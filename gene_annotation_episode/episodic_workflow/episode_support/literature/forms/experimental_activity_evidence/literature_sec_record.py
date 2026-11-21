@@ -13,7 +13,7 @@ preparations   component_a_preparation_ref, component_b_preparation_ref (the two
                merger as its dependence keys (component a as the analyte key, component b as the other partner; there is no surface).
 quantities     kd, kd_spread, complex_elution_volume, component_elution_volume_earlier, component_elution_volume_later, elution_volume_shift,
                complex_mass_measured, complex_mass_theoretical, component_mass_measured_larger, component_mass_measured_smaller, stoichiometry_ratio,
-               polydispersity, flow_rate, run_temperature, loaded_concentration, loaded_volume, salt_concentration, incubation_time, replicate_count:
+               polydispersity, flow_rate, column_volume, run_temperature, loaded_concentration, loaded_volume, salt_concentration, incubation_time, replicate_count:
                one operand each.
                Units: kd and kd_spread pM, nM, uM or mM (the apparent dissociation constant from peak areas and its spread); complex_elution_volume,
                component_elution_volume_earlier, component_elution_volume_later and elution_volume_shift 'mL' (the elution volume at the peak of the complex, of
@@ -21,7 +21,8 @@ quantities     kd, kd_spread, complex_elution_volume, component_elution_volume_e
                complex_mass_measured, complex_mass_theoretical, component_mass_measured_larger and component_mass_measured_smaller 'kDa' (the molar mass of the
                complex peak by MALS, the mass the complex should have, and the molar mass by MALS of the larger and of the smaller component run alone);
                stoichiometry_ratio and polydispersity 'ratio' (the molar ratio of the components in the complex, first named over second named; Mw/Mn);
-               flow_rate 'mL/min'; run_temperature 'C' or 'K'; loaded_concentration 'nM', 'uM' or 'mM' (the concentration of the mixture that was injected);
+               flow_rate 'mL/min'; column_volume 'mL' (the bed volume of the column as the source states it as a volume: the peak width, and so the dilution of
+               the sample on the column, and the resolvable shift of the elution volume scale with it); run_temperature 'C' or 'K'; loaded_concentration 'nM', 'uM' or 'mM' (the concentration of the mixture that was injected);
                loaded_volume 'uL' or 'mL'; salt_concentration 'mM' or 'M' (monovalent salt of the running buffer); incubation_time 's', 'min' or 'h' (before
                the injection); replicate_count 'count'.
 column_type    'superdex', 'superose', 'srt' (SRT SEC), 'other' or None.
@@ -57,7 +58,7 @@ def fact(answer, refs=(), support='direct'):
 
 VERSION = 'a105_sec_record_v1'
 EXPERIMENT_TYPE = 'sec'
-QUANTITIES = ('kd', 'kd_spread', 'complex_elution_volume', 'component_elution_volume_earlier', 'component_elution_volume_later', 'elution_volume_shift', 'complex_mass_measured', 'complex_mass_theoretical', 'component_mass_measured_larger', 'component_mass_measured_smaller', 'stoichiometry_ratio', 'polydispersity', 'flow_rate', 'run_temperature', 'loaded_concentration', 'loaded_volume', 'salt_concentration', 'incubation_time', 'replicate_count')
+QUANTITIES = ('kd', 'kd_spread', 'complex_elution_volume', 'component_elution_volume_earlier', 'component_elution_volume_later', 'elution_volume_shift', 'complex_mass_measured', 'complex_mass_theoretical', 'component_mass_measured_larger', 'component_mass_measured_smaller', 'stoichiometry_ratio', 'polydispersity', 'flow_rate', 'column_volume', 'run_temperature', 'loaded_concentration', 'loaded_volume', 'salt_concentration', 'incubation_time', 'replicate_count')
 PREPARATION_KEYS = ('component_a_preparation_ref', 'component_b_preparation_ref', 'dataset_ref')
 COLUMN_TYPES = ('superdex', 'superose', 'srt', 'other')
 DETECTIONS = ('absorbance_280', 'absorbance_260', 'refractive_index', 'light_scattering', 'fluorescence', 'other')
@@ -68,4 +69,4 @@ FACTS = {'complex_peak_detected': YES_NO, 'components_run_alone': YES_NO, 'compl
 CONCENTRATION_UNITS = ('pM', 'nM', 'uM', 'mM')
 TIME_UNITS = ('s', 'min', 'h')
 # The unit vocabulary of each quantity: the units a record may carry.
-UNITS = {'kd': CONCENTRATION_UNITS, 'kd_spread': CONCENTRATION_UNITS, 'complex_elution_volume': ('mL',), 'component_elution_volume_earlier': ('mL',), 'component_elution_volume_later': ('mL',), 'elution_volume_shift': ('mL',), 'complex_mass_measured': ('kDa',), 'complex_mass_theoretical': ('kDa',), 'component_mass_measured_larger': ('kDa',), 'component_mass_measured_smaller': ('kDa',), 'stoichiometry_ratio': ('ratio',), 'polydispersity': ('ratio',), 'flow_rate': ('mL/min',), 'run_temperature': ('C', 'K'), 'loaded_concentration': ('nM', 'uM', 'mM'), 'loaded_volume': ('uL', 'mL'), 'salt_concentration': ('mM', 'M'), 'incubation_time': TIME_UNITS, 'replicate_count': ('count',)}
+UNITS = {'kd': CONCENTRATION_UNITS, 'kd_spread': CONCENTRATION_UNITS, 'complex_elution_volume': ('mL',), 'component_elution_volume_earlier': ('mL',), 'component_elution_volume_later': ('mL',), 'elution_volume_shift': ('mL',), 'complex_mass_measured': ('kDa',), 'complex_mass_theoretical': ('kDa',), 'component_mass_measured_larger': ('kDa',), 'component_mass_measured_smaller': ('kDa',), 'stoichiometry_ratio': ('ratio',), 'polydispersity': ('ratio',), 'flow_rate': ('mL/min',), 'column_volume': ('mL',), 'run_temperature': ('C', 'K'), 'loaded_concentration': ('nM', 'uM', 'mM'), 'loaded_volume': ('uL', 'mL'), 'salt_concentration': ('mM', 'M'), 'incubation_time': TIME_UNITS, 'replicate_count': ('count',)}

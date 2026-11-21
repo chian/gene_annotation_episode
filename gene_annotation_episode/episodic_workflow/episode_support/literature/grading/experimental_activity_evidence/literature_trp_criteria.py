@@ -185,12 +185,12 @@ TRP_CRITERIA = (
     {
         'id': 'concentration_series',
         'question': 'Did the ligand concentrations bracket the KD well enough to define the binding curve?',
-        'reads': ('quantities.kd', 'quantities.titration_point_count', 'concentration_series'),
-        'rule': 'The grader records the number of concentrations (concentration_count: the listed series, or else the stated number of points) with its refs (count_refs) and, when the list and the KD are both given, the lowest and the highest over the KD (concentration_low_over_constant, concentration_high_over_constant) with their refs (series_refs), and leaves the judgement to the sheet; the span can only be judged from the list. Neither a list nor a count is unknown.',
+        'reads': ('quantities.kd', 'quantities.titration_point_count', 'quantities.concentration_lowest', 'quantities.concentration_highest', 'concentration_series'),
+        'rule': 'The grader records the number of concentrations (concentration_count: the listed series, or else the stated number of points) with its refs (count_refs) and, when the KD is given together with the list, or (with no list) with the stated lowest and/or highest concentration of a range, the lowest and the highest over the KD (concentration_low_over_constant, concentration_high_over_constant; an end the passage does not state is None) with their refs (series_refs), and leaves the judgement to the sheet. Neither a list nor a count is unknown.',
         'thresholds': ('NM_PER_UNIT',),
         'returns': (
-            ('unknown', 'series_recorded_for_the_sheet', 'a list or a count is given: the count (and the span, when it can be formed) is recorded and the sheet judges it'),
-            ('unknown', 'kd_or_series_missing', 'neither a list nor a count is given'),
+            ('unknown', 'series_recorded_for_the_sheet', 'a list, a count or a stated end of a range is given: the count (and the span, when it can be formed) is recorded and the sheet judges it'),
+            ('unknown', 'kd_or_series_missing', 'no list, no count and no stated end of a range is given'),
             ('not_applicable', 'never', 'never returned'),
         ),
     },

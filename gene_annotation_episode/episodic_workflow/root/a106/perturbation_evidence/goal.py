@@ -28,7 +28,11 @@ GOAL = ("Determine what the supplied target does within the parent's assigned qu
         'prepares a different thought pattern and/or tool selection for a new child; it does not change this episode '
         'or start that child. To commission that alternative, copy its selection and revision_origin into a '
         "separately selected child assignment with the child's job, scope, constraints and typed return. Children "
-        'own their iterative choices. The configured controller owns continuation. Unchanged observations do not '
+        'own their iterative choices. The accumulation yield controller (ADAPTIVE_CONTROL, no item count, no cost) '
+        'owns continuation: after at least 8 units attempted and 4 observed it fits nano-graphrag\'s yield model; a '
+        'unit is flat when the upper bound of its expected next marginal (hypervolume) credit is at or below the '
+        'adaptive threshold, max(one-result resolution, 0.1 x median of recent productive credits), and the episode '
+        'stops after 4 flat units in a row. Unchanged observations do not '
         'manufacture progress.')
 
 EVIDENCE_AXIS_GOAL = (
@@ -50,7 +54,11 @@ EVIDENCE_AXIS_GOAL = (
     "Copy both result.selection and revision_origin into that child's assignment to identify it as an alternative "
     'approach. Request the recorded perturbation_evidence_results source in child returns when their process '
     'relationships and existing closed credit/yield are needed for steering. Only retrieved actual tools are '
-    'available; their descriptions do not grant execution. The configured controller owns continuation.')
+    'available; their descriptions do not grant execution. The accumulation yield controller (ADAPTIVE_CONTROL, no '
+    'item count, no cost) owns continuation: after at least 8 units attempted and 4 observed it fits '
+    'nano-graphrag\'s yield model; a unit is flat when the upper bound of its expected next marginal (hypervolume) '
+    'credit is at or below the adaptive threshold, max(one-result resolution, 0.1 x median of recent productive '
+    'credits), and the episode stops after 4 flat units in a row.')
 
 UNIT = ('One model-selected unit: a tool call (a lookup in the process library, the tool library or the tool '
         'knowledge, the preparation of a revised process selection, one selected actual tool, a reasoning commit or '

@@ -35,12 +35,16 @@ preparations   titrant_preparation_ref (the partner added in a series), fixed_pa
                at a low constant concentration), dataset_ref: each a string or None (unknown). The converter hands them to the
                merger as its dependence keys (titrant as the analyte key, the labelled partner as the other partner; a titration
                in solution has no surface).
-quantities     kd, kd_spread, labelled_concentration, free_diffusion_time, bound_diffusion_time, free_diffusion_coefficient,
-               bound_diffusion_coefficient, fraction_bound_maximum, particle_number, structure_parameter, mass_ratio, brightness,
+quantities     kd, kd_spread, labelled_concentration, free_diffusion_time, free_diffusion_time_spread, bound_diffusion_time,
+               free_diffusion_coefficient, bound_diffusion_coefficient, fraction_bound_maximum, particle_number, detection_volume,
+               structure_parameter, mass_ratio, brightness,
                laser_power, measurement_time, measurement_repeat_count, titration_point_count, incubation_time, temperature,
                replicate_count: one operand each.
                Units: kd/kd_spread/labelled_concentration pM, nM, uM or mM; free_diffusion_time and bound_diffusion_time us or
-               ms (the diffusion time of the free labelled partner and of its fully bound complex); free_diffusion_coefficient and
+               ms (the diffusion time of the free labelled partner and of its fully bound complex); free_diffusion_time_spread us or
+               ms (the stated scatter, standard deviation or error, of the free diffusion time over repeated measurements: the
+               paper's own noise of the diffusion time, against which the size of the diffusion change is judged); detection_volume
+               fL (the effective confocal detection volume, with which a labelled concentration is turned into a particle number); free_diffusion_coefficient and
                bound_diffusion_coefficient 'um2/s'; fraction_bound_maximum 'percent' (the largest fraction of the labelled partner
                that is bound, at the highest titrant concentration); particle_number 'molecules' (the average number of
                fluorescent molecules in the confocal volume, N, the inverse of the correlation amplitude); structure_parameter
@@ -80,7 +84,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 
 VERSION = 'a105_fcs_record_v1'
 EXPERIMENT_TYPE = 'fcs'
-QUANTITIES = ('kd', 'kd_spread', 'labelled_concentration', 'free_diffusion_time', 'bound_diffusion_time', 'free_diffusion_coefficient', 'bound_diffusion_coefficient', 'fraction_bound_maximum', 'particle_number', 'structure_parameter', 'mass_ratio', 'brightness', 'laser_power', 'measurement_time', 'measurement_repeat_count', 'titration_point_count', 'incubation_time', 'temperature', 'replicate_count')
+QUANTITIES = ('kd', 'kd_spread', 'labelled_concentration', 'free_diffusion_time', 'free_diffusion_time_spread', 'bound_diffusion_time', 'free_diffusion_coefficient', 'bound_diffusion_coefficient', 'fraction_bound_maximum', 'particle_number', 'detection_volume', 'structure_parameter', 'mass_ratio', 'brightness', 'laser_power', 'measurement_time', 'measurement_repeat_count', 'titration_point_count', 'incubation_time', 'temperature', 'replicate_count')
 PREPARATION_KEYS = ('titrant_preparation_ref', 'fixed_partner_preparation_ref', 'dataset_ref')
 CHOICE_FIELDS = ('spread_kind', 'fit_model', 'diffusion_model', 'readout_signal')
 SPREAD_KINDS = ('standard_error', 'standard_deviation', 'confidence_interval')
@@ -117,4 +121,4 @@ def fact(answer, refs=(), support='direct'):
 
 CONCENTRATION_UNITS = ('pM', 'nM', 'uM', 'mM')
 # The unit vocabulary of each quantity (and of the concentration series): the units a record may carry.
-UNITS = {'kd': CONCENTRATION_UNITS, 'kd_spread': CONCENTRATION_UNITS, 'labelled_concentration': CONCENTRATION_UNITS, 'free_diffusion_time': ('us', 'ms'), 'bound_diffusion_time': ('us', 'ms'), 'free_diffusion_coefficient': ('um2/s',), 'bound_diffusion_coefficient': ('um2/s',), 'fraction_bound_maximum': ('percent',), 'particle_number': ('molecules',), 'structure_parameter': ('ratio',), 'mass_ratio': ('ratio',), 'brightness': ('kHz',), 'laser_power': ('nW', 'uW', 'mW'), 'measurement_time': ('s', 'min'), 'measurement_repeat_count': ('count',), 'titration_point_count': ('count',), 'incubation_time': ('s', 'min', 'h'), 'temperature': ('C', 'K'), 'replicate_count': ('count',), 'concentration_series': CONCENTRATION_UNITS}
+UNITS = {'kd': CONCENTRATION_UNITS, 'kd_spread': CONCENTRATION_UNITS, 'labelled_concentration': CONCENTRATION_UNITS, 'free_diffusion_time': ('us', 'ms'), 'free_diffusion_time_spread': ('us', 'ms'), 'bound_diffusion_time': ('us', 'ms'), 'free_diffusion_coefficient': ('um2/s',), 'bound_diffusion_coefficient': ('um2/s',), 'fraction_bound_maximum': ('percent',), 'particle_number': ('molecules',), 'detection_volume': ('fL',), 'structure_parameter': ('ratio',), 'mass_ratio': ('ratio',), 'brightness': ('kHz',), 'laser_power': ('nW', 'uW', 'mW'), 'measurement_time': ('s', 'min'), 'measurement_repeat_count': ('count',), 'titration_point_count': ('count',), 'incubation_time': ('s', 'min', 'h'), 'temperature': ('C', 'K'), 'replicate_count': ('count',), 'concentration_series': CONCENTRATION_UNITS}

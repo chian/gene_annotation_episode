@@ -20,11 +20,12 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.tests import alpha_cases
 
 # What no grader criterion reads (the grader copies every quantity into its native values without reading it): the effect's
-# variance is built from the spreads by the converter, and the bead concentration, the two partner concentrations, the plate format,
-# the number of technical wells, the bead step and the temperature are kept in the record for the reviewer, as are the choices that no
-# criterion reads.
-READ_BY_THE_CONVERTER_OR_KEPT = {'kd_spread', 'ki_spread', 'bead_concentration', 'labelled_partner_concentration', 'tagged_partner_concentration', 'plate_well_count',
-                                 'technical_replicate_count', 'bead_incubation_time', 'temperature', SPREAD_KIND, TITRATION_DESIGN, DONOR_BEAD, ACCEPTOR_BEAD}
+# variance is built from the spreads by the converter, and the bead concentration, the plate format,
+# the number of technical wells and the temperature are kept in the record for the reviewer, as are the choices that no
+# criterion reads. (The two partner concentrations and the bead step are read by the grader: partner depletion and equilibrium.
+# The titration design is read through choice_support, which this tracker does not see, so it stays in the set.)
+READ_BY_THE_CONVERTER_OR_KEPT = {'kd_spread', 'ki_spread', 'bead_concentration', 'plate_well_count',
+                                 'technical_replicate_count', 'temperature', SPREAD_KIND, TITRATION_DESIGN, DONOR_BEAD, ACCEPTOR_BEAD}
 
 
 class Tracking(dict):
@@ -110,7 +111,7 @@ def test_a_correct_synthetic_answer_is_valid_and_becomes_a_record_the_grader_acc
     assert all(_criterion(graded, name)['support_refs'] for name in CRITERIA)
     native = graded['native']
     assert native['kd_nM'] == 20 and native['ki_nM'] == 30 and native['ec50_nM'] == 28 and native['ic50_nM'] == 45 and native['constant_name'] == 'kd'
-    assert native['signal_over_background'] == 500 and native['incubation_min'] == 60 and native['concentration_count'] == 12
+    assert native['signal_over_background'] == 500 and native['incubation_min'] == 105 and native['concentration_count'] == 12      # 60 min + 45 min after the beads
     assert native['concentration_low_over_constant'] == pytest.approx(0.05) and native['concentration_high_over_constant'] == pytest.approx(102.4)
     kd = record['quantities']['kd']
     span = record['spans'][kd['source_refs'][0]]
@@ -266,7 +267,7 @@ def test_other_units_of_the_vocabulary_are_accepted_and_reach_the_record():
     record = record_from_answer(answer, SYNTHETIC, 0, 'exp', 'src', 'hyp')
     assert record['quantities']['kd']['unit'] == 'uM' and record['quantities']['ic50']['unit'] == 'pM' and record['quantities']['bead_concentration']['unit'] == 'mg/mL'
     graded = grade_alpha(record)
-    assert graded['native']['kd_nM'] == pytest.approx(20.0) and graded['native']['ic50_nM'] == pytest.approx(45.0) and graded['native']['incubation_min'] == pytest.approx(60.0)
+    assert graded['native']['kd_nM'] == pytest.approx(20.0) and graded['native']['ic50_nM'] == pytest.approx(45.0) and graded['native']['incubation_min'] == pytest.approx(105.0)
 
 
 SUPPORT_VALUES = ['direct', 'implied', 'about_something_else']

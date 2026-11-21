@@ -17,8 +17,6 @@ from __future__ import annotations
 
 import json
 
-from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.structural_homology_evidence.literature_structure_cells import (
-    experimental_structure_arm)
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import outstanding_jobs
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 
@@ -39,7 +37,6 @@ def unique(values):
 def internal_summary(view):
     parent = view.parent_input
     report, committed, revisions, children, results, history = None, [], [], [], [], []
-    experimental = []
     for unit in view.outcomes:
         if unit['kind'] == 'tool':
             outcome = unit['outcome']
@@ -56,14 +53,12 @@ def internal_summary(view):
             children.append({'slot': unit['slot'], 'child_credit': child['child_credit'],
                              'child_finding': child['child_finding']})
             results.extend(child['process_results'])
-            experimental.extend(child['experimental_structure_sheets'])
             history.append({'child': unit['slot'], 'credit': child['child_credit']})
     credit_view = credit_file.credit_view(parent, view.records)     # the comparative native arm
     controller = (yield_table(view.controller_state, forecast_unit=FORECAST_UNIT)
                   if view.controller_state is not None else None)
     return {**parent,
             'credit_view': credit_view,
-            'experimental_structure_arm': experimental_structure_arm(experimental),
             'report': report,
             'committed_record_refs': unique(committed),
             'revisions': revisions,

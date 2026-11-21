@@ -45,6 +45,8 @@ MEANING = {
     'loading_level': 'The amount of partner loaded on the sensor, the loading step response in nanometres (nm).',
     'dissociation_time': 'The length of the dissociation step (the time the sensors were in buffer after the analyte), in seconds or minutes.',
     'replicate_count': 'The number of replicate experiments the passage reports (a whole number).',
+    'partner_mass': 'The molecular mass of the partner loaded on the sensor (the immobilized protein, not the analyte), in kDa.',
+    'baseline_noise': 'The noise or drift of the signal (the baseline noise level) that the passage states, in nanometres (nm): the size of signal that cannot be told from the baseline.',
     SERIES: 'The analyte concentrations of the titration series that was measured, as a list of numbers in one unit.',
     SPREAD_KIND: 'What the reported KD uncertainty is.',
     FIT_MODEL: 'The model the passage says the sensorgrams were fitted with.',

@@ -15,7 +15,7 @@ may lower the effective concentration. It says nothing of the window, the series
 fit model's name, the controls or the equilibrium; those are in the paper's Methods and figure legend, which are not in this
 chunk. The paragraph is whole (no sentence was removed)."""
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_fp_extraction import (
-    ASSAY_FORMAT, FIT_MODEL, PLATE_TYPE, SERIES, SPREAD_KIND, field_names)
+    ASSAY_FORMAT, FIT_MODEL, INTENSITY_DIRECTION, PLATE_TYPE, SERIES, SERIES_KIND, SPREAD_KIND, field_names)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_fp_record import UNITS
 
 PAPER_ID = 'PMC10606924'
@@ -37,12 +37,13 @@ SYNTHETIC = (
     'Tween-20 and 0.1 mg/mL BSA were included to prevent adsorption to the plate. Samples were incubated for 30 min, '
     'and the polarization was stable over a further hour, so binding was at equilibrium. ParB was titrated in ten '
     'concentrations of 2, 4, 10, 20, 40, 100, 200, 400, 1000 and 2000 nM. The polarization of the free tracer, '
-    'measured as the baseline, was 50 mP and rose to a plateau of 250 mP when the tracer was fully bound. The total '
-    'fluorescence intensity changed by 10% on binding, and this change was checked and corrected for. Tracer '
+    'measured as the baseline, was 50 mP and rose to a plateau of 250 mP when the tracer was fully bound. The standard '
+    'deviation of replicate polarization reads was 4 mP. The total '
+    'fluorescence intensity decreased by 10% on binding, and this change was checked and corrected for. Tracer '
     'depletion was considered, and the data were fitted with a quadratic (tight-binding) model, giving KD = 20 nM '
     '(standard error 2 nM). Non-specific binding was checked with an unrelated protein, which gave no signal, and an '
     'excess of unlabelled peptide displaced the bound tracer. In a competition experiment with an unlabelled ligand, '
-    'Ki = 40 nM (standard error 4 nM); the affinity was thus estimated both by direct titration and by competition. '
+    'the IC50 was 80 nM and Ki = 40 nM (standard error 4 nM); the affinity was thus estimated both by direct titration and by competition. '
     'Three independent titrations were done on separate days with fresh dilution series.')
 
 # field -> (value, unit, quote) for the synthetic passage: every field of the form.
@@ -54,7 +55,11 @@ SYNTHETIC_STATED = {
     'tracer_concentration': (5, 'nM', 'held at 5 nM'),
     'signal_minimum': (50, 'mP', 'was 50 mP'),
     'signal_maximum': (250, 'mP', 'plateau of 250 mP'),
-    'total_intensity_change': (10, 'percent', 'changed by 10%'),
+    'ic50': (80, 'nM', 'IC50 was 80 nM'),
+    'signal_noise': (4, 'mP', 'replicate polarization reads was 4 mP'),
+    'total_intensity_change': (10, 'percent', 'decreased by 10%'),
+    INTENSITY_DIRECTION: ('decrease', None, 'fluorescence intensity decreased by 10%'),
+    SERIES_KIND: ('titrant', None, 'ParB was titrated in ten'),
     'assay_volume': (20, 'uL', 'a volume of 20 µL'),
     'incubation_time': (30, 'min', 'incubated for 30 min'),
     'temperature': (25, 'C', 'at 25 °C'),

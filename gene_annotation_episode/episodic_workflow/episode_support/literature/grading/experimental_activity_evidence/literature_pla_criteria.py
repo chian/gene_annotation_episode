@@ -35,6 +35,8 @@ blind, a statistical test) and the replicates decide how much that means.
 Terms. Puncta per cell: the mean number of PLA puncta per cell. Fold over control: puncta per cell of the test divided by puncta per cell of the negative control (None when the control
 has 0 puncta, which no division can express). Reduction: (test - knockdown) / test * 100, in percent, signed (a fall is positive).
 
+Spread: the stated SD or SEM of the puncta per cell of the test and of the control (kind in puncta_spread_kind). Depletion: the measured percent fall of the protein that the specificity control removes.
+
 What this method does not ask (kept in the record for the reviewer, no criterion judges them): the amplification time, the cell system, the fixation and the quantification software.
 """
 
@@ -65,8 +67,8 @@ PLA_CRITERIA = (
     {
         'id': 'puncta_enrichment',
         'question': 'Did the test show more puncta per cell than the negative control by at least the minimum fold?',
-        'reads': ('quantities.puncta_per_cell_target', 'quantities.puncta_per_cell_control'),
-        'rule': 'When the puncta per cell of the test and of the negative control are both stated, the grader records them (puncta_target, puncta_control), their quotient (puncta_fold_over_control, None when the control has 0 puncta) and the refs of the two (puncta_refs) and leaves the judgement to the sheet; otherwise unknown.',
+        'reads': ('quantities.puncta_per_cell_target', 'quantities.puncta_per_cell_control', 'quantities.puncta_spread_target', 'quantities.puncta_spread_control', 'puncta_spread_kind'),
+        'rule': 'When the puncta per cell of the test and of the negative control are both stated, the grader records them (puncta_target, puncta_control), their quotient (puncta_fold_over_control, None when the control has 0 puncta) and the refs of the two (puncta_refs) and leaves the judgement to the sheet; otherwise unknown. When the spread of both counts and its kind are also stated, it records them too (puncta_spread_target, puncta_spread_control, puncta_spread_kind, spread_refs).',
         'thresholds': (),
         'returns': (
             ('unknown', 'puncta_enrichment_recorded_for_the_sheet', 'both puncta numbers are stated: they are recorded and the sheet judges them'),
@@ -78,8 +80,8 @@ PLA_CRITERIA = (
     {
         'id': 'specificity_control',
         'question': 'Did the puncta fall when one of the two proteins was knocked down, knocked out or competed away, by at least the minimum fall?',
-        'reads': ('quantities.puncta_per_cell_knockdown', 'quantities.puncta_per_cell_target', 'facts.specificity_control_reduces_signal'),
-        'rule': 'The fact stated as no fails. Otherwise, when the puncta per cell of the test (above 0) and after the knockdown are both stated, the grader records the reduction in percent (puncta_reduction_percent, signed) and the refs of the two (reduction_refs) and leaves the judgement to the sheet; otherwise the fact decides: yes supported, unknown unknown, not_applicable not applicable.',
+        'reads': ('quantities.puncta_per_cell_knockdown', 'quantities.puncta_per_cell_target', 'quantities.protein_depletion_percent', 'facts.specificity_control_reduces_signal'),
+        'rule': 'The fact stated as no fails. Otherwise, when the puncta per cell of the test (above 0) and after the knockdown are both stated, the grader records the reduction in percent (puncta_reduction_percent, signed) and the refs of the two (reduction_refs) and leaves the judgement to the sheet; otherwise the fact decides: yes supported, unknown unknown, not_applicable not applicable. The measured depletion of the protein, when stated, is recorded beside it (protein_depletion_percent, depletion_refs) and is added to the refs only by the sheet.',
         'thresholds': ('PERCENT_PER_FRACTION',),
         'returns': (
             ('conflicting', 'fact_answered_no', 'the fact is no'),

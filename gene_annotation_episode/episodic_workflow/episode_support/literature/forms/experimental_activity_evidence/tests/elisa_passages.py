@@ -50,7 +50,8 @@ SYNTHETIC = (
     'and an irrelevant protein gave no signal. ParA was coated through its tag by an anti-tag antibody and was shown to be active, multivalent binding was '
     'excluded by use of monomeric ParB, and the detection antibody did not interfere with the binding. The curve reached saturation and was fitted with a '
     'four-parameter logistic model, giving an apparent KD = 20 nM (standard error 2 nM) and an EC50 of 28 nM. In a competition ELISA an unlabelled competitor '
-    'gave an IC50 of 45 nM and Ki = 30 nM (standard error 3 nM). Each concentration was measured in 3 wells, and 3 independent experiments were done on '
+    'displaced 10 nM ParB, whose own KD was 15 nM, and gave an IC50 of 45 nM and Ki = 30 nM (standard error 3 nM). The reader was linear up to 2.5 OD. '
+    'The dissociation rate constant of the complex was koff = 0.0001 s^-1, and the washes took 10 min in total. Each concentration was measured in 3 wells, and 3 independent experiments were done on '
     'separate plates with fresh dilutions. The affinity was also measured by surface plasmon resonance.')
 
 # field -> (value, unit, quote) for the synthetic passage: every field of the form.
@@ -89,6 +90,11 @@ SYNTHETIC_STATED = {
     'detection_does_not_interfere': ('yes', None, 'the detection antibody did not interfere with the binding'),
     'independent_experiments': ('yes', None, '3 independent experiments were done on separate plates'),
     'single_estimate_method': ('no', None, 'also measured by surface plasmon resonance'),
+    'tracer_concentration': (10, 'nM', 'displaced 10 nM ParB'),
+    'tracer_kd': (15, 'nM', 'whose own KD was 15 nM'),
+    'detector_linear_limit': (2.5, 'OD', 'The reader was linear up to 2.5 OD'),
+    'koff': (0.0001, 's^-1', 'koff = 0.0001 s^-1'),
+    'wash_duration': (10, 'min', 'the washes took 10 min in total'),
 }
 
 # field -> (value, unit, quote) for the real passage: only what it states about the experiment it is about.
@@ -107,7 +113,11 @@ REAL_STATED = {
 # titrations and, 'for the competition assay', a competition, a format. Nothing else: no KD, EC50, IC50 or Ki value, no list or
 # number of concentrations, no plateau or background absorbance, no temperature as a number ('room temperature'), no replicate
 # count, and no statement of equilibrium, wash dissociation, avidity, coated-protein activity or detection interference.
-REAL_MAY_ALSO_STATE = {DETECTION_FORMAT, 'nonspecific_binding_checked', ASSAY_FORMAT}
+# Also (after the grader-gap pass): the tracer concentration, because 'for the competition assay, the plate was incubated with 100 nM of Clu in the
+# presence of increasing concentrations of RAP' gives the constant concentration of the ligand RAP displaces (the quote '100 nM of Clu'). The
+# paragraph gives no KD of that ligand (tracer_kd), no koff, no duration of the washes (only 'washed three times') and no stated reader linear
+# range, so those four stay unavailable.
+REAL_MAY_ALSO_STATE = {DETECTION_FORMAT, 'nonspecific_binding_checked', ASSAY_FORMAT, 'tracer_concentration'}
 
 # identity expectations (OWNER_DECISION 18); see check_identity in the leaf test
 SYNTHETIC_TARGET = 'para'

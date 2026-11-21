@@ -117,8 +117,9 @@ def span_processed(span, page, reasons, records):
 
 def input_list(parent, reasons, records):
     """``(consumed, input_list)``: the commissioned windows as ``[offset, end]`` pairs, in the order assigned, those a
-    completed commit has processed and those still to process. A consumed window is no longer offered; the episode's
-    yield estimator ends it when the input list is empty."""
+    completed commit has processed and those still to process. A consumed window is no longer offered. An empty input
+    list does not end the episode: its yield estimator passes ``AccumulationYieldController`` no item count
+    (``FIXED_CONTROL``, ``items=None``), which stops after 4 flat units in a row (gamma 0.06)."""
     page = parent['page']
     pairs = [(span, [span['offset'], span['offset'] + span['limit']]) for span in parent['spans']]
     done = [pair for span, pair in pairs if span_processed(span, page, reasons, records)]

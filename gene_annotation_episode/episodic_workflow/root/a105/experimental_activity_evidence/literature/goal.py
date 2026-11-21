@@ -15,8 +15,12 @@ GOAL = ('Investigate which published evidence bears on the assigned scientific q
         'representation, version and UTF-8 byte anchors. Distinguish source claims from their applicability to the '
         'fixed target. Negative findings and qualifications can advance the investigation. Commit interpretations '
         "with the common reasoning action and update only the parent's declared typed form in that same work call. "
-        'Navigation, byte coverage and repeated reading earn no scientific credit by themselves. The commissioned '
-        "task's own yield settings guide continuation.")
+        'Navigation, byte coverage and repeated reading earn no scientific credit by themselves. For a '
+        'verified-source-leads task an accumulation controller (adaptive gamma, no input list) decides '
+        'continuation at no cost: after 8 units attempted and 4 observed it fits a yield model, a unit is flat when '
+        'the upper bound of the expected next marginal credit is at or below gamma (the larger of one result\'s '
+        'resolution and 0.1 x the median of the recent productive credits), and it stops after 4 flat units in a '
+        "row. Otherwise the commissioned task's own yield settings guide continuation.")
 UNIT = ('one model-selected unit for the assigned published-evidence question: a catalog lookup, an access or '
         'acquisition tool, a population sheet, a reasoning commit coupled with its grading sheets, the report tool, '
         'or one commission of the search-strategy investigation')

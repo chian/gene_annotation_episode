@@ -51,6 +51,7 @@ VERSION = 'a105_radioligand_criteria_v1'
 # ---- Threshold constants -------------------------------------------------
 NM_PER_UNIT = {'pM': 0.001, 'nM': 1.0, 'uM': 1000.0, 'mM': 1000000.0}  # FIXED_BY_DEFINITION: nanomolar per concentration unit.
 MIN_PER_UNIT = {'s': 1 / 60, 'min': 1.0, 'h': 60.0}  # FIXED_BY_DEFINITION: minutes per time unit.
+PER_MIN_PER_UNIT = {'1/s': 60.0, '1/min': 1.0, '1/h': 1 / 60}  # FIXED_BY_DEFINITION: reciprocal minutes per rate unit (a rate of 1/s is 60 per minute).
 
 
 def _fact_returns():
@@ -73,11 +74,12 @@ RADIOLIGAND_CRITERIA = (
     {
         'id': 'ligand_depletion',
         'question': 'Was the radioligand bound in so small a fraction that the free concentration is the added concentration?',
-        'reads': ('quantities.percent_bound', 'facts.ligand_depletion_checked'),
-        'rule': 'A reported percent of the added radioligand that was bound is recorded (percent_bound and percent_bound_refs) and the judgement is left to the sheet. When no percent is reported, the fact decides: yes supported, no fails, unknown unknown.',
+        'reads': ('quantities.percent_bound', 'facts.ligand_depletion_checked', 'facts.depletion_corrected'),
+        'rule': 'A reported percent of the added radioligand that was bound is recorded (percent_bound and percent_bound_refs) together with the answer and refs of the fact that depletion was corrected (depletion_corrected, depletion_corrected_refs: the free radioligand measured, or a fit that takes the depletion into account), and the judgement is left to the sheet. When no percent is reported, the fact ligand_depletion_checked decides: yes supported, no fails; when it is not stated and the correction fact is yes, supported by the correction; otherwise unknown.',
         'thresholds': (),
         'returns': (
-            ('unknown', 'percent_bound_recorded_for_the_sheet', 'a percent bound is reported: it is recorded and the sheet judges it'),
+            ('unknown', 'percent_bound_recorded_for_the_sheet', 'a percent bound is reported: it is recorded (with the correction fact) and the sheet judges it'),
+            ('supported', 'depletion_corrected', 'no percent reported, the depletion-checked fact is not stated and depletion was corrected (fact yes)'),
             ('supported', 'facts_answered_yes', 'no percent reported and the fact is yes'),
             ('conflicting', 'fact_answered_no', 'no percent reported and the fact is no'),
             ('unknown', 'fact_unknown', 'no percent reported and the fact is unknown'),
@@ -100,21 +102,21 @@ RADIOLIGAND_CRITERIA = (
     {
         'id': 'nonspecific_excess',
         'question': 'Was non-specific binding defined with a high enough excess of the unlabelled ligand?',
-        'reads': ('quantities.nonspecific_excess', 'quantities.nonspecific_ligand_concentration', 'quantities.kd'),
-        'rule': 'The stated fold excess of the unlabelled ligand over the Kd, else the concentration of the unlabelled ligand over the KD of the radioligand, is recorded (nonspecific_excess_ratio and nonspecific_excess_refs) and the judgement is left to the sheet. Neither given is unknown.',
+        'reads': ('quantities.nonspecific_excess', 'quantities.nonspecific_ligand_concentration', 'quantities.nonspecific_ligand_kd', 'facts.nonspecific_ligand_is_unlabelled_radioligand', 'quantities.kd'),
+        'rule': 'The excess is the unlabelled ligand over ITS OWN Kd. The stated fold excess is recorded (nonspecific_excess_ratio and nonspecific_excess_refs); else the concentration of the unlabelled ligand over its own stated Kd (nonspecific_ligand_kd); else, only when the passage says the unlabelled ligand is the unlabelled radioligand itself (fact yes), over the KD of the radioligand. The judgement is left to the sheet. None of these is unknown: the KD of a different radioligand is never the Kd of the displacer.',
         'thresholds': ('NM_PER_UNIT',),
         'returns': (
-            ('unknown', 'excess_recorded_for_the_sheet', 'a fold excess is stated, or the unlabelled ligand concentration and the KD are given: the excess is recorded and the sheet judges it'),
-            ('unknown', 'excess_not_given', 'no fold excess is stated and the concentration of the unlabelled ligand or the KD is not given'),
+            ('unknown', 'excess_recorded_for_the_sheet', 'a fold excess is stated, or the unlabelled ligand concentration and its own Kd (or the radioligand KD when it is the unlabelled radioligand) are given: the excess is recorded and the sheet judges it'),
+            ('unknown', 'excess_not_given', 'no fold excess is stated and the concentration of the unlabelled ligand or the Kd it needs is not given'),
             ('not_applicable', 'never', 'never returned'),
         ),
     },
     {
         'id': 'equilibrium',
         'question': 'Was the binding at equilibrium when the bound radioligand was separated from the free?',
-        'reads': ('facts.equilibrium_reached', 'quantities.incubation_time'),
-        'rule': 'The fact decides: yes supported, no fails. When it is not stated and an incubation time is given, the grader records it (incubation_min, in minutes, and incubation_refs) and leaves the judgement to the sheet; otherwise it is unknown.',
-        'thresholds': ('MIN_PER_UNIT',),
+        'reads': ('facts.equilibrium_reached', 'quantities.incubation_time', 'quantities.dissociation_rate'),
+        'rule': 'The fact decides: yes supported, no fails. When it is not stated and an incubation time is given, the grader records it (incubation_min, in minutes, and incubation_refs) and, when the off-rate koff of the radioligand is given, that too (dissociation_rate_per_min and dissociation_rate_refs), and leaves the judgement to the sheet; otherwise it is unknown.',
+        'thresholds': ('MIN_PER_UNIT', 'PER_MIN_PER_UNIT'),
         'returns': (
             ('supported', 'facts_answered_yes', 'answer yes'),
             ('conflicting', 'fact_answered_no', 'answer no'),

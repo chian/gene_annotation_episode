@@ -8,10 +8,10 @@ import pytest
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence import (
     literature_fp_extraction as extraction)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_fp_extraction import (
-    ASSAY_FORMAT, FIT_MODEL, NOT_EXTRACTED, PLATE_TYPE, SERIES, SPREAD_KIND, ExtractionRefused, answer_schema, field_names, quote_span,
+    ASSAY_FORMAT, FIT_MODEL, INTENSITY_DIRECTION, NOT_EXTRACTED, PLATE_TYPE, SERIES, SERIES_KIND, SPREAD_KIND, ExtractionRefused, answer_schema, field_names, quote_span,
     record_from_answer, validate_answer)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_fp_record import (
-    ASSAY_FORMATS, FACTS, FIT_MODELS, PLATE_TYPES, PREPARATION_KEYS, QUANTITIES, SPREAD_KINDS, UNITS)
+    ASSAY_FORMATS, FACTS, FIT_MODELS, INTENSITY_DIRECTIONS, PLATE_TYPES, PREPARATION_KEYS, QUANTITIES, SERIES_KINDS, SPREAD_KINDS, UNITS)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.tests.fp_passages import (
     REAL, REAL_STATED, SYNTHETIC, SYNTHETIC_STATED, answer_from, real_answer, synthetic_answer)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_fp_converter import _criterion
@@ -43,12 +43,12 @@ def fields_the_grader_reads():
     for record in (fp_cases.synthetic_record(), fp_cases.sparse_record(), fp_cases.real_record()):
         grade_fp(Tracking(record, reads))
     return {name.split('.')[-1] for name in reads if name.startswith(('quantities.', 'facts.'))
-            or name in (ASSAY_FORMAT, SPREAD_KIND, FIT_MODEL, 'concentration_series', PLATE_TYPE)}
+            or name in (ASSAY_FORMAT, SPREAD_KIND, FIT_MODEL, 'concentration_series', PLATE_TYPE, INTENSITY_DIRECTION, SERIES_KIND)}
 
 
 def test_the_schema_has_exactly_the_fields_of_the_form():
     schema = answer_schema()
-    form = {*QUANTITIES, SERIES, ASSAY_FORMAT, SPREAD_KIND, FIT_MODEL, PLATE_TYPE, *FACTS}
+    form = {*QUANTITIES, SERIES, ASSAY_FORMAT, SPREAD_KIND, FIT_MODEL, PLATE_TYPE, INTENSITY_DIRECTION, SERIES_KIND, *FACTS}
     assert set(schema['properties']) == set(field_names()) == form
     assert schema['required'] == list(schema['properties']) and schema['additionalProperties'] is False
     assert NOT_EXTRACTED == ('preparations',) and len(PREPARATION_KEYS) == 3
@@ -65,6 +65,8 @@ def test_the_vocabularies_are_the_forms_vocabularies():
     assert properties[SPREAD_KIND]['properties']['value']['anyOf'][0]['enum'] == list(SPREAD_KINDS)
     assert properties[FIT_MODEL]['properties']['value']['anyOf'][0]['enum'] == list(FIT_MODELS)
     assert properties[PLATE_TYPE]['properties']['value']['anyOf'][0]['enum'] == list(PLATE_TYPES)
+    assert properties[INTENSITY_DIRECTION]['properties']['value']['anyOf'][0]['enum'] == list(INTENSITY_DIRECTIONS)
+    assert properties[SERIES_KIND]['properties']['value']['anyOf'][0]['enum'] == list(SERIES_KINDS)
     for name, answers in FACTS.items():
         offered = properties[name]['properties']['value']['anyOf'][0]['enum']
         assert set(offered) == set(answers) - {'unknown', 'not_applicable'}
@@ -101,6 +103,9 @@ def test_a_correct_synthetic_answer_is_valid_and_becomes_a_record_the_grader_acc
     assert record['preparations'] == dict.fromkeys(PREPARATION_KEYS)
     assert record['experiment_type'] == 'fp' and record['fit_model'] == 'quadratic' and record['spread_kind'] == 'standard_error'
     assert record['assay_format'] == 'direct_titration' and record['plate_type'] == 'black_non_binding'
+    assert record['intensity_change_direction'] == 'decrease' and record['series_kind'] == 'titrant'
+    assert record['quantities']['ic50']['value'] == 80 and record['quantities']['signal_noise']['value'] == 4 and record['quantities']['signal_noise']['unit'] == 'mP'
+    assert graded['native']['window_noise_mP'] == 4 and graded['native']['intensity_change_direction'] == 'decrease' and graded['native']['series_reference'] == 'kd'
     assert record['quantities']['assay_volume']['unit'] == 'uL' and record['quantities']['temperature']['unit'] == 'C'
 
 
@@ -124,7 +129,8 @@ def test_the_real_paragraph_states_only_what_it_states_and_everything_else_stays
     assert record['quantities']['ki']['value'] is None and record['quantities']['ki']['reason'] == 'not_stated_in_passage'
     assert record['concentration_series']['status'] == 'unavailable'
     assert [name for name, item in record['facts'].items() if item['answer'] != 'unknown'] == []
-    assert record['spread_kind'] is None and record['fit_model'] is None and record['plate_type'] is None      # the kind of the +-, the model's name and the plate are not stated
+    assert record['intensity_change_direction'] is None and record['series_kind'] is None      # the real paragraph states neither the intensity change nor a series
+    assert record['spread_kind'] is None and record['fit_model'] is None and record['plate_type'] is None     # the kind of the +-, the model's name and the plate are not stated
     graded = grade_fp(record)
     judged = {name: _criterion(graded, name) for name in CRITERIA}
     assert 'conflicting' not in {item['status'] for item in judged.values()}

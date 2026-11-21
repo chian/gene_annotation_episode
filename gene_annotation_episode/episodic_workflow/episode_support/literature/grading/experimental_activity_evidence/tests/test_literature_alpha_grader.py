@@ -1,4 +1,5 @@
 """AlphaScreen grader: each criterion's rule on records, with the arithmetic worked by hand."""
+import math
 import pytest
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_alpha_record import fact, point, unavailable
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_alpha_criteria import ALPHA_CRITERIA
@@ -36,7 +37,7 @@ def test_complete_synthetic_record_is_supported_everywhere_once_the_sheet_has_ju
     native = graded['native']
     assert native['kd_nM'] == 20.0 and native['ki_nM'] == 30.0 and native['ec50_nM'] == 28.0 and native['ic50_nM'] == 45.0
     assert native['constant_name'] == 'kd' and native['constant_nM'] == 20.0 and graded['experiment_type'] == 'alphascreen'
-    assert native['signal_over_background'] == 500.0 and native['incubation_min'] == 60.0
+    assert native['signal_over_background'] == 500.0 and native['incubation_min'] == 105.0      # 60 min before the beads + 45 min after
     assert native['concentration_count'] == 12 and native['concentration_low_over_constant'] == pytest.approx(0.05) and native['concentration_high_over_constant'] == pytest.approx(102.4)
     assert native['fit_model'] == 'four_parameter_logistic' and native['titration_design'] == 'fixed_partner_titration' and native['donor_bead'] == 'streptavidin' and native['acceptor_bead'] == 'nickel_chelate'
 
@@ -84,10 +85,17 @@ def variants():
         record = synthetic_record()
         record['quantities']['z_prime'] = point(z_prime, 'ratio', 'z', ['s']) if z_prime else {**record['quantities']['z_prime'], 'status': 'unavailable', 'value': None}
         out.append(record)
-    for minutes in (10.0, 30.0):
+    for minutes in (10.0, 30.0):                                   # the time needed follows the constant: 30 minutes at 1 nM
         record = synthetic_record()
         record['facts']['equilibrium_reached'] = fact('unknown')
         record['quantities']['incubation_time'] = point(minutes, 'min', 'i', ['s'])
+        record['quantities']['kd'] = point(1.0, 'nM', 'k', ['s'])
+        missing(record, 'bead_incubation_time')
+        out.append(record)
+    for labelled in (5.0, 500.0):                                  # the partner fact not stated: the partner concentration over the constant is judged
+        record = synthetic_record()
+        record['facts']['partner_concentration_below_kd'] = fact('unknown')
+        record['quantities']['labelled_partner_concentration'] = point(labelled, 'nM', 'p', ['s'])
         out.append(record)
     for ki in (200.0, 6.0):
         record = synthetic_record()
@@ -139,7 +147,9 @@ def test_every_criterion_the_sheet_decides_carries_support_refs_too():
                     judged_cases.add((name, outcome['status']))
             else:
                 assert outcome['support_refs'] == []
-    assert judged_cases >= {(name, state) for name in ('signal_window', 'assay_quality', 'concentration_series', 'direct_vs_competition', 'replicates', 'equilibrium') for state in ('supported', 'conflicting')} - {('equilibrium', 'supported')}
+    # the replicate count is softened: a count below MIN_REPLICATES gets partial credit and never conflicts (a stated 'no' independence is the grader's conflict)
+    assert judged_cases >= {(name, state) for name in ('signal_window', 'assay_quality', 'concentration_series', 'direct_vs_competition', 'replicates', 'equilibrium') for state in ('supported', 'conflicting')} - {('equilibrium', 'supported'), ('replicates', 'conflicting')}
+    assert ('replicates', 'conflicting') not in judged_cases
 
 
 def test_a_decided_criterion_cannot_be_built_without_support_refs():
@@ -155,8 +165,8 @@ def test_the_signal_window_is_the_reported_ratio_else_the_top_signal_over_the_ba
     assert (grader_status(r, 'signal_window'), reason(r, 'signal_window')) == ('unknown', 'signal_window_recorded_for_the_sheet')
     assert grade_alpha(r)['native']['signal_over_background'] == 10.0 and grade_alpha(r)['native']['signal_window_refs'] == ['s']
     assert _criterion(grade_alpha(r), 'signal_window') == {'status': 'supported', 'support_refs': ['s'], 'degree': 1.0}
-    r['quantities']['signal_to_background'] = point(5.5, 'ratio', 's', ['s'])                  # halfway from 1 up to 10: a degree of 0.5
-    assert status(r, 'signal_window') == 'supported' and _criterion(grade_alpha(r), 'signal_window')['degree'] == pytest.approx(0.5)
+    r['quantities']['signal_to_background'] = point(5.5, 'ratio', 's', ['s'])                  # on the log of the ratio: log10(5.5) / log10(10)
+    assert status(r, 'signal_window') == 'supported' and _criterion(grade_alpha(r), 'signal_window')['degree'] == pytest.approx(math.log10(5.5))
     r['quantities']['signal_to_background'] = point(1.0, 'ratio', 's', ['s'])                  # no window: the zero-agreement limit
     assert status(r, 'signal_window') == 'conflicting' and 'degree' not in _criterion(grade_alpha(r), 'signal_window')
     missing(r, 'signal_to_background')                                                           # 450000 / 900 = 500
@@ -191,6 +201,9 @@ def test_the_z_prime_factor_is_recorded_and_the_sheet_judges_it():
                                              ('capture_artifacts', 'capture_does_not_alter_binding'), ('light_protection', 'light_protected'), ('avidity', 'avidity_excluded')])
 def test_a_one_fact_criterion_follows_its_fact(criterion, name):
     r = synthetic_record()
+    if criterion == 'partner_depletion':      # with no stated fact the partner concentration over the constant is recorded: its own test below; here no concentration is given
+        for partner in ('labelled_partner_concentration', 'tagged_partner_concentration'):
+            missing(r, partner)
     assert (status(r, criterion), reason(r, criterion)) == ('supported', 'facts_answered_yes')
     r['facts'][name] = fact('no', ['s'])
     assert (status(r, criterion), reason(r, criterion)) == ('conflicting', 'fact_answered_no')
@@ -203,12 +216,17 @@ def test_a_one_fact_criterion_follows_its_fact(criterion, name):
 def test_the_equilibrium_fact_then_a_short_binding_step():
     r = synthetic_record()
     r['facts']['equilibrium_reached'] = fact('unknown')
-    assert (grader_status(r, 'equilibrium'), reason(r, 'equilibrium')) == ('unknown', 'incubation_recorded_for_the_sheet') and grade_alpha(r)['native']['incubation_min'] == 60.0
-    assert status(r, 'equilibrium') == 'unknown'                                           # a 60 min step is not short
+    assert (grader_status(r, 'equilibrium'), reason(r, 'equilibrium')) == ('unknown', 'incubation_recorded_for_the_sheet') and grade_alpha(r)['native']['incubation_min'] == 105.0      # 60 min + the 45 min after the beads
+    assert status(r, 'equilibrium') == 'supported'                                         # a 105 min time together at 20 nM (T_FAST 1.5 min, T_SLOW 15 min): full
+    missing(r, 'bead_incubation_time')
+    assert grade_alpha(r)['native']['incubation_min'] == 60.0
+    r['quantities']['kd'] = point(1.0, 'nM', 'k', ['s'])                                   # the time needed follows the constant: 30 minutes at 1 nM
     r['quantities']['incubation_time'] = point(29.0, 'min', 'i', ['s'])
     assert status(r, 'equilibrium') == 'conflicting' and grade_alpha(r)['native']['incubation_refs'] == ['s'] and _criterion(grade_alpha(r), 'equilibrium')['support_refs'] == ['s']
-    r['quantities']['incubation_time'] = point(30.0, 'min', 'i', ['s'])                    # exactly the minimum
-    assert status(r, 'equilibrium') == 'unknown'
+    r['quantities']['incubation_time'] = point(30.0, 'min', 'i', ['s'])                    # exactly the fast limit: the zero end of the curve, still conflicting
+    assert status(r, 'equilibrium') == 'conflicting'
+    r['quantities']['incubation_time'] = point(60.0, 'min', 'i', ['s'])                    # twice the fast limit: supported with a degree (0.301)
+    assert status(r, 'equilibrium') == 'supported'
     r['quantities']['incubation_time'] = point(0.4, 'h', 'i', ['s'])                       # 24 min
     assert status(r, 'equilibrium') == 'conflicting'
     r['facts']['equilibrium_reached'] = fact('yes', ['s'])                                 # the stated fact outranks the short step
@@ -217,41 +235,86 @@ def test_the_equilibrium_fact_then_a_short_binding_step():
     assert reason(r, 'equilibrium') == 'fact_answered_no'
 
 
-def test_the_bead_incubation_time_does_not_stand_for_the_binding_step():
+def test_the_bead_incubation_time_alone_does_not_stand_for_the_binding_step_but_adds_to_it():
     r = synthetic_record()
     r['facts']['equilibrium_reached'] = fact('unknown')
     missing(r, 'incubation_time')
     r['quantities']['bead_incubation_time'] = point(5.0, 'min', 'b', ['s'])
-    assert reason(r, 'equilibrium') == 'fact_unknown' and status(r, 'equilibrium') == 'unknown'
+    assert reason(r, 'equilibrium') == 'fact_unknown' and status(r, 'equilibrium') == 'unknown' and grade_alpha(r)['native']['incubation_min'] is None      # the time before the beads is not known
+    r['quantities']['incubation_time'] = point(25.0, 'min', 'i', ['i_span'])
+    r['quantities']['bead_incubation_time'] = point(10.0, 'min', 'b', ['b_span'])
+    native = grade_alpha(r)['native']
+    assert native['incubation_min'] == 35.0 and native['incubation_refs'] == ['i_span', 'b_span'] and status(r, 'equilibrium') == 'supported'      # the 20 nM KD: T_FAST 1.5 minutes, T_SLOW 15: full
+    r['quantities']['kd'] = point(0.5, 'nM', 'k', ['s'])
+    assert status(r, 'equilibrium') == 'conflicting'                                       # 0.5 nM needs 60 min: 35 min together is short
 
 
-def test_the_series_must_have_enough_points_and_span_the_constant():
+def test_the_partner_concentration_over_the_constant_is_recorded_when_the_fact_is_not_stated():
+    r = synthetic_record()                                                                 # labelled 5 nM, tagged 10 nM, KD 20 nM, a fixed-partner titration, the fact stated yes
+    assert grade_alpha(r)['native']['partner_over_constant'] is None                       # the stated fact decides
+    r['facts']['partner_concentration_below_kd'] = fact('unknown')
+    assert (grader_status(r, 'partner_depletion'), reason(r, 'partner_depletion')) == ('unknown', 'partner_concentration_recorded_for_the_sheet')
+    native = grade_alpha(r)['native']
+    assert native['partner_over_constant'] == pytest.approx(0.5) and native['partner_name'] == 'tagged_partner_concentration'      # the largest stated partner: 10 nM over 20 nM
+    assert native['partner_refs'] == ['span_exp_synthetic_alpha_1'] and status(r, 'partner_depletion') == 'supported'
+    r['quantities']['tagged_partner_concentration'] = point(0.2, 'uM', 'p', ['s'])         # 200 nM, ten times the KD
+    assert grade_alpha(r)['native']['partner_over_constant'] == pytest.approx(10.0) and status(r, 'partner_depletion') == 'conflicting'
+    r['titration_design'] = 'cross_titration'                                              # both partners titrated: none held constant
+    assert (reason(r, 'partner_depletion'), status(r, 'partner_depletion')) == ('fact_unknown', 'unknown') and grade_alpha(r)['native']['partner_over_constant'] is None
+    r['titration_design'] = None
+    for name in ('kd', 'ki', 'ec50', 'ic50'):
+        missing(r, name)
+    assert reason(r, 'partner_depletion') == 'fact_unknown'                                # no constant: no scale
+    r['quantities']['kd'] = point(20.0, 'nM', 'k', ['k_span'])
+    r['facts']['partner_concentration_below_kd'] = fact('no', ['s'])
+    assert reason(r, 'partner_depletion') == 'fact_answered_no' and grade_alpha(r)['native']['partner_over_constant'] is None
+
+
+def test_the_series_is_judged_by_its_count_and_its_span_over_the_constant():
     r = synthetic_record()                                                                 # 12 points, 0.05 x to 102.4 x the KD
     assert (grader_status(r, 'concentration_series'), reason(r, 'concentration_series')) == ('unknown', 'concentration_series_recorded_for_the_sheet')
     native = grade_alpha(r)['native']
     assert native['concentration_count'] == 12 and native['concentration_span_refs'] == ['span_exp_synthetic_alpha_1'] and native['concentration_count_refs'] == ['span_exp_synthetic_alpha_1']
     assert _criterion(grade_alpha(r), 'concentration_series') == {'status': 'supported', 'support_refs': ['span_exp_synthetic_alpha_1'], 'degree': 1.0}
-    r['concentration_series']['value'] = [1.0, 2.0, 4.0, 8.0, 16.0, 32.0, 64.0, 128.0]    # 8 points: 0.05 x to 6.4 x the KD: the high end gives a degree (6.4 - 1) / 9
-    assert status(r, 'concentration_series') == 'supported' and _criterion(grade_alpha(r), 'concentration_series')['degree'] == pytest.approx(5.4 / 9.0)
+    r['concentration_series']['value'] = [1.0, 2.0, 4.0, 8.0, 16.0, 32.0, 64.0, 128.0]    # 8 points: 0.05 x to 6.4 x the KD: the high end gives a degree in the one-site occupancy x / (1 + x)
+    assert status(r, 'concentration_series') == 'supported' and _criterion(grade_alpha(r), 'concentration_series')['degree'] == pytest.approx((6.4 / 7.4 - 0.5) / (10 / 11 - 0.5))
     r['concentration_series']['value'] = [4.0, 8.0, 16.0, 32.0, 64.0, 128.0, 256.0, 512.0]  # lowest 4 nM = 0.2 x the KD (allowed), highest 512 = 25.6 x
     assert _criterion(grade_alpha(r), 'concentration_series')['degree'] == 1.0
-    r['concentration_series']['value'] = [12.0, 16.0, 32.0, 64.0, 128.0, 256.0, 512.0, 1024.0]   # lowest 0.6 x the KD: a degree of 0.5
-    assert _criterion(grade_alpha(r), 'concentration_series')['degree'] == pytest.approx(0.5)
+    r['concentration_series']['value'] = [12.0, 16.0, 32.0, 64.0, 128.0, 256.0, 512.0, 1024.0]   # lowest 0.6 x the KD: occupancy 0.375, between 0.5 (zero) and 1/6 (full)
+    assert _criterion(grade_alpha(r), 'concentration_series')['degree'] == pytest.approx((0.5 - 0.6 / 1.6) / (0.5 - 0.2 / 1.2))
     r['concentration_series']['value'] = [20.0, 32.0, 64.0, 128.0, 256.0, 512.0, 1024.0, 2048.0]  # lowest 1 x the KD: the zero-agreement limit
     assert status(r, 'concentration_series') == 'conflicting' and 'degree' not in _criterion(grade_alpha(r), 'concentration_series')
     r['concentration_series']['value'] = [4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 20.0]      # highest 1 x the KD: the zero-agreement limit
     assert status(r, 'concentration_series') == 'conflicting'
-    r['concentration_series']['value'] = [4.0, 8.0, 16.0, 32.0, 64.0, 128.0, 200.0]        # 7 points: fewer than eight, no degree
-    assert status(r, 'concentration_series') == 'conflicting' and grade_alpha(r)['native']['concentration_count'] == 7
+    r['concentration_series']['value'] = [4.0, 8.0, 16.0, 32.0, 64.0, 128.0, 200.0]        # 7 points, span full: (7 - 4) / (8 - 4) = 0.75, partial credit, not a fail
+    assert status(r, 'concentration_series') == 'supported' and grade_alpha(r)['native']['concentration_count'] == 7
+    assert _criterion(grade_alpha(r), 'concentration_series')['degree'] == pytest.approx(0.75)
+    r['concentration_series']['value'] = [4.0, 16.0, 64.0, 256.0]                          # 4 points: as many as the curve's free parameters, no residual: degree 0, supported, never conflicting
+    assert status(r, 'concentration_series') == 'supported' and _criterion(grade_alpha(r), 'concentration_series')['degree'] == 0.0 and _criterion(grade_alpha(r), 'concentration_series')['support_refs'] == ['span_exp_synthetic_alpha_1']
     r['concentration_series'] = {**r['concentration_series'], 'status': 'unavailable', 'value': None}
     assert reason(r, 'concentration_series') == 'concentration_series_recorded_for_the_sheet' and status(r, 'concentration_series') == 'unknown'      # the stated 12 points are enough, the span cannot be judged
     assert grade_alpha(r)['native']['concentration_low_over_constant'] is None
     r['quantities']['titration_point_count'] = point(6, 'count', 'n', ['s'])
-    assert status(r, 'concentration_series') == 'conflicting'
+    assert status(r, 'concentration_series') == 'unknown'                                  # 6 points: partial credit for the count, the span still cannot be judged
+    r['quantities']['titration_point_count'] = point(4, 'count', 'n', ['s'])
+    assert status(r, 'concentration_series') == 'unknown'                                  # without the list the span cannot be judged, so neither can the count
     r['quantities']['titration_point_count'] = point(10, 'count', 'n', ['s'])
     assert status(r, 'concentration_series') == 'unknown'
     missing(r, 'titration_point_count')
     assert (grader_status(r, 'concentration_series'), reason(r, 'concentration_series')) == ('unknown', 'constant_or_series_missing')
+
+
+def test_the_series_count_rises_gradually_to_full_credit_at_the_researched_eight_points():
+    r = synthetic_record()                                                                 # the KD is 20 nM; every series spans 0.05 x to 102.4 x it
+    degrees = {}
+    for count in range(5, 13):
+        r['concentration_series']['value'] = [1.0] + [2.0 ** k for k in range(1, count - 1)] + [2048.0]
+        outcome = _criterion(grade_alpha(r), 'concentration_series')
+        assert outcome['status'] == 'supported' and grade_alpha(r)['native']['concentration_count'] == count
+        degrees[count] = outcome['degree']
+    assert [degrees[n] for n in range(5, 13)] == pytest.approx([0.25, 0.5, 0.75, 1.0, 1.0, 1.0, 1.0, 1.0])
+    assert all(degrees[n] <= degrees[n + 1] for n in range(5, 12))                         # monotone: one more point never lowers the degree
+    assert 0.0 < degrees[7] < 1.0                                                          # just below the researched eight: partial credit, no step
 
 
 def test_the_series_is_judged_against_the_ec50_or_the_ic50_when_there_is_no_kd_or_ki():
@@ -298,14 +361,14 @@ def test_the_kd_and_the_ki_must_agree_within_the_factor():
     assert (grader_status(r, 'direct_vs_competition'), reason(r, 'direct_vs_competition')) == ('unknown', 'estimates_recorded_for_the_sheet')
     assert grade_alpha(r)['native']['estimate_fold'] == pytest.approx(1.5) and grade_alpha(r)['native']['estimate_refs'] == ['span_exp_synthetic_alpha_1']
     assert _criterion(grade_alpha(r), 'direct_vs_competition') == {'status': 'supported', 'support_refs': ['span_exp_synthetic_alpha_1'], 'degree': 1.0}
-    r['quantities']['ki'] = point(120.0, 'nM', 'k', ['s'])                                 # 6 fold: degree (10 - 6) / 7
-    assert status(r, 'direct_vs_competition') == 'supported' and _criterion(grade_alpha(r), 'direct_vs_competition')['degree'] == pytest.approx(4.0 / 7.0)
+    r['quantities']['ki'] = point(120.0, 'nM', 'k', ['s'])                                 # 6 fold: the log of the fold, log(10 / 6) / log(10 / 3)
+    assert status(r, 'direct_vs_competition') == 'supported' and _criterion(grade_alpha(r), 'direct_vs_competition')['degree'] == pytest.approx(math.log(10 / 6) / math.log(10 / 3))
     r['quantities']['ki'] = point(200.0, 'nM', 'k', ['s'])                                 # 10 fold: the zero-agreement limit
     assert status(r, 'direct_vs_competition') == 'conflicting' and 'degree' not in _criterion(grade_alpha(r), 'direct_vs_competition')
     r['quantities']['ki'] = point(2.0, 'nM', 'k', ['s'])                                   # 20 / 2 = 10 the other way
     assert status(r, 'direct_vs_competition') == 'conflicting'
-    r['quantities']['ki'] = point(4.0, 'nM', 'k', ['s'])                                   # 20 / 4 = 5 the other way: degree 5 / 7
-    assert _criterion(grade_alpha(r), 'direct_vs_competition')['degree'] == pytest.approx(5.0 / 7.0)
+    r['quantities']['ki'] = point(4.0, 'nM', 'k', ['s'])                                   # 20 / 4 = 5 the other way: log(10 / 5) / log(10 / 3)
+    assert _criterion(grade_alpha(r), 'direct_vs_competition')['degree'] == pytest.approx(math.log(10 / 5) / math.log(10 / 3))
     r['quantities']['ki'] = point(0.05, 'uM', 'k', ['s'])                                  # 50 nM: 2.5
     assert status(r, 'direct_vs_competition') == 'supported' and _criterion(grade_alpha(r), 'direct_vs_competition')['degree'] == 1.0
     missing(r, 'ki')
@@ -317,10 +380,12 @@ def test_the_kd_and_the_ki_must_agree_within_the_factor():
 def test_replicates_are_independent_experiments_and_wells_do_not_count():
     r = synthetic_record()
     assert (grader_status(r, 'replicates'), reason(r, 'replicates')) == ('unknown', 'replicate_count_recorded_for_the_sheet') and status(r, 'replicates') == 'supported'
-    r['quantities']['replicate_count'] = point(2, 'count', 'n', ['s'])
-    assert status(r, 'replicates') == 'conflicting' and grade_alpha(r)['native']['replicate_count'] == 2 and grade_alpha(r)['native']['replicate_independent'] == 'yes'
+    r['quantities']['replicate_count'] = point(2, 'count', 'n', ['s'])                     # below the researched three: partial credit sqrt(2 / 3), not a fail
+    assert status(r, 'replicates') == 'supported' and grade_alpha(r)['native']['replicate_count'] == 2 and grade_alpha(r)['native']['replicate_independent'] == 'yes'
+    assert _criterion(grade_alpha(r), 'replicates')['degree'] == pytest.approx(math.sqrt(2 / 3))
     r['quantities']['replicate_count'] = point(3, 'count', 'n', ['s'])
     assert status(r, 'replicates') == 'supported' and _criterion(grade_alpha(r), 'replicates')['support_refs'] == ['s', 'span_exp_synthetic_alpha_1']
+    assert 'degree' not in _criterion(grade_alpha(r), 'replicates')                         # at the researched count: full credit, as committed
     r['facts']['independent_experiments'] = fact('no', ['s'])
     assert (grader_status(r, 'replicates'), reason(r, 'replicates')) == ('conflicting', 'replicates_not_independent')
     r['facts']['independent_experiments'] = fact('unknown')
@@ -330,6 +395,19 @@ def test_replicates_are_independent_experiments_and_wells_do_not_count():
     assert (grader_status(r, 'replicates'), reason(r, 'replicates')) == ('unknown', 'replicate_count_or_independence_unknown')
     r['quantities']['technical_replicate_count'] = point(4, 'count', 'w', ['s'])           # triplicate or quadruplicate wells do not make replicates
     assert status(r, 'replicates') == 'unknown'
+
+
+def test_the_replicate_count_rises_gradually_to_full_credit_at_the_researched_three():
+    r = synthetic_record()
+    weights = []
+    for count in (1, 2, 3, 4, 6):
+        r['quantities']['replicate_count'] = point(count, 'count', 'n', ['s'])
+        outcome = _criterion(grade_alpha(r), 'replicates')
+        assert outcome['status'] == 'supported'
+        weights.append(outcome.get('degree', 1.0))
+    assert weights == pytest.approx([math.sqrt(1 / 3), math.sqrt(2 / 3), 1.0, 1.0, 1.0])
+    assert all(a <= b for a, b in zip(weights, weights[1:]))                              # monotone: another independent experiment never lowers the degree
+    assert 0.0 < weights[1] < 1.0                                                          # just below the researched three: partial credit, no step
 
 
 def test_only_a_ec50_or_an_ic50_is_not_a_binding_constant_but_is_kept_apart_from_the_kd():

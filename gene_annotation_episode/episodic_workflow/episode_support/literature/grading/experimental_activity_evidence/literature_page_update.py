@@ -147,10 +147,10 @@ def _check_state(sheet_state):
 
 
 def _weight_input(result):
-    """The result in the form row_weight reads: criteria {id: status} and degrees {id: degree}."""
-    interpretations = result.get('interpretations') or {}
-    return {'criteria': {name: item['status'] for name, item in interpretations.items()},
-            'degrees': {name: item['degree'] for name, item in interpretations.items() if item.get('degree') is not None}}
+    """The result in the form row_weight reads: its 'interpretations' ({criterion: {'status', 'degree'?}}) and its
+    'experiment_type' (whose unknown weight applies). (It used to pass 'criteria'/'degrees', which row_weight does not
+    read, so every row got the no-criteria weight: a bug, fixed 2026-11-21.)"""
+    return {'interpretations': result.get('interpretations') or {}, 'experiment_type': result['experiment_type']}
 
 
 def _result_ref(grader_ref, assertion_ref):
@@ -164,7 +164,7 @@ def _results_of_grader(grader, converted, record, claims):
     has_effect = effect is not None and effect['status'] == 'point'
     interpretations = {name: ({'status': item['status'], 'degree': item['degree']} if item.get('degree') is not None else {'status': item['status']})
                        for name, item in converted['extraction']['interpretations'].items()}
-    weight = row_weight([_weight_input({'interpretations': interpretations})])
+    weight = row_weight([_weight_input({'interpretations': interpretations, 'experiment_type': grader['experiment_type']})])
     qualitative = converted.get('qualitative_effect')
     support_refs = list(dict.fromkeys(qualitative['support_refs'])) if qualitative is not None else []
     bearing_record = {'experiment_type': grader['experiment_type'], 'target_id': record.get('target_id'), 'partner_id': record.get('partner_id')}

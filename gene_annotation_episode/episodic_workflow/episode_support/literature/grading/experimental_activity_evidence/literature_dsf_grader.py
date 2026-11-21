@@ -31,7 +31,7 @@ concentration_count/concentration_count_refs, low_over_kd/high_over_kd/range_ref
 Support: native 'support' holds, for each criterion, the supports ('direct', 'implied', 'about_something_else') of the stated fields it reads
 (its declared 'reads'), copied from the record and not judged here; the converter judges them.
 
-Native values retained: every record quantity as given, plus kd_nM, lowest_nM, highest_nM, thermal_shift_c (signed; the stated shift, else the Tm with the ligand minus the Tm without, None when neither is known), thermal_shift_refs, shift_over_spread (signed),
+Native values retained: every record quantity as given, plus kd_nM, lowest_nM, highest_nM, protein_nM, shift_ligand_nM, shift_concentration_over_kd, shift_concentration_refs, tm_spread_c, tm_spread_independent, kd_over_protein, thermal_shift_c (signed; the stated shift, else the Tm with the ligand minus the Tm without, None when neither is known), thermal_shift_refs, shift_over_spread (signed),
 shift_spread_refs, low_over_kd, high_over_kd, interaction, interaction_refs, preparations, readout, tm_method and spread_kind.
 """
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_dsf_criteria import (
@@ -103,6 +103,9 @@ def _shift_size(record, native):
     if shift is None:
         return _result('unknown', 'thermal_shift_not_given', [])
     native.update({'thermal_shift_c': shift, 'thermal_shift_refs': refs})
+    at, kd = native['shift_ligand_nM'], native['kd_nM']
+    if at is not None and kd is not None:
+        native.update({'shift_concentration_over_kd': at / kd, 'shift_concentration_refs': _refs(record['quantities']['shift_ligand_concentration'], record['quantities']['kd'])})
     return _result('unknown', 'thermal_shift_recorded_for_the_sheet', [])
 
 
@@ -111,7 +114,9 @@ def _shift_over_spread(record, native):
     spread = _value(record, 'tm_spread')
     if shift is None or spread is None:
         return _result('unknown', 'shift_over_spread_not_given', [])
-    native.update({'shift_over_spread': shift / spread, 'shift_spread_refs': _refs({'source_refs': refs}, record['quantities']['tm_spread'])})
+    basis = record['facts']['tm_spread_over_independent_experiments']
+    native.update({'shift_over_spread': shift / spread, 'tm_spread_c': spread, 'tm_spread_independent': basis['answer'],
+                   'shift_spread_refs': _refs({'source_refs': refs}, record['quantities']['tm_spread'], *([basis] if basis['answer'] != 'unknown' else []))})
     return _result('unknown', 'shift_over_spread_recorded_for_the_sheet', [])
 
 
@@ -133,9 +138,10 @@ def _dose_dependence(record, native):
 
 def _concentration_series(record, native):
     item = record['facts']['ligand_titration_measured']
-    if item['answer'] == 'no':
-        return _result('conflicting', 'fact_answered_no', item['source_refs'])
     count = _value(record, 'ligand_concentration_count')
+    if item['answer'] == 'no':      # a single-concentration screen: recorded as one concentration (or the stated count), judged on the sheet side
+        native.update({'concentration_count': 1 if count is None else count, 'concentration_count_refs': _refs(item)})
+        return _result('unknown', 'single_concentration_recorded_for_the_sheet', [])
     if count is None:
         return _one_fact(record, 'ligand_titration_measured')
     native.update({'concentration_count': count, 'concentration_count_refs': _refs(record['quantities']['ligand_concentration_count'])})
@@ -150,6 +156,9 @@ def _concentration_range(record, native):
         return _result('unknown', 'concentration_range_not_given', [])
     native.update({'low_over_kd': lowest / native['kd_nM'], 'high_over_kd': highest / native['kd_nM'],
                    'range_refs': _refs(record['quantities']['ligand_concentration_lowest'], record['quantities']['ligand_concentration_highest'], record['quantities']['kd'])})
+    protein = native['protein_nM']
+    if protein is not None:
+        native.update({'kd_over_protein': native['kd_nM'] / protein, 'range_refs': _refs({'source_refs': native['range_refs']}, record['quantities']['protein_concentration'])})
     return _result('unknown', 'concentration_range_recorded_for_the_sheet', [])
 
 
@@ -179,7 +188,7 @@ EVALUATORS = {'shift_observed': _shift_observed, 'shift_size': _shift_size, 'shi
 def grade_dsf(record):
     """Grade one DSF experiment record. Returns the criterion answers and native values."""
     shifted = record['facts']['thermal_shift_observed']
-    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'readout': record['readout'], 'tm_method': record['tm_method'], 'spread_kind': record['spread_kind'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'interaction': INTERACTION.get(shifted['answer']), 'interaction_refs': list(shifted['source_refs']) if shifted['answer'] in INTERACTION else [], 'kd_nM': _scaled(record, 'kd', NM_PER_UNIT), 'lowest_nM': _scaled(record, 'ligand_concentration_lowest', NM_PER_UNIT), 'highest_nM': _scaled(record, 'ligand_concentration_highest', NM_PER_UNIT), 'thermal_shift_c': None, 'thermal_shift_refs': [], 'shift_over_spread': None, 'shift_spread_refs': [], 'concentration_count': None, 'concentration_count_refs': [], 'low_over_kd': None, 'high_over_kd': None, 'range_refs': [], 'heating_rate_c_per_min': None, 'heating_rate_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': []}
+    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'readout': record['readout'], 'tm_method': record['tm_method'], 'spread_kind': record['spread_kind'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'interaction': INTERACTION.get(shifted['answer']), 'interaction_refs': list(shifted['source_refs']) if shifted['answer'] in INTERACTION else [], 'kd_nM': _scaled(record, 'kd', NM_PER_UNIT), 'lowest_nM': _scaled(record, 'ligand_concentration_lowest', NM_PER_UNIT), 'highest_nM': _scaled(record, 'ligand_concentration_highest', NM_PER_UNIT), 'protein_nM': _scaled(record, 'protein_concentration', NM_PER_UNIT), 'shift_ligand_nM': _scaled(record, 'shift_ligand_concentration', NM_PER_UNIT), 'shift_concentration_over_kd': None, 'shift_concentration_refs': [], 'tm_spread_c': None, 'tm_spread_independent': None, 'kd_over_protein': None, 'thermal_shift_c': None, 'thermal_shift_refs': [], 'shift_over_spread': None, 'shift_spread_refs': [], 'concentration_count': None, 'concentration_count_refs': [], 'low_over_kd': None, 'high_over_kd': None, 'range_refs': [], 'heating_rate_c_per_min': None, 'heating_rate_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': []}
     outcomes = {name: EVALUATORS[name](record, native) for name in CRITERIA}
     native['support'] = criterion_supports(record, DSF_CRITERIA)      # kept for the sheet: the grader does not judge it
     return {'version': VERSION, 'experiment_type': 'dsf', 'experiment_ref': record['experiment_ref'], 'criteria': {name: {'status': o['status'], 'support_refs': o['support_refs']} for name, o in outcomes.items()}, 'reasons': {name: o['reason'] for name, o in outcomes.items()}, 'native': native}

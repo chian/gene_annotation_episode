@@ -54,7 +54,19 @@ def test_concentration_series():
     native = grade_spr(r)['native']
     assert native['concentration_count'] == 4 and native['concentration_low_over_kd'] == pytest.approx(0.1) and native['concentration_high_over_kd'] == pytest.approx(30.0)
     assert native['concentration_refs'] == ['span_exp_synthetic_spr_1']
-    assert status(r, 'concentration_series') == 'conflicting'
+    assert status(r, 'concentration_series') == 'supported'                               # four concentrations, one short of the researched five: partial credit, no conflict
+    assert _criterion(grade_spr(r), 'concentration_series')['degree'] == pytest.approx(3 / 4)      # a kinetic fit (stated): the zero end is one concentration
+    r['facts']['kd_analysis'] = fact('steady_state_fit', ['s'])
+    assert grade_spr(r)['native']['kd_analysis'] == 'steady_state_fit'
+    assert _criterion(grade_spr(r), 'concentration_series')['degree'] == pytest.approx(2 / 3)      # a steady-state KD (stated, although rates are given): the isotherm's two parameters
+    r['facts']['kd_analysis'] = fact('unknown')
+    assert _criterion(grade_spr(r), 'concentration_series')['degree'] == pytest.approx(3 / 4)      # not stated: the stated rates stand for a kinetic fit
+    r['quantities']['kon'] = {**r['quantities']['kon'], 'status': 'unavailable', 'value': None}
+    assert _criterion(grade_spr(r), 'concentration_series')['degree'] == pytest.approx(2 / 3)      # not stated and no rates: the isotherm
+    r['facts']['kd_analysis'] = fact('kinetic_fit', ['s'])
+    assert _criterion(grade_spr(r), 'concentration_series')['degree'] == pytest.approx(3 / 4)      # stated kinetic without rates
+    r = synthetic_record()
+    r['concentration_series']['value'] = [2.0, 20.0, 200.0, 600.0]
     r['concentration_series']['value'] = [30.0, 40.0, 60.0, 100.0, 200.0]
     assert status(r, 'concentration_series') == 'conflicting'
     r['concentration_series']['value'] = [0.002, 0.006, 0.02, 0.06, 0.2, 0.6]
@@ -71,11 +83,35 @@ def test_fit_model():
     r['fit_model'] = 'bivalent_analyte'
     assert status(r, 'fit_model') == 'supported'
     r = synthetic_record()
+    r['quantities']['baseline_noise'] = {**r['quantities']['baseline_noise'], 'status': 'unavailable', 'value': None}      # the Rmax scale alone
     r['quantities']['chi_squared'] = point(25.0, 'RU^2', 'chi', ['s'])
-    assert reason(r, 'fit_model') == 'chi_squared_over_rmax_recorded_for_the_sheet' and grade_spr(r)['native']['chi2_over_rmax'] == pytest.approx(0.125)
+    assert reason(r, 'fit_model') == 'chi_squared_recorded_for_the_sheet' and grade_spr(r)['native']['chi2_over_rmax'] == pytest.approx(0.125)
     assert status(r, 'fit_model') == 'supported'                                            # 0.125 is above the full limit but short of the zero limit: a degree, no conflict
     r['quantities']['chi_squared'] = point(70.0, 'RU^2', 'chi', ['s'])
     assert status(r, 'fit_model') == 'conflicting'
+    # the stated baseline noise (1.5 RU in the record): chi-squared is read against noise^2 in addition to Rmax, the weakest counts
+    r = synthetic_record()
+    assert grade_spr(r)['native']['chi2_over_noise_squared'] == pytest.approx(2.0 / 2.25)
+    assert status(r, 'fit_model') == 'supported' and _criterion(grade_spr(r), 'fit_model')['degree'] == 1.0
+    r['quantities']['chi_squared'] = point(10.0, 'RU^2', 'chi', ['s'])                       # 0.05 of Rmax (fine) but 4.4 times noise^2
+    degree = _criterion(grade_spr(r), 'fit_model')['degree']
+    assert 0 < degree < 1
+    r['quantities']['chi_squared'] = point(15.0, 'RU^2', 'chi', ['s'])                       # 6.7 times noise^2: worse, never better
+    assert _criterion(grade_spr(r), 'fit_model')['degree'] < degree
+    r['quantities']['chi_squared'] = point(20.0, 'RU^2', 'chi', ['s'])                       # 0.1 of Rmax (fine by Rmax) but 8.9 times noise^2
+    assert status(r, 'fit_model') == 'supported'
+    r['quantities']['chi_squared'] = point(25.0, 'RU^2', 'chi', ['s'])                       # 11 times noise^2: no agreement although 0.125 of Rmax is only a partial one
+    assert status(r, 'fit_model') == 'conflicting'
+    r['quantities']['rmax'] = point(2000.0, 'RU', 'rmax', ['s'])                              # without a usable Rmax scale the noise scale alone decides
+    r['quantities']['chi_squared'] = point(6.0, 'RU^2', 'chi', ['s'])
+    graded = grade_spr(r)
+    assert graded['native']['chi2_over_rmax'] == pytest.approx(0.003) and 0 < _criterion(graded, 'fit_model')['degree'] < 1
+    r['quantities']['rmax'] = {**r['quantities']['rmax'], 'status': 'unavailable', 'value': None}
+    graded = grade_spr(r)
+    assert graded['native']['chi2_over_rmax'] is None and graded['native']['chi2_over_noise_squared'] == pytest.approx(6.0 / 2.25)
+    assert reason(r, 'fit_model') == 'chi_squared_recorded_for_the_sheet' and status(r, 'fit_model') == 'supported'
+    r['quantities']['baseline_noise'] = {**r['quantities']['baseline_noise'], 'status': 'unavailable', 'value': None}
+    assert reason(r, 'fit_model') == 'model_stated_with_residual_evidence' and grade_spr(r)['native']['chi2_over_noise_squared'] is None      # no noise stated: unknown, never judged against an assumed noise
     r = synthetic_record()
     r['facts']['analyte_bivalent_or_oligomeric'] = fact('unknown')
     assert status(r, 'fit_model') == 'unknown'
@@ -107,7 +143,10 @@ def test_mass_transport_baseline_replicates_activity():
     r['facts']['baseline_drift'] = fact('no')
     assert status(r, 'baseline_regeneration') == 'conflicting'
     r['quantities']['replicate_count'] = point(2, 'count', 'n', ['s'])
-    assert status(r, 'replicates') == 'conflicting' and grader_status(r, 'replicates') == 'unknown'      # the count is judged on the sheet side
+    assert status(r, 'replicates') == 'supported' and grader_status(r, 'replicates') == 'unknown'        # the count is judged on the sheet side: two, one short of the researched three, gets partial credit
+    assert _criterion(grade_spr(r), 'replicates')['degree'] == pytest.approx((2 / 3) ** 0.5)
+    r['quantities']['replicate_count'] = point(1, 'count', 'n', ['s'])
+    assert status(r, 'replicates') == 'supported' and _criterion(grade_spr(r), 'replicates')['degree'] == pytest.approx((1 / 3) ** 0.5)      # one run: low partial credit, never conflicting (the shared replicate rule)
     r['quantities']['replicate_count'] = point(3, 'count', 'n', ['s'])
     r['facts']['independent_surfaces'] = fact('unknown')
     assert status(r, 'replicates') == 'unknown'

@@ -101,11 +101,16 @@ def test_loading_and_response():
 
 def test_concentration_series():
     r = synthetic_record()
-    r['concentration_series']['value'] = [2.0, 20.0, 200.0, 600.0]            # four: fewer than five
+    r['concentration_series']['value'] = [2.0, 20.0, 200.0, 600.0]            # four: one fewer than five, partial credit (no longer a conflict)
     assert reason(r, 'concentration_series') == 'concentration_series_recorded_for_the_sheet' and grade_bli(r)['native']['concentration_count'] == 4
+    assert grader_status(r, 'concentration_series') == 'unknown' and status(r, 'concentration_series') == 'supported' and 0 < _criterion(grade_bli(r), 'concentration_series')['degree'] < 1
+    r['concentration_series']['value'] = [20.0]                                # one concentration: no series at all
     assert status(r, 'concentration_series') == 'conflicting'
     r['concentration_series']['value'] = [30.0, 40.0, 60.0, 100.0, 200.0]     # lowest 1.5 x KD, above the zero limit
-    assert grade_bli(r)['native']['concentration_low_over_kd'] == pytest.approx(1.5) and status(r, 'concentration_series') == 'conflicting'
+    assert grade_bli(r)['native']['concentration_low_over_kd'] == pytest.approx(1.5) and status(r, 'concentration_series') == 'supported'      # a kinetic (1:1) fit: gentle low end, never conflicting
+    r['fit_model'] = 'steady_state'
+    assert status(r, 'concentration_series') == 'conflicting'                 # an isotherm needs its lower arm: past the zero limit
+    r['fit_model'] = '1:1'
     r['concentration_series']['value'] = [0.002, 0.006, 0.02, 0.06, 0.2, 0.6]  # in uM: the same series as nM values
     r['concentration_series']['unit'] = 'uM'
     assert status(r, 'concentration_series') == 'supported'
@@ -163,7 +168,10 @@ def test_dissociation_window():
 def test_replicates():
     r = synthetic_record()
     r['quantities']['replicate_count'] = point(2, 'count', 'n', ['s'])
-    assert status(r, 'replicates') == 'conflicting' and grader_status(r, 'replicates') == 'unknown'      # the count is judged on the sheet side
+    assert status(r, 'replicates') == 'supported' and grader_status(r, 'replicates') == 'unknown'      # the count is judged on the sheet side: one fewer than three, partial credit (no longer a conflict)
+    assert 0 < _criterion(grade_bli(r), 'replicates')['degree'] < 1
+    r['quantities']['replicate_count'] = point(1, 'count', 'n', ['s'])
+    assert status(r, 'replicates') == 'supported' and 0 < _criterion(grade_bli(r), 'replicates')['degree'] < 1      # n >= 1 is never conflicting (rule 1): precision sqrt(1/3)
     r['quantities']['replicate_count'] = point(3, 'count', 'n', ['s'])
     assert status(r, 'replicates') == 'supported'
     r['facts']['independent_sensors'] = fact('no')

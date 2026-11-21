@@ -14,7 +14,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.
 
 CHOICE_NAMES = ('assay_format', 'spread_kind', 'fit_model', 'readout_signal', 'capillary_type', 'label_type')
 
-UNITS = {'kd': 'nM', 'ki': 'nM', 'ec50': 'nM', 'kd_spread': 'nM', 'ki_spread': 'nM', 'labelled_concentration': 'nM', 'fnorm_amplitude': 'permille', 'signal_to_noise': 'ratio', 'led_power': 'percent', 'ir_laser_power': 'percent', 'fhot_time': 's', 'titration_point_count': 'count', 'incubation_time': 'min', 'temperature': 'C', 'replicate_count': 'count'}
+UNITS = {'kd': 'nM', 'ki': 'nM', 'ec50': 'nM', 'kd_spread': 'nM', 'ki_spread': 'nM', 'labelled_concentration': 'nM', 'fnorm_amplitude': 'permille', 'fnorm_noise': 'permille', 'signal_to_noise': 'ratio', 'led_power': 'percent', 'ir_laser_power': 'percent', 'fhot_time': 's', 'titration_point_count': 'count', 'incubation_time': 'min', 'temperature': 'C', 'replicate_count': 'count'}
 
 
 def blank_record(experiment_ref, source_ref, assertion_ref):

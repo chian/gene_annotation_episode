@@ -16,7 +16,10 @@ GOAL = ('Investigate which search approach is productive. Keep the information o
         'fixed target. Negative findings and qualifications can advance the investigation. Commit interpretations '
         "with the common reasoning action and update only the parent's declared typed form in that same work call. "
         'Navigation, byte coverage and repeated reading earn no scientific credit by themselves. The commissioned '
-        "task's own yield settings guide continuation.")
+        "task's own yield settings guide the continuation of a finite commission. A verified_source_leads "
+        'commission has no cost: once 8 units are attempted and 4 observed, a unit is flat when the upper bound of '
+        'its expected next marginal credit is at or below the adaptive threshold (the larger of one result and 0.1 '
+        'x the median of recent productive credits), and the work stops after 4 flat units in a row.')
 UNIT = ('one model-selected unit for the assigned search strategy: a catalog lookup, an access or acquisition tool, a '
         'population sheet, a reasoning commit coupled with its grading sheets, the report tool, or one commission '
         'of the assessment of which returned sources merit examination')

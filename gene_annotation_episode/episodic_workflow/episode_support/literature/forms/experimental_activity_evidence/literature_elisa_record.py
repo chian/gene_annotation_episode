@@ -34,8 +34,8 @@ preparations   titrant_preparation_ref (the partner added in a series, or in com
                hands them to the merger as its dependence keys (titrant as the analyte key, the coated partner as the other
                partner; the plate is not a surface reference).
 quantities     kd, ki, ec50, ic50, kd_spread, ki_spread, coating_concentration, signal_maximum, signal_background,
-               wash_count, titration_point_count, technical_replicate_count, incubation_time, temperature, replicate_count: one
-               operand each.
+               wash_count, titration_point_count, technical_replicate_count, incubation_time, temperature, replicate_count,
+               detector_linear_limit, koff, wash_duration, tracer_concentration, tracer_kd: one operand each.
                Units: kd/ki/ec50/ic50/kd_spread/ki_spread pM, nM, uM or mM (kd is the apparent dissociation constant the source
                calls a KD; ec50 the half-maximal effective concentration of a binding curve; ic50 the half-maximal inhibitory
                concentration of a competition; ki an inhibition constant the source gives); coating_concentration 'ug/mL' or 'ng/mL'
@@ -43,6 +43,12 @@ quantities     kd, ki, ec50, ic50, kd_spread, ki_spread, coating_concentration, 
                plateau of the curve, and of the background: the blank, no-coat or no-ligand wells); wash_count, titration_point_count,
                technical_replicate_count (wells per concentration) and replicate_count (independent experiments) 'count';
                incubation_time s, min or h (the binding step of the ligand on the plate, before the wash); temperature C or K.
+               Added after the range review (grader gaps): detector_linear_limit 'OD' (the highest absorbance the paper says its plate
+               reader reads linearly); koff 's^-1' (the dissociation rate constant of the complex the paper gives, for the loss during the
+               washes); wash_duration s, min or h (the total time of the washes after the binding step, the time the complex spends without
+               free ligand before detection); tracer_concentration (the constant concentration of the ligand a competitor displaces, unit pM,
+               nM, uM or mM) and tracer_kd (the KD the paper gives for that ligand, same units): the two inputs of the Cheng-Prusoff conversion
+               of an IC50 to a Ki.
 concentration_series
                operand whose 'value' is a list of titrant concentrations (unit pM, nM, uM or mM), or None when not given. In the
                competition format it is the competitor series.
@@ -79,7 +85,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 
 VERSION = 'a105_elisa_record_v1'
 EXPERIMENT_TYPE = 'elisa'
-QUANTITIES = ('kd', 'ki', 'ec50', 'ic50', 'kd_spread', 'ki_spread', 'coating_concentration', 'signal_maximum', 'signal_background', 'wash_count', 'titration_point_count', 'technical_replicate_count', 'incubation_time', 'temperature', 'replicate_count')
+QUANTITIES = ('kd', 'ki', 'ec50', 'ic50', 'kd_spread', 'ki_spread', 'coating_concentration', 'signal_maximum', 'signal_background', 'wash_count', 'titration_point_count', 'technical_replicate_count', 'incubation_time', 'temperature', 'replicate_count', 'detector_linear_limit', 'koff', 'wash_duration', 'tracer_concentration', 'tracer_kd')
 PREPARATION_KEYS = ('titrant_preparation_ref', 'fixed_partner_preparation_ref', 'dataset_ref')
 CHOICE_FIELDS = ('assay_format', 'detection_format', 'spread_kind', 'fit_model', 'readout_signal', 'enzyme_conjugate', 'blocking_agent')
 ASSAY_FORMATS = ('saturation_titration', 'competition')
@@ -119,4 +125,4 @@ def fact(answer, refs=(), support='direct'):
 
 CONCENTRATION_UNITS = ('pM', 'nM', 'uM', 'mM')
 # The unit vocabulary of each quantity (and of the concentration series): the units a record may carry.
-UNITS = {'kd': CONCENTRATION_UNITS, 'ki': CONCENTRATION_UNITS, 'ec50': CONCENTRATION_UNITS, 'ic50': CONCENTRATION_UNITS, 'kd_spread': CONCENTRATION_UNITS, 'ki_spread': CONCENTRATION_UNITS, 'coating_concentration': ('ng/mL', 'ug/mL'), 'signal_maximum': ('OD',), 'signal_background': ('OD',), 'wash_count': ('count',), 'titration_point_count': ('count',), 'technical_replicate_count': ('count',), 'incubation_time': ('s', 'min', 'h'), 'temperature': ('C', 'K'), 'replicate_count': ('count',), 'concentration_series': CONCENTRATION_UNITS}
+UNITS = {'kd': CONCENTRATION_UNITS, 'ki': CONCENTRATION_UNITS, 'ec50': CONCENTRATION_UNITS, 'ic50': CONCENTRATION_UNITS, 'kd_spread': CONCENTRATION_UNITS, 'ki_spread': CONCENTRATION_UNITS, 'coating_concentration': ('ng/mL', 'ug/mL'), 'signal_maximum': ('OD',), 'signal_background': ('OD',), 'wash_count': ('count',), 'titration_point_count': ('count',), 'technical_replicate_count': ('count',), 'incubation_time': ('s', 'min', 'h'), 'temperature': ('C', 'K'), 'replicate_count': ('count',), 'detector_linear_limit': ('OD',), 'koff': ('s^-1',), 'wash_duration': ('s', 'min', 'h'), 'tracer_concentration': CONCENTRATION_UNITS, 'tracer_kd': CONCENTRATION_UNITS, 'concentration_series': CONCENTRATION_UNITS}

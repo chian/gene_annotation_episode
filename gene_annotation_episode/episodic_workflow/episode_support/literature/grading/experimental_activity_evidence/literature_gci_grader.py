@@ -29,11 +29,14 @@ either as enough, and otherwise uses the shared rule.
 Native values retained: every record quantity as given, plus kd_nM,
 kd_from_rates_nM, immobilization_level_pg_mm2, response_max_pg_mm2,
 concentration_count, concentration_low_over_kd, concentration_high_over_kd,
-pulse_kinetics, steady_kinetic_fold, replicate_count, replicate_independent and
+rmax_theoretical_pg_mm2, rmax_ratio, dissociation_time_s, dissociation_decay,
+dissociation_response_pg_mm2, pulse_kinetics, steady_kinetic_fold, replicate_count, replicate_independent and
 the refs of each (surface_refs, concentration_refs, replicate_refs, kinetic_refs,
 steady_kinetic_refs), preparations, spread_kind, fit_model and chip_type.
 """
-from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_gci_criteria import GCI_CRITERIA, NM_PER_M, NM_PER_UNIT, PG_MM2_PER_RU, PG_MM2_PER_UNIT
+import math
+
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_gci_criteria import GCI_CRITERIA, NM_PER_M, NM_PER_UNIT, PG_MM2_PER_RU, PG_MM2_PER_UNIT, S_PER_UNIT
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
 VERSION = 'a105_gci_grade_v1'
@@ -121,6 +124,19 @@ def _surface_level_and_response(record, native):
     return _result('unknown', 'surface_level_and_response_recorded_for_the_sheet', [])
 
 
+def _rmax_consistency(record, native):
+    names = ('response_max', 'immobilization_level', 'analyte_mass', 'ligand_mass', 'stoichiometry')
+    level, response = native['immobilization_level_pg_mm2'], native['response_max_pg_mm2']
+    analyte, ligand, stoichiometry = (_value(record, n) for n in ('analyte_mass', 'ligand_mass', 'stoichiometry'))
+    if level is None or response is None or analyte is None or ligand is None or stoichiometry is None:
+        return _result('unknown', 'rmax_operand_missing', [])
+    theoretical = analyte / ligand * level * stoichiometry
+    native['rmax_theoretical_pg_mm2'] = theoretical
+    native['rmax_ratio'] = response / theoretical
+    native['rmax_refs'] = _refs(*(record['quantities'][n] for n in names))
+    return _result('unknown', 'rmax_ratio_recorded_for_the_sheet', [])
+
+
 def _concentration_series(record, native):
     kd = native['kd_nM']
     series = record['concentration_series']
@@ -135,6 +151,17 @@ def _concentration_series(record, native):
     native['concentration_refs'] = _refs(series, record['quantities']['kd'], record['facts']['repeated_pulse_kinetics_used'])
     native['pulse_kinetics'] = record['facts']['repeated_pulse_kinetics_used']['answer'] == 'yes'
     return _result('unknown', 'concentration_series_recorded_for_the_sheet', [])
+
+
+def _dissociation_window(record, native):
+    koff, time = _value(record, 'koff'), _value(record, 'dissociation_time')
+    if koff is None or time is None:
+        return _result('unknown', 'koff_or_dissociation_time_missing', [])
+    native['dissociation_time_s'] = time * S_PER_UNIT[record['quantities']['dissociation_time']['unit']]
+    native['dissociation_decay'] = 1 - math.exp(-koff * native['dissociation_time_s'])
+    native['dissociation_response_pg_mm2'] = native['response_max_pg_mm2']
+    native['dissociation_refs'] = _refs(record['quantities']['koff'], record['quantities']['dissociation_time'], *([record['quantities']['response_max']] if native['response_max_pg_mm2'] is not None else []))
+    return _result('unknown', 'dissociation_decay_recorded_for_the_sheet', [])
 
 
 def _fit_model(record, native):
@@ -189,12 +216,12 @@ def _steady_state_vs_kinetic(record, native):
     return _result('unknown', 'estimate_fold_recorded_for_the_sheet', [])
 
 
-EVALUATORS = {'reference_subtraction': _reference_subtraction, 'bulk_solvent_correction': _bulk_solvent_correction, 'nonspecific_binding_control': _nonspecific_binding_control, 'baseline_and_regeneration': _baseline_and_regeneration, 'surface_level_and_response': _surface_level_and_response, 'concentration_series': _concentration_series, 'fit_model': _fit_model, 'mass_transport': _mass_transport, 'replicates': _replicates, 'immobilized_activity': _immobilized_activity, 'kinetic_consistency': _kinetic_consistency, 'steady_state_vs_kinetic': _steady_state_vs_kinetic}
+EVALUATORS = {'reference_subtraction': _reference_subtraction, 'bulk_solvent_correction': _bulk_solvent_correction, 'nonspecific_binding_control': _nonspecific_binding_control, 'baseline_and_regeneration': _baseline_and_regeneration, 'surface_level_and_response': _surface_level_and_response, 'rmax_consistency': _rmax_consistency, 'concentration_series': _concentration_series, 'dissociation_window': _dissociation_window, 'fit_model': _fit_model, 'mass_transport': _mass_transport, 'replicates': _replicates, 'immobilized_activity': _immobilized_activity, 'kinetic_consistency': _kinetic_consistency, 'steady_state_vs_kinetic': _steady_state_vs_kinetic}
 
 
 def grade_gci(record):
     """Grade one GCI experiment record. Returns the criterion answers and native values."""
-    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'chip_type': record['chip_type'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'concentration_series': dict(record['concentration_series']), 'kd_nM': _nm(record, 'kd'), 'kd_from_rates_nM': None, 'immobilization_level_pg_mm2': _pg_mm2(record, 'immobilization_level'), 'response_max_pg_mm2': _pg_mm2(record, 'response_max'), 'concentration_count': None, 'concentration_low_over_kd': None, 'concentration_high_over_kd': None, 'concentration_refs': [], 'pulse_kinetics': None, 'surface_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': [], 'kinetic_refs': [], 'steady_kinetic_fold': None, 'steady_kinetic_refs': []}
+    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'chip_type': record['chip_type'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'concentration_series': dict(record['concentration_series']), 'kd_nM': _nm(record, 'kd'), 'kd_from_rates_nM': None, 'immobilization_level_pg_mm2': _pg_mm2(record, 'immobilization_level'), 'response_max_pg_mm2': _pg_mm2(record, 'response_max'), 'concentration_count': None, 'concentration_low_over_kd': None, 'concentration_high_over_kd': None, 'concentration_refs': [], 'pulse_kinetics': None, 'surface_refs': [], 'rmax_theoretical_pg_mm2': None, 'rmax_ratio': None, 'rmax_refs': [], 'dissociation_time_s': None, 'dissociation_decay': None, 'dissociation_response_pg_mm2': None, 'dissociation_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': [], 'kinetic_refs': [], 'steady_kinetic_fold': None, 'steady_kinetic_refs': []}
     native['support'] = criterion_supports(record, GCI_CRITERIA)      # kept for the sheet: the grader does not judge it (criterion id -> supports of the stated fields it reads)
     outcomes = {name: EVALUATORS[name](record, native) for name in CRITERIA}
     return {'version': VERSION, 'experiment_type': 'gci', 'experiment_ref': record['experiment_ref'], 'criteria': {name: {'status': o['status'], 'support_refs': o['support_refs']} for name, o in outcomes.items()}, 'reasons': {name: o['reason'] for name, o in outcomes.items()}, 'native': native}

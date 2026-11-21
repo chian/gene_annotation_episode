@@ -37,12 +37,12 @@ Support: native['support'] keeps, per criterion, the 'support' facts of the stat
 literature_quote_support.criterion_supports). The grader only carries them; it never judges them and no status depends on them.
 
 Native values retained: every record quantity as given, plus kd_nM, ki_nM, ic50_nM, constant_name, constant_nM, radioligand_nM,
-nonspecific_ligand_nM, nonspecific_excess_ratio, incubation_min, concentration_count, concentration_low_over_kd,
+nonspecific_ligand_nM, nonspecific_excess_ratio, incubation_min, dissociation_rate_per_min, depletion_corrected, concentration_count, concentration_low_over_kd,
 concentration_high_over_kd, radioligand_over_kd, calculated_ki_nM, ki_over_calculated, the recorded facts and refs named above, preparations,
 assay_format, radioligand_isotope, separation_method, preparation_type, spread_kind and fit_model.
 """
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_radioligand_criteria import (
-    MIN_PER_UNIT, NM_PER_UNIT, RADIOLIGAND_CRITERIA)
+    MIN_PER_UNIT, NM_PER_UNIT, PER_MIN_PER_UNIT, RADIOLIGAND_CRITERIA)
 
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
@@ -102,9 +102,14 @@ def _one_fact(record, name):
 
 def _ligand_depletion(record, native):
     percent = _value(record, 'percent_bound')
+    corrected = record['facts']['depletion_corrected']
     if percent is None:
-        return _one_fact(record, 'ligand_depletion_checked')
-    native.update({'percent_bound': percent, 'percent_bound_refs': _refs(record['quantities']['percent_bound'])})
+        result = _one_fact(record, 'ligand_depletion_checked')
+        if result['status'] == 'unknown' and corrected['answer'] == 'yes':
+            return _result('supported', 'depletion_corrected', corrected['source_refs'])
+        return result
+    native.update({'percent_bound': percent, 'percent_bound_refs': _refs(record['quantities']['percent_bound']),
+                   'depletion_corrected': corrected['answer'], 'depletion_corrected_refs': list(corrected['source_refs'])})
     return _result('unknown', 'percent_bound_recorded_for_the_sheet', [])
 
 
@@ -122,13 +127,17 @@ def _nonspecific_binding(record, native):
 
 def _nonspecific_excess(record, native):
     stated = _value(record, 'nonspecific_excess')
-    ligand, kd = native['nonspecific_ligand_nM'], native['kd_nM']
+    ligand, own_kd, kd = native['nonspecific_ligand_nM'], _nm(record, 'nonspecific_ligand_kd'), native['kd_nM']
+    same = record['facts']['nonspecific_ligand_is_unlabelled_radioligand']
     if stated is not None:
         native['nonspecific_excess_ratio'] = stated
         refs = _refs(record['quantities']['nonspecific_excess'])
-    elif ligand is not None and kd is not None:
+    elif ligand is not None and own_kd is not None:                       # the excess is over the Kd of the unlabelled ligand itself
+        native['nonspecific_excess_ratio'] = ligand / own_kd
+        refs = _refs(record['quantities']['nonspecific_ligand_concentration'], record['quantities']['nonspecific_ligand_kd'])
+    elif ligand is not None and kd is not None and same['answer'] == 'yes':      # the unlabelled ligand is the radioligand itself: its Kd is the radioligand's KD
         native['nonspecific_excess_ratio'] = ligand / kd
-        refs = _refs(record['quantities']['nonspecific_ligand_concentration'], record['quantities']['kd'])
+        refs = _refs(record['quantities']['nonspecific_ligand_concentration'], record['quantities']['kd'], same)
     else:
         return _result('unknown', 'excess_not_given', [])
     native['nonspecific_excess_refs'] = refs
@@ -137,12 +146,15 @@ def _nonspecific_excess(record, native):
 
 def _equilibrium(record, native):
     item = record['facts']['equilibrium_reached']
+    rate = _scaled(record, 'dissociation_rate', PER_MIN_PER_UNIT)          # the off-rate of the radioligand: recorded only with the incubation, for the sheet
     status, reason = _shared_rule([item['answer']])
     if status != 'unknown':
         return _result(status, reason, item['source_refs'])
     if native['incubation_min'] is None:
         return _result('unknown', 'fact_unknown', [])
     native['incubation_refs'] = _refs(record['quantities']['incubation_time'])
+    if rate is not None:
+        native.update({'dissociation_rate_per_min': rate, 'dissociation_rate_refs': _refs(record['quantities']['dissociation_rate'])})
     return _result('unknown', 'incubation_recorded_for_the_sheet', [])
 
 
@@ -257,7 +269,7 @@ def grade_radioligand(record):
     """Grade one radioligand binding experiment record. Returns the criterion answers and native values."""
     nm = {name: _nm(record, name) for name in ('kd', 'ki', 'ic50')}
     constant_name = next((name for name in CONSTANTS if nm[name] is not None), None)
-    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'assay_format': record['assay_format'], 'radioligand_isotope': record['radioligand_isotope'], 'separation_method': record['separation_method'], 'preparation_type': record['preparation_type'], 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'choice_support': dict(record['choice_support']), 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'concentration_series': dict(record['concentration_series']), 'kd_nM': nm['kd'], 'ki_nM': nm['ki'], 'ic50_nM': nm['ic50'], 'constant_name': constant_name, 'constant_nM': None if constant_name is None else nm[constant_name], 'radioligand_nM': _nm(record, 'radioligand_concentration'), 'nonspecific_ligand_nM': _nm(record, 'nonspecific_ligand_concentration'), 'nonspecific_excess_ratio': None, 'incubation_min': _minutes(record, 'incubation_time'), 'concentration_count': None, 'concentration_low_over_kd': None, 'concentration_high_over_kd': None, 'radioligand_over_kd': None, 'calculated_ki_nM': None, 'ki_over_calculated': None, 'percent_bound': None, 'percent_bound_refs': [], 'nonspecific_percent': None, 'nonspecific_fraction_refs': [], 'nonspecific_excess_refs': [], 'incubation_refs': [], 'concentration_count_refs': [], 'concentration_span_refs': [], 'radioligand_level_refs': [], 'hill_slope': None, 'hill_slope_refs': [], 'cheng_prusoff_fold': None, 'cheng_prusoff_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': []}
+    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'assay_format': record['assay_format'], 'radioligand_isotope': record['radioligand_isotope'], 'separation_method': record['separation_method'], 'preparation_type': record['preparation_type'], 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'choice_support': dict(record['choice_support']), 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'concentration_series': dict(record['concentration_series']), 'kd_nM': nm['kd'], 'ki_nM': nm['ki'], 'ic50_nM': nm['ic50'], 'constant_name': constant_name, 'constant_nM': None if constant_name is None else nm[constant_name], 'radioligand_nM': _nm(record, 'radioligand_concentration'), 'nonspecific_ligand_nM': _nm(record, 'nonspecific_ligand_concentration'), 'nonspecific_excess_ratio': None, 'incubation_min': _minutes(record, 'incubation_time'), 'concentration_count': None, 'concentration_low_over_kd': None, 'concentration_high_over_kd': None, 'radioligand_over_kd': None, 'calculated_ki_nM': None, 'ki_over_calculated': None, 'percent_bound': None, 'percent_bound_refs': [], 'depletion_corrected': None, 'depletion_corrected_refs': [], 'dissociation_rate_per_min': None, 'dissociation_rate_refs': [], 'nonspecific_percent': None, 'nonspecific_fraction_refs': [], 'nonspecific_excess_refs': [], 'incubation_refs': [], 'concentration_count_refs': [], 'concentration_span_refs': [], 'radioligand_level_refs': [], 'hill_slope': None, 'hill_slope_refs': [], 'cheng_prusoff_fold': None, 'cheng_prusoff_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': []}
     outcomes = {name: EVALUATORS[name](record, native) for name in CRITERIA}
     native['support'] = criterion_supports(record, RADIOLIGAND_CRITERIA)      # kept for the sheet: the grader does not judge it
     return {'version': VERSION, 'experiment_type': 'radioligand', 'experiment_ref': record['experiment_ref'], 'criteria': {name: {'status': o['status'], 'support_refs': o['support_refs']} for name, o in outcomes.items()}, 'reasons': {name: o['reason'] for name, o in outcomes.items()}, 'native': native}

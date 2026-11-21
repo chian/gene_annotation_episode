@@ -16,7 +16,11 @@ tool needs of the assignment and of the received progress into the tool's argume
 
 Settings this episode reads (``ctx.settings``): ``launch_instructions_directory`` and ``knowledge_library_directory``
 (optional: the libraries whose context is shown to the model); ``cost`` and ``parameters``
-(``yield_estimator.py``).
+(``yield_estimator.py``, which only checks them). Its accumulation controller (``ADAPTIVE_CONTROL``, ``items=None``)
+takes no cost; after at least 8 units attempted and 4 observed it fits nano-graphrag's yield model, a unit is flat
+when the upper bound of the expected next marginal (hypervolume) credit is at or below the adaptive gamma
+(max(one-result resolution, 0.1 x median of recent productive credits)), and it stops after 4 flat units in a row;
+with ``items=None`` no item count stops it.
 
 BLOCKED-ON-JOB-SERVICE: observing the target is the old ``ProgressProvider.observe`` (``services.observe_progress``)
 over A110's execution job provider; no service wraps it. ``_observe_progress`` names the service and the call it

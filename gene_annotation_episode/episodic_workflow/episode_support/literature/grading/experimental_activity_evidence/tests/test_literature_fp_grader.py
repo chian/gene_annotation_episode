@@ -1,4 +1,6 @@
 """FP grader: each criterion's rule on records, with the arithmetic worked by hand."""
+import math
+
 import pytest
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_fp_record import fact, point
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_fp_converter import _criterion
@@ -106,7 +108,8 @@ def test_concentration_series():
     graded = grade_fp(r)
     assert graded['native']['concentration_count'] == 7 and graded['reasons']['concentration_series'] == 'series_recorded_for_the_sheet' and graded['criteria']['concentration_series']['status'] == 'unknown'
     assert graded['native']['series_refs'] == ['span_exp_synthetic_fp_1']
-    assert status(r, 'concentration_series') == 'conflicting'
+    judged = _criterion(graded, 'concentration_series')
+    assert judged['status'] == 'supported' and judged['degree'] == pytest.approx(0.8)      # (7 - 3) / (8 - 3); the ends 0.1 x and 40 x KD are full
     r['concentration_series']['value'] = [30.0, 40.0, 60.0, 100.0, 200.0, 300.0, 400.0, 500.0]   # lowest 1.5 x KD
     assert grade_fp(r)['native']['concentration_low_over_constant'] == pytest.approx(1.5) and status(r, 'concentration_series') == 'conflicting'
     r['concentration_series']['value'] = [2.0, 4.0, 8.0, 16.0, 32.0, 64.0, 128.0, 190.0]         # highest 9.5 x KD
@@ -138,18 +141,17 @@ def test_equilibrium():
         r['facts']['equilibrium_reached'] = fact(answer, ['s'])
         assert status(r, 'equilibrium') == expected
     r['facts']['equilibrium_reached'] = fact('unknown')
-    assert status(r, 'equilibrium') == 'unknown'                    # 30 min, but nothing says equilibrium
+    assert status(r, 'equilibrium') == 'supported'                  # 30 min, KD 20 nM: past T_SLOW (28.9 min), full degree; the fact is not stated, the sheet judges the time
     r['quantities']['incubation_time'] = point(4.0, 'min', 'i', ['s'])
     graded = grade_fp(r)
     assert graded['reasons']['equilibrium'] == 'incubation_recorded_for_the_sheet' and graded['native']['incubation_min'] == 4.0 and graded['native']['incubation_refs'] == ['s']
     assert graded['criteria']['equilibrium'] == {'status': 'unknown', 'support_refs': []}
-    assert _criterion(graded, 'equilibrium') == {'status': 'conflicting', 'support_refs': ['s']}
-    r['quantities']['incubation_time'] = point(300.0, 's', 'i', ['s'])      # 5 min exactly: allowed, so unknown
-    assert status(r, 'equilibrium') == 'unknown'
-    r['quantities']['incubation_time'] = point(240.0, 's', 'i', ['s'])      # 4 min
+    judged = _criterion(graded, 'equilibrium')
+    assert judged['status'] == 'supported' and judged['degree'] == pytest.approx(0.571, abs=2e-3) and judged['support_refs'][0] == 's'      # log(4 / 0.2888) / ln 100
+    r['quantities']['incubation_time'] = point(0.2, 'min', 'i', ['s'])      # below T_FAST 0.2888 min: not even the fastest binder has equilibrated
     assert status(r, 'equilibrium') == 'conflicting'
     r['quantities']['incubation_time'] = point(2.0, 'h', 'i', ['s'])
-    assert status(r, 'equilibrium') == 'unknown'
+    assert status(r, 'equilibrium') == 'supported'
 
 
 def test_intensity_change():
@@ -210,7 +212,7 @@ def test_replicates():
     graded = grade_fp(r)                                                                      # the count and the independence are recorded, the sheet judges them
     assert graded['reasons']['replicates'] == 'replicate_count_recorded_for_the_sheet' and graded['criteria']['replicates']['status'] == 'unknown'
     assert graded['native']['replicate_count'] == 2 and graded['native']['replicate_independent'] == 'yes' and graded['native']['replicate_refs']
-    assert status(r, 'replicates') == 'conflicting'
+    assert _criterion(graded, 'replicates')['status'] == 'supported' and _criterion(graded, 'replicates')['degree'] == pytest.approx(math.sqrt(2 / 3))      # two titrations: partial credit, never conflicting
     r['quantities']['replicate_count'] = point(3, 'count', 'n', ['s'])
     assert status(r, 'replicates') == 'supported'
     r['facts']['independent_titrations'] = fact('no', ['s'])                                 # a stated 'no' is a fact the grader judges

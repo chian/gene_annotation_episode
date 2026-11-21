@@ -29,7 +29,7 @@ SYNTHETIC = (
     'reaction was started with 1 mM H2O2 and lasted 1 min. Biotinylation depended on the fusion and on the labelling: a streptavidin blot showed biotinylated proteins only in cells treated with both '
     'biotin-phenol and H2O2. The controls were cells expressing the fusion but treated without H2O2, cells expressing free APEX2 without the bait, and cells expressing APEX2 fused to an unrelated protein. '
     'The biotinylated proteins were captured on streptavidin beads and identified by western blot and by mass spectrometry. Label-free intensities were compared with a moderated t-test, and PZ-2 was '
-    'enriched 8.5-fold over the free APEX2 control with a false discovery rate of 0.8%, so PZ-2 was found in proximity to BX-4. The proximity of PZ-2 to BX-4 was confirmed by co-immunoprecipitation. '
+    'enriched 8.5-fold over the APEX2 fused to an unrelated protein with a false discovery rate of 0.8%, a control matched to the bait in expression level and compartment, so PZ-2 was found in proximity to BX-4. The proximity of PZ-2 to BX-4 was confirmed by co-immunoprecipitation. '
     'Three independent experiments were done on separate days, in mammalian cells.')
 
 # identity expectations (OWNER_DECISION 18); see check_identity in the leaf test
@@ -54,4 +54,7 @@ REAL_ALLOWED = {
     'streptavidin_capture': {('yes', None)},
     'statistical_test_used': {('yes', None)},
     'ligase_only_control': {('yes', None)},
+    # The paragraph says the enrichment is over 'the TurboID and empty vector controls', the free enzyme and no enzyme at all: controls that do not match the bait's localisation (field fold_over_matched_control: no).
+    # The paragraph does not state a matched control, so yes is not allowed.
+    'fold_over_matched_control': {('no', None)},
 }

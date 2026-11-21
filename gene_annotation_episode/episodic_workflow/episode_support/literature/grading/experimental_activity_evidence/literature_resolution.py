@@ -17,10 +17,10 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     RESOLVED_UNKNOWN,
     ROW_WEIGHT_RULE,
     WEIGHT_CONFLICTING,
-    WEIGHT_NO_APPLICABLE_CRITERIA,
     WEIGHT_NO_DEGREE,
     WEIGHT_POOLED_DEGREE,
-    WEIGHT_UNKNOWN,
+    WEIGHT_UNKNOWN_BY_TYPE,
+    weight_unknown,
 )
 
 
@@ -34,16 +34,16 @@ def _check_status_degree(status, degree):
             raise ValueError(f'criterion degree must be a number in 0..1 or None: {degree!r}')
 
 
-def criterion_resolution(status, degree):
+def criterion_resolution(status, degree, experiment_type, criterion):
     """OWNER_DECISION 4 (weight rule): r_c for the WEIGHT. supported = its degree, or WEIGHT_NO_DEGREE (1.0) when the
-    degree is absent; conflicting = WEIGHT_CONFLICTING (0); unknown = WEIGHT_UNKNOWN (0.9). not_applicable is refused:
-    the caller drops it."""
+    degree is absent; conflicting = WEIGHT_CONFLICTING (0); unknown = this type's weight for this criterion
+    (weight_unknown: WEIGHT_UNKNOWN_BY_CRITERION, else WEIGHT_UNKNOWN_BY_TYPE). not_applicable is refused."""
     _check_status_degree(status, degree)
     if status == 'supported':
         return float(WEIGHT_NO_DEGREE if degree is None else degree)
     if status == 'conflicting':
         return float(WEIGHT_CONFLICTING)
-    return float(WEIGHT_UNKNOWN)
+    return float(weight_unknown(experiment_type, criterion))
 
 
 def criterion_resolved(status, degree):
@@ -63,8 +63,8 @@ def row_weight(results):
     (4c, ROW_WEIGHT_RULE). `results` is a list of converted results (RESULT_FIELDS); each result's optional 'interpretations'
     ({criterion: {'status': CRITERION_STATUS, 'degree': 0..1 or null}}) gives its criteria; r_c is criterion_resolution.
     not_applicable criteria are dropped from the sum and from N_applicable. A result with no applicable criterion (all
-    not_applicable, or no interpretations) has w = WEIGHT_NO_APPLICABLE_CRITERIA (= WEIGHT_UNKNOWN, 4b): an unvetted
-    measurement, and 1.0 is never invented; an empty list gives 0.0."""
+    not_applicable, or no interpretations) has w = its type's unknown weight (WEIGHT_UNKNOWN_BY_TYPE, 4b): an unvetted
+    measurement, and 1.0 is never invented; an empty list gives 0.0. Each result names its experiment_type."""
     if ROW_WEIGHT_RULE != 'mean_of_per_result_weights':
         raise ValueError('ROW_WEIGHT_RULE changed: row_weight must follow it')
     results = list(results)
@@ -73,11 +73,13 @@ def row_weight(results):
     weights = []
     for result in results:
         interpretations = result.get('interpretations') or {}
-        applicable = [item for item in interpretations.values() if item['status'] != 'not_applicable']
+        applicable = [(name, item) for name, item in interpretations.items() if item['status'] != 'not_applicable']
+        experiment_type = result['experiment_type']
         if not applicable:
-            weights.append(float(WEIGHT_NO_APPLICABLE_CRITERIA))
+            weights.append(float(WEIGHT_UNKNOWN_BY_TYPE[experiment_type]))
             continue
-        weights.append(sum(criterion_resolution(item['status'], item.get('degree')) for item in applicable) / len(applicable))
+        weights.append(sum(criterion_resolution(item['status'], item.get('degree'), experiment_type, name)
+                           for name, item in applicable) / len(applicable))
     return sum(weights) / len(weights)
 
 

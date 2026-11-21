@@ -18,7 +18,7 @@ are in the paper's Methods, which are not in this chunk. The paragraph is whole 
 legend that follows it in the publisher's XML (it repeats 'KD value of 20 nM') is a separate figure element and is not part of
 the paragraph's own text."""
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_fret_extraction import (
-    ASSAY_FORMAT, FIT_MODEL, PAIR, PLATE_TYPE, SERIES, SPREAD_KIND, field_names)
+    ASSAY_FORMAT, FIT_MODEL, LANTHANIDE, PAIR, PLATE_TYPE, SERIES, SERIES_FORMAT, SPREAD_KIND, field_names)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_fret_record import UNITS
 
 PAPER_ID = 'PMC10564622'
@@ -43,10 +43,11 @@ SYNTHETIC = (
     'and a d2 acceptor on its partner peptide. The proteins were labelled directly with the dyes, not through antibodies '
     'or streptavidin, and labelled and unlabelled ParB gave the same affinity, so the labels did not alter binding. In '
     'the direct titration, the donor-labelled ParB was held at 5 nM, below the KD, and samples were incubated for 60 min; '
-    'the ratio was stable over a further hour, so binding was at equilibrium. The peptide was titrated in ten '
+    'the ratio was stable over a further hour, so binding was at equilibrium. The dissociation rate constant was '
+    'koff = 0.0025 s−1, measured by chasing the labelled complex with an excess of unlabelled peptide. The peptide of the direct titration was titrated in ten '
     'concentrations of 2, 4, 10, 20, 40, 100, 200, 400, 1000 and 2000 nM. The signal was calculated for each well as '
     'the ratio of the 665 nm acceptor emission to the 620 nm donor emission; the emission ratio was 0.4 at the bottom '
-    'of the curve and rose to 1.6 at the plateau. Wells with the donor alone and wells with the acceptor alone were '
+    'of the curve and rose to 1.6 at the plateau; the Z-prime factor of the assay window was 0.72. Wells with the donor alone and wells with the acceptor alone were '
     'measured, and the bleed-through was subtracted. Interference of the peptide with the signal by absorbance or '
     'fluorescence was checked. Depletion was considered, and the data were fitted with a quadratic (tight-binding) '
     'model, giving KD = 20 nM (standard error 2 nM) and EC50 = 31 nM. Non-specific signal was checked with a '
@@ -68,6 +69,8 @@ SYNTHETIC_STATED = {
     'acceptor_concentration': (30, 'nM', 'acceptor-labelled peptide was held at 30 nM'),
     'ratio_minimum': (0.4, 'ratio', 'emission ratio was 0.4'),
     'ratio_maximum': (1.6, 'ratio', 'rose to 1.6'),
+    'z_prime': (0.72, 'ratio', 'Z-prime factor of the assay window was 0.72'),
+    'koff': (0.0025, 'per_s', 'koff = 0.0025 s−1'),
     'delay_time': (100, 'us', 'a delay of 100 µs'),
     'integration_time': (400, 'us', 'an integration window of 400 µs'),
     'assay_volume': (20, 'uL', 'a volume of 20 µL'),
@@ -80,6 +83,8 @@ SYNTHETIC_STATED = {
     FIT_MODEL: ('quadratic', None, 'a quadratic (tight-binding) model'),
     PLATE_TYPE: ('white', None, 'white 384-well plates'),
     PAIR: ('lanthanide_with_organic_acceptor', None, 'a terbium cryptate donor on ParB and a d2 acceptor'),
+    SERIES_FORMAT: ('direct_titration', None, 'The peptide of the direct titration was titrated'),
+    LANTHANIDE: ('terbium', None, 'terbium cryptate donor'),
     'time_resolved_read': ('yes', None, 'The read was time-resolved'),
     'ratiometric_readout_used': ('yes', None, 'the ratio of the 665 nm acceptor emission to the 620 nm donor emission'),
     'donor_only_control_measured': ('yes', None, 'Wells with the donor alone'),
@@ -110,6 +115,7 @@ REAL_EXPECTED_PAIR = (('klhl11btb-back',), ('cul3ntd',))     # symmetric pair na
 REAL_STATED = {
     'kd': (20, 'nM', 'KD value of 20\xa0nM'),
     SPREAD_KIND: ('confidence_interval', None, '95% CI 19–22\xa0nM'),
+    'koff': (0.00381, 'per_s', 'koff\xa0=\xa03.81\xa0×\xa010−3 s−1'),       # 3.81 x 10^-3 per second, stated as the dissociation rate constant
     ASSAY_FORMAT: ('direct_titration', None, 'saturation binding experiment'),
     'time_resolved_read': ('yes', None, 'TR-FRET donor and acceptor functionalization'),
     'indirect_labelling_used': ('no', None, 'We selected direct chemical labeling over the use of labeled anti-epitope tag antibodies or streptavidin'),

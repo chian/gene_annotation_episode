@@ -1,11 +1,13 @@
 """ELISA grader: each criterion's rule on records, with the arithmetic worked by hand."""
+import math
+
 import pytest
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_elisa_record import fact, point, unavailable
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_elisa_converter import _criterion
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_elisa_grader import CRITERIA, grade_elisa
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.tests.elisa_cases import sparse_record, synthetic_record
 
-HANDED = {'signal_window', 'concentration_series', 'direct_vs_competition', 'replicates'}      # the detector range and the equilibrium are ruled by their facts in the synthetic record
+HANDED = {'signal_window', 'concentration_series', 'direct_vs_competition', 'replicates'}      # the detector range, the wash dissociation and the equilibrium are ruled by their facts in the synthetic record
 
 
 def status(record, criterion):
@@ -52,8 +54,8 @@ def test_the_signal_window_is_the_plateau_over_the_background():
     r['quantities']['signal_maximum'] = point(0.6, 'OD', 'm', ['s'])                     # 0.6 / 0.06 = 10: above the minimum of 5, the full degree
     assert grade_elisa(r)['native']['signal_over_background'] == pytest.approx(10.0) and grade_elisa(r)['native']['signal_window_refs'] == ['s', 'span_exp_synthetic_elisa_1']
     assert _criterion(grade_elisa(r), 'signal_window') == {'status': 'supported', 'support_refs': ['s', 'span_exp_synthetic_elisa_1'], 'degree': 1.0}
-    r['quantities']['signal_maximum'] = point(0.18, 'OD', 'm', ['s'])                    # 0.18 / 0.06 = 3: halfway from 1 up to 5, a degree of 0.5
-    assert status(r, 'signal_window') == 'supported' and _criterion(grade_elisa(r), 'signal_window')['degree'] == pytest.approx(0.5)
+    r['quantities']['signal_maximum'] = point(0.18, 'OD', 'm', ['s'])                    # 0.18 / 0.06 = 3: on the log of the ratio from 1 up to 5, log 3 / log 5
+    assert status(r, 'signal_window') == 'supported' and _criterion(grade_elisa(r), 'signal_window')['degree'] == pytest.approx(math.log(3) / math.log(5))
     r['quantities']['signal_maximum'] = point(0.06, 'OD', 'm', ['s'])                    # 1: the plateau is the background
     assert status(r, 'signal_window') == 'conflicting' and 'degree' not in _criterion(grade_elisa(r), 'signal_window')
     r['quantities']['signal_maximum'] = point(0.03, 'OD', 'm', ['s'])                    # 0.5: below the background
@@ -63,6 +65,11 @@ def test_the_signal_window_is_the_plateau_over_the_background():
     assert reason(r, 'signal_window') == 'signal_or_background_not_given' and status(r, 'signal_window') == 'unknown'
 
 
+def plateau_degree(od):
+    """The softened detector range worked by hand: (10^4 - 10^OD) / (10^4 - 10^2), full credit at 2 OD and none at 4 OD."""
+    return (10 ** 4 - 10 ** od) / (10 ** 4 - 10 ** 2)
+
+
 def test_the_detector_range_fact_decides_then_the_plateau_absorbance():
     r = synthetic_record()
     r['quantities']['signal_maximum'] = point(2.8, 'OD', 'm', ['s'])
@@ -70,9 +77,12 @@ def test_the_detector_range_fact_decides_then_the_plateau_absorbance():
     r['facts']['signal_in_linear_range'] = fact('unknown')
     assert (grader_status(r, 'detector_range'), reason(r, 'detector_range')) == ('unknown', 'plateau_recorded_for_the_sheet')
     assert grade_elisa(r)['native']['plateau_absorbance'] == 2.8 and grade_elisa(r)['native']['plateau_refs'] == ['s']
-    assert _criterion(grade_elisa(r), 'detector_range') == {'status': 'conflicting', 'support_refs': ['s']}      # an absolute reading: no degree
-    r['quantities']['signal_maximum'] = point(2.0, 'OD', 'm', ['s'])                       # exactly the limit, allowed
-    assert status(r, 'detector_range') == 'supported' and _criterion(grade_elisa(r), 'detector_range')['support_refs'] == ['s']
+    verdict = _criterion(grade_elisa(r), 'detector_range')                                   # above the linear range: partial credit, not a step to conflicting
+    assert verdict['status'] == 'supported' and verdict['support_refs'] == ['s'] and verdict['degree'] == pytest.approx(plateau_degree(2.8)) and 0.9 < verdict['degree'] < 1
+    r['quantities']['signal_maximum'] = point(2.0, 'OD', 'm', ['s'])                       # exactly the researched limit: full credit, judged as before (no degree)
+    assert _criterion(grade_elisa(r), 'detector_range') == {'status': 'supported', 'support_refs': ['s']}
+    r['quantities']['signal_maximum'] = point(4.0, 'OD', 'm', ['s'])                       # the end of the reader's photometric range: conflicting, no degree
+    assert _criterion(grade_elisa(r), 'detector_range') == {'status': 'conflicting', 'support_refs': ['s']}
     missing(r, 'signal_maximum')
     assert reason(r, 'detector_range') == 'fact_unknown' and status(r, 'detector_range') == 'unknown'
     r['facts']['signal_in_linear_range'] = fact('no', ['s'])
@@ -97,13 +107,21 @@ def test_the_equilibrium_fact_then_a_short_binding_step():
     r = synthetic_record()
     r['facts']['equilibrium_reached'] = fact('unknown')
     assert (grader_status(r, 'equilibrium'), reason(r, 'equilibrium')) == ('unknown', 'incubation_recorded_for_the_sheet') and grade_elisa(r)['native']['incubation_min'] == 90.0
-    assert status(r, 'equilibrium') == 'unknown'                                           # a 90 min step is not short
+    assert status(r, 'equilibrium') == 'supported'                                         # 90 min at the 20 nM constant: T_FAST 1.5 min, so a curve, not a cliff
+    assert grade_elisa(r)['native']['constant_refs'] == ['span_exp_synthetic_elisa_1'] and _criterion(grade_elisa(r), 'equilibrium')['degree'] == pytest.approx(math.log(60) / math.log(100))
     r['quantities']['incubation_time'] = point(29.0, 'min', 'i', ['s'])
-    assert status(r, 'equilibrium') == 'conflicting' and grade_elisa(r)['native']['incubation_refs'] == ['s'] and _criterion(grade_elisa(r), 'equilibrium')['support_refs'] == ['s']
-    r['quantities']['incubation_time'] = point(30.0, 'min', 'i', ['s'])                    # exactly the minimum
-    assert status(r, 'equilibrium') == 'unknown'
-    r['quantities']['incubation_time'] = point(0.4, 'h', 'i', ['s'])                       # 24 min
+    verdict = _criterion(grade_elisa(r), 'equilibrium')                                    # below the 30 min floor: proportional, not conflicting
+    assert verdict['status'] == 'supported' and verdict['degree'] == pytest.approx(math.log(29 / 1.5) / math.log(100)) and grade_elisa(r)['native']['incubation_refs'] == ['s']
+    assert set(verdict['support_refs']) == {'s', 'span_exp_synthetic_elisa_1'}
+    r['quantities']['incubation_time'] = point(1.5, 'min', 'i', ['s'])                     # exactly T_FAST (30 x 1 / 20): the zero end
     assert status(r, 'equilibrium') == 'conflicting'
+    r['quantities']['incubation_time'] = point(0.4, 'h', 'i', ['s'])                       # 24 min: d_kon log(16)/log(100) = 0.602, d_floor 0.8
+    assert _criterion(grade_elisa(r), 'equilibrium')['degree'] == pytest.approx(math.log(16) / math.log(100))
+    for name in ('kd', 'ki', 'ec50', 'ic50'):                                              # no constant: unknown, also below the floor
+        missing(r, name)
+    assert status(r, 'equilibrium') == 'unknown' and grade_elisa(r)['native']['constant_refs'] == []
+    r = synthetic_record()
+    r['facts']['equilibrium_reached'] = fact('unknown')
     missing(r, 'incubation_time')
     assert (grader_status(r, 'equilibrium'), reason(r, 'equilibrium')) == ('unknown', 'fact_unknown')
     r['quantities']['incubation_time'] = point(0.4, 'h', 'i', ['s'])
@@ -119,23 +137,30 @@ def test_the_series_must_have_enough_points_and_span_the_constant():
     native = grade_elisa(r)['native']
     assert native['concentration_count'] == 12 and native['concentration_span_refs'] == ['span_exp_synthetic_elisa_1'] and native['concentration_count_refs'] == ['span_exp_synthetic_elisa_1']
     assert _criterion(grade_elisa(r), 'concentration_series') == {'status': 'supported', 'support_refs': ['span_exp_synthetic_elisa_1'], 'degree': 1.0}
-    r['concentration_series']['value'] = [1.0, 2.0, 4.0, 8.0, 16.0, 32.0, 64.0, 128.0]    # 8 points: 0.05 x to 6.4 x the KD: the high end gives a degree (6.4 - 1) / 9
-    assert status(r, 'concentration_series') == 'supported' and _criterion(grade_elisa(r), 'concentration_series')['degree'] == pytest.approx(5.4 / 9.0)
+    r['concentration_series']['value'] = [1.0, 2.0, 4.0, 8.0, 16.0, 32.0, 64.0, 128.0]    # 8 points: 0.05 x to 6.4 x the KD: the high end gives a degree on the occupancy scale
+    assert status(r, 'concentration_series') == 'supported' and _criterion(grade_elisa(r), 'concentration_series')['degree'] == pytest.approx((6.4 / 7.4 - 0.5) / (10 / 11 - 0.5))
     r['concentration_series']['value'] = [4.0, 8.0, 16.0, 32.0, 64.0, 128.0, 256.0, 512.0]  # lowest 4 nM = 0.2 x the KD (allowed), highest 512 = 25.6 x
     assert _criterion(grade_elisa(r), 'concentration_series')['degree'] == 1.0
-    r['concentration_series']['value'] = [12.0, 16.0, 32.0, 64.0, 128.0, 256.0, 512.0, 1024.0]   # lowest 0.6 x the KD: a degree of 0.5
-    assert _criterion(grade_elisa(r), 'concentration_series')['degree'] == pytest.approx(0.5)
+    r['concentration_series']['value'] = [12.0, 16.0, 32.0, 64.0, 128.0, 256.0, 512.0, 1024.0]   # lowest 0.6 x the KD: 0.375 on the occupancy scale
+    assert _criterion(grade_elisa(r), 'concentration_series')['degree'] == pytest.approx(0.375)
     r['concentration_series']['value'] = [20.0, 32.0, 64.0, 128.0, 256.0, 512.0, 1024.0, 2048.0]  # lowest 1 x the KD: the zero-agreement limit
     assert status(r, 'concentration_series') == 'conflicting' and 'degree' not in _criterion(grade_elisa(r), 'concentration_series')
     r['concentration_series']['value'] = [4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 20.0]      # highest 1 x the KD: the zero-agreement limit
     assert status(r, 'concentration_series') == 'conflicting'
-    r['concentration_series']['value'] = [4.0, 8.0, 16.0, 32.0, 64.0, 128.0, 200.0]        # 7 points: fewer than eight, no degree
-    assert status(r, 'concentration_series') == 'conflicting' and grade_elisa(r)['native']['concentration_count'] == 7
+    r['concentration_series']['value'] = [4.0, 8.0, 16.0, 32.0, 64.0, 128.0, 200.0]        # 7 points, 0.2 x to 10 x: 3 of the 4 residual degrees of freedom, a degree of 0.75
+    assert status(r, 'concentration_series') == 'supported' and grade_elisa(r)['native']['concentration_count'] == 7
+    assert _criterion(grade_elisa(r), 'concentration_series')['degree'] == pytest.approx(0.75)
+    r['concentration_series']['value'] = [4.0, 16.0, 64.0, 128.0, 200.0]                   # 5 points: one residual degree of freedom, a degree of 0.25
+    assert _criterion(grade_elisa(r), 'concentration_series')['degree'] == pytest.approx(0.25)
+    r['concentration_series']['value'] = [4.0, 16.0, 64.0, 200.0]                          # 4 points: the four-parameter curve is fitted exactly, no residual
+    assert _criterion(grade_elisa(r), 'concentration_series') == {'status': 'supported', 'support_refs': ['span_exp_synthetic_elisa_1'], 'degree': 0.0}      # no credit, never conflicting
     r['concentration_series'] = {**r['concentration_series'], 'status': 'unavailable', 'value': None}
     assert reason(r, 'concentration_series') == 'concentration_series_recorded_for_the_sheet' and status(r, 'concentration_series') == 'unknown'      # the stated 12 points are enough, the span cannot be judged
     assert grade_elisa(r)['native']['concentration_low_over_constant'] is None
-    r['quantities']['titration_point_count'] = point(6, 'count', 'n', ['s'])
-    assert status(r, 'concentration_series') == 'conflicting'
+    r['quantities']['titration_point_count'] = point(6, 'count', 'n', ['s'])               # six points: partial credit for the count, the span still cannot be judged
+    assert status(r, 'concentration_series') == 'unknown'
+    r['quantities']['titration_point_count'] = point(4, 'count', 'n', ['s'])               # four points: no residual, but the span cannot be judged without the list: still unknown (a short count is never conflicting)
+    assert status(r, 'concentration_series') == 'unknown'
     r['quantities']['titration_point_count'] = point(10, 'count', 'n', ['s'])
     assert status(r, 'concentration_series') == 'unknown'
     missing(r, 'titration_point_count')
@@ -187,14 +212,14 @@ def test_the_kd_and_the_ki_must_agree_within_the_factor():
     assert (grader_status(r, 'direct_vs_competition'), reason(r, 'direct_vs_competition')) == ('unknown', 'estimates_recorded_for_the_sheet')
     assert grade_elisa(r)['native']['estimate_fold'] == pytest.approx(1.5) and grade_elisa(r)['native']['estimate_refs'] == ['span_exp_synthetic_elisa_1']
     assert _criterion(grade_elisa(r), 'direct_vs_competition') == {'status': 'supported', 'support_refs': ['span_exp_synthetic_elisa_1'], 'degree': 1.0}
-    r['quantities']['ki'] = point(120.0, 'nM', 'k', ['s'])                                 # 6 fold: degree (10 - 6) / 7
-    assert status(r, 'direct_vs_competition') == 'supported' and _criterion(grade_elisa(r), 'direct_vs_competition')['degree'] == pytest.approx(4.0 / 7.0)
+    r['quantities']['ki'] = point(120.0, 'nM', 'k', ['s'])                                 # 6 fold: degree on the log of the fold
+    assert status(r, 'direct_vs_competition') == 'supported' and _criterion(grade_elisa(r), 'direct_vs_competition')['degree'] == pytest.approx(math.log(10 / 6) / math.log(10 / 3))
     r['quantities']['ki'] = point(200.0, 'nM', 'k', ['s'])                                 # 10 fold: the zero-agreement limit
     assert status(r, 'direct_vs_competition') == 'conflicting' and 'degree' not in _criterion(grade_elisa(r), 'direct_vs_competition')
     r['quantities']['ki'] = point(2.0, 'nM', 'k', ['s'])                                   # 20 / 2 = 10 the other way
     assert status(r, 'direct_vs_competition') == 'conflicting'
-    r['quantities']['ki'] = point(4.0, 'nM', 'k', ['s'])                                   # 20 / 4 = 5 the other way: degree 5 / 7
-    assert _criterion(grade_elisa(r), 'direct_vs_competition')['degree'] == pytest.approx(5.0 / 7.0)
+    r['quantities']['ki'] = point(4.0, 'nM', 'k', ['s'])                                   # 20 / 4 = 5 the other way: degree on the log of the fold
+    assert _criterion(grade_elisa(r), 'direct_vs_competition')['degree'] == pytest.approx(math.log(10 / 5) / math.log(10 / 3))
     r['quantities']['ki'] = point(0.05, 'uM', 'k', ['s'])                                  # 50 nM: 2.5
     assert status(r, 'direct_vs_competition') == 'supported' and _criterion(grade_elisa(r), 'direct_vs_competition')['degree'] == 1.0
     missing(r, 'ki')
@@ -217,13 +242,18 @@ def test_no_criterion_returns_supported_or_conflicting_without_support_refs():
 def test_replicates_are_independent_experiments_and_wells_do_not_count():
     r = synthetic_record()
     assert (grader_status(r, 'replicates'), reason(r, 'replicates')) == ('unknown', 'replicate_count_recorded_for_the_sheet') and status(r, 'replicates') == 'supported'
-    r['quantities']['replicate_count'] = point(2, 'count', 'n', ['s'])
-    assert status(r, 'replicates') == 'conflicting' and grade_elisa(r)['native']['replicate_count'] == 2 and grade_elisa(r)['native']['replicate_independent'] == 'yes'
-    r['quantities']['replicate_count'] = point(3, 'count', 'n', ['s'])
-    assert status(r, 'replicates') == 'supported' and _criterion(grade_elisa(r), 'replicates')['support_refs'] == ['s', 'span_exp_synthetic_elisa_1']
+    r['quantities']['replicate_count'] = point(2, 'count', 'n', ['s'])                     # two of the researched three experiments: partial credit sqrt(2 / 3), not a step
+    assert status(r, 'replicates') == 'supported' and grade_elisa(r)['native']['replicate_count'] == 2 and grade_elisa(r)['native']['replicate_independent'] == 'yes'
+    assert _criterion(grade_elisa(r), 'replicates')['degree'] == pytest.approx(math.sqrt(2 / 3))
+    r['quantities']['replicate_count'] = point(1, 'count', 'n', ['s'])                     # one experiment: low partial credit sqrt(1 / 3), never conflicting
+    assert _criterion(grade_elisa(r), 'replicates') == {'status': 'supported', 'support_refs': ['s', 'span_exp_synthetic_elisa_1'], 'degree': pytest.approx(math.sqrt(1 / 3))}
+    r['quantities']['replicate_count'] = point(3, 'count', 'n', ['s'])                     # the researched count: full credit, judged as before (no degree)
+    assert _criterion(grade_elisa(r), 'replicates') == {'status': 'supported', 'support_refs': ['s', 'span_exp_synthetic_elisa_1']}
     r['facts']['independent_experiments'] = fact('no', ['s'])
     assert (grader_status(r, 'replicates'), reason(r, 'replicates')) == ('conflicting', 'replicates_not_independent')
     r['facts']['independent_experiments'] = fact('unknown')
+    assert status(r, 'replicates') == 'unknown'
+    r['quantities']['replicate_count'] = point(2, 'count', 'n', ['s'])                     # independence not stated: unknown, whatever the partial credit of the count
     assert status(r, 'replicates') == 'unknown'
     r['facts']['independent_experiments'] = fact('yes', ['s'])
     missing(r, 'replicate_count')

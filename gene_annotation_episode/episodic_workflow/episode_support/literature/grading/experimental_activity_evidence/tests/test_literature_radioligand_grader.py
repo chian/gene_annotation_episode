@@ -1,4 +1,6 @@
 """Radioligand grader: each criterion's rule on records, with the arithmetic worked by hand."""
+import math
+
 import pytest
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_radioligand_record import fact, point, unavailable
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_radioligand_criteria import RADIOLIGAND_CRITERIA
@@ -67,6 +69,11 @@ def variants():
     record = synthetic_record()
     record['facts']['cheng_prusoff_applied_with_own_kd'] = fact('yes', ['s'])
     missing(record, 'ic50')
+    out.append(record)
+    record = synthetic_record()                                    # no percent bound, depletion-checked not stated, depletion corrected
+    record['facts']['ligand_depletion_checked'] = fact('unknown')
+    record['facts']['depletion_corrected'] = fact('yes', ['s'])
+    missing(record, 'percent_bound')
     out.append(record)
     for model, form in (('competitive_binding', 'saturation'), ('competitive_binding', 'competition'), ('one_site', 'competition'), ('two_site', 'saturation'), ('hill', None), ('other', None), (None, None)):
         record = synthetic_record()
@@ -184,7 +191,7 @@ def sheet_variants():
     """The records of variants() and those that reach the zero-agreement limits, for the sheet's judgement of what the grader recorded."""
     out = variants()
     for name, value, unit in (('percent_bound', 50.0, 'percent'), ('nonspecific_fraction', 90.0, 'percent'), ('nonspecific_excess', 1.0, 'ratio'), ('radioligand_concentration', 20.0, 'nM'), ('hill_slope', 0.5, 'ratio'), ('hill_slope', 1.5, 'ratio'),
-                              ('ki', 40.0, 'nM'), ('replicate_count', 2, 'count')):
+                              ('ki', 40.0, 'nM'), ('replicate_count', 2, 'count'), ('replicate_count', 1, 'count')):
         record = synthetic_record()
         record['quantities'][name] = point(value, unit, name, ['s'])
         out.append(record)
@@ -193,6 +200,9 @@ def sheet_variants():
     out.append(record)
     record = synthetic_record()
     record['concentration_series']['value'] = [0.1, 0.2, 0.4, 0.8, 1.0, 1.5, 1.8, 2.0]              # the highest at the KD
+    out.append(record)
+    record = synthetic_record()
+    record['concentration_series']['value'] = [0.1, 51.2]                                           # two points: the zero-agreement end of the count
     out.append(record)
     return out
 
@@ -209,7 +219,9 @@ def test_every_criterion_the_sheet_decides_carries_support_refs_too():
                     judged_cases.add((name, outcome['status']))
             else:
                 assert outcome['support_refs'] == []
-    assert judged_cases >= {(name, state) for name in sorted(HANDED | {'equilibrium'}) for state in ('supported', 'conflicting')} - {('equilibrium', 'supported')}
+    # a short incubation and a short count of experiments are graded (supported with a low degree), never a conflict by themselves: only a stated 'no' conflicts
+    assert judged_cases >= {(name, state) for name in sorted(HANDED | {'equilibrium'}) for state in ('supported', 'conflicting')} - {('equilibrium', 'conflicting'), ('replicates', 'conflicting')}
+    assert ('equilibrium', 'conflicting') not in judged_cases and ('replicates', 'conflicting') not in judged_cases
 
 
 def test_a_decided_criterion_cannot_be_built_without_support_refs():
@@ -225,8 +237,18 @@ def test_the_bound_fraction_is_at_most_ten_percent_else_the_fact_decides():
     assert (grader_status(r, 'ligand_depletion'), reason(r, 'ligand_depletion')) == ('unknown', 'percent_bound_recorded_for_the_sheet')
     assert grade_radioligand(r)['native']['percent_bound'] == 10.0 and grade_radioligand(r)['native']['percent_bound_refs'] == ['s']
     assert _criterion(grade_radioligand(r), 'ligand_depletion') == {'status': 'supported', 'support_refs': ['s'], 'degree': 1.0}
-    r['quantities']['percent_bound'] = point(30.0, 'percent', 'p', ['s'])               # halfway from 10 to 50: a degree of 0.5
-    assert status(r, 'ligand_depletion') == 'supported' and _criterion(grade_radioligand(r), 'ligand_depletion')['degree'] == pytest.approx(0.5)
+    r['quantities']['percent_bound'] = point(30.0, 'percent', 'p', ['s'])               # linear in the log of the KD bias 1 + f / (2 (1 - f)): 10 percent is 1.0556, 50 percent 1.5, 30 percent 1.2143
+    assert status(r, 'ligand_depletion') == 'supported'
+    assert _criterion(grade_radioligand(r), 'ligand_depletion')['degree'] == pytest.approx((math.log(1.5) - math.log(1 + 0.3 / 1.4)) / (math.log(1.5) - math.log(1 + 0.1 / 1.8)))
+    r['facts']['depletion_corrected'] = fact('yes', ['c'])                              # a stated correction removes the bias the bound fraction causes: the full degree
+    assert grade_radioligand(r)['native']['depletion_corrected'] == 'yes' and grade_radioligand(r)['native']['depletion_corrected_refs'] == ['c']
+    assert _criterion(grade_radioligand(r), 'ligand_depletion') == {'status': 'supported', 'support_refs': ['s', 'c'], 'degree': 1.0}
+    r['quantities']['percent_bound'] = point(50.0, 'percent', 'p', ['s'])               # even at the limit, when corrected
+    assert _criterion(grade_radioligand(r), 'ligand_depletion')['status'] == 'supported'
+    r['facts']['depletion_corrected'] = fact('no', ['c'])                               # a stated no leaves the judgement to the percent
+    assert status(r, 'ligand_depletion') == 'conflicting'
+    r['facts']['depletion_corrected'] = fact('unknown')
+    r['quantities']['percent_bound'] = point(30.0, 'percent', 'p', ['s'])
     r['quantities']['percent_bound'] = point(50.0, 'percent', 'p', ['s'])               # the zero-agreement limit
     assert status(r, 'ligand_depletion') == 'conflicting' and 'degree' not in _criterion(grade_radioligand(r), 'ligand_depletion')
     r['quantities']['percent_bound'] = point(60.0, 'percent', 'p', ['s'])
@@ -238,6 +260,13 @@ def test_the_bound_fraction_is_at_most_ten_percent_else_the_fact_decides():
     assert (status(r, 'ligand_depletion'), reason(r, 'ligand_depletion')) == ('conflicting', 'fact_answered_no')
     r['facts']['ligand_depletion_checked'] = fact('unknown')
     assert (status(r, 'ligand_depletion'), reason(r, 'ligand_depletion')) == ('unknown', 'fact_unknown')
+    r['facts']['depletion_corrected'] = fact('yes', ['c'])                              # no percent, the depletion fact not stated: the correction supports it
+    assert (status(r, 'ligand_depletion'), reason(r, 'ligand_depletion')) == ('supported', 'depletion_corrected') and _criterion(grade_radioligand(r), 'ligand_depletion')['support_refs'] == ['c']
+    r['facts']['depletion_corrected'] = fact('no', ['c'])                               # not correcting is not a failure by itself
+    assert (status(r, 'ligand_depletion'), reason(r, 'ligand_depletion')) == ('unknown', 'fact_unknown')
+    r['facts']['depletion_corrected'] = fact('yes', ['c'])
+    r['facts']['ligand_depletion_checked'] = fact('no', ['s'])                          # a stated no of the depletion fact still fails
+    assert (status(r, 'ligand_depletion'), reason(r, 'ligand_depletion')) == ('conflicting', 'fact_answered_no')
 
 
 def test_the_nonspecific_fraction_is_at_most_half_of_the_total_binding():
@@ -246,8 +275,8 @@ def test_the_nonspecific_fraction_is_at_most_half_of_the_total_binding():
     assert (grader_status(r, 'nonspecific_fraction'), reason(r, 'nonspecific_fraction')) == ('unknown', 'nonspecific_fraction_recorded_for_the_sheet')
     assert grade_radioligand(r)['native']['nonspecific_percent'] == 50.0 and grade_radioligand(r)['native']['nonspecific_fraction_refs'] == ['s']
     assert _criterion(grade_radioligand(r), 'nonspecific_fraction') == {'status': 'supported', 'support_refs': ['s'], 'degree': 1.0}
-    r['quantities']['nonspecific_fraction'] = point(70.0, 'percent', 'f', ['s'])         # halfway from 50 to 90: a degree of 0.5
-    assert status(r, 'nonspecific_fraction') == 'supported' and _criterion(grade_radioligand(r), 'nonspecific_fraction')['degree'] == pytest.approx(0.5)
+    r['quantities']['nonspecific_fraction'] = point(70.0, 'percent', 'f', ['s'])         # linear in the log of the non-specific over the specific binding p / (100 - p): 50 is 1, 90 is 9, 70 is 7 / 3
+    assert status(r, 'nonspecific_fraction') == 'supported' and _criterion(grade_radioligand(r), 'nonspecific_fraction')['degree'] == pytest.approx(1 - math.log(70 / 30) / math.log(9))
     r['quantities']['nonspecific_fraction'] = point(90.0, 'percent', 'f', ['s'])         # the zero-agreement limit
     assert status(r, 'nonspecific_fraction') == 'conflicting' and 'degree' not in _criterion(grade_radioligand(r), 'nonspecific_fraction')
     missing(r, 'nonspecific_fraction')
@@ -273,17 +302,28 @@ def test_the_nonspecific_excess_is_the_stated_fold_else_the_concentration_over_t
     r['quantities']['nonspecific_excess'] = point(100.0, 'ratio', 'e', ['s'])              # exactly the minimum, allowed
     assert _criterion(grade_radioligand(r), 'nonspecific_excess') == {'status': 'supported', 'support_refs': ['s'], 'degree': 1.0}
     assert grade_radioligand(r)['native']['nonspecific_excess_refs'] == ['s']
-    r['quantities']['nonspecific_excess'] = point(50.5, 'ratio', 'e', ['s'])               # halfway from 1 up to 100: a degree of 0.5
-    assert status(r, 'nonspecific_excess') == 'supported' and _criterion(grade_radioligand(r), 'nonspecific_excess')['degree'] == pytest.approx(0.5)
+    r['quantities']['nonspecific_excess'] = point(50.5, 'ratio', 'e', ['s'])               # linear in the log of the excess from 1 up to 100: ln 50.5 / ln 100
+    assert status(r, 'nonspecific_excess') == 'supported' and _criterion(grade_radioligand(r), 'nonspecific_excess')['degree'] == pytest.approx(math.log(50.5) / math.log(100))
     r['quantities']['nonspecific_excess'] = point(1.0, 'ratio', 'e', ['s'])                # the zero-agreement limit
     assert status(r, 'nonspecific_excess') == 'conflicting' and 'degree' not in _criterion(grade_radioligand(r), 'nonspecific_excess')
     missing(r, 'nonspecific_excess')                                                       # 1000 nM / 2 nM = 500
     assert grade_radioligand(r)['native']['nonspecific_excess_ratio'] == 500.0 and status(r, 'nonspecific_excess') == 'supported'
     r['quantities']['nonspecific_ligand_concentration'] = point(0.4, 'uM', 'c', ['s'])     # 400 nM / 2 nM = 200
     assert grade_radioligand(r)['native']['nonspecific_excess_ratio'] == 200.0 and status(r, 'nonspecific_excess') == 'supported'
-    r['quantities']['nonspecific_ligand_concentration'] = point(0.1, 'uM', 'c', ['s'])     # 100 nM / 2 nM = 50: a degree of 49 / 99
-    assert reason(r, 'nonspecific_excess') == 'excess_recorded_for_the_sheet' and _criterion(grade_radioligand(r), 'nonspecific_excess')['degree'] == pytest.approx(49.0 / 99.0)
-    assert len(_criterion(grade_radioligand(r), 'nonspecific_excess')['support_refs']) == 2
+    r['quantities']['nonspecific_ligand_concentration'] = point(0.1, 'uM', 'c', ['s'])     # 100 nM / 2 nM = 50: a degree of ln 50 / ln 100
+    assert reason(r, 'nonspecific_excess') == 'excess_recorded_for_the_sheet' and _criterion(grade_radioligand(r), 'nonspecific_excess')['degree'] == pytest.approx(math.log(50.0) / math.log(100))
+    assert len(_criterion(grade_radioligand(r), 'nonspecific_excess')['support_refs']) == 2      # the concentration and, in one ref, the KD and the fact that the displacer is the unlabelled radioligand (both cite the same span)
+    r['facts']['nonspecific_ligand_is_unlabelled_radioligand'] = fact('unknown')            # the displacer's own Kd is unknown: the radioligand KD is not its Kd
+    assert (status(r, 'nonspecific_excess'), reason(r, 'nonspecific_excess')) == ('unknown', 'excess_not_given')
+    r['facts']['nonspecific_ligand_is_unlabelled_radioligand'] = fact('no', ['s'])          # a different compound: still not given
+    assert reason(r, 'nonspecific_excess') == 'excess_not_given'
+    r['quantities']['nonspecific_ligand_kd'] = point(0.5, 'nM', 'k', ['k'])                 # the displacer's own Kd 0.5 nM: 100 nM / 0.5 nM = 200, whatever the radioligand KD
+    assert grade_radioligand(r)['native']['nonspecific_excess_ratio'] == 200.0 and grade_radioligand(r)['native']['nonspecific_excess_refs'] == ['s', 'k']
+    assert status(r, 'nonspecific_excess') == 'supported'
+    r['quantities']['nonspecific_ligand_kd'] = point(0.002, 'uM', 'k', ['k'])               # 2 nM in uM: 100 nM / 2 nM = 50
+    assert grade_radioligand(r)['native']['nonspecific_excess_ratio'] == pytest.approx(50.0)
+    missing(r, 'nonspecific_ligand_kd')
+    r['facts']['nonspecific_ligand_is_unlabelled_radioligand'] = fact('yes', ['s'])
     missing(r, 'kd')
     assert (status(r, 'nonspecific_excess'), reason(r, 'nonspecific_excess')) == ('unknown', 'excess_not_given')
 
@@ -292,17 +332,40 @@ def test_the_equilibrium_fact_then_a_short_incubation():
     r = synthetic_record()
     r['facts']['equilibrium_reached'] = fact('unknown')
     assert (grader_status(r, 'equilibrium'), reason(r, 'equilibrium')) == ('unknown', 'incubation_recorded_for_the_sheet') and grade_radioligand(r)['native']['incubation_min'] == 60.0
-    assert status(r, 'equilibrium') == 'unknown'                                           # a 60 min incubation is not short
-    r['quantities']['incubation_time'] = point(29.0, 'min', 'i', ['s'])
-    assert status(r, 'equilibrium') == 'conflicting' and grade_radioligand(r)['native']['incubation_refs'] == ['s'] and _criterion(grade_radioligand(r), 'equilibrium')['support_refs'] == ['s']
-    r['quantities']['incubation_time'] = point(30.0, 'min', 'i', ['s'])                    # exactly the minimum
-    assert status(r, 'equilibrium') == 'unknown'
-    r['quantities']['incubation_time'] = point(0.4, 'h', 'i', ['s'])                       # 24 min
-    assert status(r, 'equilibrium') == 'conflicting'
+    assert _criterion(grade_radioligand(r), 'equilibrium') == {'status': 'supported', 'support_refs': ['span_exp_synthetic_radioligand_1'], 'degree': 1.0}      # a 60 min incubation is not short
+    r['quantities']['incubation_time'] = point(29.0, 'min', 'i', ['s'])                    # just short of the researched 30 min: graded by the approach to equilibrium, not a conflict
+    verdict = _criterion(grade_radioligand(r), 'equilibrium')
+    assert verdict['status'] == 'supported' and verdict['support_refs'] == ['s'] and grade_radioligand(r)['native']['incubation_refs'] == ['s']
+    assert verdict['degree'] == pytest.approx((1 - 0.5 ** (5 * 29 / 30)) / (31 / 32))      # 29 min = 29 / 6 half-lives of 6 min (the five half-lives of 30 min)
+    r['quantities']['incubation_time'] = point(30.0, 'min', 'i', ['s'])                    # exactly the minimum: the full degree
+    assert _criterion(grade_radioligand(r), 'equilibrium')['degree'] == 1.0
+    r['quantities']['incubation_time'] = point(0.4, 'h', 'i', ['s'])                       # 24 min = four half-lives: 15/16 of the way, against 31/32 at 30 min
+    assert status(r, 'equilibrium') == 'supported' and _criterion(grade_radioligand(r), 'equilibrium')['degree'] == pytest.approx(30 / 31)
+    r['quantities']['incubation_time'] = point(60.0, 'min', 'i', ['s'])                    # the paper's own off-rate scales the incubation: koff 0.0231 / min is a dissociation half-life of 30 min
+    r['quantities']['dissociation_rate'] = point(math.log(2) / 30, '1/min', 'k', ['k'])
+    native = grade_radioligand(r)['native']
+    assert native['dissociation_rate_per_min'] == pytest.approx(math.log(2) / 30) and native['dissociation_rate_refs'] == ['k']
+    verdict = _criterion(grade_radioligand(r), 'equilibrium')                              # 60 min is two half-lives: 3 / 4 of the way, against 31 / 32 at the researched five half-lives
+    assert verdict['status'] == 'supported' and verdict['support_refs'] == ['s', 'k'] and verdict['degree'] == pytest.approx(0.75 / (31 / 32))
+    r['quantities']['incubation_time'] = point(150.0, 'min', 'i', ['s'])                   # five half-lives: the full degree
+    assert _criterion(grade_radioligand(r), 'equilibrium')['degree'] == pytest.approx(1.0)
+    r['quantities']['incubation_time'] = point(2.5, 'h', 'i', ['s'])
+    r['quantities']['dissociation_rate'] = point(0.0005, '1/s', 'k', ['k'])                # 0.03 / min: a dissociation half-life of 23.1 min; 150 min is 6.5 half-lives
+    assert _criterion(grade_radioligand(r), 'equilibrium')['degree'] == 1.0
+    r['quantities']['dissociation_rate'] = point(0.6, '1/h', 'k', ['k'])                   # 0.01 / min: a half-life of 69.3 min; 150 min is 2.16 half-lives: less than the absolute 30 min would give
+    assert _criterion(grade_radioligand(r), 'equilibrium')['degree'] == pytest.approx((1 - 0.5 ** (150 * 0.01 / math.log(2))) / (31 / 32))
+    r['quantities']['dissociation_rate'] = point(0.00006, '1/s', 'k', ['k'])
+    slower = _criterion(grade_radioligand(r), 'equilibrium')['degree']
+    r['quantities']['dissociation_rate'] = point(0.0001, '1/s', 'k', ['k'])
+    assert slower < _criterion(grade_radioligand(r), 'equilibrium')['degree'] < 1.0        # a slower off-rate needs a longer incubation: better never lowers, worse never raises
+    missing(r, 'dissociation_rate')
+    assert grade_radioligand(r)['native']['dissociation_rate_per_min'] is None and _criterion(grade_radioligand(r), 'equilibrium')['degree'] == 1.0
+    r['quantities']['dissociation_rate'] = point(math.log(2) / 30, '1/min', 'k', ['k'])
+    r['quantities']['incubation_time'] = point(0.4, 'h', 'i', ['s'])
     r['facts']['equilibrium_reached'] = fact('yes', ['s'])                                 # the stated fact outranks the short time
-    assert status(r, 'equilibrium') == 'supported'
+    assert status(r, 'equilibrium') == 'supported' and 'degree' not in _criterion(grade_radioligand(r), 'equilibrium')
     r['facts']['equilibrium_reached'] = fact('no', ['s'])
-    assert reason(r, 'equilibrium') == 'fact_answered_no'
+    assert reason(r, 'equilibrium') == 'fact_answered_no' and status(r, 'equilibrium') == 'conflicting'
 
 
 def test_the_series_must_have_enough_points_and_span_the_kd():
@@ -313,25 +376,27 @@ def test_the_series_must_have_enough_points_and_span_the_kd():
     assert _criterion(grade_radioligand(r), 'radioligand_range') == {'status': 'supported', 'support_refs': ['span_exp_synthetic_radioligand_1'], 'degree': 1.0}
     r['concentration_series']['value'] = [0.5, 1.0, 2.0, 4.0, 8.0, 16.0, 32.0, 64.0]      # 8 points: lowest 0.5 nM = 0.25 x the KD (allowed), highest 32 x: the full degree
     assert _criterion(grade_radioligand(r), 'radioligand_range')['degree'] == 1.0
-    r['concentration_series']['value'] = [1.0, 2.0, 4.0, 8.0, 16.0, 32.0, 64.0, 128.0]    # lowest 1 nM = 0.5 x the KD: a degree of (0.5 - 1) / (0.25 - 1) = 2 / 3
-    assert status(r, 'radioligand_range') == 'supported' and _criterion(grade_radioligand(r), 'radioligand_range')['degree'] == pytest.approx(2.0 / 3.0)
+    r['concentration_series']['value'] = [1.0, 2.0, 4.0, 8.0, 16.0, 32.0, 64.0, 128.0]    # lowest 1 nM = 0.5 x the KD: linear in the occupancy x / (1 + x): (1 / 2 - 1 / 3) / (1 / 2 - 1 / 5) = 5 / 9
+    assert status(r, 'radioligand_range') == 'supported' and _criterion(grade_radioligand(r), 'radioligand_range')['degree'] == pytest.approx(5.0 / 9.0)
     r['concentration_series']['value'] = [2.0, 4.0, 8.0, 16.0, 32.0, 64.0, 128.0, 256.0]  # lowest 2 nM = 1 x the KD: the zero-agreement limit
     assert status(r, 'radioligand_range') == 'conflicting' and 'degree' not in _criterion(grade_radioligand(r), 'radioligand_range')
     r['concentration_series']['value'] = [0.5, 1.0, 2.0, 4.0, 8.0, 9.0, 9.5, 10.0]         # highest 10 nM = 5 x the KD (allowed): the full degree
     assert _criterion(grade_radioligand(r), 'radioligand_range')['degree'] == 1.0
-    r['concentration_series']['value'] = [0.5, 0.6, 0.8, 1.0, 1.5, 2.0, 3.0, 6.0]          # highest 6 nM = 3 x the KD: a degree of (3 - 1) / (5 - 1) = 0.5
-    assert status(r, 'radioligand_range') == 'supported' and _criterion(grade_radioligand(r), 'radioligand_range')['degree'] == pytest.approx(0.5)
+    r['concentration_series']['value'] = [0.5, 0.6, 0.8, 1.0, 1.5, 2.0, 3.0, 6.0]          # highest 6 nM = 3 x the KD: occupancy 3 / 4 between 1 / 2 and 5 / 6: (3 / 4 - 1 / 2) / (5 / 6 - 1 / 2) = 3 / 4
+    assert status(r, 'radioligand_range') == 'supported' and _criterion(grade_radioligand(r), 'radioligand_range')['degree'] == pytest.approx(0.75)
     r['concentration_series']['value'] = [0.5, 0.6, 0.8, 1.0, 1.2, 1.5, 1.8, 2.0]          # highest 2 nM = 1 x the KD: the zero-agreement limit
     assert status(r, 'radioligand_range') == 'conflicting'
-    r['concentration_series']['value'] = [0.5, 1.0, 2.0, 4.0, 8.0, 16.0, 32.0]             # 7 points: fewer than eight, no degree
-    assert status(r, 'radioligand_range') == 'conflicting' and 'degree' not in _criterion(grade_radioligand(r), 'radioligand_range')
+    r['concentration_series']['value'] = [0.5, 1.0, 2.0, 4.0, 8.0, 16.0, 32.0]             # 7 points, one short of eight: (7 - 2) / (8 - 2) = 5 / 6, partial credit, not a conflict
+    assert status(r, 'radioligand_range') == 'supported' and _criterion(grade_radioligand(r), 'radioligand_range')['degree'] == pytest.approx(5.0 / 6.0)
+    r['concentration_series']['value'] = [0.5, 32.0]                                       # 2 points: the hyperbola (KD, Bmax) passes through both, no residual degree of freedom: degree 0, never conflicting
+    assert _criterion(grade_radioligand(r), 'radioligand_range')['status'] == 'supported' and _criterion(grade_radioligand(r), 'radioligand_range')['degree'] == 0.0
     r['concentration_series'] = {**r['concentration_series'], 'status': 'unavailable', 'value': None}
     assert reason(r, 'radioligand_range') == 'radioligand_range_recorded_for_the_sheet' and status(r, 'radioligand_range') == 'supported'     # 10 stated points are enough, the stated lowest 0.1 nM and highest 51.2 nM span
-    r['quantities']['titration_point_count'] = point(6, 'count', 'n', ['s'])
-    assert status(r, 'radioligand_range') == 'conflicting'
+    r['quantities']['titration_point_count'] = point(6, 'count', 'n', ['s'])               # (6 - 2) / 6 = 2 / 3
+    assert status(r, 'radioligand_range') == 'supported' and _criterion(grade_radioligand(r), 'radioligand_range')['degree'] == pytest.approx(2.0 / 3.0)
     r['quantities']['titration_point_count'] = point(10, 'count', 'n', ['s'])
-    r['quantities']['radioligand_range_highest'] = point(9.0, 'nM', 'h', ['s'])            # 4.5 x: a degree of 3.5 / 4
-    assert status(r, 'radioligand_range') == 'supported' and _criterion(grade_radioligand(r), 'radioligand_range')['degree'] == pytest.approx(3.5 / 4.0)
+    r['quantities']['radioligand_range_highest'] = point(9.0, 'nM', 'h', ['s'])            # 4.5 x: occupancy 9 / 11: (9 / 11 - 1 / 2) / (5 / 6 - 1 / 2)
+    assert status(r, 'radioligand_range') == 'supported' and _criterion(grade_radioligand(r), 'radioligand_range')['degree'] == pytest.approx((9 / 11 - 0.5) / (5 / 6 - 0.5))
     missing(r, 'radioligand_range_highest')
     assert reason(r, 'radioligand_range') == 'radioligand_range_recorded_for_the_sheet' and status(r, 'radioligand_range') == 'unknown'       # the count is known, the span is not
     missing(r, 'titration_point_count')
@@ -345,8 +410,8 @@ def test_the_competition_radioligand_concentration_is_at_most_the_kd():
     assert _criterion(grade_radioligand(r), 'competition_radioligand_level') == {'status': 'supported', 'support_refs': ['span_exp_synthetic_radioligand_1'], 'degree': 1.0}
     r['quantities']['radioligand_concentration'] = point(2.0, 'nM', 'l', ['s'])            # exactly the KD, allowed
     assert _criterion(grade_radioligand(r), 'competition_radioligand_level')['degree'] == 1.0
-    r['quantities']['radioligand_concentration'] = point(11.0, 'nM', 'l', ['s'])           # 5.5 x the KD: a degree of (10 - 5.5) / 9 = 0.5
-    assert status(r, 'competition_radioligand_level') == 'supported' and _criterion(grade_radioligand(r), 'competition_radioligand_level')['degree'] == pytest.approx(0.5)
+    r['quantities']['radioligand_concentration'] = point(11.0, 'nM', 'l', ['s'])           # 5.5 x the KD: linear in the occupancy x / (1 + x) from 1 / 2 (1 x) to 10 / 11 (10 x): (10 / 11 - 5.5 / 6.5) / (10 / 11 - 1 / 2)
+    assert status(r, 'competition_radioligand_level') == 'supported' and _criterion(grade_radioligand(r), 'competition_radioligand_level')['degree'] == pytest.approx((10 / 11 - 5.5 / 6.5) / (10 / 11 - 0.5))
     r['quantities']['radioligand_concentration'] = point(20.0, 'nM', 'l', ['s'])           # 10 x the KD: the zero-agreement limit
     assert status(r, 'competition_radioligand_level') == 'conflicting' and 'degree' not in _criterion(grade_radioligand(r), 'competition_radioligand_level')
     r['quantities']['radioligand_concentration'] = point(2.0, 'uM', 'l', ['s'])            # 1000 x
@@ -413,14 +478,14 @@ def test_the_cheng_prusoff_ki_must_agree_with_the_ic50_the_radioligand_concentra
     assert _criterion(grade_radioligand(r), 'cheng_prusoff') == {'status': 'supported', 'support_refs': ['span_exp_synthetic_radioligand_1'], 'degree': 1.0}
     r['quantities']['ki'] = point(7.5, 'nM', 'k', ['s'])                                   # 7.5 / 5 = 1.5 exactly the factor, allowed: the full degree
     assert status(r, 'cheng_prusoff') == 'supported' and _criterion(grade_radioligand(r), 'cheng_prusoff')['degree'] == pytest.approx(1.0)
-    r['quantities']['ki'] = point(16.25, 'nM', 'k', ['s'])                                 # 16.25 / 5 = 3.25: halfway from 1.5 to 5, a degree of 0.5
-    assert status(r, 'cheng_prusoff') == 'supported' and _criterion(grade_radioligand(r), 'cheng_prusoff')['degree'] == pytest.approx(0.5)
+    r['quantities']['ki'] = point(16.25, 'nM', 'k', ['s'])                                 # 16.25 / 5 = 3.25: linear in the log of the fold from 1.5 to 5
+    assert status(r, 'cheng_prusoff') == 'supported' and _criterion(grade_radioligand(r), 'cheng_prusoff')['degree'] == pytest.approx((math.log(5) - math.log(3.25)) / (math.log(5) - math.log(1.5)))
     r['quantities']['ki'] = point(25.0, 'nM', 'k', ['s'])                                  # 25 / 5 = 5: the zero-agreement limit
     assert status(r, 'cheng_prusoff') == 'conflicting' and 'degree' not in _criterion(grade_radioligand(r), 'cheng_prusoff')
     r['quantities']['ki'] = point(1.0, 'nM', 'k', ['s'])                                   # 5 / 1 = 5 the other way
     assert status(r, 'cheng_prusoff') == 'conflicting'
     r['quantities']['ki'] = point(2.0, 'nM', 'k', ['s'])                                   # 5 / 2 = 2.5 the other way: a degree of (5 - 2.5) / 3.5
-    assert _criterion(grade_radioligand(r), 'cheng_prusoff')['degree'] == pytest.approx(2.5 / 3.5)
+    assert _criterion(grade_radioligand(r), 'cheng_prusoff')['degree'] == pytest.approx((math.log(5) - math.log(2.5)) / (math.log(5) - math.log(1.5)))
     r['quantities']['ki'] = point(5.0, 'nM', 'k', ['s'])
     r['quantities']['ic50'] = point(0.0075, 'uM', 'c', ['s'])                              # 7.5 nM: the same
     assert status(r, 'cheng_prusoff') == 'supported'
@@ -442,10 +507,13 @@ def test_the_cheng_prusoff_ki_must_agree_with_the_ic50_the_radioligand_concentra
 def test_replicates_are_independent_experiments_and_tubes_do_not_count():
     r = synthetic_record()
     assert (grader_status(r, 'replicates'), reason(r, 'replicates')) == ('unknown', 'replicate_count_recorded_for_the_sheet') and status(r, 'replicates') == 'supported'
-    r['quantities']['replicate_count'] = point(2, 'count', 'n', ['s'])
-    assert status(r, 'replicates') == 'conflicting' and grade_radioligand(r)['native']['replicate_count'] == 2 and grade_radioligand(r)['native']['replicate_independent'] == 'yes'
+    r['quantities']['replicate_count'] = point(2, 'count', 'n', ['s'])                    # one short of three: the precision of the mean, sqrt(2 / 3), not a conflict
+    assert _criterion(grade_radioligand(r), 'replicates') == {'status': 'supported', 'support_refs': ['s', 'span_exp_synthetic_radioligand_1'], 'degree': pytest.approx(math.sqrt(2 / 3))}
+    assert grade_radioligand(r)['native']['replicate_count'] == 2 and grade_radioligand(r)['native']['replicate_independent'] == 'yes'
+    r['quantities']['replicate_count'] = point(1, 'count', 'n', ['s'])                    # one experiment: sqrt(1 / 3), still a constant, never a conflict by the count
+    assert status(r, 'replicates') == 'supported' and _criterion(grade_radioligand(r), 'replicates')['degree'] == pytest.approx(math.sqrt(1 / 3))
     r['quantities']['replicate_count'] = point(3, 'count', 'n', ['s'])
-    assert status(r, 'replicates') == 'supported' and _criterion(grade_radioligand(r), 'replicates')['support_refs'] == ['s', 'span_exp_synthetic_radioligand_1']
+    assert _criterion(grade_radioligand(r), 'replicates') == {'status': 'supported', 'support_refs': ['s', 'span_exp_synthetic_radioligand_1'], 'degree': 1.0}
     r['facts']['independent_experiments'] = fact('no', ['s'])
     assert (grader_status(r, 'replicates'), reason(r, 'replicates')) == ('conflicting', 'replicates_not_independent')
     r['facts']['independent_experiments'] = fact('unknown')

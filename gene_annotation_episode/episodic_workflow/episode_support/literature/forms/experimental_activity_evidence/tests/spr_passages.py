@@ -16,9 +16,10 @@ SYNTHETIC = (
     'amine-coupled to a CM5 chip to a level of 1000 RU; flow cell 1, left blank, served as the reference surface and '
     'all sensorgrams were additionally double referenced against buffer injections. The analyte PopZ (20 kDa; a '
     'monomer in solution) was injected at 2, 6, 20, 60, 200 and 600 nM at 30 µl/min. A 1:1 Langmuir binding model '
-    'fitted the data well, with residuals shown in Figure 3D and a chi-squared of 2.0 RU². The fit gave kon = '
+    'fitted the data well, with residuals shown in Figure 3D and a chi-squared of 2.0 RU². The baseline noise of the '
+    'instrument was 1.5 RU. The fit gave kon = '
     '1.0 × 10^5 M^-1 s^-1 and koff = 2.0 × 10^-3 s^-1, giving KD = 20 nM (standard error 2 nM, n = 3 independent '
-    'chips). The steady-state fit gave KD = 30 nM. The maximum response was 200 RU for 1:1 binding. Mass-transport '
+    'chips). The KD was obtained from this kinetic fit of the association and dissociation phases. The steady-state fit gave KD = 30 nM. The maximum response was 200 RU for 1:1 binding. Mass-transport '
     'limitation was tested by varying the flow rate and was not observed. The baseline was stable and the surface '
     'was regenerated completely with 10 mM glycine pH 2.0 between cycles. The immobilized ParB was active: it bound '
     'its DNA partner.')
@@ -32,6 +33,7 @@ SYNTHETIC_STATED = {
     'rmax': (200, 'RU', 'The maximum response was 200 RU'),
     'kd_spread': (2, 'nM', 'standard error 2 nM'),
     'chi_squared': (2.0, 'RU^2', 'chi-squared of 2.0 RU²'),
+    'baseline_noise': (1.5, 'RU', 'baseline noise of the instrument was 1.5 RU'),
     'immobilization_level': (1000, 'RU', 'to a level of 1000 RU'),
     'analyte_mass': (20, 'kDa', 'PopZ (20 kDa'),
     'ligand_mass': (55, 'kDa', 'ParB (55 kDa)'),
@@ -50,6 +52,7 @@ SYNTHETIC_STATED = {
     'analyte_bivalent_or_oligomeric': ('no', None, 'a monomer in solution'),
     'residuals_reported': ('yes', None, 'residuals shown in Figure 3D'),
     'single_estimate_method': ('no', None, 'The steady-state fit gave KD = 30 nM'),
+    'kd_analysis': ('kinetic_fit', None, 'The KD was obtained from this kinetic fit'),
 }
 
 

@@ -11,14 +11,17 @@ version, experiment_type ('emsa'), experiment_ref, source_ref, assertion_ref
 preparations   probe_preparation_ref (the labelled nucleic acid probe), protein_preparation_ref (the protein that is titrated or added), dataset_ref: each a
                string or None (unknown). They are references to records, which the caller supplies; no passage states them. The converter hands them to the
                merger as its dependence keys (the protein as the analyte key, the probe as the other partner; there is no surface).
-quantities     kd, kd_spread, fraction_shifted_highest, protein_concentration_lowest, protein_concentration_highest, probe_concentration, probe_length,
+quantities     kd, kd_spread, fraction_shifted_highest, plateau_shifted_fraction, competition_protein_concentration, protein_concentration_lowest, protein_concentration_highest, probe_concentration, probe_length,
                salt_concentration, magnesium_concentration, glycerol_percent, nonspecific_competitor_amount, specific_competitor_excess, incubation_time,
                incubation_temperature, gel_percent, run_time, run_voltage, run_temperature, titration_point_count, shifted_species_count, replicate_count:
                one operand each.
                Units: kd, kd_spread, protein_concentration_lowest, protein_concentration_highest and probe_concentration pM, nM, uM or mM (kd the apparent
                dissociation constant the source gives; kd_spread its spread; protein_concentration_lowest and _highest the lowest and the highest protein
                concentration of the titration; probe_concentration the concentration of the labelled probe in the reaction); fraction_shifted_highest
-               'percent' (the percent of the probe in the shifted band at the highest protein concentration); probe_length 'bp' or 'nt'; salt_concentration
+               'percent' (the percent of the probe in the shifted band at the highest protein concentration); plateau_shifted_fraction 'percent' (the
+               plateau of the fitted binding curve, the maximum percent of the probe that can be shifted, which is below 100 when part of the probe is
+               inactive); competition_protein_concentration pM, nM, uM or mM (the protein concentration in the reactions of the competition, which the
+               fold excess of the competitor has to outnumber); probe_length 'bp' or 'nt'; salt_concentration
                and magnesium_concentration 'mM' or 'M'; glycerol_percent and gel_percent 'percent'; nonspecific_competitor_amount 'ng' or 'ug' (per reaction);
                specific_competitor_excess 'ratio' (the fold excess of the unlabelled specific probe over the labelled probe); incubation_time and run_time
                's', 'min' or 'h'; incubation_temperature and run_temperature 'C' or 'K'; run_voltage 'V' or 'V/cm'; titration_point_count,
@@ -63,7 +66,7 @@ def fact(answer, refs=(), support='direct'):
 
 VERSION = 'a105_emsa_record_v1'
 EXPERIMENT_TYPE = 'emsa'
-QUANTITIES = ('kd', 'kd_spread', 'fraction_shifted_highest', 'protein_concentration_lowest', 'protein_concentration_highest', 'probe_concentration', 'probe_length', 'salt_concentration', 'magnesium_concentration', 'glycerol_percent', 'nonspecific_competitor_amount', 'specific_competitor_excess', 'incubation_time', 'incubation_temperature', 'gel_percent', 'run_time', 'run_voltage', 'run_temperature', 'titration_point_count', 'shifted_species_count', 'replicate_count')
+QUANTITIES = ('kd', 'kd_spread', 'fraction_shifted_highest', 'plateau_shifted_fraction', 'competition_protein_concentration', 'protein_concentration_lowest', 'protein_concentration_highest', 'probe_concentration', 'probe_length', 'salt_concentration', 'magnesium_concentration', 'glycerol_percent', 'nonspecific_competitor_amount', 'specific_competitor_excess', 'incubation_time', 'incubation_temperature', 'gel_percent', 'run_time', 'run_voltage', 'run_temperature', 'titration_point_count', 'shifted_species_count', 'replicate_count')
 PREPARATION_KEYS = ('probe_preparation_ref', 'protein_preparation_ref', 'dataset_ref')
 PROBE_TYPES = ('dsdna', 'ssdna', 'rna', 'other')
 PROBE_LABELS = ('p32', 'fluorescent', 'biotin_chemiluminescence', 'infrared', 'other')
@@ -77,4 +80,4 @@ FACTS = {'shift_detected': YES_NO, 'shift_abolished_by_specific_competitor': YES
 CONCENTRATION_UNITS = ('pM', 'nM', 'uM', 'mM')
 TIME_UNITS = ('s', 'min', 'h')
 # The unit vocabulary of each quantity: the units a record may carry.
-UNITS = {'kd': CONCENTRATION_UNITS, 'kd_spread': CONCENTRATION_UNITS, 'fraction_shifted_highest': ('percent',), 'protein_concentration_lowest': CONCENTRATION_UNITS, 'protein_concentration_highest': CONCENTRATION_UNITS, 'probe_concentration': CONCENTRATION_UNITS, 'probe_length': ('bp', 'nt'), 'salt_concentration': ('mM', 'M'), 'magnesium_concentration': ('mM', 'M'), 'glycerol_percent': ('percent',), 'nonspecific_competitor_amount': ('ng', 'ug'), 'specific_competitor_excess': ('ratio',), 'incubation_time': TIME_UNITS, 'incubation_temperature': ('C', 'K'), 'gel_percent': ('percent',), 'run_time': TIME_UNITS, 'run_voltage': ('V', 'V/cm'), 'run_temperature': ('C', 'K'), 'titration_point_count': ('count',), 'shifted_species_count': ('count',), 'replicate_count': ('count',)}
+UNITS = {'kd': CONCENTRATION_UNITS, 'kd_spread': CONCENTRATION_UNITS, 'fraction_shifted_highest': ('percent',), 'plateau_shifted_fraction': ('percent',), 'competition_protein_concentration': CONCENTRATION_UNITS, 'protein_concentration_lowest': CONCENTRATION_UNITS, 'protein_concentration_highest': CONCENTRATION_UNITS, 'probe_concentration': CONCENTRATION_UNITS, 'probe_length': ('bp', 'nt'), 'salt_concentration': ('mM', 'M'), 'magnesium_concentration': ('mM', 'M'), 'glycerol_percent': ('percent',), 'nonspecific_competitor_amount': ('ng', 'ug'), 'specific_competitor_excess': ('ratio',), 'incubation_time': TIME_UNITS, 'incubation_temperature': ('C', 'K'), 'gel_percent': ('percent',), 'run_time': TIME_UNITS, 'run_voltage': ('V', 'V/cm'), 'run_temperature': ('C', 'K'), 'titration_point_count': ('count',), 'shifted_species_count': ('count',), 'replicate_count': ('count',)}

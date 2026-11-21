@@ -1,5 +1,5 @@
-"""How the A102 head reads each child's return (carried from the eight ``from_child_*.py`` files at
-``97308b94c``).
+"""How the A102 head reads each child's return (carried from the ``from_child_*.py`` files at ``97308b94c``; the
+literature child is removed).
 
 The old receivers admitted the child's typed form against the report contract (a failed admission became feedback
 for ``redeliver_report``), then received the references in it. Here the system admits the result against the
@@ -15,9 +15,9 @@ finding, the names of the fields it returned and, by slot:
   (``check_refs``), in custody: the report keeps their references, and the summary reads the rows through its
   records (``outstanding_jobs``).
 
-Every other slot (``literature``, ``execution_launch``, ``resource_launch``, ``execution_results``,
-``resource_results``, ``hpc``) reports credit, finding and the returned field names; their records are held in
-custody and read where a tool or the summary names them.
+Every other slot (``execution_launch``, ``resource_launch``, ``execution_results``, ``resource_results``, ``hpc``)
+reports credit, finding and the returned field names; their records are held in custody and read where a tool or the
+summary names them.
 """
 from __future__ import annotations
 
@@ -26,11 +26,8 @@ BASE = ('credit', 'finding')
 
 def read_from_child(slot, result, summary, records):
     report = {'slot': slot, 'child_credit': result['credit'], 'child_finding': result['finding'],
-              'returned': sorted(set(result) - set(BASE)), 'process_results': [], 'check_refs': [],
-              'experimental_structure_sheets': []}
-    if slot == 'literature':
-        report['experimental_structure_sheets'] = list(result['finding']['structure_sheets'])
-    elif slot == 'structural_homology_evidence':
+              'returned': sorted(set(result) - set(BASE)), 'process_results': [], 'check_refs': []}
+    if slot == 'structural_homology_evidence':
         report['process_results'] = list(result.get('structural_homology_evidence_results', []))
     elif slot == 'monitor':
         report['check_refs'] = list(result['check_refs'])

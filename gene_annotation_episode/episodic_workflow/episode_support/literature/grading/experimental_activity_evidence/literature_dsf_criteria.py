@@ -35,7 +35,7 @@ Terms. Melting temperature Tm: the midpoint of the unfolding transition. Thermal
 passage states no shift but states both Tm values, their difference. Shift over spread: the signed shift divided by the stated standard deviation of the Tm. Ligand range over the KD: the lowest and the highest ligand concentration divided by the apparent KD.
 Heating rate: degrees Celsius per minute.
 
-What this method does not ask (kept in the record for the reviewer, no criterion judges them): the Tagg of nanoDSF, the protein concentration, the readout, the way the Tm was read, the spread of the KD and its kind.
+What this method does not ask (kept in the record for the reviewer, no criterion judges them): the Tagg of nanoDSF, the readout, the way the Tm was read, the spread of the KD and its kind.
 """
 
 VERSION = 'a105_dsf_criteria_v1'
@@ -65,9 +65,9 @@ DSF_CRITERIA = (
     {
         'id': 'shift_size',
         'question': 'Is the thermal shift (delta Tm, signed) at least the minimum shift?',
-        'reads': ('quantities.delta_tm', 'quantities.tm_apo', 'quantities.tm_ligand'),
-        'rule': 'When the passage states the shift, or states the Tm alone and the Tm with the ligand (their difference is the shift), the grader records the signed shift in degrees Celsius (thermal_shift_c) and its refs (thermal_shift_refs) and leaves the judgement to the sheet; otherwise unknown.',
-        'thresholds': (),
+        'reads': ('quantities.delta_tm', 'quantities.tm_apo', 'quantities.tm_ligand', 'quantities.shift_ligand_concentration', 'quantities.kd'),
+        'rule': 'When the passage states the shift, or states the Tm alone and the Tm with the ligand (their difference is the shift), the grader records the signed shift in degrees Celsius (thermal_shift_c) and its refs (thermal_shift_refs) and leaves the judgement to the sheet; otherwise unknown. When the ligand concentration at which the shift was read and an apparent KD are both stated, it also records their quotient (shift_concentration_over_kd) and the refs of the two (shift_concentration_refs): the shift grows with the occupancy, so the sheet reads the size of the shift against it.',
+        'thresholds': ('NM_PER_UNIT',),
         'returns': (
             ('unknown', 'thermal_shift_recorded_for_the_sheet', 'a shift is stated, or both Tm values are: the signed shift is recorded and the sheet judges it'),
             ('unknown', 'thermal_shift_not_given', 'no shift is stated and the two Tm values are not both stated'),
@@ -76,8 +76,8 @@ DSF_CRITERIA = (
     {
         'id': 'shift_over_spread',
         'question': 'Is the thermal shift larger than the scatter of the Tm?',
-        'reads': ('quantities.delta_tm', 'quantities.tm_apo', 'quantities.tm_ligand', 'quantities.tm_spread'),
-        'rule': 'When the signed shift is known (as for shift_size) and a standard deviation of the Tm is stated, the grader records the quotient (shift_over_spread) and the refs of both (shift_spread_refs) and leaves the judgement to the sheet; otherwise unknown.',
+        'reads': ('quantities.delta_tm', 'quantities.tm_apo', 'quantities.tm_ligand', 'quantities.tm_spread', 'facts.tm_spread_over_independent_experiments'),
+        'rule': 'When the signed shift is known (as for shift_size) and a standard deviation of the Tm is stated, the grader records the quotient (shift_over_spread), the standard deviation itself (tm_spread_c), the answer of the fact that says whether that standard deviation is over independent experiments or only over wells of one plate (tm_spread_independent) and the refs of all of them (shift_spread_refs) and leaves the judgement to the sheet; otherwise unknown.',
         'thresholds': (),
         'returns': (
             ('unknown', 'shift_over_spread_recorded_for_the_sheet', 'the shift and the spread are known: the quotient is recorded and the sheet judges it'),
@@ -92,10 +92,10 @@ DSF_CRITERIA = (
         'id': 'concentration_series',
         'question': 'Was the shift measured at enough ligand concentrations to show its concentration dependence?',
         'reads': ('quantities.ligand_concentration_count', 'facts.ligand_titration_measured'),
-        'rule': 'The fact stated as no fails. Otherwise a stated number of ligand concentrations is recorded (concentration_count, concentration_count_refs) and the judgement is left to the sheet; with no number the fact decides: yes supported, unknown unknown, not_applicable not applicable.',
+        'rule': 'The fact stated as no (no titration: a single-concentration screen) is a weakness, not opposition: the grader records the stated count, or one concentration when none is stated (concentration_count, concentration_count_refs: the fact) and leaves the judgement to the sheet. Otherwise a stated number of ligand concentrations is recorded the same way; with no number the fact decides: yes supported, unknown unknown, not_applicable not applicable.',
         'thresholds': (),
         'returns': (
-            ('conflicting', 'fact_answered_no', 'the fact is no'),
+            ('unknown', 'single_concentration_recorded_for_the_sheet', 'the fact is no: a single concentration (or the stated count) is recorded and the sheet judges it'),
             ('unknown', 'concentration_count_recorded_for_the_sheet', 'the fact is not no and a count is stated: it is recorded and the sheet judges it'),
             ('supported', 'facts_answered_yes', 'the fact is not no, no count is stated and the fact is yes'),
             ('unknown', 'fact_unknown', 'no count is stated and the fact is unknown'),
@@ -105,8 +105,8 @@ DSF_CRITERIA = (
     {
         'id': 'concentration_range',
         'question': 'Did the ligand concentrations span the apparent KD (some well below it, some well above it)?',
-        'reads': ('quantities.ligand_concentration_lowest', 'quantities.ligand_concentration_highest', 'quantities.kd'),
-        'rule': 'With no KD reported the criterion does not apply. When the lowest ligand concentration, the highest one and the KD are all stated, the grader records the two quotients (low_over_kd, high_over_kd) and the refs of the three (range_refs) and leaves the judgement to the sheet; otherwise unknown.',
+        'reads': ('quantities.ligand_concentration_lowest', 'quantities.ligand_concentration_highest', 'quantities.kd', 'quantities.protein_concentration'),
+        'rule': 'With no KD reported the criterion does not apply. When the lowest ligand concentration, the highest one and the KD are all stated, the grader records the two quotients (low_over_kd, high_over_kd) and the refs of the three (range_refs) and leaves the judgement to the sheet; otherwise unknown. When the protein concentration is also stated, it records the KD over the protein concentration (kd_over_protein, refs added to range_refs): a KD far below the protein concentration is limited by the titration.',
         'thresholds': ('NM_PER_UNIT',),
         'returns': (
             ('unknown', 'concentration_range_recorded_for_the_sheet', 'a KD is reported and both ends of the range are stated: the quotients are recorded and the sheet judges them'),

@@ -27,8 +27,8 @@ SYNTHETIC = (
     'Pull-down of DX-9 by GST-DX-3 was done from a lysate of HEK293 cells. This pull-down tested the binding of the prey protein DX-9 to its partner, the bait protein DX-3. 50 µl of glutathione beads carried the bait. GST-DX-3 was bound to glutathione beads and incubated '
     'with the cell lysate for 2 h at 4 °C. No crosslinker was used. The beads were washed 4 times with a buffer of 300 mM NaCl and 0.1% Triton X-100, and the bound proteins '
     'were eluted with sample buffer. 5% of the lysate was loaded as the input lane. DX-9 was detected in the eluate by western blot, and the DX-9 band in the GST-DX-3 eluate '
-    'was 12-fold stronger than in the control. 4% of the input DX-9 was recovered in the eluate. A control with GST alone on glutathione beads was done, and DX-9 was absent '
-    'from the GST-alone eluate. A control in which the lysate was incubated with the beads without GST-DX-3 showed that DX-9 does not bind the beads alone. The pull-down was '
+    'was 12-fold stronger than in the control. 4% of the input DX-9 was recovered in the eluate. Over the experiments the fold enrichment had a standard deviation of 2.6 and a standard error of the mean of 1.5. A control with GST alone on glutathione beads was done, and DX-9 was absent '
+    'from the GST-alone eluate. A positive control with the known interacting pair DX-5 and DX-6, taken through the same wash, gave the expected band. A control in which the lysate was incubated with the beads without GST-DX-3 showed that DX-9 does not bind the beads alone. The pull-down was '
     'also done the other way round with GST-DX-9, and DX-3 was found, so the interaction was reciprocal. Competition with excess untagged DX-3 abolished the capture of DX-9. '
     'The interaction survived treatment of the lysate with benzonase, so it was not bridged by nucleic acid. Purified recombinant GST-DX-3 and purified DX-9 also interacted, '
     'so the interaction is direct. The DX-3 and DX-9 in the lysate were at their endogenous levels, not overexpressed. The band intensities were quantified and normalized to '
@@ -37,6 +37,8 @@ SYNTHETIC = (
 # field -> (value, unit, quote) for the synthetic passage: every field of the form.
 SYNTHETIC_STATED = {
     'fold_enrichment': (12, 'ratio', '12-fold stronger than in the control'),
+    'fold_enrichment_sd': (2.6, 'ratio', 'a standard deviation of 2.6'),
+    'fold_enrichment_sem': (1.5, 'ratio', 'a standard error of the mean of 1.5'),
     'percent_input_recovered': (4, 'percent', '4% of the input DX-9 was recovered'),
     'input_fraction': (5, 'percent', '5% of the lysate was loaded as the input lane'),
     'nacl_wash': (300, 'mM', 'a buffer of 300 mM NaCl'),
@@ -53,6 +55,7 @@ SYNTHETIC_STATED = {
     'prey_detected_in_eluate': ('yes', None, 'DX-9 was detected in the eluate by western blot'),
     'negative_control_done': ('yes', None, 'A control with GST alone on glutathione beads was done'),
     'prey_absent_in_negative_control': ('yes', None, 'DX-9 was absent from the GST-alone eluate'),
+    'positive_control_detected': ('yes', None, 'A positive control with the known interacting pair DX-5 and DX-6, taken through the same wash, gave the expected band'),
     'bait_minus_control_done': ('yes', None, 'DX-9 does not bind the beads alone'),
     'input_lane_shown': ('yes', None, 'was loaded as the input lane'),
     'reciprocal_done': ('yes', None, 'the interaction was reciprocal'),

@@ -20,9 +20,9 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.tests import fcs_cases
 
 # What no grader criterion reads (the grader copies every quantity into its native values without reading it): the effect's
-# variance is built from the spread by the converter, and the structure parameter, the brightness, the laser power, the
+# variance is built from the spread by the converter, and the structure parameter, the laser power, the
 # temperature and the statement that only this method was used are kept in the record for the reviewer.
-READ_BY_THE_CONVERTER_OR_KEPT = {'kd_spread', 'structure_parameter', 'brightness', 'laser_power', 'temperature', 'single_estimate_method'}
+READ_BY_THE_CONVERTER_OR_KEPT = {'kd_spread', 'structure_parameter', 'laser_power', 'temperature', 'single_estimate_method'}
 
 
 class Tracking(dict):
@@ -91,7 +91,8 @@ def test_a_correct_synthetic_answer_is_valid_and_becomes_a_record_the_grader_acc
     answer = validate_answer(synthetic_answer(), SYNTHETIC)
     record = record_from_answer(answer, SYNTHETIC, 5000, 'exp_1', 'source_1', 'hypothesis_1')
     graded = grade_fcs(record)
-    assert {name: _criterion(graded, name)['status'] for name in CRITERIA} == dict.fromkeys(CRITERIA, 'supported')      # as the sheet judges what the grader recorded
+    # as the sheet judges what the grader recorded; every criterion is decided
+    assert {name: _criterion(graded, name)['status'] for name in CRITERIA} == dict.fromkeys(CRITERIA, 'supported')
     native = graded['native']
     assert native['kd_nM'] == 20 and native['labelled_nM'] == 2 and native['labelled_over_kd'] == pytest.approx(0.1) and native['particle_number'] == 0.8
     assert native['diffusion_ratio'] == pytest.approx(1.8) and native['expected_diffusion_ratio'] == pytest.approx(6 ** (1 / 3))
@@ -120,10 +121,10 @@ def test_the_span_counts_bytes_not_characters():
     assert start == SYNTHETIC.index(quote) + 1 and SYNTHETIC.encode()[start:end].decode() == quote and end - start == len(quote) + 1
     quote = 'D = 280 µm²/s'       # before it: the degree sign, the micro sign of 5 µW and the micro sign of 60 µs; its own micro sign and superscript two are two bytes each
     start, end = quote_span(SYNTHETIC, quote)
-    assert start == SYNTHETIC.index(quote) + 3 and SYNTHETIC.encode()[start:end].decode() == quote and end - start == len(quote) + 2
+    assert start == SYNTHETIC.index(quote) + 4 and SYNTHETIC.encode()[start:end].decode() == quote and end - start == len(quote) + 2
     quote = 'D = 156 µm²/s'       # before it also the micro sign and the superscript two of 280 µm²/s and the micro sign of 108 µs
     start, end = quote_span(SYNTHETIC, quote)
-    assert start == SYNTHETIC.index(quote) + 6 and SYNTHETIC.encode()[start:end].decode() == quote and end - start == len(quote) + 2
+    assert start == SYNTHETIC.index(quote) + 7 and SYNTHETIC.encode()[start:end].decode() == quote and end - start == len(quote) + 2
     quote = 'comparing the apparent τD obtained by the fit'       # a Greek tau (2 bytes) in the real paragraph before it and its own
     start, end = quote_span(REAL, quote)
     assert start == REAL.index(quote) + 1 and REAL.encode()[start:end].decode() == quote and end - start == len(quote) + 1
@@ -146,8 +147,9 @@ def test_the_real_paragraph_states_only_what_it_states_and_everything_else_stays
     assert record['diffusion_model'] == 'one_component' and record['readout_signal'] == 'diffusion_time'
     graded = grade_fcs(record)
     judged = {name: _criterion(graded, name) for name in graded['criteria']}      # as the sheet judges what the grader recorded
-    assert [name for name, item in judged.items() if item['status'] == 'supported'] == ['labelled_over_kd']
-    assert [name for name, item in judged.items() if item['status'] == 'conflicting'] == ['labelled_range']
+    assert [name for name, item in judged.items() if item['status'] == 'supported'] == ['labelled_range', 'labelled_over_kd']      # 100 pM is below the nM window (partial credit)
+    assert [name for name, item in judged.items() if item['status'] == 'conflicting'] == []
+    assert 0 < judged['labelled_range']['degree'] < 1
     assert [name for name, item in judged.items() if item['status'] == 'not_applicable'] == ['crosstalk']
     assert graded['reasons']['diffusion_model'] == 'one_component_needs_free_and_bound_reference_values' and graded['reasons']['fit_model'] == 'fit_model_not_stated'
     assert graded['reasons']['labelled_range'] == 'labelled_concentration_recorded_for_the_sheet' and graded['reasons']['concentration_series'] == 'kd_or_series_missing'

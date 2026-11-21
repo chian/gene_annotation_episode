@@ -16,12 +16,14 @@ records, which no passage states; they stay unknown (None).
 from jsonschema import Draft202012Validator
 
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_itc_record import (
-    EXPERIMENT_TYPE, FACTS, FIT_MODELS, PREPARATION_KEYS, QUANTITIES, SPREAD_KINDS, SUPPORTS, UNITS, VERSION, fact, point, unavailable)
+    EXPERIMENT_TYPE, FACTS, FIT_MODELS, PREPARATION_KEYS, QUANTITIES, SPREAD_KINDS, SUPPORTS, TITRATION_MODES, UNITS, VERSION, fact, point, unavailable)
 
 KELVIN_OFFSET = 273.15   # 0 C in kelvin (a definition)
 NOT_EXTRACTED = ('preparations',)
 SPREAD_KIND = 'spread_kind'
 FIT_MODEL = 'fit_model'
+TITRATION_MODE = 'titration_mode'
+CHOICES = {SPREAD_KIND: SPREAD_KINDS, FIT_MODEL: FIT_MODELS, TITRATION_MODE: TITRATION_MODES}
 # Why a field is unavailable: a fixed vocabulary.
 REASONS = ('not_stated_in_passage', 'unit_not_in_vocabulary', 'ambiguous_or_conflicting_in_passage')
 # A fact answer the passage can state. 'unknown' is the unavailable status itself and 'not_applicable' is a
@@ -44,8 +46,10 @@ MEANING = {
     'syringe_concentration': 'The concentration of the ligand (titrant) placed in the syringe.',
     'injection_count': 'The number of injections of the titration (a whole number).',
     'replicate_count': 'The number of replicate titrations the passage reports (a whole number).',
+    'final_molar_ratio': 'The molar ratio of ligand (syringe) to partner (cell) reached at the END of the titration, as the passage states it (for example "titrated to a final molar ratio of 3" or "up to a 2.5-fold molar excess of ligand"). Not the fitted stoichiometry n, and not the ratio of the two starting concentrations unless the passage says that is the final ratio.',
     SPREAD_KIND: 'What the reported KD uncertainty is.',
     FIT_MODEL: 'The binding model the passage says the isotherm was fitted with.',
+    TITRATION_MODE: 'How the titrant was added, as the passage states it: incremental (a series of separate injections), single_injection (one long injection of the whole titrant) or continuous (continuous injection or a slow ramp). Answer incremental only when the passage says the titration was done by separate injections; a bare injection count does not state the mode.',
     'dilution_control_performed': 'Whether the passage says the heat of diluting the ligand into buffer was measured (a control titration).',
     'dilution_control_subtracted': 'Whether the passage says the heat of dilution was subtracted from the binding heats.',
     'baseline_corrected': 'Whether the passage says the baseline was corrected or the raw thermogram was baseline-treated before integration.',
@@ -57,13 +61,14 @@ MEANING = {
     'buffer_matching': 'Whether the passage says how the buffers of the cell and syringe samples were matched (dialysed together, matched by a stated procedure, or not matched).',
     'temperature_controlled': 'Whether the passage says the temperature was controlled (held constant by the instrument).',
     'independent_titrations': 'Whether the passage says the replicate titrations were independent (separate samples or preparations).',
+    'enthalpy_buffer_ionization_corrected': 'Whether the passage says the reported binding enthalpy was corrected for the heat of buffer protonation or ionization (an intrinsic, buffer-independent enthalpy): yes if it was corrected, no if the passage says the reported enthalpy is the observed one, not corrected.',
 }
 
 
 def field_names():
     """Every field the extraction answers, in the form's own order: the quantities, the spread kind,
-    the fit model, the facts."""
-    return (*QUANTITIES, SPREAD_KIND, FIT_MODEL, *FACTS)
+    the fit model, the titration mode, the facts."""
+    return (*QUANTITIES, SPREAD_KIND, FIT_MODEL, TITRATION_MODE, *FACTS)
 
 
 def _nullable(schema):
@@ -73,8 +78,7 @@ def _nullable(schema):
 def _field_schema(name):
     value = ({'type': 'integer'} if name in COUNTS else
              {'type': 'number'} if name in QUANTITIES else
-             {'enum': list(SPREAD_KINDS)} if name == SPREAD_KIND else
-             {'enum': list(FIT_MODELS)} if name == FIT_MODEL else
+             {'enum': list(CHOICES[name])} if name in CHOICES else
              {'enum': list(STATABLE[name])})
     properties = {'status': {'enum': ['stated', 'unavailable']}, 'value': _nullable(value)}
     if name in UNITS:
@@ -167,8 +171,8 @@ def record_from_answer(answer, chunk, chunk_offset, experiment_ref, source_ref, 
     return {'version': VERSION, 'experiment_type': EXPERIMENT_TYPE, 'experiment_ref': experiment_ref, 'source_ref': source_ref,
             'assertion_ref': assertion_ref, 'preparations': dict.fromkeys(PREPARATION_KEYS),
             'quantities': {name: operand(name) for name in QUANTITIES},
-            SPREAD_KIND: choice(SPREAD_KIND), FIT_MODEL: choice(FIT_MODEL),
-            'choice_support': {name: answer[name]['support'] for name in (SPREAD_KIND, FIT_MODEL)},
+            **{name: choice(name) for name in CHOICES},
+            'choice_support': {name: answer[name]['support'] for name in CHOICES},
             'facts': {name: fact(answer[name]['value'], [refs[name]], answer[name]['support']) if answer[name]['status'] == 'stated' else fact('unknown')
                       for name in FACTS},
             'spans': spans}

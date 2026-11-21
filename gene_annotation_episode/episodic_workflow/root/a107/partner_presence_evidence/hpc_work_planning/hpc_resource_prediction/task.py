@@ -35,8 +35,8 @@ under the unit's operation key). **The shared execution memory** is the ``estima
 
 Settings this episode reads (``ctx.settings``, its entry of the run's ``continuation`` collaborator): ``resources``
 (the configured resources by id, one of kind ``pbs_ssh`` with its ``account``), ``commissions`` (the configured
-commissions by id, for ``commission_id``), ``shared_execution_memory`` (boolean), and ``cost`` and ``parameters``
-(``yield_estimator.py``).
+commissions by id, for ``commission_id``) and ``shared_execution_memory`` (boolean). The accumulation controller
+(``yield_estimator.py``: ``ADAPTIVE_CONTROL``, ``items=None``) reads no settings and takes no cost.
 
 Not carried into the prompt: the launch-instruction and tool-knowledge library texts (this episode offers no tool
 that looks anything up in them), and the old ``resource_context``, ``execution_expectations``,
@@ -111,9 +111,11 @@ INSTRUCTIONS = (
     'validation cases. It is modest and signed: a worse model loses credit. Later the planner scores the forecasts '
     'frozen with your model against the real outcomes of the allocation. Reading, discovery, queue observation, '
     'proposing and comparing earn nothing by themselves; they are worth a unit only when they change what you fit '
-    'or what the planner can decide. You do not end the episode: it ends by itself when further units stop '
-    'earning. Stop improving the model when further improvement is less useful than running the next worthwhile '
-    'portfolio.')
+    'or what the planner can decide. You do not end the episode: once eight units have been attempted it '
+    'estimates the credit the next unit can still earn, and it ends by itself after four units in a row whose '
+    'expected next credit is at most a small threshold (a tenth of the median recent productive credit, or the '
+    'resolution of one result when that is larger). Stop improving the model when further improvement is less '
+    'useful than running the next worthwhile portfolio.')
 
 
 def catalog(memory_configured):

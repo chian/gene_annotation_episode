@@ -17,7 +17,6 @@ PACKAGE = __name__.rsplit('.', 2)[0]
 FOLDER = Path(__file__).resolve().parents[1]
 EPISODE = importlib.import_module(PACKAGE + '.episode').PartnerPresenceEvidence
 CHILDREN = {'partner_presence_evidence': None,
-            'literature': 'published_evidence_assessment',
             'launch': 'execution_job_submission',
             'results': 'execution_result_acquisition',
             'monitor': 'execution_progress_assessment',
@@ -203,8 +202,7 @@ def arguments_for(slot, task):
         'revision_origin': {'version': 'partner_presence_evidence_revision_origin_v1',
                             'parent_invocation_ref': 'scientific_invocation_' + 'a' * 24,
                             'preparation_operation_ref': 'operation_' + 'a' * 24},
-        'evidence_refs': [SOURCE], 'constraints': {}, 'context': {}, 'question_context_refs': [],
-        'source_refs': [SOURCE], 'partner_components': ['removal'], 'requests': {'r': {}},
+        'evidence_refs': [SOURCE], 'constraints': {}, 'context': {}, 'requests': {'r': {}},
         'immutable_input_versions': [], 'launch_instructions': {}, 'record_refs': [SOURCE],
         'received_handoff_resources': ['r'], 'handoff_ref': 'h', 'selector': {}, 'target': {},
         'initial_result_refs': [SOURCE], 'target_handle': 't', 'requested_fields': ['execution_status'],
@@ -260,9 +258,9 @@ def test_the_commission_of_the_head_itself_is_admitted_by_its_own_form():
 
 def test_a_selection_the_child_does_not_declare_is_refused_where_the_commission_is_admitted():
     to_child = importlib.import_module(PACKAGE + '.messages.msg_to_child')
-    assert 'not_a_field' not in to_child.SELECTABLE['literature']
+    assert 'not_a_field' not in to_child.SELECTABLE['hpc']
     form = EPISODE.return_form
     with pytest.raises(FormError):
         form.select(('not_a_field',))
-    assert EPISODE.read_from_child('literature', {'credit': 1.0, 'finding': {}}, {}, None) == {
-        'slot': 'literature', 'credit': 1.0, 'finding': {}}
+    assert EPISODE.read_from_child('hpc', {'credit': 1.0, 'finding': {}}, {}, None) == {
+        'slot': 'hpc', 'credit': 1.0, 'finding': {}}

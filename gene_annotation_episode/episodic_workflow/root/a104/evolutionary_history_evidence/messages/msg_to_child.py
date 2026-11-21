@@ -13,7 +13,7 @@ the ``inprocess_completion_order``, the ``scientific_invocation_ref`` of the mes
 
 The ``ChildCall`` arguments are what ``task.py`` built from the model's selection: ``objective``, ``purpose``,
 ``scope``, ``initial_report`` (optional), ``assignment`` and ``return_fields``. The own slot and ``hpc`` are the
-children the model is offered; the slots ``launch``, ``results`` and ``literature`` carry the old assemblers with
+children the model is offered; the slots ``launch`` and ``results`` carry the old assemblers with
 the child's own assignment in ``assignment`` as the old ``episode_assignment`` (their old yield/handoff units ride
 in it). The ``monitor`` slot is commissioned on a job this episode holds (``_monitor``): its ``ChildCall`` arguments
 are ``handoff_ref`` (the held handoff row of the job), ``requested_fields``, ``information_unit`` and
@@ -71,7 +71,7 @@ def msg_to_child(slot, arguments, summary):
         assignment = {**arguments['assignment'], 'scope': arguments['scope']}
         selection = tuple(_unique(wanted))
     else:
-        # launch, results, literature: the old assemblers took the child's own assignment as written
+        # launch, results: the old assemblers took the child's own assignment as written
         assignment = dict(arguments['assignment'])
         selection = tuple(_unique(wanted))
     return ChildMessage(objective=arguments['objective'], message=message, assignment=assignment,

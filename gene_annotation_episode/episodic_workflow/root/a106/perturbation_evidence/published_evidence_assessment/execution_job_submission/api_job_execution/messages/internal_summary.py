@@ -46,8 +46,11 @@ def internal_summary(view):
                 'facts': event['event']['facts'], 'failure_code': event['event']['failure_code']}
     summary['acquired_record_count'] = len(summary['result_refs'])
     # The input list (nano-graphrag input-list paradigm): the records the parent passed that no operation has been
-    # handed yet, in the order passed. A record handed to an operation is consumed and no longer offered; the
-    # yield estimator stops the episode when the list is empty.
+    # handed yet, in the order passed. A record handed to an operation is consumed and no longer offered. The
+    # yield estimator passes ``items=None``, so an empty list does not stop the episode: the accumulation controller
+    # (``ADAPTIVE_CONTROL``, no cost) stops it after 4 flat units in a row, a unit being flat, once W=8 units are
+    # attempted and m=4 observed, when the upper bound of the expected next marginal (hypervolume) credit is at or
+    # below the adaptive gamma = max(one-result resolution, 0.1 x median of the recent productive credits).
     summary['input_list'] = [ref for ref in summary['input_refs'] if ref not in summary['consumed_input_refs']]
     summary['facts_by_source'] = {
         'execution_handoff_refs': summary['handoff_refs'], 'execution_result_refs': summary['result_refs'],

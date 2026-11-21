@@ -1,4 +1,4 @@
-"""Dialysis grader: each criterion's rule on records, with the thresholds exercised on both sides."""
+"""Dialysis grader: each criterion's rule on records, with the researched values exercised on both sides (the lone minimums give partial credit just below them)."""
 import pytest
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_dialysis_record import FACTS, fact, point
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_dialysis_converter import _criterion
@@ -241,10 +241,10 @@ def test_binding_is_observed_by_the_fact_or_by_a_stated_fraction_of_at_least_the
     assert (graded['criteria']['binding_observed'], graded['reasons']['binding_observed']) == ({'status': 'unknown', 'support_refs': []}, 'percent_bound_recorded_for_the_sheet')
     assert graded['native']['percent_bound'] == 60.0 and graded['native']['percent_bound_refs'] == ['span_exp_synthetic_dialysis_1'] and graded['native']['interaction'] is None    # the statement is the sheet's reading
     assert status(r, 'binding_observed') == 'supported'
-    for value, expected in ((5.0, 'supported'), (4.9, 'conflicting'), (60.0, 'supported'), (0.5, 'conflicting')):
+    for value, expected, degree in ((5.0, 'supported', 0.0), (10.0, 'supported', 0.5), (4.9, 'conflicting', None), (60.0, 'supported', 1.0), (0.5, 'conflicting', None)):
         put(r, 'percent_bound', value, 'percent')
         assert status(r, 'binding_observed') == expected, value
-        assert 'degree' not in judged(r, 'binding_observed') and judged(r, 'binding_observed')['support_refs'] == ['s']      # a detection decision: no degree
+        assert degree_of(r, 'binding_observed') == (pytest.approx(degree) if degree is not None else None) and judged(r, 'binding_observed')['support_refs'] == ['s']      # the direction flips at the researched 5; the credit rises from 0 there to 1 at 15
     assert reason(r, 'binding_observed') == 'percent_bound_recorded_for_the_sheet'
     missing(r, 'percent_bound')                                                             # the percent unbound is read as 100 minus it
     for value, expected in ((40.0, 'supported'), (95.0, 'supported'), (96.0, 'conflicting')):
@@ -284,10 +284,10 @@ def test_equilibrium_is_shown_by_a_time_course_or_by_a_time_of_at_least_the_mini
     graded = grade_dialysis(r)                                                                                                    # 6 h: recorded for the sheet
     assert (graded['criteria']['equilibrium'], graded['reasons']['equilibrium']) == ({'status': 'unknown', 'support_refs': []}, 'equilibration_time_recorded_for_the_sheet')
     assert graded['native']['equilibration_h'] == 6.0 and graded['native']['equilibration_refs'] == ['span_exp_synthetic_dialysis_1'] and status(r, 'equilibrium') == 'supported'
-    for value, unit, expected, degree in ((4.0, 'h', 'supported', 1.0), (240.0, 'min', 'supported', 1.0), (36.0, 'h', 'supported', 1.0), (2.5, 'h', 'supported', 0.5), (150.0, 'min', 'supported', 0.5), (1.0, 'h', 'conflicting', None), (30.0, 'min', 'conflicting', None)):
+    for value, unit, expected, degree in ((4.0, 'h', 'supported', 1.0), (240.0, 'min', 'supported', 1.0), (36.0, 'h', 'supported', 1.0), (2.5, 'h', 'supported', 0.785), (150.0, 'min', 'supported', 0.785), (1.0, 'h', 'conflicting', None), (30.0, 'min', 'conflicting', None)):
         put(r, 'equilibration_time', value, unit)
         assert status(r, 'equilibrium') == expected, (value, unit)
-        assert degree_of(r, 'equilibrium') == (pytest.approx(degree) if degree is not None else None), (value, unit)
+        assert degree_of(r, 'equilibrium') == (pytest.approx(degree, abs=0.002) if degree is not None else None), (value, unit)      # the exponential approach to equilibrium: 2.5 h is 0.785
     assert reason(r, 'equilibrium') == 'equilibration_time_recorded_for_the_sheet' and grade_dialysis(r)['native']['equilibration_h'] == pytest.approx(0.5)
     r['separation_method'] = 'ultrafiltration'                                              # not an equilibrium method: the time does not apply
     assert (status(r, 'equilibrium'), reason(r, 'equilibrium')) == ('not_applicable', 'method_is_not_equilibrium_dialysis')
@@ -311,13 +311,15 @@ def test_equilibrium_is_shown_by_a_time_course_or_by_a_time_of_at_least_the_mini
 def test_a_stated_loss_is_recorded_for_the_sheet_and_without_it_the_fact_decides(criterion, quantity, fact_name, native_key, handed, rows):
     r = synthetic_record()
     assert (grader_status(r, criterion), reason(r, criterion)) == ('unknown', handed) and status(r, criterion) == 'supported'
+    r['facts'][fact_name] = fact('unknown')                                                 # no statement about a correction: the stated number counts whole
     for value, expected, degree in rows:
         put(r, quantity, value)
         assert grade_dialysis(r)['native'][native_key] == value and judged(r, criterion)['support_refs'] == ['s']
         assert status(r, criterion) == expected and degree_of(r, criterion) == (pytest.approx(degree) if degree is not None else None), value
-    r['facts'][fact_name] = fact('yes', ['s'])                                              # the number decides, not the fact
+    r['facts'][fact_name] = fact('no', ['s'])                                               # the number decides, not the fact
     assert status(r, criterion) == 'conflicting'
     missing(r, quantity)
+    r['facts'][fact_name] = fact('yes', ['s'])
     assert (status(r, criterion), reason(r, criterion)) == ('supported', 'facts_answered_yes')
     r['facts'][fact_name] = fact('no', ['s'])
     assert (status(r, criterion), reason(r, criterion)) == ('conflicting', 'fact_answered_no')
@@ -342,10 +344,18 @@ def test_the_volume_shift_is_corrected_small_or_ruled_out_by_the_salt():
     missing(r, 'volume_shift')                                                              # no shift stated: the salt of the buffer (150 mM)
     graded = grade_dialysis(r)
     assert (graded['criteria']['volume_shift']['status'], graded['reasons']['volume_shift']) == ('unknown', 'salt_recorded_for_the_sheet') and graded['native']['salt_refs'] == ['span_exp_synthetic_dialysis_1']
-    assert judged(r, 'volume_shift') == {'status': 'supported', 'support_refs': ['span_exp_synthetic_dialysis_1']}              # the salt gets no degree
-    for value, unit, expected in ((100.0, 'mM', 'supported'), (99.0, 'mM', 'unknown'), (0.1, 'M', 'supported'), (0.05, 'M', 'unknown')):
+    assert judged(r, 'volume_shift') == {'status': 'supported', 'support_refs': ['span_exp_synthetic_dialysis_1'], 'degree': 1.0}      # at or above the researched 100 mM: full agreement
+    # the full-agreement salt is 100 mM scaled by the protein over plasma level (0.6 mM); at 300 uM protein that is 50 mM; below it the degree is salt over that salt: never a conflict, unknown at no salt
+    put(r, 'protein_concentration', 300.0, 'uM')
+    degrees = []
+    for value, unit, expected, degree in ((0.1, 'M', 'supported', 1.0), (100.0, 'mM', 'supported', 1.0), (50.0, 'mM', 'supported', 1.0), (25.0, 'mM', 'supported', 0.5), (10.0, 'mM', 'supported', 0.2), (0.0, 'mM', 'unknown', None)):
         put(r, 'salt_concentration', value, unit)
-        assert status(r, 'volume_shift') == expected, (value, unit)
+        verdict = judged(r, 'volume_shift')
+        assert verdict['status'] == expected and verdict.get('degree') == (pytest.approx(degree) if degree is not None else None), (value, unit)
+        if expected == 'supported':
+            degrees.append(verdict['degree'])
+    assert degrees == sorted(degrees, reverse=True)                                         # less salt never raises the degree
+    put(r, 'salt_concentration', 0.05, 'M')
     assert reason(r, 'volume_shift') == 'salt_recorded_for_the_sheet' and grade_dialysis(r)['native']['salt_mM'] == pytest.approx(50.0)
     missing(r, 'salt_concentration')
     assert (status(r, 'volume_shift'), reason(r, 'volume_shift')) == ('unknown', 'fact_unknown')
@@ -435,10 +445,11 @@ def test_the_series_needs_enough_concentrations_that_bracket_the_kd():
     assert graded['native']['concentration_count'] == 6 and graded['native']['concentration_count_refs'] == ['span_exp_synthetic_dialysis_1'] and graded['native']['concentration_span_refs'] == ['span_exp_synthetic_dialysis_1']
     assert status(r, 'concentration_series') == 'supported' and degree_of(r, 'concentration_series') == 1.0
     r['concentration_series'] = point([50.0, 100.0, 200.0, 400.0, 800.0], 'nM', 'series', ['s'])
-    assert status(r, 'concentration_series') == 'conflicting' and grade_dialysis(r)['native']['concentration_count'] == 5 and degree_of(r, 'concentration_series') is None      # fewer than the sheet's six
+    assert status(r, 'concentration_series') == 'supported' and grade_dialysis(r)['native']['concentration_count'] == 5 and degree_of(r, 'concentration_series') == pytest.approx(0.75)      # one below the researched six: partial credit, not a conflict
     for series, expected, degree in (([100.0, 200.0, 400.0, 800.0, 1600.0, 3200.0], 'supported', 1.0), ([100.0, 200.0, 400.0, 800.0, 1600.0, 3200.0, 6400.0], 'supported', 1.0), ([100.0, 200.0, 300.0, 400.0, 600.0, 800.0], 'supported', 1.0),
-                                     ([150.0, 200.0, 400.0, 800.0, 1600.0, 3200.0], 'supported', 0.5), ([100.0, 200.0, 400.0, 800.0, 1100.0, 1600.0], 'supported', 1.0), ([100.0, 200.0, 300.0, 400.0, 500.0, 500.0], 'supported', 0.5),
-                                     ([200.0, 400.0, 800.0, 1600.0, 3200.0, 6400.0], 'conflicting', None), ([50.0, 100.0, 150.0, 175.0, 190.0, 200.0], 'conflicting', None)):
+                                     ([150.0, 200.0, 400.0, 800.0, 1600.0, 3200.0], 'supported', 3 / 7), ([100.0, 200.0, 400.0, 800.0, 1100.0, 1600.0], 'supported', 1.0), ([100.0, 200.0, 300.0, 400.0, 500.0, 500.0], 'supported', 5 / 7),
+                                     ([200.0, 400.0, 800.0, 1600.0, 3200.0, 6400.0], 'conflicting', None), ([50.0, 100.0, 150.0, 175.0, 190.0, 200.0], 'conflicting', None),
+                                     ([100.0, 400.0, 800.0, 1600.0], 'supported', 0.5), ([100.0, 1600.0], 'supported', 0.0), ([150.0, 400.0, 800.0, 1600.0, 3200.0], 'supported', 3 / 7)):      # the weakest of the count, the low end and the high end; the ends are linear in occupancy x / (1 + x): 0.75 x KD low = 3/7, 2.5 x KD high = (5/7 - 1/2) / (3/10) = 5/7
         r['concentration_series'] = point(series, 'nM', 'series', ['s'])
         verdict = judged(r, 'concentration_series')
         assert verdict['status'] == expected and verdict.get('degree') == (pytest.approx(degree) if degree is not None else None), series
@@ -446,22 +457,33 @@ def test_the_series_needs_enough_concentrations_that_bracket_the_kd():
     assert status(r, 'concentration_series') == 'supported' and grade_dialysis(r)['native']['concentration_low_over_kd'] == pytest.approx(0.5)
     r['concentration_series'] = {**r['concentration_series'], 'status': 'unavailable', 'value': None}      # no list: the stated lowest and highest and the stated number of points
     assert status(r, 'concentration_series') == 'supported' and grade_dialysis(r)['native']['concentration_count'] == 6
+    degrees = []
+    for count, expected, degree in ((2, 'supported', 0.0), (3, 'supported', 0.25), (4, 'supported', 0.5), (5, 'supported', 0.75), (6, 'supported', 1.0), (10, 'supported', 1.0)):
+        put(r, 'titration_point_count', count, 'count')                                     # linear in the residual degrees of freedom of the one-site fit: (n - 2) / (6 - 2)
+        verdict = judged(r, 'concentration_series')
+        assert verdict['status'] == expected and verdict.get('degree') == (pytest.approx(degree) if degree is not None else None), count
+        degrees.append(verdict.get('degree', 0.0))
+    assert degrees == sorted(degrees)                                                       # more concentrations never lower the degree
+    put(r, 'titration_point_count', 2, 'count')
+    assert judged(r, 'concentration_series')['support_refs'] == ['span_exp_synthetic_dialysis_1', 's']      # two points: degree 0, supported (never conflicting)
     put(r, 'titration_point_count', 5, 'count')
-    assert status(r, 'concentration_series') == 'conflicting' and judged(r, 'concentration_series')['support_refs'] == ['s']
+    assert judged(r, 'concentration_series')['support_refs'] == ['span_exp_synthetic_dialysis_1', 's']      # a count that sets the degree is cited with the span
     missing(r, 'titration_point_count')
     assert status(r, 'concentration_series') == 'supported'
     put(r, 'ligand_range_lowest', 400.0, 'nM')                                              # 2 x the KD: beyond the zero limit of 1 x the KD
     assert status(r, 'concentration_series') == 'conflicting'
-    put(r, 'ligand_range_lowest', 150.0, 'nM')                                              # 0.75 x the KD: halfway
-    assert status(r, 'concentration_series') == 'supported' and degree_of(r, 'concentration_series') == pytest.approx(0.5)
+    put(r, 'ligand_range_lowest', 150.0, 'nM')                                              # 0.75 x the KD: degree 3/7 in occupancy (was halfway in x)
+    assert status(r, 'concentration_series') == 'supported' and degree_of(r, 'concentration_series') == pytest.approx(3 / 7)
     missing(r, 'ligand_range_highest')
     assert (grader_status(r, 'concentration_series'), reason(r, 'concentration_series')) == ('unknown', 'kd_or_series_missing')
     put(r, 'ligand_range_lowest', 50.0, 'nM')
     put(r, 'ligand_range_highest', 1600.0, 'nM')
     missing(r, 'kd')                                                                        # a Ki only: the span cannot be judged, the count can
     assert (status(r, 'concentration_series'), reason(r, 'concentration_series')) == ('unknown', 'kd_or_series_missing')
-    put(r, 'titration_point_count', 4, 'count')
-    assert (grader_status(r, 'concentration_series'), reason(r, 'concentration_series'), status(r, 'concentration_series')) == ('unknown', 'concentration_series_recorded_for_the_sheet', 'conflicting')
+    put(r, 'titration_point_count', 4, 'count')                                             # below the six, but above the fit's two: no span to bracket, unknown
+    assert (grader_status(r, 'concentration_series'), reason(r, 'concentration_series'), status(r, 'concentration_series')) == ('unknown', 'concentration_series_recorded_for_the_sheet', 'unknown')
+    put(r, 'titration_point_count', 2, 'count')                                             # no more points than the fit's parameters, and no span: still unknown, never conflicting
+    assert status(r, 'concentration_series') == 'unknown'
     missing(r, 'ki')
     assert (status(r, 'concentration_series'), reason(r, 'concentration_series')) == ('not_applicable', 'no_binding_constant_reported')
 
@@ -484,11 +506,16 @@ def test_replicates_are_independent_experiments_and_cells_of_one_experiment_do_n
     r = synthetic_record()
     assert (grader_status(r, 'replicates'), reason(r, 'replicates')) == ('unknown', 'replicate_count_recorded_for_the_sheet')
     assert grade_dialysis(r)['native']['replicate_count'] == 3 and grade_dialysis(r)['native']['replicate_independent'] == 'yes' and status(r, 'replicates') == 'supported'
-    for count, independent, expected in ((3, 'yes', 'supported'), (10, 'yes', 'supported'), (2, 'yes', 'conflicting'), (2, 'unknown', 'conflicting'), (3, 'unknown', 'unknown')):
-        put(r, 'replicate_count', count, 'count')
+    degrees = []
+    for count, independent, expected, degree in ((1, 'yes', 'supported', (1 / 3) ** 0.5), (2, 'yes', 'supported', (2 / 3) ** 0.5), (3, 'yes', 'supported', 1.0), (10, 'yes', 'supported', 1.0),
+                                                 (1, 'unknown', 'unknown', None), (2, 'unknown', 'unknown', None), (3, 'unknown', 'unknown', None)):
+        put(r, 'replicate_count', count, 'count')                                           # precision of the mean: sqrt(n / 3), capped at 1
         answer(r, 'independent_experiments', independent)
-        assert status(r, 'replicates') == expected, (count, independent)
-        assert 'degree' not in judged(r, 'replicates')
+        verdict = judged(r, 'replicates')
+        assert verdict['status'] == expected and verdict.get('degree') == (pytest.approx(degree) if degree is not None else None), (count, independent)
+        if independent == 'yes':
+            degrees.append(verdict.get('degree', 0.0))
+    assert degrees == sorted(degrees)                                                       # more experiments never lower the degree; two get partial credit, not a conflict
     put(r, 'replicate_count', 3, 'count')
     r['facts']['independent_experiments'] = fact('no', ['s'])
     assert (grader_status(r, 'replicates'), reason(r, 'replicates')) == ('conflicting', 'replicates_not_independent')       # a fact, judged by the grader
@@ -532,3 +559,20 @@ def test_the_grader_keeps_the_support_of_the_fields_each_criterion_reads_and_doe
     assert support['protein_retained'] == ['implied'] and 'about_something_else' in support['replicates']
     assert graded['criteria']['protein_retained']['status'] == 'supported'      # the status is the grader's own: support does not change it
     assert grade_dialysis(sparse_record())['native']['support']['protein_retained'] == []      # an unknown fact is not stated: no support
+
+
+def test_the_grader_records_the_spread_the_limit_of_quantification_and_the_correction_for_the_sheet():
+    r = synthetic_record()
+    r['facts']['binding_detected'] = fact('unknown')
+    put(r, 'percent_bound_spread', 4.0, 'percent', refs=('s_sd',))
+    native = grade_dialysis(r)['native']
+    assert native['percent_bound_spread'] == 4.0 and native['percent_bound_spread_refs'] == ['s_sd']
+    put(r, 'detection_lloq', 2.0, 'nM', refs=('s_l',))
+    graded = grade_dialysis(r)                                                              # the percent unbound is stated: the free concentration over the limit is recorded beside it
+    assert graded['native']['free_over_lloq'] == pytest.approx(100.0) and graded['native']['free_over_lloq_refs'] == ['span_exp_synthetic_dialysis_1', 's_l']
+    assert graded['reasons']['free_fraction_measurable'] == 'percent_unbound_recorded_for_the_sheet' and graded['native']['adsorption_corrected'] == 'yes' and graded['native']['adsorption_corrected_refs'] == ['span_exp_synthetic_dialysis_1']
+    missing(r, 'percent_bound_spread', 'detection_lloq')
+    native = grade_dialysis(r)['native']
+    assert native['percent_bound_spread'] is None and native['free_over_lloq'] is None
+    r['facts']['adsorption_checked_and_corrected'] = fact('unknown')
+    assert grade_dialysis(r)['native']['adsorption_corrected'] is None

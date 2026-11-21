@@ -71,12 +71,11 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.unit_outcom
 
 from .goal import GOAL
 
-# The head's eight slots: the recursive head (the old role ``gene_context_evidence``), the literature child (the old
-# role ``literature``), the monitor (the old role ``monitor``) and the execution, HPC and resource children the old
-# ``episode.py`` factories built.
+# The head's seven slots: the recursive head (the old role ``gene_context_evidence``), the monitor (the old role
+# ``monitor``) and the execution, HPC and resource children the old ``episode.py`` factories built. A103 has no
+# literature child.
 CHILD_SLOTS = {
     'gene_context_evidence': 'gene_context_evidence',
-    'published_evidence_assessment': 'gene_context_evidence/published_evidence_assessment',
     'execution_job_submission': 'gene_context_evidence/execution_job_submission',
     'execution_progress_assessment': 'gene_context_evidence/execution_progress_assessment',
     'execution_result_acquisition': 'gene_context_evidence/execution_result_acquisition',
@@ -110,7 +109,6 @@ THOUGHT_FIELDS = ('id', 'name', 'description', 'use_when', 'live_alternatives', 
 # the model's answer may only name records this episode holds (the provisional held-record check of ``action``).
 RECORD_REFS = {
     'gene_context_evidence': ('evidence_refs', 'scope_refs'),
-    'published_evidence_assessment': ('question_context_refs', 'source_refs', 'received_record_refs'),
     'execution_job_submission': ('record_refs',),
     'execution_progress_assessment': (),
     'execution_result_acquisition': ('handoff_ref', 'initial_result_refs', 'initial_result_artifact_refs'),
@@ -126,11 +124,6 @@ CHILD_ASSIGNMENTS = {
                              '{...}, "context": {...optional evidence_task and a103_task...}, "scope": <a scope '
                              'within yours>, "scope_refs": [<the records the scope names>], "revision_origin": '
                              '<revision_origin of process.revise, optional>}; your proposed annotation is inherited',
-    'published_evidence_assessment': 'a literature investigation: {"version": "literature_assignment_v1", '
-                                     '"question_context_refs": [...], "source_refs": [...], "scope": {...}, '
-                                     '"received_record_refs": [<the sources, their artifacts and the context '
-                                     'records>], "gene_context_evidence": {...optional constraints, context, '
-                                     'evidence operands and guidance...}}',
     'execution_job_submission': 'the launch of execution work: {"version": "execution_launch_assignment_v1", '
                                 '"requests": {<resource_id>: <closed concrete request>}, '
                                 '"immutable_input_versions": [...], "constraints": {allowed_resource_ids, '

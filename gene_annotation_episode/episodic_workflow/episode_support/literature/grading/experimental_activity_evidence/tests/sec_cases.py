@@ -1,7 +1,7 @@
 """SEC (size-exclusion chromatography, with or without multi-angle light scattering, SEC-MALS) complex experiment records for the SEC grader, converter and merger tests.
 
 synthetic_record: a fully specified, explicitly SYNTHETIC QUANTITATIVE record (not a publication) used to exercise every criterion's supported path. Its numbers: a
-mixture of two proteins (theoretical masses 36 and 18 kDa) injected at 5000 nM (25 times the KD) in 100 uL after 30 min of incubation on a Superdex column at 0.5 mL/min
+mixture of two proteins (theoretical masses 36 and 18 kDa) injected at 5000 nM (25 times the KD) in 500 uL after 30 min of incubation on a Superdex column (24 mL) at 0.5 mL/min
 at 4 C in a running buffer of 150 mM salt; the complex peak elutes at 11.2 mL, the larger component alone at 12.5 mL and the smaller at 14.1 mL (a shift of 1.3 mL); the MALS
 molar mass of the complex peak is 52 kDa against 54 kDa expected (the components alone 36.8 and 17.6 kDa), a 1:1 complex, a polydispersity of 1.02; an apparent KD from peak
 areas of 200 nM (standard error 20 nM), three independent experiments; every control done and passed (each component alone, SDS-PAGE of the complex peak, the free peak
@@ -70,7 +70,7 @@ def synthetic_record(experiment_ref='exp_synthetic_sec_1', component_a='prep_com
     record['spans'] = {refs[0]: {'locator': 'synthetic', 'quote': 'synthetic fixture'}}
     record['preparations'] = {'component_a_preparation_ref': component_a, 'component_b_preparation_ref': component_b, 'dataset_ref': dataset}
     values = {'kd': kd, 'kd_spread': spread, 'complex_elution_volume': 11.2, 'component_elution_volume_earlier': 12.5, 'component_elution_volume_later': 14.1, 'elution_volume_shift': 1.3, 'complex_mass_measured': 52.0, 'complex_mass_theoretical': 54.0,
-              'component_mass_measured_larger': 36.8, 'component_mass_measured_smaller': 17.6, 'stoichiometry_ratio': 1.0, 'polydispersity': 1.02, 'flow_rate': 0.5, 'run_temperature': 4.0, 'loaded_concentration': kd * 25.0, 'loaded_volume': 100.0,
+              'component_mass_measured_larger': 36.8, 'component_mass_measured_smaller': 17.6, 'stoichiometry_ratio': 1.0, 'polydispersity': 1.02, 'flow_rate': 0.5, 'run_temperature': 4.0, 'loaded_concentration': kd * 25.0, 'loaded_volume': 500.0, 'column_volume': 24.0,
               'salt_concentration': 150.0, 'incubation_time': 30.0, 'replicate_count': 3}
     for name, value in values.items():
         record['quantities'][name] = point(value, UNITS[name], name + ':' + experiment_ref, refs, name)

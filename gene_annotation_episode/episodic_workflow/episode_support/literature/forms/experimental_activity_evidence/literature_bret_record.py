@@ -13,18 +13,26 @@ preparations   component_a_preparation_ref, component_b_preparation_ref (the don
                string or None (unknown). They are references to records, which the caller supplies; no passage states them. The converter hands them to the
                merger as its dependence keys (component a as the analyte key, component b as the other partner; there is no surface).
 quantities     kd, kd_spread, ki, ki_spread, bret50, bret50_negative_control, bret_max, bret_ratio_pair, bret_ratio_negative_control, ratio_lowest, ratio_highest, titration_point_count,
-               tracer_concentration, fit_r_squared, replicate_count: one operand each.
+               tracer_concentration, fit_r_squared, replicate_count, and (grader gaps of the 2026-11-21 range review) bret50_spread, bret50_negative_control_spread, bret_ratio_pair_spread,
+               bret_ratio_negative_control_spread, bret_ratio_donor_only, tracer_kd: one operand each.
                Units: kd, kd_spread, ki, ki_spread and tracer_concentration pM, nM, uM or mM (the apparent dissociation constant of the tracer or of the pair from a titration, the
                inhibition constant of a competitor from a displacement, and their spread; the tracer concentration used); bret50 and bret50_negative_control 'ratio' (the acceptor-to-donor
                ratio at half of BRETmax, for the pair and for the negative control pair, as the passage gives the number); bret_max, bret_ratio_pair and bret_ratio_negative_control 'ratio' or 'mBU' (milli BRET
                units: the plateau of the saturation curve, the BRET ratio of the pair and the BRET ratio of the negative control); ratio_lowest and ratio_highest 'ratio' (the lowest and
-               the highest acceptor-to-donor ratio of the titration); titration_point_count and replicate_count 'count'; fit_r_squared 'ratio' (the coefficient of determination of the fit).
+               the highest acceptor-to-donor ratio of the titration); titration_point_count and replicate_count 'count'; fit_r_squared 'ratio' (the coefficient of determination of the fit);
+               bret50_spread and bret50_negative_control_spread 'ratio' (the stated standard error, standard deviation or confidence-interval half-width of the BRET50 of the pair and of the negative control, in the same units as
+               the BRET50); bret_ratio_pair_spread and bret_ratio_negative_control_spread 'ratio' or 'mBU' (the same for the two BRET ratios); bret_ratio_donor_only 'ratio' or 'mBU' (the BRET ratio of the donor alone, the
+               background that a RAW, not background-subtracted, ratio contains); tracer_kd pM, nM, uM or mM (the apparent dissociation constant of the tracer for the donor-fused target, which sets how the tracer concentration compares
+               with it for a Ki).
 bret_format    'saturation_titration', 'competition_displacement', 'saturation_and_competition', 'ligand_induced_change' or None: what the result is from.
 donor          'rluc', 'nanoluc' or 'other' (Rluc and Rluc8 are 'rluc') or None.
 acceptor       'fluorescent_protein', 'halotag_ligand', 'fluorescent_tracer' or 'other' or None.
 expression     'transient_transfection', 'stable_expression', 'endogenous_tagging' or None: how the fusions are expressed.
-spread_kind    'standard_error', 'standard_deviation', 'confidence_interval' or None. What kd_spread / ki_spread are.
+spread_kind    'standard_error', 'standard_deviation', 'confidence_interval' or None. What every stated spread of the record is (kd_spread, ki_spread, bret50_spread, bret50_negative_control_spread, bret_ratio_pair_spread, bret_ratio_negative_control_spread).
 facts          name -> {'answer', 'source_refs'}. Names and answer sets in FACTS below. No fact holds text: a controlled answer only.
+               Two facts are the tests against bystander BRET (random collision of over-expressed proteins): hyperbola_preferred_over_linear (a stated model comparison, F-test or AIC, favouring the
+               hyperbola over a straight line for the pair under test) and bret_constant_across_expression (the BRET ratio stays constant when the total expression changes at a fixed
+               acceptor-to-donor ratio; James et al. 2006, Felce et al. 2017). background_subtracted also tells whether the stated BRET ratios are net (yes) or raw (no).
 choice_support name -> support of each plain choice field (bret_format, donor, acceptor, expression, spread_kind), None when the choice is not stated.
 spans          source_ref -> {'locator', 'quote'}: the quoted source span behind each reference the record cites.
 
@@ -54,7 +62,7 @@ def fact(answer, refs=(), support='direct'):
 
 VERSION = 'a105_bret_record_v1'
 EXPERIMENT_TYPE = 'bret'
-QUANTITIES = ('kd', 'kd_spread', 'ki', 'ki_spread', 'bret50', 'bret50_negative_control', 'bret_max', 'bret_ratio_pair', 'bret_ratio_negative_control', 'ratio_lowest', 'ratio_highest', 'titration_point_count', 'tracer_concentration', 'fit_r_squared', 'replicate_count')
+QUANTITIES = ('kd', 'kd_spread', 'ki', 'ki_spread', 'bret50', 'bret50_negative_control', 'bret_max', 'bret_ratio_pair', 'bret_ratio_negative_control', 'ratio_lowest', 'ratio_highest', 'titration_point_count', 'tracer_concentration', 'fit_r_squared', 'replicate_count', 'bret50_spread', 'bret50_negative_control_spread', 'bret_ratio_pair_spread', 'bret_ratio_negative_control_spread', 'bret_ratio_donor_only', 'tracer_kd')
 PREPARATION_KEYS = ('component_a_preparation_ref', 'component_b_preparation_ref', 'dataset_ref')
 BRET_FORMATS = ('saturation_titration', 'competition_displacement', 'saturation_and_competition', 'ligand_induced_change')
 DONORS = ('rluc', 'nanoluc', 'other')
@@ -63,9 +71,11 @@ EXPRESSIONS = ('transient_transfection', 'stable_expression', 'endogenous_taggin
 SPREAD_KINDS = ('standard_error', 'standard_deviation', 'confidence_interval')
 YES_NO = ('yes', 'no', 'unknown', 'not_applicable')
 FACTS = {'interaction_detected': YES_NO, 'saturation_shown': YES_NO, 'negative_control_pair_used': YES_NO, 'negative_control_no_specific_signal': YES_NO, 'donor_only_control_done': YES_NO, 'acceptor_only_control_done': YES_NO,
-         'expression_levels_measured': YES_NO, 'background_subtracted': YES_NO, 'fusion_orientation_swapped': YES_NO, 'tracer_displaced_by_competitor': YES_NO, 'independent_experiments': YES_NO, 'single_estimate_method': YES_NO}
+         'expression_levels_measured': YES_NO, 'background_subtracted': YES_NO, 'fusion_orientation_swapped': YES_NO, 'tracer_displaced_by_competitor': YES_NO, 'independent_experiments': YES_NO, 'single_estimate_method': YES_NO,
+         'hyperbola_preferred_over_linear': YES_NO, 'bret_constant_across_expression': YES_NO}
 
 CONCENTRATION_UNITS = ('pM', 'nM', 'uM', 'mM')
 SIGNAL_UNITS = ('ratio', 'mBU')
 # The unit vocabulary of each quantity: the units a record may carry.
-UNITS = {'kd': CONCENTRATION_UNITS, 'kd_spread': CONCENTRATION_UNITS, 'ki': CONCENTRATION_UNITS, 'ki_spread': CONCENTRATION_UNITS, 'bret50': ('ratio',), 'bret50_negative_control': ('ratio',), 'bret_max': SIGNAL_UNITS, 'bret_ratio_pair': SIGNAL_UNITS, 'bret_ratio_negative_control': SIGNAL_UNITS, 'ratio_lowest': ('ratio',), 'ratio_highest': ('ratio',), 'titration_point_count': ('count',), 'tracer_concentration': CONCENTRATION_UNITS, 'fit_r_squared': ('ratio',), 'replicate_count': ('count',)}
+UNITS = {'kd': CONCENTRATION_UNITS, 'kd_spread': CONCENTRATION_UNITS, 'ki': CONCENTRATION_UNITS, 'ki_spread': CONCENTRATION_UNITS, 'bret50': ('ratio',), 'bret50_negative_control': ('ratio',), 'bret_max': SIGNAL_UNITS, 'bret_ratio_pair': SIGNAL_UNITS, 'bret_ratio_negative_control': SIGNAL_UNITS, 'ratio_lowest': ('ratio',), 'ratio_highest': ('ratio',), 'titration_point_count': ('count',), 'tracer_concentration': CONCENTRATION_UNITS, 'fit_r_squared': ('ratio',), 'replicate_count': ('count',),
+         'bret50_spread': ('ratio',), 'bret50_negative_control_spread': ('ratio',), 'bret_ratio_pair_spread': SIGNAL_UNITS, 'bret_ratio_negative_control_spread': SIGNAL_UNITS, 'bret_ratio_donor_only': SIGNAL_UNITS, 'tracer_kd': CONCENTRATION_UNITS}

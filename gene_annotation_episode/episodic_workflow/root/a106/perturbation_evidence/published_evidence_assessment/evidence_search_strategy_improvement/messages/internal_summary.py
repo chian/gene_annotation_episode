@@ -54,8 +54,8 @@ def internal_summary(view):
     sources = view.records.list('source')
     # The input list (nano-graphrag's input-list paradigm): the sources this episode holds (returned search results and
     # acquisitions, in the Store's order) that no assessment has been handed. A source handed out is consumed and no
-    # longer offered; the list shrinks as assessments are commissioned and the yield estimator ends the episode when it
-    # is empty.
+    # longer offered; the list shrinks as assessments are commissioned, and once it is empty no assessment can be
+    # commissioned. The yield estimator does not count it (``items=None``): an empty list does not stop the episode.
     consumed = consumed_sources([outcome for outcome in view.outcomes if outcome['kind'] == 'child'])
     input_list = [source['id'] for source in sources if source['id'] not in consumed]
     outcomes = [outcome for outcome in view.outcomes if outcome['kind'] == 'tool']

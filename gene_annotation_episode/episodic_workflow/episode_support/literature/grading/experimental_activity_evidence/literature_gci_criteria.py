@@ -43,11 +43,9 @@ short pulses of ONE analyte concentration of increasing length; it replaces a
 titration series.
 
 What GCI does not ask (items of the other binding experiments left out because
-GCI has no such thing or does not report it): the Rmax-from-molecular-masses
-check (not reported by the GCI software), a fit chi-squared or R-squared (the
-Creoptix software does not report one in the text of a paper), a dissociation
-window (the pulse and dissociation times are part of the instrument protocol,
-and waveRAPID dissociation is part of each pulse) and the avidity-rebinding
+GCI has no such thing or does not report it): a fit chi-squared or R-squared (the
+Creoptix software does not report one in the text of a paper; judged not worth
+collecting, see the converter's range review) and the avidity-rebinding
 question (a bivalent or oligomeric analyte is asked as a fact of the fit-model
 criterion).
 """
@@ -59,6 +57,7 @@ PG_MM2_PER_RU = 1.0  # EXPERT_REVIEW: the usual approximation that one response 
 NM_PER_M = 1e9  # FIXED_BY_DEFINITION: koff/kon is in molar; the sheet works in nM.
 NM_PER_UNIT = {'pM': 0.001, 'nM': 1.0, 'uM': 1000.0, 'mM': 1000000.0}  # FIXED_BY_DEFINITION: nanomolar per concentration unit.
 PG_MM2_PER_UNIT = {'pg/mm2': 1.0, 'ng/mm2': 1000.0}  # FIXED_BY_DEFINITION: pg/mm2 per surface mass unit (RU is read through PG_MM2_PER_RU).
+S_PER_UNIT = {'s': 1.0, 'min': 60.0}  # FIXED_BY_DEFINITION: seconds per dissociation time unit.
 
 # ---- The criteria --------------------------------------------------------
 GCI_CRITERIA = (
@@ -127,6 +126,18 @@ GCI_CRITERIA = (
         ),
     },
     {
+        'id': 'rmax_consistency',
+        'question': 'Is the observed maximum response consistent with the amount of immobilized partner and the molecular masses?',
+        'reads': ('quantities.response_max', 'quantities.immobilization_level', 'quantities.analyte_mass', 'quantities.ligand_mass', 'quantities.stoichiometry'),
+        'rule': 'Theoretical maximum response = analyte mass / ligand mass x immobilization level x stoichiometry (all in pg/mm2; RU is read through PG_MM2_PER_RU). The grader records the theoretical value and the observed / theoretical ratio (rmax_theoretical_pg_mm2, rmax_ratio) with their refs (rmax_refs) and leaves the judgement to the sheet.',
+        'thresholds': ('PG_MM2_PER_RU', 'PG_MM2_PER_UNIT'),
+        'returns': (
+            ('unknown', 'rmax_ratio_recorded_for_the_sheet', 'all five inputs are given: the ratio is recorded and the sheet judges it'),
+            ('unknown', 'rmax_operand_missing', 'any of the five inputs is not given'),
+            ('not_applicable', 'never', 'never returned'),
+        ),
+    },
+    {
         'id': 'concentration_series',
         'question': 'Did the analyte concentrations bracket the KD well enough to define the binding curve (or, for waveRAPID, was the pulsed concentration high enough)?',
         'reads': ('quantities.kd', 'concentration_series', 'facts.repeated_pulse_kinetics_used'),
@@ -135,6 +146,18 @@ GCI_CRITERIA = (
         'returns': (
             ('unknown', 'concentration_series_recorded_for_the_sheet', 'the KD and the series are given: the count, the two ratios and the waveRAPID statement are recorded and the sheet judges them'),
             ('unknown', 'kd_or_series_missing', 'KD or the series is not given'),
+            ('not_applicable', 'never', 'never returned'),
+        ),
+    },
+    {
+        'id': 'dissociation_window',
+        'question': 'Was the dissociation phase long enough for the signal to decay, so that koff is measured and not extrapolated?',
+        'reads': ('quantities.koff', 'quantities.dissociation_time', 'quantities.response_max'),
+        'rule': 'The fraction decayed in the window is 1 - exp(-koff x time). The grader records it (dissociation_decay) and the maximum response in pg/mm2 when given (dissociation_response_pg_mm2, else None) with the refs of the quantities used (dissociation_refs) and leaves the judgement to the sheet.',
+        'thresholds': ('S_PER_UNIT', 'PG_MM2_PER_RU', 'PG_MM2_PER_UNIT'),
+        'returns': (
+            ('unknown', 'dissociation_decay_recorded_for_the_sheet', 'koff and the dissociation time are given: the decayed fraction is recorded and the sheet judges it'),
+            ('unknown', 'koff_or_dissociation_time_missing', 'koff or the dissociation time is not given'),
             ('not_applicable', 'never', 'never returned'),
         ),
     },

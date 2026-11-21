@@ -61,18 +61,19 @@ VERSION = 'a105_fret_criteria_v1'
 NM_PER_UNIT = {'pM': 0.001, 'nM': 1.0, 'uM': 1000.0, 'mM': 1000000.0}  # FIXED_BY_DEFINITION: nanomolar per concentration unit.
 MIN_PER_UNIT = {'s': 1 / 60, 'min': 1.0, 'h': 60.0}  # FIXED_BY_DEFINITION: minutes per time unit.
 US_PER_UNIT = {'us': 1.0, 'ms': 1000.0}  # FIXED_BY_DEFINITION: microseconds per gate time unit.
+PER_S_PER_UNIT = {'per_s': 1.0, 'per_min': 1 / 60}  # FIXED_BY_DEFINITION: per second per rate unit (a rate constant per minute is 1/60 of the same per second).
 
 # ---- The criteria --------------------------------------------------------
 FRET_CRITERIA = (
     {
         'id': 'assay_window',
         'question': 'Is the fold between the highest and the lowest emission ratio large enough to resolve the titration?',
-        'reads': ('quantities.ratio_minimum', 'quantities.ratio_maximum'),
-        'rule': 'The grader records the fold (ratio_fold = maximum over minimum) and its refs (window_refs) and leaves the judgement to the sheet. Either one not given is unknown.',
+        'reads': ('quantities.ratio_minimum', 'quantities.ratio_maximum', 'quantities.z_prime'),
+        'rule': 'The grader records the fold (ratio_fold = maximum over minimum, when both ends are given), the stated Z prime factor (z_prime, when given) and their refs (window_refs) and leaves the judgement to the sheet. Neither a complete pair of ends nor a Z prime given is unknown.',
         'thresholds': (),
         'returns': (
-            ('unknown', 'window_recorded_for_the_sheet', 'both ratio ends are given: the fold is recorded and the sheet judges it'),
-            ('unknown', 'minimum_or_maximum_missing', 'a ratio end is not given'),
+            ('unknown', 'window_recorded_for_the_sheet', 'both ratio ends or a Z prime factor are given: the fold and the Z prime are recorded and the sheet judges them'),
+            ('unknown', 'minimum_or_maximum_missing', 'a ratio end is not given and no Z prime factor is given'),
             ('not_applicable', 'never', 'never returned'),
         ),
     },
@@ -106,8 +107,8 @@ FRET_CRITERIA = (
     {
         'id': 'time_gating',
         'question': 'If the read was time-resolved, was it gated with a long-lived donor, a long enough delay and a long enough integration window?',
-        'reads': ('facts.time_resolved_read', 'donor_acceptor_pair', 'quantities.delay_time', 'quantities.integration_time'),
-        'rule': 'A read stated as not time-resolved does not apply. A time-resolved read (stated, or a delay given) with a fluorescent-protein or organic-dye pair fails (those donors live nanoseconds and cannot be gated). Otherwise the delay must be given: the grader records the delay (delay_us), the integration window if given (integration_us) and their refs (gating_refs) and leaves the judgement to the sheet. A time-resolved read whose delay is not given is unknown.',
+        'reads': ('facts.time_resolved_read', 'donor_acceptor_pair', 'donor_lanthanide', 'quantities.delay_time', 'quantities.integration_time'),
+        'rule': 'A read stated as not time-resolved does not apply. A time-resolved read (stated, or a delay given) with a fluorescent-protein or organic-dye pair fails (those donors live nanoseconds and cannot be gated). Otherwise the delay must be given: the grader records the delay (delay_us), the integration window if given (integration_us), the lanthanide of the donor if named (donor_lanthanide) and their refs (gating_refs) and leaves the judgement to the sheet. A time-resolved read whose delay is not given is unknown.',
         'thresholds': ('US_PER_UNIT',),
         'returns': (
             ('unknown', 'gating_recorded_for_the_sheet', 'time-resolved with a long-lived donor and a delay is given: the delay and the window are recorded and the sheet judges them'),
@@ -136,8 +137,8 @@ FRET_CRITERIA = (
     {
         'id': 'concentration_series',
         'question': 'Did the titrant concentrations bracket the reported constant well enough to define the binding curve?',
-        'reads': ('quantities.kd', 'quantities.ki', 'quantities.ec50', 'quantities.ic50', 'concentration_series'),
-        'rule': 'The grader records the number of concentrations (concentration_count), the lowest and the highest over the reported constant (concentration_low_over_constant, concentration_high_over_constant) and their refs (series_refs) and leaves the judgement to the sheet. The constant or the series not given is unknown.',
+        'reads': ('quantities.kd', 'quantities.ki', 'quantities.ec50', 'quantities.ic50', 'concentration_series', 'series_format'),
+        'rule': 'The grader records the number of concentrations (concentration_count), the lowest and the highest over the reported constant (concentration_low_over_constant, concentration_high_over_constant), which titration the series belongs to if stated (series_format) and their refs (series_refs) and leaves the judgement to the sheet. The constant or the series not given is unknown.',
         'thresholds': ('NM_PER_UNIT',),
         'returns': (
             ('unknown', 'series_recorded_for_the_sheet', 'the constant and the series are given: count and span are recorded and the sheet judges them'),
@@ -148,9 +149,9 @@ FRET_CRITERIA = (
     {
         'id': 'equilibrium',
         'question': 'Was the binding at equilibrium when read?',
-        'reads': ('facts.equilibrium_reached', 'quantities.incubation_time'),
-        'rule': 'The fact decides: yes supported, no fails. When it is not stated and an incubation time is given, the grader records it (incubation_min, in minutes, and incubation_refs) and leaves the judgement to the sheet; otherwise it is unknown.',
-        'thresholds': ('MIN_PER_UNIT',),
+        'reads': ('facts.equilibrium_reached', 'quantities.incubation_time', 'quantities.koff', 'quantities.kd', 'quantities.ki', 'quantities.ec50', 'quantities.ic50'),
+        'rule': 'The fact decides: yes supported, no fails. When it is not stated and an incubation time is given, the grader records it (incubation_min, in minutes, the stated dissociation rate constant koff_per_s if given, and incubation_refs, which include the refs of the koff or, without one, of the reported constant) and leaves the judgement to the sheet; otherwise it is unknown.',
+        'thresholds': ('MIN_PER_UNIT', 'PER_S_PER_UNIT'),
         'returns': (
             ('supported', 'facts_answered_yes', 'answer yes'),
             ('conflicting', 'fact_answered_no', 'answer no'),

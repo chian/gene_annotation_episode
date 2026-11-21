@@ -57,7 +57,7 @@ def synthetic_record(experiment_ref='exp_synthetic_pulldown_1', bait_prep='prep_
     refs = ['span_' + experiment_ref]
     record['spans'] = {refs[0]: {'locator': 'synthetic', 'quote': 'synthetic fixture'}}
     record['preparations'] = {'bait_preparation_ref': bait_prep, 'prey_preparation_ref': prey_prep, 'dataset_ref': dataset}
-    values = {'fold_enrichment': 12.0, 'percent_input_recovered': 4.0, 'input_fraction': 5.0, 'nacl_wash': 300.0, 'detergent_wash': 0.1, 'wash_count': 4, 'incubation_time': 120.0, 'incubation_temperature': 4.0, 'replicate_count': 3}
+    values = {'fold_enrichment': 12.0, 'fold_enrichment_sd': 2.6, 'fold_enrichment_sem': 1.5, 'percent_input_recovered': 4.0, 'input_fraction': 5.0, 'nacl_wash': 300.0, 'detergent_wash': 0.1, 'wash_count': 4, 'incubation_time': 120.0, 'incubation_temperature': 4.0, 'replicate_count': 3}
     for name, value in values.items():
         record['quantities'][name] = point(value, UNITS[name], name + ':' + experiment_ref, refs, name)
     record['detection_method'] = 'western_blot'

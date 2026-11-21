@@ -48,7 +48,7 @@ def fields_the_grader_reads():
 def test_the_schema_has_exactly_the_fields_of_the_form():
     schema = answer_schema()
     form = {*QUANTITIES, SERIES, SEPARATION, DEVICE, DETECTION, SPREAD_KIND, FIT_MODEL, *FACTS}
-    assert set(schema['properties']) == set(field_names()) == form and len(form) == 46
+    assert set(schema['properties']) == set(field_names()) == form and len(form) == 48 and {'percent_bound_spread', 'detection_lloq'} <= form
     assert schema['required'] == list(schema['properties']) and schema['additionalProperties'] is False
     assert NOT_EXTRACTED == ('preparations',) and len(PREPARATION_KEYS) == 3
     for name, field in schema['properties'].items():
@@ -164,7 +164,7 @@ def test_the_real_paragraphs_state_only_what_they_state_and_everything_else_stay
     assert [name for name, item in record['facts'].items() if item['answer'] != 'unknown'] == ['protein_retained']
     assert (record['separation_method'], record['device_type'], record['detection'], record['spread_kind'], record['fit_model']) == ('equilibrium_dialysis', 'dialysis_cup', None, None, None)
     graded = grade_dialysis(record)
-    assert [name for name in graded['criteria'] if _criterion(graded, name)['status'] == 'supported'] == ['equilibrium', 'protein_retained']
+    assert [name for name in graded['criteria'] if _criterion(graded, name)['status'] == 'supported'] == ['equilibrium', 'protein_retained']      # the stated 36 h is above the researched 4 h: supported (restored: the converter has no basis for unknown here)
     assert [name for name in graded['criteria'] if _criterion(graded, name)['status'] == 'conflicting'] == []
     assert graded['reasons']['equilibrium'] == 'equilibration_time_recorded_for_the_sheet' and graded['native']['interaction'] is None and graded['native']['kd_nM'] is None
     result = validate_answer(real_result_answer(), REAL_RESULT)

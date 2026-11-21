@@ -2,7 +2,11 @@
 (``yield_controller`` -> ``_private_yield_controller``; README 7b).
 
 ``verified_source_leads`` accumulates (old ``AccumulationYieldController``): one credit unit per verified source,
-without limit. Every other task is a finite commission (old ``_FiniteLiteratureYieldController`` /
+without limit. Its controller is ``AccumulationYieldController`` with ``ADAPTIVE_CONTROL`` and ``items=None``, and it
+takes no cost: after W = 8 units attempted and m = 4 observed it fits nano-graphrag's yield model; a unit is flat when
+the upper bound of the expected next marginal (hypervolume) credit is at or below gamma, the adaptive gamma =
+max(one-result resolution, 0.1 x median of the recent productive credits); it stops after 4 flat units in a row (no
+input list is passed, so it never stops for want of items). Every other task is a finite commission (old ``_FiniteLiteratureYieldController`` /
 ``CompletionYieldController``): the target is the old ``maximum_credit``, the task's
 ``credit_unit`` (the old ``maximum_credit``: one answer to the commission), read from the parent input. The cost is the old
 task cutoff, now the episode's setting; the parameters are its settings. The old ``None`` (no private yield

@@ -42,8 +42,8 @@ over the signal of the background wells (S/B). Z': the screening-window factor o
 
 What this method does not ask (items of the other binding experiments left out because a bead assay has no such thing): a sensorgram
 baseline, mass transport, a regeneration, the kinetic rate constants, the particle number of a confocal volume, the donor and the
-acceptor of FRET, the washes of a plate assay and the coating of a plate. The bead concentration, the bead coatings, the
-concentrations of the two captured partners, the plate format, the temperature, the bead incubation time, the number of technical wells,
+acceptor of FRET, the washes of a plate assay and the coating of a plate. The bead concentration, the bead coatings,
+the plate format, the temperature, the number of technical wells,
 the spread and the statement that only this method was used are kept in the record for the reviewer; no criterion judges them.
 """
 
@@ -98,17 +98,30 @@ ALPHA_CRITERIA = (
     _one_fact('detector_range', 'Was the signal within the linear range of the reader?', 'signal_in_linear_range'),
     _one_fact('interference_counter_screen', 'Was signal interference (colour or singlet oxygen quenchers, biotin mimetics, metal chelators, light) excluded by a counter-screen with a control linker?', 'counter_screen_done'),
     _one_fact('hook_effect', 'Was the hook effect (the fall of the signal at a high partner concentration) looked for and dealt with, so that the constant is not read from the falling part?', 'hook_effect_handled'),
-    _one_fact('partner_depletion', 'Was the partner held at a constant concentration at or below the KD, so that it does not deplete the titrated partner?', 'partner_concentration_below_kd'),
+    {
+        'id': 'partner_depletion',
+        'question': 'Was the partner held at a constant concentration at or below the KD, so that it does not deplete the titrated partner?',
+        'reads': ('facts.partner_concentration_below_kd', 'quantities.labelled_partner_concentration', 'quantities.tagged_partner_concentration', 'quantities.kd', 'quantities.ki', 'quantities.ec50', 'quantities.ic50', 'titration_design'),
+        'rule': 'The fact decides: yes supported, no fails. When it is not stated, the design is not a cross-titration, the reported constant is given and at least one partner concentration is given, the grader records the largest stated partner concentration over the reported constant (partner_over_constant, partner_name, partner_refs) and leaves the judgement to the sheet; otherwise it is unknown. In a cross-titration both partners are titrated, so no partner is held constant and no number is recorded.',
+        'thresholds': ('NM_PER_UNIT',),
+        'returns': (
+            ('supported', 'facts_answered_yes', 'answer yes'),
+            ('conflicting', 'fact_answered_no', 'answer no'),
+            ('unknown', 'partner_concentration_recorded_for_the_sheet', 'not stated, not a cross-titration, a constant and a partner concentration are given: the ratio is recorded and the sheet judges it'),
+            ('unknown', 'fact_unknown', 'not stated and no ratio can be recorded'),
+            ('not_applicable', 'fact_not_applicable', 'answer not_applicable'),
+        ),
+    },
     {
         'id': 'equilibrium',
         'question': 'Was the binding at equilibrium when the beads were added or the plate was read?',
-        'reads': ('facts.equilibrium_reached', 'quantities.incubation_time'),
-        'rule': 'The fact decides: yes supported, no fails. When it is not stated and an incubation time of the partners is given, the grader records it (incubation_min, in minutes, and incubation_refs) and leaves the judgement to the sheet; otherwise it is unknown.',
+        'reads': ('facts.equilibrium_reached', 'quantities.incubation_time', 'quantities.bead_incubation_time'),
+        'rule': 'The fact decides: yes supported, no fails. When it is not stated and an incubation time of the partners is given, the grader records the time the partners were together (incubation_min, in minutes: that incubation plus the step after the beads were added when that is stated too, because the partners go on binding in that step) and its refs (incubation_refs) and leaves the judgement to the sheet; otherwise it is unknown. The step after the beads alone is not recorded: the time before the beads is then not known.',
         'thresholds': ('MIN_PER_UNIT',),
         'returns': (
             ('supported', 'facts_answered_yes', 'answer yes'),
             ('conflicting', 'fact_answered_no', 'answer no'),
-            ('unknown', 'incubation_recorded_for_the_sheet', 'not stated and an incubation time is given: it is recorded and the sheet judges it'),
+            ('unknown', 'incubation_recorded_for_the_sheet', 'not stated and an incubation time is given: the total time with the bead step is recorded and the sheet judges it'),
             ('unknown', 'fact_unknown', 'not stated and no incubation time'),
             ('not_applicable', 'fact_not_applicable', 'answer not_applicable'),
         ),

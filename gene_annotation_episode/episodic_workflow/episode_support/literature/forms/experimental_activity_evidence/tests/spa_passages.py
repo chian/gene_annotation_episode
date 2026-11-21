@@ -12,8 +12,8 @@ variants were studied by SPA: leucine affinities by saturation binding of [3H]le
 for by 100 uM unlabelled leucine, alanine and leucine affinities by competitive displacement of a fixed concentration of [3H]leucine,
 YSi-Cu His-tag SPA beads (PerkinElmer) at 1.25 or 1.6 mg/ml with 0.3, 1.5 or 3 ug/ml protein, [3H]leucine at 120, 1200 or 200 nM of
 25, 4 or 20 Ci/mmol, ligand depletion avoided by a 20-fold molar excess of [3H]leucine over LeuT, about 16 hours at 4 degrees C and
-counting on a 2450 MicroBeta2 counter in SPA mode. It gives no measured KD, Bmax, IC50 or Ki value, no Hill slope, no fit model, no
-bead-only control, no equilibrium time course, no settling time and no replicate count.
+counting on a 2450 MicroBeta2 counter in SPA mode. It gives no measured KD, Bmax, IC50 or Ki value, no affinity of the unlabelled leucine, no Hill slope, no fit model, no
+bead-only control, no association half-time, no equilibrium time course, no settling time and no replicate count.
 """
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_spa_extraction import (
     ASSAY_FORMAT, BEAD_TYPE, CAPTURE, COUNTER, FIT_MODEL, ISOTOPE, PREPARATION_TYPE, SERIES, SPREAD_KIND, field_names)
@@ -41,12 +41,13 @@ SYNTHETIC = (
     'nickel chelate binding its His tag, and 0.5 µg of receptor protein. The main experiment was a saturation experiment, in which the receptor was incubated with [3H]DX-17 at 10 '
     'concentrations of 0.1, 0.2, 0.4, 0.8, 1.6, 3.2, 6.4, 12.8, 25.6 and 51.2 nM for 120 min. The series ran from 0.1 nM to 51.2 nM. '
     'Non-specific binding was determined with 1000 nM unlabelled DX-17, a 500-fold excess over the Kd, and was subtracted from the total binding to give the '
-    'specific binding; at the highest concentration it was 25% of the total binding. A control without the captured receptor (beads and [3H]DX-17 only) was '
+    'specific binding; at the highest concentration it was 25% of the total binding. The unlabelled ligand was the unlabelled form of [3H]DX-17 itself, '
+    'with a Kd for the receptor of 2.2 nM. A control without the captured receptor (beads and [3H]DX-17 only) was '
     'measured and gave 8% of the total signal. The non-proximity signal of the free radioligand was checked and was small. '
     'No separation or wash step was done: the plates were counted with the free radioligand still in the wells. Counting was on a MicroBeta counter with a '
     'counting efficiency of 32%, after the beads had settled for 30 min. The settling time was fixed for all plates, so the settling of the beads was controlled. '
     'The quench of the counts was corrected using a quench curve of the beads. The radiochemical purity of [3H]DX-17 was checked by HPLC before each '
-    'experiment. The binding was at equilibrium because an association time course reached a plateau within 120 min. Only 6% of the added radioligand was '
+    'experiment. The binding was at equilibrium because an association time course reached a plateau within 120 min, with a half-time of 4 min. Only 6% of the added radioligand was '
     'bound, so depletion of the free radioligand was avoided. The saturation data were fitted by non-linear regression with a one-site binding model, which '
     'gave a KD = 2.0 nM (standard error 0.2 nM), a Bmax of 1200 fmol/mg protein and a Hill slope of 1.0. In a competition experiment 1 nM [3H]DX-17 was '
     'displaced by an unlabelled ligand, which gave an IC50 of 7.5 nM; the Ki = 5.0 nM (standard error 0.3 nM) was calculated with the Cheng-Prusoff equation '
@@ -72,10 +73,12 @@ SYNTHETIC_STATED = {
     'percent_bound': (6, 'percent', 'Only 6% of the added radioligand was bound'),
     'nonspecific_fraction': (25, 'percent', 'it was 25% of the total binding'),
     'nonspecific_ligand_concentration': (1000, 'nM', '1000 nM unlabelled DX-17'),
+    'nonspecific_ligand_affinity': (2.2, 'nM', 'a Kd for the receptor of 2.2 nM'),
     'nonspecific_excess': (500, 'ratio', 'a 500-fold excess over the Kd'),
     'bead_only_fraction': (8, 'percent', 'gave 8% of the total signal'),
     'counting_efficiency': (32, 'percent', 'a counting efficiency of 32%'),
     'incubation_time': (120, 'min', 'for 120 min'),
+    'association_half_time': (4, 'min', 'with a half-time of 4 min'),
     'settling_time': (30, 'min', 'settled for 30 min'),
     'temperature': (25, 'C', 'at 25 °C'),
     'titration_point_count': (10, 'count', 'at 10 concentrations'),
@@ -92,6 +95,7 @@ SYNTHETIC_STATED = {
     FIT_MODEL: ('one_site', None, 'with a one-site binding model'),
     'homogeneous_no_wash_format': ('yes', None, 'No separation or wash step was done'),
     'nonspecific_binding_determined': ('yes', None, 'Non-specific binding was determined with 1000 nM unlabelled DX-17'),
+    'nonspecific_ligand_is_radioligand': ('yes', None, 'the unlabelled form of [3H]DX-17 itself'),
     'nonproximity_signal_checked': ('yes', None, 'The non-proximity signal of the free radioligand was checked and was small'),
     'bead_only_control_done': ('yes', None, 'A control without the captured receptor (beads and [3H]DX-17 only) was measured'),
     'equilibrium_reached': ('yes', None, 'The binding was at equilibrium because an association time course reached a plateau within 120 min'),
@@ -120,6 +124,7 @@ REAL_STATED = {
     'incubation_time': (16, 'h', 'incubated for ~16 hr'),
     'temperature': (4, 'C', 'at 4°C with gentle agitation'),
     'ligand_depletion_checked': ('yes', None, 'ligand depletion was avoided by maintaining ≥20-fold molar excess of [3H]leucine relative to LeuT'),
+    'nonspecific_ligand_is_radioligand': ('yes', None, 'The unspecific binding of [3H]leucine was determined upon addition of 100 (WT, A22V, A22S) or 300 µM (N27Q, N286Q) of unlabeled leucine'),
     'nonspecific_binding_determined': ('yes', None, 'with unspecific binding corrected for by the addition of 100 µM unlabeled leucine'),
 }
 # The allowed set of the real model run: field -> every (value, unit) the paragraph clearly states for it. Some fields hold more than one,
@@ -144,6 +149,7 @@ REAL_ALLOWED = {
     'temperature': {(4, 'C')},
     'ligand_depletion_checked': {('yes', None)},
     'nonspecific_binding_determined': {('yes', None)},
+    'nonspecific_ligand_is_radioligand': {('yes', None)},      # "The unspecific binding of [3H]leucine was determined upon addition of ... unlabeled leucine": the unlabelled form of the radioligand itself
 }
 
 # identity expectations (OWNER_DECISION 18); see check_identity in the leaf test

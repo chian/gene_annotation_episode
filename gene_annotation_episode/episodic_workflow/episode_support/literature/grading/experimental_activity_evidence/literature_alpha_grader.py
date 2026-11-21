@@ -36,8 +36,13 @@ the span of the series and is never the binding constant of the converter.
 Support: native['support'] keeps, per criterion, the 'support' facts of the stated fields the criterion reads (from its declared 'reads';
 literature_quote_support.criterion_supports). The grader only carries them; it never judges them and no status depends on them.
 
+Partner depletion: the fact decides when stated; otherwise, with a reported constant, a design that is not a cross-titration and a stated partner
+concentration (the partners of the record are held at a constant concentration), the largest partner concentration over the constant is recorded
+(partner_over_constant, partner_name, partner_refs) and the sheet judges it. Equilibrium: incubation_min is the time the partners were together (the incubation before
+the beads plus the step after the beads when stated); with only the step after the beads stated it is None.
+
 Native values retained: every record quantity as given, plus kd_nM, ki_nM, ec50_nM, ic50_nM, constant_name, constant_nM,
-signal_over_background, incubation_min, concentration_count, concentration_low_over_constant, concentration_high_over_constant,
+signal_over_background, incubation_min, partner_over_constant, concentration_count, concentration_low_over_constant, concentration_high_over_constant,
 the recorded facts and refs named above, preparations, assay_format, titration_design, donor_bead, acceptor_bead, spread_kind and fit_model.
 """
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_alpha_criteria import ALPHA_CRITERIA, MIN_PER_UNIT, NM_PER_UNIT
@@ -48,6 +53,7 @@ VERSION = 'a105_alphascreen_grade_v1'
 CRITERIA = tuple(criterion['id'] for criterion in ALPHA_CRITERIA)
 CONSTANTS = ('kd', 'ki', 'ec50', 'ic50')       # the order in which a series' reported constant is taken
 DIRECT_MODELS = ('one_site', 'quadratic', 'bell_shaped_hook')    # models of a titration, not of a competition
+PARTNER_CONCENTRATIONS = ('labelled_partner_concentration', 'tagged_partner_concentration')    # the partners held at a constant concentration
 
 
 def _value(record, name):
@@ -66,6 +72,15 @@ def _nm(record, name):
 
 def _minutes(record, name):
     return _scaled(record, name, MIN_PER_UNIT)
+
+
+def _total_incubation_min(record):
+    """The time the partners were together before the read, in minutes: the incubation before the beads plus the step after the beads when that is stated too.
+    None when the incubation before the beads is not stated (the step after the beads alone leaves the time before it unknown)."""
+    before = _minutes(record, 'incubation_time')
+    if before is None:
+        return None
+    return before + (_minutes(record, 'bead_incubation_time') or 0.0)
 
 
 def _refs(*items):
@@ -133,7 +148,20 @@ def _hook_effect(record, native):
 
 
 def _partner_depletion(record, native):
-    return _one_fact(record, 'partner_concentration_below_kd')
+    item = record['facts']['partner_concentration_below_kd']
+    status, reason = _shared_rule([item['answer']])
+    if status != 'unknown':
+        return _result(status, reason, item['source_refs'])
+    constant = native['constant_nM']
+    # a cross-titration titrates both partners: none is held at a constant concentration, so a stated partner concentration is not a depleting one
+    if constant is None or record['titration_design'] == 'cross_titration':
+        return _result('unknown', 'fact_unknown', [])
+    stated = [(name, _nm(record, name)) for name in PARTNER_CONCENTRATIONS if _nm(record, name) is not None]
+    if not stated:
+        return _result('unknown', 'fact_unknown', [])
+    name, largest = max(stated, key=lambda pair: pair[1])      # the partner that can deplete the titrated one most
+    native.update({'partner_over_constant': largest / constant, 'partner_name': name, 'partner_refs': _refs(record['quantities'][name], record['quantities'][native['constant_name']])})
+    return _result('unknown', 'partner_concentration_recorded_for_the_sheet', [])
 
 
 def _equilibrium(record, native):
@@ -143,7 +171,9 @@ def _equilibrium(record, native):
         return _result(status, reason, item['source_refs'])
     if native['incubation_min'] is None:
         return _result('unknown', 'fact_unknown', [])
-    native['incubation_refs'] = _refs(record['quantities']['incubation_time'])
+    # the partners go on binding while the beads are on: the time together is the step before the beads plus the step after them when that is stated
+    steps = [record['quantities'][name] for name in ('incubation_time', 'bead_incubation_time') if _value(record, name) is not None]
+    native['incubation_refs'] = _refs(*steps)
     return _result('unknown', 'incubation_recorded_for_the_sheet', [])
 
 
@@ -224,7 +254,7 @@ def grade_alpha(record):
     """Grade one AlphaScreen / AlphaLISA binding experiment record. Returns the criterion answers and native values."""
     nm = {name: _nm(record, name) for name in CONSTANTS}
     constant_name = next((name for name in CONSTANTS if nm[name] is not None), None)
-    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'assay_format': record['assay_format'], 'titration_design': record['titration_design'], 'donor_bead': record['donor_bead'], 'acceptor_bead': record['acceptor_bead'], 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'choice_support': dict(record['choice_support']), 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'concentration_series': dict(record['concentration_series']), 'kd_nM': nm['kd'], 'ki_nM': nm['ki'], 'ec50_nM': nm['ec50'], 'ic50_nM': nm['ic50'], 'constant_name': constant_name, 'constant_nM': None if constant_name is None else nm[constant_name], 'signal_over_background': None, 'incubation_min': _minutes(record, 'incubation_time'), 'concentration_count': None, 'concentration_low_over_constant': None, 'concentration_high_over_constant': None, 'signal_window_refs': [], 'z_prime': None, 'z_prime_refs': [], 'incubation_refs': [], 'concentration_count_refs': [], 'concentration_span_refs': [], 'estimate_fold': None, 'estimate_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': []}
+    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'assay_format': record['assay_format'], 'titration_design': record['titration_design'], 'donor_bead': record['donor_bead'], 'acceptor_bead': record['acceptor_bead'], 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'choice_support': dict(record['choice_support']), 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'concentration_series': dict(record['concentration_series']), 'kd_nM': nm['kd'], 'ki_nM': nm['ki'], 'ec50_nM': nm['ec50'], 'ic50_nM': nm['ic50'], 'constant_name': constant_name, 'constant_nM': None if constant_name is None else nm[constant_name], 'signal_over_background': None, 'incubation_min': _total_incubation_min(record), 'partner_over_constant': None, 'partner_name': None, 'partner_refs': [],'concentration_count': None, 'concentration_low_over_constant': None, 'concentration_high_over_constant': None, 'signal_window_refs': [], 'z_prime': None, 'z_prime_refs': [], 'incubation_refs': [], 'concentration_count_refs': [], 'concentration_span_refs': [], 'estimate_fold': None, 'estimate_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': []}
     outcomes = {name: EVALUATORS[name](record, native) for name in CRITERIA}
     native['support'] = criterion_supports(record, ALPHA_CRITERIA)      # kept for the sheet: the grader does not judge it
     return {'version': VERSION, 'experiment_type': 'alphascreen', 'experiment_ref': record['experiment_ref'], 'criteria': {name: {'status': o['status'], 'support_refs': o['support_refs']} for name, o in outcomes.items()}, 'reasons': {name: o['reason'] for name, o in outcomes.items()}, 'native': native}

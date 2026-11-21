@@ -12,11 +12,11 @@ CUL3 N-terminal domain (PMC10564622), only what the Results paragraph states.
 """
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_fret_record import CHOICES, EXPERIMENT_TYPE, FACTS, QUANTITIES, VERSION, fact, point, unavailable
 
-UNITS = {'kd': 'nM', 'ki': 'nM', 'ec50': 'nM', 'ic50': 'nM', 'kd_spread': 'nM', 'ki_spread': 'nM', 'donor_concentration': 'nM', 'acceptor_concentration': 'nM', 'ratio_minimum': 'ratio', 'ratio_maximum': 'ratio', 'delay_time': 'us', 'integration_time': 'us', 'assay_volume': 'uL', 'incubation_time': 'min', 'temperature': 'C', 'replicate_count': 'count'}
+UNITS = {'kd': 'nM', 'ki': 'nM', 'ec50': 'nM', 'ic50': 'nM', 'kd_spread': 'nM', 'ki_spread': 'nM', 'donor_concentration': 'nM', 'acceptor_concentration': 'nM', 'ratio_minimum': 'ratio', 'ratio_maximum': 'ratio', 'z_prime': 'ratio', 'delay_time': 'us', 'integration_time': 'us', 'assay_volume': 'uL', 'incubation_time': 'min', 'koff': 'per_s', 'temperature': 'C', 'replicate_count': 'count'}
 
 
 def blank_record(experiment_ref, source_ref, assertion_ref):
-    return {'version': VERSION, 'experiment_type': EXPERIMENT_TYPE, 'experiment_ref': experiment_ref, 'source_ref': source_ref, 'assertion_ref': assertion_ref, 'preparations': {'titrant_preparation_ref': None, 'fixed_partner_preparation_ref': None, 'dataset_ref': None}, 'quantities': {name: unavailable(UNITS[name], name, 'not_given_in_the_inspected_source_text') for name in QUANTITIES}, 'concentration_series': {'value': None, 'unit': 'nM', 'status': 'unavailable', 'reason': 'not_given_in_the_inspected_source_text', 'measurement_keys': [], 'source_refs': [], 'origin': 'reported', 'native_component': 'concentration_series', 'support': None}, 'assay_format': None, 'spread_kind': None, 'fit_model': None, 'plate_type': None, 'donor_acceptor_pair': None, 'choice_support': dict.fromkeys(CHOICES), 'facts': {name: fact('unknown') for name in FACTS}, 'spans': {}}
+    return {'version': VERSION, 'experiment_type': EXPERIMENT_TYPE, 'experiment_ref': experiment_ref, 'source_ref': source_ref, 'assertion_ref': assertion_ref, 'preparations': {'titrant_preparation_ref': None, 'fixed_partner_preparation_ref': None, 'dataset_ref': None}, 'quantities': {name: unavailable(UNITS[name], name, 'not_given_in_the_inspected_source_text') for name in QUANTITIES}, 'concentration_series': {'value': None, 'unit': 'nM', 'status': 'unavailable', 'reason': 'not_given_in_the_inspected_source_text', 'measurement_keys': [], 'source_refs': [], 'origin': 'reported', 'native_component': 'concentration_series', 'support': None}, 'assay_format': None, 'series_format': None, 'spread_kind': None, 'fit_model': None, 'plate_type': None, 'donor_lanthanide': None, 'donor_acceptor_pair': None, 'choice_support': dict.fromkeys(CHOICES), 'facts': {name: fact('unknown') for name in FACTS}, 'spans': {}}
 
 
 def sparse_record(experiment_ref='exp_sparse_fret', kd=20.0):
@@ -55,6 +55,8 @@ def real_record():
     record = blank_record('exp_klhl11_cul3_tr_fret', 'source_pmc10564622', 'hypothesis_klhl11_binds_cul3_ntd')
     record['spans'] = {'span_kd': {'locator': 'Results, TR-FRET validation paragraph', 'quote': 'KD value of 20\xa0nM'}, 'span_kind': {'locator': 'Results, TR-FRET validation paragraph', 'quote': '95% CI 19–22\xa0nM'}, 'span_assay': {'locator': 'Results, TR-FRET validation paragraph', 'quote': 'saturation binding experiment'}, 'span_time_resolved': {'locator': 'Results, TR-FRET validation paragraph', 'quote': 'TR-FRET donor and acceptor functionalization'}, 'span_direct': {'locator': 'Results, TR-FRET validation paragraph', 'quote': 'We selected direct chemical labeling over the use of labeled anti-epitope tag antibodies or streptavidin'}, 'span_tolerated': {'locator': 'Results, TR-FRET validation paragraph', 'quote': 'dye functionalization was well tolerated and did not alter the binding affinity'}}
     record['quantities']['kd'] = point(20, 'nM', 'kd', ['span_kd'])
+    record['spans']['span_koff'] = {'locator': 'Results, TR-FRET validation paragraph', 'quote': 'koff\xa0=\xa03.81\xa0×\xa010−3 s−1'}
+    record['quantities']['koff'] = point(0.00381, 'per_s', 'koff', ['span_koff'])       # the dissociation rate constant; no incubation time is stated, so it judges nothing
     record['spread_kind'] = 'confidence_interval'
     record['assay_format'] = 'direct_titration'
     record['facts']['time_resolved_read'] = fact('yes', ['span_time_resolved'])

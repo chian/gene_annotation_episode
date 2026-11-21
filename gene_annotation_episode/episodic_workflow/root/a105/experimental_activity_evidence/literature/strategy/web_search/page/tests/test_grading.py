@@ -62,7 +62,8 @@ def test_the_first_decision_is_the_jev_assessment_of_every_candidate_against_the
     assert summary['report_windows'] == [[0, len(content)]]                        # consecutive chunks: one window
     assert [need['need_id'] for need in summary['information_needs']] == [
         'result:' + world['assay'], 'identity:' + world['assay']]
-    assert summary['jev_goal']['claim'] == {'predicate': 'binds', 'subject_id': 'PopZ', 'partner_id': 'ParB'}
+    # The claim carries normalized (casefolded) names, as literature_claim.claim_of_hypothesis returns them.
+    assert summary['jev_goal']['claim'] == {'predicate': 'binds', 'subject_id': 'popz', 'partner_id': 'parb'}
     assert isinstance(decision, ToolCall) and decision.name == 'assess_content'
     assert decision.arguments['information_needs'] == summary['information_needs']
     assert EPISODE.offered_actions(summary, None) == ['assess_content']

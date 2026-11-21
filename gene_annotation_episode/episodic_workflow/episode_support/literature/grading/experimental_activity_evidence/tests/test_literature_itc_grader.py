@@ -120,7 +120,10 @@ def test_fit_model_appropriate():
 def test_injections_sufficient():
     r = synthetic_record()
     r['quantities']['injection_count'] = point(14, 'count', 'inj', ['s'])
-    assert status(r, 'injections_sufficient') == 'conflicting'
+    assert status(r, 'injections_sufficient') == 'supported'                                # one short of the researched 15: partial credit, no conflict
+    assert _criterion(grade_itc(r), 'injections_sufficient')['degree'] == pytest.approx((11 / 12) ** 0.5)
+    r['quantities']['injection_count'] = point(3, 'count', 'inj', ['s'])
+    assert status(r, 'injections_sufficient') == 'supported' and _criterion(grade_itc(r), 'injections_sufficient')['degree'] == 0.0      # as many points as fitted parameters: no credit, but a short run is weaker evidence, never conflicting
     r['quantities']['injection_count'] = point(15, 'count', 'inj', ['s'])
     assert status(r, 'injections_sufficient') == 'supported'
     r['quantities']['injection_count']['status'] = 'unavailable'
@@ -145,6 +148,10 @@ def test_temperature_stated_and_controlled():
     assert status(r, 'temperature_stated_and_controlled') == 'supported'
     r['quantities']['temperature'] = point(350.0, 'K', 't', ['s'])
     assert reason(r, 'temperature_stated_and_controlled') == 'temperature_recorded_for_the_sheet' and grade_itc(r)['native']['temperature_K'] == 350.0
+    # 350 K (76.85 C) is past the usual 50 C, short of the 80 C instrument limit: little credit, no conflict
+    assert status(r, 'temperature_stated_and_controlled') == 'supported'
+    assert _criterion(grade_itc(r), 'temperature_stated_and_controlled')['degree'] == pytest.approx((353.15 - 350.0) / 30.0)
+    r['quantities']['temperature'] = point(90.0, 'C', 't', ['s'])
     assert status(r, 'temperature_stated_and_controlled') == 'conflicting'
     r['quantities']['temperature'] = point(6.0, 'C', 't', ['s'])
     assert status(r, 'temperature_stated_and_controlled') == 'supported'
@@ -163,7 +170,8 @@ def test_temperature_stated_and_controlled():
 def test_replicate_titrations_independent():
     r = synthetic_record()
     r['quantities']['replicate_count'] = point(2, 'count', 'n', ['s'])
-    assert status(r, 'replicate_titrations_independent') == 'conflicting'
+    assert status(r, 'replicate_titrations_independent') == 'supported'                     # one short of the researched 3: partial credit, no conflict
+    assert _criterion(grade_itc(r), 'replicate_titrations_independent')['degree'] == pytest.approx((2 / 3) ** 0.5)
     r['quantities']['replicate_count'] = point(3, 'count', 'n', ['s'])
     r['facts']['independent_titrations'] = fact('no')
     assert grader_status(r, 'replicate_titrations_independent') == 'conflicting' and reason(r, 'replicate_titrations_independent') == 'replicates_not_independent'
@@ -175,11 +183,17 @@ def test_replicate_titrations_independent():
 
 def test_stoichiometry_consistency():
     r = synthetic_record()
-    for n, expected in ((1.1, 'supported'), (0.5, 'supported'), (2.0, 'supported'), (1.25, 'conflicting'), (0.2, 'conflicting')):
+    # expected n stated (1.0): the deviation is judged once, in concentration_accuracy_and_active_fraction; here only the free fit is asked
+    for n in (1.1, 0.5, 2.0, 1.25, 0.2):
+        r['quantities']['stoichiometry'] = point(n, 'dimensionless', 'n', ['s'])
+        assert status(r, 'stoichiometry_consistency') == 'supported', n
+    # no expected n: the fallback grid; 1.25 is exactly between two halves (degree 0, never conflicting), 0.2 is at the size floor (conflicting)
+    r['quantities']['expected_stoichiometry']['status'] = 'unavailable'
+    r['quantities']['expected_stoichiometry']['value'] = None
+    for n, expected in ((1.1, 'supported'), (0.5, 'supported'), (2.0, 'supported'), (1.25, 'supported'), (0.2, 'conflicting')):
         r['quantities']['stoichiometry'] = point(n, 'dimensionless', 'n', ['s'])
         assert status(r, 'stoichiometry_consistency') == expected, n
     assert reason(r, 'stoichiometry_consistency') == 'stoichiometry_recorded_for_the_sheet' and grade_itc(r)['native']['stoichiometry_n'] == 0.2
-    # 1.25: nearest multiple of 0.5 is 1.5 (or 1.0), 0.25 away, the zero limit
     r['quantities']['stoichiometry'] = point(1.0, 'dimensionless', 'n', ['s'])
     r['facts']['n_fitted_freely'] = fact('no')
     assert reason(r, 'stoichiometry_consistency') == 'stoichiometry_was_fixed'
@@ -218,3 +232,32 @@ def test_the_published_hsp90_hop_case_decides_only_what_its_legend_supports():
     assert statuses['c_value_window'] == 'unknown'                          # no cell concentration in the legend
     assert statuses['thermodynamic_consistency'] == 'unknown'               # the signs of dH and -T dS, not values
     assert 'conflicting' not in statuses.values()
+
+
+def test_the_final_ratio_gives_the_final_ligand_over_kd_and_the_mode_and_ionization_answers_are_recorded():
+    r = synthetic_record()                                                                     # c = 500, n 1.0
+    r['quantities']['final_molar_ratio'] = point(2.0, 'dimensionless', 'r', ['s_r'])
+    native = grade_itc(r)['native']
+    assert native['final_ligand_over_kd'] == pytest.approx(1000.0) and native['final_ratio_refs'] == ['s_r']      # r c / n = 2.0 x 500 / 1.0
+    assert native['c_value_refs'] == ['span_exp_synthetic_itc_1']                              # the ratio is not part of c
+    assert grade_itc(synthetic_record())['native']['final_ligand_over_kd'] is None
+    assert grade_itc(r)['native']['titration_mode'] == 'incremental' and grade_itc(r)['native']['enthalpy_ionization_corrected'] == 'no'
+
+
+def test_a_stated_single_injection_or_continuous_mode_is_recorded_instead_of_the_count():
+    r = synthetic_record()
+    for mode in ('single_injection', 'continuous'):
+        r['titration_mode'] = mode
+        assert reason(r, 'injections_sufficient') == 'titration_mode_recorded_for_the_sheet' and grader_status(r, 'injections_sufficient') == 'unknown'
+        assert grade_itc(r)['native']['titration_mode'] == mode
+    r['titration_mode'] = 'incremental'
+    assert reason(r, 'injections_sufficient') == 'injection_count_recorded_for_the_sheet'
+    r['titration_mode'] = None
+    assert reason(r, 'injections_sufficient') == 'injection_count_recorded_for_the_sheet'
+
+
+def test_the_ionization_answer_is_recorded_beside_the_free_energy_gap():
+    r = synthetic_record()
+    for answer in ('yes', 'no', 'unknown'):
+        r['facts']['enthalpy_buffer_ionization_corrected'] = fact(answer, ['s'])
+        assert grade_itc(r)['native']['enthalpy_ionization_corrected'] == answer and reason(r, 'thermodynamic_consistency') == 'free_energy_gap_recorded_for_the_sheet'

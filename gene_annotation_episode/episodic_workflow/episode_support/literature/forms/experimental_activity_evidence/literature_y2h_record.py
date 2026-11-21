@@ -10,9 +10,15 @@ Record fields
 version, experiment_type ('y2h'), experiment_ref, source_ref, assertion_ref
 preparations   bait_preparation_ref, prey_preparation_ref, dataset_ref: each a string or None (unknown). They are references to records, which the caller supplies; no passage states them. The converter hands them
                to the merger as its dependence keys (the prey as the analyte key, the bait as the other partner; there is no surface).
-quantities     three_at_concentration, beta_galactosidase_interaction, beta_galactosidase_negative_control, beta_galactosidase_positive_control, incubation_temperature, incubation_time, replicate_count: one operand each.
-               Units: three_at_concentration 'mM' (the 3-AT concentration of the selective medium); beta_galactosidase_interaction, beta_galactosidase_negative_control and
-               beta_galactosidase_positive_control 'Miller_units' (the lacZ activity of the bait-prey pair tested, of the negative control pair, and of the positive control pair); incubation_temperature 'C' or 'K';
+quantities     three_at_concentration, bait_alone_three_at_concentration, beta_galactosidase_interaction, beta_galactosidase_interaction_sd, beta_galactosidase_interaction_sem, beta_galactosidase_negative_control,
+               beta_galactosidase_negative_control_sd, beta_galactosidase_negative_control_sem, beta_galactosidase_positive_control, growth_dilution_interaction, growth_dilution_negative_control,
+               incubation_temperature, incubation_time, replicate_count: one operand each.
+               Units: three_at_concentration 'mM' (the 3-AT concentration of the selective medium on which the pair was scored) and bait_alone_three_at_concentration 'mM' (the 3-AT concentration of the medium on which the bait alone,
+               with the empty prey vector, was tested for autoactivation; kept so the sheet can see whether the autoactivation test was at least as permissive as the scoring); beta_galactosidase_interaction, beta_galactosidase_negative_control and
+               beta_galactosidase_positive_control 'Miller_units' (the lacZ activity of the bait-prey pair tested, of the negative control pair, and of the positive control pair); the _sd and _sem fields of the pair and of the negative control 'Miller_units' (the stated
+               spread of that activity; the SD and the SEM are SEPARATE fields because they differ by sqrt(n) and the passage says which one it gives; kept so the sheet can judge the fold against the paper's own noise);
+               growth_dilution_interaction and growth_dilution_negative_control 'dilution_factor' (for a growth read-out on a dilution series or spot assay: the dilution factor of the most dilute spot of the pair, or of the negative control, that still
+               shows growth on the scored medium, 1 for undiluted, 1000 for 10^-3; kept so a growth-only paper can be judged as a titre difference); incubation_temperature 'C' or 'K';
                incubation_time 'h' or 'days' (the incubation of the plates or cultures before the reporter is scored); replicate_count 'count'.
 system_kind    'y2h', 'y1h', 'y3h' or None: which hybrid system the passage reports. Kept in the record for the reviewer.
 bait_fusion_domain 'gal4_dbd', 'lexa_dbd', 'other' or None: the DNA-binding domain of the bait fusion. Kept in the record for the reviewer.
@@ -49,7 +55,7 @@ def fact(answer, refs=(), support='direct'):
 
 VERSION = 'a105_y2h_record_v1'
 EXPERIMENT_TYPE = 'y2h'
-QUANTITIES = ('three_at_concentration', 'beta_galactosidase_interaction', 'beta_galactosidase_negative_control', 'beta_galactosidase_positive_control', 'incubation_temperature', 'incubation_time', 'replicate_count')
+QUANTITIES = ('three_at_concentration', 'bait_alone_three_at_concentration', 'beta_galactosidase_interaction', 'beta_galactosidase_interaction_sd', 'beta_galactosidase_interaction_sem', 'beta_galactosidase_negative_control', 'beta_galactosidase_negative_control_sd', 'beta_galactosidase_negative_control_sem', 'beta_galactosidase_positive_control', 'growth_dilution_interaction', 'growth_dilution_negative_control', 'incubation_temperature', 'incubation_time', 'replicate_count')
 PREPARATION_KEYS = ('bait_preparation_ref', 'prey_preparation_ref', 'dataset_ref')
 SYSTEM_KINDS = ('y2h', 'y1h', 'y3h')
 BAIT_FUSION_DOMAINS = ('gal4_dbd', 'lexa_dbd', 'other')
@@ -60,4 +66,4 @@ YES_NO = ('yes', 'no', 'unknown', 'not_applicable')
 FACTS = {'interaction_detected': YES_NO, 'bait_alone_inactive': YES_NO, 'prey_alone_inactive': YES_NO, 'non_interacting_control_done': YES_NO, 'positive_control_done': YES_NO, 'reciprocal_orientation_tested': YES_NO, 'nonselective_growth_shown': YES_NO, 'fusion_expression_verified': YES_NO, 'more_than_one_reporter_activated': YES_NO, 'independent_experiments': YES_NO}
 
 # The unit vocabulary of each quantity: the units a record may carry.
-UNITS = {'three_at_concentration': ('mM',), 'beta_galactosidase_interaction': ('Miller_units',), 'beta_galactosidase_negative_control': ('Miller_units',), 'beta_galactosidase_positive_control': ('Miller_units',), 'incubation_temperature': ('C', 'K'), 'incubation_time': ('h', 'days'), 'replicate_count': ('count',)}
+UNITS = {'three_at_concentration': ('mM',), 'bait_alone_three_at_concentration': ('mM',), 'beta_galactosidase_interaction': ('Miller_units',), 'beta_galactosidase_interaction_sd': ('Miller_units',), 'beta_galactosidase_interaction_sem': ('Miller_units',), 'beta_galactosidase_negative_control': ('Miller_units',), 'beta_galactosidase_negative_control_sd': ('Miller_units',), 'beta_galactosidase_negative_control_sem': ('Miller_units',), 'beta_galactosidase_positive_control': ('Miller_units',), 'growth_dilution_interaction': ('dilution_factor',), 'growth_dilution_negative_control': ('dilution_factor',), 'incubation_temperature': ('C', 'K'), 'incubation_time': ('h', 'days'), 'replicate_count': ('count',)}

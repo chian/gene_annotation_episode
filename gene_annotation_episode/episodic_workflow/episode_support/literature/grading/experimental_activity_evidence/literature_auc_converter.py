@@ -38,14 +38,66 @@ calibration_applicability     fit_quality + buffer_correction (the fit describes
 sampling_basis                replicates
 variance_correspondence       supported only when a variance was computed
 The thresholds are judged here, not in the grader (it records facts only and hands them over with a reason ending in '_recorded_for_the_sheet'; JUDGES maps each such
-criterion and reason to its judgement). A continuous comparison (a percent, a ratio, a deviation) is supported with a degree of 1.0 up to its full-agreement limit, the degree falling
-linearly to 0 at its zero-agreement limit, and conflicting (no degree) at or beyond that limit: sedimentation_shift (shift at least SHIFT_FULL_AGREEMENT_PERCENT, none below SHIFT_ZERO_AGREEMENT_PERCENT),
-mass (absolute deviation at most MASS_FULL_AGREEMENT_PERCENT, none from MASS_ZERO_AGREEMENT_PERCENT), stoichiometry (distance from 1 at most STOICHIOMETRY_FULL_AGREEMENT, none from
-STOICHIOMETRY_ZERO_AGREEMENT), concentration_range (the lowest loading concentration over the KD at most LOW_OVER_KD_FULL_AGREEMENT, none from LOW_OVER_KD_ZERO_AGREEMENT; the highest over the KD at least
-HIGH_OVER_KD_FULL_AGREEMENT, none up to HIGH_OVER_KD_ZERO_AGREEMENT; the weaker of the two decides) and fit_quality (rmsd at most FIT_RMSD_FULL_AGREEMENT, none from FIT_RMSD_ZERO_AGREEMENT, per unit).
-Count minimums get no degree: concentration_series is supported at MIN_CONCENTRATIONS loading concentrations or more, else conflicting; replicates are conflicting below MIN_REPLICATES, else supported
-when the independence is yes, else unknown. A sheet criterion that is supported carries the smallest degree of its members that have one (the
-sheet reads no degree; it travels with the interpretation and the merger carries it per result).
+criterion and reason to its judgement). A continuous comparison is supported with a degree of 1.0 at or beyond its full-agreement limit, falling to 0 at its zero-agreement
+limit, and conflicting (no degree) at or beyond that limit, because there the paper's OWN numbers show the standard is not met. Each criterion has its own scale and shape
+(the owner's questions below give the reason for each): sedimentation_shift (percent of the larger component's own s, concave), mass (percent deviation, linear),
+stoichiometry (the fold away from 1:1, symmetric in A:B and B:A, linear), concentration_range (the fractional saturation the two ends of the series reach, the weaker end
+decides) and fit_quality (rmsd per optical unit, linear). The two counts are never conflicting (a short series or a single experiment is less evidence, not evidence
+against): concentration_series has the degree count / MIN_CONCENTRATIONS, replicates sqrt(count / MIN_REPLICATES) when the independence is yes, else unknown. A sheet
+criterion that is supported carries the smallest degree of its members that have one (the sheet reads no degree; it travels with the interpretation and the merger carries
+it per result). No degree holds an unknown weight: a degree describes a stated value; how much an unstated criterion counts is decided outside this file.
+
+The owner's questions, asked of every researched value (2026-11-21; Q1 what it protects against, Q2 general practice or lab-specific, Q3 absolute or relative scale,
+Q4 how badly a wrong value misleads and whether the shape follows that, Q5 consistent with the other binding assays). Method sources: Lebowitz, Lewis & Schuck 2002
+Protein Sci 11:2067 (AUC tutorial review); Schuck 2000 Biophys J 78:1606 (c(s)); Schuck 2003 Anal Biochem 320:104 (s_w isotherms); Dam & Schuck 2005 Biophys J 89:651
+(reaction boundaries); Cole, Lary, Moody & Laue 2008 Methods Cell Biol 84:143 (SV and SE practice); Zhao, Brautigam, Ghirlando & Schuck 2013 Curr Protoc Protein Sci
+20.12 (current SV/SE methods); Zhao et al. 2015 PLoS ONE 10:e0126420 (multi-laboratory s accuracy); Pollard 2010 Mol Biol Cell 21:4061 and Jarmoskaite et al. 2020
+eLife 9:e57264 (binding-series design).
+  sedimentation_shift (SHIFT_*): Q1 a "complex peak" that is the larger component itself (s within its reproducibility). Q2 general: s of one species is reproducible
+    to about 1-2 percent within a run/instrument (Zhao 2015: 0.7 percent CV across 67 instruments after calibration corrections, about 2.5 percent before); 10 percent
+    is a clearly separate species. Q3 already relative to the paper's own control (the s of the larger component alone). The full end is now also relative to the
+    shift expected for the partner's size (s ~ M^(2/3): a partner a tenth of the mass raises s by about 6.6 percent) when the paper states both component masses
+    (grader gap CLOSED: fields component_mass_larger and component_mass_smaller; SHIFT_FULL_FRACTION_OF_EXPECTED, SHIFT_FULL_MIN_OVER_ZERO); without them the absolute 10 percent
+    stays. Q4 small partners get partial, not full, credit; the shape was linear, but a change near the noise floor (2 -> 4 percent: from inside to well
+    outside the reproducibility) matters far more than one near 10 percent (already resolved): CHANGED to concave (SHIFT_EASE_POWER), values kept. Q5 yes.
+  mass (MASS_*): Q1 a faster species that is a homodimer, an aggregate or another stoichiometry, not the A:B complex. Q2 general: c(s) masses rest on a weight-average
+    f/f0 and are good to about 10-15 percent; SE masses to about 5 percent (Schuck 2000; Cole 2008). Q3 the zero end should be relative to the smaller component's mass
+    (one partner more or less); 50 percent is right only for equal-mass partners. CHANGED when the smaller component's mass is stated (grader gap CLOSED: field
+    component_mass_smaller; MASS_FULL_FRACTION_OF_ZERO): zero = smaller mass / theoretical complex mass, full = 0.2 of it; the absolute values stay without the mass. Q4 linear kept: the method's error band
+    (10-15 percent) and the distance to the next species (20-50 percent) overlap, so no part of the ramp is flatter. Kept.
+  stoichiometry (STOICHIOMETRY_*): Q1 a KD read as a one-site constant when the complex is 2:1. Q2 general (a molar ratio is not read closer than about 10 percent;
+    1.5 molecules per one is halfway in counts between 1:1 and 2:1). Q3 the ratio is A over B, but which partner is first is arbitrary, so the scale must be the fold
+    max(r, 1/r). MISTAKE: the old distance |r - 1| made 1.5 conflicting but its mirror 0.67 (the same complex named the other way round) got degree 0.42. CHANGED
+    to the fold, with the same researched numbers (full 1.1, zero 1.5 molecules per one); linear in the fold, i.e. in the count of the excess partner. Q5 yes.
+  concentration_series (MIN_CONCENTRATIONS): Q1 a KD or a reversible association read from too few points of the isotherm. Q2 general: three loading concentrations
+    (with several speeds) is the classical SE design (Cole 2008, Zhao 2013); an s_w isotherm needs points across the KD (Schuck 2003). Q3 a count, absolute; its
+    placement relative to the KD is concentration_range. A stated 'no series' (fact concentration_series_measured) with no count is now a series of one
+    (grader rule CHANGED: recorded as count 1, not conflicting). Q4/Q5 MISTAKE: one concentration was conflicting, which made binding_regime conflicting for the most common
+    qualitative AUC experiment (one c(s) run of the mixture). A short series is less evidence, never evidence against: CHANGED to count / MIN_CONCENTRATIONS (each
+    loading concentration is one more equal point on the isotherm): 1 -> 1/3, 2 -> 2/3, 3 -> 1. MIN_CONCENTRATIONS = 3 kept; CONCENTRATIONS_ZERO_AGREEMENT removed.
+  concentration_range (LOW_/HIGH_OVER_KD_*): Q1 a KD extrapolated from a series all on one side of it (all free or all bound). Q2 general for any binding series:
+    about 0.1x to 10x KD, i.e. about 20 to 80 percent saturation (Pollard 2010; Jarmoskaite 2020), 0.2x/5x keeps a factor of 2 slack. Q3 already relative to the
+    paper's own KD. Q4 the ramp was linear in c/KD, so the two ends were judged unequally (low end at 0.5x KD got 0.63, high end at 2x KD only 0.25), though the
+    isotherm is symmetric (theta at KD/x and at x*KD are mirror images). CHANGED: linear in the fractional saturation theta = r/(1 + r) each end reaches (values
+    kept: full at theta 1/6 and 5/6, zero at 1/2). This is steep near the KD (moving the low end from KD to KD/2 opens half the free branch) and gentle near the
+    full end. theta assumes the titrated partner is in excess over the other. NOT ADDED (equimolar dilution series): with both partners at the same total c the complex
+    fraction at c = KD is about 38 percent instead of 50, a shift of the scale smaller than the factor of 2 of slack already kept in 0.2x and 5x, and the series design
+    would be unreliable to extract.
+  fit_quality (FIT_RMSD_*): Q1 a mass or KD from a model that does not describe the data. Q2 the rule (rmsd comparable to the optical noise) is general practice
+    (Schuck 2000; Zhao 2013); the noise values (0.005 AU, 0.003 fringes) are instrument-generation specific (XL-A/XL-I; the Optima is quieter). Q3 an rmsd relative
+    to the loading signal (plateau absorbance or fringes) or to the noise stated in the paper would be better; neither is recorded. NOT ADDED: the rmsd is judged against the
+    noise of the optics, a property of the instrument and not of the loading, so the absolute scale is the physically right one; the paper rarely states either quantity, so a field
+    would almost always be unavailable. Q4 linear between
+    1x and 4x noise kept (rmsd/noise is about sqrt(reduced chi^2); 1.5-2x is common practice, 4x is a misfit). Kept.
+  replicates (MIN_REPLICATES): Q1 a result from one preparation or one run (one aggregated prep, one mis-calibrated cell). Q2 three independent experiments is the
+    common reporting minimum; scans of one cell are not replicates. Q3 a count, absolute. Q4/Q5 MISTAKE: one experiment was conflicting and the curve was the
+    precision of a spread, sqrt((n - 1)/(MIN - 1)). The binding assays treat replicates as the precision of the mean: CHANGED to sqrt(min(n, MIN) / MIN)
+    (1 -> 0.58, 2 -> 0.82, 3 -> 1), supported when the independence is yes. A standard deviation still becomes a variance only from two or more experiments
+    (MIN_COUNT_FOR_A_SPREAD). REPLICATES_ZERO_AGREEMENT removed.
+  Unstated criteria (SOP step 3 item 4; not applied in this file): AUC reads absolute quantities (s and mass from hydrodynamics, no calibration curve), with trusted
+    reference values (s and mass from sequence), so unstated technical details (buffer correction, rmsd, equilibrium, speeds) are benign typical practice of the
+    SEDFIT/SEDPHAT era and could count near the KD weight. Unstated components_alone, component_homogeneity or non_binding_control are not benign: without them a
+    peak at a larger s cannot be assigned to the A:B complex, so they deserve a much lower weight. Proposal for the owner; the weight lives outside this converter.
 Quote support (SUPPORT_DEGREE in literature_quote_support.py): the record carries, per stated field, how well its quote supports it (direct 1.0,
 implied 0.7, about_something_else 0.3) and the grader keeps, per criterion, the supports of the fields it reads. A supported member criterion whose
 weakest read field is implied or about_something_else gets that factor as its degree where it had none, or the product with its own degree (the
@@ -60,6 +112,8 @@ and the sheet reports them as not selected.
 Dependence keys handed to the merger (the same four keys as the other converters): analyte_preparation_ref = the first component,
 immobilized_preparation_ref = the second component, surface_ref = None (a cell is not a surface reference), dataset_ref = the dataset.
 """
+import math
+
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_auc_criteria import NM_PER_UNIT
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_assay_grading import INPUT_VERSION, ROLES, grade_assay
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
@@ -67,19 +121,24 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 VERSION = 'a105_auc_converted_v1'
 CRITERIA_MAP = {'binding_controls': ('components_alone', 'component_homogeneity', 'non_binding_control'), 'binding_regime': ('concentration_series', 'concentration_range', 'reversibility', 'equilibrium_reached', 'multiple_speeds'), 'binding_parameter_definition': ('complex_observed', 'sedimentation_shift', 'mass', 'stoichiometry'), 'calibration_applicability': ('fit_quality', 'buffer_correction'), 'sampling_basis': ('replicates',)}
 SHIFT_FULL_AGREEMENT_PERCENT = 10.0  # EXPERT_REVIEW: smallest increase (percent) of the s of the complex over the s of the larger component alone that the sheet takes as a clear complex peak; binding of a partner a fifth of the mass of the larger component raises s by about 10 percent, and the s of one species is reproducible to 1 to 2 percent.
-SHIFT_ZERO_AGREEMENT_PERCENT = 2.0  # EXPERT_REVIEW: increase (percent) at or below which the s of the complex cannot be told from the larger component alone (the reproducibility of s); a smaller or negative shift is conflicting, in between the degree falls linearly.
+SHIFT_ZERO_AGREEMENT_PERCENT = 2.0  # EXPERT_REVIEW: increase (percent) at or below which the s of the complex cannot be told from the larger component alone (the reproducibility of s); a smaller or negative shift is conflicting.
+SHIFT_FULL_FRACTION_OF_EXPECTED = 0.5  # EXPERT_REVIEW: when the masses of both components are stated, the shift that gets full credit is this fraction of the shift a compact 1:1 complex would show, s ~ M^(2/3) (Svedberg; a partner a tenth of the mass raises s by about 6.6 percent), capped at SHIFT_FULL_AGREEMENT_PERCENT. One half because a complex is usually less compact than the sphere of the same mass (a frictional ratio above that of its components), which lowers the s it reaches by tens of percent of the expected rise (Lebowitz 2002; Zhao 2013).
+SHIFT_FULL_MIN_OVER_ZERO = 2  # EXPERT_REVIEW: the full-credit shift is never set below this multiple of SHIFT_ZERO_AGREEMENT_PERCENT: a shift of two reproducibility widths (s reproducible to 1 to 2 percent, Zhao 2015) is the smallest that can be told apart from the component alone, however small the partner.
+SHIFT_EASE_POWER = 2  # EXPERT_REVIEW: the shape between the two shift limits, degree = 1 - (1 - share) ** SHIFT_EASE_POWER: steep at the noise floor (each percent there moves the shift from inside to well outside the reproducibility of s), flat as it joins full credit (a peak already resolved gains nothing from another percent). 2 is the gentlest power whose slope is zero at the full end (no kink).
 MASS_FULL_AGREEMENT_PERCENT = 10.0  # EXPERT_REVIEW: largest absolute deviation (percent) of the molar mass of the complex from the AUC fit from the mass the complex should have that the sheet takes as agreement; the mass from c(s) or from a global equilibrium fit is accurate to about 5 to 10 percent.
+MASS_FULL_FRACTION_OF_ZERO = 0.2  # EXPERT_REVIEW: when the mass of the smaller component is stated, the zero-agreement deviation is the deviation of one partner more or less, smaller component / theoretical complex mass, capped at MASS_ZERO_AGREEMENT_PERCENT (equal partners: 50 percent), and the full-agreement deviation is this fraction of it, capped at MASS_FULL_AGREEMENT_PERCENT: the ratio 10 to 50 of the researched values for equal partners, kept for every partner size (a partner a tenth of the mass: zero at 9 percent, full at 1.8 percent, which c(s) masses cannot reach, so the credit is partial throughout, as the method deserves).
 MASS_ZERO_AGREEMENT_PERCENT = 50.0  # EXPERT_REVIEW: absolute deviation (percent) from which the sheet takes the mass as disagreeing (conflicting); half the mass or less, or 1.5 times or more, is a different species; the degree falls linearly in between.
-STOICHIOMETRY_FULL_AGREEMENT = 0.1  # EXPERT_REVIEW: largest distance of the stated stoichiometry from 1 (1:1) at which a KD is the one-site constant (a ratio is not read more closely than 10 percent).
-STOICHIOMETRY_ZERO_AGREEMENT = 0.5  # EXPERT_REVIEW: distance of the stated stoichiometry from 1 from which the sheet takes the complex as not 1:1 (a ratio of 2:1 or 1:2 is 1 or 0.5 away, halfway to it is 1.5 or 0.5); the degree falls linearly in between.
-MIN_CONCENTRATIONS = 3  # EXPERT_REVIEW: fewest loading concentrations that show the concentration dependence of a reversible association (one gives a mass or an s, two a single slope; three show curvature and a plateau).
-LOW_OVER_KD_FULL_AGREEMENT = 0.2  # EXPERT_REVIEW: largest ratio of the lowest loading concentration to the KD at which the series defines the free-component end of the isotherm.
-LOW_OVER_KD_ZERO_AGREEMENT = 1.0  # EXPERT_REVIEW: ratio of the lowest loading concentration to the KD from which the series does not reach below the KD (the complex is already formed in the whole series): conflicting; the degree falls linearly in between.
-HIGH_OVER_KD_FULL_AGREEMENT = 5.0  # EXPERT_REVIEW: smallest ratio of the highest loading concentration to the KD at which the series reaches the saturated end of the isotherm.
-HIGH_OVER_KD_ZERO_AGREEMENT = 1.0  # EXPERT_REVIEW: ratio of the highest loading concentration to the KD up to which the series does not reach above the KD (the complex is not saturated anywhere): conflicting; the degree falls linearly in between.
+STOICHIOMETRY_FULL_AGREEMENT_FOLD = 1.1  # EXPERT_REVIEW: largest fold max(r, 1/r) of the stated molar ratio r away from 1:1 at which a KD is the one-site constant (a ratio is not read more closely than 10 percent). The fold, not |r - 1|, because which partner is named first is arbitrary: A:B = 1.5 and B:A = 0.67 are the same complex.
+STOICHIOMETRY_ZERO_AGREEMENT_FOLD = 1.5  # EXPERT_REVIEW: fold from which the complex is taken as not 1:1 (conflicting): 1.5 molecules of one partner per one of the other is halfway, in counts, between 1:1 and 2:1 (or 1:2); the degree falls linearly in the fold (the count of the excess partner) in between.
+MIN_CONCENTRATIONS = 3  # EXPERT_REVIEW: loading concentrations at which concentration_series reaches FULL credit, the fewest that show the concentration dependence of a reversible association (one gives a mass or an s, two a single slope; three show curvature and a plateau; three concentrations is the classical sedimentation equilibrium design). Below it the degree is count / MIN_CONCENTRATIONS (each loading concentration is one more equal point on the isotherm): one concentration is low partial credit (1/3), never conflicting.
+LOW_OVER_KD_FULL_AGREEMENT = 0.2  # EXPERT_REVIEW: largest ratio of the lowest loading concentration to the KD at which the series defines the free-component end of the isotherm (0.1x KD with a factor of 2 slack; fractional saturation 1/6).
+LOW_OVER_KD_ZERO_AGREEMENT = 1.0  # EXPERT_REVIEW: ratio of the lowest loading concentration to the KD from which the series does not reach below the KD (half saturated or more in the whole series): conflicting; in between the degree is linear in the fractional saturation r / (1 + r).
+HIGH_OVER_KD_FULL_AGREEMENT = 5.0  # EXPERT_REVIEW: smallest ratio of the highest loading concentration to the KD at which the series reaches the saturated end of the isotherm (10x KD with a factor of 2 slack; fractional saturation 5/6, the mirror of the low end).
+HIGH_OVER_KD_ZERO_AGREEMENT = 1.0  # EXPERT_REVIEW: ratio of the highest loading concentration to the KD up to which the series does not reach above the KD (never more than half saturated): conflicting; in between the degree is linear in the fractional saturation r / (1 + r).
 FIT_RMSD_FULL_AGREEMENT = {'AU': 0.005, 'fringes': 0.003}  # EXPERT_REVIEW: largest rmsd of the fit taken as noise-limited, per unit (the noise of the absorbance optics is about 0.005 absorbance units, that of the interference optics about 0.003 fringes).
 FIT_RMSD_ZERO_AGREEMENT = {'AU': 0.02, 'fringes': 0.012}  # EXPERT_REVIEW: rmsd of the fit, per unit, from which the sheet takes the fit as not describing the data (four times the noise): conflicting; the degree falls linearly in between.
-MIN_REPLICATES = 3  # EXPERT_REVIEW: fewest independent experiments (separate experiments on separate days or preparations); scans of one cell do not count.
+MIN_REPLICATES = 3  # EXPERT_REVIEW: independent experiments (separate experiments on separate days or preparations; scans of one cell do not count) at which replicates reach FULL credit. Below it the degree is the precision of the mean relative to that at MIN_REPLICATES, sqrt(count / MIN_REPLICATES) (the standard error of a mean falls as 1 / sqrt(n)): one experiment 0.58, two 0.82; never conflicting.
+MIN_COUNT_FOR_A_SPREAD = 2  # FIXED_BY_DEFINITION: a standard deviation between experiments needs at least two of them; with fewer a stated SD is not the spread of independent experiments and is not turned into a variance.
 STATEMENTS = {'detected': 'interaction_detected', 'not_detected': 'interaction_not_detected', None: 'interaction_not_stated'}
 NULL_REASONS = {'recovery': 'an_auc_run_has_no_matrix_recovery_measurement', 'attributed_signal': 'an_auc_complex_species_is_not_an_attribution_fraction', 'total_signal': 'an_auc_complex_species_is_not_an_attribution_fraction', 'condition_test': 'no_matched_nuisance_condition_response_in_an_auc_record', 'condition_reference': 'no_matched_nuisance_condition_response_in_an_auc_record', 'assertion_prediction': 'prediction_belongs_to_the_target_assertion_not_the_experiment', 'alternative_prediction': 'prediction_belongs_to_the_target_assertion_not_the_experiment', 'effect_degrees_of_freedom': 'no_student_t_model_selected'}
 
@@ -107,24 +166,52 @@ def _graded(refs, *degrees):
     return _verdict('supported', refs, min(degrees))
 
 
+def _shift_full(native):
+    """The shift that gets full credit: SHIFT_FULL_AGREEMENT_PERCENT, or lower when the partner is small (stated masses of the two components)."""
+    larger, smaller = native['component_mass_larger'], native['component_mass_smaller']
+    if larger is None or smaller is None:
+        return SHIFT_FULL_AGREEMENT_PERCENT
+    expected = (((larger + smaller) / larger) ** (2 / 3) - 1) * 100      # s ~ M^(2/3) at a constant shape and density
+    return max(SHIFT_FULL_MIN_OVER_ZERO * SHIFT_ZERO_AGREEMENT_PERCENT, min(SHIFT_FULL_AGREEMENT_PERCENT, SHIFT_FULL_FRACTION_OF_EXPECTED * expected))
+
+
 def _judge_shift(native):
-    return _graded(native['shift_refs'], _degree(native['shift_percent'], SHIFT_FULL_AGREEMENT_PERCENT, SHIFT_ZERO_AGREEMENT_PERCENT))
+    share = _degree(native['shift_percent'], _shift_full(native), SHIFT_ZERO_AGREEMENT_PERCENT)
+    return _graded(native['shift_refs'], None if share is None else 1 - (1 - share) ** SHIFT_EASE_POWER)      # concave: steep at the noise floor, flat at full credit
 
 
 def _judge_mass(native):
-    return _graded(native['mass_support_refs'], _degree(abs(native['mass_deviation_percent']), MASS_FULL_AGREEMENT_PERCENT, MASS_ZERO_AGREEMENT_PERCENT))
+    zero, full = MASS_ZERO_AGREEMENT_PERCENT, MASS_FULL_AGREEMENT_PERCENT
+    if native['mass_smaller_component'] is not None:      # one partner more or less is the next species
+        zero = min(zero, native['mass_smaller_component'] / native['mass_theoretical'] * 100)
+        full = min(full, MASS_FULL_FRACTION_OF_ZERO * zero)
+    return _graded(native['mass_support_refs'], _degree(abs(native['mass_deviation_percent']), full, zero))
 
 
 def _judge_stoichiometry(native):
-    return _graded(native['stoichiometry_refs'], _degree(abs(native['stoichiometry_ratio'] - 1), STOICHIOMETRY_FULL_AGREEMENT, STOICHIOMETRY_ZERO_AGREEMENT))
+    ratio = native['stoichiometry_ratio']
+    fold = max(ratio, 1 / ratio)      # A:B and B:A are the same complex
+    return _graded(native['stoichiometry_refs'], _degree(fold, STOICHIOMETRY_FULL_AGREEMENT_FOLD, STOICHIOMETRY_ZERO_AGREEMENT_FOLD))
 
 
 def _judge_concentrations(native):
-    return _verdict('supported' if native['concentration_count'] >= MIN_CONCENTRATIONS else 'conflicting', native['concentration_count_refs'])
+    count = native['concentration_count']
+    if count < 1:
+        return _verdict('unknown', [])      # not a count of loading concentrations (the extraction refuses numbers at or below 0)
+    # each loading concentration is one more equal point on the isotherm; a short series is low partial credit, never conflicting
+    return _verdict('supported', native['concentration_count_refs'], min(1.0, count / MIN_CONCENTRATIONS))
+
+
+def _saturation(over_kd):
+    """The fractional saturation c / (c + KD) at a loading concentration c = over_kd * KD (the partner titrated in excess)."""
+    return over_kd / (1 + over_kd)
 
 
 def _judge_range(native):
-    return _graded(native['range_refs'], _degree(native['low_over_kd'], LOW_OVER_KD_FULL_AGREEMENT, LOW_OVER_KD_ZERO_AGREEMENT), _degree(native['high_over_kd'], HIGH_OVER_KD_FULL_AGREEMENT, HIGH_OVER_KD_ZERO_AGREEMENT))
+    # linear in the saturation each end reaches: the two ends are mirror images on the isotherm (theta 1/6 and 5/6 full, 1/2 zero)
+    low = _degree(_saturation(native['low_over_kd']), _saturation(LOW_OVER_KD_FULL_AGREEMENT), _saturation(LOW_OVER_KD_ZERO_AGREEMENT))
+    high = _degree(_saturation(native['high_over_kd']), _saturation(HIGH_OVER_KD_FULL_AGREEMENT), _saturation(HIGH_OVER_KD_ZERO_AGREEMENT))
+    return _graded(native['range_refs'], low, high)
 
 
 def _judge_fit(native):
@@ -133,9 +220,11 @@ def _judge_fit(native):
 
 
 def _judge_replicates(native):
-    if native['replicate_count'] < MIN_REPLICATES:
-        return _verdict('conflicting', native['replicate_refs'])
-    return _verdict('supported' if native['replicate_independent'] == 'yes' else 'unknown', native['replicate_refs'])
+    count = native['replicate_count']
+    if count < 1 or native['replicate_independent'] != 'yes':
+        return _verdict('unknown', [])      # independence not stated (the count alone does not say independent experiments), or not a count of experiments
+    # the precision of the mean relative to that at MIN_REPLICATES; one experiment is low partial credit, never conflicting
+    return _verdict('supported', native['replicate_refs'], math.sqrt(min(count, MIN_REPLICATES) / MIN_REPLICATES))
 
 
 # (criterion, the reason with which the grader hands it to the sheet) -> the sheet's judgement of the recorded facts
@@ -171,7 +260,7 @@ def _variance(graded):
         return sd * sd, None, spread['source_refs']
     if kind == 'standard_deviation':
         count = native['quantities']['replicate_count']
-        if _criterion(graded, 'replicates')['status'] != 'supported':
+        if _criterion(graded, 'replicates')['status'] != 'supported' or count['value'] < MIN_COUNT_FOR_A_SPREAD:
             return None, 'sd_needs_independent_experiments_to_become_a_variance_of_the_estimate', []
         return sd * sd / count['value'], None, list(dict.fromkeys([*spread['source_refs'], *count['source_refs']]))
     return None, 'confidence_interval_not_converted', []

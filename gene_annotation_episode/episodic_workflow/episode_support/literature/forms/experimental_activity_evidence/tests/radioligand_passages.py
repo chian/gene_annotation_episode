@@ -14,8 +14,8 @@ with 'the known KD value of the radiolabel (0.076 nM)', its 'known specific acti
 1 mg/mL, a non-linear 'one site-specific binding with Hill slope' fit of the saturation data, a non-linear one-site competition fit
 with 'constraints for the radiolabel concentration (0.1 nM) and KD (0.076 nM)', and a Ki of a competing ligand calculated with the
 Cheng-Prusoff equation. It gives no measured KD, Bmax, IC50 or Ki value of the experiment itself, no isotope, no separation method,
-no preparation type, no incubation time or temperature, no non-specific binding definition, no replicate count and no statement of
-depletion, equilibrium, radioligand purity, filter binding or the wash.
+no preparation type, no incubation time or temperature, no non-specific binding definition (so no Kd of an unlabelled displacer and no statement that it is the unlabelled radioligand), no dissociation
+rate, no replicate count and no statement of depletion (or of a correction for it), equilibrium, radioligand purity, filter binding or the wash.
 """
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_radioligand_extraction import (
     ASSAY_FORMAT, FIT_MODEL, ISOTOPE, PREPARATION_TYPE, SEPARATION, SERIES, SPREAD_KIND, field_names)
@@ -33,12 +33,13 @@ SYNTHETIC = (
     'Binding of [3H]DX-17 to the DX receptor was measured in membranes of HEK293 cells at 25 °C. The assay was about the DX receptor and its ligand DX-17. [3H]DX-17 had a specific activity of 85 Ci/mmol, '
     'and 20 µg of membrane protein was used per tube. In a saturation experiment the membranes were incubated with [3H]DX-17 at 10 concentrations of '
     '0.1, 0.2, 0.4, 0.8, 1.6, 3.2, 6.4, 12.8, 25.6 and 51.2 nM for 60 min. The series ran from 0.1 nM to 51.2 nM. Non-specific binding was determined with '
-    '1000 nM unlabelled DX-17, a 500-fold excess over the Kd, and was subtracted from the total binding to give the specific binding; at the highest '
+    '1000 nM unlabelled DX-17, the cold form of [3H]DX-17 (its Kd was 2.0 nM), a 500-fold excess over the Kd, and was subtracted from the total binding to give the specific binding; at the highest '
     'concentration it was 25% of the total binding. The bound radioligand was separated from the free radioligand by rapid filtration through GF/B filters. '
     'Binding of [3H]DX-17 to the filters, measured without membranes, was negligible after the filters were pre-soaked in polyethylenimine, and the loss of '
     'bound radioligand during the 10 s ice-cold wash was considered and was below 5%. The radiochemical purity of [3H]DX-17 was checked by HPLC before each '
-    'experiment. The binding was at equilibrium because an association time course reached a plateau within 60 min. Only 6% of the added radioligand was '
-    'bound, so depletion of the free radioligand was avoided. The saturation data were fitted by non-linear regression with a one-site binding model, which '
+    'experiment. The binding was at equilibrium because an association time course reached a plateau within 60 min. The dissociation rate constant of '
+    '[3H]DX-17 was 0.2 min⁻¹. Only 6% of the added radioligand was '
+    'bound, so depletion of the free radioligand was avoided. In the competition experiment the free radioligand was measured in each tube, which corrected for depletion. The saturation data were fitted by non-linear regression with a one-site binding model, which '
     'gave a KD = 2.0 nM (standard error 0.2 nM), a Bmax of 1200 fmol/mg protein and a Hill slope of 1.0. In a competition experiment 1 nM [3H]DX-17 was '
     'displaced by an unlabelled ligand, which gave an IC50 of 7.5 nM; the Ki = 5.0 nM (standard error 0.3 nM) was calculated with the Cheng-Prusoff equation '
     'using the KD of [3H]DX-17 on the same membranes. Each condition was measured in 3 tubes, and 3 independent experiments were done on separate days with '
@@ -61,8 +62,10 @@ SYNTHETIC_STATED = {
     'percent_bound': (6, 'percent', 'Only 6% of the added radioligand was bound'),
     'nonspecific_fraction': (25, 'percent', 'it was 25% of the total binding'),
     'nonspecific_ligand_concentration': (1000, 'nM', '1000 nM unlabelled DX-17'),
+    'nonspecific_ligand_kd': (2.0, 'nM', 'its Kd was 2.0 nM'),
     'nonspecific_excess': (500, 'ratio', 'a 500-fold excess over the Kd'),
     'incubation_time': (60, 'min', 'for 60 min'),
+    'dissociation_rate': (0.2, '1/min', 'dissociation rate constant of [3H]DX-17 was 0.2 min⁻¹'),
     'temperature': (25, 'C', 'at 25 °C'),
     'titration_point_count': (10, 'count', 'at 10 concentrations'),
     'technical_replicate_count': (3, 'count', 'measured in 3 tubes'),
@@ -76,6 +79,8 @@ SYNTHETIC_STATED = {
     FIT_MODEL: ('one_site', None, 'with a one-site binding model'),
     'ligand_depletion_checked': ('yes', None, 'so depletion of the free radioligand was avoided'),
     'nonspecific_binding_determined': ('yes', None, 'Non-specific binding was determined with 1000 nM unlabelled DX-17'),
+    'depletion_corrected': ('yes', None, 'the free radioligand was measured in each tube, which corrected for depletion'),
+    'nonspecific_ligand_is_unlabelled_radioligand': ('yes', None, 'the cold form of [3H]DX-17'),
     'equilibrium_reached': ('yes', None, 'The binding was at equilibrium because an association time course reached a plateau within 60 min'),
     'radioligand_purity_checked': ('yes', None, 'The radiochemical purity of [3H]DX-17 was checked by HPLC'),
     'filter_binding_checked': ('yes', None, 'Binding of [3H]DX-17 to the filters, measured without membranes, was negligible'),

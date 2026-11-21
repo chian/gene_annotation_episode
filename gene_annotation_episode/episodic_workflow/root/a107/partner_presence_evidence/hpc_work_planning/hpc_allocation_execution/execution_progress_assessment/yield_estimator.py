@@ -3,9 +3,12 @@
 ``configuration.py`` (``MonitorConfiguration``).
 
 The old monitor opened ``YieldController(epoch, initial_credit, cutoff, YieldParameters(uncertainty_alpha=...))`` from
-its own yield settings. The accumulation controller is now nano-graphrag's function and stop rule
-(``ADAPTIVE_CONTROL``): it takes no cost and no settings, and the monitor has no list of items, so ``items`` is None.
-Nothing else ends this Episode."""
+its own yield settings. The accumulation controller is now a port of nano-graphrag's EstimatorController, configured
+by this Episode with nano-graphrag's adaptive control (``ADAPTIVE_CONTROL``). It takes no cost and no settings. After
+at least W=8 units attempted and m=4 observed it fits nano-graphrag's yield model; a unit is flat when the upper bound
+of the expected next marginal (hypervolume) credit is at or below gamma, the adaptive threshold max(one-result
+resolution, 0.1 x median of recent productive credits); it stops after 4 flat units in a row. The monitor has no list
+of items, so ``items`` is ``None`` and no item count ends it. Nothing else ends this Episode."""
 from yield_control import AccumulationYieldController, ADAPTIVE_CONTROL
 
 

@@ -36,7 +36,9 @@ reports no EC50 ('no_apparent_engagement_constant_reported').
 Terms. Thermal shift: the melting temperature with the compound minus the melting temperature without it, in degrees Celsius (the stated shift, or the difference of the two stated melting temperatures). Concentration range over the EC50: the lowest and
 the highest compound concentration divided by the EC50.
 
-What this method does not ask (kept in the record for the reviewer, no criterion judges them): the heating time, the ends of the temperature range, the isothermal temperature itself, the compound incubation time, the sample format, the readout,
+Added after the range review (grader gaps, 2026-11-21): thermal_shift also reads the stated standard deviation of the Tm (tm_spread) and whether it is over independent experiments; temperature_series also reads the ends of the temperature range and the stated Tm values (is the Tm inside the sampled range); isothermal_window also reads the isothermal temperature and the Tm without the compound. The grader only records these numbers; the sheet judges them.
+
+What this method does not ask (kept in the record for the reviewer, no criterion judges them): the heating time, the compound incubation time, the sample format, the readout,
 the spread of the EC50 and its kind.
 """
 
@@ -79,9 +81,9 @@ CETSA_CRITERIA = (
     _one_fact('engagement_observed', 'Did the compound stabilise the target against heat (a thermal stabilisation that shows target engagement)?', 'target_engagement_shown'),
     {
         'id': 'thermal_shift',
-        'question': 'Did the melt curve of the target shift to a higher temperature with the compound by at least the minimum shift?',
-        'reads': ('quantities.tm_shift', 'quantities.tm_ligand', 'quantities.tm_vehicle'),
-        'rule': 'When the shift is stated, or the two melting temperatures (with and without the compound) are both stated, the grader records the shift in degrees Celsius (shift_celsius) and the refs of the values it comes from (shift_refs; a stated shift wins over a difference) and leaves the judgement to the sheet; otherwise unknown.',
+        'question': 'Did the melt curve of the target shift to a higher temperature with the compound, and by more than the scatter of the melting temperature?',
+        'reads': ('quantities.tm_shift', 'quantities.tm_ligand', 'quantities.tm_vehicle', 'quantities.tm_spread', 'facts.tm_spread_over_independent_experiments'),
+        'rule': 'When the shift is stated, or the two melting temperatures (with and without the compound) are both stated, the grader records the shift in degrees Celsius (shift_celsius) and the refs of the values it comes from (shift_refs; a stated shift wins over a difference) and leaves the judgement to the sheet; when a standard deviation of the Tm is also stated it records that too (tm_spread_c), the answer of the fact that says whether it is over independent experiments (tm_spread_independent) and the refs of all of them (shift_spread_refs); otherwise unknown.',
         'thresholds': (),
         'returns': (
             ('unknown', 'thermal_shift_recorded_for_the_sheet', 'a shift, or both melting temperatures, are stated: the shift is recorded and the sheet judges it'),
@@ -93,8 +95,8 @@ CETSA_CRITERIA = (
     {
         'id': 'temperature_series',
         'question': 'Was the melt curve measured at enough temperatures to define the transition?',
-        'reads': ('quantities.temperature_count', 'facts.melt_curve_measured'),
-        'rule': 'The fact stated as no fails. Otherwise a stated number of temperatures is recorded (temperature_count, temperature_count_refs) and the judgement is left to the sheet; with no number the fact decides: yes supported, not_applicable not applicable, unknown unknown, or not applicable when the experiment format is stated as an isothermal dose-response only (it has no melt curve).',
+        'reads': ('quantities.temperature_count', 'facts.melt_curve_measured', 'quantities.temperature_lowest', 'quantities.temperature_highest', 'quantities.tm_vehicle', 'quantities.tm_ligand'),
+        'rule': 'The fact stated as no fails. Otherwise a stated number of temperatures is recorded (temperature_count, temperature_count_refs) and the judgement is left to the sheet; when both ends of the sampled range and at least one melting temperature are stated, the distances of the lowest and the highest stated Tm from the two ends are recorded too (temperature_margin_low_c, temperature_margin_high_c, temperature_bracket_refs); with no number the fact decides: yes supported, not_applicable not applicable, unknown unknown, or not applicable when the experiment format is stated as an isothermal dose-response only (it has no melt curve).',
         'thresholds': (),
         'returns': (
             ('conflicting', 'fact_answered_no', 'the fact is no'),
@@ -105,7 +107,21 @@ CETSA_CRITERIA = (
             ('not_applicable', 'fact_not_applicable', 'no count is stated and the fact is not_applicable'),
         ),
     },
-    _format_fact('isothermal_window', 'Was the isothermal temperature chosen in the transition of the unbound target (a window between the unbound and the bound target)?', 'isothermal_temperature_in_window', 'melt_curve_format_has_no_isothermal_temperature', 'the experiment format is stated as a melt curve only'),
+    {
+        'id': 'isothermal_window',
+        'question': 'Was the isothermal temperature chosen in the transition of the unbound target (a window between the unbound and the bound target)?',
+        'reads': ('facts.isothermal_temperature_in_window', 'quantities.isothermal_temperature', 'quantities.tm_vehicle'),
+        'rule': 'The fact stated as no fails. Otherwise, when the isothermal temperature and the melting temperature without the compound are both stated, the grader records their difference (isothermal_over_tm_c, isothermal_window_refs) and leaves the judgement to the sheet; with no such numbers the fact decides: yes supported, unknown unknown, not_applicable not applicable, or not applicable when the fact is unknown and the experiment format is stated as a melt curve only (it has no isothermal temperature).',
+        'thresholds': (),
+        'returns': (
+            ('conflicting', 'fact_answered_no', 'the fact is no'),
+            ('unknown', 'isothermal_window_recorded_for_the_sheet', 'the fact is not no and both temperatures are stated: their difference is recorded and the sheet judges it'),
+            ('supported', 'facts_answered_yes', 'the fact is yes and the numbers are not both stated'),
+            ('unknown', 'fact_unknown', 'the fact is unknown, the numbers are not both stated and the format is not stated as a melt curve only'),
+            ('not_applicable', 'melt_curve_format_has_no_isothermal_temperature', 'the fact is unknown, the numbers are not both stated and the format is stated as a melt curve only'),
+            ('not_applicable', 'fact_not_applicable', 'the fact is not_applicable'),
+        ),
+    },
     {
         'id': 'dose_response',
         'question': 'Was the stabilisation followed over enough compound concentrations to show a dose dependence?',

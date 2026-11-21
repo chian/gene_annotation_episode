@@ -166,13 +166,21 @@ def _concentration_series(record, native):
     series = record['concentration_series']
     values = series['value']
     counted = len(values) if values is not None else _value(record, 'titration_point_count')
-    if counted is None:
+    ends = _value(record, 'concentration_lowest') is not None or _value(record, 'concentration_highest') is not None
+    if counted is None and not ends:
         return _result('unknown', 'kd_or_series_missing', [])
-    native.update({'concentration_count': counted, 'count_refs': _refs(series, record['quantities']['titration_point_count'])})
-    if constant is not None and values is not None:         # the span can only be judged from the list and the KD
+    if counted is not None:
+        native.update({'concentration_count': counted, 'count_refs': _refs(series, record['quantities']['titration_point_count'])})
+    if constant is not None and values is not None:         # the span is formed from the list and the KD
         nm = [v * NM_PER_UNIT[series['unit']] for v in values]
         native.update({'concentration_low_over_constant': min(nm) / constant, 'concentration_high_over_constant': max(nm) / constant,
                        'series_refs': _refs(series, record['quantities']['kd'])})
+    elif constant is not None and values is None:           # a passage that gives a range and not a list: its stated ends (either may be missing) and the KD
+        low, high = _nm(record, 'concentration_lowest'), _nm(record, 'concentration_highest')
+        if low is not None or high is not None:
+            native.update({'concentration_low_over_constant': None if low is None else low / constant,
+                           'concentration_high_over_constant': None if high is None else high / constant,
+                           'series_refs': _refs(record['quantities']['concentration_lowest'], record['quantities']['concentration_highest'], record['quantities']['kd'])})
     return _result('unknown', 'series_recorded_for_the_sheet', [])
 
 

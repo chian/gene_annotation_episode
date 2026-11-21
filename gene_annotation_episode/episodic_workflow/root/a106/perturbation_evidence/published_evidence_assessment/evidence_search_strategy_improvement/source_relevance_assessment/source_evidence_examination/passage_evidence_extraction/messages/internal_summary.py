@@ -54,8 +54,9 @@ def internal_summary(view):
     outcomes = [outcome for outcome in view.outcomes if outcome['kind'] == 'tool']
     reasons = [outcome['outcome'] for outcome in outcomes if outcome['tool'] == 'reason']
     # The input list (nano-graphrag's remaining chunks): the commissioned windows still unprocessed, in the order
-    # assigned, as [offset, end] pairs; a processed window is consumed and no longer offered, and the yield
-    # estimator ends the episode when the list is empty.
+    # assigned, as [offset, end] pairs; a processed window is consumed and no longer offered. The yield estimator
+    # passes ``items=None`` to the accumulation controller, so it does not count this list; ``task.decide`` raises
+    # ``passage_input_list_empty`` when the list is empty.
     committed = [outcome for outcome in reasons if outcome.get('status') in ('completed', 'partial')]
     consumed = [[span['offset'], span['offset'] + span['limit']] for span in parent['spans']
                 if span_processed(span, page, committed, view.records)]

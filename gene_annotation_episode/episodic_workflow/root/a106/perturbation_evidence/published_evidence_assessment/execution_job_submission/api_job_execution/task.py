@@ -6,7 +6,11 @@ Carried from the old ``task.py`` (``OperationalTask``), ``task_decision.py``, ``
 ``execution_state.py`` (``initialize``) and ``waiting.py`` (``_execute_selected_wait``). One unit is one tool
 call: the first is the lookup of the bound resource's capabilities and initial inventory (``api_capabilities``,
 offered by the task itself); after it the model selects one operation each turn. The task always offers a unit
-and never ends the Episode: only the yield controller does. The episode has no child. The old ``wait`` (permitted
+and never ends the Episode: only the accumulation controller does (``ADAPTIVE_CONTROL``, ``items=None``, no
+cost: after W=8 units attempted and m=4 observed it fits nano-graphrag's yield model; a unit is flat when the upper
+bound of the expected next marginal (hypervolume) credit is at or below the adaptive gamma = max(one-result
+resolution, 0.1 x median of the recent productive credits); it stops after 4 flat units in a row; no item count
+stops it). The episode has no child. The old ``wait`` (permitted
 by ``permitted_common_actions``) is the ``wait_for_service_job`` tool. The old decision exchange, report update,
 redelivery, restore and checkpoint code are system machinery and are not carried. This file is a private copy:
 it imports nothing from another episode.
@@ -43,8 +47,12 @@ INSTRUCTION_TEMPLATE = (
     'observations or repair from the actual available operations and received outcomes. Distinguish an immediate '
     'returned response from a service job that continues remotely. Preserve the actual request or job identity and '
     'submission uncertainty; a missing reply does not establish that no job was created. Establish the requested '
-    'usable monitoring/results handoff from recorded service facts. The configured controller governs continuation; '
-    'verified original handoff completion gives exact zero future credit.')
+    'usable monitoring/results handoff from recorded service facts. The accumulation controller governs '
+    'continuation at no cost, with the adaptive control and no list of items: after at least 8 units attempted and '
+    '4 observed it fits the yield model; a unit is flat when the upper bound of the expected next marginal credit is '
+    'at or below gamma, the adaptive gamma = max(one-result resolution, 0.1 x median of the recent productive '
+    'credits); it stops after 4 flat units in a row, and no item count stops it. Verified original handoff '
+    'completion gives exact zero future credit.')
 DESCRIPTIONS = {
     'api_capabilities': ('Read the actual caller-bound configuration of the bound API resource and its already '
                          'recorded inventory; no discovery or selection.'),

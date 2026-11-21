@@ -23,7 +23,7 @@ PACKAGE = 'gene_annotation_episode.episodic_workflow.root.a103.gene_context_evid
 FOLDER = Path(__file__).resolve().parent.parent
 LIBRARY_SOURCE = Path(__file__).resolve().parent / 'fixtures' / 'publication' / '2026-10-24-001'
 CHILD_FOLDERS = ('execution_job_submission', 'execution_progress_assessment', 'execution_result_acquisition',
-                 'hpc_work_planning', 'published_evidence_assessment', 'resource_result_acquisition',
+                 'hpc_work_planning', 'resource_result_acquisition',
                  'resource_work_submission')
 TEN_FILES = {'__init__.py', 'goal.py', 'task.py', 'credit.py', 'yield_estimator.py', 'episode.py',
              'messages/__init__.py', 'messages/read_from_parent.py', 'messages/msg_to_child.py',

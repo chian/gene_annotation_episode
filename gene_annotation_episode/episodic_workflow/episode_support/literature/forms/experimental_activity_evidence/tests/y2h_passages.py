@@ -6,7 +6,7 @@
 (Front. Plant Sci. 2018, 9:258, doi 10.3389/fpls.2018.00258, PMC5835670, open access under the Creative Commons Attribution licence (CC BY)), as the publisher's XML (Europe PMC full text) gives the paragraph's own text
 with the markup removed. It describes the bait (pBridge, GAL4 DNA-binding domain) and the prey (pGADT7, GAL4 activation domain) vectors, the yeast strain Y2HGold (and Y190 for the beta-galactosidase assay), the selective medium
 SD/-Trp-Leu-His, the incubation (3 days at 30 degrees C), the Miller units of the beta-galactosidase assay and three biological replicates. It gives no 3-AT concentration (it says 'with or without 3-AT' for the autoactivation test of the bait),
-no result of any pair, no Miller value, no control result, no reciprocal orientation, no expression of the fusions.
+no result of any pair, no Miller value and no spread of one, no dilution series, no control result, no reciprocal orientation, no expression of the fusions.
 """
 PAPER_ID = 'PMC5835670'
 REAL = (
@@ -39,8 +39,9 @@ REAL_EXPECTED_PARTNER = None
 
 SYNTHETIC = (
     'Yeast two-hybrid assays of the binding of the protein QX-7 to its partner protein PZ-2 were done in the yeast strain AH109. QX-7 was fused to the GAL4 DNA-binding domain (pGBKT7) as the bait and PZ-2 to the GAL4 activation domain (pGADT7) as the prey, '
-    'and the pairs were scored on medium lacking histidine and adenine with 5 mM 3-AT after incubation at 30 °C for 4 days. The bait QX-7 with the empty prey vector did not activate the reporter, and the prey PZ-2 with the empty bait vector did not activate it either. '
+    'and the pairs were scored on medium lacking histidine and adenine with 5 mM 3-AT after incubation at 30 °C for 4 days. The bait QX-7 with the empty prey vector, tested on medium with 2.5 mM 3-AT, did not activate the reporter, and the prey PZ-2 with the empty bait vector did not activate it either. '
     'An unrelated protein, lamin C, in place of PZ-2 did not activate the reporter. The positive control pair, p53 and large T antigen, activated the reporter. All transformants grew on non-selective medium lacking leucine and tryptophan, '
     'and immunoblots showed that both fusion proteins were expressed in yeast. The pair QX-7 and PZ-2 grew on the selective medium, so the two proteins interact, and the interaction was also seen when the bait and the prey were swapped. '
-    'The pair activated two reporters, growth on selective medium and beta-galactosidase activity. The beta-galactosidase activity of the pair was 142 Miller units, that of the negative control was 3.1 Miller units and that of the positive control was 160 Miller units. '
+    'The pair activated two reporters, growth on selective medium and beta-galactosidase activity. In a spot assay of ten-fold serial dilutions the pair grew down to the 1:1000 dilution, whereas the negative control grew only down to the 1:10 dilution. '
+    'The beta-galactosidase activity of the pair was 142 Miller units (standard deviation 12 Miller units, standard error of the mean 6.9 Miller units), that of the negative control was 3.1 Miller units (standard deviation 0.4 Miller units, standard error of the mean 0.23 Miller units) and that of the positive control was 160 Miller units. '
     'Three independent experiments were done on separate days.')

@@ -1,6 +1,6 @@
 """The A110 head (biochemical_feasibility_evidence) is a private binding in the ten-file form: importing ``episode.py``
 runs the class-definition checks; the folder holds the ten files; no module imports another episode folder; its
-commissions are admitted by the real forms of its five children and its own form (the recursive slot); its continuation
+commissions are admitted by the real forms of its four children and its own form (the recursive slot); its continuation
 is an accumulation controller built from the parent input. Nothing here contacts a resource, and the points that raise
 because the old module they need has no placed home are asserted to raise."""
 import ast
@@ -27,8 +27,6 @@ from ..messages.final_to_parent import RETURN_FORM
 from ..messages.msg_to_child import msg_to_child
 from ..messages.read_from_child import read_from_child
 from ..messages.read_from_parent import ASSIGNMENT_FORM, read_from_parent
-from ..published_evidence_assessment.messages.final_to_parent import RETURN_FORM as LITERATURE_RETURN
-from ..published_evidence_assessment.messages.read_from_parent import ASSIGNMENT_FORM as LITERATURE_FORM
 from ..task import CHILD_SLOTS, SELECTABLE, TOOLS, process_entry, process_execution, process_revise
 from ..yield_estimator import yield_controller
 
@@ -38,7 +36,7 @@ TEN_FILES = {'__init__.py', 'goal.py', 'task.py', 'credit.py', 'yield_estimator.
              'messages/__init__.py', 'messages/read_from_parent.py', 'messages/msg_to_child.py',
              'messages/read_from_child.py', 'messages/internal_summary.py', 'messages/final_to_parent.py'}
 CHILD_FOLDERS = ('execution_job_submission', 'execution_progress_assessment', 'execution_result_acquisition',
-                 'hpc_work_planning', 'published_evidence_assessment')
+                 'hpc_work_planning')
 SHA = 'a' * 64
 AXIS_REF = {'version': 'biochemical_feasibility_evidence_option_ref_v1', 'library_id': SHA, 'slot': 'evidence_axis',
             'option_id': 'A110', 'entry_sha256': SHA}
@@ -164,10 +162,6 @@ def test_each_commission_is_admitted_by_the_real_form_of_its_child():
     _admitted('results', results, RESULTS_FORM, RESULTS_RETURN)
     hpc = {**arguments, 'commission_id': 'c', 'input_refs': [], 'facts': _facts('hpc')}
     _admitted('hpc', hpc, HPC_FORM, HPC_RETURN)
-    literature = {**arguments, 'question_context_refs': [HYPOTHESIS], 'source_refs': [EVIDENCE],
-                  'received_record_refs': [HYPOTHESIS, EVIDENCE], 'facts': _facts('literature')}
-    message = _admitted('literature', literature, LITERATURE_FORM, LITERATURE_RETURN)
-    assert message.assignment['finding_unit'] == 1
     own = {**arguments, 'assignment': {'selection': SELECTION, 'evidence_refs': [EVIDENCE], 'constraints': {}},
            'facts': _facts('biochemical_feasibility_evidence')}
     message = _admitted('biochemical_feasibility_evidence', own, ASSIGNMENT_FORM, RETURN_FORM)

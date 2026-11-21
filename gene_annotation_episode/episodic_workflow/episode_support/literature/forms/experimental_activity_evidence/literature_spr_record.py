@@ -14,13 +14,17 @@ preparations   analyte_preparation_ref, immobilized_preparation_ref,
                The merger reads these to decide which experiments are not
                independent of each other.
 quantities     kd, kd_steady_state, kon, koff, rmax, kd_spread, chi_squared,
-               immobilization_level, analyte_mass, ligand_mass,
+               baseline_noise, immobilization_level, analyte_mass, ligand_mass,
                stoichiometry, replicate_count: one operand each.
                Units: kd/kd_steady_state/kd_spread nM, uM or mM; kon
                M^-1 s^-1; koff s^-1; rmax, immobilization_level RU;
                chi_squared RU^2; analyte_mass, ligand_mass kDa;
                stoichiometry dimensionless (analyte per immobilized
-               partner); replicate_count count.
+               partner); replicate_count count; baseline_noise RU (the
+               stated baseline or instrument noise level, in the unit of the
+               response, so that chi_squared can be read against its square).
+               Fact kd_analysis (kinetic_fit, steady_state_fit, unknown): how
+               the reported KD was obtained.
 concentration_series
                operand whose 'value' is a list of analyte concentrations
                (unit nM, uM or mM), or None when not given.
@@ -46,16 +50,16 @@ and default it to 'direct', and the default is only for forms built by tests tha
 VERSION = 'a105_spr_record_v1'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'spr'
-QUANTITIES = ('kd', 'kd_steady_state', 'kon', 'koff', 'rmax', 'kd_spread', 'chi_squared', 'immobilization_level', 'analyte_mass', 'ligand_mass', 'stoichiometry', 'replicate_count')
+QUANTITIES = ('kd', 'kd_steady_state', 'kon', 'koff', 'rmax', 'kd_spread', 'chi_squared', 'baseline_noise', 'immobilization_level', 'analyte_mass', 'ligand_mass', 'stoichiometry', 'replicate_count')
 PREPARATION_KEYS = ('analyte_preparation_ref', 'immobilized_preparation_ref', 'surface_ref', 'dataset_ref')
 SPREAD_KINDS = ('standard_error', 'standard_deviation', 'confidence_interval')
 FIT_MODELS = ('1:1_langmuir', 'heterogeneous_ligand', 'bivalent_analyte', 'two_state', 'steady_state_affinity', 'other')
 YES_NO = ('yes', 'no', 'unknown', 'not_applicable')
-FACTS = {'reference_surface': YES_NO, 'double_referencing': YES_NO, 'mass_transport': ('checked_not_limited', 'checked_limited', 'not_checked', 'unknown'), 'baseline_drift': YES_NO, 'regeneration': YES_NO, 'independent_surfaces': YES_NO, 'immobilized_activity': YES_NO, 'analyte_bivalent_or_oligomeric': YES_NO, 'residuals_reported': YES_NO, 'single_estimate_method': YES_NO}
+FACTS = {'reference_surface': YES_NO, 'double_referencing': YES_NO, 'mass_transport': ('checked_not_limited', 'checked_limited', 'not_checked', 'unknown'), 'baseline_drift': YES_NO, 'regeneration': YES_NO, 'independent_surfaces': YES_NO, 'immobilized_activity': YES_NO, 'analyte_bivalent_or_oligomeric': YES_NO, 'residuals_reported': YES_NO, 'single_estimate_method': YES_NO, 'kd_analysis': ('kinetic_fit', 'steady_state_fit', 'unknown')}
 
 CONCENTRATION_UNITS = ('nM', 'uM', 'mM')
 # The unit vocabulary of each quantity (and of the concentration series): the units a record may carry.
-UNITS = {'kd': CONCENTRATION_UNITS, 'kd_steady_state': CONCENTRATION_UNITS, 'kon': ('M^-1 s^-1',), 'koff': ('s^-1',), 'rmax': ('RU',), 'kd_spread': CONCENTRATION_UNITS, 'chi_squared': ('RU^2',), 'immobilization_level': ('RU',), 'analyte_mass': ('kDa',), 'ligand_mass': ('kDa',), 'stoichiometry': ('dimensionless',), 'replicate_count': ('count',), 'concentration_series': CONCENTRATION_UNITS}
+UNITS = {'kd': CONCENTRATION_UNITS, 'kd_steady_state': CONCENTRATION_UNITS, 'kon': ('M^-1 s^-1',), 'koff': ('s^-1',), 'rmax': ('RU',), 'kd_spread': CONCENTRATION_UNITS, 'chi_squared': ('RU^2',), 'baseline_noise': ('RU',), 'immobilization_level': ('RU',), 'analyte_mass': ('kDa',), 'ligand_mass': ('kDa',), 'stoichiometry': ('dimensionless',), 'replicate_count': ('count',), 'concentration_series': CONCENTRATION_UNITS}
 
 
 def point(value, unit, key, refs, native_component=None, support='direct'):

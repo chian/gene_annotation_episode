@@ -3,7 +3,8 @@ what the grader and the converter make of a record that holds only what the para
 antibodies from HeLa cell nuclear extracts, western blots, the RECQ1 antibody co-precipitating Ku70 and Ku80, the Ku70/80 immunoprecipitation co-precipitating RECQ1,
 normal IgG pulling down none of the three, and the interaction surviving benzonase treatment of the extract). It states no wash, incubation, input lane, replicate
 count, endogenous level, competition or specificity control, so nothing in it can cross a threshold: four criteria are supported by stated facts and the others are
-unknown. A conflict would be a real one only if a stated fact or number failed a criterion; none does here (a stated 'no' or a number under a minimum would be needed)."""
+unknown. A conflict would be a real one only if a stated fact or number failed a criterion; none does here (a stated 'no' or a number at or below a zero-agreement
+value, such as a fold enrichment no larger than the control, would be needed; a count under a researched minimum now gets partial credit, not a conflict)."""
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_pulldown_converter import convert_pulldown
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_pulldown_grader import grade_pulldown
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.tests.pulldown_cases import real_record

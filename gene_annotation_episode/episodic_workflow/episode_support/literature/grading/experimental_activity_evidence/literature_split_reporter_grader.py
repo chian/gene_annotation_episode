@@ -25,13 +25,13 @@ stated not to be, else None), with the spans that state it ('interaction_refs');
 effect when the record has no KD.
 
 The grader holds NO threshold that judges goodness. Where a number would be compared with a limit it records the number with its refs (signal_to_background/signal_to_background_refs,
-signal_over_negative_control/signal_over_negative_control_refs, orientation_pairs_tested/orientation_pairs_refs, concentration_count/concentration_count_refs, low_over_kd/high_over_kd/range_refs,
+signal_over_negative_control/signal_over_negative_control_refs, orientation_pairs_positive/orientation_pairs_positive_refs, orientation_single/orientation_single_refs, orientation_pairs_tested/orientation_pairs_refs, concentration_count/concentration_count_refs, low_over_kd/high_over_kd/range_refs, fixed_over_kd/fixed_refs,
 replicate_count/replicate_independent/replicate_refs) and returns 'unknown' with a reason ending in '_recorded_for_the_sheet'; the split-reporter converter judges it.
 
 Support: native 'support' holds, for each criterion, the supports ('direct', 'implied', 'about_something_else') of the stated fields it reads
 (its declared 'reads'), copied from the record and not judged here; the converter judges them.
 
-Native values retained: every record quantity as given, plus kd_nM, lowest_nM, highest_nM, interaction, interaction_refs, the recorded numbers above, preparations, reporter_system, assay_system, readout_mode and spread_kind.
+Native values retained: every record quantity as given, plus kd_nM, lowest_nM, highest_nM, fixed_partner_nM, interaction, interaction_refs, the recorded numbers above, preparations, reporter_system, assay_system, readout_mode and spread_kind.
 """
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_split_reporter_criteria import (
     NM_PER_UNIT, SPLIT_REPORTER_CRITERIA)
@@ -99,6 +99,9 @@ def _signal_to_background(record, native):
 
 
 def _negative_control_ratio(record, native):
+    item = record['facts']['expression_matched_to_control']
+    if item['answer'] == 'no':
+        return _result('conflicting', 'expression_not_matched', item['source_refs'])
     return _ratio(record, native, 'negative_control_ratio', 'signal_over_negative_control')
 
 
@@ -120,8 +123,13 @@ def _positive_control(record, native):
 
 def _fusion_orientations(record, native):
     item = record['facts']['signal_in_several_orientations']
+    positive = _value(record, 'orientation_pairs_positive')
+    if positive is not None:
+        native.update({'orientation_pairs_positive': positive, 'orientation_pairs_positive_refs': _refs(record['quantities']['orientation_pairs_positive'])})
+        return _result('unknown', 'orientation_positive_recorded_for_the_sheet', [])
     if item['answer'] == 'no':
-        return _result('conflicting', 'fact_answered_no', item['source_refs'])
+        native.update({'orientation_single': True, 'orientation_single_refs': list(item['source_refs'])})
+        return _result('unknown', 'orientation_single_recorded_for_the_sheet', [])
     count = _value(record, 'orientation_pairs_tested')
     if count is None:
         return _one_fact(record, 'signal_in_several_orientations')
@@ -150,11 +158,14 @@ def _titration_series(record, native):
 def _titration_range(record, native):
     if native['kd_nM'] is None:
         return _result('not_applicable', NO_KD, [])
-    lowest, highest = native['lowest_nM'], native['highest_nM']
-    if lowest is None or highest is None:
+    lowest, highest, fixed = native['lowest_nM'], native['highest_nM'], native['fixed_partner_nM']
+    if (lowest is None or highest is None) and fixed is None:
         return _result('unknown', 'titration_range_not_given', [])
-    native.update({'low_over_kd': lowest / native['kd_nM'], 'high_over_kd': highest / native['kd_nM'],
-                   'range_refs': _refs(record['quantities']['loaded_concentration_lowest'], record['quantities']['loaded_concentration_highest'], record['quantities']['kd'])})
+    if lowest is not None and highest is not None:
+        native.update({'low_over_kd': lowest / native['kd_nM'], 'high_over_kd': highest / native['kd_nM'],
+                       'range_refs': _refs(record['quantities']['loaded_concentration_lowest'], record['quantities']['loaded_concentration_highest'], record['quantities']['kd'])})
+    if fixed is not None:
+        native.update({'fixed_over_kd': fixed / native['kd_nM'], 'fixed_refs': _refs(record['quantities']['fixed_partner_concentration'], record['quantities']['kd'])})
     return _result('unknown', 'titration_range_recorded_for_the_sheet', [])
 
 
@@ -184,7 +195,7 @@ EVALUATORS = {'interaction_observed': _interaction_observed, 'signal_to_backgrou
 def grade_split_reporter(record):
     """Grade one split-reporter experiment record. Returns the criterion answers and native values."""
     found = record['facts']['interaction_detected']
-    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'reporter_system': record['reporter_system'], 'assay_system': record['assay_system'], 'readout_mode': record['readout_mode'], 'spread_kind': record['spread_kind'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'interaction': INTERACTION.get(found['answer']), 'interaction_refs': list(found['source_refs']) if found['answer'] in INTERACTION else [], 'kd_nM': _scaled(record, 'kd', NM_PER_UNIT), 'lowest_nM': _scaled(record, 'loaded_concentration_lowest', NM_PER_UNIT), 'highest_nM': _scaled(record, 'loaded_concentration_highest', NM_PER_UNIT), 'signal_to_background': None, 'signal_to_background_refs': [], 'signal_over_negative_control': None, 'signal_over_negative_control_refs': [], 'orientation_pairs_tested': None, 'orientation_pairs_refs': [], 'concentration_count': None, 'concentration_count_refs': [], 'low_over_kd': None, 'high_over_kd': None, 'range_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': []}
+    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'reporter_system': record['reporter_system'], 'assay_system': record['assay_system'], 'readout_mode': record['readout_mode'], 'spread_kind': record['spread_kind'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'interaction': INTERACTION.get(found['answer']), 'interaction_refs': list(found['source_refs']) if found['answer'] in INTERACTION else [], 'kd_nM': _scaled(record, 'kd', NM_PER_UNIT), 'lowest_nM': _scaled(record, 'loaded_concentration_lowest', NM_PER_UNIT), 'highest_nM': _scaled(record, 'loaded_concentration_highest', NM_PER_UNIT), 'fixed_partner_nM': _scaled(record, 'fixed_partner_concentration', NM_PER_UNIT), 'signal_to_background': None, 'signal_to_background_refs': [], 'signal_over_negative_control': None, 'signal_over_negative_control_refs': [], 'orientation_pairs_tested': None, 'orientation_pairs_refs': [], 'orientation_pairs_positive': None, 'orientation_pairs_positive_refs': [], 'orientation_single': False, 'orientation_single_refs': [], 'concentration_count': None, 'concentration_count_refs': [], 'low_over_kd': None, 'high_over_kd': None, 'range_refs': [], 'fixed_over_kd': None, 'fixed_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': []}
     outcomes = {name: EVALUATORS[name](record, native) for name in CRITERIA}
     native['support'] = criterion_supports(record, SPLIT_REPORTER_CRITERIA)      # kept for the sheet: the grader does not judge it
     return {'version': VERSION, 'experiment_type': 'split_reporter', 'experiment_ref': record['experiment_ref'], 'criteria': {name: {'status': o['status'], 'support_refs': o['support_refs']} for name, o in outcomes.items()}, 'reasons': {name: o['reason'] for name, o in outcomes.items()}, 'native': native}

@@ -1,4 +1,4 @@
-"""SEC grader: each criterion's rule on records, with the thresholds exercised on both sides."""
+"""SEC grader: each criterion's rule on records, with the sheet's gradual judgements of the recorded numbers exercised on both sides of each researched value."""
 import pytest
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_sec_record import FACTS, fact, point
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence import literature_sec_criteria, literature_sec_grader
@@ -18,6 +18,10 @@ def status(record, criterion):
 
 def refs(record, criterion):
     return _criterion(grade_sec(record), criterion)['support_refs']
+
+
+def degree(record, criterion):
+    return _criterion(grade_sec(record), criterion).get('degree')
 
 
 def grader_status(record, criterion):
@@ -186,19 +190,24 @@ def test_a_one_fact_criterion_follows_its_fact(criterion, name):
     assert (status(r, criterion), reason(r, criterion)) == ('not_applicable', 'fact_not_applicable')
 
 
-def test_the_complex_peak_must_elute_earlier_by_at_least_the_minimum_shift():
+def test_the_complex_peak_must_elute_earlier_with_full_credit_from_the_minimum_shift_and_partial_credit_below_it():
     r = synthetic_record()                                                                 # a stated shift of 1.3 mL
     assert (grader_status(r, 'elution_shift'), reason(r, 'elution_shift')) == ('unknown', 'elution_shift_recorded_for_the_sheet')
-    for value, expected in ((0.3, 'supported'), (0.29, 'conflicting'), (5.0, 'supported'), (0.05, 'conflicting')):
+    degrees = []
+    for value in (0.05, 0.15, 0.25, 0.3, 5.0):                                             # partial credit below the full-credit shift (0.3 mL x 12.5 / 13 mL = 0.2885 mL, scaled to the earlier component's volume), full from it; a larger shift never lowers the degree
         r['quantities']['elution_volume_shift'] = point(value, 'mL', 'sh', ['s'])
-        assert status(r, 'elution_shift') == expected, value
-    assert reason(r, 'elution_shift') == 'elution_shift_recorded_for_the_sheet' and grade_sec(r)['native']['shift_ml'] == 0.05
+        assert status(r, 'elution_shift') == 'supported', value
+        degrees.append(degree(r, 'elution_shift'))
+    assert degrees == sorted(degrees) and 0 < degrees[0] < degrees[1] < degrees[2] < 1 and degrees[3] == degrees[4] == 1.0
+    assert reason(r, 'elution_shift') == 'elution_shift_recorded_for_the_sheet' and grade_sec(r)['native']['shift_ml'] == 5.0
     missing(r, 'elution_volume_shift')                                                     # without a stated shift it is the earlier component alone minus the complex: 12.5 - 11.2
     assert (status(r, 'elution_shift'), reason(r, 'elution_shift')) == ('supported', 'elution_shift_recorded_for_the_sheet') and grade_sec(r)['native']['shift_ml'] == pytest.approx(1.3)
     assert refs(r, 'elution_shift') == grade_sec(r)['native']['shift_refs'] == ['span_exp_synthetic_sec_1']
-    r['quantities']['complex_elution_volume'] = point(12.3, 'mL', 'c', ['s'])
-    assert status(r, 'elution_shift') == 'conflicting' and grade_sec(r)['native']['shift_ml'] == pytest.approx(0.2)
+    r['quantities']['complex_elution_volume'] = point(12.3, 'mL', 'c', ['s'])              # a small shift (0.2 mL) is partial credit, not a failure
+    assert status(r, 'elution_shift') == 'supported' and grade_sec(r)['native']['shift_ml'] == pytest.approx(0.2) and degree(r, 'elution_shift') == pytest.approx(0.7755, abs=1e-4)
     assert refs(r, 'elution_shift') == ['span_exp_synthetic_sec_1', 's']
+    r['quantities']['complex_elution_volume'] = point(12.5, 'mL', 'c', ['s'])              # no earlier than the component alone: the paper's own volumes show no complex
+    assert status(r, 'elution_shift') == 'conflicting' and 'degree' not in _criterion(grade_sec(r), 'elution_shift')
     r['quantities']['complex_elution_volume'] = point(13.0, 'mL', 'c', ['s'])           # the mixture elutes LATER than the component: no complex peak
     assert status(r, 'elution_shift') == 'conflicting' and grade_sec(r)['native']['shift_ml'] == pytest.approx(-0.5)
     missing(r, 'complex_elution_volume')
@@ -211,7 +220,7 @@ def test_the_complex_peak_must_elute_earlier_by_at_least_the_minimum_shift():
 def test_a_stated_shift_wins_over_the_difference_of_the_volumes():
     r = synthetic_record()
     r['quantities']['elution_volume_shift'] = point(0.1, 'mL', 'sh', ['s_shift'])          # stated shift 0.1 although the volumes differ by 1.3: the stated number is the result
-    assert status(r, 'elution_shift') == 'conflicting' and refs(r, 'elution_shift') == ['s_shift']
+    assert grade_sec(r)['native']['shift_ml'] == 0.1 and degree(r, 'elution_shift') == pytest.approx(0.2772, abs=1e-4) and refs(r, 'elution_shift') == ['s_shift', 'span_exp_synthetic_sec_1']
 
 
 def test_the_mals_mass_is_recorded_as_facts_and_the_grader_judges_no_threshold():
@@ -241,12 +250,18 @@ def test_the_mals_mass_is_recorded_as_facts_and_the_grader_judges_no_threshold()
     assert (status(r, 'mals_mass'), reason(r, 'mals_mass')) == ('not_applicable', 'fact_not_applicable')
 
 
-def test_a_kd_from_peak_areas_needs_a_one_to_one_complex():
+def test_a_kd_from_peak_areas_needs_a_one_to_one_complex_with_partial_credit_between_one_to_one_and_two_to_one():
     r = synthetic_record()
-    assert (status(r, 'stoichiometry'), reason(r, 'stoichiometry')) == ('supported', 'stoichiometry_recorded_for_the_sheet')
-    for ratio, expected in ((1.09, 'supported'), (0.91, 'supported'), (1.12, 'conflicting'), (0.88, 'conflicting'), (2.0, 'conflicting'), (0.5, 'conflicting')):
+    assert (status(r, 'stoichiometry'), reason(r, 'stoichiometry')) == ('supported', 'stoichiometry_recorded_for_the_sheet') and degree(r, 'stoichiometry') == 1.0
+    degrees = {}
+    for ratio in (1.09, 0.91, 1.12, 0.88, 1.5, 0.6):
         r['quantities']['stoichiometry_ratio'] = point(ratio, 'ratio', 'r', ['s'])
-        assert status(r, 'stoichiometry') == expected, ratio
+        assert status(r, 'stoichiometry') == 'supported', ratio                            # within the tolerance full credit, beyond it partial credit, no step
+        degrees[ratio] = degree(r, 'stoichiometry')
+    assert degrees[1.09] == degrees[0.91] == 1.0 and 1.0 > degrees[1.12] > degrees[1.5] > 0 and 1.0 > degrees[0.88] > degrees[0.6] > 0
+    for ratio in (2.0, 3.0, 0.5):                                                           # a stated 2:1 or 1:2 complex: its apparent KD is not a one-site constant
+        r['quantities']['stoichiometry_ratio'] = point(ratio, 'ratio', 'r', ['s'])
+        assert status(r, 'stoichiometry') == 'conflicting', ratio
     assert reason(r, 'stoichiometry') == 'stoichiometry_recorded_for_the_sheet' and grade_sec(r)['native']['stoichiometry_ratio'] == 0.5
     missing(r, 'stoichiometry_ratio')
     assert (status(r, 'stoichiometry'), reason(r, 'stoichiometry')) == ('unknown', 'stoichiometry_not_given')
@@ -257,17 +272,22 @@ def test_a_kd_from_peak_areas_needs_a_one_to_one_complex():
     assert status(weak_complex_record(), 'stoichiometry') == 'conflicting'
 
 
-def test_the_resin_is_ruled_out_by_the_statement_or_by_a_salt_of_at_least_the_minimum():
+def test_the_resin_is_ruled_out_by_the_statement_or_by_a_salt_with_full_credit_from_the_minimum_and_partial_credit_below_it():
     r = synthetic_record()
     assert (status(r, 'resin_interaction'), reason(r, 'resin_interaction')) == ('supported', 'facts_answered_yes')
     r['facts']['buffer_rules_out_resin_interaction'] = fact('no', ['s'])                    # the proteins interacted with the resin, whatever the salt
     assert (status(r, 'resin_interaction'), reason(r, 'resin_interaction')) == ('conflicting', 'fact_answered_no')
     r['facts']['buffer_rules_out_resin_interaction'] = fact('unknown')
-    assert (status(r, 'resin_interaction'), reason(r, 'resin_interaction')) == ('supported', 'salt_recorded_for_the_sheet')      # 150 mM
+    assert (status(r, 'resin_interaction'), reason(r, 'resin_interaction')) == ('supported', 'salt_recorded_for_the_sheet') and degree(r, 'resin_interaction') == 1.0      # 150 mM
     assert refs(r, 'resin_interaction') == grade_sec(r)['native']['salt_refs'] == ['span_exp_synthetic_sec_1']
-    for value, unit, expected in ((100.0, 'mM', 'supported'), (99.0, 'mM', 'unknown'), (0.1, 'M', 'supported'), (0.05, 'M', 'unknown')):
+    for value, unit, expected in ((100.0, 'mM', 'supported'), (99.0, 'mM', 'supported'), (0.1, 'M', 'supported'), (0.075, 'M', 'supported'), (0.05, 'M', 'conflicting')):      # at 50 mM the stated buffer is against the standard (a former 'unknown' was a mistake)
         r['quantities']['salt_concentration'] = point(value, unit, 'salt', ['s'])
         assert status(r, 'resin_interaction') == expected, (value, unit)
+    r['quantities']['salt_concentration'] = point(99.0, 'mM', 'salt', ['s'])
+    just_below = degree(r, 'resin_interaction')
+    r['quantities']['salt_concentration'] = point(75.0, 'mM', 'salt', ['s'])
+    assert 1.0 > just_below > degree(r, 'resin_interaction') > 0                            # just below 100 mM partial credit, falling towards 50 mM
+    r['quantities']['salt_concentration'] = point(0.05, 'M', 'salt', ['s'])
     assert reason(r, 'resin_interaction') == 'salt_recorded_for_the_sheet' and grade_sec(r)['native']['salt_mM'] == pytest.approx(50.0)
     missing(r, 'salt_concentration')
     assert (status(r, 'resin_interaction'), reason(r, 'resin_interaction')) == ('unknown', 'fact_unknown')
@@ -275,17 +295,21 @@ def test_the_resin_is_ruled_out_by_the_statement_or_by_a_salt_of_at_least_the_mi
     assert (status(r, 'resin_interaction'), reason(r, 'resin_interaction')) == ('not_applicable', 'fact_not_applicable')
 
 
-def test_the_injected_concentration_must_be_at_least_ten_times_the_kd_for_the_complex_to_survive_the_dilution():
+def test_the_injected_concentration_gets_full_credit_from_ten_times_the_kd_and_partial_credit_below_it():
     r = synthetic_record()                                                                 # 5000 nM injected, KD 200 nM
+    missing(r, 'loaded_volume')                                                            # no injected volume: the researched dilution of the sheet (tests of the volumes are in the converter tests)
     assert (status(r, 'complex_stable_on_column'), reason(r, 'complex_stable_on_column')) == ('supported', 'load_over_kd_recorded_for_the_sheet')
-    r['quantities']['loaded_concentration'] = point(2000.0, 'nM', 'l', ['s'])               # exactly ten times: allowed
-    assert status(r, 'complex_stable_on_column') == 'supported'
-    r['quantities']['loaded_concentration'] = point(1999.0, 'nM', 'l', ['s'])
-    assert (status(r, 'complex_stable_on_column'), reason(r, 'complex_stable_on_column')) == ('conflicting', 'load_over_kd_recorded_for_the_sheet')
-    r['quantities']['loaded_concentration'] = point(1.0, 'uM', 'l', ['s'])                  # 1000 nM in micromolar
-    assert status(r, 'complex_stable_on_column') == 'conflicting' and grade_sec(r)['native']['loaded_nM'] == pytest.approx(1000.0)
+    assert degree(r, 'complex_stable_on_column') == 1.0
+    degrees = []
+    for loaded, unit in ((100.0, 'nM'), (1.0, 'uM'), (1999.0, 'nM'), (2.0, 'uM'), (5.0, 'uM')):      # partial credit below ten times the KD, full from it; a higher load never lowers it
+        r['quantities']['loaded_concentration'] = point(loaded, unit, 'l', ['s'])
+        assert status(r, 'complex_stable_on_column') == 'supported', (loaded, unit)
+        degrees.append(degree(r, 'complex_stable_on_column'))
+    assert degrees == sorted(degrees) and 0 < degrees[0] < degrees[1] < degrees[2] < 1 and degrees[3] == degrees[4] == 1.0
+    r['quantities']['loaded_concentration'] = point(1.0, 'uM', 'l', ['s'])                  # 1000 nM in micromolar: five times the KD
+    assert grade_sec(r)['native']['loaded_nM'] == pytest.approx(1000.0) and degree(r, 'complex_stable_on_column') == pytest.approx(0.7015, abs=1e-4)
     r['facts']['complex_stable_on_column'] = fact('yes', ['s'])                             # the numbers decide, not the fact
-    assert status(r, 'complex_stable_on_column') == 'conflicting'
+    assert degree(r, 'complex_stable_on_column') == pytest.approx(0.7015, abs=1e-4)
     missing(r, 'loaded_concentration')                                                      # without the number the fact decides
     assert (status(r, 'complex_stable_on_column'), reason(r, 'complex_stable_on_column')) == ('supported', 'facts_answered_yes')
     r['facts']['complex_stable_on_column'] = fact('no', ['s'])
@@ -300,12 +324,17 @@ def test_the_injected_concentration_must_be_at_least_ten_times_the_kd_for_the_co
     assert (status(r, 'complex_stable_on_column'), reason(r, 'complex_stable_on_column')) == ('not_applicable', 'fact_not_applicable')
 
 
-def test_a_polydispersity_above_the_maximum_is_aggregation_and_without_it_the_fact_decides():
+def test_a_polydispersity_above_the_maximum_gets_partial_credit_up_to_a_monomer_dimer_peak_and_without_it_the_fact_decides():
     r = synthetic_record()
     assert (status(r, 'monodispersity'), reason(r, 'monodispersity')) == ('supported', 'polydispersity_recorded_for_the_sheet')
-    for value, expected in ((1.05, 'supported'), (1.06, 'conflicting'), (1.0, 'supported'), (1.5, 'conflicting')):
+    degrees = []
+    for value in (1.0, 1.05, 1.06, 1.1):                                                    # full credit up to 1.05, partial above it; further from 1 never raises the degree
         r['quantities']['polydispersity'] = point(value, 'ratio', 'p', ['s'])
-        assert status(r, 'monodispersity') == expected, value
+        assert status(r, 'monodispersity') == 'supported', value
+        degrees.append(degree(r, 'monodispersity'))
+    assert degrees[0] == degrees[1] == 1.0 and 1.0 > degrees[2] > degrees[3] > 0
+    r['quantities']['polydispersity'] = point(1.5, 'ratio', 'p', ['s'])                     # above any monomer-dimer peak (1.125): aggregation
+    assert status(r, 'monodispersity') == 'conflicting'
     assert reason(r, 'monodispersity') == 'polydispersity_recorded_for_the_sheet' and grade_sec(r)['native']['polydispersity'] == 1.5
     r['facts']['aggregation_absent'] = fact('yes', ['s'])                                   # the number decides, not the fact
     assert status(r, 'monodispersity') == 'conflicting'
@@ -324,8 +353,10 @@ def test_replicates_are_independent_experiments_and_injections_of_one_sample_do_
     assert reason(r, 'replicates') == 'replicate_count_recorded_for_the_sheet' and status(r, 'replicates') == 'supported'
     native = grade_sec(r)['native']
     assert native['replicate_count'] == 3 and native['replicate_independent'] == 'yes' and native['replicate_refs']
-    r['quantities']['replicate_count'] = point(2, 'count', 'n', ['s'])
-    assert reason(r, 'replicates') == 'replicate_count_recorded_for_the_sheet' and status(r, 'replicates') == 'conflicting'
+    r['quantities']['replicate_count'] = point(2, 'count', 'n', ['s'])                      # two independent experiments: partial credit below three, not a failure
+    assert reason(r, 'replicates') == 'replicate_count_recorded_for_the_sheet' and status(r, 'replicates') == 'supported' and degree(r, 'replicates') == pytest.approx(0.8165, abs=1e-4)      # sqrt(2 / 3)
+    r['quantities']['replicate_count'] = point(1, 'count', 'n', ['s'])                      # one experiment: less evidence, not evidence against
+    assert reason(r, 'replicates') == 'replicate_count_recorded_for_the_sheet' and status(r, 'replicates') == 'supported' and degree(r, 'replicates') == pytest.approx(0.5774, abs=1e-4)      # one experiment: low partial credit (sqrt(1 / 3)), never conflicting
     r['quantities']['replicate_count'] = point(3, 'count', 'n', ['s'])
     r['facts']['independent_experiments'] = fact('no', ['s'])
     assert (grader_status(r, 'replicates'), reason(r, 'replicates')) == ('conflicting', 'replicates_not_independent')       # a fact, judged by the grader

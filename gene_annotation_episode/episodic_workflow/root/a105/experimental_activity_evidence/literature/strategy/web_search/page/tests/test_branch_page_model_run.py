@@ -64,7 +64,7 @@ def popz_world(directory):
                                            'evidence_axis': 'A105', 'credit_unit': 1.0,
                                            'experiments': [{'experiment_ref': assay, 'assay_type': 'ligand_binding'}]},
                        'received_record_refs': [world['target'], source, artifact, assay, popz, parb, proposed]})
-    world.update({'source': source, 'artifact': artifact, 'proposed': proposed, 'text': text,
+    world.update({'source': source, 'artifact': artifact, 'assay': assay, 'proposed': proposed, 'text': text,
                   'input': {'assignment': assignment, 'message': {'objective': OBJECTIVE},
                             'selection': ['sheet_state_refs']}})
     return world

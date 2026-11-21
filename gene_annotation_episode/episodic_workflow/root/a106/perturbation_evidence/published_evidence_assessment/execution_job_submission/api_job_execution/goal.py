@@ -10,7 +10,10 @@ GOAL = ('Carry out the assigned work through the assigned API service using one 
         'Distinguish an immediate returned response from a service job that continues remotely. Preserve the '
         'actual request or job identity and submission uncertainty; a missing reply does not establish that no job '
         'was created. Establish the requested usable monitoring/results handoff from recorded service facts. The '
-        'configured controller governs continuation; verified original handoff completion gives exact zero future '
-        'credit.')
+        'accumulation controller governs continuation at no cost, with the adaptive control and no list of items: '
+        'after at least 8 units attempted and 4 observed it fits the yield model; a unit is flat when the upper bound '
+        'of the expected next marginal credit is at or below gamma, the adaptive gamma = max(one-result resolution, '
+        '0.1 x median of the recent productive credits); it stops after 4 flat units in a row, and no item count '
+        'stops it. Verified original handoff completion gives exact zero future credit.')
 UNIT = 'One API service action'
 RESULT = 'The retained API handoff and record references'

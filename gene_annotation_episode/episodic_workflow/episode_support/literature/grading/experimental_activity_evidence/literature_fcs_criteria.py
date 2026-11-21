@@ -65,6 +65,7 @@ NM_PER_UNIT = {'pM': 0.001, 'nM': 1.0, 'uM': 1000.0, 'mM': 1000000.0}  # FIXED_B
 MIN_PER_UNIT = {'s': 1 / 60, 'min': 1.0, 'h': 60.0}  # FIXED_BY_DEFINITION: minutes per time unit.
 S_PER_UNIT = {'s': 1.0, 'min': 60.0}  # FIXED_BY_DEFINITION: seconds per time unit.
 US_PER_UNIT = {'us': 1.0, 'ms': 1000.0}  # FIXED_BY_DEFINITION: microseconds per time unit.
+PARTICLES_PER_NM_PER_FL = 0.6022  # FIXED_BY_DEFINITION: molecules in one femtolitre at one nanomolar (Avogadro's constant 6.022e23 per mole, times 1e-9 mol per litre, times 1e-15 litre).
 
 
 def _fact_returns():
@@ -87,8 +88,8 @@ FCS_CRITERIA = (
     {
         'id': 'diffusion_change',
         'question': 'Is the diffusion of the complex slow enough, against the free labelled partner, to read a fraction bound?',
-        'reads': ('quantities.free_diffusion_time', 'quantities.bound_diffusion_time', 'quantities.free_diffusion_coefficient', 'quantities.bound_diffusion_coefficient', 'readout_signal'),
-        'rule': 'The diffusion ratio is bound over free diffusion time when both are given, else free over bound diffusion coefficient. The grader records it (diffusion_ratio) and its refs (diffusion_refs) and leaves the judgement to the sheet. Nothing given is unknown, except that a brightness or cross-correlation readout, which does not read the diffusion, is not applicable.',
+        'reads': ('quantities.free_diffusion_time', 'quantities.bound_diffusion_time', 'quantities.free_diffusion_coefficient', 'quantities.bound_diffusion_coefficient', 'quantities.free_diffusion_time_spread', 'readout_signal'),
+        'rule': 'The diffusion ratio is bound over free diffusion time when both are given, else free over bound diffusion coefficient. The grader records it (diffusion_ratio) and its refs (diffusion_refs) and, when the spread of the free diffusion time and the free diffusion time are both given, the scatter of the free time relative to it (diffusion_time_scatter, with the refs of both added to diffusion_refs); it leaves the judgement to the sheet. Nothing given is unknown, except that a brightness or cross-correlation readout, which does not read the diffusion, is not applicable.',
         'thresholds': ('US_PER_UNIT',),
         'returns': (
             ('unknown', 'diffusion_ratio_recorded_for_the_sheet', 'a pair of free and bound values is given: the ratio is recorded and the sheet judges it'),
@@ -163,12 +164,13 @@ FCS_CRITERIA = (
     {
         'id': 'labelled_range',
         'question': 'Was the labelled partner at a concentration that puts a few molecules in the confocal volume?',
-        'reads': ('quantities.particle_number', 'quantities.labelled_concentration'),
-        'rule': 'A given particle number is recorded (particle_number and labelled_range_refs). Without it a given labelled concentration is recorded (labelled_nM, in nM, and labelled_range_refs). The judgement is left to the sheet. Neither given is unknown.',
-        'thresholds': ('NM_PER_UNIT',),
+        'reads': ('quantities.particle_number', 'quantities.labelled_concentration', 'quantities.detection_volume', 'quantities.brightness'),
+        'rule': 'A given particle number is recorded (particle_number and labelled_range_refs). Without it, a given labelled concentration with a given detection volume is turned into a particle number (particle_number_used, derived: concentration times volume times PARTICLES_PER_NM_PER_FL). Without either, a given labelled concentration is recorded (labelled_nM, in nM). When a particle number (stated or derived) and the molecular brightness are given, the total count rate (count_rate_kHz, the particle number times the brightness) is recorded, with the brightness ref added to labelled_range_refs. The judgement is left to the sheet. Nothing given is unknown.',
+        'thresholds': ('NM_PER_UNIT', 'PARTICLES_PER_NM_PER_FL'),
         'returns': (
             ('unknown', 'particle_number_recorded_for_the_sheet', 'the particle number is given: it is recorded and the sheet judges it'),
-            ('unknown', 'labelled_concentration_recorded_for_the_sheet', 'no particle number and the concentration is given: it is recorded and the sheet judges it'),
+            ('unknown', 'particle_number_derived_from_volume_recorded_for_the_sheet', 'no particle number, and the concentration and the detection volume are given: the derived particle number is recorded and the sheet judges it'),
+            ('unknown', 'labelled_concentration_recorded_for_the_sheet', 'no particle number and no detection volume and the concentration is given: it is recorded and the sheet judges it'),
             ('unknown', 'labelled_concentration_not_given', 'neither is given'),
             ('not_applicable', 'never', 'never returned'),
         ),
@@ -203,7 +205,7 @@ FCS_CRITERIA = (
     {
         'id': 'equilibrium',
         'question': 'Was the binding at equilibrium when read?',
-        'reads': ('facts.equilibrium_reached', 'quantities.incubation_time'),
+        'reads': ('facts.equilibrium_reached', 'quantities.incubation_time', 'quantities.kd'),
         'rule': 'The fact decides: yes supported, no fails. When it is not stated and an incubation time is given, the grader records it (incubation_min, in minutes, and incubation_refs) and leaves the judgement to the sheet; otherwise it is unknown.',
         'thresholds': ('MIN_PER_UNIT',),
         'returns': (
@@ -217,8 +219,8 @@ FCS_CRITERIA = (
     {
         'id': 'acquisition',
         'question': 'Was each sample measured long enough for a stable correlation curve?',
-        'reads': ('quantities.measurement_time', 'quantities.measurement_repeat_count'),
-        'rule': 'The total acquisition time is the time of one measurement times its number of repeats (one repeat when the number is not given). The grader records it (acquisition_total_s), whether the repeat count is given (measurement_repeats_given) and the refs (acquisition_refs) and leaves the judgement to the sheet. No time is unknown.',
+        'reads': ('quantities.measurement_time', 'quantities.measurement_repeat_count', 'quantities.brightness', 'quantities.free_diffusion_time'),
+        'rule': 'The total acquisition time is the time of one measurement times its number of repeats (one repeat when the number is not given). The grader records it (acquisition_total_s), whether the repeat count is given (measurement_repeats_given), the molecular brightness (brightness_kHz) and the free diffusion time (free_diffusion_time_us) when given, and the refs of all of these (acquisition_refs) and leaves the judgement to the sheet. No time is unknown.',
         'thresholds': ('S_PER_UNIT',),
         'returns': (
             ('unknown', 'acquisition_recorded_for_the_sheet', 'a measurement time is given: the total is recorded and the sheet judges it'),

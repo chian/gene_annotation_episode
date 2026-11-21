@@ -461,6 +461,12 @@ def alpha_variants():
         variant['facts']['equilibrium_reached'] = alpha_cases.fact(answer, ['s'] if answer == 'no' else [])
         variant['quantities']['incubation_time'] = alpha_cases.point(minutes, 'min', 'i', ['s'])
         out.append(variant)
+    for design, labelled in (('fixed_partner_titration', 5.0), ('fixed_partner_titration', 500.0), ('cross_titration', 5.0)):      # the partner fact not stated: its number is recorded and judged, or no ratio exists
+        partner = alpha_cases.synthetic_record()
+        partner['facts']['partner_concentration_below_kd'] = alpha_cases.fact('unknown')
+        partner['titration_design'] = design
+        partner['quantities']['labelled_partner_concentration'] = alpha_cases.point(labelled, 'nM', 'p', ['s'])
+        out.append(partner)
     for model, form in (('competitive_binding', 'saturation_titration'), ('competitive_binding', 'competition'), ('bell_shaped_hook', 'competition'), ('quadratic', 'saturation_titration'), (None, None)):
         modelled = alpha_cases.synthetic_record()
         modelled['fit_model'], modelled['assay_format'] = model, form

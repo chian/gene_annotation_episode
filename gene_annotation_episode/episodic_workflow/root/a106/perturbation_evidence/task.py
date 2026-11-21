@@ -5,7 +5,10 @@ reasoning (``reason``), writes its interpretation (``report``), and commissions 
 assessment (``literature``), the launch of a planned execution (``launch``), a progress check of a launched job
 (``monitor``), the acquisition of its results (``results``) and a child of this same process
 (``perturbation_evidence``). One unit is one model-selected tool call or one commissioned child. The task always
-offers a unit and never ends the Episode: only the yield controller does.
+offers a unit and never ends the Episode: only the yield controller does (``AccumulationYieldController`` with
+``ADAPTIVE_CONTROL``, ``items=None``, no cost: after at least W=8 units attempted and m=4 observed, it stops after 4
+units in a row whose expected next marginal hypervolume credit has an upper bound at or below the adaptive gamma,
+max(one-result resolution, 0.1 x median of recent productive credits)).
 
 Carried from the old ``task.py``, ``task_decision.py``, ``task_instructions.py``, ``task_state.py``,
 ``scientific_operations.py``, ``tool_selection.py``, ``alternate_process_selection.py``, ``execution_planning.py``,

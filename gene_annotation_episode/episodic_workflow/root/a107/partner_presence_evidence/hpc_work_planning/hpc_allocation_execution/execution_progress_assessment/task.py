@@ -14,8 +14,8 @@ unit with its credit like any other. ``action`` copies what a tool needs of the 
 progress into the tool's arguments (a tool is handed no summary).
 
 Settings this episode reads (``ctx.settings``): ``launch_instructions_directory`` and ``knowledge_library_directory``
-(optional: the libraries whose context is shown to the model); ``cost`` and ``parameters``
-(``yield_estimator.py``).
+(optional: the libraries whose context is shown to the model). ``yield_estimator.py`` reads no settings: its
+accumulation controller (``ADAPTIVE_CONTROL``, ``items=None``) takes no cost.
 
 ``progress_observe`` takes the ``native_operation`` argument (old ``progress.observe``) only when the described
 target declares a ``selected_observation_schema`` whose only property is ``native_operation`` (otherwise the old

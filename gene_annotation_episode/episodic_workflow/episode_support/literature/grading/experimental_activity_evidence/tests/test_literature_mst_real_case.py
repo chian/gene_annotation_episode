@@ -22,7 +22,7 @@ def test_the_labelled_concentration_and_the_fit_model_are_decided_and_nothing_co
     assert graded['reasons']['readout_window'] == 'readout_signal_not_stated'
     assert graded['reasons']['initial_fluorescence'] == 'initial_fluorescence_result_not_stated'
     assert graded['reasons']['replicates'] == 'replicate_count_recorded_for_the_sheet' and _criterion(graded, 'replicates')['status'] == 'unknown'       # in triplicate, but independence is not stated
-    assert graded['reasons']['equilibrium'] == 'incubation_recorded_for_the_sheet' and _criterion(graded, 'equilibrium')['status'] == 'unknown'      # 10 min, exactly the minimum, and no statement of equilibrium
+    assert graded['reasons']['equilibrium'] == 'incubation_recorded_for_the_sheet' and _criterion(graded, 'equilibrium') == {'status': 'supported', 'support_refs': graded['native']['incubation_refs'], 'degree': 1.0}      # 10 min, no statement of equilibrium; KD 532 nM: T_FAST 10 x 10 / 532 = 0.188 min, T_SLOW 1.88 min, so full
     assert graded['reasons']['aggregation_adsorption'] == 'fact_unknown'
 
 

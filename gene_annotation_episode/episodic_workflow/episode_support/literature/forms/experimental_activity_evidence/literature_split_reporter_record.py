@@ -11,12 +11,12 @@ version, experiment_type ('split_reporter'), experiment_ref, source_ref, asserti
 preparations   component_a_preparation_ref, component_b_preparation_ref (the two proteins that are fused to the fragments, in the order the caller names them), dataset_ref: each a
                string or None (unknown). They are references to records, which the caller supplies; no passage states them. The converter hands them to the
                merger as its dependence keys (component a as the analyte key, component b as the other partner; there is no surface).
-quantities     kd, kd_spread, signal_to_background, signal_over_negative_control, orientation_pairs_tested, loaded_concentration_lowest, loaded_concentration_highest,
-               concentration_count, replicate_count: one operand each.
+quantities     kd, kd_spread, signal_to_background, signal_over_negative_control, orientation_pairs_tested, orientation_pairs_positive, loaded_concentration_lowest, loaded_concentration_highest,
+               fixed_partner_concentration, concentration_count, replicate_count: one operand each.
                Units: kd and kd_spread pM, nM, uM or mM (the apparent dissociation constant from the titration or the kinetics and its spread); signal_to_background 'ratio' (the signal of the tested
                pair divided by the background signal); signal_over_negative_control 'ratio' (the signal of the tested pair divided by the signal of the negative control pair); orientation_pairs_tested
-               'count' (the number of fusion orientation combinations tested); loaded_concentration_lowest and loaded_concentration_highest pM, nM, uM or mM (the lowest and the highest
-               concentration of the titrated partner); concentration_count 'count' (the number of titration concentrations); replicate_count 'count'.
+               'count' (the number of fusion orientation combinations tested); orientation_pairs_positive 'count' (the number of those orientation combinations that gave a signal); loaded_concentration_lowest and loaded_concentration_highest pM, nM, uM or mM (the lowest and the highest
+               concentration of the titrated partner); fixed_partner_concentration pM, nM, uM or mM (the constant concentration of the partner that is NOT titrated, the one held fixed while the other is added; above the KD the titration is stoichiometric and the apparent KD is only an upper bound); concentration_count 'count' (the number of titration concentrations); replicate_count 'count'.
 reporter_system 'split_nanoluc', 'other_split_luciferase', 'split_fluorescent_protein', 'split_beta_lactamase', 'split_tev', 'other' or None: the reporter. Kept in the record for the reviewer.
 assay_system   'living_cells', 'cell_lysate', 'purified_proteins', 'other' or None: where the complementation was measured. Kept in the record for the reviewer.
 readout_mode   'endpoint', 'titration', 'kinetic_time_course' or None: how the signal was read. Kept in the record for the reviewer.
@@ -51,15 +51,15 @@ def fact(answer, refs=(), support='direct'):
 
 VERSION = 'a105_split_reporter_record_v1'
 EXPERIMENT_TYPE = 'split_reporter'
-QUANTITIES = ('kd', 'kd_spread', 'signal_to_background', 'signal_over_negative_control', 'orientation_pairs_tested', 'loaded_concentration_lowest', 'loaded_concentration_highest', 'concentration_count', 'replicate_count')
+QUANTITIES = ('kd', 'kd_spread', 'signal_to_background', 'signal_over_negative_control', 'orientation_pairs_tested', 'orientation_pairs_positive', 'loaded_concentration_lowest', 'loaded_concentration_highest', 'fixed_partner_concentration', 'concentration_count', 'replicate_count')
 PREPARATION_KEYS = ('component_a_preparation_ref', 'component_b_preparation_ref', 'dataset_ref')
 REPORTER_SYSTEMS = ('split_nanoluc', 'other_split_luciferase', 'split_fluorescent_protein', 'split_beta_lactamase', 'split_tev', 'other')
 ASSAY_SYSTEMS = ('living_cells', 'cell_lysate', 'purified_proteins', 'other')
 READOUT_MODES = ('endpoint', 'titration', 'kinetic_time_course')
 SPREAD_KINDS = ('standard_error', 'standard_deviation', 'confidence_interval')
 YES_NO = ('yes', 'no', 'unknown', 'not_applicable')
-FACTS = {'interaction_detected': YES_NO, 'fragment_alone_control_negative': YES_NO, 'unrelated_pair_control_negative': YES_NO, 'binding_mutant_control_negative': YES_NO, 'positive_control_done': YES_NO, 'signal_in_several_orientations': YES_NO, 'expression_verified': YES_NO, 'saturable_titration_shown': YES_NO, 'complementation_reversible': YES_NO, 'background_subtracted': YES_NO, 'independent_experiments': YES_NO, 'single_estimate_method': YES_NO}
+FACTS = {'interaction_detected': YES_NO, 'fragment_alone_control_negative': YES_NO, 'unrelated_pair_control_negative': YES_NO, 'binding_mutant_control_negative': YES_NO, 'positive_control_done': YES_NO, 'signal_in_several_orientations': YES_NO, 'expression_verified': YES_NO, 'expression_matched_to_control': YES_NO, 'saturable_titration_shown': YES_NO, 'complementation_reversible': YES_NO, 'background_subtracted': YES_NO, 'independent_experiments': YES_NO, 'single_estimate_method': YES_NO}
 
 CONCENTRATION_UNITS = ('pM', 'nM', 'uM', 'mM')
 # The unit vocabulary of each quantity: the units a record may carry.
-UNITS = {'kd': CONCENTRATION_UNITS, 'kd_spread': CONCENTRATION_UNITS, 'signal_to_background': ('ratio',), 'signal_over_negative_control': ('ratio',), 'orientation_pairs_tested': ('count',), 'loaded_concentration_lowest': CONCENTRATION_UNITS, 'loaded_concentration_highest': CONCENTRATION_UNITS, 'concentration_count': ('count',), 'replicate_count': ('count',)}
+UNITS = {'kd': CONCENTRATION_UNITS, 'kd_spread': CONCENTRATION_UNITS, 'signal_to_background': ('ratio',), 'signal_over_negative_control': ('ratio',), 'orientation_pairs_tested': ('count',), 'orientation_pairs_positive': ('count',), 'loaded_concentration_lowest': CONCENTRATION_UNITS, 'loaded_concentration_highest': CONCENTRATION_UNITS, 'fixed_partner_concentration': CONCENTRATION_UNITS, 'concentration_count': ('count',), 'replicate_count': ('count',)}

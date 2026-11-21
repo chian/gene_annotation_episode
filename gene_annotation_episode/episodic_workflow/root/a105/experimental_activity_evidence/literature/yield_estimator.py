@@ -2,11 +2,15 @@
 (``LiteratureYield.yield_controller`` -> ``_private_yield_controller``; README 7b).
 
 ``verified_source_leads`` accumulates (old ``YieldController``): one credit unit per verified source, without
-limit. Every other task is a finite commission (old ``_FiniteLiteratureYieldController`` with
+limit. Its controller is ``AccumulationYieldController`` with ``ADAPTIVE_CONTROL`` and ``items=None`` (no input
+list), nano-graphrag's estimator controller, and it has no cost: after W = 8 units attempted and m = 4 observed it
+fits nano-graphrag's yield model; a unit is flat when the upper bound of the expected next marginal (hypervolume)
+credit is at or below the adaptive gamma, max(one-result resolution, 0.1 x the median of the recent productive
+credits); it stops after 4 flat units in a row (with ``items=None`` there is no item list to run out). Every other task is a finite commission (old ``_FiniteLiteratureYieldController`` with
 ``_RemainingCommissionedCredit``): the target is the old ``maximum_credit``, ``credit_unit`` times the number of
 experiments for ``a105_experiments`` and ``credit_unit`` otherwise, read from the parent input. The cost is the
 old task cutoff and the parameters the old ``uncertainty_alpha``, now the episode's settings. The old
-``validate_yield_bindings`` checks of the cutoff and alpha are the controllers' own."""
+``validate_yield_bindings`` checks of the cutoff and alpha are the completion controller's own."""
 from yield_control import ADAPTIVE_CONTROL, AccumulationYieldController, CompletionYieldController
 
 

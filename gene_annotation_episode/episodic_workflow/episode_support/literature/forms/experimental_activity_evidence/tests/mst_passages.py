@@ -44,7 +44,7 @@ SYNTHETIC = (
     'titrated in 12 titrant concentrations of 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024 and 2048 nM. The initial '
     'fluorescence was checked with the SD-test and did not change with the titrant concentration, and the fluorescence '
     'intensity was within the range of the instrument. The capillary scans were overlaid and the peak shapes were checked '
-    'for aggregation and adsorption. The change of Fnorm was 12 ‰ with a signal-to-noise of 18. Depletion was '
+    'for aggregation and adsorption. The change of Fnorm was 12 ‰ with a signal-to-noise of 18, and the noise of Fnorm was 0.7 ‰. Depletion was '
     'considered, and the data were fitted with a quadratic (tight-binding) model, giving KD = 20 nM (standard error 2 nM) and '
     'EC50 = 31 nM. Non-specific signal was checked with a non-binding mutant peptide. The same interaction was also '
     'measured by competition, in which an unlabelled ligand displaced the labelled peptide and gave Ki = 40 nM (standard '
@@ -60,6 +60,7 @@ SYNTHETIC_STATED = {
     'ki_spread': (4, 'nM', 'standard error 4 nM'),
     'labelled_concentration': (5, 'nM', 'the labelled ParB was held at 5 nM'),
     'fnorm_amplitude': (12, 'permille', 'The change of Fnorm was 12 ‰'),
+    'fnorm_noise': (0.7, 'permille', 'the noise of Fnorm was 0.7 ‰'),
     'signal_to_noise': (18, 'ratio', 'a signal-to-noise of 18'),
     'led_power': (40, 'percent', 'The excitation LED power was 40%'),
     'ir_laser_power': (60, 'percent', 'the MST (infrared laser) power was 60%'),

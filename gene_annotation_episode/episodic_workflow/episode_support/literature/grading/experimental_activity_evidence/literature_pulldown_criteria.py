@@ -2,7 +2,7 @@
 
 DRAFT FOR EXPERT REVIEW. This file is the single source for what the pull-down grader asks. The grader reports FACTS and holds NO threshold
 that judges goodness: where a criterion needs a number to be compared with a limit (the salt and the detergent of the wash, the number of
-washes, the incubation time, the fold enrichment, the replicate count), the grader records the number with its support refs and returns
+washes, the incubation time, the fold enrichment, the replicate count, the spread of the fold), the grader records the number with its support refs and returns
 'unknown' with a reason ending in '_recorded_for_the_sheet'; the judgement and its EXPERT_REVIEW constants are on the sheet side, in
 literature_pulldown_converter.py. The logic that answers each question is in literature_pulldown_grader.py (one short function per criterion,
 same order). The only constants left here are unit conversions (FIXED_BY_DEFINITION).
@@ -86,6 +86,18 @@ PULLDOWN_CRITERIA = (
             ('not_applicable', 'fact_not_applicable', 'both facts not_applicable'),
         ),
     },
+    {
+        'id': 'positive_control',
+        'question': 'Did a positive control (a known interacting pair, or the prey with a bait known to bind it) give its expected result under the same wash and detection, so that a prey that is missing from the eluate is a real absence?',
+        'reads': ('facts.positive_control_detected',),
+        'rule': 'A stated answer (yes or no) is recorded (positive_control, positive_control_refs) and the judgement is left to the sheet, because it matters only when the prey is not detected. unknown is unknown; not_applicable is not applicable.',
+        'thresholds': (),
+        'returns': (
+            ('unknown', 'positive_control_recorded_for_the_sheet', 'the answer is yes or no: it is recorded and the sheet judges it'),
+            ('unknown', 'fact_unknown', 'answer unknown'),
+            ('not_applicable', 'fact_not_applicable', 'answer not_applicable'),
+        ),
+    },
     _one_fact('bait_minus_control', 'Was the prey incubated with the beads without the bait, to show that it does not bind the beads alone?', 'bait_minus_control_done'),
     _one_fact('input_lane', 'Was an input lane shown, so that the prey is known to have been in the material applied?', 'input_lane_shown'),
     _one_fact('reciprocal', 'Was the pull-down or co-immunoprecipitation done the other way round, with the prey as the bait, and did it find the interaction?', 'reciprocal_done'),
@@ -131,8 +143,18 @@ PULLDOWN_CRITERIA = (
             ('not_applicable', 'fact_not_applicable', 'answer not_applicable'),
         ),
     },
-    _recorded_rule('enrichment', 'Was the prey signal in the specific capture high enough over the control?', 'fold_enrichment', 'The stated fold enrichment over the control is recorded (fold_enrichment, fold_enrichment_refs) and the judgement is left to the sheet. Not given is unknown.',
-                   ('fold_enrichment_recorded_for_the_sheet', 'a fold enrichment is stated: it is recorded and the sheet judges it'), ('enrichment_not_given', 'no fold enrichment is stated')),
+    {
+        'id': 'enrichment',
+        'question': 'Was the prey signal in the specific capture high enough over the control, and large against its own stated spread?',
+        'reads': ('quantities.fold_enrichment', 'quantities.fold_enrichment_sd', 'quantities.fold_enrichment_sem'),
+        'rule': 'The stated fold enrichment over the control is recorded (fold_enrichment, fold_enrichment_refs) together with its stated standard deviation or standard error (fold_enrichment_sd, fold_enrichment_sem and their refs, None when not stated) and the judgement is left to the sheet. A spread without a fold is not recorded. Not given is unknown.',
+        'thresholds': (),
+        'returns': (
+            ('unknown', 'fold_enrichment_recorded_for_the_sheet', 'a fold enrichment is stated: it is recorded (with the spread when stated) and the sheet judges it'),
+            ('unknown', 'enrichment_not_given', 'no fold enrichment is stated'),
+            ('not_applicable', 'never', 'never returned'),
+        ),
+    },
     _one_fact('quantification', 'Were the band intensities quantified and normalized?', 'quantification_with_normalization'),
     {
         'id': 'replicates',

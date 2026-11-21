@@ -1,6 +1,7 @@
 """Chunks of text for the PLA (proximity ligation assay: in situ PLA, Duolink) extraction real-model runs.
 
-``SYNTHETIC`` is an explicitly synthetic passage (not a publication) that states every field of the form (``SYNTHETIC_STATED`` is the tuple of the field names). It contains
+``SYNTHETIC`` is an explicitly synthetic passage (not a publication) that states every field of the form (``SYNTHETIC_STATED`` is the tuple of the field names), including the spread
+(standard deviation) of the puncta of the test and of the control and the percent of PZ-2 removed by the siRNA. It contains
 multi-byte characters (micro sign, degree sign, plus-minus) so byte offsets differ from character offsets.
 
 ``REAL`` is real: the Methods paragraph of section 2.10 'Proximity Ligation Assay (PLA)' of 'An N-Terminal Acidic Patch Underlies Differential Inhibition of mRNA Nuclear Export by
@@ -32,9 +33,9 @@ SYNTHETIC = (
     'The two primary antibodies, a mouse anti-QX-7 antibody and a rabbit anti-PZ-2 antibody, were raised in different species, and both antibodies had been validated for immunofluorescence on knockout cells. '
     'After the ligation, the rolling-circle amplification was run for 100 min at 37 °C. Cells with both primary antibodies showed 24.5 puncta per cell, so the assay detected the two proteins in close proximity. '
     'The reaction with no primary antibody gave 1.2 puncta per cell and was negative, and the reactions with only the anti-QX-7 antibody or only the anti-PZ-2 antibody gave almost no puncta, so the single-antibody controls were negative. '
-    'After siRNA knockdown of PZ-2 the cells showed 3.1 puncta per cell, and the knockdown lowered the signal. A pair of proteins known to interact was run as a positive control pair in the same assay and gave puncta. '
+    'After siRNA knockdown of PZ-2 the cells showed 3.1 puncta per cell, and the knockdown lowered the signal; western blotting showed that the siRNA removed 82% of the PZ-2 protein. A pair of proteins known to interact was run as a positive control pair in the same assay and gave puncta. '
     'The puncta lay in the nucleus, where both proteins are expected to meet. The puncta were counted in 120 cells with ImageJ, and the counting was blind to the condition. '
-    'The puncta of the test and of the control were compared by a Mann-Whitney test. The assay was repeated in three independent experiments on separate days with separate cultures, and the mean puncta per cell are given as the mean ± the standard deviation of the experiments.')
+    'The puncta of the test and of the control were compared by a Mann-Whitney test. The assay was repeated in three independent experiments on separate days with separate cultures, and the spreads are standard deviations of the experiments: the puncta per cell of the test had a standard deviation of 3.8 and those of the no-primary control a standard deviation of 0.4.')
 
 SYNTHETIC_STATED = field_names()
 

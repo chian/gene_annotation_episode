@@ -11,13 +11,17 @@ version, experiment_type ('pla'), experiment_ref, source_ref, assertion_ref
 preparations   component_a_preparation_ref, component_b_preparation_ref (the two proteins that are probed, in the order the caller names them), dataset_ref: each a
                string or None (unknown). They are references to records, which the caller supplies; no passage states them. The converter hands them to the
                merger as its dependence keys (component a as the analyte key, component b as the other partner; there is no surface).
-quantities     puncta_per_cell_target, puncta_per_cell_control, puncta_per_cell_knockdown, cells_counted, amplification_time, replicate_count: one operand each.
+quantities     puncta_per_cell_target, puncta_per_cell_control, puncta_per_cell_knockdown, puncta_spread_target, puncta_spread_control, protein_depletion_percent, cells_counted,
+               amplification_time, replicate_count: one operand each.
                Units: puncta_per_cell_target 'puncta_per_cell' (the mean number of puncta per cell with both primary antibodies, the test), puncta_per_cell_control
                'puncta_per_cell' (the mean number with a single primary antibody or with no primary antibody: the negative control), puncta_per_cell_knockdown
-               'puncta_per_cell' (the mean number with both primary antibodies after the knockdown, the knockout or the competition of one protein); cells_counted
+               'puncta_per_cell' (the mean number with both primary antibodies after the knockdown, the knockout or the competition of one protein);
+               puncta_spread_target and puncta_spread_control 'puncta_per_cell' (the stated spread, of the kind puncta_spread_kind names, of the puncta per cell of the test and of the
+               negative control); protein_depletion_percent 'percent' (the measured fall of the protein that the specificity control depletes, by western blot or immunofluorescence); cells_counted
                'count' (the number of cells in which the puncta of the test were counted); amplification_time 'min' (the rolling-circle amplification time); replicate_count 'count'.
 choices        cell_system 'cultured_cells', 'primary_cells', 'tissue_section' or None; fixation 'paraformaldehyde', 'methanol', 'formalin_fixed_paraffin_embedded' or None;
-               quantification_software 'imagej', 'cellprofiler', 'blobfinder', 'other' or None. Kept in the record for the reviewer.
+               quantification_software 'imagej', 'cellprofiler', 'blobfinder', 'other' or None; puncta_spread_kind 'standard_deviation', 'standard_error' or None (what the two
+               puncta_spread quantities are). The cell system, fixation and software are kept in the record for the reviewer; the spread kind is read by the grader beside the spreads.
 facts          name -> {'answer', 'source_refs'}. Names and answer sets in FACTS below. No fact holds text: a controlled answer only.
 choice_support name -> support of each plain choice field (cell_system, fixation, quantification_software), None when the choice is not stated.
 spans          source_ref -> {'locator', 'quote'}: the quoted source span behind each reference the record cites.
@@ -48,14 +52,15 @@ def fact(answer, refs=(), support='direct'):
 
 VERSION = 'a105_pla_record_v1'
 EXPERIMENT_TYPE = 'pla'
-QUANTITIES = ('puncta_per_cell_target', 'puncta_per_cell_control', 'puncta_per_cell_knockdown', 'cells_counted', 'amplification_time', 'replicate_count')
+QUANTITIES = ('puncta_per_cell_target', 'puncta_per_cell_control', 'puncta_per_cell_knockdown', 'puncta_spread_target', 'puncta_spread_control', 'protein_depletion_percent', 'cells_counted', 'amplification_time', 'replicate_count')
 PREPARATION_KEYS = ('component_a_preparation_ref', 'component_b_preparation_ref', 'dataset_ref')
 CELL_SYSTEMS = ('cultured_cells', 'primary_cells', 'tissue_section')
 FIXATIONS = ('paraformaldehyde', 'methanol', 'formalin_fixed_paraffin_embedded')
 SOFTWARES = ('imagej', 'cellprofiler', 'blobfinder', 'other')
+SPREAD_KINDS = ('standard_deviation', 'standard_error')
 YES_NO = ('yes', 'no', 'unknown', 'not_applicable')
 FACTS = {'proximity_signal_detected': YES_NO, 'primary_antibodies_different_species': YES_NO, 'antibodies_validated': YES_NO, 'single_antibody_controls_negative': YES_NO, 'no_primary_control_negative': YES_NO, 'specificity_control_reduces_signal': YES_NO, 'positive_control_pair_done': YES_NO, 'puncta_in_expected_compartment': YES_NO, 'quantification_blinded': YES_NO, 'statistical_test_done': YES_NO, 'independent_experiments': YES_NO}
 
 PUNCTA_PER_CELL = 'puncta_per_cell'
 # The unit vocabulary of each quantity: the units a record may carry.
-UNITS = {'puncta_per_cell_target': (PUNCTA_PER_CELL,), 'puncta_per_cell_control': (PUNCTA_PER_CELL,), 'puncta_per_cell_knockdown': (PUNCTA_PER_CELL,), 'cells_counted': ('count',), 'amplification_time': ('min',), 'replicate_count': ('count',)}
+UNITS = {'puncta_per_cell_target': (PUNCTA_PER_CELL,), 'puncta_per_cell_control': (PUNCTA_PER_CELL,), 'puncta_per_cell_knockdown': (PUNCTA_PER_CELL,), 'puncta_spread_target': (PUNCTA_PER_CELL,), 'puncta_spread_control': (PUNCTA_PER_CELL,), 'protein_depletion_percent': ('percent',), 'cells_counted': ('count',), 'amplification_time': ('min',), 'replicate_count': ('count',)}

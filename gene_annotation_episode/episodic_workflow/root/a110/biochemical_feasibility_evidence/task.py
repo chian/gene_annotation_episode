@@ -1,13 +1,13 @@
 """The task: one model-selected unit per decision for the A110 evidence axis (biochemical feasibility and
-chemical/resource accounting), over the tools, the reasoning commit and the six child commissions.
+chemical/resource accounting), over the tools, the reasoning commit and the five child commissions.
 
 Carried from ``task.py`` (``ScientificTask.next``, ``apply_response``, ``execute``), ``decision_delivery.py``
 (``call``, ``instructions``), ``task_instructions.py`` (``compose_instructions``), ``task_decision.py`` (the TASK
 prompt sections), ``goal.py`` (the instruction text and ``scientific_guidance``), ``tool_selection.py`` (the catalogue
 and ``process.revise``), ``scientific_operations.py`` (``execute``), ``initial_information.py`` and
 ``internal_summary.py`` (``initial_decision_context``: the received evidence). One unit is one model selection: a tool
-(``TOOLS``) or the commission of one of the six children (``CHILD_SLOTS``: the old roles ``launch``, ``monitor``,
-``results``, ``hpc``, ``literature`` and the recursive ``biochemical_feasibility_evidence``). The task always offers a
+(``TOOLS``) or the commission of one of the five children (``CHILD_SLOTS``: the old roles ``launch``, ``monitor``,
+``results``, ``hpc`` and the recursive ``biochemical_feasibility_evidence``). The task always offers a
 unit and never ends the Episode: only the yield controller does. Not carried: the ``wait`` and ``redeliver_report``
 actions, the decision exchange (``request_context``), the running ``report_update`` of every decision (the model's
 interpretation is the outcome of the tool ``write_interpretation``), checkpoint and restore, and the old common tool
@@ -71,10 +71,7 @@ _AXIS_INSTRUCTIONS = {
         'flow, cofactor and carrier regeneration, usable resource constraints and conditional '
         'energetics distinguishable. Rhea, ChEBI and KEGG source records retain their native '
         'direction, identity and qualification; a database equation does not establish physiological '
-        'direction or activity. Use literature.reaction.populate or '
-        'literature.reaction.source.populate through the configured literature '
-        'child for the existing reaction-prediction/resource components; retain their exact '
-        'measurement scale, source meanings, native uncertainty and missing reasons. '
+        'direction or activity. '
         'Do not turn instrument signals into molar amounts, a product-pair ratio into substrate '
         'consumption, or steady-state FBA into thermodynamic feasibility. Repeated source views '
         'retain their original measurement identities. A regenerated carrier is not necessarily '
@@ -182,7 +179,6 @@ CHILD_SLOTS = {'launch': _PREFIX + 'execution_job_submission',
                'monitor': _PREFIX + 'execution_progress_assessment',
                'results': _PREFIX + 'execution_result_acquisition',
                'hpc': _PREFIX + 'hpc_work_planning',
-               'literature': _PREFIX + 'published_evidence_assessment',
                'biochemical_feasibility_evidence': 'biochemical_feasibility_evidence'}
 SERVICES = ()
 MODEL_ROLE = 'REASONING'
@@ -196,7 +192,6 @@ SELECTABLE = {
                 'log_window_refs', 'event_receipt_refs'),
     'results': ('execution_handoff_refs', 'execution_job_record_refs'),
     'hpc': ('hpc_credit', 'hpc_model_ref', 'hpc_accepted_obligations', 'hpc_result_refs'),
-    'literature': (),
     'biochemical_feasibility_evidence': ('component_axis_native_component_records',
                                          'component_axis_native_execution_records'),
 }
@@ -438,12 +433,6 @@ CHILD_DEFINITIONS = {
         'input_refs': _REFS}, ['input_refs'],
         'Commission HPC work planning for a commission (exactly one of commission_id and commission_source_ref); '
         'input_refs are the records the planned jobs read.'),
-    'literature': _child('literature', {
-        'question_context_refs': _REFS, 'source_refs': _REFS, 'received_record_refs': _REFS},
-        ['question_context_refs', 'source_refs', 'received_record_refs'],
-        'Commission a published-evidence assessment of source records this episode holds; received_record_refs '
-        'name every record its code reads (the sources, their artifacts, the sources they derive from and the '
-        'records giving the question context).'),
     'biochemical_feasibility_evidence': _child('biochemical_feasibility_evidence', {
         'assignment': obj({'selection': {'type': 'object'}, 'evidence_refs': _REFS, 'constraints': {'type': 'object'},
                            'context': {'type': 'object'}, 'revision_origin': {'type': 'object'}},
@@ -622,8 +611,7 @@ _PERMITTED_RECORD_TOOLS = ('partner.', 'chemistry.')
 _PERMITTED_RECORD_TOOL_NAMES = frozenset({'source.locate'})
 _UNITS = {'launch': ('handoff_unit', 'acquired_record_unit'), 'monitor': ('information_unit',),
           'results': ('acquired_record_unit',)}
-_NAMED = {'launch': ('input_refs',), 'results': ('handoff_ref',), 'hpc': ('input_refs',),
-          'literature': ('question_context_refs', 'source_refs', 'received_record_refs')}
+_NAMED = {'launch': ('input_refs',), 'results': ('handoff_ref',), 'hpc': ('input_refs',)}
 
 
 def _named_records(selection, arguments):

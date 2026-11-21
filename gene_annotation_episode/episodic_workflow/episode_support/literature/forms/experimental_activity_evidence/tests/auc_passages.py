@@ -39,7 +39,7 @@ SYNTHETIC = (
     'Each component was also run alone under the same conditions, and each component alone sedimented as a single species with no aggregate. The data were analysed with a continuous distribution '
     'c(s). QX-7 and PZ-2 were loaded at five concentrations, from 0.5 µM to 50 µM, as a concentration series. The mixture showed a complex peak at 4.1 S, larger than either component alone: '
     'the larger component alone sedimented at 3.2 S and the smaller one at 2.1 S. The frictional ratio of the complex was 1.3. The molar mass of the complex from the fit was 52 kDa, in agreement '
-    'with the calculated mass of 54 kDa for the complex, which has a 1:1 stoichiometry. The weight-average s increased with the loading concentration as for a reversible association. '
+    'with the calculated mass of 54 kDa for the complex, which has a 1:1 stoichiometry. The calculated mass of QX-7 alone was 36 kDa and that of PZ-2 alone was 18 kDa. The weight-average s increased with the loading concentration as for a reversible association. '
     'Sedimentation equilibrium was done at several speeds, which were fitted together in a global fit, and successive scans overlaid, so equilibrium was reached. The global fit gave a KD of 4 µM '
     'with a standard error of 0.5 µM. The rmsd of the fit was 0.004 AU and the residuals were random. A non-binding mutant of QX-7 in place of QX-7 did not form the complex with PZ-2. Three '
     'independent experiments were done on separate days, and the KD was determined by analytical ultracentrifugation only.')
@@ -54,6 +54,8 @@ SYNTHETIC_STATED = {
     'frictional_ratio': (1.3, 'ratio', 'The frictional ratio of the complex was 1.3'),
     'complex_mass_measured': (52, 'kDa', 'The molar mass of the complex from the fit was 52 kDa'),
     'complex_mass_theoretical': (54, 'kDa', 'the calculated mass of 54 kDa for the complex'),
+    'component_mass_larger': (36, 'kDa', 'The calculated mass of QX-7 alone was 36 kDa'),
+    'component_mass_smaller': (18, 'kDa', 'that of PZ-2 alone was 18 kDa'),
     'stoichiometry_ratio': (1, 'ratio', 'which has a 1:1 stoichiometry'),
     'loaded_concentration_lowest': (0.5, 'uM', 'from 0.5 µM'),
     'loaded_concentration_highest': (50, 'uM', 'to 50 µM'),
@@ -88,6 +90,10 @@ REAL_STATED = {
     'component_sedimentation_coefficient_smaller': (1.69, 'S', 'PPARγ‐DL exhibited a singular S value of 1.69S'),
     'complex_mass_measured': (73.6, 'kDa', 'another at 2.89S ± 0.21, corresponding to sedimentation particle masses of 38.06 ± 4.6 kDa and 73.6 ± 6.6 kDa, respectively'),
     'complex_mass_theoretical': (77, 'kDa', 'in a 1:1 ratio (~77 kDa)'),
+    'component_mass_larger': (51.4, 'kDa', 'the monomeric SIRT1 (51.4\u2009±\u20095.7\u2009kDa)'),
+    # The monomer's S, 2.12 S, is the larger component alone, as its monomer mass is (allowed after a real run stated it).
+    'component_sedimentation_coefficient_larger': (2.12, 'S', 'SIRT1 showed two S values of 2.12S'),
+    'component_mass_smaller': (35.6, 'kDa', 'PPARγ‐DL (35.6\u2009±\u20093.3\u2009kDa)'),
     'stoichiometry_ratio': (1, 'ratio', 'in a 1:1 ratio (~77 kDa), indicating the formation of a heterodimeric complex'),
     RUN_MODE: ('sedimentation_velocity', None, 'using sedimentation velocity assay'),
     ANALYSIS_MODEL: ('c_of_s', None, 'representative fits to a continuous c(s) distribution model'),
@@ -97,8 +103,8 @@ REAL_STATED = {
     'mass_matches_complex': ('yes', None, 'peak matched the combined masses of the monomeric SIRT1'),
 }
 # The allowed set of the real model run: field -> every (value, unit) the paragraph clearly states for it. Not allowed, because the paragraph does not
-# state them: the KD (it says only that the concentrations were above the determined KD) and its spread, the sedimentation coefficient of the larger component (SIRT1 has two species, a monomer and
-# a dimer, with no statement of which one is the result), the frictional ratio, any loading concentration or their number, the rmsd, the speed, the temperature (all in the Methods), replicates, the detection (not named in this
+# state them: the KD (it says only that the concentrations were above the determined KD) and its spread, (the larger component's sedimentation coefficient IS allowed as its monomer's, 2.12 S, like the monomer's mass 51.4 kDa;
+# PPARγ-DL's mass 35.6 kDa is stated too, both measured alone by the experiment itself), the frictional ratio, any loading concentration or their number, the rmsd, the speed, the temperature (all in the Methods), replicates, the detection (not named in this
 # paragraph), a concentration series, a reversible association, random residuals, a corrected buffer, equilibrium and several speeds (a velocity run), the non-binding control, and a statement that only this method was used.
 REAL_ALLOWED = {name: {(value, unit)} for name, (value, unit, _) in REAL_STATED.items()}
 

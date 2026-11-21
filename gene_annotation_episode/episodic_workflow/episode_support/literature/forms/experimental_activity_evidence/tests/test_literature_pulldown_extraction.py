@@ -47,7 +47,7 @@ def fields_the_grader_reads():
 def test_the_schema_has_exactly_the_fields_of_the_form():
     schema = answer_schema()
     form = {*QUANTITIES, DETECTION, CAPTURE, SOURCE, NUCLEASE, CROSSLINKER, *FACTS}
-    assert set(schema['properties']) == set(field_names()) == form and len(form) == 27
+    assert set(schema['properties']) == set(field_names()) == form and len(form) == 30
     assert schema['required'] == list(schema['properties']) and schema['additionalProperties'] is False
     assert NOT_EXTRACTED == ('preparations',) and len(PREPARATION_KEYS) == 3
     for name, field in schema['properties'].items():
@@ -63,7 +63,7 @@ def test_a_pulldown_has_no_binding_constant_field_and_the_form_has_the_pulldown_
     assert not {'kd', 'ki', 'ic50', 'bmax', 'hill_slope', 'kon', 'koff', 'concentration_series'} & names
     assert {'fold_enrichment', 'percent_input_recovered', 'input_fraction', 'nacl_wash', 'detergent_wash', 'wash_count', 'incubation_time', 'incubation_temperature', 'replicate_count',
             'negative_control_done', 'prey_absent_in_negative_control', 'bait_minus_control_done', 'input_lane_shown', 'reciprocal_done', 'competition_disrupts_interaction',
-            'interaction_survives_nuclease', 'direct_interaction_shown', 'endogenous_expression_levels', 'quantification_with_normalization', 'specificity_validated'} <= names
+            'interaction_survives_nuclease', 'positive_control_detected', 'fold_enrichment_sd', 'fold_enrichment_sem', 'direct_interaction_shown', 'endogenous_expression_levels', 'quantification_with_normalization', 'specificity_validated'} <= names
 
 
 def test_the_fold_the_percent_of_the_input_and_the_input_fraction_are_separate_fields_that_exclude_each_other():
@@ -120,6 +120,8 @@ def test_a_correct_synthetic_answer_is_valid_and_becomes_a_record_the_grader_acc
     assert record['preparations'] == dict.fromkeys(PREPARATION_KEYS) and record['experiment_type'] == 'pulldown'
     assert (record['detection_method'], record['capture_format'], record['protein_source'], record['nuclease_treatment'], record['crosslinker']) == ('western_blot', 'gst', 'cell_lysate', 'benzonase', 'none')
     quantities = record['quantities']
+    assert quantities['fold_enrichment_sd']['value'] == 2.6 and quantities['fold_enrichment_sem']['value'] == 1.5 and record['facts']['positive_control_detected']['answer'] == 'yes'
+    assert graded['native']['fold_enrichment_sd'] == 2.6 and graded['native']['fold_enrichment_sem'] == 1.5 and graded['native']['positive_control'] == 'yes'
     assert quantities['fold_enrichment']['value'] == 12 and quantities['percent_input_recovered']['value'] == 4 and quantities['input_fraction']['value'] == 5
     assert quantities['nacl_wash']['value'] == 300 and quantities['nacl_wash']['unit'] == 'mM' and quantities['detergent_wash']['value'] == 0.1 and quantities['wash_count']['value'] == 4
     assert quantities['incubation_time']['value'] == 2 and quantities['incubation_time']['unit'] == 'h' and quantities['incubation_temperature']['value'] == 4 and quantities['replicate_count']['value'] == 3

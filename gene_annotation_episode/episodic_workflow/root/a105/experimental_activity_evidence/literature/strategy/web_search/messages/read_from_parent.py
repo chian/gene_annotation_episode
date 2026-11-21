@@ -19,7 +19,9 @@ contract and the Store checks are gone): the typed-return and return-component c
 against the parent's report contract, the reference checks against the Store (``_validate_assignment``: every
 ``*_refs`` field is held and ``search_result_refs`` are sources), the proposed-annotation comparison with the
 parent's, and the fill-in of ``credit_unit`` and ``yield_settings`` from the parent's yield binding (``credit_unit``
-is a field of the commissioned task now; the cost and parameters are this episode's settings). The old page checks
+is a field of the commissioned task now; the cost and parameters of a finite commission's controller are this
+episode's settings, and the accumulation controller of a verified_source_leads commission (``ADAPTIVE_CONTROL``,
+``items=None``) has no cost and reads no settings). The old page checks
 (``assigned_page``) applied only where the assignment has a page, which a search assignment does not."""
 import json
 import math

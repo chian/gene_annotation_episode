@@ -29,8 +29,9 @@ job ``decide`` reads the service's spacing between two status requests of one jo
 (``job_access.read('describe', resource_id)``) and shows it with the job: a check that comes earlier is not sent
 and is the returned ``failed`` outcome ``provider_spacing_required`` of its unit.
 
-Settings this episode reads (``ctx.settings``): ``cost`` (the cost of one unit, also the cost of a check in the
-estimate table) and ``parameters`` (``yield_estimator.py``)."""
+Settings this episode reads (``ctx.settings``): ``cost`` (the cost of a check in the estimate table, shown to the
+model as ``cost_of_one_action``) and ``parameters``; ``yield_estimator.py`` checks both, but its accumulation
+controller (``ADAPTIVE_CONTROL``, ``items=None``) takes no cost."""
 from datetime import datetime, timedelta, timezone
 
 from jsonschema import Draft202012Validator, ValidationError
@@ -119,10 +120,13 @@ CREDIT_GUIDANCE = (
     'nothing. Neither do {no_credit}. Repeated observation identities and read timestamps alone earn no new '
     'information. Credit measures monitoring information, not scientific progress.\n')
 ACTION_BOUNDARY = (
-    'You cannot end this episode: its yield controller ends it when further actions are not expected to earn more '
-    'than they cost, and only then does your commissioner receive your return. When you expect no new fact soon, '
-    'select an action that takes no time (a check, or reading a check again): the controller then ends the episode '
-    'with what you have found. Do not emit a stop action or invent a turn budget, approval review, quality gate, '
+    'You cannot end this episode: its accumulation yield controller (ADAPTIVE_CONTROL, no item list, no cost) ends '
+    'it, and only then does your commissioner receive your return. After at least 8 actions attempted and 4 '
+    'observed it fits a yield model of your credit; an action is flat when the upper bound of the expected next '
+    'marginal (hypervolume) credit is at or below an adaptive threshold (the larger of the gain of one more result '
+    'and 0.1 x the median of the recent productive credits), and the controller ends the episode after 4 flat '
+    'actions in a row. When you expect no new fact soon, select an action that takes no time (a check, or reading '
+    'a check again): flat actions then end the episode with what you have found. Do not emit a stop action or invent a turn budget, approval review, quality gate, '
     'experiment, term or observation. Do not execute native provider tools or write commands. The host executes '
     'your selected action.\n')
 RETURN_GUIDANCE = (

@@ -25,7 +25,7 @@ any 'no' -> conflicting; else any 'unknown' -> unknown; else all
 
 Native values retained: every record quantity as given, plus kd_nM,
 temperature_K, enthalpy_kJ_per_mol, entropy_J_per_mol_K, n_over_expected,
-c_value, dg_from_kd_kJ_per_mol, dg_from_parts_kJ_per_mol, dg_gap_kJ_per_mol,
+c_value, final_ligand_over_kd, titration_mode, enthalpy_ionization_corrected, dg_from_kd_kJ_per_mol, dg_from_parts_kJ_per_mol, dg_gap_kJ_per_mol,
 injection_count, temperature_control, replicate_count, replicate_independent,
 stoichiometry_n, stoichiometry_free, concentration_facts_unknown and the refs of
 each (n_over_expected_refs, c_value_refs, injection_refs, temperature_refs,
@@ -114,6 +114,10 @@ def _c_value_window(record, native):
         return _result('unknown', 'n_cell_concentration_or_kd_missing', [])
     native['c_value'] = n * cell / kd
     native['c_value_refs'] = _refs(*(record['quantities'][name] for name in ('stoichiometry', 'cell_concentration', 'kd')))
+    ratio = _value(record, 'final_molar_ratio')
+    if ratio is not None:
+        native['final_ligand_over_kd'] = ratio * native['c_value'] / n      # r x [cell] / KD: the final total ligand in units of KD (c = n [cell] / KD)
+        native['final_ratio_refs'] = _refs(record['quantities']['final_molar_ratio'])
     return _result('unknown', 'c_value_recorded_for_the_sheet', [])
 
 
@@ -135,6 +139,10 @@ def _fit_model_appropriate(record, native):
 
 def _injections_sufficient(record, native):
     count = _value(record, 'injection_count')
+    mode = record['titration_mode']
+    if mode in ('single_injection', 'continuous'):
+        native.update({'titration_mode': mode, 'injection_refs': _refs(record['quantities']['injection_count'])})
+        return _result('unknown', 'titration_mode_recorded_for_the_sheet', [])
     if count is None:
         return _result('unknown', 'injection_count_missing', [])
     native.update({'injection_count': count, 'injection_refs': _refs(record['quantities']['injection_count'])})
@@ -195,6 +203,7 @@ def _thermodynamic_consistency(record, native):
     native['dg_from_parts_kJ_per_mol'] = enthalpy - temperature * entropy / J_PER_KJ
     native['dg_gap_kJ_per_mol'] = abs(native['dg_from_kd_kJ_per_mol'] - native['dg_from_parts_kJ_per_mol'])
     native['dg_refs'] = _refs(*(record['quantities'][name] for name in ('kd', 'enthalpy', 'entropy', 'temperature')))
+    native['enthalpy_ionization_corrected'] = record['facts']['enthalpy_buffer_ionization_corrected']['answer']
     return _result('unknown', 'free_energy_gap_recorded_for_the_sheet', [])
 
 
@@ -203,7 +212,7 @@ EVALUATORS = {'heat_of_dilution_control': _heat_of_dilution_control, 'concentrat
 
 def grade_itc(record):
     """Grade one ITC experiment record. Returns the criterion answers and native values."""
-    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'kd_nM': _nm(record, 'kd'), 'temperature_K': _kelvin(record), 'enthalpy_kJ_per_mol': _scaled(record, 'enthalpy', ENTHALPY_TO_KJ), 'entropy_J_per_mol_K': _scaled(record, 'entropy', ENTROPY_TO_J), 'n_over_expected': None, 'c_value': None, 'dg_from_kd_kJ_per_mol': None, 'dg_from_parts_kJ_per_mol': None, 'dg_gap_kJ_per_mol': None, 'n_over_expected_refs': [], 'concentration_facts_unknown': None, 'c_value_refs': [], 'injection_count': None, 'injection_refs': [], 'temperature_refs': [], 'temperature_control': None, 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': [], 'stoichiometry_n': None, 'stoichiometry_free': None, 'stoichiometry_refs': [], 'dg_refs': []}
+    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'titration_mode': record['titration_mode'], 'final_ligand_over_kd': None, 'final_ratio_refs': [], 'enthalpy_ionization_corrected': None, 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'kd_nM': _nm(record, 'kd'), 'temperature_K': _kelvin(record), 'enthalpy_kJ_per_mol': _scaled(record, 'enthalpy', ENTHALPY_TO_KJ), 'entropy_J_per_mol_K': _scaled(record, 'entropy', ENTROPY_TO_J), 'n_over_expected': None, 'c_value': None, 'dg_from_kd_kJ_per_mol': None, 'dg_from_parts_kJ_per_mol': None, 'dg_gap_kJ_per_mol': None, 'n_over_expected_refs': [], 'concentration_facts_unknown': None, 'c_value_refs': [], 'injection_count': None, 'injection_refs': [], 'temperature_refs': [], 'temperature_control': None, 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': [], 'stoichiometry_n': None, 'stoichiometry_free': None, 'stoichiometry_refs': [], 'dg_refs': []}
     native['support'] = criterion_supports(record, ITC_CRITERIA)      # kept for the sheet: the grader does not judge it (criterion id -> supports of the stated fields it reads)
     outcomes = {name: EVALUATORS[name](record, native) for name in CRITERIA}
     return {'version': VERSION, 'experiment_type': 'itc', 'experiment_ref': record['experiment_ref'], 'criteria': {name: {'status': o['status'], 'support_refs': o['support_refs']} for name, o in outcomes.items()}, 'reasons': {name: o['reason'] for name, o in outcomes.items()}, 'native': native}

@@ -89,7 +89,9 @@ def test_a_correct_synthetic_answer_is_valid_and_becomes_a_record_the_grader_acc
     answer = validate_answer(synthetic_answer(), SYNTHETIC)
     record = record_from_answer(answer, SYNTHETIC, 5000, 'exp_1', 'source_1', 'hypothesis_1')
     graded = grade_bli(record)
-    assert {name: _criterion(graded, name)['status'] for name in CRITERIA} == dict.fromkeys(CRITERIA, 'supported')      # the sheet side judges what the grader only recorded
+    # the sheet side judges what the grader only recorded: the loading against the stated partner mass, the response against the stated noise
+    assert {name: _criterion(graded, name)['status'] for name in CRITERIA} == dict.fromkeys(CRITERIA, 'supported')
+    assert graded['native']['partner_mass_kda'] == 36 and graded['native']['baseline_noise_nm'] == 0.005
     assert graded['native']['kd_nM'] == 20 and graded['native']['kd_from_rates_nM'] == pytest.approx(20)
     assert graded['native']['concentration_count'] == 6
     kd = record['quantities']['kd']

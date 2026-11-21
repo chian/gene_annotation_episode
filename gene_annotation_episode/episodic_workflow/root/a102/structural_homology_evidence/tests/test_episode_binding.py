@@ -22,7 +22,6 @@ TEN_FILES = {'__init__.py', 'goal.py', 'task.py', 'credit.py', 'yield_estimator.
              'messages/read_from_child.py', 'messages/internal_summary.py', 'messages/final_to_parent.py'}
 CHILDREN = {
     'structural_homology_evidence': BINDING_PATH,
-    'literature': BINDING_PATH + '/published_evidence_assessment',
     'execution_launch': BINDING_PATH + '/execution_job_submission',
     'resource_launch': BINDING_PATH + '/resource_work_submission',
     'execution_results': BINDING_PATH + '/execution_result_acquisition',
@@ -179,9 +178,6 @@ def commission(slot):
     arguments = {
         'structural_homology_evidence': {'selection': SELECTION, 'evidence_refs': ['source_' + 'e' * 24],
                                          'constraints': {}},
-        'literature': {'question_context_refs': ['source_' + 'e' * 24], 'source_refs': ['source_' + 'e' * 24],
-                       'literature_task': {'kind': 'source_answer', 'answer_kind': 'screening'},
-                       'received_record_refs': []},
         'execution_launch': {'requests': {'r': {}}, 'immutable_input_versions': [], 'constraints': {}},
         'resource_launch': {'work_refs': ['artifact_' + 'e' * 24], 'input_refs': ['artifact_' + 'f' * 24],
                             'allowed_kinds': ['local']},
@@ -192,10 +188,9 @@ def commission(slot):
         'monitor': {'handoff_ref': JOB['handoff_ref'], 'requested_fields': ['execution_status']},
     }[slot]
     units = {'execution_launch': {'handoff_unit': 1.0}, 'resource_launch': {'completion_target': 1.0},
-             'execution_results': {'acquired_record_unit': 1.0}, 'monitor': {'information_unit': 1.0},
-             'literature': {'credit_unit': 1.0}}.get(slot, {})
+             'execution_results': {'acquired_record_unit': 1.0}, 'monitor': {'information_unit': 1.0}}.get(slot, {})
     task = importlib.import_module(PACKAGE + '.task')
-    texts = {} if slot in ('literature', 'monitor') else {'goal': 'g', 'purpose': 'p'}
+    texts = {} if slot == 'monitor' else {'goal': 'g', 'purpose': 'p'}
     return {**texts, 'assignment': arguments, 'selection': [task.RETURN_FIELDS[slot][0]],
             'units': units}
 
@@ -209,14 +204,6 @@ def test_each_commission_fits_the_childs_own_forms(slot):
     child.assignment_form.admit(message.assignment, 'assignment')
     selected = child.return_form.select(message.selection)
     assert {'credit', 'finding', *message.selection} <= set(selected.fields)
-
-
-def test_the_literature_commission_passes_no_text_a_fixed_objective_and_an_empty_message():
-    task = importlib.import_module(PACKAGE + '.task')
-    message = episode_class().msg_to_child('literature', commission('literature'), summary())
-    assert message.objective == 'assess_published_evidence' and message.message == {}
-    assert set(task.child_arguments('literature', summary())['properties']) == {'assignment', 'selection'}
-    assert {'goal', 'purpose'} <= set(task.child_arguments('hpc', summary())['properties'])
 
 
 def test_a_wrong_commission_fails_with_its_own_error():
@@ -311,17 +298,3 @@ def test_a_selected_library_tool_needs_the_tool_catalog_service_which_is_not_bui
     assert names['library'] == ['source_read']
     with pytest.raises(NotImplementedError, match='BLOCKED-ON-TOOL-CATALOG-SERVICE: tool_catalog'):
         task.library_catalog(None, names['library'])
-
-
-def test_the_literature_report_keeps_the_experimental_structure_sheets_apart_from_the_native_arm():
-    cls = episode_class()
-    sheet = {'evidence_type': 'experimental_structure_geometry', 'sheet_refs': ['source_' + 'b' * 24]}
-    result = {'credit': 1.0, 'finding': {'structure_sheets': [sheet, sheet]}}
-    report = cls.read_from_child('literature', result, summary(), None)
-    assert report['experimental_structure_sheets'] == [sheet, sheet] and report['process_results'] == []
-    from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.structural_homology_evidence.literature_structure_cells import (
-        experimental_structure_arm)
-    arm = experimental_structure_arm(report['experimental_structure_sheets'])
-    assert arm == {'sheets': [sheet], 'aggregation': 'none', 'separate_from': 'comparative_native_grading_sheets'}
-    other = cls.read_from_child('execution_launch', {'credit': 0.0, 'finding': {}}, summary(), None)
-    assert other['experimental_structure_sheets'] == []

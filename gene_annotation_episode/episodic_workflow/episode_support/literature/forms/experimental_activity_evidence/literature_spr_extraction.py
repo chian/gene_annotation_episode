@@ -49,6 +49,7 @@ MEANING = {
     'rmax': 'The maximum response Rmax, in response units (RU).',
     'kd_spread': 'The reported uncertainty of the KD (its standard error, standard deviation or confidence interval half-width), in a concentration unit.',
     'chi_squared': 'The chi-squared of the fit, in RU^2.',
+    'baseline_noise': 'The noise level of the baseline or of the instrument that the passage states, in RU (for example "the baseline noise was 0.5 RU"). It is not the chi-squared and not the residual of one fit unless the passage calls it the noise.',
     'immobilization_level': 'The amount of immobilized partner on the surface, in RU.',
     'analyte_mass': 'The molecular mass of the analyte (the protein in solution), in kDa.',
     'ligand_mass': 'The molecular mass of the immobilized partner, in kDa.',
@@ -67,6 +68,7 @@ MEANING = {
     'analyte_bivalent_or_oligomeric': 'Whether the passage says the analyte is bivalent or oligomeric.',
     'residuals_reported': 'Whether the passage says the residuals of the fit are reported.',
     'single_estimate_method': 'Whether the passage says only one method (kinetic or steady-state) was used to estimate the KD.',
+    'kd_analysis': 'How the passage says the reported KD was obtained: kinetic_fit when it says the KD came from fitting the association and dissociation phases of the sensorgrams (the rate constants), steady_state_fit when it says it came from the equilibrium (steady-state) response plotted against concentration. The words "equilibrium dissociation constant" only name the constant and do not state the method; a passage that does not say how the KD was obtained does not state this.',
 }
 
 

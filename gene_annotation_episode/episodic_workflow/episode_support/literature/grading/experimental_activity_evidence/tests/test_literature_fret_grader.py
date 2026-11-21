@@ -1,4 +1,6 @@
 """FRET grader: each criterion's rule on records, with the arithmetic worked by hand."""
+import math
+
 import pytest
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_fret_record import fact, point
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_fret_converter import _criterion
@@ -101,7 +103,10 @@ def test_time_gating():
     r['quantities']['integration_time'] = point(0.1, 'ms', 'w', ['s'])              # 100 us
     assert grade_fret(r)['native']['integration_us'] == pytest.approx(100.0) and status(r, 'time_gating') == 'supported'
     r['quantities']['integration_time'] = point(5.0, 'us', 'w', ['s'])
-    assert status(r, 'time_gating') == 'conflicting'
+    assert status(r, 'time_gating') == 'supported'                                  # a short window costs precision only (degree in the converter test), never a conflict
+    r['donor_lanthanide'] = 'terbium'
+    assert grade_fret(r)['native']['donor_lanthanide'] == 'terbium'
+    r['donor_lanthanide'] = None
     missing(r, 'integration_time')
     assert status(r, 'time_gating') == 'supported'                                  # no window given: the delay decides
     missing(r, 'delay_time')
@@ -170,7 +175,7 @@ def test_a_single_labelled_concentration_is_the_limiting_one():
     graded = grade_fret(r)
     assert graded['native']['labelled_over_kd'] == pytest.approx(1.5) and graded['native']['tight_binding_handled'] is False
     verdict = _criterion(graded, 'labelled_concentration')
-    assert verdict['status'] == 'supported' and verdict['degree'] == pytest.approx((1.5 - 10.0) / (1.0 - 10.0))
+    assert verdict['status'] == 'supported' and verdict['degree'] == pytest.approx(math.log(6.0 / 1.75) / math.log(4.0))      # b = 1 + 1.5 / 2 = 1.75: ln(3.43) / ln(4) = 0.889 (was linear 0.944)
 
 
 def test_concentration_series():
@@ -179,7 +184,7 @@ def test_concentration_series():
     graded = grade_fret(r)
     assert graded['native']['concentration_count'] == 7 and graded['reasons']['concentration_series'] == 'series_recorded_for_the_sheet' and graded['criteria']['concentration_series']['status'] == 'unknown'
     assert graded['native']['series_refs'] == ['span_exp_synthetic_fret_1']
-    assert status(r, 'concentration_series') == 'conflicting'
+    assert status(r, 'concentration_series') == 'supported'                                     # seven, one short of MIN_CONCENTRATIONS: partial credit, not a conflict (degree in the converter test)
     r['concentration_series']['value'] = [30.0, 40.0, 60.0, 100.0, 200.0, 300.0, 400.0, 500.0]   # lowest 1.5 x KD
     assert grade_fret(r)['native']['concentration_low_over_constant'] == pytest.approx(1.5) and status(r, 'concentration_series') == 'conflicting'
     r['concentration_series']['value'] = [2.0, 4.0, 8.0, 16.0, 32.0, 64.0, 128.0, 190.0]         # highest 9.5 x KD
@@ -218,18 +223,24 @@ def test_equilibrium():
         r['facts']['equilibrium_reached'] = fact(answer, ['s'])
         assert status(r, 'equilibrium') == expected
     r['facts']['equilibrium_reached'] = fact('unknown')
-    assert status(r, 'equilibrium') == 'unknown'                    # 60 min, but nothing says equilibrium
+    assert status(r, 'equilibrium') == 'supported'                  # 60 min at KD 20 nM is past T_SLOW (15 min): full degree, from the time and the constant, not from a stated fact
+    r['quantities']['kd'] = point(2.0, 'nM', 'k', ['s_kd'])                  # the sheet scales the time to the constant: 15 min x 2 nM / 2 nM = 15 min needed
     r['quantities']['incubation_time'] = point(14.0, 'min', 'i', ['s'])
     graded = grade_fret(r)
-    assert graded['reasons']['equilibrium'] == 'incubation_recorded_for_the_sheet' and graded['native']['incubation_min'] == 14.0 and graded['native']['incubation_refs'] == ['s']
+    assert graded['reasons']['equilibrium'] == 'incubation_recorded_for_the_sheet' and graded['native']['incubation_min'] == 14.0 and graded['native']['incubation_refs'] == ['s', 's_kd']
+    assert graded['native']['koff_per_s'] is None
     assert graded['criteria']['equilibrium'] == {'status': 'unknown', 'support_refs': []}
-    assert _criterion(graded, 'equilibrium') == {'status': 'conflicting', 'support_refs': ['s']}
-    r['quantities']['incubation_time'] = point(900.0, 's', 'i', ['s'])      # 15 min exactly: allowed, so unknown
-    assert status(r, 'equilibrium') == 'unknown'
+    assert _criterion(graded, 'equilibrium') == {'status': 'conflicting', 'support_refs': ['s', 's_kd']}
+    r['quantities']['koff'] = point(0.003, 'per_min', 'k', ['s_koff'])        # a stated koff is recorded in per second, and its ref is the one the time is scaled by
+    graded = grade_fret(r)
+    assert graded['native']['koff_per_s'] == pytest.approx(0.00005) and graded['native']['incubation_refs'] == ['s', 's_koff']
+    r['quantities']['koff'] = {**r['quantities']['koff'], 'status': 'unavailable', 'value': None}
+    r['quantities']['incubation_time'] = point(900.0, 's', 'i', ['s'])      # 15 min exactly = T_FAST: the zero end of the curve, conflicting
+    assert status(r, 'equilibrium') == 'conflicting'
     r['quantities']['incubation_time'] = point(840.0, 's', 'i', ['s'])      # 14 min
     assert status(r, 'equilibrium') == 'conflicting'
     r['quantities']['incubation_time'] = point(2.0, 'h', 'i', ['s'])
-    assert status(r, 'equilibrium') == 'unknown'
+    assert status(r, 'equilibrium') == 'supported'      # 120 min: degree log(8) / log(10) = 0.90
 
 
 def test_labelling_scheme():
@@ -292,7 +303,7 @@ def test_replicates():
     graded = grade_fret(r)                                                                    # the count and the independence are recorded, the sheet judges them
     assert graded['reasons']['replicates'] == 'replicate_count_recorded_for_the_sheet' and graded['criteria']['replicates']['status'] == 'unknown'
     assert graded['native']['replicate_count'] == 2 and graded['native']['replicate_independent'] == 'yes' and graded['native']['replicate_refs']
-    assert status(r, 'replicates') == 'conflicting'
+    assert status(r, 'replicates') == 'supported'                                            # two, one short of MIN_REPLICATES: partial credit, not a conflict (degree in the converter test)
     r['quantities']['replicate_count'] = point(3, 'count', 'n', ['s'])
     assert status(r, 'replicates') == 'supported'
     r['facts']['independent_titrations'] = fact('no', ['s'])                                 # a stated 'no' is a fact the grader judges

@@ -1,11 +1,11 @@
-"""What the A102 head sends each of its children (carried from the eight ``to_child_*.py`` files and the
-``child_message_owners.py`` role table at ``97308b94c``).
+"""What the A102 head sends each of its children (carried from the ``to_child_*.py`` files and the
+``child_message_owners.py`` role table at ``97308b94c``; the literature child is removed).
 
 Every old ``to_child_*`` did the same: the model chose the child's goal, purpose, typed return form and initial
 report; a required return source had to appear in the form exactly once; the role had to be allowed; the assignment
-the model chose was prepared for the child (a monitor's against the monitor's own form; the literature child's with
-this parent's own request envelope; the head's own with its filled invocation). Here the parent writes the commission:
-the objective is the model's ``goal`` and the ``purpose`` rides in the message (except for ``literature`` and ``monitor``: a fixed objective and an empty message; the monitor's assignment is ``monitor_assignment_v2``, the handoff row and the check rows of one outstanding job this head holds), the typed return form is the selection
+the model chose was prepared for the child (a monitor's against the monitor's own form; the head's own with its
+filled invocation). Here the parent writes the commission:
+the objective is the model's ``goal`` and the ``purpose`` rides in the message (except for ``monitor``: a fixed objective and an empty message; the monitor's assignment is ``monitor_assignment_v2``, the handoff row and the check rows of one outstanding job this head holds), the typed return form is the selection
 of the child's own declared fields (rule 5), and the assignment carries the old assignment keys under their names.
 The record references the model names, and the ones this head adds (the proposed annotation, the scope's records),
 travel as ``record_refs`` fields: a record this head does not hold fails the commission with ``CustodyError``.
@@ -13,8 +13,7 @@ travel as ``record_refs`` fields: a record this head does not hold fails the com
 The old roles ``launch`` and ``results`` each had two homes, so each has two slots here (``execution_launch``,
 ``resource_launch``, ``execution_results``, ``resource_results``). What this head fills beyond the model's choice
 (new fields of the children's forms, which the old head did not send because the old children took them from their
-runner): ``scope`` for the children whose forms take one, ``credit_unit`` of the literature task
-(this head's own ``context.evidence_task.credit_unit``) and the credit units in ``arguments['units']``
+runner): ``scope`` for the children whose forms take one and the credit units in ``arguments['units']``
 (``handoff_unit``, ``completion_target``, ``acquired_record_unit``, ``information_unit``: this head's settings,
 read in ``task.action``). A wrong commission raises: an unknown slot is a ``KeyError``, a missing unit or field is a
 ``KeyError``.
@@ -31,9 +30,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.hpc.resou
 
 EXECUTION_LAUNCH_VERSION = 'execution_launch_assignment_v1'
 EXECUTION_RESULTS_VERSION = 'execution_results_assignment_v1'
-LITERATURE_VERSION = 'literature_assignment_v1'
 MONITOR_VERSION = 'monitor_assignment_v2'
-AXIS = 'A102'
 
 
 def only(source, names):
@@ -46,16 +43,6 @@ def structural_homology_evidence(chosen, units, summary):
             'constraints': chosen['constraints'], 'context': summary['context'], 'scope': summary['scope'],
             'scope_refs': summary['scope_refs'], 'proposed_annotation_ref': summary['proposed_annotation_ref'],
             **only(chosen, ('revision_origin',))}
-
-
-def literature(chosen, units, summary):
-    received = list(dict.fromkeys([*chosen['received_record_refs'], *summary['proposed_annotation_ref']]))
-    return {'version': LITERATURE_VERSION, 'question_context_refs': chosen['question_context_refs'],
-            'source_refs': chosen['source_refs'],
-            'literature_task': {**chosen['literature_task'], 'evidence_axis': AXIS,
-                                'credit_unit': units['credit_unit']},
-            'proposed_annotation_ref': summary['proposed_annotation_ref'][0],
-            'scope': summary['scope'], 'received_record_refs': received}
 
 
 def execution_launch(chosen, units, summary):
@@ -100,24 +87,19 @@ def monitor(chosen, units, summary):
             'requested_fields': list(chosen['requested_fields']), 'information_unit': units['information_unit']}
 
 
-ASSIGNMENTS = {'structural_homology_evidence': structural_homology_evidence, 'literature': literature,
+ASSIGNMENTS = {'structural_homology_evidence': structural_homology_evidence,
                'execution_launch': execution_launch, 'resource_launch': resource_launch,
                'execution_results': execution_results, 'resource_results': resource_results, 'hpc': hpc,
                'monitor': monitor}
 
 
-# No text passes to the literature child: its objective is fixed by the slot and its message is empty (controlled
-# messaging; the model chooses only the assignment and the selection).
-LITERATURE_OBJECTIVE = 'assess_published_evidence'
-# Nor to the monitor: the model chooses the held handoff record, the fields to observe and the selection.
+# No text passes to the monitor: its objective is fixed by the slot and its message is empty (controlled messaging;
+# the model chooses the held handoff record, the fields to observe and the selection).
 MONITOR_OBJECTIVE = 'assess_job_progress'
 
 
 def msg_to_child(slot, arguments, summary):
     assignment = ASSIGNMENTS[slot](arguments['assignment'], arguments['units'], summary)
-    if slot == 'literature':
-        return ChildMessage(objective=LITERATURE_OBJECTIVE, message={}, assignment=assignment,
-                            selection=tuple(arguments['selection']))
     if slot == 'monitor':
         return ChildMessage(objective=MONITOR_OBJECTIVE, message={}, assignment=assignment,
                             selection=tuple(arguments['selection']))

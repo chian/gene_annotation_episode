@@ -20,7 +20,9 @@ criterion returns 'unknown' with a declared reason.
 The grader holds NO threshold that judges goodness. Where a number would be compared with a limit it records the number with its refs
 (signal_over_background/signal_window_refs, plateau_absorbance/plateau_refs, incubation_min/incubation_refs,
 concentration_count/concentration_count_refs and the span over the constant/concentration_span_refs, estimate_fold/estimate_refs,
-replicate_count/replicate_independent/replicate_refs) and returns 'unknown' with a reason ending in '_recorded_for_the_sheet'; the ELISA
+replicate_count/replicate_independent/replicate_refs; added after the range review: the reader linear limit the paper states,
+detector_linear_limit/linear_limit_refs; koff_per_s, wash_min/wash_loss_refs; the Cheng-Prusoff Ki ki_cheng_prusoff_nM from the IC50, the displaced ligand's
+concentration and KD, with conversion_fold/conversion_refs against a reported Ki) and returns 'unknown' with a reason ending in '_recorded_for_the_sheet'; the ELISA
 converter judges it. What stays with the grader is what a stated fact says (a stated 'no' is conflicting) and the choice among facts.
 
 Shared rule for yes/no facts (answers yes / no / unknown / not_applicable):
@@ -107,13 +109,15 @@ def _signal_window(record, native):
 
 def _detector_range(record, native):
     item = record['facts']['signal_in_linear_range']
+    limit = _value(record, 'detector_linear_limit')
     status, reason = _shared_rule([item['answer']])
     if status != 'unknown':
         return _result(status, reason, item['source_refs'])
     maximum = _value(record, 'signal_maximum')
     if maximum is None:
         return _result('unknown', 'fact_unknown', [])
-    native.update({'plateau_absorbance': maximum, 'plateau_refs': _refs(record['quantities']['signal_maximum'])})
+    native.update({'plateau_absorbance': maximum, 'plateau_refs': _refs(record['quantities']['signal_maximum']),
+                   'detector_linear_limit': limit, 'linear_limit_refs': _refs(record['quantities']['detector_linear_limit'])})
     return _result('unknown', 'plateau_recorded_for_the_sheet', [])
 
 
@@ -130,7 +134,15 @@ def _specificity_control(record, native):
 
 
 def _wash_dissociation(record, native):
-    return _one_fact(record, 'wash_dissociation_considered')
+    item = record['facts']['wash_dissociation_considered']
+    status, reason = _shared_rule([item['answer']])
+    if status != 'unknown':
+        return _result(status, reason, item['source_refs'])
+    koff, minutes = _value(record, 'koff'), _minutes(record, 'wash_duration')
+    if koff is None or minutes is None:
+        return _result('unknown', 'fact_unknown', [])
+    native.update({'koff_per_s': koff, 'wash_min': minutes, 'wash_loss_refs': _refs(record['quantities']['koff'], record['quantities']['wash_duration'])})
+    return _result('unknown', 'wash_loss_recorded_for_the_sheet', [])
 
 
 def _equilibrium(record, native):
@@ -141,6 +153,8 @@ def _equilibrium(record, native):
     if native['incubation_min'] is None:
         return _result('unknown', 'fact_unknown', [])
     native['incubation_refs'] = _refs(record['quantities']['incubation_time'])
+    if native['constant_name'] is not None:
+        native['constant_refs'] = _refs(record['quantities'][native['constant_name']])      # the constant the sheet scales the incubation by
     return _result('unknown', 'incubation_recorded_for_the_sheet', [])
 
 
@@ -189,12 +203,25 @@ def _fit_model(record, native):
 
 
 def _direct_vs_competition(record, native):
+    quantities = record['quantities']
     kd, ki = native['kd_nM'], native['ki_nM']
-    if kd is None or ki is None:
+    ic50, tracer, tracer_kd = native['ic50_nM'], native['tracer_concentration_nM'], native['tracer_kd_nM']
+    derived, derived_refs = None, []
+    if ic50 is not None and tracer is not None and tracer_kd is not None:
+        # Cheng-Prusoff: the Ki that the IC50 gives for a competitor of a ligand at a stated concentration with a stated KD (arithmetic of stated numbers).
+        derived = ic50 / (1 + tracer / tracer_kd)
+        derived_refs = _refs(quantities['ic50'], quantities['tracer_concentration'], quantities['tracer_kd'])
+        native.update({'ki_cheng_prusoff_nM': derived, 'cheng_prusoff_refs': derived_refs})
+    if kd is not None and (ki is not None or derived is not None):
+        other = ki if ki is not None else derived
+        native.update({'estimate_fold': max(kd, other) / min(kd, other),
+                       'estimate_refs': _refs(quantities['kd'], quantities['ki']) if ki is not None else _refs(quantities['kd'], {'source_refs': derived_refs})})
+    if ki is not None and derived is not None:
+        native.update({'conversion_fold': max(ki, derived) / min(ki, derived), 'conversion_refs': _refs(quantities['ki'], {'source_refs': derived_refs})})
+    if native['estimate_fold'] is None and native['conversion_fold'] is None:
         if record['facts']['single_estimate_method']['answer'] == 'yes':
             return _result('not_applicable', 'single_estimate_method', record['facts']['single_estimate_method']['source_refs'])
         return _result('unknown', 'kd_or_ki_missing', [])
-    native.update({'estimate_fold': max(kd, ki) / min(kd, ki), 'estimate_refs': _refs(record['quantities']['kd'], record['quantities']['ki'])})
     return _result('unknown', 'estimates_recorded_for_the_sheet', [])
 
 
@@ -217,7 +244,7 @@ def grade_elisa(record):
     """Grade one ELISA-style binding experiment record. Returns the criterion answers and native values."""
     nm = {name: _nm(record, name) for name in CONSTANTS}
     constant_name = next((name for name in CONSTANTS if nm[name] is not None), None)
-    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'assay_format': record['assay_format'], 'detection_format': record['detection_format'], 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'readout_signal': record['readout_signal'], 'enzyme_conjugate': record['enzyme_conjugate'], 'blocking_agent': record['blocking_agent'], 'choice_support': dict(record['choice_support']), 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'concentration_series': dict(record['concentration_series']), 'kd_nM': nm['kd'], 'ki_nM': nm['ki'], 'ec50_nM': nm['ec50'], 'ic50_nM': nm['ic50'], 'constant_name': constant_name, 'constant_nM': None if constant_name is None else nm[constant_name], 'signal_over_background': None, 'incubation_min': _minutes(record, 'incubation_time'), 'concentration_count': None, 'concentration_low_over_constant': None, 'concentration_high_over_constant': None, 'signal_window_refs': [], 'plateau_absorbance': None, 'plateau_refs': [], 'incubation_refs': [], 'concentration_count_refs': [], 'concentration_span_refs': [], 'estimate_fold': None, 'estimate_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': []}
+    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'assay_format': record['assay_format'], 'detection_format': record['detection_format'], 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'readout_signal': record['readout_signal'], 'enzyme_conjugate': record['enzyme_conjugate'], 'blocking_agent': record['blocking_agent'], 'choice_support': dict(record['choice_support']), 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'concentration_series': dict(record['concentration_series']), 'kd_nM': nm['kd'], 'ki_nM': nm['ki'], 'ec50_nM': nm['ec50'], 'ic50_nM': nm['ic50'], 'tracer_concentration_nM': _nm(record, 'tracer_concentration'), 'tracer_kd_nM': _nm(record, 'tracer_kd'), 'ki_cheng_prusoff_nM': None, 'cheng_prusoff_refs': [], 'conversion_fold': None, 'conversion_refs': [], 'detector_linear_limit': None, 'linear_limit_refs': [], 'koff_per_s': None, 'wash_min': None, 'wash_loss_refs': [], 'constant_name': constant_name, 'constant_nM': None if constant_name is None else nm[constant_name], 'signal_over_background': None, 'incubation_min': _minutes(record, 'incubation_time'), 'concentration_count': None, 'concentration_low_over_constant': None, 'concentration_high_over_constant': None, 'signal_window_refs': [], 'plateau_absorbance': None, 'plateau_refs': [], 'incubation_refs': [], 'constant_refs': [], 'concentration_count_refs': [], 'concentration_span_refs': [], 'estimate_fold': None, 'estimate_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': []}
     outcomes = {name: EVALUATORS[name](record, native) for name in CRITERIA}
     native['support'] = criterion_supports(record, ELISA_CRITERIA)      # kept for the sheet: the grader does not judge it
     return {'version': VERSION, 'experiment_type': 'elisa', 'experiment_ref': record['experiment_ref'], 'criteria': {name: {'status': o['status'], 'support_refs': o['support_refs']} for name, o in outcomes.items()}, 'reasons': {name: o['reason'] for name, o in outcomes.items()}, 'native': native}

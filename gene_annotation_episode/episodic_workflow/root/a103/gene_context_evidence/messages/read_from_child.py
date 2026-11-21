@@ -1,5 +1,5 @@
 """What the A103 head takes from a child's return: its credit and its controlled finding (carried from the old
-``from_child_gene_context_evidence.py`` and ``from_child_published_evidence_assessment.py``, which admitted the child's
+``from_child_gene_context_evidence.py``, which admitted the child's
 typed form and received the references it declared, and from ``from_child_execution_progress_assessment.py``, which
 read the monitor's ``episode_progress`` references: the system admits the result against the child's own form now and
 writes the ``returned`` receipts of the records it names). A child's credit is information for the summary; it is

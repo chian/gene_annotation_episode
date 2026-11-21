@@ -17,7 +17,8 @@ commissioner passes in custody, e.g. the result sources of the sister's allocati
 Not carried: the old ``prepare_assignment`` checks of the commission against the parent (parent role ``hpc``, owner
 episode equal to the parent, commission identity equal to the parent's, yield binding present). They were the
 parent's check of its own commission, which fails when it is wrong (nothing checks one ahead). The yield binding
-is read from the run's settings in ``yield_estimator.py``. ``initial_information``, ``received_api_reports`` and
+is not read: ``yield_estimator.py`` builds the accumulation controller with ``ADAPTIVE_CONTROL`` and
+``items=None``, which reads no settings and takes no cost. ``initial_information``, ``received_api_reports`` and
 ``received_execution_information`` (selection of declared readers of the old catalog) are not carried."""
 from method_loop import Field, RecordForm
 

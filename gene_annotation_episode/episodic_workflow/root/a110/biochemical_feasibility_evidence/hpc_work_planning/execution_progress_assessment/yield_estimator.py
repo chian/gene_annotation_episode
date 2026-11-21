@@ -6,8 +6,13 @@ The old monitor had two modes. With its own yield settings (exactly ``{kind: 'in
 0, uncertainty_alpha in (0, 1)}``) it opened ``YieldController(epoch, initial_credit, cutoff,
 YieldParameters(uncertainty_alpha=...))``; without them asking for the controller raised
 ``monitor_private_yield_binding_not_enabled``. Now: ``settings`` is this episode's entry of the run's
-``continuation`` collaborator, ``{'cost': <old cutoff, >= 0>, 'parameters': {'uncertainty_alpha': ...}}``; an entry
-without them raises the same error. The cutoff is the controller's ``cost``. Nothing else ends this Episode."""
+``continuation`` collaborator, ``{'cost': <number, >= 0>, 'parameters': {'uncertainty_alpha': ...}}``; an entry
+without them raises the same error, but neither value reaches the controller. The controller is the accumulation
+controller, a port of nano-graphrag's EstimatorController, configured by this Episode with the fixed control
+(``FIXED_CONTROL``); it takes no cost. After at least W=8 units attempted and m=4 observed it fits nano-graphrag's
+yield model; a unit is flat when the upper bound of the expected next marginal (hypervolume) credit is at or below
+gamma, fixed at 0.06; it stops after 4 flat units in a row. ``items`` is ``None``, so no item count ends it. Nothing
+else ends this Episode."""
 import math
 
 from yield_control import AccumulationYieldController, FIXED_CONTROL

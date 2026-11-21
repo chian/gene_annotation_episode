@@ -17,9 +17,11 @@ the FP fit models. Every number must be above 0. Fields not extracted (``NOT_EXT
 from jsonschema import Draft202012Validator
 
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_fp_record import (
-    ASSAY_FORMATS, CHOICES, EXPERIMENT_TYPE, FACTS, FIT_MODELS, PLATE_TYPES, PREPARATION_KEYS, QUANTITIES, SPREAD_KINDS, SUPPORTS, UNITS, VERSION, fact, point, unavailable)
+    ASSAY_FORMATS, CHOICES, EXPERIMENT_TYPE, FACTS, FIT_MODELS, INTENSITY_DIRECTIONS, PLATE_TYPES, PREPARATION_KEYS, QUANTITIES, SERIES_KINDS, SPREAD_KINDS, SUPPORTS, UNITS, VERSION, fact, point, unavailable)
 
 NOT_EXTRACTED = ('preparations',)
+INTENSITY_DIRECTION = 'intensity_change_direction'
+SERIES_KIND = 'series_kind'
 SERIES = 'concentration_series'
 ASSAY_FORMAT = 'assay_format'
 SPREAD_KIND = 'spread_kind'
@@ -38,6 +40,8 @@ MEANING = {
     'ki': 'The inhibition constant Ki of an unlabelled ligand that displaces the tracer, as the passage reports it from a competition (displacement) experiment. An IC50 is not this field.',
     'kd_spread': 'The reported uncertainty of the KD given in the kd field (its standard error, standard deviation or confidence interval half-width), in a concentration unit. An uncertainty reported for any other value is not this field.',
     'ki_spread': 'The reported uncertainty of the Ki given in the ki field (its standard error, standard deviation or confidence interval half-width), in a concentration unit. An uncertainty reported for any other value is not this field.',
+    'ic50': 'The half-inhibition concentration IC50 of the unlabelled competitor in a competition (displacement) experiment, as the passage reports it. A Ki or a KD is not this field.',
+    'signal_noise': 'The reported noise of the polarization reads, in mP only: the standard deviation (or standard error) of replicate polarization readings of the free or the bound tracer, or of the wells at one concentration. An uncertainty of the KD or Ki is not this field, and a noise given in anisotropy r is unavailable with the reason unit_not_in_vocabulary.',
     'tracer_concentration': 'The concentration of the fluorescently labelled tracer (probe) held fixed in the assay.',
     'signal_minimum': 'The polarization or anisotropy of the free tracer (the lowest end of the titration curve), in mP or as an anisotropy r.',
     'signal_maximum': 'The polarization or anisotropy of the fully bound tracer (the plateau at the top of the titration curve), in mP or as an anisotropy r.',
@@ -47,6 +51,8 @@ MEANING = {
     'temperature': 'The temperature at which the samples were incubated or read.',
     'replicate_count': 'The number of replicate titrations the passage reports (a whole number).',
     SERIES: 'The titrant concentrations that were used, as a list of numbers in one unit (in a competition experiment, the competitor concentrations).',
+    INTENSITY_DIRECTION: 'Whether the passage says the total fluorescence intensity of the tracer rose (increase) or fell (decrease, for example quenching) when it bound. The quote must itself say the direction; a size alone does not.',
+    SERIES_KIND: 'Whether the listed concentrations are those of the partner titrated into the tracer (titrant) or those of the unlabelled competitor in a competition (competitor).',
     ASSAY_FORMAT: 'Whether the experiment titrated the tracer with its partner (direct titration) or displaced the tracer with an unlabelled competitor (competition).',
     SPREAD_KIND: 'What the reported KD or Ki uncertainty is.',
     FIT_MODEL: 'The model the passage says the binding curve was fitted with: a one-site hyperbolic 1:1 model, a Hill model, a quadratic (tight-binding) model, a competitive-binding model, or another one.',
@@ -67,7 +73,7 @@ MEANING = {
 def field_names():
     """Every field the extraction answers, in the form's own order: the quantities, the series, the assay format,
     the spread kind, the fit model, the plate type, the facts."""
-    return (*QUANTITIES, SERIES, ASSAY_FORMAT, SPREAD_KIND, FIT_MODEL, PLATE_TYPE, *FACTS)
+    return (*QUANTITIES, SERIES, ASSAY_FORMAT, SPREAD_KIND, FIT_MODEL, PLATE_TYPE, INTENSITY_DIRECTION, SERIES_KIND, *FACTS)
 
 
 def _nullable(schema):
@@ -82,6 +88,8 @@ def _field_schema(name):
              {'enum': list(SPREAD_KINDS)} if name == SPREAD_KIND else
              {'enum': list(FIT_MODELS)} if name == FIT_MODEL else
              {'enum': list(PLATE_TYPES)} if name == PLATE_TYPE else
+             {'enum': list(INTENSITY_DIRECTIONS)} if name == INTENSITY_DIRECTION else
+             {'enum': list(SERIES_KINDS)} if name == SERIES_KIND else
              {'enum': list(STATABLE[name])})
     properties = {'status': {'enum': ['stated', 'unavailable']}, 'value': _nullable(value)}
     if name in UNITS:
@@ -175,6 +183,7 @@ def record_from_answer(answer, chunk, chunk_offset, experiment_ref, source_ref, 
             'assertion_ref': assertion_ref, 'preparations': dict.fromkeys(PREPARATION_KEYS),
             'quantities': {name: operand(name) for name in QUANTITIES}, SERIES: operand(SERIES),
             ASSAY_FORMAT: choice(ASSAY_FORMAT), SPREAD_KIND: choice(SPREAD_KIND), FIT_MODEL: choice(FIT_MODEL), PLATE_TYPE: choice(PLATE_TYPE),
+            INTENSITY_DIRECTION: choice(INTENSITY_DIRECTION), SERIES_KIND: choice(SERIES_KIND),
             'choice_support': {name: answer[name]['support'] for name in CHOICES},
             'facts': {name: fact(answer[name]['value'], [refs[name]], answer[name]['support']) if answer[name]['status'] == 'stated' else fact('unknown')
                       for name in FACTS},

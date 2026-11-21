@@ -22,7 +22,7 @@ A BRET experiment has two outcomes. With a tracer titration or a displacement it
 interaction (a BRET ratio, a BRET50, a saturation). The native values carry the qualitative statement of the record, 'interaction' ('detected' when the interaction fact is yes, 'not_detected' when it is no, else None), with the spans that state it ('interaction_refs');
 the converter hands it to the merger as the experiment's qualitative effect when the record has no constant.
 
-The grader holds NO threshold that judges goodness. Where a number would be compared with a limit it records the number with its refs (bret50_control_over_pair/bret50_refs, signal_over_control/signal_refs,
+The grader holds NO threshold that judges goodness. Where a number would be compared with a limit it records the number with its refs (bret50_control_over_pair/bret50_refs, signal_over_control (with the two ratios, their spreads, the donor-only ratio and the background-subtracted answer)/signal_refs, tracer_over_kd/tracer_refs,
 titration_point_count/titration_refs, low_over_bret50/high_over_bret50/range_refs, fit_r_squared/fit_refs, replicate_count/replicate_independent/replicate_refs) and returns 'unknown' with a reason ending in
 '_recorded_for_the_sheet'; the BRET converter judges it.
 
@@ -41,6 +41,7 @@ CRITERIA = tuple(criterion['id'] for criterion in BRET_CRITERIA)
 INTERACTION = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact interaction_detected
 CONSTANTS = ('kd', 'ki')                                  # the order in which the binding constant of a record is taken
 NO_BRET50 = 'no_bret50_reported'
+NO_KI = 'no_ki_reported'
 
 
 def _value(record, name):
@@ -103,7 +104,8 @@ def _bret50_specificity(record, native):
     pair, control = _value(record, 'bret50'), _value(record, 'bret50_negative_control')
     if pair is None or control is None:
         return _result('unknown', 'bret50_comparison_not_given', [])
-    native.update({'bret50_control_over_pair': control / pair, 'bret50_refs': _refs(record['quantities']['bret50'], record['quantities']['bret50_negative_control'])})
+    used = [record['quantities'][name] for name in ('bret50', 'bret50_negative_control', 'bret50_spread', 'bret50_negative_control_spread') if record['quantities'][name]['status'] == 'point']
+    native.update({'bret50_control_over_pair': control / pair, 'bret50_pair_spread': _value(record, 'bret50_spread'), 'bret50_control_spread': _value(record, 'bret50_negative_control_spread'), 'bret50_refs': _refs(*used)})
     return _result('unknown', 'bret50_comparison_recorded_for_the_sheet', [])
 
 
@@ -111,7 +113,12 @@ def _signal_over_control(record, native):
     pair, control = _scaled(record, 'bret_ratio_pair', RATIO_PER_SIGNAL_UNIT), _scaled(record, 'bret_ratio_negative_control', RATIO_PER_SIGNAL_UNIT)
     if pair is None or control is None:
         return _result('unknown', 'signal_over_control_not_given', [])
-    native.update({'signal_over_control': pair / control, 'signal_refs': _refs(record['quantities']['bret_ratio_pair'], record['quantities']['bret_ratio_negative_control'])})
+    names = ('bret_ratio_pair', 'bret_ratio_negative_control', 'bret_ratio_pair_spread', 'bret_ratio_negative_control_spread', 'bret_ratio_donor_only')
+    background = record['facts']['background_subtracted']
+    used = [record['quantities'][name] for name in names if record['quantities'][name]['status'] == 'point'] + ([background] if background['answer'] in ('yes', 'no') else [])
+    native.update({'signal_over_control': pair / control, 'signal_pair': pair, 'signal_control': control, 'signal_pair_spread': _scaled(record, 'bret_ratio_pair_spread', RATIO_PER_SIGNAL_UNIT),
+                   'signal_control_spread': _scaled(record, 'bret_ratio_negative_control_spread', RATIO_PER_SIGNAL_UNIT), 'signal_donor_only': _scaled(record, 'bret_ratio_donor_only', RATIO_PER_SIGNAL_UNIT),
+                   'signal_background_subtracted': background['answer'], 'signal_refs': _refs(*used)})
     return _result('unknown', 'signal_over_control_recorded_for_the_sheet', [])
 
 
@@ -132,6 +139,29 @@ def _negative_control(record, native):
 
 def _expression_matching(record, native):
     return _one_fact(record, 'expression_levels_measured')
+
+
+def _bystander_test(record, native):
+    items = [record['facts']['hyperbola_preferred_over_linear'], record['facts']['bret_constant_across_expression']]
+    answers = [item['answer'] for item in items]
+    if 'no' in answers:
+        return _result('conflicting', 'fact_answered_no', _refs(*[item for item in items if item['answer'] == 'no']))
+    if 'yes' in answers:
+        return _result('supported', 'facts_answered_yes', _refs(*[item for item in items if item['answer'] == 'yes']))
+    if 'unknown' in answers:
+        return _result('unknown', 'fact_unknown', [])
+    return _result('not_applicable', 'fact_not_applicable', [])
+
+
+def _tracer_regime(record, native):
+    ki = _scaled(record, 'ki', NM_PER_UNIT)
+    if ki is None:
+        return _result('not_applicable', NO_KI, [])
+    tracer, tracer_kd = _scaled(record, 'tracer_concentration', NM_PER_UNIT), _scaled(record, 'tracer_kd', NM_PER_UNIT)
+    if tracer is None or tracer_kd is None:
+        return _result('unknown', 'tracer_regime_not_given', [])
+    native.update({'tracer_over_kd': tracer / tracer_kd, 'tracer_refs': _refs(record['quantities']['ki'], record['quantities']['tracer_concentration'], record['quantities']['tracer_kd'])})
+    return _result('unknown', 'tracer_regime_recorded_for_the_sheet', [])
 
 
 def _titration_points(record, native):
@@ -186,7 +216,7 @@ def _replicates(record, native):
     return _result('unknown', 'replicate_count_recorded_for_the_sheet', [])
 
 
-EVALUATORS = {'interaction_observed': _interaction_observed, 'saturation_shown': _saturation_shown, 'bret50_specificity': _bret50_specificity, 'signal_over_control': _signal_over_control, 'donor_only_control': _donor_only_control, 'acceptor_only_control': _acceptor_only_control, 'negative_control': _negative_control, 'expression_matching': _expression_matching, 'titration_points': _titration_points, 'ratio_range': _ratio_range, 'competition': _competition, 'orientation': _orientation, 'background_correction': _background_correction, 'fit_quality': _fit_quality, 'replicates': _replicates}
+EVALUATORS = {'interaction_observed': _interaction_observed, 'saturation_shown': _saturation_shown, 'bret50_specificity': _bret50_specificity, 'signal_over_control': _signal_over_control, 'donor_only_control': _donor_only_control, 'acceptor_only_control': _acceptor_only_control, 'negative_control': _negative_control, 'bystander_test': _bystander_test, 'tracer_regime': _tracer_regime, 'expression_matching': _expression_matching, 'titration_points': _titration_points, 'ratio_range': _ratio_range, 'competition': _competition, 'orientation': _orientation, 'background_correction': _background_correction, 'fit_quality': _fit_quality, 'replicates': _replicates}
 
 
 def grade_bret(record):
@@ -194,7 +224,7 @@ def grade_bret(record):
     found = record['facts']['interaction_detected']
     nm = {name: _scaled(record, name, NM_PER_UNIT) for name in CONSTANTS}
     constant_name = next((name for name in CONSTANTS if nm[name] is not None), None)
-    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'bret_format': record['bret_format'], 'donor': record['donor'], 'acceptor': record['acceptor'], 'expression': record['expression'], 'spread_kind': record['spread_kind'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'interaction': INTERACTION.get(found['answer']), 'interaction_refs': list(found['source_refs']) if found['answer'] in INTERACTION else [], 'kd_nM': nm['kd'], 'ki_nM': nm['ki'], 'constant_name': constant_name, 'constant_nM': None if constant_name is None else nm[constant_name], 'tracer_nM': _scaled(record, 'tracer_concentration', NM_PER_UNIT), 'bret50_control_over_pair': None, 'bret50_refs': [], 'signal_over_control': None, 'signal_refs': [], 'titration_point_count': None, 'titration_refs': [], 'low_over_bret50': None, 'high_over_bret50': None, 'range_refs': [], 'fit_r_squared': None, 'fit_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': []}
+    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'bret_format': record['bret_format'], 'donor': record['donor'], 'acceptor': record['acceptor'], 'expression': record['expression'], 'spread_kind': record['spread_kind'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'interaction': INTERACTION.get(found['answer']), 'interaction_refs': list(found['source_refs']) if found['answer'] in INTERACTION else [], 'kd_nM': nm['kd'], 'ki_nM': nm['ki'], 'constant_name': constant_name, 'constant_nM': None if constant_name is None else nm[constant_name], 'tracer_nM': _scaled(record, 'tracer_concentration', NM_PER_UNIT), 'bret50_control_over_pair': None, 'bret50_pair_spread': None, 'bret50_control_spread': None, 'bret50_refs': [], 'signal_over_control': None, 'signal_pair': None, 'signal_control': None, 'signal_pair_spread': None, 'signal_control_spread': None, 'signal_donor_only': None, 'signal_background_subtracted': None, 'signal_refs': [], 'tracer_over_kd': None, 'tracer_refs': [], 'titration_point_count': None, 'titration_refs': [], 'low_over_bret50': None, 'high_over_bret50': None, 'range_refs': [], 'fit_r_squared': None, 'fit_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': []}
     outcomes = {name: EVALUATORS[name](record, native) for name in CRITERIA}
     native['support'] = criterion_supports(record, BRET_CRITERIA)      # kept for the sheet: the grader does not judge it
     return {'version': VERSION, 'experiment_type': 'bret', 'experiment_ref': record['experiment_ref'], 'criteria': {name: {'status': o['status'], 'support_refs': o['support_refs']} for name, o in outcomes.items()}, 'reasons': {name: o['reason'] for name, o in outcomes.items()}, 'native': native}

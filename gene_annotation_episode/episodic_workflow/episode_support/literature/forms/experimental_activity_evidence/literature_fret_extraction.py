@@ -10,7 +10,7 @@ UTF-8 byte span, and a quote that does not occur in the chunk exactly once is re
 Differences from the other types that come from the form: the emission ratio ends are unit-less ratios, the form has
 the donor and the acceptor concentration, the delay and the integration window of a time-resolved read, an assay volume,
 an incubation time and a temperature, a Ki and the half-maximal concentrations EC50 and IC50 beside the KD, an assay
-format (direct titration or competition), the donor-acceptor pair, a plate type and the FRET fit models. Every number
+format (direct titration or competition), the format of the listed series, the donor lanthanide, a Z' factor and a koff, the donor-acceptor pair, a plate type and the FRET fit models. Every number
 must be above 0. Fields not extracted (``NOT_EXTRACTED``): the identity references (``experiment_ref``, ``source_ref``,
 ``assertion_ref``) are given by the caller and the three preparation references (``preparations``) are references to
 records, which no passage states; they stay unknown (None).
@@ -18,7 +18,7 @@ records, which no passage states; they stay unknown (None).
 from jsonschema import Draft202012Validator
 
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_fret_record import (
-    ASSAY_FORMATS, CHOICES, EXPERIMENT_TYPE, FACTS, FIT_MODELS, PAIRS, PLATE_TYPES, PREPARATION_KEYS, QUANTITIES, SPREAD_KINDS, SUPPORTS, UNITS, VERSION, fact, point, unavailable)
+    ASSAY_FORMATS, CHOICES, EXPERIMENT_TYPE, FACTS, FIT_MODELS, LANTHANIDES, PAIRS, PLATE_TYPES, SERIES_FORMATS, PREPARATION_KEYS, QUANTITIES, SPREAD_KINDS, SUPPORTS, UNITS, VERSION, fact, point, unavailable)
 
 NOT_EXTRACTED = ('preparations',)
 SERIES = 'concentration_series'
@@ -27,6 +27,8 @@ SPREAD_KIND = 'spread_kind'
 FIT_MODEL = 'fit_model'
 PLATE_TYPE = 'plate_type'
 PAIR = 'donor_acceptor_pair'
+SERIES_FORMAT = 'series_format'
+LANTHANIDE = 'donor_lanthanide'
 # Why a field is unavailable: a fixed vocabulary.
 REASONS = ('not_stated_in_passage', 'unit_not_in_vocabulary', 'ambiguous_or_conflicting_in_passage')
 # A fact answer the passage can state. 'unknown' is the unavailable status itself and 'not_applicable' is a
@@ -46,13 +48,17 @@ MEANING = {
     'acceptor_concentration': 'The concentration of the acceptor-labelled binding partner when it is held fixed in the assay (not the titrated series).',
     'ratio_minimum': 'The lowest value of the acceptor over donor emission ratio of the titration (the background end of the curve), as the passage gives it.',
     'ratio_maximum': 'The highest value of the acceptor over donor emission ratio of the titration (the plateau end of the curve), as the passage gives it.',
+    'z_prime': "The Z' factor (Z-prime, Z prime) of the assay window of this titration, as the passage states it under that name: a dimensionless number, at most 1, that the passage gives for the separation of the bound and free ends of the curve. Not a ratio end and not a signal-to-background fold.",
     'delay_time': 'The delay between the excitation flash and the start of the read in a time-resolved measurement.',
     'integration_time': 'The length of the integration window of the read in a time-resolved measurement.',
     'assay_volume': 'The volume of one assay sample as read, in uL or mL.',
     'incubation_time': 'How long the samples were incubated before the read.',
+    'koff': 'The dissociation rate constant koff of the complex, as the passage reports it (a rate per second or per minute; a dissociation half-life or a residence time is not this field).',
     'temperature': 'The temperature at which the samples were incubated or read.',
     'replicate_count': 'The number of replicate titrations the passage reports (a whole number).',
     SERIES: 'The titrant concentrations that were used, as a list of numbers in one unit (in a competition experiment, the competitor concentrations). A number of points with a top concentration is not a list.',
+    SERIES_FORMAT: 'Which titration the concentrations of the series field belong to: a direct titration of a labelled partner (direct_titration), or the competitor series of a displacement experiment (competition). State it only when the passage says what the listed concentrations were titrated in.',
+    LANTHANIDE: 'Which lanthanide the long-lived donor is, when the passage names it: terbium (Tb, a terbium chelate or cryptate) or europium (Eu), or another lanthanide. A donor name or a product name alone, without the passage saying the metal, does not say this.',
     ASSAY_FORMAT: 'Whether the experiment titrated a labelled partner with its partner (direct titration, a saturation experiment) or displaced a labelled partner with an unlabelled competitor (competition).',
     SPREAD_KIND: 'What the reported KD or Ki uncertainty is.',
     FIT_MODEL: 'The model the passage says the binding curve was fitted with: a one-site hyperbolic 1:1 model, a Hill model, a quadratic (tight-binding) model, a competitive-binding model, or another one.',
@@ -79,7 +85,7 @@ MEANING = {
 def field_names():
     """Every field the extraction answers, in the form's own order: the quantities, the series, the assay format,
     the spread kind, the fit model, the plate type, the pair, the facts."""
-    return (*QUANTITIES, SERIES, ASSAY_FORMAT, SPREAD_KIND, FIT_MODEL, PLATE_TYPE, PAIR, *FACTS)
+    return (*QUANTITIES, SERIES, ASSAY_FORMAT, SERIES_FORMAT, SPREAD_KIND, FIT_MODEL, PLATE_TYPE, LANTHANIDE, PAIR, *FACTS)
 
 
 def _nullable(schema):
@@ -91,6 +97,8 @@ def _field_schema(name):
              {'type': 'integer'} if name in COUNTS else
              {'type': 'number'} if name in QUANTITIES else
              {'enum': list(ASSAY_FORMATS)} if name == ASSAY_FORMAT else
+             {'enum': list(SERIES_FORMATS)} if name == SERIES_FORMAT else
+             {'enum': list(LANTHANIDES)} if name == LANTHANIDE else
              {'enum': list(SPREAD_KINDS)} if name == SPREAD_KIND else
              {'enum': list(FIT_MODELS)} if name == FIT_MODEL else
              {'enum': list(PLATE_TYPES)} if name == PLATE_TYPE else
@@ -187,7 +195,7 @@ def record_from_answer(answer, chunk, chunk_offset, experiment_ref, source_ref, 
     return {'version': VERSION, 'experiment_type': EXPERIMENT_TYPE, 'experiment_ref': experiment_ref, 'source_ref': source_ref,
             'assertion_ref': assertion_ref, 'preparations': dict.fromkeys(PREPARATION_KEYS),
             'quantities': {name: operand(name) for name in QUANTITIES}, SERIES: operand(SERIES),
-            ASSAY_FORMAT: choice(ASSAY_FORMAT), SPREAD_KIND: choice(SPREAD_KIND), FIT_MODEL: choice(FIT_MODEL), PLATE_TYPE: choice(PLATE_TYPE), PAIR: choice(PAIR),
+            ASSAY_FORMAT: choice(ASSAY_FORMAT), SERIES_FORMAT: choice(SERIES_FORMAT), SPREAD_KIND: choice(SPREAD_KIND), FIT_MODEL: choice(FIT_MODEL), PLATE_TYPE: choice(PLATE_TYPE), LANTHANIDE: choice(LANTHANIDE), PAIR: choice(PAIR),
             'choice_support': {name: answer[name]['support'] for name in CHOICES},
             'facts': {name: fact(answer[name]['value'], [refs[name]], answer[name]['support']) if answer[name]['status'] == 'stated' else fact('unknown')
                       for name in FACTS},

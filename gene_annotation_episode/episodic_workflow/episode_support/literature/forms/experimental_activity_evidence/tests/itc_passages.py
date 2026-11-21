@@ -11,7 +11,7 @@ written inline; the thin spaces (U+2009) and the hyphen U+2010 before TdS kept a
 fitted stoichiometry n, that the model was a single binding site, that the errors are standard deviations of three
 independent experiments, and the signs of the enthalpy and entropy terms (no values)."""
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_itc_extraction import (
-    FIT_MODEL, SPREAD_KIND, field_names)
+    FIT_MODEL, SPREAD_KIND, TITRATION_MODE, field_names)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_itc_record import UNITS
 
 PAPER_ID = 'PMC7679967'
@@ -25,12 +25,12 @@ SYNTHETIC = (
     'Isothermal titration calorimetry was performed on a MicroCal PEAQ-ITC at 25 °C, with the temperature held '
     'constant by the instrument. The assay measured the binding of the protein ParB to its partner PopZ. The cell contained 10 µM ParB and the syringe 100 µM PopZ; both proteins were '
     'dialysed together against the same buffer. Their concentrations were determined by absorbance at 280 nm, and the '
-    'active fraction of each protein was determined by a binding-activity assay. A single titration consisted of 20 '
-    'injections. Control titrations of PopZ into buffer measured the heat of dilution, and this heat was subtracted '
+    'active fraction of each protein was determined by a binding-activity assay. A single incremental titration consisted of 20 '
+    'injections and was taken to a final molar ratio of 2.0 of PopZ to ParB. Control titrations of PopZ into buffer measured the heat of dilution, and this heat was subtracted '
     'from the binding heats; the baseline of each thermogram was corrected before integration. The isotherm was '
     'fitted with a one-set-of-sites model, in which n was a free fitting parameter, and the binding sites were not '
     'heterogeneous; residuals of the fit are shown in Figure 2B. The fit gave n = 1.0 (1:1 expected from the crystal '
-    'structure), KD = 20 nM (standard deviation 3 nM), ΔH = -50 kJ/mol and ΔS = -20.3 J/mol/K. Three independent '
+    'structure), KD = 20 nM (standard deviation 3 nM), ΔH = -50 kJ/mol and ΔS = -20.3 J/mol/K; the enthalpy is the observed value, not corrected for buffer ionization. Three independent '
     'titrations were done on separate protein preparations.')
 
 # field -> (value, unit, quote) for the synthetic passage: every field of the form.
@@ -46,7 +46,9 @@ SYNTHETIC_STATED = {
     'syringe_concentration': (100, 'uM', 'the syringe 100 µM PopZ'),
     'injection_count': (20, 'count', 'consisted of 20 injections'),
     'replicate_count': (3, 'count', 'Three independent titrations'),
+    'final_molar_ratio': (2.0, 'dimensionless', 'a final molar ratio of 2.0 of PopZ to ParB'),
     SPREAD_KIND: ('standard_deviation', None, 'standard deviation 3 nM'),
+    TITRATION_MODE: ('incremental', None, 'A single incremental titration'),
     FIT_MODEL: ('one_set_of_sites', None, 'a one-set-of-sites model'),
     'dilution_control_performed': ('yes', None, 'Control titrations of PopZ into buffer measured the heat of dilution'),
     'dilution_control_subtracted': ('yes', None, 'this heat was subtracted from the binding heats'),
@@ -59,6 +61,7 @@ SYNTHETIC_STATED = {
     'buffer_matching': ('dialysed_together', None, 'dialysed together against the same buffer'),
     'temperature_controlled': ('yes', None, 'with the temperature held constant by the instrument'),
     'independent_titrations': ('yes', None, 'Three independent titrations were done on separate protein preparations'),
+    'enthalpy_buffer_ionization_corrected': ('no', None, 'the enthalpy is the observed value, not corrected for buffer ionization'),
 }
 
 # identity expectations (OWNER_DECISION 18); see check_identity in the leaf test

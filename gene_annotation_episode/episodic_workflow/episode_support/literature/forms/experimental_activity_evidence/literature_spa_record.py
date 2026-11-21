@@ -40,10 +40,11 @@ preparations   radioligand_preparation_ref (the radioligand, the labelled ligand
                dependence keys (the radioligand as the analyte key, the captured target as the other partner; there is no surface).
 quantities     kd, bmax, ki, ic50, hill_slope, kd_spread, ki_spread, specific_activity, radioligand_concentration, radioligand_range_lowest,
                radioligand_range_highest, bead_amount, bead_concentration, receptor_amount, percent_bound, nonspecific_fraction,
-               nonspecific_ligand_concentration, nonspecific_excess, bead_only_fraction, counting_efficiency, incubation_time, settling_time,
+               nonspecific_ligand_concentration, nonspecific_ligand_affinity, nonspecific_excess, bead_only_fraction, counting_efficiency, incubation_time,
+               association_half_time, settling_time,
                temperature, titration_point_count, technical_replicate_count, replicate_count: one operand each.
                Units: kd/ki/ic50/kd_spread/ki_spread, radioligand_concentration, radioligand_range_lowest, radioligand_range_highest and
-               nonspecific_ligand_concentration pM, nM, uM or mM (kd is the dissociation constant of the radioligand from a saturation experiment;
+               nonspecific_ligand_concentration, nonspecific_ligand_affinity pM, nM, uM or mM (kd is the dissociation constant of the radioligand from a saturation experiment;
                ki an inhibition constant the source gives; ic50 the half-maximal inhibitory concentration of a competition;
                radioligand_concentration the single concentration of the radioligand in a competition; radioligand_range_lowest and _highest the
                lowest and the highest radioligand concentration of a saturation series); bmax 'fmol/mg', 'pmol/mg', 'sites/cell' or 'nM';
@@ -53,7 +54,10 @@ quantities     kd, bmax, ki, ic50, hill_slope, kd_spread, ki_spread, specific_ac
                as a percent of the total binding at the highest radioligand concentration; bead_only_fraction: the signal of the control without
                the captured target as a percent of the total signal; counting_efficiency: the percent of the decays counted); nonspecific_excess
                'ratio' (the stated fold excess of the unlabelled ligand over the Kd of the radioligand that defines non-specific binding);
-               incubation_time and settling_time s, min or h; temperature C or K; titration_point_count, technical_replicate_count (wells per
+               nonspecific_ligand_affinity the KD or Ki of the unlabelled ligand that defines non-specific binding, which the excess is measured against
+               (the radioligand's own KD only when that ligand is the unlabelled radioligand: fact nonspecific_ligand_is_radioligand);
+               association_half_time the time to half of the plateau binding in a stated association time course (the converter judges the
+               incubation in multiples of it); incubation_time, association_half_time and settling_time s, min or h; temperature C or K; titration_point_count, technical_replicate_count (wells per
                condition) and replicate_count (independent experiments) 'count'.
 concentration_series
                operand whose 'value' is a list of radioligand concentrations of a saturation series (unit pM, nM, uM or mM), or None when not given.
@@ -101,7 +105,7 @@ def fact(answer, refs=(), support='direct'):
 
 VERSION = 'a105_spa_record_v1'
 EXPERIMENT_TYPE = 'spa'
-QUANTITIES = ('kd', 'bmax', 'ki', 'ic50', 'hill_slope', 'kd_spread', 'ki_spread', 'specific_activity', 'radioligand_concentration', 'radioligand_range_lowest', 'radioligand_range_highest', 'bead_amount', 'bead_concentration', 'receptor_amount', 'percent_bound', 'nonspecific_fraction', 'nonspecific_ligand_concentration', 'nonspecific_excess', 'bead_only_fraction', 'counting_efficiency', 'incubation_time', 'settling_time', 'temperature', 'titration_point_count', 'technical_replicate_count', 'replicate_count')
+QUANTITIES = ('kd', 'bmax', 'ki', 'ic50', 'hill_slope', 'kd_spread', 'ki_spread', 'specific_activity', 'radioligand_concentration', 'radioligand_range_lowest', 'radioligand_range_highest', 'bead_amount', 'bead_concentration', 'receptor_amount', 'percent_bound', 'nonspecific_fraction', 'nonspecific_ligand_concentration', 'nonspecific_ligand_affinity', 'nonspecific_excess', 'bead_only_fraction', 'counting_efficiency', 'incubation_time', 'association_half_time', 'settling_time', 'temperature', 'titration_point_count', 'technical_replicate_count', 'replicate_count')
 PREPARATION_KEYS = ('radioligand_preparation_ref', 'receptor_preparation_ref', 'dataset_ref')
 ASSAY_FORMATS = ('saturation', 'competition', 'kinetic')
 ISOTOPES = ('tritium', 'iodine_125', 'sulfur_35', 'other')
@@ -112,9 +116,9 @@ COUNTERS = ('microbeta', 'topcount', 'other')
 SPREAD_KINDS = ('standard_error', 'standard_deviation', 'confidence_interval')
 FIT_MODELS = ('one_site', 'two_site', 'hill', 'competitive_binding', 'other')
 YES_NO = ('yes', 'no', 'unknown', 'not_applicable')
-FACTS = {'homogeneous_no_wash_format': YES_NO, 'nonspecific_binding_determined': YES_NO, 'nonproximity_signal_checked': YES_NO, 'bead_only_control_done': YES_NO, 'equilibrium_reached': YES_NO, 'ligand_depletion_checked': YES_NO, 'quench_interference_checked': YES_NO, 'bead_settling_controlled': YES_NO, 'radioligand_purity_checked': YES_NO, 'nonlinear_fit_used': YES_NO, 'cheng_prusoff_applied_with_own_kd': YES_NO, 'independent_experiments': YES_NO, 'single_estimate_method': YES_NO}
+FACTS = {'homogeneous_no_wash_format': YES_NO, 'nonspecific_binding_determined': YES_NO, 'nonspecific_ligand_is_radioligand': YES_NO, 'nonproximity_signal_checked': YES_NO, 'bead_only_control_done': YES_NO, 'equilibrium_reached': YES_NO, 'ligand_depletion_checked': YES_NO, 'quench_interference_checked': YES_NO, 'bead_settling_controlled': YES_NO, 'radioligand_purity_checked': YES_NO, 'nonlinear_fit_used': YES_NO, 'cheng_prusoff_applied_with_own_kd': YES_NO, 'independent_experiments': YES_NO, 'single_estimate_method': YES_NO}
 
 CONCENTRATION_UNITS = ('pM', 'nM', 'uM', 'mM')
 TIME_UNITS = ('s', 'min', 'h')
 # The unit vocabulary of each quantity (and of the concentration series): the units a record may carry.
-UNITS = {'kd': CONCENTRATION_UNITS, 'bmax': ('fmol/mg', 'pmol/mg', 'sites/cell', 'nM'), 'ki': CONCENTRATION_UNITS, 'ic50': CONCENTRATION_UNITS, 'hill_slope': ('ratio',), 'kd_spread': CONCENTRATION_UNITS, 'ki_spread': CONCENTRATION_UNITS, 'specific_activity': ('Ci/mmol',), 'radioligand_concentration': CONCENTRATION_UNITS, 'radioligand_range_lowest': CONCENTRATION_UNITS, 'radioligand_range_highest': CONCENTRATION_UNITS, 'bead_amount': ('ug', 'mg'), 'bead_concentration': ('mg/mL',), 'receptor_amount': ('ug', 'mg'), 'percent_bound': ('percent',), 'nonspecific_fraction': ('percent',), 'nonspecific_ligand_concentration': CONCENTRATION_UNITS, 'nonspecific_excess': ('ratio',), 'bead_only_fraction': ('percent',), 'counting_efficiency': ('percent',), 'incubation_time': TIME_UNITS, 'settling_time': TIME_UNITS, 'temperature': ('C', 'K'), 'titration_point_count': ('count',), 'technical_replicate_count': ('count',), 'replicate_count': ('count',), 'concentration_series': CONCENTRATION_UNITS}
+UNITS = {'kd': CONCENTRATION_UNITS, 'bmax': ('fmol/mg', 'pmol/mg', 'sites/cell', 'nM'), 'ki': CONCENTRATION_UNITS, 'ic50': CONCENTRATION_UNITS, 'hill_slope': ('ratio',), 'kd_spread': CONCENTRATION_UNITS, 'ki_spread': CONCENTRATION_UNITS, 'specific_activity': ('Ci/mmol',), 'radioligand_concentration': CONCENTRATION_UNITS, 'radioligand_range_lowest': CONCENTRATION_UNITS, 'radioligand_range_highest': CONCENTRATION_UNITS, 'bead_amount': ('ug', 'mg'), 'bead_concentration': ('mg/mL',), 'receptor_amount': ('ug', 'mg'), 'percent_bound': ('percent',), 'nonspecific_fraction': ('percent',), 'nonspecific_ligand_concentration': CONCENTRATION_UNITS, 'nonspecific_ligand_affinity': CONCENTRATION_UNITS, 'nonspecific_excess': ('ratio',), 'bead_only_fraction': ('percent',), 'counting_efficiency': ('percent',), 'incubation_time': TIME_UNITS, 'association_half_time': TIME_UNITS, 'settling_time': TIME_UNITS, 'temperature': ('C', 'K'), 'titration_point_count': ('count',), 'technical_replicate_count': ('count',), 'replicate_count': ('count',), 'concentration_series': CONCENTRATION_UNITS}

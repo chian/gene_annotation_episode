@@ -1,9 +1,7 @@
-"""Branch runs of the A110 head with the real model on a held world (the reaction world of the literature grading
-plus a proposed reaction hypothesis): the head alone (1a), the head with the literature child subtree (1b) and the
-head offered every child slot while only the literature subtree is registered (1). Public API only: ``link(...).run()``
-with the standard ``ModelProvider``, a real Store and journal, then ``resume``. Selected only with ``-m model_run``."""
+"""Branch run of the A110 head with the real model on a held world (a held reaction world plus a proposed reaction
+hypothesis): the head alone with its own tools. Public API only: ``link(...).run()`` with the standard
+``ModelProvider``, a real Store and journal, then ``resume``. Selected only with ``-m model_run``."""
 import asyncio
-import importlib
 import json
 
 import pytest
@@ -17,22 +15,9 @@ from ..credit import projector
 from ..episode import BiochemicalFeasibilityEvidence as HEAD
 from ..goal import BINDING_PATH
 
-LIT = 'gene_annotation_episode.episodic_workflow.root.a110.biochemical_feasibility_evidence.published_evidence_assessment'
-CHAIN = (('', 'PublishedEvidenceAssessment'),
-         ('.evidence_search_strategy_improvement', 'EvidenceSearchStrategyImprovement'),
-         ('.evidence_search_strategy_improvement.source_relevance_assessment', 'SourceRelevanceAssessment'),
-         ('.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination',
-          'SourceEvidenceExamination'),
-         ('.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.'
-          'source_coverage_improvement', 'SourceCoverageImprovement'),
-         ('.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.'
-          'passage_evidence_extraction', 'PassageEvidenceExtraction'),
-         ('.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.'
-          'table_evidence_extraction', 'TableEvidenceExtraction'))
 SHA = 'a' * 64
 OPTION = {'version': 'biochemical_feasibility_evidence_option_ref_v1', 'library_id': SHA, 'entry_sha256': SHA}
 TASK = 'A110:received_scientific_finding_progress'
-LEAF_SETTINGS = {'cost': 0.02, 'parameters': {'uncertainty_alpha': 0.05}}
 
 
 def world(tmp_path):
@@ -58,31 +43,20 @@ def world(tmp_path):
                    'chemically feasible; the held paper reports the measurements.'}, 'selection': []}, paper['id']
 
 
-def settings(entry, roles, with_literature):
+def settings(entry, roles):
     parent = HEAD.read_from_parent(HEAD.assignment_form.admit(entry['assignment'], 'assignment'), entry['message'])
     declaration = {'kind': 'accumulation', 'cutoff': 0.5, 'parameters': {'uncertainty_alpha': 0.05},
                    'credit_definition': projector(parent).as_record()}
-    value = {BINDING_PATH: {'child_roles': roles, 'handoff_unit': 1.0, 'acquired_record_unit': 1.0,
-                            'information_unit': 1.0, 'tool_registry': {},
-                            'yield_bindings': {TASK: declaration}}}
-    if with_literature:
-        value.update({LIT.split('episodic_workflow.root.a110.')[1].replace('.', '/') + path.replace('.', '/'):
-                      LEAF_SETTINGS for path, _ in CHAIN})
-    return value
+    return {BINDING_PATH: {'child_roles': roles, 'handoff_unit': 1.0, 'acquired_record_unit': 1.0,
+                           'information_unit': 1.0, 'tool_registry': {},
+                           'yield_bindings': {TASK: declaration}}}
 
 
-def bindings(with_literature):
-    found = [HEAD()]
-    if with_literature:
-        found += [getattr(importlib.import_module(LIT + path + '.episode'), name)() for path, name in CHAIN]
-    return found
-
-
-def run_branch(tmp_path, run_id, roles, with_literature):
+def run_branch(tmp_path, run_id, roles):
     store, entry, paper = world(tmp_path)
     journal = RunJournal(tmp_path / 'journal.sqlite3')
-    registry = BindingRegistry(bindings(with_literature))
-    continuation = settings(entry, roles, with_literature)
+    registry = BindingRegistry([HEAD()])
+    continuation = settings(entry, roles)
     collaborators = {'store': store, 'model_provider': ModelProvider(load_config(), tmp_path / 'model_calls', tmp_path),
                      'continuation': continuation, 'services': {}}
     try:
@@ -108,15 +82,5 @@ def run_branch(tmp_path, run_id, roles, with_literature):
 
 
 @pytest.mark.model_run
-def test_branch_head_with_every_slot_offered_and_only_the_literature_subtree(tmp_path):
-    run_branch(tmp_path, 'a110_head_all', ['launch', 'monitor', 'results', 'hpc', 'literature', BINDING_PATH], True)
-
-
-@pytest.mark.model_run
 def test_branch_head_with_its_own_tools_only(tmp_path):
-    run_branch(tmp_path, 'a110_head_alone', [BINDING_PATH], False)
-
-
-@pytest.mark.model_run
-def test_branch_head_with_the_literature_child(tmp_path):
-    run_branch(tmp_path, 'a110_head_literature', ['literature', BINDING_PATH], True)
+    run_branch(tmp_path, 'a110_head_alone', [BINDING_PATH])

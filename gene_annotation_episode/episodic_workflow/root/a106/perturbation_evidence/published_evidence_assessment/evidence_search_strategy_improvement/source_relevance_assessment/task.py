@@ -15,7 +15,16 @@ sequence, GEO and SRA file tools) to the access tools of the page episode and ha
 both are carried here. The population route of the old episode is carried through the library's
 ``literature_population_route`` (the population operations, the intervention grading sheet G1, the A106 final
 subscore G2 and the automatic score judgment); the old ``report`` tool is gone: what returns is the credit and the
-controlled features of the G1 and G2 sheets."""
+controlled features of the G1 and G2 sheets.
+
+The search step's Jev measurement (nano-graphrag ``web_search_binding``, ``SEARCH_PAGE_SELECTION_VERSION``
+``model_planned_from_jev_evidence_v5``): before this episode plans, ``assess_search_results`` (decided by code, no model
+call) has Jev measure every search result once, from its held text, against the immutable Search Goal derived from
+the commission (``search_result_assessment.assess_search_results``) and holds the assessment as an artifact. It is the
+only action offered until then. Every later decision shows the model nano-graphrag's candidate view for the
+UNCONSUMED search results only (``context.page_candidates``: each result's Jev probability, provider rank, title and
+description, and the measured outcomes of the prior page children); the model selects one source per page child, and
+a source handed to a page is consumed. Jev is planning evidence, not the selection policy."""
 from jsonschema import ValidationError
 
 from episode_runtime import ChildCall, CustodyError, ModelRequest, Rejected, ToolCall
@@ -38,6 +47,9 @@ from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.pe
     decode_response, generation_schema)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.prompts.perturbation_evidence.literature_investigation_prompt import (
     INSTRUCTIONS, REASONING_COMMIT_REQUIREMENT)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.search_result_assessment import (
+    assess_search_results as assess_results)
+from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.jev_client import JevDecisionClient
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.presentation import extend_context
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import (
     rejection_feedback)
@@ -50,7 +62,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.progress_
 from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_discovery_values import (
     references_schema)
 from gene_annotation_episode.episodic_workflow.episode_support.records.perturbation_evidence.domain import (
-    RECORD_SCHEMAS, REF, REFS, identity, obj, source_location_inputs, validate_schema)
+    RECORD_SCHEMAS, REF, REFS, canonical, identity, obj, source_location_inputs, validate_schema)
 from gene_annotation_episode.episodic_workflow.episode_support.records.perturbation_evidence.experimental_database_records import (
     reader_schema as experimental_records_schema)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.perturbation_evidence.tools import ToolRegistry
@@ -266,7 +278,15 @@ COMMISSION_GUIDANCE = ('\nYour input list (input_list) holds the sources still t
                        'the examination can name only a source of the input list.'
                        '\nCommission the examination of one source you hold (literature_page) when it is useful: it '
                        'returns its credit, the controlled features of the A106 sheets saved below it and, for the literature task you choose for it, its typed '
-                       'answers as counts and references. The examination reads only the source its page assigns.')
+                       'answers as counts and references. The examination reads only the source its page assigns.'
+                       '\nJev has measured every search result once against the Search Goal. '
+                       'context.page_candidates shows, for the UNCONSUMED search results only, each one\'s provider '
+                       'rank, title, description and Jev assessment (relevance_probability: Jev\'s probability that '
+                       'the result can contribute to the Search Goal), and the measured results of the previous page '
+                       'examinations (previous_page_children). These are measurements for your planning, not a rule '
+                       'that the largest probability must be selected: use them and the realized results of previous '
+                       'examinations to choose the next source worth examining. One examination takes one source; the '
+                       'numerical controller alone decides whether the search continues.')
 LEAD_GUIDANCE = ('\nFor a verified_source_leads commission, a reason selection also carries source_lead: the '
                  'inspected source, its anchored reference subject, whether it is a useful lead for the original '
                  'question and the exact witnessed byte interval. A search hit or title alone verifies nothing.')
@@ -742,17 +762,54 @@ async def literature_a106_score_judgment(arguments, ctx):
     return await route.score_judgment(arguments, ctx, ROLE, GOAL)
 
 
+ASSESS = 'assess_search_results'
+
+
+def result_text(store, reference):
+    """The held text of one search result, read through custody: its text representation, else its original bytes
+    when they are UTF-8 text, else nothing (the measurement then reads its description, as nano-graphrag does)."""
+    source = store.get(reference)
+    for key in ('text_ref', 'artifact_ref'):
+        if source.get(key) is None:
+            continue
+        try:
+            return store.get_artifact(source[key]).decode('utf-8')
+        except UnicodeDecodeError:
+            continue
+    return ''
+
+
+async def assess_search_results(arguments, ctx):
+    """The search step's Jev measurement (nano-graphrag ``SearchPageProposer._issue`` with ``assess_page_candidate``):
+    every search result's held text is read through custody, Jev measures each once against the Search Goal, and this
+    unit holds the assessment as an artifact the episode keeps (``search_assessment_ref``). The library function is
+    pure; this unit alone writes. The Jev client reads its key from the repository's ``.env`` at run time
+    (``jev_client``); a missing key or a failed call raises."""
+    results = [{**item, 'text': result_text(ctx.store, item['result_id'])} for item in arguments['results']]
+    assessment = await assess_results(JevDecisionClient.from_repository_env(), goal=arguments['goal'],
+                                      results=results)
+    ref = ctx.store.artifact(canonical(assessment), 'application/json')
+    return {'status': 'completed', 'assessment_ref': ref, 'result_count': len(results),
+            'window_count': sum(len(item['window_probabilities']) for item in assessment['assessments']),
+            'request_count': sum(item['attempts'] for item in assessment['assessments'])}
+
+
 TOOLS = {'state_query': state_query, 'source_read': source_read, 'source_locate': source_locate, 'source_sequence_scan': source_sequence_scan, 'source_sequence_references': source_sequence_references, 'source_experimental_records': source_experimental_records, 'image_view': image_view, 'source_archive_members': source_archive_members, 'source_archive_extract': source_archive_extract, 'source_xlsx_sheets': source_xlsx_sheets, 'source_xlsx_rows': source_xlsx_rows, 'source_pdf_info': source_pdf_info, 'source_pdf_text': source_pdf_text, 'source_pdf_page': source_pdf_page, 'execution_estimate': execution_estimate, 'public_literature_search': public_literature_search, 'public_literature_read': public_literature_read, 'public_literature_sequence_identity': public_literature_sequence_identity, 'public_ncbi_search': public_ncbi_search, 'public_pmc_versions': public_pmc_versions, 'public_pmc_files': public_pmc_files, 'public_pmc_asset': public_pmc_asset, 'public_sabiork_search': public_sabiork_search, 'public_sabiork_read': public_sabiork_read, 'public_brenda_search': public_brenda_search, 'public_brenda_read': public_brenda_read, 'public_bioassay_search': public_bioassay_search, 'public_bioassay_read': public_bioassay_read, 'public_chembl_search': public_chembl_search, 'public_chembl_read': public_chembl_read, 'public_mavedb_search': public_mavedb_search, 'public_mavedb_read': public_mavedb_read, 'public_brenda_graph_search': public_brenda_graph_search, 'public_ncbi_entrez': public_ncbi_entrez, 'public_ncbi_sequence': public_ncbi_sequence, 'public_ncbi_geo': public_ncbi_geo, 'public_ncbi_sra_file': public_ncbi_sra_file,
          'reason': reason,
          'literature_a106_score_judgment': literature_a106_score_judgment, 'open_population': open_population,
-         **{name: globals()[name] for name in route.POPULATION_NAMES}}
+         **{name: globals()[name] for name in route.POPULATION_NAMES}, ASSESS: assess_search_results}
 
 
 def decide(summary, feedback, ctx):
     """Ask the model for the next unit, shown the assignment, the custody of the sources it holds, its own read and
     acquisition outcomes, the controlled features of the A106 sheets saved here and below, the reports of its examinations, the latest image it looked at,
-    the tools and the examinations it may commission, the measured time and the yield table
-    (the old decision state and inputs, over this episode's summary)."""
+    the tools and the examinations it may commission, Jev's measurement of the unconsumed search results, the measured
+    time and the yield table (the old decision state and inputs, over this episode's summary).
+
+    Before Jev has measured the search results the decision is that measurement, made by code with no model call
+    (nano-graphrag assesses every buffered result before its page proposer is asked)."""
+    if assessment_pending(summary):
+        return ToolCall(ASSESS, {'goal': summary['jev_search_goal'], 'results': summary['search_result_candidates']})
     names = offered(ctx.settings, summary['opened_population'])
     leads = summary['task']['kind'] == 'verified_source_leads'
     knowledge_directory = ctx.settings.get('knowledge_library_directory')
@@ -769,6 +826,7 @@ def decide(summary, feedback, ctx):
                'input_list': summary['input_list'], 'consumed_inputs': summary['consumed_inputs'],
                'tools': catalog(names, summary['reasoning_schema'], leads, ctx.settings),
                'child_options': commissions(summary['input_list']),
+               'page_candidates': summary['search_planner_context'],
                'time_accounting': time_accounting(ctx.clock.progress_time)}
     context = extend_context(context, {
         'feedback': feedback, 'action_yields': summary['action_yields'],
@@ -810,3 +868,20 @@ def action(response, summary, records, ctx):
 def validate_selection(value, schema):
     validate_schema(value, schema)
     return value['selection']
+
+
+def assessment_pending(summary):
+    """Whether Jev has yet to measure the search results: there are results and no held assessment."""
+    return summary['search_assessment_ref'] is None and bool(summary['search_result_candidates'])
+
+
+def offered_actions(summary, ctx):
+    """The action types offered at this decision: before Jev has measured the search results the one action is
+    ``assess_search_results``; after it, the names of the tools ``decide`` shows (the same ``catalog`` over the same
+    ``offered`` list) and the examinations it may commission."""
+    if assessment_pending(summary):
+        return [ASSESS]
+    names = offered(ctx.settings, summary['opened_population'])
+    leads = summary['task']['kind'] == 'verified_source_leads'
+    tools = [entry['name'] for entry in catalog(names, summary['reasoning_schema'], leads, ctx.settings)]
+    return [*tools, *(entry['slot'] for entry in commissions(summary['input_list']))]

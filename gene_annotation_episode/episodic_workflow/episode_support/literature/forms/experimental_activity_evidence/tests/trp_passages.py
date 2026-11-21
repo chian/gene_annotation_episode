@@ -11,7 +11,7 @@ PMID 36361524, open access, CC BY 4.0), exactly as the publisher's XML gives the
 ranges, minus signs U+2212 in the equation and one line break before 'where'). The paragraph is whole (no sentence was removed). It
 states that the interaction of TRKB-ECD-His with three test compounds was determined by tryptophan fluorescence titration, with
 7,8-DHF as a positive control, that the protein was at 50 nM in PBS, that the compounds were used at 0-1000 nM (a range, not a
-list), the instrument, 'room temperature' (no value), excitation at 295 nm, an emission range of 300-400 nm, and that the KD was
+list: only its top, 1000 nM, is a concentration above 0), the instrument, 'room temperature' (no value), excitation at 295 nm, an emission range of 300-400 nm, and that the KD was
 determined by fitting the normalized fluorescence intensity at 330 nm with an equation of the fractional change f and the total
 protein and compound concentrations. It gives no KD (the KD values are in the Results paragraph, not in this chunk), no spread,
 no size of the change, no direction, no name of the fit model, no replicate count, no incubation time and no control, and says
@@ -37,7 +37,8 @@ REAL = (
 SYNTHETIC = (
     'Binding of the peptide ligand to ParB was measured by intrinsic tryptophan fluorescence titration at 25 °C. The assay was about the quenching of the protein ParB by its partner, the peptide PZ-2. ParB was held at a '
     'constant 5 nM, below the KD, and the samples were excited at 295 nm; the emission was read at 340 nm. The ligand was added in '
-    '12 ligand concentrations of 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024 and 2048 nM, and each sample was left for 5 min after '
+    '12 ligand concentrations of 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024 and 2048 nM, that is, a lowest concentration of 1 nM and '
+    'a highest of 2048 nM, and each sample was left for 5 min after '
     'each addition before the read; the signal was stable over a further hour, so binding was at equilibrium. The total added '
     'volume was 3% of the starting volume, and the fluorescence was corrected for dilution. The fluorescence of the buffer was '
     'subtracted, and the fluorescence of the ligand alone was measured under the same conditions. The ligand did not absorb at the '
@@ -65,6 +66,8 @@ SYNTHETIC_STATED = {
     'ligand_absorbance': (0.02, 'AU', 'an absorbance of 0.02 AU'),
     'added_volume_fraction': (3, 'percent', 'The total added volume was 3% of the starting volume'),
     'titration_point_count': (12, 'count', '12 ligand concentrations'),
+    'concentration_lowest': (1, 'nM', 'a lowest concentration of 1 nM'),
+    'concentration_highest': (2048, 'nM', 'a highest of 2048 nM'),
     'incubation_time': (5, 'min', 'left for 5 min'),
     'temperature': (25, 'C', 'at 25 °C'),
     'replicate_count': (3, 'count', 'Three independent titrations'),
@@ -96,9 +99,11 @@ REAL_STATED = {
     'protein_concentration': (50, 'nM', 'TRKB-ECD-His (50 nM in PBS)'),
     'excitation_wavelength': (295, 'nm', 'excitation wavelength set at 295 nm'),
     'emission_wavelength': (330, 'nm', 'fluorescence intensity at 330 nm'),
+    'concentration_highest': (1000, 'nM', '0–1000 nM'),
 }
 # What else a careful reader may also state from the real passage: nothing. The compounds are used over a range (0-1000 nM), not a
-# list; the temperature is 'room temperature' (no number); the emission range 300-400 nm is not a single wavelength; 'The
+# list: its highest end, 1000 nM, is stated (concentration_highest) and its lowest end is 0, a blank without compound, which is not a
+# lowest concentration (concentration_lowest stays unavailable); the temperature is 'room temperature' (no number); the emission range 300-400 nm is not a single wavelength; 'The
 # fluorescent quenching was conducted' names the assay and does not say the compounds quenched or by how much; the equation of f,
 # [P]T and [D]T is not named a model; 7,8-DHF is a positive-control compound, not a non-binding control; and no replicate count,
 # incubation, correction, blank or control is stated. None of those may be stated.

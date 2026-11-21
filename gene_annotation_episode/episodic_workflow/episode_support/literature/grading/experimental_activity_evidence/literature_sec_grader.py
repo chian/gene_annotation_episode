@@ -33,11 +33,11 @@ the mass fields) and returns 'unknown' with a reason ending in '_recorded_for_th
 Support: native 'support' holds, for each criterion, the supports ('direct', 'implied', 'about_something_else') of the stated fields it reads
 (its declared 'reads'), copied from the record and not judged here; the converter judges them.
 
-Native values retained: every record quantity as given, plus kd_nM, loaded_nM, salt_mM, shift_ml, mass_measured, mass_theoretical, mass_deviation_percent (signed; facts only, the grader judges no mass threshold; None when the two masses are not both stated), mass_support_refs, load_over_kd, interaction,
+Native values retained: every record quantity as given, plus kd_nM, loaded_nM, loaded_mL (the injected volume), column_mL (the stated column volume) with loaded_refs and column_refs (recorded for the sheet beside the shift and the load), salt_mM, shift_ml, mass_measured, mass_theoretical, mass_deviation_percent (signed; facts only, the grader judges no mass threshold; None when the two masses are not both stated), mass_support_refs, load_over_kd, interaction,
 interaction_refs, preparations, column_type, detection and spread_kind.
 """
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_sec_criteria import (
-    MM_PER_SALT_UNIT, NM_PER_UNIT, PERCENT_PER_FRACTION, SEC_CRITERIA)
+    ML_PER_VOLUME_UNIT, MM_PER_SALT_UNIT, NM_PER_UNIT, PERCENT_PER_FRACTION, SEC_CRITERIA)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
 VERSION = 'a105_sec_grade_v1'
@@ -94,6 +94,13 @@ def _fact_unless_no_kd(record, native, name):
     return _result(status, reason, item['source_refs'])
 
 
+def _column(record, native):
+    """Record the stated column volume (mL) with its refs: the scale of the peak width, read by the sheet beside the shift and the dilution on the column."""
+    operand = record['quantities']['column_volume']
+    if operand['status'] == 'point':
+        native.update({'column_mL': operand['value'], 'column_refs': _refs(operand)})
+
+
 def _complex_peak_observed(record, native):
     return _one_fact(record, 'complex_peak_detected')
 
@@ -109,6 +116,7 @@ def _elution_shift(record, native):
         shift = earlier - complex_volume
         refs = _refs(record['quantities']['component_elution_volume_earlier'], record['quantities']['complex_elution_volume'])
     native.update({'shift_ml': shift, 'shift_refs': refs})
+    _column(record, native)
     return _result('unknown', 'elution_shift_recorded_for_the_sheet', [])
 
 
@@ -165,6 +173,9 @@ def _complex_stable_on_column(record, native):
         return _fact_unless_no_kd(record, native, 'complex_stable_on_column')
     native['load_over_kd'] = loaded / kd
     native['load_refs'] = _refs(record['quantities']['loaded_concentration'], record['quantities']['kd'])
+    _column(record, native)
+    if native['loaded_mL'] is not None:
+        native['loaded_refs'] = _refs(record['quantities']['loaded_volume'])
     return _result('unknown', 'load_over_kd_recorded_for_the_sheet', [])
 
 
@@ -198,7 +209,7 @@ EVALUATORS = {'complex_peak_observed': _complex_peak_observed, 'elution_shift': 
 def grade_sec(record):
     """Grade one SEC experiment record. Returns the criterion answers and native values."""
     complex_peak = record['facts']['complex_peak_detected']
-    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'column_type': record['column_type'], 'detection': record['detection'], 'spread_kind': record['spread_kind'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'interaction': INTERACTION.get(complex_peak['answer']), 'interaction_refs': list(complex_peak['source_refs']) if complex_peak['answer'] in INTERACTION else [], 'kd_nM': _scaled(record, 'kd', NM_PER_UNIT), 'loaded_nM': _scaled(record, 'loaded_concentration', NM_PER_UNIT), 'salt_mM': _scaled(record, 'salt_concentration', MM_PER_SALT_UNIT), 'shift_ml': None, 'shift_refs': [], 'stoichiometry_ratio': None, 'stoichiometry_refs': [], 'salt_refs': [], 'load_refs': [], 'polydispersity': None, 'polydispersity_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': [], 'mass_measured': None, 'mass_theoretical': None, 'mass_deviation_percent': None, 'mass_support_refs': [], 'load_over_kd': None}
+    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'column_type': record['column_type'], 'detection': record['detection'], 'spread_kind': record['spread_kind'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'interaction': INTERACTION.get(complex_peak['answer']), 'interaction_refs': list(complex_peak['source_refs']) if complex_peak['answer'] in INTERACTION else [], 'kd_nM': _scaled(record, 'kd', NM_PER_UNIT), 'loaded_nM': _scaled(record, 'loaded_concentration', NM_PER_UNIT), 'salt_mM': _scaled(record, 'salt_concentration', MM_PER_SALT_UNIT), 'loaded_mL': _scaled(record, 'loaded_volume', ML_PER_VOLUME_UNIT), 'loaded_refs': [], 'column_mL': None, 'column_refs': [], 'shift_ml': None, 'shift_refs': [], 'stoichiometry_ratio': None, 'stoichiometry_refs': [], 'salt_refs': [], 'load_refs': [], 'polydispersity': None, 'polydispersity_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': [], 'mass_measured': None, 'mass_theoretical': None, 'mass_deviation_percent': None, 'mass_support_refs': [], 'load_over_kd': None}
     outcomes = {name: EVALUATORS[name](record, native) for name in CRITERIA}
     native['support'] = criterion_supports(record, SEC_CRITERIA)      # kept for the sheet: the grader does not judge it
     return {'version': VERSION, 'experiment_type': 'sec', 'experiment_ref': record['experiment_ref'], 'criteria': {name: {'status': o['status'], 'support_refs': o['support_refs']} for name, o in outcomes.items()}, 'reasons': {name: o['reason'] for name, o in outcomes.items()}, 'native': native}

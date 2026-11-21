@@ -1,6 +1,5 @@
-"""The commissions of the six child slots, carried from the old ``to_child_*.py`` request assemblers
-(``to_child_partner_presence_evidence``, ``to_child_published_evidence_assessment``,
-``to_child_hpc_work_planning``, ``to_child_execution_job_submission``, ``to_child_execution_result_acquisition``) and
+"""The commissions of the five child slots, carried from the old ``to_child_*.py`` request assemblers
+(``to_child_partner_presence_evidence``, ``to_child_hpc_work_planning``, ``to_child_execution_job_submission``, ``to_child_execution_result_acquisition``) and
 ``to_child_execution_progress_assessment.prepare_request``.
 
 The old assemblers built an ``EpisodeRequest`` envelope (goal, ``message`` with the scope, the ``initial_report``,
@@ -16,8 +15,7 @@ key raises where the child is built.
 
 The head fills the child's new fields from its own parent input: the scope, the finding unit and the units. The
 model supplies only what the old model supplied (the objective, the purpose, the child's own assignment fields and
-the return fields it wants). The records of the literature child's ``received_record_refs`` are everything the head
-holds (a pass carries only the records named)."""
+the return fields it wants)."""
 from episode_runtime import ChildMessage
 
 from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence.construction_records import (
@@ -136,8 +134,6 @@ SELECTABLE = {
         'hpc_result_refs': 'Sources containing original result bytes and attempt custody',
         'hpc_result_artifact_refs': 'The artifact of each source named in hpc_result_refs (a returned record does not bring the reco',
     },
-    # The literature child returns its credit and the controlled features of its partner sheets; nothing is selectable.
-    'literature': {},
 }
 
 
@@ -169,13 +165,6 @@ def assignment_for(slot, arguments, summary):
         if summary['proposed_annotation_ref'] is not None:
             assignment['proposed_annotation_ref'] = [summary['proposed_annotation_ref']]
         return assignment
-    if slot == 'literature':
-        return {'version': 'literature_assignment_v1',
-                'question_context_refs': arguments['question_context_refs'],
-                'source_refs': arguments['source_refs'], 'scope': summary['scope'],
-                'finding_unit': summary['finding_unit'], 'received_record_refs': summary['held_record_refs'],
-                **({'literature_partner_components': arguments['partner_components']}
-                   if arguments.get('partner_components') is not None else {})}
     if slot == 'launch':
         return {'version': 'execution_launch_assignment_v1', 'requests': arguments['requests'],
                 'immutable_input_versions': arguments['immutable_input_versions'],

@@ -65,12 +65,12 @@ MST_CRITERIA = (
     {
         'id': 'signal_amplitude',
         'question': 'Is the change of the normalized fluorescence large enough, against the noise, to fit a KD?',
-        'reads': ('quantities.signal_to_noise', 'quantities.fnorm_amplitude'),
-        'rule': 'The grader records the two numbers that are given (signal_to_noise, fnorm_amplitude in per mille; None for one not given) and their refs (signal_refs) and leaves the judgement to the sheet. Neither given is unknown.',
+        'reads': ('quantities.signal_to_noise', 'quantities.fnorm_amplitude', 'quantities.fnorm_noise'),
+        'rule': 'The grader records the numbers that are given (signal_to_noise, fnorm_amplitude and fnorm_noise in per mille; None for one not given) and their refs (signal_refs) and leaves the judgement to the sheet. Neither given is unknown.',
         'thresholds': (),
         'returns': (
-            ('unknown', 'signal_recorded_for_the_sheet', 'at least one number is given: it is recorded and the sheet judges it'),
-            ('unknown', 'signal_not_given', 'neither number is given'),
+            ('unknown', 'signal_recorded_for_the_sheet', 'the signal-to-noise or the amplitude is given (the noise alone is not a signal): it is recorded and the sheet judges it'),
+            ('unknown', 'signal_not_given', 'neither the signal-to-noise nor the amplitude is given'),
             ('not_applicable', 'never', 'never returned'),
         ),
     },
@@ -145,7 +145,7 @@ MST_CRITERIA = (
         'id': 'equilibrium',
         'question': 'Was the binding at equilibrium when read?',
         'reads': ('facts.equilibrium_reached', 'quantities.incubation_time'),
-        'rule': 'The fact decides: yes supported, no fails. When it is not stated and an incubation time is given, the grader records it (incubation_min, in minutes, and incubation_refs) and leaves the judgement to the sheet; otherwise it is unknown.',
+        'rule': 'The fact decides: yes supported, no fails. When it is not stated and an incubation time is given, the grader records it (incubation_min, in minutes, incubation_constant_nM, the reported KD else Ki in nM, and incubation_refs, those of the time and the constant) and leaves the judgement to the sheet; otherwise it is unknown.',
         'thresholds': ('MIN_PER_UNIT',),
         'returns': (
             ('supported', 'facts_answered_yes', 'answer yes'),

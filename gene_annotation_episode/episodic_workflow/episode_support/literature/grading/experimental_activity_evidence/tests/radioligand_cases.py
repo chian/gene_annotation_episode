@@ -11,7 +11,7 @@ real_record: see below (the published case).
 """
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_radioligand_record import CHOICE_FIELDS, EXPERIMENT_TYPE, FACTS, QUANTITIES, VERSION, fact, point, unavailable
 
-UNITS = {'kd': 'nM', 'bmax': 'fmol/mg', 'ki': 'nM', 'ic50': 'nM', 'hill_slope': 'ratio', 'kd_spread': 'nM', 'ki_spread': 'nM', 'specific_activity': 'Ci/mmol', 'radioligand_concentration': 'nM', 'radioligand_range_lowest': 'nM', 'radioligand_range_highest': 'nM', 'receptor_amount': 'ug', 'percent_bound': 'percent', 'nonspecific_fraction': 'percent', 'nonspecific_ligand_concentration': 'nM', 'nonspecific_excess': 'ratio', 'incubation_time': 'min', 'temperature': 'C', 'titration_point_count': 'count', 'technical_replicate_count': 'count', 'replicate_count': 'count'}
+UNITS = {'kd': 'nM', 'bmax': 'fmol/mg', 'ki': 'nM', 'ic50': 'nM', 'hill_slope': 'ratio', 'kd_spread': 'nM', 'ki_spread': 'nM', 'specific_activity': 'Ci/mmol', 'radioligand_concentration': 'nM', 'radioligand_range_lowest': 'nM', 'radioligand_range_highest': 'nM', 'receptor_amount': 'ug', 'percent_bound': 'percent', 'nonspecific_fraction': 'percent', 'nonspecific_ligand_concentration': 'nM', 'nonspecific_ligand_kd': 'nM', 'nonspecific_excess': 'ratio', 'incubation_time': 'min', 'dissociation_rate': '1/min', 'temperature': 'C', 'titration_point_count': 'count', 'technical_replicate_count': 'count', 'replicate_count': 'count'}
 
 
 def blank_record(experiment_ref, source_ref, assertion_ref):
@@ -60,6 +60,6 @@ def synthetic_record(experiment_ref='exp_synthetic_radioligand_1', radioligand_p
     record['spread_kind'] = 'standard_error'
     record['fit_model'] = 'one_site'
     record['choice_support'] = dict.fromkeys(CHOICE_FIELDS, 'direct')      # a hand-built record: every stated choice is direct
-    answers ={'ligand_depletion_checked': 'yes', 'nonspecific_binding_determined': 'yes', 'equilibrium_reached': 'yes', 'radioligand_purity_checked': 'yes', 'filter_binding_checked': 'yes', 'wash_dissociation_considered': 'yes', 'nonlinear_fit_used': 'yes', 'cheng_prusoff_applied_with_own_kd': 'yes', 'independent_experiments': 'yes', 'single_estimate_method': 'no'}
-    record['facts'] = {name: fact(answer, refs) for name, answer in answers.items()}
+    answers ={'ligand_depletion_checked': 'yes', 'nonspecific_binding_determined': 'yes', 'equilibrium_reached': 'yes', 'radioligand_purity_checked': 'yes', 'filter_binding_checked': 'yes', 'wash_dissociation_considered': 'yes', 'nonlinear_fit_used': 'yes', 'cheng_prusoff_applied_with_own_kd': 'yes', 'nonspecific_ligand_is_unlabelled_radioligand': 'yes', 'independent_experiments': 'yes', 'single_estimate_method': 'no'}
+    record['facts'] = {**record['facts'], **{name: fact(answer, refs) for name, answer in answers.items()}}      # a fact not named here stays unknown
     return record

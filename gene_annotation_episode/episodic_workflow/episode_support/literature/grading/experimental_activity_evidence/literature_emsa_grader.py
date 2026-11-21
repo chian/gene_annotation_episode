@@ -12,7 +12,7 @@ single source). This file only evaluates them: one short function per
 criterion, in the same order as the declaration.
 
 The grader holds NO threshold that judges goodness. Where a number would be compared with a limit it records the number with its refs
-(specific_competitor_excess, incubation_min, probe_over_kd, protein_low_over_kd/protein_high_over_kd, titration_point_count, fraction_shifted_percent,
+(specific_competitor_excess, competition_protein_nM, incubation_min, probe_over_kd, protein_low_over_kd/protein_high_over_kd, titration_point_count, fraction_shifted_percent, plateau_percent,
 shifted_species_count, replicate_count/replicate_independent, each with its *_refs) and returns 'unknown' with a reason ending in
 '_recorded_for_the_sheet' and no refs; the EMSA converter (literature_emsa_converter.py) judges it, and holds the classification of the fit models
 as one-site or not. A fact stated as no stays the grader's own conflicting.
@@ -104,6 +104,9 @@ def _specific_competition(record, native):
     excess = _value(record, 'specific_competitor_excess')
     if item['answer'] == 'no' and excess is not None:
         native.update({'specific_competitor_excess': excess, 'specific_competition_refs': list(item['source_refs'])})
+        protein = _scaled(record, 'competition_protein_concentration', NM_PER_UNIT)
+        if protein is not None:      # the protein the competitor has to outnumber, with the probe concentration (native probe_nM) the sheet turns the fold excess into a molar ratio
+            native.update({'competition_protein_nM': protein, 'competition_protein_refs': _refs(record['quantities']['competition_protein_concentration'])})
         return _result('unknown', 'competition_excess_recorded_for_the_sheet', [])
     status, reason = _shared_rule([item['answer']])
     return _result(status, reason, item['source_refs'])
@@ -191,6 +194,9 @@ def _saturation(record, native):
     if percent is None:
         return _result('unknown', 'fraction_shifted_not_given', [])
     native.update({'fraction_shifted_percent': percent, 'fraction_shifted_refs': _refs(record['quantities']['fraction_shifted_highest'])})
+    plateau = _value(record, 'plateau_shifted_fraction')
+    if plateau is not None:      # the fitted plateau the shifted fraction is read against (an inactive part of the probe caps the shift below 100 percent)
+        native.update({'plateau_percent': plateau, 'plateau_refs': _refs(record['quantities']['plateau_shifted_fraction'])})
     return _result('unknown', 'fraction_shifted_recorded_for_the_sheet', [])
 
 
@@ -235,7 +241,7 @@ EVALUATORS = {'shift_observed': _shift_observed, 'specific_competition': _specif
 def grade_emsa(record):
     """Grade one EMSA experiment record. Returns the criterion answers and native values."""
     shift = record['facts']['shift_detected']
-    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'probe_type': record['probe_type'], 'probe_label': record['probe_label'], 'gel_type': record['gel_type'], 'nonspecific_competitor_type': record['nonspecific_competitor_type'], 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'interaction': INTERACTION.get(shift['answer']), 'interaction_refs': list(shift['source_refs']) if shift['answer'] in INTERACTION else [], 'kd_nM': _scaled(record, 'kd', NM_PER_UNIT), 'probe_nM': _scaled(record, 'probe_concentration', NM_PER_UNIT), 'protein_low_nM': _scaled(record, 'protein_concentration_lowest', NM_PER_UNIT), 'protein_high_nM': _scaled(record, 'protein_concentration_highest', NM_PER_UNIT), 'incubation_min': _scaled(record, 'incubation_time', MIN_PER_UNIT), 'probe_over_kd': None, 'protein_low_over_kd': None, 'protein_high_over_kd': None, 'specific_competitor_excess': None, 'specific_competition_refs': [], 'incubation_refs': [], 'probe_over_kd_refs': [], 'protein_range_refs': [], 'titration_point_count': None, 'titration_point_refs': [], 'fraction_shifted_percent': None, 'fraction_shifted_refs': [], 'shifted_species_count': None, 'shifted_species_refs': [], 'shifted_species_kd_refs': [], 'fit_model_probe_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': []}
+    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'probe_type': record['probe_type'], 'probe_label': record['probe_label'], 'gel_type': record['gel_type'], 'nonspecific_competitor_type': record['nonspecific_competitor_type'], 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'interaction': INTERACTION.get(shift['answer']), 'interaction_refs': list(shift['source_refs']) if shift['answer'] in INTERACTION else [], 'kd_nM': _scaled(record, 'kd', NM_PER_UNIT), 'probe_nM': _scaled(record, 'probe_concentration', NM_PER_UNIT), 'protein_low_nM': _scaled(record, 'protein_concentration_lowest', NM_PER_UNIT), 'protein_high_nM': _scaled(record, 'protein_concentration_highest', NM_PER_UNIT), 'incubation_min': _scaled(record, 'incubation_time', MIN_PER_UNIT), 'probe_over_kd': None, 'protein_low_over_kd': None, 'protein_high_over_kd': None, 'specific_competitor_excess': None, 'specific_competition_refs': [], 'competition_protein_nM': None, 'competition_protein_refs': [], 'plateau_percent': None, 'plateau_refs': [], 'incubation_refs': [], 'probe_over_kd_refs': [], 'protein_range_refs': [], 'titration_point_count': None, 'titration_point_refs': [], 'fraction_shifted_percent': None, 'fraction_shifted_refs': [], 'shifted_species_count': None, 'shifted_species_refs': [], 'shifted_species_kd_refs': [], 'fit_model_probe_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': []}
     outcomes = {name: EVALUATORS[name](record, native) for name in CRITERIA}
     native['support'] = criterion_supports(record, EMSA_CRITERIA)      # kept for the sheet: the grader does not judge it
     return {'version': VERSION, 'experiment_type': 'emsa', 'experiment_ref': record['experiment_ref'], 'criteria': {name: {'status': o['status'], 'support_refs': o['support_refs']} for name, o in outcomes.items()}, 'reasons': {name: o['reason'] for name, o in outcomes.items()}, 'native': native}

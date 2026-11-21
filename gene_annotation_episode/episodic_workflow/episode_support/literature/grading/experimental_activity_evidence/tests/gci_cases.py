@@ -3,13 +3,15 @@
 synthetic_record: a fully specified, explicitly SYNTHETIC record (not a publication) used to exercise every
 criterion's supported path. Its numbers, worked by hand: KD 20 nM from kon 1.0e5 M^-1 s^-1 and koff 2.0e-3 s^-1
 (koff / kon = 2.0e-8 M = 20 nM); steady-state KD 30 nM (ratio 1.5); immobilization level 500 pg/mm2, maximum response
-40 pg/mm2; six concentrations from 2 nM (0.1 x KD) to 600 nM (30 x KD); a standard error of 2 nM; three replicates.
+40 pg/mm2; an analyte of 20 kDa on a ligand of 100 kDa at stoichiometry 1 (theoretical maximum response 20 / 100 x 500
+x 1 = 100 pg/mm2, observed / theoretical 0.4); a dissociation phase of 600 s (decay 1 - exp(-2.0e-3 x 600) = 0.699);
+six concentrations from 2 nM (0.1 x KD) to 600 nM (30 x KD); a standard error of 2 nM; three replicates.
 sparse_record: only a KD and what a bare abstract gives; everything else is an unavailable operand or an 'unknown' fact.
 real_record: the published GCI measurement of CrcA binding to Crc (PMC10213629), only what the paragraph states.
 """
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_gci_record import EXPERIMENT_TYPE, FACTS, QUANTITIES, VERSION, fact, point, unavailable
 
-UNITS = {'kd': 'nM', 'kd_steady_state': 'nM', 'kon': 'M^-1 s^-1', 'koff': 's^-1', 'response_max': 'pg/mm2', 'kd_spread': 'nM', 'immobilization_level': 'pg/mm2', 'replicate_count': 'count'}
+UNITS = {'kd': 'nM', 'kd_steady_state': 'nM', 'kon': 'M^-1 s^-1', 'koff': 's^-1', 'response_max': 'pg/mm2', 'kd_spread': 'nM', 'immobilization_level': 'pg/mm2', 'analyte_mass': 'kDa', 'ligand_mass': 'kDa', 'stoichiometry': 'dimensionless', 'dissociation_time': 's', 'replicate_count': 'count'}
 
 
 def blank_record(experiment_ref, source_ref, assertion_ref):
@@ -28,7 +30,7 @@ def synthetic_record(experiment_ref='exp_synthetic_gci_1', analyte_prep='prep_an
     refs = ['span_' + experiment_ref]
     record['spans'] = {refs[0]: {'locator': 'synthetic', 'quote': 'synthetic fixture'}}
     record['preparations'] = {'analyte_preparation_ref': analyte_prep, 'immobilized_preparation_ref': immobilized_prep, 'chip_ref': chip, 'dataset_ref': dataset}
-    values = {'kd': kd, 'kd_steady_state': kd * 1.5, 'kon': 1.0e5, 'koff': kd * 1e-9 * 1.0e5, 'response_max': 40.0, 'kd_spread': spread, 'immobilization_level': 500.0, 'replicate_count': 3}
+    values = {'kd': kd, 'kd_steady_state': kd * 1.5, 'kon': 1.0e5, 'koff': kd * 1e-9 * 1.0e5, 'response_max': 40.0, 'kd_spread': spread, 'immobilization_level': 500.0, 'analyte_mass': 20.0, 'ligand_mass': 100.0, 'stoichiometry': 1.0, 'dissociation_time': 600.0, 'replicate_count': 3}
     for name, value in values.items():
         record['quantities'][name] = point(value, UNITS[name], name + ':' + experiment_ref, refs, name)
     record['concentration_series'] = {**point([kd / 10, kd * 0.3, kd, kd * 3, kd * 10, kd * 30], 'nM', 'series:' + experiment_ref, refs, 'concentration_series')}

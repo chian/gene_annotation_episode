@@ -1,9 +1,8 @@
 """The commission of each child (carried from ``to_child_execution_job_submission.py``,
 ``to_child_execution_progress_assessment.py``, ``to_child_execution_result_acquisition.py``,
-``to_child_hpc_work_planning.py``, ``to_child_published_evidence_assessment.py``,
-``to_child_biochemical_feasibility_evidence.py`` and ``child_commissioning.py``). Written against the finished
-``goal.py``, ``messages/read_from_parent.py`` and ``messages/final_to_parent.py`` of the five child folders, read as
-data, and the recursive commission against this episode's own form.
+``to_child_hpc_work_planning.py``, ``to_child_biochemical_feasibility_evidence.py`` and ``child_commissioning.py``).
+Written against the finished ``goal.py``, ``messages/read_from_parent.py`` and ``messages/final_to_parent.py`` of the
+four child folders, read as data, and the recursive commission against this episode's own form.
 
 The old ``assemble_request`` envelopes (the child goal, the result contract written by the parent, the report
 contract declaration, ``inprocess_completion_order``, ``knowledge_inheritance``, the receipts and the invocation
@@ -23,14 +22,13 @@ The old checks of the commission (``prepare_child_request`` validating the monit
 
 New fields (listed in the carry-over record): the launch child's ``record_refs``, ``handoff_unit``,
 ``acquired_record_unit`` and ``scientific_task``; the results child's ``resource_kind`` and ``acquired_record_unit``;
-the monitor child's ``information_unit``; the hpc child's ``scope`` and ``input_refs``; the literature child's
-``scope``, ``finding_unit`` and ``received_record_refs``; this episode's own ``scope`` and ``received_record_refs``."""
+the monitor child's ``information_unit``; the hpc child's ``scope`` and ``input_refs``; this episode's own ``scope``
+and ``received_record_refs``."""
 from episode_runtime import ChildMessage
 
 LAUNCH_VERSION = 'execution_launch_assignment_v1'
 RESULTS_VERSION = 'execution_results_assignment_v1'
 MONITOR_VERSION = 'monitor_assignment_v2'
-LITERATURE_VERSION = 'literature_assignment_v1'
 
 
 def _selection(arguments, *forced):
@@ -82,13 +80,6 @@ def msg_to_child(slot, arguments, summary):
             assignment['commission_source_ref'] = [arguments['commission_source_ref']]
         if 'tool_request' in arguments:
             assignment['tool_request'] = arguments['tool_request']
-        return ChildMessage(objective=arguments['objective'], message=_message(arguments), assignment=assignment,
-                            selection=_selection(arguments))
-    if slot == 'literature':
-        assignment = {'version': LITERATURE_VERSION, 'question_context_refs': list(arguments['question_context_refs']),
-                      'source_refs': list(arguments['source_refs']), 'scope': summary['scope'],
-                      'finding_unit': summary['finding_unit'],
-                      'received_record_refs': list(arguments['received_record_refs'])}
         return ChildMessage(objective=arguments['objective'], message=_message(arguments), assignment=assignment,
                             selection=_selection(arguments))
     if slot == 'biochemical_feasibility_evidence':

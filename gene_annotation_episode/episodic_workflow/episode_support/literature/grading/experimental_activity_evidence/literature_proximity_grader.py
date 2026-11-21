@@ -21,7 +21,7 @@ else all 'not_applicable' -> not_applicable; else supported.
 A proximity-labeling experiment reports no binding constant. The native values carry the qualitative statement of the record, 'interaction' ('detected' when the candidate is stated enriched, i.e. proximal,
 'not_detected' when it is stated not to be, else None), with the spans that state it ('interaction_refs'); the converter hands it to the merger as the experiment's qualitative effect.
 
-The grader holds NO threshold that judges goodness. Where a number would be compared with a limit it records the number with its refs (fold_enrichment/fold_refs, fdr_percent/fdr_refs,
+The grader holds NO threshold that judges goodness. Where a number would be compared with a limit it records the number with its refs (fold_enrichment/fold_refs/fold_matched_control, fdr_percent/fdr_refs,
 expression_ratio/expression_refs, replicate_count/replicate_independent/replicate_refs) and returns 'unknown' with a reason ending in '_recorded_for_the_sheet'; the proximity converter judges it.
 
 Support: native 'support' holds, for each criterion, the supports ('direct', 'implied', 'about_something_else') of the stated fields it reads
@@ -72,20 +72,32 @@ def _one_fact(record, name):
     return _result(status, reason, item['source_refs'])
 
 
+def _not_enriched(record):
+    return record['facts']['candidate_enriched']['answer'] == 'no'
+
+
 def _proximity_observed(record, native):
-    return _one_fact(record, 'candidate_enriched')
+    item = record['facts']['candidate_enriched']
+    if item['answer'] in INTERACTION:
+        return _result('supported', 'candidate_enrichment_stated', item['source_refs'])      # a stated result, positive or negative; its direction is the qualitative statement
+    status, reason = _shared_rule([item['answer']])
+    return _result(status, reason, item['source_refs'])
 
 
 def _enrichment_magnitude(record, native):
+    if _not_enriched(record):
+        return _result('not_applicable', 'candidate_stated_not_enriched', [])
     operand = record['quantities']['enrichment_fold']
     if operand['status'] != 'point':
         return _result('unknown', 'enrichment_fold_not_given', [])
     ratio = LOG2_BASE ** operand['value'] if operand['unit'] == 'log2_ratio' else operand['value']
-    native.update({'fold_enrichment': ratio, 'fold_refs': _refs(operand)})
+    native.update({'fold_enrichment': ratio, 'fold_refs': _refs(operand), 'fold_matched_control': record['facts']['fold_over_matched_control']['answer']})
     return _result('unknown', 'enrichment_fold_recorded_for_the_sheet', [])
 
 
 def _enrichment_significance(record, native):
+    if _not_enriched(record):
+        return _result('not_applicable', 'candidate_stated_not_enriched', [])
     test = record['facts']['statistical_test_used']
     if test['answer'] == 'no':
         return _result('conflicting', 'fact_answered_no', test['source_refs'])
@@ -154,7 +166,7 @@ EVALUATORS = {'proximity_observed': _proximity_observed, 'enrichment_magnitude':
 def grade_proximity(record):
     """Grade one proximity-labeling experiment record. Returns the criterion answers and native values."""
     enriched = record['facts']['candidate_enriched']
-    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'ligase': record['ligase'], 'fusion_site': record['fusion_site'], 'cell_system': record['cell_system'], 'readout': record['readout'], 'quantification': record['quantification'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'interaction': INTERACTION.get(enriched['answer']), 'interaction_refs': list(enriched['source_refs']) if enriched['answer'] in INTERACTION else [], 'fold_enrichment': None, 'fold_refs': [], 'fdr_percent': None, 'fdr_refs': [], 'expression_ratio': None, 'expression_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': []}
+    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'ligase': record['ligase'], 'fusion_site': record['fusion_site'], 'cell_system': record['cell_system'], 'readout': record['readout'], 'quantification': record['quantification'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'interaction': INTERACTION.get(enriched['answer']), 'interaction_refs': list(enriched['source_refs']) if enriched['answer'] in INTERACTION else [], 'fold_enrichment': None, 'fold_refs': [], 'fold_matched_control': None, 'fdr_percent': None, 'fdr_refs': [], 'expression_ratio': None, 'expression_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': []}
     outcomes = {name: EVALUATORS[name](record, native) for name in CRITERIA}
     native['support'] = criterion_supports(record, PROXIMITY_CRITERIA)      # kept for the sheet: the grader does not judge it
     return {'version': VERSION, 'experiment_type': 'proximity', 'experiment_ref': record['experiment_ref'], 'criteria': {name: {'status': o['status'], 'support_refs': o['support_refs']} for name, o in outcomes.items()}, 'reasons': {name: o['reason'] for name, o in outcomes.items()}, 'native': native}

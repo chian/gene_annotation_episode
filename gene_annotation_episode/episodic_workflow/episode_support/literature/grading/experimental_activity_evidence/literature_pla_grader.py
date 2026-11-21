@@ -29,6 +29,7 @@ Support: native 'support' holds, for each criterion, the supports ('direct', 'im
 (its declared 'reads'), copied from the record and not judged here; the converter judges them.
 
 Native values retained: every record quantity as given, plus puncta_target, puncta_control, puncta_fold_over_control (None when the control has 0 puncta or a number is not stated), puncta_reduction_percent (signed),
+puncta_spread_target / puncta_spread_control / puncta_spread_kind / spread_refs (when both spreads and their kind are stated), protein_depletion_percent / depletion_refs (when stated),
 cells_counted, interaction, interaction_refs, preparations, cell_system, fixation and quantification_software.
 """
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_pla_criteria import (
@@ -84,6 +85,10 @@ def _puncta_enrichment(record, native):
         return _result('unknown', 'puncta_enrichment_not_given', [])
     native.update({'puncta_target': target, 'puncta_control': control, 'puncta_fold_over_control': None if control == 0 else target / control,
                    'puncta_refs': _refs(record['quantities']['puncta_per_cell_target'], record['quantities']['puncta_per_cell_control'])})
+    spread_target, spread_control = _value(record, 'puncta_spread_target'), _value(record, 'puncta_spread_control')
+    if spread_target is not None and spread_control is not None and record['puncta_spread_kind'] is not None:      # the spread of both counts and what it is: recorded, judged by the sheet
+        native.update({'puncta_spread_target': spread_target, 'puncta_spread_control': spread_control, 'puncta_spread_kind': record['puncta_spread_kind'],
+                       'spread_refs': _refs(record['quantities']['puncta_spread_target'], record['quantities']['puncta_spread_control'])})
     return _result('unknown', 'puncta_enrichment_recorded_for_the_sheet', [])
 
 
@@ -104,6 +109,9 @@ def _specificity_control(record, native):
         return _one_fact(record, 'specificity_control_reduces_signal')
     native.update({'puncta_reduction_percent': (target - knockdown) / target * PERCENT_PER_FRACTION,
                    'reduction_refs': _refs(record['quantities']['puncta_per_cell_target'], record['quantities']['puncta_per_cell_knockdown'])})
+    depletion = _value(record, 'protein_depletion_percent')
+    if depletion is not None:
+        native.update({'protein_depletion_percent': depletion, 'depletion_refs': _refs(record['quantities']['protein_depletion_percent'])})
     return _result('unknown', 'puncta_reduction_recorded_for_the_sheet', [])
 
 
@@ -157,7 +165,7 @@ EVALUATORS = {'proximity_observed': _proximity_observed, 'puncta_enrichment': _p
 def grade_pla(record):
     """Grade one PLA experiment record. Returns the criterion answers and native values."""
     detected = record['facts']['proximity_signal_detected']
-    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'cell_system': record['cell_system'], 'fixation': record['fixation'], 'quantification_software': record['quantification_software'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'interaction': INTERACTION.get(detected['answer']), 'interaction_refs': list(detected['source_refs']) if detected['answer'] in INTERACTION else [], 'puncta_target': None, 'puncta_control': None, 'puncta_fold_over_control': None, 'puncta_refs': [], 'puncta_reduction_percent': None, 'reduction_refs': [], 'cells_counted': None, 'cells_counted_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': []}
+    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'cell_system': record['cell_system'], 'fixation': record['fixation'], 'quantification_software': record['quantification_software'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'interaction': INTERACTION.get(detected['answer']), 'interaction_refs': list(detected['source_refs']) if detected['answer'] in INTERACTION else [], 'puncta_target': None, 'puncta_control': None, 'puncta_fold_over_control': None, 'puncta_refs': [], 'puncta_reduction_percent': None, 'reduction_refs': [], 'puncta_spread_target': None, 'puncta_spread_control': None, 'puncta_spread_kind': None, 'spread_refs': [], 'protein_depletion_percent': None, 'depletion_refs': [], 'cells_counted': None, 'cells_counted_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': []}
     outcomes = {name: EVALUATORS[name](record, native) for name in CRITERIA}
     native['support'] = criterion_supports(record, PLA_CRITERIA)      # kept for the sheet: the grader does not judge it
     return {'version': VERSION, 'experiment_type': 'pla', 'experiment_ref': record['experiment_ref'], 'criteria': {name: {'status': o['status'], 'support_refs': o['support_refs']} for name, o in outcomes.items()}, 'reasons': {name: o['reason'] for name, o in outcomes.items()}, 'native': native}

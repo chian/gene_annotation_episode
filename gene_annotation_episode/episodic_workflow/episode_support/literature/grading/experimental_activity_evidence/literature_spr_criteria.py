@@ -55,8 +55,8 @@ SPR_CRITERIA = (
     {
         'id': 'concentration_series',
         'question': 'Did the analyte concentrations bracket the KD well enough to define the binding curve?',
-        'reads': ('quantities.kd', 'concentration_series'),
-        'rule': 'When the KD and the series are both given, the grader records the number of concentrations (concentration_count), the lowest and the highest over the KD (concentration_low_over_kd, concentration_high_over_kd) and their refs (concentration_refs) and leaves the judgement to the sheet; otherwise unknown.',
+        'reads': ('quantities.kd', 'concentration_series', 'facts.kd_analysis'),
+        'rule': 'When the KD and the series are both given, the grader records the number of concentrations (concentration_count), the lowest and the highest over the KD (concentration_low_over_kd, concentration_high_over_kd), how the paper says the KD was obtained (kd_analysis: kinetic_fit, steady_state_fit or unknown) and their refs (concentration_refs) and leaves the judgement to the sheet; otherwise unknown.',
         'thresholds': (),
         'returns': (
             ('unknown', 'concentration_series_recorded_for_the_sheet', 'the KD and the series are given: the count and the two ratios are recorded and the sheet judges them'),
@@ -67,15 +67,15 @@ SPR_CRITERIA = (
     {
         'id': 'fit_model',
         'question': 'Is the fitting model appropriate for the analyte, and is there evidence the fit describes the data?',
-        'reads': ('fit_model', 'facts.analyte_bivalent_or_oligomeric', 'facts.residuals_reported', 'quantities.chi_squared', 'quantities.rmax'),
-        'rule': 'The model must be stated, with residual evidence (chi-squared with Rmax, or residuals reported). A 1:1 model for a bivalent or oligomeric analyte fails (a fact). When chi-squared and Rmax are both given, the grader records their quotient (chi2_over_rmax), the answer on bivalence (fit_bivalent_answer) and the refs (fit_refs) and leaves the judgement to the sheet.',
+        'reads': ('fit_model', 'facts.analyte_bivalent_or_oligomeric', 'facts.residuals_reported', 'quantities.chi_squared', 'quantities.rmax', 'quantities.baseline_noise'),
+        'rule': 'The model must be stated, with residual evidence (chi-squared with Rmax or with the baseline noise, or residuals reported). A 1:1 model for a bivalent or oligomeric analyte fails (a fact). When chi-squared and Rmax are both given, the grader records their quotient (chi2_over_rmax); when chi-squared and the baseline noise are both given, it records chi-squared over the noise squared (chi2_over_noise_squared); with either, it records the answer on bivalence (fit_bivalent_answer) and the refs (fit_refs) and leaves the judgement to the sheet.',
         'thresholds': (),
         'returns': (
             ('supported', 'model_stated_with_residual_evidence', 'model stated, no chi-squared over Rmax, residuals reported, no shortfall'),
             ('conflicting', 'one_to_one_model_for_bivalent_or_oligomeric_analyte', 'model is 1:1_langmuir and the analyte is bivalent or oligomeric'),
-            ('unknown', 'chi_squared_over_rmax_recorded_for_the_sheet', 'model stated, not the bivalent case, chi-squared and Rmax given: the quotient is recorded and the sheet judges it'),
+            ('unknown', 'chi_squared_recorded_for_the_sheet', 'model stated, not the bivalent case, chi-squared given with Rmax or with the baseline noise: the quotient or quotients are recorded and the sheet judges them'),
             ('unknown', 'fit_model_not_stated', 'no fit model'),
-            ('unknown', 'no_residual_evidence', 'neither chi-squared with Rmax nor residuals reported'),
+            ('unknown', 'no_residual_evidence', 'neither chi-squared with Rmax or the baseline noise nor residuals reported'),
             ('unknown', 'bivalence_or_oligomer_state_unknown_for_one_to_one_model', '1:1 model and bivalence not answered no'),
             ('not_applicable', 'never', 'never returned'),
         ),

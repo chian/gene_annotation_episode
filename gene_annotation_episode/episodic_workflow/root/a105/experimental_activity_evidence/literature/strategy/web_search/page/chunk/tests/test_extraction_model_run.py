@@ -129,19 +129,25 @@ def check_expected_identity(keys, experiment_type, run_id):
     stated_target, stated_partner = keys['target_id'], keys['partner_id']
     print('EXPECTED', kind, 'TARGET', repr(target), 'PARTNER', repr(partner), 'STATED TARGET', repr(stated_target), 'PARTNER', repr(stated_partner))
     if kind == 'SYNTHETIC':
-        assert stated_target is not None and stated_target == target, ('synthetic target', stated_target, target)
+        # a stated name that contains the expected spelling is the same molecule: the passage's own tag or prefix ('His-tagged DX
+        # receptor') is kept by the identity rule (tag prefixes stay), as the real-paragraph pair check already accepts
+        assert stated_target is not None and target in stated_target, ('synthetic target', stated_target, target)
         if partner is not None:
-            assert stated_partner == partner, ('synthetic partner', stated_partner, partner)
+            assert stated_partner is not None and partner in stated_partner, ('synthetic partner', stated_partner, partner)
     elif expected_pair(experiment_type) is not None:
         pair = expected_pair(experiment_type)
         print('EXPECTED PAIR', pair)
         union = {name for group in pair for name in group}
         # a stated name matches a molecule when one of its spellings is contained in it: the paragraph's own fusion suffix (TLR1/2-Rluc8,
         # PII-LgBiT) or plural (nucleosomes) is the same molecule
+        # a stated name belongs to the group of the LONGEST spelling it contains, so 'crca' is CrcA, not Crc ('crc' is inside 'crca')
+        def group_of(stated):
+            matches = [(len(name), index) for index, group in enumerate(pair) for name in group if name in stated]
+            return max(matches)[1] if matches else None
         for label, stated in (('target', stated_target), ('partner', stated_partner)):
-            assert stated is None or any(name in stated for name in union), (f'real pair {label}', stated, pair)
+            assert stated is None or group_of(stated) is not None, (f'real pair {label}', stated, pair)
         if stated_target is not None and stated_partner is not None:
-            assert not any(any(name in stated_target for name in group) and any(name in stated_partner for name in group) for group in pair), ('target and partner are the same molecule of the pair', stated_target, stated_partner, pair)
+            assert group_of(stated_target) != group_of(stated_partner), ('target and partner are the same molecule of the pair', stated_target, stated_partner, pair)
     else:
         if target is None:
             assert stated_target is None, ('the paragraph names no single target; a stated target is an overreach', stated_target)

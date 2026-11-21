@@ -10,8 +10,7 @@ GOAL = ("Determine what the supplied target does within the parent's assigned qu
         'can emerge from the evidence and be compared or revised; missing information remains unknown. Preserve '
         'named scientific components separately from controller progress.')
 UNIT = ('One scientific action of its own (a selected tool, a library lookup, a reasoning commit, the preparation '
-        'of an alternative process) or one commissioned partner, literature, '
-        'execution, results, monitor or HPC child')
+        'of an alternative process) or one commissioned partner, execution, results, monitor or HPC child')
 RESULT = ('the controlled finding of the A107 scoring sheet: the evidence type, direction, target correspondence and '
           'sheet of the strongest literature partner sheet, the features of every literature sheet and the agreement counts, '
           'and, when selected, the records it committed and the A107 qualification and native component records')

@@ -15,7 +15,7 @@ correlation curves were fitted with 'a model comprising a single effective diffu
 τD, that the fraction bound was calculated from the apparent τD against reference values of the fully free and the fully bound
 aptamer, that the curve was fitted with 'a simple binding model' (not named 1:1) giving 'KD = 5 ± 1 nM' (the kind of the
 uncertainty is not stated), and that the KD is in line with dot blot and biolayer interferometry values. It gives no diffusion time
-or coefficient (they are in the preceding Results paragraph, not in this chunk), no laser power, measurement time or repeat count
+or coefficient and no spread of one (they are in the preceding Results paragraph, not in this chunk), no detection volume, no laser power, measurement time or repeat count
 (they are in the Methods), no particle number, no maximum fraction bound, no list of concentrations, no incubation time, no
 replicate count and no statement of any control, and does not say whether the aptamer concentration was at or below the KD.
 """
@@ -43,7 +43,7 @@ SYNTHETIC = (
     'Binding of ParB to a fluorescently labelled peptide was measured by fluorescence correlation spectroscopy (FCS) at 25 °C. '
     'The assay was about the binding of the protein ParB to its partner PZ-2, the labelled peptide. '
     'The peptide was labelled with Alexa 488 and held at a constant 2 nM, below the KD, which put an average of 0.8 molecules in '
-    'the confocal volume. ParB was added in 10 concentrations of 1, 2, 5, 10, 20, 50, 100, 200, 500 and 1000 nM, and each sample '
+    'the confocal volume; the effective confocal volume was 0.66 fL. ParB was added in 10 concentrations of 1, 2, 5, 10, 20, 50, 100, 200, 500 and 1000 nM, and each sample '
     'was incubated for 20 min after mixing; the diffusion time did not change over a further hour, so binding was at '
     'equilibrium. The confocal volume was calibrated with Rhodamine 6G, which gave a structure parameter of 5.2. Each '
     'measurement lasted 30 s and was repeated 5 times, at a laser power of 5 µW at the sample, with a brightness of 12 kHz per '
@@ -51,7 +51,7 @@ SYNTHETIC = (
     'trace were excluded, and the background was measured with buffer alone and corrected for. The chambers were passivated '
     'with BSA. The diffusion time of the peptide was the binding signal, and the correlation curves were fitted with a '
     'two-component diffusion model that included a triplet state term, with the diffusion time of the free peptide fixed to the '
-    'value measured for the free peptide: the free peptide had a diffusion time of 60 µs and a diffusion coefficient D = 280 '
+    'value measured for the free peptide: the free peptide had a diffusion time of 60 µs (standard deviation 4 µs over repeated measurements) and a diffusion coefficient D = 280 '
     'µm²/s, and the fully bound complex had a diffusion time of 108 µs and D = 156 µm²/s; the complex is 6-fold heavier than '
     'the free peptide. The difference between the brightness of the complex and of the free peptide was taken into account. A '
     'control cross-correlation measurement in two colours was also done, and the spectral cross-talk between the two channels '
@@ -67,11 +67,13 @@ SYNTHETIC_STATED = {
     'kd_spread': (2, 'nM', 'standard error 2 nM'),
     'labelled_concentration': (2, 'nM', 'held at a constant 2 nM'),
     'free_diffusion_time': (60, 'us', 'a diffusion time of 60 µs'),
+    'free_diffusion_time_spread': (4, 'us', 'standard deviation 4 µs over repeated measurements'),
     'bound_diffusion_time': (108, 'us', 'a diffusion time of 108 µs'),
     'free_diffusion_coefficient': (280, 'um2/s', 'D = 280 µm²/s'),
     'bound_diffusion_coefficient': (156, 'um2/s', 'D = 156 µm²/s'),
     'fraction_bound_maximum': (92, 'percent', 'The fraction bound reached 92%'),
     'particle_number': (0.8, 'molecules', 'an average of 0.8 molecules in the confocal volume'),
+    'detection_volume': (0.66, 'fL', 'the effective confocal volume was 0.66 fL'),
     'structure_parameter': (5.2, 'ratio', 'a structure parameter of 5.2'),
     'mass_ratio': (6, 'ratio', 'the complex is 6-fold heavier than the free peptide'),
     'brightness': (12, 'kHz', 'a brightness of 12 kHz per molecule'),

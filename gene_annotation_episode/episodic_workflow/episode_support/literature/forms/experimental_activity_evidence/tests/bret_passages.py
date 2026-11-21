@@ -25,9 +25,10 @@ SYNTHETIC = (
     'BRET between the kinase KX-1 and its partner protein PZ-2 was measured in live HEK293 cells that were transiently transfected, with KX-1 fused to NanoLuc as the donor and PZ-2 fused to Venus as the acceptor. '
     'A saturation titration was done: the donor DNA was held constant and the PZ-2-Venus DNA was raised in eight steps, and the acceptor-to-donor ratio, from 0.02 to 4, was read from the Venus fluorescence and the NanoLuc luminescence of the same cells, so that the expression levels were measured. '
     'Cells that expressed the donor alone and cells that expressed the acceptor alone were run as controls, and the donor-only signal was subtracted from all BRET ratios. Both fusion orientations, with the donor on KX-1 or on PZ-2, were tested. '
-    'The BRET ratio of the pair rose as a hyperbola that reached a plateau, a saturation curve, with a BRETmax of 380 mBU and a BRET50 of 0.12; the one-site fit had an R squared of 0.98. At an acceptor-to-donor ratio of 1 the BRET ratio of the pair was 0.30 and the BRET ratio of the negative control was 0.04, so the pair showed a clear BRET signal. '
-    'A non-interacting membrane protein, QR-5, fused to Venus was run as a negative control in the same way; it gave only a nearly linear signal with no specific interaction, and an apparent BRET50 of 0.85. '
-    'In a NanoBRET target engagement experiment with the NanoLuc-KX-1 fusion, a cell-permeable fluorescent tracer was titrated and gave an apparent KD of 35 nM with a standard error of 4 nM. The tracer was used at 0.1 µM in the displacement experiment, in which the unlabelled compound CPD-9 lowered the BRET signal of the tracer in a concentration-dependent way and gave a Ki of 120 nM with a standard error of 15 nM. '
+    'The BRET ratio of the pair rose as a hyperbola that reached a plateau, a saturation curve, with a BRETmax of 380 mBU and a BRET50 of 0.12; the one-site fit had an R squared of 0.98. At an acceptor-to-donor ratio of 1 the BRET ratio of the pair was 0.30, with a standard error of 0.02, and the BRET ratio of the negative control was 0.04, with a standard error of 0.005, so the pair showed a clear BRET signal; the donor alone gave a BRET ratio of 0.02. '
+    'An F-test showed that the hyperbola fitted the data of the pair significantly better than a straight line, and at a fixed acceptor-to-donor ratio of 1 the BRET ratio stayed constant when the total expression was raised. '
+    'A non-interacting membrane protein, QR-5, fused to Venus was run as a negative control in the same way; it gave only a nearly linear signal with no specific interaction, and an apparent BRET50 of 0.85. The standard error of the BRET50 of the pair was 0.015 and that of the negative control was 0.09. '
+    'In a NanoBRET target engagement experiment with the NanoLuc-KX-1 fusion, a cell-permeable fluorescent tracer was titrated and gave an apparent KD of 35 nM with a standard error of 4 nM. The affinity of the tracer for NanoLuc-KX-1, its tracer KD, was 35 nM. The tracer was used at 0.1 µM in the displacement experiment, in which the unlabelled compound CPD-9 lowered the BRET signal of the tracer in a concentration-dependent way and gave a Ki of 120 nM with a standard error of 15 nM. '
     'Three independent experiments were done on separate days, and the interaction of KX-1 and PZ-2 was determined by BRET only.')
 
 # identity expectations (OWNER_DECISION 18); see check_identity in the leaf test
@@ -54,6 +55,12 @@ SYNTHETIC_STATED = {
     'ratio_highest': (4, 'ratio', 'to 4'),
     'titration_point_count': (8, 'count', 'raised in eight steps'),
     'tracer_concentration': (0.1, 'uM', 'The tracer was used at 0.1 µM'),
+    'bret50_spread': (0.015, 'ratio', 'standard error of the BRET50 of the pair was 0.015'),
+    'bret50_negative_control_spread': (0.09, 'ratio', 'that of the negative control was 0.09'),
+    'bret_ratio_pair_spread': (0.02, 'ratio', 'with a standard error of 0.02'),
+    'bret_ratio_negative_control_spread': (0.005, 'ratio', 'with a standard error of 0.005'),
+    'bret_ratio_donor_only': (0.02, 'ratio', 'the donor alone gave a BRET ratio of 0.02'),
+    'tracer_kd': (35, 'nM', 'its tracer KD, was 35 nM'),
     'fit_r_squared': (0.98, 'ratio', 'an R squared of 0.98'),
     'replicate_count': (3, 'count', 'Three independent experiments'),
     BRET_FORMAT: ('saturation_and_competition', None, 'A saturation titration was done'),
@@ -72,6 +79,8 @@ SYNTHETIC_STATED = {
     'fusion_orientation_swapped': ('yes', None, 'Both fusion orientations, with the donor on KX-1 or on PZ-2, were tested'),
     'tracer_displaced_by_competitor': ('yes', None, 'lowered the BRET signal of the tracer in a concentration-dependent way'),
     'independent_experiments': ('yes', None, 'Three independent experiments were done on separate days'),
+    'hyperbola_preferred_over_linear': ('yes', None, 'the hyperbola fitted the data of the pair significantly better than a straight line'),
+    'bret_constant_across_expression': ('yes', None, 'the BRET ratio stayed constant when the total expression was raised'),
     'single_estimate_method': ('yes', None, 'was determined by BRET only'),
 }
 
@@ -89,5 +98,5 @@ REAL_STATED = {
 }
 # The allowed set of the real model run: field -> every (value, unit) the paragraph clearly states for it. Not allowed, because the paragraph does not state them: a KD or a Ki, BRETmax, any BRET ratio,
 # the ratio range and the number of points, the tracer, the fit, the replicates, the expression system (the cells and the transfection are in the Methods), the donor-only and acceptor-only controls, the
-# measured expression levels, the subtracted background, the swap of the fusions, a displaced tracer, independent experiments and a statement that only this method was used.
+# measured expression levels, the subtracted background, the swap of the fusions, a displaced tracer, independent experiments and a statement that only this method was used, any spread of the BRET50 or of a BRET ratio, the donor-only BRET ratio, the tracer KD, a stated comparison of the hyperbola with a straight line and a test of BRET against the total expression (a plain statement that a curve was linear is not a model comparison).
 REAL_ALLOWED = {name: {(value, unit)} for name, (value, unit, _) in REAL_STATED.items()}

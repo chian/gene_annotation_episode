@@ -40,19 +40,21 @@ preparations   radioligand_preparation_ref (the radioligand, the labelled ligand
                preparation as the other partner; there is no surface).
 quantities     kd, bmax, ki, ic50, hill_slope, kd_spread, ki_spread, specific_activity, radioligand_concentration,
                radioligand_range_lowest, radioligand_range_highest, receptor_amount, percent_bound, nonspecific_fraction,
-               nonspecific_ligand_concentration, nonspecific_excess, incubation_time, temperature, titration_point_count,
-               technical_replicate_count, replicate_count: one operand each.
+               nonspecific_ligand_concentration, nonspecific_ligand_kd, nonspecific_excess, incubation_time, dissociation_rate, temperature,
+               titration_point_count, technical_replicate_count, replicate_count: one operand each.
                Units: kd/ki/ic50/kd_spread/ki_spread, radioligand_concentration, radioligand_range_lowest,
-               radioligand_range_highest and nonspecific_ligand_concentration pM, nM, uM or mM (kd is the dissociation constant of the
+               radioligand_range_highest, nonspecific_ligand_concentration and nonspecific_ligand_kd pM, nM, uM or mM (kd is the dissociation constant of the
                radioligand from a saturation experiment; ki an inhibition constant the source gives; ic50 the half-maximal inhibitory
                concentration of a competition; radioligand_concentration the single concentration of the radioligand in a competition;
-               radioligand_range_lowest and _highest the lowest and the highest radioligand concentration of a saturation series);
+               radioligand_range_lowest and _highest the lowest and the highest radioligand concentration of a saturation series;
+               nonspecific_ligand_kd the Kd (or Ki) of the unlabelled ligand that defines non-specific binding, of that ligand itself);
                bmax 'fmol/mg', 'pmol/mg', 'sites/cell' or 'nM' (the number of binding sites); hill_slope 'ratio';
                specific_activity 'Ci/mmol'; receptor_amount 'ug' or 'mg' (receptor protein per assay tube or well);
                percent_bound, nonspecific_fraction 'percent' (percent_bound: the percent of the total added radioligand that was bound;
                nonspecific_fraction: the non-specific binding as a percent of the total binding at the highest radioligand
-               concentration); nonspecific_excess 'ratio' (the stated fold excess of the unlabelled ligand over the Kd of the radioligand
-               that defines non-specific binding); incubation_time s, min or h; temperature C or K; titration_point_count,
+               concentration); nonspecific_excess 'ratio' (the stated fold excess of the unlabelled ligand that defines non-specific binding
+               over its own Kd); incubation_time s, min or h; dissociation_rate '1/s', '1/min' or '1/h' (the off-rate koff of the radioligand
+               from the receptor preparation); temperature C or K; titration_point_count,
                technical_replicate_count (wells or tubes per condition) and replicate_count (independent experiments) 'count'.
 concentration_series
                operand whose 'value' is a list of radioligand concentrations of a saturation series (unit pM, nM, uM or mM), or None
@@ -87,7 +89,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 
 VERSION = 'a105_radioligand_record_v1'
 EXPERIMENT_TYPE = 'radioligand'
-QUANTITIES = ('kd', 'bmax', 'ki', 'ic50', 'hill_slope', 'kd_spread', 'ki_spread', 'specific_activity', 'radioligand_concentration', 'radioligand_range_lowest', 'radioligand_range_highest', 'receptor_amount', 'percent_bound', 'nonspecific_fraction', 'nonspecific_ligand_concentration', 'nonspecific_excess', 'incubation_time', 'temperature', 'titration_point_count', 'technical_replicate_count', 'replicate_count')
+QUANTITIES = ('kd', 'bmax', 'ki', 'ic50', 'hill_slope', 'kd_spread', 'ki_spread', 'specific_activity', 'radioligand_concentration', 'radioligand_range_lowest', 'radioligand_range_highest', 'receptor_amount', 'percent_bound', 'nonspecific_fraction', 'nonspecific_ligand_concentration', 'nonspecific_ligand_kd', 'nonspecific_excess', 'incubation_time', 'dissociation_rate', 'temperature', 'titration_point_count', 'technical_replicate_count', 'replicate_count')
 PREPARATION_KEYS = ('radioligand_preparation_ref', 'receptor_preparation_ref', 'dataset_ref')
 CHOICE_FIELDS = ('assay_format', 'radioligand_isotope', 'separation_method', 'preparation_type', 'spread_kind', 'fit_model')
 ASSAY_FORMATS = ('saturation', 'competition', 'kinetic')
@@ -97,7 +99,7 @@ PREPARATION_TYPES = ('membrane', 'purified_protein', 'whole_cell', 'other')
 SPREAD_KINDS = ('standard_error', 'standard_deviation', 'confidence_interval')
 FIT_MODELS = ('one_site', 'two_site', 'hill', 'competitive_binding', 'other')
 YES_NO = ('yes', 'no', 'unknown', 'not_applicable')
-FACTS = {'ligand_depletion_checked': YES_NO, 'nonspecific_binding_determined': YES_NO, 'equilibrium_reached': YES_NO, 'radioligand_purity_checked': YES_NO, 'filter_binding_checked': YES_NO, 'wash_dissociation_considered': YES_NO, 'nonlinear_fit_used': YES_NO, 'cheng_prusoff_applied_with_own_kd': YES_NO, 'independent_experiments': YES_NO, 'single_estimate_method': YES_NO}
+FACTS = {'ligand_depletion_checked': YES_NO, 'nonspecific_binding_determined': YES_NO, 'equilibrium_reached': YES_NO, 'radioligand_purity_checked': YES_NO, 'filter_binding_checked': YES_NO, 'wash_dissociation_considered': YES_NO, 'nonlinear_fit_used': YES_NO, 'cheng_prusoff_applied_with_own_kd': YES_NO, 'depletion_corrected': YES_NO, 'nonspecific_ligand_is_unlabelled_radioligand': YES_NO, 'independent_experiments': YES_NO, 'single_estimate_method': YES_NO}
 
 
 def _checked(support):
@@ -126,4 +128,4 @@ def fact(answer, refs=(), support='direct'):
 
 CONCENTRATION_UNITS = ('pM', 'nM', 'uM', 'mM')
 # The unit vocabulary of each quantity (and of the concentration series): the units a record may carry.
-UNITS = {'kd': CONCENTRATION_UNITS, 'bmax': ('fmol/mg', 'pmol/mg', 'sites/cell', 'nM'), 'ki': CONCENTRATION_UNITS, 'ic50': CONCENTRATION_UNITS, 'hill_slope': ('ratio',), 'kd_spread': CONCENTRATION_UNITS, 'ki_spread': CONCENTRATION_UNITS, 'specific_activity': ('Ci/mmol',), 'radioligand_concentration': CONCENTRATION_UNITS, 'radioligand_range_lowest': CONCENTRATION_UNITS, 'radioligand_range_highest': CONCENTRATION_UNITS, 'receptor_amount': ('ug', 'mg'), 'percent_bound': ('percent',), 'nonspecific_fraction': ('percent',), 'nonspecific_ligand_concentration': CONCENTRATION_UNITS, 'nonspecific_excess': ('ratio',), 'incubation_time': ('s', 'min', 'h'), 'temperature': ('C', 'K'), 'titration_point_count': ('count',), 'technical_replicate_count': ('count',), 'replicate_count': ('count',), 'concentration_series': CONCENTRATION_UNITS}
+UNITS = {'kd': CONCENTRATION_UNITS, 'bmax': ('fmol/mg', 'pmol/mg', 'sites/cell', 'nM'), 'ki': CONCENTRATION_UNITS, 'ic50': CONCENTRATION_UNITS, 'hill_slope': ('ratio',), 'kd_spread': CONCENTRATION_UNITS, 'ki_spread': CONCENTRATION_UNITS, 'specific_activity': ('Ci/mmol',), 'radioligand_concentration': CONCENTRATION_UNITS, 'radioligand_range_lowest': CONCENTRATION_UNITS, 'radioligand_range_highest': CONCENTRATION_UNITS, 'receptor_amount': ('ug', 'mg'), 'percent_bound': ('percent',), 'nonspecific_fraction': ('percent',), 'nonspecific_ligand_concentration': CONCENTRATION_UNITS, 'nonspecific_ligand_kd': CONCENTRATION_UNITS, 'nonspecific_excess': ('ratio',), 'incubation_time': ('s', 'min', 'h'), 'dissociation_rate': ('1/s', '1/min', '1/h'), 'temperature': ('C', 'K'), 'titration_point_count': ('count',), 'technical_replicate_count': ('count',), 'replicate_count': ('count',), 'concentration_series': CONCENTRATION_UNITS}

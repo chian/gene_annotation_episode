@@ -16,6 +16,7 @@ class SourceRelevanceAssessment(EpisodeBinding):
     tools = task_file.TOOLS
     services = task_file.SERVICES
     decide = task_file.decide
+    offered_actions = task_file.offered_actions
     action = task_file.action
     credit = credit_file.credit
     yield_controller = yield_file.yield_controller

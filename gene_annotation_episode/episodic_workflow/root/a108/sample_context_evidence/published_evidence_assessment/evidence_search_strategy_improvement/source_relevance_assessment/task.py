@@ -18,6 +18,15 @@ subscoring sheet is saved (AGENTS.md, "Required literature evidence processing")
 (``literature.a108_grading.populate`` and ``literature.a108.aggregate``) stay tools. The sheet repositories and the
 required-grading logic work on the custody-scoped store.
 
+The search step's Jev measurement (nano-graphrag ``web_search_binding``, ``SEARCH_PAGE_SELECTION_VERSION``
+``model_planned_from_jev_evidence_v5``): before this episode plans, ``assess_search_results`` (decided by code, no model
+call) has Jev measure every search result once, from its held text, against the immutable Search Goal
+(``search_result_assessment.assess_search_results``) and holds the assessment as an artifact. Every later decision shows
+the model nano-graphrag's candidate view for the UNCONSUMED search results only (``context.page_candidates``: each
+result's Jev probability, provider rank, title and description, and the measured outcomes of the prior source
+examination children); the model selects one source per child, and a source handed to a child is consumed. Jev is
+planning evidence, not the selection policy.
+
 Settings read (``ctx.settings``): ``tool_registry`` (the JSON keyword arguments of the library ``ToolRegistry``; its
 ``PublicClients`` are the declared service ``public_clients``) and ``knowledge_library_directory`` (optional). ``cost`` and ``parameters``
 are read by ``yield_estimator.py``."""
@@ -44,10 +53,13 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.prompt
     INSTRUCTIONS, REASONING_COMMIT_REQUIREMENT)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.sample_context_evidence.literature_sequence_discovery import (
     identity_schema, references_schema)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.search_result_assessment import (
+    assess_search_results as assess_results)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.literature_grading_storage import (
     LiteratureA108GradingRepository)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.sample_context_evidence.literature_aggregation_storage import (
     LiteratureA108AggregationRepository)
+from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.jev_client import JevDecisionClient
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.presentation import extend_context
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import (
     rejection_feedback)
@@ -57,7 +69,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.readers.sample_co
     locate_schema)
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import time_accounting
 from gene_annotation_episode.episodic_workflow.episode_support.records.sample_context_evidence.domain import (
-    ContractError, RECORD_SCHEMAS, REF, REFS, identity, obj, source_location_inputs, validate_schema)
+    ContractError, RECORD_SCHEMAS, REF, REFS, canonical, identity, obj, source_location_inputs, validate_schema)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.sample_context_evidence.tools import ToolRegistry
 from gene_annotation_episode.episodic_workflow.episode_support.tools.tool_knowledge import (
     INSTRUCTIONS as KNOWLEDGE_INSTRUCTIONS, ToolKnowledge)
@@ -206,7 +218,9 @@ CHILD_DESCRIPTIONS = {
                                    "source's artifact for it, the records giving the question context and the "
                                    'records delivered by earlier examinations of this source. The source must be one '
                                    'of input_list; a source handed to this child is consumed and is no longer offered '
-                                   '(consumed_source_refs).',
+                                   '(consumed_source_refs). For a search result, choose it from '
+                                   'context.page_candidates (its Jev probability, provider rank, title, description '
+                                   'and the measured outcomes of the previous source examination children).',
 }
 
 REASON_DESCRIPTION = ('Commit a typed scientific reasoning over the selected table or sheet and the records you hold: '
@@ -226,6 +240,15 @@ RETURN_GUIDANCE = ('\nWhat returns to your parent is your credit and the counts 
 LEAD_GUIDANCE = ('\nFor a verified_source_leads commission, a reason selection also carries source_lead: the '
                  'inspected source, its anchored reference subject, whether it is a useful lead for the original '
                  'question and the exact witnessed byte interval. A search hit or title alone verifies nothing.')
+PAGE_CANDIDATE_GUIDANCE = ('\nJev has measured every search result once against the Search Goal. '
+                           'context.page_candidates shows, for the UNCONSUMED search results only, each one\'s provider '
+                           'rank, title, description and Jev assessment (relevance_probability: Jev\'s probability '
+                           'that the result can contribute to the Search Goal), and the measured results of the '
+                           'previous source examination children (previous_page_children). These are measurements for '
+                           'your planning, not a rule that the largest probability must be selected: use them and the '
+                           'realized results of previous children to choose the next result worth examining. One '
+                           'source examination child takes one source; the numerical controller alone decides whether '
+                           'the search continues.')
 
 
 @dataclass(frozen=True)
@@ -254,7 +277,7 @@ def instructions(*, knowledge, leads):
         text += KNOWLEDGE_INSTRUCTIONS
     if leads:
         text += LEAD_GUIDANCE
-    return text + RETURN_GUIDANCE
+    return text + PAGE_CANDIDATE_GUIDANCE + RETURN_GUIDANCE
 
 
 def offered(settings, input_list):
@@ -631,6 +654,43 @@ def reason(arguments, ctx):
                                     authorize_source_access=authorize_source_access)
 
 
+ASSESS = 'assess_search_results'
+
+
+def result_text(store, reference):
+    """The held text of one search result, read through custody: its text representation, else its original bytes
+    when they are UTF-8 text, else nothing (the measurement then reads its description, as nano-graphrag does)."""
+    source = store.get(reference)
+    for key in ('text_ref', 'artifact_ref'):
+        if source.get(key) is None:
+            continue
+        try:
+            return store.get_artifact(source[key]).decode('utf-8')
+        except UnicodeDecodeError:
+            continue
+    return ''
+
+
+async def assess_search_results(arguments, ctx):
+    """The search step's Jev measurement (nano-graphrag ``SearchPageProposer._issue`` with ``assess_page_candidate``):
+    every search result's held text is read through custody, Jev measures each once against the Search Goal, and this
+    unit holds the assessment as an artifact the episode keeps (``search_assessment_ref``). The library function is
+    pure; this unit alone writes. The Jev client reads its key from the repository's ``.env`` at run time
+    (``jev_client``); a missing key or a failed call raises."""
+    results = [{**item, 'text': result_text(ctx.store, item['result_id'])} for item in arguments['results']]
+    assessment = await assess_results(JevDecisionClient.from_repository_env(), goal=arguments['goal'],
+                                      results=results)
+    ref = ctx.store.artifact(canonical(assessment), 'application/json')
+    return {'status': 'completed', 'assessment_ref': ref, 'result_count': len(results),
+            'window_count': sum(len(item['window_probabilities']) for item in assessment['assessments']),
+            'request_count': sum(item['attempts'] for item in assessment['assessments'])}
+
+
+def assessment_pending(summary):
+    """Whether Jev has yet to measure the search results: there are results and no held assessment."""
+    return summary['search_assessment_ref'] is None and bool(summary['search_result_candidates'])
+
+
 TOOLS = {'state_query': state_query, 'source_read': source_read, 'source_locate': source_locate,
          'source_sequence_references': source_sequence_references, 'image_view': image_view,
          'source_archive_members': source_archive_members, 'source_archive_extract': source_archive_extract,
@@ -643,13 +703,18 @@ TOOLS = {'state_query': state_query, 'source_read': source_read, 'source_locate'
          'public_pmc_files': public_pmc_files, 'public_pmc_asset': public_pmc_asset,
          'public_taxonomy': public_taxonomy, 'public_ncbi_sequence': public_ncbi_sequence,
          'literature_a108_grading_populate': literature_a108_grading_populate,
-         'literature_a108_aggregate': literature_a108_aggregate, 'reason': reason}
+         'literature_a108_aggregate': literature_a108_aggregate, 'reason': reason, ASSESS: assess_search_results}
 
 
 def decide(summary, feedback, ctx):
     """Ask the model for the next tool or child commission, shown the assignment, the custody of the source, its own
     read outcomes, what its children returned, the interpretation so far, the latest image it looked at, the saved sheets, the commissioned goal plan, the tools, the
-    measured time and the yield table (the old decision state and inputs, over this episode's summary)."""
+    measured time and the yield table (the old decision state and inputs, over this episode's summary).
+
+    Before Jev has measured the search results the decision is that measurement, made by code with no model call
+    (nano-graphrag assesses every buffered result before its page proposer is asked)."""
+    if assessment_pending(summary):
+        return ToolCall(ASSESS, {'goal': summary['jev_search_goal'], 'results': summary['search_result_candidates']})
     names = offered(ctx.settings, summary['input_list'])
     leads = summary['task']['kind'] == 'verified_source_leads'
     knowledge_directory = ctx.settings.get('knowledge_library_directory')
@@ -667,6 +732,7 @@ def decide(summary, feedback, ctx):
                'last_local_outcome': summary['last_local_outcome'], 'held_record_refs': summary['held_record_refs'],
                'current_findings': summary['finding'], 'child_reports': summary['child_reports'],
                'source_lead_dispositions': summary['source_lead_dispositions'],
+               'page_candidates': summary['search_planner_context'],
                'tools': catalog(names, summary['reasoning_schema'], leads, summary['input_list']),
                'time_accounting': time_accounting(ctx.clock.progress_time)}
     context = extend_context(context, {

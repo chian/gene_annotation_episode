@@ -23,7 +23,7 @@ REAL = (
 # The allowed set of the real model run: field -> every (value, unit) the paragraph clearly states for it. The paragraph states that the readout is the intrinsic fluorescence (nanoDSF), that a
 # positive thermal shift was seen (a rise of the Tm), that the shift was taken against a DMSO control (the protein with the vehicle and no ligand) and the shifts of the two compounds (0.98 and 0.57 degrees Celsius; it gives each for a
 # different compound, so a call may state either or leave the shift unavailable). Not allowed, because the paragraph does not state them: any Tm, a scatter, a Tagg, any concentration or their number, a heating rate, replicates, the KD,
-# the way the Tm was read (it says the inflection point of a derivative, not a fit or a maximum), a ligand-alone control, the shape of the curves, a series of concentrations, a dose dependence and independent experiments.
+# the ligand concentration at which a shift was read, whether a scatter is over independent experiments or wells (no scatter is given), the way the Tm was read (it says the inflection point of a derivative, not a fit or a maximum), a ligand-alone control, the shape of the curves, a series of concentrations, a dose dependence and independent experiments.
 REAL_ALLOWED = {
     'delta_tm': {(0.98, 'C'), (0.57, 'C')},
     READOUT: {('label_free_intrinsic_fluorescence', None)},
@@ -43,7 +43,7 @@ SYNTHETIC = (
     'The samples were heated at 1 °C/min from 20 °C to 95 °C, and the Tm was read as the maximum of the first derivative of the fluorescence ratio. '
     'The protein alone, without the ligand, was measured in the same buffer with the same 1% DMSO vehicle, and its Tm was 52.3 °C. '
     'The ligand alone, with the buffer and no protein, was also scanned and gave no signal of its own. The melt curves were clean sigmoids with one unfolding transition. '
-    'QX-7 was added at eight concentrations, from 1 µM to 200 µM, as a ligand titration. With 200 µM QX-7 the Tm was 57.1 °C, a thermal shift of 4.8 °C, with a standard deviation of the Tm of 0.3 °C. '
+    'QX-7 was added at eight concentrations, from 1 µM to 200 µM, as a ligand titration. With 200 µM QX-7 the Tm was 57.1 °C, a thermal shift of 4.8 °C, with a standard deviation of the Tm of 0.3 °C, taken over the independent experiments. '
     'The Tagg of the protein alone was 61.0 °C and with the ligand 66.2 °C. The shift grew with the ligand concentration, as a dose dependent stabilisation. '
     'A fit of the shifts against the ligand concentration gave an apparent KD of 12 µM with a standard error of 1.5 µM. '
     'Three independent experiments were done on separate days.')
@@ -62,6 +62,7 @@ SYNTHETIC_STATED = {
     'ligand_concentration_lowest': (1, 'uM', 'from 1 µM'),
     'ligand_concentration_highest': (200, 'uM', 'to 200 µM'),
     'ligand_concentration_count': (8, 'count', 'added at eight concentrations'),
+    'shift_ligand_concentration': (200, 'uM', 'With 200 µM QX-7'),
     'heating_rate': (1, 'C_per_min', 'heated at 1 °C/min'),
     'replicate_count': (3, 'count', 'Three independent experiments'),
     READOUT: ('label_free_intrinsic_fluorescence', None, 'label free by the intrinsic tryptophan fluorescence'),
@@ -73,5 +74,6 @@ SYNTHETIC_STATED = {
     'melt_curve_sigmoidal': ('yes', None, 'The melt curves were clean sigmoids with one unfolding transition'),
     'ligand_titration_measured': ('yes', None, 'as a ligand titration'),
     'shift_dose_dependent': ('yes', None, 'The shift grew with the ligand concentration'),
+    'tm_spread_over_independent_experiments': ('yes', None, 'taken over the independent experiments'),
     'independent_experiments': ('yes', None, 'Three independent experiments were done on separate days'),
 }

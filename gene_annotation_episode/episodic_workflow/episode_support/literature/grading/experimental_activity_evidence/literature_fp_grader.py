@@ -29,6 +29,10 @@ KD it is the Ki of a competition experiment (native 'constant_name' says
 which). The concentration series is judged against it; the tracer
 concentration is judged against the KD only (a Ki is not the tracer's KD).
 
+Added after the range review: signal_noise (mP) is recorded with the window (window_noise_mP, window_noise_refs); the intensity change keeps its stated
+direction (intensity_change_direction, 'increase' or 'decrease' or None); a competitor series is read against the IC50 when it is given
+(series_reference 'ic50', else the constant's name); series_kind and ic50_nM are retained.
+
 Native values retained: every record quantity as given, plus kd_nM, ki_nM,
 constant_nM, constant_name, tracer_nM, tracer_over_kd, signal_minimum_mP,
 signal_maximum_mP, window_mP, incubation_min, concentration_count,
@@ -105,6 +109,8 @@ def _assay_window(record, native):
     if low is None or high is None:
         return _result('unknown', 'minimum_or_maximum_missing', [])
     native.update({'window_mP': high - low, 'window_refs': _refs(record['quantities']['signal_minimum'], record['quantities']['signal_maximum'])})
+    if native['window_noise_mP'] is not None:      # the paper's own noise of the reads, so the sheet can judge the window against it
+        native['window_noise_refs'] = _refs(record['quantities']['signal_noise'])
     return _result('unknown', 'window_recorded_for_the_sheet', [])
 
 
@@ -133,15 +139,19 @@ def _tracer_concentration(record, native):
 
 
 def _concentration_series(record, native):
-    constant = native['constant_nM']
+    # The series is read against the IC50 when it is the competitor series of a competition and the IC50 is given (a competition curve is centred on
+    # the IC50, not on the Ki); otherwise against the reported constant.
+    on_ic50 = record['series_kind'] == 'competitor' and native['ic50_nM'] is not None
+    constant = native['ic50_nM'] if on_ic50 else native['constant_nM']
     series = record['concentration_series']
     values = series['value']
     if constant is None or values is None:
         return _result('unknown', 'constant_or_series_missing', [])
     scale = NM_PER_UNIT[series['unit']]
     nm = [v * scale for v in values]
+    reference = 'ic50' if on_ic50 else native['constant_name']
     native.update({'concentration_count': len(nm), 'concentration_low_over_constant': min(nm) / constant, 'concentration_high_over_constant': max(nm) / constant,
-                   'series_refs': _refs(series, record['quantities'][native['constant_name']])})
+                   'series_reference': reference, 'series_refs': _refs(series, record['quantities'][reference])})
     return _result('unknown', 'series_recorded_for_the_sheet', [])
 
 
@@ -224,7 +234,7 @@ def grade_fp(record):
     """Grade one FP experiment record. Returns the criterion answers and native values."""
     kd, ki = _nm(record, 'kd'), _nm(record, 'ki')
     constant_name = 'kd' if kd is not None else 'ki' if ki is not None else None
-    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'assay_format': record['assay_format'], 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'plate_type': record['plate_type'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'concentration_series': dict(record['concentration_series']), 'kd_nM': kd, 'ki_nM': ki, 'constant_name': constant_name, 'constant_nM': kd if kd is not None else ki, 'tracer_nM': _nm(record, 'tracer_concentration'), 'tracer_over_kd': None, 'signal_minimum_mP': _mp(record, 'signal_minimum'), 'signal_maximum_mP': _mp(record, 'signal_maximum'), 'window_mP': None, 'incubation_min': _minutes(record, 'incubation_time'), 'concentration_count': None, 'concentration_low_over_constant': None, 'concentration_high_over_constant': None, 'window_refs': [], 'tracer_refs': [], 'tight_binding_handled': None, 'series_refs': [], 'incubation_refs': [], 'intensity_change_percent': None, 'intensity_change_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': [], 'estimate_fold': None, 'estimate_refs': []}
+    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'assay_format': record['assay_format'], 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'plate_type': record['plate_type'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'concentration_series': dict(record['concentration_series']), 'kd_nM': kd, 'ki_nM': ki, 'constant_name': constant_name, 'constant_nM': kd if kd is not None else ki, 'ic50_nM': _nm(record, 'ic50'), 'series_kind': record['series_kind'], 'series_reference': None, 'intensity_change_direction': record['intensity_change_direction'], 'window_noise_mP': _value(record, 'signal_noise'), 'window_noise_refs': [], 'tracer_nM': _nm(record, 'tracer_concentration'), 'tracer_over_kd': None, 'signal_minimum_mP': _mp(record, 'signal_minimum'), 'signal_maximum_mP': _mp(record, 'signal_maximum'), 'window_mP': None, 'incubation_min': _minutes(record, 'incubation_time'), 'concentration_count': None, 'concentration_low_over_constant': None, 'concentration_high_over_constant': None, 'window_refs': [], 'tracer_refs': [], 'tight_binding_handled': None, 'series_refs': [], 'incubation_refs': [], 'intensity_change_percent': None, 'intensity_change_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': [], 'estimate_fold': None, 'estimate_refs': []}
     native['support'] = criterion_supports(record, FP_CRITERIA)      # kept for the sheet: the grader does not judge it
     outcomes = {name: EVALUATORS[name](record, native) for name in CRITERIA}
     return {'version': VERSION, 'experiment_type': 'fp', 'experiment_ref': record['experiment_ref'], 'criteria': {name: {'status': o['status'], 'support_refs': o['support_refs']} for name, o in outcomes.items()}, 'reasons': {name: o['reason'] for name, o in outcomes.items()}, 'native': native}

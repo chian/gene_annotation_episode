@@ -13,7 +13,7 @@ single source). This file only evaluates them: one short function per
 criterion, in the same order as the declaration, each reading its thresholds
 by name from that file.
 
-The grader holds NO threshold that judges goodness. Where a number would be compared with a limit it records the number with its refs (signal_to_noise/fnorm_amplitude/signal_refs,
+The grader holds NO threshold that judges goodness. Where a number would be compared with a limit it records the number with its refs (signal_to_noise/fnorm_amplitude/fnorm_noise/signal_refs,
 labelled_over_kd/labelled_refs/tight_binding_handled, concentration_count/count_refs and the low/high over the constant/series_refs, incubation_min/incubation_refs, fhot_s/fhot_refs,
 replicate_count/replicate_independent/replicate_refs, estimate_fold/estimate_refs) and returns 'unknown' with a reason ending in '_recorded_for_the_sheet'; the MST converter judges it.
 
@@ -97,10 +97,10 @@ def _one_fact(record, name):
 
 
 def _signal_amplitude(record, native):
-    noise, amplitude = _value(record, 'signal_to_noise'), _value(record, 'fnorm_amplitude')
+    noise, amplitude, fnorm_noise = _value(record, 'signal_to_noise'), _value(record, 'fnorm_amplitude'), _value(record, 'fnorm_noise')
     if noise is None and amplitude is None:
         return _result('unknown', 'signal_not_given', [])
-    native.update({'signal_to_noise': noise, 'fnorm_amplitude': amplitude, 'signal_refs': _refs(record['quantities']['signal_to_noise'], record['quantities']['fnorm_amplitude'])})
+    native.update({'signal_to_noise': noise, 'fnorm_amplitude': amplitude, 'fnorm_noise': fnorm_noise, 'signal_refs': _refs(record['quantities']['signal_to_noise'], record['quantities']['fnorm_amplitude'], record['quantities']['fnorm_noise'])})
     return _result('unknown', 'signal_recorded_for_the_sheet', [])
 
 
@@ -169,7 +169,9 @@ def _equilibrium(record, native):
     minutes = native['incubation_min']
     if minutes is None:
         return _result('unknown', 'fact_unknown', [])
-    native['incubation_refs'] = _refs(record['quantities']['incubation_time'])
+    binding_constant = native['constant_name'] in ('kd', 'ki')      # an EC50 is not a binding constant: it gives the sheet no association scale
+    native['incubation_constant_nM'] = native['constant_nM'] if binding_constant else None      # the fact the sheet needs next to the time: the reported KD (else Ki) in nM
+    native['incubation_refs'] = _refs(record['quantities']['incubation_time'], *([record['quantities'][native['constant_name']]] if binding_constant else []))
     return _result('unknown', 'incubation_recorded_for_the_sheet', [])
 
 
@@ -253,7 +255,7 @@ def grade_mst(record):
     """Grade one MST experiment record. Returns the criterion answers and native values."""
     nm = {name: _nm(record, name) for name in CONSTANTS}
     constant_name = next((name for name in CONSTANTS if nm[name] is not None), None)
-    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'assay_format': record['assay_format'], 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'readout_signal': record['readout_signal'], 'capillary_type': record['capillary_type'], 'label_type': record['label_type'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'concentration_series': dict(record['concentration_series']), 'kd_nM': nm['kd'], 'ki_nM': nm['ki'], 'ec50_nM': nm['ec50'], 'constant_name': constant_name, 'constant_nM': None if constant_name is None else nm[constant_name], 'labelled_nM': _nm(record, 'labelled_concentration'), 'labelled_over_kd': None, 'fhot_s': _seconds(record, 'fhot_time'), 'incubation_min': _minutes(record, 'incubation_time'), 'concentration_count': None, 'concentration_low_over_constant': None, 'concentration_high_over_constant': None, 'signal_to_noise': None, 'fnorm_amplitude': None, 'signal_refs': [], 'labelled_refs': [], 'tight_binding_handled': None, 'count_refs': [], 'series_refs': [], 'incubation_refs': [], 'fhot_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': [], 'estimate_fold': None, 'estimate_refs': []}
+    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'assay_format': record['assay_format'], 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'readout_signal': record['readout_signal'], 'capillary_type': record['capillary_type'], 'label_type': record['label_type'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'concentration_series': dict(record['concentration_series']), 'kd_nM': nm['kd'], 'ki_nM': nm['ki'], 'ec50_nM': nm['ec50'], 'constant_name': constant_name, 'constant_nM': None if constant_name is None else nm[constant_name], 'labelled_nM': _nm(record, 'labelled_concentration'), 'labelled_over_kd': None, 'fhot_s': _seconds(record, 'fhot_time'), 'incubation_min': _minutes(record, 'incubation_time'), 'concentration_count': None, 'concentration_low_over_constant': None, 'concentration_high_over_constant': None, 'signal_to_noise': None, 'fnorm_amplitude': None, 'fnorm_noise': None, 'signal_refs': [], 'labelled_refs': [], 'tight_binding_handled': None, 'count_refs': [], 'series_refs': [], 'incubation_refs': [], 'incubation_constant_nM': None, 'fhot_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': [], 'estimate_fold': None, 'estimate_refs': []}
     native['support'] = criterion_supports(record, MST_CRITERIA)      # kept for the sheet: criterion -> supports of the stated fields it reads; the grader does not judge them
     outcomes = {name: EVALUATORS[name](record, native) for name in CRITERIA}
     return {'version': VERSION, 'experiment_type': 'mst', 'experiment_ref': record['experiment_ref'], 'criteria': {name: {'status': o['status'], 'support_refs': o['support_refs']} for name, o in outcomes.items()}, 'reasons': {name: o['reason'] for name, o in outcomes.items()}, 'native': native}

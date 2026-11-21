@@ -3,6 +3,15 @@ commission the examination of a selected source, commit reasoning on what the so
 grading sheets in one unit, and for a verified-source-leads commission validated source leads), populate the
 source-cell families when the settings turn the population route on. The finding returned is the controlled features of the saved grading sheets.
 
+The search step's Jev measurement (nano-graphrag ``web_search_binding``, ``SEARCH_PAGE_SELECTION_VERSION``
+``model_planned_from_jev_evidence_v5``): before this episode plans, ``assess_search_results`` (decided by code, no model
+call) has Jev measure every search result once, from its held text, against the immutable Search Goal
+(``search_result_assessment.assess_search_results``) and holds the assessment as an artifact. Every later decision shows
+the model nano-graphrag's candidate view for the UNCONSUMED results only (``context.page_candidates``: each result's Jev
+probability, provider rank, title and description, and the measured outcomes of the prior page children); the model
+selects one result per page child, and a result handed to a page is consumed. Jev is planning evidence, not the
+selection policy.
+
 Carried from the old task.py (``LiteratureOperations.catalog`` / ``execute``), source_operations.py
 (``LiteratureSourceOperations._tool_arguments`` / ``_materialize_text_arguments``), task_decision.py,
 task_instructions.py, source_contracts.py (``_ROLE_INSTRUCTIONS``, ``_CHILDREN``, ``_PAGE``, ``_WINDOW``,
@@ -55,11 +64,14 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.reader
     identity_schema, references_schema)
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.experimental_activity_evidence.action_transport import (
     decode_response, generation_schema)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.search_result_assessment import (
+    assess_search_results as assess_results)
+from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.jev_client import JevDecisionClient
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.presentation import extend_context
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import (
     rejection_feedback)
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import (
-    REF, obj, identity, source_location_inputs, validate_schema)
+    REF, canonical, obj, identity, source_location_inputs, validate_schema)
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.experimental_database_records import (
     reader_schema as experimental_records_schema)
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import time_accounting
@@ -142,7 +154,9 @@ OBJECTIVE = {'enum': ['evidence_in_table', 'evidence_in_passages', 'evidence_loc
 CHILD_DESCRIPTION = (
     'Investigate where and how one exact UNCONSUMED source of the search results (input_list) should be examined, in '
     'one of its representations; the child chooses ordinary source operations or selected table, ordered-reading or '
-    'targeted-passage investigations of it. The source is consumed: it is not offered again.')
+    'targeted-passage investigations of it. Choose the result from context.page_candidates (its Jev probability, '
+    'provider rank, title, description and the measured outcomes of the previous page children). The source is '
+    'consumed: it is not offered again.')
 
 
 def page_schema(input_list):
@@ -171,7 +185,14 @@ HISTORY_GUIDANCE = ('Your own earlier read outcomes are shown to you as own_lite
 CHILD_GUIDANCE = ('\nSelect the page child (the examination of one selected source) with its objective and the page '
                   'it examines when that is the better way to examine a returned source; what it returns is shown '
                   'to you as child_returns. A child earns credit in this episode only through the records it '
-                  'returns.')
+                  'returns.\nJev has measured every search result once against the Search Goal. '
+                  'context.page_candidates shows, for the UNCONSUMED results only, each one\'s provider rank, title, '
+                  'description and Jev assessment (relevance_probability: Jev\'s probability that the result can '
+                  'contribute to the Search Goal), and the measured results of the previous page children '
+                  '(previous_page_children). These are measurements for your planning, not a rule that the largest '
+                  'probability must be selected: use them and the realized results of previous pages to choose the '
+                  'next result worth examining. One page child takes one result; the numerical controller alone '
+                  'decides whether the search continues.')
 
 
 LEAD_GUIDANCE = ('\nFor a verified_source_leads commission, a reason selection also carries source_lead: the '
@@ -350,6 +371,38 @@ def reason(arguments, ctx):
                               offered_populations(ctx.settings))
     return reasoning_unit(ctx.store, scope, None, arguments['arguments'], ctx.operation_key,
                           arguments['proposed_annotation_ref'], authorize, read_cells)
+
+
+ASSESS = 'assess_search_results'
+
+
+def result_text(store, reference):
+    """The held text of one search result, read through custody: its text representation, else its original bytes
+    when they are UTF-8 text, else nothing (the measurement then reads its description, as nano-graphrag does)."""
+    source = store.get(reference)
+    for key in ('text_ref', 'artifact_ref'):
+        if source.get(key) is None:
+            continue
+        try:
+            return store.get_artifact(source[key]).decode('utf-8')
+        except UnicodeDecodeError:
+            continue
+    return ''
+
+
+async def assess_search_results(arguments, ctx):
+    """The search step's Jev measurement (nano-graphrag ``SearchPageProposer._issue`` with ``assess_page_candidate``):
+    every search result's held text is read through custody, Jev measures each once against the Search Goal, and this
+    unit holds the assessment as an artifact the episode keeps (``search_assessment_ref``). The library function is
+    pure; this unit alone writes. The Jev client reads its key (``TYPESAFE_API_KEY``) from the repository's ``.env`` at
+    run time (``jev_client``); a missing key or a failed call raises."""
+    results = [{**item, 'text': result_text(ctx.store, item['result_id'])} for item in arguments['results']]
+    assessment = await assess_results(JevDecisionClient.from_repository_env(), goal=arguments['goal'],
+                                      results=results)
+    ref = ctx.store.artifact(canonical(assessment), 'application/json')
+    return {'status': 'completed', 'assessment_ref': ref, 'result_count': len(results),
+            'window_count': sum(len(item['window_probabilities']) for item in assessment['assessments']),
+            'request_count': sum(item['attempts'] for item in assessment['assessments'])}
 
 
 async def state_query(arguments, ctx):
@@ -668,7 +721,7 @@ TOOLS = {
     'literature_ratio_source_populate': literature_ratio_source_populate,
     'literature_controlled_response_source_v3_populate': literature_controlled_response_source_v3_populate,
     'literature_gel_populate': literature_gel_populate,
-    'reason': reason}
+    'reason': reason, ASSESS: assess_search_results}
 
 
 def child_options(input_list):
@@ -686,7 +739,12 @@ def decide(summary, feedback, ctx):
     The population display contexts of the old ``internal_summary.py`` (the possessed rate, domain, meaning,
     gel, controlled-response, endpoint, precision, comparison and window rows, the owned population sources and
     the failed population attempt) read the family repositories through the Store and are not carried (see the
-    "Carried over" table)."""
+    "Carried over" table).
+
+    Before Jev has measured the search results the decision is that measurement, made by code with no model call
+    (nano-graphrag assesses every buffered result before its page proposer is asked)."""
+    if assessment_pending(summary):
+        return ToolCall(ASSESS, {'goal': summary['jev_search_goal'], 'results': summary['search_result_candidates']})
     names = offered(ctx.settings)
     leads = summary['task']['kind'] == 'verified_source_leads'
     knowledge_directory = ctx.settings['knowledge_library_directory']
@@ -700,6 +758,7 @@ def decide(summary, feedback, ctx):
                'aggregation_sheets': summary['aggregation_sheets'],
                'child_returns': summary['child_returns'], 'input_list': summary['input_list'],
                'consumed_inputs': summary['consumed_inputs'], 'child_options': child_options(summary['input_list']),
+               'page_candidates': summary['search_planner_context'],
                'tools': catalog(names, summary['reasoning_schema'], leads, ctx.settings),
                'time_accounting': time_accounting(ctx.clock.progress_time)}
     if ctx.settings['rate_population']:
@@ -749,9 +808,17 @@ def action(response, summary, records, ctx):
                            'proposed_annotation_ref': summary['proposed_annotation_ref']})
 
 
+def assessment_pending(summary):
+    """Whether Jev has yet to measure the search results: there are results and no held assessment."""
+    return summary['search_assessment_ref'] is None and bool(summary['search_result_candidates'])
+
+
 def offered_actions(summary, ctx):
-    """The action types offered at this decision: the names of the tools ``decide`` shows (the same ``catalog`` over
-    the same ``offered`` list) and the child slots."""
+    """The action types offered at this decision: before Jev has measured the search results the one action is
+    ``assess_search_results``; after it, the names of the tools ``decide`` shows (the same ``catalog`` over the same
+    ``offered`` list) and the child slots."""
+    if assessment_pending(summary):
+        return [ASSESS]
     names = offered(ctx.settings)
     leads = summary['task']['kind'] == 'verified_source_leads'
     tools = [entry['name'] for entry in catalog(names, summary['reasoning_schema'], leads, ctx.settings)]

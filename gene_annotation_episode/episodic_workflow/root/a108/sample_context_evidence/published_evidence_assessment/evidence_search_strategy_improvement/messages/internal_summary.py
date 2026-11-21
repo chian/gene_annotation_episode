@@ -119,8 +119,12 @@ def internal_summary(view):
     task = parent['task']
     records = view.records
     # The input list: candidate sources not yet handed to the assessment child; a source handed out is consumed and
-    # no longer offered (nano-graphrag ``PageRunState.processed_chunk_ids`` / ``remaining_chunks``). The yield
-    # estimator (another agent's) stops when it is empty.
+    # no longer offered (nano-graphrag ``PageRunState.processed_chunk_ids`` / ``remaining_chunks``). Its emptiness
+    # does not stop the episode: ``yield_estimator.py`` passes ``items=None`` to the accumulation controller
+    # (``AccumulationYieldController``, ``ADAPTIVE_CONTROL``, no cost), which stops after 4 flat units in a row (a
+    # unit is flat when, after W = 8 attempted and m = 4 observed units, the upper bound of the expected next marginal
+    # (hypervolume) credit is at or below the adaptive gamma = max(one-result resolution, 0.1 x median of recent
+    # productive credits)).
     consumed = list(dict.fromkeys(ref for outcome in view.outcomes if outcome['kind'] == 'child'
                                   for ref in outcome['arguments']['search_result_refs']))
     input_list = [ref for ref in candidate_sources(parent, view.outcomes, records) if ref not in consumed]

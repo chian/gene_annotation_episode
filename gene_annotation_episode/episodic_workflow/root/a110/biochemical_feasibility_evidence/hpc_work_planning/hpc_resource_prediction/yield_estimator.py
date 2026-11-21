@@ -2,12 +2,17 @@
 
 README 7b: ``HPCContinuationEstimator`` and ``continuation_for_action`` have no controller of their own. The
 credit here is a signed measured model improvement that accumulates, so the controller is the accumulation
-controller. The old ``chosen = commission['yield_bindings'][role]`` (``cutoff`` and ``parameters``) is this episode's
-entry of the run's ``continuation`` collaborator: ``{'cost': <old cutoff, finite and above zero>, 'parameters':
-{...}}``; the commission is not read here (``read_from_parent`` produced no commission). An entry without them
-raises the old error. ``continuation_for_action`` (the zero-expected-continuation packet written when there were no
-validation ids, all training was used and every candidate had a fresh comparison) and ``practical_estimator`` are
-deleted: nothing but this controller ends the Episode."""
+controller: ``AccumulationYieldController`` (nano-graphrag's ``EstimatorController``) with ``ADAPTIVE_CONTROL`` and
+``items=None``. It has no cost. After W = 8 units attempted and m = 4 observed it fits nano-graphrag's yield model;
+a unit is flat when the upper bound of the expected next marginal (hypervolume) credit is at or below gamma, here the
+adaptive gamma = max(one-result resolution, 0.1 x median of recent productive credits); it stops the Episode after 4
+flat units in a row. With ``items=None`` there is no input list, so no item limit stops it. The old
+``chosen = commission['yield_bindings'][role]`` (``cutoff`` and ``parameters``) is this episode's entry of the run's
+``continuation`` collaborator: ``{'cost': <old cutoff, finite and above zero>, 'parameters': {...}}``; the commission
+is not read here (``read_from_parent`` produced no commission). An entry without them raises the old error; the
+controller is given neither. ``continuation_for_action`` (the zero-expected-continuation packet written when there
+were no validation ids, all training was used and every candidate had a fresh comparison) and
+``practical_estimator`` are deleted: nothing but this controller ends the Episode."""
 import math
 
 from yield_control import AccumulationYieldController, ADAPTIVE_CONTROL

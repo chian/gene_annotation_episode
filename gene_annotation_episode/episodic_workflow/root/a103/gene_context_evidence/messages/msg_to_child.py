@@ -1,8 +1,7 @@
-"""The commissions of the A103 head's eight slots, carried from the old ``to_children.py``,
-``to_child_gene_context_evidence.py``, ``to_child_published_evidence_assessment.py`` and
-``to_child_execution_progress_assessment.py``. The first two (the recursive head and the literature child) were
-byte-identical in the old code: the typed assignment the model wrote (``selection['assignment']``) went through the
-child binding's ``prepare_assignment``; the monitor's assignment was passed on unchanged. The other four children of the
+"""The commissions of the A103 head's seven slots, carried from the old ``to_children.py``,
+``to_child_gene_context_evidence.py`` and ``to_child_execution_progress_assessment.py``. For the recursive head the
+typed assignment the model wrote (``selection['assignment']``) went through the child binding's
+``prepare_assignment``; the monitor's assignment was passed on unchanged. A103 has no literature child. The other four children of the
 old ``episode.py`` factories (execution, HPC, resource) were commissioned through the same ``episode_child`` action with
 the same typed assignment.
 
@@ -26,7 +25,7 @@ The old condition ``annotation_task_required``
 holds here always: the proposed annotation of the commission is required (``read_from_parent``)."""
 from episode_runtime import ChildMessage
 
-SLOTS = ('gene_context_evidence', 'published_evidence_assessment', 'execution_job_submission',
+SLOTS = ('gene_context_evidence', 'execution_job_submission',
          'execution_progress_assessment', 'execution_result_acquisition', 'hpc_work_planning',
          'resource_work_submission', 'resource_result_acquisition')
 MONITOR_VERSION = 'monitor_assignment_v2'

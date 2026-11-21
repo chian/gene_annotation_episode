@@ -14,7 +14,9 @@ steady-state ('equilibration curve') KD of 11.99 +- 0.00 uM, and then reports a 
 with the Hfq/amiE6ARN complex, KD2 112.310 nM). The chunk ends before the paragraph's seventh sentence, which repeats the
 words '1:1 kinetic' (for that other complex): with it a natural quote of the fit model occurs twice and is refused (a
 real model run met this), so the chunk is the paragraph up to there. It says nothing of kon, koff, the response, the
-replicates, referencing, regeneration or mass transport."""
+replicates, referencing, regeneration or mass transport, and states no molecular mass, stoichiometry or dissociation
+time (so the real paragraph's expected sets are unchanged by the four fields analyte_mass, ligand_mass, stoichiometry
+and dissociation_time; the name of its '1:1 kinetic' fit is not a stoichiometry statement, and the form says so)."""
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_gci_extraction import (
     CHIP_TYPE, FIT_MODEL, SERIES, SPREAD_KIND, field_names)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_gci_record import UNITS
@@ -44,7 +46,9 @@ SYNTHETIC = (
     'Mass-transport limitation was checked by repeating the injections at two flow rates. Kinetics were measured '
     'with the waveRAPID method, using repeated short pulses of a single concentration of 200 nM. The sensorgrams '
     'were globally fitted with a 1:1 model, which gave kon = 1.0 × 10^5 M^-1 s^-1 and koff = 2.0 × 10^-3 '
-    's^-1, giving KD = 20 nM (standard deviation 3 nM). The maximum response was 40 pg/mm². A steady-state fit '
+    's^-1, giving KD = 20 nM (standard deviation 3 nM). The maximum response was 40 pg/mm². '
+    'The molecular mass of ParB is 100 kDa and that of PopZ is 20 kDa, and the stoichiometry is one PopZ molecule '
+    'bound per ParB molecule. Dissociation was followed for 600 s after each pulse. A steady-state fit '
     'of the equilibrium responses gave KD = 30 nM, so both a kinetic and a steady-state estimate were made. The '
     'surface was regenerated with 10 mM glycine pH 1.7 without loss of binding capacity. Three independent '
     'experiments were done on separate channels of separate chips.')
@@ -58,6 +62,10 @@ SYNTHETIC_STATED = {
     'response_max': (40, 'pg/mm2', 'The maximum response was 40 pg/mm²'),
     'kd_spread': (3, 'nM', 'standard deviation 3 nM'),
     'immobilization_level': (500, 'pg/mm2', 'an immobilization level of 500 pg/mm²'),
+    'analyte_mass': (20, 'kDa', 'that of PopZ is 20 kDa'),
+    'ligand_mass': (100, 'kDa', 'mass of ParB is 100 kDa'),
+    'stoichiometry': (1, 'dimensionless', 'one PopZ molecule bound per ParB molecule'),
+    'dissociation_time': (600, 's', 'Dissociation was followed for 600 s'),
     'replicate_count': (3, 'count', 'Three independent experiments'),
     SERIES: ([200], 'nM', 'a single concentration of 200 nM'),
     SPREAD_KIND: ('standard_deviation', None, 'standard deviation 3 nM'),

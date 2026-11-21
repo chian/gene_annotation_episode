@@ -13,7 +13,7 @@ criterion, in the same order as the declaration.
 
 The grader holds NO threshold that judges goodness. Where a number would be compared with a limit it records the number with its refs
 (nacl_wash_mM/nacl_wash_refs, detergent_percent/detergent_wash_refs, wash_count/wash_count_refs, incubation_min/incubation_refs,
-fold_enrichment/fold_enrichment_refs, replicate_count/replicate_independent/replicate_refs) and returns 'unknown' with a reason ending in
+fold_enrichment/fold_enrichment_refs (with fold_enrichment_sd/_sem and their refs), positive_control/positive_control_refs, replicate_count/replicate_independent/replicate_refs) and returns 'unknown' with a reason ending in
 '_recorded_for_the_sheet' and no refs; the pull-down converter (literature_pulldown_converter.py) judges it. A fact stated as no stays the
 grader's own conflicting.
 
@@ -21,7 +21,7 @@ A criterion returns 'supported' or 'conflicting' only with support refs (the quo
 ``_result`` refuses to build one without them.
 
 Shared rule for yes/no facts (answers yes / no / unknown / not_applicable): any 'no' -> conflicting; else any 'unknown' -> unknown;
-else all 'not_applicable' -> not_applicable; else supported. negative_control, wash_stringency, wash_count, incubation,
+else all 'not_applicable' -> not_applicable; else supported. negative_control, positive_control, wash_stringency, wash_count, incubation,
 direct_interaction, enrichment and replicates have their own rules (declared).
 
 A pull-down reports no binding constant. The native values carry instead the qualitative statement of the record, 'interaction'
@@ -106,6 +106,17 @@ def _negative_control(record, native):
     return _result('unknown', 'negative_control_result_unknown', [])
 
 
+def _positive_control(record, native):
+    """A stated yes or no is recorded for the sheet: whether a missing prey is a real absence depends on the prey's own statement, which the sheet reads."""
+    item = record['facts']['positive_control_detected']
+    if item['answer'] == 'not_applicable':
+        return _result('not_applicable', 'fact_not_applicable', [])
+    if item['answer'] == 'unknown':
+        return _result('unknown', 'fact_unknown', [])
+    native.update({'positive_control': item['answer'], 'positive_control_refs': list(item['source_refs'])})
+    return _result('unknown', 'positive_control_recorded_for_the_sheet', [])
+
+
 def _bait_minus_control(record, native):
     return _one_fact(record, 'bait_minus_control_done')
 
@@ -163,7 +174,13 @@ def _direct_interaction(record, native):
 
 
 def _enrichment(record, native):
-    return _recorded(record, native, 'fold_enrichment', 'fold_enrichment', 'fold_enrichment_refs', 'fold_enrichment_recorded_for_the_sheet', 'enrichment_not_given')
+    """The fold with its stated spread (SD and SEM kept apart: they differ by sqrt(n)); a spread without a fold is not recorded."""
+    outcome = _recorded(record, native, 'fold_enrichment', 'fold_enrichment', 'fold_enrichment_refs', 'fold_enrichment_recorded_for_the_sheet', 'enrichment_not_given')
+    if native['fold_enrichment'] is not None:
+        for name in ('fold_enrichment_sd', 'fold_enrichment_sem'):
+            if _value(record, name) is not None:
+                native.update({name: _value(record, name), name + '_refs': _refs(record['quantities'][name])})
+    return outcome
 
 
 def _quantification(record, native):
@@ -182,13 +199,13 @@ def _replicates(record, native):
     return _result('unknown', 'replicate_count_recorded_for_the_sheet', [])
 
 
-EVALUATORS = {'prey_in_eluate': _prey_in_eluate, 'negative_control': _negative_control, 'bait_minus_control': _bait_minus_control, 'input_lane': _input_lane, 'reciprocal': _reciprocal, 'competition': _competition, 'nuclease': _nuclease, 'specificity': _specificity, 'wash_stringency': _wash_stringency, 'wash_count': _wash_count, 'incubation': _incubation, 'expression_level': _expression_level, 'direct_interaction': _direct_interaction, 'enrichment': _enrichment, 'quantification': _quantification, 'replicates': _replicates}
+EVALUATORS = {'prey_in_eluate': _prey_in_eluate, 'negative_control': _negative_control, 'positive_control': _positive_control, 'bait_minus_control': _bait_minus_control, 'input_lane': _input_lane, 'reciprocal': _reciprocal, 'competition': _competition, 'nuclease': _nuclease, 'specificity': _specificity, 'wash_stringency': _wash_stringency, 'wash_count': _wash_count, 'incubation': _incubation, 'expression_level': _expression_level, 'direct_interaction': _direct_interaction, 'enrichment': _enrichment, 'quantification': _quantification, 'replicates': _replicates}
 
 
 def grade_pulldown(record):
     """Grade one pull-down or co-IP experiment record. Returns the criterion answers and native values."""
     detected = record['facts']['prey_detected_in_eluate']
-    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'detection_method': record['detection_method'], 'capture_format': record['capture_format'], 'protein_source': record['protein_source'], 'nuclease_treatment': record['nuclease_treatment'], 'crosslinker': record['crosslinker'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'interaction': INTERACTION.get(detected['answer']), 'interaction_refs': list(detected['source_refs']) if detected['answer'] in INTERACTION else [], 'nacl_wash_mM': _scaled(record, 'nacl_wash', MM_PER_UNIT), 'incubation_min': _scaled(record, 'incubation_time', MIN_PER_UNIT), 'nacl_wash_refs': [], 'detergent_percent': None, 'detergent_wash_refs': [], 'wash_count': None, 'wash_count_refs': [], 'incubation_refs': [], 'fold_enrichment': None, 'fold_enrichment_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': []}
+    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'detection_method': record['detection_method'], 'capture_format': record['capture_format'], 'protein_source': record['protein_source'], 'nuclease_treatment': record['nuclease_treatment'], 'crosslinker': record['crosslinker'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'interaction': INTERACTION.get(detected['answer']), 'interaction_refs': list(detected['source_refs']) if detected['answer'] in INTERACTION else [], 'nacl_wash_mM': _scaled(record, 'nacl_wash', MM_PER_UNIT), 'incubation_min': _scaled(record, 'incubation_time', MIN_PER_UNIT), 'nacl_wash_refs': [], 'detergent_percent': None, 'detergent_wash_refs': [], 'wash_count': None, 'wash_count_refs': [], 'incubation_refs': [], 'fold_enrichment': None, 'fold_enrichment_refs': [], 'fold_enrichment_sd': None, 'fold_enrichment_sd_refs': [], 'fold_enrichment_sem': None, 'fold_enrichment_sem_refs': [], 'positive_control': None, 'positive_control_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': []}
     outcomes = {name: EVALUATORS[name](record, native) for name in CRITERIA}
     native['support'] = criterion_supports(record, PULLDOWN_CRITERIA)      # kept for the sheet: the grader does not judge it
     return {'version': VERSION, 'experiment_type': 'pulldown', 'experiment_ref': record['experiment_ref'], 'criteria': {name: {'status': o['status'], 'support_refs': o['support_refs']} for name, o in outcomes.items()}, 'reasons': {name: o['reason'] for name, o in outcomes.items()}, 'native': native}

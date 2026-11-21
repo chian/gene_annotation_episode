@@ -13,7 +13,7 @@ real_record: see below (the published case).
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_spa_record import EXPERIMENT_TYPE, FACTS, QUANTITIES, VERSION, fact, point, unavailable
 
 CHOICE_NAMES = ('assay_format', 'radioligand_isotope', 'bead_type', 'capture_method', 'preparation_type', 'counter', 'spread_kind', 'fit_model')
-UNITS = {'kd': 'nM', 'bmax': 'fmol/mg', 'ki': 'nM', 'ic50': 'nM', 'hill_slope': 'ratio', 'kd_spread': 'nM', 'ki_spread': 'nM', 'specific_activity': 'Ci/mmol', 'radioligand_concentration': 'nM', 'radioligand_range_lowest': 'nM', 'radioligand_range_highest': 'nM', 'bead_amount': 'mg', 'bead_concentration': 'mg/mL', 'receptor_amount': 'ug', 'percent_bound': 'percent', 'nonspecific_fraction': 'percent', 'nonspecific_ligand_concentration': 'nM', 'nonspecific_excess': 'ratio', 'bead_only_fraction': 'percent', 'counting_efficiency': 'percent', 'incubation_time': 'min', 'settling_time': 'min', 'temperature': 'C', 'titration_point_count': 'count', 'technical_replicate_count': 'count', 'replicate_count': 'count'}
+UNITS = {'kd': 'nM', 'bmax': 'fmol/mg', 'ki': 'nM', 'ic50': 'nM', 'hill_slope': 'ratio', 'kd_spread': 'nM', 'ki_spread': 'nM', 'specific_activity': 'Ci/mmol', 'radioligand_concentration': 'nM', 'radioligand_range_lowest': 'nM', 'radioligand_range_highest': 'nM', 'bead_amount': 'mg', 'bead_concentration': 'mg/mL', 'receptor_amount': 'ug', 'percent_bound': 'percent', 'nonspecific_fraction': 'percent', 'nonspecific_ligand_concentration': 'nM', 'nonspecific_ligand_affinity': 'nM', 'nonspecific_excess': 'ratio', 'bead_only_fraction': 'percent', 'counting_efficiency': 'percent', 'incubation_time': 'min', 'association_half_time': 'min', 'settling_time': 'min', 'temperature': 'C', 'titration_point_count': 'count', 'technical_replicate_count': 'count', 'replicate_count': 'count'}
 
 
 def blank_record(experiment_ref, source_ref, assertion_ref):
@@ -46,6 +46,7 @@ def real_record():
                        'span_incubation': {'locator': locator, 'quote': 'incubated for ~16 hr'},
                        'span_temperature': {'locator': locator, 'quote': 'at 4°C with gentle agitation'},
                        'span_depletion': {'locator': locator, 'quote': 'ligand depletion was avoided by maintaining ≥20-fold molar excess of [3H]leucine relative to LeuT'},
+                       'span_nonspecific_itself': {'locator': locator, 'quote': 'The unspecific binding of [3H]leucine was determined upon addition of 100 (WT, A22V, A22S) or 300 µM (N27Q, N286Q) of unlabeled leucine'},
                        'span_nonspecific': {'locator': locator, 'quote': 'with unspecific binding corrected for by the addition of 100 µM unlabeled leucine'}}
     quantities = {'specific_activity': (25.0, 'Ci/mmol', 'span_specific_activity'), 'bead_concentration': (1.25, 'mg/mL', 'span_bead_concentration'),
                   'nonspecific_ligand_concentration': (100.0, 'uM', 'span_nonspecific_ligand'), 'incubation_time': (16.0, 'h', 'span_incubation'), 'temperature': (4.0, 'C', 'span_temperature')}
@@ -56,6 +57,7 @@ def real_record():
     record['choice_support'].update(radioligand_isotope='direct', bead_type='direct', capture_method='direct', preparation_type='direct', counter='direct')
     record['facts']['ligand_depletion_checked'] = fact('yes', ['span_depletion'])
     record['facts']['nonspecific_binding_determined'] = fact('yes', ['span_nonspecific'])
+    record['facts']['nonspecific_ligand_is_radioligand'] = fact('yes', ['span_nonspecific_itself'])
     record['preparations']['dataset_ref'] = 'dataset_pmc10945697_spa'
     return record
 
@@ -65,7 +67,7 @@ def synthetic_record(experiment_ref='exp_synthetic_spa_1', radioligand_prep='pre
     refs = ['span_' + experiment_ref]
     record['spans'] = {refs[0]: {'locator': 'synthetic', 'quote': 'synthetic fixture'}}
     record['preparations'] = {'radioligand_preparation_ref': radioligand_prep, 'receptor_preparation_ref': receptor_prep, 'dataset_ref': dataset}
-    values = {'kd': kd, 'bmax': 1200.0, 'ki': kd * 2.5, 'ic50': kd * 3.75, 'hill_slope': 1.0, 'kd_spread': spread, 'ki_spread': spread * 1.5, 'specific_activity': 85.0, 'radioligand_concentration': kd / 2, 'radioligand_range_lowest': kd * 0.05, 'radioligand_range_highest': kd * 25.6, 'bead_amount': 2.0, 'bead_concentration': 20.0, 'receptor_amount': 0.5, 'percent_bound': 6.0, 'nonspecific_fraction': 25.0, 'nonspecific_ligand_concentration': kd * 500, 'nonspecific_excess': 500.0, 'bead_only_fraction': 8.0, 'counting_efficiency': 32.0, 'incubation_time': 120.0, 'settling_time': 30.0, 'temperature': 25.0, 'titration_point_count': 10, 'technical_replicate_count': 3, 'replicate_count': 3}
+    values = {'kd': kd, 'bmax': 1200.0, 'ki': kd * 2.5, 'ic50': kd * 3.75, 'hill_slope': 1.0, 'kd_spread': spread, 'ki_spread': spread * 1.5, 'specific_activity': 85.0, 'radioligand_concentration': kd / 2, 'radioligand_range_lowest': kd * 0.05, 'radioligand_range_highest': kd * 25.6, 'bead_amount': 2.0, 'bead_concentration': 20.0, 'receptor_amount': 0.5, 'percent_bound': 6.0, 'nonspecific_fraction': 25.0, 'nonspecific_ligand_concentration': kd * 500, 'nonspecific_ligand_affinity': kd * 1.1, 'nonspecific_excess': 500.0, 'bead_only_fraction': 8.0, 'counting_efficiency': 32.0, 'incubation_time': 120.0, 'association_half_time': 4.0, 'settling_time': 30.0, 'temperature': 25.0, 'titration_point_count': 10, 'technical_replicate_count': 3, 'replicate_count': 3}
     for name, value in values.items():
         record['quantities'][name] = point(value, UNITS[name], name + ':' + experiment_ref, refs, name)
     record['concentration_series'] = {**point([kd * 0.05 * 2 ** step for step in range(10)], 'nM', 'series:' + experiment_ref, refs, 'concentration_series')}
@@ -78,6 +80,6 @@ def synthetic_record(experiment_ref='exp_synthetic_spa_1', radioligand_prep='pre
     record['spread_kind'] = 'standard_error'
     record['fit_model'] = 'one_site'
     record['choice_support'] = dict.fromkeys(CHOICE_NAMES, 'direct')
-    answers = {'homogeneous_no_wash_format': 'yes', 'nonspecific_binding_determined': 'yes', 'nonproximity_signal_checked': 'yes', 'bead_only_control_done': 'yes', 'equilibrium_reached': 'yes', 'ligand_depletion_checked': 'yes', 'quench_interference_checked': 'yes', 'bead_settling_controlled': 'yes', 'radioligand_purity_checked': 'yes', 'nonlinear_fit_used': 'yes', 'cheng_prusoff_applied_with_own_kd': 'yes', 'independent_experiments': 'yes', 'single_estimate_method': 'no'}
+    answers = {'homogeneous_no_wash_format': 'yes', 'nonspecific_binding_determined': 'yes', 'nonspecific_ligand_is_radioligand': 'yes', 'nonproximity_signal_checked': 'yes', 'bead_only_control_done': 'yes', 'equilibrium_reached': 'yes', 'ligand_depletion_checked': 'yes', 'quench_interference_checked': 'yes', 'bead_settling_controlled': 'yes', 'radioligand_purity_checked': 'yes', 'nonlinear_fit_used': 'yes', 'cheng_prusoff_applied_with_own_kd': 'yes', 'independent_experiments': 'yes', 'single_estimate_method': 'no'}
     record['facts'] = {name: fact(answer, refs) for name, answer in answers.items()}
     return record

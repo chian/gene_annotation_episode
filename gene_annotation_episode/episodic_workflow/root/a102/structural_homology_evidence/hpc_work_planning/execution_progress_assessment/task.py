@@ -14,8 +14,8 @@ unit with its credit like any other. ``action`` copies what a tool needs of the 
 progress into the tool's arguments (a tool is handed no summary).
 
 Settings this episode reads (``ctx.settings``): ``launch_instructions_directory`` and ``knowledge_library_directory``
-(optional: the libraries whose context is shown to the model); ``cost`` and ``parameters``
-(``yield_estimator.py``).
+(optional: the libraries whose context is shown to the model). ``yield_estimator.py`` reads no settings: its
+accumulation controller (``FIXED_CONTROL``, ``items=None``) takes no cost.
 
 BLOCKED-ON-JOB-SERVICE: observing the target is the old ``ProgressProvider.observe`` over A102's execution job
 provider; no service wraps it. ``progress_observe`` names the service and the call it wants and raises where it is

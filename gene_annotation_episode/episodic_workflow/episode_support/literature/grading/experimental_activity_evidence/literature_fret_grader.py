@@ -36,9 +36,9 @@ ec50_nM, ic50_nM, constant_name, constant_nM, labelled_nM (the limiting labelled
 partner), labelled_over_kd, ratio_fold, delay_us, integration_us, incubation_min,
 concentration_count, concentration_low_over_constant,
 concentration_high_over_constant, preparations, assay_format, spread_kind,
-fit_model, plate_type and donor_acceptor_pair.
+fit_model, plate_type, donor_acceptor_pair, donor_lanthanide, series_format, z_prime and koff_per_s.
 """
-from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_fret_criteria import FRET_CRITERIA, MIN_PER_UNIT, NM_PER_UNIT, US_PER_UNIT
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_fret_criteria import FRET_CRITERIA, MIN_PER_UNIT, NM_PER_UNIT, PER_S_PER_UNIT, US_PER_UNIT
 
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
@@ -66,6 +66,11 @@ def _minutes(record, name):
 def _us(record, name):
     value = _value(record, name)
     return None if value is None else value * US_PER_UNIT[record['quantities'][name]['unit']]
+
+
+def _per_s(record, name):
+    value = _value(record, name)
+    return None if value is None else value * PER_S_PER_UNIT[record['quantities'][name]['unit']]
 
 
 def _refs(*items):
@@ -100,10 +105,11 @@ def _one_fact(record, name):
 
 
 def _assay_window(record, native):
-    low, high = _value(record, 'ratio_minimum'), _value(record, 'ratio_maximum')
-    if low is None or high is None:
+    low, high, z_prime = _value(record, 'ratio_minimum'), _value(record, 'ratio_maximum'), _value(record, 'z_prime')
+    if (low is None or high is None) and z_prime is None:
         return _result('unknown', 'minimum_or_maximum_missing', [])
-    native.update({'ratio_fold': high / low, 'window_refs': _refs(record['quantities']['ratio_minimum'], record['quantities']['ratio_maximum'])})
+    refs = _refs(record['quantities']['z_prime']) if low is None or high is None else _refs(record['quantities']['ratio_minimum'], record['quantities']['ratio_maximum'], record['quantities']['z_prime'])
+    native.update({'ratio_fold': None if low is None or high is None else high / low, 'z_prime': z_prime, 'window_refs': refs})
     return _result('unknown', 'window_recorded_for_the_sheet', [])
 
 
@@ -184,7 +190,9 @@ def _equilibrium(record, native):
     minutes = native['incubation_min']
     if minutes is None:
         return _result('unknown', 'fact_unknown', [])
-    native['incubation_refs'] = _refs(record['quantities']['incubation_time'])
+    koff = native['koff_per_s']
+    scale = record['quantities']['koff'] if koff is not None else record['quantities'][native['constant_name']] if native['constant_name'] is not None else None     # what the sheet scales the time against: the stated koff, else the reported constant
+    native['incubation_refs'] = _refs(record['quantities']['incubation_time'], *([] if scale is None else [scale]))
     return _result('unknown', 'incubation_recorded_for_the_sheet', [])
 
 
@@ -260,7 +268,7 @@ def grade_fret(record):
     nm = {name: _nm(record, name) for name in CONSTANTS}
     constant_name = next((name for name in CONSTANTS if nm[name] is not None), None)
     labelled = [value for value in (_nm(record, 'donor_concentration'), _nm(record, 'acceptor_concentration')) if value is not None]
-    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'assay_format': record['assay_format'], 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'plate_type': record['plate_type'], 'donor_acceptor_pair': record['donor_acceptor_pair'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'concentration_series': dict(record['concentration_series']), 'kd_nM': nm['kd'], 'ki_nM': nm['ki'], 'ec50_nM': nm['ec50'], 'ic50_nM': nm['ic50'], 'constant_name': constant_name, 'constant_nM': None if constant_name is None else nm[constant_name], 'labelled_nM': min(labelled) if labelled else None, 'labelled_over_kd': None, 'ratio_fold': None, 'delay_us': _us(record, 'delay_time'), 'integration_us': _us(record, 'integration_time'), 'incubation_min': _minutes(record, 'incubation_time'), 'concentration_count': None, 'concentration_low_over_constant': None, 'concentration_high_over_constant': None, 'window_refs': [], 'gating_refs': [], 'labelled_refs': [], 'tight_binding_handled': None, 'series_refs': [], 'incubation_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': [], 'estimate_fold': None, 'estimate_refs': []}
+    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'assay_format': record['assay_format'], 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'plate_type': record['plate_type'], 'donor_acceptor_pair': record['donor_acceptor_pair'], 'donor_lanthanide': record['donor_lanthanide'], 'series_format': record['series_format'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'concentration_series': dict(record['concentration_series']), 'kd_nM': nm['kd'], 'ki_nM': nm['ki'], 'ec50_nM': nm['ec50'], 'ic50_nM': nm['ic50'], 'constant_name': constant_name, 'constant_nM': None if constant_name is None else nm[constant_name], 'labelled_nM': min(labelled) if labelled else None, 'labelled_over_kd': None, 'ratio_fold': None, 'z_prime': None, 'koff_per_s': _per_s(record, 'koff'), 'delay_us': _us(record, 'delay_time'), 'integration_us': _us(record, 'integration_time'), 'incubation_min': _minutes(record, 'incubation_time'), 'concentration_count': None, 'concentration_low_over_constant': None, 'concentration_high_over_constant': None, 'window_refs': [], 'gating_refs': [], 'labelled_refs': [], 'tight_binding_handled': None, 'series_refs': [], 'incubation_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': [], 'estimate_fold': None, 'estimate_refs': []}
     native['support'] = criterion_supports(record, FRET_CRITERIA)      # kept for the sheet: criterion -> supports of the stated fields it reads; the grader does not judge them
     outcomes = {name: EVALUATORS[name](record, native) for name in CRITERIA}
     return {'version': VERSION, 'experiment_type': 'fret', 'experiment_ref': record['experiment_ref'], 'criteria': {name: {'status': o['status'], 'support_refs': o['support_refs']} for name, o in outcomes.items()}, 'reasons': {name: o['reason'] for name, o in outcomes.items()}, 'native': native}

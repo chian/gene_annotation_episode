@@ -9,7 +9,7 @@ Equilibrium Dialysis with a Comparison of Methods' (Toxics 2021, 9(3), 45, PMC79
 the paragraph that begins 'EqD experiments were performed at room temperature' and the paragraph that follows it ('Blanks were prepared using a protein solution with no PFAS'), as the publisher's XML gives their own text,
 joined by one space. Nothing is removed from either paragraph. They describe the equilibrium dialysis (EqD) set-up: 1.2 mL of phosphate buffered saline (pH 7.4) with the perfluoroalkyl acid in a tube, a Slide-a-Lyzer
 mini dialysis cup with a 10 kDa cutoff membrane that is impermeable to the proteins, protein at 1 uM (0.48 uM for two proteins) in a final volume of 100 uL, blanks and non-binding controls (prepared; no result is given),
-36 h on a rocker to reach equilibrium at room temperature, in duplicate. They give no KD, no percent bound, no detection method and no result (the LC-MS/MS and the results are in other paragraphs), so the real
+36 h on a rocker to reach equilibrium at room temperature, in duplicate. They give no KD, no percent bound (nor its spread), no detection limit, no detection method and no result (the LC-MS/MS and the results are in other paragraphs), so the real
 record built from them is a qualitative one with no statement of binding.
 
 ``REAL_RESULT`` is real: the Results paragraph of the same paper that begins 'Strong binding for PFHxA (Figure 4A)', whole (PMC7996760, CC BY 4.0). It reports the KD of PFHxA with PPAR-alpha from the EqD experiments (0.097 uM) and
@@ -55,6 +55,8 @@ SYNTHETIC = (
     'The volume shift of the protein chamber was 3%, and it was corrected. '
     'At a total QX-7 concentration of 500 nM, the free concentration was 200 nM and the bound concentration was 300 nM. '
     'Thus 60% of QX-7 was bound, with a fraction bound of 0.6, and 40% was unbound, with a fraction unbound of 0.4, which shows that QX-7 bound to PZ-2. '
+    'The percent bound had a standard deviation of 4 percentage points between the cells. '
+    'The lower limit of quantification of the LC-MS/MS assay was 2 nM. '
     'In a saturation series of six total concentrations of QX-7 (50, 100, 200, 400, 800 and 1600 nM), from 50 nM to 1600 nM, the bound against the free QX-7 was fitted with a one-site binding model, '
     'which gave a KD of 200 nM with a standard error of 20 nM and a Bmax of 1.0 mol of QX-7 per mol of PZ-2. '
     'The protein concentration of 1 µM was above the KD. '
@@ -69,6 +71,7 @@ SYNTHETIC_STATED = {
     'ki': (500, 'nM', 'a Ki of 500 nM'),
     'ki_spread': (50, 'nM', 'a standard error of 50 nM'),
     'percent_bound': (60, 'percent', '60% of QX-7 was bound'),
+    'percent_bound_spread': (4, 'percent', 'a standard deviation of 4 percentage points'),
     'percent_unbound': (40, 'percent', '40% was unbound'),
     'fraction_bound': (0.6, 'ratio', 'a fraction bound of 0.6'),
     'fraction_unbound': (0.4, 'ratio', 'a fraction unbound of 0.4'),
@@ -79,6 +82,7 @@ SYNTHETIC_STATED = {
     'ligand_range_lowest': (50, 'nM', 'from 50 nM'),
     'ligand_range_highest': (1600, 'nM', 'to 1600 nM'),
     'titration_point_count': (6, 'count', 'six total concentrations'),
+    'detection_lloq': (2, 'nM', 'The lower limit of quantification of the LC-MS/MS assay was 2 nM'),
     'membrane_cutoff': (10, 'kDa', 'a membrane cutoff of 10 kDa'),
     'equilibration_time': (6, 'h', 'for 6 h'),
     'run_temperature': (37, 'C', 'at 37 °C'),

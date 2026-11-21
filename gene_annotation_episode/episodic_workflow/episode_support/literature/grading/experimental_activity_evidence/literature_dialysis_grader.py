@@ -12,7 +12,7 @@ single source). This file only evaluates them: one short function per
 criterion, in the same order as the declaration.
 
 The grader holds NO threshold that judges goodness. Where a number would be compared with a limit it records the number with its refs
-(percent_bound, equilibration_h, recovery_percent, adsorption_percent, volume_shift_percent, salt_mM, bound_over_protein, protein_over_kd, percent_unbound,
+(percent_bound, percent_bound_spread, free_over_lloq, adsorption_corrected, equilibration_h, recovery_percent, adsorption_percent, volume_shift_percent, salt_mM, bound_over_protein, protein_over_kd, percent_unbound,
 concentration_count and the span over the KD, replicate_count/replicate_independent, each with its *_refs) and returns 'unknown' with a reason ending in
 '_recorded_for_the_sheet' and no refs; the dialysis converter (literature_dialysis_converter.py) judges it. A fact stated as no stays the grader's own
 conflicting. When binding_observed is decided by a stated fraction and not by its fact, the grader leaves 'interaction' empty: the qualitative statement is
@@ -126,6 +126,9 @@ def _binding_observed(record, native):
     percent, refs = _percent(record, BOUND_FROM)
     if percent is None:
         return _result('unknown', 'fact_unknown', [])
+    spread = _value(record, 'percent_bound_spread')
+    if spread is not None:                   # the paper's own noise of the percent bound, for the sheet to read the detection end against
+        native.update({'percent_bound_spread': spread, 'percent_bound_spread_refs': _refs(record['quantities']['percent_bound_spread'])})
     native['percent_bound_refs'] = refs      # whether binding is shown, and so the qualitative statement, is the sheet's judgement of native['percent_bound']
     return _result('unknown', 'percent_bound_recorded_for_the_sheet', [])
 
@@ -149,7 +152,12 @@ def _recovery(record, native):
 
 
 def _device_adsorption(record, native):
-    return _recorded_or_fact(record, native, 'membrane_adsorption', 'adsorption_checked_and_corrected', 'adsorption_percent', 'adsorption_refs', 'adsorption_recorded_for_the_sheet')
+    outcome = _recorded_or_fact(record, native, 'membrane_adsorption', 'adsorption_checked_and_corrected', 'adsorption_percent', 'adsorption_refs', 'adsorption_recorded_for_the_sheet')
+    corrected = record['facts']['adsorption_checked_and_corrected']
+    if outcome['reason'] == 'adsorption_recorded_for_the_sheet' and corrected['answer'] != 'unknown':
+        # a stated number is judged by the sheet; whether it was corrected for is the second fact the sheet needs (the grader does not judge it)
+        native.update({'adsorption_corrected': corrected['answer'], 'adsorption_corrected_refs': list(corrected['source_refs'])})
+    return outcome
 
 
 def _volume_shift(record, native):
@@ -213,8 +221,18 @@ def _protein_level(record, native):
 
 def _free_fraction_measurable(record, native):
     percent, refs = _percent(record, UNBOUND_FROM)
+    lloq = _nm(record, 'detection_lloq')
+    free = _nm(record, 'free_ligand_concentration')
+    free_refs = _refs(record['quantities']['free_ligand_concentration']) if free is not None else []
+    total = _nm(record, 'ligand_total_concentration')
+    if free is None and total is not None and percent is not None:      # the free concentration of the reading: total times the fraction unbound
+        free, free_refs = total * percent / PERCENT_FULL, _refs(record['quantities']['ligand_total_concentration'], {'source_refs': refs})
+    if lloq is not None and free is not None:
+        native.update({'free_over_lloq': free / lloq, 'free_over_lloq_refs': _refs({'source_refs': free_refs}, record['quantities']['detection_lloq'])})
     if percent is None:
-        return _result('not_applicable', 'no_fraction_reported', [])
+        if native['free_over_lloq'] is None:
+            return _result('not_applicable', 'no_fraction_reported', [])
+        return _result('unknown', 'free_over_lloq_recorded_for_the_sheet', [])
     native['percent_unbound_refs'] = refs
     return _result('unknown', 'percent_unbound_recorded_for_the_sheet', [])
 
@@ -273,7 +291,7 @@ def grade_dialysis(record):
     constant_name = next((name for name in CONSTANTS if nm[name] is not None), None)
     bound_percent, _ = _percent(record, BOUND_FROM)
     unbound_percent, _ = _percent(record, UNBOUND_FROM)
-    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'separation_method': record['separation_method'], 'device_type': record['device_type'], 'detection': record['detection'], 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'concentration_series': dict(record['concentration_series']), 'kd_nM': nm['kd'], 'ki_nM': nm['ki'], 'constant_name': constant_name, 'constant_nM': None if constant_name is None else nm[constant_name], 'percent_bound': bound_percent, 'percent_unbound': unbound_percent, 'protein_nM': _nm(record, 'protein_concentration'), 'bound_nM': None, 'bound_over_protein': None, 'protein_over_kd': None, 'salt_mM': _scaled(record, 'salt_concentration', MM_PER_SALT_UNIT), 'equilibration_h': _scaled(record, 'equilibration_time', H_PER_UNIT), 'concentration_count': None, 'concentration_low_over_kd': None, 'concentration_high_over_kd': None, 'interaction': None, 'interaction_refs': [], 'percent_bound_refs': [], 'equilibration_refs': [], 'recovery_percent': None, 'recovery_refs': [], 'adsorption_percent': None, 'adsorption_refs': [], 'volume_shift_percent': None, 'volume_shift_refs': [], 'salt_refs': [], 'bound_over_protein_refs': [], 'protein_over_kd_refs': [], 'percent_unbound_refs': [], 'concentration_count_refs': [], 'concentration_span_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': []}
+    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'separation_method': record['separation_method'], 'device_type': record['device_type'], 'detection': record['detection'], 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'concentration_series': dict(record['concentration_series']), 'kd_nM': nm['kd'], 'ki_nM': nm['ki'], 'constant_name': constant_name, 'constant_nM': None if constant_name is None else nm[constant_name], 'percent_bound': bound_percent, 'percent_unbound': unbound_percent, 'protein_nM': _nm(record, 'protein_concentration'), 'bound_nM': None, 'bound_over_protein': None, 'protein_over_kd': None, 'salt_mM': _scaled(record, 'salt_concentration', MM_PER_SALT_UNIT), 'equilibration_h': _scaled(record, 'equilibration_time', H_PER_UNIT), 'concentration_count': None, 'concentration_low_over_kd': None, 'concentration_high_over_kd': None, 'interaction': None, 'interaction_refs': [], 'percent_bound_refs': [], 'equilibration_refs': [], 'recovery_percent': None, 'recovery_refs': [], 'adsorption_percent': None, 'adsorption_refs': [], 'volume_shift_percent': None, 'volume_shift_refs': [], 'salt_refs': [], 'bound_over_protein_refs': [], 'protein_over_kd_refs': [], 'percent_unbound_refs': [], 'percent_bound_spread': None, 'percent_bound_spread_refs': [], 'free_over_lloq': None, 'free_over_lloq_refs': [], 'adsorption_corrected': None, 'adsorption_corrected_refs': [], 'concentration_count_refs': [], 'concentration_span_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': []}
     outcomes = {name: EVALUATORS[name](record, native) for name in CRITERIA}
     native['support'] = criterion_supports(record, DIALYSIS_CRITERIA)      # kept for the sheet: the grader does not judge it
     return {'version': VERSION, 'experiment_type': 'dialysis', 'experiment_ref': record['experiment_ref'], 'criteria': {name: {'status': o['status'], 'support_refs': o['support_refs']} for name, o in outcomes.items()}, 'reasons': {name: o['reason'] for name, o in outcomes.items()}, 'native': native}

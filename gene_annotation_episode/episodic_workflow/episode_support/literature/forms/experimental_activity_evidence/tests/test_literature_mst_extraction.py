@@ -92,7 +92,7 @@ def test_a_correct_synthetic_answer_is_valid_and_becomes_a_record_the_grader_acc
     answer = validate_answer(synthetic_answer(), SYNTHETIC)
     record = record_from_answer(answer, SYNTHETIC, 5000, 'exp_1', 'source_1', 'hypothesis_1')
     graded = grade_mst(record)
-    assert {name: _criterion(graded, name)['status'] for name in CRITERIA} == dict.fromkeys(CRITERIA, 'supported')      # the grader records the numbers, the sheet judges them
+    assert {name: _criterion(graded, name)['status'] for name in CRITERIA} == dict.fromkeys(CRITERIA, 'supported')
     native = graded['native']
     assert native['kd_nM'] == 20 and native['ki_nM'] == 40 and native['ec50_nM'] == 31
     assert native['labelled_nM'] == 5 and native['labelled_over_kd'] == pytest.approx(0.25) and native['fhot_s'] == pytest.approx(1.5) and native['incubation_min'] == 15
@@ -107,6 +107,7 @@ def test_a_correct_synthetic_answer_is_valid_and_becomes_a_record_the_grader_acc
     assert record['assay_format'] == 'direct_titration' and record['readout_signal'] == 'thermophoresis' and record['capillary_type'] == 'hydrophilic' and record['label_type'] == 'covalent_nhs_dye'
     assert record['quantities']['fnorm_amplitude']['unit'] == 'permille' and record['quantities']['fnorm_amplitude']['value'] == 12
     assert record['quantities']['fhot_time']['unit'] == 's' and record['quantities']['temperature']['unit'] == 'C' and record['quantities']['led_power']['unit'] == 'percent'
+    assert record['quantities']['fnorm_noise']['unit'] == 'permille' and record['quantities']['fnorm_noise']['value'] == 0.7
     assert record['quantities']['signal_to_noise']['unit'] == 'ratio' and record['quantities']['titration_point_count']['value'] == 12
 
 

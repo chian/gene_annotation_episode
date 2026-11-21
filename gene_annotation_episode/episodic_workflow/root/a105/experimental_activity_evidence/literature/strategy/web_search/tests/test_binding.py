@@ -151,6 +151,7 @@ def test_the_model_is_offered_the_access_and_acquisition_tools_the_reasoning_and
         empty = task.selection_schema(names, COMMIT_SCHEMA, leads, POPULATION_OFF, [])
         assert len(empty['properties']['selection']['anyOf']) == len(names)
     assert set(task.CHILD_ARGUMENTS) == set(EPISODE.child_slots) == set(task.CHILD_SLOTS)
-    assert len(task.POPULATIONS) == 35 and set(task.TOOL_NAMES.values()) == set(EPISODE.tools) - {'reason'}
+    assert len(task.POPULATIONS) == 35 and set(task.TOOL_NAMES.values()) == set(EPISODE.tools) - {
+        'reason', task.ASSESS}
     assert len(task.offered({'rate_population': True, **{name: True for name in FLAGS}})) == len(names) + 35
 

@@ -19,7 +19,7 @@ GOAL = ("Determine what the supplied target does within the parent's assigned qu
 UNIT = ('one selected action: one scientific tool action, one typed reasoning commit, the written interpretation, '
         'a lookup (the selected entries, the received evidence, the tool catalogue, tool knowledge, a different '
         'thought pattern and tool selection prepared for a new child), or one commission of a launch, monitor, '
-        'results, hpc, literature or recursive A110 child')
+        'results, hpc or recursive A110 child')
 RESULT = ('the credit of the retained distinct scientific findings this episode holds, the finding that states '
           'what was committed, interpreted and returned by each child, and the records the reasoning commits and '
           'the children produced')

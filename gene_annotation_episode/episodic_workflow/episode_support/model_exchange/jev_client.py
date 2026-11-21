@@ -3,12 +3,10 @@
 A minimal port of nano-graphrag's ``question_pipeline/utilities/model.py`` (``JevDecisionClient`` with its
 ``nouls``, ``nouls_request_token_count`` and the ``JEV_*`` budgets). Differences, each forced by this repository:
 
-- Credentials. nano-graphrag reads ``TYPESAFE_API_KEY`` from the process environment. This repository keeps API
-  credentials in its private user-local credential store (``gene_annotation_episode.credentials``, as
-  ``addgene_access`` does) and the workflow launcher passes no caller environment. The client resolves the field
-  ``api_key`` of the one stored credential of service ``typesafe`` at the HTTPS origin of the endpoint. The value is
-  held only inside the client and sent only in the request's ``Authorization`` header; it is never logged, returned
-  or put in an exception.
+- Credentials. nano-graphrag reads ``TYPESAFE_API_KEY`` from the process environment; the workflow launcher passes no
+  caller environment, so the client reads ``TYPESAFE_API_KEY`` at run time from the repository's own ``.env`` file
+  (gitignored, private; one ``NAME=value`` per line). The value is held only inside the client and sent only in the
+  request's ``Authorization`` header; it is never logged, returned, copied or put in an exception.
 - Token counts. nano-graphrag counts ``o200k_base`` tokens with ``tiktoken``, which this repository does not install.
   Every ``o200k_base`` token decodes to at least one UTF-8 byte, so the UTF-8 byte length of a text is an upper bound
   of its token count. The budgets below are checked against that bound (times nano-graphrag's calibration
@@ -24,15 +22,14 @@ from collections.abc import Mapping
 from dataclasses import dataclass
 import json
 import math
+from pathlib import Path
 
 import requests
 
-from gene_annotation_episode.credentials import CredentialError, credential_reference, resolve_credential
-
 JEV_API_ENDPOINT = 'https://api.typesafe.ai/v1/systemone'
-JEV_ORIGIN = 'https://api.typesafe.ai'
-JEV_SERVICE = 'typesafe'
-JEV_CREDENTIAL_FIELD = 'api_key'
+JEV_KEY_VARIABLE = 'TYPESAFE_API_KEY'
+# The repository's own .env (this file is gene_annotation_episode/episodic_workflow/episode_support/model_exchange/).
+JEV_KEY_FILE = Path(__file__).resolve().parents[4] / '.env'
 JEV_MODEL = 'jev-1.13.0'
 # Jev shares state across questions: the batch and each state/question pair have separate limits
 # (nano-graphrag: https://docs.typesafe.ai/models).
@@ -120,16 +117,19 @@ class JevDecisionClient:
         return f'<JevDecisionClient model={self.model!r} endpoint={self.endpoint!r}>'
 
     @classmethod
-    def from_credential_store(cls):
-        """The client with the ``api_key`` of the one stored ``typesafe`` credential for Jev's origin. A missing or
-        ambiguous credential raises ``JevCallError`` naming what is missing (never a value)."""
+    def from_repository_env(cls):
+        """The client with ``TYPESAFE_API_KEY`` read now from the repository's ``.env``. A missing file, or a file
+        without exactly one non-empty ``TYPESAFE_API_KEY=`` line, raises ``JevCallError`` naming what is missing
+        (never a value)."""
         try:
-            reference = credential_reference(JEV_SERVICE, JEV_ORIGIN)
-            key = resolve_credential(reference, service=JEV_SERVICE, endpoint=JEV_ORIGIN).field(JEV_CREDENTIAL_FIELD)
-        except CredentialError as error:
-            raise JevCallError(f'jev_credential_unavailable:{error.args[0]}:service={JEV_SERVICE}:'
-                               f'endpoint={JEV_ORIGIN}:field={JEV_CREDENTIAL_FIELD}') from None
-        return cls(api_key=key)
+            lines = JEV_KEY_FILE.read_text(encoding='utf-8').splitlines()
+        except OSError as error:
+            raise JevCallError(f'jev_key_file_unavailable:{type(error).__name__}:{JEV_KEY_FILE}') from None
+        values = [line.split('=', 1)[1].strip() for line in lines
+                  if line.split('=', 1)[0].strip() == JEV_KEY_VARIABLE and '=' in line]
+        if len(values) != 1 or not values[0]:
+            raise JevCallError(f'jev_key_unavailable:{JEV_KEY_VARIABLE}:lines={len(values)}:{JEV_KEY_FILE}')
+        return cls(api_key=values[0])
 
     @staticmethod
     def _noul_questions(questions):
@@ -199,6 +199,6 @@ class JevDecisionClient:
                                                     for name in typed}, response=response)
 
 
-__all__ = ['JEV_API_ENDPOINT', 'JEV_EVALUATION_TOKEN_BUDGET', 'JEV_MODEL', 'JEV_ORIGIN', 'JEV_REQUEST_TOKEN_BUDGET',
-           'JEV_SERVICE', 'JEV_TOKEN_BOUND', 'JEV_TOKEN_HEADROOM', 'JevCallError', 'JevDecisionClient',
+__all__ = ['JEV_API_ENDPOINT', 'JEV_EVALUATION_TOKEN_BUDGET', 'JEV_KEY_FILE', 'JEV_KEY_VARIABLE', 'JEV_MODEL',
+           'JEV_REQUEST_TOKEN_BUDGET', 'JEV_TOKEN_BOUND', 'JEV_TOKEN_HEADROOM', 'JevCallError', 'JevDecisionClient',
            'jev_token_estimate', 'token_bound', 'window_text']

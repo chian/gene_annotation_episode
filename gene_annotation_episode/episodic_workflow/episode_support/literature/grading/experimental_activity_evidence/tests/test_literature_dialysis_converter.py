@@ -1,7 +1,9 @@
 """Dialysis converter: the quantitative effect and variance (a KD, else a Ki), the qualitative effect (no KD and no Ki), the criteria mapping and the null reasons."""
+import math
+
 import pytest
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_dialysis_record import fact, point
-from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_dialysis_converter import CRITERIA_MAP, convert_dialysis
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_dialysis_converter import CRITERIA_MAP, _criterion, convert_dialysis
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_dialysis_grader import CRITERIA, grade_dialysis
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.tests.dialysis_cases import low_binding_record, qualitative_record, sparse_record, synthetic_record
 
@@ -61,8 +63,9 @@ def test_the_kind_of_the_spread_decides_whether_a_variance_exists():
     record = synthetic_record()
     record['spread_kind'] = 'standard_deviation'                                 # sd 20 nM over 3 independent experiments: 400 / 3
     assert convert(record)['extraction']['quantities']['effect_variance']['value'] == pytest.approx(400.0 / 3)
-    record['quantities']['replicate_count'] = point(2, 'count', 'n', ['s'])      # fewer than three: not supported
+    record['quantities']['replicate_count'] = point(2, 'count', 'n', ['s'])      # fewer than three: partial credit for sampling_basis, but not a variance of the estimate
     converted = convert(record)
+    assert converted['extraction']['interpretations']['sampling_basis']['status'] == 'supported' and converted['extraction']['interpretations']['sampling_basis']['degree'] == pytest.approx(math.sqrt(2 / 3))
     assert converted['extraction']['quantities']['effect_variance'] is None and converted['null_components']['effect_variance'] == 'sd_needs_independent_experiments_to_become_a_variance_of_the_estimate'
     assert converted['extraction']['quantities']['effect']['value'] == 200.0    # the effect stays, only the variance is null
     record['spread_kind'] = 'confidence_interval'
@@ -167,15 +170,20 @@ def test_the_sheet_holds_the_threshold_constants_with_their_values():
     assert (sheet.MIN_RECOVERY_PERCENT, sheet.RECOVERY_ZERO_AGREEMENT_PERCENT, sheet.MAX_ADSORPTION_PERCENT, sheet.ADSORPTION_ZERO_AGREEMENT_PERCENT) == (80.0, 50.0, 15.0, 40.0)
     assert (sheet.MAX_VOLUME_SHIFT_PERCENT, sheet.VOLUME_SHIFT_ZERO_AGREEMENT_PERCENT, sheet.MIN_SALT_MM, sheet.MAX_BOUND_OVER_PROTEIN, sheet.BOUND_OVER_PROTEIN_ZERO_AGREEMENT) == (10.0, 30.0, 100.0, 1.0, 3.0)
     assert (sheet.MIN_PROTEIN_OVER_KD, sheet.PROTEIN_OVER_KD_ZERO_AGREEMENT, sheet.MIN_CONCENTRATIONS, sheet.LOW_FACTOR, sheet.LOW_ZERO_AGREEMENT_FACTOR, sheet.HIGH_FACTOR, sheet.HIGH_ZERO_AGREEMENT_FACTOR, sheet.MIN_REPLICATES) == (0.2, 0.05, 6, 0.5, 1.0, 4.0, 1.0, 3)
+    assert (sheet.SALT_ZERO_AGREEMENT_MM, sheet.FIT_PARAMETERS) == (0.0, 2)      # the zero ends of the softened lone minimums
+    assert (sheet.QUANTIFIED_PERCENT_BOUND, sheet.HALF_LIVES_AT_MIN_EQUILIBRATION, sheet.MAX_RECOVERY_PERCENT, sheet.RECOVERY_HIGH_ZERO_AGREEMENT_PERCENT) == (15.0, 5.0, 120.0, 150.0)
+    assert (sheet.DEVICE_SHARE_OF_BOUND_FULL, sheet.DEVICE_SHARE_OF_BOUND_ZERO, sheet.PLASMA_PROTEIN_NM) == (0.2, 1.0, 600000.0)
+    assert not hasattr(sheet, 'SINGLE_EXPERIMENT') and not hasattr(sheet, 'WEIGHT_UNKNOWN')      # one experiment is no longer a conflict; no unknown weight inside a degree
 
 
 def test_the_degree_travels_into_the_sheet_criterion_and_is_the_weakest_member_degree():
     record = synthetic_record()
     interpretations = convert(record)['extraction']['interpretations']
     assert interpretations['binding_controls']['degree'] == 1.0 and interpretations['binding_regime']['degree'] == 1.0 and interpretations['calibration_applicability']['degree'] == 1.0      # all the continuous members at full agreement
-    assert 'degree' not in interpretations['sampling_basis'] and 'degree' not in interpretations['binding_parameter_definition']      # a count and facts carry none (binding is decided by its fact)
+    assert interpretations['sampling_basis']['degree'] == 1.0 and 'degree' not in interpretations['binding_parameter_definition']      # the replicate count is graded now; facts carry none (binding is decided by its fact)
     record['quantities']['recovery'] = point(65.0, 'percent', 'r', ['s'])                 # 0.5
     record['quantities']['membrane_adsorption'] = point(27.5, 'percent', 'a', ['s'])      # 0.5 (binding_controls)
+    record['facts']['adsorption_checked_and_corrected'] = fact('unknown')                 # a stated correction would leave only a residual of it (tested apart)
     record['quantities']['percent_unbound'] = point(0.75, 'percent', 'u', ['s'])          # 0.75
     record['facts']['volume_shift_corrected'] = fact('unknown')                           # the stated shift decides instead
     record['quantities']['volume_shift'] = point(20.0, 'percent', 'v', ['s'])             # 0.5 (binding_regime)
@@ -188,6 +196,162 @@ def test_the_degree_travels_into_the_sheet_criterion_and_is_the_weakest_member_d
     record['quantities']['recovery'] = point(40.0, 'percent', 'r', ['s'])
     interpretations = convert(record)['extraction']['interpretations']
     assert interpretations['calibration_applicability']['status'] == 'conflicting' and 'degree' not in interpretations['calibration_applicability']
+
+
+def test_the_lone_minimums_give_partial_credit_just_below_their_researched_values_and_never_a_step():
+    weight = {'conflicting': 0.0, 'unknown': 0.9}      # the row weight of a status without a degree (literature_row_contract WEIGHT_CONFLICTING, WEIGHT_UNKNOWN)
+
+    def credit(verdict):
+        return verdict['degree'] if verdict['status'] == 'supported' else weight[verdict['status']]
+
+    # replicates (MIN_REPLICATES 3): sqrt(n / 3), the precision of the mean over n independent experiments; one experiment is weaker, never conflicting
+    seen = []
+    for count, degree in ((1, math.sqrt(1 / 3)), (2, math.sqrt(2 / 3)), (3, 1.0), (6, 1.0)):
+        record = synthetic_record()
+        record['quantities']['replicate_count'] = point(count, 'count', 'n', ['s'])
+        verdict = convert(record)['extraction']['interpretations']['sampling_basis']
+        assert verdict['status'] == 'supported' and verdict['degree'] == pytest.approx(degree), count
+        seen.append(credit(verdict))
+    assert seen == sorted(seen)
+    record['facts']['independent_experiments'] = fact('unknown')                          # independence not stated: unknown, not a degree
+    assert convert(record)['extraction']['interpretations']['sampling_basis']['status'] == 'unknown'
+    record['facts']['independent_experiments'] = fact('no', ['s'])                        # a stated no stays the grader's conflicting
+    assert convert(record)['extraction']['interpretations']['sampling_basis']['status'] == 'conflicting'
+    # the concentration count (MIN_CONCENTRATIONS 6): linear in the residual degrees of freedom of the one-site fit, (n - 2) / 4, 0 at two points but never conflicting;
+    # every series spans 0.25 to 8 x the KD
+    seen = []
+    for series, degree in (([50.0, 1600.0], 0.0), ([50.0, 400.0, 1600.0], 0.25), ([50.0, 200.0, 400.0, 800.0, 1600.0], 0.75),
+                           ([50.0, 100.0, 200.0, 400.0, 800.0, 1600.0], 1.0), ([50.0, 100.0, 200.0, 300.0, 400.0, 800.0, 1200.0, 1600.0], 1.0)):
+        record = synthetic_record()
+        record['concentration_series'] = point(series, 'nM', 'series', ['s'])
+        verdict = convert(record)['extraction']['interpretations']['binding_regime']
+        assert verdict['status'] == 'supported' and verdict['degree'] == pytest.approx(degree), series
+        seen.append(credit(verdict))
+    assert seen == sorted(seen)
+    # Decision C: both ends are linear in the occupancy x / (1 + x) (KD 200 nM). Lowest 150 nM = 0.75 x KD: (1/2 - 3/7) / (1/2 - 1/3) = 3/7. Highest 400 nM = 2 x KD: (2/3 - 1/2) / (4/5 - 1/2) = 5/9;
+    # 600 nM = 3 x KD: (3/4 - 1/2) / (3/10) = 5/6.
+    for series, degree in (([150.0, 300.0, 600.0, 900.0, 1200.0, 1600.0], 3 / 7), ([50.0, 100.0, 150.0, 200.0, 300.0, 400.0], 5 / 9), ([50.0, 100.0, 200.0, 300.0, 450.0, 600.0], 5 / 6)):
+        record = synthetic_record()
+        record['concentration_series'] = point(series, 'nM', 'series', ['s'])
+        verdict = convert(record)['extraction']['interpretations']['binding_regime']
+        assert verdict['status'] == 'supported' and verdict['degree'] == pytest.approx(degree), series
+    record['concentration_series'] = point([300.0, 400.0, 600.0], 'nM', 'series', ['s'])  # the span still can conflict: the lowest is above the KD
+    assert convert(record)['extraction']['interpretations']['binding_regime']['status'] == 'conflicting'
+
+
+def judge(record, name):
+    return _criterion(grade_dialysis(record), name)
+
+
+def test_the_salt_is_scaled_by_the_protein_and_never_uses_the_unknown_weight_as_a_degree():
+    def salted(salt, protein):
+        record = synthetic_record()
+        record['facts']['volume_shift_corrected'] = fact('unknown')
+        missing(record, 'volume_shift')
+        record['quantities']['salt_concentration'] = point(salt, 'mM', 'c', ['s'])
+        if protein is None:
+            missing(record, 'protein_concentration')
+        else:
+            record['quantities']['protein_concentration'] = point(protein, 'nM', 'p', ['s'])
+        return judge(record, 'volume_shift')
+    # protein not stated: the researched plasma level, full from MIN_SALT_MM 100, salt / 100 below it, unknown at no salt, never conflicting
+    seen = []
+    for salt, degree in ((1.0, 0.01), (10.0, 0.1), (50.0, 0.5), (99.0, 0.99), (100.0, 1.0), (150.0, 1.0)):
+        verdict = salted(salt, None)
+        assert verdict['status'] == 'supported' and verdict['degree'] == pytest.approx(degree) and verdict['support_refs'] == ['s'], salt
+        seen.append(verdict['degree'])
+    assert seen == sorted(seen)
+    assert salted(0.0, None) == {'status': 'unknown', 'support_refs': []}
+    # a dilute purified protein (1 uM): the Donnan excess is 600 times smaller, so even 1 mM of salt screens it
+    assert salted(1.0, 1000.0)['degree'] == pytest.approx(1.0) and salted(0.1, 1000.0)['degree'] == pytest.approx(0.1 / (100.0 * 1000.0 / 600000.0))
+    # a protein above the plasma level needs more salt: 1.2 mM protein at 150 mM is 0.75
+    assert salted(150.0, 1200000.0)['degree'] == pytest.approx(0.75)
+
+
+def test_a_detected_binding_gets_credit_rising_from_the_detection_limit_and_the_statement_still_flips_there():
+    record = qualitative_record()
+    record['facts']['binding_detected'] = fact('unknown')
+    seen = []
+    for value, statement, status, degree in ((0.5, 'interaction_not_detected', 'conflicting', None), (4.9, 'interaction_not_detected', 'conflicting', None), (5.0, 'interaction_detected', 'supported', 0.0),
+                                             (5.5, 'interaction_detected', 'supported', 0.05), (10.0, 'interaction_detected', 'supported', 0.5), (15.0, 'interaction_detected', 'supported', 1.0), (60.0, 'interaction_detected', 'supported', 1.0)):
+        record['quantities']['percent_bound'] = point(value, 'percent', 'p', ['s_p'])
+        converted = convert(record)
+        assert converted['qualitative_effect']['statement'] == statement, value
+        verdict = converted['extraction']['interpretations']['binding_parameter_definition']
+        assert verdict['status'] == status and verdict.get('degree') == (pytest.approx(degree) if degree is not None else None), value
+        seen.append(verdict.get('degree', 0.0))
+    assert seen == sorted(seen)      # the row weight does not jump where the statement flips: 0 on both sides of MIN_PERCENT_BOUND
+    record['facts']['binding_detected'] = fact('yes', ['s_yes'])                            # a stated fact: no degree
+    assert 'degree' not in convert(record)['extraction']['interpretations']['binding_parameter_definition']
+
+
+def test_the_equilibration_time_follows_the_exponential_approach_to_equilibrium():
+    def at(hours):
+        record = synthetic_record()
+        record['facts']['equilibrium_time_course_shown'] = fact('unknown')
+        record['quantities']['equilibration_time'] = point(hours, 'h', 't', ['s'])
+        return judge(record, 'equilibrium')
+    assert at(1.0) == {'status': 'conflicting', 'support_refs': ['s']} and at(0.5)['status'] == 'conflicting'
+    seen = []
+    for hours in (1.01, 1.5, 2.0, 2.5, 3.0, 3.9, 4.0, 6.0, 36.0):
+        verdict = at(hours)
+        assert verdict['status'] == 'supported' and 0.0 <= verdict['degree'] <= 1.0, hours
+        seen.append(verdict['degree'])
+    assert seen == sorted(seen) and seen[0] < 0.05 and seen[-3:] == [1.0, 1.0, 1.0]
+    floor, full = 0.5 ** 1.25, 0.5 ** 5      # the share not yet reached at 1 h and at 4 h (five half-lives at 4 h)
+    assert at(2.5)['degree'] == pytest.approx((floor - 0.5 ** 3.125) / (floor - full)) and at(2.5)['degree'] > 0.75      # concave: 2.5 h is about 0.79, not the linear 0.5
+    assert 0.95 < at(3.9)['degree'] < 1.0                                                     # just below the researched time: nearly full, no step
+
+
+def test_the_recovery_is_judged_on_both_sides_of_the_researched_window():
+    def at(percent):
+        record = synthetic_record()
+        record['quantities']['recovery'] = point(percent, 'percent', 'r', ['s'])
+        return judge(record, 'recovery')
+    for percent, status, degree in ((40.0, 'conflicting', None), (50.0, 'conflicting', None), (65.0, 'supported', 0.5), (80.0, 'supported', 1.0), (100.0, 'supported', 1.0),
+                                    (120.0, 'supported', 1.0), (135.0, 'supported', 0.5), (149.0, 'supported', 1 / 30), (150.0, 'conflicting', None), (180.0, 'conflicting', None)):
+        verdict = at(percent)
+        assert verdict['status'] == status and verdict.get('degree') == (pytest.approx(degree) if degree is not None else None) and verdict['support_refs'] == ['s'], percent
+
+
+def test_an_ultrafiltration_adsorption_is_also_read_against_the_stated_bound_fraction():
+    def at(adsorption, unbound, method='ultrafiltration'):
+        record = qualitative_record()
+        record['separation_method'] = method
+        record['facts']['adsorption_checked_and_corrected'] = fact('unknown')
+        for name in ('percent_bound', 'fraction_bound', 'fraction_unbound'):
+            missing(record, name)
+        record['quantities']['percent_unbound'] = point(unbound, 'percent', 'u', ['s_u'])
+        record['quantities']['membrane_adsorption'] = point(adsorption, 'percent', 'a', ['s_a'])
+        return judge(record, 'device_adsorption')
+    # 95 percent unbound (5 bound): a 5 percent filter loss accounts for 0.95 of the binding; 6 percent for all of it
+    assert at(5.0, 95.0)['status'] == 'supported' and at(5.0, 95.0)['degree'] == pytest.approx((1.0 - 0.95) / 0.8) and at(5.0, 95.0)['support_refs'] == ['s_a', 's_u']
+    assert at(6.0, 95.0) == {'status': 'conflicting', 'support_refs': ['s_a', 's_u']}
+    assert at(5.0, 95.0, 'rapid_equilibrium_dialysis') == {'status': 'supported', 'support_refs': ['s_a'], 'degree': 1.0}      # a dialysis: the absolute ramp only
+    # a well-bound ligand (40 percent unbound): the share is small and the absolute ramp decides, as before
+    assert at(15.0, 40.0)['degree'] == pytest.approx(1.0) and at(27.5, 40.0)['degree'] == pytest.approx(0.5) and at(40.0, 40.0)['status'] == 'conflicting'
+    seen = [at(value, 95.0).get('degree', 0.0) for value in (0.0, 0.5, 1.0, 2.0, 4.0, 5.0, 6.0)]
+    assert seen == sorted(seen, reverse=True)                                                 # more adsorption never raises the credit
+    assert at(5.0, 100.0)['degree'] == pytest.approx(1.0)                                    # nothing bound: nothing for the device to account for
+
+
+def test_the_bound_over_protein_limits_scale_with_the_papers_own_sites_per_protein():
+    def at(bound, bmax=None):
+        record = synthetic_record()                                                            # 1000 nM protein
+        record['quantities']['bound_ligand_concentration'] = point(bound, 'nM', 'b', ['s'])
+        if bmax is None:
+            missing(record, 'bmax')
+        else:
+            record['quantities']['bmax'] = point(bmax[0], bmax[1], 'm', ['s_m'])
+        return judge(record, 'ligand_depletion')
+    for bmax in (None, (1.0, 'ratio'), (0.5, 'ratio')):                                       # one site or fewer: the researched limits (1 and 3)
+        assert at(2000.0, bmax)['degree'] == pytest.approx(0.5) and at(3000.0, bmax)['status'] == 'conflicting', bmax
+    for bmax in ((2.0, 'ratio'), (2000.0, 'nM'), (2.0, 'uM')):                                # two sites: full to 2, zero at 6
+        verdict = at(2000.0, bmax)
+        assert verdict['status'] == 'supported' and verdict['degree'] == pytest.approx(1.0) and verdict['support_refs'][0] == 's' and verdict['support_refs'][-1] == 's_m', bmax      # the stated Bmax is cited
+        assert at(4000.0, bmax)['degree'] == pytest.approx(0.5) and at(6000.0, bmax)['status'] == 'conflicting', bmax
+        seen = [at(value, bmax).get('degree', 0.0) for value in (1000.0, 2000.0, 2500.0, 4000.0, 5900.0, 6000.0)]
+        assert seen == sorted(seen, reverse=True)
 
 
 def test_the_qualitative_statement_of_a_stated_fraction_is_the_sheets_reading_of_its_judgement_exactly_as_before():
@@ -206,7 +370,7 @@ def test_the_qualitative_statement_of_a_stated_fraction_is_the_sheets_reading_of
 
 def test_a_criterion_resting_on_a_weak_quote_gets_the_support_degree_and_a_direct_one_is_unchanged():
     base = convert(synthetic_record())['extraction']['interpretations']
-    assert base['binding_controls']['status'] == base['sampling_basis']['status'] == 'supported' and 'degree' not in base['sampling_basis']
+    assert base['binding_controls']['status'] == base['sampling_basis']['status'] == 'supported' and base['sampling_basis']['degree'] == 1.0
     record = synthetic_record()
     record['facts']['protein_retained']['support'] = 'implied'            # a fact: supported with no degree before
     record['quantities']['replicate_count']['support'] = 'about_something_else'
@@ -223,3 +387,80 @@ def test_a_criterion_resting_on_a_weak_quote_gets_the_support_degree_and_a_direc
     record = synthetic_record()
     record['choice_support']['fit_model'] = 'implied'
     assert convert(record)['extraction']['interpretations']['binding_parameter_definition']['degree'] == pytest.approx(min(base['binding_parameter_definition'].get('degree', 1.0), 0.7))
+
+
+def test_the_stated_standard_deviation_of_the_percent_bound_moves_the_detection_ramp():
+    def at(percent, spread=None):
+        record = qualitative_record()
+        record['facts']['binding_detected'] = fact('unknown')
+        record['quantities']['percent_bound'] = point(percent, 'percent', 'p', ['s_p'])
+        if spread is not None:
+            record['quantities']['percent_bound_spread'] = point(spread, 'percent', 'sd', ['s_sd'])
+        return judge(record, 'binding_observed')
+    assert at(10.0) == {'status': 'supported', 'support_refs': ['s_p'], 'degree': pytest.approx(0.5)}      # not stated: the researched ramp, 5 to 15
+    # sd 4 points: the ramp starts at 3.3 x 4 = 13.2 and is full at 10 x 4 = 40
+    assert at(10.0, 4.0)['degree'] == 0.0 and at(26.6, 4.0)['degree'] == pytest.approx(0.5) and at(40.0, 4.0)['degree'] == 1.0 and at(26.6, 4.0)['support_refs'] == ['s_p', 's_sd']
+    assert at(4.0, 4.0)['status'] == 'conflicting'                                           # the direction stays decided at the researched 5
+    for percent in (6.0, 12.0, 20.0, 30.0, 60.0):                                            # a noisier measurement never raises the degree
+        degrees = [at(percent, spread)['degree'] for spread in (0.1, 1.0, 2.0, 4.0, 8.0)]
+        assert degrees == sorted(degrees, reverse=True) and all(0.0 <= d <= 1.0 for d in degrees)
+    for spread in (0.5, 4.0):                                                                # more bound never lowers it: no step
+        degrees = [at(percent, spread)['degree'] for percent in (5.0, 8.0, 12.0, 20.0, 40.0, 80.0)]
+        assert degrees == sorted(degrees)
+    assert at(8.0, 0.5)['degree'] == at(8.0)['degree']                                       # a precise detector never moves the researched ramp
+
+
+def test_the_detector_limit_of_quantification_is_read_against_the_free_concentration():
+    def at(lloq, free=None, unbound=None, total=None):
+        record = qualitative_record()
+        for name in ('percent_unbound', 'percent_bound', 'fraction_bound', 'fraction_unbound', 'free_ligand_concentration', 'ligand_total_concentration'):
+            missing(record, name)
+        if unbound is not None:
+            record['quantities']['percent_unbound'] = point(unbound, 'percent', 'u', ['s_u'])
+        if free is not None:
+            record['quantities']['free_ligand_concentration'] = point(free, 'nM', 'f', ['s_f'])
+        if total is not None:
+            record['quantities']['ligand_total_concentration'] = point(total, 'nM', 't', ['s_t'])
+        if lloq is not None:
+            record['quantities']['detection_lloq'] = point(lloq, 'nM', 'l', ['s_l'])
+        return record
+    graded = grade_dialysis(at(2.0, free=200.0))
+    assert (graded['reasons']['free_fraction_measurable'], graded['native']['free_over_lloq'], graded['native']['free_over_lloq_refs']) == ('free_over_lloq_recorded_for_the_sheet', 100.0, ['s_f', 's_l'])
+    for ratio, status, degree in ((100.0, 'supported', 1.0), (3.0, 'supported', 1.0), (2.0, 'supported', 0.5), (1.5, 'supported', 0.25), (1.0, 'conflicting', None), (0.5, 'conflicting', None)):
+        verdict = judge(at(1.0, free=ratio), 'free_fraction_measurable')
+        assert verdict['status'] == status and verdict.get('degree') == (pytest.approx(degree) if degree is not None else None), ratio
+    seen = [judge(at(1.0, free=ratio), 'free_fraction_measurable').get('degree', 0.0) for ratio in (0.5, 1.0, 1.5, 2.0, 3.0, 10.0)]
+    assert seen == sorted(seen)                                                              # a larger free concentration never lowers the credit
+    derived = grade_dialysis(at(2.0, unbound=0.5, total=1000.0))                             # no stated free concentration: total x percent unbound = 5 nM = 2.5 x the limit
+    assert derived['native']['free_over_lloq'] == pytest.approx(2.5) and derived['native']['free_over_lloq_refs'] == ['s_t', 's_u', 's_l']
+    verdict = judge(at(2.0, unbound=0.5, total=1000.0), 'free_fraction_measurable')           # the weaker of the percent-unbound ramp (0.5 of 1 to 0) and the limit ramp (0.75)
+    assert verdict['status'] == 'supported' and verdict['degree'] == pytest.approx(0.5) and verdict['support_refs'] == ['s_u', 's_t', 's_l']
+    assert judge(at(None, unbound=0.5, total=1000.0), 'free_fraction_measurable')['degree'] == pytest.approx(0.5)      # no limit stated: the researched percent ramp as before
+    assert grade_dialysis(at(None, free=200.0))['reasons']['free_fraction_measurable'] == 'no_fraction_reported'      # a free concentration without the limit or a fraction: nothing to judge
+
+
+def test_a_stated_and_corrected_adsorption_leaves_only_a_residual_of_itself():
+    def at(adsorption, corrected, method='equilibrium_dialysis', unbound=None):
+        record = qualitative_record()
+        record['separation_method'] = method
+        record['facts']['adsorption_checked_and_corrected'] = fact(corrected, ['s_c'] if corrected in ('yes', 'no') else [])
+        record['quantities']['membrane_adsorption'] = point(adsorption, 'percent', 'a', ['s_a'])
+        if unbound is not None:
+            for name in ('percent_bound', 'fraction_bound', 'fraction_unbound'):
+                missing(record, name)
+            record['quantities']['percent_unbound'] = point(unbound, 'percent', 'u', ['s_u'])
+        return record
+    graded = grade_dialysis(at(27.5, 'yes'))
+    assert graded['native']['adsorption_corrected'] == 'yes' and graded['native']['adsorption_corrected_refs'] == ['s_c']
+    assert grade_dialysis(at(27.5, 'unknown'))['native']['adsorption_corrected'] is None
+    assert judge(at(27.5, 'unknown'), 'device_adsorption')['degree'] == pytest.approx(0.5)     # not stated: whole
+    assert judge(at(27.5, 'no'), 'device_adsorption')['degree'] == pytest.approx(0.5)          # stated not corrected: whole
+    corrected = judge(at(27.5, 'yes'), 'device_adsorption')                                    # 15 percent of 27.5 = 4.1: inside the researched 15
+    assert corrected == {'status': 'supported', 'support_refs': ['s_a', 's_c'], 'degree': 1.0}
+    assert judge(at(40.0, 'unknown'), 'device_adsorption')['status'] == 'conflicting' and judge(at(40.0, 'yes'), 'device_adsorption')['status'] == 'supported'      # a corrected 40 percent is not the whole bias
+    assert judge(at(95.0, 'yes'), 'device_adsorption')['degree'] == 1.0                       # even 95 percent corrected leaves 14.25 (the residual share can never exceed 15 of 100)
+    degrees = [judge(at(value, 'yes'), 'device_adsorption').get('degree', 0.0) for value in (5.0, 50.0, 100.0)]
+    assert degrees == sorted(degrees, reverse=True)
+    # an ultrafiltration with 95 percent unbound: a 5 percent loss accounts for 0.95 of the bound; corrected, for 0.1425 (inside the 0.2 limit)
+    assert judge(at(5.0, 'unknown', 'ultrafiltration', 95.0), 'device_adsorption')['degree'] == pytest.approx(0.0625)
+    assert judge(at(5.0, 'yes', 'ultrafiltration', 95.0), 'device_adsorption')['degree'] == 1.0

@@ -6,8 +6,9 @@ reference: the handoff row the job service wrote at the launch (a row of the job
 selector names paths of result files inside the job's directory (``paths``, or one ``path`` with ``offset`` and
 ``limit``). The job's directory is in the handoff row, which only held records give: the paths are confined to it,
 and the job service's name of each path is computed, where the row is read (``messages/internal_summary.py``).
-``resource_kind`` names the kind of the resource the job runs on, which chooses the continuation profile
-(``yield_estimator.py``); ``acquired_record_unit`` is the credit of one fully acquired selector;
+``resource_kind`` names the kind of the resource the job runs on, which chooses the continuation profile of a
+finite selector (``yield_estimator.py``; the accumulating controller of a selector of no fixed length reads no
+profile and takes no cost);``acquired_record_unit`` is the credit of one fully acquired selector;
 ``known_result_refs`` passes back what an earlier acquisition of this handoff returned, whose bytes earn nothing.
 A wrong commission fails with its error.
 
@@ -36,7 +37,8 @@ ASSIGNMENT_FORM = RecordForm({
                                 'or one path with offset and limit)'),
     'acquired_record_unit': Field('number', 'The credit of one fully acquired selector (a positive number)'),
     'resource_kind': ChoiceField('text', 'The kind of the resource the handed-off job runs on (it chooses the '
-                                         'continuation profile before any record is read)', ('local', 'hpc')),
+                                         'continuation profile of a finite selector before any record is read; '
+                                         'a selector of no fixed length takes no profile)', ('local', 'hpc')),
     'known_result_refs': Field('record_refs', 'What an earlier acquisition of this handoff returned in '
                                'execution_result_refs and the parent holds: each result record with its '
                                'information artifact. The bytes their windows hold earn no credit',

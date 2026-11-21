@@ -1,7 +1,6 @@
 """What the parent takes from a child's admitted result (carried from ``from_child_execution_job_submission.py``,
 ``from_child_execution_progress_assessment.py``, ``from_child_execution_result_acquisition.py``,
-``from_child_hpc_work_planning.py``, ``from_child_published_evidence_assessment.py`` and
-``from_child_biochemical_feasibility_evidence.py``).
+``from_child_hpc_work_planning.py`` and ``from_child_biochemical_feasibility_evidence.py``).
 
 Not carried: the old receivers' bookkeeping (``receive_report``, ``receive_progress``: the recorded-admission refs on
 replay, the progress provider delivery with its content digest, the receipts, the counterpart reads and the tool

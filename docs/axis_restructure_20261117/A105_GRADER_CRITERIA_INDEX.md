@@ -52,35 +52,26 @@ Evaluated in `literature_spr_grader.py` (one short function per criterion). Mapp
 
 Declared in `literature_itc_criteria.py` (criteria in `ITC_CRITERIA`, numbers as named constants at the top).
 Evaluated in `literature_itc_grader.py`. Record form in `forms/experimental_activity_evidence/literature_itc_record.py`
-(one level up from the folder above). Mapped to the binding sheet in `literature_itc_converter.py`. Every judgment
-value below is a first draft and is marked for expert review.
+(one level up from the folder above). Mapped to the binding sheet in `literature_itc_converter.py`. The grader records
+facts only; the converter judges them gradually (a degree in (0, 1] on `supported`), scaled only by numbers of the same
+record, with no threshold constant (owner rule of 2026-11-21); nothing to compare against is unknown. The forms are
+illustrative drafts for the owner and experts.
 
 | Criterion id | Question | Rule in words | Constants used |
 | --- | --- | --- | --- |
 | `heat_of_dilution_control` | Was the heat of diluting the ligand into buffer measured and removed, and the baseline treated? | All three facts (control performed, control subtracted, baseline corrected) yes; any no fails; otherwise unknown if any unknown. | none |
-| `concentration_accuracy_and_active_fraction` | Were concentrations determined and the active fraction considered, so n is near expected? | Fitted n / expected n between the two limits and both facts yes; a ratio outside the limits or a "no" fails. | `N_OVER_EXPECTED_MIN`, `N_OVER_EXPECTED_MAX` |
-| `c_value_window` | Is the curve shape measurable (c = n x [cell] / KD)? | c between the lower and upper limit, inclusive. Outside it KD is poorly determined. | `C_VALUE_MIN`, `C_VALUE_MAX` |
+| `concentration_accuracy_and_active_fraction` | Were concentrations determined and the active fraction considered, so n is near expected? | A fact "no" fails. Otherwise r = fitted n / expected n gives degree min(r, 1/r); a fact unknown is unknown. | none |
+| `c_value_window` | Is the curve shape measurable (c = n x [cell] / KD)? | With N stated injections: degree (c / (c + 1)) x (N / (N + sqrt(c))), the saturation of the cell sites times the share of injections on the curved part; N not stated is unknown. | none |
 | `fit_model_appropriate` | Is the model right for the sites, with residual evidence? | Model stated and residuals reported; a one-set-of-sites model for heterogeneous sites fails; that question unanswered is unknown. | none |
-| `injections_sufficient` | Enough injections to define the isotherm? | Injection count at least the minimum. | `MIN_INJECTIONS` |
+| `injections_sufficient` | Enough injections to define the isotherm? | N injections give degree N / (N + 1); no minimum. | none |
 | `buffer_matching` | Same buffer in cell and syringe? | Dialysed together or matched by a stated procedure supported; stated not matched fails; not stated unknown. | none |
-| `temperature_stated_and_controlled` | Is the temperature stated, plausible and controlled? | Temperature given and within the range, and control stated yes; outside the range or control "no" fails. | `TEMPERATURE_MIN_K`, `TEMPERATURE_MAX_K`, `KELVIN_OFFSET` |
-| `replicate_titrations_independent` | Enough independent replicate titrations? | At least the minimum, independent; "not independent" or a count below the minimum fails. | `MIN_REPLICATE_TITRATIONS` |
-| `stoichiometry_consistency` | Is n a freely fitted, simple-ratio stoichiometry? | n given, at least the minimum, within the tolerance of a multiple of 0.5, and fitted freely; a fixed or non-simple n fails. | `STOICHIOMETRY_MIN`, `STOICHIOMETRY_STEP_TOLERANCE` |
-| `thermodynamic_consistency` | Does dG from KD match dH - T dS? | Gap at most the tolerance in kJ/mol; if only the entropy is not given the check does not apply; KD, enthalpy or temperature missing is unknown. | `DG_TOLERANCE_KJ_PER_MOL`, `GAS_CONSTANT_J_PER_MOL_K`, `KCAL_TO_KJ`, `KELVIN_OFFSET`, `NM_PER_M`, `J_PER_KJ` |
+| `temperature_stated_and_controlled` | Is the temperature stated and controlled? | Temperature given and control stated yes; control "no" fails. No range is judged (nothing in the record to compare against). | `KELVIN_OFFSET` |
+| `replicate_titrations_independent` | Enough independent replicate titrations? | "Not independent" fails; m titrations stated independent give degree m / (m + 1); independence unknown is unknown. | none |
+| `stoichiometry_consistency` | Is the fitted n a freely fitted stoichiometry close to the stoichiometry the source expects? | A fixed n fails. A freely fitted n against the stated expected n e gives degree 1 / (1 + abs(n - e) / e); free fit unknown or no expected n is unknown. | none |
+| `thermodynamic_consistency` | Does dG from KD match dH - T dS? | The gap g gives degree abs(dG_KD) / (abs(dG_KD) + g); if only the entropy is not given the check does not apply; KD, enthalpy or temperature missing is unknown. | `GAS_CONSTANT_J_PER_MOL_K`, `KCAL_TO_KJ`, `KELVIN_OFFSET`, `NM_PER_M`, `J_PER_KJ` |
 
 | Constant | Value | Judgment? | Why it exists |
 | --- | --- | --- | --- |
-| `N_OVER_EXPECTED_MIN` | 0.7 | EXPERT_REVIEW | Fitted n / expected n below this suggests an inactive fraction or concentration error. |
-| `N_OVER_EXPECTED_MAX` | 1.3 | EXPERT_REVIEW | Fitted n / expected n above this suggests a concentration error or non-specific heat. |
-| `C_VALUE_MIN` | 1.0 | EXPERT_REVIEW | Below c = 1 the curve is too flat and KD is poorly determined. |
-| `C_VALUE_MAX` | 1000.0 | EXPERT_REVIEW | Above c = 1000 the curve is a step and only a limit on KD is determined. |
-| `MIN_INJECTIONS` | 15 | EXPERT_REVIEW | Fewest injections for a defined isotherm. |
-| `TEMPERATURE_MIN_K` | 278.15 | EXPERT_REVIEW | Lowest plausible calorimeter temperature (5 C). |
-| `TEMPERATURE_MAX_K` | 323.15 | EXPERT_REVIEW | Highest plausible calorimeter temperature (50 C). |
-| `MIN_REPLICATE_TITRATIONS` | 3 | EXPERT_REVIEW | Fewest independent replicate titrations. |
-| `STOICHIOMETRY_MIN` | 0.4 | EXPERT_REVIEW | A fitted n below this is not a meaningful stoichiometry. |
-| `STOICHIOMETRY_STEP_TOLERANCE` | 0.15 | EXPERT_REVIEW | Fitted n must lie this close (absolute) to a multiple of 0.5. |
-| `DG_TOLERANCE_KJ_PER_MOL` | 2.0 | EXPERT_REVIEW | Allowed gap between dG from KD and dG from dH - T dS. |
 | `GAS_CONSTANT_J_PER_MOL_K` | 8.314462618 | FIXED_BY_DEFINITION | The gas constant R. |
 | `KCAL_TO_KJ` | 4.184 | FIXED_BY_DEFINITION | Unit conversion. |
 | `KELVIN_OFFSET` | 273.15 | FIXED_BY_DEFINITION | 0 C in kelvin. |

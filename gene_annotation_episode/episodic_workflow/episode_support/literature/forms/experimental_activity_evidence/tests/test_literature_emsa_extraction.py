@@ -49,7 +49,7 @@ def fields_the_grader_reads():
 def test_the_schema_has_exactly_the_fields_of_the_form():
     schema = answer_schema()
     form = {*QUANTITIES, PROBE_TYPE, PROBE_LABEL, GEL_TYPE, COMPETITOR_TYPE, SPREAD_KIND, FIT_MODEL, *FACTS}
-    assert set(schema['properties']) == set(field_names()) == form and len(form) == 42
+    assert set(schema['properties']) == set(field_names()) == form and len(form) == 44
     assert schema['required'] == list(schema['properties']) and schema['additionalProperties'] is False
     assert NOT_EXTRACTED == ('preparations',) and len(PREPARATION_KEYS) == 3
     for name, field in schema['properties'].items():

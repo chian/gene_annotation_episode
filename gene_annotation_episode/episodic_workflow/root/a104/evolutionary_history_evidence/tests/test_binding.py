@@ -18,7 +18,7 @@ EPISODE = importlib.import_module(PACKAGE + '.episode').EvolutionaryHistoryEvide
 TO_CHILD = importlib.import_module(PACKAGE + '.messages.msg_to_child')
 FINAL = importlib.import_module(PACKAGE + '.messages.final_to_parent')
 CHILDREN = ('execution_job_submission', 'execution_progress_assessment', 'execution_result_acquisition',
-            'hpc_work_planning', 'published_evidence_assessment')
+            'hpc_work_planning')
 FILES = {'__init__.py', 'goal.py', 'task.py', 'credit.py', 'yield_estimator.py', 'episode.py',
          'messages/__init__.py', 'messages/read_from_parent.py', 'messages/msg_to_child.py',
          'messages/read_from_child.py', 'messages/internal_summary.py', 'messages/final_to_parent.py',
@@ -45,8 +45,7 @@ def test_the_class_inherits_only_the_episode_type_and_is_its_own_binding():
         'hpc': 'evolutionary_history_evidence/hpc_work_planning',
         'launch': 'evolutionary_history_evidence/execution_job_submission',
         'monitor': 'evolutionary_history_evidence/execution_progress_assessment',
-        'results': 'evolutionary_history_evidence/execution_result_acquisition',
-        'literature': 'evolutionary_history_evidence/published_evidence_assessment'}
+        'results': 'evolutionary_history_evidence/execution_result_acquisition'}
     assert tuple(EPISODE.services) == ()
     assert all(re.fullmatch(r'[a-z][a-z0-9_]*', name) for name in EPISODE.tools)
 

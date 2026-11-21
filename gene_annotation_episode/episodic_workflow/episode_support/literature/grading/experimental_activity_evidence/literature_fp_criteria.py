@@ -62,8 +62,8 @@ FP_CRITERIA = (
     {
         'id': 'assay_window',
         'question': 'Is the polarization window between free and bound tracer large enough to resolve the titration?',
-        'reads': ('quantities.signal_minimum', 'quantities.signal_maximum'),
-        'rule': 'The grader records the window (window_mP = maximum minus minimum, in mP; an anisotropy r is converted to polarization first) and its refs (window_refs) and leaves the judgement to the sheet. Either one not given is unknown.',
+        'reads': ('quantities.signal_minimum', 'quantities.signal_maximum', 'quantities.signal_noise'),
+        'rule': 'The grader records the window (window_mP = maximum minus minimum, in mP; an anisotropy r is converted to polarization first) and its refs (window_refs), and, when the paper states the noise of the polarization reads in mP, that noise (window_noise_mP, window_noise_refs), and leaves the judgement to the sheet. Either end not given is unknown.',
         'thresholds': ('MP_PER_POLARIZATION', 'ANISOTROPY_FACTOR', 'ANISOTROPY_OFFSET'),
         'returns': (
             ('unknown', 'window_recorded_for_the_sheet', 'both signal ends are given: the window is recorded and the sheet judges it'),
@@ -102,8 +102,8 @@ FP_CRITERIA = (
     {
         'id': 'concentration_series',
         'question': 'Did the titrant concentrations bracket the reported constant well enough to define the binding curve?',
-        'reads': ('quantities.kd', 'quantities.ki', 'concentration_series'),
-        'rule': 'The grader records the number of concentrations (concentration_count), the lowest and the highest over the reported constant (concentration_low_over_constant, concentration_high_over_constant) and their refs (series_refs) and leaves the judgement to the sheet. The constant or the series not given is unknown.',
+        'reads': ('quantities.kd', 'quantities.ki', 'quantities.ic50', 'concentration_series', 'series_kind'),
+        'rule': 'The grader records the number of concentrations (concentration_count), the lowest and the highest over the reference constant (concentration_low_over_constant, concentration_high_over_constant) and their refs (series_refs) and leaves the judgement to the sheet. The reference is the IC50 when the series is stated to be the competitor series and the IC50 is given (series_reference ic50), otherwise the reported constant. The reference or the series not given is unknown.',
         'thresholds': ('NM_PER_UNIT',),
         'returns': (
             ('unknown', 'series_recorded_for_the_sheet', 'the constant and the series are given: count and span are recorded and the sheet judges them'),
@@ -128,8 +128,8 @@ FP_CRITERIA = (
     {
         'id': 'intensity_change',
         'question': 'Was a change of the tracer fluorescence intensity on binding checked or corrected?',
-        'reads': ('facts.intensity_change_checked', 'quantities.total_intensity_change'),
-        'rule': 'The fact decides: yes supported, no fails. When it is not stated and an intensity change is reported, the grader records it (intensity_change_percent and intensity_change_refs) and leaves the judgement to the sheet; with neither it is unknown.',
+        'reads': ('facts.intensity_change_checked', 'quantities.total_intensity_change', 'intensity_change_direction'),
+        'rule': 'The fact decides: yes supported, no fails. When it is not stated and an intensity change is reported, the grader records it (intensity_change_percent and intensity_change_refs, and the stated direction intensity_change_direction, increase or decrease or None) and leaves the judgement to the sheet; with neither it is unknown.',
         'thresholds': (),
         'returns': (
             ('supported', 'facts_answered_yes', 'answer yes'),

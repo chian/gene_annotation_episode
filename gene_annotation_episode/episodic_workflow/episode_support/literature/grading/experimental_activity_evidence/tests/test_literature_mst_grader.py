@@ -1,4 +1,6 @@
 """MST grader: each criterion's rule on records, with the arithmetic worked by hand."""
+import math
+
 import pytest
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_mst_record import fact, point
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_mst_converter import _criterion
@@ -53,8 +55,9 @@ def test_signal_amplitude_records_every_given_number_and_the_sheet_judges_them()
     assert status(r, 'signal_amplitude') == 'conflicting'
     r['quantities']['signal_to_noise'] = point(18.0, 'ratio', 's', ['s'])
     r['quantities']['fnorm_amplitude'] = point(1.0, 'permille', 'a', ['s'])
-    assert status(r, 'signal_amplitude') == 'conflicting'
-    missing(r, 'signal_to_noise')                                                     # the amplitude alone is recorded
+    assert status(r, 'signal_amplitude') == 'supported'                               # a stated signal-to-noise governs (range review); the amplitude is the fallback
+    missing(r, 'signal_to_noise')
+    assert status(r, 'signal_amplitude') == 'conflicting'                                                     # the amplitude alone is recorded
     graded = grade_mst(r)
     assert graded['native']['signal_to_noise'] is None and graded['native']['fnorm_amplitude'] == 1.0 and graded['reasons']['signal_amplitude'] == 'signal_recorded_for_the_sheet'
     r['quantities']['fnorm_amplitude'] = point(12.0, 'permille', 'a', ['s'])
@@ -131,7 +134,7 @@ def test_concentration_series_by_count_and_span():
     assert graded['native']['count_refs'] and graded['native']['series_refs'] == ['span_exp_synthetic_mst_1']
     assert status(r, 'concentration_series') == 'supported'
     r['concentration_series']['value'] = [4.0, 8.0, 16.0, 32.0, 64.0, 100.0, 150.0, 180.0, 200.0]          # nine: recorded, the sheet judges the count
-    assert grade_mst(r)['native']['concentration_count'] == 9 and status(r, 'concentration_series') == 'conflicting'
+    assert grade_mst(r)['native']['concentration_count'] == 9 and status(r, 'concentration_series') == 'supported'      # just below MIN_CONCENTRATIONS: partial credit (6/7, see the converter test), not a fail
     r['concentration_series']['value'] = [6.0, 8.0, 16.0, 32.0, 64.0, 100.0, 150.0, 180.0, 190.0, 400.0]   # lowest 0.3 x KD
     assert grade_mst(r)['native']['concentration_low_over_constant'] == pytest.approx(0.3)
     r['concentration_series']['value'] = [4.0, 8.0, 16.0, 32.0, 64.0, 100.0, 150.0, 180.0, 190.0, 199.0]   # highest 9.95 x KD
@@ -142,8 +145,10 @@ def test_concentration_series_by_count_and_span():
     r['concentration_series'] = {**r['concentration_series'], 'value': None, 'status': 'unavailable'}
     assert reason(r, 'concentration_series') == 'series_recorded_for_the_sheet' and status(r, 'concentration_series') == 'unknown'    # 12 points counted, no list: the count is recorded, the span is not known
     assert grade_mst(r)['native']['concentration_low_over_constant'] is None
-    r['quantities']['titration_point_count'] = point(9, 'count', 'n', ['s'])           # a count below the minimum fails without a list
-    assert grade_mst(r)['native']['concentration_count'] == 9 and status(r, 'concentration_series') == 'conflicting'
+    r['quantities']['titration_point_count'] = point(9, 'count', 'n', ['s'])           # a count just below the minimum without a list: partial credit on the count, the span is not known
+    assert grade_mst(r)['native']['concentration_count'] == 9 and status(r, 'concentration_series') == 'unknown'
+    r['quantities']['titration_point_count'] = point(3, 'count', 'n', ['s'])           # no more points than the fit has parameters, no list: the span is not known, so unknown (a short series is never conflicting)
+    assert status(r, 'concentration_series') == 'unknown'
     r['quantities']['titration_point_count'] = point(10, 'count', 'n', ['s'])
     assert status(r, 'concentration_series') == 'unknown'
     missing(r, 'titration_point_count')
@@ -175,14 +180,20 @@ def test_equilibrium():
     r['quantities']['incubation_time'] = point(9.0, 'min', 'i', ['s'])
     graded = grade_mst(r)
     assert graded['reasons']['equilibrium'] == 'incubation_recorded_for_the_sheet' and graded['native']['incubation_min'] == 9.0 and graded['native']['incubation_refs'] == ['s']
+    assert graded['native']['incubation_constant_nM'] == 20.0                               # the KD (20 nM) is handed over with the time; the grader holds no threshold
     assert graded['criteria']['equilibrium'] == {'status': 'unknown', 'support_refs': []}
-    assert _criterion(graded, 'equilibrium') == {'status': 'conflicting', 'support_refs': ['s']}
-    r['quantities']['incubation_time'] = point(600.0, 's', 'i', ['s'])      # 10 min exactly: allowed, so unknown
-    assert status(r, 'equilibrium') == 'unknown'
-    r['quantities']['incubation_time'] = point(540.0, 's', 'i', ['s'])      # 9 min
+    # KD 20 nM: T_FAST = 10 min x 10 nM / 20 nM = 5 min, T_SLOW 50 min; 9 min: log(9 / 5) / log(10) = 0.2553
+    verdict = _criterion(graded, 'equilibrium')
+    assert verdict['status'] == 'supported' and verdict['degree'] == pytest.approx(math.log10(9 / 5)) and verdict['support_refs'] == ['s']
+    r['quantities']['incubation_time'] = point(300.0, 's', 'i', ['s'])      # 5 min exactly: the zero end, conflicting
     assert status(r, 'equilibrium') == 'conflicting'
-    r['quantities']['incubation_time'] = point(1.0, 'h', 'i', ['s'])
-    assert status(r, 'equilibrium') == 'unknown'
+    r['quantities']['incubation_time'] = point(1.0, 'h', 'i', ['s'])        # 60 min: past T_SLOW, full
+    assert _criterion(grade_mst(r), 'equilibrium')['degree'] == 1.0
+    r['quantities']['kd'] = {**r['quantities']['kd'], 'status': 'unavailable', 'value': None}      # Ki 40 nM is the constant now
+    assert grade_mst(r)['native']['incubation_constant_nM'] == 40.0
+    r['quantities']['ki'] = {**r['quantities']['ki'], 'status': 'unavailable', 'value': None}      # only an EC50: no association scale
+    graded = grade_mst(r)
+    assert graded['native']['constant_name'] == 'ec50' and graded['native']['incubation_constant_nM'] is None and _criterion(graded, 'equilibrium')['status'] == 'unknown'
 
 
 def test_labelling_scheme():
@@ -266,7 +277,9 @@ def test_replicates():
     graded = grade_mst(r)                                                                     # the count and the independence are recorded, the sheet judges them
     assert graded['reasons']['replicates'] == 'replicate_count_recorded_for_the_sheet' and graded['criteria']['replicates']['status'] == 'unknown'
     assert graded['native']['replicate_count'] == 2 and graded['native']['replicate_independent'] == 'yes' and graded['native']['replicate_refs']
-    assert status(r, 'replicates') == 'conflicting'
+    assert status(r, 'replicates') == 'supported'                                            # just below MIN_REPLICATES: partial credit (1/2, see the converter test), not a fail
+    r['quantities']['replicate_count'] = point(1, 'count', 'n', ['s'])
+    assert status(r, 'replicates') == 'supported'                                            # one titration: degree sqrt(1/3) (a short count is never conflicting)
     r['quantities']['replicate_count'] = point(3, 'count', 'n', ['s'])
     assert status(r, 'replicates') == 'supported'
     r['facts']['independent_titrations'] = fact('no', ['s'])                                 # a stated 'no' is a fact the grader judges
@@ -291,3 +304,13 @@ def test_direct_vs_competition():
     assert reason(r, 'direct_vs_competition') == 'kd_or_ki_missing'
     r['facts']['single_estimate_method'] = fact('yes', ['s'])
     assert status(r, 'direct_vs_competition') == 'not_applicable'
+
+
+def test_the_fnorm_noise_is_recorded_with_its_refs_and_alone_is_not_a_signal():
+    r = synthetic_record()
+    r['quantities']['fnorm_noise'] = point(0.7, 'permille', 'n', ['sn'])
+    graded = grade_mst(r)
+    assert graded['native']['fnorm_noise'] == 0.7 and 'sn' in graded['native']['signal_refs'] and graded['reasons']['signal_amplitude'] == 'signal_recorded_for_the_sheet'
+    missing(r, 'signal_to_noise')
+    missing(r, 'fnorm_amplitude')
+    assert grade_mst(r)['reasons']['signal_amplitude'] == 'signal_not_given'

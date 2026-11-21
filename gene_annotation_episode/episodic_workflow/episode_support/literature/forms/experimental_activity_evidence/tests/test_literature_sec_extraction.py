@@ -19,10 +19,10 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_sec_grader import CRITERIA, grade_sec
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.tests import sec_cases
 
-# What no grader criterion reads (the grader copies every quantity into its native values without reading it): the spread of the KD, the elution volume of the later-eluting
-# component, the molar masses of the components alone, the flow rate, the temperature, the injected volume, the incubation, the single estimate method, and the choices
-# are kept in the record for the reviewer (or read by the converter).
-KEPT = {'kd_spread', 'component_elution_volume_later', 'component_mass_measured_larger', 'component_mass_measured_smaller', 'flow_rate', 'run_temperature', 'loaded_volume', 'incubation_time',
+# What no grader criterion reads (the grader copies every quantity into its native values without reading it): the spread of the KD, the molar mass of the larger component
+# alone, the elution volume of the later-eluting component, the flow rate, the temperature, the incubation, the single estimate method, and the choices are kept in the record
+# for the reviewer. The injected volume, the column volume and the smaller component's mass are read (the load, the shift and the mass criteria declare them).
+KEPT = {'kd_spread', 'component_mass_measured_larger', 'component_elution_volume_later', 'flow_rate', 'run_temperature', 'incubation_time',
         'single_estimate_method', *CHOICES}
 
 
@@ -49,7 +49,7 @@ def fields_the_grader_reads():
 def test_the_schema_has_exactly_the_fields_of_the_form():
     schema = answer_schema()
     form = {*QUANTITIES, COLUMN_TYPE, DETECTION, SPREAD_KIND, *FACTS}
-    assert set(schema['properties']) == set(field_names()) == form and len(form) == 34
+    assert set(schema['properties']) == set(field_names()) == form and len(form) == 35
     assert schema['required'] == list(schema['properties']) and schema['additionalProperties'] is False
     assert NOT_EXTRACTED == ('preparations',) and len(PREPARATION_KEYS) == 3
     for name, field in schema['properties'].items():
@@ -64,7 +64,7 @@ def test_an_sec_has_an_apparent_kd_field_and_the_sec_items_but_no_other_binding_
     names = set(field_names())
     assert not {'ki', 'ic50', 'ec50', 'bmax', 'kon', 'koff', 'concentration_series', 'fold_enrichment'} & names
     assert {'kd', 'kd_spread', 'complex_elution_volume', 'component_elution_volume_earlier', 'component_elution_volume_later', 'elution_volume_shift', 'complex_mass_measured', 'complex_mass_theoretical',
-            'component_mass_measured_larger', 'component_mass_measured_smaller', 'stoichiometry_ratio', 'polydispersity', 'flow_rate', 'run_temperature', 'loaded_concentration', 'loaded_volume',
+            'component_mass_measured_larger', 'component_mass_measured_smaller', 'stoichiometry_ratio', 'polydispersity', 'flow_rate', 'run_temperature', 'loaded_concentration', 'loaded_volume', 'column_volume',
             'salt_concentration', 'incubation_time', 'replicate_count', 'complex_peak_detected', 'components_run_alone', 'complex_peak_analysed_by_sds_page', 'free_peak_decreases_with_titration',
             'mals_mass_matches_complex', 'column_calibrated_with_standards', 'buffer_rules_out_resin_interaction', 'complex_stable_on_column', 'aggregation_absent', 'single_component_control_done',
             'independent_experiments', 'single_estimate_method'} <= names
@@ -143,7 +143,7 @@ def test_the_span_counts_bytes_not_characters():
     quote = 'an apparent KD of 200 nM'       # the degree sign and the two micro signs before it are two bytes each
     start, end = quote_span(SYNTHETIC, quote)
     assert start == SYNTHETIC.index(quote) + 3 and SYNTHETIC.encode()[start:end].decode() == quote and end - start == len(quote)
-    quote = '5 µM each'       # the degree sign and the micro sign of '100 µL' before it, and its own micro sign, are two bytes each
+    quote = '5 µM each'       # the degree sign and the micro sign of '500 µL' before it, and its own micro sign, are two bytes each
     start, end = quote_span(SYNTHETIC, quote)
     assert start == SYNTHETIC.index(quote) + 2 and SYNTHETIC.encode()[start:end].decode() == quote and end - start == len(quote) + 1
     assert len(REAL) == 2524 and len(REAL.encode()) > len(REAL) and 'Quaternary structure' not in REAL    # the real paragraph holds non-breaking spaces, the minus sign, the tilde operator and the plus-minus sign; the legend of Figure 4 is not in it
@@ -194,7 +194,7 @@ def test_a_quote_that_is_not_in_the_chunk_exactly_once_is_refused():
     with pytest.raises(ExtractionRefused, match='run_temperature:quote_is_not_in_the_chunk'):
         validate_answer(wrong(answer, 'run_temperature', quote='and 4 degC'), SYNTHETIC)
     with pytest.raises(ExtractionRefused, match='loaded_volume:quote_is_not_in_the_chunk'):
-        validate_answer(wrong(answer, 'loaded_volume', quote='A 100 μL sample'), SYNTHETIC)
+        validate_answer(wrong(answer, 'loaded_volume', quote='A 500 μL sample'), SYNTHETIC)
     # a plain space where the real paragraph has the non-breaking space is not in the chunk
     with pytest.raises(ExtractionRefused, match='component_mass_measured_larger:quote_is_not_in_the_chunk'):
         validate_answer(wrong(real_answer(), 'component_mass_measured_larger', quote='a measured molecular weight of 13.6 ± 0.2 kDa'), REAL)

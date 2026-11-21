@@ -536,10 +536,11 @@ async def assess_content(arguments, ctx):
     (``page_candidates``, the same split the summary makes), Jev measures every candidate once against every
     information need of the commission, and this unit holds the assessment as an artifact the page keeps
     (``content_assessment_ref``). The library functions are pure; this unit alone writes. The Jev client reads its
-    credential from the private credential store (``jev_client``); a missing credential or a failed call raises."""
+    key (``TYPESAFE_API_KEY``) from the repository's ``.env`` at run time (``jev_client``); a missing key or a failed
+    call raises."""
     content = representation_content(ctx.store, arguments['source_ref'], arguments['representation'])
     candidates = page_candidates(content)
-    assessment = await assess_page_content(JevDecisionClient.from_credential_store(), goal=arguments['goal'],
+    assessment = await assess_page_content(JevDecisionClient.from_repository_env(), goal=arguments['goal'],
                                            page_context=arguments['page_context'],
                                            needs=arguments['information_needs'], candidates=candidates,
                                            content=content)

@@ -55,7 +55,7 @@ def internal_summary(view):
             child_reports.append(report)
             if 'committed_record_refs' in report:
                 committed.extend(report['committed_record_refs'])
-            if outcome['slot'] in ('literature', 'partner_presence_evidence'):
+            if outcome['slot'] == 'partner_presence_evidence':
                 returned.extend(report['finding']['partner_sheets'])
         elif outcome['tool'] == 'reason':
             committed.extend(outcome['outcome'].get('record_refs', ()))

@@ -31,7 +31,7 @@ which). The IC50 is a half-maximal concentration, not a dissociation constant: i
 binding constant of the converter.
 
 Native values retained: every record quantity as given, plus kd_nM, ki_nM, ic50_nM, constant_name, constant_nM, radioligand_nM,
-nonspecific_ligand_nM, nonspecific_excess_ratio, incubation_min, settling_min, concentration_count, concentration_low_over_kd,
+nonspecific_ligand_nM, nonspecific_affinity_nM, nonspecific_excess_ratio, incubation_min, association_half_min, incubation_over_half_time, settling_min, concentration_count, concentration_low_over_kd,
 concentration_high_over_kd, radioligand_over_kd, calculated_ki_nM, ki_over_calculated, preparations, assay_format, radioligand_isotope,
 bead_type, capture_method, preparation_type, counter, spread_kind and fit_model, and 'support': for each criterion the supports ('direct',
 'implied', 'about_something_else') of the stated fields it reads, copied from the record and not judged here.
@@ -120,13 +120,20 @@ def _nonspecific_binding(record, native):
 
 def _nonspecific_excess(record, native):
     stated = _value(record, 'nonspecific_excess')
-    ligand, kd = native['nonspecific_ligand_nM'], native['kd_nM']
+    ligand, own, kd = native['nonspecific_ligand_nM'], native['nonspecific_affinity_nM'], native['kd_nM']
+    itself = record['facts']['nonspecific_ligand_is_radioligand']
     if stated is not None:
         native['nonspecific_excess_ratio'] = stated
         refs = _refs(record['quantities']['nonspecific_excess'])
-    elif ligand is not None and kd is not None:
+    elif ligand is not None and own is not None:
+        native['nonspecific_excess_ratio'] = ligand / own
+        refs = _refs(record['quantities']['nonspecific_ligand_concentration'], record['quantities']['nonspecific_ligand_affinity'])
+    elif ligand is not None and itself['answer'] == 'yes' and kd is not None:
+        # only the unlabelled radioligand has the radioligand's own KD; another ligand has another affinity
         native['nonspecific_excess_ratio'] = ligand / kd
-        refs = _refs(record['quantities']['nonspecific_ligand_concentration'], record['quantities']['kd'])
+        refs = _refs(record['quantities']['nonspecific_ligand_concentration'], record['quantities']['kd'], itself)
+    elif ligand is not None:
+        return _result('unknown', 'excess_reference_not_given', [])
     else:
         return _result('unknown', 'excess_not_given', [])
     native['nonspecific_excess_refs'] = refs
@@ -149,7 +156,12 @@ def _equilibrium(record, native):
     if native['incubation_min'] is None:
         return _result('unknown', 'fact_unknown', [])
     native['incubation_refs'] = _refs(record['quantities']['incubation_time'])
-    return _result('unknown', 'incubation_recorded_for_the_sheet', [])
+    if native['association_half_min'] is None:
+        native['kd_refs'] = [] if native['kd_nM'] is None else _refs(record['quantities']['kd'])      # the KD that scales the incubation, handed with its refs
+        return _result('unknown', 'incubation_recorded_for_the_sheet', [])
+    native['incubation_over_half_time'] = native['incubation_min'] / native['association_half_min']
+    native['half_time_refs'] = _refs(record['quantities']['incubation_time'], record['quantities']['association_half_time'])
+    return _result('unknown', 'incubation_over_half_time_recorded_for_the_sheet', [])
 
 
 def _radioligand_range(record, native):
@@ -259,7 +271,7 @@ def grade_spa(record):
     """Grade one SPA binding experiment record. Returns the criterion answers and native values."""
     nm = {name: _nm(record, name) for name in ('kd', 'ki', 'ic50')}
     constant_name = next((name for name in CONSTANTS if nm[name] is not None), None)
-    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'assay_format': record['assay_format'], 'radioligand_isotope': record['radioligand_isotope'], 'bead_type': record['bead_type'], 'capture_method': record['capture_method'], 'preparation_type': record['preparation_type'], 'counter': record['counter'], 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'concentration_series': dict(record['concentration_series']), 'kd_nM': nm['kd'], 'ki_nM': nm['ki'], 'ic50_nM': nm['ic50'], 'constant_name': constant_name, 'constant_nM': None if constant_name is None else nm[constant_name], 'radioligand_nM': _nm(record, 'radioligand_concentration'), 'nonspecific_ligand_nM': _nm(record, 'nonspecific_ligand_concentration'), 'nonspecific_excess_ratio': None, 'incubation_min': _minutes(record, 'incubation_time'), 'settling_min': _minutes(record, 'settling_time'), 'concentration_count': None, 'concentration_low_over_kd': None, 'concentration_high_over_kd': None, 'radioligand_over_kd': None, 'calculated_ki_nM': None, 'ki_over_calculated': None, 'percent_bound': None, 'percent_bound_refs': [], 'nonspecific_fraction_percent': None, 'nonspecific_fraction_refs': [], 'nonspecific_excess_refs': [], 'bead_only_percent': None, 'bead_only_refs': [], 'incubation_refs': [], 'concentration_count_refs': [], 'concentration_span_refs': [], 'radioligand_over_kd_refs': [], 'hill_slope': None, 'hill_slope_refs': [], 'cheng_prusoff_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': []}
+    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'assay_format': record['assay_format'], 'radioligand_isotope': record['radioligand_isotope'], 'bead_type': record['bead_type'], 'capture_method': record['capture_method'], 'preparation_type': record['preparation_type'], 'counter': record['counter'], 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'concentration_series': dict(record['concentration_series']), 'kd_nM': nm['kd'], 'ki_nM': nm['ki'], 'ic50_nM': nm['ic50'], 'constant_name': constant_name, 'constant_nM': None if constant_name is None else nm[constant_name], 'radioligand_nM': _nm(record, 'radioligand_concentration'), 'nonspecific_ligand_nM': _nm(record, 'nonspecific_ligand_concentration'), 'nonspecific_affinity_nM': _nm(record, 'nonspecific_ligand_affinity'), 'association_half_min': _minutes(record, 'association_half_time'), 'incubation_over_half_time': None, 'half_time_refs': [], 'nonspecific_excess_ratio': None, 'incubation_min': _minutes(record, 'incubation_time'), 'settling_min': _minutes(record, 'settling_time'), 'concentration_count': None, 'concentration_low_over_kd': None, 'concentration_high_over_kd': None, 'radioligand_over_kd': None, 'calculated_ki_nM': None, 'ki_over_calculated': None, 'percent_bound': None, 'percent_bound_refs': [], 'nonspecific_fraction_percent': None, 'nonspecific_fraction_refs': [], 'nonspecific_excess_refs': [], 'bead_only_percent': None, 'bead_only_refs': [], 'incubation_refs': [], 'kd_refs': [], 'concentration_count_refs': [], 'concentration_span_refs': [], 'radioligand_over_kd_refs': [], 'hill_slope': None, 'hill_slope_refs': [], 'cheng_prusoff_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': []}
     outcomes = {name: EVALUATORS[name](record, native) for name in CRITERIA}
     native['support'] = criterion_supports(record, SPA_CRITERIA)      # kept for the sheet: the grader does not judge it
     return {'version': VERSION, 'experiment_type': 'spa', 'experiment_ref': record['experiment_ref'], 'criteria': {name: {'status': o['status'], 'support_refs': o['support_refs']} for name, o in outcomes.items()}, 'reasons': {name: o['reason'] for name, o in outcomes.items()}, 'native': native}

@@ -21,11 +21,14 @@ version, experiment_type ('gci'), experiment_ref, source_ref, assertion_ref
 preparations   analyte_preparation_ref (the protein in the flow), immobilized_preparation_ref (the partner on the
                chip), chip_ref (the chip, or chip lot), dataset_ref: each a string or None (unknown).
                The converter hands them to the merger as its dependence keys (chip_ref as the surface key).
-quantities     kd, kd_steady_state, kon, koff, response_max, kd_spread, immobilization_level, replicate_count: one
-               operand each.
+quantities     kd, kd_steady_state, kon, koff, response_max, kd_spread, immobilization_level, analyte_mass, ligand_mass,
+               stoichiometry, dissociation_time, replicate_count: one operand each.
                Units: kd/kd_steady_state/kd_spread pM, nM, uM or mM; kon M^-1 s^-1; koff s^-1; response_max and
-               immobilization_level pg/mm2, ng/mm2 or RU (the surface mass, or response units); replicate_count
-               count.
+               immobilization_level pg/mm2, ng/mm2 or RU (the surface mass, or response units); analyte_mass and
+               ligand_mass kDa (the molecular mass of the analyte in the flow and of the partner on the chip);
+               stoichiometry dimensionless (analyte molecules per immobilized molecule, as the passage states it);
+               dissociation_time s or min (the length of the dissociation phase after the analyte injection);
+               replicate_count count.
 concentration_series
                operand whose 'value' is a list of analyte concentrations (unit pM, nM, uM or mM), or None when not
                given. For waveRAPID it is the one concentration (or the few) pulsed.
@@ -44,7 +47,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.
 
 VERSION = 'a105_gci_record_v1'
 EXPERIMENT_TYPE = 'gci'
-QUANTITIES = ('kd', 'kd_steady_state', 'kon', 'koff', 'response_max', 'kd_spread', 'immobilization_level', 'replicate_count')
+QUANTITIES = ('kd', 'kd_steady_state', 'kon', 'koff', 'response_max', 'kd_spread', 'immobilization_level', 'analyte_mass', 'ligand_mass', 'stoichiometry', 'dissociation_time', 'replicate_count')
 PREPARATION_KEYS = ('analyte_preparation_ref', 'immobilized_preparation_ref', 'chip_ref', 'dataset_ref')
 SPREAD_KINDS = ('standard_error', 'standard_deviation', 'confidence_interval')
 FIT_MODELS = ('1:1', 'bivalent_analyte', 'heterogeneous_ligand', 'two_state', 'steady_state', 'other')
@@ -54,5 +57,6 @@ FACTS = {'reference_channel_subtracted': YES_NO, 'double_referenced': YES_NO, 'b
 
 CONCENTRATION_UNITS = ('pM', 'nM', 'uM', 'mM')
 MASS_UNITS = ('pg/mm2', 'ng/mm2', 'RU')
+TIME_UNITS = ('s', 'min')
 # The unit vocabulary of each quantity (and of the concentration series): the units a record may carry.
-UNITS = {'kd': CONCENTRATION_UNITS, 'kd_steady_state': CONCENTRATION_UNITS, 'kon': ('M^-1 s^-1',), 'koff': ('s^-1',), 'response_max': MASS_UNITS, 'kd_spread': CONCENTRATION_UNITS, 'immobilization_level': MASS_UNITS, 'replicate_count': ('count',), 'concentration_series': CONCENTRATION_UNITS}
+UNITS = {'kd': CONCENTRATION_UNITS, 'kd_steady_state': CONCENTRATION_UNITS, 'kon': ('M^-1 s^-1',), 'koff': ('s^-1',), 'response_max': MASS_UNITS, 'kd_spread': CONCENTRATION_UNITS, 'immobilization_level': MASS_UNITS, 'analyte_mass': ('kDa',), 'ligand_mass': ('kDa',), 'stoichiometry': ('dimensionless',), 'dissociation_time': TIME_UNITS, 'replicate_count': ('count',), 'concentration_series': CONCENTRATION_UNITS}

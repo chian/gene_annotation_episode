@@ -29,14 +29,16 @@ preparations   titrant_preparation_ref (the ligand added in a series), fixed_par
                converter hands them to the merger as its dependence keys (titrant as the analyte key, the protein as the
                other partner; a titration in solution has no surface).
 quantities     kd, kd_spread, ksv, protein_concentration, excitation_wavelength, emission_wavelength, emission_shift,
-               fluorescence_change, ligand_absorbance, added_volume_fraction, titration_point_count, incubation_time,
-               temperature, replicate_count: one operand each.
+               fluorescence_change, ligand_absorbance, added_volume_fraction, titration_point_count, concentration_lowest,
+               concentration_highest, incubation_time, temperature, replicate_count: one operand each.
                Units: kd/kd_spread/protein_concentration pM, nM, uM or mM; ksv 'M^-1' (the Stern-Volmer quenching constant,
                kept apart from the KD); excitation_wavelength, emission_wavelength and emission_shift 'nm' (the emission
                shift as a positive number, its direction is emission_shift_direction); fluorescence_change 'percent' (the
                change of the fluorescence between the free protein and the saturated complex, as a positive number, its
                direction is change_direction); ligand_absorbance 'AU' (the absorbance of the ligand, at the highest
                concentration used, at the excitation or at the emission wavelength: the largest the passage gives);
+               concentration_lowest and concentration_highest pM, nM, uM or mM (the lowest and the highest ligand concentration of
+               the series, for a passage that gives a range and not a list; a zero blank is not a lowest concentration);
                added_volume_fraction 'percent' (the total volume of ligand added, over the starting volume of the protein
                sample); titration_point_count and replicate_count 'count'; incubation_time s, min or h (the time allowed
                after each addition before the read); temperature C or K.
@@ -82,7 +84,7 @@ def fact(answer, refs=(), support='direct'):
 
 VERSION = 'a105_trp_record_v1'
 EXPERIMENT_TYPE = 'trp_quenching'
-QUANTITIES = ('kd', 'kd_spread', 'ksv', 'protein_concentration', 'excitation_wavelength', 'emission_wavelength', 'emission_shift', 'fluorescence_change', 'ligand_absorbance', 'added_volume_fraction', 'titration_point_count', 'incubation_time', 'temperature', 'replicate_count')
+QUANTITIES = ('kd', 'kd_spread', 'ksv', 'protein_concentration', 'excitation_wavelength', 'emission_wavelength', 'emission_shift', 'fluorescence_change', 'ligand_absorbance', 'added_volume_fraction', 'titration_point_count', 'concentration_lowest', 'concentration_highest', 'incubation_time', 'temperature', 'replicate_count')
 PREPARATION_KEYS = ('titrant_preparation_ref', 'fixed_partner_preparation_ref', 'dataset_ref')
 SPREAD_KINDS = ('standard_error', 'standard_deviation', 'confidence_interval')
 FIT_MODELS = ('1:1', 'hill', 'quadratic', 'stern_volmer', 'other')
@@ -93,4 +95,4 @@ FACTS = {'inner_filter_corrected': YES_NO, 'ligand_absorbance_negligible': YES_N
 
 CONCENTRATION_UNITS = ('pM', 'nM', 'uM', 'mM')
 # The unit vocabulary of each quantity (and of the concentration series): the units a record may carry.
-UNITS = {'kd': CONCENTRATION_UNITS, 'kd_spread': CONCENTRATION_UNITS, 'ksv': ('M^-1',), 'protein_concentration': CONCENTRATION_UNITS, 'excitation_wavelength': ('nm',), 'emission_wavelength': ('nm',), 'emission_shift': ('nm',), 'fluorescence_change': ('percent',), 'ligand_absorbance': ('AU',), 'added_volume_fraction': ('percent',), 'titration_point_count': ('count',), 'incubation_time': ('s', 'min', 'h'), 'temperature': ('C', 'K'), 'replicate_count': ('count',), 'concentration_series': CONCENTRATION_UNITS}
+UNITS = {'kd': CONCENTRATION_UNITS, 'kd_spread': CONCENTRATION_UNITS, 'ksv': ('M^-1',), 'protein_concentration': CONCENTRATION_UNITS, 'excitation_wavelength': ('nm',), 'emission_wavelength': ('nm',), 'emission_shift': ('nm',), 'fluorescence_change': ('percent',), 'ligand_absorbance': ('AU',), 'added_volume_fraction': ('percent',), 'titration_point_count': ('count',), 'concentration_lowest': CONCENTRATION_UNITS, 'concentration_highest': CONCENTRATION_UNITS, 'incubation_time': ('s', 'min', 'h'), 'temperature': ('C', 'K'), 'replicate_count': ('count',), 'concentration_series': CONCENTRATION_UNITS}

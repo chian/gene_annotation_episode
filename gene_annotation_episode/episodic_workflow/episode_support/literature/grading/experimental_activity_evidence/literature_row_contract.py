@@ -157,6 +157,53 @@ SUPPORT_FACTORS = SUPPORT_DEGREE
 WEIGHT_NO_DEGREE = 1.0           # EXPERT_REVIEW: OWNER_DECISION 4: a supported criterion without a degree is fully supported.
 WEIGHT_CONFLICTING = 0.0         # EXPERT_REVIEW: OWNER_DECISION 4: a conflicting criterion gives the measurement no reliability for the weight.
 WEIGHT_UNKNOWN = 0.9             # OWNER_DECISION 4 (owner, 2026-11-21: 0.9; real paragraphs decide about 1 criterion in 7, so an unknown criterion barely lowers the weight): it is never treated as opposition.
+# The weight an UNKNOWN criterion still counts, PER EXPERIMENT TYPE (owner, 2026-11-21: 0.9 was reasoned for KD, whose
+# reference range is trusted even when the paper states little; other assays differ). Decided per type by asking: is the
+# readout absolute or relative; is there a reference range we would trust without the paper; what does an unstated control
+# or calibration do to the number's meaning; how badly does a wrong assumption mislead; is it consistent with KD.
+# The full question-and-answer chain per assay is docs/axis_restructure_20261117/A105_ASSAY_CALIBRATION_DETAILS.md. The
+# weight is the expected reliability of an unstated detail, anchored so SPR gives the owner's 0.9: in KD-type assays a
+# failed unstated detail mostly distorts the KD's size and 'binds' survives; in relative or qualitative assays a failed
+# unstated control can turn background into a false 'binds', so they weigh less.
+WEIGHT_UNKNOWN_BY_TYPE = {
+    'spr': 0.90, 'itc': 0.90, 'bli': 0.85, 'gci': 0.85, 'fp': 0.80, 'fret': 0.75, 'mst': 0.75, 'trp_quenching': 0.70,
+    'fcs': 0.80, 'elisa': 0.70, 'alphascreen': 0.65, 'radioligand': 0.85, 'spa': 0.80, 'pulldown': 0.70, 'emsa': 0.75,
+    'sec': 0.75, 'dialysis': 0.85, 'auc': 0.85, 'dsf': 0.70, 'cetsa': 0.65, 'bret': 0.70, 'y2h': 0.60,
+    'split_reporter': 0.65, 'pla': 0.55, 'proximity': 0.60,
+}
+# Per sheet criterion overrides where the answers differ within an assay (same document).
+WEIGHT_UNKNOWN_BY_CRITERION = {
+    'itc': {'binding_regime': 0.85},
+    'bli': {'binding_controls': 0.80},
+    'fp': {'binding_controls': 0.75, 'binding_regime': 0.75},
+    'fret': {'binding_controls': 0.70, 'binding_parameter_definition': 0.70, 'calibration_applicability': 0.85},
+    'mst': {'binding_controls': 0.70},
+    'trp_quenching': {'binding_controls': 0.60},
+    'fcs': {'calibration_applicability': 0.75},
+    'elisa': {'binding_controls': 0.65, 'binding_regime': 0.65},
+    'alphascreen': {'binding_controls': 0.60, 'binding_regime': 0.60},
+    'radioligand': {'binding_controls': 0.90, 'binding_regime': 0.80, 'calibration_applicability': 0.80},
+    'spa': {'calibration_applicability': 0.75},
+    'pulldown': {'binding_controls': 0.55, 'binding_species': 0.60, 'sampling_basis': 0.80},
+    'emsa': {'binding_controls': 0.60},
+    'sec': {'binding_regime': 0.60, 'calibration_applicability': 0.90},
+    'dialysis': {'calibration_applicability': 0.80},
+    'auc': {'binding_regime': 0.75},
+    'dsf': {'binding_controls': 0.80, 'binding_regime': 0.65},
+    'cetsa': {'binding_controls': 0.55},
+    'bret': {'binding_controls': 0.60, 'binding_regime': 0.60},
+    'y2h': {'binding_controls': 0.50, 'binding_species': 0.80, 'sampling_basis': 0.80},
+    'split_reporter': {'binding_controls': 0.55, 'binding_regime': 0.60},
+    'pla': {'binding_controls': 0.50, 'calibration_applicability': 0.50, 'binding_regime': 0.70, 'sampling_basis': 0.80},
+    'proximity': {'binding_parameter_definition': 0.55, 'calibration_applicability': 0.85, 'sampling_basis': 0.80},
+}
+if set(WEIGHT_UNKNOWN_BY_TYPE) != set(EXPERIMENT_TYPES) or not set(WEIGHT_UNKNOWN_BY_CRITERION) <= set(EXPERIMENT_TYPES):
+    raise ValueError('WEIGHT_UNKNOWN_BY_TYPE must name exactly the EXPERIMENT_TYPES (and the overrides only those)')
+
+
+def weight_unknown(experiment_type, criterion):
+    """The weight an unknown sheet criterion of this experiment type counts: its override, else the type's weight."""
+    return WEIGHT_UNKNOWN_BY_CRITERION.get(experiment_type, {}).get(criterion, WEIGHT_UNKNOWN_BY_TYPE[experiment_type])
 # OWNER_DECISION 4 sub-rules (defaults; each EXPERT_REVIEW):
 #  (4a) a POOLED supported criterion of a row carries the MINIMUM degree over the experiments that gave one (the weakest
 #       experiment limits it; matches the pooled status rule 'supported only if all are supported').

@@ -34,7 +34,8 @@ the execution memory, and its ``maxItems: 8`` and ``history(limit=64)`` are coun
 Settings read (``ctx.settings``): ``process_library_directory`` (the frozen A/P option library),
 ``tool_library_directory`` (the frozen tool library), ``tool_registry`` (the keyword arguments of the library
 ``ToolRegistry`` with the ``PublicClients`` of the acquisition tools) and ``knowledge_library_directory`` (optional).
-``cost`` and ``parameters`` are read by ``yield_estimator.py``."""
+``yield_estimator.py`` reads no setting: its accumulation controller (``ADAPTIVE_CONTROL``, ``items=None``) takes no
+cost and stops after 4 flat units in a row (see ``yield_estimator.py``)."""
 from dataclasses import dataclass
 
 from jsonschema import ValidationError

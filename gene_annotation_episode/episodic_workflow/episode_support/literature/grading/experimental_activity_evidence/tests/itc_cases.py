@@ -12,11 +12,11 @@ an unavailable operand or an 'unknown' fact.
 """
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_itc_record import EXPERIMENT_TYPE, FACTS, QUANTITIES, VERSION, fact, point, unavailable
 
-UNITS = {'kd': 'nM', 'kd_spread': 'nM', 'stoichiometry': 'dimensionless', 'expected_stoichiometry': 'dimensionless', 'enthalpy': 'kJ/mol', 'entropy': 'J/mol/K', 'temperature': 'K', 'cell_concentration': 'uM', 'syringe_concentration': 'uM', 'injection_count': 'count', 'replicate_count': 'count'}
+UNITS = {'kd': 'nM', 'kd_spread': 'nM', 'stoichiometry': 'dimensionless', 'expected_stoichiometry': 'dimensionless', 'enthalpy': 'kJ/mol', 'entropy': 'J/mol/K', 'temperature': 'K', 'cell_concentration': 'uM', 'syringe_concentration': 'uM', 'injection_count': 'count', 'replicate_count': 'count', 'final_molar_ratio': 'dimensionless'}
 
 
 def blank_record(experiment_ref, source_ref, assertion_ref):
-    return {'version': VERSION, 'experiment_type': EXPERIMENT_TYPE, 'experiment_ref': experiment_ref, 'source_ref': source_ref, 'assertion_ref': assertion_ref, 'preparations': {'syringe_preparation_ref': None, 'cell_preparation_ref': None, 'dataset_ref': None}, 'quantities': {name: unavailable(UNITS[name], name, 'not_given_in_the_inspected_source_text') for name in QUANTITIES}, 'spread_kind': None, 'fit_model': None, 'choice_support': {'spread_kind': None, 'fit_model': None}, 'facts': {name: fact('unknown') for name in FACTS}, 'spans': {}}
+    return {'version': VERSION, 'experiment_type': EXPERIMENT_TYPE, 'experiment_ref': experiment_ref, 'source_ref': source_ref, 'assertion_ref': assertion_ref, 'preparations': {'syringe_preparation_ref': None, 'cell_preparation_ref': None, 'dataset_ref': None}, 'quantities': {name: unavailable(UNITS[name], name, 'not_given_in_the_inspected_source_text') for name in QUANTITIES}, 'spread_kind': None, 'fit_model': None, 'titration_mode': None, 'choice_support': {'spread_kind': None, 'fit_model': None, 'titration_mode': None}, 'facts': {name: fact('unknown') for name in FACTS}, 'spans': {}}
 
 
 def sparse_record(experiment_ref='exp_sparse_itc', kd=20.0):
@@ -36,8 +36,9 @@ def synthetic_record(experiment_ref='exp_synthetic_itc_1', syringe_prep='prep_sy
         record['quantities'][name] = point(value, UNITS[name], name + ':' + experiment_ref, refs, name)
     record['spread_kind'] = 'standard_error'
     record['fit_model'] = 'one_set_of_sites'
-    record['choice_support'] = {'spread_kind': 'direct', 'fit_model': 'direct'}
-    answers = {'dilution_control_performed': 'yes', 'dilution_control_subtracted': 'yes', 'baseline_corrected': 'yes', 'concentrations_determined': 'yes', 'active_fraction_determined': 'yes', 'binding_sites_heterogeneous': 'no', 'residuals_reported': 'yes', 'n_fitted_freely': 'yes', 'buffer_matching': 'dialysed_together', 'temperature_controlled': 'yes', 'independent_titrations': 'yes'}
+    record['titration_mode'] = 'incremental'
+    record['choice_support'] = {'spread_kind': 'direct', 'fit_model': 'direct', 'titration_mode': 'direct'}
+    answers = {'dilution_control_performed': 'yes', 'dilution_control_subtracted': 'yes', 'baseline_corrected': 'yes', 'concentrations_determined': 'yes', 'active_fraction_determined': 'yes', 'binding_sites_heterogeneous': 'no', 'residuals_reported': 'yes', 'n_fitted_freely': 'yes', 'buffer_matching': 'dialysed_together', 'temperature_controlled': 'yes', 'independent_titrations': 'yes', 'enthalpy_buffer_ionization_corrected': 'no'}
     record['facts'] = {name: fact(answer, refs) for name, answer in answers.items()}
     return record
 
@@ -54,7 +55,7 @@ def hsp90_hop_record():
     record['quantities']['replicate_count'] = point(3, 'count', 'replicate_count', ['span_replicates'])
     record['spread_kind'] = 'standard_deviation'
     record['fit_model'] = 'one_set_of_sites'
-    record['choice_support'] = {'spread_kind': 'direct', 'fit_model': 'direct'}
+    record['choice_support'] = {'spread_kind': 'direct', 'fit_model': 'direct', 'titration_mode': None}
     record['facts']['independent_titrations'] = fact('yes', ['span_replicates'])
     record['preparations']['dataset_ref'] = 'dataset_pmc7679967_fig1'
     return record

@@ -7,7 +7,7 @@
 (PMC8206089, open access under the Creative Commons Attribution 4.0 licence (CC BY 4.0), as the licence statement of the publisher's XML (Europe PMC full text) says), the paragraphs on the titration of PipX-SmBiT to PII-LgBiT
 that begin 'To quantitatively determine the dissociation constant of PII-PipX interaction' and 'At the concentration of PipX-SmBiT at which half maximal luminescence is observed', as the XML gives the text of each paragraph with the markup (italics, subscripts, the figure and table links) removed, joined by a blank line.
 The text is exactly as the XML gives it, including its non-breaking spaces (``\\xa0``) and thin spaces (``\\u2009``). The paragraphs report an apparent KD of the PII-PipX complex from a titration of PipX-SmBiT to PII-LgBiT, with two values (in the presence of ADP and in the presence of ATP);
-they give no negative control, no signal-to-background ratio, no replicate, no list of concentrations, and do not say where the assay was run.
+they state the fixed concentration of PII-LgBiT (10 pM trimer) and give no negative control, no signal-to-background ratio, no replicate, no list of concentrations, and do not say where the assay was run.
 """
 PAPER_ID = 'PMC8206089'
 REAL = (
@@ -19,10 +19,10 @@ REAL = (
 
 SYNTHETIC = (
     'The binding of QX-7 to its partner protein PZ-2 was measured with the split NanoLuc reporter NanoBiT, in a lysate of HEK293 cells, as a titration. QX-7 was fused to LgBiT and PZ-2 to SmBiT, and four orientation combinations '
-    'of the fusions were tested. The signal of the pair was seen in more than one of these orientations. The expression of all fusion proteins was verified by immunoblot. The QX-7 and PZ-2 pair gave a reconstituted luminescence signal '
+    'of the fusions were tested. The signal of the pair was seen in more than one of these orientations, in three of the four orientations in all. The expression of all fusion proteins was verified by immunoblot, and the fusion proteins of the pair and of the negative control pair were expressed at comparable levels. The QX-7 and PZ-2 pair gave a reconstituted luminescence signal '
     'above the background and the controls, with a signal-to-background ratio of 85 and a signal 40 times that of the negative control pair. Each fusion protein alone, or with the free partner fragment, gave only background signal. '
     'A pair of unrelated proteins fused to the same fragments gave only background signal. A non-binding mutant of QX-7 in place of QX-7 gave only background signal. A known interacting pair, the leucine zipper pair, gave a signal '
-    'in the same assay. The background signal of untransfected lysate was measured and subtracted. PZ-2 was titrated at eight concentrations, from 1 nM to 1000 nM. The signal rose with the concentration of PZ-2 and reached a plateau. '
+    'in the same assay. The background signal of untransfected lysate was measured and subtracted. PZ-2 was titrated at eight concentrations, from 1 nM to 1000 nM, to a fixed concentration of 2 nM QX-7-LgBiT. The signal rose with the concentration of PZ-2 and reached a plateau. '
     'The reconstitution of NanoBiT is reversible, so the signal follows the equilibrium of the partners. Fitting the titration gave an apparent KD of 40 nM with a standard error of 4 nM. Three independent experiments were done on '
     'separate days, and the KD was determined by the split reporter only.')
 
@@ -42,8 +42,10 @@ SYNTHETIC_STATED = {
     'signal_to_background': (85, 'ratio', 'a signal-to-background ratio of 85'),
     'signal_over_negative_control': (40, 'ratio', 'a signal 40 times that of the negative control pair'),
     'orientation_pairs_tested': (4, 'count', 'four orientation combinations of the fusions were tested'),
+    'orientation_pairs_positive': (3, 'count', 'in three of the four orientations'),
     'loaded_concentration_lowest': (1, 'nM', 'from 1 nM'),
     'loaded_concentration_highest': (1000, 'nM', 'to 1000 nM'),
+    'fixed_partner_concentration': (2, 'nM', 'a fixed concentration of 2 nM'),
     'concentration_count': (8, 'count', 'at eight concentrations'),
     'replicate_count': (3, 'count', 'Three independent experiments'),
     'reporter_system': ('split_nanoluc', None, 'the split NanoLuc reporter NanoBiT'),
@@ -57,6 +59,7 @@ SYNTHETIC_STATED = {
     'positive_control_done': ('yes', None, 'A known interacting pair, the leucine zipper pair, gave a signal in the same assay'),
     'signal_in_several_orientations': ('yes', None, 'was seen in more than one of these orientations'),
     'expression_verified': ('yes', None, 'The expression of all fusion proteins was verified by immunoblot'),
+    'expression_matched_to_control': ('yes', None, 'were expressed at comparable levels'),
     'saturable_titration_shown': ('yes', None, 'The signal rose with the concentration of PZ-2 and reached a plateau'),
     'complementation_reversible': ('yes', None, 'The reconstitution of NanoBiT is reversible, so the signal follows the equilibrium of the partners'),
     'background_subtracted': ('yes', None, 'The background signal of untransfected lysate was measured and subtracted'),
@@ -64,12 +67,13 @@ SYNTHETIC_STATED = {
     'single_estimate_method': ('yes', None, 'the KD was determined by the split reporter only'),
 }
 
-# The allowed set of the real model run: field -> every (value, unit) the paragraphs clearly state for it. Not allowed, because the paragraphs do not
-# state them: the KD (two values, for ADP and for ATP, with no statement of which is the result) and its spread and kind, any signal ratio, the number of orientations, the concentrations of the series and their number, the assay system (cells, lysate or purified proteins),
+# The allowed set of the real model run: field -> every (value, unit) the paragraphs clearly state for it. Allowed beyond the titration facts: the constant PII-LgBiT concentration, 10 pM ('a fixed concentration of PII-LgBiT (10 pM trimer)'). Not allowed, because the paragraphs do not
+# state them: the KD (two values, for ADP and for ATP, with no statement of which is the result) and its spread and kind, any signal ratio, the number of orientations tested or with a signal, the expression comparison with a control, the concentrations of the series and their number, the assay system (cells, lysate or purified proteins),
 # replicates, every control, expression, a reversible complementation, the background and a statement that only this method was used.
 REAL_ALLOWED = {
     'reporter_system': {('split_nanoluc', None)},
     'readout_mode': {('titration', None)},
+    'fixed_partner_concentration': {(10, 'pM')},
     'interaction_detected': {('yes', None)},
     'saturable_titration_shown': {('yes', None)},
 }

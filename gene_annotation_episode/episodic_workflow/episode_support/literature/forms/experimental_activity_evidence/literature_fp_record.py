@@ -22,10 +22,13 @@ version, experiment_type ('fp'), experiment_ref, source_ref, assertion_ref
 preparations   titrant_preparation_ref (the protein or ligand titrated), tracer_preparation_ref (the labelled partner),
                dataset_ref: each a string or None (unknown). The converter hands them to the merger as its dependence
                keys (titrant as the analyte key, tracer as the other partner; an FP experiment has no surface).
-quantities     kd, ki, kd_spread, ki_spread, tracer_concentration, signal_minimum, signal_maximum, total_intensity_change,
-               assay_volume, incubation_time, temperature, replicate_count: one operand each.
-               Units: kd/ki/kd_spread/ki_spread/tracer_concentration pM, nM, uM or mM; signal_minimum and signal_maximum
-               mP or r (the polarization in millipolarization units, or the anisotropy); total_intensity_change percent
+quantities     kd, ki, kd_spread, ki_spread, ic50, tracer_concentration, signal_minimum, signal_maximum, signal_noise,
+               total_intensity_change, assay_volume, incubation_time, temperature, replicate_count: one operand each.
+               Units: kd/ki/kd_spread/ki_spread/ic50/tracer_concentration pM, nM, uM or mM; signal_minimum and signal_maximum
+               mP or r (the polarization in millipolarization units, or the anisotropy); signal_noise mP only (the standard
+               deviation of replicate polarization reads, so the window can be read against the paper's own noise; an
+               anisotropy noise is not converted and stays unavailable); ic50 is the half-inhibition concentration of a
+               competition, which the competitor series should bracket; total_intensity_change percent
                (the size of the relative change of the tracer's total fluorescence intensity on binding); assay_volume uL
                or mL; incubation_time s, min or h; temperature C or K; replicate_count count.
 concentration_series
@@ -34,6 +37,11 @@ concentration_series
 assay_format   'direct_titration' (the tracer is titrated with its partner; KD) or 'competition' (an unlabelled ligand
                displaces the tracer; Ki) or None.
 spread_kind    'standard_error', 'standard_deviation', 'confidence_interval' or None. What kd_spread / ki_spread are.
+intensity_change_direction
+               'increase' or 'decrease' or None: whether the tracer's total fluorescence intensity rose or fell on binding
+               (the size is total_intensity_change; the direction fixes the size of the bias of the apparent KD).
+series_kind    'titrant' (the series is the partner added to the tracer) or 'competitor' (the series is the unlabelled
+               competitor of a competition) or None.
 fit_model      '1:1', 'hill', 'quadratic', 'competitive_binding', 'other' or None.
 plate_type     'black_non_binding', 'black_standard', 'cuvette', 'other' or None. The plate or cell the reads were made in,
                kept in the record for the reviewer; no criterion judges it.
@@ -67,19 +75,21 @@ def unavailable(unit, key, reason):
 def fact(answer, refs=(), support='direct'):
     return {**literature_spr_record.fact(answer, refs), 'support': None if answer == 'unknown' else support}
 
-VERSION = 'a105_fp_record_v1'
+VERSION = 'a105_fp_record_v2'
 EXPERIMENT_TYPE = 'fp'
-QUANTITIES = ('kd', 'ki', 'kd_spread', 'ki_spread', 'tracer_concentration', 'signal_minimum', 'signal_maximum', 'total_intensity_change', 'assay_volume', 'incubation_time', 'temperature', 'replicate_count')
+QUANTITIES = ('kd', 'ki', 'kd_spread', 'ki_spread', 'ic50', 'tracer_concentration', 'signal_minimum', 'signal_maximum', 'signal_noise', 'total_intensity_change', 'assay_volume', 'incubation_time', 'temperature', 'replicate_count')
 PREPARATION_KEYS = ('titrant_preparation_ref', 'tracer_preparation_ref', 'dataset_ref')
 ASSAY_FORMATS = ('direct_titration', 'competition')
 SPREAD_KINDS = ('standard_error', 'standard_deviation', 'confidence_interval')
 FIT_MODELS = ('1:1', 'hill', 'quadratic', 'competitive_binding', 'other')
 PLATE_TYPES = ('black_non_binding', 'black_standard', 'cuvette', 'other')
-CHOICES = ('assay_format', 'spread_kind', 'fit_model', 'plate_type')
+INTENSITY_DIRECTIONS = ('increase', 'decrease')
+SERIES_KINDS = ('titrant', 'competitor')
+CHOICES = ('assay_format', 'spread_kind', 'fit_model', 'plate_type', 'intensity_change_direction', 'series_kind')
 YES_NO = ('yes', 'no', 'unknown', 'not_applicable')
 FACTS = {'tracer_at_or_below_kd': YES_NO, 'equilibrium_reached': YES_NO, 'tight_binding_considered': YES_NO, 'intensity_change_checked': YES_NO, 'free_probe_baseline_measured': YES_NO, 'nonspecific_binding_checked': YES_NO, 'unlabelled_competitor_displaces': YES_NO, 'surface_adsorption_prevented': YES_NO, 'independent_titrations': YES_NO, 'single_estimate_method': YES_NO}
 
 CONCENTRATION_UNITS = ('pM', 'nM', 'uM', 'mM')
 SIGNAL_UNITS = ('mP', 'r')
 # The unit vocabulary of each quantity (and of the concentration series): the units a record may carry.
-UNITS = {'kd': CONCENTRATION_UNITS, 'ki': CONCENTRATION_UNITS, 'kd_spread': CONCENTRATION_UNITS, 'ki_spread': CONCENTRATION_UNITS, 'tracer_concentration': CONCENTRATION_UNITS, 'signal_minimum': SIGNAL_UNITS, 'signal_maximum': SIGNAL_UNITS, 'total_intensity_change': ('percent',), 'assay_volume': ('uL', 'mL'), 'incubation_time': ('s', 'min', 'h'), 'temperature': ('C', 'K'), 'replicate_count': ('count',), 'concentration_series': CONCENTRATION_UNITS}
+UNITS = {'kd': CONCENTRATION_UNITS, 'ki': CONCENTRATION_UNITS, 'kd_spread': CONCENTRATION_UNITS, 'ki_spread': CONCENTRATION_UNITS, 'ic50': CONCENTRATION_UNITS, 'tracer_concentration': CONCENTRATION_UNITS, 'signal_minimum': SIGNAL_UNITS, 'signal_maximum': SIGNAL_UNITS, 'signal_noise': ('mP',),'total_intensity_change': ('percent',), 'assay_volume': ('uL', 'mL'), 'incubation_time': ('s', 'min', 'h'), 'temperature': ('C', 'K'), 'replicate_count': ('count',), 'concentration_series': CONCENTRATION_UNITS}

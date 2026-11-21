@@ -12,12 +12,13 @@ preparations   component_a_preparation_ref, component_b_preparation_ref (the two
                string or None (unknown). They are references to records, which the caller supplies; no passage states them. The converter hands them to the
                merger as its dependence keys (component a as the analyte key, component b as the other partner; there is no surface).
 quantities     kd, kd_spread, complex_sedimentation_coefficient, component_sedimentation_coefficient_larger, component_sedimentation_coefficient_smaller, frictional_ratio,
-               complex_mass_measured, complex_mass_theoretical, stoichiometry_ratio, loaded_concentration_lowest, loaded_concentration_highest, concentration_count, fit_rmsd,
+               complex_mass_measured, complex_mass_theoretical, component_mass_larger, component_mass_smaller, stoichiometry_ratio, loaded_concentration_lowest, loaded_concentration_highest, concentration_count, fit_rmsd,
                rotor_speed, run_temperature, replicate_count: one operand each.
                Units: kd and kd_spread pM, nM, uM or mM (the dissociation constant from the concentration series and its spread); complex_sedimentation_coefficient,
                component_sedimentation_coefficient_larger and component_sedimentation_coefficient_smaller 'S' (Svedberg: the sedimentation coefficient of the complex peak and of the
                larger and the smaller component run alone); frictional_ratio 'ratio' (f/f0); complex_mass_measured and complex_mass_theoretical 'kDa' (the molar mass of the complex
-               from the AUC fit, and the mass the complex should have); stoichiometry_ratio 'ratio' (the molar ratio of the components in the complex, first named over second named);
+               from the AUC fit, and the mass the complex should have); component_mass_larger and component_mass_smaller 'kDa' (the molar mass of the larger and of the smaller component
+               alone, calculated from the sequence or measured alone: the sheet reads them against the partner size, to know how much the complex should sediment faster and how far one partner more or less moves the mass); stoichiometry_ratio 'ratio' (the molar ratio of the components in the complex, first named over second named);
                loaded_concentration_lowest and loaded_concentration_highest pM, nM, uM or mM (the lowest and the highest loading concentration of the series); concentration_count 'count'
                (the number of loading concentrations); fit_rmsd 'AU' (absorbance units) or 'fringes' (the root mean square deviation of the fit); rotor_speed 'rpm';
                run_temperature 'C' or 'K'; replicate_count 'count'.
@@ -55,7 +56,7 @@ def fact(answer, refs=(), support='direct'):
 
 VERSION = 'a105_auc_record_v1'
 EXPERIMENT_TYPE = 'auc'
-QUANTITIES = ('kd', 'kd_spread', 'complex_sedimentation_coefficient', 'component_sedimentation_coefficient_larger', 'component_sedimentation_coefficient_smaller', 'frictional_ratio', 'complex_mass_measured', 'complex_mass_theoretical', 'stoichiometry_ratio', 'loaded_concentration_lowest', 'loaded_concentration_highest', 'concentration_count', 'fit_rmsd', 'rotor_speed', 'run_temperature', 'replicate_count')
+QUANTITIES = ('kd', 'kd_spread', 'complex_sedimentation_coefficient', 'component_sedimentation_coefficient_larger', 'component_sedimentation_coefficient_smaller', 'frictional_ratio', 'complex_mass_measured', 'complex_mass_theoretical', 'component_mass_larger', 'component_mass_smaller', 'stoichiometry_ratio', 'loaded_concentration_lowest', 'loaded_concentration_highest', 'concentration_count', 'fit_rmsd', 'rotor_speed', 'run_temperature', 'replicate_count')
 PREPARATION_KEYS = ('component_a_preparation_ref', 'component_b_preparation_ref', 'dataset_ref')
 RUN_MODES = ('sedimentation_velocity', 'sedimentation_equilibrium', 'velocity_and_equilibrium')
 ANALYSIS_MODELS = ('c_of_s', 'lamm_equation_fit', 'global_equilibrium_fit', 'other')
@@ -66,4 +67,4 @@ FACTS = {'complex_detected': YES_NO, 'components_run_alone': YES_NO, 'components
 
 CONCENTRATION_UNITS = ('pM', 'nM', 'uM', 'mM')
 # The unit vocabulary of each quantity: the units a record may carry.
-UNITS = {'kd': CONCENTRATION_UNITS, 'kd_spread': CONCENTRATION_UNITS, 'complex_sedimentation_coefficient': ('S',), 'component_sedimentation_coefficient_larger': ('S',), 'component_sedimentation_coefficient_smaller': ('S',), 'frictional_ratio': ('ratio',), 'complex_mass_measured': ('kDa',), 'complex_mass_theoretical': ('kDa',), 'stoichiometry_ratio': ('ratio',), 'loaded_concentration_lowest': CONCENTRATION_UNITS, 'loaded_concentration_highest': CONCENTRATION_UNITS, 'concentration_count': ('count',), 'fit_rmsd': ('AU', 'fringes'), 'rotor_speed': ('rpm',), 'run_temperature': ('C', 'K'), 'replicate_count': ('count',)}
+UNITS = {'kd': CONCENTRATION_UNITS, 'kd_spread': CONCENTRATION_UNITS, 'complex_sedimentation_coefficient': ('S',), 'component_sedimentation_coefficient_larger': ('S',), 'component_sedimentation_coefficient_smaller': ('S',), 'frictional_ratio': ('ratio',), 'complex_mass_measured': ('kDa',), 'complex_mass_theoretical': ('kDa',), 'component_mass_larger': ('kDa',), 'component_mass_smaller': ('kDa',), 'stoichiometry_ratio': ('ratio',), 'loaded_concentration_lowest': CONCENTRATION_UNITS, 'loaded_concentration_highest': CONCENTRATION_UNITS, 'concentration_count': ('count',), 'fit_rmsd': ('AU', 'fringes'), 'rotor_speed': ('rpm',), 'run_temperature': ('C', 'K'), 'replicate_count': ('count',)}

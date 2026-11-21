@@ -28,7 +28,7 @@ The record's per-field 'support' (how well each stated field's quote supports it
 per criterion (native 'support': criterion id -> the supports of the stated fields it reads) for the converter.
 
 Native values retained: every record quantity as given, plus kd_nM,
-kd_from_rates_nM, rmax_theoretical, rmax_ratio, chi2_over_rmax,
+kd_from_rates_nM, rmax_theoretical, rmax_ratio, chi2_over_rmax, chi2_over_noise_squared, kd_analysis,
 concentration_low_over_kd, concentration_high_over_kd, concentration_count,
 steady_kinetic_fold, replicate_count, replicate_independent, fit_bivalent_answer
 and the refs of each (concentration_refs, fit_refs, rmax_refs, replicate_refs,
@@ -98,7 +98,9 @@ def _concentration_series(record, native):
     native['concentration_count'] = len(nm)
     native['concentration_low_over_kd'] = min(nm) / kd
     native['concentration_high_over_kd'] = max(nm) / kd
-    native['concentration_refs'] = _refs(series, record['quantities']['kd'])
+    how = record['facts']['kd_analysis']
+    native['kd_analysis'] = how['answer']
+    native['concentration_refs'] = _refs(series, record['quantities']['kd'], how)
     return _result('unknown', 'concentration_series_recorded_for_the_sheet', [])
 
 
@@ -108,16 +110,19 @@ def _fit_model(record, native):
     residuals = record['facts']['residuals_reported']
     chi2 = _value(record, 'chi_squared')
     rmax = _value(record, 'rmax')
-    refs = _refs(bivalent, residuals, record['quantities']['chi_squared'], record['quantities']['rmax'])
+    noise = _value(record, 'baseline_noise')
+    refs = _refs(bivalent, residuals, record['quantities']['chi_squared'], record['quantities']['rmax'], record['quantities']['baseline_noise'])
     if chi2 is not None and rmax is not None:
         native['chi2_over_rmax'] = chi2 / rmax
+    if chi2 is not None and noise is not None:
+        native['chi2_over_noise_squared'] = chi2 / (noise * noise)
     if model is None:
         return _result('unknown', 'fit_model_not_stated', [])
     if model == '1:1_langmuir' and bivalent['answer'] == 'yes':
         return _result('conflicting', 'one_to_one_model_for_bivalent_or_oligomeric_analyte', refs)
-    if native['chi2_over_rmax'] is not None:
+    if native['chi2_over_rmax'] is not None or native['chi2_over_noise_squared'] is not None:
         native.update({'fit_bivalent_answer': bivalent['answer'], 'fit_refs': refs})
-        return _result('unknown', 'chi_squared_over_rmax_recorded_for_the_sheet', [])
+        return _result('unknown', 'chi_squared_recorded_for_the_sheet', [])
     if residuals['answer'] != 'yes':
         return _result('unknown', 'no_residual_evidence', [])
     if model == '1:1_langmuir' and bivalent['answer'] != 'no':
@@ -193,7 +198,7 @@ EVALUATORS = {'reference_subtraction': _reference_subtraction, 'concentration_se
 
 def grade_spr(record):
     """Grade one SPR experiment record. Returns the criterion answers and native values."""
-    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'concentration_series': dict(record['concentration_series']), 'kd_nM': _nm(record, 'kd'), 'kd_from_rates_nM': None, 'rmax_theoretical': None, 'rmax_ratio': None, 'chi2_over_rmax': None, 'concentration_count': None, 'concentration_low_over_kd': None, 'concentration_high_over_kd': None, 'concentration_refs': [], 'fit_bivalent_answer': None, 'fit_refs': [], 'rmax_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': [], 'kinetic_refs': [], 'steady_kinetic_fold': None, 'steady_kinetic_refs': []}
+    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'concentration_series': dict(record['concentration_series']), 'kd_nM': _nm(record, 'kd'), 'kd_from_rates_nM': None, 'rmax_theoretical': None, 'rmax_ratio': None, 'chi2_over_rmax': None, 'chi2_over_noise_squared': None, 'kd_analysis': None, 'concentration_count': None, 'concentration_low_over_kd': None, 'concentration_high_over_kd': None, 'concentration_refs': [], 'fit_bivalent_answer': None, 'fit_refs': [], 'rmax_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': [], 'kinetic_refs': [], 'steady_kinetic_fold': None, 'steady_kinetic_refs': []}
     native['support'] = criterion_supports(record, SPR_CRITERIA)      # kept for the sheet: the grader does not judge it
     outcomes = {name: EVALUATORS[name](record, native) for name in CRITERIA}
     return {'version': VERSION, 'experiment_type': 'spr', 'experiment_ref': record['experiment_ref'], 'criteria': {name: {'status': o['status'], 'support_refs': o['support_refs']} for name, o in outcomes.items()}, 'reasons': {name: o['reason'] for name, o in outcomes.items()}, 'native': native}

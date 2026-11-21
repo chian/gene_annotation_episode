@@ -51,7 +51,7 @@ def fields_the_grader_reads():
 def test_the_schema_has_exactly_the_fields_of_the_form():
     schema = answer_schema()
     form = {*QUANTITIES, SERIES, ASSAY_FORMAT, ISOTOPE, BEAD_TYPE, CAPTURE, PREPARATION_TYPE, COUNTER, SPREAD_KIND, FIT_MODEL, *FACTS}
-    assert set(schema['properties']) == set(field_names()) == form and len(form) == 48
+    assert set(schema['properties']) == set(field_names()) == form and len(form) == 51
     assert schema['required'] == list(schema['properties']) and schema['additionalProperties'] is False
     assert NOT_EXTRACTED == ('preparations',) and len(PREPARATION_KEYS) == 3
     for name, field in schema['properties'].items():
@@ -181,7 +181,7 @@ def test_the_real_paragraph_states_only_what_it_states_and_everything_else_stays
         assert record['quantities'][name]['reason'] == 'not_stated_in_passage'
     assert record['quantities']['receptor_amount']['status'] == 'unavailable'                   # '0.3 µg/ml protein' is a concentration, not an amount per well
     assert record['concentration_series']['status'] == 'unavailable'
-    assert [name for name, item in record['facts'].items() if item['answer'] != 'unknown'] == ['nonspecific_binding_determined', 'ligand_depletion_checked']
+    assert [name for name, item in record['facts'].items() if item['answer'] != 'unknown'] == ['nonspecific_binding_determined', 'nonspecific_ligand_is_radioligand', 'ligand_depletion_checked']
     assert record['assay_format'] is None and record['fit_model'] is None and record['spread_kind'] is None
     assert (record['radioligand_isotope'], record['bead_type'], record['capture_method'], record['preparation_type'], record['counter']) == ('tritium', 'ysi', 'metal_chelate', 'purified_protein', 'microbeta')
     assert record['choice_support'][CAPTURE] == 'implied' and record['choice_support'][ISOTOPE] == 'direct' and record['choice_support'][FIT_MODEL] is None
@@ -191,7 +191,7 @@ def test_the_real_paragraph_states_only_what_it_states_and_everything_else_stays
     assert [name for name, item in graded['criteria'].items() if item['status'] == 'conflicting'] == []
     assert graded['reasons']['equilibrium'] == 'incubation_recorded_for_the_sheet' and graded['reasons']['radioligand_range'] == 'kd_or_series_missing' and graded['reasons']['competition_radioligand_level'] == 'radioligand_concentration_or_kd_not_given'
     assert graded['native']['kd_nM'] is None and graded['native']['incubation_min'] == 960
-    assert set(REAL_STATED) <= set(REAL_ALLOWED) < set(field_names()) and set(REAL_ALLOWED) == set(REAL_STATED)
+    assert set(REAL_STATED) <= set(REAL_ALLOWED) < set(field_names()) and set(REAL_ALLOWED) - set(REAL_STATED) == {ASSAY_FORMAT}      # the real run may state the format (allowed); the reference answer leaves it unavailable
     for name, (value, unit, _) in REAL_STATED.items():
         assert (value, unit) in REAL_ALLOWED[name]
 

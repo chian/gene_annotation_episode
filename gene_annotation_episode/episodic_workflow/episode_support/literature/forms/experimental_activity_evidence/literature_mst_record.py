@@ -31,11 +31,13 @@ preparations   titrant_preparation_ref (the partner added in a series, or in com
                fixed_partner_preparation_ref (the detected partner held at a fixed concentration), dataset_ref: each a
                string or None (unknown). The converter hands them to the merger as its dependence keys (titrant as the
                analyte key, the fixed partner as the other partner; an MST experiment in solution has no surface).
-quantities     kd, ki, ec50, kd_spread, ki_spread, labelled_concentration, fnorm_amplitude, signal_to_noise, led_power,
+quantities     kd, ki, ec50, kd_spread, ki_spread, labelled_concentration, fnorm_amplitude, fnorm_noise, signal_to_noise, led_power,
                ir_laser_power, fhot_time, titration_point_count, incubation_time, temperature, replicate_count: one operand
                each.
-               Units: kd/ki/ec50/kd_spread/ki_spread/labelled_concentration pM, nM, uM or mM; fnorm_amplitude 'permille'
-               (the change of Fnorm between the unbound and the bound state, in per mille, as a positive number);
+               Units: kd/ki/ec50/kd_spread/ki_spread/labelled_concentration pM, nM, uM or mM; fnorm_amplitude and fnorm_noise 'permille'
+               (the change of Fnorm between the unbound and the bound state, in per mille, as a positive number; fnorm_noise is the stated
+               noise of Fnorm, the scatter of the points about the fit or of the repeated reads, in per mille, which lets the sheet
+               read the amplitude against the paper's own instrument noise when no signal-to-noise is stated);
                signal_to_noise 'ratio'; led_power and ir_laser_power 'percent' (the excitation LED power and the infrared
                laser (MST) power as the passage gives them in percent); fhot_time s or ms (the time after the infrared
                laser is switched on at which F-hot is read, the start of the F-hot window); titration_point_count and
@@ -87,7 +89,7 @@ def fact(answer, refs=(), support='direct'):
 
 VERSION = 'a105_mst_record_v1'
 EXPERIMENT_TYPE = 'mst'
-QUANTITIES = ('kd', 'ki', 'ec50', 'kd_spread', 'ki_spread', 'labelled_concentration', 'fnorm_amplitude', 'signal_to_noise', 'led_power', 'ir_laser_power', 'fhot_time', 'titration_point_count', 'incubation_time', 'temperature', 'replicate_count')
+QUANTITIES = ('kd', 'ki', 'ec50', 'kd_spread', 'ki_spread', 'labelled_concentration', 'fnorm_amplitude', 'fnorm_noise', 'signal_to_noise', 'led_power', 'ir_laser_power', 'fhot_time', 'titration_point_count', 'incubation_time', 'temperature', 'replicate_count')
 PREPARATION_KEYS = ('titrant_preparation_ref', 'fixed_partner_preparation_ref', 'dataset_ref')
 ASSAY_FORMATS = ('direct_titration', 'competition')
 SPREAD_KINDS = ('standard_error', 'standard_deviation', 'confidence_interval')
@@ -100,4 +102,4 @@ FACTS = {'initial_fluorescence_checked': YES_NO, 'initial_fluorescence_consisten
 
 CONCENTRATION_UNITS = ('pM', 'nM', 'uM', 'mM')
 # The unit vocabulary of each quantity (and of the concentration series): the units a record may carry.
-UNITS = {'kd': CONCENTRATION_UNITS, 'ki': CONCENTRATION_UNITS, 'ec50': CONCENTRATION_UNITS, 'kd_spread': CONCENTRATION_UNITS, 'ki_spread': CONCENTRATION_UNITS, 'labelled_concentration': CONCENTRATION_UNITS, 'fnorm_amplitude': ('permille',), 'signal_to_noise': ('ratio',), 'led_power': ('percent',), 'ir_laser_power': ('percent',), 'fhot_time': ('s', 'ms'), 'titration_point_count': ('count',), 'incubation_time': ('s', 'min', 'h'), 'temperature': ('C', 'K'), 'replicate_count': ('count',), 'concentration_series': CONCENTRATION_UNITS}
+UNITS = {'kd': CONCENTRATION_UNITS, 'ki': CONCENTRATION_UNITS, 'ec50': CONCENTRATION_UNITS, 'kd_spread': CONCENTRATION_UNITS, 'ki_spread': CONCENTRATION_UNITS, 'labelled_concentration': CONCENTRATION_UNITS, 'fnorm_amplitude': ('permille',), 'fnorm_noise': ('permille',), 'signal_to_noise': ('ratio',), 'led_power': ('percent',), 'ir_laser_power': ('percent',), 'fhot_time': ('s', 'ms'), 'titration_point_count': ('count',), 'incubation_time': ('s', 'min', 'h'), 'temperature': ('C', 'K'), 'replicate_count': ('count',), 'concentration_series': CONCENTRATION_UNITS}

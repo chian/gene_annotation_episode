@@ -31,10 +31,10 @@ SYNTHETIC = (
     'was added at 11 concentrations from 1 nM to 640 nM. The binding buffer held 100 mM KCl, 5 mM MgCl2 and 10% glycerol, with 50 ng of poly(dI-dC) in each 20 µl reaction. '
     'The reactions were incubated for 30 min at 25 °C, and a time course showed that binding had reached equilibrium by 20 min. They were run on a 6% native polyacrylamide '
     'gel at 10 V/cm for 90 min at 4 °C. A lane with the probe alone was run beside the reactions. DX-5 gave a shifted band with the probe. A 100-fold excess of the unlabelled '
-    'specific probe abolished the shifted band, whereas a 200-fold excess of an unlabelled unrelated DNA did not abolish it. A probe with the DX-5 site mutated did not shift. '
+    'specific probe abolished the shifted band, whereas a 200-fold excess of an unlabelled unrelated DNA did not abolish it. The competition reactions held DX-5 at 40 nM. A probe with the DX-5 site mutated did not shift. '
     'Bovine serum albumin in place of DX-5 did not shift the probe. An anti-DX-5 antibody gave a supershift, which confirms that the protein in the complex is DX-5. '
     'The complex was stable in the gel run, with no smear between the shifted band and the free probe. The free and shifted probe were quantified by phosphorimager, and 92% of '
-    'the probe was shifted at 640 nM DX-5. The shifted fraction against the protein concentration was fitted with a one-site binding model, which gave an apparent KD of 20 nM with '
+    'the probe was shifted at 640 nM DX-5. The fitted plateau was 95% of the probe shifted. The shifted fraction against the protein concentration was fitted with a one-site binding model, which gave an apparent KD of 20 nM with '
     'a standard deviation of 2 nM. The probe concentration was below the KD, and the protein concentrations spanned the KD, from well below it to saturation. Only one shifted band '
     'was seen. Three independent experiments were done on separate days, and the KD was determined by this gel shift method only.')
 
@@ -52,6 +52,8 @@ SYNTHETIC_STATED = {
     'glycerol_percent': (10, 'percent', '10% glycerol'),
     'nonspecific_competitor_amount': (50, 'ng', '50 ng of poly(dI-dC)'),
     'specific_competitor_excess': (100, 'ratio', 'A 100-fold excess of the unlabelled specific probe'),
+    'competition_protein_concentration': (40, 'nM', 'The competition reactions held DX-5 at 40 nM'),
+    'plateau_shifted_fraction': (95, 'percent', 'The fitted plateau was 95% of the probe shifted'),
     'incubation_time': (30, 'min', 'incubated for 30 min'),
     'incubation_temperature': (25, 'C', 'at 25 °C'),
     'gel_percent': (6, 'percent', 'a 6% native polyacrylamide gel'),
@@ -97,7 +99,7 @@ REAL_STATED = {
 }
 # The allowed set of the real model run: field -> every (value, unit) the paragraph clearly states for it. The number of shifted species is allowed
 # with the value 2 ('A second band shift then appeared' after 'a distinct complex': two shifted bands). Not allowed, because the paragraph does not
-# state them: the probe length and type of this probe (the '225' names the fragment and the only stated length, '225 pb', is of the non-specific
+# state them: the plateau of a fitted curve and the protein concentration of the competition reactions (none is given), the probe length and type of this probe (the '225' names the fragment and the only stated length, '225 pb', is of the non-specific
 # fragment), the label, any concentration of the probe or the protein, the buffer, incubation, gel, run, the number of titration points, replicates,
 # the fit model, the spread kind, the supershift, the mutant probe, the probe-alone lane, quantification, equilibrium and the stability of the complex.
 REAL_ALLOWED = {**{name: {(value, unit)} for name, (value, unit, _) in REAL_STATED.items()}, 'shifted_species_count': {(2, 'count')}}

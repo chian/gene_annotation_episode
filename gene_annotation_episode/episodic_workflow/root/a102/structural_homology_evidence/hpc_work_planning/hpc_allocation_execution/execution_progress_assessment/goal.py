@@ -12,7 +12,11 @@ GOAL = ('Investigate which further exposed progress information is useful for th
         'or depth is prescribed. Return your declared form at your closure even while the target remains active. '
         'Do not report private reasoning, intentions or unrestricted findings. Recorded facts use saved delivered '
         'observations; closure does not poll or compose another report with a model. The monitor\'s '
-        'information-credit projector and bound yield rule govern continuation. Repeated observation identities '
+        'information-credit projector feeds the accumulation controller (adaptive control, no item count), which '
+        'takes no cost and governs continuation: after at least 8 units attempted and 4 observed, a unit is flat '
+        'when the upper bound of the expected next marginal credit is at or below its adaptive threshold (the '
+        'larger of one result\'s resolution and 0.1 x the median of recent productive credits), and it stops '
+        'after 4 flat units in a row. Repeated observation identities '
         'and read timestamps alone earn no new information.')
 UNIT = ('one selected action: one progress tool (observe the assigned target, read a delivered observation, read '
         'one retained log window), or one commissioned monitor for an exposed direct dependency of the target')

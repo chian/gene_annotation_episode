@@ -15,8 +15,11 @@ GOAL = ('Investigate which returned sources merit examination for the assigned q
         'representation, version and UTF-8 byte anchors. Distinguish source claims from their applicability to the '
         'fixed target. Negative findings and qualifications can advance the investigation. Commit interpretations '
         "with the common reasoning action and update only the parent's declared typed form in that same work call. "
-        'Navigation, byte coverage and repeated reading earn no scientific credit by themselves. The commissioned '
-        "task's own yield settings guide continuation.")
+        'Navigation, byte coverage and repeated reading earn no scientific credit by themselves. For a finite '
+        "commission the commissioned task's yield settings guide continuation. For a verified_source_leads commission "
+        'a numerical controller with no cost decides it: after 8 units it fits the yield of the units and stops after '
+        '4 units in a row whose expected next credit is at most its adaptive threshold, not when the search results '
+        'run out.')
 UNIT = ('one model-selected unit for the assigned search results: a catalog lookup, an access or acquisition tool, a '
         'population sheet, a reasoning commit coupled with its grading sheets, the report tool, or one commission '
         'of the examination of a selected source')

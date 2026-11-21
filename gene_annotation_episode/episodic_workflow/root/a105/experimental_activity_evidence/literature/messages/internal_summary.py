@@ -95,7 +95,10 @@ def internal_summary(view):
     covered = screening_covered(task, view.outcomes, spans)
     # The input list (nano-graphrag's input-list paradigm): the sources of the work not yet consumed, in the order they
     # came (for a screening answer, the sources of the commissioned spans). A consumed source is not offered to the
-    # child again; the yield estimator ends the episode when the list is empty.
+    # child again. The yield estimator passes no item list (``items=None``), so an empty list does not end the episode:
+    # a ``verified_source_leads`` task's accumulation controller (``ADAPTIVE_CONTROL``, no cost) stops after 4 flat
+    # units in a row (expected next marginal credit's upper bound at or below the adaptive gamma, once W = 8 units
+    # are attempted and m = 4 observed).
     consumed = consumed_inputs(task, view.outcomes, spans, covered)
     items = ([span['source_ref'] for span in task['examined']] if task.get('answer_kind') == 'screening'
              else work_sources(literature, task, view.outcomes, records))

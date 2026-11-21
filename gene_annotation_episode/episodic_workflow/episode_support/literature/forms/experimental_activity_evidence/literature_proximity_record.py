@@ -57,7 +57,7 @@ CELL_SYSTEMS = ('mammalian_cells', 'yeast', 'bacteria', 'plant', 'parasite', 'an
 READOUTS = ('western_blot', 'mass_spectrometry', 'western_blot_and_mass_spectrometry')
 QUANTIFICATIONS = ('spectral_counts', 'label_free_intensity', 'silac', 'tmt', 'densitometry', 'other')
 YES_NO = ('yes', 'no', 'unknown', 'not_applicable')
-FACTS = {'candidate_enriched': YES_NO, 'ligase_only_control': YES_NO, 'unlabeled_control': YES_NO, 'unrelated_bait_control': YES_NO, 'biotinylation_confirmed': YES_NO, 'streptavidin_capture': YES_NO, 'bait_expression_checked': YES_NO, 'bait_localization_checked': YES_NO, 'orthogonal_validation': YES_NO, 'statistical_test_used': YES_NO, 'independent_experiments': YES_NO}
+FACTS = {'candidate_enriched': YES_NO, 'ligase_only_control': YES_NO, 'unlabeled_control': YES_NO, 'unrelated_bait_control': YES_NO, 'biotinylation_confirmed': YES_NO, 'streptavidin_capture': YES_NO, 'bait_expression_checked': YES_NO, 'bait_localization_checked': YES_NO, 'orthogonal_validation': YES_NO, 'fold_over_matched_control': YES_NO, 'statistical_test_used': YES_NO, 'independent_experiments': YES_NO}
 
 CONCENTRATION_UNITS = ('uM', 'mM')
 # The unit vocabulary of each quantity: the units a record may carry.

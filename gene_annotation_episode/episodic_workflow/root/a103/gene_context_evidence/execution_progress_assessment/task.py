@@ -29,8 +29,13 @@ job ``decide`` reads the service's spacing between two status requests of one jo
 (``job_access.read('describe', resource_id)``) and shows it with the job: a check that comes earlier is not sent
 and is the returned ``failed`` outcome ``provider_spacing_required`` of its unit.
 
-Settings this episode reads (``ctx.settings``): ``cost`` (the cost of one unit, also the cost of a check in the
-estimate table) and ``parameters`` (``yield_estimator.py``)."""
+Settings this episode reads (``ctx.settings``): ``cost`` (the cost of a check in the estimate table and the
+``cost_of_one_action`` shown in the request; the yield controller takes no cost) and ``parameters`` (checked by
+``yield_estimator.py``, not passed to the controller). The controller (``yield_estimator.py``:
+``AccumulationYieldController`` with ``ADAPTIVE_CONTROL`` and ``items=None``) fits nano-graphrag's yield model once at
+least W = 8 units were attempted and m = 4 observed; a unit is flat when the upper bound of the expected next marginal
+(hypervolume) credit is at or below gamma = max(one-result resolution, 0.1 x median of recent productive credits);
+it stops after 4 flat units in a row. ``items`` is None, so no item count stops it."""
 from datetime import datetime, timedelta, timezone
 
 from jsonschema import Draft202012Validator, ValidationError
@@ -115,10 +120,12 @@ CREDIT_GUIDANCE = (
     'nothing. Neither do {no_credit}. Repeated observation identities and read timestamps alone earn no new '
     'information. Credit measures monitoring information, not scientific progress.\n')
 ACTION_BOUNDARY = (
-    'You cannot end this episode: its yield controller ends it when further actions are not expected to earn more '
-    'than they cost, and only then does your commissioner receive your return. When you expect no new fact soon, '
+    'You cannot end this episode: its yield controller ends it, and only then does your commissioner receive your '
+    'return. After at least 8 actions attempted and 4 observed, it ends the episode after 4 actions in a row whose '
+    'expected next credit is, at its upper bound, at or below a small threshold (the larger of the credit of one '
+    'result and a tenth of the median credit of your recent productive actions). When you expect no new fact soon, '
     'select an action that takes no time (a check, or reading a check again): the controller then ends the episode '
-    'with what you have found. Do not emit a stop action or invent a turn budget, approval review, quality gate, '
+    'by that rule with what you have found. Do not emit a stop action or invent a turn budget, approval review, quality gate, '
     'experiment, term or observation. Do not execute native provider tools or write commands. The host executes '
     'your selected action.\n')
 RETURN_GUIDANCE = (

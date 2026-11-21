@@ -8,10 +8,10 @@ import pytest
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence import (
     literature_itc_extraction as extraction)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_itc_extraction import (
-    NOT_EXTRACTED, SPREAD_KIND, ExtractionRefused, answer_schema, field_names, quote_span, record_from_answer,
+    NOT_EXTRACTED, SPREAD_KIND, TITRATION_MODE, ExtractionRefused, answer_schema, field_names, quote_span, record_from_answer,
     validate_answer)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_itc_record import (
-    FACTS, FIT_MODELS, PREPARATION_KEYS, QUANTITIES, SPREAD_KINDS, UNITS)
+    FACTS, FIT_MODELS, PREPARATION_KEYS, QUANTITIES, SPREAD_KINDS, TITRATION_MODES, UNITS)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.tests.itc_passages import (
     HSP90_HOP, HSP90_HOP_STATED, SYNTHETIC, SYNTHETIC_STATED, answer_from, hsp90_hop_answer, synthetic_answer)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_itc_converter import _criterion
@@ -43,12 +43,12 @@ def fields_the_grader_reads():
     for record in (itc_cases.synthetic_record(), itc_cases.sparse_record(), itc_cases.hsp90_hop_record()):
         grade_itc(Tracking(record, reads))
     return {name.split('.')[-1] for name in reads if name.startswith(('quantities.', 'facts.'))
-            or name in (SPREAD_KIND, 'fit_model')}
+            or name in (SPREAD_KIND, 'fit_model', TITRATION_MODE)}
 
 
 def test_the_schema_has_exactly_the_fields_of_the_form():
     schema = answer_schema()
-    form = {*QUANTITIES, SPREAD_KIND, 'fit_model', *FACTS}
+    form = {*QUANTITIES, SPREAD_KIND, 'fit_model', TITRATION_MODE, *FACTS}
     assert set(schema['properties']) == set(field_names()) == form
     assert schema['required'] == list(schema['properties']) and schema['additionalProperties'] is False
     assert NOT_EXTRACTED == ('preparations',) and len(PREPARATION_KEYS) == 3
@@ -63,6 +63,7 @@ def test_the_vocabularies_are_the_forms_vocabularies():
     properties = answer_schema()['properties']
     assert properties[SPREAD_KIND]['properties']['value']['anyOf'][0]['enum'] == list(SPREAD_KINDS)
     assert properties['fit_model']['properties']['value']['anyOf'][0]['enum'] == list(FIT_MODELS)
+    assert properties[TITRATION_MODE]['properties']['value']['anyOf'][0]['enum'] == list(TITRATION_MODES)
     for name, answers in FACTS.items():
         offered = properties[name]['properties']['value']['anyOf'][0]['enum']
         assert set(offered) == set(answers) - {'unknown', 'not_applicable'}
@@ -220,7 +221,21 @@ def test_the_record_carries_the_support_of_each_stated_value():
     record = record_from_answer(validate_answer(answer, SYNTHETIC), SYNTHETIC, 0, 'exp_1', 'source_1', 'hypothesis_1')
     assert record['quantities']['kd']['support'] == 'implied' and record['quantities']['enthalpy']['support'] == 'direct'
     assert record['facts']['buffer_matching']['support'] == 'about_something_else' and record['facts']['baseline_corrected']['support'] == 'direct'
-    assert record['choice_support'] == {'spread_kind': 'implied', 'fit_model': 'direct'}
+    assert record['choice_support'] == {'spread_kind': 'implied', 'fit_model': 'direct', 'titration_mode': 'direct'} and record['titration_mode'] == 'incremental'
     empty = record_from_answer(validate_answer(answer_from(SYNTHETIC, {}), SYNTHETIC), SYNTHETIC, 0, 'exp_1', 'source_1', 'hypothesis_1')
     assert empty['quantities']['kd']['support'] is None and empty['facts']['buffer_matching']['support'] is None
-    assert empty['choice_support'] == {'spread_kind': None, 'fit_model': None}
+    assert empty['choice_support'] == {'spread_kind': None, 'fit_model': None, 'titration_mode': None} and empty['titration_mode'] is None
+
+
+def test_the_new_gap_fields_are_stated_in_the_synthetic_record_and_the_real_paragraph_states_none_of_them():
+    record = record_from_answer(validate_answer(synthetic_answer(), SYNTHETIC), SYNTHETIC, 0, 'exp_1', 'source_1', 'hypothesis_1')
+    assert record['quantities']['final_molar_ratio']['value'] == 2.0 and record['quantities']['final_molar_ratio']['unit'] == 'dimensionless'
+    assert record['titration_mode'] == 'incremental' and record['facts']['enthalpy_buffer_ionization_corrected']['answer'] == 'no'
+    assert graded_native(record)['final_ligand_over_kd'] == pytest.approx(2.0 * 500 / 1.0)
+    real = record_from_answer(validate_answer(hsp90_hop_answer(), HSP90_HOP), HSP90_HOP, 0, 'exp', 'src', 'hyp')
+    assert real['quantities']['final_molar_ratio']['status'] == 'unavailable' and real['titration_mode'] is None
+    assert real['facts']['enthalpy_buffer_ionization_corrected']['answer'] == 'unknown'
+
+
+def graded_native(record):
+    return grade_itc(record)['native']

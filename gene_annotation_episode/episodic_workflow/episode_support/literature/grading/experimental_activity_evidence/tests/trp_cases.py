@@ -14,7 +14,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.
 
 CHOICE_NAMES = ('spread_kind', 'fit_model', 'change_direction', 'emission_shift_direction')
 
-UNITS = {'kd': 'nM', 'kd_spread': 'nM', 'ksv': 'M^-1', 'protein_concentration': 'nM', 'excitation_wavelength': 'nm', 'emission_wavelength': 'nm', 'emission_shift': 'nm', 'fluorescence_change': 'percent', 'ligand_absorbance': 'AU', 'added_volume_fraction': 'percent', 'titration_point_count': 'count', 'incubation_time': 'min', 'temperature': 'C', 'replicate_count': 'count'}
+UNITS = {'kd': 'nM', 'kd_spread': 'nM', 'ksv': 'M^-1', 'protein_concentration': 'nM', 'excitation_wavelength': 'nm', 'emission_wavelength': 'nm', 'emission_shift': 'nm', 'fluorescence_change': 'percent', 'ligand_absorbance': 'AU', 'added_volume_fraction': 'percent', 'titration_point_count': 'count', 'concentration_lowest': 'nM', 'concentration_highest': 'nM', 'incubation_time': 'min', 'temperature': 'C', 'replicate_count': 'count'}
 
 
 def blank_record(experiment_ref, source_ref, assertion_ref):
@@ -52,7 +52,7 @@ def real_record():
     Sciences 2022, doi 10.3390/ijms232112734, PMC9654711), from its Results paragraph 2.7 and its Methods paragraph 4.14: KD 16.0 nM
     (standard-error-looking '16.0 +/- 3.4 nM', but the kind of the uncertainty is not stated), the TRKB-ECD-His protein at 50 nM,
     excitation at 295 nm and the fit of the normalized intensity at 330 nm. Only what the paragraphs state is filled: the compounds
-    are used over a range (1-1000 nM), not a list; 'room temperature' has no value; the size of the change is not given; the fit is an
+    are used over a range (0-1000 nM), not a list, so only its top end (1000 nM) is filled and its lowest is not (0 is a blank); 'room temperature' has no value; the size of the change is not given; the fit is an
     equation of the fractional change, not a named model; no replicate count, incubation, correction, blank or control is stated.
     Preparations are unknown."""
     record = blank_record('exp_trkb_78dhf_trp', 'source_pmc9654711', 'hypothesis_trkb_binds_78dhf')
@@ -60,7 +60,9 @@ def real_record():
                        'span_spread': {'locator': 'Results 2.7', 'quote': '16.0 ± 3.4 nM'},
                        'span_protein': {'locator': 'Methods 4.14', 'quote': 'TRKB-ECD-His (50 nM in PBS)'},
                        'span_excitation': {'locator': 'Methods 4.14', 'quote': 'excitation wavelength set at 295 nm'},
-                       'span_emission': {'locator': 'Methods 4.14', 'quote': 'fluorescence intensity at 330 nm'}}
+                       'span_emission': {'locator': 'Methods 4.14', 'quote': 'fluorescence intensity at 330 nm'},
+                       'span_highest': {'locator': 'Methods 4.14', 'quote': '0–1000 nM'}}
+    record['quantities']['concentration_highest'] = point(1000, 'nM', 'concentration_highest', ['span_highest'])      # the range's top; its 0 is a blank, not a lowest concentration
     record['quantities']['kd'] = point(16.0, 'nM', 'kd', ['span_kd'])
     record['quantities']['kd_spread'] = point(3.4, 'nM', 'kd_spread', ['span_spread'])
     record['quantities']['protein_concentration'] = point(50, 'nM', 'protein_concentration', ['span_protein'])

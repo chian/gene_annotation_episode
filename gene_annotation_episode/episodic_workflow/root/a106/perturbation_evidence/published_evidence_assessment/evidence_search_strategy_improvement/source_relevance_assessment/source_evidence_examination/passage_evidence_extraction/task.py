@@ -544,7 +544,7 @@ def decide(summary, feedback, ctx):
     the controlled features of the A106 sheets it saved, the latest image it looked at, the tools, the measured time and the yield table
     (the old decision state and inputs, over this episode's summary)."""
     if not summary['input_list']:
-        raise LookupError('passage_input_list_empty')   # every commissioned window is consumed; the yield estimator ends the episode
+        raise LookupError('passage_input_list_empty')   # every commissioned window is consumed; the controller counts no items (items=None)
     names = offered(ctx.settings, summary['opened_population'])
     leads = summary['task']['kind'] == 'verified_source_leads'
     knowledge_directory = ctx.settings.get('knowledge_library_directory')

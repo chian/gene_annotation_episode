@@ -19,7 +19,7 @@ criterion returns 'unknown' with a declared reason.
 
 The grader holds NO threshold that judges goodness. Where a number would be compared with a limit it records the number with its refs
 (diffusion_ratio/diffusion_refs, expected_diffusion_ratio/mass_consistency_refs, fraction_bound_maximum/fraction_bound_maximum_refs,
-particle_number or labelled_nM/labelled_range_refs, labelled_over_kd/tight_binding_analysis/labelled_over_kd_refs,
+particle_number (or labelled_nM with the detection volume, as a derived particle_number_used), count_rate_kHz (the particle number times the brightness) and labelled_range_refs, diffusion_time_scatter (the spread of the free diffusion time over that time), brightness_kHz and free_diffusion_time_us (for the acquisition), labelled_over_kd/tight_binding_analysis/labelled_over_kd_refs,
 concentration_count/concentration_count_refs and the span over the KD/concentration_span_refs, incubation_min/incubation_refs,
 acquisition_total_s/measurement_repeats_given/acquisition_refs, replicate_count/replicate_independent/replicate_refs) and returns 'unknown'
 with a reason ending in '_recorded_for_the_sheet'; the FCS converter judges it. What stays with the grader is what a stated fact says (a stated
@@ -42,7 +42,7 @@ labelled_over_kd, particle_number, diffusion_ratio, expected_diffusion_ratio, ma
 acquisition_total_s, concentration_count, concentration_low_over_constant, concentration_high_over_constant,
 the recorded facts and refs named above, preparations, spread_kind, fit_model, diffusion_model and readout_signal.
 """
-from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_fcs_criteria import FCS_CRITERIA, MIN_PER_UNIT, NM_PER_UNIT, S_PER_UNIT, US_PER_UNIT, CUBE_ROOT_EXPONENT
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_fcs_criteria import FCS_CRITERIA, MIN_PER_UNIT, NM_PER_UNIT, S_PER_UNIT, US_PER_UNIT, CUBE_ROOT_EXPONENT, PARTICLES_PER_NM_PER_FL
 
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
@@ -126,6 +126,10 @@ def _diffusion_change(record, native):
             return _result('not_applicable', 'readout_is_not_the_diffusion', [])
         return _result('unknown', 'diffusion_values_not_given', [])
     native['diffusion_refs'] = refs
+    spread, free_time = native['free_diffusion_time_spread_us'], native['free_diffusion_time_us']
+    if spread is not None and free_time is not None:
+        native['diffusion_time_scatter'] = spread / free_time      # the paper's own scatter of the free diffusion time, relative to that time
+        native['diffusion_refs'] = list(dict.fromkeys(refs + _refs(record['quantities']['free_diffusion_time_spread'], record['quantities']['free_diffusion_time'])))
     return _result('unknown', 'diffusion_ratio_recorded_for_the_sheet', [])
 
 
@@ -215,14 +219,24 @@ def _specificity_control(record, native):
 
 
 def _labelled_range(record, native):
-    particles, labelled = native['particle_number'], native['labelled_nM']
+    particles, labelled, volume = native['particle_number'], native['labelled_nM'], _value(record, 'detection_volume')
+    brightness = native['brightness_kHz']
     if particles is not None:
-        native['labelled_range_refs'] = _refs(record['quantities']['particle_number'])
-        return _result('unknown', 'particle_number_recorded_for_the_sheet', [])
-    if labelled is None:
+        native['particle_number_used'] = particles
+        refs, reason = _refs(record['quantities']['particle_number']), 'particle_number_recorded_for_the_sheet'
+    elif labelled is not None and volume is not None:
+        native['particle_number_used'], native['particle_number_derived'] = labelled * volume * PARTICLES_PER_NM_PER_FL, True      # a unit conversion of two stated values
+        refs, reason = _refs(record['quantities']['labelled_concentration'], record['quantities']['detection_volume']), 'particle_number_derived_from_volume_recorded_for_the_sheet'
+    elif labelled is None:
         return _result('unknown', 'labelled_concentration_not_given', [])
-    native['labelled_range_refs'] = _refs(record['quantities']['labelled_concentration'])
-    return _result('unknown', 'labelled_concentration_recorded_for_the_sheet', [])
+    else:
+        native['labelled_range_refs'] = _refs(record['quantities']['labelled_concentration'])
+        return _result('unknown', 'labelled_concentration_recorded_for_the_sheet', [])
+    if brightness is not None:
+        native['count_rate_kHz'] = native['particle_number_used'] * brightness      # the total count rate the detector sees
+        refs = list(dict.fromkeys(refs + _refs(record['quantities']['brightness'])))
+    native['labelled_range_refs'] = refs
+    return _result('unknown', reason, [])
 
 
 def _labelled_over_kd(record, native):
@@ -277,7 +291,7 @@ def _acquisition(record, native):
         return _result('unknown', 'measurement_time_not_given', [])
     repeats = _value(record, 'measurement_repeat_count')
     native['acquisition_total_s'] = seconds * (repeats if repeats is not None else 1)
-    native.update({'measurement_repeats_given': repeats is not None, 'acquisition_refs': _refs(record['quantities']['measurement_time'], record['quantities']['measurement_repeat_count'])})
+    native.update({'measurement_repeats_given': repeats is not None, 'acquisition_refs': _refs(record['quantities']['measurement_time'], record['quantities']['measurement_repeat_count'], record['quantities']['brightness'], record['quantities']['free_diffusion_time'])})
     return _result('unknown', 'acquisition_recorded_for_the_sheet', [])
 
 
@@ -312,7 +326,7 @@ def grade_fcs(record):
     nm = {name: _nm(record, name) for name in CONSTANTS}
     constant_name = next((name for name in CONSTANTS if nm[name] is not None), None)
     ratio, _ = _diffusion_ratio(record)
-    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'diffusion_model': record['diffusion_model'], 'readout_signal': record['readout_signal'], 'choice_support': dict(record['choice_support']), 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'concentration_series': dict(record['concentration_series']), 'kd_nM': nm['kd'], 'constant_name': constant_name, 'constant_nM': None if constant_name is None else nm[constant_name], 'labelled_nM': _nm(record, 'labelled_concentration'), 'labelled_over_kd': None, 'particle_number': _value(record, 'particle_number'), 'diffusion_ratio': ratio, 'expected_diffusion_ratio': None, 'mass_ratio': _value(record, 'mass_ratio'), 'incubation_min': _minutes(record, 'incubation_time'), 'measurement_s': _seconds(record, 'measurement_time'), 'acquisition_total_s': None, 'concentration_count': None, 'concentration_low_over_constant': None, 'concentration_high_over_constant': None, 'diffusion_refs': [], 'mass_consistency_refs': [], 'fraction_bound_maximum': None, 'fraction_bound_maximum_refs': [], 'labelled_range_refs': [], 'tight_binding_analysis': None, 'labelled_over_kd_refs': [], 'concentration_count_refs': [], 'concentration_span_refs': [], 'incubation_refs': [], 'measurement_repeats_given': None, 'acquisition_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': []}
+    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'diffusion_model': record['diffusion_model'], 'readout_signal': record['readout_signal'], 'choice_support': dict(record['choice_support']), 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'concentration_series': dict(record['concentration_series']), 'kd_nM': nm['kd'], 'constant_name': constant_name, 'constant_nM': None if constant_name is None else nm[constant_name], 'labelled_nM': _nm(record, 'labelled_concentration'), 'labelled_over_kd': None, 'particle_number': _value(record, 'particle_number'), 'diffusion_ratio': ratio, 'expected_diffusion_ratio': None, 'mass_ratio': _value(record, 'mass_ratio'), 'incubation_min': _minutes(record, 'incubation_time'), 'measurement_s': _seconds(record, 'measurement_time'), 'acquisition_total_s': None, 'concentration_count': None, 'concentration_low_over_constant': None, 'concentration_high_over_constant': None, 'diffusion_refs': [], 'free_diffusion_time_us': _scaled(record, 'free_diffusion_time', US_PER_UNIT), 'free_diffusion_time_spread_us': _scaled(record, 'free_diffusion_time_spread', US_PER_UNIT), 'diffusion_time_scatter': None, 'brightness_kHz': _value(record, 'brightness'), 'particle_number_used': None, 'particle_number_derived': False, 'count_rate_kHz': None, 'mass_consistency_refs': [], 'fraction_bound_maximum': None, 'fraction_bound_maximum_refs': [], 'labelled_range_refs': [], 'tight_binding_analysis': None, 'labelled_over_kd_refs': [], 'concentration_count_refs': [], 'concentration_span_refs': [], 'incubation_refs': [], 'measurement_repeats_given': None, 'acquisition_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': []}
     outcomes = {name: EVALUATORS[name](record, native) for name in CRITERIA}
     native['support'] = criterion_supports(record, FCS_CRITERIA)      # kept for the sheet: the grader does not judge it
     return {'version': VERSION, 'experiment_type': 'fcs', 'experiment_ref': record['experiment_ref'], 'criteria': {name: {'status': o['status'], 'support_refs': o['support_refs']} for name, o in outcomes.items()}, 'reasons': {name: o['reason'] for name, o in outcomes.items()}, 'native': native}

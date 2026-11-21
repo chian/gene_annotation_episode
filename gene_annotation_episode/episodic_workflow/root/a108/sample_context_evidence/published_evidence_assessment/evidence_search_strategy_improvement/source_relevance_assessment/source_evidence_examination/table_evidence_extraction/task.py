@@ -591,7 +591,7 @@ def decide(summary, feedback, ctx):
     interpretation so far, the latest image it looked at, the saved sheets, the commissioned goal plan, the tools, the
     measured time and the yield table (the old decision state and inputs, over this episode's summary)."""
     if not summary['input_list']:
-        raise LookupError('table_input_list_empty')   # the yield estimator ends the episode on an empty input list
+        raise LookupError('table_input_list_empty')   # the selected region is consumed; the controller counts no items (items=None)
     names = offered(ctx.settings, summary['input_list'])
     leads = summary['task']['kind'] == 'verified_source_leads'
     knowledge_directory = ctx.settings.get('knowledge_library_directory')

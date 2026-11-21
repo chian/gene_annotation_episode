@@ -16,7 +16,7 @@ tool needs of the assignment and of the received progress into the tool's argume
 
 Settings this episode reads (``ctx.settings``): ``launch_instructions_directory`` and ``knowledge_library_directory``
 (optional: the libraries whose context is shown to the model); ``cost`` and ``parameters``
-(``yield_estimator.py``).
+(``yield_estimator.py`` checks them; its accumulation controller takes no cost and uses neither).
 
 BLOCKED-ON-JOB-SERVICE: observing the target is the old ``ProgressProvider.observe`` (``services.observe_progress``)
 over A110's execution job provider; no service wraps it. ``_observe_progress`` names the service and the call it

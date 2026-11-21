@@ -49,7 +49,7 @@ def fields_the_grader_reads():
 def test_the_schema_has_exactly_the_fields_of_the_form():
     schema = answer_schema()
     form = {*QUANTITIES, SERIES, ASSAY_FORMAT, ISOTOPE, SEPARATION, PREPARATION_TYPE, SPREAD_KIND, FIT_MODEL, *FACTS}
-    assert set(schema['properties']) == set(field_names()) == form and len(form) == 38
+    assert set(schema['properties']) == set(field_names()) == form and len(form) == 42
     assert schema['required'] == list(schema['properties']) and schema['additionalProperties'] is False
     assert NOT_EXTRACTED == ('preparations',) and len(PREPARATION_KEYS) == 3
     for name, field in schema['properties'].items():
@@ -73,6 +73,22 @@ def test_the_radioligand_concentration_the_series_ends_and_the_nonspecific_ligan
     assert 'competitor of a competition curve, or of the radioligand, is not this field' in meaning['nonspecific_ligand_concentration']
     assert 'A concentration of the unlabelled ligand is not this field' in meaning['nonspecific_excess']
     assert 'percent of non-specific' not in meaning['percent_bound'] and 'non-specific binding' in meaning['percent_bound']
+
+
+def test_the_fields_added_for_the_grader_gaps_are_in_the_form_and_say_what_to_quote():
+    meaning = extraction.MEANING
+    assert {'dissociation_rate', 'nonspecific_ligand_kd'} <= set(QUANTITIES) and {'depletion_corrected', 'nonspecific_ligand_is_unlabelled_radioligand'} <= set(FACTS)
+    assert UNITS['dissociation_rate'] == ('1/s', '1/min', '1/h') and UNITS['nonspecific_ligand_kd'] == UNITS['kd']
+    assert 'A half-life' in meaning['dissociation_rate'] and 'ITS OWN Kd' in meaning['nonspecific_excess'] and 'of that ligand itself' in meaning['nonspecific_ligand_kd']
+    assert 'avoided or small' in meaning['depletion_corrected'] and 'cold' in meaning['nonspecific_ligand_is_unlabelled_radioligand']
+    for name in ('dissociation_rate', 'nonspecific_ligand_kd', 'depletion_corrected', 'nonspecific_ligand_is_unlabelled_radioligand'):
+        assert name in SYNTHETIC_STATED and SYNTHETIC_STATED[name][2] in SYNTHETIC and SYNTHETIC.count(SYNTHETIC_STATED[name][2]) == 1 and name not in REAL_STATED
+    record = record_from_answer(validate_answer(synthetic_answer(), SYNTHETIC), SYNTHETIC, 0, 'exp_1', 'source_1', 'hypothesis_1')
+    assert record['quantities']['dissociation_rate']['value'] == 0.2 and record['quantities']['dissociation_rate']['unit'] == '1/min'
+    assert record['quantities']['nonspecific_ligand_kd']['value'] == 2.0 and record['facts']['depletion_corrected']['answer'] == 'yes'
+    assert record['facts']['nonspecific_ligand_is_unlabelled_radioligand']['answer'] == 'yes'
+    native = grade_radioligand(record)['native']
+    assert native['nonspecific_excess_ratio'] == 500 and native['depletion_corrected'] == 'yes'      # the stated fold wins; the correction fact is recorded with the percent bound
 
 
 def test_the_vocabularies_are_the_forms_vocabularies():

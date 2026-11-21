@@ -11,7 +11,7 @@ publication) used to exercise every criterion's supported path.
 from copy import deepcopy
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_spr_record import EXPERIMENT_TYPE, FACTS, QUANTITIES, VERSION, fact, point, unavailable
 
-UNITS = {'kd': 'nM', 'kd_steady_state': 'nM', 'kon': 'M^-1 s^-1', 'koff': 's^-1', 'rmax': 'RU', 'kd_spread': 'nM', 'chi_squared': 'RU^2', 'immobilization_level': 'RU', 'analyte_mass': 'kDa', 'ligand_mass': 'kDa', 'stoichiometry': 'dimensionless', 'replicate_count': 'count'}
+UNITS = {'kd': 'nM', 'kd_steady_state': 'nM', 'kon': 'M^-1 s^-1', 'koff': 's^-1', 'rmax': 'RU', 'kd_spread': 'nM', 'chi_squared': 'RU^2', 'baseline_noise': 'RU', 'immobilization_level': 'RU', 'analyte_mass': 'kDa', 'ligand_mass': 'kDa', 'stoichiometry': 'dimensionless', 'replicate_count': 'count'}
 
 
 def blank_record(experiment_ref, source_ref, assertion_ref):
@@ -31,13 +31,13 @@ def synthetic_record(experiment_ref='exp_synthetic_spr_1', analyte_prep='prep_an
     refs = ['span_' + experiment_ref]
     record['spans'] = {refs[0]: {'locator': 'synthetic', 'quote': 'synthetic fixture'}}
     record['preparations'] = {'analyte_preparation_ref': analyte_prep, 'immobilized_preparation_ref': immobilized_prep, 'surface_ref': surface, 'dataset_ref': dataset}
-    values = {'kd': kd, 'kd_steady_state': kd * 1.5, 'kon': 1.0e5, 'koff': kd * 1e-9 * 1.0e5, 'rmax': 200.0, 'kd_spread': spread, 'chi_squared': 2.0, 'immobilization_level': 1000.0, 'analyte_mass': 20.0, 'ligand_mass': 50.0, 'stoichiometry': 1.0, 'replicate_count': 3}
+    values = {'kd': kd, 'kd_steady_state': kd * 1.5, 'kon': 1.0e5, 'koff': kd * 1e-9 * 1.0e5, 'rmax': 200.0, 'kd_spread': spread, 'chi_squared': 2.0, 'baseline_noise': 1.5, 'immobilization_level': 1000.0, 'analyte_mass': 20.0, 'ligand_mass': 50.0, 'stoichiometry': 1.0, 'replicate_count': 3}
     for name, value in values.items():
         record['quantities'][name] = point(value, UNITS[name], name + ':' + experiment_ref, refs, name)
     record['concentration_series'] = {**point([2.0, 6.0, 20.0, 60.0, 200.0, 600.0], 'nM', 'series:' + experiment_ref, refs, 'concentration_series')}
     record['spread_kind'] = 'standard_error'
     record['fit_model'] = '1:1_langmuir'
     record['choice_support'] = {'spread_kind': 'direct', 'fit_model': 'direct'}
-    answers = {'reference_surface': 'yes', 'double_referencing': 'yes', 'mass_transport': 'checked_not_limited', 'baseline_drift': 'yes', 'regeneration': 'yes', 'independent_surfaces': 'yes', 'immobilized_activity': 'yes', 'analyte_bivalent_or_oligomeric': 'no', 'residuals_reported': 'yes', 'single_estimate_method': 'no'}
+    answers = {'reference_surface': 'yes', 'double_referencing': 'yes', 'mass_transport': 'checked_not_limited', 'baseline_drift': 'yes', 'regeneration': 'yes', 'independent_surfaces': 'yes', 'immobilized_activity': 'yes', 'analyte_bivalent_or_oligomeric': 'no', 'residuals_reported': 'yes', 'single_estimate_method': 'no', 'kd_analysis': 'kinetic_fit'}
     record['facts'] = {name: fact(answer, refs) for name, answer in answers.items()}
     return record

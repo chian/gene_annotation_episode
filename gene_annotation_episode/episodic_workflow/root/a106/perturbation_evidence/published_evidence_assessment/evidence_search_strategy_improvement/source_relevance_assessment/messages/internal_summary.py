@@ -18,16 +18,32 @@ this episode's.
 
 ``source_custody`` maps each held source to the records a commission of its page must name for the child: the
 source and the artifacts it holds (the old ``prepare_assignment`` read them in scope; the child now reads only what
-is passed)."""
+is passed).
+
+The search step's Jev measurement (nano-graphrag ``web_search_binding``: ``assess_page_candidate`` and
+``SearchPageProposer``): every search result of the assignment is a possible page child with its provider rank (its
+position in ``search_result_refs``, the order the search returned it), a title and a description read from its source
+record (``search_result_candidates``). ``jev_search_goal`` is the immutable Search Goal Jev measures them against,
+derived from the commission: the runner's goal record of this episode (as nano-graphrag's ``goal.as_record()``: the
+commissioner's objective, result contract and root task context), this episode's grain, the commissioned literature
+task, the question context and the subject of the proposed annotation. ``search_assessment_ref`` is the assessment the
+code-decided ``assess_search_results`` unit holds, and ``search_planner_context`` is that assessment over the
+UNCONSUMED search results only, with the measured outcomes of the prior page children (``prior_page_outcomes``). The
+other held sources of the input list are not search results: Jev did not measure them and they are not in it."""
+import json
+
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.perturbation_evidence.literature_a106_findings import (
     merged_findings, own_findings)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.search_result_assessment import (
+    search_planner_context)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.literature_population_route import (
     opened_population)
 from gene_annotation_episode.episodic_workflow.episode_support.records.own_outcomes import outcome_page
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 
 from ..credit import credit_binding, lead_dispositions, screening_answers
-from ..task import ACQUISITION_NAMES
+from ..goal import BINDING_PATH, RESULT, UNIT
+from ..task import ACQUISITION_NAMES, ASSESS
 
 OUTCOME_PAGE_SIZE = 8        # the old configuration outcome_page_size
 READ_TOOLS = ('source_read', 'source_locate', 'source_sequence_scan', 'source_sequence_references',
@@ -41,6 +57,68 @@ EXPERIMENTAL_WORK = {'version': 'literature_experimental_task_v1', 'aspect': 'so
 
 # The literature child, whose finding is the A106 finding (its sheets are listed beside this episode's own).
 LITERATURE = ('literature_page',)
+DESCRIPTION_KEYS = ('provider', 'accession', 'uri', 'version', 'retrieved_at')
+
+
+def search_result_candidates(search_result_refs, records):
+    """Each search result as a possible page child (nano-graphrag's provider result): its id (the source ref the planner
+    selects), its provider rank (1-based position in the order the search returned it), a title (the source's accession,
+    else its uri, else its provider) and a description (the source record's provider metadata, as ``key=value``)."""
+    candidates = []
+    for rank, ref in enumerate(search_result_refs, start=1):
+        source = records.get(ref)
+        description = '; '.join(f'{key}={source[key]}' for key in DESCRIPTION_KEYS if source.get(key))
+        candidates.append({'result_id': ref, 'provider_rank': rank, 'title': title_of(source),
+                           'description': description})
+    return candidates
+
+
+def title_of(source):
+    return str(source.get('accession') or source.get('uri') or source.get('provider') or '')
+
+
+def label_of(records, ref):
+    return records.get(ref).get('label') or ref
+
+
+def search_goal(view, parent, records):
+    """The immutable Search Goal Jev measures every result against, derived from the commission (nano-graphrag:
+    ``EpisodeGoal.for_grain(search_grain, parent=strategy goal, objective=...)`` and ``goal.as_record()``). The runner
+    already built this episode's goal as the child of its commissioner's goal with the commission's objective
+    (``view.goal``); its record is carried as it is, with this episode's grain (binding path, unit, result) and what the
+    commission requests: the commissioned literature task (its key, kind and answer kind, the titles of the sources an
+    assessment answer names and the number of spans a screening answer covers), the labels of the question-context
+    records and the subject of the proposed annotation (its predicate and the labels of its records)."""
+    task = parent['task']
+    hypothesis = records.get(parent['proposed_annotation_ref'])
+    value = hypothesis['value']
+    requested = {'task_key': parent['task_key'], 'task_kind': task['kind'], 'answer_kind': task.get('answer_kind'),
+                 'evidence_axis': task['evidence_axis'],
+                 'assessed_sources': [title_of(records.get(ref)) for ref in task.get('source_refs', ())],
+                 'screened_span_count': len(task['examined']) if 'examined' in task else None}
+    return {**view.goal.as_record(), 'grain': {'binding_path': BINDING_PATH, 'unit': UNIT, 'result': RESULT},
+            'requested_results': {key: item for key, item in requested.items() if item not in (None, [])},
+            'question_context': [label_of(records, ref) for ref in parent['search']['question_context_refs']],
+            'subject': {'predicate': hypothesis['predicate'],
+                        'subjects': [label_of(records, ref) for ref in hypothesis['subject_refs']],
+                        'partner': (label_of(records, value['ref']) if value.get('type') in ('term_ref', 'reference')
+                                    else value)}}
+
+
+def prior_page_outcomes(children, ranks):
+    """The compact measured outcome of each page child, in the order commissioned (nano-graphrag
+    ``record_page_outcome``): the source it was handed and its provider rank (None for a held source that is not a
+    search result), the kind of literature task it was given, how it ended, its units, its credit and the counts of
+    its finding and of the lead sources it returned."""
+    return [{'result_id': outcome['arguments']['page']['source_ref'],
+             'provider_rank': ranks.get(outcome['arguments']['page']['source_ref']),
+             'literature_task_kind': outcome['arguments']['literature_task']['kind'],
+             'ended_by': outcome['completion']['ended_by'],
+             'units_consumed': outcome['completion']['units_consumed'], 'credit': outcome['report']['credit'],
+             'intervention_assessments': len(outcome['report']['finding']['intervention_assessments']),
+             'a106_subscores': len(outcome['report']['finding']['a106_subscores']),
+             'lead_sources': len(outcome['report'].get('lead_source_refs', ()))}
+            for outcome in children]
 
 
 def internal_summary(view):
@@ -71,11 +149,28 @@ def internal_summary(view):
     consumed = list(dict.fromkeys(child['arguments']['page']['source_ref'] for child in children))
     candidates = list(dict.fromkeys([*parent['search']['search_result_refs'], *(source['id'] for source in sources)]))
     input_list = [ref for ref in candidates if ref not in consumed]
+    # Jev's measurement of the search results (nano-graphrag ``SearchPageProposer``): held once by the code-decided
+    # ``assess_search_results`` unit; the planner sees it for the unconsumed search results only.
+    search_result_refs = parent['search']['search_result_refs']
+    results = search_result_candidates(search_result_refs, view.records)
+    assessed = [outcome for outcome in view.outcomes if outcome['kind'] == 'tool' and outcome['tool'] == ASSESS]
+    assessment_ref = assessed[-1]['outcome']['assessment_ref'] if assessed else None
+    assessment = None if assessment_ref is None else json.loads(view.records.get_artifact(assessment_ref))
+    page_outcomes = prior_page_outcomes(
+        [outcome for outcome in view.outcomes if outcome['kind'] == 'child' and outcome['slot'] in LITERATURE],
+        {item['result_id']: item['provider_rank'] for item in results})
+    unconsumed_results = [ref for ref in search_result_refs if ref not in consumed]
     assignment = {**parent['search'], 'literature_task': task,
                   'proposed_annotation_ref': parent['proposed_annotation_ref']}
     summary = {
         'literature_assignment': assignment, 'search': parent['search'],
         'input_list': input_list, 'consumed_inputs': consumed,
+        'search_result_candidates': results,
+        'jev_search_goal': search_goal(view, parent, view.records),
+        'search_assessment_ref': assessment_ref,
+        'prior_page_outcomes': page_outcomes,
+        'search_planner_context': (None if assessment is None
+                                   else search_planner_context(assessment, unconsumed_results, page_outcomes)),
         'task': task, 'task_key': parent['task_key'], 'proposed_annotation_ref': parent['proposed_annotation_ref'],
         'scope': parent['scope'], 'received_record_refs': parent['received_record_refs'],
         'literature_source_custody': [{'source_ref': source['id'], **{key: source.get(key) for key in CUSTODY_KEYS}}

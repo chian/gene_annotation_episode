@@ -96,8 +96,8 @@ BLI_CRITERIA = (
     {
         'id': 'loading_and_response',
         'question': 'Was the loading step documented, with a loading level that is not crowded and a response well above the noise?',
-        'reads': ('facts.loading_step_documented', 'quantities.loading_level', 'quantities.response_max'),
-        'rule': 'The loading step must be documented (yes); not documented (no) fails (a fact). When the loading level or the maximum response is given, the grader records them (loading_level_nm, response_max_nm; None when not given), the answer on the documentation (loading_documented) and the refs (loading_refs) and leaves the judgement of the loading and of the response to the sheet; neither given is unknown.',
+        'reads': ('facts.loading_step_documented', 'quantities.loading_level', 'quantities.response_max', 'quantities.partner_mass', 'quantities.baseline_noise'),
+        'rule': 'The loading step must be documented (yes); not documented (no) fails (a fact). When the loading level or the maximum response is given, the grader records them (loading_level_nm, response_max_nm; None when not given), the answer on the documentation (loading_documented) and the refs (loading_refs) and leaves the judgement of the loading and of the response to the sheet. The partner mass and the stated baseline noise, when given, are always recorded beside them (partner_mass_kda, baseline_noise_nm, with partner_mass_refs and noise_refs) so the sheet can judge the loading relative to the partner and the response relative to the noise; neither loading nor response given is unknown.',
         'thresholds': (),
         'returns': (
             ('conflicting', 'loading_step_not_documented', 'the fact is no'),
@@ -148,8 +148,8 @@ BLI_CRITERIA = (
     {
         'id': 'dissociation_window',
         'question': 'Was the dissociation step long enough for the signal to decay so that koff is measured?',
-        'reads': ('quantities.koff', 'quantities.dissociation_time'),
-        'rule': 'The fraction decayed in the window is 1 - exp(-koff x time). The grader records it (dissociation_decay) with the refs of koff and the time (dissociation_refs) and leaves the judgement to the sheet.',
+        'reads': ('quantities.koff', 'quantities.dissociation_time', 'quantities.response_max', 'quantities.baseline_noise'),
+        'rule': 'The fraction decayed in the window is 1 - exp(-koff x time). The grader records it (dissociation_decay) with the refs of koff and the time (dissociation_refs) and leaves the judgement to the sheet. The sheet also judges the decayed signal (fraction x maximum response) against the noise, so it reads response_max_nm and the stated baseline noise (baseline_noise_nm); their quote support is kept for it.',
         'thresholds': ('SECONDS_PER_MINUTE',),
         'returns': (
             ('unknown', 'dissociation_decay_recorded_for_the_sheet', 'koff and the dissociation time are given: the decayed fraction is recorded and the sheet judges it'),

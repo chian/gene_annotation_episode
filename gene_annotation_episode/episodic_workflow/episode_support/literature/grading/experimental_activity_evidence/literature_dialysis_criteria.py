@@ -76,8 +76,8 @@ DIALYSIS_CRITERIA = (
     {
         'id': 'binding_observed',
         'question': 'Was binding of the ligand to the protein observed (a measurable fraction of the ligand bound)?',
-        'reads': ('facts.binding_detected', 'quantities.percent_bound', 'quantities.percent_unbound', 'quantities.fraction_bound', 'quantities.fraction_unbound'),
-        'rule': 'The fact decides: yes supported, no fails, not_applicable not applicable. When the fact is unknown and a fraction is stated, the grader records the percent bound (percent_bound: the stated percent bound, else 100 minus the percent unbound, else the fraction bound times 100, else 100 minus the fraction unbound times 100; percent_bound_refs) and leaves the judgement (whether binding is shown) to the sheet, which also reads the qualitative statement from it; none stated is unknown.',
+        'reads': ('facts.binding_detected', 'quantities.percent_bound', 'quantities.percent_bound_spread', 'quantities.percent_unbound', 'quantities.fraction_bound', 'quantities.fraction_unbound'),
+        'rule': 'The fact decides: yes supported, no fails, not_applicable not applicable. When the fact is unknown and a fraction is stated, the grader records the percent bound (percent_bound: the stated percent bound, else 100 minus the percent unbound, else the fraction bound times 100, else 100 minus the fraction unbound times 100; percent_bound_refs), with the stated standard deviation of the percent bound when there is one (percent_bound_spread, percent_bound_spread_refs), and leaves the judgement (whether binding is shown) to the sheet, which also reads the qualitative statement from it; none stated is unknown.',
         'thresholds': ('PERCENT_FULL',),
         'returns': (
             ('supported', 'facts_answered_yes', 'answer yes'),
@@ -120,7 +120,7 @@ DIALYSIS_CRITERIA = (
         'id': 'device_adsorption',
         'question': 'Was the binding of the ligand to the membrane and the device small, or checked and corrected?',
         'reads': ('quantities.membrane_adsorption', 'facts.adsorption_checked_and_corrected'),
-        'rule': 'A stated adsorption is recorded (adsorption_percent, adsorption_refs) and the judgement is left to the sheet. Otherwise the fact decides: yes supported, no fails, unknown unknown, not_applicable not applicable.',
+        'rule': 'A stated adsorption is recorded (adsorption_percent, adsorption_refs) together with the answer of the fact (adsorption_corrected, adsorption_corrected_refs: whether it was checked and corrected, when the fact is not unknown) and the judgement is left to the sheet. Otherwise the fact decides: yes supported, no fails, unknown unknown, not_applicable not applicable.',
         'thresholds': (),
         'returns': (
             ('unknown', 'adsorption_recorded_for_the_sheet', 'an adsorption is stated: it is recorded and the sheet judges it'),
@@ -178,12 +178,13 @@ DIALYSIS_CRITERIA = (
     {
         'id': 'free_fraction_measurable',
         'question': 'Was the free fraction large enough to be measured (not below the minimum percent unbound)?',
-        'reads': ('quantities.percent_unbound', 'quantities.fraction_unbound', 'quantities.percent_bound', 'quantities.fraction_bound'),
-        'rule': 'The percent unbound (the stated one, else the fraction unbound times 100, else 100 minus the percent bound, else 100 minus the fraction bound times 100) is recorded (percent_unbound, percent_unbound_refs) and the judgement is left to the sheet. None stated does not apply.',
+        'reads': ('quantities.percent_unbound', 'quantities.fraction_unbound', 'quantities.percent_bound', 'quantities.fraction_bound', 'quantities.free_ligand_concentration', 'quantities.ligand_total_concentration', 'quantities.detection_lloq'),
+        'rule': 'The percent unbound (the stated one, else the fraction unbound times 100, else 100 minus the percent bound, else 100 minus the fraction bound times 100) is recorded (percent_unbound, percent_unbound_refs) and the judgement is left to the sheet. When the detector\'s lower limit of quantification is stated and the free concentration of the reading is known (the stated free concentration, else the total concentration times the percent unbound over 100), the free concentration over the limit is recorded too (free_over_lloq, free_over_lloq_refs). With no fraction but a free concentration over the limit, that ratio is recorded alone. Neither does not apply.',
         'thresholds': ('PERCENT_FULL',),
         'returns': (
-            ('unknown', 'percent_unbound_recorded_for_the_sheet', 'a fraction is stated: the percent unbound is recorded and the sheet judges it'),
-            ('not_applicable', 'no_fraction_reported', 'no fraction is stated'),
+            ('unknown', 'percent_unbound_recorded_for_the_sheet', 'a fraction is stated: the percent unbound is recorded (and the free concentration over the limit of quantification when both are known) and the sheet judges it'),
+            ('unknown', 'free_over_lloq_recorded_for_the_sheet', 'no fraction is stated, a free concentration and the limit of quantification are: the ratio is recorded and the sheet judges it'),
+            ('not_applicable', 'no_fraction_reported', 'no fraction is stated and no free concentration over the limit can be had'),
         ),
     },
     {

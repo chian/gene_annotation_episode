@@ -66,8 +66,11 @@ def internal_summary(view):
     task = parent['task']
     # The input list (nano-graphrag's input-list paradigm): the held sources (assigned and acquired) no strategy child
     # has been handed. Only these are offered to a commission; the list shrinks as a commission consumes its prior
-    # search sources and grows when an acquisition produces a new source. The yield estimator stops the episode when
-    # it is empty.
+    # search sources and grows when an acquisition produces a new source. The yield estimator is not handed this list:
+    # its accumulation controller (``ADAPTIVE_CONTROL``, ``items=None``, no cost) stops after 4 flat units in a row,
+    # a unit being flat when, once W = 8 units are attempted and m = 4 observed, the upper bound of the expected next
+    # marginal (hypervolume) credit is at or below the adaptive gamma (max(one-result resolution, 0.1 x the median of
+    # the recent productive credits)); an empty list does not stop it.
     consumed = consumed_sources(view)
     input_list = [reference for reference in held_sources(view) if reference not in consumed]
     sources = view.records.list('source')

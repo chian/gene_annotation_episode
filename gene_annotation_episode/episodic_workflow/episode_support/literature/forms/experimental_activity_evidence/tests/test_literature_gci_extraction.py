@@ -89,7 +89,9 @@ def test_a_correct_synthetic_answer_is_valid_and_becomes_a_record_the_grader_acc
     answer = validate_answer(synthetic_answer(), SYNTHETIC)
     record = record_from_answer(answer, SYNTHETIC, 5000, 'exp_1', 'source_1', 'hypothesis_1')
     graded = grade_gci(record)
-    assert {name: _criterion(graded, name)['status'] for name in CRITERIA} == dict.fromkeys(CRITERIA, 'supported')      # the sheet side judges what the grader only recorded
+    # the sheet side judges what the grader only recorded: every criterion is decided and supported
+    assert {name: _criterion(graded, name)['status'] for name in CRITERIA} == dict.fromkeys(CRITERIA, 'supported')
+    assert graded['native']['rmax_ratio'] == pytest.approx(0.4) and graded['native']['dissociation_time_s'] == 600 and graded['native']['dissociation_decay'] == pytest.approx(0.699, abs=1e-3)
     assert graded['native']['kd_nM'] == 20 and graded['native']['kd_from_rates_nM'] == pytest.approx(20)
     assert graded['native']['concentration_count'] == 1 and graded['native']['concentration_high_over_kd'] == pytest.approx(10)   # the one waveRAPID concentration, 10 x KD
     kd = record['quantities']['kd']

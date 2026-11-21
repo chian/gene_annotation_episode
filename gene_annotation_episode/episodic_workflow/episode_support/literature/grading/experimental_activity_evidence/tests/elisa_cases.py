@@ -9,7 +9,7 @@ sparse_record: only a KD and what a bare abstract gives; everything else is an u
 """
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_elisa_record import CHOICE_FIELDS, EXPERIMENT_TYPE, FACTS, QUANTITIES, VERSION, fact, point, unavailable
 
-UNITS = {'kd': 'nM', 'ki': 'nM', 'ec50': 'nM', 'ic50': 'nM', 'kd_spread': 'nM', 'ki_spread': 'nM', 'coating_concentration': 'ug/mL', 'signal_maximum': 'OD', 'signal_background': 'OD', 'wash_count': 'count', 'titration_point_count': 'count', 'technical_replicate_count': 'count', 'incubation_time': 'min', 'temperature': 'C', 'replicate_count': 'count'}
+UNITS = {'kd': 'nM', 'ki': 'nM', 'ec50': 'nM', 'ic50': 'nM', 'kd_spread': 'nM', 'ki_spread': 'nM', 'coating_concentration': 'ug/mL', 'signal_maximum': 'OD', 'signal_background': 'OD', 'wash_count': 'count', 'titration_point_count': 'count', 'technical_replicate_count': 'count', 'incubation_time': 'min', 'temperature': 'C', 'replicate_count': 'count', 'detector_linear_limit': 'OD', 'koff': 's^-1', 'wash_duration': 'min', 'tracer_concentration': 'nM', 'tracer_kd': 'nM'}
 
 
 def blank_record(experiment_ref, source_ref, assertion_ref):

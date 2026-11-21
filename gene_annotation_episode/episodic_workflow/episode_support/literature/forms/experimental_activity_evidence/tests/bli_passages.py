@@ -43,7 +43,8 @@ SYNTHETIC = (
     'buffer for a dissociation step of 600 s. A reference sensor carrying no ParB was run with PopZ and its signal '
     'was subtracted, and a buffer-only reference of the loaded sensor was subtracted as well. The baseline was '
     'stable, with no significant drift. Non-specific binding of PopZ to blank streptavidin sensors was checked. The '
-    'ParB on the sensor was active: it bound its known partner. The analyte PopZ is not bivalent or oligomeric under '
+    'ParB on the sensor was active: it bound its known partner. The molecular mass of ParB is 36 kDa, and the baseline noise of the '
+    'instrument was 0.005 nm. The analyte PopZ is not bivalent or oligomeric under '
     'these conditions. Avidity and rebinding were considered, and a low loading level was used to avoid them; '
     'mass-transport limitation was also considered. The sensorgrams were globally fitted with a 1:1 model '
     '(R² = 0.99), which gave kon = 1.0 × 10^5 M^-1 s^-1 and koff = 2.0 × 10^-3 s^-1, giving KD = 20 nM (standard '
@@ -63,6 +64,8 @@ SYNTHETIC_STATED = {
     'loading_level': (1.0, 'nm', 'a loading level of 1.0 nm'),
     'dissociation_time': (600, 's', 'a dissociation step of 600 s'),
     'replicate_count': (3, 'count', 'Three independent experiments'),
+    'partner_mass': (36, 'kDa', 'The molecular mass of ParB is 36 kDa'),
+    'baseline_noise': (0.005, 'nm', 'the baseline noise of the instrument was 0.005 nm'),
     SERIES: ([2, 6, 20, 60, 200, 600], 'nM', 'PopZ at 2, 6, 20, 60, 200 and 600 nM'),
     SPREAD_KIND: ('standard_deviation', None, 'standard deviation 3 nM'),
     FIT_MODEL: ('1:1', None, 'globally fitted with a 1:1 model'),

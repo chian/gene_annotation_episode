@@ -37,8 +37,7 @@ constructed with: the process lookups and the evidence-axis and thought-pattern 
 optionally ``knowledge_library_directory`` and ``launch_instructions_directory`` (the old workflow's tool-knowledge
 and launch libraries) and ``tool_registry`` (the old ``ToolRegistry`` configuration); and, for a child that needs its
 credit unit from this head, ``handoff_unit`` (execution launch), ``completion_target`` (resource launch),
-``acquired_record_unit`` (execution results) and ``information_unit`` (monitor). The literature child's
-``credit_unit`` is this head's own ``context.evidence_task.credit_unit``.
+``acquired_record_unit`` (execution results) and ``information_unit`` (monitor).
 
 BLOCKED-ON-TOOL-CATALOG-SERVICE: the schemas of the library tools the commission selected came from the old
 ``services.tool_catalog(scope)`` (``ToolRegistry.catalog``, which needs the Store). No service wraps it:
@@ -85,7 +84,6 @@ from .messages.final_to_parent import COMMITTED_SOURCE, RESULTS_SOURCE
 
 CHILD_SLOTS = {
     'structural_homology_evidence': BINDING_PATH,
-    'literature': BINDING_PATH + '/published_evidence_assessment',
     'execution_launch': BINDING_PATH + '/execution_job_submission',
     'resource_launch': BINDING_PATH + '/resource_work_submission',
     'execution_results': BINDING_PATH + '/execution_result_acquisition',
@@ -185,7 +183,6 @@ REPORT_SCHEMA = obj({'interpretation': TEXT, 'qualification': TEXT})
 
 SELECTION_DESCRIPTION = {
     'structural_homology_evidence': 'the head again, with the selection and revision_origin a process_revise returned',
-    'literature': 'published evidence assessment: search and read the literature and examine sources',
     'execution_launch': 'launch a concrete execution request on an explicit resource_id',
     'resource_launch': 'choose and launch an execution approach for a job on a resource',
     'execution_results': 'acquire the results of an already handed-off execution through its handoff',
@@ -198,9 +195,6 @@ SELECTION_DESCRIPTION = {
 CHILD_ASSIGNMENTS = {
     'structural_homology_evidence': obj({'selection': OPEN, 'evidence_refs': REFS, 'constraints': OPEN,
                                          'revision_origin': OPEN}, ['selection', 'evidence_refs', 'constraints']),
-    'literature': obj({'question_context_refs': REFS, 'source_refs': REFS, 'literature_task': OPEN,
-                       'received_record_refs': REFS},
-                      ['question_context_refs', 'source_refs', 'literature_task', 'received_record_refs']),
     'execution_launch': obj({'requests': OPEN, 'immutable_input_versions': RECORDS, 'constraints': OPEN,
                              'launch_instructions': OPEN, 'input_refs': REFS, 'already_handed_off_resource_ids': TEXTS,
                              'scientific_task': OPEN}, ['requests', 'immutable_input_versions', 'constraints']),
@@ -243,7 +237,6 @@ EXECUTION_FIELDS = ('execution_handoff_refs', 'execution_result_refs', 'executio
                     'execution_protein_structure_sequences', 'execution_protein_structure_failures')
 RETURN_FIELDS = {
     'structural_homology_evidence': (RESULTS_SOURCE, COMMITTED_SOURCE),
-    'literature': ('literature_screening_answers', 'literature_source_lead_dispositions'),
     'execution_launch': EXECUTION_FIELDS,
     'resource_launch': ('check_refs',),
     'execution_results': ('execution_handoff_refs', 'execution_job_record_refs', 'execution_result_refs',
@@ -263,9 +256,9 @@ UNIT_SETTINGS = {'execution_launch': 'handoff_unit', 'resource_launch': 'complet
 
 
 def child_arguments(slot, summary):
-    """The model's commission of a child: the assignment and the selection, and, for every slot but ``literature``
-    and ``monitor`` (whose objective is fixed and whose message is empty), the goal and purpose."""
-    texts = {} if slot in ('literature', 'monitor') else {'goal': TEXT, 'purpose': TEXT}
+    """The model's commission of a child: the assignment and the selection, and, for every slot but ``monitor``
+    (whose objective is fixed and whose message is empty), the goal and purpose."""
+    texts = {} if slot == 'monitor' else {'goal': TEXT, 'purpose': TEXT}
     assignment = monitor_assignment(summary) if slot == 'monitor' else CHILD_ASSIGNMENTS[slot]
     return obj({**texts, 'assignment': assignment,
                 'selection': {'type': 'array', 'uniqueItems': True, 'items': {'enum': list(RETURN_FIELDS[slot])}}})
@@ -1017,8 +1010,6 @@ def action(response, summary, records, ctx):
         units = {}
         if slot in UNIT_SETTINGS:
             units[UNIT_SETTINGS[slot]] = ctx.settings[UNIT_SETTINGS[slot]]
-        if slot == 'literature':
-            units['credit_unit'] = summary['credit_unit']
         return ChildCall(slot, {**arguments, 'units': units})
     name = selection['tool']
     if name in LIBRARY_NAMES:

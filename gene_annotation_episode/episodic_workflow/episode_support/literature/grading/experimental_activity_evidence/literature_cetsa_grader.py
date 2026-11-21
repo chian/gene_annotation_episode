@@ -29,6 +29,10 @@ concentration_count/concentration_count_refs, low_over_ec50/high_over_ec50/range
 Support: native 'support' holds, for each criterion, the supports ('direct', 'implied', 'about_something_else') of the stated fields it reads
 (its declared 'reads'), copied from the record and not judged here; the converter judges them.
 
+Facts added after the range review (2026-11-21, grader gaps): tm_spread_c, tm_spread_independent and shift_spread_refs (the stated standard deviation of the Tm, whether it is over independent experiments, and the refs of the shift and of both);
+temperature_margin_low_c, temperature_margin_high_c and temperature_bracket_refs (the lowest stated Tm minus the lowest heating temperature, the highest heating temperature minus the highest stated Tm; negative when a Tm lies outside the sampled range);
+isothermal_over_tm_c and isothermal_window_refs (the isothermal temperature minus the Tm without the compound). The isothermal_window criterion now hands the two numbers to the sheet when both are stated and the fact is not no.
+
 Native values retained: every record quantity as given, plus ec50_nM, lowest_nM, highest_nM, shift_celsius (signed), low_over_ec50, high_over_ec50, interaction, interaction_refs, preparations, sample_format, experiment_format, readout and spread_kind.
 """
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_cetsa_criteria import (
@@ -102,6 +106,11 @@ def _thermal_shift(record, native):
         native.update({'shift_celsius': ligand - vehicle, 'shift_refs': _refs(quantities['tm_ligand'], quantities['tm_vehicle'])})
     else:
         return _result('unknown', 'thermal_shift_not_given', [])
+    spread = _value(record, 'tm_spread')
+    if spread is not None:      # the paper's own scatter of the Tm, with whether it is over independent experiments: facts for the sheet
+        basis = record['facts']['tm_spread_over_independent_experiments']
+        native.update({'tm_spread_c': spread, 'tm_spread_independent': basis['answer'],
+                       'shift_spread_refs': _refs({'source_refs': native['shift_refs']}, quantities['tm_spread'], *([basis] if basis['answer'] != 'unknown' else []))})
     return _result('unknown', 'thermal_shift_recorded_for_the_sheet', [])
 
 
@@ -129,10 +138,26 @@ def _counted_fact(record, native, fact_name, count_name, count_key, format_field
 
 
 def _temperature_series(record, native):
-    return _counted_fact(record, native, 'melt_curve_measured', 'temperature_count', 'temperature_count', ('experiment_format', 'itdr'), 'isothermal_format_has_no_melt_curve')
+    result = _counted_fact(record, native, 'melt_curve_measured', 'temperature_count', 'temperature_count', ('experiment_format', 'itdr'), 'isothermal_format_has_no_melt_curve')
+    lowest, highest = _value(record, 'temperature_lowest'), _value(record, 'temperature_highest')
+    melts = [name for name in ('tm_vehicle', 'tm_ligand') if _value(record, name) is not None]
+    if result['reason'] == 'temperature_count_recorded_for_the_sheet' and lowest is not None and highest is not None and melts:
+        quantities = record['quantities']
+        tms = [_value(record, name) for name in melts]
+        # the distance of the stated melting temperatures from the two ends of the sampled range (facts: differences of stated numbers; negative = a Tm outside the range)
+        native.update({'temperature_margin_low_c': min(tms) - lowest, 'temperature_margin_high_c': highest - max(tms),
+                       'temperature_bracket_refs': _refs(quantities['temperature_lowest'], quantities['temperature_highest'], *(quantities[name] for name in melts))})
+    return result
 
 
 def _isothermal_window(record, native):
+    item = record['facts']['isothermal_temperature_in_window']
+    temperature, vehicle = _value(record, 'isothermal_temperature'), _value(record, 'tm_vehicle')
+    if item['answer'] != 'no' and temperature is not None and vehicle is not None:
+        quantities = record['quantities']
+        # the stated heating temperature and the stated melting temperature without the compound: their difference is recorded (a fact), the sheet judges the window
+        native.update({'isothermal_over_tm_c': temperature - vehicle, 'isothermal_window_refs': _refs(quantities['isothermal_temperature'], quantities['tm_vehicle'])})
+        return _result('unknown', 'isothermal_window_recorded_for_the_sheet', [])
     return _format_fact(record, 'isothermal_temperature_in_window', 'experiment_format', 'melt_curve', 'melt_curve_format_has_no_isothermal_temperature')
 
 
@@ -186,7 +211,7 @@ EVALUATORS = {'engagement_observed': _engagement_observed, 'thermal_shift': _the
 def grade_cetsa(record):
     """Grade one CETSA experiment record. Returns the criterion answers and native values."""
     engagement = record['facts']['target_engagement_shown']
-    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'sample_format': record['sample_format'], 'experiment_format': record['experiment_format'], 'readout': record['readout'], 'spread_kind': record['spread_kind'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'interaction': INTERACTION.get(engagement['answer']), 'interaction_refs': list(engagement['source_refs']) if engagement['answer'] in INTERACTION else [], 'ec50_nM': _scaled(record, 'engagement_ec50', NM_PER_UNIT), 'lowest_nM': _scaled(record, 'compound_concentration_lowest', NM_PER_UNIT), 'highest_nM': _scaled(record, 'compound_concentration_highest', NM_PER_UNIT), 'shift_celsius': None, 'shift_refs': [], 'temperature_count': None, 'temperature_count_refs': [], 'concentration_count': None, 'concentration_count_refs': [], 'low_over_ec50': None, 'high_over_ec50': None, 'range_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': []}
+    native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'sample_format': record['sample_format'], 'experiment_format': record['experiment_format'], 'readout': record['readout'], 'spread_kind': record['spread_kind'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'interaction': INTERACTION.get(engagement['answer']), 'interaction_refs': list(engagement['source_refs']) if engagement['answer'] in INTERACTION else [], 'ec50_nM': _scaled(record, 'engagement_ec50', NM_PER_UNIT), 'lowest_nM': _scaled(record, 'compound_concentration_lowest', NM_PER_UNIT), 'highest_nM': _scaled(record, 'compound_concentration_highest', NM_PER_UNIT), 'shift_celsius': None, 'shift_refs': [], 'tm_spread_c': None, 'tm_spread_independent': None, 'shift_spread_refs': [], 'temperature_margin_low_c': None, 'temperature_margin_high_c': None, 'temperature_bracket_refs': [], 'isothermal_over_tm_c': None, 'isothermal_window_refs': [], 'temperature_count': None, 'temperature_count_refs': [], 'concentration_count': None, 'concentration_count_refs': [], 'low_over_ec50': None, 'high_over_ec50': None, 'range_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': []}
     outcomes = {name: EVALUATORS[name](record, native) for name in CRITERIA}
     native['support'] = criterion_supports(record, CETSA_CRITERIA)      # kept for the sheet: the grader does not judge it
     return {'version': VERSION, 'experiment_type': 'cetsa', 'experiment_ref': record['experiment_ref'], 'criteria': {name: {'status': o['status'], 'support_refs': o['support_refs']} for name, o in outcomes.items()}, 'reasons': {name: o['reason'] for name, o in outcomes.items()}, 'native': native}

@@ -91,7 +91,8 @@ def test_a_correct_synthetic_answer_is_valid_and_becomes_a_record_the_grader_acc
     answer = validate_answer(synthetic_answer(), SYNTHETIC)
     record = record_from_answer(answer, SYNTHETIC, 5000, 'exp_1', 'source_1', 'hypothesis_1')
     graded = grade_trp(record)
-    assert {name: _criterion(graded, name)['status'] for name in CRITERIA} == dict.fromkeys(CRITERIA, 'supported')      # the grader records the numbers, the sheet judges them
+    # the grader records the numbers, the sheet judges them; the excitation wavelength has nothing in the record to be compared with
+    assert {name: _criterion(graded, name)['status'] for name in CRITERIA} == dict.fromkeys(CRITERIA, 'supported')
     native = graded['native']
     assert native['kd_nM'] == 20 and native['protein_nM'] == 5 and native['protein_over_kd'] == pytest.approx(0.25) and native['excitation_nm'] == 295
     assert native['incubation_min'] == 5 and native['concentration_count'] == 12 and native['concentration_high_over_constant'] == pytest.approx(102.4)
@@ -128,7 +129,8 @@ def test_the_real_paragraph_states_only_what_it_states_and_everything_else_stays
     answer = validate_answer(real_answer(), REAL)
     record = record_from_answer(answer, REAL, 100, 'exp', 'src', 'hyp')
     stated = [name for name in QUANTITIES if record['quantities'][name]['status'] == 'point']
-    assert stated == ['protein_concentration', 'excitation_wavelength', 'emission_wavelength']
+    assert stated == ['protein_concentration', 'excitation_wavelength', 'emission_wavelength', 'concentration_highest']
+    assert record['quantities']['concentration_highest']['value'] == 1000 and record['quantities']['concentration_lowest']['reason'] == 'not_stated_in_passage'   # 0-1000 nM: the zero blank is no lowest concentration
     assert record['quantities']['kd']['value'] is None and record['quantities']['kd']['reason'] == 'not_stated_in_passage'
     assert record['concentration_series']['status'] == 'unavailable'                          # the compounds are given as a range, not a list
     assert record['quantities']['temperature']['reason'] == 'not_stated_in_passage'           # 'room temperature' is not a number
@@ -137,7 +139,7 @@ def test_the_real_paragraph_states_only_what_it_states_and_everything_else_stays
     graded = grade_trp(record)
     judged = {name: _criterion(graded, name) for name in CRITERIA}
     assert 'conflicting' not in {item['status'] for item in judged.values()}
-    assert [name for name, item in judged.items() if item['status'] == 'supported'] == ['excitation_selectivity']
+    assert [name for name, item in judged.items() if item['status'] == 'supported'] == ['excitation_selectivity']          # 295 nm is the tryptophan-selective wavelength (the sheet judges it); the top of the range has no KD to be put over, so the series stays unknown
     assert graded['reasons']['protein_concentration'] == 'protein_or_kd_missing' and graded['reasons']['fit_model'] == 'fit_model_not_stated'
     assert set(REAL_STATED) < set(field_names())
 

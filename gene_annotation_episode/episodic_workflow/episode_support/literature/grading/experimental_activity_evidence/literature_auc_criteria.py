@@ -83,8 +83,8 @@ AUC_CRITERIA = (
     {
         'id': 'sedimentation_shift',
         'question': 'Did the complex sediment faster than the larger component alone by at least the minimum shift?',
-        'reads': ('quantities.complex_sedimentation_coefficient', 'quantities.component_sedimentation_coefficient_larger'),
-        'rule': 'When the s of the complex and the s of the larger component alone are both stated, the grader records the shift in percent (shift_percent, signed) and the refs of the two (shift_refs) and leaves the judgement to the sheet; otherwise unknown.',
+        'reads': ('quantities.complex_sedimentation_coefficient', 'quantities.component_sedimentation_coefficient_larger', 'quantities.component_mass_larger', 'quantities.component_mass_smaller'),
+        'rule': 'When the s of the complex and the s of the larger component alone are both stated, the grader records the shift in percent (shift_percent, signed) and the refs of the two (shift_refs) and leaves the judgement to the sheet; when the masses of both components are also stated it records them (component_mass_larger, component_mass_smaller) and adds their refs, so that the sheet can read the shift against the partner size; otherwise unknown.',
         'thresholds': ('PERCENT_PER_FRACTION',),
         'returns': (
             ('unknown', 'sedimentation_shift_recorded_for_the_sheet', 'both s values are stated: the shift is recorded and the sheet judges it'),
@@ -96,8 +96,8 @@ AUC_CRITERIA = (
     {
         'id': 'mass',
         'question': 'Does the molar mass of the complex from the AUC fit agree with the mass the complex should have?',
-        'reads': ('quantities.complex_mass_measured', 'quantities.complex_mass_theoretical', 'facts.mass_matches_complex'),
-        'rule': 'The grader holds no threshold for the mass. When the measured and the theoretical mass of the complex are both stated, it records them as facts (mass_measured, mass_theoretical, mass_deviation_percent = (measured - theoretical) / theoretical * 100, signed, and the refs of the two spans in mass_support_refs) and leaves the judgement to the sheet side (the AUC converter). Otherwise the fact decides: yes supported, no fails, unknown unknown, not_applicable not applicable.',
+        'reads': ('quantities.complex_mass_measured', 'quantities.complex_mass_theoretical', 'quantities.component_mass_smaller', 'facts.mass_matches_complex'),
+        'rule': 'The grader holds no threshold for the mass. When the measured and the theoretical mass of the complex are both stated, it records them as facts (mass_measured, mass_theoretical, mass_deviation_percent = (measured - theoretical) / theoretical * 100, signed, and the refs of the two spans in mass_support_refs; with the mass of the smaller component, when stated, as mass_smaller_component and its ref added) and leaves the judgement to the sheet side (the AUC converter). Otherwise the fact decides: yes supported, no fails, unknown unknown, not_applicable not applicable.',
         'thresholds': ('PERCENT_PER_FRACTION',),
         'returns': (
             ('unknown', 'mass_deviation_recorded_for_the_sheet', 'both masses are stated: the deviation is recorded and the sheet judges it'),
@@ -123,12 +123,11 @@ AUC_CRITERIA = (
         'id': 'concentration_series',
         'question': 'Was the experiment run at enough loading concentrations to show the concentration dependence of a reversible association?',
         'reads': ('quantities.concentration_count', 'facts.concentration_series_measured'),
-        'rule': 'The fact stated as no fails. Otherwise a stated number of loading concentrations is recorded (concentration_count, concentration_count_refs) and the judgement is left to the sheet; with no number the fact decides: yes supported, unknown unknown, not_applicable not applicable.',
+        'rule': 'A stated number of loading concentrations is recorded (concentration_count, concentration_count_refs) and the judgement is left to the sheet. With no number, the fact stated as no is a series of one (count 1, the fact\'s refs), recorded the same way: a short series is less evidence, not evidence against. Otherwise the fact decides: yes supported, unknown unknown, not_applicable not applicable.',
         'thresholds': (),
         'returns': (
-            ('conflicting', 'fact_answered_no', 'the fact is no'),
-            ('unknown', 'concentration_count_recorded_for_the_sheet', 'the fact is not no and a count is stated: it is recorded and the sheet judges it'),
-            ('supported', 'facts_answered_yes', 'the fact is not no, no count is stated and the fact is yes'),
+            ('unknown', 'concentration_count_recorded_for_the_sheet', 'a count is stated, or the fact is no (a series of one): it is recorded and the sheet judges it'),
+            ('supported', 'facts_answered_yes', 'no count is stated and the fact is yes'),
             ('unknown', 'fact_unknown', 'no count is stated and the fact is unknown'),
             ('not_applicable', 'fact_not_applicable', 'no count is stated and the fact is not_applicable'),
         ),

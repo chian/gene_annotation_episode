@@ -8,7 +8,7 @@ extraction's answer form; nothing here is a second schema kept in step by hand. 
 UTF-8 byte span, and a quote that does not occur in the chunk exactly once is refused.
 
 Differences from the other types that come from the form: the signal is the change of the normalized fluorescence in
-per mille (``fnorm_amplitude``) with its signal-to-noise, the form has the detected partner's fixed concentration, the
+per mille (``fnorm_amplitude``) with its signal-to-noise and the noise of Fnorm in per mille (``fnorm_noise``), the form has the detected partner's fixed concentration, the
 excitation and the infrared laser power in percent, the F-hot time, the number of titrant concentrations, a Ki and an
 EC50 beside the KD, an assay format (direct titration or competition), the readout signal (thermophoresis, temperature
 jump or initial fluorescence), the capillary type, the label type and the MST fit models. Every number must be above 0.
@@ -46,6 +46,7 @@ MEANING = {
     'ki_spread': 'The reported uncertainty of the Ki given in the ki field (its standard error, standard deviation or confidence interval half-width), in a concentration unit. A confidence interval given as a lower and an upper limit is not a half-width: leave this unavailable unless the passage gives the uncertainty as one number. An uncertainty reported for any other value is not this field.',
     'labelled_concentration': 'The concentration at which the detected partner (the labelled partner, or the partner detected through its own fluorescence) is held fixed in the measurement, as the passage states it. It is not a concentration of the titrant series.',
     'fnorm_amplitude': 'The size of the change of the normalized fluorescence Fnorm (the MST signal) between the unbound and the bound state, in per mille, as a positive number, as the passage gives it. A signal-to-noise ratio is not this field.',
+    'fnorm_noise': 'The noise of the normalized fluorescence Fnorm (the scatter of the points about the fitted curve, or of repeated reads), in per mille, as the passage gives it. The size of the binding signal is not this field, and a signal-to-noise ratio is not this field.',
     'signal_to_noise': 'The signal-to-noise ratio of the titration curve (the size of the binding signal over the noise), as the passage gives it. An amplitude alone is not this field.',
     'led_power': 'The excitation (LED) power of the instrument in percent, as the passage gives it as a number. A word such as low, medium or high is not a number.',
     'ir_laser_power': 'The infrared laser power that heats the sample, called the MST power, in percent, as the passage gives it as a number. A word such as low, medium or high is not a number.',

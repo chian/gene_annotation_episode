@@ -76,8 +76,8 @@ ITC_CRITERIA = (
     {
         'id': 'c_value_window',
         'question': 'Is the c value in the window where the curve has a measurable shape, so KD is well determined?',
-        'reads': ('quantities.stoichiometry', 'quantities.cell_concentration', 'quantities.kd'),
-        'rule': 'c = n x [cell] / KD. The grader records it (c_value) with the refs of the three quantities (c_value_refs) and leaves the judgement of the window to the sheet.',
+        'reads': ('quantities.stoichiometry', 'quantities.cell_concentration', 'quantities.kd', 'quantities.final_molar_ratio'),
+        'rule': 'c = n x [cell] / KD. The grader records it (c_value) with the refs of the three quantities (c_value_refs) and leaves the judgement of the window to the sheet. When the final ligand : partner molar ratio r is also stated it records the final total ligand over KD, r x c / n (final_ligand_over_kd, with final_ratio_refs): how far the titration went past KD, which decides whether a low-c titration still reached its plateau.',
         'thresholds': (),
         'returns': (
             ('unknown', 'c_value_recorded_for_the_sheet', 'n, cell concentration and KD are given: c is recorded and the sheet judges it'),
@@ -103,11 +103,12 @@ ITC_CRITERIA = (
     {
         'id': 'injections_sufficient',
         'question': 'Were there enough injections to define the binding isotherm?',
-        'reads': ('quantities.injection_count',),
-        'rule': 'The grader records the stated injection count (injection_count) with its refs (injection_refs) and leaves the judgement to the sheet.',
+        'reads': ('quantities.injection_count', 'titration_mode'),
+        'rule': 'The grader records the titration mode (titration_mode). When the mode is stated as single_injection or continuous the injection count does not describe how well the curve is sampled: the grader records the mode with its refs (injection_refs) and leaves the judgement to the sheet. Otherwise it records the stated injection count (injection_count) with its refs (injection_refs) and leaves the judgement to the sheet.',
         'thresholds': (),
         'returns': (
-            ('unknown', 'injection_count_recorded_for_the_sheet', 'a count is stated: it is recorded and the sheet judges it'),
+            ('unknown', 'titration_mode_recorded_for_the_sheet', 'the mode is single_injection or continuous: it is recorded and the sheet judges it'),
+            ('unknown', 'injection_count_recorded_for_the_sheet', 'a count is stated and the mode is not single_injection or continuous: it is recorded and the sheet judges it'),
             ('unknown', 'injection_count_missing', 'count not given'),
             ('not_applicable', 'never', 'never returned'),
         ),
@@ -166,8 +167,8 @@ ITC_CRITERIA = (
     {
         'id': 'thermodynamic_consistency',
         'question': 'Do the free energy from KD and the free energy from enthalpy minus temperature times entropy agree?',
-        'reads': ('quantities.kd', 'quantities.enthalpy', 'quantities.entropy', 'quantities.temperature'),
-        'rule': 'dG from KD = R T ln(KD in molar). dG from parts = dH - T dS. The grader records both and their absolute gap (dg_from_kd_kJ_per_mol, dg_from_parts_kJ_per_mol, dg_gap_kJ_per_mol) with the refs (dg_refs) and leaves the judgement of the gap to the sheet. If only the entropy is not given the check cannot be made and does not apply.',
+        'reads': ('quantities.kd', 'quantities.enthalpy', 'quantities.entropy', 'quantities.temperature', 'facts.enthalpy_buffer_ionization_corrected'),
+        'rule': 'dG from KD = R T ln(KD in molar). dG from parts = dH - T dS. The grader records both and their absolute gap (dg_from_kd_kJ_per_mol, dg_from_parts_kJ_per_mol, dg_gap_kJ_per_mol) with the refs (dg_refs) and the answer on whether the reported dH was corrected for buffer ionization (enthalpy_ionization_corrected) and leaves the judgement of the gap, and of whether the identity applies to a corrected dH, to the sheet. If only the entropy is not given the check cannot be made and does not apply.',
         'thresholds': ('GAS_CONSTANT_J_PER_MOL_K', 'KCAL_TO_KJ', 'KELVIN_OFFSET', 'NM_PER_M', 'J_PER_KJ'),
         'returns': (
             ('unknown', 'free_energy_gap_recorded_for_the_sheet', 'KD, enthalpy, entropy and temperature are given: the gap is recorded and the sheet judges it'),

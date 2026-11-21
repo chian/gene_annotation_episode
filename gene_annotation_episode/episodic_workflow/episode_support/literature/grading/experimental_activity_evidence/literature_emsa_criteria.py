@@ -79,8 +79,8 @@ EMSA_CRITERIA = (
     {
         'id': 'specific_competition',
         'question': 'Did an excess of the unlabelled specific probe abolish the shifted band?',
-        'reads': ('facts.shift_abolished_by_specific_competitor', 'quantities.specific_competitor_excess'),
-        'rule': 'The fact decides: yes supported, unknown unknown, not_applicable not applicable. A fact answered no fails when no fold excess is stated; when one is stated, the grader records it (specific_competitor_excess) with the refs of the fact (specific_competition_refs) and leaves the judgement to the sheet: a competitor in too small an excess is not a test of specificity.',
+        'reads': ('facts.shift_abolished_by_specific_competitor', 'quantities.specific_competitor_excess', 'quantities.competition_protein_concentration'),
+        'rule': 'The fact decides: yes supported, unknown unknown, not_applicable not applicable. A fact answered no fails when no fold excess is stated; when one is stated, the grader records it (specific_competitor_excess) with the refs of the fact (specific_competition_refs), and the protein concentration of the competition reactions when it is stated (competition_protein_nM, competition_protein_refs; the sheet turns the fold excess and the probe concentration into a molar competitor over protein), and leaves the judgement to the sheet: a competitor in too small an excess is not a test of specificity.',
         'thresholds': (),
         'returns': (
             ('supported', 'facts_answered_yes', 'answer yes'),
@@ -168,8 +168,8 @@ EMSA_CRITERIA = (
     {
         'id': 'saturation',
         'question': 'Did the shifted fraction reach a plateau at the highest protein concentration?',
-        'reads': ('quantities.fraction_shifted_highest', 'quantities.kd'),
-        'rule': 'With an apparent KD reported, the percent of the probe shifted at the highest protein concentration is recorded (fraction_shifted_percent, fraction_shifted_refs) and the judgement is left to the sheet. Not given is unknown. With no apparent KD reported the criterion does not apply.',
+        'reads': ('quantities.fraction_shifted_highest', 'quantities.plateau_shifted_fraction', 'quantities.kd'),
+        'rule': 'With an apparent KD reported, the percent of the probe shifted at the highest protein concentration is recorded (fraction_shifted_percent, fraction_shifted_refs), with the fitted plateau when it is stated (plateau_percent, plateau_refs), and the judgement is left to the sheet. Not given is unknown. With no apparent KD reported the criterion does not apply.',
         'thresholds': (),
         'returns': (
             ('unknown', 'fraction_shifted_recorded_for_the_sheet', 'a KD is reported and a shifted fraction is stated: it is recorded and the sheet judges it'),

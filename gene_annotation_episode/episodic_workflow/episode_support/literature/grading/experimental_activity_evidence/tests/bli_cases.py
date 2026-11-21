@@ -10,7 +10,7 @@ sparse_record: only a KD and what a bare abstract gives; everything else is an u
 """
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_bli_record import EXPERIMENT_TYPE, FACTS, QUANTITIES, VERSION, fact, point, unavailable
 
-UNITS = {'kd': 'nM', 'kd_steady_state': 'nM', 'kon': 'M^-1 s^-1', 'koff': 's^-1', 'response_max': 'nm', 'kd_spread': 'nM', 'fit_r_squared': 'dimensionless', 'loading_level': 'nm', 'dissociation_time': 's', 'replicate_count': 'count'}
+UNITS = {'kd': 'nM', 'kd_steady_state': 'nM', 'kon': 'M^-1 s^-1', 'koff': 's^-1', 'response_max': 'nm', 'kd_spread': 'nM', 'fit_r_squared': 'dimensionless', 'loading_level': 'nm', 'dissociation_time': 's', 'replicate_count': 'count', 'partner_mass': 'kDa', 'baseline_noise': 'nm'}
 
 
 def blank_record(experiment_ref, source_ref, assertion_ref):

@@ -14,9 +14,9 @@ tool: what the parent receives is the credit and the controlled features code re
 (``messages/final_to_parent.py``).
 
 Offered children: the old ``allowed_child_roles`` kept ``evolutionary_history_evidence`` (this episode again, a
-narrower investigation) and ``hpc`` (``hpc_work_planning``); the slots ``launch``, ``monitor``, ``results`` and
-``literature`` are declared (the old request assemblers existed for them, see ``messages/msg_to_child.py``) but, as
-in the old code, are not offered to the model.
+narrower investigation) and ``hpc`` (``hpc_work_planning``); the slots ``launch``, ``monitor`` and ``results`` are
+declared (the old request assemblers existed for them, see ``messages/msg_to_child.py``) but, as in the old code, are
+not offered to the model. A104 has no literature child.
 
 Settings this episode reads (``ctx.settings``): ``process_library_directory`` (the frozen process library),
 ``tool_library_directory`` (the frozen scientific tool library), ``tool_registry`` (the keyword settings of the
@@ -80,8 +80,7 @@ CHILD_SLOTS = {'evolutionary_history_evidence': 'evolutionary_history_evidence',
                'hpc': _PREFIX + 'hpc_work_planning',
                'launch': _PREFIX + 'execution_job_submission',
                'monitor': _PREFIX + 'execution_progress_assessment',
-               'results': _PREFIX + 'execution_result_acquisition',
-               'literature': _PREFIX + 'published_evidence_assessment'}
+               'results': _PREFIX + 'execution_result_acquisition'}
 SERVICES = ()
 MODEL_ROLE = 'REASONING'
 # How the action schema travels to the model: the model endpoint takes no open object, so a record whose fields the

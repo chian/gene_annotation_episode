@@ -551,15 +551,19 @@ Episode that wrote these bytes); two episodes that declare the same service shar
    controllers. `credit(initial summary)` is the Episode's initial credit: it is computed once, when the Episode
    is first entered, and journaled (`episodes.initial_credit`); an Episode that is entered again is built from the
    journaled value ("Resume"). **This is the only way an Episode ends** (`ended_by` has the one value `'yield_stop'`):
-   - a controller stops when its forecast upper bound of the next unit's credit is at or below its cost: a
-     completion controller at the latest when credit reaches the commission's target (the forecast is then
-     exactly zero), a bounded-quality controller at the latest at its maximum, and any of the three earlier, when
-     its units stop earning;
+   - a completion or bounded-quality controller stops when its forecast upper bound of the next unit's credit is
+     at or below its cost: a completion controller at the latest when credit reaches the commission's target (the
+     forecast is then exactly zero), a bounded-quality controller at the latest at its maximum, and either
+     earlier, when its units stop earning;
+   - an accumulation controller (`AccumulationYieldController`, nano-graphrag's estimator controller) has no
+     cost. From 8 units attempted and 4 observed, a unit is flat when the upper bound of the expected next
+     marginal hypervolume credit is at or below gamma (`ADAPTIVE_CONTROL`: after each unit max(the one-result
+     resolution, 0.1 x the median of the productive credits of the last 8 units); `FIXED_CONTROL`: 0.06); it
+     stops after 4 flat units in a row, or when none of its `items` (the episode's input list) remains;
    - an episode with nothing left to gain still offers units (a wait, a check, a lookup). What they earn is its
-     own `credit.py` and settings; when they earn nothing the forecast falls to the cost and the controller
-     stops it. At cost zero an accumulating controller never stops, so such an episode's settings give its
-     units a cost. A head with only an outstanding job ends this way, and the root commissions it again later
-     (`LAUNCH_MONITOR_EXTRACT_MECHANICS.md`, section 8);
+     own `credit.py` and settings; when they earn nothing the forecast falls to the cost (an accumulation
+     controller's units turn flat) and the controller stops it. A head with only an outstanding job ends this
+     way, and the root commissions it again later (`LAUNCH_MONITOR_EXTRACT_MECHANICS.md`, section 8);
    - **a closing value the model writes** (a closing text, a final report) is produced by a tool unit: the
      episode declares a tool for it (a `close` or `report` tool), the model selects it as its action with the
      value in the arguments, and the tool returns it. The outcome is journaled with the unit, the summary holds

@@ -1,6 +1,6 @@
 """Trp grader: each criterion's rule on records, with the arithmetic worked by hand."""
 import pytest
-from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_trp_record import fact, point
+from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_trp_record import fact, point, unavailable
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_trp_converter import _criterion
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_trp_grader import CRITERIA, grade_trp
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.tests.trp_cases import sparse_record, synthetic_record
@@ -9,6 +9,11 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 def status(record, criterion):
     """The status after the sheet's judgement where the grader handed the recorded facts over, else the grader's own (threshold-boundary cases are judged on the sheet side)."""
     return _criterion(grade_trp(record), criterion)['status']
+
+
+def graded_unknown_fact(record):
+    graded = grade_trp(record)
+    return graded['criteria']['equilibrium']['status'] == 'unknown' and graded['reasons']['equilibrium'] == 'incubation_recorded_for_the_sheet'
 
 
 def reason(record, criterion):
@@ -63,9 +68,9 @@ def test_excitation_is_recorded_and_the_sheet_judges_the_tyrosine_excitation():
     r['quantities']['excitation_wavelength'] = point(300.0, 'nm', 'e', ['s'])
     assert status(r, 'excitation_selectivity') == 'supported'
     r['quantities']['excitation_wavelength'] = point(280.0, 'nm', 'e', ['s'])
-    assert grade_trp(r)['native']['excitation_nm'] == 280.0 and status(r, 'excitation_selectivity') == 'unknown'
-    r['quantities']['excitation_wavelength'] = point(294.9, 'nm', 'e', ['s'])
-    assert status(r, 'excitation_selectivity') == 'unknown'
+    assert grade_trp(r)['native']['excitation_nm'] == 280.0 and status(r, 'excitation_selectivity') == 'supported'      # the sheet gives the tryptophan share of the 280 nm excitation, never a conflict
+    r['quantities']['excitation_wavelength'] = point(294.9, 'nm', 'e', ['s'])           # just below the researched 295 nm: a little tyrosine, partial credit, not a step
+    assert status(r, 'excitation_selectivity') == 'supported' and _criterion(grade_trp(r), 'excitation_selectivity')['degree'] < 1.0
     missing(r, 'excitation_wavelength')
     assert reason(r, 'excitation_selectivity') == 'excitation_wavelength_not_stated'
 
@@ -149,8 +154,8 @@ def test_concentration_series_by_count_and_span():
     assert graded['native']['concentration_count'] == 8 and graded['reasons']['concentration_series'] == 'series_recorded_for_the_sheet' and graded['criteria']['concentration_series'] == {'status': 'unknown', 'support_refs': []}
     assert graded['native']['count_refs'] and graded['native']['series_refs'] == ['span_exp_synthetic_trp_1']
     assert status(r, 'concentration_series') == 'supported'
-    r['concentration_series']['value'] = [4.0, 16.0, 40.0, 80.0, 120.0, 160.0, 200.0]          # seven: recorded, the sheet judges the count
-    assert grade_trp(r)['native']['concentration_count'] == 7 and status(r, 'concentration_series') == 'conflicting'
+    r['concentration_series']['value'] = [4.0, 16.0, 40.0, 80.0, 120.0, 160.0, 200.0]          # seven: recorded, the sheet gives the count partial credit (no step at eight)
+    assert grade_trp(r)['native']['concentration_count'] == 7 and status(r, 'concentration_series') == 'supported'
     r['concentration_series']['value'] = [6.0, 16.0, 40.0, 80.0, 120.0, 160.0, 190.0, 400.0]   # lowest 0.3 x KD
     assert grade_trp(r)['native']['concentration_low_over_constant'] == pytest.approx(0.3)
     r['concentration_series']['value'] = [4.0, 16.0, 40.0, 80.0, 120.0, 160.0, 190.0, 199.0]   # highest 9.95 x KD
@@ -161,12 +166,32 @@ def test_concentration_series_by_count_and_span():
     r['concentration_series'] = {**r['concentration_series'], 'value': None, 'status': 'unavailable'}
     assert reason(r, 'concentration_series') == 'series_recorded_for_the_sheet' and status(r, 'concentration_series') == 'unknown'    # 12 points counted, no list: the count is recorded, the span is not known
     assert grade_trp(r)['native']['concentration_low_over_constant'] is None
-    r['quantities']['titration_point_count'] = point(7, 'count', 'n', ['s'])           # a count below the minimum fails without a list
-    assert grade_trp(r)['native']['concentration_count'] == 7 and status(r, 'concentration_series') == 'conflicting'
+    r['quantities']['titration_point_count'] = point(7, 'count', 'n', ['s'])           # a count below eight without a list: partial count, the span is not known
+    assert grade_trp(r)['native']['concentration_count'] == 7 and status(r, 'concentration_series') == 'unknown'
+    r['quantities']['titration_point_count'] = point(2, 'count', 'n', ['s'])           # two points without a list: a short count is never a conflict, and the span is not known
+    assert status(r, 'concentration_series') == 'unknown'
     r['quantities']['titration_point_count'] = point(8, 'count', 'n', ['s'])
     assert status(r, 'concentration_series') == 'unknown'
     missing(r, 'titration_point_count')
     assert status(r, 'concentration_series') == 'unknown' and grade_trp(r)['native']['concentration_count'] is None and reason(r, 'concentration_series') == 'kd_or_series_missing'
+
+
+def test_a_range_without_a_list_gives_the_span_from_its_stated_ends():
+    r = synthetic_record()                                                                          # KD 20 nM
+    r['concentration_series'] = {**r['concentration_series'], 'value': None, 'status': 'unavailable'}
+    r['quantities']['concentration_lowest'] = point(4.0, 'nM', 'lo', ['s'])
+    r['quantities']['concentration_highest'] = point(0.2, 'uM', 'hi', ['s'])
+    native = grade_trp(r)['native']
+    assert native['concentration_low_over_constant'] == pytest.approx(0.2) and native['concentration_high_over_constant'] == pytest.approx(10.0)
+    assert native['series_refs'] == ['s'] or 'span_exp_synthetic_trp_1' in native['series_refs']
+    assert reason(r, 'concentration_series') == 'series_recorded_for_the_sheet' and status(r, 'concentration_series') == 'supported'
+    r['quantities']['concentration_lowest'] = unavailable('nM', 'lo', 'not_stated_in_passage')      # only the top end is stated: it alone is recorded
+    native = grade_trp(r)['native']
+    assert native['concentration_low_over_constant'] is None and native['concentration_high_over_constant'] == pytest.approx(10.0)
+    missing(r, 'titration_point_count')                                                             # no count either: the top end alone still records the span
+    assert reason(r, 'concentration_series') == 'series_recorded_for_the_sheet'
+    r['quantities']['kd'] = unavailable('nM', 'kd', 'not_stated_in_passage')                        # no KD: the ends cannot be put over it
+    assert grade_trp(r)['native']['concentration_high_over_constant'] is None
 
 
 def test_without_a_kd_the_span_cannot_be_judged_and_a_ksv_is_never_the_constant():
@@ -208,18 +233,20 @@ def test_equilibrium():
         r['facts']['equilibrium_reached'] = fact(answer, ['s'])
         assert status(r, 'equilibrium') == expected
     r['facts']['equilibrium_reached'] = fact('unknown')
-    assert status(r, 'equilibrium') == 'unknown'                    # 5 min, but nothing says equilibrium
+    assert graded_unknown_fact(r)                                   # the grader itself: nothing says equilibrium, the time is handed to the sheet (5 min, KD 20 nM: the sheet's degree 0.746)
     r['quantities']['incubation_time'] = point(1.0, 'min', 'i', ['s'])
     graded = grade_trp(r)
     assert graded['reasons']['equilibrium'] == 'incubation_recorded_for_the_sheet' and graded['native']['incubation_min'] == 1.0 and graded['native']['incubation_refs'] == ['s']
     assert graded['criteria']['equilibrium'] == {'status': 'unknown', 'support_refs': []}
-    assert _criterion(graded, 'equilibrium') == {'status': 'conflicting', 'support_refs': ['s']}
-    r['quantities']['incubation_time'] = point(120.0, 's', 'i', ['s'])      # 2 min exactly: allowed, so unknown
-    assert status(r, 'equilibrium') == 'unknown'
-    r['quantities']['incubation_time'] = point(90.0, 's', 'i', ['s'])       # 1.5 min
+    # 1 min, KD 20 nM: T_FAST = 5 ln2 / (1e8 x 2e-8) s = 1.733 s, T_SLOW = 1733 s; d_kon = ln(60 / 1.733) / ln(1000) = 0.513, d_floor = 1 / 2: degree 0.5, never conflicting by the floor
+    sheet = _criterion(graded, 'equilibrium')
+    assert sheet['status'] == 'supported' and sheet['degree'] == pytest.approx(0.5) and sheet['support_refs'] == ['s', 'span_exp_synthetic_trp_1']
+    r['quantities']['incubation_time'] = point(120.0, 's', 'i', ['s'])      # 2 min: floor 1, d_kon 0.613: supported
+    assert status(r, 'equilibrium') == 'supported'
+    r['quantities']['incubation_time'] = point(1.0, 's', 'i', ['s'])        # 1 s, shorter than T_FAST = 1.733 s: even the fastest association has not equilibrated
     assert status(r, 'equilibrium') == 'conflicting'
-    r['quantities']['incubation_time'] = point(1.0, 'h', 'i', ['s'])
-    assert status(r, 'equilibrium') == 'unknown'
+    r['quantities']['incubation_time'] = point(1.0, 'h', 'i', ['s'])        # an hour: past T_SLOW (28.9 min), full
+    assert _criterion(grade_trp(r), 'equilibrium')['degree'] == 1.0
 
 
 def test_fit_model_a_stern_volmer_fit_gives_ksv_not_a_kd():
@@ -240,7 +267,9 @@ def test_replicates():
     graded = grade_trp(r)                                                                     # the count and the independence are recorded, the sheet judges them
     assert graded['reasons']['replicates'] == 'replicate_count_recorded_for_the_sheet' and graded['criteria']['replicates']['status'] == 'unknown'
     assert graded['native']['replicate_count'] == 2 and graded['native']['replicate_independent'] == 'yes' and graded['native']['replicate_refs']
-    assert status(r, 'replicates') == 'conflicting'
+    assert status(r, 'replicates') == 'supported'                                            # two independent titrations: partial credit below the researched three
+    r['quantities']['replicate_count'] = point(1, 'count', 'n', ['s'])
+    assert status(r, 'replicates') == 'supported'                                            # one titration: partial credit sqrt(1 / 3), never conflicting for a stated count
     r['quantities']['replicate_count'] = point(3, 'count', 'n', ['s'])
     assert status(r, 'replicates') == 'supported'
     r['facts']['independent_titrations'] = fact('no', ['s'])                                 # a stated 'no' is a fact the grader judges

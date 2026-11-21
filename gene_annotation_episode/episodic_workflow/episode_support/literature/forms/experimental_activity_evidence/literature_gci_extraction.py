@@ -8,7 +8,8 @@ units, facts and vocabularies). The model gives only the quote of each stated fi
 span, and a quote that does not occur in the chunk exactly once is refused.
 
 Differences from the other types that come from the form: concentrations may be in pM, the surface mass (response
-and immobilization level) is in pg/mm2, ng/mm2 or RU, the form has a chip type (a controlled list of chip surface
+and immobilization level) is in pg/mm2, ng/mm2 or RU, the analyte and ligand masses are in kDa with a dimensionless
+stoichiometry (for the theoretical maximum response), the dissociation time is in s or min, the form has a chip type (a controlled list of chip surface
 chemistries) and the GCI fit models, and a fact that repeated-pulse (waveRAPID) kinetics was used. Every number must
 be above 0. Fields not extracted (``NOT_EXTRACTED``): the identity references (``experiment_ref``, ``source_ref``,
 ``assertion_ref``) are given by the caller and the four preparation references (``preparations``) are references to
@@ -40,6 +41,10 @@ MEANING = {
     'response_max': 'The maximum binding response, the surface mass signal in pg/mm2, ng/mm2 or response units (RU).',
     'kd_spread': 'The reported uncertainty of the KD given in the kd field (its standard error, standard deviation or confidence interval half-width), in a concentration unit. An uncertainty reported for any other value, such as the steady-state KD, is not this field.',
     'immobilization_level': 'The amount of partner immobilized or captured on the chip surface, in pg/mm2, ng/mm2 or response units (RU).',
+    'analyte_mass': 'The molecular mass of the analyte (the protein in the flow), in kDa, as the passage states it for this experiment.',
+    'ligand_mass': 'The molecular mass of the partner immobilized or captured on the chip, in kDa, as the passage states it for this experiment.',
+    'stoichiometry': 'The binding stoichiometry the passage states for this experiment, as analyte molecules per immobilized molecule (for example one analyte molecule per immobilized molecule is 1). Stated only when the passage gives the binding ratio itself; the name of a fitting model alone (for example a 1:1 model) is not that statement.',
+    'dissociation_time': 'The length of the dissociation phase (the time buffer alone flowed over the surface after the analyte injection, or the stated dissociation time), in seconds or minutes.',
     'replicate_count': 'The number of replicate experiments the passage reports (a whole number).',
     SERIES: 'The analyte concentrations that were injected, as a list of numbers in one unit. A single concentration that the passage says was injected (once or in repeated pulses) is a list of one number.',
     SPREAD_KIND: 'What the reported KD uncertainty is.',

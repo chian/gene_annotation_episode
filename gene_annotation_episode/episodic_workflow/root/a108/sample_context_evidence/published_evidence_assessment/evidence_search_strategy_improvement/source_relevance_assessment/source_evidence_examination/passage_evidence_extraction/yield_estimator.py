@@ -1,8 +1,11 @@
 """Continuation from the commissioned task, carried from the old ``yield_estimator.py``
 (``yield_controller`` -> ``_private_yield_controller``; README 7b).
 
-``verified_source_leads`` accumulates (old ``YieldController``, now ``AccumulationYieldController``): one credit unit
-per verified source, without limit. Every other task is a finite commission (old ``_FiniteLiteratureYieldController``
+``verified_source_leads`` accumulates (old ``YieldController``, now ``AccumulationYieldController`` with
+``FIXED_CONTROL`` and ``items=None``, nano-graphrag's EstimatorController): one credit unit per verified source, and
+no cost. After 8 units attempted and 4 observed it fits nano-graphrag's yield model; a unit is flat when the upper
+bound of the expected next marginal (hypervolume) credit is at or below gamma (fixed, 0.06); it stops after 4 flat
+units in a row. No item count is passed, so the input list does not stop it. Every other task is a finite commission (old ``_FiniteLiteratureYieldController``
 with ``_RemainingCommissionedCredit``, now ``CompletionYieldController``): the target is the task's ``credit_unit``
 (the old ``maximum_credit``: one answer to the commission), read from the parent input. The cost is the old task
 cutoff, now the episode's setting; the parameters are its settings. The old ``None`` (no private yield binding) and

@@ -1,4 +1,5 @@
 """SPA grader: each criterion's rule on records, with the arithmetic worked by hand."""
+import math
 import pytest
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_spa_record import fact, point, unavailable
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_spa_converter import _criterion
@@ -257,32 +258,97 @@ def test_the_nonspecific_excess_is_the_stated_fold_else_the_concentration_over_t
     assert grade_spa(r)['native']['nonspecific_excess_ratio'] == 100.0 and grade_spa(r)['native']['nonspecific_excess_refs'] == ['s'] and status(r, 'nonspecific_excess') == 'supported'
     r['quantities']['nonspecific_excess'] = point(5.0, 'ratio', 'e', ['s'])
     assert status(r, 'nonspecific_excess') == 'conflicting'
-    missing(r, 'nonspecific_excess')                                                       # 1000 nM / 2 nM = 500
-    assert grade_spa(r)['native']['nonspecific_excess_ratio'] == 500.0 and status(r, 'nonspecific_excess') == 'supported'
+    missing(r, 'nonspecific_excess')                                                       # 1000 nM over the ligand's own affinity 2.2 nM
+    missing(r, 'nonspecific_ligand_affinity')                                              # no own affinity, but the fact says it is the unlabelled radioligand: over the KD
+    assert grade_spa(r)['native']['nonspecific_excess_ratio'] == 500.0 and status(r, 'nonspecific_excess') == 'supported'     # 1000 nM / 2 nM = 500
     r['quantities']['nonspecific_ligand_concentration'] = point(0.4, 'uM', 'c', ['s'])     # 400 nM / 2 nM = 200
     assert grade_spa(r)['native']['nonspecific_excess_ratio'] == 200.0 and status(r, 'nonspecific_excess') == 'supported'
     r['quantities']['nonspecific_ligand_concentration'] = point(0.01, 'uM', 'c', ['s'])    # 10 nM / 2 nM = 5
     assert grade_spa(r)['native']['nonspecific_excess_ratio'] == 5.0 and status(r, 'nonspecific_excess') == 'conflicting'
     missing(r, 'kd')
+    assert (status(r, 'nonspecific_excess'), reason(r, 'nonspecific_excess')) == ('unknown', 'excess_reference_not_given')
+    missing(r, 'nonspecific_ligand_concentration')
     assert (status(r, 'nonspecific_excess'), reason(r, 'nonspecific_excess')) == ('unknown', 'excess_not_given')
+
+
+def test_the_excess_is_measured_against_the_unlabelled_ligands_own_affinity_never_against_another_ligands_kd():
+    r = synthetic_record()
+    missing(r, 'nonspecific_excess')                                                       # 1000 nM over its own affinity 2.2 nM = 454.5
+    graded = grade_spa(r)
+    assert graded['native']['nonspecific_excess_ratio'] == pytest.approx(1000 / 2.2) and graded['native']['nonspecific_excess_refs']
+    r['quantities']['nonspecific_ligand_affinity'] = point(125.0, 'nM', 'a', ['s_affinity'])  # another ligand, weaker than the radioligand: 1000 / 125 = 8, not 500
+    graded = grade_spa(r)
+    assert graded['native']['nonspecific_excess_ratio'] == pytest.approx(8.0) and 's_affinity' in graded['native']['nonspecific_excess_refs'] and status(r, 'nonspecific_excess') == 'conflicting'
+    missing(r, 'nonspecific_ligand_affinity')
+    r['facts']['nonspecific_ligand_is_radioligand'] = fact('no', ['s'])                    # another ligand with no affinity given: the radioligand KD is the wrong constant
+    assert (status(r, 'nonspecific_excess'), reason(r, 'nonspecific_excess')) == ('unknown', 'excess_reference_not_given')
+    r['facts']['nonspecific_ligand_is_radioligand'] = fact('unknown')                      # identity not stated: not assumed
+    assert (status(r, 'nonspecific_excess'), reason(r, 'nonspecific_excess')) == ('unknown', 'excess_reference_not_given')
+
+
+def test_the_incubation_over_the_association_half_time_is_recorded_when_the_fact_is_not_stated():
+    r = synthetic_record()                                                                 # 120 min incubation, half-time 4 min
+    r['facts']['equilibrium_reached'] = fact('unknown')
+    graded = grade_spa(r)
+    assert graded['reasons']['equilibrium'] == 'incubation_over_half_time_recorded_for_the_sheet' and graded['native']['incubation_over_half_time'] == pytest.approx(30.0)
+    assert graded['native']['half_time_refs'] and graded['criteria']['equilibrium']['status'] == 'unknown' and status(r, 'equilibrium') == 'supported'
+    r['quantities']['association_half_time'] = point(1.0, 'h', 'h', ['s'])                 # 60 min
+    assert grade_spa(r)['native']['incubation_over_half_time'] == pytest.approx(2.0)
+    r['facts']['equilibrium_reached'] = fact('yes', ['s'])                                 # the stated fact outranks the numbers
+    assert reason(r, 'equilibrium') == 'facts_answered_yes'
+    missing(r, 'association_half_time')
+    r['facts']['equilibrium_reached'] = fact('unknown')
+    assert reason(r, 'equilibrium') == 'incubation_recorded_for_the_sheet'
 
 
 def test_the_equilibrium_fact_then_a_short_incubation():
     r = synthetic_record()
+    missing(r, 'association_half_time')                                                    # no time course stated: the incubation alone
     r['facts']['equilibrium_reached'] = fact('unknown')
     assert reason(r, 'equilibrium') == 'incubation_recorded_for_the_sheet' and grade_spa(r)['native']['incubation_min'] == 120.0 and grade_spa(r)['native']['incubation_refs'] == ['span_exp_synthetic_spa_1']
-    assert grader_status(r, 'equilibrium') == 'unknown' and status(r, 'equilibrium') == 'unknown'      # a 120 min incubation is not short
-    r['quantities']['incubation_time'] = point(29.0, 'min', 'i', ['s'])
-    assert grader_status(r, 'equilibrium') == 'unknown' and status(r, 'equilibrium') == 'conflicting' and _criterion(grade_spa(r), 'equilibrium')['support_refs'] == ['s']
-    r['quantities']['incubation_time'] = point(30.0, 'min', 'i', ['s'])                    # exactly the sheet's minimum
-    assert status(r, 'equilibrium') == 'unknown'
-    r['quantities']['incubation_time'] = point(0.4, 'h', 'i', ['s'])                       # 24 min
+    assert grader_status(r, 'equilibrium') == 'unknown' and grade_spa(r)['native']['kd_nM'] == 2.0 and grade_spa(r)['native']['kd_refs'] == ['span_exp_synthetic_spa_1']      # the KD handed with its refs
+    # KD 2 nM: T_FAST = 5 ln2 / (1e8 * 2e-9) = 17.3287 s = 0.28881 min; d_kon = ln(t / 0.28881) / ln(1000) (ln 1000 = 6.90776); d_floor = min(1, t / 30)
+    verdict = _criterion(grade_spa(r), 'equilibrium')                                      # 120 min: ln(415.50) = 6.02942, d_kon 0.87284, d_floor 1
+    assert verdict['status'] == 'supported' and verdict['degree'] == pytest.approx(0.87284, abs=1e-4) and 'span_exp_synthetic_spa_1' in verdict['support_refs']
+    r['quantities']['incubation_time'] = point(29.0, 'min', 'i', ['s'])                    # d_kon ln(100.41) / ln(1000) = 0.66726, d_floor 0.96667
+    verdict = _criterion(grade_spa(r), 'equilibrium')
+    assert grader_status(r, 'equilibrium') == 'unknown' and verdict['status'] == 'supported' and verdict['degree'] == pytest.approx(0.66726, abs=1e-4) and 's' in verdict['support_refs']
+    r['quantities']['incubation_time'] = point(30.0, 'min', 'i', ['s'])                    # exactly the floor: d_floor 1, d_kon ln(103.875) / ln(1000) = 0.67215
+    assert _criterion(grade_spa(r), 'equilibrium')['degree'] == pytest.approx(0.67215, abs=1e-4)
+    r['quantities']['incubation_time'] = point(0.4, 'h', 'i', ['s'])                       # 24 min: d_floor 0.8, d_kon ln(83.10) / ln(1000) = 0.63988: the smaller
+    assert _criterion(grade_spa(r), 'equilibrium')['degree'] == pytest.approx(0.63988, abs=1e-4)
+    r['quantities']['incubation_time'] = point(5.0, 'min', 'i', ['s'])                     # d_floor 5 / 30 = 0.16667 is the smaller (d_kon 0.41278); never conflicting by the floor
+    assert _criterion(grade_spa(r), 'equilibrium')['degree'] == pytest.approx(1 / 6)
+    r['quantities']['incubation_time'] = point(0.5, 'min', 'i', ['s'])                     # d_floor 0.016667; d_kon 0.0795
+    assert _criterion(grade_spa(r), 'equilibrium')['degree'] == pytest.approx(0.5 / 30)
+    r['quantities']['incubation_time'] = point(0.2, 'min', 'i', ['s'])                     # below T_FAST 0.28881: not even the fastest plausible association has equilibrated
+    assert status(r, 'equilibrium') == 'conflicting' and _criterion(grade_spa(r), 'equilibrium')['support_refs'] == ['s', 'span_exp_synthetic_spa_1']
+    r['quantities']['incubation_time'] = point(5 * math.log(2) / 0.2 / 60, 'min', 'i', ['s'])      # exactly T_FAST: d_kon 0, the zero end
     assert status(r, 'equilibrium') == 'conflicting'
+    r['quantities']['incubation_time'] = point(16.0, 'h', 'i', ['s'])                      # 960 min: ln(3323.7) = 8.109 > ln 1000, d_kon clipped to 1, d_floor 1
+    assert _criterion(grade_spa(r), 'equilibrium')['degree'] == 1.0
+    r['quantities']['incubation_time'] = point(0.4, 'h', 'i', ['s'])
+    missing(r, 'kd')                                                                       # no KD, no scale: unknown, short or long
+    assert (status(r, 'equilibrium'), grade_spa(r)['native']['kd_refs']) == ('unknown', [])
+    r['quantities']['incubation_time'] = point(2.0, 'min', 'i', ['s'])
+    assert status(r, 'equilibrium') == 'unknown'
     missing(r, 'incubation_time')
     assert (grader_status(r, 'equilibrium'), reason(r, 'equilibrium')) == ('unknown', 'fact_unknown')
+    r = synthetic_record(kd=0.001)                                                         # a 1 pM binder: T_FAST = 3.46574 / (1e8 * 1e-12) s = 34657.4 s = 577.62 min
+    missing(r, 'association_half_time')
+    r['facts']['equilibrium_reached'] = fact('unknown')
+    assert status(r, 'equilibrium') == 'conflicting'                                       # 120 min
+    r['quantities']['incubation_time'] = point(16.0, 'h', 'i', ['s'])                      # 960 min: ln(960 / 577.62) / ln(1000) = 0.50783 / 6.90776 = 0.07351
+    assert _criterion(grade_spa(r), 'equilibrium')['degree'] == pytest.approx(0.07351, abs=1e-4)
+    r = synthetic_record(kd=1000.0)                                                        # a 1 uM binder: T_FAST 0.0005776 min, T_SLOW 0.5776 min
+    missing(r, 'association_half_time')
+    r['facts']['equilibrium_reached'] = fact('unknown')
+    assert _criterion(grade_spa(r), 'equilibrium')['degree'] == 1.0                        # 120 min
+    r['quantities']['incubation_time'] = point(15.0, 'min', 'i', ['s'])                    # only the floor binds: 15 / 30
+    assert _criterion(grade_spa(r), 'equilibrium')['degree'] == pytest.approx(0.5)
+    r = synthetic_record()
+    missing(r, 'association_half_time')
     r['quantities']['incubation_time'] = point(0.4, 'h', 'i', ['s'])
-    r['quantities']['incubation_time'] = point(16.0, 'h', 'i', ['s'])                      # 960 min: long, so not conflicting, and not stated: unknown
-    assert status(r, 'equilibrium') == 'unknown'
     r['facts']['equilibrium_reached'] = fact('yes', ['s'])                                 # the stated fact outranks the short time
     r['quantities']['incubation_time'] = point(0.4, 'h', 'i', ['s'])
     assert status(r, 'equilibrium') == 'supported'
@@ -298,27 +364,35 @@ def test_the_series_must_have_enough_points_and_span_the_kd():
     assert status(r, 'radioligand_range') == 'supported'
     r['concentration_series']['value'] = [0.5, 1.0, 2.0, 4.0, 8.0, 16.0, 32.0, 64.0]      # 8 points: lowest 0.5 nM = 0.25 x the KD (the sheet's full-agreement limit), highest 32 x
     assert status(r, 'radioligand_range') == 'supported' and _criterion(grade_spa(r), 'radioligand_range')['degree'] == 1.0
-    r['concentration_series']['value'] = [1.0, 2.0, 4.0, 8.0, 16.0, 32.0, 64.0, 128.0]     # lowest 0.5 x the KD: partial (0.5 - 1.0 on the way to the zero limit of 1.0)
-    assert grade_spa(r)['native']['concentration_low_over_kd'] == 0.5 and _criterion(grade_spa(r), 'radioligand_range')['degree'] == pytest.approx((1.0 - 0.5) / (1.0 - 0.25))
+    r['concentration_series']['value'] = [1.0, 2.0, 4.0, 8.0, 16.0, 32.0, 64.0, 128.0]     # lowest 0.5 x the KD: partial, linear in the occupancy from 0.2 (0.25 x) to 0.5 (1 x): occupancy 1/3
+    assert grade_spa(r)['native']['concentration_low_over_kd'] == 0.5 and _criterion(grade_spa(r), 'radioligand_range')['degree'] == pytest.approx((1 / 3 - 0.5) / (0.2 - 0.5))
     r['concentration_series']['value'] = [2.0, 4.0, 8.0, 16.0, 32.0, 64.0, 128.0, 256.0]    # lowest at the KD: conflicting
     assert status(r, 'radioligand_range') == 'conflicting'
     r['concentration_series']['value'] = [0.5, 1.0, 2.0, 4.0, 8.0, 9.0, 9.5, 10.0]         # highest 10 nM = 5 x the KD (full agreement)
     assert status(r, 'radioligand_range') == 'supported' and _criterion(grade_spa(r), 'radioligand_range')['degree'] == 1.0
-    r['concentration_series']['value'] = [0.5, 1.0, 2.0, 2.5, 3.0, 3.5, 3.8, 4.0]          # highest 2 x the KD: partial, 0.25
-    assert grade_spa(r)['native']['concentration_high_over_kd'] == 2.0 and _criterion(grade_spa(r), 'radioligand_range')['degree'] == pytest.approx(0.25)
+    r['concentration_series']['value'] = [0.5, 1.0, 2.0, 2.5, 3.0, 3.5, 3.8, 4.0]          # highest 2 x the KD: partial, linear in the occupancy from 0.5 (1 x) to 5/6 (5 x): occupancy 2/3
+    assert grade_spa(r)['native']['concentration_high_over_kd'] == 2.0 and _criterion(grade_spa(r), 'radioligand_range')['degree'] == pytest.approx((2 / 3 - 0.5) / (5 / 6 - 0.5))
     r['concentration_series']['value'] = [0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.5, 2.0]          # highest at the KD: conflicting
     assert status(r, 'radioligand_range') == 'conflicting'
-    r['concentration_series']['value'] = [0.5, 1.0, 2.0, 4.0, 8.0, 16.0, 32.0]             # 7 points: below the sheet's count minimum
-    assert status(r, 'radioligand_range') == 'conflicting' and _criterion(grade_spa(r), 'radioligand_range')['support_refs'] == ['span_exp_synthetic_spa_1'] and 'degree' not in _criterion(grade_spa(r), 'radioligand_range')
+    r['concentration_series']['value'] = [0.5, 1.0, 2.0, 4.0, 8.0, 16.0, 32.0]             # 7 points, one below the sheet's full-credit count: partial, (7 - 2) / (8 - 2)
+    assert status(r, 'radioligand_range') == 'supported' and _criterion(grade_spa(r), 'radioligand_range')['support_refs'] == ['span_exp_synthetic_spa_1'] and _criterion(grade_spa(r), 'radioligand_range')['degree'] == pytest.approx(5 / 6)
+    r['concentration_series']['value'] = [0.5, 4.0, 32.0]                                   # 3 points: one residual degree of freedom after KD and Bmax: low credit, never conflicting
+    assert status(r, 'radioligand_range') == 'supported' and _criterion(grade_spa(r), 'radioligand_range')['support_refs'] == ['span_exp_synthetic_spa_1'] and _criterion(grade_spa(r), 'radioligand_range')['degree'] == pytest.approx(1 / 6)
     r['concentration_series'] = {**r['concentration_series'], 'status': 'unavailable', 'value': None}
     assert status(r, 'radioligand_range') == 'supported'                                   # 10 stated points are enough, the stated lowest 0.1 nM and highest 51.2 nM span
     r['quantities']['titration_point_count'] = point(6, 'count', 'n', ['s'])
-    assert status(r, 'radioligand_range') == 'conflicting' and grade_spa(r)['native']['concentration_count'] == 6
+    verdict = _criterion(grade_spa(r), 'radioligand_range')
+    assert verdict['status'] == 'supported' and grade_spa(r)['native']['concentration_count'] == 6 and verdict['degree'] == pytest.approx(4 / 6) and 's' in verdict['support_refs']      # (6 - 2) / (8 - 2); the count is part of the judgement
     r['quantities']['titration_point_count'] = point(10, 'count', 'n', ['s'])
-    r['quantities']['radioligand_range_highest'] = point(9.0, 'nM', 'h', ['s'])            # 4.5 x: a degree just below 1
-    assert status(r, 'radioligand_range') == 'supported' and _criterion(grade_spa(r), 'radioligand_range')['degree'] == pytest.approx((4.5 - 1.0) / (5.0 - 1.0))
+    r['quantities']['radioligand_range_highest'] = point(9.0, 'nM', 'h', ['s'])            # 4.5 x: a degree just below 1 (occupancy scale)
+    assert status(r, 'radioligand_range') == 'supported' and _criterion(grade_spa(r), 'radioligand_range')['degree'] == pytest.approx((4.5 / 5.5 - 0.5) / (5 / 6 - 0.5))
     missing(r, 'radioligand_range_highest')                                                # the count is recorded but the span cannot be read
     assert (grader_status(r, 'radioligand_range'), reason(r, 'radioligand_range')) == ('unknown', 'concentration_series_recorded_for_the_sheet') and status(r, 'radioligand_range') == 'unknown'
+    r['quantities']['titration_point_count'] = point(5, 'count', 'n', ['s'])               # a count below full credit alone never supports the range
+    assert status(r, 'radioligand_range') == 'unknown'
+    r['quantities']['titration_point_count'] = point(3, 'count', 'n', ['s'])               # a short stated count with no readable span: unknown (a count alone never supports the range)
+    assert status(r, 'radioligand_range') == 'unknown'
+    r['quantities']['titration_point_count'] = point(10, 'count', 'n', ['s'])
     missing(r, 'titration_point_count')
     assert reason(r, 'radioligand_range') == 'kd_or_series_missing' and status(r, 'radioligand_range') == 'unknown'
 
@@ -330,8 +404,8 @@ def test_the_competition_radioligand_concentration_over_the_kd_is_recorded_for_t
     assert status(r, 'competition_radioligand_level') == 'supported'
     r['quantities']['radioligand_concentration'] = point(2.0, 'nM', 'l', ['s'])            # exactly the KD, the sheet's full-agreement limit
     assert status(r, 'competition_radioligand_level') == 'supported' and _criterion(grade_spa(r), 'competition_radioligand_level')['degree'] == 1.0
-    r['quantities']['radioligand_concentration'] = point(11.0, 'nM', 'l', ['s'])           # 5.5 x the KD: halfway to the zero limit of 10 x
-    assert _criterion(grade_spa(r), 'competition_radioligand_level')['degree'] == pytest.approx(0.5)
+    r['quantities']['radioligand_concentration'] = point(11.0, 'nM', 'l', ['s'])           # 5.5 x the KD: linear in the occupancy r / (1 + r) from 0.5 (1 x) to 10/11 (10 x)
+    assert _criterion(grade_spa(r), 'competition_radioligand_level')['degree'] == pytest.approx((5.5 / 6.5 - 10 / 11) / (0.5 - 10 / 11))
     r['quantities']['radioligand_concentration'] = point(2.0, 'uM', 'l', ['s'])            # 1000 x
     assert status(r, 'competition_radioligand_level') == 'conflicting' and 'degree' not in _criterion(grade_spa(r), 'competition_radioligand_level')
     missing(r, 'kd')
@@ -409,11 +483,12 @@ def test_replicates_are_independent_experiments_and_wells_do_not_count():
     r = synthetic_record()
     assert (grader_status(r, 'replicates'), reason(r, 'replicates')) == ('unknown', 'replicate_count_recorded_for_the_sheet')
     assert grade_spa(r)['native']['replicate_count'] == 3 and grade_spa(r)['native']['replicate_independent'] == 'yes' and status(r, 'replicates') == 'supported'
-    for count, independent, expected in ((3, 'yes', 'supported'), (10, 'yes', 'supported'), (2, 'yes', 'conflicting'), (2, 'unknown', 'conflicting'), (3, 'unknown', 'unknown')):
+    # full credit from the sheet's 3, partial below it as sqrt(n / 3) (precision of the mean, never conflicting for a stated count); a count without stated independence is unknown
+    for count, independent, expected, degree in ((3, 'yes', 'supported', 1.0), (10, 'yes', 'supported', 1.0), (2, 'yes', 'supported', (2 / 3) ** 0.5), (1, 'yes', 'supported', (1 / 3) ** 0.5), (1, 'unknown', 'unknown', None), (2, 'unknown', 'unknown', None), (3, 'unknown', 'unknown', None)):
         r['quantities']['replicate_count'] = point(count, 'count', 'n', ['s'])
         r['facts']['independent_experiments'] = fact(independent, ['s'] if independent != 'unknown' else [])
         assert status(r, 'replicates') == expected, (count, independent)
-        assert 'degree' not in _criterion(grade_spa(r), 'replicates')
+        assert _criterion(grade_spa(r), 'replicates').get('degree') == (pytest.approx(degree) if degree is not None else None), (count, independent)
     r['quantities']['replicate_count'] = point(3, 'count', 'n', ['s'])
     r['facts']['independent_experiments'] = fact('no', ['s'])
     assert (grader_status(r, 'replicates'), reason(r, 'replicates')) == ('conflicting', 'replicates_not_independent')       # a fact, judged by the grader

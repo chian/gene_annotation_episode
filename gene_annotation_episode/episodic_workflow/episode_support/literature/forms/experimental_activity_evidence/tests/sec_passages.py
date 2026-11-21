@@ -37,8 +37,8 @@ REAL = (
     'co-elute in gel filtration experiments.')
 
 SYNTHETIC = (
-    'SEC-MALS of the binding of QX-7 to its partner protein PZ-2 was done on a Superdex 200 Increase 10/300 GL column at a flow rate of 0.5 mL/min and 4 °C in a running buffer of 20 mM Tris '
-    'pH 8.0 with 150 mM NaCl, which was high enough to rule out interaction with the resin. The column was calibrated with protein standards of known size. A 100 µL sample of QX-7 and PZ-2 at '
+    'SEC-MALS of the binding of QX-7 to its partner protein PZ-2 was done on a Superdex 200 Increase 10/300 GL column (bed volume 24 mL) at a flow rate of 0.5 mL/min and 4 °C in a running buffer of 20 mM Tris '
+    'pH 8.0 with 150 mM NaCl, which was high enough to rule out interaction with the resin. The column was calibrated with protein standards of known size. A 500 µL sample of QX-7 and PZ-2 at '
     '5 µM each was injected after 30 min of incubation, and the elution was followed by light scattering. Each component was also run alone on the same column. The mixture eluted as a complex '
     'peak, earlier than either component alone: the complex peak at 11.2 mL, the larger component alone at 12.5 mL and the smaller component alone at 14.1 mL, a shift of 1.3 mL. SDS-PAGE of '
     'the fractions of the complex peak showed both proteins. The molar mass of the complex peak by MALS was 52 kDa, against a calculated mass of 54 kDa for the complex, in agreement with the '
@@ -62,9 +62,10 @@ SYNTHETIC_STATED = {
     'stoichiometry_ratio': (1, 'ratio', 'The complex has a 1:1 stoichiometry'),
     'polydispersity': (1.02, 'ratio', 'a polydispersity of 1.02'),
     'flow_rate': (0.5, 'mL/min', 'a flow rate of 0.5 mL/min'),
+    'column_volume': (24, 'mL', 'bed volume 24 mL'),
     'run_temperature': (4, 'C', 'and 4 °C'),
     'loaded_concentration': (5, 'uM', '5 µM each'),
-    'loaded_volume': (100, 'uL', 'A 100 µL sample'),
+    'loaded_volume': (500, 'uL', 'A 500 µL sample'),
     'salt_concentration': (150, 'mM', '150 mM NaCl'),
     'incubation_time': (30, 'min', 'after 30 min of incubation'),
     'replicate_count': (3, 'count', 'Three independent experiments'),
@@ -99,7 +100,7 @@ REAL_STATED = {
 }
 # The allowed set of the real model run: field -> every (value, unit) the paragraph clearly states for it. Not allowed, because the paragraph does not
 # state them: any elution volume or shift (none is given as a number), the theoretical mass of the complex (only the monomer masses are given), the smaller component's mass (three
-# values at three injection concentrations, none given as the result), the injected concentration (given in mg/mL, a unit the form does not offer), the polydispersity, the column, flow rate,
+# values at three injection concentrations, none given as the result), the injected concentration (given in mg/mL, a unit the form does not offer), the polydispersity, the column (and its volume: none is given), flow rate,
 # temperature, salt of the running buffer (the 5 mM CaCl2 and MgCl2 are divalent cations added to test an effect), incubation, the KD, replicates, calibration, resin interaction, aggregation
 # (a single peak is not a statement of it), the titration, the single-component control (running each protein alone is not that), and a statement that the MALS mass matches the complex.
 REAL_ALLOWED = {name: {(value, unit)} for name, (value, unit, _) in REAL_STATED.items()}

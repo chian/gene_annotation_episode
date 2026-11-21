@@ -12,7 +12,7 @@ Results and Methods paragraphs state.
 """
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_fcs_record import CHOICE_FIELDS, EXPERIMENT_TYPE, FACTS, QUANTITIES, VERSION, fact, point, unavailable
 
-UNITS = {'kd': 'nM', 'kd_spread': 'nM', 'labelled_concentration': 'nM', 'free_diffusion_time': 'us', 'bound_diffusion_time': 'us', 'free_diffusion_coefficient': 'um2/s', 'bound_diffusion_coefficient': 'um2/s', 'fraction_bound_maximum': 'percent', 'particle_number': 'molecules', 'structure_parameter': 'ratio', 'mass_ratio': 'ratio', 'brightness': 'kHz', 'laser_power': 'uW', 'measurement_time': 's', 'measurement_repeat_count': 'count', 'titration_point_count': 'count', 'incubation_time': 'min', 'temperature': 'C', 'replicate_count': 'count'}
+UNITS = {'kd': 'nM', 'kd_spread': 'nM', 'labelled_concentration': 'nM', 'free_diffusion_time': 'us', 'free_diffusion_time_spread': 'us', 'bound_diffusion_time': 'us', 'free_diffusion_coefficient': 'um2/s', 'bound_diffusion_coefficient': 'um2/s', 'fraction_bound_maximum': 'percent', 'particle_number': 'molecules', 'detection_volume': 'fL', 'structure_parameter': 'ratio', 'mass_ratio': 'ratio', 'brightness': 'kHz', 'laser_power': 'uW', 'measurement_time': 's', 'measurement_repeat_count': 'count', 'titration_point_count': 'count', 'incubation_time': 'min', 'temperature': 'C', 'replicate_count': 'count'}
 
 
 def blank_record(experiment_ref, source_ref, assertion_ref):
@@ -31,7 +31,7 @@ def synthetic_record(experiment_ref='exp_synthetic_fcs_1', titrant_prep='prep_ti
     refs = ['span_' + experiment_ref]
     record['spans'] = {refs[0]: {'locator': 'synthetic', 'quote': 'synthetic fixture'}}
     record['preparations'] = {'titrant_preparation_ref': titrant_prep, 'fixed_partner_preparation_ref': fixed_prep, 'dataset_ref': dataset}
-    values = {'kd': kd, 'kd_spread': spread, 'labelled_concentration': kd / 10, 'free_diffusion_time': 60.0, 'bound_diffusion_time': 108.0, 'free_diffusion_coefficient': 280.0, 'bound_diffusion_coefficient': 156.0, 'fraction_bound_maximum': 92.0, 'particle_number': 0.8, 'structure_parameter': 5.2, 'mass_ratio': 6.0, 'brightness': 12.0, 'laser_power': 5.0, 'measurement_time': 30.0, 'measurement_repeat_count': 5, 'titration_point_count': 12, 'incubation_time': 20.0, 'temperature': 25.0, 'replicate_count': 3}
+    values = {'kd': kd, 'kd_spread': spread, 'labelled_concentration': kd / 10, 'free_diffusion_time': 60.0, 'free_diffusion_time_spread': 4.0, 'bound_diffusion_time': 108.0, 'free_diffusion_coefficient': 280.0, 'bound_diffusion_coefficient': 156.0, 'fraction_bound_maximum': 92.0, 'particle_number': 0.8, 'detection_volume': 0.66, 'structure_parameter': 5.2, 'mass_ratio': 6.0, 'brightness': 12.0, 'laser_power': 5.0, 'measurement_time': 30.0, 'measurement_repeat_count': 5, 'titration_point_count': 12, 'incubation_time': 20.0, 'temperature': 25.0, 'replicate_count': 3}
     for name, value in values.items():
         record['quantities'][name] = point(value, UNITS[name], name + ':' + experiment_ref, refs, name)
     record['concentration_series'] = {**point([kd / 20 * 2 ** step for step in range(12)], 'nM', 'series:' + experiment_ref, refs, 'concentration_series')}
@@ -72,7 +72,7 @@ def real_record():
                        'span_control': {'locator': 'Results, control experiments', 'quote': 'did not lead to any appreciable change in the measured τD and the calculated fraction bound'},
                        'span_other_method': {'locator': 'Results, Measurement of Binding Affinity', 'quote': 'a value obtained by biolayer interferometry'}}
     quantities = {'kd': (5.0, 'nM', 'span_kd'), 'kd_spread': (1.0, 'nM', 'span_kd'), 'labelled_concentration': (100.0, 'pM', 'span_labelled'),
-                  'free_diffusion_time': (0.37, 'ms', 'span_free_time'), 'bound_diffusion_time': (1.2, 'ms', 'span_bound_time'),
+                  'free_diffusion_time': (0.37, 'ms', 'span_free_time'), 'free_diffusion_time_spread': (0.03, 'ms', 'span_free_time'), 'bound_diffusion_time': (1.2, 'ms', 'span_bound_time'),
                   'free_diffusion_coefficient': (90.0, 'um2/s', 'span_free_d'), 'bound_diffusion_coefficient': (30.0, 'um2/s', 'span_bound_d'),
                   'laser_power': (3.0, 'uW', 'span_power'), 'measurement_time': (180.0, 's', 'span_time'), 'measurement_repeat_count': (3, 'count', 'span_repeats'),
                   'replicate_count': (4, 'count', 'span_replicates')}

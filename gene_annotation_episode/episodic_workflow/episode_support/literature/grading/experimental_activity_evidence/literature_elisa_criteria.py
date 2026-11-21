@@ -90,8 +90,8 @@ ELISA_CRITERIA = (
     {
         'id': 'detector_range',
         'question': 'Was the signal within the linear range of the plate reader?',
-        'reads': ('facts.signal_in_linear_range', 'quantities.signal_maximum'),
-        'rule': 'The fact decides: yes supported, no fails. When it is not stated and a plateau absorbance is given, the grader records it (plateau_absorbance and plateau_refs) and leaves the judgement to the sheet; none given is unknown.',
+        'reads': ('facts.signal_in_linear_range', 'quantities.signal_maximum', 'quantities.detector_linear_limit'),
+        'rule': 'The fact decides: yes supported, no fails. When it is not stated and a plateau absorbance is given, the grader records it (plateau_absorbance and plateau_refs) together with the reader linear limit the paper states, if any (detector_linear_limit and linear_limit_refs), and leaves the judgement to the sheet; no plateau given is unknown.',
         'thresholds': (),
         'returns': (
             ('supported', 'facts_answered_yes', 'answer yes'),
@@ -104,12 +104,25 @@ ELISA_CRITERIA = (
     _one_fact('saturation', 'Did the binding curve reach a plateau within the concentrations used?', 'saturation_reached'),
     _one_fact('blank_subtraction', 'Was the signal of the blank wells (no coat, no ligand) subtracted?', 'blank_subtracted'),
     _one_fact('specificity_control', 'Was the specificity shown by a control with a non-binding protein, an uncoated well or a mutant?', 'nonspecific_binding_checked'),
-    _one_fact('wash_dissociation', 'Was dissociation of the complex during the washes considered, so that the number can be read as an apparent KD?', 'wash_dissociation_considered'),
+    {
+        'id': 'wash_dissociation',
+        'question': 'Was dissociation of the complex during the washes considered, so that the number can be read as an apparent KD?',
+        'reads': ('facts.wash_dissociation_considered', 'quantities.koff', 'quantities.wash_duration'),
+        'rule': 'The fact decides: yes supported, no fails. When it is not stated and both the dissociation rate constant and the total wash duration are given, the grader records them (koff_per_s, wash_min and wash_loss_refs) and leaves the judgement to the sheet; otherwise it is unknown.',
+        'thresholds': ('MIN_PER_UNIT',),
+        'returns': (
+            ('supported', 'facts_answered_yes', 'answer yes'),
+            ('conflicting', 'fact_answered_no', 'answer no'),
+            ('unknown', 'wash_loss_recorded_for_the_sheet', 'not stated and koff and the wash duration are given: they are recorded and the sheet judges them'),
+            ('unknown', 'fact_unknown', 'not stated and koff or the wash duration is not given'),
+            ('not_applicable', 'fact_not_applicable', 'answer not_applicable'),
+        ),
+    },
     {
         'id': 'equilibrium',
         'question': 'Was the binding at equilibrium when the plate was washed?',
         'reads': ('facts.equilibrium_reached', 'quantities.incubation_time'),
-        'rule': 'The fact decides: yes supported, no fails. When it is not stated and an incubation time is given, the grader records it (incubation_min, in minutes, and incubation_refs) and leaves the judgement to the sheet; otherwise it is unknown.',
+        'rule': 'The fact decides: yes supported, no fails. When it is not stated and an incubation time is given, the grader records it (incubation_min, in minutes, and incubation_refs, with constant_refs of the reported constant it is read against) and leaves the judgement to the sheet; otherwise it is unknown.',
         'thresholds': ('MIN_PER_UNIT',),
         'returns': (
             ('supported', 'facts_answered_yes', 'answer yes'),
@@ -152,11 +165,11 @@ ELISA_CRITERIA = (
     {
         'id': 'direct_vs_competition',
         'question': 'Do the saturation-titration KD and the competition Ki, when both are reported, agree?',
-        'reads': ('quantities.kd', 'quantities.ki', 'facts.single_estimate_method'),
-        'rule': 'With both a KD and a Ki given, the grader records the larger over the smaller (estimate_fold, at least 1) and the refs of the two (estimate_refs) and leaves the judgement to the sheet. With one missing, only this method used (single estimate stated yes) is not applicable and otherwise unknown.',
+        'reads': ('quantities.kd', 'quantities.ki', 'quantities.ic50', 'quantities.tracer_concentration', 'quantities.tracer_kd', 'facts.single_estimate_method'),
+        'rule': 'With a competition IC50, the concentration of the ligand it displaces and that ligand\'s KD given, the grader computes the Cheng-Prusoff Ki, IC50 / (1 + tracer concentration / tracer KD) (ki_cheng_prusoff_nM; arithmetic of stated numbers, not a judgement). The Ki compared is the reported Ki, else this one. With both a KD and that Ki given, the grader records the larger over the smaller (estimate_fold, at least 1) and the refs (estimate_refs); with both a reported Ki and the Cheng-Prusoff Ki, it records their fold (conversion_fold, conversion_refs); the judgement is left to the sheet. With no fold to record, only this method used (single estimate stated yes) is not applicable and otherwise unknown.',
         'thresholds': (),
         'returns': (
-            ('unknown', 'estimates_recorded_for_the_sheet', 'both are given: the fold gap is recorded and the sheet judges it'),
+            ('unknown', 'estimates_recorded_for_the_sheet', 'a fold gap (KD against the Ki, or the reported Ki against the Cheng-Prusoff Ki) is recorded and the sheet judges it'),
             ('unknown', 'kd_or_ki_missing', 'the KD or the Ki is missing and only one method is not stated'),
             ('not_applicable', 'single_estimate_method', 'the KD or the Ki is missing and only one method is stated'),
         ),

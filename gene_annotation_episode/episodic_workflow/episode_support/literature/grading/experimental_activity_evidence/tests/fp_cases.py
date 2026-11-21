@@ -11,11 +11,11 @@ what the Results paragraph states.
 """
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_fp_record import CHOICES, EXPERIMENT_TYPE, FACTS, QUANTITIES, VERSION, fact, point, unavailable
 
-UNITS = {'kd': 'nM', 'ki': 'nM', 'kd_spread': 'nM', 'ki_spread': 'nM', 'tracer_concentration': 'nM', 'signal_minimum': 'mP', 'signal_maximum': 'mP', 'total_intensity_change': 'percent', 'assay_volume': 'uL', 'incubation_time': 'min', 'temperature': 'C', 'replicate_count': 'count'}
+UNITS = {'kd': 'nM', 'ki': 'nM', 'kd_spread': 'nM', 'ki_spread': 'nM', 'ic50': 'nM', 'tracer_concentration': 'nM', 'signal_minimum': 'mP', 'signal_maximum': 'mP', 'signal_noise': 'mP','total_intensity_change': 'percent', 'assay_volume': 'uL', 'incubation_time': 'min', 'temperature': 'C', 'replicate_count': 'count'}
 
 
 def blank_record(experiment_ref, source_ref, assertion_ref):
-    return {'version': VERSION, 'experiment_type': EXPERIMENT_TYPE, 'experiment_ref': experiment_ref, 'source_ref': source_ref, 'assertion_ref': assertion_ref, 'preparations': {'titrant_preparation_ref': None, 'tracer_preparation_ref': None, 'dataset_ref': None}, 'quantities': {name: unavailable(UNITS[name], name, 'not_given_in_the_inspected_source_text') for name in QUANTITIES}, 'concentration_series': {'value': None, 'unit': 'nM', 'status': 'unavailable', 'reason': 'not_given_in_the_inspected_source_text', 'measurement_keys': [], 'source_refs': [], 'origin': 'reported', 'native_component': 'concentration_series', 'support': None}, 'assay_format': None, 'spread_kind': None, 'fit_model': None, 'plate_type': None, 'choice_support': dict.fromkeys(CHOICES), 'facts': {name: fact('unknown') for name in FACTS}, 'spans': {}}
+    return {'version': VERSION, 'experiment_type': EXPERIMENT_TYPE, 'experiment_ref': experiment_ref, 'source_ref': source_ref, 'assertion_ref': assertion_ref, 'preparations': {'titrant_preparation_ref': None, 'tracer_preparation_ref': None, 'dataset_ref': None}, 'quantities': {name: unavailable(UNITS[name], name, 'not_given_in_the_inspected_source_text') for name in QUANTITIES}, 'concentration_series': {'value': None, 'unit': 'nM', 'status': 'unavailable', 'reason': 'not_given_in_the_inspected_source_text', 'measurement_keys': [], 'source_refs': [], 'origin': 'reported', 'native_component': 'concentration_series', 'support': None}, 'assay_format': None, 'spread_kind': None, 'fit_model': None, 'plate_type': None, 'intensity_change_direction': None, 'series_kind': None, 'choice_support': dict.fromkeys(CHOICES), 'facts': {name: fact('unknown') for name in FACTS}, 'spans': {}}
 
 
 def sparse_record(experiment_ref='exp_sparse_fp', kd=20.0):

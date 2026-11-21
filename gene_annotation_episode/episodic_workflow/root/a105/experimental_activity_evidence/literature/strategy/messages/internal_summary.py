@@ -62,8 +62,9 @@ def internal_summary(view):
     records = view.records
     children = [outcome for outcome in view.outcomes if outcome['kind'] == 'child']
     # The input list (nano-graphrag's input-list paradigm): the search results known to this episode (given and
-    # acquired) that no search child has yet been handed. A result handed out is consumed and never offered again;
-    # the yield estimator ends the episode when the list is empty.
+    # acquired) that no search child has yet been handed. A result handed out is consumed and never offered again.
+    # The yield estimator passes ``items=None``, so an empty list does not stop the episode: the search child is
+    # no longer offered (``task.valid_slots``), and an accumulating task stops only by its controller's flat-unit rule.
     consumed = consumed_results(children)
     input_list = [ref for ref in search_results(parent, view.outcomes, records) if ref not in consumed]
     last = view.outcomes[-1] if view.outcomes else None

@@ -11,10 +11,10 @@ version, experiment_type ('cetsa'), experiment_ref, source_ref, assertion_ref
 preparations   ligand_preparation_ref, target_preparation_ref (the compound and the target protein, in the order the caller names them), dataset_ref: each a
                string or None (unknown). They are references to records, which the caller supplies; no passage states them. The converter hands them to the
                merger as its dependence keys (the ligand as the analyte key, the target as the other partner; there is no surface).
-quantities     engagement_ec50, engagement_ec50_spread, tm_vehicle, tm_ligand, tm_shift, isothermal_temperature, heating_time, temperature_lowest, temperature_highest,
+quantities     engagement_ec50, engagement_ec50_spread, tm_vehicle, tm_ligand, tm_shift, tm_spread, isothermal_temperature, heating_time, temperature_lowest, temperature_highest,
                temperature_count, compound_concentration_lowest, compound_concentration_highest, concentration_count, compound_incubation_time, replicate_count: one operand each.
                Units: engagement_ec50 and engagement_ec50_spread pM, nM, uM or mM (the EC50 of the isothermal dose-response, or an apparent affinity that the passage derives from it, and its spread);
-               tm_vehicle, tm_ligand and tm_shift 'C' (the melting temperature without and with the compound, and the shift of the melt curve by the compound: the stabilisation, above 0);
+               tm_vehicle, tm_ligand and tm_shift 'C' (the melting temperature without and with the compound, and the shift of the melt curve by the compound: the stabilisation, above 0); tm_spread 'C' (the standard deviation of the melting temperature over replicates: the sheet compares the shift with the scatter of the Tm);
                isothermal_temperature 'C' (the one temperature of an ITDR); heating_time 's' or 'min'; temperature_lowest and temperature_highest 'C' (the ends of the temperature range of a melt curve);
                temperature_count 'count' (the number of temperatures of the melt curve); compound_concentration_lowest and compound_concentration_highest pM, nM, uM or mM (the ends of the concentration series);
                concentration_count 'count' (the number of compound concentrations of the series); compound_incubation_time 'min' or 'h' (how long the sample was with the compound before the heating);
@@ -53,15 +53,15 @@ def fact(answer, refs=(), support='direct'):
 
 VERSION = 'a105_cetsa_record_v1'
 EXPERIMENT_TYPE = 'cetsa'
-QUANTITIES = ('engagement_ec50', 'engagement_ec50_spread', 'tm_vehicle', 'tm_ligand', 'tm_shift', 'isothermal_temperature', 'heating_time', 'temperature_lowest', 'temperature_highest', 'temperature_count', 'compound_concentration_lowest', 'compound_concentration_highest', 'concentration_count', 'compound_incubation_time', 'replicate_count')
+QUANTITIES = ('engagement_ec50', 'engagement_ec50_spread', 'tm_vehicle', 'tm_ligand', 'tm_shift', 'tm_spread', 'isothermal_temperature', 'heating_time', 'temperature_lowest', 'temperature_highest', 'temperature_count', 'compound_concentration_lowest', 'compound_concentration_highest', 'concentration_count', 'compound_incubation_time', 'replicate_count')
 PREPARATION_KEYS = ('ligand_preparation_ref', 'target_preparation_ref', 'dataset_ref')
 SAMPLE_FORMATS = ('intact_cells', 'cell_lysate', 'tissue_or_animal')
 EXPERIMENT_FORMATS = ('melt_curve', 'itdr', 'melt_curve_and_itdr')
 READOUTS = ('western_blot', 'alphascreen', 'mass_spectrometry', 'other')
 SPREAD_KINDS = ('standard_error', 'standard_deviation', 'confidence_interval')
 YES_NO = ('yes', 'no', 'unknown', 'not_applicable')
-FACTS = {'target_engagement_shown': YES_NO, 'vehicle_control_done': YES_NO, 'loading_control_used': YES_NO, 'melt_curve_measured': YES_NO, 'isothermal_temperature_in_window': YES_NO, 'dose_dependent_shown': YES_NO, 'negative_control_done': YES_NO, 'specificity_control_done': YES_NO, 'cell_integrity_checked': YES_NO, 'total_target_level_controlled': YES_NO, 'independent_experiments': YES_NO}
+FACTS = {'target_engagement_shown': YES_NO, 'vehicle_control_done': YES_NO, 'loading_control_used': YES_NO, 'melt_curve_measured': YES_NO, 'isothermal_temperature_in_window': YES_NO, 'dose_dependent_shown': YES_NO, 'negative_control_done': YES_NO, 'specificity_control_done': YES_NO, 'cell_integrity_checked': YES_NO, 'total_target_level_controlled': YES_NO, 'independent_experiments': YES_NO, 'tm_spread_over_independent_experiments': YES_NO}
 
 CONCENTRATION_UNITS = ('pM', 'nM', 'uM', 'mM')
 # The unit vocabulary of each quantity: the units a record may carry.
-UNITS = {'engagement_ec50': CONCENTRATION_UNITS, 'engagement_ec50_spread': CONCENTRATION_UNITS, 'tm_vehicle': ('C',), 'tm_ligand': ('C',), 'tm_shift': ('C',), 'isothermal_temperature': ('C',), 'heating_time': ('s', 'min'), 'temperature_lowest': ('C',), 'temperature_highest': ('C',), 'temperature_count': ('count',), 'compound_concentration_lowest': CONCENTRATION_UNITS, 'compound_concentration_highest': CONCENTRATION_UNITS, 'concentration_count': ('count',), 'compound_incubation_time': ('min', 'h'), 'replicate_count': ('count',)}
+UNITS = {'engagement_ec50': CONCENTRATION_UNITS, 'engagement_ec50_spread': CONCENTRATION_UNITS, 'tm_vehicle': ('C',), 'tm_ligand': ('C',), 'tm_shift': ('C',), 'tm_spread': ('C',), 'isothermal_temperature': ('C',), 'heating_time': ('s', 'min'), 'temperature_lowest': ('C',), 'temperature_highest': ('C',), 'temperature_count': ('count',), 'compound_concentration_lowest': CONCENTRATION_UNITS, 'compound_concentration_highest': CONCENTRATION_UNITS, 'concentration_count': ('count',), 'compound_incubation_time': ('min', 'h'), 'replicate_count': ('count',)}

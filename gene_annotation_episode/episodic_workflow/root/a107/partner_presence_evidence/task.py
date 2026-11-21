@@ -1,7 +1,7 @@
 """The task: the model investigates the supplied target under the pinned A107 evidence axis, thought pattern and
 selected tools. It looks up library options and tool instructions, runs the selected tools, commits scientific
 interpretations with the reasoning tool, prepares an alternative process for a new child, commissions a child
-(itself, literature, launch, results, monitor or HPC). The prose report tool is not carried: the return is the controlled
+(itself, launch, results, monitor or HPC). The prose report tool is not carried: the return is the controlled
 finding code reads from the A107 scoring sheet. The task
 always offers a unit and never ends the Episode: its yield controller does.
 
@@ -61,10 +61,9 @@ from .goal import GOAL
 from .messages.msg_to_child import SELECTABLE
 from .messages.read_from_parent import TOOL_SELECTOR
 
-# The old child roles by slot (the old ``child_roles``): the head itself, literature, launch, results, monitor and
-# HPC.
+# The old child roles by slot (the old ``child_roles``, without the removed literature child): the head itself,
+# launch, results, monitor and HPC.
 CHILD_SLOTS = {'partner_presence_evidence': 'partner_presence_evidence',
-               'literature': 'partner_presence_evidence/published_evidence_assessment',
                'launch': 'partner_presence_evidence/execution_job_submission',
                'results': 'partner_presence_evidence/execution_result_acquisition',
                'monitor': 'partner_presence_evidence/execution_progress_assessment',
@@ -121,7 +120,7 @@ INSTRUCTION_VERSION_TEXT = (
     "child's objective, evidence, constraints and context. Children own their iterative choices. The configured "
     'controller owns continuation. Unchanged observations do not manufacture progress.')
 RETURN_GUIDANCE = ('\nWhat returns to your parent is your credit and controlled features code reads from the A107 scoring '
-                   'sheet: the literature partner sheets your literature children graded, side by side with the native '
+                   'sheet: the partner sheets your children returned, side by side with the native '
                    'components and per-use qualifications you hold; no prose of yours is returned. Selecting a tool or a '
                    'child does not end your work: only the numerical controller does.')
 EVIDENCE_THROUGH_CHILDREN = (
@@ -143,9 +142,6 @@ PROCESS_REVISE_DESCRIPTION = (
 CHILD_OPTIONS = {
     'partner_presence_evidence': 'A new A107 investigation with a prepared alternative process (process.revise): its '
                                  'own thought pattern and tools, over the evidence and constraints you name.',
-    'literature': 'Investigate which published evidence bears on the partner question: reported partner removal, '
-                  'addback and coexpression evidence from named sources; returns its typed finding and, when '
-                  'selected, the partner cells of its committed sheets.',
     'launch': 'Choose and commission the permitted concrete execution requests on an explicit resource_id (API, '
               'local or HPC); returns the original handoff records of the launched jobs.',
     'results': 'Acquire the selected execution results of a handed-off job (bounded status or file/page reads); '
@@ -169,9 +165,6 @@ CHILD_FIELDS = {
     'partner_presence_evidence': ({'process_selection': OBJECT, 'revision_origin': OBJECT, 'evidence_refs': REFS,
                                    'constraints': OBJECT, 'context': OBJECT},
                                   ['process_selection', 'evidence_refs', 'constraints', 'context']),
-    'literature': ({'question_context_refs': REFS, 'source_refs': REFS,
-                    'partner_components': {'type': 'array', 'items': TEXT, 'uniqueItems': True}},
-                   ['question_context_refs', 'source_refs']),
     'launch': ({'requests': OBJECT, 'immutable_input_versions': {'type': 'array', 'items': OBJECT},
                 'constraints': OBJECT, 'launch_instructions': OBJECT, 'record_refs': REFS,
                 'received_handoff_resources': {'type': 'array', 'items': TEXT, 'uniqueItems': True}},
@@ -185,8 +178,7 @@ CHILD_FIELDS = {
 }
 # The arguments of each slot that name Store records the head must hold (an answer naming an unheld record is an
 # invalid answer: the provisional held-record check of ``action``, never a check of a commission).
-RECORD_ARGUMENTS = {'partner_presence_evidence': ('evidence_refs',),
-                    'literature': ('question_context_refs', 'source_refs'), 'launch': ('record_refs',),
+RECORD_ARGUMENTS = {'partner_presence_evidence': ('evidence_refs',), 'launch': ('record_refs',),
                     'results': ('record_refs', 'initial_result_refs'), 'monitor': (),
                     'hpc': ('commission_source_ref', 'received_record_refs', 'input_refs')}
 

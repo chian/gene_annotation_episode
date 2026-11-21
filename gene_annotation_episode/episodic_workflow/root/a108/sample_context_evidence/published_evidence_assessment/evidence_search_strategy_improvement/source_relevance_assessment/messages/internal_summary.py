@@ -27,7 +27,20 @@ its committed records, findings, sheets and cells join the own ones. Child logs 
 
 A child's return is controlled data only (credit, the features of its sheets with their references, the lead count
 and lead sources, the screening counts, the requested cell rows by reference); the records it returned reach this
-episode's code, never its model: the received-fact display leaves them out."""
+episode's code, never its model: the received-fact display leaves them out.
+
+The search step's Jev measurement (nano-graphrag ``web_search_binding``: ``assess_page_candidate`` and
+``SearchPageProposer``): every search result of the assignment is a possible source examination child with its provider
+rank (its position in ``search_result_refs``, the order the search returned it), a title and a description read from its
+source record. ``jev_search_goal`` is the immutable Search Goal Jev measures them against (the runner's goal record of
+this episode, as nano-graphrag's ``goal.as_record()``, with this episode's grain, what the commission requests and the
+subject of the proposed annotation); ``search_assessment_ref`` is the assessment the code-decided
+``assess_search_results`` unit holds, and ``search_planner_context`` is that assessment over the unconsumed search
+results only with the measured outcomes of the prior source examination children (``prior_page_outcomes``)."""
+import json
+
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.search_result_assessment import (
+    search_planner_context)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.sample_context_evidence.literature_context_findings import (
     merged_findings, own_cell_refs, own_findings, screening_return)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.sample_context_evidence.literature_context_findings import (
@@ -38,7 +51,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.sample_co
     ContractError)
 
 from ..credit import credit_binding, lead_dispositions, lead_return, screening_answers
-from ..goal import GOAL
+from ..goal import BINDING_PATH, GOAL, RESULT, UNIT
 from .read_from_parent import REQUESTED_AGGREGATION, REQUESTED_GRADING
 
 OUTCOME_PAGE_SIZE = 8        # the old configuration outcome_page_size
@@ -112,15 +125,93 @@ def source_inputs(parent, custody, children):
     return consumed, [ref for ref in listed if ref not in consumed]
 
 
+ASSESS = 'assess_search_results'
+DESCRIPTION_KEYS = ('provider', 'accession', 'uri', 'version', 'retrieved_at')
+
+
+def search_result_candidates(search_result_refs, records):
+    """Each search result as a possible source examination child (nano-graphrag's provider result): its id (the source
+    ref the planner selects), its provider rank (1-based position in the order the search returned it), a title (the
+    source's accession, else its uri, else its provider) and a description (the source record's provider metadata, as
+    ``key=value``)."""
+    candidates = []
+    for rank, ref in enumerate(search_result_refs, start=1):
+        source = records.get(ref)
+        title = source.get('accession') or source.get('uri') or source.get('provider') or ''
+        description = '; '.join(f'{key}={source[key]}' for key in DESCRIPTION_KEYS if source.get(key))
+        candidates.append({'result_id': ref, 'provider_rank': rank, 'title': str(title), 'description': description})
+    return candidates
+
+
+def label_of(records, ref):
+    record = records.get(ref)
+    return record.get('label') or record.get('name') or ref
+
+
+def question_context(records, ref):
+    """One record giving the assigned question its context, as the Search Goal names it: its record type, its context
+    type and its name or label, where it has them."""
+    record = records.get(ref)
+    entry = {'record_type': record.get('record_type'), 'context_type': record.get('context_type'),
+             'name': record.get('name') or record.get('label')}
+    return {key: value for key, value in entry.items() if value is not None}
+
+
+def search_goal(view, parent, records):
+    """The immutable Search Goal Jev measures every result against (nano-graphrag: ``EpisodeGoal.for_grain(search_grain,
+    parent=strategy goal, objective=...)`` and ``goal.as_record()``), derived from the commission. The runner already
+    built this episode's goal as the child of its commissioner's goal with the commission's objective (``view.goal``);
+    its record is carried as it is, with this episode's grain (binding path, unit, result) and what the commission
+    requests: the commissioned A108 task (its key, kind and answer kind), the A108 grading and aggregation components the
+    parent wants returned, the records giving the question its context, and the subject of the proposed annotation (its
+    predicate, the labels of its subjects and its value)."""
+    task = parent['task']
+    hypothesis = records.get(parent['proposed_annotation_ref'])
+    value = hypothesis['value']
+    requested = {'task_key': parent['task_key'], 'task_kind': task['kind'], 'answer_kind': task.get('answer_kind'),
+                 REQUESTED_GRADING: parent[REQUESTED_GRADING], REQUESTED_AGGREGATION: parent[REQUESTED_AGGREGATION],
+                 'question_context': [question_context(records, ref) for ref in parent['question_context_refs']]}
+    return {**view.goal.as_record(), 'grain': {'binding_path': BINDING_PATH, 'unit': UNIT, 'result': RESULT},
+            'requested_results': {key: item for key, item in requested.items() if item not in (None, [])},
+            'subject': {'predicate': hypothesis['predicate'],
+                        'subjects': [label_of(records, ref) for ref in hypothesis['subject_refs']],
+                        'partner': (label_of(records, value['ref']) if value.get('type') in ('term_ref', 'reference')
+                                    else value)}}
+
+
+def prior_page_outcomes(children, ranks):
+    """The compact measured outcome of each source examination child, in the order commissioned (nano-graphrag
+    ``record_page_outcome``): the source it was handed and its provider rank (null for a source that is not a search
+    result), how it ended, its units, its credit and the counts of its finding."""
+    return [{'result_id': outcome['arguments']['page']['source_ref'],
+             'provider_rank': ranks.get(outcome['arguments']['page']['source_ref']),
+             'ended_by': outcome['completion']['ended_by'],
+             'units_consumed': outcome['completion']['units_consumed'], 'credit': outcome['report']['credit'],
+             'grading_sheets': len(outcome['report']['finding']['grading_sheets']),
+             'aggregation_cells': len(outcome['report']['finding']['aggregation_cells']),
+             'assessments': len(outcome['report']['finding']['assessment_refs']),
+             'lead_sources': (len(outcome['report']['leads']['lead_source_refs']) if 'leads' in outcome['report']
+                              else 0)}
+            for outcome in children]
+
+
 def internal_summary(view):
     parent = view.parent_input
     task = parent['task']
     records = view.records
     held = sorted(records.refs())
     custody = source_custody(records, held)
-    consumed_sources, input_list = source_inputs(parent, custody,
-                                                 [outcome for outcome in view.outcomes if outcome['kind'] == 'child'])
+    children = [outcome for outcome in view.outcomes if outcome['kind'] == 'child']
+    consumed_sources, input_list = source_inputs(parent, custody, children)
     outcomes = [outcome for outcome in view.outcomes if outcome['kind'] == 'tool']
+    # Jev's measurement of the search results (nano-graphrag ``SearchPageProposer``): held once by the code-decided
+    # ``assess_search_results`` unit; the planner sees it for the unconsumed search results only.
+    candidates = search_result_candidates(parent['search_result_refs'], records)
+    assessed = [outcome for outcome in outcomes if outcome['tool'] == ASSESS]
+    assessment_ref = assessed[-1]['outcome']['assessment_ref'] if assessed else None
+    assessment = None if assessment_ref is None else json.loads(records.get_artifact(assessment_ref))
+    page_outcomes = prior_page_outcomes(children, {item['result_id']: item['provider_rank'] for item in candidates})
+    unconsumed_results = [ref for ref in input_list if ref in parent['search_result_refs']]
     child_reports = [{'slot': outcome['slot'], 'objective': outcome['message']['objective'],
                       'page': outcome['arguments']['page'], **outcome['report']}
                      for outcome in view.outcomes if outcome['kind'] == 'child']
@@ -160,6 +251,12 @@ def internal_summary(view):
                                       dict.fromkeys([*parent['search_result_refs'], *task.get('source_refs', [])])],
         'held_source_custody': custody,
         'input_list': input_list, 'consumed_source_refs': consumed_sources,
+        'search_result_candidates': candidates,
+        'jev_search_goal': search_goal(view, parent, records),
+        'search_assessment_ref': assessment_ref,
+        'prior_page_outcomes': page_outcomes,
+        'search_planner_context': (None if assessment is None
+                                   else search_planner_context(assessment, unconsumed_results, page_outcomes)),
         'proposed_annotation_subject_refs': records.get(parent['proposed_annotation_ref'])['subject_refs'],
         'own_literature_outcomes': outcome_page(outcomes, offset=0, limit=OUTCOME_PAGE_SIZE, tools=(*ACQUISITION_TOOLS, *READ_TOOLS),
                                                 tool_of=lambda outcome: outcome.get('tool')),

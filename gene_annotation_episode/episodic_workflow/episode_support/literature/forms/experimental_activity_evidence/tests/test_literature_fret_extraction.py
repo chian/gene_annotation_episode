@@ -8,10 +8,10 @@ import pytest
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence import (
     literature_fret_extraction as extraction)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_fret_extraction import (
-    ASSAY_FORMAT, FIT_MODEL, NOT_EXTRACTED, PAIR, PLATE_TYPE, SERIES, SPREAD_KIND, ExtractionRefused, answer_schema, field_names, quote_span,
+    ASSAY_FORMAT, FIT_MODEL, LANTHANIDE, NOT_EXTRACTED, PAIR, PLATE_TYPE, SERIES, SERIES_FORMAT, SPREAD_KIND, ExtractionRefused, answer_schema, field_names, quote_span,
     record_from_answer, validate_answer)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_fret_record import (
-    ASSAY_FORMATS, FACTS, FIT_MODELS, PAIRS, PLATE_TYPES, PREPARATION_KEYS, QUANTITIES, SPREAD_KINDS, UNITS)
+    ASSAY_FORMATS, FACTS, FIT_MODELS, LANTHANIDES, PAIRS, PLATE_TYPES, PREPARATION_KEYS, QUANTITIES, SERIES_FORMATS, SPREAD_KINDS, UNITS)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.tests.fret_passages import (
     REAL, REAL_STATED, SYNTHETIC, SYNTHETIC_STATED, answer_from, real_answer, synthetic_answer)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_fret_converter import _criterion
@@ -43,12 +43,12 @@ def fields_the_grader_reads():
     for record in (fret_cases.synthetic_record(), fret_cases.sparse_record(), fret_cases.real_record()):
         grade_fret(Tracking(record, reads))
     return {name.split('.')[-1] for name in reads if name.startswith(('quantities.', 'facts.'))
-            or name in (ASSAY_FORMAT, SPREAD_KIND, FIT_MODEL, 'concentration_series', PLATE_TYPE, PAIR)}
+            or name in (ASSAY_FORMAT, SERIES_FORMAT, SPREAD_KIND, FIT_MODEL, 'concentration_series', PLATE_TYPE, LANTHANIDE, PAIR)}
 
 
 def test_the_schema_has_exactly_the_fields_of_the_form():
     schema = answer_schema()
-    form = {*QUANTITIES, SERIES, ASSAY_FORMAT, SPREAD_KIND, FIT_MODEL, PLATE_TYPE, PAIR, *FACTS}
+    form = {*QUANTITIES, SERIES, ASSAY_FORMAT, SERIES_FORMAT, SPREAD_KIND, FIT_MODEL, PLATE_TYPE, LANTHANIDE, PAIR, *FACTS}
     assert set(schema['properties']) == set(field_names()) == form
     assert schema['required'] == list(schema['properties']) and schema['additionalProperties'] is False
     assert NOT_EXTRACTED == ('preparations',) and len(PREPARATION_KEYS) == 3
@@ -66,6 +66,8 @@ def test_the_vocabularies_are_the_forms_vocabularies():
     assert properties[FIT_MODEL]['properties']['value']['anyOf'][0]['enum'] == list(FIT_MODELS)
     assert properties[PLATE_TYPE]['properties']['value']['anyOf'][0]['enum'] == list(PLATE_TYPES)
     assert properties[PAIR]['properties']['value']['anyOf'][0]['enum'] == list(PAIRS)
+    assert properties[SERIES_FORMAT]['properties']['value']['anyOf'][0]['enum'] == list(SERIES_FORMATS)
+    assert properties[LANTHANIDE]['properties']['value']['anyOf'][0]['enum'] == list(LANTHANIDES)
     for name, answers in FACTS.items():
         offered = properties[name]['properties']['value']['anyOf'][0]['enum']
         assert set(offered) == set(answers) - {'unknown', 'not_applicable'}
@@ -93,6 +95,8 @@ def test_a_correct_synthetic_answer_is_valid_and_becomes_a_record_the_grader_acc
     graded = grade_fret(record)
     assert {name: _criterion(graded, name)['status'] for name in CRITERIA} == dict.fromkeys(CRITERIA, 'supported')      # the grader records the numbers, the sheet judges them
     native = graded['native']
+    assert native['z_prime'] == pytest.approx(0.72) and native['koff_per_s'] == pytest.approx(0.0025) and native['donor_lanthanide'] == 'terbium' and native['series_format'] == 'direct_titration'
+    assert record['donor_lanthanide'] == 'terbium' and record['series_format'] == 'direct_titration' and record['quantities']['koff']['unit'] == 'per_s' and record['quantities']['z_prime']['unit'] == 'ratio'
     assert native['kd_nM'] == 20 and native['ki_nM'] == 40 and native['ec50_nM'] == 31 and native['ic50_nM'] == 85
     assert native['ratio_fold'] == pytest.approx(4.0) and native['labelled_nM'] == 5 and native['delay_us'] == 100 and native['integration_us'] == 400
     assert native['concentration_count'] == 10 and native['concentration_high_over_constant'] == pytest.approx(100)
@@ -126,7 +130,8 @@ def test_the_real_paragraph_states_only_what_it_states_and_everything_else_stays
     answer = validate_answer(real_answer(), REAL)
     record = record_from_answer(answer, REAL, 100, 'exp', 'src', 'hyp')
     stated = [name for name in QUANTITIES if record['quantities'][name]['status'] == 'point']
-    assert stated == ['kd']
+    assert stated == ['kd', 'koff'] and record['quantities']['koff']['value'] == pytest.approx(0.00381) and record['quantities']['koff']['unit'] == 'per_s'      # the paragraph states the dissociation rate constant
+    assert record['donor_lanthanide'] is None and record['series_format'] is None and record['quantities']['z_prime']['status'] == 'unavailable'
     assert record['quantities']['ki']['value'] is None and record['quantities']['ki']['reason'] == 'not_stated_in_passage'
     assert record['concentration_series']['status'] == 'unavailable'
     assert [name for name, item in record['facts'].items() if item['answer'] != 'unknown'] == ['time_resolved_read', 'indirect_labelling_used', 'labelling_does_not_alter_binding']

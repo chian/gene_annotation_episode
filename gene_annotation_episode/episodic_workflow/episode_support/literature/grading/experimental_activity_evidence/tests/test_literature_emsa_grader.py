@@ -219,12 +219,13 @@ def test_equilibrium_is_the_fact_and_a_short_incubation_fails_only_when_the_fact
     r = synthetic_record()
     assert (status(r, 'equilibrium'), reason(r, 'equilibrium')) == ('supported', 'facts_answered_yes')
     r['facts']['equilibrium_reached'] = fact('unknown')
-    for value, unit, expected in ((15.0, 'min', 'unknown'), (14.0, 'min', 'conflicting'), (0.2, 'h', 'conflicting'), (800.0, 's', 'conflicting'), (900.0, 's', 'unknown'), (1.0, 'h', 'unknown')):
+    # with a KD of 20 nM the incubation is conflicting up to about 0.87 s (5 half-lives of the lane at the KD, fast kon) and a curve to full degree at 87 s (slow kon): supported from there on
+    for value, unit, expected in ((15.0, 'min', 'supported'), (14.0, 'min', 'supported'), (0.2, 'h', 'supported'), (800.0, 's', 'supported'), (5.0, 's', 'supported'), (1.0, 'h', 'supported'), (0.5, 's', 'conflicting')):
         r['quantities']['incubation_time'] = point(value, unit, 'i', ['s'])
         assert status(r, 'equilibrium') == expected, (value, unit)
-    assert (grader_status(r, 'equilibrium'), reason(r, 'equilibrium')) == ('unknown', 'incubation_recorded_for_the_sheet') and grade_emsa(r)['native']['incubation_min'] == 60.0     # the grader records it; the sheet judges it
-    r['quantities']['incubation_time'] = point(5.0, 'min', 'i', ['s'])
-    assert judged(r, 'equilibrium') == {'status': 'conflicting', 'support_refs': ['s']} and grade_emsa(r)['native']['incubation_refs'] == ['s']
+    assert (grader_status(r, 'equilibrium'), reason(r, 'equilibrium')) == ('unknown', 'incubation_recorded_for_the_sheet') and grade_emsa(r)['native']['incubation_min'] == pytest.approx(0.5 / 60)     # the grader records it; the sheet judges it
+    r['quantities']['incubation_time'] = point(0.5, 's', 'i', ['s'])
+    assert judged(r, 'equilibrium') == {'status': 'conflicting', 'support_refs': list(dict.fromkeys(['s', *r['quantities']['kd']['source_refs']]))} and grade_emsa(r)['native']['incubation_refs'] == ['s']
     r['facts']['equilibrium_reached'] = fact('yes', ['s'])                                  # a stated time course outweighs a short incubation
     assert status(r, 'equilibrium') == 'supported'
     missing(r, 'incubation_time')
@@ -285,10 +286,12 @@ def test_the_protein_concentrations_over_the_kd_are_recorded_and_the_sheet_judge
 def test_the_titration_needs_enough_points_and_the_shifted_fraction_a_plateau():
     r = synthetic_record()
     assert (grader_status(r, 'titration_points'), reason(r, 'titration_points')) == ('unknown', 'titration_points_recorded_for_the_sheet') and grade_emsa(r)['native']['titration_point_count'] == 11
-    for count, expected in ((6, 'supported'), (5, 'conflicting'), (12, 'supported')):
+    # full credit from MIN_TITRATION_POINTS (6) on; below it partial credit, one fifth per concentration beyond the one the KD itself counts (n - 2 + 1) / (6 - 2 + 1)
+    for count, expected, degree in ((6, 'supported', 1.0), (12, 'supported', 1.0), (5, 'supported', 0.8), (4, 'supported', 0.6), (3, 'supported', 0.4), (2, 'supported', 0.2), (1, 'supported', 0.2)):
         r['quantities']['titration_point_count'] = point(count, 'count', 't', ['s'])
-        assert status(r, 'titration_points') == expected, count
-        assert judged(r, 'titration_points')['support_refs'] == ['s'] and 'degree' not in judged(r, 'titration_points')
+        verdict = judged(r, 'titration_points')
+        assert verdict['status'] == expected and verdict.get('degree') == (pytest.approx(degree) if degree is not None else None), count
+        assert verdict['support_refs'] == ['s']
     missing(r, 'titration_point_count')
     assert (status(r, 'titration_points'), reason(r, 'titration_points')) == ('unknown', 'titration_point_count_not_given')
     assert (grader_status(r, 'saturation'), reason(r, 'saturation')) == ('unknown', 'fraction_shifted_recorded_for_the_sheet') and grade_emsa(r)['native']['fraction_shifted_percent'] == 92.0
@@ -349,11 +352,12 @@ def test_replicates_are_independent_experiments_and_lanes_do_not_count():
     r = synthetic_record()
     assert (grader_status(r, 'replicates'), reason(r, 'replicates')) == ('unknown', 'replicate_count_recorded_for_the_sheet')
     assert grade_emsa(r)['native']['replicate_count'] == 3 and grade_emsa(r)['native']['replicate_independent'] == 'yes' and status(r, 'replicates') == 'supported'
-    for count, independent, expected in ((3, 'yes', 'supported'), (10, 'yes', 'supported'), (2, 'yes', 'conflicting'), (2, 'unknown', 'conflicting'), (3, 'unknown', 'unknown')):
+    # full credit from MIN_REPLICATES (3) on; sqrt(n / 3): two independent experiments 0.82, one 0.58, never conflicting on the count
+    for count, independent, expected, degree in ((3, 'yes', 'supported', 1.0), (10, 'yes', 'supported', 1.0), (2, 'yes', 'supported', (2 / 3) ** 0.5), (1, 'yes', 'supported', (1 / 3) ** 0.5), (1, 'unknown', 'unknown', None), (2, 'unknown', 'unknown', None), (3, 'unknown', 'unknown', None)):
         r['quantities']['replicate_count'] = point(count, 'count', 'n', ['s'])
         r['facts']['independent_experiments'] = fact(independent, ['s'] if independent != 'unknown' else [])
         assert status(r, 'replicates') == expected, (count, independent)
-        assert 'degree' not in judged(r, 'replicates')
+        assert judged(r, 'replicates').get('degree') == (pytest.approx(degree) if degree is not None else None), (count, independent)
     r['quantities']['replicate_count'] = point(3, 'count', 'n', ['s'])
     r['facts']['independent_experiments'] = fact('no', ['s'])
     assert (grader_status(r, 'replicates'), reason(r, 'replicates')) == ('conflicting', 'replicates_not_independent')       # a fact, judged by the grader

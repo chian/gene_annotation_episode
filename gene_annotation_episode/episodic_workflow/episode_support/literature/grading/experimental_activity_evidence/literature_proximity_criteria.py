@@ -62,14 +62,26 @@ def _one_fact(criterion_id, question, fact_name):
 
 # ---- The criteria --------------------------------------------------------
 PROXIMITY_CRITERIA = (
-    _one_fact('proximity_observed', 'Was the candidate enriched over the control (found in proximity to the bait)?', 'candidate_enriched'),
+    {
+        'id': 'proximity_observed',
+        'question': 'Does the experiment state whether the candidate was enriched over the control (found in proximity to the bait)?',
+        'reads': ('facts.candidate_enriched',),
+        'rule': 'The criterion asks whether the result is stated, not whether it is positive: yes AND no are both a stated result (supported; the direction, detected or not detected, travels as the qualitative statement of the experiment), so a well-run experiment that finds the candidate NOT proximal is not penalised for its result. unknown stays unknown, not_applicable stays not applicable.',
+        'thresholds': (),
+        'returns': (
+            ('supported', 'candidate_enrichment_stated', 'answer yes or no'),
+            ('unknown', 'fact_unknown', 'answer unknown'),
+            ('not_applicable', 'fact_not_applicable', 'answer not_applicable'),
+        ),
+    },
     {
         'id': 'enrichment_magnitude',
         'question': 'Was the candidate enriched over the control by at least the minimum fold?',
-        'reads': ('quantities.enrichment_fold',),
-        'rule': 'When the fold enrichment is stated, the grader records it as a ratio (fold_enrichment; a log2 value is converted by 2 to the power) and its refs (fold_refs) and leaves the judgement to the sheet; otherwise unknown.',
+        'reads': ('quantities.enrichment_fold', 'facts.candidate_enriched', 'facts.fold_over_matched_control'),
+        'rule': 'A candidate stated NOT enriched has no magnitude to judge: not applicable. Otherwise, when the fold enrichment is stated, the grader records it as a ratio (fold_enrichment; a log2 value is converted by 2 to the power) and its refs (fold_refs), together with whether the control was matched to the bait (fold_matched_control: the answer of the fact fold_over_matched_control, yes, no or unknown), and leaves the judgement to the sheet; otherwise unknown.',
         'thresholds': ('LOG2_BASE',),
         'returns': (
+            ('not_applicable', 'candidate_stated_not_enriched', 'the candidate is stated not enriched (the fact candidate_enriched is no)'),
             ('unknown', 'enrichment_fold_recorded_for_the_sheet', 'the fold enrichment is stated: it is recorded and the sheet judges it'),
             ('unknown', 'enrichment_fold_not_given', 'no fold enrichment is stated'),
         ),
@@ -77,10 +89,11 @@ PROXIMITY_CRITERIA = (
     {
         'id': 'enrichment_significance',
         'question': 'Is the enrichment statistically supported (a false discovery rate low enough)?',
-        'reads': ('quantities.enrichment_fdr', 'facts.statistical_test_used'),
-        'rule': 'A statistical test stated as not used fails (a fact). Otherwise a stated false discovery rate is recorded in percent (fdr_percent, fdr_refs) and the judgement is left to the sheet; with no rate the fact decides: yes supported, unknown unknown, not_applicable not applicable.',
+        'reads': ('quantities.enrichment_fdr', 'facts.statistical_test_used', 'facts.candidate_enriched'),
+        'rule': 'A candidate stated NOT enriched has no enrichment to support: not applicable. Otherwise a statistical test stated as not used fails (a fact). Otherwise a stated false discovery rate is recorded in percent (fdr_percent, fdr_refs) and the judgement is left to the sheet; with no rate the fact decides: yes supported, unknown unknown, not_applicable not applicable.',
         'thresholds': ('PERCENT_PER_FRACTION',),
         'returns': (
+            ('not_applicable', 'candidate_stated_not_enriched', 'the candidate is stated not enriched (the fact candidate_enriched is no)'),
             ('conflicting', 'fact_answered_no', 'the fact is no'),
             ('unknown', 'enrichment_fdr_recorded_for_the_sheet', 'the fact is not no and a rate is stated: it is recorded and the sheet judges it'),
             ('supported', 'facts_answered_yes', 'the fact is not no, no rate is stated and the fact is yes'),
@@ -111,7 +124,7 @@ PROXIMITY_CRITERIA = (
     _one_fact('orthogonal_validation', 'Was the proximity of the candidate confirmed by an independent method?', 'orthogonal_validation'),
     {
         'id': 'replicates',
-        'question': 'Were there enough independent experiments?',
+        'question': 'How many independent experiments were there (the sheet gives full credit from the researched number and partial credit below it)?',
         'reads': ('quantities.replicate_count', 'facts.independent_experiments'),
         'rule': 'Independence stated as no fails (a fact). A stated count with independence not stated as no is recorded (replicate_count, replicate_independent, replicate_refs) and the judgement is left to the sheet. Lanes and injections of one sample are not replicates.',
         'thresholds': (),

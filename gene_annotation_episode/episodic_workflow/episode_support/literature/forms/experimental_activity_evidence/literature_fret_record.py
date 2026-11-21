@@ -28,11 +28,14 @@ preparations   titrant_preparation_ref (the partner added in a series, or in com
                string or None (unknown). The converter hands them to the merger as its dependence keys (titrant as the
                analyte key, the fixed partner as the other partner; a FRET experiment in solution has no surface).
 quantities     kd, ki, ec50, ic50, kd_spread, ki_spread, donor_concentration, acceptor_concentration, ratio_minimum,
-               ratio_maximum, delay_time, integration_time, assay_volume, incubation_time, temperature, replicate_count:
-               one operand each.
+               ratio_maximum, z_prime, delay_time, integration_time, assay_volume, incubation_time, koff, temperature,
+               replicate_count: one operand each.
                Units: kd/ki/ec50/ic50/kd_spread/ki_spread/donor_concentration/acceptor_concentration pM, nM, uM or mM;
                ratio_minimum and ratio_maximum 'ratio' (the acceptor over donor emission ratio as the passage gives it, on
-               whatever scale it uses; only their quotient is judged); delay_time and integration_time us or ms;
+               whatever scale it uses; only their quotient is judged); z_prime 'ratio' (the Z' factor of the assay window as
+               the passage states it, a dimensionless number: it holds the scatter of the ratio at both ends of the curve
+               that the two ratio ends alone do not); koff 'per_s' or 'per_min' (the dissociation rate constant of the
+               complex as the passage states it, which fixes how long the samples need to reach equilibrium); delay_time and integration_time us or ms;
                assay_volume uL or mL; incubation_time s, min or h; temperature C or K; replicate_count count.
 concentration_series
                operand whose 'value' is a list of titrant concentrations (unit pM, nM, uM or mM), or None when not given.
@@ -40,16 +43,24 @@ concentration_series
 assay_format   'direct_titration' (a labelled partner is titrated with its partner; KD) or 'competition' (an unlabelled
                ligand displaces a labelled partner; Ki or IC50) or None.
 spread_kind    'standard_error', 'standard_deviation', 'confidence_interval' or None. What kd_spread / ki_spread are.
+series_format  'direct_titration' or 'competition' or None. Which titration the listed concentration_series belongs to (the
+               series of a direct titration, or the competitor series of a competition). assay_format names the experiment; a
+               passage that reports both formats still has one series, and the sheet judges that series against the midpoint
+               of its own curve (the KD or EC50 of a titration, the IC50 or Ki of a competition).
 fit_model      '1:1', 'hill', 'quadratic', 'competitive_binding', 'other' or None.
 plate_type     'white', 'black', 'cuvette', 'other' or None. The plate or cell the reads were made in, kept in the record
                for the reviewer; no criterion judges it.
+donor_lanthanide
+               'terbium', 'europium', 'other' or None. Which lanthanide the long-lived donor is, when the passage names it (the
+               luminescence lifetime of terbium and europium differs several-fold, and the integration window is judged
+               against it).
 donor_acceptor_pair
                'lanthanide_with_organic_acceptor' (a terbium or europium chelate or cryptate donor with an organic dye or
                d2 or allophycocyanin acceptor), 'fluorescent_protein_pair' (for example CFP and YFP), 'organic_dye_pair'
                (for example Cy3 and Cy5, or fluorescein and rhodamine), 'other' or None.
 facts          name -> {'answer', 'source_refs'}. Names and answer sets in FACTS below. No fact holds text: a
                controlled answer only.
-choice_support name -> support of each plain choice field (assay_format, spread_kind, fit_model, plate_type, donor_acceptor_pair),
+choice_support name -> support of each plain choice field (assay_format, series_format, spread_kind, fit_model, plate_type, donor_lanthanide, donor_acceptor_pair),
                None when the field is not stated.
 spans          source_ref -> {'locator', 'quote'}: the quoted source span behind each reference the record cites.
 
@@ -79,17 +90,19 @@ def fact(answer, refs=(), support='direct'):
 
 VERSION = 'a105_fret_record_v1'
 EXPERIMENT_TYPE = 'fret'
-QUANTITIES = ('kd', 'ki', 'ec50', 'ic50', 'kd_spread', 'ki_spread', 'donor_concentration', 'acceptor_concentration', 'ratio_minimum', 'ratio_maximum', 'delay_time', 'integration_time', 'assay_volume', 'incubation_time', 'temperature', 'replicate_count')
+QUANTITIES = ('kd', 'ki', 'ec50', 'ic50', 'kd_spread', 'ki_spread', 'donor_concentration', 'acceptor_concentration', 'ratio_minimum', 'ratio_maximum', 'z_prime', 'delay_time', 'integration_time', 'assay_volume', 'incubation_time', 'koff', 'temperature', 'replicate_count')
 PREPARATION_KEYS = ('titrant_preparation_ref', 'fixed_partner_preparation_ref', 'dataset_ref')
 ASSAY_FORMATS = ('direct_titration', 'competition')
 SPREAD_KINDS = ('standard_error', 'standard_deviation', 'confidence_interval')
 FIT_MODELS = ('1:1', 'hill', 'quadratic', 'competitive_binding', 'other')
 PLATE_TYPES = ('white', 'black', 'cuvette', 'other')
-CHOICES = ('assay_format', 'spread_kind', 'fit_model', 'plate_type', 'donor_acceptor_pair')
+SERIES_FORMATS = ASSAY_FORMATS
+LANTHANIDES = ('terbium', 'europium', 'other')
+CHOICES = ('assay_format', 'series_format', 'spread_kind', 'fit_model', 'plate_type', 'donor_lanthanide', 'donor_acceptor_pair')
 PAIRS = ('lanthanide_with_organic_acceptor', 'fluorescent_protein_pair', 'organic_dye_pair', 'other')
 YES_NO = ('yes', 'no', 'unknown', 'not_applicable')
 FACTS = {'time_resolved_read': YES_NO, 'ratiometric_readout_used': YES_NO, 'donor_only_control_measured': YES_NO, 'acceptor_only_control_measured': YES_NO, 'crosstalk_corrected': YES_NO, 'labelled_partner_at_or_below_kd': YES_NO, 'tight_binding_considered': YES_NO, 'equilibrium_reached': YES_NO, 'indirect_labelling_used': YES_NO, 'labelling_does_not_alter_binding': YES_NO, 'compound_interference_checked': YES_NO, 'nonspecific_binding_checked': YES_NO, 'unlabelled_competitor_displaces': YES_NO, 'independent_titrations': YES_NO, 'single_estimate_method': YES_NO}
 
 CONCENTRATION_UNITS = ('pM', 'nM', 'uM', 'mM')
 # The unit vocabulary of each quantity (and of the concentration series): the units a record may carry.
-UNITS = {'kd': CONCENTRATION_UNITS, 'ki': CONCENTRATION_UNITS, 'ec50': CONCENTRATION_UNITS, 'ic50': CONCENTRATION_UNITS, 'kd_spread': CONCENTRATION_UNITS, 'ki_spread': CONCENTRATION_UNITS, 'donor_concentration': CONCENTRATION_UNITS, 'acceptor_concentration': CONCENTRATION_UNITS, 'ratio_minimum': ('ratio',), 'ratio_maximum': ('ratio',), 'delay_time': ('us', 'ms'), 'integration_time': ('us', 'ms'), 'assay_volume': ('uL', 'mL'), 'incubation_time': ('s', 'min', 'h'), 'temperature': ('C', 'K'), 'replicate_count': ('count',), 'concentration_series': CONCENTRATION_UNITS}
+UNITS = {'kd': CONCENTRATION_UNITS, 'ki': CONCENTRATION_UNITS, 'ec50': CONCENTRATION_UNITS, 'ic50': CONCENTRATION_UNITS, 'kd_spread': CONCENTRATION_UNITS, 'ki_spread': CONCENTRATION_UNITS, 'donor_concentration': CONCENTRATION_UNITS, 'acceptor_concentration': CONCENTRATION_UNITS, 'ratio_minimum': ('ratio',), 'ratio_maximum': ('ratio',), 'z_prime': ('ratio',), 'delay_time': ('us', 'ms'), 'integration_time': ('us', 'ms'), 'assay_volume': ('uL', 'mL'), 'incubation_time': ('s', 'min', 'h'), 'koff': ('per_s', 'per_min'), 'temperature': ('C', 'K'), 'replicate_count': ('count',), 'concentration_series': CONCENTRATION_UNITS}

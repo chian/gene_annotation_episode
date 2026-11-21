@@ -18,7 +18,7 @@ def test_two_facts_are_supported_and_everything_else_is_unknown():
     assert [name for name, status in statuses.items() if status == 'not_applicable'] == []
     assert graded['reasons']['equilibrium'] == 'incubation_recorded_for_the_sheet' and graded['native']['incubation_min'] == 960.0       # about 16 hours: recorded for the sheet
     assert _criterion(graded, 'equilibrium') == {'status': 'unknown', 'support_refs': []}                                                     # not short, and no time course is stated
-    assert graded['reasons']['nonspecific_excess'] == 'excess_not_given' and graded['native']['nonspecific_ligand_nM'] == 100000.0
+    assert graded['reasons']['nonspecific_excess'] == 'excess_reference_not_given' and graded['native']['nonspecific_ligand_nM'] == 100000.0
     assert graded['reasons']['competition_radioligand_level'] == 'radioligand_concentration_or_kd_not_given' and graded['reasons']['radioligand_range'] == 'kd_or_series_missing'
     assert graded['reasons']['bead_only_control'] == 'fact_unknown' and graded['reasons']['homogeneous_format'] == 'fact_unknown'
     assert graded['reasons']['fit_model'] == 'fit_model_not_stated' and graded['reasons']['cheng_prusoff'] == 'fact_unknown'

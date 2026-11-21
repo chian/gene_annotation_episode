@@ -1,7 +1,7 @@
 """Split-reporter criteria: the ONE place where the split-reporter (protein-fragment complementation: split luciferase such as NanoBiT, split GFP / BiFC, split beta-lactamase, split TEV) grader's criteria and thresholds are declared (two fragments of a reporter are fused to the two candidate partners; when the partners come together the reporter is reconstituted and its signal reports proximity or interaction in cells, in a lysate or with purified proteins; a titration or a kinetic time course of a reversible reporter such as NanoBiT can give an apparent KD; otherwise the result is qualitative).
 
 DRAFT FOR EXPERT REVIEW. This file is the single source for what the split-reporter grader asks. The grader reports FACTS and holds NO threshold that judges
-goodness: where a criterion needs a number to be compared with a limit (the signal over the background, the signal over the negative control, the number of fusion orientations, the number of titration concentrations, the titration range relative to the apparent KD, the replicate count), the grader records the number with its support refs and returns
+goodness: where a criterion needs a number to be compared with a limit (the signal over the background, the signal over the negative control, the number of fusion orientations, the number of titration concentrations, the titration range and the constant partner concentration relative to the apparent KD, the replicate count), the grader records the number with its support refs and returns
 'unknown' with a reason ending in '_recorded_for_the_sheet'; the judgement and its EXPERT_REVIEW constants are on the sheet side, in literature_split_reporter_converter.py.
 The logic that answers each question is in literature_split_reporter_grader.py (one short function per criterion, same order). The only constants left
 here are unit conversions (FIXED_BY_DEFINITION).
@@ -77,7 +77,18 @@ def _ratio(criterion_id, question, quantity, native_name):
 SPLIT_REPORTER_CRITERIA = (
     _one_fact('interaction_observed', 'Was a reconstituted reporter signal seen for the tested pair, above the background and the controls?', 'interaction_detected'),
     _ratio('signal_to_background', 'Is the signal of the tested pair clearly above the background signal?', 'signal_to_background', 'signal_to_background'),
-    _ratio('negative_control_ratio', 'Is the signal of the tested pair clearly above the signal of the negative control pair?', 'signal_over_negative_control', 'signal_over_negative_control'),
+    {
+        'id': 'negative_control_ratio',
+        'question': 'Is the signal of the tested pair clearly above the signal of the negative control pair, with the fusions expressed at comparable levels?',
+        'reads': ('quantities.signal_over_negative_control', 'facts.expression_matched_to_control'),
+        'rule': 'The fact stated as no (the expression of the tested and the control fusions was not comparable, so a ratio can come from expression alone) fails. Otherwise a stated ratio is recorded (signal_over_negative_control, signal_over_negative_control_refs) and the judgement is left to the sheet; none stated is unknown.',
+        'thresholds': (),
+        'returns': (
+            ('conflicting', 'expression_not_matched', 'the fact is no'),
+            ('unknown', 'negative_control_ratio_recorded_for_the_sheet', 'the fact is not no and the ratio is stated: it is recorded and the sheet judges it'),
+            ('unknown', 'negative_control_ratio_not_given', 'the fact is not no and the ratio is not stated'),
+        ),
+    },
     _one_fact('fragment_alone_control', 'Did each fragment fusion alone (or with the free partner fragment) give only background, so that the fragments do not reconstitute by themselves?', 'fragment_alone_control_negative'),
     _one_fact('unrelated_pair_control', 'Did a pair of non-interacting proteins fused to the same fragments give only background?', 'unrelated_pair_control_negative'),
     _one_fact('binding_mutant_control', 'Did a non-binding mutant of one partner give only background, or a much lower signal than the wild-type pair?', 'binding_mutant_control_negative'),
@@ -85,15 +96,16 @@ SPLIT_REPORTER_CRITERIA = (
     {
         'id': 'fusion_orientations',
         'question': 'Was the interaction tested in several fusion orientations, and seen in more than one?',
-        'reads': ('quantities.orientation_pairs_tested', 'facts.signal_in_several_orientations'),
-        'rule': 'The fact stated as no (the signal was seen in only one orientation) fails. Otherwise a stated number of orientation combinations tested is recorded (orientation_pairs_tested, orientation_pairs_refs) and the judgement is left to the sheet; with no number the fact decides: yes supported, unknown unknown, not_applicable not applicable.',
+        'reads': ('quantities.orientation_pairs_positive', 'quantities.orientation_pairs_tested', 'facts.signal_in_several_orientations'),
+        'rule': 'A stated number of orientation combinations that gave a signal is recorded (orientation_pairs_positive, orientation_pairs_positive_refs) and the judgement is left to the sheet. Otherwise the fact stated as no (the signal was seen in only one orientation) is recorded as a single positive orientation (orientation_single, orientation_single_refs) and the judgement is left to the sheet (a real pair often signals in only some geometries: a short count is weaker evidence, not evidence against). Otherwise a stated number of orientation combinations tested is recorded (orientation_pairs_tested, orientation_pairs_refs) and the judgement is left to the sheet; with no number the fact decides: yes supported, unknown unknown, not_applicable not applicable.',
         'thresholds': (),
         'returns': (
-            ('conflicting', 'fact_answered_no', 'the fact is no'),
-            ('unknown', 'orientation_pairs_recorded_for_the_sheet', 'the fact is not no and a number is stated: it is recorded and the sheet judges it'),
-            ('supported', 'facts_answered_yes', 'the fact is not no, no number is stated and the fact is yes'),
-            ('unknown', 'fact_unknown', 'no number is stated and the fact is unknown'),
-            ('not_applicable', 'fact_not_applicable', 'no number is stated and the fact is not_applicable'),
+            ('unknown', 'orientation_positive_recorded_for_the_sheet', 'a number of orientations with a signal is stated: it is recorded and the sheet judges it'),
+            ('unknown', 'orientation_single_recorded_for_the_sheet', 'no such number is stated and the fact is no: it is recorded and the sheet judges it'),
+            ('unknown', 'orientation_pairs_recorded_for_the_sheet', 'neither of the above and a number tested is stated: it is recorded and the sheet judges it'),
+            ('supported', 'facts_answered_yes', 'none of the above and the fact is yes'),
+            ('unknown', 'fact_unknown', 'none of the above and the fact is unknown'),
+            ('not_applicable', 'fact_not_applicable', 'none of the above and the fact is not_applicable'),
         ),
     },
     _one_fact('expression_verified', 'Was the expression of the fusion proteins shown?', 'expression_verified'),
@@ -113,12 +125,12 @@ SPLIT_REPORTER_CRITERIA = (
     {
         'id': 'titration_range',
         'question': 'Did the titration concentrations span the apparent KD (some well below it, some well above it)?',
-        'reads': ('quantities.loaded_concentration_lowest', 'quantities.loaded_concentration_highest', 'quantities.kd'),
-        'rule': 'With no apparent KD reported the criterion does not apply. When the lowest concentration, the highest one and the KD are all stated, the grader records the two quotients (low_over_kd, high_over_kd) and the refs of the three (range_refs) and leaves the judgement to the sheet; otherwise unknown.',
+        'reads': ('quantities.loaded_concentration_lowest', 'quantities.loaded_concentration_highest', 'quantities.fixed_partner_concentration', 'quantities.kd'),
+        'rule': 'With no apparent KD reported the criterion does not apply. When the lowest concentration, the highest one and the KD are all stated, the grader records the two quotients (low_over_kd, high_over_kd) and the refs of the three (range_refs); when the constant concentration of the non-titrated partner and the KD are stated, it records their quotient (fixed_over_kd) and the refs of the two (fixed_refs); it leaves the judgement to the sheet; with neither recorded: unknown.',
         'thresholds': ('NM_PER_UNIT',),
         'returns': (
-            ('unknown', 'titration_range_recorded_for_the_sheet', 'a KD is reported and both ends of the range are stated: the quotients are recorded and the sheet judges them'),
-            ('unknown', 'titration_range_not_given', 'a KD is reported and the two ends of the range are not both stated'),
+            ('unknown', 'titration_range_recorded_for_the_sheet', 'a KD is reported and both ends of the range, or the fixed partner concentration, are stated: the quotients are recorded and the sheet judges them'),
+            ('unknown', 'titration_range_not_given', 'a KD is reported and neither the two ends of the range nor the fixed partner concentration are stated'),
             ('not_applicable', 'no_apparent_kd_reported', 'no KD is reported'),
         ),
     },

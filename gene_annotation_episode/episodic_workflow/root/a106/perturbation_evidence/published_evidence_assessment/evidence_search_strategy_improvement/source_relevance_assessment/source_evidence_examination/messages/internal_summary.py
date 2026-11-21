@@ -60,7 +60,10 @@ def internal_summary(view):
     # The input list (nano-graphrag's page state): the source's candidate input units (table regions and prose chunks,
     # UTF-8 byte offsets of the representation the page was assigned), the ones handed to an investigation consumed. Only
     # unconsumed candidates are offered; the list shrinks as each investigation is commissioned and is empty when every
-    # candidate has been handed out (the yield estimator ends the episode on an empty list).
+    # candidate has been handed out. The yield estimator is not given this list and an empty list ends no episode: a
+    # verified_source_leads episode's AccumulationYieldController (ADAPTIVE_CONTROL, items=None, no cost) stops only
+    # after 4 flat units in a row, a unit being flat when the upper bound of its expected next marginal (hypervolume)
+    # credit is at or below the adaptive gamma (fitted from W = 8 units attempted and m = 4 observed).
     content = view.records.get_artifact(page['artifact_ref'])
     candidates = page_candidates(content)
     children_outcomes = [outcome for outcome in view.outcomes if outcome['kind'] == 'child']

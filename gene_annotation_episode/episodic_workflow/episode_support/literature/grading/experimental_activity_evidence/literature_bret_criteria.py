@@ -33,7 +33,7 @@ proximity only; the saturation curve, a BRET50 well below that of a negative con
 Terms. BRET50: the acceptor-to-donor ratio at half of BRETmax. Negative control over pair BRET50: BRET50 of the negative control pair divided by BRET50 of the pair under test (above 1 when the control needs more acceptor). Signal over control: the BRET ratio of the pair divided by the
 BRET ratio of the negative control (both in ratio units; 1 mBU = 0.001 ratio). Low and high over BRET50: the lowest and the highest acceptor-to-donor ratio divided by BRET50.
 
-What this method does not ask (kept in the record for the reviewer, no criterion judges them): BRETmax alone, the tracer concentration, the apparent KD and Ki and their spread and kind, the format, the donor, the acceptor, the expression system and the statement that only this method was used.
+What this method does not ask (kept in the record for the reviewer, no criterion judges them): BRETmax alone, the apparent KD and Ki and their spread, the spread kind, the format, the donor, the acceptor, the expression system and the statement that only this method was used.
 """
 
 VERSION = 'a105_bret_criteria_v1'
@@ -78,8 +78,8 @@ BRET_CRITERIA = (
     {
         'id': 'bret50_specificity',
         'question': 'Is the BRET50 of the pair far below that of the negative control pair?',
-        'reads': ('quantities.bret50', 'quantities.bret50_negative_control'),
-        'rule': 'When the BRET50 of the pair and the BRET50 of the negative control are both stated, the grader records the quotient control over pair (bret50_control_over_pair) and the refs of the two (bret50_refs) and leaves the judgement to the sheet; otherwise unknown.',
+        'reads': ('quantities.bret50', 'quantities.bret50_negative_control', 'quantities.bret50_spread', 'quantities.bret50_negative_control_spread'),
+        'rule': 'When the BRET50 of the pair and the BRET50 of the negative control are both stated, the grader records the quotient control over pair (bret50_control_over_pair), the two stated spreads when given (bret50_pair_spread, bret50_control_spread; as stated, unconverted) and the refs of everything it used (bret50_refs) and leaves the judgement to the sheet; otherwise unknown.',
         'thresholds': (),
         'returns': (
             ('unknown', 'bret50_comparison_recorded_for_the_sheet', 'both BRET50 values are stated: the quotient is recorded and the sheet judges it'),
@@ -89,8 +89,8 @@ BRET_CRITERIA = (
     {
         'id': 'signal_over_control',
         'question': 'Is the BRET ratio of the pair well above that of the negative control?',
-        'reads': ('quantities.bret_ratio_pair', 'quantities.bret_ratio_negative_control'),
-        'rule': 'When the BRET ratio of the pair and that of the negative control are both stated, the grader records the quotient pair over control in ratio units (signal_over_control) and the refs of the two (signal_refs) and leaves the judgement to the sheet; otherwise unknown.',
+        'reads': ('quantities.bret_ratio_pair', 'quantities.bret_ratio_negative_control', 'quantities.bret_ratio_pair_spread', 'quantities.bret_ratio_negative_control_spread', 'quantities.bret_ratio_donor_only', 'facts.background_subtracted'),
+        'rule': 'When the BRET ratio of the pair and that of the negative control are both stated, the grader records the quotient pair over control in ratio units (signal_over_control), the two ratios (signal_pair, signal_control), the two stated spreads and the donor-only ratio when given (signal_pair_spread, signal_control_spread, signal_donor_only, in ratio units), the answer of the fact background_subtracted (signal_background_subtracted: yes means the ratios are net, no that they are raw) and the refs of everything it used (signal_refs) and leaves the judgement to the sheet; otherwise unknown.',
         'thresholds': ('RATIO_PER_SIGNAL_UNIT',),
         'returns': (
             ('unknown', 'signal_over_control_recorded_for_the_sheet', 'both BRET ratios are stated: the quotient is recorded and the sheet judges it'),
@@ -125,6 +125,19 @@ BRET_CRITERIA = (
         ),
     },
     {
+        'id': 'bystander_test',
+        'question': 'Did the paper test directly against bystander BRET (a hyperbola preferred over a straight line by a stated comparison, or BRET constant when the total expression changes at a fixed acceptor-to-donor ratio)?',
+        'reads': ('facts.hyperbola_preferred_over_linear', 'facts.bret_constant_across_expression'),
+        'rule': 'Either fact stated no fails; else either stated yes is supported (one of the two tests is enough, so a test not stated does not make the other unknown); else both unknown is unknown; all not_applicable is not applicable. The refs are those of the facts that decide.',
+        'thresholds': (),
+        'returns': (
+            ('supported', 'facts_answered_yes', 'a fact is yes and none is no'),
+            ('conflicting', 'fact_answered_no', 'a fact is no'),
+            ('unknown', 'fact_unknown', 'both facts are unknown'),
+            ('not_applicable', 'fact_not_applicable', 'all facts are not_applicable'),
+        ),
+    },
+    {
         'id': 'ratio_range',
         'question': 'Did the acceptor-to-donor ratios run from well below to well above BRET50 (so that BRETmax and BRET50 are defined by the data)?',
         'reads': ('quantities.ratio_lowest', 'quantities.ratio_highest', 'quantities.bret50'),
@@ -139,6 +152,18 @@ BRET_CRITERIA = (
     _format_fact('competition', 'Did an unlabelled competitor lower the tracer signal in a concentration-dependent way?', 'tracer_displaced_by_competitor', ('saturation_titration', 'ligand_induced_change'), 'not_a_competition_run'),
     _one_fact('orientation', 'Were both fusion orientations (donor and acceptor positions) tried?', 'fusion_orientation_swapped'),
     _one_fact('background_correction', 'Was the background BRET (donor only or no acceptor) subtracted?', 'background_subtracted'),
+    {
+        'id': 'tracer_regime',
+        'question': 'For a Ki, was the tracer used at a concentration near or below its own KD (so that the Cheng-Prusoff correction is small)?',
+        'reads': ('quantities.ki', 'quantities.tracer_concentration', 'quantities.tracer_kd'),
+        'rule': 'With no Ki stated the criterion does not apply. With a Ki, the tracer concentration and the tracer KD both stated, the grader records the quotient tracer concentration over tracer KD (tracer_over_kd, both in nM) and the refs of the three (tracer_refs) and leaves the judgement to the sheet; otherwise unknown.',
+        'thresholds': ('NM_PER_UNIT',),
+        'returns': (
+            ('unknown', 'tracer_regime_recorded_for_the_sheet', 'a Ki, the tracer concentration and the tracer KD are stated: the quotient is recorded and the sheet judges it'),
+            ('unknown', 'tracer_regime_not_given', 'a Ki is stated and the tracer concentration or the tracer KD is not'),
+            ('not_applicable', 'no_ki_reported', 'no Ki is stated'),
+        ),
+    },
     {
         'id': 'fit_quality',
         'question': 'Does the fit describe the data (a high R squared)?',

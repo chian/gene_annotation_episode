@@ -33,7 +33,7 @@ SYNTHETIC = (
     'Cellular thermal shift assays of the binding of the compound QX-7 to the kinase PZ-2 were done in intact HEK293 cells that were incubated with QX-7 for 1 h at 37 °C. '
     'For the melt curve, the cells were heated for 3 min at ten temperatures from 40 °C to 67 °C, and for the isothermal dose-response at 52 °C, and the soluble PZ-2 was read by western blot. '
     'DMSO vehicle controls were heated in the same way, and GAPDH was used as a loading control. The melting temperature of PZ-2 was 48.5 °C with the vehicle and 54.0 °C with 10 µM QX-7, '
-    'a thermal shift of 5.5 °C, so QX-7 stabilised PZ-2 and engaged it in the cells. The temperature of 52 °C was in the melting transition of PZ-2 and gave a window between the unbound and the bound protein. '
+    'a thermal shift of 5.5 °C, so QX-7 stabilised PZ-2 and engaged it in the cells. The standard deviation of the Tm was 0.4 °C, taken over the independent experiments. The temperature of 52 °C was in the melting transition of PZ-2 and gave a window between the unbound and the bound protein. '
     'The stabilisation increased with the concentration of QX-7 in a dose-response of eleven concentrations from 0.01 µM to 30 µM, with an EC50 of 0.8 µM and a standard error of 0.1 µM. '
     'The total amount of PZ-2 in unheated samples was not changed by QX-7. An inactive analogue of QX-7 did not stabilise PZ-2, and PZ-2 with a mutation of the binding site was not stabilised by QX-7. '
     'Cell viability was checked with a viability assay and was not changed by QX-7. Three independent experiments were done on separate days.')
@@ -53,6 +53,7 @@ SYNTHETIC_STATED = {
     'tm_vehicle': (48.5, 'C', '48.5 °C with the vehicle'),
     'tm_ligand': (54.0, 'C', '54.0 °C with 10 µM QX-7'),
     'tm_shift': (5.5, 'C', 'a thermal shift of 5.5 °C'),
+    'tm_spread': (0.4, 'C', 'standard deviation of the Tm was 0.4 °C'),
     'isothermal_temperature': (52, 'C', 'isothermal dose-response at 52 °C'),
     'heating_time': (3, 'min', 'heated for 3 min'),
     'temperature_lowest': (40, 'C', 'from 40 °C'),
@@ -78,10 +79,11 @@ SYNTHETIC_STATED = {
     'cell_integrity_checked': ('yes', None, 'Cell viability was checked with a viability assay and was not changed by QX-7'),
     'total_target_level_controlled': ('yes', None, 'The total amount of PZ-2 in unheated samples was not changed by QX-7'),
     'independent_experiments': ('yes', None, 'Three independent experiments were done on separate days'),
+    'tm_spread_over_independent_experiments': ('yes', None, 'taken over the independent experiments'),
 }
 
 # The allowed set of the real model run: field -> every (value, unit) the paragraph clearly states for it. Not allowed, because the paragraph does not
-# state them or gives no single result: the EC50 (three compounds, none the result) and its spread, a melting temperature or a shift (none given), the heating time, a temperature range or count, the compound concentrations and their number,
+# state them or gives no single result: the EC50 (three compounds, none the result) and its spread, a melting temperature, its standard deviation (and whether it is over independent experiments) or a shift (none given), the heating time, a temperature range or count, the compound concentrations and their number,
 # the incubation time (only a separate time-course), the readout (it is in the paragraph before), the vehicle, loading, specificity, viability and total-target controls, replicates.
 REAL_ALLOWED = {
     'target_engagement_shown': {('yes', None)},

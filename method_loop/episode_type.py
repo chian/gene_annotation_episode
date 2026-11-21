@@ -119,8 +119,9 @@ from . import (ChildEpisodeUnit, ChildProjection, Commission, EpisodeBindingDecl
                EpisodeControllerBinding, EpisodeFunctionBinding, EpisodeGoal, EpisodeRef, EpisodeRequest,
                EpisodeTopologyRole, EpisodeView, Episode, JsonRecord, Leaf, RecordForm, ReportContract)
 from .jsonvalue import closed_copy, same_json
-from yield_control import (AccumulationYieldController, BoundedQualityYieldController, CompletionYieldController,
-                           ForecastYieldController, ForecastYieldState, UNBOUNDED_TEXT)
+from yield_control import (ADAPTIVE_THRESHOLD_VERSION, DEFAULT_EFFICIENCY_FRACTION, AccumulationYieldController,
+                           BoundedQualityYieldController, CompletionYieldController, ForecastYieldController,
+                           ForecastYieldState, UNBOUNDED_TEXT)
 
 _NAME = re.compile(r'^[a-z][a-z0-9_]*$')
 _SEGMENT = r'[a-z][a-z0-9]*(?:_[a-z0-9]+)*'
@@ -519,20 +520,36 @@ def _controller_text(controller):
                 'forecast from its ceiling and what actions of its kind realized before',
                 'stops when no offered action\'s forecast gain exceeds its expected seconds times the exchange rate '
                 + repr(controller.exchange_rate))
-    cost = controller.cost
     if isinstance(controller, AccumulationYieldController):
         return ('credit(summary) accumulates after each unit without a declared limit',
-                'stops when the forecast upper bound of the next unit\'s credit is at or below its cost '
-                + repr(cost))
+                _accumulation_stopping_text(controller))
     if isinstance(controller, BoundedQualityYieldController):
         return ('credit(summary) is a quality that cannot pass its declared maximum ' + repr(controller.maximum_credit),
                 'stops when the forecast upper bound of further credit below that maximum is at or below its cost '
-                + repr(cost))
+                + repr(controller.cost))
     if isinstance(controller, CompletionYieldController):
         return ('credit(summary) counts toward the commission\'s finite target ' + repr(controller.target),
                 'stops when the forecast of the credit still to come before the target is at or below its cost '
-                + repr(cost))
+                + repr(controller.cost))
     raise TypeError('episode_yield_controller_must_be_a_yield_control_controller:' + type(controller).__name__)
+
+
+def _accumulation_stopping_text(controller):
+    """The stop rule of an ``AccumulationYieldController`` (nano-graphrag's estimator controller), read from its own
+    ``control`` and ``items``. It has no cost."""
+    control = controller.control
+    if control.threshold == ADAPTIVE_THRESHOLD_VERSION:
+        gamma = ('the adaptive gamma, after each unit max(the one-result resolution, '
+                 + repr(DEFAULT_EFFICIENCY_FRACTION) + ' x the median of the productive credits of the last '
+                 + repr(control.window_size) + ' units)')
+    else:
+        gamma = 'the fixed gamma ' + repr(control.gamma)
+    text = ('stops after ' + repr(control.streak_length) + ' flat units in a row: from ' + repr(control.window_size)
+            + ' units attempted and ' + repr(control.subsample_size) + ' observed, a unit is flat when the upper bound '
+            'of the expected next marginal hypervolume credit is at or below ' + gamma)
+    if controller.items is not None:
+        text += '; or when none of its ' + repr(controller.items) + ' input items remains (each unit uses one)'
+    return text
 
 
 def _written(ceiling):

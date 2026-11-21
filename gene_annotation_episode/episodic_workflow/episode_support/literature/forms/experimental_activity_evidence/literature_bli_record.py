@@ -19,10 +19,12 @@ preparations   analyte_preparation_ref (the protein in the well), immobilized_pr
                the sensor), sensor_ref (the sensor or sensor lot), dataset_ref: each a string or None (unknown).
                The converter hands them to the merger as its dependence keys (sensor_ref as the surface key).
 quantities     kd, kd_steady_state, kon, koff, response_max, kd_spread, fit_r_squared, loading_level,
-               dissociation_time, replicate_count: one operand each.
+               dissociation_time, replicate_count, partner_mass, baseline_noise: one operand each.
                Units: kd/kd_steady_state/kd_spread nM, uM or mM; kon M^-1 s^-1; koff s^-1; response_max and
                loading_level nm (the wavelength shift); fit_r_squared dimensionless (the R-squared of the fit, at
-               most 1); dissociation_time s or min (the length of the dissociation step); replicate_count count.
+               most 1); dissociation_time s or min (the length of the dissociation step); replicate_count count; partner_mass kDa (the
+               molecular mass of the partner loaded on the sensor); baseline_noise nm (the noise or drift of the signal the
+               passage states, in the same wavelength-shift unit as the response).
 concentration_series
                operand whose 'value' is a list of analyte concentrations (unit nM, uM or mM), or None when not given.
 spread_kind    'standard_error', 'standard_deviation', 'confidence_interval' or None. What kd_spread is.
@@ -40,7 +42,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.
 
 VERSION = 'a105_bli_record_v1'
 EXPERIMENT_TYPE = 'bli'
-QUANTITIES = ('kd', 'kd_steady_state', 'kon', 'koff', 'response_max', 'kd_spread', 'fit_r_squared', 'loading_level', 'dissociation_time', 'replicate_count')
+QUANTITIES = ('kd', 'kd_steady_state', 'kon', 'koff', 'response_max', 'kd_spread', 'fit_r_squared', 'loading_level', 'dissociation_time', 'replicate_count', 'partner_mass', 'baseline_noise')
 PREPARATION_KEYS = ('analyte_preparation_ref', 'immobilized_preparation_ref', 'sensor_ref', 'dataset_ref')
 SPREAD_KINDS = ('standard_error', 'standard_deviation', 'confidence_interval')
 FIT_MODELS = ('1:1', '2:1_bivalent_analyte', 'heterogeneous_ligand', 'steady_state', 'other')
@@ -50,4 +52,4 @@ FACTS = {'reference_sensor_subtracted': YES_NO, 'buffer_reference_subtracted': Y
 
 CONCENTRATION_UNITS = ('nM', 'uM', 'mM')
 # The unit vocabulary of each quantity (and of the concentration series): the units a record may carry.
-UNITS = {'kd': CONCENTRATION_UNITS, 'kd_steady_state': CONCENTRATION_UNITS, 'kon': ('M^-1 s^-1',), 'koff': ('s^-1',), 'response_max': ('nm',), 'kd_spread': CONCENTRATION_UNITS, 'fit_r_squared': ('dimensionless',), 'loading_level': ('nm',), 'dissociation_time': ('s', 'min'), 'replicate_count': ('count',), 'concentration_series': CONCENTRATION_UNITS}
+UNITS = {'kd': CONCENTRATION_UNITS, 'kd_steady_state': CONCENTRATION_UNITS, 'kon': ('M^-1 s^-1',), 'koff': ('s^-1',), 'response_max': ('nm',), 'kd_spread': CONCENTRATION_UNITS, 'fit_r_squared': ('dimensionless',), 'loading_level': ('nm',), 'dissociation_time': ('s', 'min'), 'replicate_count': ('count',), 'partner_mass': ('kDa',), 'baseline_noise': ('nm',), 'concentration_series': CONCENTRATION_UNITS}
