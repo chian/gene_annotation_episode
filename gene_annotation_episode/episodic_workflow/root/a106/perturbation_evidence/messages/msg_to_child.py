@@ -12,10 +12,10 @@ returns and this commission selects the fact sources it wants (the old fact-sour
 child's own: nothing is checked here, a commission the child does not admit fails, and a record this episode does not
 hold fails the run. The child's scope is this episode's own (the old model-selected sub-scope is not carried).
 
-``literature``: ``literature_assignment_v1`` from the model's records and task (the task's ``credit_unit`` is this
-episode's own, where the old child binding filled it), the proposed annotation of this episode (a child may not change
-it), the scope and every record this episode names for the child: the question context, the sources with their
-artifacts (``summary['source_custody']``) and the proposed annotation.
+``literature``: ``literature_assignment_v1`` from the model's records and the one task, ``verified_source_leads`` (the
+task's ``credit_unit`` is this episode's own, where the old child binding filled it), the proposed annotation of this
+episode (a child may not change it), the scope and every record this episode names for the child: the question context
+and the proposed annotation. No source is named: a paper reaches the chain only through its search.
 
 ``launch``: ``execution_launch_assignment_v1`` from the model's arguments, the scope and ``handoff_unit`` which
 ``task.action`` took from the settings; the resources that already have a usable handoff from earlier launches of this
@@ -56,16 +56,11 @@ def selection(slot, arguments, *extra):
 
 def literature(arguments, summary):
     task = {**arguments['literature_task'], 'credit_unit': summary['task']['credit_unit']}
-    answers = ('literature_source_lead_dispositions',) if task['kind'] == 'verified_source_leads' else (
-        ('literature_screening_answers',) if task['answer_kind'] == 'screening' else ())
     received = [*arguments['question_context_refs'], summary['proposed_annotation_ref']]
-    for source_ref in arguments['source_refs']:
-        received.extend(summary['source_custody'][source_ref])
     assignment = {'version': LITERATURE_VERSION, 'question_context_refs': arguments['question_context_refs'],
-                  'source_refs': arguments['source_refs'], 'literature_task': task,
-                  'proposed_annotation_ref': summary['proposed_annotation_ref'], 'scope': summary['scope'],
-                  'received_record_refs': list(dict.fromkeys(received))}
-    return assignment, selection('literature', arguments, *answers)
+                  'literature_task': task, 'proposed_annotation_ref': summary['proposed_annotation_ref'],
+                  'scope': summary['scope'], 'received_record_refs': list(dict.fromkeys(received))}
+    return assignment, selection('literature', arguments, 'literature_source_lead_dispositions')
 
 
 def launch(arguments, summary):

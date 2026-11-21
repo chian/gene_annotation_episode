@@ -40,7 +40,7 @@ def test_the_decision_schema_is_one_the_model_endpoint_takes(tmp_path):
     entry, published = task.entry_of(library, selection)
     entries = task.catalog({'knowledge_library_directory': str(tmp_path)}, selection, summary, published)
     selected = task.selected_catalog(tools, selection)
-    assert len(selected) == len(available)
+    assert [row['name'] for row in selected] == ['state.query']      # no tool that searches, fetches or reads a paper
     schema = task.selection_schema(entries, selected, list(task.CHILD_SLOTS), JOBS)
     request = ModelRequest('REASONING', GOAL, {}, task.generation_schema(schema))
     _, schema = admitted_by_provider(request, tmp_path / 'provider')

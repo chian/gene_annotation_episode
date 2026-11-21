@@ -1,79 +1,42 @@
-"""Where the reading stands, as a pure function of the loop's view: the assignment, custody of the page's source, the
-first page of the episode's own read outcomes, the controlled features of the current A106 sheets it saved (G1
-and G2, ``literature_a106_findings.own_findings``), the latest image the model looked at, and the typed answers the commissioned task asks for (carried from the
-old ``internal_summary.py``: ``literature_assignment``, ``literature_source_custody``, ``own_literature_outcomes``,
-``literature_history_meaning``, and from ``decision_context.py`` the ``visual_evidence`` of the latest completed
-``image.view``; the old reads of ``runtime_actions`` are the unit outcomes of ``view``).
+"""Where the document-order extraction stands (nano-graphrag ``ReportWindowSource``: the remaining text read in document
+order, each window once), from the loop's view: the commission (the page, the task, the proposed annotation, the scope), the
+input list and the window of the next unit.
 
-The root-only ``reference_evidence_parent`` context is not
-this episode's."""
-from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_leaf_extraction import (
-    representation_content)
-from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.evolutionary_history_evidence.literature_reading_windows import (
-    consumed_ranges, reading_windows, remaining_windows)
+``input_list`` holds the commissioned windows not yet extracted, as ``[offset, end]`` pairs in document order: after k
+extractions it is ``spans[k:]``, and each extraction takes the first and removes it, whatever its outcome (an ``invalid``
+outcome of the route is a returned outcome and consumes its window). The window of this unit is the first of that list
+(``window``: its text, read through custody from the artifact of the page; ``offset``; ``limit``); with the list empty there
+is no window. ``windows_total`` is the number of commissioned windows. ``sheet_refs`` are the perturbation sheets the
+completed extractions saved and ``lead_source_refs`` the verified sources: the page source once a sheet was saved.
+``a106_findings`` are the controlled features of the A106 grading sheets this episode saved (code reads them from the
+sheets)."""
+from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.perturbation_evidence.literature_leaf_extraction import (
+    saved_sheet_refs, window_text)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.perturbation_evidence.literature_a106_findings import (
     own_findings)
-from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.literature_population_route import (
-    opened_population)
-from gene_annotation_episode.episodic_workflow.episode_support.records.own_outcomes import outcome_page
-from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
-
-from ..credit import credit_binding, lead_dispositions, screening_answers
-
-OUTCOME_PAGE_SIZE = 8        # the old configuration outcome_page_size
-READ_TOOLS = ('source_read', 'source_locate', 'source_sequence_scan', 'source_sequence_references',
-              'source_experimental_records', 'source_xlsx_rows', 'source_pdf_text', 'image_view')
-CUSTODY_KEYS = ('version', 'artifact_ref', 'text_ref', 'stdout_ref', 'stderr_ref', 'parent_source_refs')
-HISTORY_MEANING = ('Own outcome metadata only. Read exact prior outcomes through own_literature_outcomes. Source '
-                   'delivery does not establish scientific understanding, absence or resolved science.')
 
 
 def internal_summary(view):
     parent = view.parent_input
     page, task = parent['page'], parent['task']
-    source = view.records.get(page['source_ref'])
-    if parent['window']['offset'] > view.records.get(page['artifact_ref'])['size']:
-        raise ValueError('source_offset_out_of_bounds')
-    outcomes = [outcome for outcome in view.outcomes if outcome['kind'] == 'tool']
-    reasons = [outcome['outcome'] for outcome in outcomes if outcome['tool'] == 'reason']
-    last = outcomes[-1] if outcomes else None
-    visual = (last['outcome'].get('visual_inputs', []) if last is not None and last['tool'] == 'image_view'
-              and last['outcome'].get('status') == 'completed' else [])
-    assignment = {'version': 'reading_assignment_v1', 'page': page, 'selection': parent['window'],
-                  'literature_task': task, 'proposed_annotation_ref': parent['proposed_annotation_ref']}
-    # The input list (nano-graphrag ReportWindowSource): the windows of the source from the commissioned starting window
-    # to the end, in document order; a window the episode has read entirely is consumed and no longer offered.
-    content = representation_content(view.records, page['source_ref'], page['representation'])
-    windows = reading_windows(content, parent['window']['offset'], parent['window']['limit'])
-    ranges = consumed_ranges(view.outcomes, page['source_ref'], page['representation'])
-    remaining = remaining_windows(windows, ranges)
-    summary = {
-        'input_list': remaining, 'consumed_windows': [window for window in windows if window not in remaining],
-        'consumed_ranges': ranges, 'windows_total': len(windows), 'content_bytes': len(content),
-        'literature_assignment': assignment,
-        'task': task, 'task_key': parent['task_key'], 'proposed_annotation_ref': parent['proposed_annotation_ref'],
+    extracted = [outcome for outcome in view.outcomes if outcome['kind'] == 'tool' and outcome['tool'] == 'extract']
+    remaining = parent['spans'][len(extracted):]
+    current = {'offset': None, 'limit': None, 'window': None}
+    if remaining:
+        first = remaining[0]
+        current = {'offset': first['offset'], 'limit': first['limit'],
+                   'window': window_text(view.records, page, first['offset'], first['limit'])}
+    sheets = saved_sheet_refs(view.outcomes)
+    return {
+        **current,
+        'input_list': [[span['offset'], span['offset'] + span['limit']] for span in remaining],
+        'windows_total': len(parent['spans']),
+        'page': page, 'task': task, 'proposed_annotation_ref': parent['proposed_annotation_ref'],
         'scope': parent['scope'], 'received_record_refs': parent['received_record_refs'],
-        'literature_source_custody': [{'source_ref': page['source_ref'],
-                                       **{key: source.get(key) for key in CUSTODY_KEYS}}],
-        'own_literature_outcomes': outcome_page(view.outcomes, offset=0, limit=OUTCOME_PAGE_SIZE, tools=READ_TOOLS,
-                                                tool_of=lambda outcome: outcome.get('tool')),
-        'literature_history_meaning': HISTORY_MEANING,
-        'credit_binding': credit_binding(parent['task_key'], task),
-        'reasoning_schema': view.records.reasoning_schema(),
-        'held_record_refs': sorted(view.records.refs()),
-        'last_local_outcome': None if last is None else {'tool': last['tool'], 'outcome': last['outcome']},
-        'visual_evidence': visual,
-        'units_consumed': view.units_consumed,
-        'action_yields': (None if view.controller_state is None
-                          else yield_table(view.controller_state, forecast_unit='credit')),
+        'literature_assignment': {'version': 'reading_assignment_v1', 'page': page,
+                                  'selection': {'spans': parent['spans']}, 'literature_task': task,
+                                  'proposed_annotation_ref': parent['proposed_annotation_ref']},
+        'sheet_refs': sheets, 'lead_source_refs': [page['source_ref']] if sheets else [],
         'a106_findings': own_findings(view.records, view.outcomes),
-        'opened_population': opened_population(view.outcomes),
-        'source_leads': [outcome['literature_source_lead'] for outcome in reasons
-                         if 'literature_source_lead' in outcome],
-        'no_applicable_evidence': [span for outcome in reasons if 'evidence_processing' in outcome
-                                   for span in outcome['evidence_processing']['examined']],
+        'units_consumed': view.units_consumed,
     }
-    summary['source_lead_dispositions'] = (lead_dispositions(summary, view.records)
-                                           if task['kind'] == 'verified_source_leads' else [])
-    summary['screening_answers'] = screening_answers(summary)
-    return summary

@@ -1,7 +1,7 @@
 """A real run of this episode with the real model (``episode_runtime/tests/test_model_run.py`` is the pattern): the
-model reads the held paper source and decides, unit by unit, which tool to use; the run ends when the Episode's yield
-controller stops it. The return is the credit and the controlled finding read by code from the sheets the model
-saved; a resumed run replays the recorded answers without asking the model again.
+model is shown each commissioned window in order and fills the perturbation form from it; code finds its quotations and saves
+the sheet. The run ends when the Episode's yield controller stops it (the windows are done, or the estimator stops it). The
+return is the credit and the controlled finding; a resumed run replays the recorded answers without asking the model again.
 
 Selected only with ``-m model_run``; it needs the owner's Codex sign-in."""
 import asyncio
@@ -18,13 +18,12 @@ PACKAGE = __name__.rsplit('.', 2)[0]
 EPISODE = importlib.import_module(PACKAGE + '.episode').SourceCoverageImprovement
 PATH = EPISODE.binding_path
 RUN_ID = 'a106_source_coverage_model_run'
-# A positive continuation cost: with no credit the accumulation estimator stops the Episode.
-RUN_SETTINGS = {PATH: {**SETTINGS, 'cost': 0.05}}
+RUN_SETTINGS = {PATH: SETTINGS}
 
 
 @pytest.mark.model_run
-def test_the_model_reads_and_grades_the_source_and_resume_replays_its_recorded_answers(tmp_path):
-    store, entry, _, names = held_world(tmp_path)
+def test_the_model_fills_the_form_for_each_window_and_resume_replays_its_recorded_answers(tmp_path):
+    store, entry, _ = held_world(tmp_path)
     linked, journal, collaborators = linked_run(tmp_path, [EPISODE()], PATH, entry, store, RUN_ID, RUN_SETTINGS)
     first = asyncio.run(linked.run())
     record = first['result'].as_record()

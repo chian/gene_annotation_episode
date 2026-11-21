@@ -1,119 +1,98 @@
-"""Where the strategy investigation stands, as a pure function of the loop's view: the assignment, custody of the
-sources this episode holds (the old ``literature_source_custody``, for the assigned ``source_refs`` of the old
-assignment, which this role does not have; here every source held, since the model chooses the returned sources to
-commission an assessment of), the first page of the episode's own read and acquisition outcomes, the controlled features of the current A106 sheets saved here and below (``literature_a106_findings``), the reports of the source relevance assessments it commissioned, the latest image the model looked
-at, and the typed answers the commissioned task asks for (carried from the old ``internal_summary.py``:
-``literature_assignment``, ``literature_source_custody``, ``own_literature_outcomes``,
-``literature_history_meaning``, ``literature_experimental_work``, and from ``decision_context.py`` the
-``visual_evidence`` of the latest completed ``image.view``; the old reads of ``runtime_actions`` are the unit
-outcomes of ``view``, and the old ``completed_action_reports`` are the child reports ``read_from_child`` made).
+"""Where the strategy investigation stands, as a pure function of the loop's view: the assignment, the queries this
+episode has written and the ones it has handed out, the first page of its own outcomes, the reports of the search
+children it commissioned (their credit and the controlled features of their findings), the lead sources they returned
+and the typed answer the commissioned task asks for (carried from the old ``internal_summary.py``:
+``literature_assignment``, ``own_literature_outcomes``, ``literature_history_meaning``; the old reads of
+``runtime_actions`` are the unit outcomes of ``view``, and the old ``completed_action_reports`` are the child reports
+``read_from_child`` made).
 
-The old display contexts of the population route (owned population sources, the latest failed population
-attempt, ``literature_completed_work``, the per-sheet contexts) are replaced by the controlled features of the G1 and
-G2 sheets (``a106_findings``). ``literature_examined_source_inputs`` and ``received_intervention_analysis_rows`` need the old library
-readers over ``runtime_*`` tables and the BV-BRC execution binding (``own_source_inputs``,
-``intervention_execution_lookup``) and are not carried. The root-only ``reference_evidence_parent`` context is not
-this episode's.
+Nano-graphrag's strategy keeps a queue of searches (``SearchTask``): the queries written and not yet handed to the
+search level are the input list; a query handed out is done and never offered again (``consumed_inputs``). This episode
+cannot search, fetch or read, so it keeps no hit and no paper: a query is a record of this episode (the ``source``
+record ``write_search`` made, whose ``request_ref`` artifact holds the request) and is what the search child receives,
+by reference. The yield estimator does not count the list (``items=None``): an empty list does not stop the episode,
+the search child is not offered until another query is written, and the controller's flat-unit rule alone stops it.
 
-``source_custody`` maps each held source to the records a commission of the search child must name for it: the
-source and the artifacts it holds (the old ``prepare_assignment`` read them in scope; the child now reads only what
-is passed)."""
+The old display contexts of the population route are replaced by the controlled features of the G1 and G2 sheets
+(``a106_findings``), which this episode only receives from its children: it saves no sheet itself."""
+import json
+
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.perturbation_evidence.literature_a106_findings import (
-    merged_findings, own_findings)
-from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.literature_population_route import (
-    opened_population)
+    merged_findings)
 from gene_annotation_episode.episodic_workflow.episode_support.records.own_outcomes import outcome_page
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 
-from ..credit import credit_binding, lead_dispositions, screening_answers
-from ..task import ACQUISITION_NAMES
+from ..credit import credit_binding, lead_dispositions
 
 OUTCOME_PAGE_SIZE = 8        # the old configuration outcome_page_size
-READ_TOOLS = ('source_read', 'source_locate', 'source_sequence_scan', 'source_sequence_references',
-              'source_experimental_records', 'source_xlsx_rows', 'source_pdf_text', 'image_view')
-CUSTODY_KEYS = ('version', 'artifact_ref', 'text_ref', 'stdout_ref', 'stderr_ref', 'parent_source_refs')
-ARTIFACT_KEYS = ('artifact_ref', 'text_ref', 'stdout_ref', 'stderr_ref')
-HISTORY_MEANING = ('Own outcome metadata only. Read exact prior outcomes through own_literature_outcomes. Source '
-                   'delivery does not establish scientific understanding, absence or resolved science.')
-EXPERIMENTAL_WORK = {'version': 'literature_experimental_task_v1', 'aspect': 'source_experimental_evidence',
-                     'evidence_axis': 'A106'}
-
-# The literature child, whose finding is the A106 finding (its sheets are listed beside this episode's own).
-LITERATURE = ('literature_search',)
+WRITE_SEARCH = 'write_search'
+READ_TOOLS = ('state_query', WRITE_SEARCH)
+HISTORY_MEANING = ('Own outcome metadata only. Read exact prior outcomes through own_literature_outcomes. A record '
+                   'read does not establish scientific understanding, absence or resolved science.')
+NO_FINDING = {'intervention_assessments': [], 'a106_subscores': []}
 
 
-def consumed_sources(children):
-    """The sources handed to a source relevance assessment (nano-graphrag ``web_search_binding``: a candidate source
-    taken up is consumed), in the order handed out: the ``search_result_refs`` of each commission."""
-    return list(dict.fromkeys(ref for outcome in children for ref in outcome['arguments']['search_result_refs']))
+def written_searches(outcomes):
+    """The queries this episode has written, in the order written: the record each completed ``write_search`` unit
+    produced. It is a record of this episode (the request); nothing of it is run or read here."""
+    return [outcome['outcome']['result']['search_ref'] for outcome in outcomes
+            if outcome['kind'] == 'tool' and outcome['tool'] == WRITE_SEARCH
+            and outcome['outcome']['status'] == 'completed']
+
+
+def consumed_searches(children):
+    """The queries handed to a search child, in the order handed out (nano-graphrag ``processed_chunk_ids`` /
+    ``processed_row_ids``: an item handed out is done and no longer offered)."""
+    return list(dict.fromkeys(outcome['arguments']['search_query_ref'] for outcome in children))
+
+
+def request_of(records, reference):
+    """The request one of this episode's query records holds, read through custody."""
+    return json.loads(records.get_artifact(records.get(reference)['request_ref']))
 
 
 def internal_summary(view):
     parent = view.parent_input
-    task = parent['task']
-    sources = view.records.list('source')
-    # The input list (nano-graphrag's input-list paradigm): the sources this episode holds (returned search results and
-    # acquisitions, in the Store's order) that no assessment has been handed. A source handed out is consumed and no
-    # longer offered; the list shrinks as assessments are commissioned, and once it is empty no assessment can be
-    # commissioned. The yield estimator does not count it (``items=None``): an empty list does not stop the episode.
-    consumed = consumed_sources([outcome for outcome in view.outcomes if outcome['kind'] == 'child'])
-    input_list = [source['id'] for source in sources if source['id'] not in consumed]
-    outcomes = [outcome for outcome in view.outcomes if outcome['kind'] == 'tool']
-    reasons = [outcome['outcome'] for outcome in outcomes if outcome['tool'] == 'reason']
+    strategy, task = parent['strategy'], parent['task']
+    records = view.records
+    children = [outcome for outcome in view.outcomes if outcome['kind'] == 'child']
+    written = written_searches(view.outcomes)
+    consumed = consumed_searches(children)
+    input_list = [ref for ref in written if ref not in consumed]
     last = view.outcomes[-1] if view.outcomes else None
-    visual = (last['outcome'].get('visual_inputs', []) if last is not None and last['kind'] == 'tool'
-              and last['tool'] == 'image_view' and last['outcome'].get('status') == 'completed' else [])
-    # The leads in the order of the units: an own validated lead of a reasoning commit, and each relevant lead source
-    # an admitted literature child return names (the old ``lead_dispositions`` merged them by decision order).
-    leads, children = [], []
-    for outcome in view.outcomes:
-        if outcome['kind'] == 'child':
-            leads.extend({'source_ref': ref, 'disposition': 'relevant',
-                          'proposed_annotation_ref': parent['proposed_annotation_ref']}
-                         for ref in (outcome['report']['lead_source_refs']
-                                     if outcome['slot'] in LITERATURE and task['kind'] == 'verified_source_leads'
-                                     else ()))
-            children.append({'slot': outcome['slot'], 'arguments': outcome['arguments'],
-                             'report': outcome['report']})
-        elif outcome['tool'] == 'reason' and 'literature_source_lead' in outcome['outcome']:
-            leads.append(outcome['outcome']['literature_source_lead'])
-    assignment = {**parent['strategy'], 'literature_task': task,
-                  'proposed_annotation_ref': parent['proposed_annotation_ref']}
+    # The leads in the order of the units: each relevant lead source an admitted search return names (the old
+    # ``lead_dispositions`` merged them by decision order).
+    leads = [{'source_ref': ref, 'disposition': 'relevant', 'proposed_annotation_ref': parent['proposed_annotation_ref']}
+             for outcome in children for ref in outcome['report'].get('lead_source_refs', ())]
+    returned = {outcome['arguments']['search_query_ref']: outcome['report'] for outcome in children}
+    assignment = {**strategy, 'literature_task': task, 'proposed_annotation_ref': parent['proposed_annotation_ref']}
     summary = {
-        'literature_assignment': assignment, 'strategy': parent['strategy'],
+        'literature_assignment': assignment, 'strategy': strategy,
         'task': task, 'task_key': parent['task_key'], 'proposed_annotation_ref': parent['proposed_annotation_ref'],
         'scope': parent['scope'], 'received_record_refs': parent['received_record_refs'],
-        'literature_source_custody': [{'source_ref': source['id'], **{key: source.get(key) for key in CUSTODY_KEYS}}
-                                      for source in sources],
-        'source_custody': {source['id']: [source['id'], *[source[key] for key in ARTIFACT_KEYS
-                                                          if source.get(key) is not None]]
-                           for source in sources},
-        'own_literature_outcomes': outcome_page(view.outcomes, offset=0, limit=OUTCOME_PAGE_SIZE,
-                                                tools=(*ACQUISITION_NAMES, *READ_TOOLS),
+        'own_literature_outcomes': outcome_page(view.outcomes, offset=0, limit=OUTCOME_PAGE_SIZE, tools=READ_TOOLS,
                                                 tool_of=lambda outcome: outcome.get('tool')),
         'literature_history_meaning': HISTORY_MEANING,
-        'literature_experimental_work': EXPERIMENTAL_WORK,
         'credit_binding': credit_binding(parent['task_key'], task),
-        'reasoning_schema': view.records.reasoning_schema(),
-        'held_record_refs': sorted(view.records.refs()),
+        'held_record_refs': sorted(records.refs()),
         'last_local_outcome': (None if last is None
                                else {'tool': last['tool'], 'outcome': last['outcome']} if last['kind'] == 'tool'
                                else {'slot': last['slot'], 'report': last['report']}),
-        'child_reports': children,
-        'visual_evidence': visual,
         'input_list': input_list, 'consumed_inputs': consumed,
+        # Each query this episode wrote, with the request it holds and, once handed out, what the search returned.
+        'written_searches': [{'search_ref': ref, 'request': request_of(records, ref),
+                              'handed_out': ref in consumed,
+                              'report': (None if ref not in returned else
+                                         {'credit': returned[ref]['credit'], 'finding': returned[ref]['finding'],
+                                          'lead_source_refs': returned[ref].get('lead_source_refs', [])})}
+                             for ref in written],
+        'child_reports': [{'slot': outcome['slot'], 'arguments': outcome['arguments'], 'report': outcome['report']}
+                          for outcome in children],
         'units_consumed': view.units_consumed,
         'action_yields': (None if view.controller_state is None
                           else yield_table(view.controller_state, forecast_unit='credit')),
-        'a106_findings': merged_findings(own_findings(view.records, view.outcomes),
-                                         [child['report']['finding'] for child in children
-                                          if child['slot'] in LITERATURE]),
-        'opened_population': opened_population(view.outcomes),
+        'a106_findings': merged_findings(NO_FINDING, [outcome['report']['finding'] for outcome in children]),
         'source_leads': leads,
-        'no_applicable_evidence': [span for outcome in reasons if 'evidence_processing' in outcome
-                                   for span in outcome['evidence_processing']['examined']],
     }
-    summary['source_lead_dispositions'] = (lead_dispositions(summary, view.records)
-                                           if task['kind'] == 'verified_source_leads' else [])
-    summary['screening_answers'] = screening_answers(summary)
+    summary['source_lead_dispositions'] = lead_dispositions(summary, records)
     return summary

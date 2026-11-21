@@ -28,6 +28,8 @@ PATH = EPISODE.binding_path
 CHILD_CLASSES = [getattr(importlib.import_module(PACKAGE + '.' + name + '.episode'), cls) for name, cls in zip(
     CHILD_PATHS, ('TableEvidenceExtraction', 'SourceCoverageImprovement', 'PassageEvidenceExtraction'))]
 OBJECTIVE = 'evidence_in_passages'
+POPZ_SEQUENCE = ('MSDQSQEPTMEEILASIRRIISEDDAPAEPAAEAAPPPPPEPEPEPVSFDDEVLELTDPIAPEPELPPLETVGDIDVYSPPEPESEPAYTPPPAAPVFDRDEVAEQ'
+                 'LVGVSAASAAASAFGSLSSALLMPKDGRTLEDVVRELLRPLLKEWLDQNLPRIVETKVEEEVQRISRGRGA')
 
 
 def popz_world(directory):
@@ -42,29 +44,23 @@ def popz_world(directory):
                                   'version': None, 'retrieved_at': None, 'parent_source_refs': []},
                        origin='caller')['id']
 
-    def protein(label):
+    def protein(label, sequence=None):
+        """PopZ, the claim's subject, holds its real sequence (UniProt A0A0H3C7Y4): the page compares the protein a paper
+        identifies with it by pairwise BLAST."""
         return store.put('reference', {'reference_type': 'protein', 'source_ref': source, 'accession': label.lower(),
-                                       'label': label, 'sequence_ref': None, 'molecule': None, 'length': None,
-                                       'term_refs': [], 'context_refs': [], 'anchor': None}, origin='caller')['id']
-    popz, parb = protein('PopZ'), protein('ParB')
+                                       'label': label, 'anchor': None, 'term_refs': [], 'context_refs': [],
+                                       'sequence_ref': None if sequence is None else store.artifact(sequence, 'text/plain'),
+                                       'molecule': None if sequence is None else 'protein',
+                                       'length': None if sequence is None else len(sequence)}, origin='caller')['id']
+    popz, parb = protein('PopZ', POPZ_SEQUENCE), protein('ParB')
     proposed = store.put('hypothesis', {'subject_refs': [popz], 'predicate': 'binds',
                                         'value': {'type': 'reference', 'ref': parb}, 'context_refs': []},
                          origin='reasoning')['id']
-    start = len('Preceding text. '.encode())
-    quote = spr_passages.POPZ_FIRST
-    assay = store.put('reference', {'reference_type': 'assay', 'source_ref': source, 'accession': 'popz_parb_spr',
-                                    'label': 'PopZ ParB SPR', 'sequence_ref': None, 'molecule': None, 'length': None,
-                                    'term_refs': [], 'context_refs': [],
-                                    'anchor': {'source_ref': source, 'artifact_ref': artifact, 'start': start,
-                                               'end': start + len(quote.encode()), 'quote': quote}},
-                      origin='caller')['id']
     assignment = dict(world['input']['assignment'])
     assignment.update({'source_ref': source, 'artifact_ref': artifact, 'proposed_annotation_ref': proposed,
-                       'literature_task': {'version': 'literature_local_task_v1', 'kind': 'a105_experiments',
-                                           'evidence_axis': 'A105', 'credit_unit': 1.0,
-                                           'experiments': [{'experiment_ref': assay, 'assay_type': 'ligand_binding'}]},
-                       'received_record_refs': [world['target'], source, artifact, assay, popz, parb, proposed]})
-    world.update({'source': source, 'artifact': artifact, 'assay': assay, 'proposed': proposed, 'text': text,
+                       'received_record_refs': [world['target'], source, artifact, popz, store.get(popz)['sequence_ref'], parb,
+                                                proposed]})
+    world.update({'source': source, 'artifact': artifact, 'proposed': proposed, 'text': text,
                   'input': {'assignment': assignment, 'message': {'objective': OBJECTIVE},
                             'selection': ['sheet_state_refs']}})
     return world
@@ -78,7 +74,7 @@ def linked(directory, world, run_id):
     journal = RunJournal(directory / 'journal.sqlite3')
     world['collaborators'] = {'store': world['store'],
                               'model_provider': ModelProvider(load_config(), directory / 'model_calls', directory),
-                              'continuation': continuation, 'services': {}}
+                              'continuation': continuation, 'services': gw.job_world_services(directory)}
     return registry, journal, link(registry, PATH, world['input'], run_id=run_id, journal=journal,
                                    collaborators=world['collaborators'])
 
@@ -90,7 +86,6 @@ def recorded_requests(tmp_path):
 
 # Each episode's decision calls and the context key a call carries when it asks again after a refused answer: the page's
 # decisions carry the refusal as ``feedback``; the chunk's extraction calls as ``previous_answer_was_rejected_because``.
-# Other calls (the classification tail of a page ``reason``) are not decisions and are not counted.
 ASKED_AGAIN_KEYS = {'page': 'feedback', 'chunk': 'previous_answer_was_rejected_because'}
 
 
@@ -118,8 +113,9 @@ def rejection_facts(requests, page_units):
         reasons.extend((name, call['context'][key]) for call, asked in zip(calls, again) if asked)
         if name == 'page':
             accepted_page = len(accepted)
-    # The page's assess_content unit is decided by code (no model call); every other page unit is one accepted call.
-    decided = [unit for unit in page_units if not (unit[2]['kind'] == 'tool' and unit[2]['tool'] == 'assess_content')]
+    # The page's assess_content and update_sheet units are decided by code (no model call); every other page unit is one
+    # accepted call.
+    decided = [unit for unit in page_units if unit[2]['kind'] == 'child']
     return retried, abs(accepted_page - len(decided)), reasons
 
 
@@ -142,7 +138,7 @@ def print_inputs(store, units):
             assignment = outcome['message']['assignment']
             windows = assignment.get('windows') or [[assignment['offset'], assignment['offset'] + assignment['limit']]]
             print('PAGE_UNIT', index, 'child', outcome['slot'], outcome['arguments'].get('candidate_id'), windows,
-                  outcome['arguments']['experiment_type'])
+                  assignment['sheet_class'])
             handed.extend(windows)
         else:
             print('PAGE_UNIT', index, 'tool', outcome['tool'])
@@ -237,21 +233,10 @@ def dfra_world(directory):
     proposed = store.put('hypothesis', {'subject_refs': [dfra], 'predicate': 'catalyzes',
                                         'value': {'type': 'term_ref', 'ref': dhf}, 'context_refs': []},
                          origin='reasoning')['id']
-    start = len('Preceding text. '.encode())
-    quote = paragraph[:60]
-    assay = store.put('reference', {'reference_type': 'assay', 'source_ref': source, 'accession': 'thdf_flavin_reductase_kinetics',
-                                    'label': 'ThdF flavin reductase kinetics', 'sequence_ref': None, 'molecule': None, 'length': None,
-                                    'term_refs': [], 'context_refs': [],
-                                    'anchor': {'source_ref': source, 'artifact_ref': artifact, 'start': start,
-                                               'end': start + len(quote.encode()), 'quote': quote}},
-                      origin='caller')['id']
     assignment = dict(world['input']['assignment'])
     assignment.update({'source_ref': source, 'artifact_ref': artifact, 'proposed_annotation_ref': proposed,
-                       'literature_task': {'version': 'literature_local_task_v1', 'kind': 'a105_experiments',
-                                           'evidence_axis': 'A105', 'credit_unit': 1.0,
-                                           'experiments': [{'experiment_ref': assay, 'assay_type': 'activity_rate'}]},
-                       'received_record_refs': [world['target'], source, artifact, assay, dfra, dhf, proposed]})
-    world.update({'source': source, 'artifact': artifact, 'assay': assay, 'proposed': proposed, 'text': text,
+                       'received_record_refs': [world['target'], source, artifact, dfra, dhf, proposed]})
+    world.update({'source': source, 'artifact': artifact, 'proposed': proposed, 'text': text,
                   'input': {'assignment': assignment, 'message': {'objective': OBJECTIVE},
                             'selection': ['sheet_state_refs']}})
     return world
@@ -278,7 +263,7 @@ def test_the_page_commissioned_for_thdf_catalyzes_flavin_reduction_returns_credi
     for unit in units:
         if unit[2]['kind'] == 'child':
             print('PAGE_CHILD_REPORT', unit[2]['slot'], json.dumps(unit[2]['report'])[:1500])
-            print('PAGE_CHILD_EXPERIMENT_TYPE', unit[2]['arguments'].get('experiment_type'))
+            print('PAGE_CHILD_SHEET_CLASS', unit[2]['message']['assignment']['sheet_class'])
         elif unit[2]['tool'] == 'update_sheet':
             print('PAGE_UPDATE_SHEET_OUTCOME', json.dumps(unit[2]['outcome'])[:3000])
     print('PAGE_RETURN', json.dumps(result))
@@ -290,7 +275,8 @@ def test_the_page_commissioned_for_thdf_catalyzes_flavin_reduction_returns_credi
     chunks = [unit for unit in units if unit[2]['kind'] == 'child' and unit[2]['slot'] == 'chunk']
     updates = [unit for unit in units if unit[2]['kind'] == 'tool' and unit[2]['tool'] == 'update_sheet']
     assert chunks and updates
-    assert any(unit[2]['arguments'].get('experiment_type') == 'spectro_direct' for unit in chunks)      # the page chose the new type
+    assert all(set(unit[2]['arguments']) == {'candidate_id'} for unit in chunks)      # the page names no type
+    assert all(unit[2]['message']['assignment']['sheet_class'] == 'activity_rate' for unit in chunks)      # it hands the claim's class
     assert EPISODE.return_form.select(('sheet_state_refs',)).admit(result, 'return') == result
     assert set(result) == {'credit', 'finding', 'sheet_state_refs'}
     assert set(result['finding']) == {'scores', 'features'}      # no raw record, no grader, no leaf record

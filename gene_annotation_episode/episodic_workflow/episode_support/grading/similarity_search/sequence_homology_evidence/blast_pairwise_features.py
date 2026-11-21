@@ -27,7 +27,7 @@ SHEET_FEATURES = {
     'hsp_count': ('count',),
     'issue_count': ('count',),
     'query_length': ('count',),
-    'reference_length': ('count',),
+    'reference_length': ('count', 'optional'),   # absent when BLAST reported no alignment: the sheet then has no reference
     'paired_query_positions': ('count',),
     'paired_reference_positions': ('count',),
     'identical_residue_pairs': ('count',),
@@ -89,21 +89,27 @@ def grading_features(grading, sheet_ref):
         raise ValueError('blast_pairwise_sheet_required')
     union = sheet['union']
     counts, fractions = union['counts'], union['fractions']
+    if sheet['status'] == 'no_reported_alignment':
+        # nothing is paired: the union has no rows, so the sheet leaves these unavailable; the graded result is zero
+        counts = {**counts, 'identical_residue_pairs': 0}
+        fractions = {**fractions, 'query_paired_coverage': 0.0, 'reference_paired_coverage': 0.0}
     search = sheet['input']['search']
     evalues = [value for value in (_number(row['components']['native_scores'].get('evalue'))
                                    for row in sheet['hsps']) if value is not None]
     statistics = search.get('statistics') or {}
+    reference = sheet['reference']
     features = {'evidence_type': EVIDENCE_TYPE, 'sheet_refs': [sheet_ref],
                 'routed_to_axis_credit': search['program'] == 'blastp',
                 'traceback_complete': counts['hsps_without_geometry'] == 0 and bool(union['complete_for_reported_hsps']),
                 'hsp_count': len(sheet['hsps']), 'issue_count': len(sheet['issues']),
-                'query_length': sheet['query']['length'], 'reference_length': sheet['reference']['length'],
+                'query_length': sheet['query']['length'],
                 'paired_query_positions': counts['paired_query_positions'],
                 'paired_reference_positions': counts['paired_reference_positions'],
                 'identical_residue_pairs': counts['identical_residue_pairs'],
                 'query_paired_coverage': fractions['query_paired_coverage'],
                 'reference_paired_coverage': fractions['reference_paired_coverage']}
-    optional = {'paired_identity': fractions.get('paired_identity'),
+    optional = {'reference_length': None if reference is None else reference['length'],
+                'paired_identity': fractions.get('paired_identity'),
                 'min_native_evalue': min(evalues, default=None),
                 'expect_threshold': _number((search.get('parameters') or {}).get('expect')),
                 **{feature: _number(statistics.get(name)) for name, feature in STATISTICS.items()}}

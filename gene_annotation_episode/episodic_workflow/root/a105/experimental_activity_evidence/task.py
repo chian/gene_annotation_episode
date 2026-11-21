@@ -15,9 +15,11 @@ Children. The old ``child_roles`` were this head itself (``experimental_activity
 ``messages/msg_to_child.py`` builds each commission.
 
 Tools offered. The registry tools are the A105 tool library's catalog (``A105ToolRegistry.catalog``); this episode
-offers those the commissioner selected in ``selection['child_tool_info']`` (the old selected tools), and always the
-library lookups (``process_search``, ``process_entry``, ``process_sources``), ``process_revise`` and ``reason``.
-A selected tool this episode does not have raises (a wrong commission fails).
+offers, of those the commissioner selected in ``selection['child_tool_info']``, only the ones its role needs
+(``ROLE_REGISTRY_NAMES``: ``state.query``, the reading of records it holds), and always the library lookups
+(``process_search``, ``process_entry``, ``process_sources``), ``process_revise`` and ``reason``. It runs no provider
+search and obtains or reads no paper (the literature child does that, below the strategy and web search), whatever
+the selection holds. A selected tool the library does not have raises (a wrong commission fails).
 
 A105 evidence processing (AGENTS.md, "Required literature evidence processing"): the ``reason`` tool is the
 required-grading action (the old head committed with a plain reasoning commit; the rule couples the grading with
@@ -43,20 +45,14 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.experimenta
 from gene_annotation_episode.episodic_workflow.episode_support.instructions.experimental_activity_evidence.evidence_axis_instructions import (
     VERSION as INSTRUCTION_VERSION, instruction_view)
 from gene_annotation_episode.episodic_workflow.episode_support.instructions.instruction_spans import replace_span
-from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_assay_grading import (
-    ASSAY_TYPES, COMPONENTS as ASSAY_GRADING_COMPONENTS)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_reasoning import (
     REASON_DESCRIPTION, empty_commit, reason as reasoning_unit, reason_schema as reasoning_schema)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.prompts.experimental_activity_evidence.literature_grading_instructions import (
     grading_section)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.prompts.experimental_activity_evidence.literature_investigation_prompt import (
     INSTRUCTIONS, REASONING_COMMIT_REQUIREMENT)
-from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_aggregation import (
-    COMPONENTS as AGGREGATION_COMPONENTS)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_sequence_discovery import (
     identity_schema, references_schema)
-from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_quantity_storage import (
-    COMPONENTS as QUANTITY_COMPONENTS, quantity_population_schema)
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.strict_output import (
     decode_strict_output, strict_output_schema)
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.presentation import extend_context
@@ -96,6 +92,9 @@ REGISTRY_NAMES = ('state.query', 'source.read', 'source.locate', 'source.sequenc
                   'public.literature.search', 'public.literature.read', 'public.literature.sequence_identity',
                   'public.ncbi.search', 'public.ncbi.sequence', 'public.taxonomy',
                   'public.pmc.versions', 'public.pmc.files', 'public.pmc.asset', *EXPERIMENT_DATABASE_TOOLS)
+# What this episode offers its model of those tools: it reads records it holds. Every tool that runs a provider search
+# or obtains or reads a paper (the public, source and database tools above) is not offered to it.
+ROLE_REGISTRY_NAMES = ('state.query',)
 # The old ``_RECEIVED_SOURCE_READERS``: the source locator reads only records this episode received.
 HELD_SOURCE_TOOLS = ('source.locate',)
 LIBRARY_LOOKUPS = ('process.search', 'process.entry', 'process.sources')
@@ -145,95 +144,29 @@ REVISION_ARGUMENTS = obj({'thought_pattern': OPTION_REF,
                           'child_tool_info': {'type': 'array', 'items': TOOL_SELECTOR, 'uniqueItems': True}})
 
 # The literature assignment (private copy of what the published-evidence assessment takes; the head states it in its
-# own text and schema and sends it by name, rule 5).
-OTHER_REQUESTED = (
-    'requested_concentration_window_components', 'requested_measurement_comparison_components',
-    'requested_kinetic_summary_precision_components', 'requested_rate_grid_components',
-    'requested_rate_observation_components', 'requested_calibration_recovery_components',
-    'requested_product_coupling_components', 'requested_measurement_validation_components',
-    'requested_rate_replicate_components', 'requested_rate_components', 'requested_assay_components',
-    'requested_ratio_components', 'requested_binding_components', 'requested_binding_model_components',
-    'requested_transport_components', 'requested_endpoint_signal_components', 'requested_figure_components',
-    'requested_amount_components', 'requested_optical_components', 'requested_kinetic_components',
-    'requested_kinetic_model_components', 'requested_binding_interaction_model_components',
-    'requested_binding_interaction_components', 'requested_ion_discrimination_components',
-    'requested_channel_components', 'requested_compiled_assay_components',
-    'requested_compiled_assay_components_v2', 'requested_compiled_assay_components_v3',
-    'requested_parent_depletion_components', 'requested_stoichiometric_balance_components',
-    'requested_product_partition_components', 'requested_completion_time_components',
-    'requested_active_site_components', 'requested_ratio_source_components',
-    'requested_controlled_response_components', 'requested_controlled_response_views',
-    'requested_controlled_response_component_keys', 'requested_gel_components', 'requested_gel_views',
-    'requested_gel_component_keys')
-
-
-# What each literature_task kind is for, and what it earns (read from credit.py and literature/credit.py).
-KIND_DESCRIPTIONS = {
-    'verified_source_leads': (
-        'Send this kind for a claim that has no graded evidence yet. The literature child searches for sources, '
-        'opens the pages it finds, extracts the experiments they report and grades them on the claim. It returns '
-        'its credit and the states of the subscoring sheet. It needs no experiment record beforehand; it finds out '
-        'whether a source reports an experiment at all.'),
-    'source_answer': (
-        'Send this kind only to answer one question about sources you already hold: assess them, screen named '
-        'spans, or read one measurement. It earns the credit unit once, for that one answer. It does not search '
-        'for sources.'),
-    'a105_experiments': (
-        'Send this kind only for experiment records you already hold. It grades each named experiment on its '
-        'assay type and earns credit by the change of the sheet. Without held experiment records it cannot be '
-        'used.'),
-    'a105_assembly': (
-        'Send this kind only to combine experiments that are already graded into one aggregation sheet. It earns '
-        'the credit unit once, for that one sheet.')}
+# own text and schema and sends it by name, rule 5). The one task is the search for sources of a claim.
+VERIFIED_SOURCE_LEADS = (
+    'Send this task for a claim that has no graded evidence yet. The literature child proposes searches, has them run, '
+    'opens the pages of the papers they find, extracts the experiments those report and grades them on the claim. It '
+    'returns its credit and the states of the subscoring sheet. It needs no experiment record, no search and no paper '
+    'beforehand; it finds out whether a paper reports an experiment at all.')
 
 
 def literature_task_schema():
-    """The commissioned literature result and its explicit local credit unit (the old ``goal.task_schema``)."""
+    """The commissioned literature task and its explicit local credit unit: the one kind, ``verified_source_leads``."""
     yield_settings = obj({'kind': {'enum': ['accumulation', 'remaining_commissioned_credit']},
                           'cutoff': {'type': 'number', 'minimum': 0},
                           'uncertainty_alpha': {'type': 'number', 'exclusiveMinimum': 0, 'exclusiveMaximum': 1}})
     base = {'version': {'const': 'literature_local_task_v1'}, 'evidence_axis': {'const': 'A105'},
-            'credit_unit': {'type': 'number', 'exclusiveMinimum': 0}, 'yield_settings': yield_settings}
-
-    def task_object(properties):
-        return obj(properties, required=[key for key in properties if key != 'yield_settings'])
-    refs = {'type': 'array', 'items': REF, 'minItems': 1, 'uniqueItems': True}
-    span = obj({'source_ref': REF, 'artifact_ref': REF, 'start': {'type': 'integer', 'minimum': 0},
-                'end': {'type': 'integer', 'minimum': 1}})
-    return {'anyOf': [
-        task_object({**base, 'kind': {'const': 'verified_source_leads', 'description': KIND_DESCRIPTIONS[
-            'verified_source_leads']}}),
-        task_object({**base, 'kind': {'const': 'source_answer', 'description': KIND_DESCRIPTIONS['source_answer']},
-                     'answer_kind': {'const': 'assessment'}, 'source_refs': refs}),
-        task_object({**base, 'kind': {'const': 'source_answer', 'description': KIND_DESCRIPTIONS['source_answer']},
-                     'answer_kind': {'const': 'screening'},
-                     'examined': {'type': 'array', 'minItems': 1, 'items': span}}),
-        task_object({**base, 'kind': {'const': 'source_answer', 'description': KIND_DESCRIPTIONS['source_answer']},
-                     'answer_kind': {'const': 'measurement'},
-                     'selection': quantity_population_schema(),
-                     'components': {'type': 'array', 'minItems': 1, 'uniqueItems': True,
-                                    'items': {'enum': ['reported_value', 'reported_spread',
-                                                       'relative_reported_spread']}}}),
-        task_object({**base, 'kind': {'const': 'a105_experiments', 'description': KIND_DESCRIPTIONS[
-            'a105_experiments']},
-                     'experiments': {'type': 'array', 'minItems': 1,
-                                     'items': obj({'experiment_ref': REF, 'assay_type': {'enum': list(ASSAY_TYPES)}})}}),
-        task_object({**base, 'kind': {'const': 'a105_assembly', 'description': KIND_DESCRIPTIONS['a105_assembly']},
-                     'experiment_refs': refs,
-                     'metrics': {'type': 'array', 'minItems': 1, 'uniqueItems': True,
-                                 'items': {'enum': ['reliability', 'validity', 'relevance', 'attribution',
-                                                    'overall']}}})]}
+            'credit_unit': {'type': 'number', 'exclusiveMinimum': 0}, 'yield_settings': yield_settings,
+            'kind': {'const': 'verified_source_leads', 'description': VERIFIED_SOURCE_LEADS}}
+    return obj(base, required=[key for key in base if key != 'yield_settings'])
 
 
 def literature_assignment_schema():
-    requested = {'requested_assay_grading_components': {'type': 'array', 'items': {'enum': list(ASSAY_GRADING_COMPONENTS)}},
-                 'requested_a105_aggregation_components': {'type': 'array', 'items': {'enum': list(AGGREGATION_COMPONENTS)}},
-                 'requested_quantity_components': {'type': 'array', 'items': {'enum': list(QUANTITY_COMPONENTS)}},
-                 **{name: {'type': 'array', 'items': TEXT} for name in OTHER_REQUESTED}}
     properties = {'version': {'const': 'literature_assignment_v1'}, 'question_context_refs': REFS,
-                  'source_refs': REFS, 'literature_task': literature_task_schema(),
-                  'proposed_annotation_ref': REF, **requested}
-    return obj(properties, required=['version', 'question_context_refs', 'source_refs', 'literature_task',
+                  'literature_task': literature_task_schema(), 'proposed_annotation_ref': REF}
+    return obj(properties, required=['version', 'question_context_refs', 'literature_task',
                                      'proposed_annotation_ref'])
 
 
@@ -248,12 +181,12 @@ CHILD_ARGUMENTS = {
         obj({'objective': OBJECTIVE, 'scope': SCOPE, 'assignment': HEAD_ASSIGNMENT,
              'request_results': {'type': 'boolean'}}, required=['objective', 'scope', 'assignment'])),
     'literature': (
-        'Commission an A105 published-evidence assessment of one proposed annotation: it searches and reads the '
-        'sources, grades each applicable experiment with its purpose-specific subscoring sheet and returns its '
-        'credit, its typed findings and the typed answer its task requires. Name the sources and the question '
-        'context it starts from. For a claim with no graded evidence yet, set literature_task.kind to '
-        "'verified_source_leads': the child searches, opens pages and grades what it finds, and returns the sheet "
-        "states and its credit. Use 'a105_experiments' only for experiment records you already hold.",
+        'Commission an A105 published-evidence assessment of one proposed annotation: it proposes searches, has them '
+        'run, opens the papers they find, grades each experiment those report with its purpose-specific subscoring '
+        'sheet and returns its credit, its typed findings and the typed answer its task requires. Name the question '
+        "context it starts from. The one task is literature_task.kind 'verified_source_leads': the child searches, "
+        'opens pages and grades what it finds, and returns the sheet states and its credit. It needs no paper, '
+        'search or experiment record from you.',
         obj({'objective': OBJECTIVE, 'scope': SCOPE, 'assignment': literature_assignment_schema()})),
 }
 
@@ -306,12 +239,12 @@ CHILD_GUIDANCE = ('\nSelect a child with its objective, scope and assignment whe
                   'iteration; what it returns is shown to you as child_returns. A child earns credit in this '
                   'episode only through the records it returns.\n'
                   'What earns credit here: a retained finding from a committed reasoning assessment with its grading '
-                  'sheet (reason), and the credit a child returns. Your own searches and reads (the public and '
-                  'source tools, process_search, process_entry, process_sources, process_revise) earn no credit; '
-                  'they can only prepare a commission or a commit. A paper you read yourself earns nothing until a '
-                  'child or a reasoning commit grades it. For a claim with no graded evidence yet, commission the '
-                  "literature child with literature_task.kind 'verified_source_leads'; it does the searching, "
-                  "page reading and grading. 'a105_experiments' is only for experiment records you already hold.")
+                  'sheet (reason), and the credit a child returns. Your own reads of held records and lookups '
+                  '(state_query, process_search, process_entry, process_sources, process_revise) earn no credit; '
+                  'they can only prepare a commission or a commit. You run no provider search and read no paper '
+                  'yourself: the literature child does. For a claim with no graded evidence yet, commission the '
+                  "literature child with literature_task.kind 'verified_source_leads' (its one task); it does the "
+                  'searching, page reading and grading.')
 REVISE_DESCRIPTION = ('Prepare a different thought pattern and/or selected actual tools for a new child investigating '
                       'the same evidence axis. Return its selection for a separately selected child commission with '
                       "the child's scope, constraints and typed return. Copy result.selection and revision_origin "
@@ -338,13 +271,14 @@ def axis_entry(library, selection):
 
 
 def offered(summary):
-    """The tools offered now (library names): the registry tools the commissioner selected, the library lookups,
-    the revision preparation and the reasoning commit. A selected tool this episode does not have raises."""
+    """The tools offered now (library names): of the registry tools the commissioner selected, those of this role
+    (``ROLE_REGISTRY_NAMES``), the library lookups, the revision preparation and the reasoning commit. A selected tool
+    the library does not have raises."""
     selected = [item['name'] for item in summary['selection']['child_tool_info']]
     unknown = sorted(set(selected) - set(REGISTRY_NAMES))
     if unknown:
         raise ValueError('a105_selected_tools_not_in_the_tool_library:' + ','.join(unknown))
-    return [*[name for name in REGISTRY_NAMES if name in selected], *LIBRARY_LOOKUPS, 'process.revise', 'reason']
+    return [*[name for name in ROLE_REGISTRY_NAMES if name in selected], *LIBRARY_LOOKUPS, 'process.revise', 'reason']
 
 
 def offered_actions(summary, ctx):

@@ -63,6 +63,7 @@ def internal_summary(view):
                            'features': outcome['report']['features']}
                           for outcome in children],
         'sheet_state_refs': sheet_state_refs,
+        'given_sheet_state_refs': list(parent['sheet_state_refs']),
         'scores': children[-1]['report']['scores'] if children else [],
         'features': children[-1]['report']['features'] if children else [],
         'no_applicable_spans': no_applicable_spans(view.outcomes, records),

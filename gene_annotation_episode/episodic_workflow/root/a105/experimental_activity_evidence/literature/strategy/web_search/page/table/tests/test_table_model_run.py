@@ -25,7 +25,7 @@ from gene_annotation_episode.model_provider import ModelProvider, load_config
 
 from ...chunk.tests.leaf_world import SETTINGS, held_world
 from ...chunk.tests.test_extraction_model_run import (
-    check_identity, no_unrecovered_rejection, quote_span, rejection_counts, type_answer)
+    check_identity, check_named, fill_calls, no_unrecovered_rejection, quote_span, rejection_counts, type_answer)
 from ..episode import TableEvidenceExtraction
 from ..task import TEXT
 
@@ -59,7 +59,8 @@ def test_the_real_iscr_kd_table_is_read_by_the_table_leaf(tmp_path):
                collaborators=collaborators)
     result = asyncio.run(run.run())['result'].as_record()
     path = tuple(tuple(step) for step in journal.episodes(run_id)[0]['path'])
-    calls = journal.model_calls(run_id, path)
+    every_call = journal.model_calls(run_id, path)
+    calls = fill_calls(every_call)             # the unit's fills; the naming calls are checked by check_named
     units = [row[2] for row in journal.units(run_id, path)]
     state = journal.run_state(run_id)[1]
     print('ENDED', state)
@@ -86,6 +87,7 @@ def test_the_real_iscr_kd_table_is_read_by_the_table_leaf(tmp_path):
         assert keys['target_id'] is not None and EXPECTED_TARGET in keys['target_id'], ('the table names IscR', keys['target_id'])
     records = [json.loads(world['store'].get_artifact(ref)) for ref in result['record_refs']]
     window = str(world['input']['assignment']['offset']) + '-' + str(world['input']['assignment']['offset'] + len(table.encode('utf-8')))
+    check_named(world, every_call, records)                        # the leaf was handed the sheet class and named fp
     for record in records:
         print('LEAF RECORD', record['experiment_ref'], 'TARGET', record.get('target_id'), 'PARTNER', record.get('partner_id'))
     assert [record['experiment_ref'].rsplit(':', 1)[1] for record in records] == [window]   # one standing record of the table

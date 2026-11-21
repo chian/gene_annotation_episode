@@ -5,9 +5,12 @@ the text is called (``text``: 'chunk', 'table', 'window'; it is the noun of ever
 text), an optional sentence of their own on how their text reads (``reading``), and which window's standing records the
 model is shown.
 
-The commission names the kind of experiment (``experiment_type``, a controlled value of ``FORMS``). Code picks, by that
-value, the extraction module (``FORMS``) and, through the record's own type, the grader; the model never picks either and
-never calls the grader. The model is asked once per unit, with the text, to fill the answer form derived from that kind's
+The commission names the sheet class of the claim (``sheet_class``), not an experiment type: the page has not read the text.
+The leaf's model first NAMES the method the text reports (``method_request``/``method_call``: a type of that class, shown
+with its plain line, or ``none``, in which case the window is done without a record); the unit's tool then has the model fill
+the named type's form (``extraction_arguments``, the decision's naming and the tool's fills are the calls of one unit). Code
+picks, by the named value, the extraction module (``FORMS``) and, through the record's own type, the grader; the model never
+picks either and never calls the grader. The model fills, with the text, the answer form derived from that kind's
 grader input form plus the identity block (``literature_identity_extraction``). ``extraction_call`` checks the answer with
 that module's validator (an answer that is not in the form, or a quote that is not in the text exactly once, is rejected
 before any unit exists and the episode's ``decide`` asks again with the reason); ``leaf_record`` turns the valid answer into
@@ -29,6 +32,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.
     literature_proximity_extraction, literature_pulldown_extraction, literature_radioligand_extraction,
     literature_sec_extraction, literature_spa_extraction, literature_spectro_direct_extraction, literature_split_reporter_extraction, literature_spr_extraction,
     literature_trp_extraction, literature_y2h_extraction)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_row_contract import (
+    CLASS_OF_EXPERIMENT_TYPE, EXPERIMENT_TYPE_LINES, experiment_types_of_class)
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.experimental_activity_evidence.action_transport import (
     decode_response, generation_schema)
 
@@ -1045,7 +1050,12 @@ IDENTITY_PARAGRAPH = (
     'instrument, control protein, or a molecule the {text} only cites from other work is not the target. If the {text} '
     'names no target, answer unavailable. Give the name exactly as the {text} writes it (the name is a part of the '
     'quote, and the quote is a short unique span around it); you do not normalise it. The partner is the other '
-    'molecule the target is tested against, only when the {text} names it. Give a number only when the {text} writes it, '
+    'molecule the target is tested against, only when the {text} names it. The identity block also asks which sequence the '
+    'target (and the partner) is: the database identifier exactly as the {text} writes it (an accession, a locus tag or a '
+    'gene identifier), the database it belongs to, the organism and strain, the residue range and the mutations, each only '
+    'when the {text} writes it for this experiment. A name alone is not a database identifier: if the {text} gives only the '
+    'name, the identifier is unavailable. An organism named for another experiment or a cited study is not this '
+    'experiment\'s organism. Give a number only when the {text} writes it, '
     'and a class only when the {text} states what the class describes. The reference to a figure, table or section is '
     'the quote of the reference as the {text} writes it, with its kind, number and panel letter.')
 INSTRUCTIONS = {'spr': SPR_INSTRUCTIONS, 'itc': ITC_INSTRUCTIONS, 'bli': BLI_INSTRUCTIONS, 'gci': GCI_INSTRUCTIONS, 'fp': FP_INSTRUCTIONS, 'fret': FRET_INSTRUCTIONS, 'mst': MST_INSTRUCTIONS, 'trp_quenching': TRP_INSTRUCTIONS, 'fcs': FCS_INSTRUCTIONS, 'elisa': ELISA_INSTRUCTIONS, 'alphascreen': ALPHA_INSTRUCTIONS, 'radioligand': RADIOLIGAND_INSTRUCTIONS, 'spa': SPA_INSTRUCTIONS, 'pulldown': PULLDOWN_INSTRUCTIONS, 'emsa': EMSA_INSTRUCTIONS, 'sec': SEC_INSTRUCTIONS, 'dialysis': DIALYSIS_INSTRUCTIONS, 'auc': AUC_INSTRUCTIONS, 'split_reporter': SPLIT_REPORTER_INSTRUCTIONS, 'cetsa': CETSA_INSTRUCTIONS, 'y2h': Y2H_INSTRUCTIONS, 'dsf': DSF_INSTRUCTIONS, 'pla': PLA_INSTRUCTIONS, 'proximity': PROXIMITY_INSTRUCTIONS, 'bret': BRET_INSTRUCTIONS, 'spectro_direct': SPECTRO_DIRECT_INSTRUCTIONS}
@@ -1103,6 +1113,78 @@ def extraction_call(response, experiment_type, content, *, source_ref, offset, l
                                 'assertion_ref': assertion_ref})
 
 
+# The word a leaf names for a window that reports none of the methods of its sheet class.
+NONE = 'none'
+# The sheet classes that have at least one experiment type: the values a page can hand a leaf as ``sheet_class``.
+SHEET_CLASSES = tuple(dict.fromkeys(CLASS_OF_EXPERIMENT_TYPE.values()))
+
+# The first choice of a leaf on one window: which method the window reports. The page has not read the text, so it hands the
+# leaf the sheet class of the claim only; the leaf names the method (a type of that class, or none) and then fills that type's form.
+METHOD_INSTRUCTIONS = (
+    'You are the first step of a system that scores how well published experiments support a proposed annotation of a '
+    'protein. You are given one {text} of text from a published source and the sheet class of the claim (sheet_class). '
+    'Say which experimental method, if any, the {text} reports. The methods that can support a claim of that class are '
+    'listed in methods, each with one plain line that says what it is.\n'
+    'Answer with the name of exactly one listed method when the {text} itself reports a result obtained with it (a '
+    'measured or stated value, or how the experiment was done), or with none when the {text} reports none of the listed '
+    'methods. A method that the {text} only mentions as background, cites from other work or proposes for later is not '
+    'reported. If the {text} reports results of several listed methods, name the one whose result is about the molecules '
+    'the {text} is mainly about. You extract nothing now: a later step reads the {text} again and fills in the form of '
+    'the method you name.')
+
+
+def methods_of(sheet_class):
+    """{experiment type: its plain line} of the types of ``sheet_class``, in registry order; a class with no type raises."""
+    types = experiment_types_of_class(sheet_class)
+    if not types:
+        raise ValueError('literature_sheet_class_has_no_experiment_type:' + sheet_class)
+    return {name: EXPERIMENT_TYPE_LINES[name] for name in types}
+
+
+def method_schema(sheet_class):
+    """The schema of the naming: one field, ``method``, a type of the class or ``none``."""
+    return {'type': 'object', 'additionalProperties': False, 'required': ['method'],
+            'properties': {'method': {'type': 'string', 'enum': [*methods_of(sheet_class), NONE]}}}
+
+
+def method_request(sheet_class, content, feedback, *, text):
+    """The model request that names the method ``content`` (the text, shown under the key ``text``) reports."""
+    context = {'sheet_class': sheet_class, 'methods': methods_of(sheet_class), text: content,
+               'previous_answer_was_rejected_because': feedback}
+    return ModelRequest('REASONING', METHOD_INSTRUCTIONS.format(text=text), context, generation_schema(method_schema(sheet_class)))
+
+
+def method_call(response, sheet_class, content, already_stated, not_yet_stated, *, source_ref, offset, limit, assertion_ref):
+    """The ``extract`` call of the model's naming ``response``: ``experiment_type`` is the type named, or None for ``none``
+    (the window is done without a record). A method that is not one of the class's is rejected before any unit exists."""
+    schema = method_schema(sheet_class)
+    method = decode_response(response, schema)['method']
+    if method not in schema['properties']['method']['enum']:
+        raise Rejected({'status': 'invalid', 'category': 'method_not_listed', 'detail': method})
+    return ToolCall('extract', {'experiment_type': None if method == NONE else method, 'sheet_class': sheet_class,
+                                'source_ref': source_ref, 'chunk': content, 'offset': offset, 'limit': limit,
+                                'assertion_ref': assertion_ref, 'already_stated_fields': already_stated,
+                                'not_yet_stated_fields': not_yet_stated})
+
+
+async def extraction_arguments(model, arguments, *, text, reading=''):
+    """The arguments of the leaf record of the type named in ``arguments`` (the ``extract`` call of ``method_call``): the
+    model (the unit's recorded ``ctx.model``) fills that type's form with its identity block, quote-only; an answer the
+    validator refuses is asked again with the reason, until one is accepted."""
+    feedback = None
+    while True:
+        request = extraction_request(arguments['experiment_type'], arguments['chunk'], feedback,
+                                     arguments['already_stated_fields'], arguments['not_yet_stated_fields'],
+                                     text=text, reading=reading)
+        response = await model.complete(request.role, request.instructions, request.context, request.output_schema)
+        try:
+            return extraction_call(response, arguments['experiment_type'], arguments['chunk'],
+                                   source_ref=arguments['source_ref'], offset=arguments['offset'],
+                                   limit=arguments['limit'], assertion_ref=arguments['assertion_ref']).arguments
+        except Rejected as refused:
+            feedback = refused.feedback
+
+
 def leaf_record(arguments):
     """The leaf record the arguments of an ``extract`` call (``extraction_call``) make: the record of the commissioned type with
     the identity keys beside ``source_ref`` and ``experiment_type``. Its experiment ref is ``kind:source:offset-end`` of the
@@ -1157,7 +1239,7 @@ def extraction_state(records, outcomes, window_start=None):
     held record (``field_counts``), and what the standing records already state and leave unstated (the fields shown to the
     model so a further extraction is not a blind repeat). With ``window_start`` only the standing records of the window that
     starts there are shown."""
-    order = [unit['outcome']['record_ref'] for unit in outcomes]
+    order = [unit['outcome']['record_ref'] for unit in outcomes if unit['outcome']['record_ref'] is not None]   # a window named none holds no record
     held_refs = list(dict.fromkeys(order))   # content-addressed: the same answer holds the same record
     held = {ref: json.loads(records.get_artifact(ref)) for ref in held_refs}
     standing = identity.one_record_per_experiment([(ref, held[ref]) for ref in order])
@@ -1165,4 +1247,5 @@ def extraction_state(records, outcomes, window_start=None):
     already = sorted({name for record in shown for name in identity.stated_fields(record)})
     not_yet = sorted({name for record in shown for name in identity.asked_fields(record)} - set(already))
     return {'held_record_refs': held_refs, 'record_refs': standing, 'counts': field_counts(records, held_refs),
+            'named_methods': [unit['outcome']['experiment_type'] for unit in outcomes],
             'already_stated_fields': already, 'not_yet_stated_fields': not_yet}

@@ -1,19 +1,12 @@
-"""Continuation from the commissioned task, carried from the old ``yield_estimator.py``
-(``yield_controller`` -> ``_private_yield_controller``; README 7b).
-
-``A108:verified_source_leads`` accumulates (old ``YieldController``): one credit unit per verified source, without
-limit. ``A108:source_answer:assessment`` and ``A108:source_answer:screening`` are a finite commission (old
-``_FiniteLiteratureYieldController`` / ``_RemainingCommissionedCredit``): the target is the task's ``credit_unit``
-(the old ``maximum_credit``), read from the parent input. The cost is the old task cutoff, now the episode's setting;
-the parameters are its settings. The old ``None`` (no private yield binding) is not carried: the controller is
-always built from the task."""
-from yield_control import ADAPTIVE_CONTROL, AccumulationYieldController, CompletionYieldController
+"""Continuation from the commissioned task: ``verified_source_leads`` accumulates (``AccumulationYieldController`` with
+``ADAPTIVE_CONTROL``, nano-graphrag's EstimatorController): one credit unit per verified source, and no cost. After W = 8
+units attempted and m = 4 observed it fits nano-graphrag's yield model; a unit is flat when the upper bound of the expected
+next marginal (hypervolume) credit is at or below gamma, the adaptive gamma = max(one-result resolution, 0.1 x median of
+recent productive credits). It stops after 4 flat units in a row. The input list bounds it: each commissioned window is
+consumed by its extraction, so the episode stops when no window remains."""
+from yield_control import ADAPTIVE_CONTROL, AccumulationYieldController
 
 
 def yield_controller(initial_credit, settings, parent_input):
-    task = parent_input['task']
-    if task['kind'] == 'verified_source_leads':
-        return AccumulationYieldController('source_coverage_improvement', initial_credit, ADAPTIVE_CONTROL,
-                                           items=None)
-    return CompletionYieldController('source_coverage_improvement', initial_credit, settings['cost'],
-                                     task['credit_unit'], settings['parameters'])
+    return AccumulationYieldController('source_coverage_improvement', initial_credit, ADAPTIVE_CONTROL,
+                                       items=len(parent_input['spans']))

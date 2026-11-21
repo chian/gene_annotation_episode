@@ -1,23 +1,17 @@
-"""What this episode is for: the A106 examination of one source its parent selected (where and how the exact source
-should be examined, and the commissions of its table, ordered-reading and targeted-passage investigations), carried
-from the old ``goal.py`` (``LiteratureGoal.instructions``) of ``literature_page`` at 97308b94c. The old text joined
-the role instruction (``source_contracts._ROLE_INSTRUCTIONS['literature_page']``), the perturbation task text and
-the A106 sub-score task text; the last two are the library's ``PERTURBATION_TASK`` and ``TASK`` (their old
-shared-library sources are in ``episode_support/literature``)."""
-from gene_annotation_episode.episodic_workflow.episode_support.literature.prompts.literature_perturbation_prompt import (
-    PERTURBATION_TASK)
-from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.literature_subscore import (
-    TASK as A106_SUBSCORE_TASK)
+"""What this episode is for (nano-graphrag's page): the A106 page of ONE paper that a search handed it for the claim.
+Jev has assessed every table region and prose chunk of the paper against the information needs of the claim (automatic,
+first); the page chooses which one leaf child reads next. The page does not read the text, does not extract and commits
+no reasoning. A leaf extracts its item and grades it on its own sheets; a candidate handed to a leaf is done."""
 
 BINDING_PATH = 'perturbation_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination'
-ROLE_INSTRUCTION = ('Investigate where and how this exact source should be examined. Choose ordinary source '
-                    'operations or selected table, ordered-reading or targeted-passage investigations as useful. '
-                    'Paragraph projections omit some XML headings, tables and footnotes; retained original bytes '
-                    'remain addressable.')
-GOAL = '\n\n'.join((ROLE_INSTRUCTION, PERTURBATION_TASK, A106_SUBSCORE_TASK))
-UNIT = ('one model-selected unit on the assigned source: a tool call (a catalog lookup, an access tool, a reasoning '
-        'commit, or the report of the interpretation) or the commission of a table, ordered-reading or '
-        'targeted-passage investigation of it')
-RESULT = ('the interpretation of where and how the assigned source is to be examined and what it says for the '
-          "assigned question, with the commissioned task's typed answers (screening answers, source-lead "
-          'dispositions)')
+GOAL = ("Choose, from Jev's assessment of the paper's table regions and prose chunks against the information needs of "
+        'the claim, which one candidate a leaf child reads next: one table region, one prose chunk, or the remaining '
+        'prose in order. Whether the paper reports an intervention experiment is what the leaves find out; the page '
+        'does not read or extract. A candidate handed to a leaf is done. The commissioned task\'s own yield settings '
+        'guide continuation.')
+UNIT = ('one automatic step on the assigned paper (Jev\'s assessment of its candidates), or one model-selected leaf '
+        'child on one candidate of the paper')
+RESULT = ('the typed investigation findings of the paper for the claim (the controlled features of the intervention '
+          'grading sheets and the A106 final subscores its leaves saved) and the source-lead answer the parent selects')
+PLANNING_QUESTION = ('Which one unconsumed candidate of the paper should a leaf child read next, given Jev\'s '
+                     'assessment against the information needs of the claim and what the leaves returned?')

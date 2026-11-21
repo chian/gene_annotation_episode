@@ -1,56 +1,67 @@
-"""The commissions of the three children. The parent states what each child takes in its own assignment: the reading
-assignment ``reading_assignment_v1`` (this page, the selection the model chose, the commissioned literature task, the
-proposed annotation, the A108 components the parent wants returned, the scope and the records the child reads).
-Carried from the old ``to_child_table_evidence_extraction.py`` (child role ``literature_table``),
-``to_child_source_coverage_improvement.py`` (``literature_ordered``) and ``to_child_passage_evidence_extraction.py``
-(``literature_targeted``): the three differed only in the role string. The old request carried the child scope (within
-the parent scope), the commissioned task and the proposed annotation, and ``episode_assignment`` was the child
-binding's ``prepare_assignment``; the old expanded return contract is the ``selection`` of fields now.
+"""The commissions: what this episode sends each of its three leaf children. Each is handed ONE input unit of the page's
+candidate list (``messages/internal_summary.py``) of this episode's own paper, in the representation it was commissioned:
 
-Selection: this episode returns the commissioned task's answers, so it asks each child for the answer that task needs
-(source-lead dispositions, screening answers) and, when its own assignment requests A108 components, for the cells of
-the requested families; the passage child declares no cells and is given no requested components. A child returns cells as the references of their rows; the features of every sheet it saved are in its finding.
+- ``table_evidence_extraction``: the one table region the model selected (its byte window);
+- ``passage_evidence_extraction``: the one prose chunk the model selected (its byte window);
+- ``source_coverage_improvement``: the remaining prose in document order, as one window from the first remaining prose
+  window to the end of the last.
 
-A commission that is wrong (a selection the child does not declare, a record this episode does not hold, a selection
-the child's form does not admit) raises in the child's form or in custody and fails the run: nothing here checks it."""
+The model selects only unconsumed candidates (the selection schema of ``task.py`` names no other), and a candidate handed
+to a leaf is consumed (``internal_summary.consumed_candidates``). The objective is the fixed one below: whether the
+candidate holds an organism-context observation is what the leaf finds out, so neither the page nor its model states one.
+Nothing is checked against the child: a selection the child does not declare, an assignment its form does not admit or a
+record this episode does not hold fails the run where the child is built.
+
+Selection: the relevant source-lead answer, and the cells of the requested A108 component families for the leaves that
+declare cells (the passage leaf declares none and is given no requested components). A leaf returns its cells as the
+references of their rows; the features of every sheet it saved are in its finding."""
 from episode_runtime import ChildMessage
 
 LEADS = 'literature_source_lead_dispositions'
-SCREENING = 'literature_screening_answers'
 GRADING_CELLS = 'literature_a108_grading_cells'
 AGGREGATION_CELLS = 'literature_a108_aggregation_cells'
 REQUESTED_GRADING = 'requested_a108_grading_components'
 REQUESTED_AGGREGATION = 'requested_a108_aggregation_components'
 CELLS_FROM = ('table_evidence_extraction', 'source_coverage_improvement')
+OBJECTIVE = 'find_applicable_evidence'
 
 
-def selected_fields(slot, task, parent):
-    """The selectable fields of the child's return this commission wants."""
-    selection = []
-    if task['kind'] == 'verified_source_leads':
-        selection.append(LEADS)
-    elif task['answer_kind'] == 'screening':
-        selection.append(SCREENING)
+def selected_fields(slot, assignment):
+    """The selectable fields of the leaf's return this commission wants."""
+    selection = [LEADS]
     if slot in CELLS_FROM:
-        if parent[REQUESTED_GRADING]:
+        if assignment.get(REQUESTED_GRADING):
             selection.append(GRADING_CELLS)
-        if parent[REQUESTED_AGGREGATION]:
+        if assignment.get(REQUESTED_AGGREGATION):
             selection.append(AGGREGATION_CELLS)
     return tuple(selection)
 
 
+def window_of(summary, start, end):
+    page = summary['page']
+    return {'source_ref': page['source_ref'], 'representation': page['representation'], 'offset': start,
+            'limit': end - start}
+
+
+def selection_of(slot, arguments, summary):
+    """The window (or spans) the leaf's form takes: the candidate's bytes, or the remaining prose windows in document
+    order, each one a span the coverage leaf extracts once."""
+    if slot == 'source_coverage_improvement':
+        return {'spans': [window_of(summary, start, end) for start, end in summary['report_windows']]}
+    candidate = {item['candidate_id']: item for item in summary['content_candidates']}[arguments['candidate_id']]
+    window = window_of(summary, candidate['start'], candidate['end'])
+    return {'spans': [window]} if slot == 'passage_evidence_extraction' else window
+
+
 def msg_to_child(slot, arguments, summary):
     assignment = summary['literature_assignment']
-    page = {name: assignment[name] for name in ('version', 'source_ref', 'representation', 'artifact_ref',
-                                                'question_context_refs', 'prior_delivery_refs')}
-    task = summary['task']
-    parent = {REQUESTED_GRADING: assignment.get(REQUESTED_GRADING, []),
-              REQUESTED_AGGREGATION: assignment.get(REQUESTED_AGGREGATION, [])}
-    child = {'version': 'reading_assignment_v1', 'page': page, 'selection': arguments['selection'],
-             'literature_task': task, 'proposed_annotation_ref': summary['proposed_annotation_ref'],
-             **{name: value for name, value in parent.items() if value and slot in CELLS_FROM},
+    page = summary['page']
+    child = {'version': 'reading_assignment_v1', 'page': page, 'selection': selection_of(slot, arguments, summary),
+             'literature_task': summary['task'], 'proposed_annotation_ref': summary['proposed_annotation_ref'],
+             **{name: assignment[name] for name in (REQUESTED_GRADING, REQUESTED_AGGREGATION)
+                if slot in CELLS_FROM and assignment.get(name)},
              'scope': summary['scope'],
              'received_record_refs': list(dict.fromkeys(
                  [*summary['received_record_refs'], *page['question_context_refs'], *page['prior_delivery_refs']]))}
-    return ChildMessage(objective=arguments['objective'], message={'scope': summary['scope']},
-                        assignment=child, selection=selected_fields(slot, task, parent))
+    return ChildMessage(objective=OBJECTIVE, message={'scope': summary['scope']}, assignment=child,
+                        selection=selected_fields(slot, assignment))

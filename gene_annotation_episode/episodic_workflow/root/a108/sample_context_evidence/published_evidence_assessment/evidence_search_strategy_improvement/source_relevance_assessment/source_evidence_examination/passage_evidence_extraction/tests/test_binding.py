@@ -1,15 +1,22 @@
 """The real checks of this episode's binding: importing ``episode.py`` runs the class-definition checks; the folder
 holds exactly the ten-file set of an episode without children; no module imports another episode folder; the
-episode's own forms and functions behave on real data. Nothing here is faked."""
+episode's own forms and functions behave on real data; and the one extraction runs through the real runner on the held
+A108 world of the source coverage leaf's tests (a test fixture, shared). Nothing here is faked."""
 import ast
+import asyncio
 import importlib
+import json
 from pathlib import Path
 
 import pytest
 
-from episode_runtime import EpisodeBinding
+from episode_runtime import BindingRegistry, EpisodeBinding, RunJournal, ToolCall, link
 from method_loop import FormError
-from yield_control import AccumulationYieldController, CompletionYieldController
+from yield_control import AccumulationYieldController
+from gene_annotation_episode.model_provider import ModelProvider, load_config
+
+from ...source_coverage_improvement.tests.a108_world import (SERVICES, SETTINGS, extraction, held_world,
+                                                             reading_assignment, window)
 
 PACKAGE = __name__.rsplit('.', 2)[0]
 FOLDER = Path(__file__).resolve().parents[1]
@@ -18,8 +25,6 @@ FILES = {'__init__.py', 'goal.py', 'task.py', 'credit.py', 'yield_estimator.py',
          'messages/__init__.py', 'messages/read_from_parent.py', 'messages/internal_summary.py',
          'messages/final_to_parent.py', 'tests/__init__.py', 'tests/test_binding.py'}
 ROOT = 'gene_annotation_episode.episodic_workflow.root'
-COMMIT_SCHEMA = {'type': 'object', 'additionalProperties': False, 'required': ['terms'],
-                 'properties': {'terms': {'type': 'array'}}}
 PAGE = {'version': 'page_assignment_v1', 'source_ref': 'src_1', 'representation': 'text', 'artifact_ref': 'art_1',
         'question_context_refs': [], 'prior_delivery_refs': []}
 WINDOW = {'source_ref': 'src_1', 'representation': 'text', 'offset': 0, 'limit': 10}
@@ -61,7 +66,7 @@ def test_no_module_of_the_folder_imports_another_episode_folder():
                     str(path.relative_to(FOLDER)) + ' imports ' + module
 
 
-def test_the_commission_form_admits_a_reading_assignment_and_refuses_an_unknown_field():
+def test_the_commission_form_admits_one_chunk_and_refuses_what_is_not_the_commission():
     form = EPISODE.assignment_form
     admitted = form.admit(assignment(), 'test')
     parent_input = EPISODE.read_from_parent(admitted, {'objective': 'read'})
@@ -73,75 +78,70 @@ def test_the_commission_form_admits_a_reading_assignment_and_refuses_an_unknown_
     other = {**admitted, 'selection': {'spans': [{**WINDOW, 'source_ref': 'src_2'}]}}
     with pytest.raises(ValueError, match='literature_reading_source_mismatch'):
         EPISODE.read_from_parent(other, {})
+    two = {**admitted, 'selection': {'spans': [WINDOW, {**WINDOW, 'offset': 10}]}}
+    with pytest.raises(ValueError, match='reading_assignment_requires_one_chunk'):
+        EPISODE.read_from_parent(two, {})
     with pytest.raises(ValueError, match='literature_original_task_invalid'):
         EPISODE.read_from_parent({**admitted, 'literature_task': {**TASK, 'evidence_axis': 'A106'}}, {})
+    for kind in ({'kind': 'source_answer', 'answer_kind': 'assessment', 'source_refs': ['src_1']},
+                 {'kind': 'source_answer', 'answer_kind': 'screening', 'examined': []}):
+        with pytest.raises(ValueError, match='literature_original_task_invalid'):
+            EPISODE.read_from_parent({**admitted, 'literature_task': {**TASK, **kind}}, {})
 
 
-def test_the_return_declares_credit_and_finding_as_required_and_the_facts_as_selectable():
+def test_the_return_declares_credit_and_finding_as_required_and_the_leads_as_selectable():
     form = EPISODE.return_form
     assert form.fields['credit'].required and form.fields['finding'].required
-    selectable = {name for name, spec in form.fields.items() if not spec.required}
-    assert selectable == {'literature_screening_answers', 'literature_source_lead_dispositions'}
+    assert {name for name, spec in form.fields.items() if not spec.required} == {
+        'literature_source_lead_dispositions'}
 
 
-def test_the_credit_is_real_code_and_counts_nothing_without_a_validated_lead():
+def test_the_credit_counts_nothing_without_a_graded_sheet_and_the_ceiling_of_the_extraction_is_unbounded():
     credit_module = importlib.import_module(PACKAGE + '.credit')
-    assert EPISODE.credit is credit_module.credit
+    assert EPISODE.credit is credit_module.credit and EPISODE.ceiling is credit_module.ceiling
     assert 'NotImplementedError' not in (FOLDER / 'credit.py').read_text()
-    summary = {'task': {'kind': 'verified_source_leads', 'credit_unit': 2.0}, 'task_key': 'A108:verified_source_leads',
-               'source_leads': [], 'proposed_annotation_ref': 'hyp_1'}
+    summary = {'task': {**TASK, 'credit_unit': 2.0}, 'task_key': 'A108:verified_source_leads', 'source_leads': [],
+               'proposed_annotation_ref': 'hyp_1', 'finding': {'grading_sheets': []}}
     assert credit_module.credit(summary, None) == 0
-    screening = {'task': {'kind': 'source_answer', 'answer_kind': 'screening', 'credit_unit': 2.0},
-                 'task_key': 'A108:source_answer:screening', 'no_applicable_evidence': [],
-                 'proposed_annotation_ref': 'hyp_1'}
-    assert credit_module.credit(screening, None) == 0
+    assert credit_module.ceiling(summary, None, 'extract', None, None) == credit_module.UNBOUNDED
+    assert credit_module.ceiling(summary, None, 'source_read', None, None) == 0.0
 
 
-def test_the_controller_is_chosen_from_the_commissioned_task_and_its_target_is_the_credit_unit():
+def test_the_controller_counts_the_one_chunk_to_do():
     settings = {'cost': 0.1, 'parameters': {'uncertainty_alpha': 0.1}}
-    leads = EPISODE.yield_controller(0, settings, {'task': TASK})
-    assert isinstance(leads, AccumulationYieldController)
-    answer = {'kind': 'source_answer', 'answer_kind': 'assessment', 'credit_unit': 3.0, 'source_refs': ['src_1']}
-    assert isinstance(EPISODE.yield_controller(0, settings, {'task': answer}), CompletionYieldController)
+    controller = EPISODE.yield_controller(0, settings, {'task': TASK, 'spans': [WINDOW]})
+    assert isinstance(controller, AccumulationYieldController) and controller.items == 1
 
 
-def test_the_model_is_offered_the_access_tools_the_populations_and_the_graded_reasoning():
+def test_the_one_action_is_the_extraction_and_the_model_has_no_tool_to_read_around():
+    assert list(EPISODE.tools) == ['extract'] == EPISODE.offered_actions({}, None)
+    assert tuple(EPISODE.services) == ()
     task = importlib.import_module(PACKAGE + '.task')
-    names = task.offered({'tool_registry': {}})
-    assert 'execution_estimate' not in names and names[-1] == 'reason'
-    assert {'grading_populate', 'aggregate_populate'} <= set(names) and len(names) == 15
-    assert set(names) <= set(EPISODE.tools)
-    for leads in (False, True):
-        schema = task.selection_schema(names, COMMIT_SCHEMA, leads)
-        assert len(schema['properties']['selection']['anyOf']) == len(names)
-        task.generation_schema(schema)
-    reason = [entry for entry in task.catalog(names, COMMIT_SCHEMA, True) if entry['name'] == 'reason'][0]
-    assert 'source_lead' in reason['input_schema']['properties']
-    assert 'evidence_processing' in reason['input_schema']['properties']
-    assert 'source_lead' not in task.reason_schema(COMMIT_SCHEMA, False)['properties']
-    assert 'execution_estimate' in task.offered({'tool_registry': {'native_statistics': object()}})
-    assert task.empty_commit({'terms': []}, COMMIT_SCHEMA) and not task.empty_commit({'terms': [{}]}, COMMIT_SCHEMA)
+    assert task.TEXT == 'chunk'
+    assert not hasattr(task, 'source_read') and not hasattr(task, 'grading_populate')
 
 
-def test_the_input_list_is_the_unprocessed_windows_and_a_read_inside_consumed_ones_is_refused():
-    summary_module = importlib.import_module(PACKAGE + '.messages.internal_summary')
-    task = importlib.import_module(PACKAGE + '.task')
-    windows = [{**WINDOW, 'offset': 0, 'limit': 10}, {**WINDOW, 'offset': 10, 'limit': 10}]
-    parent = {'page': PAGE, 'spans': windows}
-
-    class Records(dict):
-        def get(self, ref):
-            return self[ref]
-    records = Records({'rec_1': {'anchor': {'artifact_ref': 'art_1', 'start': 12, 'end': 15}},
-                       'src_1': {'text_ref': 'art_1', 'artifact_ref': 'art_o'}})
-    assert summary_module.input_list(parent, [], records) == ([], [[0, 10], [10, 20]])
-    anchored = {'record_refs': ['rec_1'], 'status': 'completed'}
-    assert summary_module.input_list(parent, [anchored], records) == ([[10, 20]], [[0, 10]])
-    declared = {'status': 'completed', 'record_refs': [], 'evidence_processing': {
-        'kind': 'no_applicable_evidence', 'reason': 'none',
-        'examined': [{'source_ref': 'src_1', 'representation': 'text', 'start': 0, 'end': 10}]}}
-    assert summary_module.input_list(parent, [declared, anchored], records) == ([[0, 10], [10, 20]], [])
-    summary = {'literature_assignment': {'page': PAGE}, 'consumed_inputs': [[0, 10]]}
-    assert task.consumed_read({'source_ref': 'src_1', 'offset': 2, 'limit': 5}, summary)
-    assert not task.consumed_read({'source_ref': 'src_1', 'offset': 8, 'limit': 5}, summary)
-    assert not task.consumed_read({'source_ref': 'src_1', 'representation': 'original', 'offset': 2, 'limit': 5}, summary)
+def test_the_chunk_is_extracted_once_with_its_grading_and_is_then_consumed(tmp_path):
+    world = held_world(tmp_path)
+    path = EPISODE.binding_path
+    collaborators = {'store': world['store'], 'model_provider': ModelProvider(load_config(), tmp_path / 'calls', tmp_path),
+                     'continuation': {path: SETTINGS}, 'services': SERVICES}
+    entry = {'assignment': reading_assignment(world, {'spans': [window(world)]}, requested=()),
+             'message': {'objective': 'extract'}, 'selection': []}
+    run = link(BindingRegistry([EPISODE()]), path, entry, run_id='a108-chunk',
+               journal=RunJournal(tmp_path / 'journal.sqlite3'), collaborators=collaborators)
+    request = asyncio.run(run.next_decision())
+    assert request.context['chunk']['segments'] and 'tools' not in request.context
+    envelope = {'arguments': extraction(world), 'scope': world['scope'], 'page_source_ref': world['paper']['id'],
+                'proposed_annotation_ref': world['claim']['id'],
+                'assignment': reading_assignment(world, {'spans': [window(world)]}, requested=())}
+    outcome = asyncio.run(run.run_unit(ToolCall('extract', envelope)))
+    assert outcome['outcome']['status'] in ('completed', 'partial'), outcome['outcome']
+    summary = EPISODE.internal_summary(run.view)
+    assert summary['input_list'] == [] and len(summary['consumed_inputs']) == 1
+    assert len(summary['finding']['grading_sheets']) == 1 and EPISODE.credit(summary, run.view.records) == 1.0
+    result = EPISODE.final_to_parent(summary, {'ended_by': 'items', 'units_consumed': 1, 'credit': 1.0},
+                                     ('literature_source_lead_dispositions',))
+    form = EPISODE.return_form.select(('literature_source_lead_dispositions',))
+    assert form.admit(result, 'return') == json.loads(json.dumps(result))
+    world['store'].close()

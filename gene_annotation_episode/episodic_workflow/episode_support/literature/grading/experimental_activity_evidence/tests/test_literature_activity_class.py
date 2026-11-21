@@ -77,27 +77,35 @@ def record(target, partner=None):
 
 def test_enzyme_claim_on_a_reaction_term_is_direct_for_a_record_of_that_enzyme(probe_type):
     claim = claim_of_hypothesis(hypothesis('catalyzes', 'term_ref'), {'s': 'EstA', 'v': 'Hydrolysis'})
-    assert bearing(record('esta'), claim) == {'bearing': 'direct', 'reasons': ['predicate_and_target_agree']}
+    assert bearing(record('esta'), claim, None) == {'bearing': 'direct', 'reasons': ['predicate_and_target_agree']}
     # the record's stated substrate is not compared when the claim has no molecule partner
-    assert bearing(record('esta', 'pnpa'), claim)['bearing'] == 'direct'
+    assert bearing(record('esta', 'pnpa'), claim, None)['bearing'] == 'direct'
 
 
 def test_a_record_of_another_enzyme_is_a_different_subject(probe_type):
     claim = claim_of_hypothesis(hypothesis('catalyzes', 'term_ref'), {'s': 'EstA', 'v': 'Hydrolysis'})
-    assert bearing(record('estb'), claim) == {'bearing': 'different_subject', 'reasons': ['target_differs_from_subject']}
+    assert bearing(record('estb'), claim, None) == {'bearing': 'different_subject', 'reasons': ['target_differs_from_subject']}
+
+
+def test_a_record_of_another_name_is_judged_by_its_sequence_once_identified(probe_type):
+    claim = claim_of_hypothesis(hypothesis('catalyzes', 'term_ref'), {'s': 'EstA', 'v': 'Hydrolysis'})
+    assert bearing(record('estb'), claim, 1.0) == {'bearing': 'direct', 'reasons': ['target_sequence_identical']}
+    assert bearing(record('estb'), claim, 0.6) == {'bearing': 'transfer', 'reasons': ['target_sequence_related']}
+    assert bearing(record('esta'), claim, 0.6) == {'bearing': 'transfer', 'reasons': ['target_sequence_related']}
+    assert bearing(record('esta'), claim, 1.0) == {'bearing': 'direct', 'reasons': ['predicate_and_target_agree']}
 
 
 def test_a_substrate_claim_does_not_bear_on_a_record_with_another_substrate(probe_type):
     claim = claim_of_hypothesis(hypothesis('catalyzes', 'reference'), {'s': 'EstA', 'v': 'pNPA'})
-    assert bearing(record('esta', 'pnpb'), claim) == {'bearing': 'different_subject', 'reasons': ['partner_contradicts_claim']}
-    assert bearing(record('esta', 'pnpa'), claim)['bearing'] == 'direct'
-    assert bearing(record('esta'), claim)['bearing'] == 'direct'
+    assert bearing(record('esta', 'pnpb'), claim, None) == {'bearing': 'different_subject', 'reasons': ['partner_contradicts_claim']}
+    assert bearing(record('esta', 'pnpa'), claim, None)['bearing'] == 'direct'
+    assert bearing(record('esta'), claim, None)['bearing'] == 'direct'
 
 
 def test_catalyzes_is_not_symmetric(probe_type):
     claim = {'predicate': 'catalyzes', 'subject_id': 'esta', 'partner_id': 'pnpa'}
     # the target is the claim's partner and the record's partner the claim's subject: direct for a symmetric predicate only
-    assert bearing(record('pnpa', 'esta'), claim)['bearing'] == 'different_subject'
+    assert bearing(record('pnpa', 'esta'), claim, None)['bearing'] == 'different_subject'
 
 
 # ---- the anchors and the strength curve -----------------------------------------------------------------------------

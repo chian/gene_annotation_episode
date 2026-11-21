@@ -1,20 +1,18 @@
-"""What this episode is for: the A108 examination of one exact source for the assigned organism-context question,
-carried from the old ``goal.py`` (``LiteratureGoal.instructions``) of ``literature_page`` at 97308b94c. The old text
-joined the role instruction (old ``source_contracts._ROLE_INSTRUCTIONS['literature_page']``) with the A108 context
-task and the A108 reading task (the library's ``literature/prompts/literature_prompt.py``; the old shared-library
-source was ``literature_a108_prompt``)."""
-from gene_annotation_episode.episodic_workflow.episode_support.literature.prompts.literature_prompt import (
-    A108_CONTEXT_TASK, A108_READING_TASK)
+"""What this episode is for (nano-graphrag's page): the A108 page of ONE paper that a search handed it for the claim.
+Jev has assessed every table region and prose chunk of the paper against the information needs of the claim (automatic,
+first); the page chooses which one leaf child reads next. The page does not read the text and does not extract: whether
+the paper holds an organism-context observation is what the leaves find out. A leaf extracts, grades and saves its
+subscoring sheet; the page only passes the candidate."""
 
 BINDING_PATH = 'sample_context_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination'
-ROLE_INSTRUCTION = ('Investigate where and how this exact source should be examined. Choose ordinary source '
-                    'operations or selected table, ordered-reading or targeted-passage investigations as useful. '
-                    'Paragraph projections omit some XML headings, tables and footnotes; retained original bytes '
-                    'remain addressable.')
-GOAL = '\n\n'.join((ROLE_INSTRUCTION, A108_CONTEXT_TASK, A108_READING_TASK))
-UNIT = ('one model-selected tool call on the assigned source (a catalog lookup, an access tool, a reasoning commit '
-        'coupled with its contextual grading sheets, a sheet population, or the report of the interpretation), or '
-        'one child commission (a table, an ordered reading or targeted passages of the source)')
-RESULT = ('the controlled features code reads from the A108 subscoring and main evidence sheets saved (own and the '
-          "children's), with the sheet and graded assessment references, and the commissioned task's answers as "
-          'counts and references')
+GOAL = ("Choose, from Jev's assessment of the paper's table regions and prose chunks against the information needs of "
+        'the claim, which one candidate a leaf child reads next: one table region, one prose chunk, or the remaining '
+        'prose in order. Whether the paper reports an organism-context observation is what the leaves find out; the '
+        'page does not read or extract. A candidate handed to a leaf is done.')
+UNIT = ("one automatic step on the assigned paper (Jev's assessment of its candidates), or one model-selected leaf "
+        'child on one candidate of the paper')
+RESULT = ('the controlled features code reads from the A108 subscoring and main evidence sheets the leaves saved, with '
+          'the sheet and graded assessment references, the relevant source-lead answer and the cell references the '
+          'parent selects')
+PLANNING_QUESTION = ("Which one unconsumed candidate of the paper should a leaf child read next, given Jev's "
+                     'assessment against the information needs of the claim and what the leaves returned?')

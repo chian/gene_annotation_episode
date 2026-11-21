@@ -65,13 +65,12 @@ def msg_to_child(slot, arguments, summary):
     elif slot == 'published_evidence_assessment':
         given = arguments['assignment']
         assignment = {'version': 'literature_assignment_v1',
-                      'question_context_refs': given['question_context_refs'], 'source_refs': given['source_refs'],
+                      'question_context_refs': given['question_context_refs'],
                       'literature_task': given['literature_task'],
                       'proposed_annotation_ref': summary['proposed_annotation_ref'],
                       **{name: given[name] for name in (REQUESTED_GRADING, REQUESTED_AGGREGATION) if given[name]},
                       'scope': scope,
-                      'received_record_refs': passed_records(
-                          summary, scope, [*given['source_refs'], *given['literature_task'].get('source_refs', [])])}
+                      'received_record_refs': passed_records(summary, scope, [])}
         assignment['received_record_refs'] = list(dict.fromkeys(
             [*assignment['received_record_refs'], *given['question_context_refs']]))
         selection = tuple(arguments['return_fields'])

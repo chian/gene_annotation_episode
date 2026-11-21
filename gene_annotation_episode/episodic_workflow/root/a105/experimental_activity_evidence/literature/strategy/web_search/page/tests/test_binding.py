@@ -5,10 +5,11 @@ faked."""
 import ast
 import importlib
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
-from episode_runtime import ChildMessage, EpisodeBinding
+from episode_runtime import EpisodeBinding
 from method_loop import FormError
 
 PACKAGE = __name__.rsplit('.', 2)[0]
@@ -21,11 +22,7 @@ FILES = {'__init__.py', 'goal.py', 'task.py', 'credit.py', 'yield_estimator.py',
          'tests/__init__.py', 'tests/test_binding.py', 'tests/grading_world.py', 'tests/test_grading.py',
          'tests/test_branch_page_model_run.py'}
 ROOT = 'gene_annotation_episode.episodic_workflow.root'
-from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_assay_grading import (  # noqa: E402
-    ASSAY_TYPES)
-
-COMMIT_SCHEMA = {'type': 'object', 'additionalProperties': False, 'required': ['terms'],
-                 'properties': {'terms': {'type': 'array'}}}
+OBJECTIVE = {'objective': 'evidence_location_unknown'}
 
 
 def own_files():
@@ -40,15 +37,6 @@ def assignment():
             'artifact_ref': 'art_1', 'question_context_refs': ['ctx_1'], 'prior_delivery_refs': [],
             'literature_task': task, 'proposed_annotation_ref': 'hyp_1',
             'scope': {'subject_refs': ['sub_1']}, 'received_record_refs': ['src_1', 'art_1', 'ctx_1']}
-
-
-def summary_of(requested=None, task=None):
-    given = assignment()
-    page = {name: given[name] for name in ('version', 'source_ref', 'representation', 'artifact_ref',
-                                           'question_context_refs', 'prior_delivery_refs')}
-    return {'page': page, 'task': task or given['literature_task'], 'task_key': 'A105:verified_source_leads',
-            'proposed_annotation_ref': 'hyp_1', 'scope': given['scope'], 'requested': requested or {},
-            'held_record_refs': ['art_1', 'ctx_1', 'src_1']}
 
 
 def test_the_class_inherits_only_the_episode_type_and_is_its_own_binding():
@@ -78,65 +66,39 @@ def test_no_module_of_the_folder_imports_another_episode_folder():
                                for child in CHILDREN), str(path.relative_to(FOLDER)) + ' imports ' + module
 
 
-def test_the_commission_form_admits_a_page_assignment_and_refuses_an_unknown_field():
+def test_the_commission_form_admits_one_papers_assignment_and_every_other_task_is_a_wrong_commission():
     form = EPISODE.assignment_form
     given = assignment()
     admitted = form.admit(given, 'test')
-    parent_input = EPISODE.read_from_parent(admitted, {'objective': 'evidence_location_unknown'})
+    parent_input = EPISODE.read_from_parent(admitted, OBJECTIVE)
     assert parent_input['page']['source_ref'] == 'src_1' and parent_input['task_key'] == 'A105:verified_source_leads'
     assert set(form.record_refs(admitted)) == {'src_1', 'art_1', 'ctx_1'}
     with pytest.raises(FormError, match='unknown_field'):
         form.admit({**given, 'extra': 1}, 'test')
-    refused = {**admitted, 'literature_task': {**given['literature_task'], 'evidence_axis': 'A106'}}
+    with pytest.raises(FormError, match='unknown_field'):
+        form.admit({**given, 'requested_assay_grading_components': []}, 'test')
+    wrong_axis = {**admitted, 'literature_task': {**given['literature_task'], 'evidence_axis': 'A106'}}
     with pytest.raises(Exception, match='representation_error'):
-        EPISODE.read_from_parent(refused, {'objective': 'evidence_location_unknown'})
-    outside = {**admitted, 'literature_task': {'version': 'literature_local_task_v1', 'kind': 'source_answer',
-                                               'answer_kind': 'assessment', 'evidence_axis': 'A105',
-                                               'credit_unit': 1.0, 'source_refs': ['source_' + 'b' * 24]}}
-    with pytest.raises(Exception, match='literature_task_outside_assigned_source'):
-        EPISODE.read_from_parent(outside, {'objective': 'evidence_location_unknown'})
-    duplicate = {**admitted, 'literature_task': {
-        'version': 'literature_local_task_v1', 'kind': 'a105_experiments', 'evidence_axis': 'A105',
-        'credit_unit': 1.0, 'experiments': [{'experiment_ref': 'experiment_' + 'c' * 24, 'assay_type': ASSAY_TYPES[0]},
-                                            {'experiment_ref': 'experiment_' + 'c' * 24, 'assay_type': ASSAY_TYPES[0]}]}}
-    with pytest.raises(Exception, match='literature_task_duplicate_experiment'):
-        EPISODE.read_from_parent(duplicate, {'objective': 'evidence_location_unknown'})
+        EPISODE.read_from_parent(wrong_axis, OBJECTIVE)
+    for task in ({'kind': 'source_answer', 'answer_kind': 'assessment', 'source_refs': ['src_1']},
+                 {'kind': 'a105_experiments', 'experiments': []}, {'kind': 'a105_assembly'}):
+        other = {**admitted, 'literature_task': {**given['literature_task'], **task}}
+        with pytest.raises(Exception, match='representation_error'):
+            EPISODE.read_from_parent(other, OBJECTIVE)
 
 
-FLAGS = ('assay_grading_population', 'ratio_source_population', 'controlled_response_population', 'gel_population',
-         'completion_time_population', 'product_partition_population', 'active_site_population',
-         'parent_depletion_population', 'stoichiometric_balance_population', 'compiled_assay_population',
-         'channel_population', 'ion_discrimination_population')
-POPULATION_OFF = {'rate_population': False}
-
-
-def mid_summary(**changes):
-    value = {'assay_sheets': [], 'aggregation_sheets': [], 'proposed_annotation_ref': 'hyp_1',
-             'no_applicable_spans': [], 'screening_covered': False, 'lead_source_refs': []}
-    value.update(changes)
-    return value
-
-
-def test_the_credit_is_real_code_and_counts_the_answers():
+def test_the_credit_is_the_filling_of_the_grading_sheet_and_nothing_else():
     credit_module = importlib.import_module(PACKAGE + '.credit')
     assert EPISODE.credit is credit_module.credit
-    assert 'NotImplementedError' not in (FOLDER / 'credit.py').read_text()
-    # A verified_source_leads page is credited through its sheet, like an a105_experiments page: no commissioned
-    # experiment and no pre-made record is needed.
-    for kind, extra in (('verified_source_leads', {}), ('a105_experiments', {'experiments': []})):
-        task = {'kind': kind, 'credit_unit': 2.0, **extra}
-        none_yet = {'task': task, 'child_returns': [], 'sheet_update': None}
-        assert credit_module.credit(none_yet, None) == 0.0
-        updated = {'task': task, 'child_returns': [{'credit': 0.25}],
-                   'sheet_update': {'credit': [{'credit': 0.5}, {'credit': 0.25}]}}
-        assert credit_module.credit(updated, None) == 1.5
-        leaf_only = {'task': task, 'child_returns': [{'credit': 0.5}, {'credit': 0.75}], 'sheet_update': None}
-        assert credit_module.credit(leaf_only, None) == 1.5
-    screening = {'task': {'kind': 'source_answer', 'answer_kind': 'screening', 'credit_unit': 3.0,
-                          'examined': [{'source_ref': 's', 'artifact_ref': 'a', 'start': 0, 'end': 10}]},
-                 'proposed_annotation_ref': 'hyp_1', 'screening_covered': False}
-    assert credit_module.credit(screening, None) == 0
-
+    task = {'kind': 'verified_source_leads', 'credit_unit': 2.0}
+    none_yet = {'task': task, 'child_returns': [], 'sheet_update': None}
+    assert credit_module.credit(none_yet, None) == 0.0
+    updated = {'task': task, 'child_returns': [{'credit': 0.25}],
+               'sheet_update': {'credit': [{'credit': 0.5}, {'credit': 0.25}]}}
+    assert credit_module.credit(updated, None) == 1.5
+    # what a leaf read or stated earns the page nothing until it is on the sheet
+    leaf_only = {'task': task, 'child_returns': [{'credit': 0.5}, {'credit': 0.75}], 'sheet_update': None}
+    assert credit_module.credit(leaf_only, None) == 0.0
 
 
 class HeldArtifacts:
@@ -162,25 +124,61 @@ def test_a_source_is_the_lead_only_when_its_sheet_row_of_the_claim_is_measured_a
     assert lead(given, 'src_1', 'hyp_1', ['state_given'], update(('hyp_2', 'measured', 'row:new'))) == []
 
 
-def test_the_experiment_type_of_a_leaf_is_offered_with_its_plain_line_for_the_claims_class_only():
+def leaf_summary(**changes):
+    task = {'version': 'literature_local_task_v1', 'kind': 'verified_source_leads', 'evidence_axis': 'A105',
+            'credit_unit': 1.0}
+    value = {'task': task, 'content_assessment_ref': 'assessment_1', 'report_windows': [[0, 10]],
+             'unconsumed_chunk_ids': ['prose_chunk:0000'], 'unconsumed_table_ids': ['source_table:0001'],
+             'unused_leaf_record_refs': [], 'sheet_class': 'ligand_binding'}
+    value.update(changes)
+    return value
+
+
+def test_the_page_names_no_experiment_type_for_a_leaf_and_hands_the_sheet_class_of_the_claim():
     task_module = importlib.import_module(PACKAGE + '.task')
-    binds = {'jev_goal': {'claim': {'predicate': 'binds', 'subject_id': 'PopZ', 'partner_id': 'ParB'}},
-             'report_windows': [[0, 10]], 'unconsumed_chunk_ids': ['prose_chunk:0000'], 'unconsumed_table_ids': []}
-    schema = task_module.child_arguments('chunk', binds)['properties']['experiment_type']
-    assert len(schema['enum']) == 25 and 'spectro_direct' not in schema['enum']
-    assert '- proximity: Proximity labelling' in schema['description'] and '- pulldown: Pull-down' in schema['description']
-    assert 'commission no leaf for it' in schema['description'] and 'no_applicable_evidence' in schema['description']
-    catalyzes = {'jev_goal': {'claim': {'predicate': 'catalyzes', 'subject_id': 'E', 'partner_id': 'S'}}}
-    assert task_module.child_arguments('report', catalyzes)['properties']['experiment_type']['enum'] == ['spectro_direct']
+    to_child = importlib.import_module(PACKAGE + '.messages.msg_to_child')
+    summary_module = importlib.import_module(PACKAGE + '.messages.internal_summary')
+    summary = leaf_summary()
+    assert set(task_module.child_arguments('report', summary)['properties']) == set()
+    for slot in ('chunk', 'table'):
+        assert set(task_module.child_arguments(slot, summary)['properties']) == {'candidate_id'}
+    summary = {**summary, 'held_record_refs': ['src_1'], 'proposed_annotation_ref': 'hyp_1',
+               'page': {'source_ref': 'src_1', 'representation': 'text'}, 'task_key': 'A105:verified_source_leads',
+               'content_candidates': [{'candidate_id': 'prose_chunk:0000', 'start': 4, 'end': 20}]}
+    message = to_child.msg_to_child('chunk', {'candidate_id': 'prose_chunk:0000'}, summary)
+    assert message.assignment['sheet_class'] == 'ligand_binding' and 'experiment_type' not in message.assignment
+    assert (message.assignment['offset'], message.assignment['limit']) == (4, 16)
+    assert message.objective == 'find_applicable_evidence'
+    report = to_child.msg_to_child('report', {}, summary)
+    assert report.assignment['sheet_class'] == 'ligand_binding' and report.assignment['windows'] == [[0, 10]]
+    assert summary_module.class_of_predicate('binds') == 'ligand_binding'
+    assert summary_module.class_of_predicate('catalyzes') == 'activity_rate'
 
 
-def test_the_page_offers_the_leaf_children_and_the_sheet_ceiling_under_a_verified_source_leads_task():
+def test_the_page_assesses_first_then_updates_the_sheet_by_code_and_offers_the_model_only_leaf_children():
+    task_module = importlib.import_module(PACKAGE + '.task')
+    context = SimpleNamespace(settings={})
+    assert task_module.offered_actions(leaf_summary(content_assessment_ref=None), context) == ['assess_content']
+    assert task_module.offered_actions(leaf_summary(unused_leaf_record_refs=['leaf_1']), context) == ['update_sheet']
+    assert task_module.offered_actions(leaf_summary(), context) == list(CHILDREN)
+    assert task_module.offered_actions(leaf_summary(unconsumed_chunk_ids=[], unconsumed_table_ids=[],
+                                                    report_windows=[]), context) == []
+    assert set(task_module.TOOLS) == {'assess_content', 'update_sheet'}
+    ungrouped = leaf_summary(unused_leaf_record_refs=['leaf_1'], leaf_record_refs=['leaf_1'], base_state_refs=[],
+                             proposed_annotation_ref='hyp_1')
+    decision = task_module.decide(ungrouped, None, context)
+    assert decision.name == 'update_sheet' and decision.arguments['leaf_record_refs'] == ['leaf_1']
+    brief = task_module.BRIEF + task_module.RETURN_GUIDANCE
+    assert 'source_read' not in brief and 'reason' not in brief.replace('reasoning', '')
+
+
+def test_the_page_offers_the_leaf_children_and_the_sheet_ceiling():
     credit_module = importlib.import_module(PACKAGE + '.credit')
-    task_module = importlib.import_module(PACKAGE + '.task')
-    task = {'kind': 'verified_source_leads', 'credit_unit': 2.0}   # no commissioned experiments
+    task = {'kind': 'verified_source_leads', 'credit_unit': 2.0}
     summary = {'task': task, 'child_returns': [], 'sheet_update': None, 'unused_leaf_record_refs': ['leaf_1']}
     for slot in CHILDREN:
         assert credit_module.ceiling(summary, None, slot, None, None) == 2.0
     assert credit_module.ceiling(summary, None, 'update_sheet', None, None) == 2.0
-    assert credit_module.ceiling(summary, None, 'reason', None, None) == 0.0
-    assert not hasattr(task_module, 'LEAD_GUIDANCE')
+    assert credit_module.ceiling(summary, None, 'assess_content', None, None) == 0.0
+    with pytest.raises(ValueError, match='ceiling_unknown_action_type'):
+        credit_module.ceiling(summary, None, 'reason', None, None)

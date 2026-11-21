@@ -17,12 +17,10 @@ subjects by itself), and for the literature child every record this episode hold
 records its parent had received through the receipt ledger; ``reference_subset(known_refs, scope)``).
 
 Selection: the head returns ``committed_record_refs`` under an annotation task. The literature child returns the
-typed answer its task needs: ``literature_source_lead_dispositions`` for a verified-source-leads task and
-``literature_screening_answers`` for a screening answer."""
+typed answer its one task needs: ``literature_source_lead_dispositions``."""
 from episode_runtime import ChildMessage
 
 COMMITTED = 'committed_record_refs'
-SCREENING = 'literature_screening_answers'
 LEADS = 'literature_source_lead_dispositions'
 SHEET_STATE_REFS = 'sheet_state_refs'
 
@@ -44,12 +42,8 @@ def head_message(arguments, summary):
 
 def literature_message(arguments, summary):
     given = arguments['assignment']
-    task = given['literature_task']
-    selection = [SHEET_STATE_REFS]   # the child's persisted sheet states: the next run starts from them
-    if task['kind'] == 'verified_source_leads':
-        selection.append(LEADS)
-    if task.get('answer_kind') == 'screening':
-        selection.append(SCREENING)
+    # the child's persisted sheet states (the next run starts from them) and the lead dispositions of the one task
+    selection = [SHEET_STATE_REFS, LEADS]
     assignment = {**given, 'scope': arguments['scope'], SHEET_STATE_REFS: list(summary['sheet_state_refs']),
                   'received_record_refs': list(summary['held_record_refs'])}
     return ChildMessage(objective=arguments['objective'],

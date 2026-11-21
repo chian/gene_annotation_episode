@@ -147,14 +147,16 @@ def _job(store, directory, program, sequences, executable_directory):
 
 def _graded(store, report_ref, program, query, subject):
     """The grading of the fetched report as the pairwise sheet of the two operands. A report of another sheet type
-    or of sequences of other lengths raises ``ValueError``."""
+    or of sequences of other lengths raises ``ValueError``. A report of no alignment has no reference on its sheet
+    (status ``no_reported_alignment``): that is a graded result, not an error."""
     grading = grade_blast_result(store.get_artifact(report_ref), mode='pairwise', resource='local',
                                  output_format='json2', request={'program': program, 'query_length': len(query)},
                                  _retain_correspondence=True)
     sheet = grading['sheet']
     if sheet['schema'] != SHEET_SCHEMA:
         raise ValueError('blast_pairwise_result_type_conflict')
-    if sheet['query']['length'] != len(query) or sheet['reference']['length'] != len(subject):
+    reference = sheet['reference']
+    if sheet['query']['length'] != len(query) or (reference is not None and reference['length'] != len(subject)):
         raise ValueError('blast_pairwise_result_operand_conflict')
     return grading
 

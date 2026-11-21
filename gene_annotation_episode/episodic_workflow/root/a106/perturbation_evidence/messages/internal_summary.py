@@ -2,12 +2,11 @@
 its old names), the investigation progress of the retained findings held (the old credit-view fields
 ``retained_finding_count``, ``inactive_dependencies`` and ``detail_pages``, which ``project_finding_progress`` gives and
 which the old ``commissioned_credit_presentation`` and ``standalone_credit_presentation`` showed), the credit
-binding (the projector's ``as_record()``), the visual evidence (the pixels of the latest completed ``image.view``), the latest page of the own outcomes (old ``episode.history``: the old reads
+binding (the projector's ``as_record()``), the latest page of the own outcomes (old ``episode.history``: the old reads
 of ``runtime_actions`` are the unit outcomes of ``view``), the last local outcome, the reports of the children, the
 handoffs the children returned, the outstanding jobs (the jobs whose handoff row of the job ledger this Episode
 holds and whose closure row it does not hold, with the check rows it holds of each: what a monitor commission
-passes in custody), the custody of the sources held (the records a commission
-of the literature child must name for each), the interpretation written, the records committed, the controller's
+passes in custody), the interpretation written, the records committed, the controller's
 yield table and the reasoning schema.
 
 Carried from the old ``internal_summary.py``, ``decision_state.py``, ``commissioned_credit_presentation.py``,
@@ -29,7 +28,6 @@ from ..credit import finding_progress
 
 OUTCOME_PAGE_SIZE = 8            # the old configuration outcome_page_size
 PREVIEW_SIZE = 24                # the old ``loss_preview_size`` of ``ScientificFindingProgress``
-ARTIFACT_KEYS = ('artifact_ref', 'text_ref', 'stdout_ref', 'stderr_ref')
 
 
 def children(view, slot):
@@ -53,10 +51,6 @@ def internal_summary(view):
     for child in own:
         committed.extend(child['committed_record_refs'])
     committed = list(dict.fromkeys(committed))
-    visual = (last['outcome'].get('visual_inputs', []) if last is not None and last['kind'] == 'tool'
-              and last['tool'] == 'selected_tool' and last['arguments']['arguments']['name'] == 'image.view'
-              and last['outcome'].get('status') == 'completed' else [])
-    sources = records.list('source')
     page_offset = max(0, len(view.outcomes) - OUTCOME_PAGE_SIZE)
     return {
         **parent,
@@ -69,8 +63,6 @@ def internal_summary(view):
                                else {'tool': last['tool'], 'outcome': last['outcome']} if last['kind'] == 'tool'
                                else {'slot': last['slot'], 'report': last['report']}),
         'held_record_refs': sorted(records.refs()),
-        'source_custody': {source['id']: [source['id'], *[source[key] for key in ARTIFACT_KEYS
-                                                          if source.get(key) is not None]] for source in sources},
         'reasoning_schema': records.reasoning_schema(),
         'child_reports': [{'slot': outcome['slot'], 'arguments': outcome['arguments'], 'report': outcome['report']}
                           for outcome in view.outcomes if outcome['kind'] == 'child'],
@@ -79,7 +71,6 @@ def internal_summary(view):
         'handoff_resources': list(dict.fromkeys(resource for report_ in launches
                                                 for resource in report_['finding']['handoff_resources'])),
         'outstanding_jobs': outstanding_jobs(records),
-        'visual_evidence': visual,
         'report': report,
         'report_source_held': ({} if report is None else
                                {item['source_ref']: records.holds(item['source_ref']) for item in report['sources']}),

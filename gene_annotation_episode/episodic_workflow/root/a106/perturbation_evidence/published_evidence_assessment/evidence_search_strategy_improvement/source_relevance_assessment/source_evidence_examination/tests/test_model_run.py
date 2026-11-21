@@ -1,7 +1,7 @@
 """A real run of this examination with the real model, its three investigations linked beside it
 (``episode_runtime/tests/test_model_run.py`` is the pattern; the world is the A106 grading world of
-``source_coverage_improvement/tests/a106_world.py``): the model reads the held paper, grades it itself or commissions
-an investigation, which runs with the model in its turn and returns its credit and controlled finding. The run ends
+``source_coverage_improvement/tests/a106_world.py``): Jev assesses the held paper's candidates, the model picks one leaf per decision,
+which runs with the model in its turn and returns its credit and controlled finding. The run ends
 when this Episode's yield controller stops it; a resumed run replays the recorded answers without asking the model.
 
 Selected only with ``-m model_run``; it needs the owner's Codex sign-in."""
@@ -53,7 +53,7 @@ def test_the_examination_and_its_investigations_run_with_the_model_and_resume_re
     for unit in units:
         if unit['kind'] == 'child':
             report = unit['report']
-            assert set(report) <= {'slot', 'credit', 'finding', 'lead_source_refs', 'screening'}
+            assert set(report) <= {'slot', 'credit', 'finding', 'lead_source_refs'}
             assert set(report['finding']) == {'intervention_assessments', 'a106_subscores'}
     calls = list((tmp_path / 'model_calls').glob('call-*'))
     assert calls

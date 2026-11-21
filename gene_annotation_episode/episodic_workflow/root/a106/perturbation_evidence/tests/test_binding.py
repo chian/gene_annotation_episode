@@ -227,7 +227,7 @@ def commission(slot, arguments, summary):
 
 
 def test_the_literature_commission_is_admitted_by_the_form_of_the_child_and_selects_what_the_task_counts():
-    arguments = {'question_context_refs': [CONTEXT], 'source_refs': [SOURCE],
+    arguments = {'question_context_refs': [CONTEXT],
                  'literature_task': {'evidence_axis': 'A106', 'kind': 'verified_source_leads'}}
     task, parent_input = module('task'), EPISODE.read_from_parent(ASSIGNMENT, {})
     schema = task.commission_arguments('literature', [])
@@ -235,14 +235,20 @@ def test_the_literature_commission_is_admitted_by_the_form_of_the_child_and_sele
     message = commission('literature', arguments, summary_of(parent_input))
     read = child_module('published_evidence_assessment', 'messages.read_from_parent')
     admitted = read.ASSIGNMENT_FORM.admit(message.assignment, 'commission')
-    assert set(read.ASSIGNMENT_FORM.record_refs(admitted)) == {CONTEXT, SOURCE, ARTIFACT, HYPOTHESIS}
+    assert set(read.ASSIGNMENT_FORM.record_refs(admitted)) == {CONTEXT, HYPOTHESIS}
     assert admitted['literature_task']['credit_unit'] == 2.0
     assert read.read_from_parent(admitted, {})['task_key'] == 'A106:verified_source_leads'
     returns = child_module('published_evidence_assessment', 'messages.final_to_parent').RETURN_FORM
     assert set(message.selection) == {'literature_source_lead_dispositions'}
     assert set(returns.select(message.selection).fields) >= {'credit', 'finding', *message.selection}
-    with pytest.raises(KeyError):      # a source this episode does not hold is a wrong commission: it fails
-        commission('literature', arguments, summary_of(parent_input, source_custody={}))
+    # No paper and no other task kind is part of the commission: either is a wrong commission and fails.
+    with pytest.raises(Exception):
+        task.validate_schema({**arguments, 'source_refs': [SOURCE]}, schema)
+    for other in ({'evidence_axis': 'A106', 'kind': 'source_answer', 'answer_kind': 'screening'},
+                  {'evidence_axis': 'A106', 'kind': 'source_answer', 'answer_kind': 'assessment'}):
+        with pytest.raises(Exception):
+            task.validate_schema({**arguments, 'literature_task': other}, schema)
+    assert 'source_refs' not in schema['properties']
     report = EPISODE.read_from_child('literature', {'credit': 1.0, 'finding': {}, 'literature_source_lead_dispositions':
                                                     [{'x': 1}]}, {}, None)
     assert report['facts'] == {'literature_source_lead_dispositions': [{'x': 1}]}

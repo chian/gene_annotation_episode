@@ -1,32 +1,30 @@
-"""The commission: what this episode sends its one child, carried from the old ``to_child_source_evidence_examination.py``
-(``to_child``: the child's assignment is the one the model wrote, unchanged) and from the envelope the old model
-wrote (``version``, ``page``, ``literature_task``, ``proposed_annotation_ref`` and the requested components), under
-the old names.
+"""The commission: what this episode sends its one child, the page: ONE paper, the source reference of the paper the
+picked hit names (``source_ref``; code obtained it, or it was already held), its ``representation`` and ``artifact_ref``
+(filled by code from the source record, ``internal_summary.page_of``), with this episode's question context, the one
+task, the proposed annotation, the persisted sheet states, the scope and the records.
+
+The page's objective is one fixed value of the page's own vocabulary, ``evidence_location_unknown``: the search has not
+read the paper, so it does not know whether the paper holds an experiment, let alone where (that is what the page and
+the leaves below it find out). No model-written text reaches the page.
 
 The parent states what the child takes in its own text and schema (``task.py``) and builds the child's assignment
-here: the page the model chose (``source_ref``, ``representation``, ``artifact_ref``, ``prior_delivery_refs``) with
-this episode's question context, the commissioned task, the proposed annotation, the requested arrays of the cell
-families selected, the scope and the records. Nothing is checked against the child: a selection the child does not
-declare, an assignment its form does not admit or a record this episode does not hold fails the run where the child
-is built (rule 1). The old ``to_child`` copied the assignment unchanged and so does this: the old task checks the
-child made against its page (``literature_task_outside_assigned_source``) are the child's own.
+here. Nothing is checked against the child: a selection the child does not declare, an assignment its form does not
+admit or a record this episode does not hold fails the run where the child is built (rule 1).
 
-Selection (rule 5): what the commissioned task needs back. ``literature_source_lead_dispositions`` for a
-verified-source-leads task and ``literature_screening_answers`` for a screening answer.
+Selection (rule 5): what the one task needs back: the persisted sheet states (the next page starts from them) and
+``literature_source_lead_dispositions``.
 
-Records (decision T5): the commission names every record the child's code reads. The old child inherited the
-records its parent had received, through the receipt ledger; the new commission names every record this episode
-holds (its passed records and what it produced or was returned)."""
+Records (decision T5): the commission names every record this episode holds (its passed records and what it produced
+or was returned)."""
 from episode_runtime import ChildMessage
 
-SCREENING = 'literature_screening_answers'
 LEADS = 'literature_source_lead_dispositions'
 SHEET_STATE_REFS = 'sheet_state_refs'
+OBJECTIVE = 'evidence_location_unknown'
 
 
 def child_page(arguments, summary):
-    """The old ``_PAGE``: the child's page, with this episode's question context and the deliveries of earlier
-    examinations of the page the model named."""
+    """The child's page: the paper, its representation and artifact, with this episode's question context."""
     page = arguments['page']
     return {'source_ref': page['source_ref'], 'representation': page['representation'],
             'artifact_ref': page['artifact_ref'], 'question_context_refs': summary['search']['question_context_refs'],
@@ -36,17 +34,10 @@ def child_page(arguments, summary):
 def msg_to_child(slot, arguments, summary):
     if slot != 'page':
         raise LookupError('no_such_child_slot:' + slot)
-    task = summary['task']
-    selection = [SHEET_STATE_REFS]   # the page's persisted sheet states: the next page starts from them
-    if task['kind'] == 'verified_source_leads':
-        selection.append(LEADS)
-    if task.get('answer_kind') == 'screening':
-        selection.append(SCREENING)
-    page = child_page(arguments, summary)
-    assignment = {'version': 'page_assignment_v1', **page, 'literature_task': task,
-                  'proposed_annotation_ref': summary['proposed_annotation_ref'], **summary['requested'],
+    assignment = {'version': 'page_assignment_v1', **child_page(arguments, summary),
+                  'literature_task': summary['task'], 'proposed_annotation_ref': summary['proposed_annotation_ref'],
                   SHEET_STATE_REFS: list(summary['sheet_state_refs']),
                   'scope': summary['scope'], 'received_record_refs': list(summary['held_record_refs'])}
-    return ChildMessage(objective=arguments['objective'],
-                        message={'objective': arguments['objective'], 'task_key': summary['task_key']},
-                        assignment=assignment, selection=tuple(selection))
+    return ChildMessage(objective=OBJECTIVE,
+                        message={'objective': OBJECTIVE, 'task_key': summary['task_key']},
+                        assignment=assignment, selection=(SHEET_STATE_REFS, LEADS))

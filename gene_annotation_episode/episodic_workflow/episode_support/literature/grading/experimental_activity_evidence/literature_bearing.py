@@ -22,7 +22,11 @@ Result: {'bearing': one of BEARING, 'reasons': [one code of BEARING_REASONS]}. C
   direct             predicate_and_target_agree: the class bears the predicate, the target equals the subject, and when
                      both sides state a partner the partners are equal (a partner stated by one side only is not a
                      conflict).
-  transfer           NEVER returned: the contract has no relation vocabulary (homolog / related subject) yet.
+  transfer           target_sequence_related: the assayed protein was identified (a closeness is given) and is below the
+                     exact sequence (EXACT_SEQUENCE_CLOSENESS): a related protein. (2026-11-21: the third argument of
+                     bearing, subject_closeness, is the closeness of the assayed protein's sequence to the claim
+                     subject's, or None when it was not identified. Identified: the sequence decides and a name that
+                     differs no longer excludes; not identified: the names decide, as above.)
 
 'catalyzes' (activity_rate class) is NOT symmetric: the subject is the enzyme (the record's target_id), so a record whose target
 is the claim's substrate or reaction is different_subject. Its claim partner is null when the hypothesis value is a reaction
@@ -57,7 +61,20 @@ BEARING_REASONS = (
     'partner_contradicts_claim',                      # different_subject: target agrees, both partners stated, they differ
     'target_not_stated',                              # none: the record states no target
     'experiment_type_cannot_bear_on_predicate',       # none: the type's class does not list the predicate
+    'target_sequence_identical',                      # direct: the names differ, the assayed protein's sequence is the target's
+    'target_sequence_related',                        # transfer: the assayed protein is a related protein (closeness below the exact sequence)
 )
+
+# EXPERT_REVIEW (owner to confirm): the bottom of the identified_closeness scale, the standing of a result whose assayed protein
+# could not be identified (or has no sequence). 0.05, not 0: owner rule "no gate, every score gradual", and the result still
+# comes from a real measurement of a protein the paper names; but "only credit for identifiable sequences", so it is near
+# the bottom. Also the standing of a resolved subject of closeness 0, so the scale has no step between the two.
+SUBJECT_UNIDENTIFIED_STANDING = 0.05
+# EXPERT_REVIEW (owner to confirm): the closeness from which the assayed protein is the exact sequence (bearing 'direct');
+# below it the protein is related (bearing 'transfer'). The label only: the contribution scales smoothly with the closeness
+# itself (identified_closeness), so no threshold changes any number. 0.99 leaves room for the rounding of an identity x
+# coverage closeness over identical sequences (identical sequences give 1.0).
+EXACT_SEQUENCE_CLOSENESS = 0.99
 
 
 def _check_record(record):
@@ -97,20 +114,59 @@ def _result(bearing, reason):
     return {'bearing': bearing, 'reasons': [reason]}
 
 
-def bearing(record, claim):
+def _is_partner_route(record, claim):
+    return (claim['predicate'] in SYMMETRIC_PREDICATES and record['partner_id'] is not None and claim['partner_id'] is not None
+            and normalize_identity_ref(record['target_id']) == normalize_identity_ref(claim['partner_id'])
+            and normalize_identity_ref(record['partner_id']) == normalize_identity_ref(claim['subject_id']))
+
+
+def assayed_molecule(record, claim):
+    """'partner' when the molecule whose sequence must be identified is the record's partner (the symmetric partner route:
+    the record's partner is the claim's subject), else 'target'. Names only; the record's target must be stated."""
+    return 'partner' if (normalize_identity_ref(record['target_id']) != normalize_identity_ref(claim['subject_id'])
+                         and _is_partner_route(record, claim)) else 'target'
+
+
+def bearing(record, claim, subject_closeness):
+    """subject_closeness: the closeness (0..1) of the assayed protein's sequence to the claim subject's, or None when the
+    assayed protein was not identified. Identified: the sequence decides (direct at the exact sequence, transfer for a related
+    protein; the name is no longer the test). Not identified: the names decide as before (equal names direct, differing names
+    different_subject)."""
     experiment_type = _check_record(record)
     predicate = _check_claim(claim)
+    if subject_closeness is not None and not 0.0 <= subject_closeness <= 1.0:
+        raise ValueError(f'bearing subject_closeness must be in 0..1 or None: {subject_closeness!r}')
     if record['target_id'] is None:
         return _result('none', 'target_not_stated')
     if predicate not in CLAIM_PREDICATES_BY_CLASS.get(CLASS_OF_EXPERIMENT_TYPE[experiment_type], ()):
         return _result('none', 'experiment_type_cannot_bear_on_predicate')
-    if normalize_identity_ref(record['target_id']) != normalize_identity_ref(claim['subject_id']):
-        if predicate in SYMMETRIC_PREDICATES and record['partner_id'] is not None and claim['partner_id'] is not None \
-                and normalize_identity_ref(record['target_id']) == normalize_identity_ref(claim['partner_id']) \
-                and normalize_identity_ref(record['partner_id']) == normalize_identity_ref(claim['subject_id']):
-            return _result('direct', 'partner_route')
+    names_equal = normalize_identity_ref(record['target_id']) == normalize_identity_ref(claim['subject_id'])
+    partner_route = not names_equal and _is_partner_route(record, claim)
+    if not names_equal and not partner_route and subject_closeness is None:
         return _result('different_subject', 'target_differs_from_subject')
-    if record['partner_id'] is not None and claim['partner_id'] is not None \
+    if not partner_route and record['partner_id'] is not None and claim['partner_id'] is not None \
             and normalize_identity_ref(record['partner_id']) != normalize_identity_ref(claim['partner_id']):
         return _result('different_subject', 'partner_contradicts_claim')
-    return _result('direct', 'predicate_and_target_agree')
+    if subject_closeness is None:
+        return _result('direct', 'partner_route' if partner_route else 'predicate_and_target_agree')
+    if subject_closeness < EXACT_SEQUENCE_CLOSENESS:
+        return _result('transfer', 'target_sequence_related')
+    return _result('direct', 'partner_route' if partner_route else 'predicate_and_target_agree' if names_equal else 'target_sequence_identical')
+
+
+def identified_closeness(result):
+    """The result's standing factor in 0..1 (2026-11-21): how far the assayed protein is the claim's target, smooth in the
+    result's subject_closeness.
+
+        standing = SUBJECT_UNIDENTIFIED_STANDING + (1 - SUBJECT_UNIDENTIFIED_STANDING) * subject_closeness
+
+    When a name matched several records, subject_closeness is that of the CLOSEST one (page_update measures each and keeps
+    it): the closest carries the result. The number of matches (subject_match_count) is a recorded fact and lowers nothing
+    (owner, 2026-11-21: "halving makes no sense"; two database entries of one protein are not two doubts).
+
+    A subject that could not be identified (resolution 'unresolved', or a record with no sequence to compare, closeness null)
+    stands at SUBJECT_UNIDENTIFIED_STANDING, the bottom of the scale: never a gate, so the scale stays continuous with a
+    resolved subject of closeness 0. It reads the result's fields directly."""
+    if result['subject_resolution'] == 'unresolved' or result['subject_closeness'] is None:
+        return SUBJECT_UNIDENTIFIED_STANDING
+    return SUBJECT_UNIDENTIFIED_STANDING + (1.0 - SUBJECT_UNIDENTIFIED_STANDING) * result['subject_closeness']

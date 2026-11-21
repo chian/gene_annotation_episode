@@ -1,18 +1,18 @@
-"""The A105 grading of this episode through the real runner on a real Store, without a model: the first decision
-offers ``reason`` with the owner's grading instructions; a ``reason`` unit commits the interpretation and saves its
-grading sheet together; the finding is the controlled features read from the saved sheet, admitted by
-``RETURN_FORM``. The whole literature subtree below this episode is linked (its bindings and settings), as a run
-links it. Nothing is faked."""
+"""The decision of this episode through the real runner on a real Store, without a model: the first decision offers the
+writing of a query and nothing else (no search child until a query is written, no read, search or fetch tool, no
+reasoning commit); a written query is a record of this episode handed out by its reference, one query at a time. The
+whole literature subtree below this episode is linked (its bindings and settings), as a run links it. Nothing is
+faked."""
 import asyncio
 import importlib
 import json
+import types
 
 from episode_runtime import BindingRegistry, ModelRequest, RunJournal, ToolCall, link
 from gene_annotation_episode.model_provider import ModelProvider, load_config
-from gene_annotation_episode.episodic_workflow.episode_support.literature.prompts.experimental_activity_evidence.literature_assay_grading_prompt import (
-    ASSAY_GRADING_TASK)
 
-from .grading_world import SETTINGS, held_world, reasoning_selection
+from .grading_world import SETTINGS, held_world
+from ..web_search.page.tests.grading_world import job_world_services
 
 PACKAGE = __name__.rsplit('.', 2)[0]
 EPISODE = getattr(importlib.import_module(PACKAGE + '.episode'), 'EvidenceSearchStrategyImprovement')
@@ -34,74 +34,52 @@ BELOW = [getattr(importlib.import_module(ROOT + '.' + name + '.episode'), cls) f
 def linked_run(directory, world, run_id):
     collaborators = {'store': world['store'],
                      'model_provider': ModelProvider(load_config(), directory / 'model_calls', directory),
-                     'continuation': {cls.binding_path: SETTINGS for cls in BELOW}, 'services': {}}
+                     'continuation': {cls.binding_path: SETTINGS for cls in BELOW}, 'services': job_world_services(directory)}
     return link(BindingRegistry([cls() for cls in BELOW]), PATH, world['input'], run_id=run_id,
                 journal=RunJournal(directory / 'journal.sqlite3'), collaborators=collaborators)
 
 
-def test_the_first_decision_offers_reason_with_the_owners_grading_instructions(tmp_path):
+def test_the_first_decision_offers_only_the_writing_of_a_query(tmp_path):
     world = held_world(tmp_path)
-    run = linked_run(tmp_path, world, 'a105-upper-decision')
+    run = linked_run(tmp_path, world, 'a105-strategy-decision')
     request = asyncio.run(run.next_decision())
-    assert isinstance(request, ModelRequest) and ASSAY_GRADING_TASK in request.instructions
-    tools = {entry['name'] for entry in request.context['tools']}
-    assert 'reason' in tools and 'report' not in tools
+    assert isinstance(request, ModelRequest)
+    # no tool runs a provider search, fetches or reads, and no reasoning commit is offered
+    assert {entry['name'] for entry in request.context['tools']} == {'write_search'}
+    assert 'evidence_processing' not in request.instructions
     summary = EPISODE()._summary(run.view)
-    assert summary['assay_sheets'] == [] and EPISODE.credit(summary, run.view.records) == 0
-    assert summary['input_list'] == [world['search']]
+    assert EPISODE.credit(summary, run.view.records) == 0
+    # nothing is written yet: no search child is offered until a query is written
+    assert summary['input_list'] == [] and request.context['child_options'] == []
+    assert EPISODE.offered_actions(summary, types.SimpleNamespace(settings=SETTINGS)) == ['write_search']
     world['store'].close()
 
 
-def test_the_list_handed_on_holds_only_searches_of_the_three_kinds_of_source(tmp_path):
-    """Strategy's role is searches: of a search response, a fetched article and a PMC version listing (given or produced
-    by its own units) only the search response is handed to the web search child."""
+def test_a_written_query_is_a_record_of_this_episode_and_is_handed_out_by_its_reference_one_at_a_time(tmp_path):
+    """The model writes a query with ``write_search``: the unit keeps it as a source record of this episode whose
+    ``request_ref`` artifact holds the request (written through the scoped store, held as produced). Its reference is
+    the input list until a search child is handed it; the commission passes the reference, never the query. A query
+    handed out is done and is not offered again."""
     world = held_world(tmp_path)
-    run = linked_run(tmp_path, world, 'a105-upper-results')
+    run = linked_run(tmp_path, world, 'a105-strategy-write')
     asyncio.run(run.next_decision())
+    task = importlib.import_module(PACKAGE + '.task')
     summary_module = importlib.import_module(PACKAGE + '.messages.internal_summary')
-    parent = {'strategy': {'prior_search_refs': [world['search'], world['article'], world['listing']]}}
-    outcomes = [{'kind': 'tool', 'tool': 'public_literature_read',
-                 'outcome': {'record_refs': [world['article'], world['listing']]}},
-                {'kind': 'tool', 'tool': 'public_literature_search', 'outcome': {'record_refs': [world['search']]}}]
-    assert summary_module.search_results(parent, outcomes, run.view.records) == [world['search']]
-    world['store'].close()
-
-
-def test_the_commission_to_the_web_search_selects_the_articles_its_pages_examined():
-    to_child = importlib.import_module(PACKAGE + '.messages.msg_to_child')
-    task = {'version': 'literature_local_task_v1', 'kind': 'a105_experiments', 'evidence_axis': 'A105',
-            'credit_unit': 1.0, 'experiments': []}
-    summary = {'task': task, 'task_key': 'A105:experiments', 'strategy': {'question_context_refs': []},
-               'proposed_annotation_ref': 'hyp_1', 'requested': {}, 'sheet_state_refs': [], 'scope': {},
-               'held_record_refs': [], 'all_examined_article_refs': ['src_9', 'src_8']}
-    message = to_child.msg_to_child('web_search', {'objective': 'x', 'search': {'search_result_refs': ['src_1']}},
-                                    summary)
-    assert 'examined_article_refs' in message.selection and 'sheet_state_refs' in message.selection
-    # every article examined so far (the ones this episode was given and its children's) goes to each web-search commission
-    assert message.assignment['examined_article_refs'] == ['src_9', 'src_8']
-
-
-def test_the_articles_examined_are_the_ones_given_and_the_ones_the_web_search_children_returned(tmp_path):
-    world = held_world(tmp_path)
-    run = linked_run(tmp_path, world, 'a105-upper-examined')
-    asyncio.run(run.next_decision())
+    arguments = {'arguments': {'query': 'PopZ ParB binding assay', 'size': 25}, 'scope': world['scope']}
+    unit = asyncio.run(run.run_unit(ToolCall(task.WRITE_SEARCH, arguments)))
+    written = unit['outcome']['result']['search_ref']
+    records = run.view.records
+    source = records.get(written)
+    assert source['record_type'] == 'source' and source['provider'] == 'europepmc_search_request'
+    assert json.loads(records.get_artifact(source['request_ref'])) == {'query': 'PopZ ParB binding assay', 'size': 25}
+    assert records.receipt(written)['how'] == 'produced'
+    assert summary_module.written_searches(run.view.outcomes) == [written]
     summary = EPISODE()._summary(run.view)
-    assert summary['examined_article_refs'] == [] and summary['all_examined_article_refs'] == []
-    summary_module = importlib.import_module(PACKAGE + '.messages.internal_summary')
-    given = {**run.view.parent_input, 'examined_article_refs': ['src_given']}
-    child = {'kind': 'child', 'slot': 'web_search', 'arguments': {'search': {'search_result_refs': ['src_1']}},
-             'report': {'examined_article_refs': ['src_a', 'src_b']}}
-    again = {**child, 'report': {'examined_article_refs': ['src_b', 'src_c']}}
-    assert summary_module.examined_article_refs(given, [child, again]) == (['src_a', 'src_b', 'src_c'],
-                                                                           ['src_given', 'src_a', 'src_b', 'src_c'])
+    assert summary['input_list'] == [written]
+    assert EPISODE.offered_actions(summary, types.SimpleNamespace(settings=SETTINGS)) == ['write_search', 'web_search']
+    schema = task.selection_schema(summary)
+    child = schema['properties']['selection']['anyOf'][-1]['properties']['arguments']
+    assert child['properties']['search_query_ref'] == {'enum': [written]}
+    handed = {'kind': 'child', 'slot': 'web_search', 'arguments': {'objective': 'o', 'search_query_ref': written}}
+    assert summary_module.consumed_results([handed]) == [written]
     world['store'].close()
-
-
-def test_the_return_declares_the_articles_its_pages_examined_and_returns_them_when_selected():
-    final = importlib.import_module(PACKAGE + '.messages.final_to_parent')
-    summary = {'scores': [], 'features': [], 'examined_article_refs': ['src_1'], 'sheet_state_refs': []}
-    result = final.final_to_parent(summary, {'credit': 1.0}, ['examined_article_refs'])
-    assert result['examined_article_refs'] == ['src_1']
-    assert EPISODE.return_form.admit(result, 'test')['examined_article_refs'] == ['src_1']
-    assert 'examined_article_refs' not in final.final_to_parent(summary, {'credit': 1.0}, [])
-

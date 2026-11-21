@@ -1,9 +1,7 @@
-"""A real held world for the A105 grading of this episode (the assignment of this episode): a Store with the problem, a
-synthetic source (an assay's reported effect, variance, controls and fixed predictions, each a number followed by its
-printed unit), the
-assay reference anchored in it and a reaction term, all passed to the entry Episode in custody; and the reasoning
-selection a model makes on it (the commit of the hypothesis, observation and assessment with its typed
-investigation finding, and the grading arguments of the ``activity_rate`` grader for that assay)."""
+"""A real held world for this episode: a Store with the problem, a reaction term and the proposed annotation (the claim),
+the strategy's record of ONE query (a source whose ``request_ref`` artifact holds the request), the retained search
+response that query returns when it is run (the provider call itself is no part of an offline test) and, when asked,
+articles held in full; all passed to the entry Episode in custody."""
 import json
 
 from gene_annotation_episode.state import Store
@@ -17,15 +15,9 @@ SETTINGS = {'cost': 0.0, 'parameters': {'uncertainty_alpha': 0.05}, 'rate_popula
             'tool_registry': {'pdfinfo_executable': None, 'pdftotext_executable': None, 'pdftoppm_executable': None,
                               'job_limits': {'memory_bytes': 1 << 30, 'scratch_bytes': 1 << 30}},
             'knowledge_library_directory': None, 'launch_instruction_directory': None}
-LINES = ['Experiment A: purified enzyme hydrolysis rate assay with a known normal fixed-prediction model.',
-         'effect 12.5 U/mg; variance 0.25 U/mg_squared;',
-         'recovery 0.9 fraction; attributed 0.6 fraction; total 0.8 fraction;',
-         'condition test 0.8 fraction; condition reference 1 fraction;',
-         'assertion prediction 12 U/mg; alternative prediction 0 U/mg.']
-TEXT = '\n'.join(LINES)
-CRITERIA = ('measurement_identity', 'calibration_applicability', 'matrix_interference', 'background_alternatives',
-            'attribution_supported', 'assertion_relevance', 'condition_scope', 'variance_correspondence',
-            'sampling_basis', 'rate_regime', 'normalization_basis')
+# A real model run: each unit costs 0.1 credit, so the controller stops the Episode when its forecast yield of a
+# further unit no longer exceeds that.
+MODEL_SETTINGS = {**SETTINGS, 'cost': 0.1}
 
 
 def hit(pmcid, pmid, doi, title):
@@ -43,49 +35,45 @@ SEARCH_RESPONSE = {'version': '6.9', 'hitCount': 5, 'resultList': {'result': [
     hit('PMC300', '3', '10.1/c', 'A third article'),
     hit('PMC301', '4', '10.1/c', 'The third article, other record')]}}
 HITS = ['PMC100', 'PMC300']
+HIT_CANDIDATES = [
+    {'result_id': 'PMC100', 'provider_rank': 1, 'title': 'PopZ binds ParB',
+     'description': 'Journal of Tests, 2024. Abstract of PopZ binds ParB.'},
+    {'result_id': 'PMC300', 'provider_rank': 2, 'title': 'A third article',
+     'description': 'Journal of Tests, 2024. Abstract of A third article.'}]
 
 
-def held_world(directory, task_kind='a105_experiments', held_articles=(), examined_articles=()):
-    """The Store, the entry input of the episode at ``assignment_version`` and the records the model would name.
-    ``search_result_refs`` is a retained search response; ``held_articles`` are PMCIDs of articles held in full and
+def held_world(directory, held_articles=(), examined_articles=()):
+    """The Store, the entry input of the episode at ``search_assignment_v1`` and the records the model would name.
+    ``search_query_ref`` is the strategy's record of the query to run (``request``); ``search`` is the retained search
+    response that query returns when it is run. ``held_articles`` are PMCIDs of articles held in full and
     ``examined_articles`` the held ones an earlier run's page examined (the assignment names them)."""
     store = Store(directory / 'store')
     store.create_problem(raw_sequence='ATGGCT', molecule='dna')
     target = store.problem()['subject_refs'][0]
     scope = {'subject_refs': [target]}
-    artifact = store.artifact(TEXT, 'text/plain')
-    source = store.put('source', {'provider': 'synthetic_a105_table', 'accession': None, 'uri': None,
-                                  'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': None,
-                                  'version': None, 'retrieved_at': None, 'parent_source_refs': []},
-                       origin='caller')['id']
-    quote = LINES[0]
-    assay = store.put('reference', {'reference_type': 'assay', 'source_ref': source, 'accession': 'synthetic_assay_a',
-                                    'label': 'Experiment A', 'sequence_ref': None, 'molecule': None, 'length': None,
-                                    'term_refs': [], 'context_refs': [],
-                                    'anchor': {'source_ref': source, 'artifact_ref': artifact, 'start': 0,
-                                               'end': len(quote), 'quote': quote}}, origin='caller')['id']
+    artifact = store.artifact('The question context.', 'text/plain')
+    context = store.put('source', {'provider': 'synthetic_context', 'accession': None, 'uri': None,
+                                   'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': None,
+                                   'version': None, 'retrieved_at': None, 'parent_source_refs': []},
+                        origin='caller')['id']
     reaction = store.put('term', {'namespace': 'synthetic', 'accession': 'hydrolysis', 'label': 'Hydrolysis',
-                                  'term_type': 'reaction', 'source_ref': source, 'anchor': None},
+                                  'term_type': 'reaction', 'source_ref': context, 'anchor': None},
                          origin='caller')['id']
     proposed = store.put('hypothesis', {'subject_refs': [target], 'predicate': 'catalyzes',
                                         'value': {'type': 'term_ref', 'ref': reaction}, 'context_refs': []},
                          origin='reasoning')['id']
-    task = ({'version': 'literature_local_task_v1', 'kind': 'a105_experiments', 'evidence_axis': 'A105', 'credit_unit': 1.0,
-             'experiments': [{'experiment_ref': assay, 'assay_type': 'activity_rate'}]}
-            if task_kind == 'a105_experiments' else
-            {'version': 'literature_local_task_v1', 'kind': 'verified_source_leads', 'evidence_axis': 'A105',
-             'credit_unit': 1.0})
-    page = {'version': 'page_assignment_v1', 'source_ref': source, 'representation': 'original',
-            'artifact_ref': artifact, 'question_context_refs': [], 'prior_delivery_refs': []}
-    if task_kind == 'named_assessment':
-        task = {'version': 'literature_local_task_v1', 'kind': 'source_answer', 'answer_kind': 'assessment',
-                'evidence_axis': 'A105', 'credit_unit': 1.0, 'source_refs': [source]}
+    task = {'version': 'literature_local_task_v1', 'kind': 'verified_source_leads', 'evidence_axis': 'A105',
+            'credit_unit': 1.0}
     response = store.artifact(json.dumps(SEARCH_RESPONSE), 'application/json')
     search = store.put('source', {'provider': 'europepmc', 'accession': None,
                                   'uri': 'https://www.ebi.ac.uk/europepmc/webservices/rest/search',
                                   'artifact_ref': response, 'text_ref': None, 'request_ref': None,
                                   'version': None, 'retrieved_at': None, 'parent_source_refs': []},
                        origin='caller')['id']
+    query = store.artifact(json.dumps({'query': 'PopZ ParB binding assay', 'size': 25}), 'application/json')
+    request = store.put('source', {'provider': 'europepmc_search_request', 'accession': None, 'uri': None,
+                                   'artifact_ref': query, 'text_ref': None, 'request_ref': query,
+                                   'version': None, 'retrieved_at': None}, origin='tool')['id']
     articles = []
     for pmcid in held_articles:
         full_text = store.artifact('Full text of ' + pmcid, 'text/plain')
@@ -93,79 +81,14 @@ def held_world(directory, task_kind='a105_experiments', held_articles=(), examin
                                              'artifact_ref': full_text, 'text_ref': full_text, 'request_ref': None,
                                              'version': None, 'retrieved_at': None, 'parent_source_refs': []},
                                   origin='caller')['id'])
-    held = [target, source, artifact, assay, reaction, proposed, search, response, *articles]
-    assignment = {'version': 'search_assignment_v1', 'question_context_refs': [], 'search_result_refs': [search],
+    held = [target, context, artifact, reaction, proposed, request, query, search, response, *articles]
+    assignment = {'version': 'search_assignment_v1', 'question_context_refs': [context], 'search_query_ref': request,
                   'literature_task': task, 'proposed_annotation_ref': proposed, 'scope': scope,
                   'received_record_refs': held}
     if examined_articles:
         assignment['examined_article_refs'] = [ref for ref, pmcid in zip(articles, held_articles)
                                                if pmcid in examined_articles]
-    names = {'store': store, 'target': target, 'source': source, 'artifact': artifact, 'assay': assay,
-             'reaction': reaction, 'proposed': proposed, 'scope': scope, 'search': search, 'articles': articles}
-    return {**names, 'input': {'assignment': assignment, 'message': {'objective': 'grade the table'},
+    names = {'store': store, 'target': target, 'context': context, 'reaction': reaction, 'proposed': proposed,
+             'scope': scope, 'search': search, 'request': request, 'articles': articles}
+    return {**names, 'input': {'assignment': assignment, 'message': {'objective': 'find the evidence'},
                                'selection': []}}
-
-
-def witness(world, quote, start=0):
-    offset = TEXT.index(quote, start)
-    return {'source_ref': world['source'], 'representation': 'original', 'start': offset, 'end': offset + len(quote)}
-
-
-def number(world, label, token, unit):
-    fragment = label + ' ' + token + ' ' + unit
-    start = TEXT.index(fragment)
-    return {'kind': 'source_number',
-            'number': {'witness': witness(world, fragment), 'number_start': len(label) + 1,
-                       'number_end': len(label) + 1 + len(token)},
-            'unit': witness(world, unit, start + len(label) + len(token) + 2), 'origin': 'reported'}
-
-
-def grading_arguments(world, assertion):
-    """The ``activity_rate`` grader's arguments for the anchored assay, against ``assertion``."""
-    return {'source_ref': world['source'], 'source_kind': 'synthetic_fixture', 'assay_type': 'activity_rate',
-            'assertion_ref': assertion, 'experiment_ref': world['assay'], 'quantity_kind': 'rate',
-            'interpretations': {name: {'status': 'supported', 'support_refs': [world['assay']]} for name in CRITERIA},
-            'prediction_model': {'kind': 'fixed_predictions_known_normal', 'variance_interpretation': 'known',
-                                 'support_refs': [world['assay']]},
-            'quantities': {'effect': number(world, 'effect', '12.5', 'U/mg'),
-                           'effect_variance': number(world, 'variance', '0.25', 'U/mg_squared'),
-                           'recovery': number(world, 'recovery', '0.9', 'fraction'),
-                           'attributed_signal': number(world, 'attributed', '0.6', 'fraction'),
-                           'total_signal': number(world, 'total', '0.8', 'fraction'),
-                           'condition_test': number(world, 'condition test', '0.8', 'fraction'),
-                           'condition_reference': number(world, 'condition reference', '1', 'fraction'),
-                           'assertion_prediction': number(world, 'assertion prediction', '12', 'U/mg'),
-                           'alternative_prediction': number(world, 'alternative prediction', '0', 'U/mg')}}
-
-
-def reasoning_selection(world):
-    """What a model selects for ``reason``: the observation of the assay's reported rate, its assessment against the
-    proposed annotation with a typed investigation finding, and the grading of the assay in the same action."""
-    claim = {'subject_refs': [world['assay']], 'predicate': 'catalyzes',
-             'value': {'type': 'term_ref', 'ref': world['reaction']}, 'context_refs': []}
-    commit = {'structural_proposals': [], 'terms': [], 'source_subjects': [], 'hypotheses': [],
-              'annotation_updates': [],
-              'observations': [{'alias': 'rate', 'subject_refs': [world['target']],
-                                'source_subject_refs': [world['assay']], 'kind': 'assay_report',
-                                'source_ref': world['source'], 'measurements': [], 'dependencies': [],
-                                'anchor': {'source_ref': world['source'], 'artifact_ref': world['artifact'],
-                                           'start': TEXT.index(LINES[1]),
-                                           'end': TEXT.index(LINES[1]) + len(LINES[1])}}],
-              'assessments': [{'alias': 'graded', 'hypothesis_ref': world['proposed'], 'observation_ref': '@rate',
-                               'relation': 'strengthens', 'applicability': 'transfer',
-                               'extent_basis': 'observed_extent', 'condition_refs': [], 'assumption_refs': [],
-                               'expected_revision': 0,
-                               'investigation_finding': {
-                                   'source_claim': claim,
-                                   'qualification': {'kind': 'different_source_subject', 'context_refs': [],
-                                                     'assumption_refs': []},
-                                   'status': 'retained', 'withdrawal_reason': 'not_withdrawn',
-                                   'same_source_claim_as_ref': None, 'replaces_refs': []}}]}
-    return {'commit': commit, 'evidence_processing': {
-        'kind': 'graded', 'gradings': [{'arguments': json.dumps(grading_arguments(world, world['proposed']))}]}}
-# A real model run: each unit costs 0.1 credit, so the controller stops the Episode when its forecast yield of a
-# further unit no longer exceeds that.
-MODEL_SETTINGS = {**SETTINGS, 'cost': 0.1}
-FLAGS_OFF = {name: False for name in FLAGS}
-# The three reading children take the same settings; the population route is off for the examination run.
-CHILD_PATHS = ('table', 'report', 'chunk')

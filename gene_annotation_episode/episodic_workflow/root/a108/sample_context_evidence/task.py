@@ -1,7 +1,8 @@
-"""The task: look up the process the selection names, acquire and read sources through the tools of the selection,
-commit reasoning on what they say together with its contextual grading sheets, prepare a revised selection for a new
-child, or commission a child (a narrower A108 sample-context
-investigation by this binding itself, or the assessment of published evidence).
+"""The task: look up the process the selection names, use the tools of the selection (none of them searches for,
+fetches or reads a paper's text: that is the literature chain's), commit reasoning on the records it holds together with
+its contextual grading sheets, prepare a revised selection for a new child, or commission a child (a narrower A108
+sample-context investigation by this binding itself, or the literature chain: the published evidence assessment, whose
+one task is the verified source leads).
 
 Carried from the old task.py, task_decision.py, task_instructions.py, scientific_operations.py,
 scientific_contracts.py, library_operations.py, library_services.py, source_references.py and
@@ -58,7 +59,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.reader
 from gene_annotation_episode.episodic_workflow.episode_support.literature.prompts.sample_context_evidence.literature_investigation_prompt import (
     INSTRUCTIONS, REASONING_COMMIT_REQUIREMENT)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.sample_context_evidence.literature_sequence_discovery import (
-    identity_schema, references_schema)
+    references_schema)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.literature_grading_storage import (
     COMPONENTS as GRADING_COMPONENTS, LiteratureA108GradingRepository)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.sample_context_evidence.literature_aggregation import (
@@ -136,6 +137,11 @@ HISTORY_START = 'On a fresh provider conversation,'
 HISTORY_END = 'Do not execute native provider tools.'
 HISTORY_GUIDANCE = ('Your own earlier outcomes are shown to you as own_outcomes; that page creates no new action and '
                     'does not execute or credit the historical work again.\n')
+LITERATURE_GUIDANCE = ('\nYou run no literature search, fetch no paper and read no paper text yourself. The literature '
+                       'chain does that: commission the published evidence assessment child for the proposed '
+                       'annotation (its strategy writes the searches, its search picks a paper, its page examines it, '
+                       'and what is found is graded there automatically). It takes one task, the verified source '
+                       'leads.')
 RETURN_GUIDANCE = ('\nWhat returns to your parent is your credit and the counts code reads from the A108 sheets you and your '
                    'children saved, with their references and the assessments committed with grading; nothing you '
                    'write in prose is returned. Selecting a tool never ends your work: only the numerical controller '
@@ -154,8 +160,6 @@ INPUT_SCHEMAS = {
                        'description': "Select records that refer to any supplied ID through reference fields or "
                                       "provenance anchors. This does not match a record's own ID; to read known "
                                       "records themselves, supply refs alone instead."}}, required=[]),
-    'source.read': obj({'source_ref': REF, 'offset': INTEGER, 'limit': POSITIVE,
-                        'representation': {'enum': ['text', 'original', 'stdout', 'stderr']}}, ['source_ref']),
     'source.locate': locate_schema(),
     'source.sequence.references': references_schema(),
     'source.sequence.scan': scan_schema(),
@@ -170,29 +174,21 @@ INPUT_SCHEMAS = {
         'where': {**obj({'column': {'type': ['string', 'null'], 'pattern': '^[A-Z]+$'},
                          'match': {'enum': ['equals', 'contains']}, 'value': TEXT,
                          'case_sensitive': {'type': 'boolean'}}), 'type': ['object', 'null']}}),
-    'source.pdf.info': obj({'source_ref': REF}),
-    'source.pdf.text': obj({'source_ref': REF, 'page': POSITIVE, 'last_page': POSITIVE,
-                            'layout': {'enum': ['reading_order', 'layout', 'raw']}}, ['source_ref', 'page']),
-    'source.pdf.page': obj({'source_ref': REF, 'page': POSITIVE, 'dpi': {'type': 'number', 'exclusiveMinimum': 0}},
-                           ['source_ref', 'page']),
-    'public.literature.search': obj({'query': TEXT, 'size': POSITIVE, 'cursor': TEXT}, ['query']),
-    'public.literature.read': obj({'pmcid': TEXT}),
-    'public.literature.sequence_identity': identity_schema(),
     'public.ncbi.search': obj({'database': {'enum': ['protein', 'nuccore', 'assembly', 'taxonomy', 'biosample',
-                                                     'bioproject', 'pubmed']},
+                                                     'bioproject']},
                                'term': TEXT, 'size': POSITIVE, 'offset': INTEGER}, ['database', 'term']),
     'public.ncbi.sequence': obj({'accession': TEXT, 'database': {'enum': ['protein', 'nuccore']},
                                  'start': INTEGER, 'end': POSITIVE}, ['accession', 'database']),
     'public.ncbi.entrez': ncbi_entrez_tool_contract()['input_schema'],
-    'public.pmc.versions': obj({'pmcid': {'type': 'string', 'pattern': '^PMC[0-9]+$'}, 'continuation_token': TEXT},
-                               ['pmcid']),
-    'public.pmc.files': obj({'version_ref': REF, 'continuation_token': TEXT}, ['version_ref']),
-    'public.pmc.asset': obj({'asset_ref': REF}),
     'public.taxonomy': obj({'taxon_id': POSITIVE}),
 }
 INPUT_SCHEMAS['execution.estimate'] = {'anyOf': [
     obj({'tool': {'const': name}, 'arguments': INPUT_SCHEMAS[name]}) for name in ('source.xlsx.sheets', 'source.xlsx.rows')]}
 ACCESS = {name: name.replace('.', '_') for name in INPUT_SCHEMAS}
+# The reading authorization the grading repository asks before it reads a source the head holds (the head offers no
+# tool that reads a paper's text: this is the schema of the authorization, not an offered tool).
+SOURCE_READ = obj({'source_ref': REF, 'offset': INTEGER, 'limit': POSITIVE,
+                   'representation': {'enum': ['text', 'original', 'stdout', 'stderr']}}, ['source_ref'])
 
 # A Store scope within this scope, in the closed form ``Store.validate_scope`` admits (BINDING_CONTRACT.md, C1).
 SCOPE_SCHEMA = {**obj({
@@ -229,23 +225,15 @@ REVISION_ORIGIN = obj({'version': {'const': REVISION_ORIGIN_VERSION},
                        'preparation_operation_ref': {'type': 'string', 'pattern': '^operation_[a-f0-9]{24}$'}})
 HELD_REFS = {'type': 'array', 'items': REF, 'uniqueItems': True}
 COMMITTED = 'committed_record_refs'
-LITERATURE_FIELDS = ['literature_screening_answers', 'literature_source_lead_dispositions',
+LITERATURE_FIELDS = ['literature_source_lead_dispositions',
                      'literature_a108_grading_cells', 'literature_a108_aggregation_cells']
 LITERATURE_VERSION = 'literature_local_task_v1'
 
 
 def literature_task_schema():
     """The commissioned A108 literature task (private copy of the old ``goal.task_schema`` of ``literature``)."""
-    base = {'version': {'const': LITERATURE_VERSION}, 'evidence_axis': {'const': 'A108'},
-            'credit_unit': {'type': 'number', 'exclusiveMinimum': 0}}
-    refs = {'type': 'array', 'items': REF, 'minItems': 1, 'uniqueItems': True}
-    span = obj({'source_ref': REF, 'artifact_ref': REF, 'start': INTEGER, 'end': POSITIVE})
-    return {'anyOf': [
-        obj({**base, 'kind': {'const': 'verified_source_leads'}}),
-        obj({**base, 'kind': {'const': 'source_answer'}, 'answer_kind': {'const': 'assessment'},
-             'source_refs': refs}),
-        obj({**base, 'kind': {'const': 'source_answer'}, 'answer_kind': {'const': 'screening'},
-             'examined': {'type': 'array', 'minItems': 1, 'items': span}})]}
+    return obj({'version': {'const': LITERATURE_VERSION}, 'evidence_axis': {'const': 'A108'},
+                'credit_unit': {'type': 'number', 'exclusiveMinimum': 0}, 'kind': {'const': 'verified_source_leads'}})
 
 
 SELF_ARGUMENTS = obj({
@@ -256,7 +244,7 @@ SELF_ARGUMENTS = obj({
 LITERATURE_ARGUMENTS = obj({
     'objective': TEXT, 'purpose': TEXT, 'scope': SCOPE_SCHEMA,
     'assignment': obj({
-        'question_context_refs': HELD_REFS, 'source_refs': HELD_REFS, 'literature_task': literature_task_schema(),
+        'question_context_refs': HELD_REFS, 'literature_task': literature_task_schema(),
         'requested_a108_grading_components': {'type': 'array', 'uniqueItems': True,
                                               'items': {'enum': list(GRADING_COMPONENTS)}},
         'requested_a108_aggregation_components': {'type': 'array', 'uniqueItems': True,
@@ -267,8 +255,11 @@ CHILD_DESCRIPTIONS = {
     'sample_context_evidence': 'Commission a narrower A108 sample-context investigation over a sub-scope of this '
                                'scope; it returns its credit and the findings it retained. For an alternative '
                                'approach copy selection and revision_origin from process_revise.',
-    'published_evidence_assessment': 'Commission an A108 published-evidence assessment of the proposed annotation; '
-                                     'it returns its credit and the findings it retained.',
+    'published_evidence_assessment': 'Commission the A108 literature chain for the proposed annotation: its strategy '
+                                     'writes the searches, its search runs each one and picks a paper, its page '
+                                     'examines the paper and the findings are graded there. You search for, fetch '
+                                     'and read no paper yourself; it returns its credit and the findings it '
+                                     'retained.',
 }
 REASON_DESCRIPTION = ('Commit a typed scientific reasoning over the selected table or sheet and the records you hold: '
                       'extracted terms, source subjects, contexts, observations, hypotheses and assessments, each '
@@ -378,7 +369,7 @@ def instructions(process, knowledge):
     if knowledge is not None:
         text += KNOWLEDGE_INSTRUCTIONS
     text += GRADING_INSTRUCTIONS
-    return text + RETURN_GUIDANCE
+    return text + LITERATURE_GUIDANCE + RETURN_GUIDANCE
 
 
 def outcome_of(result):
@@ -503,10 +494,6 @@ async def state_query(arguments, ctx):
     return await run_access_tool('state.query', arguments, ctx)
 
 
-async def source_read(arguments, ctx):
-    return await run_access_tool('source.read', arguments, ctx)
-
-
 async def source_locate(arguments, ctx):
     return await run_access_tool('source.locate', arguments, ctx)
 
@@ -539,32 +526,8 @@ async def source_xlsx_rows(arguments, ctx):
     return await run_access_tool('source.xlsx.rows', arguments, ctx)
 
 
-async def source_pdf_info(arguments, ctx):
-    return await run_access_tool('source.pdf.info', arguments, ctx)
-
-
-async def source_pdf_text(arguments, ctx):
-    return await run_access_tool('source.pdf.text', arguments, ctx)
-
-
-async def source_pdf_page(arguments, ctx):
-    return await run_access_tool('source.pdf.page', arguments, ctx)
-
-
 async def execution_estimate(arguments, ctx):
     return await run_access_tool('execution.estimate', arguments, ctx)
-
-
-async def public_literature_search(arguments, ctx):
-    return await run_access_tool('public.literature.search', arguments, ctx)
-
-
-async def public_literature_read(arguments, ctx):
-    return await run_access_tool('public.literature.read', arguments, ctx)
-
-
-async def public_literature_sequence_identity(arguments, ctx):
-    return await run_access_tool('public.literature.sequence_identity', arguments, ctx)
 
 
 async def public_ncbi_search(arguments, ctx):
@@ -577,18 +540,6 @@ async def public_ncbi_sequence(arguments, ctx):
 
 async def public_ncbi_entrez(arguments, ctx):
     return await run_access_tool('public.ncbi.entrez', arguments, ctx)
-
-
-async def public_pmc_versions(arguments, ctx):
-    return await run_access_tool('public.pmc.versions', arguments, ctx)
-
-
-async def public_pmc_files(arguments, ctx):
-    return await run_access_tool('public.pmc.files', arguments, ctx)
-
-
-async def public_pmc_asset(arguments, ctx):
-    return await run_access_tool('public.pmc.asset', arguments, ctx)
 
 
 async def public_taxonomy(arguments, ctx):
@@ -615,7 +566,7 @@ def reason(arguments, ctx):
 
     def authorize_source_access(reference, representation):
         reading = {'source_ref': reference, 'representation': representation}
-        validate_schema(reading, source_location_inputs(INPUT_SCHEMAS['source.read']))
+        validate_schema(reading, source_location_inputs(SOURCE_READ))
         repository.authorize_source_access(context, reference, representation, 'source.read')
     return execute_required_grading(context, selection, ctx.operation_key, repository,
                                     authorize_source_access=authorize_source_access)
@@ -624,18 +575,13 @@ def reason(arguments, ctx):
 TOOLS = {'process_selection': process_selection, 'process_search': process_search, 'process_entry': process_entry,
          'process_sources': process_sources, 'process_tools': process_tools, 'process_revise': process_revise,
          'knowledge_search': knowledge_search, 'knowledge_entry': knowledge_entry, 'knowledge_read': knowledge_read,
-         'state_query': state_query, 'source_read': source_read, 'source_locate': source_locate,
+         'state_query': state_query, 'source_locate': source_locate,
          'source_sequence_references': source_sequence_references, 'source_sequence_scan': source_sequence_scan,
          'image_view': image_view, 'source_archive_members': source_archive_members,
          'source_archive_extract': source_archive_extract, 'source_xlsx_sheets': source_xlsx_sheets,
-         'source_xlsx_rows': source_xlsx_rows, 'source_pdf_info': source_pdf_info,
-         'source_pdf_text': source_pdf_text, 'source_pdf_page': source_pdf_page,
-         'execution_estimate': execution_estimate, 'public_literature_search': public_literature_search,
-         'public_literature_read': public_literature_read,
-         'public_literature_sequence_identity': public_literature_sequence_identity,
+         'source_xlsx_rows': source_xlsx_rows, 'execution_estimate': execution_estimate,
          'public_ncbi_search': public_ncbi_search, 'public_ncbi_sequence': public_ncbi_sequence,
-         'public_ncbi_entrez': public_ncbi_entrez, 'public_pmc_versions': public_pmc_versions,
-         'public_pmc_files': public_pmc_files, 'public_pmc_asset': public_pmc_asset,
+         'public_ncbi_entrez': public_ncbi_entrez,
          'public_taxonomy': public_taxonomy, 'reason': reason}
 
 
@@ -701,9 +647,7 @@ def action(response, summary, records, ctx):
             held(records, arguments['evidence_refs'])
             return ChildCall(name, arguments)
         if name == 'published_evidence_assessment':
-            task = arguments['assignment']['literature_task']
-            held(records, [*arguments['assignment']['question_context_refs'], *arguments['assignment']['source_refs'],
-                           *task.get('source_refs', [])])
+            held(records, arguments['assignment']['question_context_refs'])
             return ChildCall(name, arguments)
         if (name == 'reason' and empty_commit(arguments['commit'], summary['reasoning_schema'])
                 and arguments.get('evidence_processing', {}).get('kind') != 'no_applicable_evidence'):

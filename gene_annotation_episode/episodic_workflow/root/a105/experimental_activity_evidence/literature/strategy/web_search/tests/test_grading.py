@@ -1,20 +1,17 @@
-"""The A105 grading of this episode through the real runner on a real Store, without a model: the first decision is
-the code-decided Jev assessment of the search results, after which ``reason`` is offered with the owner's grading
-instructions; a ``reason`` unit commits the interpretation and saves its
-grading sheet together; the finding is the controlled features read from the saved sheet, admitted by
-``RETURN_FORM``. The whole literature subtree below this episode is linked (its bindings and settings), as a run
+"""The decisions of this episode through the real runner on a real Store, without a model or a provider: the first
+decision is the provider search of the one query the strategy handed over, run from its record through custody; the
+second is Jev's measurement of every hit; the model then picks ONE unprocessed hit and code obtains its paper and
+commissions the page. The whole literature subtree below this episode is linked (its bindings and settings), as a run
 links it. Nothing is faked."""
 import asyncio
 import importlib
-import json
 import types
 
-from episode_runtime import BindingRegistry, ModelRequest, RunJournal, ToolCall, link
+from episode_runtime import BindingRegistry, RunJournal, ToolCall, link
 from gene_annotation_episode.model_provider import ModelProvider, load_config
-from gene_annotation_episode.episodic_workflow.episode_support.literature.prompts.experimental_activity_evidence.literature_assay_grading_prompt import (
-    ASSAY_GRADING_TASK)
 
-from .grading_world import SETTINGS, held_world, reasoning_selection
+from .grading_world import HIT_CANDIDATES, SETTINGS, held_world
+from ..page.tests.grading_world import job_world_services
 
 PACKAGE = __name__.rsplit('.', 2)[0]
 EPISODE = getattr(importlib.import_module(PACKAGE + '.episode'), 'SourceRelevanceAssessment')
@@ -36,135 +33,151 @@ BELOW = [getattr(importlib.import_module(ROOT + '.' + name + '.episode'), cls) f
 def linked_run(directory, world, run_id):
     collaborators = {'store': world['store'],
                      'model_provider': ModelProvider(load_config(), directory / 'model_calls', directory),
-                     'continuation': {cls.binding_path: SETTINGS for cls in BELOW}, 'services': {}}
+                     'continuation': {cls.binding_path: SETTINGS for cls in BELOW}, 'services': job_world_services(directory)}
     return link(BindingRegistry([cls() for cls in BELOW]), PATH, world['input'], run_id=run_id,
                 journal=RunJournal(directory / 'journal.sqlite3'), collaborators=collaborators)
 
 
-HIT_CANDIDATES = [
-    {'result_id': 'PMC100', 'provider_rank': 1, 'title': 'PopZ binds ParB',
-     'description': 'Journal of Tests, 2024. Abstract of PopZ binds ParB.'},
-    {'result_id': 'PMC300', 'provider_rank': 2, 'title': 'A third article',
-     'description': 'Journal of Tests, 2024. Abstract of A third article.'}]
+def after_search(run, world):
+    """The view of the run once the query of the assignment has been run. The provider call is no part of an offline
+    test: the outcome is the one the ``run_search`` unit records, over the retained response the world holds."""
+    outcome = {'kind': 'tool', 'tool': 'run_search', 'arguments': {'search_query_ref': world['request']},
+               'outcome': {'status': 'completed', 'record_refs': [world['search']]}}
+    view = run.view
+    return types.SimpleNamespace(parent_input=view.parent_input, records=view.records, goal=view.goal,
+                                 units_consumed=view.units_consumed, controller_state=view.controller_state,
+                                 outcomes=[*view.outcomes, outcome])
 
 
-def test_the_first_decision_is_the_jev_assessment_of_every_hit_of_the_result_lists_against_the_search_goal(tmp_path):
-    """Offline, without a model or Jev call: before this episode plans, its first decision is made by code:
-    ``assess_search_results`` of every HIT of the result list (its PMCID, provider rank, title and description: the
-    journal, year and abstract the provider returned) against the Search Goal (the runner's goal record of this episode
-    with the results and subject the commission requests). The list holds five entries: one without a PMCID (nothing to
-    fetch), one repeating a PMCID and one that is another publication's DOI are not items. Every hit is unconsumed and
-    the one action offered is the assessment; the planner view exists only after it."""
+def test_the_first_decision_is_the_search_of_the_query_handed_over_run_from_its_record_through_custody(tmp_path,
+                                                                                                     monkeypatch):
+    """The commission names ONE query of the strategy (a record holding the request), not a result list. The first
+    decision is made by code: ``run_search`` of that query; the unit reads the request from the record through custody
+    and runs the operation of ``public.literature.search`` with exactly the arguments the strategy wrote. Until it ran,
+    no hit is known and the one action offered is the search."""
     world = held_world(tmp_path)
-    run = linked_run(tmp_path, world, 'a105-upper-decision')
+    run = linked_run(tmp_path, world, 'a105-search-first')
     decision = asyncio.run(run.next_decision())
     summary = EPISODE()._summary(run.view)
     task = importlib.import_module(PACKAGE + '.task')
+    assert isinstance(decision, ToolCall) and decision.name == task.RUN_SEARCH
+    assert decision.arguments['search_query_ref'] == world['request']
+    assert summary['pending_search'] == world['request'] and summary['search_result_candidates'] == []
+    assert EPISODE.offered_actions(summary, None) == [task.RUN_SEARCH]
+    called = {}
+
+    async def run_operation(name, arguments, scope, ctx):
+        called.update(name=name, arguments=arguments)
+        return {'status': 'completed'}
+    monkeypatch.setattr(task, 'run_operation', run_operation)
+    asyncio.run(task.run_search(decision.arguments, types.SimpleNamespace(store=run.view.records)))
+    assert called == {'name': 'public.literature.search',
+                      'arguments': {'query': 'PopZ ParB binding assay', 'size': 25}}
+    world['store'].close()
+
+
+def test_a_search_that_ran_is_not_run_again(tmp_path):
+    summary_module = importlib.import_module(PACKAGE + '.messages.internal_summary')
+    world = held_world(tmp_path)
+    run = linked_run(tmp_path, world, 'a105-search-ran')
+    asyncio.run(run.next_decision())
+    done = after_search(run, world)
+    parent = run.view.parent_input
+    assert summary_module.next_search(parent, run.view.outcomes) == world['request']
+    assert summary_module.next_search(parent, done.outcomes) is None
+    assert summary_module.result_response(done.outcomes) == [world['search']]
+    world['store'].close()
+
+
+def test_the_decision_after_the_search_is_the_jev_assessment_of_every_hit_against_the_search_goal(tmp_path):
+    """Offline, without a model or Jev call: once its search ran, before the model picks, the decision is made by code:
+    ``assess_search_results`` of every HIT of the result list (its PMCID, provider rank, title and description) against
+    the Search Goal (the runner's goal record of this episode with the commissioned task and the subject of the claim).
+    The list holds five entries: one without a PMCID (nothing to fetch), one repeating a PMCID and one that is another
+    publication's DOI are not items. Every hit is unprocessed and the one action offered is the assessment."""
+    world = held_world(tmp_path)
+    run = linked_run(tmp_path, world, 'a105-search-assess')
+    asyncio.run(run.next_decision())
+    summary = EPISODE()._summary(after_search(run, world))
+    task = importlib.import_module(PACKAGE + '.task')
+    decision = task.decide(summary, None, None)
     assert isinstance(decision, ToolCall) and decision.name == task.ASSESS
     assert decision.arguments['results'] == summary['search_result_candidates'] == HIT_CANDIDATES
     goal = decision.arguments['goal']
     assert goal == summary['jev_search_goal'] and goal['goal_id'] == run.view.goal.goal_id
-    assert goal['requested_results']['commissioned_experiments'] == [{'label': 'Experiment A',
-                                                                     'assay_type': 'activity_rate'}]
+    assert goal['requested_results'] == {'task_key': 'A105:verified_source_leads', 'task_kind': 'verified_source_leads'}
     assert goal['subject']['predicate'] == 'catalyzes' and goal['subject']['partner'] == 'Hydrolysis'
     assert summary['input_list'] == ['PMC100', 'PMC300'] and summary['search_assessment_ref'] is None
-    assert summary['named_source_refs'] == [] and summary['pending_page'] is None and summary['hit_fetches'] == []
+    assert summary['pending_page'] is None and summary['hit_fetches'] == []
     assert summary['search_planner_context'] is None and summary['prior_page_outcomes'] == []
     assert EPISODE.offered_actions(summary, None) == [task.ASSESS]
-    assert summary['assay_sheets'] == [] and EPISODE.credit(summary, run.view.records) == 0
+    assert EPISODE.credit(summary, run.view.records) == 0
     assert list((tmp_path / 'model_calls').glob('call-*')) == []
-    # After the assessment the planner is asked with the owner's grading instructions and the reasoning commit.
-    assert ASSAY_GRADING_TASK in task.instructions(knowledge=None, leads=False, populations=())
-    assert 'reason' in {entry['name'] for entry in task.catalog(task.offered(SETTINGS), summary['reasoning_schema'], False,
-                                                              SETTINGS)}
     world['store'].close()
-
 
 
 def test_an_article_examined_by_a_page_is_not_a_search_result_any_more_but_one_only_held_is(tmp_path):
-    """An item leaves the list when its work is done: the article a page of an earlier run examined (named by the
-    assignment's ``examined_article_refs``) is not offered."""
+    """A hit leaves the list when its work is done: the article a page of an earlier run examined (named by the
+    assignment's ``examined_article_refs``) is not offered; one that is only held stays."""
     world = held_world(tmp_path, held_articles=['PMC100'], examined_articles=['PMC100'])
-    run = linked_run(tmp_path, world, 'a105-upper-examined')
+    run = linked_run(tmp_path, world, 'a105-search-examined')
     asyncio.run(run.next_decision())
-    summary = EPISODE()._summary(run.view)
+    summary = EPISODE()._summary(after_search(run, world))
     assert summary['search_result_candidates'] == HIT_CANDIDATES[1:] and summary['input_list'] == ['PMC300']
     world['store'].close()
-
-
-def test_an_article_only_held_stays_a_search_result(tmp_path):
-    world = held_world(tmp_path, held_articles=['PMC100'])
-    run = linked_run(tmp_path, world, 'a105-upper-held')
+    (tmp_path / 'held').mkdir()
+    held = held_world(tmp_path / 'held', held_articles=['PMC100'])
+    run = linked_run(tmp_path / 'held', held, 'a105-search-held')
     asyncio.run(run.next_decision())
-    summary = EPISODE()._summary(run.view)
+    summary = EPISODE()._summary(after_search(run, held))
     assert summary['search_result_candidates'] == HIT_CANDIDATES and summary['input_list'] == ['PMC100', 'PMC300']
-    world['store'].close()
+    held['store'].close()
 
 
-def test_a_held_article_is_opened_without_a_new_fetch(tmp_path):
+def test_a_held_article_is_opened_without_a_new_fetch_and_the_page_is_commissioned_by_code_on_it(tmp_path):
     """Picking a hit whose article is held completes on the held source (no provider call, no second record), and the
-    page is then commissioned on it as for a fresh fetch."""
+    page is then commissioned on it as for a fresh fetch, with no model call."""
     summary_module = importlib.import_module(PACKAGE + '.messages.internal_summary')
     task = importlib.import_module(PACKAGE + '.task')
     world = held_world(tmp_path, held_articles=['PMC100'])
-    run = linked_run(tmp_path, world, 'a105-upper-open-held')
+    run = linked_run(tmp_path, world, 'a105-search-open-held')
     asyncio.run(run.next_decision())
     before = sorted(run.view.records.refs())
     ctx = types.SimpleNamespace(store=run.view.records, operation_key='open-held')
-    arguments = {'arguments': {'hit': 'PMC100', 'objective': 'evidence_in_passages'}}
+    arguments = {'arguments': {'hit': 'PMC100'}, 'scope': world['scope']}
     outcome = asyncio.run(task.fetch_search_hit(arguments, ctx))
     assert outcome['status'] == 'completed' and outcome['result'] == {'source_ref': world['articles'][0]}
     assert sorted(run.view.records.refs()) == before
-    page = summary_module.pending_page({'kind': 'tool', 'tool': task.FETCH, 'outcome': outcome,
-                                        'arguments': arguments}, run.view.records)
-    assert page['page']['source_ref'] == world['articles'][0] and page['hit'] == 'PMC100'
+    last = {'kind': 'tool', 'tool': task.FETCH, 'outcome': outcome, 'arguments': arguments}
+    pending = summary_module.pending_page(last, run.view.records)
+    assert pending['page']['source_ref'] == world['articles'][0] and pending['hit'] == 'PMC100'
+    assert set(pending) == {'hit', 'page'}
     world['store'].close()
 
 
-def test_a_fetched_hit_is_consumed_whether_it_completed_or_failed_and_only_a_completed_fetch_gets_its_page(tmp_path):
+def test_a_picked_hit_is_done_whether_its_fetch_completed_or_failed_and_only_a_completed_fetch_gets_its_page(tmp_path):
     summary_module = importlib.import_module(PACKAGE + '.messages.internal_summary')
     task = importlib.import_module(PACKAGE + '.task')
     world = held_world(tmp_path, held_articles=['PMC100'])
-    run = linked_run(tmp_path, world, 'a105-upper-fetch')
+    run = linked_run(tmp_path, world, 'a105-search-fetch')
     asyncio.run(run.next_decision())
     records = run.view.records
     article = world['articles'][0]
 
     def fetch(hit, outcome):
-        return {'kind': 'tool', 'tool': task.FETCH, 'outcome': outcome,
-                'arguments': {'arguments': {'hit': hit, 'objective': 'evidence_in_passages'}}}
+        return {'kind': 'tool', 'tool': task.FETCH, 'outcome': outcome, 'arguments': {'arguments': {'hit': hit}}}
     completed = fetch('PMC100', {'status': 'completed', 'feedback': None, 'result': {'source_ref': article}})
     failed = fetch('PMC300', {'status': 'failed', 'feedback': {'code': 'provider_http_500'}})
     page = {'source_ref': article, 'representation': 'text', 'artifact_ref': records.get(article)['text_ref'],
             'prior_delivery_refs': []}
-    # the page is commissioned by code on the article that was fetched, with the objective the model chose
-    assert summary_module.pending_page(completed, records) == {'hit': 'PMC100', 'objective': 'evidence_in_passages',
-                                                               'page': page}
+    # the page is commissioned by code on the paper that was fetched
+    assert summary_module.pending_page(completed, records) == {'hit': 'PMC100', 'page': page}
     # a failed fetch is never opened: no page, and the hit is reported with the provider status
     assert summary_module.pending_page(failed, records) is None and summary_module.pending_page(None, records) is None
     assert summary_module.hit_fetches([completed, failed]) == [
         {'hit': 'PMC100', 'status': 'completed', 'provider_status': None},
         {'hit': 'PMC300', 'status': 'failed', 'provider_status': 'provider_http_500'}]
-    assert summary_module.consumed_results([completed, failed], False) == ['PMC100', 'PMC300']
+    assert summary_module.consumed_results([completed, failed]) == ['PMC100', 'PMC300']
     child = {'kind': 'child', 'slot': 'page', 'arguments': {'hit': 'PMC100', 'page': page}}
     assert summary_module.pending_page(child, records) is None
-    world['store'].close()
-
-
-def test_under_a_task_that_names_its_source_the_page_candidate_is_that_source_and_no_hit_is_offered(tmp_path):
-    """The page refuses a source other than the one it is assigned (``literature_task_outside_assigned_source``), so a
-    task naming a source offers the page on that source only: no hit, no Jev measurement, no fetch."""
-    world = held_world(tmp_path, 'named_assessment')
-    run = linked_run(tmp_path, world, 'a105-upper-named')
-    request = asyncio.run(run.next_decision())
-    summary = EPISODE()._summary(run.view)
-    task = importlib.import_module(PACKAGE + '.task')
-    assert isinstance(request, ModelRequest)
-    assert summary['named_source_refs'] == summary['input_list'] == [world['source']]
-    assert summary['search_result_candidates'] == [] and summary['search_assessment_ref'] is None
-    assert request.context['page_candidates'] is None and request.context['input_list'] == [world['source']]
-    assert [entry['slot'] for entry in request.context['child_options']] == ['page']
-    assert task.FETCH not in {entry['name'] for entry in request.context['tools']}
-    offered = EPISODE.offered_actions(summary, types.SimpleNamespace(settings=SETTINGS))
-    assert 'page' in offered and task.FETCH not in offered
     world['store'].close()

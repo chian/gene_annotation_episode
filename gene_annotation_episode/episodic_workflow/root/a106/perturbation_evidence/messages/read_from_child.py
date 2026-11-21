@@ -10,7 +10,7 @@ sources this parent selected. A monitor always returns the check rows of the job
 this Episode holds them as returned and its summary reads the job's latest check from them (``outstanding_jobs``);
 the report keeps their references."""
 
-LITERATURE = ('literature_screening_answers', 'literature_source_lead_dispositions')
+LITERATURE = ('literature_source_lead_dispositions',)
 LAUNCH = ('execution_handoff_refs', 'execution_result_refs', 'execution_completed', 'bvbrc_appservice_support_refs',
           'bvbrc_application_outcomes')
 MONITOR = ('job_returncode', 'job_duration_seconds', 'job_elapsed_seconds', 'stdout_bytes', 'stderr_bytes',

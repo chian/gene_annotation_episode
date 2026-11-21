@@ -43,6 +43,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     IDENTITY_FEATURES,
     IDENTITY_MUST_MATCH,
     IDENTITY_NORMALIZED_REF_FIELDS,
+    IDENTITY_STATED_FIELDS,
     IDENTITY_NUMBER_TOLERANCE,
     IDENTITY_QUANTITY_OF_FIELD,
     IDENTITY_SPLIT_ONLY_ON,
@@ -267,7 +268,9 @@ def _member_fields(record):
     # OWNER_DECISION 18: the target and the partner identity (top-level keys of the leaf record). Unavailable when not stated;
     # the chunk's byte span (span_start, span_end) is the stated support when the record carries it.
     reasons = record.get('unavailable_reasons') or {}
-    for name in IDENTITY_NORMALIZED_REF_FIELDS:
+    # The sequence identity fields (subject_*, partner_*: identifier, database, organism, residue range, mutations) are kept per
+    # result the same way, so the sheet's conversion reads them from the grader's stated fields.
+    for name in IDENTITY_STATED_FIELDS:
         value = record.get(name)
         if value is None:
             found['identity.' + name] = ('unavailable', UNAVAILABLE_CONFLICTING if reasons.get(name) == UNAVAILABLE_CONFLICTING else None)

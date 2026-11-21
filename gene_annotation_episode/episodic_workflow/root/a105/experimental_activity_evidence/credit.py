@@ -7,14 +7,17 @@ target-eligible typed findings among the assessments this Episode holds; revisio
 earn nothing and annotation support stays separate.
 
 What a child returns is its credit, its per-annotation scores, the features of its subscoring rows and its sheet states;
-its assessments stay inside the child. The children's credit therefore enters this credit as returned (the page child
-credits the change of the resolution of the sheet, see the page ``credit.py``); this level computes nothing from the
-scores or features. Never bounded, clamped or rescaled."""
+its assessments stay inside the child. The head's credit is its own (owner, 2026-11-21): the strongest evidence at the
+closest relationship on the latest sheet state it holds minus that of the sheet it was given (library:
+``literature_strongest_evidence``). The children's credits are shown in the summary and never added. Never bounded,
+clamped or rescaled."""
 from method_loop import UNBOUNDED
 import math
 
 from .task import TOOLS
 
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_strongest_evidence import (
+    evidence_gain)
 from gene_annotation_episode.episodic_workflow.episode_support.findings.experimental_activity_evidence.investigation_progress import (
     FindingProgressPolicy, ScientificFindingProgress, project_finding_progress)
 
@@ -39,10 +42,13 @@ def finding_progress(records, scope, finding_unit):
 
 
 def credit(summary, records):
-    """The head's own finding progress plus what its children earned (OWNER_DECISION 10: the page updates the subscoring
-    sheet and produces the credit; the levels above only receive it and compute nothing). The children return only their
-    credit, scores, features and sheet states, so the children's credits are added as returned."""
-    value = float(summary['progress']['credit']) + math.fsum(child['credit'] for child in summary['child_returns'])
+    """The strongest evidence at the closest relationship for the proposed annotation on the latest sheet state this head
+    holds, minus the same on the sheet state it was given (``strongest_evidence``; 0 when it was given none). Counted as
+    soon as a graded sheet is held: no assessment or reasoning commit switches it on or off (a write-up of the head's own
+    earns nothing), and no model step stands between a graded result and its being counted. A child's credit is
+    information in the summary and is never added (owner, 2026-11-21)."""
+    value = evidence_gain(records, summary['sheet_state_refs'], summary['given_sheet_state_refs'],
+                          summary['proposed_annotation_ref'])
     if not math.isfinite(value):
         raise ValueError('literature_finite_task_credit_required')
     return value
@@ -51,43 +57,22 @@ def credit(summary, records):
 def ceiling(summary, records, action_type, arguments, ctx):
     """The most the credit can rise if the action ``action_type`` with ``arguments`` is the next unit.
 
-    The credit is ``finding_unit`` times the distinct retained findings among the held assessments, plus the credits the
-    children returned. ``finding_unit`` is ``summary['evidence_task']['credit_unit']``. ``arguments`` is what the unit is
-    called with: for a tool the ``ToolCall`` arguments (``{'arguments': the model's tool arguments, 'scope', ...}``), for a
-    child the ``ChildCall`` arguments (``{'objective', 'scope', 'assignment'}``).
+    The credit is the rise of the strongest evidence at the closest relationship held on the sheet. ``arguments`` is what the
+    unit is called with: for a tool the ``ToolCall`` arguments, for a child the ``ChildCall`` arguments (``{'objective',
+    'scope', 'assignment'}``).
 
-    * Every tool except ``reason`` (the registry reads and searches, ``process_search``, ``process_entry``,
-      ``process_sources``, ``process_revise``): 0. None of them saves an assessment or returns a child credit, so neither
-      term of the credit can rise.
-    * ``reason``: each assessment the commit saves adds at most one distinct finding key, so at most
-      ``finding_unit * len(commit['assessments'])``. The gradings, sheets and other sections add no assessment. A
-      commit's assessments are not bounded by anything held now (the schema has no maximum and the commit may create its
-      own observations and hypotheses), so with ``arguments`` None there is no finite bound: ``UNBOUNDED``.
-    * ``literature``: its assessments stay in the child, so only its returned credit enters. By task kind: ``a105_experiments``
-      returns the sum of page credits, each the change of 1 - mean resolution of the one commissioned claim's classes over a
-      sheet that starts from the sheet the previous run returned, so the sum is at most the remaining 1 - R <= 1, times the
-      task's ``credit_unit``; ``source_answer`` (assessment, screening, measurement) and ``a105_assembly`` earn
-      ``credit_unit`` for the one answer; ``verified_source_leads`` earns ``credit_unit`` per verified lead source, and the
-      number of leads is not bounded by anything held now, so it (and ``arguments`` None, which spans that kind) is ``UNBOUNDED``.
-    * ``experimental_activity_evidence`` (a narrower head): the child returns its own credit, a count of retained findings
-      with no bound held now, so there is no finite ceiling: ``UNBOUNDED``.
+    * Every tool, ``reason`` included: 0. None of them changes a sheet; a write-up fills no grading sheet.
+    * ``literature``: its pages can return a result stronger or closer than the best held, by an amount nothing held now
+      bounds (how many papers its searches reach, what they measure): ``UNBOUNDED``.
+    * ``experimental_activity_evidence`` (a narrower head): the same, through its own children: ``UNBOUNDED``.
 
     Where no finite bound exists the ceiling is ``UNBOUNDED`` (the owner: UNBOUNDED where truly unbounded), never a made-up number."""
-    unit = summary['evidence_task']['credit_unit']
     if action_type == 'reason':
-        if arguments is None:
-            return UNBOUNDED   # a commit can carry any number of assessments; nothing held limits it
-        commit = arguments['arguments']['commit']
-        return float(unit * len(commit.get('assessments', [])))
+        return 0.0
     if action_type == 'literature':
-        if arguments is None:
-            return UNBOUNDED   # over every arguments: a leads task can return any number of lead sources
-        task = arguments['assignment']['literature_task']
-        if task['kind'] == 'verified_source_leads':
-            return UNBOUNDED   # each relevant lead source earns a unit; nothing limits how many a child returns
-        return float(task['credit_unit'])
+        return UNBOUNDED   # the sheet credit of every page below it; nothing held limits how many papers it reaches
     if action_type == 'experimental_activity_evidence':
-        return UNBOUNDED   # the narrower head returns its own finding count, which has no limit
+        return UNBOUNDED   # the narrower head returns its children's credit, which has no limit held now
     if action_type in TOOLS:
         return 0.0
     raise LookupError('no_such_action_type:' + action_type)

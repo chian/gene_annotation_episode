@@ -5,6 +5,8 @@ import ast
 import importlib
 from pathlib import Path
 
+import pytest
+
 from episode_runtime import ChildMessage, EpisodeBinding
 
 MODULE = ('gene_annotation_episode.episodic_workflow.root.a108.sample_context_evidence.'
@@ -98,13 +100,36 @@ def test_each_commission_names_the_page_the_selection_and_the_fields_it_wants():
                                          'proposed_annotation_ref': 'hypothesis_1'},
                'task': parent_input['task'], 'proposed_annotation_ref': 'hypothesis_1',
                'scope': parent_input['scope'], 'received_record_refs': parent_input['received_record_refs']}
-    window = {'source_ref': 'src_1', 'representation': 'original', 'offset': 0, 'limit': 100}
+    summary['page'] = page
+    summary['content_candidates'] = [{'candidate_id': 'prose_chunk:0000', 'candidate_type': 'prose_chunk', 'index': 0,
+                                      'start': 0, 'end': 100},
+                                     {'candidate_id': 'source_table:t', 'candidate_type': 'source_table', 'index': 0,
+                                      'start': 100, 'end': 160}]
+    summary['report_windows'] = [[0, 100]]
+    arguments = {'passage_evidence_extraction': {'candidate_id': 'prose_chunk:0000'},
+                 'table_evidence_extraction': {'candidate_id': 'source_table:t'},
+                 'source_coverage_improvement': {}}
     for slot in sorted(CHILDREN):
-        selection = {'spans': [window]} if slot == 'passage_evidence_extraction' else window
-        message = to_child.msg_to_child(slot, {'objective': 'o', 'selection': selection}, summary)
-        assert isinstance(message, ChildMessage) and message.objective == 'o'
+        message = to_child.msg_to_child(slot, arguments[slot], summary)
+        assert isinstance(message, ChildMessage) and message.objective == 'find_applicable_evidence'
         assert message.selection == ('literature_source_lead_dispositions',)
         assert message.assignment['version'] == 'reading_assignment_v1'
         assert message.assignment['received_record_refs'] == ['src_1', 'art_1', 'hypothesis_1', 'ctx_1', 'dlv_1']
+
+
+def test_any_task_but_verified_source_leads_is_a_wrong_commission():
+    from_parent = importlib.import_module(MODULE + '.messages.read_from_parent')
+    wrong = {**assignment(), 'literature_task': {'version': 'literature_local_task_v1', 'evidence_axis': 'A108',
+                                                 'credit_unit': 2, 'kind': 'source_answer',
+                                                 'answer_kind': 'assessment', 'source_refs': ['src_1']}}
+    admitted = from_parent.ASSIGNMENT_FORM.admit(wrong, 'assignment')
+    with pytest.raises(Exception):
+        from_parent.read_from_parent(admitted, {})
+
+
+def test_the_page_offers_no_tool_but_its_automatic_assessment():
+    task = importlib.import_module(MODULE + '.task')
+    assert set(task.TOOLS) == {'assess_content'}
+    assert set(task.CHILD_SLOTS) == CHILDREN
 
 

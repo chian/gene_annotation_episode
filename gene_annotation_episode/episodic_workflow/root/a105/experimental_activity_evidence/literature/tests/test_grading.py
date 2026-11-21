@@ -1,18 +1,15 @@
-"""The A105 grading of this episode through the real runner on a real Store, without a model: the first decision
-offers ``reason`` with the owner's grading instructions; a ``reason`` unit commits the interpretation and saves its
-grading sheet together; the finding is the controlled features read from the saved sheet, admitted by
-``RETURN_FORM``. The whole literature subtree below this episode is linked (its bindings and settings), as a run
-links it. Nothing is faked."""
+"""The decision of this episode through the real runner on a real Store, without a model: the first decision offers the
+reading of held records and the strategy child (its objective alone); no tool runs a provider search or obtains or reads
+a paper, and no reasoning commit is offered. The whole literature subtree below this episode is linked (its bindings and
+settings), as a run links it. Nothing is faked."""
 import asyncio
 import importlib
-import json
 
-from episode_runtime import BindingRegistry, ModelRequest, RunJournal, ToolCall, link
+from episode_runtime import BindingRegistry, ModelRequest, RunJournal, link
 from gene_annotation_episode.model_provider import ModelProvider, load_config
-from gene_annotation_episode.episodic_workflow.episode_support.literature.prompts.experimental_activity_evidence.literature_assay_grading_prompt import (
-    ASSAY_GRADING_TASK)
 
-from .grading_world import SETTINGS, held_world, reasoning_selection
+from .grading_world import SETTINGS, held_world
+from ..strategy.web_search.page.tests.grading_world import job_world_services
 
 PACKAGE = __name__.rsplit('.', 2)[0]
 EPISODE = getattr(importlib.import_module(PACKAGE + '.episode'), 'PublishedEvidenceAssessment')
@@ -34,31 +31,25 @@ BELOW = [getattr(importlib.import_module(ROOT + '.' + name + '.episode'), cls) f
 def linked_run(directory, world, run_id):
     collaborators = {'store': world['store'],
                      'model_provider': ModelProvider(load_config(), directory / 'model_calls', directory),
-                     'continuation': {cls.binding_path: SETTINGS for cls in BELOW}, 'services': {}}
+                     'continuation': {cls.binding_path: SETTINGS for cls in BELOW}, 'services': job_world_services(directory)}
     return link(BindingRegistry([cls() for cls in BELOW]), PATH, world['input'], run_id=run_id,
                 journal=RunJournal(directory / 'journal.sqlite3'), collaborators=collaborators)
 
 
-def test_the_first_decision_offers_reason_with_the_owners_grading_instructions(tmp_path):
-    world = held_world(tmp_path)
-    run = linked_run(tmp_path, world, 'a105-upper-decision')
-    request = asyncio.run(run.next_decision())
-    assert isinstance(request, ModelRequest) and ASSAY_GRADING_TASK in request.instructions
-    tools = {entry['name'] for entry in request.context['tools']}
-    assert 'reason' in tools and 'report' not in tools
-    summary = EPISODE()._summary(run.view)
-    assert summary['assay_sheets'] == [] and EPISODE.credit(summary, run.view.records) == 0
-    world['store'].close()
-
-
-def test_the_input_list_offers_the_strategy_child_only_search_responses(tmp_path):
-    """The sources held are a caller's file, a search response, a fetched article and a PMC version listing; strategy's
-    role is searches, so only the search response is offered. The others stay held, usable by the episode's own tools."""
+def test_the_first_decision_offers_the_reading_of_held_records_and_the_strategy_child_with_its_objective_only(tmp_path):
+    """This episode holds the question context and the claim; it reads records it holds and hands its strategy child its
+    objective alone (the strategy writes its own searches). No search, paper, population or reasoning tool is offered."""
     world = held_world(tmp_path)
     run = linked_run(tmp_path, world, 'a105-upper-offered')
-    asyncio.run(run.next_decision())
+    request = asyncio.run(run.next_decision())
+    assert isinstance(request, ModelRequest)
+    assert {entry['name'] for entry in request.context['tools']} == {'state_query'}
+    assert 'reason' not in request.instructions.split() and 'evidence_processing' not in request.instructions
+    options = request.context['child_options']
+    assert [option['slot'] for option in options] == ['strategy']
+    assert list(options[0]['arguments']['properties']) == ['objective']
     summary = EPISODE()._summary(run.view)
-    assert summary['input_list'] == [world['search']]
-    assert {world['source'], world['article'], world['listing']} <= set(summary['held_record_refs'])
+    assert 'input_list' not in summary and EPISODE.credit(summary, run.view.records) == 0
+    assert {world['proposed'], world['reaction'], world['context']} <= set(summary['held_record_refs'])
+    assert summary['literature_assignment']['literature_task']['kind'] == 'verified_source_leads'
     world['store'].close()
-

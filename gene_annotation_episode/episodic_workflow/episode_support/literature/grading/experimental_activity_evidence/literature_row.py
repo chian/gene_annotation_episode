@@ -60,7 +60,9 @@ import hashlib
 import json
 import math
 
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_bearing import identified_closeness
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_row_contract import (
+    BEARING_SCORING,
     CLASSES,
     CLASS_OF_EXPERIMENT_TYPE,
     QUALITATIVE_STATEMENT,
@@ -88,8 +90,8 @@ NOT_POOLED_CLASSES = ('activity_rate',)
 
 def _check_result(result):
     validate_result(result)
-    if result['bearing'] != 'direct':
-        raise ValueError(f"result {result['result_ref']} has bearing {result['bearing']!r}: only direct results enter a row")
+    if result['bearing'] not in BEARING_SCORING:
+        raise ValueError(f"result {result['result_ref']} has bearing {result['bearing']!r}: only direct and transfer results enter a row")
     if result['target_id'] is None:
         raise ValueError(f"result {result['result_ref']} is direct and has no target_id (OWNER_DECISION 18)")
     return result
@@ -144,7 +146,7 @@ def group_by_candidate(results):
     grouped, targets = {}, {}
     for result in results:
         validate_result(result)
-        if result['bearing'] != 'direct':
+        if result['bearing'] not in BEARING_SCORING:
             continue
         key = (result['sheet'], result['assertion_ref'])
         target = _target_of(result)
@@ -296,6 +298,8 @@ def merge_row_state(sheet, assertion_ref, results, prior_row=None):
     criteria, degrees = _criteria(ordered)
     all_degrees = [d for per in degrees.values() for d in per.values()]
     statements, support_refs = _qualitative(ordered)
+    # the best identified member: the greatest identified_closeness, ties by the least result_ref (ordered is by result_ref)
+    best = max(ordered, key=identified_closeness)
     row = {
         'sheet': sheet,
         'assertion_ref': assertion_ref,
@@ -323,6 +327,13 @@ def merge_row_state(sheet, assertion_ref, results, prior_row=None):
         'independence_known': _independence_known(groups),
         'qualitative_statements': statements,
         'qualitative_support_refs': support_refs,
+        'identified_closeness': identified_closeness(best),
+        'subject_record_ref': best['subject_record_ref'],
+        'subject_sequence_ref': best['subject_sequence_ref'],
+        'subject_resolution': best['subject_resolution'],
+        'subject_match_count': best['subject_match_count'],
+        'subject_closeness': best['subject_closeness'],
+        'comparison_ref': best['comparison_ref'],
     }
     validate_partial_row(row)
     state = {'row': row, 'member_results': ordered, 'version': ROW_SHEET_VERSION}

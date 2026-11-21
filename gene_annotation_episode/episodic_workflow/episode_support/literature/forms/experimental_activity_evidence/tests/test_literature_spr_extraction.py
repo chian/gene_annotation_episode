@@ -206,3 +206,28 @@ def test_the_record_carries_the_support_of_each_stated_value():
     empty = record_from_answer(validate_answer(answer_from(SYNTHETIC, {}), SYNTHETIC), SYNTHETIC, 0, 'exp_1', 'source_1', 'hypothesis_1')
     assert empty['quantities']['kd']['support'] is None and empty['facts']['regeneration']['support'] is None
     assert empty['choice_support'] == {'spread_kind': None, 'fit_model': None}
+
+
+def test_the_synthetic_passage_states_which_sequence_the_target_is_and_the_identity_record_keeps_it():
+    from copy import deepcopy as copy
+    from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence import literature_identity_extraction as identity
+    from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.tests.spr_passages import synthetic_identity_answer
+    from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_row_contract import (
+        IDENTITY_FIELDS, SUBJECT_TEXT_FIELDS, PARTNER_TEXT_FIELDS)
+    assert {'subject_database', 'partner_database', *SUBJECT_TEXT_FIELDS, *PARTNER_TEXT_FIELDS} <= set(identity.ASKED)
+    block = identity.validate_identity_answer(synthetic_identity_answer(identity.ASKED), SYNTHETIC)
+    keys = identity.identity_record_keys(block, SYNTHETIC, 0, experiment_type='spr', source_ref='source_1')
+    assert (keys['subject_database_id'], keys['subject_database'], keys['subject_organism'], keys['subject_residue_range']) == (
+        'cc_1319', 'locus_tag', 'caulobacter crescentus na1000', '1-177')
+    assert keys['subject_mutations'] is None and keys['partner_database_id'] is None
+    # a name alone is not stated as an identifier: an identifier not in its quote is refused, and so is an organism over twelve words
+    wrong = copy(block)
+    wrong['subject_database_id']['value'] = 'CC_9999'
+    with pytest.raises(identity.IdentityRefused):
+        identity.validate_identity_answer(wrong, SYNTHETIC)
+    long = copy(block)
+    long['subject_organism']['value'] = 'Caulobacter crescentus NA1000 ' + 'x ' * 12
+    long['subject_organism']['quote'] = 'from Caulobacter crescentus NA1000, residues'
+    with pytest.raises(identity.IdentityRefused):
+        identity.validate_identity_answer(long, SYNTHETIC)
+    assert IDENTITY_FIELDS['subject_database']['kind'] == 'vocab'

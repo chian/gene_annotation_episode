@@ -29,7 +29,14 @@ Not carried, and the reason: the old common tools ``episode.history`` and ``epis
 own outcomes and the credit), ``episode.annotation_score``, ``episode.monitoring_information``,
 ``episode.estimate_wait`` and the ``shared.*`` information board (they lived in the old shared runtime, which is not
 read: no implementation outside it exists); ``services.authenticate_source_byte_operands`` (the authentication
-step has no place: custody is the system's)."""
+step has no place: custody is the system's).
+
+The literature chain (nano-graphrag's shape: the level above the search level cannot obtain or read a paper). This
+episode runs no provider search and obtains or reads no paper: of the tools the commission selected it is offered only
+``state.query`` (``ROLE_REGISTRY_NAMES``, the reading of the records it holds); every tool that searches, fetches or
+reads a source is the literature chain's, below the strategy. It commissions the literature child with one task
+(``verified_source_leads``) and the records that give the question its context; no source is named in the
+commission, since a paper reaches the chain only through a search."""
 from copy import deepcopy
 
 from jsonschema import ValidationError
@@ -86,7 +93,9 @@ SHA256 = {'type': 'string', 'pattern': '^[a-f0-9]{64}$'}
 OPEN_RECORD = {'type': 'object'}   # travels as JSON text; an optional one may be null (the strict transport)
 OPEN_RECORDS = {'type': 'array', 'items': OPEN_RECORD}   # an array schema names its items
 UNIQUE_REFERENCES = {'type': 'array', 'items': REF, 'uniqueItems': True}
-REFERENCES = {'type': 'array', 'items': REF, 'minItems': 1, 'uniqueItems': True}
+# What this episode is offered of the tools the commission selected: it reads the records it holds. Every tool that
+# runs a provider search or obtains or reads a source is not offered to it.
+ROLE_REGISTRY_NAMES = ('state.query',)
 RESOURCES = {'enum': ['api', 'local', 'hpc']}
 # The old ``_REVISION_ARGUMENTS``, ``_THOUGHT_REF`` and ``_TOOL_SELECTOR``.
 THOUGHT_REF = obj({'version': {'const': OPTION_REF_VERSION}, 'library_id': SHA256, 'slot': {'const': 'thought_pattern'},
@@ -98,7 +107,7 @@ REVISION_ARGUMENTS = obj({'thought_pattern': THOUGHT_REF,
 # The fact sources each child declares as selectable (read as data from the child's ``RETURN_FORM``), under their
 # old names; the model names the ones it wants and ``msg_to_child`` selects them.
 FACTS = {
-    'literature': ('literature_screening_answers', 'literature_source_lead_dispositions'),
+    'literature': ('literature_source_lead_dispositions',),
     'launch': ('execution_handoff_refs', 'execution_result_refs', 'execution_completed',
                'bvbrc_appservice_support_refs', 'bvbrc_application_outcomes'),
     'monitor': ('job_returncode', 'job_duration_seconds', 'job_elapsed_seconds', 'stdout_bytes', 'stderr_bytes',
@@ -120,22 +129,16 @@ def facts_property(slot):
     return {'return_facts': {'type': 'array', 'items': {'enum': list(FACTS[slot])}, 'uniqueItems': True}}
 
 
-# The literature task the model commissions (the old ``task_schema`` of the published evidence assessment): the
-# credit unit is this episode's own, filled by ``msg_to_child``.
-SPAN = obj({'source_ref': REF, 'artifact_ref': REF, 'start': {'type': 'integer', 'minimum': 0},
-            'end': {'type': 'integer', 'minimum': 1}})
-LITERATURE_TASK = {'anyOf': [
-    obj({'evidence_axis': {'const': 'A106'}, 'kind': {'const': 'verified_source_leads'}}),
-    obj({'evidence_axis': {'const': 'A106'}, 'kind': {'const': 'source_answer'},
-         'answer_kind': {'const': 'assessment'}, 'source_refs': REFERENCES}),
-    obj({'evidence_axis': {'const': 'A106'}, 'kind': {'const': 'source_answer'},
-         'answer_kind': {'const': 'screening'}, 'examined': {'type': 'array', 'minItems': 1, 'items': SPAN}})]}
+# The one literature task the model commissions (the old ``task_schema`` of the published evidence assessment, its
+# ``verified_source_leads`` kind): the credit unit is this episode's own, filled by ``msg_to_child``.
+LITERATURE_TASK = obj({'evidence_axis': {'const': 'A106'}, 'kind': {'const': 'verified_source_leads'}})
 
 COMMISSION = {
-    'literature': 'Commission an investigation of which published evidence bears on the assigned question: the '
-                  'records that give the question context (question_context_refs), the sources assigned for reading '
-                  '(source_refs, sources this episode holds, see source_custody) and the typed answer asked '
-                  '(literature_task). It returns its interpretation, credit and, selected, its typed answers.',
+    'literature': 'Commission the search of the published literature for evidence that bears on the assigned '
+                  'question: the records that give the question context (question_context_refs) and the one task '
+                  'asked (literature_task, verified_source_leads). The chain searches, picks and examines the '
+                  'papers itself; you hand it no paper. It returns its credit, the controlled features of its '
+                  'graded sheets and, selected, the sources it verified as leads.',
     'launch': 'Commission the launch of permitted concrete execution requests on explicit resource ids: requests '
               '(resource_id -> request), the immutable input versions, the constraints, optionally a pinned '
               'launch-instruction selection and the records the job inputs name (record_refs). It returns the '
@@ -159,9 +162,9 @@ def commission_arguments(slot, jobs):
     the settings. ``jobs`` are the outstanding jobs of the summary: a monitor is commissioned on one of them, named
     by its held handoff reference."""
     if slot == 'literature':
-        return obj({**HEAD, 'question_context_refs': UNIQUE_REFERENCES, 'source_refs': REFERENCES,
-                    'literature_task': LITERATURE_TASK, **facts_property(slot)},
-                   required=['question_context_refs', 'source_refs', 'literature_task'])
+        return obj({**HEAD, 'question_context_refs': UNIQUE_REFERENCES, 'literature_task': LITERATURE_TASK,
+                    **facts_property(slot)},
+                   required=['question_context_refs', 'literature_task'])
     if slot == 'launch':
         return obj({**HEAD, 'requests': OPEN_RECORD, 'immutable_input_versions': OPEN_RECORDS,
                     'constraints': OPEN_RECORD, 'launch_instructions': OPEN_RECORD,
@@ -183,7 +186,7 @@ def commission_arguments(slot, jobs):
 def named_references(slot, arguments):
     """The records a commission of ``slot`` names that this episode must hold."""
     if slot == 'literature':
-        return [*arguments['question_context_refs'], *arguments['source_refs']]
+        return list(arguments['question_context_refs'])
     if slot == 'launch':
         return list(arguments.get('record_refs', []))
     if slot == 'results':
@@ -379,9 +382,11 @@ def catalog(settings, selection, summary, published):
 
 
 def selected_catalog(tools, selection):
-    """The actual selected tools, by their library name."""
+    """The actual selected tools this episode is offered, by their library name: of the selection, those of its role
+    (``ROLE_REGISTRY_NAMES``)."""
     return [{'name': row['name'], 'description': row.get('description'), 'resources': row.get('resources'),
-             'input_schema': source_location_inputs(row['input_schema'])} for row in direct_tools(tools, selection)]
+             'input_schema': source_location_inputs(row['input_schema'])} for row in direct_tools(tools, selection)
+            if row['name'] in ROLE_REGISTRY_NAMES]
 
 
 def selection_schema(entries, selected, slots, jobs):
@@ -489,10 +494,9 @@ async def selected_tool(arguments, ctx):
     enters the iterator like any other (the old ``record_execution_failure``)."""
     name, scope = arguments['arguments']['name'], arguments['scope']
     registry = ToolRegistry(ctx.store, **ctx.settings.get('tool_registry', {}))
-    permitted = tuple(ctx.store.refs()) if name == 'source.locate' else None
     try:
         return await registry.execute_async(name, arguments['arguments']['arguments'], scope=scope,
-                                            operation_key=ctx.operation_key, permitted_record_refs=permitted)
+                                            operation_key=ctx.operation_key, permitted_record_refs=None)
     except CustodyError:
         raise
     except Exception as error:
@@ -559,13 +563,12 @@ def decide(summary, feedback, ctx):
                                                           'context') if key in summary},
             'permitted_children': slots},
         'credit_binding': summary['credit_binding'], 'investigation_progress': summary['investigation_progress'],
-        'own_outcomes': summary['own_outcomes'], 'visual_evidence': summary['visual_evidence'],
+        'own_outcomes': summary['own_outcomes'],
         'last_local_outcome': summary['last_local_outcome'],
         'held_record_refs': summary['held_record_refs'], 'current_report_update': summary['report'],
         'child_reports': summary['child_reports'], 'handoff_refs': summary['handoff_refs'],
         'outstanding_jobs': [{name: job[name] for name in ('handoff_ref', 'job', 'resource_id', 'kind',
                                                              'submitted_at', 'latest_check')} for job in jobs],
-        'source_custody': sorted(summary['source_custody']),
         'tools': entries, 'selected_tools': selected,
         'child_options': [{'slot': slot, 'description': COMMISSION[slot],
                            'input_schema': commission_arguments(slot, jobs)} for slot in slots],

@@ -1,772 +1,199 @@
-"""The task: examine the assigned source through the access tools or commission one of three child investigations
-of it (a selected table or sheet, an ordered reading, targeted passages), commit reasoning on what it says together
-with its contextual grading sheets (and, for a verified-source-leads commission, validated source leads), populate the
-A108 sheets. There is no report tool: the return is the controlled features code reads from the saved sheets.
+"""The task (nano-graphrag's page): the page of ONE paper that a search handed it for the claim.
 
-Carried from the old task.py, task_decision.py, task_instructions.py, source_operations.py, source_references.py,
-source_contracts.py, scientific_records.py, scoring/contextual_main_sheet.py and grading/contextual_*.py at
-97308b94c (the old child roles ``literature_table``, ``literature_ordered`` and ``literature_targeted`` are the
-slots below). One unit is one model-selected tool call or one child commission. The task always offers a unit and never
-ends the Episode: only the yield controller does. The episode cannot search or fetch new sources (no acquisition tools).
-The old permitted actions ``wait`` (``waiting.supports_wait`` was False) and ``redeliver_report`` do not exist.
+Automatic unit (code attached to a unit, no model call; ``decide`` returns the tool call itself):
 
-A108 reasoning is the required-grading action of ``literature_required_grading``: the interpretation and the purpose-
-specific contextual grader selected for it are committed in one tool call and the interpretation is refused unless its
-subscoring sheet is saved (AGENTS.md, "Required literature evidence processing"). Only a source-grounded
-``no_applicable_evidence`` declaration omits grading. The two population tools of the old catalogue
-(``literature.a108_grading.populate`` and ``literature.a108.aggregate``) stay tools. The sheet repositories and the
-required-grading logic work on the custody-scoped store.
+- ``assess_content``: before the page plans, the paper's bytes are split into candidate input units (table regions and prose
+  chunks), and Jev measures every candidate once against the information needs of the claim; this unit holds the
+  assessment (``literature_page_content``, nano-graphrag ``PageChildProposer._ensure_content_assessment``).
 
-Settings read (``ctx.settings``): ``tool_registry`` (the JSON keyword arguments of the library ``ToolRegistry``:
-``job_limits`` and the executables) and ``knowledge_library_directory`` (optional). The public acquisition clients are
-the declared service ``public_clients``. ``cost`` and ``parameters`` are read by ``yield_estimator.py``."""
-from dataclasses import dataclass
-
+The model's one choice: ONE leaf child per decision (``passage_evidence_extraction``: one unconsumed prose chunk;
+``table_evidence_extraction``: one unconsumed table region; ``source_coverage_improvement``: every remaining prose chunk in
+document order) from Jev's assessment of the unconsumed candidates. The page reads nothing, extracts nothing, commits no
+reasoning and has no other task. A leaf grades what it extracted and saves its subscoring sheet in its own unit (the A108
+sheets are the leaves'; the page has no sheet of its own to update). A candidate handed to a child is consumed and offered no
+more. With no unconsumed candidate the page offers no unit; the page cannot end its Episode, only its yield estimator does
+(``yield_estimator.py``)."""
 from jsonschema import ValidationError
 
-from episode_runtime import ChildCall, CustodyError, ModelRequest, Rejected, ToolCall
+from episode_runtime import ChildCall, ModelRequest, Rejected, ToolCall
 
-from gene_annotation_episode.episodic_workflow.episode_support.forms.sample_context_evidence.communication import (
-    plain)
-from gene_annotation_episode.episodic_workflow.episode_support.instructions.instruction_spans import replace_span
-from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.sample_context_evidence.literature_experimental_contracts import (
-    ExperimentalContractError)
-from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.sample_context_evidence.literature_population_catalog import (
-    population_catalog)
-from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.sample_context_evidence.literature_required_grading import (
-    action_schema as required_grading_schema, execute as execute_required_grading)
-from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.literature_grading_inputs import (
-    grading_population_schema)
-from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.sample_context_evidence.literature_assay_inputs import (
-    _Sources, _witness_schema, materialize_text_witness_inputs)
-from gene_annotation_episode.episodic_workflow.episode_support.literature.prompts.sample_context_evidence.literature_investigation_prompt import (
-    INSTRUCTIONS, REASONING_COMMIT_REQUIREMENT)
-from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.sample_context_evidence.literature_sequence_discovery import (
-    references_schema)
-from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.sample_context_evidence.literature_context_findings import (
-    GRADING_INSTRUCTIONS)
-from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.literature_grading_storage import (
-    LiteratureA108GradingRepository)
-from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.sample_context_evidence.literature_aggregation_storage import (
-    LiteratureA108AggregationRepository)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_leaf_extraction import (
+    representation_content)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_page_content import (
+    assess_page_content, page_candidates)
+from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.jev_client import JevDecisionClient
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.presentation import extend_context
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import (
     rejection_feedback)
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.sample_context_evidence.action_transport import (
     decode_response, generation_schema)
-from gene_annotation_episode.episodic_workflow.episode_support.readers.sample_context_evidence.source_locations import (
-    locate_schema)
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import time_accounting
-from gene_annotation_episode.episodic_workflow.episode_support.records.received_records import read_record_in_scope
 from gene_annotation_episode.episodic_workflow.episode_support.records.sample_context_evidence.domain import (
-    ContractError, RECORD_SCHEMAS, REF, REFS, identity, obj, source_location_inputs, validate_schema)
-from gene_annotation_episode.episodic_workflow.episode_support.tools.sample_context_evidence.tools import ToolRegistry
-from gene_annotation_episode.episodic_workflow.episode_support.tools.tool_knowledge import (
-    INSTRUCTIONS as KNOWLEDGE_INSTRUCTIONS, ToolKnowledge)
-from gene_annotation_episode.episodic_workflow.episode_support.tools.unit_outcomes import failure_outcome
+    canonical, obj, validate_schema)
 
-from .goal import GOAL
-
-# The three children (the old ``_CHILDREN['literature_page']``: literature_table, literature_ordered,
-# literature_targeted), by slot.
 CHILD_SLOTS = {
     'table_evidence_extraction': 'sample_context_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction',
     'source_coverage_improvement': 'sample_context_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement',
     'passage_evidence_extraction': 'sample_context_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction',
 }
-SERVICES = ('public_clients',)
-
-INTEGER = {'type': 'integer', 'minimum': 0}
-POSITIVE = {'type': 'integer', 'minimum': 1}
-TEXT = {'type': 'string', 'minLength': 1}
-
-# The access tools of the old ``_A108_ACCESS_TOOLS`` that the A108 tool library implements (the old catalogue
-# skipped a name the library does not offer: ``material.annotations``, ``material.parse`` and ``material.from_source``
-# are not in it); descriptions as the tool library states them.
-DESCRIPTIONS = {
-    'state.query':
-        'Read an exact page of typed scientific records, current revisions, or records referring to actual references. Follow the returned next_query for the same selection and order. Exact refs is a separate mode and cannot be combined with page selectors.',
-    'source.read':
-        'Read a bounded UTF-8 byte window from an actual source. Choose original for retained source bytes, including XML tables/headings omitted by a paragraph projection; text selects that projection when available. Explicit stdout/stderr select retained native stream bytes when present, without falling back to another representation. Returned artifact/offsets support exact anchors.',
-    'source.locate':
-        'Locate an exact supplied literal quote in an explicitly received original or text source representation. Return UTF-8 byte witnesses, unchanged neighboring context and bounded match continuation. Multiple occurrences remain separate. No normalization, scientific interpretation, measurement parsing or evidence credit is performed; no literal match means only no match in the examined bytes.',
-    'source.sequence.references':
-        'Read a page of publication identifiers, titles and reported citation scopes from a received sequence-identity response. Reverify full sequence equality for the selected record. Citation metadata supplies leads; it does not establish experimental results.',
-    'image.view':
-        'Inspect one explicitly selected frame of a registered scientific image. The next reasoning call receives its actual pixels and exact source/frame metadata. Stored axes are preserved; no contrast adjustment, resizing, interpretation or annotation is performed. An optional RGB conversion is explicit and recorded; original bytes remain intact.',
-    'source.archive.members':
-        'Inventory one page of an actual ZIP/TAR source. Member IDs preserve ordinal identity, including duplicate names; no members are extracted or selected for you.',
-    'source.archive.extract':
-        "Extract exactly one inventoried regular member to a source artifact; never follow a member's host path or link. Original archive and member identity remain attached.",
-    'source.xlsx.sheets':
-        'Read the actual sheet names, relationship keys and package parts of a retained XLSX source. No sheet or biological interpretation is selected for you.',
-    'source.xlsx.rows':
-        'Read a selected page of actual XLSX rows, optionally matching literal cell values. Select sheet_key from source.xlsx.sheets; row offsets count matching rows, while returned row numbers/cell addresses retain native identity. Header row is caller-selected or null. Original numeric/date lexical values, styles, formulas and caches remain distinct; no formula is recalculated or biology inferred.',
-    'source.pdf.info':
-        'Read native PDF information and physical page count for a selected actual source; no biological interpretation.',
-    'source.pdf.text':
-        'Extract a selected physical PDF page or contiguous page range as a reusable UTF-8 text derivative. page is the first page; optional last_page is inclusive and defaults to page. Use source.pdf.info for the physical page count, then source.locate on the extracted text to find a section without guessing pages. Native page breaks and the selected range are retained. Byte offsets refer to this text derivative, not the PDF. No OCR or interpretation is performed.',
-    'source.pdf.page':
-        'Render one explicitly selected physical PDF page as a reusable PNG source. Rendering does not by itself supply image input to a model or interpret a figure.',
-    'execution.estimate':
-        'Obtain recorded duration expectations before a proposed workbook selection. Uses the same operands, actual settings and caller resource as execution. Creates no native job or scientific evidence; missing history stays unknown. This is an optional information tool, not a scheduling or continuation decision.',
-}
-
-# python tool name -> the library's tool name (a tool name here is lowercase letters, digits and underscores)
-LIBRARY_NAMES = {
-    'state_query': 'state.query', 'source_read': 'source.read', 'source_locate': 'source.locate',
-    'source_sequence_references': 'source.sequence.references', 'image_view': 'image.view',
-    'source_archive_members': 'source.archive.members', 'source_archive_extract': 'source.archive.extract',
-    'source_xlsx_sheets': 'source.xlsx.sheets', 'source_xlsx_rows': 'source.xlsx.rows',
-    'source_pdf_info': 'source.pdf.info', 'source_pdf_text': 'source.pdf.text', 'source_pdf_page': 'source.pdf.page',
-    'execution_estimate': 'execution.estimate'}
-# The two population operations of the old catalogue (``population_catalog``), by tool name.
-POPULATION_NAMES = {'literature_a108_grading_populate': 'literature.a108_grading.populate',
-                    'literature_a108_aggregate': 'literature.a108.aggregate'}
-# Tools whose source reads are bound to the records this episode holds (the old ``authorization``).
-HELD_SOURCE_TOOLS = ('source.locate', 'source.sequence.references')
-# The source and record reference keys the old population branch of ``_tool_arguments`` kept within the page source.
-POPULATION_SOURCE_KEYS = {'source_ref', 'metadata_source_ref', 'sheet_ref', 'covariance_source_ref',
-                          'model_source_ref'}
-
-INPUT_SCHEMAS = {
-    'state.query': obj({
-        'kind': {'enum': list(RECORD_SCHEMAS) + ['subject']}, 'offset': INTEGER, 'limit': POSITIVE,
-        'refs': {**REFS,
-                 'description': 'Exact reference mode: supply refs alone, including an empty array for no records. '
-                                'Omit kind, offset, limit, current_only and references in this mode.'},
-        'current_only': {'type': 'boolean'},
-        'references': {'type': 'array', 'items': REF, 'minItems': 1,
-                       'description': "Select records that refer to any supplied ID through reference fields or "
-                                      "provenance anchors. This does not match a record's own ID; to read known "
-                                      "records themselves, supply refs alone instead."}}, required=[]),
-    'source.read': obj({'source_ref': REF, 'offset': INTEGER, 'limit': POSITIVE,
-                        'representation': {'enum': ['text', 'original', 'stdout', 'stderr']}}, ['source_ref']),
-    'source.locate': locate_schema(),
-    'source.sequence.references': references_schema(),
-    'image.view': obj({'source_ref': REF, 'frame': INTEGER, 'colour_conversion': {'enum': ['preserve', 'rgb']}},
-                      ['source_ref']),
-    'source.archive.members': obj({'source_ref': REF, 'offset': INTEGER, 'limit': POSITIVE}, ['source_ref']),
-    'source.archive.extract': obj({'member_ref': REF}),
-    'source.xlsx.sheets': obj({'source_ref': REF}),
-    'source.xlsx.rows': obj({
-        'source_ref': REF, 'sheet_key': TEXT, 'offset': INTEGER, 'limit': INTEGER,
-        'header_row': {'type': ['integer', 'null'], 'minimum': 1},
-        'where': {**obj({'column': {'type': ['string', 'null'], 'pattern': '^[A-Z]+$'},
-                         'match': {'enum': ['equals', 'contains']}, 'value': TEXT,
-                         'case_sensitive': {'type': 'boolean'}}), 'type': ['object', 'null']}}),
-    'source.pdf.info': obj({'source_ref': REF}),
-    'source.pdf.text': obj({'source_ref': REF, 'page': POSITIVE, 'last_page': POSITIVE,
-                            'layout': {'enum': ['reading_order', 'layout', 'raw']}}, ['source_ref', 'page']),
-    'source.pdf.page': obj({'source_ref': REF, 'page': POSITIVE, 'dpi': {'type': 'number', 'exclusiveMinimum': 0}},
-                           ['source_ref', 'page']),
-}
-# ``execution.estimate`` is offered for the workbook tools only, and only when the run has timing statistics.
-INPUT_SCHEMAS['execution.estimate'] = {'anyOf': [
-    obj({'tool': {'const': name}, 'arguments': INPUT_SCHEMAS[name]}) for name in ('source.xlsx.sheets', 'source.xlsx.rows')]}
-
-WINDOW = obj({'source_ref': REF, 'representation': {'enum': ['text', 'original', 'stdout', 'stderr']},
-              'offset': INTEGER, 'limit': POSITIVE})
-# What each child takes as its ``selection`` (the forms of the children's ``read_from_parent.py``).
-CHILD_SELECTIONS = {
-    'table_evidence_extraction': {'anyOf': [
-        obj({'source_ref': REF, 'sheet_key': TEXT, 'offset': INTEGER, 'limit': INTEGER,
-             'header_row': {'type': 'integer', 'minimum': 1},
-             'where': obj({'column': {'type': 'string', 'pattern': '^[A-Z]+$'},
-                           'match': {'enum': ['equals', 'contains']}, 'value': TEXT,
-                           'case_sensitive': {'type': 'boolean'}}, ['match', 'value'])},
-            ['source_ref', 'sheet_key', 'offset', 'limit']),
-        WINDOW]},
-    'source_coverage_improvement': WINDOW,
-    'passage_evidence_extraction': obj({'spans': {'type': 'array', 'minItems': 1, 'items': WINDOW}}),
-}
+SERVICES = ()
+ASSESS = 'assess_content'
+CANDIDATES_OF_SLOT = {'passage_evidence_extraction': 'unconsumed_chunk_ids',
+                      'table_evidence_extraction': 'unconsumed_table_ids'}
 CHILD_DESCRIPTIONS = {
-    'table_evidence_extraction': 'Commission an investigation of one selected table or sheet of the assigned source: '
-                                 'a workbook table selection, or the exact original-source window an article XML '
-                                 'table begins at.',
-    'source_coverage_improvement': 'Commission an ordered reading of the assigned source in document order from the '
-                                   'window you select.',
-    'passage_evidence_extraction': 'Commission an investigation of separate passages of the assigned source that you '
-                                   'select; separate spans stay separate.',
+    'table_evidence_extraction': (
+        'A leaf extractor: reads ONE unconsumed table region of this paper (candidate_id, with the exact beginning of '
+        'the region), extracts the organism-context observations it holds, grades them and saves its subscoring '
+        'sheet. The region is consumed.'),
+    'source_coverage_improvement': (
+        'A leaf extractor that reads every remaining prose chunk of this paper in document order, extracts the '
+        'organism-context observations it holds, grades them and saves its subscoring sheet. The chunks it reads are '
+        'consumed.'),
+    'passage_evidence_extraction': (
+        'A leaf extractor: reads ONE unconsumed prose chunk of this paper (candidate_id), extracts the '
+        'organism-context observations it holds, grades them and saves its subscoring sheet. The chunk is consumed.'),
 }
 
-# The page's input list (``messages/internal_summary.py``; nano-graphrag's page offers child options only for
-# unconsumed inputs): the candidate input units of the assigned representation (table regions and prose chunks). The
-# model names candidates, never windows; a candidate handed to a child is consumed and offered no more, so every enum
-# below is built at each decision from the unconsumed ids. A representation that is not UTF-8 text has no candidates
-# (``input_list_basis`` is ``not_utf8``) and keeps the window / workbook selections above.
-CANDIDATE_DESCRIPTIONS = {
-    'table_evidence_extraction':
-        'Commission an investigation of one selected table of the assigned source: either ONE unconsumed table '
-        'region (candidate_id from context.unconsumed_candidates; the region is consumed) or a workbook table '
-        'selection (source_ref, sheet_key, offset, limit, optional header_row and where).',
-    'source_coverage_improvement':
-        'Commission an ordered reading of the assigned source in document order, starting at ONE unconsumed '
-        'candidate (candidate_id from context.unconsumed_candidates; its window is consumed).',
-    'passage_evidence_extraction':
-        'Commission an investigation of separate passages of the assigned source: one or more unconsumed '
-        'candidates (candidate_ids from context.unconsumed_candidates; each is consumed, separate spans stay '
-        'separate).',
-}
+BRIEF = (
+    'THIS EPISODE: page (A108 organism-context evidence). One paper (context.literature_assignment: source_ref, '
+    'representation) was found for ONE proposed annotation (context.commission.proposed_annotation_ref) and the organism '
+    'context the caller supplied (context.commission.claim). You do not read the paper and you extract nothing: you '
+    'choose which part of it a leaf child reads next. Whether the paper reports an organism-context observation is what '
+    'the children find out; you do not need to know it beforehand.\n'
+    'THE PAGE\'S CANDIDATES: the paper was split into candidate input units: every table region detected in it '
+    '(source_table:<id>) and the prose chunks of the running text between them (prose_chunk:<index>), each with its byte '
+    'interval (context.content_candidates). Jev has measured every candidate once against the information needs of this '
+    'claim (context.content_assessment.information_needs: per kind of outside context, physiology, environment, '
+    'availability and localization, the observation itself and the identity link to the supplied organism). '
+    'context.content_assessment shows, for the candidates not yet consumed only, the top needs of each table region, the '
+    'best single chunk per need group and the top chunks per need, each with Jev\'s probability that it could '
+    'contribute. These probabilities are what you choose with. They do not admit evidence, assign credit or decide '
+    'whether the page continues.\n'
+    'YOUR CHOICE (context.child_options lists the children valid now, with what each would read): ONE leaf child per '
+    'decision:\n'
+    '- passage_evidence_extraction: ONE unconsumed prose chunk (candidate_id).\n'
+    '- table_evidence_extraction: ONE unconsumed table region (candidate_id), with the exact beginning of the region.\n'
+    '- source_coverage_improvement: every remaining prose chunk read in document order; the choice when useful pieces '
+    'appear distributed across chunks.\n'
+    'A candidate handed to a child is consumed: it is not offered again and its probabilities are no longer shown. No '
+    'child is compulsory and no order is prescribed. The children grade what they extract and save the subscoring '
+    'sheets; what they return is their credit, the controlled features of their sheets and the relevant source leads '
+    '(context.child_reports).\n')
+RETURN_GUIDANCE = ('\nWhat returns to your parent is your credit, the controlled features code reads from the sheets your '
+                   'children saved and the references the parent selected; no prose of yours and no raw record is '
+                   'returned. Selecting a child does not end your work: only the numerical controller does.')
 
 
-def candidate_selection(slot, summary):
-    """The selection schema the model may answer ``slot`` with now, or ``None`` when the slot has nothing to take: a
-    table child takes an unconsumed table region or a workbook selection; the coverage and passage children take
-    unconsumed candidates only and are not offered when the input list is empty."""
-    if summary['input_list_basis'] != 'text':
-        return CHILD_SELECTIONS[slot]
-    if slot == 'table_evidence_extraction':
-        options = ([obj({'candidate_id': {'enum': summary['unconsumed_table_ids']}})]
-                   if summary['unconsumed_table_ids'] else [])
-        return {'anyOf': [*options, CHILD_SELECTIONS[slot]['anyOf'][0]]}
-    ids = summary['unconsumed_candidate_ids']
-    if not ids:
-        return None
+def available_slots(summary):
+    """The child slots valid now (nano-graphrag ``PageChildProposer._valid_children``): the passage leaf while an
+    unconsumed prose chunk remains, the table leaf while an unconsumed table region remains, the ordered reading while a
+    remaining chunk can be read."""
+    return [slot for slot in CHILD_SLOTS
+            if (summary['report_windows'] if slot == 'source_coverage_improvement'
+                else summary[CANDIDATES_OF_SLOT[slot]])]
+
+
+def child_arguments(slot, summary):
+    """The arguments a child takes now: for the passage and table leaves, one unconsumed candidate of their kind; the
+    ordered reading takes none."""
     if slot == 'source_coverage_improvement':
-        return obj({'candidate_id': {'enum': ids}})
-    return obj({'candidate_ids': {'type': 'array', 'minItems': 1, 'uniqueItems': True, 'items': {'enum': ids}}})
+        return obj({})
+    return obj({'candidate_id': {'enum': list(summary[CANDIDATES_OF_SLOT[slot]]),
+                                 'description': 'One unconsumed candidate of context.content_candidates'}})
 
 
-def child_description(slot, summary):
-    return CHILD_DESCRIPTIONS[slot] if summary['input_list_basis'] != 'text' else CANDIDATE_DESCRIPTIONS[slot]
+def selection_schema(summary):
+    """What the model answers with: one valid child slot and its arguments; a passage or table leaf names only an
+    unconsumed candidate."""
+    return obj({'selection': {'anyOf': [
+        obj({'slot': {'const': slot}, 'arguments': child_arguments(slot, summary)}) for slot in available_slots(summary)]}})
 
 
-def window_of(summary, candidate_id):
-    """The window of the assigned source and representation a candidate is (what the children's forms take)."""
-    page = summary['literature_assignment']
-    candidate = {item['candidate_id']: item for item in summary['content_candidates']}[candidate_id]
-    return {'source_ref': page['source_ref'], 'representation': page['representation'],
-            'offset': candidate['start'], 'limit': candidate['end'] - candidate['start']}
+def offered_actions(summary, ctx):
+    """The action types offered at this decision, by the names the runner records. Before Jev has assessed the page's
+    candidates the one action is ``assess_content``; otherwise each child slot valid now (only for unconsumed
+    candidates)."""
+    if summary['content_assessment_ref'] is None:
+        return [ASSESS]
+    return available_slots(summary)
 
 
-def child_selection_of(selection, summary):
-    """The selection a child is commissioned with: a named candidate becomes its window, a workbook or window selection
-    (no candidates) passes unchanged."""
-    if 'candidate_id' in selection:
-        return window_of(summary, selection['candidate_id'])
-    if 'candidate_ids' in selection:
-        return {'spans': [window_of(summary, candidate_id) for candidate_id in selection['candidate_ids']]}
-    return selection
+async def assess_content(arguments, ctx):
+    """The page's content assessment (nano-graphrag ``PageChildProposer._ensure_content_assessment`` with
+    ``assess_page_content``): the paper's bytes are read through custody and split into the candidate input units
+    (``page_candidates``, the same split the summary makes), Jev measures every candidate once against every
+    information need of the claim, and this unit holds the assessment as an artifact the page keeps
+    (``content_assessment_ref``). The library functions are pure; this unit alone writes. The Jev client reads its
+    key (``TYPESAFE_API_KEY``) from the repository's ``.env`` at run time (``jev_client``); a missing key or a failed
+    call raises."""
+    content = representation_content(ctx.store, arguments['source_ref'], arguments['representation'])
+    candidates = page_candidates(content)
+    assessment = await assess_page_content(JevDecisionClient.from_repository_env(), goal=arguments['goal'],
+                                           page_context=arguments['page_context'],
+                                           needs=arguments['information_needs'], candidates=candidates,
+                                           content=content)
+    ref = ctx.store.artifact(canonical(assessment), 'application/json')
+    return {'status': 'completed', 'assessment_ref': ref, 'candidate_count': len(candidates),
+            'need_count': len(arguments['information_needs']), 'request_count': len(assessment['requests'])}
 
 
-INPUT_LIST_GUIDANCE = ('\nThe input list (context.input_list, with context.unconsumed_candidates) is the candidate input '
-                       'units of the assigned source: its table regions and prose chunks with their byte intervals. A '
-                       'child is commissioned with candidates of this list, never with a window of your own; a candidate '
-                       'handed to a child is consumed and no longer offered, so the list shrinks and a child with no '
-                       'unconsumed candidate left to take is not offered. A workbook table selection does not consume '
-                       'candidates. When the source is not UTF-8 text the list is empty and the children keep their '
-                       'window selections.')
-
-REASON_DESCRIPTION = ('Commit a typed scientific reasoning over the selected table or sheet and the records you hold: '
-                      'extracted terms, source subjects, contexts, observations, hypotheses and assessments, each '
-                      'with its exact source anchor, together with the contextual grader selected for the '
-                      'interpretation (evidence_processing) in this one call. An interpretation is not saved '
-                      'without its subscoring sheet; only a source-grounded finding that the examined material has '
-                      'no applicable contextual observation omits grading. A commit with every section empty is '
-                      'rejected.')
-HISTORY_START = 'On a fresh provider conversation,'
-HISTORY_END = 'Do not execute native provider tools.'
-HISTORY_GUIDANCE = ('Your own earlier read outcomes are shown to you as own_literature_outcomes; that page creates '
-                    'no new action and does not execute or credit the historical work again.\n')
-RETURN_GUIDANCE = ('\nWhat returns to your parent is your credit and the counts code reads from the A108 sheets you and your '
-                   'children saved, with their references; nothing you write in prose is returned. Selecting a tool '
-                   'never ends your work: only the numerical controller does.')
-LEAD_GUIDANCE = ('\nFor a verified_source_leads commission, a reason selection also carries source_lead: the '
-                 'inspected source, its anchored reference subject, whether it is a useful lead for the original '
-                 'question and the exact witnessed byte interval. A search hit or title alone verifies nothing.')
+TOOLS = {ASSESS: assess_content}
 
 
-@dataclass(frozen=True)
-class LiteratureContext:
-    """The old episode context the A108 sheet repositories and the required-grading logic read: one literature
-    episode's identity, commission and the records it holds (private copy; library candidate)."""
-    run_id: str
-    episode_id: str
-    role: str
-    path: tuple
-    scope: dict
-    assignment: dict
-    request: dict
-    received_record_refs: tuple
-
-
-def instructions(*, knowledge, leads):
-    """The old task_instructions.instructions: the investigation text, this episode's goal, the reasoning-commit
-    requirement, the tool-knowledge text when it is offered. The decision-exchange paragraph, the pending-delivery
-    paragraph, the wait paragraphs and the redeliver_report text are not carried: no such action exists."""
-    text = replace_span(INSTRUCTIONS, HISTORY_START, HISTORY_END, HISTORY_GUIDANCE)
-    text += '\n' + GOAL
-    text += '\n' + REASONING_COMMIT_REQUIREMENT
-    text += INPUT_LIST_GUIDANCE
-    text += GRADING_INSTRUCTIONS
-    if knowledge is not None:
-        text += KNOWLEDGE_INSTRUCTIONS
-    if leads:
-        text += LEAD_GUIDANCE
-    return text + RETURN_GUIDANCE
-
-
-def offered(settings, summary):
-    """The tools offered now: the access tools (``execution_estimate`` only with timing statistics configured), the
-    two population operations, the reasoning commit, and the child commissions that still have an unconsumed input
-    to take (``candidate_selection``)."""
-    access = [name for name in LIBRARY_NAMES
-              if name != 'execution_estimate' or 'native_statistics' in settings['tool_registry']]
-    return (access + list(POPULATION_NAMES)
-            + ['reason', *(slot for slot in CHILD_SLOTS if candidate_selection(slot, summary) is not None)])
-
-
-def lead_schema():
-    """The old credit.py ``lead_schema``: the source lead a verified_source_leads reasoning also carries."""
-    return obj({'proposed_annotation_ref': {**REF, 'x-reference-namespace': 'hypothesis'},
-                'source_ref': {**REF, 'x-reference-namespace': 'source'},
-                'subject_ref': {**REF, 'x-reference-namespace': 'reference'},
-                'disposition': {'enum': ['relevant', 'not_relevant'],
-                                'description': 'Whether the inspected source is a useful lead for this commissioned '
-                                               'question. This is not evidence supporting or opposing the proposed '
-                                               'annotation.'},
-                'relevance_rationale': {'type': 'string', 'minLength': 1,
-                                        'description': 'Explain the specific connection between the witnessed source '
-                                                       'subject/result and the original question; a search hit or '
-                                                       'matching title alone is not verification.'},
-                'witness': _witness_schema()})
-
-
-def reason_schema(commit_schema, leads):
-    """The old ``contextual_interpretation.reasoning_action_schema``: the required-grading action (the typed commit
-    with its ``evidence_processing``: the contextual grader selected for the interpretation, or the source-grounded
-    no-applicable-evidence declaration) and, for a verified_source_leads commission, a source_lead."""
-    schema = required_grading_schema(commit_schema, source_location_inputs(grading_population_schema()))
-    if leads:
-        schema['properties']['source_lead'] = lead_schema()
-    return source_location_inputs(schema)
-
-
-def catalog(names, commit_schema, leads, summary):
-    """The tools the model is shown: name, description and input schema (the old catalog; every input schema
-    is projected through source_location_inputs). A child's schema names only the unconsumed inputs."""
-    populations = {entry['name']: entry for entry in population_catalog()}
-    entries = []
-    for name in names:
-        if name in CHILD_SLOTS:
-            entries.append({'name': name, 'description': child_description(name, summary),
-                            'input_schema': obj({'objective': TEXT, 'selection': candidate_selection(name, summary)})})
-        elif name == 'reason':
-            entries.append({'name': 'reason', 'description': REASON_DESCRIPTION,
-                            'input_schema': reason_schema(commit_schema, leads)})
-        elif name in POPULATION_NAMES:
-            entry = populations[POPULATION_NAMES[name]]
-            entries.append({'name': name, 'description': entry['description'],
-                            'input_schema': source_location_inputs(entry['input_schema'])})
+def child_options(summary):
+    """The children valid now (nano-graphrag ``_valid_children``): slot, description, the arguments it takes and what it
+    would read: for the table leaf each unconsumed region (byte interval, parser hint, exact beginning), for the passage
+    leaf each unconsumed prose chunk (byte interval), for the ordered reading the windows of the remaining chunks."""
+    candidates = {item['candidate_id']: item for item in summary['content_candidates']}
+    options = []
+    for slot in available_slots(summary):
+        if slot == 'source_coverage_improvement':
+            reads = {'unprocessed_chunk_count': len(summary['unconsumed_chunk_ids']),
+                     'reading_order': 'document_order', 'windows': summary['report_windows']}
         else:
-            entries.append({'name': name, 'description': DESCRIPTIONS[LIBRARY_NAMES[name]],
-                            'input_schema': source_location_inputs(INPUT_SCHEMAS[LIBRARY_NAMES[name]])})
-    return entries
-
-
-def selection_schema(names, commit_schema, leads, summary):
-    """What the model answers with: one tool and its arguments (the old action schema)."""
-    return obj({'selection': {'anyOf': [obj({'kind': {'const': 'child' if entry['name'] in CHILD_SLOTS else 'tool'},
-                                             'tool': {'const': entry['name']}, 'arguments': entry['input_schema']})
-                                        for entry in catalog(names, commit_schema, leads, summary)]}})
-
-
-def within_source(store, reference, root, scope):
-    """Whether ``reference`` is ``root`` or a source derived from it through ``parent_source_refs`` (the old
-    ``_within_source``; each source on the way is read in scope)."""
-    pending, seen = [reference], set()
-    while pending:
-        current = pending.pop()
-        if current == root:
-            return True
-        if current in seen:
-            continue
-        seen.add(current)
-        source = read_record_in_scope(store, current, scope, 'source')
-        pending.extend(source.get('parent_source_refs', ()))
-    return False
-
-
-def population_sources(value):
-    """The old ``sources`` generator of ``_tool_arguments``: the references a population argument names as a source
-    or a sheet."""
-    if isinstance(value, dict):
-        for key, child in value.items():
-            if key in POPULATION_SOURCE_KEYS and isinstance(child, str):
-                yield child
-            else:
-                yield from population_sources(child)
-    elif isinstance(value, list):
-        for child in value:
-            yield from population_sources(child)
-
-
-def admitted(store, name, arguments, scope, root):
-    """The old ``_tool_arguments`` (its Store-free part and the page restriction): the arguments against the offered
-    schema and the source they name against the assigned page's source; the population operations' sources against
-    the page source. A violation is a ``ContractError``."""
-    if name in POPULATION_NAMES.values():
-        entry = {entry['name']: entry for entry in population_catalog()}[name]
-        validate_schema(arguments, source_location_inputs(entry['input_schema']))
-        if any(not within_source(store, ref, root, scope) for ref in set(population_sources(arguments))):
-            raise ContractError('literature_reading_outside_assigned_source')
-        return
-    validate_schema(arguments, source_location_inputs(INPUT_SCHEMAS[name]))
-    selected = arguments['arguments'] if name == 'execution.estimate' else arguments
-    source_ref = selected.get('source_ref')
-    if name == 'source.archive.extract':
-        source_ref = read_record_in_scope(store, arguments['member_ref'], scope, 'archive_member')['source_ref']
-    if source_ref is not None and not within_source(store, source_ref, root, scope):
-        raise ContractError('literature_reading_outside_assigned_source')
-
-
-def literature_context(ctx, envelope):
-    """The context the library repositories and the required-grading logic read (the old binding context): the
-    episode's identity, its commission and the records it holds now."""
-    return LiteratureContext(
-        run_id=ctx.run_id, episode_id=ctx.episode_id, role='literature_page',
-        path=tuple(ctx.binding_path.split('/')), scope=envelope['scope'], assignment=envelope['assignment'],
-        request={'goal': GOAL, 'scope': envelope['scope']}, received_record_refs=tuple(ctx.store.refs()))
-
-
-def repositories(store):
-    """The old ``_a108_grading_repository`` and ``_a108_aggregation_repository``: the aggregation reads the grading
-    cells of a sheet through the grading repository."""
-    grading = LiteratureA108GradingRepository(store)
-    aggregation = LiteratureA108AggregationRepository(
-        store,
-        read_cells=lambda context, sheet_ref, components: grading.fact_cells(context, [sheet_ref],
-                                                                              components=components))
-    return grading, aggregation
-
-
-def invalid_outcome(ctx, name, arguments, error):
-    """The old invalid outcome of ``execute``: a contract error is returned as ``arguments_or_reference`` feedback."""
-    detail = getattr(error, 'detail', None)
-    field = getattr(error, 'field', None)
-    return {'status': 'invalid',
-            'operation_ref': identity('operation', {'key': ctx.operation_key, 'name': name, 'arguments': arguments}),
-            'record_refs': [], 'changed_record_refs': [], 'result': None,
-            'feedback': {'category': 'arguments_or_reference', 'code': getattr(error, 'code', str(error)),
-                         **({'field': field} if field is not None else {}),
-                         **({'detail': detail} if detail else {})}}
-
-
-def authorize_source(store, context, name, arguments):
-    """The old repository authorization of ``_tool_arguments``: a source read, or a state.query by reference, may not
-    reach another episode's private sheet (``a108_selected_components_required_for_nonowner``)."""
-    for repository in repositories(store):
-        if isinstance(arguments.get('source_ref'), str) and (name.startswith('source.')
-                                                             or name in {'image.view', 'material.from_source'}):
-            representation = arguments.get('representation',
-                                           'original' if name == 'source.sequence.references' else 'text')
-            repository.authorize_source_access(context, arguments['source_ref'], representation, name)
-        elif name == 'state.query' and 'refs' in arguments:
-            for ref in arguments['refs']:
-                repository.authorize_record_access(context, store.get(ref))
-
-
-async def run_access_tool(name, envelope, ctx):
-    """Execute one access tool: the old ``execute`` of ``LiteratureOperations``. A contract error is returned as an
-    ``invalid`` outcome, as the old ``execute`` did; the outcome is the unit's outcome like any other."""
-    arguments, scope, root = envelope['arguments'], envelope['scope'], envelope['page_source_ref']
-    context = literature_context(ctx, envelope)
-    try:
-        admitted(ctx.store, name, arguments, scope, root)
-        authorize_source(ctx.store, context, name, arguments)
-    except (ContractError, ValidationError) as error:
-        return invalid_outcome(ctx, name, arguments, error)
-    registry = ToolRegistry(ctx.store, clients=ctx.services['public_clients'], **ctx.settings['tool_registry'])
-    permitted = tuple(ctx.store.refs()) if name in HELD_SOURCE_TOOLS else None
-    try:
-        outcome = await registry.execute_async(name, arguments, scope=scope, operation_key=ctx.operation_key,
-                                               permitted_record_refs=permitted)
-    except CustodyError:
-        raise
-    except Exception as error:   # the old record_execution_failure: a failed selected operation is an outcome
-        return failure_outcome(ctx.store, error, category='episode_execution', cause_code='selected_operation_failed')
-    if name == 'state.query' and outcome.get('status') in {'completed', 'partial'}:
-        repositories_ = repositories(ctx.store)
-        try:
-            for record in outcome.get('result', {}).get('records', ()):
-                for repository in repositories_:
-                    repository.authorize_record_access(context, record)
-        except ContractError as error:
-            return {'status': 'invalid',
-                    'operation_ref': identity('operation', {'key': ctx.operation_key, 'name': name,
-                                                            'arguments': arguments}),
-                    'record_refs': [], 'changed_record_refs': [], 'result': None,
-                    'feedback': {'category': 'arguments_or_reference', 'code': str(error)}}
-    return outcome
-
-
-async def state_query(arguments, ctx):
-    return await run_access_tool('state.query', arguments, ctx)
-
-
-async def source_read(arguments, ctx):
-    return await run_access_tool('source.read', arguments, ctx)
-
-
-async def source_locate(arguments, ctx):
-    return await run_access_tool('source.locate', arguments, ctx)
-
-
-async def source_sequence_references(arguments, ctx):
-    return await run_access_tool('source.sequence.references', arguments, ctx)
-
-
-async def image_view(arguments, ctx):
-    return await run_access_tool('image.view', arguments, ctx)
-
-
-async def source_archive_members(arguments, ctx):
-    return await run_access_tool('source.archive.members', arguments, ctx)
-
-
-async def source_archive_extract(arguments, ctx):
-    return await run_access_tool('source.archive.extract', arguments, ctx)
-
-
-async def source_xlsx_sheets(arguments, ctx):
-    return await run_access_tool('source.xlsx.sheets', arguments, ctx)
-
-
-async def source_xlsx_rows(arguments, ctx):
-    return await run_access_tool('source.xlsx.rows', arguments, ctx)
-
-
-async def source_pdf_info(arguments, ctx):
-    return await run_access_tool('source.pdf.info', arguments, ctx)
-
-
-async def source_pdf_text(arguments, ctx):
-    return await run_access_tool('source.pdf.text', arguments, ctx)
-
-
-async def source_pdf_page(arguments, ctx):
-    return await run_access_tool('source.pdf.page', arguments, ctx)
-
-
-async def execution_estimate(arguments, ctx):
-    return await run_access_tool('execution.estimate', arguments, ctx)
-
-
-def populate(name, envelope, ctx):
-    """The old population branch of ``execute`` (``literature.a108_grading.populate`` and ``literature.a108.aggregate``):
-    the arguments admitted, their text witnesses materialized from the actual source bytes, then the repository
-    populates its sheet. A contract error is an ``invalid`` outcome."""
-    arguments, scope, root = envelope['arguments'], envelope['scope'], envelope['page_source_ref']
-    store = ctx.store
-    context = literature_context(ctx, envelope)
-    grading, aggregation = repositories(store)
-    repository = grading if name == 'literature.a108_grading.populate' else aggregation
-
-    def read_source(ref, representation):
-        source = repository._native_source(context, ref)
-        reading = {'source_ref': ref, 'representation': representation}
-        admitted(store, 'source.read', reading, scope, root)
-        authorize_source(store, context, 'source.read', reading)
-        artifact = source.get('artifact_ref' if representation == 'original' else 'text_ref')
-        if artifact is None:
-            raise ContractError('literature_source_representation_unavailable')
-        return {'artifact_ref': artifact, 'content': store.get_artifact(artifact)}
-    try:
-        admitted(store, name, arguments, scope, root)
-        materialized = materialize_text_witness_inputs(arguments, read_source=read_source)
-        return repository.populate(context, materialized, ctx.operation_key)
-    except (ContractError, ExperimentalContractError) as error:
-        return invalid_outcome(ctx, name, arguments, error)
-
-
-def literature_a108_grading_populate(arguments, ctx):
-    return populate('literature.a108_grading.populate', arguments, ctx)
-
-
-def literature_a108_aggregate(arguments, ctx):
-    return populate('literature.a108.aggregate', arguments, ctx)
-
-
-def validate_lead(store, value, outcome, proposed, task):
-    """The old credit.py ``validate_lead`` re-expressed on custody (private copy; library candidate): the lead's
-    identity and exact source witness against the records this episode holds. A violation is a ``ContractError``."""
-    if task['kind'] != 'verified_source_leads':
-        raise ContractError('literature_lead_outside_original_search_task')
-    value = plain(resolve_aliases(plain(value), outcome.get('aliases', {})))
-    validate_schema(value, source_location_inputs(lead_schema()))
-    if value['proposed_annotation_ref'] != proposed or value['witness']['source_ref'] != value['source_ref']:
-        raise ContractError('literature_lead_question_or_source_mismatch')
-    if not value['relevance_rationale'].strip():
-        raise ContractError('literature_lead_relevance_rationale_required')
-    known = {*store.refs(), *outcome.get('record_refs', [])}
-    if not {value['source_ref'], value['subject_ref'], proposed} <= known:
-        raise ContractError('literature_lead_original_inputs_not_received')
-    source = store.require(value['source_ref'], {'source'})
-    subject = store.require(value['subject_ref'], {'reference'})
-    if subject['source_ref'] != value['source_ref'] or not subject.get('anchor'):
-        raise ContractError('literature_lead_subject_not_anchored_in_source')
-    uri = (source.get('uri') or '').split('?', 1)[0].rstrip('/')
-    if uri.endswith(('/search', '/esearch.fcgi')):
-        raise ContractError('literature_lead_requires_acquired_source_not_search_page')
-
-    def read_source(ref, representation):
-        if ref != value['source_ref']:
-            raise ContractError('literature_lead_source_mismatch')
-        artifact = source.get('artifact_ref' if representation == 'original' else 'text_ref')
-        if artifact is None:
-            raise ContractError('literature_lead_source_representation_unavailable')
-        return {'artifact_ref': artifact, 'content': store.get_artifact(artifact)}
-    witness = _Sources(read_source).witness(value['witness'], 'source_lead.witness')
-    anchor = subject['anchor']
-    if (anchor['artifact_ref'] != witness['artifact_ref']
-            or not witness['start'] <= anchor['start'] < anchor['end'] <= witness['end']):
-        raise ContractError('literature_lead_subject_outside_witness')
-    return {**value, 'witness': {**value['witness'], 'quote': witness['quote']}}
-
-
-def resolve_aliases(value, aliases, reference_position=False):
-    """The old credit.py ``_resolve``: original-action aliases in reference positions of a source lead."""
-    if reference_position and isinstance(value, str) and value.startswith('@'):
-        if value[1:] not in aliases:
-            raise ContractError('required_grading_unresolved_alias', detail={'reference': value})
-        return aliases[value[1:]]
-    if isinstance(value, dict):
-        return {key: resolve_aliases(child, aliases, key in ('ref', 'dependencies') or key.endswith('_ref')
-                                     or key.endswith('_refs')) for key, child in value.items()}
-    if isinstance(value, list):
-        return [resolve_aliases(child, aliases, reference_position) for child in value]
-    return value
-
-
-def reason(arguments, ctx):
-    """Commit the model's typed reasoning with its contextual grader: the old ``execute_reasoning`` of
-    ``ContextualInterpretation``. Without a ``source_lead`` this is the required-grading action of the library
-    (``literature_required_grading.execute``: the commit and the sheet are saved together, or nothing). With a
-    ``source_lead`` the same action and the validated lead are one transaction: a lead that does not hold returns an
-    ``invalid`` outcome."""
-    envelope = arguments
-    selection, scope, root = envelope['arguments'], envelope['scope'], envelope['page_source_ref']
-    store = ctx.store
-    context = literature_context(ctx, envelope)
-    repository = repositories(store)[0]
-
-    def authorize_source_access(reference, representation):
-        reading = {'source_ref': reference, 'representation': representation}
-        admitted(store, 'source.read', reading, scope, root)
-        authorize_source(store, context, 'source.read', reading)
-    if 'source_lead' in selection:
-        try:
-            witness = selection['source_lead']['witness']
-            reading = {'source_ref': witness['source_ref'], 'representation': witness['representation'],
-                       'offset': witness['start'], 'limit': witness['end'] - witness['start']}
-            admitted(store, 'source.read', reading, scope, root)
-            authorize_source(store, context, 'source.read', reading)
-            with store.transaction():
-                native = {key: value for key, value in plain(selection).items() if key != 'source_lead'}
-                result = execute_required_grading(context, native, ctx.operation_key, repository,
-                                                  authorize_source_access=authorize_source_access)
-                if result['status'] not in ('completed', 'partial'):
-                    return result
-                lead = validate_lead(store, selection['source_lead'], result, envelope['proposed_annotation_ref'],
-                                     envelope['task'])
-                return {**result, 'literature_source_lead': lead}
-        except (ContractError, ExperimentalContractError) as error:
-            return {'status': 'invalid', 'record_refs': [], 'changed_record_refs': [], 'result': None,
-                    'feedback': {'category': 'source_lead', 'code': getattr(error, 'code', str(error))}}
-    return execute_required_grading(context, selection, ctx.operation_key, repository,
-                                    authorize_source_access=authorize_source_access)
-
-
-TOOLS = {'state_query': state_query, 'source_read': source_read, 'source_locate': source_locate,
-         'source_sequence_references': source_sequence_references, 'image_view': image_view,
-         'source_archive_members': source_archive_members, 'source_archive_extract': source_archive_extract,
-         'source_xlsx_sheets': source_xlsx_sheets, 'source_xlsx_rows': source_xlsx_rows,
-         'source_pdf_info': source_pdf_info, 'source_pdf_text': source_pdf_text, 'source_pdf_page': source_pdf_page,
-         'execution_estimate': execution_estimate,
-         'literature_a108_grading_populate': literature_a108_grading_populate,
-         'literature_a108_aggregate': literature_a108_aggregate, 'reason': reason}
+            reads = {'candidates': [
+                {'candidate_id': ref, 'start_offset': candidates[ref]['start'], 'end_offset': candidates[ref]['end'],
+                 **({'parser_hint': candidates[ref]['parser_hint'],
+                     'exact_table_beginning': summary['table_previews'][ref]}
+                    if slot == 'table_evidence_extraction' else {})}
+                for ref in summary[CANDIDATES_OF_SLOT[slot]]]}
+        options.append({'slot': slot, 'description': CHILD_DESCRIPTIONS[slot],
+                        'arguments': child_arguments(slot, summary), 'reads': reads})
+    return options
 
 
 def decide(summary, feedback, ctx):
-    """Ask the model for the next tool or child commission, shown the assignment, the custody of the source, its own
-    read outcomes, what its children returned, the controlled features of the saved sheets, the latest image it looked at, the saved sheets, the commissioned goal plan, the tools, the
-    measured time and the yield table (the old decision state and inputs, over this episode's summary)."""
-    names = offered(ctx.settings, summary)
-    leads = summary['task']['kind'] == 'verified_source_leads'
-    knowledge_directory = ctx.settings.get('knowledge_library_directory')
-    context = {'commission_message': summary['literature_goal_plan']['commission_message'],
-               'goal': GOAL, 'scope': summary['scope'], 'literature_assignment': summary['literature_assignment'],
-               'literature_source_custody': summary['literature_source_custody'],
-               'own_literature_outcomes': summary['own_literature_outcomes'],
-               'literature_history_meaning': summary['literature_history_meaning'],
-               'literature_experimental_work': summary['literature_experimental_work'],
-               'literature_received_fact_display': summary['literature_received_fact_display'],
-               'literature_owned_population_sources': summary['literature_owned_population_sources'],
-               'literature_goal_plan': summary['literature_goal_plan'],
-               'current_findings': summary['finding'],
-               'credit_binding': summary['credit_binding'], 'visual_evidence': summary['visual_evidence'],
-               'last_local_outcome': summary['last_local_outcome'], 'held_record_refs': summary['held_record_refs'],
-               'child_reports': summary['child_reports'],
-               'source_lead_dispositions': summary['source_lead_dispositions'],
-               'returned_leads': summary['lead_return'],
-               'input_list': summary['input_list'], 'input_list_basis': summary['input_list_basis'],
-               'unconsumed_candidates': summary['unconsumed_candidates'],
+    """The page's decision. Before Jev has assessed the paper's candidates the decision is the assessment itself: a tool
+    call made by code, no model call (nano-graphrag assesses before its page proposer is asked). Otherwise the model
+    chooses ONE leaf child, shown the commission, the unconsumed candidates with Jev's assessment and what its children
+    returned; it is offered no tool."""
+    if summary['content_assessment_ref'] is None:
+        return ToolCall(ASSESS, {'source_ref': summary['page']['source_ref'],
+                                 'representation': summary['page']['representation'],
+                                 'goal': summary['jev_goal'], 'page_context': summary['jev_page_context'],
+                                 'information_needs': summary['information_needs']})
+    context = {'commission': summary['commission'], 'literature_assignment': summary['literature_assignment'],
+               'credit_binding': summary['credit_binding'], 'last_local_outcome': summary['last_local_outcome'],
+               'child_reports': summary['child_reports'], 'finding': summary['finding'],
+               'content_candidates': [item for item in summary['content_candidates']
+                                      if item['candidate_id'] not in summary['consumed_candidate_ids']],
                'consumed_candidate_ids': summary['consumed_candidate_ids'],
-               'table_previews': summary['table_previews'],
-               'tools': catalog(names, summary['reasoning_schema'], leads, summary),
+               'content_assessment': summary['planner_context'], 'child_options': child_options(summary),
                'time_accounting': time_accounting(ctx.clock.progress_time)}
-    context = extend_context(context, {
-        'literature_selected_population_attempt': summary['literature_selected_population_attempt'],
-        'feedback': feedback, 'action_yields': summary['action_yields'],
-        'tool_knowledge': None if knowledge_directory is None else ToolKnowledge(knowledge_directory).context()},
-        conflict='initial_binding_context_field_conflict')
-    return ModelRequest('REASONING', instructions(knowledge=context.get('tool_knowledge'), leads=leads), context,
-                        generation_schema(selection_schema(names, summary['reasoning_schema'], leads, summary)))
-
-
-def empty_commit(commit, commit_schema):
-    """The old empty-reasoning test: every section the schema names is present or absent and none has a row."""
-    return (set(commit_schema.get('required', commit_schema['properties'])) <= set(commit)
-            <= set(commit_schema['properties']) and all(value == [] for value in commit.values()))
-
-
-def reasoning_has_task_content(task, arguments):
-    """The old ``ContextualInterpretation.reasoning_has_task_content``: an otherwise empty commit is executable only
-    as a valid source lead of a verified_source_leads commission."""
-    if 'source_lead' not in arguments or task['kind'] != 'verified_source_leads':
-        return False
-    validate_schema(plain(arguments['source_lead']), source_location_inputs(lead_schema()))
-    return True
+    context = extend_context(context, {'feedback': feedback, 'action_yields': summary['action_yields']},
+                             conflict='initial_binding_context_field_conflict')
+    return ModelRequest('REASONING', BRIEF + RETURN_GUIDANCE, context, generation_schema(selection_schema(summary)))
 
 
 def action(response, summary, records, ctx):
-    """Turn the model's answer into one tool call or one child commission, or reject it (no unit). An answer that
-    selects no offered tool or child, arguments
-    that do not fit its schema, or an empty reasoning commit (except a no-applicable-evidence declaration or a source
-    lead) is invalid."""
-    names = offered(ctx.settings, summary)
-    leads = summary['task']['kind'] == 'verified_source_leads'
-    commit_schema = summary['reasoning_schema']
-    schema = selection_schema(names, commit_schema, leads, summary)
+    """Turn the model's answer into one child commission, or reject it (no unit). An answer that selects no valid slot or
+    arguments that do not fit its schema is invalid. What the child commission names is not checked here: a wrong
+    commission fails where the child is built."""
+    schema = selection_schema(summary)
     try:
-        selection = validate_selection(decode_response(response, schema), schema)
-        name, arguments = selection['tool'], selection['arguments']
-        if name in CHILD_SLOTS:
-            return ChildCall(name, {'objective': arguments['objective'],
-                                    'selection': child_selection_of(arguments['selection'], summary)})
-        if (name == 'reason' and empty_commit(arguments['commit'], commit_schema)
-                and arguments.get('evidence_processing', {}).get('kind') != 'no_applicable_evidence'
-                and not reasoning_has_task_content(summary['task'], arguments)):
-            raise ValueError('empty_reasoning_commit')
+        value = decode_response(response, schema)
+        validate_schema(value, schema)
+        selection = value['selection']
     except (ValueError, KeyError, TypeError, ValidationError) as error:
         raise Rejected(rejection_feedback(error, category='action_contract'))
-    return ToolCall(name, {'arguments': arguments, 'scope': summary['scope'],
-                           'page_source_ref': summary['literature_assignment']['source_ref'],
-                           'assignment': summary['literature_assignment'], 'task': summary['task'],
-                           'proposed_annotation_ref': summary['proposed_annotation_ref']})
-
-
-def validate_selection(value, schema):
-    validate_schema(value, schema)
-    return value['selection']
+    return ChildCall(selection['slot'], selection['arguments'])

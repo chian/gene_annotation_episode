@@ -22,7 +22,7 @@ SYNTHETIC = (
     'chips). The KD was obtained from this kinetic fit of the association and dissociation phases. The steady-state fit gave KD = 30 nM. The maximum response was 200 RU for 1:1 binding. Mass-transport '
     'limitation was tested by varying the flow rate and was not observed. The baseline was stable and the surface '
     'was regenerated completely with 10 mM glycine pH 2.0 between cycles. The immobilized ParB was active: it bound '
-    'its DNA partner.')
+    'its DNA partner. The analyte was PopZ (CC_1319) from Caulobacter crescentus NA1000, residues 1-177.')
 
 # field -> (value, unit, quote) for the synthetic passage.
 SYNTHETIC_STATED = {
@@ -81,6 +81,33 @@ def answer_from(chunk, stated):
 
 def synthetic_answer():
     return answer_from(SYNTHETIC, SYNTHETIC_STATED)
+
+
+# The identity block that reads the synthetic passage correctly: field -> (value, quote). Every other asked identity field is
+# unavailable (the passage states no partner identifier, no mutation, no temperature class beyond what is listed here).
+SYNTHETIC_IDENTITY_STATED = {
+    'target_id': ('PopZ', 'binding of the protein PopZ to its partner'),
+    'partner_id': ('ParB', 'its partner protein ParB'),
+    'subject_database_id': ('CC_1319', 'PopZ (CC_1319) from Caulobacter crescentus NA1000, residues 1-177'),
+    'subject_database': ('locus_tag', 'PopZ (CC_1319) from'),
+    'subject_organism': ('Caulobacter crescentus NA1000', 'from Caulobacter crescentus NA1000, residues'),
+    'subject_residue_range': ('1-177', 'NA1000, residues 1-177'),
+}
+
+
+def synthetic_identity_answer(asked):
+    """The identity block (``literature_identity_extraction.identity_answer_schema`` shape) for the synthetic passage; ``asked`` is
+    the module's ASKED tuple."""
+    block = {}
+    for name in asked:
+        if name in SYNTHETIC_IDENTITY_STATED:
+            value, quote = SYNTHETIC_IDENTITY_STATED[name]
+            block[name] = {'status': 'stated', 'value': value, 'quote': quote, 'support': 'direct', 'reason': None}
+        else:
+            block[name] = {'status': 'unavailable', 'value': None, 'quote': None, 'support': None, 'reason': 'not_stated_in_passage'}
+        if name == 'temperature_c':
+            block[name]['unit'] = None
+    return block
 
 
 PRIMARY = (Path(__file__).resolve().parents[7] / 'research' / 'experimental_scoring_review_2026-10-23' /

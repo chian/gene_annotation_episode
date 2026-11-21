@@ -26,7 +26,7 @@ from gene_annotation_episode.model_provider import ModelProvider, load_config
 
 from ...chunk.tests.leaf_world import SETTINGS, held_world
 from ...chunk.tests.test_extraction_model_run import (
-    check_identity, no_unrecovered_rejection, quote_span, rejection_counts, type_answer)
+    check_identity, check_named, fill_calls, naming_calls, no_unrecovered_rejection, quote_span, rejection_counts, type_answer)
 from ..episode import SourceCoverageImprovement
 from ..task import TEXT
 
@@ -82,7 +82,8 @@ def test_the_real_popz_paragraph_with_its_neighbours_is_read_window_by_window(tm
                collaborators=collaborators)
     result = asyncio.run(run.run())['result'].as_record()
     path = tuple(tuple(step) for step in journal.episodes(run_id)[0]['path'])
-    calls = journal.model_calls(run_id, path)
+    every_call = journal.model_calls(run_id, path)
+    calls = fill_calls(every_call)             # the unit's fills; the naming calls are checked by check_named
     units = [row[2] for row in journal.units(run_id, path)]
     state = journal.run_state(run_id)[1]
     print('ENDED', state)
@@ -113,6 +114,9 @@ def test_the_real_popz_paragraph_with_its_neighbours_is_read_window_by_window(tm
         if (start, end) == spans[kd_window[0]]:
             assert keys['target_id'] == spr_passages.REAL_EXPECTED_TARGET, ('the SPR window names PopZ', keys['target_id'])
     records = [json.loads(world['store'].get_artifact(ref)) for ref in result['record_refs']]
+    named = naming_calls(every_call)                               # one naming per window, in order
+    assert len(named) == len(spans)
+    check_named(world, every_call, records)                        # the leaf was handed the sheet class and named spr
     for record in records:
         print('LEAF RECORD', record['experiment_ref'], 'TARGET', record.get('target_id'), 'PARTNER', record.get('partner_id'))
     assert sorted(record['experiment_ref'].rsplit(':', 1)[1] for record in records) == sorted(

@@ -9,6 +9,7 @@ import pytest
 
 from episode_runtime import EpisodeBinding
 from method_loop import FormError
+from yield_control import AccumulationYieldController
 
 PACKAGE = __name__.rsplit('.', 2)[0]
 FOLDER = Path(__file__).resolve().parents[1]
@@ -20,8 +21,10 @@ FILES = {'__init__.py', 'goal.py', 'task.py', 'credit.py', 'yield_estimator.py',
 SOURCE = 'source_' + 'a' * 24
 ARTIFACT = 'artifact_' + 'a' * 24
 ROOT = 'gene_annotation_episode.episodic_workflow.root'
-COMMIT_SCHEMA = {'type': 'object', 'additionalProperties': False, 'required': ['terms'],
-                 'properties': {'terms': {'type': 'array'}}}
+TASK = {'kind': 'verified_source_leads', 'evidence_axis': 'A108', 'credit_unit': 1.0,
+        'version': 'literature_local_task_v1'}
+FIRST = {'source_ref': SOURCE, 'representation': 'text', 'offset': 0, 'limit': 10}
+SECOND = {'source_ref': SOURCE, 'representation': 'text', 'offset': 10, 'limit': 10}
 
 
 def files():
@@ -29,12 +32,11 @@ def files():
             if path.is_file() and '__pycache__' not in path.parts}
 
 
-def assignment(task):
+def assignment(task=TASK, spans=(FIRST, SECOND)):
     page = {'version': 'page_assignment_v1', 'source_ref': SOURCE, 'representation': 'text', 'artifact_ref': ARTIFACT,
             'question_context_refs': [], 'prior_delivery_refs': []}
-    window = {'source_ref': SOURCE, 'representation': 'text', 'offset': 0, 'limit': 10}
-    return {'version': 'reading_assignment_v1', 'page': page, 'selection': window, 'literature_task': task,
-            'proposed_annotation_ref': 'hyp_1', 'scope': {'subject_refs': ['sub_1']},
+    return {'version': 'reading_assignment_v1', 'page': page, 'selection': {'spans': list(spans)},
+            'literature_task': task, 'proposed_annotation_ref': 'hyp_1', 'scope': {'subject_refs': ['sub_1']},
             'received_record_refs': [SOURCE, ARTIFACT]}
 
 
@@ -62,61 +64,75 @@ def test_no_module_of_the_folder_imports_another_episode_folder():
                     str(path.relative_to(FOLDER)) + ' imports ' + module
 
 
-def test_the_commission_form_admits_a_reading_assignment_and_refuses_an_unknown_field():
+def test_the_commission_admits_the_windows_in_order_and_refuses_what_is_not_the_commission():
     form = EPISODE.assignment_form
-    task = {'kind': 'verified_source_leads', 'evidence_axis': 'A108', 'credit_unit': 1.0, 'version':
-            'literature_local_task_v1'}
-    admitted = form.admit(assignment(task), 'test')
+    admitted = form.admit(assignment(), 'test')
     parent_input = EPISODE.read_from_parent(admitted, {'objective': 'read'})
-    assert parent_input['window'] == admitted['selection'] and parent_input['page'] == admitted['page']
-    assert parent_input['task_key'] == 'A108:verified_source_leads'
+    assert parent_input['spans'] == [FIRST, SECOND] and parent_input['task_key'] == 'A108:verified_source_leads'
     assert set(form.record_refs(admitted)) == {SOURCE, ARTIFACT}
     with pytest.raises(FormError, match='unknown_field'):
-        form.admit({**assignment(task), 'extra': 1}, 'test')
-    other = {**admitted, 'selection': {**admitted['selection'], 'source_ref': 'source_' + 'c' * 24}}
+        form.admit({**assignment(), 'extra': 1}, 'test')
+    other = {**admitted, 'selection': {'spans': [{**FIRST, 'source_ref': 'source_' + 'c' * 24}]}}
     with pytest.raises(ValueError, match='literature_reading_source_mismatch'):
         EPISODE.read_from_parent(other, {})
+    backwards = {**admitted, 'selection': {'spans': [SECOND, FIRST]}}
+    with pytest.raises(ValueError, match='literature_reading_windows_invalid'):
+        EPISODE.read_from_parent(backwards, {})
+    for kind in ({'kind': 'source_answer', 'answer_kind': 'assessment', 'source_refs': [SOURCE]},
+                 {'kind': 'source_answer', 'answer_kind': 'screening', 'examined': []}):
+        wrong = {**admitted, 'literature_task': {**TASK, **kind}}
+        with pytest.raises(ValueError, match='literature_original_task_invalid'):
+            EPISODE.read_from_parent(wrong, {})
 
 
-def test_a_screening_task_must_name_spans_on_the_page_artifact():
-    span = {'source_ref': SOURCE, 'artifact_ref': 'artifact_' + 'b' * 24, 'start': 0, 'end': 5}
-    task = {'kind': 'source_answer', 'answer_kind': 'screening', 'evidence_axis': 'A108', 'credit_unit': 2.0,
-            'version': 'literature_local_task_v1', 'examined': [span]}
-    admitted = EPISODE.assignment_form.admit(assignment(task), 'test')
-    with pytest.raises(ValueError, match='literature_task_screening_artifact_mismatch'):
-        EPISODE.read_from_parent(admitted, {})
-
-
-def test_the_return_declares_credit_and_finding_as_required_and_the_controlled_fields_as_selectable():
+def test_the_return_declares_credit_and_finding_as_required_and_the_leads_and_cells_as_selectable():
     fields = EPISODE.return_form.fields
-    assert fields['credit'].required and fields['finding'].required and 'finding_refs' not in fields
-    for name in ('literature_a108_grading_cells', 'literature_a108_aggregation_cells', 'literature_screening_answers',
-                 'literature_source_lead_dispositions'):
-        assert not fields[name].required
+    assert fields['credit'].required and fields['finding'].required
+    assert {name for name, spec in fields.items() if not spec.required} == {
+        'literature_source_lead_dispositions', 'literature_a108_grading_cells'}
     assert fields['literature_a108_grading_cells'].type == 'record_refs'
 
 
-def test_the_credit_is_real_code_and_counts_nothing_without_a_validated_lead():
+def test_the_credit_counts_nothing_without_a_graded_sheet_and_the_ceiling_of_the_extraction_is_unbounded():
     credit_module = importlib.import_module(PACKAGE + '.credit')
-    assert EPISODE.credit is credit_module.credit
-    assert 'NotImplementedError' not in (FOLDER / 'credit.py').read_text()
-    summary = {'task': {'kind': 'verified_source_leads', 'credit_unit': 2.0}, 'task_key': 'A108:verified_source_leads',
-               'source_leads': [], 'proposed_annotation_ref': 'hyp_1'}
+    assert EPISODE.credit is credit_module.credit and EPISODE.ceiling is credit_module.ceiling
+    summary = {'task': {**TASK, 'credit_unit': 2.0}, 'task_key': 'A108:verified_source_leads', 'source_leads': [],
+               'proposed_annotation_ref': 'hyp_1', 'finding': {'grading_sheets': []}}
     assert credit_module.credit(summary, None) == 0
+    assert credit_module.ceiling(summary, None, 'extract', None, None) == credit_module.UNBOUNDED
+    assert credit_module.ceiling(summary, None, 'source_read', None, None) == 0.0
 
 
-def test_the_model_is_offered_the_access_tools_the_coupled_reasoning_and_the_two_sheet_populations():
+def test_the_controller_counts_the_windows_to_do():
+    settings = {'cost': 0.1, 'parameters': {'uncertainty_alpha': 0.1}}
+    controller = EPISODE.yield_controller(0, settings, {'task': TASK, 'spans': [FIRST, SECOND]})
+    assert isinstance(controller, AccumulationYieldController) and controller.items == 2
+
+
+def test_the_one_action_is_the_extraction_with_its_grading_and_source_lead():
     task = importlib.import_module(PACKAGE + '.task')
-    names = task.offered({'tool_registry': {}})
-    assert 'execution_estimate' not in names and len(names) == 15
-    assert 'reason' in names and set(task.POPULATE_NAMES) <= set(names)
-    assert set(names) <= set(EPISODE.tools)
-    for leads in (False, True):
-        schema = task.selection_schema(names, COMMIT_SCHEMA, leads)
-        assert len(schema['properties']['selection']['anyOf']) == len(names)
-    reason = [entry for entry in task.catalog(names, COMMIT_SCHEMA, True) if entry['name'] == 'reason'][0]
-    assert 'source_lead' in reason['input_schema']['properties']
-    assert 'evidence_processing' in reason['input_schema']['properties']
-    assert 'source_lead' not in task.reason_schema(COMMIT_SCHEMA, False)['properties']
-    assert 'execution_estimate' in task.offered({'tool_registry': {'native_statistics': object()}})
-    assert task.empty_commit({'terms': []}, COMMIT_SCHEMA) and not task.empty_commit({'terms': [{}]}, COMMIT_SCHEMA)
+    commit_schema = {'type': 'object', 'additionalProperties': False, 'required': ['terms'],
+                     'properties': {'terms': {'type': 'array'}}}
+    assert list(EPISODE.tools) == ['extract'] == EPISODE.offered_actions({}, None)
+    assert tuple(EPISODE.services) == ()
+    library = importlib.import_module(
+        'gene_annotation_episode.episodic_workflow.episode_support.literature.forms.sample_context_evidence.'
+        'literature_leaf_extraction')
+    schema = library.selection_schema(commit_schema)
+    options = schema['properties']['selection']['anyOf']
+    assert len(options) == 1 and options[0]['properties']['tool']['const'] == 'extract'
+    arguments = options[0]['properties']['arguments']['properties']
+    assert 'evidence_processing' in arguments and 'source_lead' in arguments
+    assert library.empty_commit({'terms': []}, commit_schema) and not library.empty_commit({'terms': [{}]}, commit_schema)
+    assert task.TEXT == 'window'
+
+
+def test_the_segments_carry_the_exact_byte_offsets_of_the_text_shown():
+    library = importlib.import_module(
+        'gene_annotation_episode.episodic_workflow.episode_support.literature.forms.sample_context_evidence.'
+        'literature_leaf_extraction')
+    content = 'Methods. Strain QX-7 grew in 5 µM succinate. It did not grow without it.\nDiscussion. Done'.encode()
+    segments = library.window_segments(content, 9, len(content))
+    assert segments and segments[0]['text'].startswith('Strain QX-7')
+    for segment in segments:
+        assert content[segment['start']:segment['end']].decode() == segment['text']

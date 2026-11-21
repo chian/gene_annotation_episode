@@ -1,18 +1,14 @@
-"""What this episode is for: the A108 reading of one source in document order, carried from the old ``goal.py``
-(``LiteratureGoal.instructions`` of ``literature_ordered`` at 97308b94c). The old text joined the role
-instruction (old ``source_contracts._ROLE_INSTRUCTIONS['literature_ordered']``) with the A108 organism-context task
-text and the A108 reading task text; the last two are the library's ``A108_CONTEXT_TASK`` and
-``A108_READING_TASK``."""
-from gene_annotation_episode.episodic_workflow.episode_support.literature.prompts.literature_prompt import (
-    A108_CONTEXT_TASK, A108_READING_TASK)
+"""What this episode is for: the A108 extraction of the prose windows of one source in document order (nano-graphrag's
+report leaf: it takes the windows it is given, each once, in order)."""
 
 BINDING_PATH = 'sample_context_evidence/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement'
-ROLE_INSTRUCTION = ('Investigate the source in document order as useful for the assigned question. Use returned '
-                    'UTF-8 byte continuations and retain representation identity. Decide whether to continue, '
-                    'reread, change the examined window or interpret obtained evidence from actual outcomes.')
-GOAL = '\n\n'.join((ROLE_INSTRUCTION, A108_CONTEXT_TASK, A108_READING_TASK))
-UNIT = ('one model-selected tool call on the assigned source (an access tool, a reasoning commit coupled with its '
-        'purpose-specific grading and saved subscoring sheet, or a sheet population)')
-RESULT = ('the controlled features code reads from the A108 subscoring and main evidence sheets saved with the '
-          'graded interpretations of the source, with the sheet and assessment references, and the commissioned '
-          "task's answers as counts and references")
+GOAL = ('Extract what the window reports for the assigned organism-context question: whether the proposed protein '
+        'function fits the actual organism, its physiology, environment, availability of substrates and cofactors, '
+        'and localization, at the resolution the window states (organism, strain, sample, condition). The windows of '
+        'the source come one at a time in document order, each once. Extract exactly what the window says and nothing '
+        'else; what it does not state stays unstated.')
+UNIT = ('one extraction of the next window: the typed commit of what it reports with its grading, whose subscoring '
+        'sheet is saved in the same unit')
+RESULT = ('the controlled features code reads from the A108 subscoring sheets saved with the graded interpretations of '
+          'the windows, with the sheet and assessment references, the cell rows of the requested components and the '
+          "commission's source leads as a count and references")

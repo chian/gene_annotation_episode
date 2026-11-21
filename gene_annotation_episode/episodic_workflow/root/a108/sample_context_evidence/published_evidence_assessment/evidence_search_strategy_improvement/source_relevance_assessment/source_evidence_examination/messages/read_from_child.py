@@ -1,19 +1,15 @@
-"""What the parent takes from a child's return, with the slot that produced it: controlled data only. The child's
-credit (its productivity: the parent's decision to commission another reading rests on it), the controlled features
-of the child's sheets with their references and the assessments it committed with grading (``finding``), and the
-fields this episode selected in ``msg_to_child``: the relevant lead count and lead sources, the screening counts, the
-cell rows of the requested A108 components (references only). The three children return the same form."""
-from .msg_to_child import AGGREGATION_CELLS, GRADING_CELLS, LEADS, SCREENING, selected_fields
-from .read_from_parent import REQUESTED_AGGREGATION, REQUESTED_GRADING
+"""What the page takes from a leaf's return, with the slot that produced it: controlled data only. The leaf's credit (its
+productivity), the controlled features of the sheets it saved with their references and the assessments it committed with
+grading (``finding``), and the fields this episode selected in ``msg_to_child``: the relevant lead count and lead sources
+and the cell rows of the requested A108 components (references only). The three leaves return the same form."""
+from .msg_to_child import LEADS, selected_fields
 
-RENAMED = {LEADS: 'leads', SCREENING: 'screening'}
+RENAMED = {LEADS: 'leads'}
 
 
 def read_from_child(slot, result, summary, records):
     requested = summary['literature_assignment']
-    parent = {REQUESTED_GRADING: requested.get(REQUESTED_GRADING, []),
-              REQUESTED_AGGREGATION: requested.get(REQUESTED_AGGREGATION, [])}
-    report = {'credit': result['credit'], 'finding': result['finding']}
-    for name in selected_fields(slot, summary['task'], parent):
+    report = {'slot': slot, 'credit': result['credit'], 'finding': result['finding']}
+    for name in selected_fields(slot, requested):
         report[RENAMED.get(name, name)] = result[name]
     return report

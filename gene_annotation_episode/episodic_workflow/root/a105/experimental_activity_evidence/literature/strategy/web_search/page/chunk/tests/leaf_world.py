@@ -4,6 +4,8 @@ bytes of that text), and the run's collaborators (real runner, journal, Store, m
 import importlib
 
 from episode_runtime import BindingRegistry, RunJournal, link, resume
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_row_contract import (
+    CLASS_OF_EXPERIMENT_TYPE)
 from gene_annotation_episode.model_provider import ModelProvider, load_config
 from gene_annotation_episode.state import Store
 
@@ -14,7 +16,9 @@ SETTINGS = {'cost': 0.1, 'parameters': {'uncertainty_alpha': 0.1}}
 
 
 def held_world(directory, text, offset, length, name='world', experiment_type='spr'):
-    """``text`` is the source's text; the chunk is ``length`` bytes of it from byte ``offset``."""
+    """``text`` is the source's text; the chunk is ``length`` bytes of it from byte ``offset``. The leaf is handed the
+    SHEET CLASS of ``experiment_type`` (never the type itself: the page has not read the text); ``world['expected_type']`` is the
+    type a test expects the leaf to name."""
     directory = directory / name
     directory.mkdir()
     store = Store(directory / 'store')
@@ -33,8 +37,9 @@ def held_world(directory, text, offset, length, name='world', experiment_type='s
                          origin='reasoning')['id']
     assignment = {'source_ref': source, 'passed_refs': [source, artifact], 'representation': 'text',
                   'offset': offset, 'limit': length,
-                  'experiment_type': experiment_type, 'proposed_annotation_ref': proposed}
+                  'sheet_class': CLASS_OF_EXPERIMENT_TYPE[experiment_type], 'proposed_annotation_ref': proposed}
     return {'directory': directory, 'store': store, 'source': source, 'artifact': artifact, 'proposed': proposed,
+            'expected_type': experiment_type,
             'input': {'assignment': assignment, 'message': {}, 'selection': ['record_refs']}}
 
 

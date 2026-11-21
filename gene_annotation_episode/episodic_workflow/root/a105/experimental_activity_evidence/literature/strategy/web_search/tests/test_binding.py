@@ -4,12 +4,13 @@ imports another episode folder; the episode's own forms and functions behave on 
 import ast
 import importlib
 import json
+import types
 from pathlib import Path
 
 import pytest
 
-from episode_runtime import ChildMessage, EpisodeBinding
-from method_loop import FormError
+from episode_runtime import EpisodeBinding
+from method_loop import UNBOUNDED, FormError
 
 from .grading_world import SEARCH_RESPONSE
 
@@ -22,9 +23,7 @@ FILES = {'__init__.py', 'goal.py', 'task.py', 'credit.py', 'yield_estimator.py',
          'messages/read_from_child.py', 'messages/internal_summary.py', 'messages/final_to_parent.py',
          'tests/__init__.py', 'tests/test_binding.py', 'tests/grading_world.py', 'tests/test_grading.py'}
 ROOT = 'gene_annotation_episode.episodic_workflow.root'
-COMMIT_SCHEMA = {'type': 'object', 'additionalProperties': False, 'required': ['terms'],
-                 'properties': {'terms': {'type': 'array'}}}
-PAGE = {'source_ref': 'src_1', 'representation': 'text', 'artifact_ref': 'art_1', 'prior_delivery_refs': ['del_1']}
+PAGE = {'source_ref': 'src_1', 'representation': 'text', 'artifact_ref': 'art_1', 'prior_delivery_refs': []}
 
 
 def own_files():
@@ -35,17 +34,25 @@ def own_files():
 def assignment():
     task = {'version': 'literature_local_task_v1', 'kind': 'verified_source_leads', 'evidence_axis': 'A105',
             'credit_unit': 1.0}
-    return {'version': 'search_assignment_v1', 'question_context_refs': ['ctx_1'], 'search_result_refs': ['src_1'],
+    return {'version': 'search_assignment_v1', 'question_context_refs': ['ctx_1'], 'search_query_ref': 'src_1',
             'literature_task': task, 'proposed_annotation_ref': 'hyp_1',
-            'scope': {'subject_refs': ['sub_1']}, 'received_record_refs': ['src_1', 'art_1', 'ctx_1', 'del_1']}
+            'scope': {'subject_refs': ['sub_1']}, 'received_record_refs': ['src_1', 'art_1', 'ctx_1']}
 
 
-def summary_of(requested=None, task=None):
+def summary_of():
     given = assignment()
-    search = {name: given[name] for name in ('version', 'question_context_refs', 'search_result_refs')}
-    return {'search': search, 'task': task or given['literature_task'], 'task_key': 'A105:verified_source_leads',
-            'proposed_annotation_ref': 'hyp_1', 'scope': given['scope'], 'requested': requested or {},
-            'held_record_refs': ['art_1', 'ctx_1', 'del_1', 'src_1']}
+    search = {name: given[name] for name in ('version', 'question_context_refs', 'search_query_ref')}
+    return {'search': search, 'task': given['literature_task'], 'task_key': 'A105:verified_source_leads',
+            'proposed_annotation_ref': 'hyp_1', 'scope': given['scope'],
+            'held_record_refs': ['art_1', 'ctx_1', 'src_1'], 'sheet_state_refs': []}
+
+
+class HeldSources:
+    def __init__(self, sources):
+        self.sources = sources
+
+    def get(self, ref):
+        return self.sources[ref]
 
 
 def test_the_class_inherits_only_the_episode_type_and_is_its_own_binding():
@@ -75,92 +82,25 @@ def test_no_module_of_the_folder_imports_another_episode_folder():
                                for child in CHILDREN), str(path.relative_to(FOLDER)) + ' imports ' + module
 
 
-def test_the_commission_form_admits_a_search_assignment_and_refuses_an_unknown_field():
+def test_the_commission_form_admits_a_search_assignment_with_one_query_and_refuses_an_unknown_field_and_any_other_task():
     form = EPISODE.assignment_form
     given = assignment()
     admitted = form.admit(given, 'test')
     parent_input = EPISODE.read_from_parent(admitted, {'objective': 'assess'})
-    assert parent_input['search']['search_result_refs'] == ['src_1']
+    assert parent_input['search']['search_query_ref'] == 'src_1'
     assert parent_input['task_key'] == 'A105:verified_source_leads' and 'page' not in parent_input
-    assert set(form.record_refs(admitted)) == {'src_1', 'art_1', 'ctx_1', 'del_1'}
+    assert set(form.record_refs(admitted)) == {'src_1', 'art_1', 'ctx_1'}
     with pytest.raises(FormError, match='unknown_field'):
-        form.admit({**given, 'extra': 1}, 'test')
-    refused = {**admitted, 'literature_task': {**given['literature_task'], 'evidence_axis': 'A106'}}
+        form.admit({**given, 'search_refs': ['src_1']}, 'test')
     with pytest.raises(Exception, match='representation_error'):
-        EPISODE.read_from_parent(refused, {})
+        EPISODE.read_from_parent({**admitted, 'literature_task': {**given['literature_task'], 'kind': 'source_answer'}},
+                                 {})
 
 
-def test_the_old_commission_rules_still_refuse_a_wrong_task():
-    admitted = EPISODE.assignment_form.admit(assignment(), 'test')
-    task = {'version': 'literature_local_task_v1', 'evidence_axis': 'A105', 'credit_unit': 1.0}
-    from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_assay_grading import (
-        ASSAY_TYPES)
-    experiment = 'experiment_' + 'c' * 24
-    duplicate = {**admitted, 'literature_task': {
-        **task, 'kind': 'a105_experiments',
-        'experiments': [{'experiment_ref': experiment, 'assay_type': ASSAY_TYPES[0]},
-                        {'experiment_ref': experiment, 'assay_type': ASSAY_TYPES[0]}]}}
-    with pytest.raises(Exception, match='literature_task_duplicate_experiment'):
-        EPISODE.read_from_parent(duplicate, {})
-    metrics = {**admitted, 'literature_task': {**task, 'kind': 'a105_assembly', 'experiment_refs': [experiment],
-                                               'metrics': ['overall']}}
-    with pytest.raises(Exception, match='literature_task_requested_metrics_mismatch'):
-        EPISODE.read_from_parent(metrics, {})
-    span = {'source_ref': 'source_' + 'a' * 24, 'artifact_ref': 'artifact_' + 'a' * 24, 'start': 5, 'end': 5}
-    screening = {**admitted, 'literature_task': {**task, 'kind': 'source_answer', 'answer_kind': 'screening',
-                                                 'examined': [span]}}
-    with pytest.raises(Exception, match='literature_task_screening_span_invalid'):
-        EPISODE.read_from_parent(screening, {})
-
-
-FLAGS = ('assay_grading_population', 'ratio_source_population', 'controlled_response_population', 'gel_population',
-         'completion_time_population', 'product_partition_population', 'active_site_population',
-         'parent_depletion_population', 'stoichiometric_balance_population', 'compiled_assay_population',
-         'channel_population', 'ion_discrimination_population')
-POPULATION_OFF = {'rate_population': False}
-
-
-def mid_summary(**changes):
-    value = {'assay_sheets': [], 'aggregation_sheets': [], 'proposed_annotation_ref': 'hyp_1',
-             'no_applicable_spans': [], 'screening_covered': False, 'lead_source_refs': []}
-    value.update(changes)
-    return value
-
-
-def test_the_credit_is_real_code_and_counts_the_answers():
-    credit_module = importlib.import_module(PACKAGE + '.credit')
-    assert EPISODE.credit is credit_module.credit
-    # verified_source_leads: the credit its page children returned (the pages' sheet credit) plus credit_unit for each
-    # lead its own reason units validated; a page child's lead is not counted twice.
-    summary = {'task': {'kind': 'verified_source_leads', 'credit_unit': 2.0}, 'task_key': 'A105:verified_source_leads',
-               'lead_source_refs': ['src_1', 'src_2'], 'own_lead_source_refs': ['src_2'],
-               'child_returns': [{'credit': 0.5}, {'credit': 0.25}], 'proposed_annotation_ref': 'hyp_1'}
-    assert credit_module.credit(summary, None) == 2.75
-    screening = {'task': {'kind': 'source_answer', 'answer_kind': 'screening', 'credit_unit': 3.0, 'examined': []},
-                 'proposed_annotation_ref': 'hyp_1', 'screening_covered': True}
-    assert credit_module.credit(screening, None) == 3.0
-
-
-class HeldSources:
-    def __init__(self, sources):
-        self.sources = sources
-
-    def get(self, ref):
-        return self.sources[ref]
-
-
-def test_the_sources_a_task_names_are_the_only_sources_a_page_of_the_commission_can_examine():
-    admitted = EPISODE.assignment_form.admit(assignment(), 'test')
-    task = {'version': 'literature_local_task_v1', 'evidence_axis': 'A105', 'credit_unit': 1.0, 'kind': 'source_answer'}
-    span = {'source_ref': 'source_' + 'a' * 24, 'artifact_ref': 'artifact_' + 'a' * 24, 'start': 5, 'end': 9}
-
-    def named(literature_task):
-        return EPISODE.read_from_parent({**admitted, 'literature_task': literature_task}, {})['named_source_refs']
-    assert EPISODE.read_from_parent(admitted, {})['named_source_refs'] == []     # verified_source_leads names none
-    assert named({**task, 'answer_kind': 'assessment', 'source_refs': ['source_' + 'c' * 24]}) == ['source_' + 'c' * 24]
-    assert named({**task, 'answer_kind': 'screening', 'examined': [span, span]}) == ['source_' + 'a' * 24]
-    assert named({**task, 'answer_kind': 'screening', 'examined': [span, {**span, 'source_ref': 'source_' + 'd' * 24}]}
-                 ) == ['source_' + 'a' * 24, 'source_' + 'd' * 24]
+def test_the_yield_controller_is_the_accumulation_controller():
+    parent = EPISODE.read_from_parent(EPISODE.assignment_form.admit(assignment(), 'test'), {})
+    settings = {'cost': 0.1, 'parameters': {'uncertainty_alpha': 0.1}}
+    assert type(EPISODE.yield_controller(0, settings, parent)).__name__ == 'AccumulationYieldController'
 
 
 def test_the_return_declares_the_articles_its_pages_examined_and_returns_them_when_selected():
@@ -183,49 +123,92 @@ def test_a_search_result_is_one_distinct_hit_of_a_result_list_with_a_pmcid():
     assert hits[2]['year'] == '2020' and hits[2]['journal'] == '' and hits[0]['journal'] == 'Journal of Tests'
 
 
+def test_the_listed_hits_follow_the_search_hits_each_paper_once_and_a_listed_paper_without_full_text_is_not_offered():
+    from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.search_result_assessment import (
+        ranked_hits)
+    from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_record_publications import (
+        listed_without_full_text, merge_listed)
+    search = ranked_hits([json.dumps({'resultList': {'result': [
+        {'pmcid': 'PMC1', 'pmid': '11', 'doi': '10.1/a', 'title': 'first'},
+        {'pmcid': 'PMC2', 'pmid': '22', 'title': 'second'}]}})])
+
+    def listed(pmcid, pmid, doi, title):
+        return {'pmcid': pmcid, 'pmid': pmid, 'doi': doi, 'title': title, 'journal': '', 'year': '', 'abstract': ''}
+
+    # PMC2 is listed under a different identifier set that shares its PMID; PMC9 is listed for two records; the last
+    # listed paper has no PMCID (no full text), so it cannot be opened
+    merged = merge_listed(search, [listed('PMC2', '22', None, 'second'), listed('PMC9', '99', None, 'ninth'),
+                                   listed('PMC9', '99', None, 'ninth'), listed(None, '55', '10.1/z', 'closed')])
+    assert [(hit['pmcid'], hit['provider_rank']) for hit in merged] == [('PMC1', 1), ('PMC2', 2), ('PMC9', 3)]
+    assert listed_without_full_text([listed(None, '55', '10.1/z', 'closed')]) == 1
+
+
 def test_the_page_of_a_search_result_is_filled_by_code_from_its_source_record():
-    task = importlib.import_module(PACKAGE + '.task')
+    summary_module = importlib.import_module(PACKAGE + '.messages.internal_summary')
     held = HeldSources({'src_text': {'text_ref': 'art_text', 'artifact_ref': 'art_orig'},
                         'src_orig': {'text_ref': None, 'artifact_ref': 'art_orig'}})
-    assert task.page_of(held, 'src_text') == {'source_ref': 'src_text', 'representation': 'text',
-                                              'artifact_ref': 'art_text', 'prior_delivery_refs': []}
-    assert task.page_of(held, 'src_orig') == {'source_ref': 'src_orig', 'representation': 'original',
-                                              'artifact_ref': 'art_orig', 'prior_delivery_refs': []}
-    # the model names the source and nothing else of the page
-    assert set(task.PAGE_SCHEMA['properties']) == {'source_ref'}
+    assert summary_module.page_of(held, 'src_text') == {'source_ref': 'src_text', 'representation': 'text',
+                                                        'artifact_ref': 'art_text', 'prior_delivery_refs': []}
+    assert summary_module.page_of(held, 'src_orig') == {'source_ref': 'src_orig', 'representation': 'original',
+                                                        'artifact_ref': 'art_orig', 'prior_delivery_refs': []}
 
 
-def test_the_model_is_offered_the_access_and_acquisition_tools_the_reasoning_and_the_child():
+def test_the_model_is_offered_only_the_pick_of_an_unprocessed_hit_and_no_read_search_or_reasoning_tool():
     task = importlib.import_module(PACKAGE + '.task')
-    names = task.offered(POPULATION_OFF)
-    assert names[-1] == 'reason' and 'report' not in names
-    entries = task.catalog(names, COMMIT_SCHEMA, True, POPULATION_OFF)
-    assert {entry['name'] for entry in entries} <= set(EPISODE.tools)
-    assert 'evidence_processing' in [entry for entry in entries if entry['name'] == 'reason'][0]['input_schema']['properties']
-    for leads in (False, True):
-        # over hits the model picks a hit (the tool that has code fetch it and commission the page); no page child is
-        # offered to it, and a consumed hit is not selectable
-        schema = task.selection_schema(names, COMMIT_SCHEMA, leads, POPULATION_OFF, ['PMC1', 'PMC2'], False)
-        options = schema['properties']['selection']['anyOf']
-        assert len(options) == len(names) + 1
-        pick = options[-1]['properties']
-        assert pick['kind'] == {'const': 'tool'} and pick['tool'] == {'const': task.FETCH}
-        assert pick['arguments']['properties']['hit'] == {'enum': ['PMC1', 'PMC2']}
-        assert not [option for option in options if option['properties']['kind'] == {'const': 'child'}]
-        # under a task that names its source the page child is offered on the named source alone
-        named = task.selection_schema(names, COMMIT_SCHEMA, leads, POPULATION_OFF, ['src_1'], True)
-        child = named['properties']['selection']['anyOf'][-1]
-        assert child['properties']['kind'] == {'const': 'child'}
-        assert child['properties']['arguments']['properties']['page']['properties']['source_ref'] == {
-            'enum': ['src_1']}
-        assert len(named['properties']['selection']['anyOf']) == len(names) + len(task.CHILD_SLOTS)
-        for named_mode in (False, True):
-            empty = task.selection_schema(names, COMMIT_SCHEMA, leads, POPULATION_OFF, [], named_mode)
-            assert len(empty['properties']['selection']['anyOf']) == len(names)
+    assert set(EPISODE.tools) == {task.RUN_SEARCH, task.LIST, task.ASSESS, task.FETCH}
+    schema = task.selection_schema({'input_list': ['PMC1', 'PMC2']})
+    options = schema['properties']['selection']['anyOf']
+    assert len(options) == 1
+    pick = options[0]['properties']
+    assert pick['kind'] == {'const': 'tool'} and pick['tool'] == {'const': task.FETCH}
+    # the pick names the hit and nothing else: no objective, no experiment type; a processed hit is not selectable
+    assert list(pick['arguments']['properties']) == ['hit'] and pick['arguments']['properties']['hit'] == {
+        'enum': ['PMC1', 'PMC2']}
+    assert task.hit_tools([]) == []
     assert set(task.CHILD_ARGUMENTS) == set(EPISODE.child_slots) == set(task.CHILD_SLOTS)
-    assert task.valid_slots([], True) == [] and task.valid_slots(['src_1'], False) == []
-    assert task.valid_slots(['src_1'], True) == list(task.CHILD_SLOTS)
-    assert len(task.POPULATIONS) == 35 and set(task.TOOL_NAMES.values()) == set(EPISODE.tools) - {
-        'reason', task.ASSESS, task.FETCH}
-    assert len(task.offered({'rate_population': True, **{name: True for name in FLAGS}})) == len(names) + 35
 
+
+def test_the_page_commission_is_one_paper_with_the_fixed_objective_and_the_sheet_states():
+    to_child = importlib.import_module(PACKAGE + '.messages.msg_to_child')
+    summary = {**summary_of(), 'sheet_state_refs': ['state_1']}
+    message = to_child.msg_to_child('page', {'hit': 'PMC1', 'page': PAGE}, summary)
+    assert message.objective == 'evidence_location_unknown'
+    assert set(message.selection) == {'sheet_state_refs', 'literature_source_lead_dispositions'}
+    assert message.assignment['source_ref'] == 'src_1' and message.assignment['artifact_ref'] == 'art_1'
+    assert message.assignment['sheet_state_refs'] == ['state_1']
+    assert 'search_query_ref' not in message.assignment
+
+
+def sheet_records(states):
+    """A custody reader over sheet states ``{ref: (assertion_ref, [(log_ratio, weight), ...])}``, as the page persists them
+    (the fields the measure reads: the row's assertion_ref and each member result's log_ratio and weight)."""
+    held = {ref: json.dumps({'row': {'assertion_ref': assertion, 'row_ref': row_ref, 'support': support,
+                                     'opposition': opposition}})
+            for ref, (assertion, row_ref, support, opposition) in states.items()}
+    return types.SimpleNamespace(get_artifact=lambda ref: held[ref])
+
+
+def test_the_credit_is_the_evidence_the_held_sheet_adds_over_the_given_sheet_additive_and_weighed_by_distance_and_only_the_page_can_raise_it():
+    credit_module = importlib.import_module(PACKAGE + '.credit')
+    assert EPISODE.credit is credit_module.credit
+    # state ref -> (assertion, row_ref, support, opposition); a row's support and opposition already carry the distance weight
+    records = sheet_records({'given': ('a1', 'r1', 1.0, 0.0), 'more': ('a1', 'r1', 1.5, 0.25),   # 'more' is a later state of r1
+                             'second': ('a1', 'r2', 0.5, 0.25), 'other': ('a2', 'r9', 9.0, 1.0)})
+
+    def held(refs, given):
+        return {'sheet_state_refs': refs, 'given_sheet_state_refs': given, 'proposed_annotation_ref': 'a1',
+                'child_returns': [{'credit': 7.0}]}
+    assert credit_module.credit(held([], []), records) == 0.0                  # no sheet: nothing; a child's credit is not added
+    assert credit_module.credit(held(['given'], []), records) == 1.0           # r1: 1.0 + 0.0
+    assert credit_module.credit(held(['given', 'second'], []), records) == 1.75   # two rows add: 1.0 + (0.5 + 0.25)
+    assert credit_module.credit(held(['given', 'more'], []), records) == 1.75     # the later state of r1 stands: 1.5 + 0.25, not added to 1.0
+    assert credit_module.credit(held(['more', 'given'], []), records) == 1.0      # the last state listed stands
+    assert credit_module.credit(held(['more'], ['given']), records) == 0.75       # 1.75 held minus the given 1.0
+    assert credit_module.credit(held(['given', 'second'], ['given']), records) == 0.75   # only the new row adds
+    assert credit_module.credit(held(['given', 'other'], ['given']), records) == 0.0      # another annotation adds nothing
+    offered = types.SimpleNamespace(settings={})
+    run_search_summary = {'pending_search': 'src_1', 'pending_listing': None}
+    assert credit_module.ceiling(run_search_summary, None, 'run_search', None, offered) == 0.0
+    page_summary = {'pending_search': None, 'pending_listing': None, 'search_assessment_ref': 'a', 'search_result_candidates': ['x'],
+                    'pending_page': {'hit': 'PMC1'}, 'input_list': []}
+    assert credit_module.ceiling(page_summary, None, 'page', None, offered) is UNBOUNDED

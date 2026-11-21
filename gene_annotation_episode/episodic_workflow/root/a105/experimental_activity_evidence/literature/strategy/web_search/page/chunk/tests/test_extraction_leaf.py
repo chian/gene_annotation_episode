@@ -30,6 +30,9 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.experimental_activity_evidence.action_transport import (
     generation_schema)
 
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_row_contract import (
+    EXPERIMENT_TYPE_LINES, experiment_types_of_class)
+
 from .leaf_world import EPISODE, PACKAGE, PATH, held_world, linked, resumed
 
 FOLDER = Path(__file__).resolve().parents[1]
@@ -318,32 +321,6 @@ def importlib_path():
     return importlib.import_module(PACKAGE + '.goal').BINDING_PATH
 
 
-def run_to_the_end(world, chunk, answer, run_id):
-    run = linked(world, run_id)
-    asyncio.run(run.next_decision())
-    summary = EPISODE._summary(EPISODE(), run.view)
-    assert summary['chunk'] == chunk
-    call = EPISODE.action(answer, summary, run.view.records, None)
-    assert isinstance(call, ToolCall) and call.name == 'extract'
-    unit = asyncio.run(run.run_unit(call))
-    return run, unit
-
-
-def test_the_commission_accepts_alphascreen_as_an_experiment_type_and_the_earlier_ones_still():
-    from ..messages.read_from_parent import EXPERIMENT_TYPES
-    assert EXPERIMENT_TYPES[:11] == ('spr', 'itc', 'bli', 'gci', 'fp', 'fret', 'mst', 'trp_quenching', 'fcs', 'elisa', 'alphascreen')     # the earlier ones are unchanged; radioligand follows
-
-
-def test_the_commission_accepts_radioligand_as_an_experiment_type():
-    from ..messages.read_from_parent import EXPERIMENT_TYPES
-    assert EXPERIMENT_TYPES[:12] == ('spr', 'itc', 'bli', 'gci', 'fp', 'fret', 'mst', 'trp_quenching', 'fcs', 'elisa', 'alphascreen', 'radioligand')     # the earlier ones are unchanged; spa follows
-
-
-def test_the_commission_accepts_spa_as_an_experiment_type_and_the_earlier_ones_still():
-    from ..messages.read_from_parent import EXPERIMENT_TYPES
-    assert EXPERIMENT_TYPES[:13] == ('spr', 'itc', 'bli', 'gci', 'fp', 'fret', 'mst', 'trp_quenching', 'fcs', 'elisa', 'alphascreen', 'radioligand', 'spa')     # the earlier ones are unchanged; pulldown follows
-
-
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.tests import spectro_direct_passages
 
 
@@ -357,8 +334,77 @@ def spectro_direct_real_world(tmp_path):
     return held_world(tmp_path, text, 16, len(spectro_direct_passages.REAL.encode()), experiment_type='spectro_direct')
 
 
-def test_the_commission_accepts_spectro_direct_the_first_activity_rate_type_and_the_earlier_ones_still():
-    from ..messages.read_from_parent import EXPERIMENT_TYPES
-    assert EXPERIMENT_TYPES[:13] == ('spr', 'itc', 'bli', 'gci', 'fp', 'fret', 'mst', 'trp_quenching', 'fcs', 'elisa', 'alphascreen', 'radioligand', 'spa')     # the earlier ones are unchanged
-    assert EXPERIMENT_TYPES[-1] == 'spectro_direct' and len(EXPERIMENT_TYPES) == 26
+def decided(world):
+    """The run linked on ``world``, its first decision (no model call) and the summary the decision was made from."""
+    run = linked(world, 'a105-extract-offline')
+    request = asyncio.run(run.next_decision())
+    return run, request, EPISODE._summary(EPISODE(), run.view)
+
+
+def test_the_commission_hands_the_sheet_class_and_no_experiment_type(tmp_path):
+    from ..messages.read_from_parent import ASSIGNMENT_FORM, read_from_parent
+    assert 'sheet_class' in ASSIGNMENT_FORM.fields and 'experiment_type' not in ASSIGNMENT_FORM.fields
+    assert ASSIGNMENT_FORM.fields['sheet_class'].options == ('ligand_binding', 'activity_rate')
+    world = synthetic_world(tmp_path)
+    assignment = world['input']['assignment']
+    assert assignment['sheet_class'] == 'ligand_binding' and 'experiment_type' not in assignment
+    assert 'experiment_type' not in read_from_parent(assignment, {})
+    world['store'].close()
+
+
+def test_the_leaf_is_asked_to_name_the_method_from_the_types_of_the_class_each_with_its_line(tmp_path):
+    world = synthetic_world(tmp_path)
+    run, request, summary = decided(world)
+    types = experiment_types_of_class('ligand_binding')
+    assert request.context['sheet_class'] == 'ligand_binding' and 'experiment_type' not in request.context
+    assert request.context['methods'] == {name: EXPERIMENT_TYPE_LINES[name] for name in types}
+    assert request.context['chunk'] == SYNTHETIC and 'spectro_direct' not in request.context['methods']
+    assert request.output_schema['properties']['method']['enum'] == [*types, 'none']
+    assert summary['input_list'] == [[16, 16 + len(SYNTHETIC.encode())]]
+    world['store'].close()
+
+
+def test_a_class_with_one_type_offers_that_type_and_none(tmp_path):
+    world = spectro_direct_synthetic_world(tmp_path)
+    run, request, summary = decided(world)
+    assert world['input']['assignment']['sheet_class'] == 'activity_rate'
+    assert list(request.context['methods']) == ['spectro_direct']
+    assert request.output_schema['properties']['method']['enum'] == ['spectro_direct', 'none']
+    world['store'].close()
+
+
+def test_the_naming_becomes_the_extract_call_with_the_type_named_or_none(tmp_path):
+    world = synthetic_world(tmp_path)
+    run, request, summary = decided(world)
+    for method, expected in (('spr', 'spr'), ('itc', 'itc'), ('none', None)):
+        call = EPISODE.action({'method': method}, summary, run.view.records, None)
+        assert isinstance(call, ToolCall) and call.name == 'extract'
+        assert call.arguments['experiment_type'] == expected and call.arguments['sheet_class'] == 'ligand_binding'
+        assert call.arguments['chunk'] == SYNTHETIC and call.arguments['assertion_ref'] == world['proposed']
+    world['store'].close()
+
+
+def test_a_method_that_is_not_a_type_of_the_class_is_rejected_before_any_unit(tmp_path):
+    world = synthetic_world(tmp_path)
+    run, request, summary = decided(world)
+    for method in ('spectro_direct', 'kinase_assay', ''):
+        with pytest.raises(Rejected) as refused:
+            EPISODE.action({'method': method}, summary, run.view.records, None)
+        assert refused.value.feedback['category'] == 'method_not_listed'
+    world['store'].close()
+
+
+def test_a_chunk_named_none_is_done_without_a_record_and_the_list_bound_ends_the_episode(tmp_path):
+    world = synthetic_world(tmp_path)
+    run, request, summary = decided(world)
+    call = EPISODE.action({'method': 'none'}, summary, run.view.records, None)
+    unit = asyncio.run(run.run_unit(call))
+    after = EPISODE._summary(EPISODE(), run.view)
+    assert after['input_list'] == [] and after['named_methods'] == [None]
+    assert after['record_refs'] == [] and after['held_record_refs'] == [] and after['counts']['stated'] == 0
+    result = asyncio.run(run.run())['result'].as_record()
+    assert result['credit'] == 0.0 and result['finding'] == {'stated': 0, 'newly_stated': 0, 'asked': 0}
+    assert run.journal.run_state('a105-extract-offline')[1]['ended_by'] == 'yield_stop'
+    assert run.journal.model_calls('a105-extract-offline', tuple(tuple(step) for step in run.journal.episodes('a105-extract-offline')[0]['path'])) == []
+    world['store'].close()
 

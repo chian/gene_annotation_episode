@@ -35,7 +35,9 @@ def assignment():
     return {'selection': {'version': 'experimental_activity_evidence_selection_v1',
                           'evidence_axis': {**OPTION, 'slot': 'evidence_axis', 'option_id': 'A105'},
                           'thought_pattern': {**OPTION, 'slot': 'thought_pattern', 'option_id': 'P1'},
-                          'child_tool_info': [{'name': 'source.read', 'resources': 'api'}]},
+                          'child_tool_info': [{'name': 'state.query', 'resources': 'api'},
+                                              {'name': 'source.read', 'resources': 'api'},
+                                              {'name': 'public.literature.search', 'resources': 'api'}]},
             'proposed_annotation_ref': 'hyp_1', 'evidence_refs': ['sub_1', 'hyp_1'], 'constraints': {},
             'context': {'evidence_task': {'version': 'evidence_axis_task_v1', 'kind': 'whole_axis_findings',
                                           'evidence_axis': 'A105', 'credit_unit': 1.0}},
@@ -101,10 +103,38 @@ def test_the_credit_is_real_code_over_the_finding_progress_projection():
     assert credit_module.credit_binding(1.0)['policy']['finding_unit'] == 1.0
 
 
-def test_the_model_is_offered_the_selected_tools_the_lookups_the_revision_and_the_reasoning():
+def test_the_credit_is_the_evidence_the_held_sheet_adds_over_the_given_sheet_additive_and_weighed_by_distance_and_no_tool_raises_it():
+    import json
+    import types
+    credit_module = importlib.import_module(PACKAGE + '.credit')
+    # state ref -> (assertion, row_ref, support, opposition); a row's support and opposition already carry the distance weight
+    states = {'given': ('a1', 'r1', 1.0, 0.0), 'more': ('a1', 'r1', 1.5, 0.25),   # 'more' is a later state of row r1
+              'second': ('a1', 'r2', 0.5, 0.25), 'other': ('a2', 'r9', 9.0, 1.0)}
+    held_states = {ref: json.dumps({'row': {'assertion_ref': assertion, 'row_ref': row_ref, 'support': support,
+                                            'opposition': opposition}})
+                   for ref, (assertion, row_ref, support, opposition) in states.items()}
+    records = types.SimpleNamespace(get_artifact=lambda ref: held_states[ref])
+
+    def held(refs, given):
+        return {'sheet_state_refs': refs, 'given_sheet_state_refs': given, 'proposed_annotation_ref': 'a1',
+                'child_returns': [{'credit': 7.0}]}
+    assert credit_module.credit(held([], []), records) == 0.0                  # no sheet: nothing; a child's credit is not added
+    assert credit_module.credit(held(['given'], []), records) == 1.0           # r1: 1.0 + 0.0
+    assert credit_module.credit(held(['given', 'second'], []), records) == 1.75   # two rows add: 1.0 + (0.5 + 0.25)
+    assert credit_module.credit(held(['given', 'more'], []), records) == 1.75     # the later state of r1 stands: 1.5 + 0.25, not added to 1.0
+    assert credit_module.credit(held(['more', 'given'], []), records) == 1.0      # the last state listed stands
+    assert credit_module.credit(held(['more'], ['given']), records) == 0.75       # 1.75 held minus the given 1.0
+    assert credit_module.credit(held(['given', 'second'], ['given']), records) == 0.75   # only the new row adds
+    assert credit_module.credit(held(['given', 'other'], ['given']), records) == 0.0      # another annotation adds nothing
+    assert credit_module.ceiling(held([], []), records, 'reason', None, None) == 0.0
+
+
+def test_the_model_is_offered_the_record_reading_the_lookups_the_revision_and_the_reasoning_whatever_is_selected():
     task = importlib.import_module(PACKAGE + '.task')
+    # The selection holds a source read and a provider search; the head offers neither (it runs no search and reads no
+    # paper), only the reading of held records of what was selected.
     names = task.offered(summary())
-    assert names == ['source.read', 'process.search', 'process.entry', 'process.sources', 'process.revise', 'reason']
+    assert names == ['state.query', 'process.search', 'process.entry', 'process.sources', 'process.revise', 'reason']
     schema = {'type': 'object', 'additionalProperties': False, 'required': ['terms'],
               'properties': {'terms': {'type': 'array'}}}
     entries = task.catalog(names, schema)

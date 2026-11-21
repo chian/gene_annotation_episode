@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 
 from episode_runtime import ChildCall, EpisodeBinding
-from method_loop import FormError
+from method_loop import UNBOUNDED, FormError
 
 PACKAGE = __name__.rsplit('.', 2)[0]
 FOLDER = Path(__file__).resolve().parents[1]
@@ -20,17 +20,15 @@ OWN_FILES = {'__init__.py', 'goal.py', 'task.py', 'credit.py', 'yield_estimator.
              'tests/__init__.py', 'tests/test_binding.py'}
 CHILDREN = ('source_relevance_assessment',)
 ROOT = 'gene_annotation_episode.episodic_workflow.root'
-NONE = {'literature_populations': [], 'literature_evidence_origins': {}}
 EMPTY = {'intervention_assessments': [], 'a106_subscores': []}
-COMMIT_SCHEMA = {'type': 'object', 'additionalProperties': False, 'required': ['terms'],
-                 'properties': {'terms': {'type': 'array'}}}
 SRC = 'source_' + 'a' * 24
-ART = 'artifact_' + 'c' * 24
+QUERY = 'source_' + 'b' * 24
+OTHER = 'source_' + 'c' * 24
 CTX = 'record_' + 'd' * 24
 TASK = {'kind': 'verified_source_leads', 'evidence_axis': 'A106', 'credit_unit': 1.0}
-ASSIGNMENT = {'version': 'strategy_assignment_v1', 'question_context_refs': ['ctx_1'], 'prior_search_refs': [SRC],
+ASSIGNMENT = {'version': 'strategy_assignment_v1', 'question_context_refs': [CTX],
               'literature_task': TASK, 'proposed_annotation_ref': 'hyp_1', 'scope': {'subject_refs': ['sub_1']},
-              'received_record_refs': [SRC, 'hyp_1']}
+              'received_record_refs': [CTX, 'hyp_1']}
 
 
 def child_module(name, module):
@@ -68,138 +66,119 @@ def test_no_module_of_the_episode_imports_another_episode_folder():
                 assert not module.startswith(ROOT), str(relative) + ' imports ' + module
 
 
-def test_the_commission_form_admits_a_strategy_assignment_and_refuses_an_unknown_field():
+def test_the_commission_form_admits_a_strategy_assignment_and_refuses_an_unknown_field_or_another_task():
     form = EPISODE.assignment_form
     admitted = form.admit(ASSIGNMENT, 'test')
     parent_input = EPISODE.read_from_parent(admitted, {'objective': 'strategy'})
-    assert parent_input['strategy'] == {'version': 'strategy_assignment_v1', 'question_context_refs': ['ctx_1'],
-                                        'prior_search_refs': [SRC]}
+    assert parent_input['strategy'] == {'version': 'strategy_assignment_v1', 'question_context_refs': [CTX]}
     assert parent_input['task_key'] == 'A106:verified_source_leads'
-    assert set(form.record_refs(admitted)) == {'ctx_1', SRC, 'hyp_1'}
+    assert set(form.record_refs(admitted)) == {CTX, 'hyp_1'}
     with pytest.raises(FormError, match='unknown_field'):
         form.admit({**ASSIGNMENT, 'extra': 1}, 'test')
+    with pytest.raises(FormError, match='unknown_field'):      # no prior search is handed to a strategy
+        form.admit({**ASSIGNMENT, 'prior_search_refs': [SRC]}, 'test')
     with pytest.raises(ValueError, match='literature_finite_task_credit_unit_required'):
         EPISODE.read_from_parent({**admitted, 'literature_task': {**TASK, 'credit_unit': 0}}, {})
     with pytest.raises(ValueError, match='literature_original_task_invalid'):
         EPISODE.read_from_parent({**admitted, 'literature_task': {**TASK, 'evidence_axis': 'A105'}}, {})
+    with pytest.raises(ValueError, match='literature_original_task_invalid'):
+        EPISODE.read_from_parent({**admitted, 'literature_task': {**TASK, 'kind': 'source_answer'}}, {})
 
 
-def test_the_controller_is_built_from_the_parent_input_alone():
-    parent_input = EPISODE.read_from_parent(ASSIGNMENT, {})
-    settings = {'cost': 0.1, 'parameters': {'uncertainty_alpha': 0.1}}
-    controller = EPISODE.yield_controller(0, settings, parent_input)
+def test_the_controller_is_the_accumulation_controller_built_from_the_parent_input_alone():
+    controller = EPISODE.yield_controller(0, {}, EPISODE.read_from_parent(ASSIGNMENT, {}))
     assert type(controller).__name__ == 'AccumulationYieldController'
-    answer = {**ASSIGNMENT, 'literature_task': {'kind': 'source_answer', 'answer_kind': 'screening',
-                                                'evidence_axis': 'A106', 'credit_unit': 2.0,
-                                                'examined': [{'source_ref': SRC, 'artifact_ref': 'art_1',
-                                                              'start': 0, 'end': 5}]}}
-    controller = EPISODE.yield_controller(0, settings, EPISODE.read_from_parent(answer, {}))
-    assert type(controller).__name__ == 'CompletionYieldController'
 
 
 def test_the_return_declares_credit_and_finding_as_required_and_returns_the_systems_credit():
     form = EPISODE.return_form
     assert form.fields['credit'].required and form.fields['finding'].required
     assert not form.fields['literature_source_lead_dispositions'].required
-    assert not form.fields['literature_screening_answers'].required
-    summary = {'a106_findings': EMPTY, 'no_applicable_evidence': [], 'screening_answers': [],
-               'source_lead_dispositions': [{'source_ref': SRC, 'disposition': 'relevant'}]}
+    assert 'literature_screening_answers' not in form.fields
+    summary = {'a106_findings': EMPTY, 'source_lead_dispositions': [{'source_ref': SRC, 'disposition': 'relevant'}]}
     result = EPISODE.final_to_parent(summary, {'ended_by': 'yield_stop', 'units_consumed': 0, 'credit': 2.5}, ())
     assert result == {'credit': 2.5, 'finding': EMPTY}
     form.admit(result, 'test')
-    both = ('literature_screening_answers', 'literature_source_lead_dispositions')
-    result = EPISODE.final_to_parent(summary, {'ended_by': 'yield_stop', 'units_consumed': 1, 'credit': 1.0}, both)
+    selection = ('literature_source_lead_dispositions',)
+    result = EPISODE.final_to_parent(summary, {'ended_by': 'yield_stop', 'units_consumed': 1, 'credit': 1.0}, selection)
     assert result['literature_source_lead_dispositions'] == {'relevant_lead_count': 1, 'lead_source_refs': [SRC]}
-    assert result['literature_screening_answers'] == {'examined_span_count': 0, 'commissioned_spans_covered': False}
-    form.select(both).admit(result, 'return')
+    form.select(selection).admit(result, 'return')
 
 
-def test_the_credit_is_real_code_and_counts_nothing_without_a_validated_lead():
+def test_the_credit_counts_the_relevant_leads_and_the_ceiling_is_unbounded_for_the_search_only():
     credit_module = importlib.import_module(PACKAGE + '.credit')
-    assert EPISODE.credit is credit_module.credit
-    assert 'NotImplementedError' not in (FOLDER / 'credit.py').read_text()
+    assert EPISODE.credit is credit_module.credit and EPISODE.ceiling is credit_module.ceiling
     summary = {'task': {'kind': 'verified_source_leads', 'credit_unit': 2.0}, 'task_key': 'A106:verified_source_leads',
                'source_leads': [], 'proposed_annotation_ref': 'hyp_1'}
     assert credit_module.credit(summary, None) == 0
+    assert credit_module.ceiling(summary, None, 'literature_search', None, None) is UNBOUNDED
+    for name in ('state_query', 'write_search'):
+        assert credit_module.ceiling(summary, None, name, None, None) == 0.0
+    with pytest.raises(ValueError, match='ceiling_unknown_action_type'):
+        credit_module.ceiling(summary, None, 'reason', None, None)
 
 
-def test_the_model_is_offered_the_access_and_acquisition_tools_the_reasoning_the_report_and_the_search_assessment():
+def test_the_model_writes_one_query_reads_held_records_and_commissions_the_search_with_a_written_query_only():
     task = importlib.import_module(PACKAGE + '.task')
-    names = task.offered(NONE, None)
-    assert 'execution_estimate' not in names and names[-2:] == ['literature_a106_score_judgment', 'reason'] and len(names) == 39
-    assert set(names) <= set(EPISODE.tools) and set(task.ACQUISITION_NAMES) <= set(names)
-    assert len(task.ACQUISITION_NAMES) == 22 and 'public_literature_search' in names
-    for leads in (False, True):
-        schema = task.selection_schema(names, COMMIT_SCHEMA, leads, NONE, [SRC])
-        assert len(schema['properties']['selection']['anyOf']) == len(names) + 1
-        task.generation_schema(schema)
-        # An empty input list offers no commission at all.
-        assert len(task.selection_schema(names, COMMIT_SCHEMA, leads, NONE, [])['properties']['selection']['anyOf']) \
-            == len(names)
-    assert [entry['slot'] for entry in task.commissions([SRC])] == list(EPISODE.child_slots)
+    assert set(EPISODE.tools) == {'state_query', 'write_search'} and task.offered() == list(EPISODE.tools)
+    assert [entry['name'] for entry in task.catalog()] == ['state_query', 'write_search']
+    # The search child is offered only while a written query not yet handed out remains.
     assert task.commissions([]) == []
-    shown = {entry['name']: entry for entry in task.catalog(names, COMMIT_SCHEMA, True, NONE)}
-    assert 'source_lead' in shown['reason']['input_schema']['properties']
-    assert 'source_lead' not in task.reason_schema(COMMIT_SCHEMA, False)['properties']
-    assert shown['public_ncbi_search']['input_schema']['properties']['database'] == {'enum': ['pubmed']}
-    assert shown['public_ncbi_entrez']['description'] and shown['public_ncbi_geo']['description']
-    assert 'execution_estimate' in task.offered({**NONE, 'tool_registry': {'native_statistics': object()}}, None)
-    assert task.empty_commit({'terms': []}, COMMIT_SCHEMA) and not task.empty_commit({'terms': [{}]}, COMMIT_SCHEMA)
+    assert [entry['slot'] for entry in task.commissions([QUERY])] == list(EPISODE.child_slots)
+    assert len(task.selection_schema([])['properties']['selection']['anyOf']) == 2
+    assert len(task.selection_schema([QUERY])['properties']['selection']['anyOf']) == 3
+    task.generation_schema(task.selection_schema([QUERY]))
+    assert task.offered_actions({'input_list': []}, None) == ['state_query', 'write_search']
+    assert task.offered_actions({'input_list': [QUERY]}, None) == ['state_query', 'write_search', 'literature_search']
+    schema = task.commission_arguments([QUERY])
+    assert schema['properties'] == {'search_query_ref': {'enum': [QUERY]}}      # one query, by reference
+    task.validate_selection({'selection': {'kind': 'child', 'slot': 'literature_search',
+                                           'arguments': {'search_query_ref': QUERY}}},
+                            task.selection_schema([QUERY]))
+    with pytest.raises(Exception):      # a query already handed out is no longer offered
+        task.validate_selection({'selection': {'kind': 'child', 'slot': 'literature_search',
+                                               'arguments': {'search_query_ref': QUERY}}},
+                                task.selection_schema([OTHER]))
+    with pytest.raises(Exception):      # one query, no paper
+        task.validate_selection({'selection': {'kind': 'child', 'slot': 'literature_search',
+                                               'arguments': {'search_query_ref': QUERY, 'search_result_refs': [SRC]}}},
+                                task.selection_schema([QUERY]))
+    written = task.validate_selection(
+        {'selection': {'kind': 'tool', 'tool': 'write_search',
+                       'arguments': {'query': 'rpoB knockout rescue', 'size': 25}}}, task.selection_schema([]))
+    assert written['tool'] == 'write_search'
 
 
 def test_the_commission_is_admitted_by_the_form_of_the_search_child_and_selects_what_the_task_counts():
-    task = importlib.import_module(PACKAGE + '.task')
-    child_task = {'version': 'literature_local_task_v1', 'evidence_axis': 'A106', 'kind': 'verified_source_leads'}
-    arguments = {'question_context_refs': [CTX],
-                 'search_result_refs': [SRC], 'literature_task': child_task}
-    task.validate_selection({'selection': {'kind': 'child', 'slot': 'literature_search', 'arguments': arguments}},
-                            task.selection_schema(task.offered(NONE, None), COMMIT_SCHEMA, True, NONE, [SRC]))
-    # A consumed source (one not in the input list) is refused by the offered schema.
-    other = 'source_' + 'b' * 24
-    with pytest.raises(Exception):
-        task.validate_selection({'selection': {'kind': 'child', 'slot': 'literature_search', 'arguments': arguments}},
-                                task.selection_schema(task.offered(NONE, None), COMMIT_SCHEMA, True, NONE, [other]))
     parent_input = EPISODE.read_from_parent(ASSIGNMENT, {})
-    summary = {'task': parent_input['task'], 'proposed_annotation_ref': parent_input['proposed_annotation_ref'],
-               'scope': parent_input['scope'], 'source_custody': {SRC: [SRC, ART]}}
-    message = EPISODE.msg_to_child('literature_search', ChildCall('literature_search', arguments).arguments, summary)
-    child_form = child_module('source_relevance_assessment', 'messages.read_from_parent').ASSIGNMENT_FORM
-    admitted = child_form.admit(message.assignment, 'commission')
-    assert set(child_form.record_refs(admitted)) == {CTX, SRC, ART, 'hyp_1'}
-    assert admitted['literature_task']['credit_unit'] == 1.0
-    child_input = child_module('source_relevance_assessment', 'messages.read_from_parent').read_from_parent(
-        admitted, {})
-    assert child_input['search']['search_result_refs'] == [SRC]
+    summary = {'task': parent_input['task'], 'strategy': parent_input['strategy'],
+               'proposed_annotation_ref': parent_input['proposed_annotation_ref'], 'scope': parent_input['scope']}
+    arguments = ChildCall('literature_search', {'search_query_ref': QUERY}).arguments
+    message = EPISODE.msg_to_child('literature_search', arguments, summary)
+    read = child_module('source_relevance_assessment', 'messages.read_from_parent')
+    admitted = read.ASSIGNMENT_FORM.admit(message.assignment, 'commission')
+    assert set(read.ASSIGNMENT_FORM.record_refs(admitted)) == {CTX, QUERY, 'hyp_1'}
+    assert admitted['search_query_ref'] == QUERY and admitted['literature_task']['credit_unit'] == 1.0
+    assert read.read_from_parent(admitted, {})['search']['search_query_ref'] == QUERY
     child_return = child_module('source_relevance_assessment', 'messages.final_to_parent').RETURN_FORM
     selected = child_return.select(message.selection)
     assert set(message.selection) == {'literature_source_lead_dispositions'}
     assert 'credit' in selected.fields and 'finding' in selected.fields
-    with pytest.raises(KeyError):      # a source this episode does not hold is a wrong commission: it fails
-        EPISODE.msg_to_child('literature_search', arguments, {**summary, 'source_custody': {}})
     returned = {'credit': 1.0, 'finding': EMPTY,
                 'literature_source_lead_dispositions': {'relevant_lead_count': 1, 'lead_source_refs': [SRC]}}
     selected.admit(returned, 'return')
-    read = EPISODE.read_from_child('literature_search', returned, summary, None)
-    assert read == {'slot': 'literature_search', 'credit': 1.0, 'finding': EMPTY, 'lead_source_refs': [SRC]}
+    assert EPISODE.read_from_child('literature_search', returned, summary, None) == {
+        'slot': 'literature_search', 'credit': 1.0, 'finding': EMPTY, 'lead_source_refs': [SRC]}
+    assert EPISODE.read_from_child('literature_search', {'credit': 0.0, 'finding': EMPTY}, summary, None) == {
+        'slot': 'literature_search', 'credit': 0.0, 'finding': EMPTY}
 
 
-def test_the_input_list_is_the_held_sources_not_yet_handed_to_an_assessment():
+def test_the_input_list_is_the_written_queries_not_yet_handed_to_a_search():
     summary_module = importlib.import_module(PACKAGE + '.messages.internal_summary')
-    children = [{'kind': 'child', 'slot': 'literature_search', 'arguments': {'search_result_refs': [SRC]}},
-                {'kind': 'child', 'slot': 'literature_search', 'arguments': {'search_result_refs': [SRC, 'x']}}]
-    assert summary_module.consumed_sources(children) == [SRC, 'x']
-    assert summary_module.consumed_sources([]) == []
-
-
-def test_read_from_child_reads_only_the_answers_the_commission_selected():
-    read = importlib.import_module(PACKAGE + '.messages.read_from_child').read_from_child
-    leads = {'relevant_lead_count': 1, 'lead_source_refs': [SRC]}
-    got = read('literature_search', {'credit': 1.0, 'finding': EMPTY, 'literature_source_lead_dispositions': leads},
-               {'task': TASK}, None)
-    assert got == {'slot': 'literature_search', 'credit': 1.0, 'finding': EMPTY, 'lead_source_refs': [SRC]}
-    got = read('literature_search', {'credit': 1.0, 'finding': EMPTY}, {'task': TASK}, None)
-    assert got == {'slot': 'literature_search', 'credit': 1.0, 'finding': EMPTY}
-    screening = {'examined_span_count': 2, 'commissioned_spans_covered': True}
-    got = read('literature_search', {'credit': 1.0, 'finding': EMPTY, 'literature_screening_answers': screening},
-               {'task': TASK}, None)
-    assert got['screening'] == screening and 'lead_source_refs' not in got
+    written = [{'kind': 'tool', 'tool': 'write_search', 'outcome': {'status': 'completed', 'result': {'search_ref': ref}}}
+               for ref in (QUERY, OTHER)]
+    failed = {'kind': 'tool', 'tool': 'write_search', 'outcome': {'status': 'failed'}}
+    assert summary_module.written_searches([*written, failed]) == [QUERY, OTHER]
+    children = [{'kind': 'child', 'slot': 'literature_search', 'arguments': {'search_query_ref': QUERY}}]
+    assert summary_module.consumed_searches(children) == [QUERY]
+    assert summary_module.consumed_searches([]) == []

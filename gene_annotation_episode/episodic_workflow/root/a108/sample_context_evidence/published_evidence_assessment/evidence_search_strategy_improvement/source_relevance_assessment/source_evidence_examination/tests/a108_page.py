@@ -11,9 +11,9 @@ PATH = EPISODE.binding_path
 CONTINUATION = {path: SETTINGS for path in (PATH, *EPISODE.child_slots.values())}
 
 
-def assessment_task(world):
-    return {'version': 'literature_local_task_v1', 'evidence_axis': 'A108', 'kind': 'source_answer',
-            'answer_kind': 'assessment', 'credit_unit': 1.0, 'source_refs': [world['paper']['id']]}
+def leads_task():
+    return {'version': 'literature_local_task_v1', 'evidence_axis': 'A108', 'kind': 'verified_source_leads',
+            'credit_unit': 1.0}
 
 
 def page_assignment(world, task, requested=('evidence_amount',)):

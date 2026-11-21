@@ -1,19 +1,27 @@
-"""What this episode is for: which published evidence bears on the commissioned A108 organism-context question,
-carried from the old ``goal.py`` (``LiteratureGoal.instructions``) of ``literature`` at 97308b94c. The old text joined
-the role instruction (old ``source_contracts._ROLE_INSTRUCTIONS['literature']``) with the A108 context task and the
-A108 reading task (the library's ``literature/prompts/literature_prompt.py``; the old shared-library source was
-``literature_a108_prompt``)."""
-from gene_annotation_episode.episodic_workflow.episode_support.literature.prompts.literature_prompt import (
-    A108_CONTEXT_TASK, A108_READING_TASK)
+"""What this episode is for: which published evidence bears on the commissioned A108 organism-context question. It is
+the top of the literature chain and does what the top of nano-graphrag's chain does: it proposes the next search
+strategy and hands it down. It runs no search, fetches no paper and reads no paper text; the search below it obtains a
+paper when its page is built, and what the page and its leaves find is graded there automatically. Nothing in this
+episode is assessed by a reasoning commit.
+
+Carried from the old ``goal.py`` (``LiteratureGoal.instructions``) of ``literature`` at 97308b94c, with the ordinary
+searches, source reads, reasoning commit and the three task kinds other than the verified source leads removed."""
 
 BINDING_PATH = 'sample_context_evidence/published_evidence_assessment'
-ROLE_INSTRUCTION = ('Investigate which published evidence bears on the assigned scientific question. You can pursue '
-                    'ordinary searches and source reads directly, or assign a strategy investigation when that '
-                    'narrower question warrants iteration.')
-GOAL = '\n\n'.join((ROLE_INSTRUCTION, A108_CONTEXT_TASK, A108_READING_TASK))
-UNIT = ('one model-selected tool call (a catalog lookup, an acquisition or access tool, a reasoning commit coupled '
-        'with its contextual grading sheets, a sheet population, or the report of the interpretation), or one child '
-        'commission (the strategy investigation of which search approach is productive for the question)')
-RESULT = ('the controlled features code reads from the A108 subscoring and main evidence sheets saved (own and the '
-          "children's), with the sheet and graded assessment references, and the commissioned task's answers as "
-          'counts and references')
+ROLE_INSTRUCTION = (
+    "Investigate which published evidence bears on whether the proposed protein function fits the actual organism's "
+    "biology and sample conditions: physiology (what the organism is observed to do), environment (habitat, "
+    "temperature, pH, oxygen, growth conditions), availability (the relevant substrates and cofactors) and "
+    "localization (whether the protein and the required molecules can occur in compatible cellular locations). The "
+    "supplied organism, strain and sample context is a job operand, not evidence; the question context records name "
+    "it. You do not search for papers, fetch them or read them. Commission the search strategy investigation with "
+    "its objective; it proposes the searches, a search level runs each one and picks a paper, a page level examines "
+    "that paper, and what is found in it is graded automatically where it is found. Choose the next objective from "
+    "what the strategy returned (its credit and the features of its findings). The configured controller alone "
+    "decides when this episode stops.")
+GOAL = ROLE_INSTRUCTION
+UNIT = ('one model-selected read of the records this episode holds, or one child commission (the strategy '
+        'investigation of which searches are productive for the question)')
+RESULT = ('the controlled features code reads from the A108 subscoring and main evidence sheets saved (the '
+          "children's), with the sheet and graded assessment references, and the verified source leads as counts "
+          'and references')

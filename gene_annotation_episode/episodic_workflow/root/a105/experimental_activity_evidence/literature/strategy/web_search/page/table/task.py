@@ -1,17 +1,21 @@
-"""The task: the leaf extraction of ONE byte window of a source that holds a table, for ONE experiment type. The leaf
-extraction is the library's (``literature_leaf_extraction``), called with this episode's pieces: the text is called the
-table (``TEXT``) and the model is told how a table states a value (``READING``). The model is asked once per unit, with
-the table's text, to fill the answer form of the commissioned experiment type with its identity block, quote-only; code
-validates every quote (found once in the table), finds its span and holds the immutable leaf record; ``extract`` is the
-one action. The leaf grades and judges nothing: the page groups the leaf records of its chunk, table and report children
-into graders.
+"""The task: the leaf extraction of ONE table region (a byte window of a source that holds a table), for the sheet class of
+the claim. The page has not read the table, so the commission names the sheet class (``sheet_class``), not an experiment
+type. At each decision the model NAMES the method the table reports, from the experiment types of that class (each shown with
+its plain line) or ``none`` (the library's ``method_request`` and ``method_call``). The unit, ``extract``, then has the model
+fill the named type's form with its identity block, quote-only, through the unit's recorded model (the library's
+``extraction_arguments``); code validates every quote (found once in the table), finds its span and holds the immutable
+leaf record, which carries the type named. A table named ``none`` is done without a record. The leaf extraction is the
+library's (``literature_leaf_extraction``), called with this episode's pieces: the text is called the table (``TEXT``) and
+the model is told how a table states a value (``READING``). The leaf grades and judges nothing: the page groups the leaf
+records of its chunk, table and report children into graders.
 
 The selection is a byte window only. A sheet selection (an XLSX sheet's rows) has no text rendering in the A105 tools
 (``source.xlsx.*`` has no A105 implementation), so it is not offered. The experiment ref is ``kind:source:offset-end`` of
-the window. The window is the leaf's one input unit (``input_list``): it is extracted once and then consumed
-(nano-graphrag's selected table region), never offered for a re-extraction."""
+the window. The window is the leaf's one input unit (``input_list``): it is named and extracted once and then consumed
+(nano-graphrag's selected table region), never offered again. The naming and the fill are the model calls of one unit, so
+the item is one unit and the yield estimator's item count is the table regions to do. One method is named per table region."""
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_leaf_extraction import (
-    extraction_call, extraction_request, leaf_record)
+    extraction_arguments, leaf_record, method_call, method_request)
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import (
     canonical)
 
@@ -26,25 +30,28 @@ READING = (
 
 
 def decide(summary, feedback, ctx):
-    """The extraction of the table while it is unread (``input_list``); once it has been extracted the table region is
-    consumed and is never offered again: the input list is empty and the episode's yield estimator ends it, so a
-    decision asked for with an empty input list is an error."""
+    """The naming of the method the table reports while it is unread (``input_list``); once it has been extracted the
+    table region is consumed and is never offered again: the input list is empty and the episode's yield estimator ends
+    it, so a decision asked for with an empty input list is an error."""
     if not summary['input_list']:
         raise LookupError('leaf_input_list_empty:' + TEXT)
-    return extraction_request(summary['experiment_type'], summary['table'], feedback, summary['already_stated_fields'],
-                              summary['not_yet_stated_fields'], text=TEXT, reading=READING)
+    return method_request(summary['sheet_class'], summary['table'], feedback, text=TEXT)
 
 
 def action(response, summary, records, ctx):
-    return extraction_call(response, summary['experiment_type'], summary['table'], source_ref=summary['source_ref'],
-                           offset=summary['offset'], limit=summary['limit'],
-                           assertion_ref=summary['proposed_annotation_ref'])
+    return method_call(response, summary['sheet_class'], summary['table'], summary['already_stated_fields'],
+                       summary['not_yet_stated_fields'], source_ref=summary['source_ref'], offset=summary['offset'],
+                       limit=summary['limit'], assertion_ref=summary['proposed_annotation_ref'])
 
 
-def extract(arguments, ctx):
-    """Hold the record (of the commissioned experiment type) the answer makes; return its ref."""
-    record_ref = ctx.store.artifact(canonical(leaf_record(arguments)), 'application/json')
-    return {'status': 'completed', 'record_ref': record_ref}
+async def extract(arguments, ctx):
+    """Fill the form of the type the model named and hold its record; return its ref and the type named. A table named
+    ``none`` holds no record (``record_ref`` None)."""
+    if arguments['experiment_type'] is None:
+        return {'status': 'completed', 'experiment_type': None, 'record_ref': None}
+    filled = await extraction_arguments(ctx.model, arguments, text=TEXT, reading=READING)
+    record_ref = ctx.store.artifact(canonical(leaf_record(filled)), 'application/json')
+    return {'status': 'completed', 'experiment_type': arguments['experiment_type'], 'record_ref': record_ref}
 
 
 TOOLS = {'extract': extract}

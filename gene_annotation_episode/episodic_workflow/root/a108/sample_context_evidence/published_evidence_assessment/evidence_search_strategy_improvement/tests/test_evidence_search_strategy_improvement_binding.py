@@ -1,10 +1,13 @@
 """Real checks of the A108 evidence search strategy improvement binding: importing ``episode.py`` runs the system's
 class-definition checks, the folder holds exactly the ten-file set, no module imports another episode folder, the
-assignment form admits a strategy assignment with its commissioned task, the yield controller follows the task and the
-commission carries what the child's own form names."""
+assignment form admits a strategy assignment with its one task kind and no search, the yield controller is
+accumulation, the model is offered only the writing of a search and, while a written search is not yet handed out, the
+search child (by reference), and the commission carries the one search by reference."""
 import ast
 import importlib
 from pathlib import Path
+
+import pytest
 
 from episode_runtime import ChildMessage, EpisodeBinding
 
@@ -63,8 +66,8 @@ def test_no_module_imports_another_episode_folder():
                 raise AssertionError((relative, 'relative import above the episode folder'))
 
 
-SOURCE, OTHER = 'source_111111111111111111111111', 'source_222222222222222222222222'
-ARTIFACT, TEXT, CONTEXT = 'artifact_111111111111111111111111', 'artifact_222222222222222222222222', 'context_111111111111111111111111'
+SEARCH, OTHER = 'source_111111111111111111111111', 'source_222222222222222222222222'
+CONTEXT = 'context_111111111111111111111111'
 HYPOTHESIS, SUBJECT = 'hypothesis_111111111111111111111111', 'input_111111111111111111111111'
 LEADS_TASK = {'version': 'literature_local_task_v1', 'evidence_axis': 'A108', 'credit_unit': 2,
               'kind': 'verified_source_leads'}
@@ -72,7 +75,7 @@ LEADS_TASK = {'version': 'literature_local_task_v1', 'evidence_axis': 'A108', 'c
 
 def assignment(task=None):
     return {'version': 'strategy_assignment_v1', 'question_context_refs': [CONTEXT],
-            'prior_search_refs': [SOURCE, OTHER], 'literature_task': task or LEADS_TASK,
+            'literature_task': task or LEADS_TASK,
             'proposed_annotation_ref': HYPOTHESIS, 'scope': {'subject_refs': [SUBJECT]},
             'received_record_refs': [HYPOTHESIS]}
 
@@ -83,61 +86,68 @@ def parent_input(task=None):
                                         {'purpose': 'x'})
 
 
-def test_the_assignment_admits_a_strategy_assignment_and_read_from_parent_reads_it():
+def test_the_assignment_admits_a_strategy_assignment_without_a_search_and_read_from_parent_reads_it():
     value = parent_input()
     assert value['task_key'] == 'A108:verified_source_leads'
-    assert value['prior_search_refs'] == [SOURCE, OTHER] and value['message'] == {'purpose': 'x'}
+    assert 'prior_search_refs' not in value and value['message'] == {'purpose': 'x'}
+    with pytest.raises(Exception):
+        parent_input({**LEADS_TASK, 'kind': 'source_answer', 'answer_kind': 'assessment', 'source_refs': [SEARCH]})
 
 
-def test_the_yield_controller_follows_the_commissioned_task():
+def test_the_yield_controller_is_accumulation():
     yield_file = importlib.import_module(MODULE + '.yield_estimator')
-    settings = {'cost': 0.5, 'parameters': {'uncertainty_alpha': 0.1}}
-    assert type(yield_file.yield_controller(0.0, settings, parent_input())).__name__ == 'AccumulationYieldController'
-    answer = {'version': 'literature_local_task_v1', 'evidence_axis': 'A108', 'credit_unit': 2,
-              'kind': 'source_answer', 'answer_kind': 'assessment', 'source_refs': [SOURCE]}
-    controller = yield_file.yield_controller(0.0, settings, parent_input(answer))
-    assert type(controller).__name__ == 'CompletionYieldController'
+    assert type(yield_file.yield_controller(0.0, {}, parent_input())).__name__ == 'AccumulationYieldController'
 
 
-def summary_of(task):
-    value = parent_input(task)
-    return {'literature_assignment': {'version': 'strategy_assignment_v1', **{
-                name: value[name] for name in ('question_context_refs', 'prior_search_refs')},
-                'literature_task': value['task'], 'proposed_annotation_ref': HYPOTHESIS},
+def summary_of(input_list=()):
+    value = parent_input()
+    return {'literature_assignment': {'version': 'strategy_assignment_v1',
+                                      'question_context_refs': value['question_context_refs'],
+                                      'literature_task': value['task'], 'proposed_annotation_ref': HYPOTHESIS},
             'task': value['task'], 'proposed_annotation_ref': HYPOTHESIS, 'scope': value['scope'],
             'received_record_refs': value['received_record_refs'], 'proposed_annotation_subject_refs': [SUBJECT],
-            'held_source_custody': {
-                SOURCE: {'artifact_ref': ARTIFACT, 'text_ref': TEXT, 'stdout_ref': None, 'stderr_ref': None,
-                         'parent_source_refs': ['source_000000000000000000000000']},
-                OTHER: {'artifact_ref': None, 'text_ref': None, 'stdout_ref': None, 'stderr_ref': None,
-                        'parent_source_refs': []},
-                'source_000000000000000000000000': {'artifact_ref': 'artifact_000000000000000000000000',
-                                                    'text_ref': None, 'stdout_ref': None, 'stderr_ref': None,
-                                                    'parent_source_refs': []}}}
+            'input_list': list(input_list)}
 
 
-def test_the_commission_names_the_sources_the_records_and_the_fields_it_wants():
+def test_the_commission_carries_the_one_search_by_reference():
     to_child = importlib.import_module(MODULE + '.messages.msg_to_child')
     child_form = importlib.import_module(MODULE + '.source_relevance_assessment.messages.read_from_parent')
-    message = to_child.msg_to_child('source_relevance_assessment', {
-        'objective': 'o', 'search_result_refs': [SOURCE], 'question_context_refs': [CONTEXT]}, summary_of(None))
+    message = to_child.msg_to_child('source_relevance_assessment', {'objective': 'o', 'search_query_ref': SEARCH},
+                                    summary_of([SEARCH]))
     assert isinstance(message, ChildMessage) and message.objective == 'o'
     assert message.selection == ('literature_source_lead_dispositions',)
     assert message.assignment['version'] == 'search_assignment_v1'
-    assert message.assignment['received_record_refs'] == [
-        SOURCE, ARTIFACT, TEXT, 'source_000000000000000000000000', 'artifact_000000000000000000000000', CONTEXT,
-        HYPOTHESIS, SUBJECT]
+    assert message.assignment['search_query_ref'] == SEARCH
+    assert message.assignment['received_record_refs'] == [SEARCH, CONTEXT, HYPOTHESIS, SUBJECT]
     child_form.ASSIGNMENT_FORM.admit(message.assignment, 'assignment')
+    with pytest.raises(LookupError):
+        to_child.msg_to_child('nobody', {'objective': 'o'}, summary_of())
 
 
-def test_an_assessment_task_is_passed_with_its_sources_and_asks_for_no_answer_field():
-    to_child = importlib.import_module(MODULE + '.messages.msg_to_child')
-    task = {'version': 'literature_local_task_v1', 'evidence_axis': 'A108', 'credit_unit': 2,
-            'kind': 'source_answer', 'answer_kind': 'assessment', 'source_refs': [OTHER]}
-    message = to_child.msg_to_child('source_relevance_assessment', {
-        'objective': 'o', 'search_result_refs': [SOURCE], 'question_context_refs': []}, summary_of(task))
-    assert message.assignment['literature_task'] == task
-    assert OTHER in message.assignment['received_record_refs']
-    assert message.selection == ()
+def test_the_search_child_is_offered_only_while_a_written_search_remains(tmp_path):
+    from episode_runtime import ModelRequest
+    from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.sample_context_evidence.action_transport import (
+        generation_schema)
+    from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.tests.provider_schema_rules import (
+        admitted_by_provider, violations)
+    task = importlib.import_module(MODULE + '.task')
+    credit = importlib.import_module(MODULE + '.credit')
+    assert set(task.TOOLS) == {'write_search'} and set(task.CHILD_SLOTS) == CHILDREN
+    assert task.offered_actions(summary_of(), None) == ['write_search']
+    names = task.offered_actions(summary_of([SEARCH]), None)
+    assert names == ['write_search', 'source_relevance_assessment']
+    assert [credit.ceiling(None, None, name, None, None) for name in names] == [0.0, credit.UNBOUNDED]
+    schema = task.selection_schema([SEARCH])
+    child = [option for option in schema['properties']['selection']['anyOf']
+             if option['properties']['tool']['const'] == 'source_relevance_assessment'][0]
+    assert child['properties']['arguments']['properties']['search_query_ref']['enum'] == [SEARCH]
+    request = ModelRequest('REASONING', task.GOAL, {}, generation_schema(schema))
+    _, provider_schema = admitted_by_provider(request, tmp_path / 'provider')
+    assert violations(provider_schema) == []
 
 
+def test_a_childs_returned_credit_and_its_leads_earn_nothing_only_a_held_graded_sheet_does():
+    credit = importlib.import_module(MODULE + '.credit')
+    summary = {'task': dict(LEADS_TASK), 'finding': {'grading_sheets': []}, 'returned_lead_source_refs': ['source_1'],
+               'child_reports': [{'credit': 5.0}]}
+    assert credit.credit(summary, None) == 0

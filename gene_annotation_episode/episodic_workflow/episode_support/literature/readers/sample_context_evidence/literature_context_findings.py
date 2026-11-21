@@ -263,6 +263,17 @@ def grading_features(reader, sheet_ref):
     return validate_grading_features(features)
 
 
+def sheet_amount(reader, finding):
+    """The A108 sheet measure over the subscoring sheets a finding names and the reader holds: the sum of each held
+    sheet's own ``evidence_amount`` cell (the distinct original observations it counts as support or conflict, once each;
+    a sheet whose status is ``unavailable`` counts none). Each sheet is read through custody (``grading_features``), never
+    from a figure a child returned. No weight and no constant: the sheet's own count is the measure (EXPERT_REVIEW: owner
+    to confirm that the sheet's evidence_amount is the credit of A108 until a degree of relationship, direct above
+    transferred, is given a weight)."""
+    return sum(features['evidence_amount'] for item in finding['grading_sheets']
+               if (features := grading_features(reader, item['sheet_refs'][0])) is not None)
+
+
 def aggregation_features(reader, sheet_ref):
     """The findings of one saved S2 sheet: one per cell whose status is not ``unavailable``."""
     sheet = _saved(reader, sheet_ref)['sheet']
@@ -382,6 +393,6 @@ def finding_form(meaning_of_assessments):
 
 __all__ = ['GRADING_FEATURES', 'GRADING_MEANINGS', 'AGGREGATION_FEATURES', 'AGGREGATION_MEANINGS',
            'GRADING_INSTRUCTIONS', 'GRADING_FORM', 'AGGREGATION_FORM', 'LEAD_FORM', 'SCREENING_FORM', 'finding_form',
-           'validate_grading_features', 'validate_aggregation_features', 'grading_features',
+           'validate_grading_features', 'validate_aggregation_features', 'grading_features', 'sheet_amount',
            'aggregation_features', 'own_findings', 'merged_findings', 'own_cell_refs', 'assessment_basis', 'lead_return',
            'screening_return']

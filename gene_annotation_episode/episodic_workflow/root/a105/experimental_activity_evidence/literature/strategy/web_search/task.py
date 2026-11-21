@@ -1,58 +1,41 @@
-"""The task: search for and examine the sources the assigned question needs through the access and acquisition tools,
-commission the examination of a selected source, commit reasoning on what the sources say (the interpretation and its
-grading sheets in one unit, and for a verified-source-leads commission validated source leads), populate the
-source-cell families when the settings turn the population route on. The finding returned is the controlled features of the saved grading sheets.
+"""The task: nano-graphrag's web search. It receives ONE query (by reference), runs the provider search, has Jev score
+every hit once, the model picks ONE unprocessed hit, code obtains the paper when its page is built and commissions the
+page. A hit picked is done. It cannot read or extract, offers no read tool and commits no reasoning (grading is
+automatic, far below).
 
-The search step's Jev measurement (nano-graphrag ``web_search_binding``, ``SEARCH_PAGE_SELECTION_VERSION``
-``model_planned_from_jev_evidence_v5``): a search result is ONE HIT of a provider's result list (``messages/
-internal_summary.py``: its PMCID, rank, title, journal, year and the abstract the provider returned), not a fetched
-document. Before this episode plans, ``assess_search_results`` (decided by code, no model call) has Jev measure every
-hit once, from its description, against the immutable Search Goal (``search_result_assessment.assess_search_results``)
-and holds the assessment as an artifact. Every later decision shows the model nano-graphrag's candidate view for the
-UNCONSUMED hits only (``context.page_candidates``: each hit's Jev probability, provider rank, title and description,
-and the measured outcomes of the prior page children); the model picks one hit with the objective of its examination
-(the tool ``fetch_search_hit``), code fetches that hit's full text (the operation of ``public.literature.read``), and,
-when the fetch completed, code commissions the page on the fetched article with no model call (an article already held
-is opened without a new fetch: no second record of it). A hit is consumed by its fetch; a hit whose fetch failed is shown in ``context.hit_fetches`` with the provider status and is never opened. Jev
-is planning evidence, not the selection policy.
+Units. Each is one unit of the episode's iterator with its own outcome:
 
-A task that names specific sources (``named_source_refs``) has no hits to choose from: the page refuses any source
-but the one it is assigned, so under such a task the page child is offered on the one named source only.
+* ``run_search`` (automatic, code attached to the unit): the provider search for the query the strategy handed over
+  (nano-graphrag ``web_search_binding``: the search level runs the provider search for the query it was handed). The
+  query is not in the commission: ``search_query_ref`` names a record of the strategy, which holds the request in its
+  ``request_ref`` artifact, read here through custody. The unit is the operation of ``public.literature.search``; its
+  outcome is the unit's outcome like any other, and the retained response it produced is the result list the hits are
+  read from (``messages/internal_summary.py``).
+* ``list_record_publications`` (automatic, only when the proposed annotation's subject is a protein with a sequence):
+  the papers a database lists for the target's own records (owner's goal for this arm, 2026-11-21: find the exact
+  sequence the experimental data belong to; "some dbs will have a partial list of papers"). Code runs the sequence-
+  identity lookup of the target (the operation ``public.literature.sequence_identity``), holds the records whose
+  complete sequence equals the target's (``target_record_refs``), reads the papers the database lists for each
+  (``record_publications``) and has Europe PMC give the PMCID of the listed papers (the operation
+  ``public.literature.search``). The list is held as an artifact; ``messages/internal_summary.py`` adds the listed
+  papers that can be opened to the hit list, each once and marked with where it came from. The database's list is
+  partial and says so to the model.
+* ``assess_search_results`` (automatic): the search step's Jev measurement (nano-graphrag ``web_search_binding``,
+  ``SEARCH_PAGE_SELECTION_VERSION`` ``model_planned_from_jev_evidence_v5``): a search result is ONE HIT of the provider's
+  result list (its PMCID, rank, title, journal, year and the abstract the provider returned), not a fetched document.
+  Jev measures every hit once, from its description, against the immutable Search Goal and the assessment is held as an
+  artifact.
+* ``fetch_search_hit`` (the model's pick): every later decision shows the model nano-graphrag's candidate view for the
+  UNPROCESSED hits only (``context.page_candidates``: each hit's Jev probability, provider rank, title and
+  description, and the measured outcomes of the prior pages); the model picks one hit. Code obtains that hit's paper
+  (the operation of ``public.literature.read``; an article already held is opened without a new fetch: no second
+  record of it) and, when that completed, commissions the page on the paper with no model call. A hit is done by its
+  pick; a hit whose fetch failed is shown in ``context.hit_fetches`` with the provider status and is never opened. Jev
+  is planning evidence, not the selection policy.
 
-Carried from the old task.py (``LiteratureOperations.catalog`` / ``execute``), source_operations.py
-(``LiteratureSourceOperations._tool_arguments`` / ``_materialize_text_arguments``), task_decision.py,
-task_instructions.py, source_contracts.py (``_ROLE_INSTRUCTIONS``, ``_CHILDREN``, ``_PAGE``, ``_WINDOW``,
-``_TABLE``, ``_ACCESS_TOOLS``, ``_ACQUISITION_TOOLS``, ``_CATALOG_ORDER``),
-grading/experimental_interpretation.py (``reasoning_action_schema``, ``reasoning_has_task_content``,
-``execute_reasoning``), grading/assay_subscoring.py and the old credit.py lead functions (``lead_schema``,
-``validate_lead``, private copies). One unit is one model-selected tool call or one commission of the child. The task
-always offers a unit and never ends the Episode: only the yield controller does.
-
-Child. The old ``_CHILDREN['literature_search']`` is ``('literature_page',)``: the slot below is that role under the
-name of its folder. Code commissions it on the article fetched for the hit the model picked, with the model's objective
-and the page it examines (the article, its representation and artifact, and the records earlier examinations of it
-delivered); ``messages/msg_to_child.py`` builds the commission. A child is a unit like any other: what it earns in this episode is
-this episode's own credit.
-
-Tools offered. The access tools are the ones the A105 tool library implements (its ``A105ToolRegistry.catalog``
-intersected with the old ``_ACCESS_TOOLS``): ``source.sequence.scan``, ``image.view``, ``source.xlsx.sheets``,
-``source.xlsx.rows`` and ``execution.estimate`` have no A105 implementation and are not offered. The acquisition tools
-are the old ``_ACQUISITION_TOOLS`` (literature search and read, sequence identity, NCBI search narrowed to ``pubmed``,
-the three PMC operations and every experimental-database operation); this episode, unlike its child, is offered them.
-The 35 ``literature.*`` population operations are offered when ``settings['rate_population']`` is true, each under
-its flags (the old ``rate_population`` configuration, its other flags are settings of the same names, default
-false). A search assignment names no page, so the old containment of source reads inside a page (``_within_source``)
-does not apply.
-
-A105 evidence processing (AGENTS.md, "Required literature evidence processing"): the ``reason`` tool is the old
-required-grading action. Its selection carries ``evidence_processing`` (graded gradings, or a source-grounded
-``no_applicable_evidence``); the library's ``literature_required_grading.execute`` commits the interpretation and
-saves its subscoring sheets together before any credit, and every assessment carries its typed
-``investigation_finding`` (a record of this episode): ``literature_reasoning.reason`` on the custody-scoped store.
-What returns to the parent is the controlled features code reads from the saved sheets (own and returned by the
-child), never prose; the old ``report`` tool is gone. The owner's grading instructions are part of every decision's
-instructions (``grading_section``)."""
-import copy
+Child. The slot below is the old ``_CHILDREN['literature_search']`` (the page) under the name of its folder. A child is
+a unit like any other: what it earns in this episode is this episode's own credit. The task never ends the Episode:
+only the yield controller does."""
 import json
 
 from jsonschema import ValidationError
@@ -60,249 +43,110 @@ from jsonschema import ValidationError
 from episode_runtime import ChildCall, CustodyError, ModelRequest, Rejected, ToolCall
 
 from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.episodic_workflow.episode_support.instructions.instruction_spans import replace_span
-from gene_annotation_episode.episodic_workflow.episode_support.acquisition.experimental_activity_evidence.experimental_database_acquisition import (
-    OPERATIONS as EXPERIMENT_DATABASE_TOOLS, catalog as experimental_database_catalog)
-from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_experimental_contracts import (
-    ExperimentalContractError)
-from gene_annotation_episode.episodic_workflow.episode_support.literature.prompts.experimental_activity_evidence.literature_investigation_prompt import (
-    INSTRUCTIONS, REASONING_COMMIT_REQUIREMENT)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.search_result_assessment import (
+    article_sources, assess_search_results as assess_results, source_kind)
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_record_publications import (
+    PARTIAL_LIST, record_publications, resolve_queries, target_record_refs, with_full_text)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_sequence_discovery import (
-    identity_schema, references_schema)
+    identity_schema)
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.experimental_activity_evidence.action_transport import (
     decode_response, generation_schema)
-from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.search_result_assessment import (
-    article_sources, assess_search_results as assess_results)
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.jev_client import JevDecisionClient
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.presentation import extend_context
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import (
     rejection_feedback)
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import (
-    REF, canonical, obj, identity, source_location_inputs, validate_schema)
-from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.experimental_database_records import (
-    reader_schema as experimental_records_schema)
+    canonical, identity, obj, source_location_inputs, validate_schema)
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import time_accounting
 from gene_annotation_episode.episodic_workflow.episode_support.tools.experimental_activity_evidence import (
     tools as access_library)
-from gene_annotation_episode.episodic_workflow.episode_support.tools.tool_knowledge import (
-    INSTRUCTIONS as KNOWLEDGE_INSTRUCTIONS, ToolKnowledge)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.unit_outcomes import failure_outcome
-
-from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_reasoning import (
-    REASON_DESCRIPTION, empty_commit, reason as reasoning_unit, reason_schema)
-from gene_annotation_episode.episodic_workflow.episode_support.literature.prompts.experimental_activity_evidence.literature_grading_instructions import (
-    grading_section)
-from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_population_route import (
-    REPOSITORIES, authorize_record_access, authorize_source_access, population_entries, reader_cells,
-    run_population as population_unit)
 from .goal import GOAL
-from .messages.internal_summary import page_of
 
 CHILD_SLOTS = {
     'page': 'experimental_activity_evidence/literature/strategy/web_search/page',
 }
 SERVICES = ()
 
-# The access tools of the old ``_ACCESS_TOOLS`` that the A105 tool library implements; the descriptions and input
-# schemas are the library's own (``A105ToolRegistry.catalog``).
-ACCESS_NAMES = ('state.query', 'source.read', 'source.locate', 'source.sequence.references',
-                'source.experimental.records', 'source.archive.members', 'source.archive.extract',
-                'source.pdf.info', 'source.pdf.text', 'source.pdf.page')
-# The old ``_ACQUISITION_TOOLS``: the public literature, NCBI and PMC operations and the experimental databases.
-ACQUISITION_NAMES = ('public.literature.search', 'public.literature.read', 'public.literature.sequence_identity',
-                     'public.ncbi.search', 'public.pmc.versions', 'public.pmc.files', 'public.pmc.asset',
-                     *EXPERIMENT_DATABASE_TOOLS)
-LIBRARY_NAMES = (*ACCESS_NAMES, *ACQUISITION_NAMES)
+# The provider operations this episode's code runs for its units (they are not offered to the model).
+SEARCH_OPERATION = 'public.literature.search'
+READ_OPERATION = 'public.literature.read'
+IDENTITY_OPERATION = 'public.literature.sequence_identity'
+OPERATION_DEFINITIONS = {name: access_library._DEFINITIONS[name] for name in (SEARCH_OPERATION, READ_OPERATION)}
+OPERATION_DEFINITIONS[IDENTITY_OPERATION] = (access_library._SEQUENCE_IDENTITY_DESCRIPTION, identity_schema())
 
-
-def definitions():
-    """The description and input schema of every library tool this episode offers: the registry's own
-    ``_DEFINITIONS`` and readers, the sequence-identity and experimental-database catalogs; ``public.ncbi.search`` is
-    narrowed to ``pubmed`` (the old ``catalog``)."""
-    result = {name: access_library._DEFINITIONS[name] for name in LIBRARY_NAMES
-              if name in access_library._DEFINITIONS and name not in ('source.sequence.references',
-                                                                      'source.experimental.records')}
-    result['source.sequence.references'] = (access_library._SEQUENCE_REFERENCES_DESCRIPTION, references_schema())
-    result['source.experimental.records'] = (access_library._EXPERIMENT_RECORDS_DESCRIPTION,
-                                             experimental_records_schema())
-    result['public.literature.sequence_identity'] = (access_library._SEQUENCE_IDENTITY_DESCRIPTION,
-                                                      identity_schema())
-    for name, entry in experimental_database_catalog().items():
-        result[name] = (entry['description'], entry['input_schema'])
-    ncbi = copy.deepcopy(result['public.ncbi.search'])
-    ncbi[1]['properties']['database'] = {'enum': ['pubmed']}
-    result['public.ncbi.search'] = ncbi
-    return {name: result[name] for name in LIBRARY_NAMES}
-
-
-LIBRARY_DEFINITIONS = definitions()
-HELD_SOURCE_TOOLS = ('source.locate', 'source.sequence.references', 'source.experimental.records')
-# The repository families the old ``rate_population`` source access authorized (``authorize_source_access`` /
-# ``authorize_record_access``), asked before every source read and record query while the population route is on.
-SOURCE_READ_TOOLS = ('source.read', 'source.locate', 'source.sequence.references', 'source.experimental.records')
-
-
-
-
-INTEGER = {'type': 'integer', 'minimum': 0}
-TEXT = {'type': 'string', 'minLength': 1}
-
-
-# The model names only the source (one of the unconsumed search results). The representation, its artifact and the
-# prior deliveries are known to code from the source record, and ``action`` fills them (``page_of``).
-PAGE_SCHEMA = obj({'source_ref': TEXT})
-# What this episode asks of the page child: one value of the child's fixed vocabulary (controlled messaging: the
-# child's model is never shown text this episode's model wrote).
-OBJECTIVE = {'enum': ['evidence_in_table', 'evidence_in_passages', 'evidence_location_unknown'],
-             'description': 'Where you expect the evidence of the commissioned task in the selected source. '
-                            'evidence_in_table: it is reported in a table, a sheet or a tabular block of numbers. '
-                            'evidence_in_passages: it is stated in particular passages of the running text. '
-                            'evidence_location_unknown: where the source holds it, or whether it holds any, is not '
-                            'known.'}
-CHILD_DESCRIPTION = (
-    'Investigate where and how the one source the commissioned task names (input_list) should be examined; you '
-    'name only the source (its representation and artifact are filled from its record: its text when it has one, '
-    'else its original bytes); the child chooses ordinary source operations or selected table, ordered-reading or '
-    'targeted-passage investigations of it. The source is consumed: it is not offered again. The page child is where '
-    'published experiments get graded: it measures the passages and tables of the source against the claim, extracts '
-    'each experiment the source reports and writes its grading sheet row; the sheet states and the credit come back '
-    'to you. Your own reads earn no credit, and reading a source yourself does not grade it.')
-# The tool the model picks a hit with. Code fetches the hit's full text and commissions the page on it.
+RUN_SEARCH = 'run_search'
+LIST = 'list_record_publications'
+ASSESS = 'assess_search_results'
+# The tool the model picks a hit with. Code obtains the hit's paper and commissions the page on it.
 FETCH = 'fetch_search_hit'
 FETCH_DESCRIPTION = (
-    'Pick one UNCONSUMED hit of the search results (input_list: PMCIDs) to have examined, with where you expect the '
-    'evidence of the commissioned task in it. Choose the hit from context.page_candidates (its Jev probability, '
-    'provider rank, title, description and the measured outcomes of the previous page children). Code then fetches the '
-    'hit\'s full text (the operation of public_literature_read; an article already held is opened without a new '
-    'fetch) and, when that completes, commissions the page child '
-    'on the article with no further choice of yours; a hit whose fetch fails is consumed, is shown in '
-    'context.hit_fetches with the provider status and is never opened. The hit is consumed: it is not offered again. '
-    'The page child is where published experiments get graded: it measures the passages and tables of the article '
-    'against the claim, extracts each experiment it reports and writes its grading sheet row; the sheet states and '
-    'the credit come back to you. Your own reads earn no credit, and reading a source yourself does not grade it.')
-
-
-def page_schema(input_list):
-    """The page the model may select under a task that names its source: ``source_ref`` is one of the unconsumed
-    named sources (the input list), so a consumed source cannot be selected."""
-    return obj({**PAGE_SCHEMA['properties'], 'source_ref': {'enum': list(input_list)}})
-
-
-def child_arguments(slot, input_list):
-    """The description and arguments schema of a child, over the input list now."""
-    return CHILD_DESCRIPTION, obj({'objective': OBJECTIVE, 'page': page_schema(input_list)})
+    'Pick one UNPROCESSED hit of the search results (input_list: PMCIDs) to have examined. Choose the hit from '
+    'context.page_candidates (its Jev probability, provider rank, title, description and the measured outcomes of the '
+    'previous pages). Code then obtains the hit\'s paper (the operation of public_literature_read; an article already '
+    'held is opened without a new fetch) and, when that completes, commissions the page on the paper with no further '
+    'choice of yours; a hit whose fetch fails is done, is shown in context.hit_fetches with the provider status and is '
+    'never opened. A hit picked is done: it is not offered again. The page is where the paper is examined; the sheet '
+    'states and the credit come back to you. You read nothing yourself and extract nothing.')
 
 
 def fetch_entry(input_list):
-    """The hit-picking tool the model is shown, over the unconsumed hits (the input list): the objective and the hit."""
+    """The hit-picking tool the model is shown, over the unprocessed hits (the input list)."""
     return {'name': FETCH, 'description': FETCH_DESCRIPTION,
-            'input_schema': obj({'objective': OBJECTIVE, 'hit': {'enum': list(input_list)}})}
+            'input_schema': obj({'hit': {'enum': list(input_list)}})}
 
 
-def valid_slots(input_list, named):
-    """The child slots the model may select now: the page child while the one named source of a task that names its
-    source is unconsumed. Under any other task a page is commissioned by code after a hit is fetched."""
-    return list(CHILD_SLOTS) if input_list and named else []
+def hit_tools(input_list):
+    """The hit-picking tool while an unprocessed hit remains."""
+    return [fetch_entry(input_list)] if input_list else []
 
 
-def hit_tools(input_list, named):
-    """The hit-picking tool while an unconsumed hit remains (a task that names its source has none)."""
-    return [fetch_entry(input_list)] if input_list and not named else []
+# The declared shape of the page child's commission (code builds it; the model only picks the hit), kept for the
+# binding test: the hit and the page (the source, its representation and artifact, filled from the source record).
+CHILD_ARGUMENTS = {'page': ('The page on the paper of the hit the model picked, commissioned by code.',
+                            obj({'hit': {'type': 'string', 'minLength': 1},
+                                 'page': obj({'source_ref': {'type': 'string', 'minLength': 1},
+                                              'representation': {'enum': ['text', 'original']},
+                                              'artifact_ref': {'type': 'string', 'minLength': 1},
+                                              'prior_delivery_refs': {'type': 'array'}})}))}
+
+INSTRUCTIONS = (
+    'You own an iterative scientific annotation improvement, not a tool itinerary. The provider search for your query '
+    'has been run and Jev has scored every hit once. You pick ONE unprocessed hit per decision (fetch_search_hit); code '
+    'obtains its paper and the page examines it. You read nothing and extract nothing, and nothing is assessed by a '
+    'reasoning commit: grading of what the leaves extract is automatic and its results come back as child_returns. '
+    'Only the numerical controller decides when you stop.\n')
+CHILD_GUIDANCE = ('\nA search result is one hit of a provider\'s result list (its PMCID, title, journal, year and '
+                  'abstract). Jev has measured every hit once against the Search Goal. context.page_candidates shows, '
+                  'for the UNPROCESSED hits only, each one\'s provider rank, title, description and Jev assessment '
+                  '(relevance_probability: Jev\'s probability that the hit can contribute to the Search Goal), and the '
+                  'measured results of the previous pages (previous_page_children). These are measurements for your '
+                  'planning, not a rule that the largest probability must be selected: use them and the realized '
+                  'results of previous pages to choose the next hit worth examining. context.hit_fetches shows which '
+                  'hits were fetched and the provider status of a fetch that failed (that hit is never opened). One '
+                  'page takes one hit; a publication is one hit however many lists returned it, and an article a page '
+                  'has already examined is not offered again; the numerical controller alone decides whether the '
+                  'search continues. Some hits are not provider search results but papers a database lists for a '
+                  'record of the target\'s sequence (their description begins "[Listed by"): ' + PARTIAL_LIST + ' '
+                  'context.listed_publications names them. A child earns credit in this episode only through the records it returns.')
+RETURN_GUIDANCE = ('\nWhat returns to your parent is your credit and the features code reads from the grading sheets '
+                   'your pages returned (evidence type, quantity kind, measured effect, variance, log evidence '
+                   'ratio, prediction model, criterion statuses); no prose of yours is returned.')
 
 
-# Static form (the declared shape of each child's arguments, without the input list), kept for the binding test.
-CHILD_ARGUMENTS = {slot: child_arguments(slot, ['<unconsumed search result>']) for slot in CHILD_SLOTS}
-
-HISTORY_START = 'On a fresh provider conversation,'
-HISTORY_END = 'Do not execute native provider tools.'
-HISTORY_GUIDANCE = ('Your own earlier read outcomes are shown to you as own_literature_outcomes; that page creates '
-                    'no new action and does not execute or credit the historical work again.\n')
-CHILD_GUIDANCE = ('\nPick a hit (fetch_search_hit, with the objective of its examination) when that is the better way '
-                  'to examine a returned search result: code fetches the hit\'s full text and has the page child '
-                  'examine the fetched article; what the page returns is shown to you as child_returns. A child '
-                  'earns credit in this episode only through the records it returns.\nA search result is one hit of '
-                  'a provider\'s result list (its PMCID, title, journal, year and abstract). Jev has measured every '
-                  'hit once against the Search Goal. context.page_candidates shows, for the UNCONSUMED hits only, '
-                  'each one\'s provider rank, title, description and Jev assessment (relevance_probability: Jev\'s '
-                  'probability that the hit can contribute to the Search Goal), and the measured results of the '
-                  'previous page children (previous_page_children). These are measurements for your planning, not a '
-                  'rule that the largest probability must be selected: use them and the realized results of previous '
-                  'pages to choose the next hit worth examining. context.hit_fetches shows which hits were fetched '
-                  'and the provider status of a fetch that failed (that hit is never opened). One page child takes '
-                  'one hit; a publication is one hit however many lists returned it, and an article a page has already '
-                  'examined is not offered again (an article that was only read is still offered, and is opened '
-                  'without a new fetch); the numerical controller alone decides whether the search continues. When '
-                  'the commissioned task names its source, there are no hits: the page child examines that source.')
+def instructions():
+    return INSTRUCTIONS + '\n' + GOAL + CHILD_GUIDANCE + RETURN_GUIDANCE
 
 
-LEAD_GUIDANCE = ('\nFor a verified_source_leads commission, a reason selection also carries source_lead: the '
-                 'inspected source, its anchored reference subject, whether it is a useful lead for the original '
-                 'question and the exact witnessed byte interval. A search hit or title alone verifies nothing.')
-
-
-def instructions(*, knowledge, leads, populations):
-    """The old task_instructions.instructions: the investigation text, this episode's goal (the old role
-    instruction and the shared investigation paragraph), the reasoning-commit requirement, the child text, the
-    tool-knowledge text when it is offered. The decision-exchange paragraph, the pending-delivery paragraph, the
-    wait paragraphs and the redeliver_report text are not carried: no such action exists."""
-    text = replace_span(INSTRUCTIONS, HISTORY_START, HISTORY_END, HISTORY_GUIDANCE)
-    text += '\n' + GOAL
-    text += '\n' + REASONING_COMMIT_REQUIREMENT
-    text += grading_section(populations)
-    if knowledge is not None:
-        text += KNOWLEDGE_INSTRUCTIONS
-    if leads:
-        text += LEAD_GUIDANCE
-    return text + CHILD_GUIDANCE + RETURN_GUIDANCE
-
-
-def offered(settings):
-    """The tools offered now (library names): the access and acquisition tools, the population operations under
-    their flags and the reasoning commit."""
-    return [*LIBRARY_NAMES, *(entry['name'] for entry in population_entries(settings)), 'reason']
-
-
-def catalog(names, commit_schema, leads, settings):
-    """The tools the model is shown: python tool name, description and input schema (the old catalog; every input
-    schema is projected through ``source_location_inputs``)."""
-    population = {entry['name']: entry for entry in population_entries(settings)}
-    entries = []
-    for name in names:
-        if name == 'reason':
-            entries.append({'name': 'reason', 'description': REASON_DESCRIPTION,
-                            'input_schema': reason_schema(commit_schema, leads)})
-        elif name in population:
-            entries.append({'name': TOOL_NAMES[name], 'description': population[name]['description'],
-                            'input_schema': source_location_inputs(population[name]['input_schema'])})
-        else:
-            description, schema = LIBRARY_DEFINITIONS[name]
-            entries.append({'name': TOOL_NAMES[name], 'description': description,
-                            'input_schema': source_location_inputs(schema)})
-    return entries
-
-
-def selection_schema(names, commit_schema, leads, settings, input_list, named):
-    """What the model answers with: one tool and its arguments, or one child slot and its arguments (the old action
-    schema: kinds ``tool`` and ``child``). A hit is picked only while one is unconsumed (``input_list``); a child is
-    offered only under a task that names its source (``named``) and while that source is unconsumed."""
+def selection_schema(summary):
+    """What the model answers with: one unprocessed hit to pick (the old action schema: kind ``tool``)."""
     tools = [obj({'kind': {'const': 'tool'}, 'tool': {'const': entry['name']}, 'arguments': entry['input_schema']})
-             for entry in [*catalog(names, commit_schema, leads, settings), *hit_tools(input_list, named)]]
-    children = [obj({'kind': {'const': 'child'}, 'slot': {'const': slot},
-                     'arguments': child_arguments(slot, input_list)[1]})
-                for slot in valid_slots(input_list, named)]
-    return obj({'selection': {'anyOf': [*tools, *children]}})
-
-
-def admitted(ctx, name, arguments, assignment):
-    """The old ``_tool_arguments``: the source authorization of the population route. A violation is a
-    ``ContractError``. ``name`` is a library tool name."""
-    if name in POPULATIONS:
-        return
-    authorize_source_read(ctx, name, arguments, assignment)
+             for entry in hit_tools(summary['input_list'])]
+    return obj({'selection': {'anyOf': tools}})
 
 
 def invalid(name, arguments, ctx, error):
-    """The old ``execute`` outcome for a contract error: an ``invalid`` outcome with feedback."""
+    """A contract error of the arguments of a unit: an ``invalid`` outcome with feedback."""
     detail = {'detail': error.detail} if getattr(error, 'detail', None) else {}
     return {'status': 'invalid',
             'operation_ref': identity('operation', {'key': ctx.operation_key, 'name': name, 'arguments': arguments}),
@@ -310,111 +154,62 @@ def invalid(name, arguments, ctx, error):
             'feedback': {'category': 'arguments_or_reference', 'code': str(error), **detail}}
 
 
-async def run_access_tool(name, envelope, ctx):
-    """Execute one access or acquisition tool. A contract error is returned as an ``invalid`` outcome with ``arguments_or_reference``
-    feedback, as the old ``execute`` did; the outcome is the unit's outcome like any other."""
-    arguments, scope = envelope['arguments'], envelope['scope']
+async def run_operation(name, arguments, scope, ctx):
+    """Execute one provider operation of the library for a unit of this episode. A contract error is returned as an
+    ``invalid`` outcome with ``arguments_or_reference`` feedback; a failed provider call is the unit's outcome like any
+    other."""
     try:
-        validate_schema(arguments, source_location_inputs(LIBRARY_DEFINITIONS[name][1]))
-        admitted(ctx, name, arguments, envelope['assignment'])
+        validate_schema(arguments, source_location_inputs(OPERATION_DEFINITIONS[name][1]))
     except (ContractError, ValidationError) as error:
         return invalid(name, arguments, ctx, error)
     registry = access_library.A105ToolRegistry(ctx.store, **ctx.settings['tool_registry'])
-    permitted = tuple(ctx.store.refs()) if name in HELD_SOURCE_TOOLS else None
     try:
-        outcome = await registry.execute_async(name, arguments, scope=scope, operation_key=ctx.operation_key,
-                                               permitted_record_refs=permitted)
+        return await registry.execute_async(name, arguments, scope=scope, operation_key=ctx.operation_key,
+                                            permitted_record_refs=None)
     except CustodyError:
         raise
-    except Exception as error:   # the old record_execution_failure: a failed selected operation is an outcome
+    except Exception as error:   # a failed selected operation is an outcome
         return failure_outcome(ctx.store, error, category='episode_execution', cause_code='selected_operation_failed')
-    if ctx.settings['rate_population'] and name == 'state.query' and outcome['status'] in ('completed', 'partial'):
-        for record in outcome['result']['records']:
-            authorize_record_access(ctx.store, ctx.run_id, ctx.episode_id, ctx.binding_path, scope,
-                                    envelope['assignment'], record)
-    return outcome
 
 
-# The population operations (library tool names): the reader families, the grader and the aggregation.
-POPULATIONS = (*REPOSITORIES, 'literature.assay_grading.populate', 'literature.a105.aggregate')
-TOOL_NAMES = {name: name.replace('.', '_') for name in (*LIBRARY_NAMES, *POPULATIONS)}
-RETURN_GUIDANCE = ('\nWhat returns to your parent is your credit and the features code reads from the grading and '
-                   'aggregation sheets saved here or returned by your child (evidence type, quantity kind, measured '
-                   'effect, variance, log evidence ratio, prediction model, criterion statuses); no prose of yours is '
-                   'returned. Selecting a tool does not end your work: only the numerical controller does.')
+async def run_search(arguments, ctx):
+    """The provider search of the one query the strategy handed over: ``search_query_ref`` names a record of the
+    strategy, which holds the request in its ``request_ref`` artifact, read here through custody."""
+    source = ctx.store.require(arguments['search_query_ref'], {'source'})
+    request = json.loads(ctx.store.get_artifact(source['request_ref']))
+    return await run_operation(SEARCH_OPERATION, request, arguments['scope'], ctx)
 
 
-def offered_populations(settings):
-    return tuple(entry['name'] for entry in population_entries(settings))
-
-
-def authorize_source_read(ctx, name, arguments, assignment):
-    """The old ``_tool_arguments`` source authorization of the population route: while ``rate_population`` is on,
-    each source read and each exact-reference record query is first authorized by the access authorities of the
-    population route (``literature_population_route.authorize_source_access`` / ``authorize_record_access``). This
-    assignment names no page, so the old containment of a read inside an assigned page does not apply."""
-    if not ctx.settings['rate_population']:
-        return
-    if name in SOURCE_READ_TOOLS:
-        representation = ('original' if name in ('source.sequence.references', 'source.experimental.records')
-                          else arguments.get('representation', 'text'))
-        authorize_source_access(ctx.store, ctx.run_id, ctx.episode_id, ctx.binding_path, assignment['scope'],
-                                assignment, arguments['source_ref'], representation, name)
-    elif name == 'state.query' and 'refs' in arguments:
-        for reference in arguments['refs']:
-            authorize_record_access(ctx.store, ctx.run_id, ctx.episode_id, ctx.binding_path, assignment['scope'],
-                                    assignment, ctx.store.get(reference))
-
-
-def source_reader(ctx, scope, assignment):
-    """The held bytes of a source (the old ``_materialize_text_arguments`` reader), each read authorized."""
-    def read_source(reference, representation):
-        authorize_source_read(ctx, 'source.read', {'source_ref': reference, 'representation': representation},
-                              assignment)
-        source = ctx.store.require(reference, {'source'})
-        if not ctx.store.reference_subset([reference], scope):
-            raise ContractError('literature_source_outside_scope')
-        artifact = source.get('artifact_ref' if representation == 'original' else 'text_ref')
-        if artifact is None:
-            raise ContractError('literature_source_representation_unavailable')
-        return {'artifact_ref': artifact, 'content': ctx.store.get_artifact(artifact)}
-    return read_source
-
-
-async def run_population(name, envelope, ctx):
-    """One population operation (the old ``execute`` population branch): the arguments are admitted against the
-    offered schema, then the library's population route saves the sheet; a contract error is an ``invalid``
-    outcome that enters the iterator."""
-    arguments, scope = envelope['arguments'], envelope['scope']
-    try:
-        validate_schema(arguments, source_location_inputs(
-            {entry['name']: entry for entry in population_entries(ctx.settings)}[name]['input_schema']))
-        return population_unit(name, ctx.store, arguments, ctx.operation_key, scope=scope, page_source_ref=None,
-                               assignment=envelope['assignment'], requested=envelope['requested'],
-                               run_id=ctx.run_id, episode_id=ctx.episode_id, binding_path=ctx.binding_path,
-                               offered=offered_populations(ctx.settings),
-                               read_source=source_reader(ctx, scope, envelope['assignment']))
-    except (ContractError, ExperimentalContractError, ValidationError) as error:
-        return invalid(name, arguments, ctx, error)
-
-
-def reason(arguments, ctx):
-    """One reasoning unit: the interpretation, the grading sheets of its experiments and, for a
-    verified-source-leads commission, the validated lead, committed together (``literature_reasoning.reason``).
-    The grader reads the cells of a reader sheet this episode populated through that family's repository."""
-    scope, assignment = arguments['scope'], arguments['assignment']
-
-    def authorize(reference, representation):
-        read = {'source_ref': reference, 'representation': representation}
-        validate_schema(read, source_location_inputs(LIBRARY_DEFINITIONS['source.read'][1]))
-        authorize_source_read(ctx, 'source.read', read, assignment)
-    read_cells = reader_cells(ctx.store, ctx.run_id, ctx.episode_id, ctx.binding_path, scope, assignment,
-                              offered_populations(ctx.settings))
-    return reasoning_unit(ctx.store, scope, None, arguments['arguments'], ctx.operation_key,
-                          arguments['proposed_annotation_ref'], authorize, read_cells)
-
-
-ASSESS = 'assess_search_results'
+async def list_record_publications(arguments, ctx):
+    """The papers a database lists for the target's own records. For each protein subject of the proposed annotation:
+    the sequence-identity lookup (one UniProt checksum page), the records whose complete sequence equals the
+    subject's, and the papers the database lists for each. The listed papers that have a PubMed identifier and no PMCID
+    are looked up in Europe PMC for their PMCID and abstract. An operation that does not complete is the unit's
+    outcome. The unit holds the list as an artifact (``publications_ref``)."""
+    produced, listed, record_refs = [], [], []
+    for subject_ref in arguments['subject_refs']:
+        lookup = await run_operation(IDENTITY_OPERATION, {'subject_ref': subject_ref}, arguments['scope'], ctx)
+        if lookup['status'] != 'completed':
+            return lookup
+        produced += lookup['record_refs']
+        for record_ref in target_record_refs(ctx.store, subject_ref=subject_ref):
+            record_refs.append(record_ref)
+            listed += record_publications(ctx.store, record_ref=record_ref)
+    contents = []
+    for request in resolve_queries(listed):
+        resolved = await run_operation(SEARCH_OPERATION, request, arguments['scope'], ctx)
+        if resolved['status'] != 'completed':
+            return resolved
+        produced += resolved['record_refs']
+        contents += [ctx.store.get_artifact(ctx.store.get(ref)['artifact_ref']) for ref in resolved['record_refs']
+                     if source_kind(ctx.store.get(ref)) == 'search_response']
+    listed = with_full_text(listed, contents)
+    publications = ctx.store.artifact(canonical({'listed': listed, 'record_refs': record_refs}), 'application/json')
+    return {'status': 'completed',
+            'operation_ref': identity('operation', {'key': ctx.operation_key, 'name': LIST, 'arguments': arguments}),
+            'record_refs': list(dict.fromkeys([*produced, *record_refs])), 'changed_record_refs': [],
+            'result': {'target_record_count': len(record_refs), 'listed_count': len(listed)},
+            'feedback': None, 'publications_ref': publications}
 
 
 async def assess_search_results(arguments, ctx):
@@ -434,426 +229,66 @@ async def assess_search_results(arguments, ctx):
 
 
 async def fetch_search_hit(arguments, ctx):
-    """The full text of the picked hit: the operation of ``public.literature.read`` on the hit's PMCID, run by code
-    for the model's pick. Its outcome is the unit's outcome like any other, whatever the provider answered: a failed
-    fetch is an outcome that consumes the hit and is reported to the model with the provider status. An article this
-    episode already holds in full (a model read it, or an earlier run fetched it) is not fetched again: the unit
-    completes on the held source, so the article has one record. The page the model chose the hit for is commissioned
-    by code once this unit completed (``decide``)."""
+    """The paper of the picked hit: the operation of ``public.literature.read`` on the hit's PMCID, run by code for the
+    model's pick. Its outcome is the unit's outcome like any other, whatever the provider answered: a failed fetch is an
+    outcome that completes the hit and is reported to the model with the provider status. An article this episode
+    already holds in full (an earlier run fetched it) is not fetched again: the unit completes on the held source, so
+    the article has one record. The page is commissioned by code once this unit completed (``decide``)."""
     pmcid = arguments['arguments']['hit']
     held = article_sources(ctx.store).get(pmcid)
     if held:
         return {'status': 'completed',
                 'operation_ref': identity('operation', {'key': ctx.operation_key, 'name': FETCH, 'arguments': arguments}),
                 'record_refs': [], 'changed_record_refs': [], 'result': {'source_ref': held[0]}, 'feedback': None}
-    return await run_access_tool('public.literature.read', {**arguments, 'arguments': {'pmcid': pmcid}}, ctx)
+    return await run_operation(READ_OPERATION, {'pmcid': pmcid}, arguments['scope'], ctx)
 
 
-async def state_query(arguments, ctx):
-    return await run_access_tool('state.query', arguments, ctx)
-
-
-async def source_read(arguments, ctx):
-    return await run_access_tool('source.read', arguments, ctx)
-
-
-async def source_locate(arguments, ctx):
-    return await run_access_tool('source.locate', arguments, ctx)
-
-
-async def source_sequence_references(arguments, ctx):
-    return await run_access_tool('source.sequence.references', arguments, ctx)
-
-
-async def source_experimental_records(arguments, ctx):
-    return await run_access_tool('source.experimental.records', arguments, ctx)
-
-
-async def source_archive_members(arguments, ctx):
-    return await run_access_tool('source.archive.members', arguments, ctx)
-
-
-async def source_archive_extract(arguments, ctx):
-    return await run_access_tool('source.archive.extract', arguments, ctx)
-
-
-async def source_pdf_info(arguments, ctx):
-    return await run_access_tool('source.pdf.info', arguments, ctx)
-
-
-async def source_pdf_text(arguments, ctx):
-    return await run_access_tool('source.pdf.text', arguments, ctx)
-
-
-async def source_pdf_page(arguments, ctx):
-    return await run_access_tool('source.pdf.page', arguments, ctx)
-
-
-async def public_literature_search(arguments, ctx):
-    return await run_access_tool('public.literature.search', arguments, ctx)
-
-
-async def public_literature_read(arguments, ctx):
-    return await run_access_tool('public.literature.read', arguments, ctx)
-
-
-async def public_literature_sequence_identity(arguments, ctx):
-    return await run_access_tool('public.literature.sequence_identity', arguments, ctx)
-
-
-async def public_ncbi_search(arguments, ctx):
-    return await run_access_tool('public.ncbi.search', arguments, ctx)
-
-
-async def public_pmc_versions(arguments, ctx):
-    return await run_access_tool('public.pmc.versions', arguments, ctx)
-
-
-async def public_pmc_files(arguments, ctx):
-    return await run_access_tool('public.pmc.files', arguments, ctx)
-
-
-async def public_pmc_asset(arguments, ctx):
-    return await run_access_tool('public.pmc.asset', arguments, ctx)
-
-
-async def public_sabiork_search(arguments, ctx):
-    return await run_access_tool('public.sabiork.search', arguments, ctx)
-
-
-async def public_sabiork_read(arguments, ctx):
-    return await run_access_tool('public.sabiork.read', arguments, ctx)
-
-
-async def public_brenda_search(arguments, ctx):
-    return await run_access_tool('public.brenda.search', arguments, ctx)
-
-
-async def public_brenda_read(arguments, ctx):
-    return await run_access_tool('public.brenda.read', arguments, ctx)
-
-
-async def public_bioassay_search(arguments, ctx):
-    return await run_access_tool('public.bioassay.search', arguments, ctx)
-
-
-async def public_bioassay_read(arguments, ctx):
-    return await run_access_tool('public.bioassay.read', arguments, ctx)
-
-
-async def public_chembl_search(arguments, ctx):
-    return await run_access_tool('public.chembl.search', arguments, ctx)
-
-
-async def public_chembl_read(arguments, ctx):
-    return await run_access_tool('public.chembl.read', arguments, ctx)
-
-
-async def public_mavedb_search(arguments, ctx):
-    return await run_access_tool('public.mavedb.search', arguments, ctx)
-
-
-async def public_mavedb_read(arguments, ctx):
-    return await run_access_tool('public.mavedb.read', arguments, ctx)
-
-
-async def public_brenda_graph_search(arguments, ctx):
-    return await run_access_tool('public.brenda.graph_search', arguments, ctx)
-
-
-async def literature_concentration_window_populate(arguments, ctx):
-    return await run_population('literature.concentration_window.populate', arguments, ctx)
-
-
-async def literature_measurement_comparison_populate(arguments, ctx):
-    return await run_population('literature.measurement_comparison.populate', arguments, ctx)
-
-
-async def literature_rate_populate(arguments, ctx):
-    return await run_population('literature.rate.populate', arguments, ctx)
-
-
-async def literature_rate_observations_populate(arguments, ctx):
-    return await run_population('literature.rate.observations.populate', arguments, ctx)
-
-
-async def literature_calibration_recovery_populate(arguments, ctx):
-    return await run_population('literature.calibration.recovery.populate', arguments, ctx)
-
-
-async def literature_product_coupling_populate(arguments, ctx):
-    return await run_population('literature.product_coupling.populate', arguments, ctx)
-
-
-async def literature_measurement_validation_populate(arguments, ctx):
-    return await run_population('literature.measurement_validation.populate', arguments, ctx)
-
-
-async def literature_rate_replicates_populate(arguments, ctx):
-    return await run_population('literature.rate.replicates.populate', arguments, ctx)
-
-
-async def literature_quantity_populate(arguments, ctx):
-    return await run_population('literature.quantity.populate', arguments, ctx)
-
-
-async def literature_assay_populate(arguments, ctx):
-    return await run_population('literature.assay.populate', arguments, ctx)
-
-
-async def literature_ratio_populate(arguments, ctx):
-    return await run_population('literature.ratio.populate', arguments, ctx)
-
-
-async def literature_binding_populate(arguments, ctx):
-    return await run_population('literature.binding.populate', arguments, ctx)
-
-
-async def literature_binding_model_populate(arguments, ctx):
-    return await run_population('literature.binding.model.populate', arguments, ctx)
-
-
-async def literature_transport_response_populate(arguments, ctx):
-    return await run_population('literature.transport.response.populate', arguments, ctx)
-
-
-async def literature_figure_populate(arguments, ctx):
-    return await run_population('literature.figure.populate', arguments, ctx)
-
-
-async def literature_rate_source_populate(arguments, ctx):
-    return await run_population('literature.rate.source.populate', arguments, ctx)
-
-
-async def literature_amount_populate(arguments, ctx):
-    return await run_population('literature.amount.populate', arguments, ctx)
-
-
-async def literature_optical_populate(arguments, ctx):
-    return await run_population('literature.optical.populate', arguments, ctx)
-
-
-async def literature_kinetic_populate(arguments, ctx):
-    return await run_population('literature.kinetic.populate', arguments, ctx)
-
-
-async def literature_kinetic_model_populate(arguments, ctx):
-    return await run_population('literature.kinetic.model.populate', arguments, ctx)
-
-
-async def literature_binding_interaction_populate(arguments, ctx):
-    return await run_population('literature.binding.interaction.populate', arguments, ctx)
-
-
-async def literature_binding_interaction_model_populate(arguments, ctx):
-    return await run_population('literature.binding.interaction.model.populate', arguments, ctx)
-
-
-async def literature_ion_discrimination_populate(arguments, ctx):
-    return await run_population('literature.ion_discrimination.populate', arguments, ctx)
-
-
-async def literature_channel_populate(arguments, ctx):
-    return await run_population('literature.channel.populate', arguments, ctx)
-
-
-async def literature_assay_components_populate(arguments, ctx):
-    return await run_population('literature.assay.components.populate', arguments, ctx)
-
-
-async def literature_assay_grading_populate(arguments, ctx):
-    return await run_population('literature.assay_grading.populate', arguments, ctx)
-
-
-async def literature_a105_aggregate(arguments, ctx):
-    return await run_population('literature.a105.aggregate', arguments, ctx)
-
-
-async def literature_product_partition_populate(arguments, ctx):
-    return await run_population('literature.product_partition.populate', arguments, ctx)
-
-
-async def literature_completion_time_populate(arguments, ctx):
-    return await run_population('literature.completion_time.populate', arguments, ctx)
-
-
-async def literature_active_site_populate(arguments, ctx):
-    return await run_population('literature.active_site.populate', arguments, ctx)
-
-
-async def literature_parent_depletion_populate(arguments, ctx):
-    return await run_population('literature.parent_depletion.populate', arguments, ctx)
-
-
-async def literature_stoichiometric_balance_populate(arguments, ctx):
-    return await run_population('literature.stoichiometric_balance.populate', arguments, ctx)
-
-
-async def literature_ratio_source_populate(arguments, ctx):
-    return await run_population('literature.ratio.source.populate', arguments, ctx)
-
-
-async def literature_controlled_response_source_v3_populate(arguments, ctx):
-    return await run_population('literature.controlled_response.source_v3.populate', arguments, ctx)
-
-
-async def literature_gel_populate(arguments, ctx):
-    return await run_population('literature.gel.populate', arguments, ctx)
-
-
-TOOLS = {
-    'state_query': state_query,
-    'source_read': source_read,
-    'source_locate': source_locate,
-    'source_sequence_references': source_sequence_references,
-    'source_experimental_records': source_experimental_records,
-    'source_archive_members': source_archive_members,
-    'source_archive_extract': source_archive_extract,
-    'source_pdf_info': source_pdf_info,
-    'source_pdf_text': source_pdf_text,
-    'source_pdf_page': source_pdf_page,
-    'public_literature_search': public_literature_search,
-    'public_literature_read': public_literature_read,
-    'public_literature_sequence_identity': public_literature_sequence_identity,
-    'public_ncbi_search': public_ncbi_search,
-    'public_pmc_versions': public_pmc_versions,
-    'public_pmc_files': public_pmc_files,
-    'public_pmc_asset': public_pmc_asset,
-    'public_sabiork_search': public_sabiork_search,
-    'public_sabiork_read': public_sabiork_read,
-    'public_brenda_search': public_brenda_search,
-    'public_brenda_read': public_brenda_read,
-    'public_bioassay_search': public_bioassay_search,
-    'public_bioassay_read': public_bioassay_read,
-    'public_chembl_search': public_chembl_search,
-    'public_chembl_read': public_chembl_read,
-    'public_mavedb_search': public_mavedb_search,
-    'public_mavedb_read': public_mavedb_read,
-    'public_brenda_graph_search': public_brenda_graph_search,
-    'literature_concentration_window_populate': literature_concentration_window_populate,
-    'literature_measurement_comparison_populate': literature_measurement_comparison_populate,
-    'literature_rate_populate': literature_rate_populate,
-    'literature_rate_observations_populate': literature_rate_observations_populate,
-    'literature_calibration_recovery_populate': literature_calibration_recovery_populate,
-    'literature_product_coupling_populate': literature_product_coupling_populate,
-    'literature_measurement_validation_populate': literature_measurement_validation_populate,
-    'literature_rate_replicates_populate': literature_rate_replicates_populate,
-    'literature_quantity_populate': literature_quantity_populate,
-    'literature_assay_populate': literature_assay_populate,
-    'literature_ratio_populate': literature_ratio_populate,
-    'literature_binding_populate': literature_binding_populate,
-    'literature_binding_model_populate': literature_binding_model_populate,
-    'literature_transport_response_populate': literature_transport_response_populate,
-    'literature_figure_populate': literature_figure_populate,
-    'literature_rate_source_populate': literature_rate_source_populate,
-    'literature_amount_populate': literature_amount_populate,
-    'literature_optical_populate': literature_optical_populate,
-    'literature_kinetic_populate': literature_kinetic_populate,
-    'literature_kinetic_model_populate': literature_kinetic_model_populate,
-    'literature_binding_interaction_populate': literature_binding_interaction_populate,
-    'literature_binding_interaction_model_populate': literature_binding_interaction_model_populate,
-    'literature_ion_discrimination_populate': literature_ion_discrimination_populate,
-    'literature_channel_populate': literature_channel_populate,
-    'literature_assay_components_populate': literature_assay_components_populate,
-    'literature_assay_grading_populate': literature_assay_grading_populate,
-    'literature_a105_aggregate': literature_a105_aggregate,
-    'literature_product_partition_populate': literature_product_partition_populate,
-    'literature_completion_time_populate': literature_completion_time_populate,
-    'literature_active_site_populate': literature_active_site_populate,
-    'literature_parent_depletion_populate': literature_parent_depletion_populate,
-    'literature_stoichiometric_balance_populate': literature_stoichiometric_balance_populate,
-    'literature_ratio_source_populate': literature_ratio_source_populate,
-    'literature_controlled_response_source_v3_populate': literature_controlled_response_source_v3_populate,
-    'literature_gel_populate': literature_gel_populate,
-    'reason': reason, ASSESS: assess_search_results, FETCH: fetch_search_hit}
-
-
-def child_options(input_list, named):
-    """The children the model may select now: slot, description and the arguments it takes (the old
-    ``child_option_information``), only for the unconsumed named source of the input list."""
-    return [{'slot': slot, 'description': child_arguments(slot, input_list)[0],
-             'arguments': child_arguments(slot, input_list)[1]} for slot in valid_slots(input_list, named)]
+TOOLS = {RUN_SEARCH: run_search, LIST: list_record_publications, ASSESS: assess_search_results,
+         FETCH: fetch_search_hit}
 
 
 def decide(summary, feedback, ctx):
-    """Ask the model for the next tool or child, shown the assignment, the custody of the sources, its own read
-    and acquisition outcomes, the goal plan, the interpretation so far, the children's returns, the tools, the measured time and the
-    yield table (the old decision state and inputs, over this episode's summary).
-
-    The population display contexts of the old ``internal_summary.py`` (the possessed rate, domain, meaning,
-    gel, controlled-response, endpoint, precision, comparison and window rows, the owned population sources and
-    the failed population attempt) read the family repositories through the Store and are not carried (see the
-    "Carried over" table).
-
-    Before Jev has measured the search results the decision is that measurement, made by code with no model call
-    (nano-graphrag assesses every buffered result before its page proposer is asked). Straight after the fetch of a
-    picked hit completed the decision is the page on the fetched article, also made by code with no model call."""
+    """The next unit. Before the provider search has run, the decision is that search; before Jev has measured the
+    results, the decision is that measurement; straight after the fetch of a picked hit completed, the decision is the
+    page on the paper; these are code attached to the units, with no model call (nano-graphrag runs the search and
+    assesses every buffered result before its page proposer is asked). Otherwise the model picks one unprocessed hit,
+    shown the assignment, its own outcomes, the credit definition, the candidates and their Jev assessment, the pages'
+    returns, the measured time and the yield table."""
+    if summary['pending_search'] is not None:
+        return ToolCall(RUN_SEARCH, {'search_query_ref': summary['pending_search'], 'scope': summary['scope']})
+    if summary['pending_listing'] is not None:
+        return ToolCall(LIST, {'subject_refs': summary['pending_listing'], 'scope': summary['scope']})
     if assessment_pending(summary):
         return ToolCall(ASSESS, {'goal': summary['jev_search_goal'], 'results': summary['search_result_candidates']})
     if summary['pending_page'] is not None:
         return ChildCall('page', summary['pending_page'])
-    named = bool(summary['named_source_refs'])
-    names = offered(ctx.settings)
-    leads = summary['task']['kind'] == 'verified_source_leads'
-    knowledge_directory = ctx.settings['knowledge_library_directory']
     context = {'goal': GOAL, 'scope': summary['scope'], 'literature_assignment': summary['literature_assignment'],
-               'literature_source_custody': summary['literature_source_custody'],
                'own_literature_outcomes': summary['own_literature_outcomes'],
-               'literature_history_meaning': summary['literature_history_meaning'],
                'literature_goal_plan': summary['literature_goal_plan'],
                'credit_binding': summary['credit_binding'], 'last_local_outcome': summary['last_local_outcome'],
-               'held_record_refs': summary['held_record_refs'], 'assay_sheets': summary['assay_sheets'],
-               'aggregation_sheets': summary['aggregation_sheets'],
+               'held_record_refs': summary['held_record_refs'],
                'child_returns': summary['child_returns'], 'input_list': summary['input_list'],
                'consumed_inputs': summary['consumed_inputs'],
-               'child_options': child_options(summary['input_list'], named),
                'page_candidates': summary['search_planner_context'], 'hit_fetches': summary['hit_fetches'],
-               'tools': [*catalog(names, summary['reasoning_schema'], leads, ctx.settings),
-                         *hit_tools(summary['input_list'], named)],
+               'listed_publications': summary['listed_publications'],
+               'tools': hit_tools(summary['input_list']),
                'time_accounting': time_accounting(ctx.clock.progress_time)}
-    if ctx.settings['rate_population']:
-        context['literature_experimental_work'] = {'version': 'literature_experimental_task_v1',
-                                                    'aspect': 'source_experimental_evidence', 'evidence_axis': 'A105'}
-    context = extend_context(context, {
-        'feedback': feedback, 'action_yields': summary['action_yields'],
-        'tool_knowledge': None if knowledge_directory is None else ToolKnowledge(knowledge_directory).context()},
-        conflict='initial_binding_context_field_conflict')
-    return ModelRequest('REASONING', instructions(knowledge=context.get('tool_knowledge'), leads=leads,
-                                                  populations=offered_populations(ctx.settings)), context,
-                        generation_schema(selection_schema(names, summary['reasoning_schema'], leads, ctx.settings,
-                                                           summary['input_list'], named)))
-
-
-def validate_selection(value, schema):
-    validate_schema(value, schema)
-    return value['selection']
+    context = extend_context(context, {'feedback': feedback, 'action_yields': summary['action_yields']},
+                             conflict='initial_binding_context_field_conflict')
+    return ModelRequest('REASONING', instructions(), context, generation_schema(selection_schema(summary)))
 
 
 def action(response, summary, records, ctx):
-    """Turn the model's answer into one tool call or one child commission, or reject it (no unit). An answer that
-    selects no offered tool or slot, arguments that do not fit its schema, an empty reasoning commit without a
-    source lead or a no-applicable-evidence declaration, or a child page naming a record this episode does
-    not hold is invalid (validation of the model's own answer). What ``msg_to_child`` builds is not checked here: a
-    wrong commission fails where the child is built."""
-    names = offered(ctx.settings)
-    leads = summary['task']['kind'] == 'verified_source_leads'
-    commit_schema = summary['reasoning_schema']
-    schema = selection_schema(names, commit_schema, leads, ctx.settings, summary['input_list'],
-                              bool(summary['named_source_refs']))
+    """Turn the model's answer into the pick of one hit, or reject it (no unit): an answer that selects no offered hit
+    or arguments that do not fit the schema is invalid (validation of the model's own answer)."""
+    schema = selection_schema(summary)
     try:
-        selection = validate_selection(decode_response(response, schema), schema)
-        if selection['kind'] == 'child':
-            page = page_of(records, selection['arguments']['page']['source_ref'])
-            return ChildCall(selection['slot'], {**selection['arguments'], 'page': page})
-        name, arguments = selection['tool'], selection['arguments']
-        if name == 'reason' and empty_commit(arguments['commit'], commit_schema) and 'source_lead' not in arguments and (
-                arguments.get('evidence_processing', {}).get('kind') != 'no_applicable_evidence'):
-            raise ValueError('empty_reasoning_commit')
+        decoded = decode_response(response, schema)
+        validate_schema(decoded, schema)
+        selection = decoded['selection']
     except (ValueError, KeyError, TypeError, ValidationError) as error:
         raise Rejected(rejection_feedback(error, category='action_contract'))
-    return ToolCall(name, {'arguments': arguments, 'scope': summary['scope'],
-                           'assignment': summary['literature_assignment'], 'requested': summary['requested'],
-                           'proposed_annotation_ref': summary['proposed_annotation_ref']})
+    return ToolCall(selection['tool'], {'arguments': selection['arguments'], 'scope': summary['scope']})
 
 
 def assessment_pending(summary):
@@ -862,17 +297,15 @@ def assessment_pending(summary):
 
 
 def offered_actions(summary, ctx):
-    """The action types offered at this decision: before Jev has measured the search results the one action is
-    ``assess_search_results``; straight after a fetched hit it is the page; otherwise the names of the tools ``decide``
-    shows (the same ``catalog`` over the same ``offered`` list, and the hit-picking tool while a hit remains) and the
-    child slots."""
+    """The action types offered at this decision: before the provider search ran the one action is ``run_search``;
+    before Jev measured the results it is ``assess_search_results``; straight after a fetched hit it is the page;
+    otherwise the hit-picking tool while an unprocessed hit remains."""
+    if summary['pending_search'] is not None:
+        return [RUN_SEARCH]
+    if summary['pending_listing'] is not None:
+        return [LIST]
     if assessment_pending(summary):
         return [ASSESS]
     if summary['pending_page'] is not None:
         return list(CHILD_SLOTS)
-    named = bool(summary['named_source_refs'])
-    names = offered(ctx.settings)
-    leads = summary['task']['kind'] == 'verified_source_leads'
-    tools = [entry['name'] for entry in [*catalog(names, summary['reasoning_schema'], leads, ctx.settings),
-                                         *hit_tools(summary['input_list'], named)]]
-    return [*tools, *valid_slots(summary['input_list'], named)]
+    return [entry['name'] for entry in hit_tools(summary['input_list'])]

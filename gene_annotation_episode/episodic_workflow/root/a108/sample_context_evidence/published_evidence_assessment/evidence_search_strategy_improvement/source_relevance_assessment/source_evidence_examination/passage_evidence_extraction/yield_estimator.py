@@ -1,22 +1,11 @@
-"""Continuation from the commissioned task, carried from the old ``yield_estimator.py``
-(``yield_controller`` -> ``_private_yield_controller``; README 7b).
-
-``verified_source_leads`` accumulates (old ``YieldController``, now ``AccumulationYieldController`` with
-``FIXED_CONTROL`` and ``items=None``, nano-graphrag's EstimatorController): one credit unit per verified source, and
-no cost. After 8 units attempted and 4 observed it fits nano-graphrag's yield model; a unit is flat when the upper
-bound of the expected next marginal (hypervolume) credit is at or below gamma (fixed, 0.06); it stops after 4 flat
-units in a row. No item count is passed, so the input list does not stop it. Every other task is a finite commission (old ``_FiniteLiteratureYieldController``
-with ``_RemainingCommissionedCredit``, now ``CompletionYieldController``): the target is the task's ``credit_unit``
-(the old ``maximum_credit``: one answer to the commission), read from the parent input. The cost is the old task
-cutoff, now the episode's setting; the parameters are its settings. The old ``None`` (no private yield binding) and
-the old ``validate_yield_bindings`` declaration checks are not carried: the controller is always built from the
-task, and the settings are the run's ``continuation`` entry."""
-from yield_control import AccumulationYieldController, CompletionYieldController, FIXED_CONTROL
+"""Continuation from the commissioned task: ``verified_source_leads`` accumulates (``AccumulationYieldController`` with
+``FIXED_CONTROL``, nano-graphrag's EstimatorController): one credit unit per verified source, and no cost. After 8 units
+attempted and 4 observed it fits nano-graphrag's yield model; a unit is flat when the upper bound of the expected next
+marginal (hypervolume) credit is at or below gamma (fixed, 0.06); it stops after 4 flat units in a row. The input list
+bounds it: the one commissioned chunk is consumed by its extraction, so the episode stops when no item remains."""
+from yield_control import AccumulationYieldController, FIXED_CONTROL
 
 
 def yield_controller(initial_credit, settings, parent_input):
-    task = parent_input['task']
-    if task['kind'] == 'verified_source_leads':
-        return AccumulationYieldController('passage_evidence_extraction', initial_credit, FIXED_CONTROL, items=None)
-    return CompletionYieldController('passage_evidence_extraction', initial_credit, settings['cost'],
-                                     task['credit_unit'], settings['parameters'])
+    return AccumulationYieldController('passage_evidence_extraction', initial_credit, FIXED_CONTROL,
+                                       items=len(parent_input['spans']))

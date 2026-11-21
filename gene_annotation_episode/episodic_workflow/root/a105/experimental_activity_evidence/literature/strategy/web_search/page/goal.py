@@ -1,28 +1,17 @@
-"""What this episode is for: the A105 examination of one exact source, carried from the old ``goal.py``
-(``SourceGoal.instructions``: the role instruction of ``literature_page`` in ``source_contracts._ROLE_INSTRUCTIONS``
-and the shared investigation paragraph) at 97308b94c. The planning question of ``SourceGoal.planning_context`` is
-``PLANNING_QUESTION``; ``task.py`` and ``messages/internal_summary.py`` show it to the model."""
+"""What this episode is for (nano-graphrag's page): the A105 page of ONE paper that a search handed it for the claim.
+Jev has assessed every table region and prose chunk of the paper against the information needs of the claim (automatic,
+first); the page chooses which one leaf child reads next. The page does not read the text and does not extract. A leaf
+extracts its item; the update of the subscoring sheet from what the leaves returned is automatic (``task.py``)."""
 
 BINDING_PATH = 'experimental_activity_evidence/literature/strategy/web_search/page'
-GOAL = ('Investigate where and how this exact source should be examined. Choose ordinary source operations or '
-        'selected table, ordered-reading or targeted-passage investigations as useful. Paragraph projections omit '
-        'some XML headings, tables and footnotes; retained original bytes remain addressable.\n'
-        'This is an iterative scientific investigation in the shared Episode loop. Earlier outcomes and admitted '
-        'child forms inform later choices; no child order, reading quota or complete-document requirement is '
-        'prescribed. A one-off search/read is an ordinary tool. A supplied reading selector is context, not an '
-        "automatically executed action. Preserve the source's actual subject, experimental conditions, "
-        'representation, version and UTF-8 byte anchors. Distinguish source claims from their applicability to the '
-        'fixed target. Negative findings and qualifications can advance the investigation. Commit interpretations '
-        "with the common reasoning action and update only the parent's declared typed form in that same work call. "
-        'Navigation, byte coverage and repeated reading earn no scientific credit by themselves. The commissioned '
-        "task's own yield settings guide continuation.")
-UNIT = ('one model-selected unit on the assigned source: a catalog lookup, an access tool, a population sheet, a '
-        'reasoning commit coupled with its grading sheets, the report tool, or one commission of a table, '
-        'ordered-reading or targeted-passage investigation')
-RESULT = ('the typed investigation finding of the examination of the assigned source for the assigned question (the '
-          "actual source claim, source subject and qualification), with the commissioned task's typed answers "
-          '(screening answers, source-lead dispositions, quantity, assay-grading and aggregation cells) the parent '
+GOAL = ("Choose, from Jev's assessment of the paper's table regions and prose chunks against the information needs of "
+        'the claim, which one candidate a leaf child reads next: one table region, one prose chunk, or the remaining '
+        'prose in order. Whether the paper reports an experiment is what the leaves find out; the page does not read '
+        "or extract. A candidate handed to a leaf is done. The commissioned task's own yield settings guide continuation.")
+UNIT = ('one automatic step on the assigned paper (Jev\'s assessment of its candidates; the update of the subscoring '
+        'sheet from the leaf records returned), or one model-selected leaf child on one candidate of the paper')
+RESULT = ("the typed investigation finding of the paper for the claim (the per-annotation scores and the controlled "
+          "features of the subscoring rows), with the persisted sheet states and the source-lead answer the parent "
           'selects')
-PLANNING_QUESTION = ('Which unresolved part of the commissioned source assessment should be investigated next, using '
-                     'the actual findings and returned components? Choose source operations or one of the declared '
-                     'children; revise the approach from outcomes while preserving the original objective.')
+PLANNING_QUESTION = ('Which one unconsumed candidate of the paper should a leaf child read next, given Jev\'s '
+                     'assessment against the information needs of the claim and what the leaves returned?')

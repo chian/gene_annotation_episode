@@ -82,16 +82,28 @@ def grading_arguments(world, relation='support'):
                               'origin_link_evidence': []}]}
 
 
-def reading_assignment(world, task, requested=('evidence_amount',)):
-    """The ``reading_assignment_v1`` of the leaf: the paper as the page, its start as the window."""
+def leads_task():
+    """The one commissioned task of the leaves: the verified source leads."""
+    return {'version': 'literature_local_task_v1', 'evidence_axis': 'A108', 'kind': 'verified_source_leads',
+            'credit_unit': 1.0}
+
+
+def window(world, first=0, last=None):
+    """A window of the paper in the page's representation: bytes ``[first, last)`` (the whole paper by default)."""
+    paper = world['paper']
+    last = len(PAPER.encode()) if last is None else last
+    return {'source_ref': paper['id'], 'representation': 'original', 'offset': first, 'limit': last - first}
+
+
+def reading_assignment(world, selection, requested=('evidence_amount',)):
+    """The ``reading_assignment_v1`` of a leaf: the paper as the page and the leaf's ``selection`` (a leaf's own
+    shape: ``{'spans': [windows]}`` for the chunk and report leaves, one window for the table leaf)."""
     paper = world['paper']
     page = {'version': 'page_assignment_v1', 'source_ref': paper['id'], 'representation': 'original',
             'artifact_ref': paper['artifact_ref'], 'question_context_refs': [world['organism']['id']],
             'prior_delivery_refs': []}
-    assignment = {'version': 'reading_assignment_v1', 'page': page,
-                  'selection': {'source_ref': paper['id'], 'representation': 'original', 'offset': 0,
-                                'limit': len(PAPER.encode())},
-                  'literature_task': task, 'proposed_annotation_ref': world['claim']['id'],
+    assignment = {'version': 'reading_assignment_v1', 'page': page, 'selection': selection,
+                  'literature_task': leads_task(), 'proposed_annotation_ref': world['claim']['id'],
                   'scope': world['scope'], 'received_record_refs': list(dict.fromkeys(world['held']))}
     if requested:
         assignment['requested_a108_grading_components'] = list(requested)
@@ -128,5 +140,20 @@ def graded_commit(world):
                                    'qualification': {'kind': 'none', 'context_refs': [], 'assumption_refs': []},
                                    'status': 'retained', 'withdrawal_reason': 'not_withdrawn',
                                    'same_source_claim_as_ref': None, 'replaces_refs': []}}]}
-    return {'commit': commit, 'evidence_processing': {
+    return {'kind': 'reason', 'commit': commit, 'evidence_processing': {
         'kind': 'graded', 'gradings': [{'arguments': json.dumps(grading_arguments(world))}]}}
+
+
+def source_lead(world, disposition='relevant'):
+    """The source lead of the verified-source-leads commission: the paper, its anchored result reference as the
+    subject, and the exact interval of the result in the paper."""
+    start, end = span(PAPER, RESULT)
+    return {'proposed_annotation_ref': world['claim']['id'], 'source_ref': world['paper']['id'],
+            'subject_ref': world['result']['id'], 'disposition': disposition,
+            'relevance_rationale': 'the paper reports the growth response of the target organism on succinate',
+            'witness': {'source_ref': world['paper']['id'], 'representation': 'original', 'start': start, 'end': end}}
+
+
+def extraction(world):
+    """What the model selects for the one ``extract`` action: the graded commit and the source lead."""
+    return {**graded_commit(world), 'source_lead': source_lead(world)}

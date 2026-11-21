@@ -80,7 +80,7 @@ AXIS = {'version': 'sample_context_evidence_option_ref_v1', 'library_id': LIBRAR
 THOUGHT = {'version': 'sample_context_evidence_option_ref_v1', 'library_id': LIBRARY, 'slot': 'thought_pattern',
            'option_id': 'P01', 'entry_sha256': SHA}
 SELECTORS = {'version': 'sample_context_evidence_selection_v3', 'evidence_axis': AXIS, 'thought_pattern': THOUGHT,
-             'child_tool_info': [{'name': 'source.read', 'resources': 'local'}]}
+             'child_tool_info': [{'name': 'source.locate', 'resources': 'local'}]}
 TASK = {'version': 'evidence_axis_task_v1', 'kind': 'whole_axis_findings', 'evidence_axis': 'A108', 'credit_unit': 2}
 SUBJECT, HYPOTHESIS = ref('input', '1'), ref('hypothesis', '1')
 SCOPE = {'subject_refs': [SUBJECT]}
@@ -146,16 +146,21 @@ def test_the_literature_commission_is_admitted_by_the_child_form():
     child_return = importlib.import_module(CHILD_MODULE + '.messages.final_to_parent')
     source = ref('source', '3')
     task = {'version': 'literature_local_task_v1', 'evidence_axis': 'A108', 'credit_unit': 2,
-            'kind': 'source_answer', 'answer_kind': 'assessment', 'source_refs': [source]}
+            'kind': 'verified_source_leads'}
     message = to_child.msg_to_child('published_evidence_assessment', {
         'objective': 'o', 'purpose': 'p', 'scope': SCOPE, 'assignment': {
-            'question_context_refs': [ref('context', '5')], 'source_refs': [source], 'literature_task': task,
+            'question_context_refs': [ref('context', '5')], 'literature_task': task,
             'requested_a108_grading_components': [], 'requested_a108_aggregation_components': []},
-        'return_fields': ['literature_screening_answers']}, summary_of())
+        'return_fields': ['literature_source_lead_dispositions']}, summary_of())
     child_form.ASSIGNMENT_FORM.admit(message.assignment, 'assignment')
+    assert 'source_refs' not in message.assignment
     assert message.assignment['received_record_refs'] == [
-        source, ref('artifact', '4'), ref('hypothesis', '1'), ref('input', '1'), ref('context', '5')]
-    assert message.selection == ('literature_screening_answers',)
+        ref('hypothesis', '1'), ref('input', '1'), ref('context', '5')]
+    assert message.selection == ('literature_source_lead_dispositions',)
+    wrong = {**task, 'kind': 'source_answer', 'answer_kind': 'assessment', 'source_refs': [source]}
+    task_file = importlib.import_module(MODULE + '.task')
+    with pytest.raises(Exception):
+        Draft202012Validator(task_file.literature_task_schema()).validate(wrong)
     assert set(message.selection) <= set(child_return.RETURN_FORM.fields)
     with pytest.raises(LookupError):
         to_child.msg_to_child('nobody', {'scope': SCOPE}, summary_of())
@@ -169,11 +174,13 @@ def test_the_offered_action_schema_is_a_valid_strict_output_schema(tmp_path):
     with Store(tmp_path / 'state') as store:
         summary = {**summary_of(), 'reasoning_schema': store.reasoning_schema(), 'process': {
             'evidence_axis_entry_version': 'evidence_axis_instruction_v1',
-            'child_tool_info': [{'name': 'source.read', 'resources': 'local', 'description': 'd',
+            'child_tool_info': [{'name': 'source.locate', 'resources': 'local', 'description': 'd',
                                  'instructions': 'i'}]}}
     names = task.offered(summary, {})
     assert names == ['process_search', 'process_entry', 'process_sources', 'process_tools', 'process_revise',
-                     'source_read', 'reason', 'sample_context_evidence', 'published_evidence_assessment']
+                     'source_locate', 'reason', 'sample_context_evidence', 'published_evidence_assessment']
+    assert not {'source_read', 'source_pdf_text', 'public_literature_search', 'public_literature_read',
+                'public_pmc_asset'} & set(task.TOOLS)
     schema = task.selection_schema(summary, names)
     Draft202012Validator.check_schema(schema)
     Draft202012Validator.check_schema(generation_schema(schema))

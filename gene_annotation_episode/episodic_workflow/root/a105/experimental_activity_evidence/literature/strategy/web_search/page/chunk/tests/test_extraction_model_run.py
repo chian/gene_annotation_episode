@@ -18,6 +18,9 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_row_contract import (
     IDENTITY_FIELDS, IDENTITY_UNAVAILABLE_REASONS, LEAF_RECORD_IDENTITY, normalize_identity_ref, validate_identity)
 
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_row_contract import (
+    experiment_types_of_class)
+
 from .leaf_world import EPISODE, PATH, linked, resumed
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.tests import (
     alpha_passages, bli_passages, elisa_passages, emsa_passages, fcs_passages, fp_passages, fret_passages, gci_passages, itc_passages, mst_passages, pulldown_passages, radioligand_passages, sec_passages, spa_passages, trp_passages)
@@ -34,6 +37,36 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.
 from .test_extraction_leaf import y2h_real_world, y2h_synthetic_world
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.tests import cetsa_passages
 from .test_extraction_leaf import cetsa_real_world, cetsa_synthetic_world
+
+
+def naming_calls(calls):
+    """The calls that name the method of a window (the decision's model call of a unit; their context has the sheet class and
+    the listed methods, not an experiment type)."""
+    return [call for call in calls if 'methods' in (call['request'].get('context') or {})]
+
+
+def fill_calls(calls):
+    """The calls that fill the form of the type the leaf named (the unit's own model calls; their context names the type)."""
+    return [call for call in calls if 'experiment_type' in (call['request'].get('context') or {})]
+
+
+def check_named(world, calls, records):
+    """The leaf was handed the sheet class (never a type) and named the type the test expects: every naming call offered exactly
+    the types of that class and answered with the expected type, every fill call is for it, and every held record carries it."""
+    expected = world['expected_type']
+    sheet_class = world['input']['assignment']['sheet_class']
+    assert 'experiment_type' not in world['input']['assignment']
+    named = naming_calls(calls)
+    assert named, 'the leaf must name the method before it fills a form'
+    for call in named:
+        assert call['request']['context']['sheet_class'] == sheet_class
+        assert set(call['request']['context']['methods']) == set(experiment_types_of_class(sheet_class))
+        print('NAMED', call['response']['method'])
+        assert call['response']['method'] == expected, ('the leaf named another method', call['response']['method'], expected)
+    for call in fill_calls(calls):
+        assert call['request']['context']['experiment_type'] == expected
+    for record in records:
+        assert record['experiment_type'] == expected
 
 
 def type_answer(call):
@@ -185,21 +218,22 @@ def check_identity(world, call, run_id=None):
     validate_identity_answer(block, chunk)           # the same generic rules the leaf applies
     assert not ('partner_role' in stated and 'partner_id' not in stated)
     assert not ('panel_letter' in stated and 'label_number' not in stated)
-    keys = identity_record_keys(block, chunk, assignment['offset'], experiment_type=assignment['experiment_type'], source_ref=assignment['source_ref'])
+    keys = identity_record_keys(block, chunk, assignment['offset'], experiment_type=world['expected_type'], source_ref=assignment['source_ref'])
     if 'target_id' in stated:
         assert keys['target_id'] == normalize_identity_ref(block['target_id']['value'])
     else:
         assert keys['target_id'] is None and 'target_id' in keys['unavailable_reasons']
     print('IDENTITY TARGET', repr(keys['target_id']), 'PARTNER', repr(keys['partner_id']), 'TEMPERATURE_C', keys['temperature_c'])
     if run_id is not None:
-        check_expected_identity(keys, assignment['experiment_type'], run_id)
+        check_expected_identity(keys, world['expected_type'], run_id)
     return keys
 
 
 def report(world, run, run_id, result):
     journal = run.journal
     path = tuple(tuple(step) for step in journal.episodes(run_id)[0]['path'])
-    calls = journal.model_calls(run_id, path)
+    every_call = journal.model_calls(run_id, path)
+    calls = fill_calls(every_call)             # the unit's fills; the naming calls are checked by check_named
     units = [row[2] for row in journal.units(run_id, path)]
     print('ENDED', journal.run_state(run_id)[1])
     print('MODEL CALLS', len(calls), 'UNITS', len(units))
@@ -224,6 +258,7 @@ def report(world, run, run_id, result):
         check_identity(world, call, run_id)
     print('RETURN', result)
     store = world['store']
+    check_named(world, every_call, [json.loads(store.get_artifact(ref)) for ref in result['record_refs']])
     for ref in result['record_refs']:
         record = json.loads(store.get_artifact(ref))
         if 'unavailable_reasons' in record:       # the stored leaf record: the identity keys at top level beside source_ref and experiment_type

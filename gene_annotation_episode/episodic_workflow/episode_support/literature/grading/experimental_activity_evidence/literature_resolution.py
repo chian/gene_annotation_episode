@@ -9,6 +9,7 @@ All constants come from literature_row_contract (WEIGHT_*, RESOLVED_*, CREDIT_QU
 """
 import math
 
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_bearing import identified_closeness
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_row_contract import (
     CREDIT_QUESTIONS_EXTRA,
     CRITERION_STATUS,
@@ -75,11 +76,14 @@ def row_weight(results):
         interpretations = result.get('interpretations') or {}
         applicable = [(name, item) for name, item in interpretations.items() if item['status'] != 'not_applicable']
         experiment_type = result['experiment_type']
+        # 2026-11-21: the result's weight is scaled by how far its assayed protein is the target (identified_closeness, 0..1,
+        # smooth in the sequence closeness; never a gate), so the score (which reads the result's weight) scales with it.
+        standing = identified_closeness(result)
         if not applicable:
-            weights.append(float(WEIGHT_UNKNOWN_BY_TYPE[experiment_type]))
+            weights.append(float(WEIGHT_UNKNOWN_BY_TYPE[experiment_type]) * standing)
             continue
-        weights.append(sum(criterion_resolution(item['status'], item.get('degree'), experiment_type, name)
-                           for name, item in applicable) / len(applicable))
+        weights.append(standing * sum(criterion_resolution(item['status'], item.get('degree'), experiment_type, name)
+                                      for name, item in applicable) / len(applicable))
     return sum(weights) / len(weights)
 
 
@@ -117,7 +121,10 @@ def row_resolution(row):
         if status == 'not_applicable':
             continue
         values.append(criterion_resolved(status, _row_criterion_degree(row, name) if status == 'supported' else None))
-    return sum(values) / len(values)
+    # 2026-11-21: every answer of the row is only as resolved as its best identified experiment is the target's protein
+    # (row['identified_closeness'] = the greatest identified_closeness over the member results: adding a result never lowers
+    # it, so credit is never lost to an added result). Smooth, never a gate: an unidentified subject stands at the bottom value.
+    return row['identified_closeness'] * sum(values) / len(values)
 
 
 def credit_change(before_row, after_row):
