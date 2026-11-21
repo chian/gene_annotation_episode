@@ -84,6 +84,16 @@ _BINDING_PATH = re.compile('^' + _SEGMENT + '(?:/' + _SEGMENT + ')*$')
 YIELD_CONTROLLERS = (AccumulationYieldController, BoundedQualityYieldController, CompletionYieldController)
 
 
+class _Unbounded:
+    def __repr__(self):
+        return 'UNBOUNDED'
+
+
+# What a ``ceiling`` returns, deliberately and for one action, when the credit that action can add has no finite upper
+# bound. There is no default: a ``ceiling`` answers for every action its episode offers.
+UNBOUNDED = _Unbounded()
+
+
 @dataclass(frozen=True)
 class ModelRequest:
     """``decide`` asks the model."""
@@ -563,6 +573,6 @@ class _SystemSource:
             self._binding._summary(self.episode.view_of(record)), completion, self._bound.selection))
 
 
-__all__ = ['ALWAYS_RETURNED', 'ChildCall', 'ChildMessage', 'EpisodeBinding', 'ModelRequest', 'Rejected',
+__all__ = ['ALWAYS_RETURNED', 'UNBOUNDED', 'ChildCall', 'ChildMessage', 'EpisodeBinding', 'ModelRequest', 'Rejected',
            'SUPPLIED_BY_FILE', 'SIGNATURES', 'ToolCall', 'YIELD_CONTROLLERS', 'closing_credit',
            'controller_input_schema']

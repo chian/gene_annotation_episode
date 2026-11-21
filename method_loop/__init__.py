@@ -46,7 +46,7 @@ from .episode import (
 from .forms import (FIELD_TYPES, ChoiceField, Commission, DeclaredField, Field, FormError, RecordForm,
                     SubsetField)
 from .episode_type import (ALWAYS_RETURNED, SIGNATURES, SUPPLIED_BY_FILE, YIELD_CONTROLLERS, ChildCall, ChildMessage,
-                           EpisodeBinding, ModelRequest, Rejected, ToolCall, checked_members, closing_credit,
+                           EpisodeBinding, ModelRequest, Rejected, ToolCall, UNBOUNDED, checked_members, closing_credit,
                            controller_input_schema)
 
 __all__ = [
@@ -60,6 +60,7 @@ __all__ = [
     "ModelRequest",
     "Rejected",
     "ToolCall",
+    "UNBOUNDED",
     "checked_members",
     "closing_credit",
     "controller_input_schema",
