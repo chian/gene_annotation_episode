@@ -157,7 +157,10 @@ CHILD_DESCRIPTION = (
     'else its original bytes); the child chooses ordinary source operations or selected table, ordered-reading or '
     'targeted-passage investigations of it. Choose the result from context.page_candidates (its Jev probability, '
     'provider rank, title, description and the measured outcomes of the previous page children). The source is '
-    'consumed: it is not offered again.')
+    'consumed: it is not offered again. The page child is where published experiments get graded: it measures the '
+    'passages and tables of the source against the claim, extracts each experiment the source reports and writes '
+    'its grading sheet row; the sheet states and the credit come back to you. Your own reads earn no credit, and '
+    'reading a source yourself does not grade it.')
 
 
 def page_schema(input_list):

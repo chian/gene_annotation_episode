@@ -137,7 +137,10 @@ CHILD_DESCRIPTION = (
     'separate from a literal provider query; the child revises terms or source choices in light of actual '
     'search/read outcomes and can commission an investigation of which returned sources deserve examination. The '
     'sources handed to it are taken from the input list (the sources not yet consumed) and are consumed: they are '
-    'not offered again.')
+    'not offered again. This child is where published experiments get graded: below it the returned sources are '
+    'measured against the claim, a selected source is examined as a page, and the page extracts each experiment it '
+    'reports and writes its grading sheet row; the sheet states and the credit come back to you. Your own searches '
+    'and reads earn no credit, and reading a source yourself does not grade it.')
 
 
 def strategy_schema(input_list):

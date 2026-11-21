@@ -136,7 +136,10 @@ CHILD_DESCRIPTION = (
     'the sources your own searches acquired) merit examination for the assigned question. Search results are '
     'source-discovery information: the child examines the original sources and their conditions before '
     'asserting biological evidence, and can commission the examination of a selected source. The results handed to '
-    'the child are consumed: they are not offered again.')
+    'the child are consumed: they are not offered again. This child is where published experiments get graded: it '
+    'measures each result against the claim, has a selected source examined as a page, and the page extracts each '
+    'experiment it reports and writes its grading sheet row; the sheet states and the credit come back to you. Your '
+    'own searches and reads earn no credit, and reading a source yourself does not grade it.')
 
 
 def search_schema(input_list):
