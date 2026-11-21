@@ -25,6 +25,9 @@ The configuration names every part; nothing has a default:
   (``CONFIGURATION``) or with it empty (``API_CONFIGURATION``); no other key set is taken;
 - ``bvbrc``: ``{resource_id: <the configuration of BvbrcJobRoute>}``: the authenticated BV-BRC application service
   (``bvbrc_job_route.py``), optional beside ``api``;
+- ``foldseek``: ``{resource_id: <the configuration of FoldseekJobRoute>}``: the public Foldseek structure search server
+  (``foldseek_job_route.py``), optional beside ``api``; the same keys as ``bvbrc`` without the login and the folder of
+  the service's workspace;
 - ``capabilities``: the declared capabilities, one per resource the run knows of;
 - ``event_ledger_directory``, ``estimate_table_path``, ``launch_instructions_directory``,
   ``tool_knowledge_directory``.
@@ -38,6 +41,7 @@ from gene_annotation_episode.local_job_policy import LocalJobPolicy
 
 from .api_job_route import ApiJobRoute
 from .bvbrc_job_route import BvbrcJobRoute
+from .foldseek_job_route import FoldseekJobRoute
 from .instruction_libraries import InstructionLibraries
 from .job_resource_adapter import JobResourceAdapter
 from .local_job_route import LocalJobRoute
@@ -47,7 +51,7 @@ from .pbs_job_route import PbsSshRoute
 CONFIGURATION = ('local', 'pbs', 'capabilities', 'event_ledger_directory', 'estimate_table_path',
                  'launch_instructions_directory', 'tool_knowledge_directory')
 API_CONFIGURATION = (*CONFIGURATION, 'api')
-OPTIONAL_CONFIGURATION = ('api', 'bvbrc')
+OPTIONAL_CONFIGURATION = ('api', 'bvbrc', 'foldseek')
 
 
 def job_services(configuration):
@@ -61,6 +65,8 @@ def job_services(configuration):
         remote.append((ApiJobRoute, configuration['api']))
     if 'bvbrc' in configuration:
         remote.append((BvbrcJobRoute, configuration['bvbrc']))
+    if 'foldseek' in configuration:
+        remote.append((FoldseekJobRoute, configuration['foldseek']))
     shared = {}
 
     def job_access():

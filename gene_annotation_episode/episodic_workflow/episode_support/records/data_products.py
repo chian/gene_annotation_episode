@@ -82,6 +82,22 @@ KINDS = {
     # with what they were read from). format_3464 JSON.
     'tool_grading_sheet': ('http://edamontology.org/data_2048', 'http://edamontology.org/format_3464',
                            'Report, JSON (the graded sheet of one tool result)'),
+    # A model of the target's structure (A102 ``get_model``: the AlphaFold DB model of an identical UniProt sequence, or an
+    # ESMFold prediction), as the PDB text the source returned. EDAM.tsv, read 2026-11-21 (https://edamontology.org/EDAM.tsv),
+    # neither obsolete: data_1460 Protein structure ("3D coordinate and associated data for a protein tertiary (3D) structure");
+    # not data_0883 Structure (it is for any macromolecule) and not data_1469 Protein structure (all atoms), which is obsolete.
+    # format_1476 PDB ("Entry format of PDB database in PDB format"): both sources write PDB text, with the per-residue
+    # confidence (pLDDT) in the B-factor column.
+    'protein_structure_model': ('http://edamontology.org/data_1460', 'http://edamontology.org/format_1476',
+                                'Protein structure, PDB (a model of the target: AlphaFold DB or ESMFold)'),
+    # The result of one Foldseek server search of a structure database with one model (``structure_search``: per hit the
+    # alignment, its statistics and the hit's aligned C-alpha coordinates). EDAM.tsv, read 2026-11-21, neither obsolete:
+    # data_0887 Structure alignment report ("An informative report of molecular tertiary structure alignment-derived data"):
+    # the report is the alignments of the target's model with the hits. Not data_0885 Structure database search results, which
+    # is obsolete in this release, and not data_0886 Structure alignment (that is the superimposed coordinates; the result
+    # holds the alignments and the hits' own C-alpha coordinates, not a superposition). format_3464 JSON.
+    'structure_search_results': ('http://edamontology.org/data_0887', 'http://edamontology.org/format_3464',
+                                 'Structure alignment report, JSON (Foldseek server result of one search)'),
 }
 EDAM_SOURCE = 'https://edamontology.org/EDAM.tsv, read 2026-11-20'
 

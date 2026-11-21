@@ -1,0 +1,52 @@
+{
+    "id": "StructureSearch",
+    "script": "foldseek_web_server",
+    "label": "Search a structure database with one structure (Foldseek web server)",
+    "description": "One search of one structure database with one query structure file, on the public Foldseek web server. Retained as verified on 2026-11-21: the MMseqs2 server API documentation (StructureSearch_server_api_docs.html, read from https://search.mmseqs.com/docs/, sha256 d92fc43678b78eb8d251b20fb06a0b05ac3db904f875de1c32b3dd7bef9c00a2) and the requests made to https://search.foldseek.com (docs/plan/designs/a102_services.md, section 3; docs/plan/designs/a102_structure_search_episode.md). The service has no key, no login and no cancel operation.",
+    "service": "foldseek",
+    "endpoints": {
+        "Foldseek": "https://search.foldseek.com"
+    },
+    "requests": {
+        "submit": {"method": "POST", "path": "/api/ticket", "content_type": "multipart/form-data", "reply": {"id": "string", "status": "PENDING"}},
+        "status": {"method": "GET", "path": "/api/ticket/{id}", "reply": {"id": "string", "status": ["PENDING", "RUNNING", "COMPLETE", "ERROR", "UNKNOWN"]}},
+        "result": {"method": "GET", "path": "/api/result/{id}/0", "content_type": "application/json", "reply": "one object: type, mode, queries[], results[] (one per database: db, alignments[0][] hits)"}
+    },
+    "parameters": [
+        {
+            "id": "q",
+            "label": "The query structure",
+            "required": 1,
+            "type": "file",
+            "desc": "multipart file field; one PDB (or mmCIF) structure file. A FASTA sequence is accepted as a ticket and ends in ERROR (verified: a102_services.md, section 3)."
+        },
+        {
+            "id": "database[]",
+            "label": "The structure database to search",
+            "required": 1,
+            "type": "enum",
+            "enum": ["afdb-swissprot"],
+            "desc": "One value of the service's databases (GET /api/databases, field path). Round 1 offers one; 'pdb100' and 'cath50' are verified to exist and are added to this list when their round is built.",
+            "verified_available": ["afdb-swissprot", "pdb100", "cath50"]
+        },
+        {
+            "id": "mode",
+            "label": "The alignment mode",
+            "required": 1,
+            "type": "enum",
+            "enum": ["tmalign"],
+            "desc": "Fixed. The documentation names the modes all and summary; the server also accepts 3diaa and tmalign (verified live, 2026-11-21); tmalign is the global TM-align mode in which score is the query-normalised TM-score x 100 and eval the mean TM-score (Foldseek README).",
+            "documented_enum": ["all", "summary"],
+            "verified_enum": ["3diaa", "tmalign"]
+        }
+    ],
+    "not_sent": ["email"],
+    "ticket_states": {
+        "PENDING": "queued",
+        "RUNNING": "running",
+        "COMPLETE": "finished",
+        "ERROR": "failed",
+        "UNKNOWN": "unknown"
+    },
+    "timing": "The ticket carries no task times (reply: id and status only); the duration of a job is observed."
+}
