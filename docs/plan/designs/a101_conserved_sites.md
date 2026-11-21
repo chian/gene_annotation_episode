@@ -74,3 +74,9 @@ local and BV-BRC resources, Pfam, the yield and children settings of R1's contin
 5. The estimator stops the head after 2 to 5 units that follow the last gain (R1 had 3 + 4 units after the first gain and stopped at 16 units); the
    head makes 6 to 11 units in all, against R1's 16, with at most 2 MSA and 1 or 2 MetaCATS jobs against R1's 4 and 7.
 6. No custody error; the ledger gets one row per launch (Homology, MSA, MetaCATS).
+
+## Run C1: observed (`runs/a101_conserved_run_C1`, workspace `runs/a101_conserved_ws_C1`, run id `a101_conserved_C1`; completed, exit 0, 791 s)
+
+Head's actions in order, credit after each: (1) `hmmer_profile_scan` 0.8198; (2) child `bvbrc_blast` (blastp, bacteria-archaea, until extracted; 4 child units, credit 4.0) 5.1003; (3) to (18) sixteen `reason` commits, credit 5.1003 each (marginal 0.0); the estimator stopped the head at the 16th of them (18 units, `yield_stop`). 16 units followed the last gain.
+Jobs: 1 Homology, 0 MSA, 0 MetaCATS (no limit was approached; I did not stop the run). No alignment, so no conserved-site measurement was exercised in a real run.
+Cause, from the model's own request (call 7): `msa_options` showed the held search with `candidates: []`, so `bvbrc_msa` was never offered (and so `bvbrc_metacats` was not). `bvbrc_msa_alignment.msa_options` (LIB/tools/.../bvbrc_msa_alignment.py, line 109) builds the test name `database_search:<provider>:<program>:<database>` without the `@<source reference>` that commit `f227c34a8` added to every test name in `candidate_measurements`, so no candidate's `tests` list matches it. This is a defect brought in by `f227c34a8`; the file is outside what this change may edit, so it is not fixed here. Against the prediction: scan, blast and credit 5.1003 as predicted; no MSA (predicted 0.9) because it was not offered.
