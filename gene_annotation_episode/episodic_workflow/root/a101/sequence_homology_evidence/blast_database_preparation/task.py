@@ -85,6 +85,12 @@ def decide(summary, feedback, ctx):
                                                      if value is not None}, output_schema())
 
 
+def offered_actions(summary, ctx):
+    """The action types offered at this decision: the tools of ``TOOLS`` (``launch_local`` and ``hold``); ``decide``
+    always lets the model answer either (``hold`` is always valid), so nothing is withheld."""
+    return list(TOOLS)
+
+
 def action(response, summary, records, ctx):
     """The model's JSON to a unit. The one check runs here, before anything runs; a call with problems is rejected
     with the list of them (no unit, no observation)."""
