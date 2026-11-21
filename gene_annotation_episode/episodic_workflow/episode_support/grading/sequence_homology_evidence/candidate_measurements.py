@@ -54,7 +54,7 @@ import math
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_alignment.native_correspondence import (
     _regions)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.differential_credit import (
-    differential_credit)
+    differential_credit, standing)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.scoring import (
     compile_native_sheet, hmmer_comparisons, route_native_grading)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.tool_grading_artifacts import (
@@ -203,6 +203,13 @@ def candidate_measurements(reader, scope, sources):
     return _read(reader, scope, sources)[0]
 
 
+def candidate_standing(reader, scope, sources):
+    """Where each candidate stands, per target of the scope (``{target: differential_credit.standing(its
+    measurements)}``), after the graded ``sources``: what a further test's ceiling is computed from."""
+    measurements, _ = _read(reader, scope, sources)
+    return {target: standing(rows) for target, rows in _by(measurements, 'target').items()}
+
+
 def _entry(measurements, candidate):
     first = next(row for row in measurements if row['candidate'] == candidate)
     return {'vocabulary': first['vocabulary'], 'name': first['name'],
@@ -220,7 +227,7 @@ def candidate_table(reader, scope, sources):
     targets = {}
     for target, rows in _by(measurements, 'target').items():
         result = differential_credit(rows)
-        candidates = [{**_entry(rows, candidate), 'score': score,
+        candidates = [{**_entry(rows, candidate), 'score': score, 'sheets': [{'sheet': kind, 'value': value} for kind, value in result['sheets'][candidate].items()],
                        'tests': list(dict.fromkeys(row['test'] for row in rows if row['candidate'] == candidate)),
                        'measurement_count': sum(1 for row in rows if row['candidate'] == candidate),
                        'best_value': max(row['value'] for row in rows if row['candidate'] == candidate)}

@@ -36,10 +36,15 @@ CANDIDATE_REFERENCE_FORM = RecordForm({
     'identifier': Field('text', 'The candidate\'s identifier exactly as its source gives it (a family accession or '
                                 'a record reference; a product has none)', required=False),
 })
+SHEET_FORM = RecordForm({
+    'sheet': Field('text', 'The subscoring sheet: the kind of test (the part of the test name before the @)'),
+    'value': Field('number', 'The candidate\'s value on the sheet: the sum of its values in the tests of that kind'),
+})
 CANDIDATE_FORM = RecordForm({
     **CANDIDATE_REFERENCE_FORM.fields,
-    'score': Field('number', 'The candidate\'s annotation score: the mean over the tests it has undergone of its mean '
-                             'value in each test, 0 to 1'),
+    'score': Field('number', 'The candidate\'s annotation score: the sum of its sheet values, that is, of its mean '
+                             'value (0 to 1) in each test it has undergone'),
+    'sheets': Field('list', 'The candidate\'s subscoring sheets, one per kind of test it has undergone', items=SHEET_FORM),
     'tests': Field('list', 'The tests the candidate has undergone, each as the controlled test name'),
     'measurement_count': Field('integer', 'The measurements of the candidate over all its tests'),
     'best_value': Field('number', 'The highest single value of the candidate, 0 to 1'),
