@@ -26,6 +26,9 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.database_blast_search import (
     held_searches)
 
+from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence import (
+    bvbrc_blast_search as bvbrc)
+
 from ..credit import A101SequenceCredit
 from ..task import CHILD_SLOTS, PAIRWISE_TOOL, PROFILE_TOOL
 
@@ -116,6 +119,7 @@ def internal_summary(view):
             'held_profile_scans': _held_profile_scans(records),
             'held_sequences': held_sequences,
             'database_searches': held_searches(records, {ref: records.get(ref)['sequence_ref'] for ref in held_sequences}),
+            'bvbrc_searches': bvbrc.held_searches(records, {ref: records.get(ref)['sequence_ref'] for ref in held_sequences}),
             'named_refs': {ref: _named(records, ref) for ref in held},
             'evidence_refs': [row['id'] for kind in EVIDENCE_RECORD_TYPES for row in records.list(kind)],
             'working_state': records.reasoning_view(parent['scope']),

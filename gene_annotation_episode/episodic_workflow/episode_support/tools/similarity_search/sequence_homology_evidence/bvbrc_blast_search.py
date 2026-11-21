@@ -73,6 +73,8 @@ METADATA_PROVIDER = 'bvbrc_data'
 DATABASES = {name: spec['unit'] for name, spec in PRECOMPUTED_DATABASES.items()}
 ACTIONS = ('estimate', 'launch', 'fix', 'monitor', 'extract')
 STATES = ('no_estimate', 'estimated', 'launched', 'finished', 'extracted', 'failed')
+UNTIL = ('launched', 'extracted')
+ENDED_SEARCH_STATES = ('finished', 'failed', 'unknown')
 ESTIMATE_BASES = ('learned_from_earlier_searches', 'no_earlier_measurement')
 REQUEST_FIELDS = ('program', 'database', 'resource_id')
 # The range of the seconds an estimate may name, and of one wait of a status request. A wait is a granule the model
@@ -129,6 +131,60 @@ def graded_rows(reader):
         grading = json.loads(reader.get_artifact(grading_ref))['grading']
         rows.append({'source_ref': source['id'], 'grading_ref': grading_ref, 'hit_count': len(grading['sheet']['hits']),
                      'features': saved_grading_features(reader, grading_ref)})
+    return rows
+
+
+def held_searches(reader, sequences):
+    """The searches of the BV-BRC service the parent (the head) holds, from its job ledger rows: one row per handoff of a
+    ``bvbrc`` job, with its request, its query (the held subject whose sequence artifact was staged), the state its latest
+    held check showed (``submitted`` before any), whether it is outstanding (no closure held and not shown failed or lost)
+    and the references of its handoff, status and closure rows: an outstanding search is continued by a later commission
+    (``until`` ``extracted``). ``sequences`` is ``{subject record: its sequence artifact}``."""
+    found = []
+    for handoff in (row for row in job_rows(reader) if row['event'] == 'handoff' and row['detail']['kind'] == ROUTE_KIND):
+        shown, ended = checks(reader, handoff['job']), closure(reader, handoff['job'])
+        state = 'submitted' if not shown else shown[-1]['detail']['state']
+        request = handoff['detail']['native']['request']
+        (query,) = [ref for ref, artifact in sequences.items() if artifact == handoff['detail']['input_refs'][QUERY_FILE]]
+        found.append({'handoff_ref': handoff['id'], 'resource_id': handoff['detail']['resource_id'], 'query_ref': query,
+                      'program': request['program'], 'database': request['database'], 'latest_state': state,
+                      'closed': ended is not None, 'outstanding': ended is None and state not in ('failed', 'unknown'),
+                      'known_ended': state in ENDED_SEARCH_STATES, 'launched_at': handoff['at'], 'check_refs': [row['id'] for row in shown],
+                      'closure_refs': [] if ended is None else [ended['id']],
+                      'estimated_seconds': handoff['detail']['estimates']['predicted_seconds'],
+                      'estimate_basis': handoff['detail']['estimates']['duration_basis'],
+                      'seconds_known_since_launch': (0.0 if not shown else seconds_between(handoff['at'], shown[-1]['at']))})
+    return found
+
+
+def search_notice(facts, revised_remaining=None):
+    """The wait notice of a search that is launched and not extracted, as controlled numbers: the seconds since the launch
+    as of the latest thing the holder knows (the launch, or its latest status request), the estimated total seconds and the
+    expected remaining seconds: the estimate minus the seconds since the launch, not below zero, unless a status request
+    came with a revised remaining time (``revised_remaining``), which is the later fact and stands. ``facts`` is
+    ``search_facts``."""
+    elapsed = 0.0 if facts['latest_check'] is None else facts['latest_check']['observed_seconds']
+    estimated = facts['predicted_seconds']
+    remaining = revised_remaining if revised_remaining is not None else max(estimated - elapsed, 0.0)
+    return {'seconds_since_launch': elapsed, 'estimated_seconds': estimated, 'expected_remaining_seconds': remaining}
+
+
+def resumed_rows(search):
+    """The unit rows a passed-back search stands for in ``episode_state``: its estimate and launch (the estimate recorded
+    with the launch, and the request the handoff records) and, when it holds status records, the state the latest shows."""
+    handoff = search['handoff']
+    request = handoff['detail']['native']['request']
+    estimates = handoff['detail']['estimates']
+    done = {'status': 'completed', 'failure_code': None, 'retryable': False}
+    rows = [{'action': 'estimate', **done, 'estimate': {'program': request['program'], 'database': request['database'],
+                                                         'expected_seconds': estimates['predicted_seconds'],
+                                                         'basis': estimates['duration_basis']}},
+            {'action': 'launch', **done, 'request': {'program': request['program'], 'database': request['database'],
+                                                     'resource_id': handoff['detail']['resource_id']}}]
+    if search['checks']:
+        latest = search['checks'][-1]['detail']
+        rows.append({'action': 'monitor', **done, 'state': latest['state'], 'result_available': latest['result_available'],
+                     'waited_seconds': 0})
     return rows
 
 
@@ -308,12 +364,16 @@ def check_extract(request, *, state, search):
     return problems
 
 
-def check_commission(request, *, programs, sequences, scope_subjects, resources, commissioned):
+def check_commission(request, *, programs, sequences, scope_subjects, resources, searches, commissioned):
     """The things to fix in the head's commission of this episode (``request``: ``query_ref``, ``program``,
-    ``database``, ``resource_id``), before any child is commissioned. ``programs`` are the programs the commissioning
-    episode offers (those its own credit can score). ``sequences`` is ``{record: molecule}``, ``commissioned`` the
-    (query, program, database) of the earlier commissions of this child: one commission does the whole search, and
-    nothing is passed back to a later one, so a repeat would submit the search again and is refused."""
+    ``database``, ``resource_id``, ``until``), before any child is commissioned. ``programs`` are the programs the
+    commissioning episode offers (those its own credit can score). ``sequences`` is ``{record: molecule}``, ``searches``
+    is ``held_searches`` and ``commissioned`` the (query, program, database) of the earlier commissions of this child.
+    The conditions: the query is a sequence of the scope; the program takes its molecule; the database holds what the
+    program searches; the resource is a bound BV-BRC service; a search of the query held outstanding is continued: the
+    same program, database and resource, and ``until`` ``extracted`` (a continuation submits nothing); a search already
+    closed is not commissioned again; a new search of a query, program and database already commissioned and not held
+    (nothing was launched, or the launch failed) is not commissioned again: it would submit afresh."""
     query, program, database = request['query_ref'], request['program'], request['database']
     problems = []
     if program not in programs:
@@ -325,7 +385,20 @@ def check_commission(request, *, programs, sequences, scope_subjects, resources,
     if resources.get(request['resource_id']) != ROUTE_KIND:
         problems.append(_choose('resource_id', 'resource_is_not_a_bvbrc_service',
                                 choose_from=[name for name, kind in resources.items() if kind == ROUTE_KIND]))
-    if (query, program, database) in commissioned:
+    held = [search for search in searches if search['query_ref'] == query]
+    for search in held:
+        same = (search['program'], search['database'], search['resource_id']) == (program, database,
+                                                                                    request['resource_id'])
+        if search['outstanding'] and not same:
+            problems.append(_choose('program', 'commission_must_continue_the_outstanding_search',
+                                    program=search['program'], database=search['database'],
+                                    resource_id=search['resource_id']))
+        if search['outstanding'] and same and request['until'] != 'extracted':
+            problems.append(_choose('until', 'a_continuation_follows_the_search_to_its_result', choose_from=['extracted']))
+        if search['closed'] and same:
+            problems.append(_choose('database', 'search_already_held'))
+    if (query, program, database) in commissioned and not any(
+            search['outstanding'] and (search['program'], search['database']) == (program, database) for search in held):
         problems.append(_choose('database', 'search_already_commissioned'))
     return problems
 
@@ -484,7 +557,7 @@ def fetch_and_grade_search(ctx, *, handoff_ref, fields, query_ref):
 
 
 __all__ = ['ACTIONS', 'DATABASES', 'ESTIMATE_BASES', 'ESTIMATE_RANGE', 'FAILURE_CODES', 'PROVIDER', 'REQUEST_FIELDS',
-           'ROUTE_KIND', 'STATES', 'STATUS_FIELDS', 'WAIT_RANGE_MAX', 'check_commission', 'check_estimate',
+           'ROUTE_KIND', 'STATES', 'STATUS_FIELDS', 'WAIT_RANGE_MAX', 'check_commission', 'check_estimate', 'held_searches', 'resumed_rows', 'search_notice', 'UNTIL', 'ENDED_SEARCH_STATES',
            'check_extract', 'check_fix', 'check_launch', 'check_monitor', 'combinations', 'episode_state',
            'fetch_and_grade_search', 'graded_rows', 'launch_search', 'learned_statistics', 'minimum_wait',
            'monitor_search', 'record_estimate', 'search_facts', 'search_kind', 'search_view', 'timing']

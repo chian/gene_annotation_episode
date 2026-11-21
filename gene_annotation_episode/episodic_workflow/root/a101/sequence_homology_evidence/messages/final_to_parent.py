@@ -21,10 +21,18 @@ def feature_field(name, rule):
     return Field(FIELD_TYPES[rule[0]], MEANINGS[name], required=rule[-1] != 'optional')
 
 
+WAITING_FORM = RecordForm({
+    'slot': ChoiceField('text', 'The child episode the search runs under', ('bvbrc_blast',)),
+    'seconds_since_launch': Field('number', 'The seconds from the launch to the latest thing the child knew'),
+    'expected_remaining_seconds': Field('number', 'The seconds still expected, as the child last knew them'),
+})
 TARGET_FORM = RecordForm({name: feature_field(name, rule) for name, rule in FEATURES.items()})
 FINDING_FORM = RecordForm({
     'evidence_axis': ChoiceField('text', 'The evidence axis', ('A101',)),
     'targets': Field('list', 'One entry per target of the scope: the features of its axis sheet', items=TARGET_FORM),
+    'waiting_searches': Field('list', 'The BV-BRC searches launched and not extracted: for each the slot, the seconds since '
+                                      'its launch and the seconds still expected, as the child last knew them',
+                              items=WAITING_FORM, required=False),
     'outstanding_handoff_count': Field('integer', 'Handoffs its launches returned for which no completed result '
                                                   'acquisition has reported yet'),
 })
@@ -50,9 +58,16 @@ CLOSING_STATES = {'database_blast': 'graded', 'bvbrc_blast': 'extracted'}
 def final_to_parent(summary, completion, selection):
     completed = sum(1 for row in summary['child_reports'] if row['slot'] in CLOSING_STATES
                     and row['finding']['state'] == CLOSING_STATES[row['slot']])
+    waiting = [{'slot': row['slot'], 'seconds_since_launch': row['finding']['seconds_since_launch'],
+                'expected_remaining_seconds': row['finding']['expected_remaining_seconds']}
+               for index, row in enumerate(summary['child_reports'])
+               if row['slot'] == 'bvbrc_blast' and row['finding'].get('parked')
+               and not any(later['slot'] == 'bvbrc_blast' and later['finding']['state'] == 'extracted'
+                           for later in summary['child_reports'][index + 1:])]
     result = {'credit': completion['credit'],
               'finding': {'evidence_axis': 'A101', 'targets': summary['axis_findings'],
-                          'outstanding_handoff_count': max(len(summary['handoff_refs']) - completed, 0)}}
+                          'outstanding_handoff_count': max(len(summary['handoff_refs']) - completed, 0),
+                          **({'waiting_searches': waiting} if waiting else {})}}
     if 'committed_record_refs' in selection:
         result['committed_record_refs'] = summary['committed_record_refs']
     if 'execution_handoff_refs' in selection:

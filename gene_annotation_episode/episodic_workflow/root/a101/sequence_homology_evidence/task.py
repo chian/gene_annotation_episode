@@ -54,6 +54,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
     DATABASES, HITLIST_RANGE, check_commission)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence import (
     bvbrc_blast_search as bvbrc)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.database_blast_search import (
+    seconds_between)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.pairwise_blast_comparison import (
     PROGRAM_MOLECULES, check_pairwise_request, pairwise_blast_comparison)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.hmmer_profile_scan import (
@@ -173,17 +175,25 @@ CHILD_DESCRIPTIONS = {
         'Search one query sequence of your scope against a precomputed BV-BRC database through the BV-BRC application '
         'service (the Homology application, run on the owner\'s account): the identification of the query from the best '
         'hits of the database (the same graded sheet also gives the residue correspondence of the best hits, which your '
-        'credit counts when the search is graded). Fill the four fields of its commission: query_ref (a sequence of '
+        'credit counts when the search is graded). Fill the five fields of its commission: query_ref (a sequence of '
         'your scope; held_sequences gives the molecule of each), program (only blastp is offered: a protein query against '
         'a protein database; your credit scores that program only), database (bacteria-archaea holds the proteins of the '
-        'reference and representative bacterial and archaeal genomes) and resource_id (a bvbrc resource of '
-        'bound_resources). Code checks the commission before the child is commissioned; if something is wrong it comes '
-        'back in feedback with the things to fix and nothing was commissioned. One commission does the whole search: the '
-        'child estimates its duration, launches the search, monitors it until the service has ended it and extracts the '
-        'result into the graded sheet, and returns the state of the search (no_estimate, estimated, launched, finished, '
-        'extracted or failed), the hit count and the controlled identification features of the graded sheet, the seconds '
-        'estimated and observed, the last failure code and its credit. Nothing is passed back to a later commission, so '
-        'a search is commissioned once: the same query, program and database are not commissioned again.'),
+        'reference and representative bacterial and archaeal genomes), resource_id (a bvbrc resource of bound_resources) '
+        'and until. Code checks the commission before the child is commissioned; if something is wrong it comes back in '
+        'feedback with the things to fix and nothing was commissioned. What until means: with until launched the child '
+        'estimates the duration, launches the search and returns at once; the search then keeps running at the service '
+        'while you do other work, and the child is said to be parked. With until extracted the child follows the search '
+        'to its end (it waits between status requests) and extracts the result into the graded sheet; it is also how a '
+        'parked search is continued: while bvbrc_searches shows a search of the query as outstanding, commissioning the '
+        'child again with the same query, program, database and resource and until extracted continues that search and '
+        'submits nothing (code passes back the records the child returned). What comes back: the state of the search '
+        '(no_estimate, estimated, launched, finished, extracted or failed), the hit count, the controlled identification '
+        'features of the graded sheet, the seconds estimated and observed, the last failure code and the credit. When the '
+        'search is parked (parked true) the report is a wait notice: seconds_since_launch, estimated_seconds and '
+        'expected_remaining_seconds (the estimate minus the seconds since the launch, not below zero, or the later '
+        'revised figure of a status request), and bvbrc_searches keeps showing the search with the seconds since its launch '
+        'and the seconds still expected as of each decision. A search that failed or is already held extracted is not '
+        'commissioned again.'),
 }
 
 
@@ -325,15 +335,31 @@ def bvbrc_blast_fields(summary, resources):
     if not queries or not services:
         return None
     properties = {'query_ref': {'enum': queries}, 'program': {'enum': list(COMMISSION_PROGRAMS)},
-                  'database': {'enum': list(bvbrc.DATABASES)}, 'resource_id': {'enum': services}}
+                  'database': {'enum': list(bvbrc.DATABASES)}, 'resource_id': {'enum': services},
+                  'until': {'enum': list(bvbrc.UNTIL)}}
     return properties, list(properties)
+
+
+def bvbrc_searches_view(searches, now):
+    """The BV-BRC searches this episode holds as the model sees them at ``now`` (the decision's recorded time): each with its
+    state, whether it is outstanding, and for an outstanding one the seconds since its launch and the seconds still
+    expected: the estimate recorded with its launch minus those seconds, not below zero. Facts, never a deadline."""
+    shown = []
+    for search in searches:
+        row = {key: search[key] for key in ('handoff_ref', 'query_ref', 'program', 'database', 'resource_id',
+                                            'latest_state', 'outstanding', 'closed', 'estimated_seconds')}
+        if search['outstanding']:
+            elapsed = seconds_between(search['launched_at'], now)
+            row.update(seconds_since_launch=elapsed, expected_remaining_seconds=max(search['estimated_seconds'] - elapsed, 0.0))
+        shown.append(row)
+    return shown
 
 
 def check_bvbrc_blast(commission, summary, resources):
     """The things to fix in a commission of ``bvbrc_blast`` (``bvbrc_blast_search.check_commission``)."""
     return bvbrc.check_commission(
         commission, programs=COMMISSION_PROGRAMS, sequences=summary['held_sequences'],
-        scope_subjects=summary['scope']['subject_refs'], resources=resources,
+        scope_subjects=summary['scope']['subject_refs'], resources=resources, searches=summary['bvbrc_searches'],
         commissioned=[(row['arguments']['query_ref'], row['arguments']['program'], row['arguments']['database'])
                       for row in summary['units'] if row['kind'] == 'child' and row['slot'] == 'bvbrc_blast'])
 
@@ -415,6 +441,7 @@ def decide(summary, feedback, ctx):
         'held_sequences': summary['held_sequences'], 'held_comparisons': summary['held_comparisons'],
         'held_profile_scans': summary['held_profile_scans'],
         'database_searches': summary['database_searches'],
+        'bvbrc_searches': bvbrc_searches_view(summary['bvbrc_searches'], ctx.clock.now),
         'tools': [{'name': 'reason', 'description': DESCRIPTIONS['reason']}, *own, *tools],
         'child_options': [{'slot': slot, 'binding_path': CHILD_SLOTS[slot], 'description': CHILD_DESCRIPTIONS[slot],
                            'selectable_return_fields': SELECTABLE[slot]} for slot in offered],

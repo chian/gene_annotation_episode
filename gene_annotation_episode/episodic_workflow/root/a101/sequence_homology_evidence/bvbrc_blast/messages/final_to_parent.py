@@ -40,6 +40,14 @@ FINDING_FORM = RecordForm({
                                                'missing, not a hit with no function)', required=False),
     'data_request_count': Field('integer', 'The requests made to the data service for the names of the hits',
                                 required=False),
+    'parked': Field('boolean', 'The search is launched and not extracted: this child parked, and the parent is shown the '
+                               'wait notice (seconds since the launch, estimated seconds, expected remaining seconds)',
+                    required=False),
+    'seconds_since_launch': Field('number', 'The seconds from the launch to the latest thing the child knew (the launch or '
+                                            'its latest status request)', required=False),
+    'expected_remaining_seconds': Field('number', 'The seconds still expected: the estimate minus the seconds since the '
+                                                  'launch (not below zero), or the revised remaining seconds a status '
+                                                  'request came with, the later fact', required=False),
     'estimated_seconds': Field('number', 'The seconds the search was expected to take, as estimated before the launch',
                                required=False),
     'estimate_basis': ChoiceField('text', 'What the estimate rested on', ESTIMATE_BASES, required=False),
@@ -72,6 +80,9 @@ def final_to_parent(summary, completion, selection):
         finding.update(metadata_hit_count=counts['metadata_hit_count'],
                        metadata_covered_count=counts['metadata_covered_count'],
                        data_request_count=counts['metadata_request_count'])
+    if summary['notice'] is not None:
+        finding.update(parked=True, seconds_since_launch=summary['notice']['seconds_since_launch'],
+                       expected_remaining_seconds=summary['notice']['expected_remaining_seconds'])
     if search is not None:
         if search['predicted_seconds'] is not None:
             finding['estimated_seconds'] = search['predicted_seconds']

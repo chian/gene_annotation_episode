@@ -73,13 +73,21 @@ def _database_blast(arguments, summary):
 
 def _bvbrc_blast(arguments, summary):
     """The assignment of one BV-BRC database search: the query and its sequence in custody, the program, the database,
-    the resource and the three credit units. One commission does the whole search: nothing is passed back."""
+    the resource, ``until`` and the three credit units. When the commission continues an outstanding search of the query
+    (``summary['bvbrc_searches']``) code passes back, in custody, the records the child returned for it: its handoff and
+    status records and the closure record, with whether a status already shows it ended: nothing is submitted again."""
     query = arguments['query_ref']
     units = summary['child_credit_units']
-    return {'query_refs': [query], 'input_refs': [ref for ref in _custody([query], summary) if ref != query],
+    assignment = {'query_refs': [query], 'input_refs': [ref for ref in _custody([query], summary) if ref != query],
             'program': arguments['program'], 'database': arguments['database'], 'resource_id': arguments['resource_id'],
-            'handoff_unit': units['handoff_unit'], 'information_unit': units['information_unit'],
-            'graded_unit': units['acquired_record_unit']}
+            'until': arguments['until'], 'handoff_unit': units['handoff_unit'],
+            'information_unit': units['information_unit'], 'graded_unit': units['acquired_record_unit']}
+    held = [search for search in summary['bvbrc_searches'] if search['query_ref'] == query and search['outstanding']]
+    if held:
+        (search,) = held
+        assignment.update(handoff_refs=[search['handoff_ref']], check_refs=search['check_refs'],
+                          closure_refs=search['closure_refs'], known_ended=search['known_ended'])
+    return assignment
 
 
 ASSIGNMENTS = {'database_blast': _database_blast, 'bvbrc_blast': _bvbrc_blast}

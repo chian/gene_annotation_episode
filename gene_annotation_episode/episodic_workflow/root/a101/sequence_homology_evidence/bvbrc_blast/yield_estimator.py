@@ -1,16 +1,20 @@
-"""Continuation: the accumulating controller (``AccumulationYieldController``). The credit of this episode is a sum of
-units earned for what is newly established: an estimate held, a handoff, each status request that shows a fact the
-earlier ones did not, the graded result. The number of informative status requests is not fixed by the commission (a
-search can be queued, running, finished), so there is no finite target to complete and no maximum to bound; a
-completion controller would raise when the credit passed its target. The controller stops the episode when the
-forecast of the next unit's credit is at or below its cost. The cost is a setting of the run (``settings['cost']``),
-with the estimator's ``settings['parameters']``. The value used: half of a credit unit, so a further unit is taken only
-while it is forecast to earn at least half a unit; once the result is extracted every action is a repeat that earns
-nothing, and the forecast falls with each such unit until the controller stops the episode (several no-gain units are
-normal). A search still running when the controller stops the episode is returned as ``launched``: the parent would have
-to come back for it (the later work on detaching); nothing here waits for it or works around that."""
-from yield_control import AccumulationYieldController
+"""Continuation: the completion controller (``CompletionYieldController``): continue until the credit reaches the commission's
+finite target. The credit of this episode is bounded (``credit.py``): four things, each worth its unit once and counted only
+when new in this commission: an estimate held, the search launched, the search known ended and the graded result. The
+target (``read_from_parent``) is the sum of the units still obtainable under the commission's ``until``: ``launched`` ->
+the estimate and the launch; ``extracted`` -> all four, less what the passed-back records already hold. At the target the
+remaining credit is exactly zero and the controller stops the episode at once: a parking commission ends the moment the
+launch completes, a resuming or one-loop commission the moment the result is extracted, with no wind-down units. The credit
+never exceeds the target (it raises if it did): ``credit`` counts each unit only where ``read_from_parent`` put it into the
+target. A search that failed at the service, or a monitor that keeps showing running, leaves the target unreached: the
+controller then winds the episode down by units that earn nothing, as the forecast falls to the cost.
+
+The cost is a setting of the run, ``settings['cost']``, taken as a fraction of the smallest credit unit of the commission
+(``0.5``: half a unit), so it is always below the target (the controller requires that) and below the credit left before the
+target, which is at least one unit; ``settings['parameters']`` are the estimator's."""
+from yield_control import CompletionYieldController
 
 
 def yield_controller(initial_credit, settings, parent_input):
-    return AccumulationYieldController('bvbrc_blast', initial_credit, settings['cost'], settings['parameters'])
+    cost = settings['cost'] * min(parent_input['units'].values())
+    return CompletionYieldController('bvbrc_blast', initial_credit, cost, parent_input['target'], settings['parameters'])

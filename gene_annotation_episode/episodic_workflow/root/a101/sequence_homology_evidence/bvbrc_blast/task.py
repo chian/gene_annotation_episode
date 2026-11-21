@@ -44,6 +44,12 @@ INSTRUCTIONS = (
     'resource are the commission\'s, in commission), to follow the search to its end and to return what it established '
     'to the parent: the estimate, the handoff, what the status requests showed and the graded result.\n'
     '\n'
+    'The commission\'s until says where this commission ends. launched: estimate and launch, and the episode ends the '
+    'moment the launch completes (the search keeps running at the service and the parent is told how long to expect; a '
+    'later commission resumes it). extracted: follow the search to its graded result; when resumed is true the search was '
+    'launched by an earlier commission (state launched or finished): do not estimate or launch, monitor it and extract. '
+    'The episode ends by itself when its credit reaches the target of the commission; you cannot end it.\n'
+    '\n'
     'You do not write a request. You answer with one action as JSON; code checks your JSON before anything runs and runs '
     'the job.\n'
     '- estimate: before anything is launched, the program and database you will search and the seconds you expect the '
@@ -72,11 +78,12 @@ INSTRUCTIONS = (
     'seconds you estimated and how far past it the search is (negative: before it): facts, not a deadline. A search far '
     'past its estimate may still finish.\n'
     '\n'
-    'Credit is the measure of this episode, and only for what is new: the first estimate held and each status request '
-    'that shows a fact the earlier ones did not (credit.information_unit: queued, running, finished), the handoff '
-    '(credit.handoff_unit) and the graded result (credit.graded_unit). A repeat and a failure earn nothing. When nothing '
-    'more can be gained (the result is extracted) estimate is the only action left and earns nothing; a few of them and '
-    'the yield controller ends the episode. You cannot end it.')
+    'Credit is the measure of this episode, bounded, and only for what is new in this commission: four things, each '
+    'worth its unit once: an estimate held (credit.information_unit), the search launched (credit.handoff_unit), the '
+    'search known ended (credit.information_unit: the first status that shows finished or failed; queued or running earns '
+    'nothing) and the graded result (credit.graded_unit). The target is what is still obtainable under until. When the '
+    'target cannot be reached (the search failed, or it keeps running) a few actions that earn nothing follow and the '
+    'yield controller ends the episode. You cannot end it.')
 
 
 def output_schema(state):
@@ -112,7 +119,8 @@ def decide(summary, feedback, ctx):
     fields, search, facts = summary['fields'], summary['search'], summary['state_facts']
     description = ctx.services['job_access'].read('describe', _resource(summary))
     context = {
-        'commission': {**fields, 'query': {'record': summary['query']['subject_ref'],
+        'commission': {**fields, 'until': summary['until'], 'resumed': summary['resumed'],
+                       'known_ended': summary['known_ended'], 'query': {'record': summary['query']['subject_ref'],
                                            'molecule': summary['query']['molecule'],
                                            'length': summary['query']['length']}},
         'credit': {**summary['units'],

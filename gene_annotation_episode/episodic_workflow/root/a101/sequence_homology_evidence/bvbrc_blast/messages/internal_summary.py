@@ -8,7 +8,7 @@ since the launch are not here (the summary reads no clock): ``decide`` computes 
 ``final_to_parent`` returns the duration observed at the latest check."""
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_blast_search import (
-    episode_state, graded_rows, search_facts, search_view)
+    episode_state, graded_rows, resumed_rows, search_facts, search_notice, search_view)
 
 
 def _unit(position, unit):
@@ -20,7 +20,8 @@ def _unit(position, unit):
             row['estimate'] = outcome['estimate']
         elif unit['tool'] == 'monitor':
             row.update(state=outcome['state'], result_available=outcome['result_available'],
-                       waited_seconds=outcome['waited_seconds'])
+                       waited_seconds=outcome['waited_seconds'],
+                       expected_remaining_seconds=outcome['expected_remaining_seconds'])
         elif unit['tool'] == 'fix':
             row['fix'] = outcome['fix']
     if unit['tool'] == 'launch':
@@ -35,8 +36,14 @@ def internal_summary(view):
     sequence = records.get_artifact(record['sequence_ref'])
     rows = [_unit(position, unit) for position, unit in enumerate(view.outcomes)]
     search, graded = search_view(records), graded_rows(records)
-    facts = episode_state(rows)
-    return {'fields': parent['fields'], 'units': parent['units'],
+    resumed = resumed_rows(search) if parent['resumed'] else []
+    facts = episode_state([*resumed, *rows])
+    revised = [row['expected_remaining_seconds'] for unit, row in zip(view.outcomes, rows)
+               if unit['tool'] == 'monitor' and row['status'] == 'completed' and row['state'] not in ('finished', 'failed', 'unknown')]
+    return {'fields': parent['fields'], 'units': parent['units'], 'until': parent['until'], 'prior': parent['prior'],
+            'resumed': parent['resumed'], 'known_ended': parent['known_ended'], 'target': parent['target'],
+            'notice': (search_notice(search_facts(search), revised[-1] if revised else None)
+                       if search is not None and facts['state'] in ('launched', 'finished') else None),
             'query': {'subject_ref': query_ref, 'sequence_ref': record['sequence_ref'],
                       'molecule': record.get('molecule'), 'length': len(sequence)},
             'unit_rows': rows, 'state_facts': facts, 'state': facts['state'],
