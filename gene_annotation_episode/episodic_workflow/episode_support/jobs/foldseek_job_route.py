@@ -54,9 +54,9 @@ SERVICE = 'foldseek'
 CONFIGURATION = ('service', 'endpoints', 'workspace', 'request_spacing_seconds', 'poll_spacing_seconds',
                  'transport_timeout_seconds')
 # The databases of the server the route offers, by the value of ``database[]`` (the ``path`` of GET /api/databases).
-# Round 1 offers one; 'pdb100' and 'cath50' are verified to exist (a102_services.md, section 3) and are added when their
-# round is built, with the name lookup their hits need.
-DATABASES = ('afdb-swissprot',)
+# 'pdb100' (experimental structures; its hits are named through ``pdb_chain_proteins``) and 'cath50' are verified to exist
+# (a102_services.md, section 3); 'cath50' is added when its round is built, with the name lookup its hits need.
+DATABASES = ('afdb-swissprot', 'pdb100')
 MODE = 'tmalign'
 # The service's ticket states as job states (the states of ``job_access.STATES``).
 STATES = {'PENDING': 'queued', 'RUNNING': 'running', 'COMPLETE': 'finished', 'ERROR': 'failed', 'UNKNOWN': 'unknown'}

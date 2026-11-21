@@ -239,3 +239,103 @@ unit functions, the model sources (live) and the naming (live, in part b) are re
   once.
 * UniProt entries whose accession is secondary: the `fields` request does not ask for secondary accessions, so a hit named by a merged accession
   stays unnamed (`no_name_count`); none occurred in the 976 hits.
+
+# The second database, `pdb100` (library; checked directly 2026-11-21, not a real run)
+
+Why: with `afdb-swissprot` a common protein's 1000 hits fill with its own orthologs (RecA: 18 candidates, all RecA under other names).
+Solved structures are diverse and carry bound ligands and nucleic acids. A `pdb100` hit gets the SAME kind of candidate as an
+`afdb-swissprot` hit: the UniProt recommended protein name of the chain's protein. Files: `foldseek_job_route.DATABASES` gains
+`pdb100` (nothing else of the route), `foldseek_result.pdb_target` (the parser), `pdb_chain_proteins.py` (new: chain -> accession and
+the naming loop), `foldseek_search.name_and_chain_hits` (the dispatch by database in the extract; `afdb-swissprot` takes its old path
+unchanged), `structure_search_sheet` (rows gain `pdb_entry`, `pdb_chain`, `chain_accession_count`, null for `afdb-swissprot`),
+`StructureSearch.json` (the database list). `uniprot_hit_names` is untouched (its `lookup` is called). Checks and data:
+`runs/a102_pdb100_check/` (`check_pdb100.py`, `report.py`, `child_b.py`, the replies in `cache/`).
+
+## The target and the chain label
+
+A pdb100 target is `<pdb id>-assembly<n>.cif.gz_<chain label> <entry title>` (the database is built from biological-assembly files).
+All 548 targets of the CspA search and all 858 of the RecA search match; the title is the ENTRY's title, not a product name (kept as
+`description`). The assembly number takes 1 to 6 (CspA: 437 x 1, 73 x 2, 22 x 3, 10 x 4, 5 x 5, 1 x 6). Forms of the chain label in the 548
+CspA targets (A = any upper case letter, a = lower case, 9 = digit): `A` 486 (`A`, `B`); `A-9` 19 (`B-2`, `A-2`); `AA` 17 (`SY`, `AL`, `BE`);
+`a` 8 (`x`, `r`, `w`); `A9` 5 (`C0`, `X2`, `D3`); `9` 4 (`6`, `5`, `1`); `AAA` 4 (`DDD`, `HHH`); `AA9` 3 (`SX0`); `Aa` 2 (`Al`, `Ao`). The label
+is kept exactly (`chain_label`). The suffix `-<n>` (19 of 548; 19 of 858 for RecA) marks a further symmetry copy of the chain in the assembly:
+the base chain (`chain`) is the author chain of the entry, `chain_copy` is `<n>`. That the suffix is a symmetry-operator copy is read
+from the pattern (every base chain exists in its entry as a protein chain; the entries are small oligomers, e.g. 2BH8 has chains A, B and
+the hits are `A-2`, `B-2`): UNVERIFIED against the Foldseek build scripts.
+
+THE FINDING, which id the label is: the chain label is the AUTHOR chain id (`auth_asym_id`), not the label `asym_id`. Evidence (RCSB
+GraphQL, all entries of both searches): all 548 (CspA) and 857 of 857 present (RecA) labels exist as an `auth_asym_id` of their entry; only
+483 and 827 exist as an `asym_id` (65 and 30 do not at all); in 35 (CspA) and 55 (RecA) hits the label names a DIFFERENT entity as author id
+than as label asym id, and the entity of the author reading is the one whose sequence length is at least the hit's `dbLen` in 35 of 35 and 55
+of 55, the label reading in 11 and 18. Examples: `1g29-assembly1.cif.gz_1` (entity 1, MalK, 372 residues = `dbLen` 372; author `1`, label `A`;
+there is no label asym `1`); `7zag ..._6` (author `6`, label `FA`, translation initiation factor 1A; no label asym `6`); `7d5s ..._SY` (author
+`SY`, label `K`, S23); `8bhu ..._DDD` (author `DDD`, label `D`); `2HAX` chain `B` (author reading: entity 2; label reading: entity 1).
+`dbLen` is the length of the chain in the structure file (resolved residues), not the entity's: `7zag ..._6` dbLen 92 of the entity's 134.
+
+## The request (verified live)
+
+`POST https://data.rcsb.org/graphql`, `Content-Type: application/json`, body `{"query": QUERY, "variables": {"ids": [<entry ids, upper case, up
+to 100>]}}` with `entries(entry_ids: $ids){ rcsb_id polymer_entities{ rcsb_polymer_entity_container_identifiers{entity_id uniprot_ids}
+rcsb_polymer_entity{pdbx_description} entity_poly{rcsb_entity_polymer_type rcsb_sample_sequence_length} rcsb_polymer_entity_align{
+reference_database_name reference_database_accession aligned_regions{entity_beg_seq_id ref_beg_seq_id length}}
+polymer_entity_instances{rcsb_polymer_entity_instance_container_identifiers{entry_id auth_asym_id asym_id entity_id}}}}`. HTTP 200. The requested `polymer_entity_instances(instance_ids: ["1MJC.A", ...])` root was tried and CANNOT do it: its instance id is
+`<entry>.<label asym id>` and an id it does not know is silently left out of the list (`1G29.A` and `7D5S.K` and `7ZAG.FA` answered; `1G29.1`,
+`1G29.2`, `7ZAG.6`, `4BTS.C0`, `7D5S.SY` returned nothing and no error), while the Foldseek label is the author id, so the batch is by ENTRY and the
+instance is selected in code by `auth_asym_id`. PDBe SIFTS was not needed (no request). One entry of the RecA search (`7t23`, DnaB with
+DnaG) is not in RCSB (`GET /rest/v1/core/entry/7T23` -> 404; it stays in the pdb100 build): status `entry_not_returned`, no accession.
+
+THE CHAIN'S PROTEIN. The accessions of the chain's entity are the union of `uniprot_ids` and the UniProt references of `rcsb_polymer_entity_align`.
+No accession: asked, no product (CspA 14 of 548 chains, RecA 15 of 858 + the one missing entry). More than one (a chimeric chain: CspA 5, RecA 6 chains,
+e.g. `7D8R` chain C: O66738 104 residues and O75030 72): every accession is recorded (`pdb.accessions`, `chain_accession_count` in the sheet); the
+chain is named by the accession that covers most of the entity (sum of the aligned regions' `length`) when every accession has a coverage, else by the
+first accession in sorted order. The names are then `uniprot_hit_names.lookup` over the accessions (recommended name; a submitted name is used and
+flagged `name_source`, as before).
+
+THE NAMING RULE (one rule for both searches): hits in rank order, batches of 100 hits; for each batch the RCSB lookup (pdb100 only) and then the UniProt
+lookup of the accessions not named before; after each batch the candidate picture of the hits done (one test, mean B per candidate, over ITS HITS: many
+PDB chains share an accession, so the picture takes every hit's own B); stop when a batch admits no new product and moves no candidate by more than 0.01,
+or all hits are done; a hit never asked is NOT ASKED. Spacing 3 s before each request; no name, email or key; the browser-like User-Agent constant. Every
+reply's bytes are kept as the `search_hit_metadata` product (the RCSB replies and the chain records under `chain_service`).
+
+## The sheet and the control
+
+Per hit: the entry id, the author chain (without the suffix) and the accession or null; B as before: the reference length is `dbLen`, the length of the chain
+in the structure. A solved construct can be a fragment of the protein: B then uses the construct's length (CspA: hit lengths 66 to 71 against the target's 70).
+The self control: a pdb100 search has none (there is no copy of an AlphaFold model in pdb100; experimental coordinates of the same protein are a different
+structure and count as hits): `is_model_itself` matches only an AlphaFold target id, so `control_count` is 0 in both checks. The rule for `afdb-swissprot` is untouched.
+
+## Direct checks (not a real run)
+
+CspA: the stored pdb100 result, the AlphaFold model (P0A9X9). RecA: the AlphaFold model of P0A7G6 (353 residues) and ONE new ticket (pdb100, tmalign:
+858 hits, 8.6 MB). Requests: RCSB GraphQL 17 (2 probes, 6 CspA, 9 RecA) and 1 REST; UniProt 15 (6 + 9); PDBe 0; Foldseek 1 ticket; the `afdb-swissprot` runs replayed
+the stored UniProt replies of the earlier runs.
+
+* CspA pdb100: 548 hits, 534 with an accession, 14 without; 159 candidates; 6 batches, all named (no settling). Top 15 hits
+  (rank entry chain accession product B): 1 1MJC A P0A9X9 Cold shock protein CspA 0.8492; 2 1HZA B P41016 Cold shock protein CspB 0.8747; 3 1C9O B P41016 CspB 0.8505;
+  4 1HZ9 B P41016 CspB 0.8509; 5 3I2Z B Q7CQZ5 RNA chaperone, negative regulator of cspA transcription 0.8375; 6 1HZC B P41016 0.8365; 7 1I5F B P41016 0.8298;
+  8 8H1I B P0A9Y6 Cold shock-like protein CspC 0.7573; 9 1C9O A P41016 0.8108; 10 1HZ9 A P41016 0.8098; 11 1HZB B P41016 0.8026; 12 3PF5 B P32081 CspB 0.7579; 13 3PF4 A P32081
+  0.7476; 14 2I5L X P32081 0.7538; 15 3I2Z A Q7CQZ5 0.5409. Top candidates (product, hits, mean B): Cold shock-like protein CspC 1 0.7573; Cold shock protein CspB 17 0.7500;
+  Cold shock protein 1 0.7047; RNA chaperone, negative regulator of cspA transcription 2 0.6892; Probable cold shock protein A 1 0.6546; Cold shock protein CspA 3 0.6203;
+  Cold-shock DNA-binding domain family protein 1 0.6006; Y-box-binding protein 2 2 0.5362; Protein lin-28 homolog B 1 0.5101; Calcium-regulated heat-stable protein 1 3 0.5098;
+  Y-box-binding protein 1 8 0.5059; Cold shock domain family protein 1 0.4762; Lin-28 homolog B 1 0.4740. Against `afdb-swissprot` (130 candidates): 48 shared, 111 only in
+  pdb100, 82 only in afdb. pdb100 adds, among others, RNA chaperone (Q7CQZ5), Cold-shock DNA-binding domain family protein, Cold shock domain family protein, Lin-28 homolog B, HypC,
+  RsgI1, PilY2, and gives the Y-box proteins (YB-1 8 hits, YB-2 2) and lin-28 B values 0.5 against 0.2 (afdb) because solved cold shock domains are domain constructs.
+* RecA pdb100: 858 hits, 842 with an accession, 15 without, 1 entry not in RCSB; 104 candidates; 9 batches, all named. Top 15 hits: 1 8GMS F A0A485JBB4 Protein RecA 0.6682; 2 7JY9 I P0A7G6
+  Protein RecA 0.6828; 3 8AMD G P0A452 RecA 0.5102; 4 1U98 A P0A7G6 0.5862; 5 1U99 A P0A7G6 0.5848; 6 1U94 A P0A7G6 0.5712; 7 4PQY A P9WHJ3 0.4749; 8 1REA A P0A7G6 0.584; 9 4PO9 A P9WHJ3
+  0.5294; 10 4PQR A P9WHJ3 0.5349; 11 4PPF A 0.5396; 12 4PO1 A 0.5198; 13 1N03 A P0A7G6 0.6719; 14 4PSK A 0.5346; 15 4PPG A 0.515. Top candidates: Protein RecA 69 0.4317; DNA repair protein RAD51
+  homolog 1 0.2991; DNA repair and recombination protein RadB 1 0.2682; DNA repair and recombination protein RadA 70 0.2596; Meiotic recombination protein DMC1 homolog 11 0.2534; DNA repair protein
+  RAD51 6 0.2486; Meiotic recombination protein DMC1 1 0.2454; DNA repair protein RAD51 homolog 1 17 0.2382; RAD51 homolog 3 7 0.2291; KaiC domain-containing protein 3 0.2285; XRCC2 2 0.209.
+  Against `afdb-swissprot` (18 candidates): 5 shared (Protein RecA 652 hits 0.6126 afdb / 69 hits 0.4317 pdb100; RadA 47 0.228 / 70 0.2596; RadB; two ATP synthase alpha), 99 only in pdb100:
+  RAD51 (several names), DMC1, XRCC2, RAD51 paralogs, KaiC domain proteins, SulA, others. So RadA, Rad51 and DMC1 DO appear, as the recombinases the afdb search never listed.
+* The differential credit (A102 copies), RecA: the `afdb-swissprot` test alone 6.2504 (18 entries); then the `pdb100` test: 18.931 (rise 12.68; 117 candidates listed, 99 entries for the new
+  ones summing 11.07, and 10 differentials among the shared ones). CspA: 41.408 then 304.09 (241 entries, 1128 differentials: many shared and many new candidates).
+* `afdb-swissprot` unchanged: the child's direct extract check (`child_b.py`, the same as `run_b2` above, with the stored UniProt replies replayed) gives the same sheet:
+  976 hits, control 1, 975 named, 130 candidates, the same top 10 candidates and hits, naming 976 asked in 10 batches. The only difference is the three added null keys per hit row.
+* Imports of the touched modules pass; `len(run_command.subtree('structural_homology_evidence'))` 2, `sequence_homology_evidence` 5.
+
+## Not verified, and what did not fit
+
+* The meaning of the `-<n>` suffix (above). Nothing was run through the head or the child's unit with `pdb100` (the unit's extract path is the same function; the check called the
+  dispatch and the sheet directly). The `site_correspondence` library reads the sheet's `accession` of a hit and does not handle a null accession (a pdb100 chain with no UniProt
+  accession) nor take the entry and chain from the PDB: it is the other agent's and was not edited.
+* A chain whose accession UniProt has since merged is unnamed (as for `afdb-swissprot`, `no_name_count`). The RCSB service's limits are not documented in the pages read; none was met.

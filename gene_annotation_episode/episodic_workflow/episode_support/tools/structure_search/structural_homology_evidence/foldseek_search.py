@@ -25,7 +25,9 @@ copy of the job-child machinery); this module is the binding of the application 
 * the extract (ONE unit): fetch the result through the route, keep it and label it ``structure_search_results``; parse it
   (``foldseek_result.parse_foldseek_result``); the model's C-alpha by target position; ``structure_search_sheet.measure_hits``
   (the superposition and B of every hit); the hits are named in rank order by UniProt (``uniprot_hit_names.name_hits``: the hit
-  that is the model itself, the self control, is given no value in the picture); ``grade_structure_search``; the UniProt replies
+  that is the model itself, the self control, is given no value in the picture; for ``pdb100`` the hit's PDB chain is looked up
+  first, ``pdb_chain_proteins``: chain -> UniProt accession -> the same UniProt recommended name; ``name_and_chain_hits`` dispatches
+  by database); ``grade_structure_search``; the UniProt replies
   kept as the ``search_hit_metadata`` product; the grading retained (``retain_tool_grading``, with a source record of provider
   ``foldseek_search``) and labelled (``record_grading_product``).
 
@@ -58,6 +60,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_s
     FAILURE_CODES, JobApplication, _choose, _failed, check_resource_and_continuation)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.uniprot_hit_names import (
     BATCH, FIELDS as UNIPROT_FIELDS, SEARCH_URL as UNIPROT_URL, SETTLE, name_hits)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.pdb_chain_proteins import (
+    GRAPHQL_URL as RCSB_URL, SERVICE as RCSB_SERVICE, name_pdb_hits)
 
 CHILD = 'structure_search'
 SERVICE = 'foldseek'
@@ -211,10 +215,31 @@ def reusable_search(reader, model_artifact_ref, database):
     return find_reusable(reader, RESULTS_KIND, [model_artifact_ref], search_settings(database))
 
 
-def metadata_settings():
+def metadata_settings(database):
     """The settings of the hit metadata as a data product (closed JSON): the data service, the fields asked of each hit's
-    entry, the batch and the settling step of the naming (``uniprot_hit_names.name_hits``)."""
-    return {'service': METADATA_PROVIDER, 'url': UNIPROT_URL, 'fields': UNIPROT_FIELDS, 'batch': BATCH, 'settle': SETTLE}
+    entry, the batch and the settling step of the naming (``uniprot_hit_names.name_hits``); for ``pdb100`` also the service
+    that gives the chain's accession (``pdb_chain_proteins``)."""
+    settings = {'service': METADATA_PROVIDER, 'url': UNIPROT_URL, 'fields': UNIPROT_FIELDS, 'batch': BATCH, 'settle': SETTLE}
+    return settings if database != 'pdb100' else {**settings, 'chain_service': RCSB_SERVICE, 'chain_url': RCSB_URL}
+
+
+def name_and_chain_hits(database, hits, values):
+    """The naming of the hits of ``database`` in rank order (``values``: B per hit, ``None`` for a hit with no value or the
+    model itself), by the database's own rule: ``afdb-swissprot`` -> the accession of the target id, named by UniProt
+    (``uniprot_hit_names.name_hits``, unchanged); ``pdb100`` -> the UniProt accession of the hit's PDB chain from RCSB
+    (``pdb_chain_proteins.name_pdb_hits``), named by UniProt the same way. Returns ``(hits, found)``: the hits the sheet takes
+    (for ``pdb100`` each with the accession its chain is named by and its chain's record in ``pdb``), and ``found`` as
+    ``name_hits`` gives it (``replies``, ``failures``, ``products``, ``asked``, ``metadata``, ``naming``) with, for
+    ``pdb100``, ``chains`` (the chain record per hit), ``rcsb_replies`` and ``rcsb_failures``."""
+    if database == 'afdb-swissprot':
+        return hits, name_hits([(hit['accession'], value) for hit, value in zip(hits, values)])
+    named = name_pdb_hits([(hit['pdb']['entry'], hit['pdb']['chain'], value) for hit, value in zip(hits, values)])
+    chained = [{**hit, 'accession': record['accession'],
+                'pdb': {**hit['pdb'], 'accessions': record['accessions'], 'asked': record['asked']}}
+               for hit, record in zip(hits, named['hits'])]
+    return chained, {'products': named['products'], 'asked': named['asked'], 'metadata': named['metadata'],
+                     'replies': named['uniprot_replies'], 'failures': named['uniprot_failures'], 'naming': named['naming'],
+                     'chains': named['hits'], 'rcsb_replies': named['rcsb_replies'], 'rcsb_failures': named['failures']}
 
 
 def field_problems(request, commission):
@@ -272,10 +297,9 @@ def extract(ctx, handoff_ref, request, commission):
             raise ValueError('result_of_another_query')
         model_ca = model_positions(model_bytes, sequence)
         measured = measure_hits(parsed['hits'], model_ca, len(sequence))
-        ordered = [(hit['accession'], None if is_model_itself(hit, facts) else value['B'])
-                   for hit, value in zip(parsed['hits'], measured)]
-        found = name_hits(ordered)
-        sheet = grade_structure_search(parsed['hits'], model_ca, len(sequence),
+        values = [None if is_model_itself(hit, facts) else value['B'] for hit, value in zip(parsed['hits'], measured)]
+        hits, found = name_and_chain_hits(identity['database'], parsed['hits'], values)
+        sheet = grade_structure_search(hits, model_ca, len(sequence),
                                        {'products': found['products'], 'asked': found['asked']},
                                        database=identity['database'], mode=identity['mode'], model_facts=facts,
                                        measured=measured)
@@ -290,6 +314,13 @@ def extract(ctx, handoff_ref, request, commission):
                             for reply in found['replies']],
                 'failures': found['failures'], 'products': found['products'], 'metadata': found['metadata'],
                 'naming': found['naming']}
+    if identity['database'] == 'pdb100':
+        metadata['chain_service'] = {
+            'service': RCSB_SERVICE, 'url': RCSB_URL,
+            'replies': [{'url': reply['url'], 'status': reply['status'], 'sha256': reply['sha256'],
+                         'media_type': reply['media_type'], 'body': json.loads(reply['content'])}
+                        for reply in found['rcsb_replies']],
+            'failures': found['rcsb_failures'], 'chains': found['chains']}
     with store.transaction():
         grading_ref = retain_tool_grading(store, provider=PROVIDER, native_artifact_ref=result_ref, grading=grading)
         source = store.put('source', {
@@ -308,7 +339,7 @@ def extract(ctx, handoff_ref, request, commission):
             locations=[{'service': 'foldseek_server', 'path': '/api/result/' + remote + '/0'}])
         metadata_product = record_product(
             store, artifact_ref=metadata_ref, kind=METADATA_KIND, generated_by=metadata_source['id'], used=[result_ref],
-            derived_from=[product['id']], settings=metadata_settings())
+            derived_from=[product['id']], settings=metadata_settings(identity['database']))
         grading_product = record_grading_product(
             store, grading_ref=grading_ref, grading=grading, provider=PROVIDER, source_ref=source['id'],
             used=[result_ref, metadata_ref], derived_from=[product['id'], metadata_product['id']])
@@ -318,8 +349,9 @@ def extract(ctx, handoff_ref, request, commission):
             'hit_count': sheet['hit_count'], 'named_count': sheet['named_count'], 'not_asked_count': sheet['not_asked_count'],
             'control_count': sheet['control_count'],
             'candidate_count': sum(1 for row in sheet['candidates'] if row['mean_B'] is not None),
-            'metadata_request_count': len(found['replies']) + len(found['failures']),
-            'metadata_failure_count': len(found['failures']), 'naming_batch_count': found['naming']['batches'],
+            'metadata_request_count': (len(found['replies']) + len(found['failures'])
+                                       + len(found.get('rcsb_replies', ())) + len(found.get('rcsb_failures', ()))),
+            'metadata_failure_count': len(found['failures']) + len(found.get('rcsb_failures', ())), 'naming_batch_count': found['naming']['batches'],
             'naming_stopped': found['naming']['stopped']}
 
 

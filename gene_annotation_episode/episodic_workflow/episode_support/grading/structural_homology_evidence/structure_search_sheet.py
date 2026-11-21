@@ -28,7 +28,16 @@ the model compared with itself. Its row carries ``control`` ``model_itself`` and
 ``control_B`` and ``control_rmsd_A``, but it names no candidate (``product`` null, ``named`` false, ``B`` null) and so gives no
 value to any candidate: it is in no candidate's mean and in no candidate's hit count (``control_count`` counts it). Other
 entries with the same sequence are separate models and count like any hit. A model of another origin has no control row (an
-ESMFold model is in no database).
+ESMFold model is in no database). In ``pdb100`` there is no copy of an AlphaFold model: experimental coordinates of the same
+protein are a different structure and COUNT as hits, so a ``pdb100`` search has no control row whatever the model's origin
+(``is_model_itself`` matches only an AlphaFold DB target id).
+
+THE ``pdb100`` HITS. A hit is a chain of a PDB entry: the row carries ``pdb_entry``, ``pdb_chain`` (the author chain id,
+without a symmetry-copy suffix) and ``accession`` (the UniProt accession the chain is named by, or null: a chain with no
+UniProt accession is asked and has no product), and ``chain_accession_count`` (more than 1: a chimeric chain, named by one of its
+accessions). The row's ``asked`` says the chain was looked up. The reference length of B is ``dbLen``, the length of the chain
+in the structure file: a solved construct can be a fragment of the protein, and B then uses the construct's length. A row of
+``afdb-swissprot`` has these three keys null.
 
 The grader holds no threshold: it does not say a hit is good or bad. The server's ``score`` and ``eval`` are kept as
 reported (``score_as_reported``: in ``tmalign`` mode the query-normalised TM-score x 100; ``eval_as_reported``: the mean of
@@ -52,7 +61,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.structura
 
 SCHEMA = 'a102_structure_search_sheet_v1'
 PROVIDER = 'foldseek'
-DATABASES = ('afdb-swissprot',)
+DATABASES = ('afdb-swissprot', 'pdb100')
 MODES = ('tmalign',)
 MODEL_ORIGINS = ('alphafold_db', 'esmfold', 'rcsb_pdb')
 NAME_SOURCES = ('recommended', 'submitted')
@@ -166,7 +175,8 @@ def grade_structure_search(hits, model_ca, target_length, names, *, database, mo
 
     ``hits``: the parsed hit rows (``parse_foldseek_result(...)['hits']``); ``model_ca``, ``target_length``: see the module;
     ``names``: ``{'products': {accession: {'product', 'name_source'}}, 'asked': [accessions asked]}`` (what
-    ``uniprot_hit_names.name_hits`` gives; a hit not in ``asked`` was NOT ASKED, a hit asked and not in ``products`` was asked
+    ``uniprot_hit_names.name_hits`` gives, or ``pdb_chain_proteins.name_pdb_hits``: a ``pdb100`` hit then carries its chain's
+    ``pdb`` dict with ``entry``, ``chain``, ``accessions`` and ``asked``, ``accession`` being the one the chain is named by; a hit not in ``asked`` was NOT ASKED, a hit asked and not in ``products`` was asked
     and has no name); ``model_facts``: ``origin``, ``accession``, ``mean_plddt``, ``residues_covered`` and ``model_sha256`` (the
     hash of the model file searched: with the database it identifies the search); ``measured``: ``measure_hits`` of the same
     hits when the caller already holds it.
@@ -184,13 +194,17 @@ def grade_structure_search(hits, model_ca, target_length, names, *, database, mo
     _require(len(measured) == len(hits), 'measured_does_not_match_the_hits')
     rows = []
     for hit, value in zip(hits, measured):
-        _require(hit['accession'] is not None, 'hit_without_accession')
+        pdb = hit['pdb']
+        _require((pdb is None) == (database == 'afdb-swissprot') and (pdb is not None or hit['accession'] is not None),
+                 'hit_is_not_of_the_database')
         itself = is_model_itself(hit, facts)
-        name = None if itself else products.get(hit['accession'])
+        name = None if itself or hit['accession'] is None else products.get(hit['accession'])
         rows.append({'rank': hit['rank'], 'accession': hit['accession'], 'target_id': hit['target_id'],
+                     'pdb_entry': None if pdb is None else pdb['entry'], 'pdb_chain': None if pdb is None else pdb['chain'],
+                     'chain_accession_count': None if pdb is None else len(pdb['accessions']),
                      'control': 'model_itself' if itself else None, 'control_B': value['B'] if itself else None,
                      'control_rmsd_A': value['rmsd_A'] if itself else None,
-                     'asked': hit['accession'] in asked, 'named': name is not None,
+                     'asked': pdb['asked'] if pdb is not None else hit['accession'] in asked, 'named': name is not None,
                      'product': None if name is None else name['product'],
                      'name_source': None if name is None else name['name_source'],
                      'B': None if itself else value['B'],

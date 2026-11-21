@@ -25,8 +25,8 @@
             "label": "The structure database to search",
             "required": 1,
             "type": "enum",
-            "enum": ["afdb-swissprot"],
-            "desc": "One value of the service's databases (GET /api/databases, field path). Round 1 offers one; 'pdb100' and 'cath50' are verified to exist and are added to this list when their round is built.",
+            "enum": ["afdb-swissprot", "pdb100"],
+            "desc": "One value of the service's databases (GET /api/databases, field path). Offered: 'afdb-swissprot' (AlphaFold models of UniProt/Swiss-Prot) and 'pdb100' (experimental structures: the chains of the biological assemblies of the PDB; a hit is named from the chain's UniProt accession, see pdb_chain_proteins). 'cath50' is verified to exist and is added when its round is built.",
             "verified_available": ["afdb-swissprot", "pdb100", "cath50"]
         },
         {
