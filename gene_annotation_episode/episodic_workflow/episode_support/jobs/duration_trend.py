@@ -12,7 +12,8 @@ carries ``duration_seconds`` and ``outcome``.
 - the latest measured durations, newest first (a service that has become slower shows here before the median moves);
 - once enough jobs of different sizes are measured, a straight line fitted through duration against one size field
   of the job (least squares: ``seconds = seconds_at_zero + seconds_per_unit * size``), with the duration it gives
-  for the size asked about.
+  for the size asked about and how far the measured durations lie from the line (the median distance in seconds:
+  a line whose distance is as large as the spread of the durations says the size explains little).
 
 Only jobs that ended as ``finished`` are measured durations; a job that failed or is still open is counted beside
 them and enters no number. Nothing here reads a file: the caller hands in the rows (``EstimateTable.rows(kind)``)."""
@@ -63,6 +64,8 @@ def duration_trend(rows, *, size_field=None, size=None, latest=5, fit_minimum=5)
             at_zero, per_unit = _line(points)
             trend['size_fit'] = {'size_field': size_field, 'points': len(points), 'seconds_at_zero': at_zero,
                                  'seconds_per_unit': per_unit,
+                                 'typical_distance_seconds': _quantile(
+                                     [abs(seconds - at_zero - per_unit * size_) for size_, seconds in points], 0.5),
                                  'predicted_seconds': None if size is None else at_zero + per_unit * size}
     return trend
 

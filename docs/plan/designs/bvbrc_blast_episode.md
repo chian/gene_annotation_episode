@@ -272,3 +272,55 @@ that the ledger reaches five measured searches of three lengths and the size lin
 4. Afterwards the ledger holds 5 measured searches of 3 query lengths and the trend carries `size_fit` (the
    least-squares line of seconds against query length).
 5. The head's credit is close to 1 with no further call.
+
+## Parking and resuming (owner's instruction, 2026-11-20; "park" is the word)
+
+Owner: "figure out how to "release" (dangerous word since it can be used multiple ways---find a better one) this child to run
+in background while other pieces of the episodic workflow can do other work (i.e., bounce a waiting notice/info back up to
+parent with about how long we expect to wait so parent can choose what to do next. it could just wait, it could send off
+another tool, it could go all the way back up to root with the same info)".
+
+Design (nothing of `episode_runtime`, `method_loop` or `yield_control` is changed; no action added):
+- The commission has `until`: `launched` (estimate, launch, then the child returns: it parks) or `extracted` (follow the search
+  to its result; also how a parked search is resumed).
+- The child's credit is bounded: four units, each once and only when new in this commission: an estimate held
+  (`information_unit`), the search launched (`handoff_unit`, once however many launches a fix needed), the search known ended
+  (`information_unit`: the first status that shows finished, failed or lost; queued or running earns nothing) and the graded
+  result (`graded_unit`). The target (`read_from_parent`) is the sum of the units obtainable under `until`: `launched` -> estimate
+  + handoff; `extracted` -> all four, less what passed-back records hold (no estimate and handoff when a handoff is passed back;
+  no ended-unit when a passed-back status already shows it ended). `credit.py` counts each term under exactly the same
+  condition as the target term, so the credit cannot exceed it: on the fix path (a failed launch, a fix, a second launch) the
+  estimate is counted once (any completed estimate unit), the handoff once (any completed launch unit), the ended unit once
+  (any new status row that shows ended), so a second launch adds nothing. `until: launched` with a passed-back handoff is
+  refused (target 0).
+- Controller: `CompletionYieldController`, cost = `settings['cost']` (0.5) times the smallest unit of the commission: always below
+  the target (which the controller requires) and below the one-unit credit still missing before the target, so it does not stop
+  early on forecast; it stops at the target at once (exact zero remaining credit). A search that keeps running, or failed at the
+  service, leaves the target unreached; the controller then winds the child down.
+- Resume: the head's `held_searches` view (as `database_blast`'s) of the job rows of kind `bvbrc`; its commission check admits a
+  continuation (same query, program, database, resource, `until` extracted) and refuses a second submission; `msg_to_child` passes
+  back, in custody, the handoff, status and closure records and `known_ended`; the child rebuilds its state from them
+  (`resumed_rows`: the estimate recorded with the launch and the launch, and the state the latest status shows), so the launch
+  and estimate checks refuse. The ledger row of the launch is resolved by the first status that shows it ended.
+- Wait notice (the child's return when it ends with the search launched and not extracted): `parked`, `seconds_since_launch`
+  (to the latest thing the child knew: the launch or its latest status), `estimated_seconds` and `expected_remaining_seconds`
+  (estimate minus seconds since launch, not below zero; if a status came with a revised remaining time, that later fact).
+  The head's model also sees `bvbrc_searches` with the seconds since the launch and the seconds still expected as of each of its
+  own decisions, and its own return carries `waiting_searches` (slot, seconds since launch, expected remaining seconds) beside
+  `outstanding_handoff_count`, with the handoff and status records in its selectable lists.
+- The head's three choices stay with its model, from its existing actions; the description of the child says what `until` means
+  and what the notice is, and does not say which to choose.
+
+### Run E1: observed (`runs/bvbrc_a101_run_E1`, workspace `runs/bvbrc_a101_ws_E`)
+
+1. As predicted: the first estimate was 86.31 s, learned from the ledger.
+2. One ledger row with `query_length` 1342; one monitor. NOT as predicted: the search measured 66.3 s (predicted
+   80 to 150): the longest query was the fastest so far.
+3. As predicted: one product, "DNA-directed RNA polymerase beta subunit (EC 2.7.7.6)", on all 100 hit records read.
+4. As predicted: 5 measured searches of 3 query lengths, and the trend now carries the line:
+   seconds = 89.74 - 0.0191 x query length (64.1 s for 1342 residues, 83.0 s for 353, 88.4 s for 70). The model's
+   estimates after the extract used it (64.12 s). The slope is negative and small: over these five searches the
+   query length explains little of the duration (three searches of the same length took 66.4, 85.5 and 87.2 s). The
+   trend therefore also gives the median distance of the measured durations from the line
+   (`typical_distance_seconds`), added after this run.
+5. The head's credit: 1.0 with no further call.
