@@ -19,8 +19,12 @@ The kinds of held graded source read, by the content of their retained sheet:
 * a database search with names (a ``blast_database_sheet`` whose ``reference_metadata`` gives each hit its functions):
   test ``database_search:<provider>:<program>:<database>``; each hit names a candidate of vocabulary ``product``: its
   function as the sheet's reference metadata gives it (for BV-BRC that is the ``product`` of the feature, never its
-  ``annotation`` field); its value is the subscore of that hit's alignments. A hit with no function names no candidate
-  and is counted as unlabelled. Hits with the same function are replicates of that candidate in the test.
+  ``annotation`` field); its value is the subscore of that hit's alignments. A hit with no function names no candidate.
+  It is counted as NOT ASKED when the naming of the search's hits stopped before it (``bvbrc_hit_metadata.name_hits``
+  asks for the hits in the order of their value and stops once the candidates settle; its ``naming`` record, the
+  ``search_hit_metadata`` product of the search, gives ``not_asked``): its function is unknown, not absent. Every other
+  hit with no function was asked and carries no product (``no_product``). Hits with the same function are replicates of
+  that candidate in the test.
 * a profile scan (``hmmer_search_sheet_v1`` of ``hmmscan``): test ``profile_scan:<database name>``; each matched family
   is a candidate of vocabulary ``profile_family`` (identifier: its accession, name: its name, as the profile database
   gives them); its value is the subscore of its domains.
@@ -81,6 +85,7 @@ because the receipts are recorded once, in the journal's row order.
 
 The measurements of different targets are never compared: ``candidate_table`` runs ``differential_credit`` on each
 target of the scope and the credit is the sum over the targets."""
+import json
 import math
 
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_alignment.native_correspondence import (
@@ -105,6 +110,8 @@ DATABASE_SHEETS = ('blast_database_sheet_v1', 'blast_database_sheet_v2', 'blast_
 PAIRWISE_SHEET = 'blast_pairwise_sheet_v1'
 PROFILE_SHEET = 'hmmer_search_sheet_v1'
 MSA_SHEET = 'msa_alignment_sheet_v1'
+# The data product of a search's hit metadata (``bvbrc_blast_search.METADATA_KIND``; that module imports this one).
+HIT_METADATA_KIND = 'search_hit_metadata'
 # The owner (2026-11-21): "if you expect 10 conserve sites per protein on average, you would make the weighting 0.1 -- now I
 # don't know how many conserved regions there generally are, so you will have to figure that out".
 # E is the expected number of distinguishing sites of one candidate in one alignment, derived from the stored real alignments
@@ -139,7 +146,7 @@ def search_hits(grading, value_of):
     """The hits of a database search with names, one row per (hit, product name) in hit order: ``hit_index``, ``product``
     (the function the sheet's reference metadata gives it), ``value`` (the subscore of that hit's alignments), and the
     hit's ``accession``, ``aa_sequence_md5``, ``aa_length`` and ``feature_id`` (BV-BRC's feature fields; ``None`` where the metadata has
-    none), plus ``unlabelled`` (a hit that names no product gives one row with ``product`` ``None``)."""
+    none); a hit that names no product (not asked, or asked and carrying none) gives one row with ``product`` ``None``."""
     sheet = grading['sheet']
     rows = _by(route_native_grading(grading), 'hit_index')
     found = []
@@ -169,6 +176,17 @@ def _database_search(source, grading, value_of):
     rows = search_hits(grading, value_of)
     found = [(test, 'product', row['product'], None, row['value']) for row in rows if row['product'] is not None]
     return found, sum(1 for row in rows if row['product'] is None)
+
+
+def hit_naming(reader, source):
+    """The ``naming`` record (``{'named', 'not_asked', 'batches', 'stopped'}``, ``bvbrc_hit_metadata.name_hits``) of the hit metadata
+    of the held search ``source``: the held ``search_hit_metadata`` product made from the search's report. ``None`` when none is
+    held or it has no naming record (a search whose every hit was asked)."""
+    rows = [row for row in products(reader, HIT_METADATA_KIND) if source['artifact_ref'] in row['used']]
+    if not rows:
+        return None
+    (row,) = rows
+    return json.loads(reader.get_artifact(row['artifact_ref'])).get('naming')
 
 
 def new_site_values(sites, seen, target):
@@ -286,11 +304,12 @@ def _pairwise(reader, source, grading, value_of):
 
 
 def _read(reader, scope, sources):
-    """The measurements in arrival order, the unlabelled hits of each target, the identified conserved sites (target,
-    target position, residue, candidate name) of the held alignments and the matched sites the held MetaCATS reports confirmed
-    (the same identities)."""
+    """The measurements in arrival order, per target the hits of database searches that name no candidate
+    (``{'not_asked', 'no_product'}``: the hits whose function was never asked, and those asked that carry no product), the
+    identified conserved sites (target, target position, residue, candidate name) of the held alignments and the matched
+    sites the held MetaCATS reports confirmed (the same identities)."""
     scope = reader.validate_scope(scope)
-    measurements, unlabelled = [], {target: 0 for target in scope['subject_refs']}
+    measurements, unnamed = [], {target: {'not_asked': 0, 'no_product': 0} for target in scope['subject_refs']}
     identified, confirmed = set(), set()
     for reference in sources:
         source = reader.get(reference)
@@ -317,9 +336,15 @@ def _read(reader, scope, sources):
             length, regions = reader.subject_length(target), _regions(reader, scope, target)
             found, missing = read(source, grading, lambda rows: compile_native_sheet(
                 rows, supplied_length=length, regions=regions)['value'])
-            unlabelled[target] += missing
+            if missing:
+                naming = hit_naming(reader, source)
+                not_asked = 0 if naming is None else naming['not_asked']
+                if not_asked > missing:
+                    raise ValueError('hits_not_asked_exceed_the_hits_without_a_function:' + reference)
+                unnamed[target]['not_asked'] += not_asked
+                unnamed[target]['no_product'] += missing - not_asked
             measurements.extend(_measurement(target, row[0] + '@' + reference, *row[1:5], reference, *row[5:]) for row in found)
-    return measurements, unlabelled, identified, confirmed
+    return measurements, unnamed, identified, confirmed
 
 
 def candidate_measurements(reader, scope, sources):
@@ -408,9 +433,11 @@ def candidate_table(reader, scope, sources):
     (one row per admitted candidate, highest score first, ties in arrival order: its vocabulary, name and
     identifier, its ``score``, the ``tests`` it has undergone, its ``measurement_count`` and its ``best_value``),
     ``tests`` (each test applied to the target with ``candidate_count``, the admitted candidates it measured),
-    ``differentials`` (each: the ``test``, the two candidates and the ``value``), ``unlabelled_hit_count`` and the
-    target's ``credit``), and the ``credit`` of the scope: the sum over its targets."""
-    measurements, unlabelled = _read(reader, scope, sources)[:2]
+    ``differentials`` (each: the ``test``, the two candidates and the ``value``), ``not_asked_hit_count`` (the hits of
+    database searches whose function was never asked: the naming stopped once the candidates settled), ``no_product_hit_count``
+    (the hits asked that carry no product) and the target's ``credit``), and the ``credit`` of the scope: the sum over its
+    targets."""
+    measurements, unnamed = _read(reader, scope, sources)[:2]
     targets = {}
     for target, rows in _by(measurements, 'target').items():
         result = differential_credit(rows)
@@ -428,8 +455,10 @@ def candidate_table(reader, scope, sources):
                           'second': _entry(rows, row['pair'][1]), 'value': row['value']}
                          for row in result['differentials']]
         targets[target] = {'candidates': candidates, 'tests': tests, 'differentials': differentials,
-                           'unlabelled_hit_count': unlabelled[target], 'credit': result['credit']}
-    for target, count in unlabelled.items():
+                           'not_asked_hit_count': unnamed[target]['not_asked'],
+                           'no_product_hit_count': unnamed[target]['no_product'], 'credit': result['credit']}
+    for target, counts in unnamed.items():
         targets.setdefault(target, {'candidates': [], 'tests': [], 'differentials': [],
-                                    'unlabelled_hit_count': count, 'credit': 0.0})
+                                    'not_asked_hit_count': counts['not_asked'], 'no_product_hit_count': counts['no_product'],
+                                    'credit': 0.0})
     return {'targets': targets, 'credit': math.fsum(row['credit'] for row in targets.values())}

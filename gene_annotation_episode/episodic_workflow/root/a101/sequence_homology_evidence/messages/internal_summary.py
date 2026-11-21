@@ -72,7 +72,8 @@ def _held_profile_scans(records):
 def _candidate_fields(target):
     """The candidate fields of the finding of one target (``final_to_parent``)."""
     return {'candidates': target['candidates'], 'candidate_count': len(target['candidates']),
-            'unlabelled_hit_count': target['unlabelled_hit_count'], 'differentials': target['differentials']}
+            'not_asked_hit_count': target['not_asked_hit_count'], 'no_product_hit_count': target['no_product_hit_count'],
+            'differentials': target['differentials']}
 
 
 def _across_targets(table, name):
@@ -161,7 +162,8 @@ def internal_summary(view):
             'credit_binding': A101DifferentialCredit().as_record(), 'axis_findings': findings,
             'candidates': _across_targets(table, 'candidates'), 'tests': _across_targets(table, 'tests'),
             'differentials': _across_targets(table, 'differentials'),
-            'unlabelled_hit_count': sum(target['unlabelled_hit_count'] for target in table['targets'].values()),
+            'not_asked_hit_count': sum(target['not_asked_hit_count'] for target in table['targets'].values()),
+            'no_product_hit_count': sum(target['no_product_hit_count'] for target in table['targets'].values()),
             'units_consumed': view.units_consumed,
             'action_yields': (None if view.controller_state is None
                               else yield_table(view.controller_state, forecast_unit='differential_credit'))}

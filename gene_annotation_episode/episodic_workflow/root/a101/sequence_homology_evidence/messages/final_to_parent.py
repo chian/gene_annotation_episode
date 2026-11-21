@@ -64,8 +64,10 @@ TARGET_FORM = RecordForm({
     'candidates': Field('list', 'The possible annotations found for the target, each with its score, the leading one '
                                 'first', items=CANDIDATE_FORM),
     'candidate_count': Field('integer', 'The number of possible annotations found'),
-    'unlabelled_hit_count': Field('integer', 'The hits of database searches that carry no function and name no '
-                                             'candidate'),
+    'not_asked_hit_count': Field('integer', 'The hits of database searches whose function was not asked: the naming of the '
+                                            'hits stopped once the candidates settled, so their function is unknown, not absent'),
+    'no_product_hit_count': Field('integer', 'The hits of database searches whose function was asked and that carry no '
+                                             'product: they name no candidate'),
     'differentials': Field('list', 'The tests that differentiated two listed candidates', items=DIFFERENTIAL_FORM),
 })
 FINDING_FORM = RecordForm({
