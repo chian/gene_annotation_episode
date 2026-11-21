@@ -74,3 +74,12 @@ The estimator stopped the head (`ended_by yield_stop`, 21 units) when the upper 
 Credit rose by each new candidate's score: the scan admitted one family, CSD (PF00313.29), score 0.8198 (the credit rose 0.8198); the extract admitted five products with D1's scores and the credit rose 4.2045 (= 0.9593 + 0.8212 + 0.8113 + 0.8082 + 0.8046). No differential arose (as predicted). The head's return (`stdout.log`): credit 5.0243; the target's finding carries `candidate_count` 6, `unlabelled_hit_count` 0, `differentials` [] and `candidates` (leading first): product "Cold shock protein of CSP family => CspA (naming convention as in E.coli)" 0.9593 (55 measurements); product "... => CspB/CspG/CspI ..." 0.8212 (156); profile_family CSD PF00313.29 0.8198 (1); product "Cold shock protein of CSP family" 0.8113 (53); "hypothetical protein" 0.8082 (2); "... => CspC ..." 0.8046 (34). The model's decision context from the second decision on showed `candidates` and `tests` (model call 2 and 26 of `model_calls_H1`).
 
 Against the prediction: actions as predicted (scan then search, one `Homology` submission: one job directory in `bvbrc_jobs`), the CSD family scored 0.82 (predicted near 0.9), the credit near 5.02 (predicted about 5.1), the leader the CspA product, six candidates, no differential. Not as predicted: 19 units after the last gain, not 3 to 6: the accumulation controller's bound fell slowly (and rose twice, at units 7, 10, 18) because it was fitted to a first gain of 4.2 within a few units of real time.
+
+## Run H2: prediction (written before the run)
+
+Target: E. coli K-12 RecA (UniProt P0A7G6, 352 residues), workspace `runs/a101_diff_ws_H2`, run `runs/a101_diff_run_H2` (run id `a101_diff_H2`), same settings as H1 (one `Homology` submission allowed).
+
+- Actions: a profile scan and a BV-BRC search (as H1), then reasoning commits until the estimator stops (again probably more than 6 units).
+- The scan: one to three Pfam families (RecA, PF00154, and its C-terminal domain family), the credit rising by each family's score at the scan unit.
+- The search: the lead expects one product among the 300 hits; I expect one dominant product (a RecA name) with a score near 0.9 and possibly one or two rare variants (a differently written RecA name or "hypothetical protein") with a score near 0.8 or less. Credit at the extract unit rises by the sum of those scores (about 1 to 3).
+- Credit at the end about 2 to 4; no differential; the leading candidate a RecA product (or the PF00154 family if its score is higher).
