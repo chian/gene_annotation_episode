@@ -54,10 +54,10 @@ CANDIDATE_FORM = RecordForm({
     'best_value': Field('number', 'The highest single value of the candidate, 0 to 1'),
 })
 DIFFERENTIAL_FORM = RecordForm({
-    'test': Field('text', 'The test the top two listed candidates both underwent'),
+    'test': Field('text', 'The test two listed candidates both underwent'),
     'first': Field('record', 'The first candidate', form=CANDIDATE_REFERENCE_FORM),
     'second': Field('record', 'The second candidate', form=CANDIDATE_REFERENCE_FORM),
-    'value': Field('number', 'The credit the test earned by differentiating the top two: the difference of the moves of their '
+    'value': Field('number', 'The credit the test earned by differentiating them: the difference of the moves of their '
                              'scores over the test times the weaker evidence of the two (1 except in a cluster test, where '
                              'a candidate with n sequences in the set has evidence n/(n+4))'),
 })
@@ -70,7 +70,7 @@ TARGET_FORM = RecordForm({
                                             'hits stopped once the candidates settled, so their function is unknown, not absent'),
     'no_product_hit_count': Field('integer', 'The hits of database searches whose function was asked and that carry no '
                                              'product: they name no candidate'),
-    'differentials': Field('list', 'The tests that differentiated the top two listed candidates they measured (one per test)', items=DIFFERENTIAL_FORM),
+    'differentials': Field('list', 'The tests that differentiated two listed candidates', items=DIFFERENTIAL_FORM),
 })
 FINDING_FORM = RecordForm({
     'evidence_axis': ChoiceField('text', 'The evidence axis', ('A101',)),

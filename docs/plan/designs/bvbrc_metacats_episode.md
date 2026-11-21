@@ -64,9 +64,4 @@ A matched conserved site of a candidate in the analysed alignment is confirmed w
 candidate is (its matched sites confirmed by this report and by no earlier held report) x W, on the msa family (`a101_conserved_sites.md`, the
 section of this date, holds the rule, the column mapping and how it was verified on the stored reports, the ceiling and the direct check). The head's
 ceiling for `bvbrc_metacats` is derived from the current state (`HEAD/credit.metacats_value`); `best_arguments` names the alignment that reaches it.
-The report is one test: it earns the entries of the candidates it admits and ONE differential, the difference of the moves of the top two listed candidates it
-measures (the highest scores before it, a tie by the candidate key; the owner, 2026-11-21: "you only do the differential between the top two candidates"), and
-nothing for any other pair; its ceiling is the entries of the unlisted candidates plus the largest listed bound m_c (`differential_credit.metacats_test_ceiling`,
-ceiling version `a101_ceiling_v2`). Direct check under this rule (not a real run; `runs/a101_top_two_check`, goal12 cspa unit 4): the report earned 0.75
-(|0.8333 - 0.0833|, the CspA and the CSP family products; 1.5 under the sum over all three pairs), ceiling 0.8333.
 The chi-square table reader no longer keeps the comma after a residue (`read_chisq_table`).

@@ -3,8 +3,8 @@
 ``credit(summary, records)`` is ``candidate_table(...)['credit']`` (library: ``grading/sequence_homology_evidence/
 candidate_measurements.py``, which reads the held graded sources in the order the head obtained them and calls
 ``differential_credit``): a candidate annotation with positive evidence is admitted and earns its score; applying a
-test earns the difference of the moves of the top two of the candidates already on the list that it measures (one
-pair, nothing for any other); a repeat changes nothing, so it earns nothing. The sum has no fixed maximum, so the credit's controller is the
+test the candidates already on the list have all undergone earns the sizes of the differences of their moves; a
+repeat changes nothing, so it earns nothing. The sum has no fixed maximum, so the credit's controller is the
 accumulation controller (``yield_estimator.py``); ``A101DifferentialCredit`` is its definition record.
 
 ``A101SequenceCredit`` is no longer the credit. It stays as the reader of the residue-similarity index of the
@@ -13,7 +13,7 @@ library's ``NativeCorrespondenceScoring``), which the head still reports as a fe
 (``axis_findings`` of ``messages/internal_summary.py``). ``read_details`` scores the native BLAST and HMMER gradings
 of the received observations inside the scope's target segments and reads only through the custody reader."""
 from dataclasses import dataclass
-import heapq
+from itertools import combinations
 import json
 from pathlib import Path
 
@@ -64,7 +64,7 @@ class A101DifferentialCredit:
     yield_method = 'forecast'
 
     def as_record(self):
-        return {'kind': 'a101_differential_credit', 'version': 'a101_differential_credit_v7', 'axis': 'A101',
+        return {'kind': 'a101_differential_credit', 'version': 'a101_differential_credit_v6', 'axis': 'A101',
                 'measurement': 'subscore_of_one_references_alignments_over_the_scope_regions',
                 'subscore_version': VERSION,
                 'candidates': 'product_from_database_search_functions_profile_family_reference_sequence',
@@ -73,11 +73,11 @@ class A101DifferentialCredit:
                 'score': 'sum_over_subscoring_sheets_of_weight_times_sum_of_mean_value_in_test_of_that_kind',
                 'admission': 'first_value_above_zero',
                 'entry': 'score_after_the_admitting_test_only',
-                'differential': 'abs_difference_of_the_score_moves_of_the_top_two_candidates_listed_before_the_test_that_it_measures_nothing_for_any_other_pair',
+                'differential': 'abs_difference_of_score_moves_of_two_listed_candidates_in_a_test_both_underwent',
                 'credit': 'sum_of_entry_scores_and_differentials', 'maximum': 'none',
                 'dataset': 'tests_of_one_dataset_earn_their_largest_test_credit_once_and_sheet_reads_largest_value',
                 'metacats': 'matched_conserved_sites_confirmed_significant_not_confirmed_before_times_site_weight_msa_family',
-                'cluster_evidence': 'top_pair_times_min_r_entry_times_own_r_r_is_n_over_n_plus_pseudo_count_value_stays_share',
+                'cluster_evidence': 'pair_times_min_r_entry_times_own_r_r_is_n_over_n_plus_pseudo_count_value_stays_share',
                 'cluster_pseudo_count': CLUSTER_PSEUDO_COUNT,
                 'repeat': 'earns_nothing'}
 
@@ -247,19 +247,14 @@ def all_vs_all_best(summary, records):
     commissioned or graded before at any ``per_candidate`` (``commission_keys``: the same candidates again are a replicate). The
     arguments are ``{'query_ref', 'search_ref', 'candidates', 'per_candidate'}``; ``(0.0, None)`` when none can earn.
 
-    The ceiling of a set ``S`` is ``w (sum of r_c over the unlisted c in S + min(r_a, r_b))``, ``a`` and ``b`` the top two listed
-    candidates of ``S`` by score (``cluster_test_ceiling``), less the dataset's best. It does not fall when ``per_candidate`` rises (a
-    candidate's planned sequences do not fall, so its evidence ``n / (n + 4)`` does not fall, and the top two do not depend on
-    it): the commission is at the largest ``per_candidate``, and each candidate's planned size is its own (``plan_rows`` plans each
-    candidate alone), so the sizes are planned once. It is NOT monotone in the candidate set (a listed candidate added above the pair
-    replaces a member of it). So the sets are searched best first: the largest set of each kind (``a`` and ``b`` the top two listed,
-    every unlisted candidate and every listed one below ``b``; or one listed, or none) is a start; a start that is commissioned is
-    expanded into the sets with one candidate fewer (never fewer than ``ALL_VS_ALL_MINIMUM_CANDIDATES``), each worth no more
-    than it unless it changes the top two, and the first set popped that is not commissioned is the maximum (a set not
-    commissioned of a kind is reached from that kind's start by removing one candidate at a time, the values of which do not rise, and the
-    first one of the chain that is not commissioned was on the queue before any worth less). A winner is then reduced by removing the
-    candidates that add nothing (later in the option's order first), when what is left is not commissioned. Ties: the options in
-    their order, then the order of discovery."""
+    The maximum never falls when a candidate is added to a set (every term of the cluster test's credit is nonnegative, so the best
+    vertex of the smaller set, with the added candidate at any value, earns at least as much) or when ``per_candidate`` rises (a
+    candidate's planned sequences do not fall, so its evidence ``n / (n + 4)``, which weighs its entry and its pairs, does not fall).
+    So the commission is at the largest ``per_candidate``, and the best set is among the sets reached from the option's full set by
+    removing one candidate at a time through sets already commissioned (a set not commissioned is not reduced further: any set
+    inside it earns no more). Every set not commissioned lies inside one of these: walking down from the full set to it, the first
+    set not commissioned is reached. Order (the first found wins a tie): the options in their order, larger sets first, the sets
+    of one size in the option's order (``itertools.combinations``)."""
     scope, high = summary['scope'], ALL_VS_ALL_PER_CANDIDATE_RANGE[1]
     options = [item for item in summary['msa_options'] if item['query_ref'] in scope['subject_refs']
                and summary['held_sequences'].get(item['query_ref']) == 'protein'
@@ -271,44 +266,20 @@ def all_vs_all_best(summary, records):
     commissioned, best = all_vs_all_commission_keys(summary), (0.0, None)
     for item in options:
         query, search, names = item['query_ref'], item['search_ref'], list(dict.fromkeys(item['candidates']))
-        held, place = standing.get(query, {}), {name: i for i, name in enumerate(names)}
-        sizes = all_vs_all_sizes(records, query, search, names, high, search_rows(records, {'subject_refs': [query]}, search))
-
-        def value(chosen):
-            return all_vs_all_value(standing, bests, query, search, {'product:' + name: sizes['product:' + name] for name in chosen})
-        listed = sorted((name for name in names if held.get('product:' + name, {}).get('listed')),
-                        key=lambda name: (-held['product:' + name]['score'], 'product:' + name))
-        unlisted = [name for name in names if name not in listed]
-        starts = [frozenset(unlisted)] + [frozenset(unlisted) | {name} for name in listed] + [
-            frozenset(unlisted) | set(listed[i:i + 1] + listed[j:]) for i in range(len(listed)) for j in range(i + 1, len(listed))]
-        queue, seen, found = [], set(), 0
-        for chosen in starts:
-            if len(chosen) >= ALL_VS_ALL_MINIMUM_CANDIDATES and chosen not in seen:
-                seen.add(chosen)
-                heapq.heappush(queue, (-value(chosen), found, chosen))
-                found += 1
-        winner = None
-        while queue:
-            negative, _, chosen = heapq.heappop(queue)
-            if (search, sorted(chosen)) not in commissioned:
-                winner = (-negative, chosen)
-                break
-            if len(chosen) > ALL_VS_ALL_MINIMUM_CANDIDATES:
-                for name in sorted(chosen, key=place.get):
-                    smaller = chosen - {name}
-                    if smaller not in seen:
-                        seen.add(smaller)
-                        heapq.heappush(queue, (-value(smaller), found, smaller))
-                        found += 1
-        if winner is None or winner[0] <= best[0] + 1e-12:
-            continue
-        top, chosen = winner
-        for name in sorted(chosen, key=place.get, reverse=True):
-            smaller = chosen - {name}
-            if (len(smaller) >= ALL_VS_ALL_MINIMUM_CANDIDATES and abs(value(smaller) - top) <= 1e-12
-                    and (search, sorted(smaller)) not in commissioned):
-                chosen = smaller
-        best = (top, {'query_ref': query, 'search_ref': search, 'candidates': sorted(chosen, key=place.get), 'per_candidate': high})
+        rows, place = search_rows(records, {'subject_refs': [query]}, search), {name: i for i, name in enumerate(names)}
+        level = [tuple(names)]
+        while level:
+            below = set()
+            for chosen in level:
+                if (search, sorted(chosen)) in commissioned:
+                    if len(chosen) > ALL_VS_ALL_MINIMUM_CANDIDATES:
+                        below.update(combinations(chosen, len(chosen) - 1))
+                    continue
+                value = all_vs_all_value(standing, bests, query, search,
+                                         all_vs_all_sizes(records, query, search, chosen, high, rows))
+                if value > best[0] + 1e-12:
+                    best = (value, {'query_ref': query, 'search_ref': search, 'candidates': list(chosen), 'per_candidate': high})
+            level = sorted(below, key=lambda chosen: [place[name] for name in chosen])
     return best
 
 
@@ -371,31 +342,27 @@ def outcome_pending(summary, records, position):
 # action's share of its ceiling only from ledger rows recorded under the same credit definition and the same version of
 # that action's ceiling (``yield_estimator.py``), so change an action's version whenever its ceiling's derivation changes,
 # and only that action's. Every offered action has one; an action without one raises
-# (``forecast_definition_missing_for_action``). The differential of a test is ONE pair's (the top two of the listed candidates
-# it measures: credit definition v7), which changed the ceiling of every action whose test can have a differential: v2 of
-# ``bvbrc_blast``, ``hmmer_profile_scan``, ``bvbrc_msa`` and ``bvbrc_metacats`` (one pair's difference added to the entries, no sum
-# over pairs), v5 of ``all_vs_all`` (the cluster test's bound with the top two's weaker evidence and each entry's own, minus the
-# dataset best; v4 summed over pairs). ``pairwise_blast`` measures one candidate, so it has no pair and keeps v1, as do ``reason``
-# and ``execute_selected_tool``. The shares of the old versions were learned under the pair sum and are not mixed with the new.
+# (``forecast_definition_missing_for_action``). ``all_vs_all`` v4: the cluster test's vertex bound with each pair weighed by
+# the weaker side's evidence and each entry by its own (``cluster_test_ceiling`` over the planned group sizes), minus the dataset
+# best; every other action keeps the derivation it had under v1.
 CEILING_VERSIONS = {'reason': 'a101_ceiling_v1', 'execute_selected_tool': 'a101_ceiling_v1',
-                    'pairwise_blast': 'a101_ceiling_v1', 'hmmer_profile_scan': 'a101_ceiling_v2',
-                    'bvbrc_blast': 'a101_ceiling_v2', 'bvbrc_msa': 'a101_ceiling_v2',
-                    'bvbrc_metacats': 'a101_ceiling_v2', 'all_vs_all': 'a101_ceiling_v5'}
+                    'pairwise_blast': 'a101_ceiling_v1', 'hmmer_profile_scan': 'a101_ceiling_v1',
+                    'bvbrc_blast': 'a101_ceiling_v1', 'bvbrc_msa': 'a101_ceiling_v1',
+                    'bvbrc_metacats': 'a101_ceiling_v1', 'all_vs_all': 'a101_ceiling_v4'}
 
 
 def ceiling(summary, records, action_type, arguments, ctx):
     """The most the head's credit can rise if the action ``action_type`` with ``arguments`` is the next unit (with
     ``arguments`` ``None``: the most over every arguments the action type can take now).
 
-    The credit is, per target, the sum of the entry scores of the candidates and of the differential of each test, ONE pair's
-    (``differential_credit``: the top two of the candidates listed before the test that the test measures). A unit adds at most one graded source, which is one test appended after the earlier ones.
+    The credit is, per target, the sum of the entry scores of the candidates and of the differentials
+    (``differential_credit``). A unit adds at most one graded source, which is one test appended after the earlier ones.
     A candidate's score is the sum of its weighted values over the tests (``differential_credit.SHEET_WEIGHT``: the value of a test
     of a family is the family's weight times its raw value, which is in [0, 1] except an alignment's, below), so that test moves a
     candidate's score by its weighted value. ``differential_credit.test_ceiling`` (for the alignment, ``msa_test_ceiling``) then bounds what the one test can add to
-    the target's credit: the one pair, the top two of the candidates on the list that the test measures, earns at most ``w`` (the
-    family's weight: the difference of two moves in [0, ``w``]), and only when at least two listed candidates are measured; a
-    candidate the test admits earns its entry, its first score, at most ``w``; a test that measures one candidate on the list and
-    admits none earns 0. Per action type:
+    the target's credit: a pair of candidates on the list that the test measures earns at most ``w`` (the family's weight: the
+    difference of two moves in [0, ``w``]); a candidate the test admits earns its entry, its first score, at most ``w``, and its pairs earn
+    nothing in that test; a test that measures one candidate on the list and admits none earns 0. Per action type:
 
     * ``reason``: 0. A reasoning commit holds interpretations and writes no graded source, and the credit is read from
       graded sources only (``held_sources``).
@@ -410,8 +377,8 @@ def ceiling(summary, records, action_type, arguments, ctx):
       sequence), so each candidate's group size in the alignment is known: a candidate with fewer than ``MINIMUM_GROUP_SIZE``
       sequences, or fewer than two such candidates, earns 0; an alignment whose input (candidates, sequences and order) is
       exactly a held alignment's earns 0 (a repeat). Otherwise a candidate's value is at most ``SITE_WEIGHT`` x (the target
-      positions whose matched site of it no held alignment identified) and the alignment's rise is at most the entries of the candidates
-      it can admit plus the largest of those bounds among the listed candidates (one pair: ``msa_test_ceiling``). With ``arguments`` ``None`` the ceiling is the largest over every commission
+      positions whose matched site of it no held alignment identified) and the alignment's rise is at most the vertex
+      maximum of ``msa_test_ceiling``. With ``arguments`` ``None`` the ceiling is the largest over every commission
       the head's checks would accept now (``msa_best``: every held search, every subset of at least two of its admitted
       candidates, every sequence count; commissions already held or already commissioned are left out), so that the
       ceiling of the row shown to the model is the ceiling of one named commission, ``best_arguments``. A group context
@@ -421,11 +388,11 @@ def ceiling(summary, records, action_type, arguments, ctx):
       ``differential_credit.cluster_test_ceiling``). The cluster test of the commission's committed clustering measures each named
       candidate once, its value ``w`` x the share of its sequences in the target's cluster, in [0, ``w``], with its evidence
       ``r = n / (n + 4)`` for its ``n`` sequences in the planned set (``all_vs_all_sizes``: the plan is deterministic); appended
-      last, its own test credit is ``r`` x the entry of each candidate it admits plus ``min(r_a, r_b) |v_a - v_b|`` for the ONE pair
-      of the top two listed candidates (fixed by their scores), so it is at most ``w`` (the sum of ``r`` over the unlisted
-      candidates plus ``min(r_a, r_b)`` of the top two). Its dataset is the commission's search: all the clusterings of one dataset earn one test's credit together, the largest (the
+      last, its own test credit (``r`` x the entry of each candidate it admits plus ``min(r_a, r_b) |v_a - v_b|`` over the listed
+      pairs) is convex on that box and largest at a vertex: ``w`` (the sum of ``r`` over the unlisted candidates plus the largest
+      cut of the listed ones, a pair across the cut earning ``min(r_a, r_b)``). Its dataset is the commission's search: all the clusterings of one dataset earn one test's credit together, the largest (the
       owner: "You only can earn one credit for one dataset - you can improve a clustering to earn more, but you cannot
-      replicate"), so the ceiling is that bound minus the dataset's best test credit so far, floored at 0
+      replicate"), so the ceiling is that vertex bound minus the dataset's best test credit so far, floored at 0
       (``dataset_test_ceiling``; ``dataset_bests``). A commission identical to one already commissioned or already graded (the
       search and the candidates, at any sequences per candidate) earns 0. With ``arguments`` ``None``: the largest over every
       commission the head's check would accept now (``all_vs_all_best``), and ``best_arguments`` names that commission.
@@ -434,8 +401,8 @@ def ceiling(summary, records, action_type, arguments, ctx):
       confirming conserved sites in comparison to a gene family." A report of the named alignment measures the alignment's group
       candidates; a candidate's value is ``SITE_WEIGHT`` x (its matched conserved sites of that alignment confirmed by the report
       and by no earlier held report), so at most ``SITE_WEIGHT`` x (its matched sites there not yet confirmed:
-      ``candidate_measurements.unconfirmed_matched_sites``) x the msa sheet's weight, and the rise is at most the entries of the candidates it can admit plus the largest of those bounds among the listed candidates
-      (one pair). An alignment the head's check refuses (a report of it held: the reuse check; or commissioned and not
+      ``candidate_measurements.unconfirmed_matched_sites``) x the msa sheet's weight, and the rise is at most the vertex maximum
+      over those bounds. An alignment the head's check refuses (a report of it held: the reuse check; or commissioned and not
       continued) earns 0. With ``arguments`` ``None``: the largest over the alignments a commission may name now
       (``metacats_best``), and ``best_arguments`` names that commission.
     * ``hmmer_profile_scan``: the scan of the target ``query_ref`` against the profile database ``database`` reports

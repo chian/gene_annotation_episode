@@ -24,15 +24,11 @@ given in the order they arrived. The tests are ordered by their first measuremen
 - A candidate is a possibility only on positive evidence: it is admitted with its first value above zero and earns
   its score after the test that admitted it (that value, since nothing was added before). A candidate that never
   scored above zero is not on the list and earns nothing.
-- THE DIFFERENTIAL OF A TEST IS ONE PAIR'S (the owner, 2026-11-20: "(1) adding new possible annotations gets you a score (2)
-  differentiating those scores (i.e., abs[S_A(t=i+1) - S_A(t=i)] vs abs[S_B(t=i+1) - S_B(t=1)] vs .... for all possibilities";
-  "I mean that if S_A moves +0.5 and S_B only moves +0.1, then you have differentiated the lead candidates by 0.4"; 2026-11-21: "Do
-  you not remember that you only do the differential between the top two candidates?"). Among the candidates already on the list
-  BEFORE a test (admitted by an earlier test) that the test measures, take the TWO with the highest scores before the test (a tie is
-  broken by the order of the candidate key); the test earns ``|d_A - d_B|`` for that pair, ``d_c`` being the change of ``S_c`` over
-  the test (the candidate's weighted value in it), and NOTHING for any other pair. With fewer than two such candidates the test
-  earns no differential. The test that admits a candidate earns that candidate's entry score only: its rise from nothing is not
-  counted a second time as a differential.
+- A test that two candidates both underwent after both were already on the list earns ``|d_A - d_B|`` for that
+  pair, where ``d_c`` is the change of ``S_c`` over that test, that is, the candidate's value in that test. The test
+  that admits a candidate earns that candidate's entry score only: its rise from nothing is not counted a second time
+  as a differential. A test only one of the two underwent earns nothing for the pair until the other undergoes it
+  too.
 
 ``credit`` is the sum of the entry scores and of the differentials: it never falls. Nothing here reads a record, a
 file or a model.
@@ -56,6 +52,7 @@ differential of two candidates is ``min(r_a, r_b) x |d_a - d_b|``: a pair is onl
 test admits (an entry) earns ``r(n) x`` its entry score: a candidate entering on thin data enters with less. Every other family
 (search, scan, alignment, MetaCATS, pairwise) has evidence 1, so its rule is unchanged."""
 import math
+from itertools import combinations
 
 
 # The typical strong value of each sheet's family: the value, in ONE test of that family, of the candidate that leads a stored real run
@@ -122,23 +119,13 @@ def _sheet_value(held):
     return math.fsum([value for dataset, value in held if dataset is None] + list(best.values()))
 
 
-def lead_pair(scores):
-    """The top two of ``scores`` (``{candidate: score}``): the two with the highest scores, a tie broken by the order of the candidate
-    key; ``None`` with fewer than two."""
-    if len(scores) < 2:
-        return None
-    first, second = sorted(scores, key=lambda candidate: (-scores[candidate], candidate))[:2]
-    return first, second
-
-
 def differential_credit(measurements):
     """The scores, the sheets and the credit of ``measurements`` (``[{'test', 'candidate', 'value'}]``, each optionally
     with its ``dataset``, in arrival order; a measurement of a ``cluster`` test also has its ``size``). Also ``test_credits``
-    (each test's entries, each times the evidence of the admitting measurement, plus its differential, times the weaker
-    evidence of its pair: ``_evidence``) and ``datasets`` (per dataset: its ``best`` test credit so far, the ``best_test`` and the
-    credit each of its tests ``earned``). A test has at most one differential row: its ``pair`` (the top two of the candidates
-    listed before it that it measured, the higher score first), the credit it earned (``value``), the ``difference`` of the
-    two ``moves`` and the pair's ``evidence``."""
+    (each test's entries, each times the evidence of the admitting measurement, plus its differentials, each times the weaker
+    evidence of the pair: ``_evidence``) and ``datasets`` (per dataset: its ``best`` test credit so far, the ``best_test`` and the
+    credit each of its tests ``earned``). A differential row carries the credit it earned (``value``), the ``difference`` of the
+    two moves and the pair's ``evidence``."""
     tests, values, evidence = [], {}, {}
     dataset_of = _datasets(measurements)
     for row in measurements:
@@ -150,26 +137,28 @@ def differential_credit(measurements):
             raise ValueError('replicates_of_a_candidate_differ_in_evidence:' + row['test'])
     candidates = sorted({candidate for _, candidate in values})
     sheets = {candidate: {} for candidate in candidates}
-    entries, admitted, differentials = {}, {}, []
+    changes, entries, admitted = {}, {}, {}
 
     def score(candidate):
         return math.fsum(_sheet_value(held) for held in sheets[candidate].values())
-    for position, test in enumerate(tests):
-        measured = [candidate for candidate in candidates if (test, candidate) in values]
-        changes = {candidate: sheet_weight(test) * math.fsum(values[test, candidate]) / len(values[test, candidate])
-                   for candidate in measured}
-        pair = lead_pair({candidate: score(candidate) for candidate in measured if candidate in entries})
-        if pair is not None:
-            first, second = pair
-            difference = abs(changes[first] - changes[second])
-            weaker = min(evidence[test, first], evidence[test, second])
-            differentials.append({'test': test, 'pair': [first, second], 'value': weaker * difference,
-                                  'difference': difference, 'evidence': weaker,
-                                  'moves': [changes[first], changes[second]]})
-        for candidate in measured:
-            sheets[candidate].setdefault(_kind(test), []).append((dataset_of.get(test), changes[candidate]))
-            if candidate not in entries and changes[candidate] > 0:
-                entries[candidate], admitted[candidate] = score(candidate), position
+    for test in tests:
+        for candidate in candidates:
+            if (test, candidate) not in values:
+                continue
+            replicates = values[test, candidate]
+            value = sheet_weight(test) * math.fsum(replicates) / len(replicates)
+            sheets[candidate].setdefault(_kind(test), []).append((dataset_of.get(test), value))
+            changes[test, candidate] = value
+            if candidate not in entries and value > 0:
+                entries[candidate], admitted[candidate] = score(candidate), tests.index(test)
+    differentials = [{'test': test, 'pair': [first, second],
+                      'value': min(evidence[test, first], evidence[test, second])
+                      * abs(changes[test, first] - changes[test, second]),
+                      'difference': abs(changes[test, first] - changes[test, second]),
+                      'evidence': min(evidence[test, first], evidence[test, second])}
+                     for position, test in enumerate(tests) for first, second in combinations(sorted(entries), 2)
+                     if (test, first) in changes and (test, second) in changes
+                     and position > max(admitted[first], admitted[second])]
     test_credits = {test: math.fsum([evidence[test, candidate] * entries[candidate] for candidate in entries
                                      if tests[admitted[candidate]] == test]
                                     + [row['value'] for row in differentials if row['test'] == test]) for test in tests}
@@ -206,54 +195,39 @@ def standing(measurements):
 
 
 def test_ceiling(held, measurable, family, unseen=0, limit=None):
-    """The most one further test can add to the credit of one target, from where the list stands: a PROVED maximum.
+    """The most one further test can add to the credit of one target, from where the list stands.
 
     ``held`` is ``standing`` of the target. The test measures candidates of ``measurable`` (identifiers, each possibly
     not yet held) and up to ``unseen`` others never met, at most ``limit`` candidates in all when ``limit`` is given.
-
-    Proof. Scores are additive and a candidate's value in a test of ``family`` is in [0, w], ``w`` = ``SHEET_WEIGHT[family]`` (the raw
+    Scores are additive and a candidate's value in a test of ``family`` is in [0, w], ``w`` = ``SHEET_WEIGHT[family]`` (the raw
     value is in [0, 1]), so the test moves a score by its value, between 0 and ``w``. The test is the last one, so it earns:
 
-    * for each candidate not on the list that it admits, the entry score (its first score), at most ``w``;
-    * ONE differential, the absolute difference of the moves of the top two of the listed candidates it measures, which are two
-      numbers in [0, w]: at most ``w``, and only when at least two listed candidates are measured (the test that admits a candidate
-      earns that candidate's entry only, and no other pair earns anything);
-    * nothing else.
+    * for two candidates on the list that it measures, the size of the difference of their moves: at most ``w`` for each pair;
+    * for a candidate not on the list that it admits, the entry score (its first score): at most ``w`` each (the test that
+      admits a candidate earns that candidate's entry only, so a pair with it earns nothing in this test);
+    * nothing else: a test that measures one candidate on the list and admits none earns 0.
 
-    With ``m`` listed candidates measured (``count`` of them are named) and ``new`` others new, the bound is ``w`` x ((1 if
-    ``m`` >= 2) + the new ones admitted); with a ``limit`` of ``k`` the new ones number at most ``k - m``, and the bound is the
-    largest of that over ``m`` from 0 to ``min(k, count)``. Tight: the top two at ``w`` and 0, every new candidate at ``w``."""
+    With ``m`` listed candidates measured and the others new, the bound is ``m(m-1)/2`` pairs plus one for each new one, times
+    ``w``; with a ``limit`` of ``k`` it is the largest of that over the ``m`` that leave ``k - m`` places for the new ones. It
+    is a bound, not a forecast."""
     weight = SHEET_WEIGHT[family]
     listed = {candidate for candidate, state in held.items() if state['listed']}
     count = len({candidate for candidate in measurable if candidate in listed})
     new = len({candidate for candidate in measurable if candidate not in listed}) + unseen
     if limit is None:
-        return weight * float((1 if count >= 2 else 0) + new)
-    return weight * float(max((1 if m >= 2 else 0) + min(limit - m, new) for m in range(min(limit, count) + 1)))
+        return weight * float(count * (count - 1) // 2 + new)
+    return weight * float(max(m * (m - 1) // 2 + min(limit - m, new) for m in range(min(limit, count) + 1)))
 
 
 def dataset_test_ceiling(bound, best):
     """The most one further test of a dataset can add to the credit, given ``bound``, the most that test's own credit (its
-    entries plus its differential) can be (for a clustering, ``cluster_test_bound``), and ``best``, the largest test credit of the dataset's tests held
+    entries plus its differentials) can be (for a clustering, the vertex bound of ``cluster_test_ceiling``), and ``best``, the largest test credit of the dataset's tests held
     so far (``differential_credit(...)['datasets'][dataset]['best']``, 0 with none): ``max(0, bound - best)``.
 
     Proof. The dataset contributes the largest test credit of its tests to the credit, and nothing else of the credit changes
-    when a test is appended (earlier entries and differentials are fixed; the new test's entries and differential are its own
+    when a test is appended (earlier entries and differentials are fixed; the new test's entries and differentials are its own
     test credit). So the credit rises by ``max(0, T - best)`` where ``T`` is the new test's credit, and ``T <= bound``."""
     return max(0.0, bound - best)
-
-
-def cluster_test_bound(held, sizes):
-    """The most the credit of ONE cluster test can be, ``B``, over the candidates of ``sizes`` (candidate -> sequences in the planned
-    set), from where the list stands (``held``, ``standing`` of the target): ``w (sum of r_c over the unlisted candidates measured +
-    min(r_a, r_b) of the top two listed candidates measured)``; the second term only with two listed candidates measured. See
-    ``cluster_test_ceiling``."""
-    weight = SHEET_WEIGHT['cluster']
-    measured = {candidate: cluster_evidence(size) for candidate, size in sizes.items() if size > 0}
-    listed = {candidate: held[candidate]['score'] for candidate in measured if held.get(candidate, {}).get('listed')}
-    new = math.fsum(r for candidate, r in measured.items() if candidate not in listed)
-    pair = lead_pair(listed)
-    return weight * (new + (0.0 if pair is None else min(measured[pair[0]], measured[pair[1]])))
 
 
 def cluster_test_ceiling(held, sizes, best):
@@ -263,42 +237,50 @@ def cluster_test_ceiling(held, sizes, best):
     sequences for to ``n_c``, its number of sequences in the planned set (the commission's plan is deterministic:
     ``bvbrc_msa_alignment.plan_rows``; a candidate with none gives no measurement and is left out); ``best`` is the dataset's
     largest test credit so far (``differential_credit(...)['datasets'][dataset]['best']``, 0 with none). With ``w`` =
-    ``SHEET_WEIGHT['cluster']`` and ``r_c = cluster_evidence(n_c)``, the ceiling is ``max(0, B - best)`` with ``B = w (sum of
-    r_c over the unlisted candidates + min(r_a, r_b))``, ``a`` and ``b`` the top two of the listed candidates (the highest scores in
-    ``held``, a tie by candidate key); the pair term is absent with fewer than two listed candidates.
+    ``SHEET_WEIGHT['cluster']`` and ``r_c = cluster_evidence(n_c)``, the ceiling is ``max(0, B - best)`` with
+    ``B = w (sum of r_c over the unlisted candidates + max over the sets S of listed candidates of the sum over the pairs
+    a in S, b not in S of min(r_a, r_b))``.
 
     Proof.
 
     1. The test measures each candidate group once: its value is ``w`` x the share of the group's sequences in the target's
        cluster, so ``0 <= v_c <= w`` (``cluster_sheet.group_values``; a group with share 0 is still measured), and its evidence is
        ``r_c``, fixed by the plan (``_evidence``). Nothing else is measured: the set holds only the target and the named
-       candidates' sequences. So the listed candidates the test measures are the listed ones with a group, and which two of them
-       are the top two is fixed by ``held`` (their scores before the test).
-    2. Appended last, the test's own credit ``T`` is ``r_c v_c`` for each candidate it admits (unlisted: no earlier value above 0,
-       so its entry score is its sheet value from the dataset, the largest over the dataset's tests, which is ``v_c``), plus
-       ONE differential ``min(r_a, r_b) |v_a - v_b|`` for the top two listed (``differential_credit``). ``r_c v_c <= r_c w`` and
-       ``|v_a - v_b| <= w``, so ``T <= B``.
+       candidates' sequences.
+    2. Appended last, the test's own credit ``T`` is, for each candidate it admits (unlisted: no earlier value above 0, so its
+       entry score is its sheet value from the dataset, the largest over the dataset's tests, which is ``v_c``), ``r_c v_c``,
+       plus ``min(r_a, r_b) |v_a - v_b|`` for each pair of listed candidates (``differential_credit``). Each term is convex in
+       ``v`` (linear, or a nonnegative multiple of an absolute value), so ``T(v)`` is convex on the box ``0 <= v_c <= w`` and its
+       maximum is at a vertex: every unlisted ``v_c = w`` (its term grows with ``v_c`` and it is in no pair) and the listed
+       candidates split into ``S`` at ``w`` and the rest at 0. A pair inside ``S`` or inside the rest earns 0 and a pair across
+       earns ``w min(r_a, r_b)``, so the vertex value is ``w (sum r_u + cut(S))``; ``B`` is the largest. ``cluster_vertex_bound``
+       takes the maximum over every ``S`` up to 16 listed candidates, and above that the looser sum over all listed pairs of
+       ``w min(r_a, r_b)`` (never below the maximum).
     3. The dataset earns the largest test credit of its tests and nothing else of the credit changes when its test is appended
        (``dataset_test_ceiling``), so the credit rises by ``max(0, T - best) <= max(0, B - best)``.
-    4. Tight: each group has at least one sequence, so a share of 0 and a share of 1 are both outcomes the clustering can give; the
-       partition that puts every unlisted group and the group of ``a`` in the target's cluster and the group of ``b`` outside it
-       (the other groups anywhere) gives exactly ``T = B``.
+    4. Tight (up to 16 listed candidates): each group has at least one sequence, so a share of 0 and a share of 1 are both
+       outcomes the clustering can give; the partition that puts the groups of the best ``S`` and of every unlisted candidate in
+       the target's cluster and the other groups outside it gives exactly ``T = B``.
 
     Not bounded further, and why: which partition MCL gives depends on the sequences and on the tuning the child's model chooses
-    after the commission, so no partition is excluded before the clustering runs."""
-    return dataset_test_ceiling(cluster_test_bound(held, sizes), best)
+    after the commission, so no vertex is excluded before the clustering runs."""
+    return dataset_test_ceiling(cluster_vertex_bound(held, sizes), best)
 
 
-def _new_and_pair_room(held, maxima, measurable):
-    """The largest rise of the credit over values ``0 <= v_c <= maxima[c]`` of the ``measurable`` candidates in one test appended
-    last: the entries of the candidates not listed (each at its maximum) plus one differential, the difference of the moves of the
-    top two listed candidates measured, at most the larger of their maxima; which listed candidates are measured is the test's
-    outcome (one with no value to find is not measured), so any two listed candidates can be the top two measured, and the
-    bound is the largest maximum among the listed ones when there are at least two of them."""
-    measured = [candidate for candidate in dict.fromkeys(measurable) if maxima[candidate] > 0]
-    listed = [maxima[candidate] for candidate in measured if held.get(candidate, {}).get('listed')]
-    new = math.fsum(maxima[candidate] for candidate in measured if not held.get(candidate, {}).get('listed'))
-    return new + (max(listed) if len(listed) >= 2 else 0.0)
+def cluster_vertex_bound(held, sizes):
+    """``B`` of ``cluster_test_ceiling``: the largest credit one cluster test can earn over the candidates of ``sizes`` (candidate
+    -> sequences in the planned set), from where the list stands (``held``, ``standing`` of the target)."""
+    weight = SHEET_WEIGHT['cluster']
+    measured = {candidate: cluster_evidence(size) for candidate, size in sizes.items() if size > 0}
+    listed = [r for candidate, r in measured.items() if held.get(candidate, {}).get('listed')]
+    new = math.fsum(r for candidate, r in measured.items() if not held.get(candidate, {}).get('listed'))
+    if len(listed) > 16:
+        return weight * (new + math.fsum(min(a, b) for a, b in combinations(listed, 2)))
+    cut = 0.0
+    for mask in range(1 << max(0, len(listed) - 1)):    # S and its complement give the same cut: the last one stays outside
+        cut = max(cut, math.fsum(min(listed[i], listed[j]) for i, j in combinations(range(len(listed)), 2)
+                                 if (mask >> i & 1) != (mask >> j & 1)))
+    return weight * (new + cut)
 
 
 def msa_test_ceiling(held, maxima, measurable):
@@ -320,14 +302,15 @@ def msa_test_ceiling(held, maxima, measurable):
        earlier with ANOTHER conserved residue stays open: a different group context can move the columns, so the old rule
        "every position identified at all is closed" was not a proved bound.) Hence ``0 <= v_c <= m_c = W room_c``.
     2. The credit adds, for this last test, the entries of the candidates it admits (not yet listed: ``v_c``, at most
-       ``m_c``) and ONE differential: ``|v_a - v_b|`` for the top two (highest score before the test) of the listed candidates
-       it measures (``differential_credit``). A candidate with no new site is not measured (it earns nothing and is no partner),
-       so which listed candidates are measured, and so which two are the top two, is the outcome of the alignment.
-    3. Whatever the outcome, the two moves are in [0, ``m``] of their candidates, so the differential is at most the larger of the
-       two ``m``, hence at most the largest ``m_c`` among the listed candidates; and it needs two listed candidates measured. So the
-       rise is at most the sum of ``m_c`` over the unlisted candidates plus, with at least two listed candidates eligible, the
-       largest ``m_c`` among the listed ones (``_new_and_pair_room``). It is a bound, not tight to the last site: the partner is
-       measured with a value of at least one site.
+       ``m_c``; a pair with an admitted candidate earns nothing in the test that admits it) and, for each pair of listed
+       candidates both measured, ``|v_a - v_b|`` (``differential_credit``). A candidate with no new site is not measured
+       (it earns nothing and makes no pair), which only lowers the sum, so ``v_c = 0`` is allowed.
+    3. The rise ``R(v)`` is the sum of ``v_c`` over the unlisted candidates plus ``|v_a - v_b|`` over the listed pairs: a
+       convex function of ``v`` (sum of norms and linear terms) on the box ``0 <= v_c <= m_c``, so it is largest at a vertex,
+       ``v_c`` equal to 0 or to ``m_c``. For a set ``S`` of listed candidates at ``m`` and the other listed at 0 it is
+       ``sum_{a<b in S} |m_a - m_b| + sum_{a in S, b not in S} m_a`` (plus the ``m_c`` of the unlisted candidates, always
+       at ``m_c``). The bound is the largest over the sets ``S`` (all of them when 16 or fewer listed candidates are
+       measured, else the looser ``sum over pairs of max(m_a, m_b)``, which is never below it).
     4. A candidate with fewer than ``MINIMUM_GROUP_SIZE`` sequences has no conserved site and is no partner, and a site
        needs two groups, so fewer than two eligible candidates, or an alignment that repeats a held one exactly (the same
        sequences in the same order: the same input, nothing new), earns 0. The caller passes only eligible candidates and
@@ -337,7 +320,7 @@ def msa_test_ceiling(held, maxima, measurable):
     (removing or adding a group can move columns), so the positions of one group in a new alignment context are
     not fixed by its sequences; a count of residues or a share argument over the sequences would need the columns
     fixed. Those parts keep the open bound (every position not seen as a matched site of the candidate)."""
-    return _new_and_pair_room(held, maxima, measurable)
+    return vertex_maximum(held, maxima, measurable)
 
 
 def metacats_test_ceiling(held, maxima, measurable):
@@ -351,11 +334,28 @@ def metacats_test_ceiling(held, maxima, measurable):
     earlier report confirmed) (``confirmed_site_values``); a confirmed site is one of the alignment's matched sites of ``c``
     (fixed by the held alignment's sheet, whatever columns the service finds significant), and a site already confirmed is not
     counted, so the count is between 0 and the number of matched sites not yet confirmed; weighted by the msa sheet's weight,
-    ``0 <= v_c <= m_c``. A candidate with ``m_c`` = 0 gets no measurement (it earns nothing and is no partner). The report is
-    one test appended last, so the credit rises by the entries of the candidates it admits (each ``v_c``) plus ONE differential,
-    ``|v_a - v_b|`` of the top two listed candidates it measures (``differential_credit``; it is no dataset test, so nothing
-    else changes). Which listed candidates are measured is the report's outcome, so the differential is at most the largest
-    ``m_c`` among the listed candidates, with at least two of them measurable: the bound ``_new_and_pair_room`` computes (the
-    same as for an alignment: ``msa_test_ceiling`` step 3). A report of an alignment already analysed by a held report is
-    refused by the request check (the reuse key), so its ceiling is 0; the caller decides that."""
-    return _new_and_pair_room(held, maxima, measurable)
+    ``0 <= v_c <= m_c``. A candidate with ``m_c`` = 0 gets no measurement (it earns nothing and makes no pair). The report is
+    one test appended last, so the credit rises by the entries of the candidates it admits (each ``v_c``) plus ``|v_a - v_b|``
+    for each pair of listed candidates it measures (``differential_credit``; it is no dataset test, so nothing else changes).
+    That rise is convex in ``v`` on the box ``0 <= v_c <= m_c``, so its maximum is at a vertex, the bound ``vertex_maximum``
+    computes (the same as for an alignment: ``msa_test_ceiling`` step 3). A report of an alignment already analysed by a held
+    report is refused by the request check (the reuse key), so its ceiling is 0; the caller decides that."""
+    return vertex_maximum(held, maxima, measurable)
+
+
+def vertex_maximum(held, maxima, measurable):
+    """The largest rise of the credit over values ``0 <= v_c <= maxima[c]`` of the ``measurable`` candidates in one test appended
+    last: the entries of the candidates not listed (each at its maximum) plus, over the sets ``S`` of listed candidates at their
+    maximum (the others at 0), ``sum_{a<b in S} |m_a - m_b| + sum_{a in S, b not in S} m_a``; above 16 listed candidates the
+    looser ``sum over pairs of max(m_a, m_b)``. The vertex argument is ``msa_test_ceiling``'s step 3."""
+    measured = [candidate for candidate in dict.fromkeys(measurable) if maxima[candidate] > 0]
+    listed = [candidate for candidate in measured if held.get(candidate, {}).get('listed')]
+    new = math.fsum(maxima[candidate] for candidate in measured if candidate not in listed)
+    if len(listed) > 16:
+        return new + math.fsum(max(maxima[first], maxima[second]) for first, second in combinations(listed, 2))
+    best = 0.0
+    for mask in range(1 << len(listed)):
+        inside = [maxima[listed[i]] for i in range(len(listed)) if mask >> i & 1]
+        outside = len(listed) - len(inside)
+        best = max(best, math.fsum(abs(a - b) for a, b in combinations(inside, 2)) + outside * math.fsum(inside))
+    return new + best
