@@ -38,7 +38,7 @@ def ceiling(summary, records, action_type, arguments, ctx):
         if summary['committed'] or run.CLUSTERS_KIND not in held:
             return 0.0
         clusters = [row['id'] for row in products(records, run.CLUSTERS_KIND)]
-        return float(summary['units']['graded_unit']) if arguments is None or arguments['clusters_ref'] in clusters else 0.0
+        return float(summary['units']['graded_unit']) if arguments is None or arguments['call']['clusters_ref'] in clusters else 0.0
     if action_type in ('cluster', 'hold'):
         return 0.0
     raise ValueError('all_vs_all_unknown_action_type:' + str(action_type))
