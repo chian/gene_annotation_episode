@@ -80,6 +80,21 @@ evidence, which is what serves a protein that is not an enzyme); then the RNA pa
 least reliable); pairwise alignment and a structural all-vs-all of candidates repeat A101's shape and come last, if at all.
 Other databases of `structure_search` (`pdb100`, `cath50`) are added when P2's `ligand_contacts` needs experimental hits.
 
+## Heavy tools, later or on HPC (the owner, 2026-11-21: "Starting light is a good idea")
+
+Recorded so they are not lost; none is built. Facts: `a102_structural_aligners.md`, `a102_tool_survey.md`.
+
+| Tool | What it adds | Why not now |
+|---|---|---|
+| DALI (DaliLite, with a PDB set to search) | the distance-matrix search the axis entry names ("DALI Z score"); the standard for remote similarity; a second search method and so a separate test (Z, TM-score and RMSD are not interchangeable) | the web server works without an email (one search verified: 2.6 min, 2505 hits, 1MJC-A Z 15.4) but has no API and states that it mitigates automated traffic; locally DaliLite needs gfortran (not installed) and a database built from structure files. The owner: "a good reason to do it later or on hpc" |
+| Co-folding models (Chai-1, Boltz, AlphaFold 3 class) | the target predicted together with a ligand, DNA or RNA that `partner_contacts` or the ligand transplants name: the proper form of row P7 (does the proposed partner fit), in place of rigid docking; a result is structural compatibility (interface and ligand confidence), never measured binding | need a GPU; this machine has none usable. The owner named Chai among the "other big tools" |
+| Docking (AutoDock Vina, gnina, DiffDock) | row P7 in its light form | needs installs (Vina, rdkit, meeko); least reliable of the rows; after the partners are known |
+| Local Foldseek with its databases; Merizo or Chainsaw domain splitting | searches without the server's 1000-hit cap; domains for a model with no AlphaFold accession | database downloads; torch |
+
+The standalone aligner is no longer deferred: US-align is installed (`resources/software/usalign-20261019`) and is the
+correspondence under `partner_contacts`; the RCSB alignment service (TM-align, FATCAT rigid and flexible, CE) was verified
+and is a candidate for a flexible alignment when a rigid one fails.
+
 ## Services (verified live, `a102_services.md`)
 
 | Step | Service | Request | Seconds seen |
