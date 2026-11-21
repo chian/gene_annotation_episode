@@ -56,3 +56,18 @@ def field_counts(records, record_refs):
 def credit(summary, records):
     counts = summary['counts']
     return counts['newly_stated'] / counts['asked'] if counts['asked'] else 0.0
+
+
+def ceiling(summary, records, action_type, arguments, ctx):
+    """The most the credit can rise if ``action_type`` with ``arguments`` is taken as the next unit.
+
+    The episode has one action, ``extract``, whatever its arguments: it holds one record of the commissioned experiment type,
+    and the credit is newly_stated / asked, the share of the asked fields that the held records state. That share is a
+    fraction of the fields the form asked, so it never exceeds 1 (a field is counted once however many records state it, and
+    the asked count of a record is at least the fields it states). A new record can therefore raise it only up to 1, so the
+    most it can add is what is not yet earned, 1 - credit(summary, records), and no less than 0 once every asked field is
+    stated. The bound is the same for every arguments (the answer is the model's, so no argument narrows it). Any other
+    action type is not one this episode offers and cannot earn: 0."""
+    if action_type != 'extract':
+        return 0.0
+    return max(0.0, 1.0 - credit(summary, records))

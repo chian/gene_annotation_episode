@@ -974,3 +974,8 @@ def extract(arguments, ctx):
 
 
 TOOLS = {'extract': extract}
+
+
+def offered_actions(summary, ctx):
+    """The action types offered at this decision: the one tool, ``extract`` (``decide`` always asks for an extraction)."""
+    return list(TOOLS)
