@@ -245,3 +245,16 @@ workspace `runs/bvbrc_a101_ws_D`; the services file names the global ledger.
 4. Afterwards the ledger holds 4 measured searches and no open row; the trend has two query lengths and still no
    line (fewer than five searches).
 5. The head's credit is close to 1 with no further call.
+
+### Run D1: observed (`runs/bvbrc_a101_run_D1`, workspace `runs/bvbrc_a101_ws_D`)
+
+1. As predicted: the first estimate was 85.45 s with the basis `learned_from_earlier_searches`; the decision showed
+   the ledger's trend (3 measured, typical 85.45 s, latest 87.17, 85.45, 66.44, no size line).
+2. As predicted: one ledger row for the launch, with `query_length` 70. Two monitors. NOT as predicted: the search
+   measured 96.14 s (predicted 60 to 90): the shorter query was not faster.
+3. As predicted: more than one product among the hits. Of the 100 hit records read: 58 "Cold shock protein of CSP
+   family => CspB/CspG/CspI", 15 "... => CspA", 14 "Cold shock protein of CSP family", 12 "... => CspC", 1
+   "hypothetical protein".
+4. As predicted: the ledger holds 4 measured searches, no open row, one kind; the trend has two query lengths and
+   no line. The ten repeat `estimate` units of the wind-down wrote nothing to the ledger.
+5. The head's credit: 0.9716 with no further call (1 head unit).

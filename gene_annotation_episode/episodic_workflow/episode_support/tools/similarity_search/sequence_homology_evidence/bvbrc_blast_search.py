@@ -44,6 +44,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.acquisition.servi
 from gene_annotation_episode.episodic_workflow.episode_support.grading.similarity_search.sequence_homology_evidence.blast_database_grading_inputs import (
     metadata_accounting)
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.bvbrc_job_route import PRECOMPUTED_DATABASES
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.duration_trend import duration_trend
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import checks, closure, job_rows
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_wait import wait_for_job
 from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_homology_evidence.domain import (
@@ -93,12 +94,17 @@ def combinations():
             for database, held in DATABASES.items() if held == unit]
 
 
-def learned_statistics(table):
-    """What the estimate table has learned of each offered kind of search, by ``program:database`` (read through the
-    table's read handle in a decision): the number of resolved searches and the band of their measured durations."""
-    return {program + ':' + database: (lambda found: {'resolved': found['resolved'],
-                                                      'duration_seconds': found['duration_seconds']})(
-        table.read('kind_statistics', search_kind(program, database))) for program, database in combinations()}
+LEDGER_ROWS = 500
+
+
+def learned_statistics(table, query_length):
+    """What the estimate ledger has learned of each offered kind of search, by ``program:database`` (read through the
+    table's read handle in a decision): the short trend of its measured durations (``duration_trend``: how many were
+    measured, their band, the latest ones, and once enough searches of different query lengths are measured the line of
+    duration against query length with what it gives for a query of ``query_length``)."""
+    return {program + ':' + database: duration_trend(
+        table.read('rows', search_kind(program, database), LEDGER_ROWS), size_field='query_length', size=query_length)
+        for program, database in combinations()}
 
 
 # -- what the episode holds -----------------------------------------------------------------------------------------
@@ -206,7 +212,7 @@ def check_estimate(request, *, state, learned, query_molecule):
     if not ESTIMATE_RANGE[0] <= request['expected_seconds'] <= ESTIMATE_RANGE[1]:
         problems.append(_choose('expected_seconds', 'expected_seconds_out_of_range', minimum=ESTIMATE_RANGE[0],
                                 maximum=ESTIMATE_RANGE[1]))
-    found = learned[request['program'] + ':' + request['database']]['resolved']
+    found = learned[request['program'] + ':' + request['database']]['measured']
     if (request['basis'] == 'learned_from_earlier_searches') != (found > 0):
         problems.append(_choose('basis', 'basis_does_not_match_the_learned_statistics', measured_searches=found,
                                 choose_from=['learned_from_earlier_searches' if found else 'no_earlier_measurement']))
@@ -342,7 +348,9 @@ def launch_search(ctx, *, request, estimate, sequence_ref):
     started = now_text()
     table.expect(search_kind(request['program'], request['database']),
                  {'gain': {'value': 0.0, 'lower': 0.0, 'upper': 0.0}, 'cost': 0.0,
-                  'duration_seconds': estimate['expected_seconds'], 'duration_basis': estimate['basis']},
+                  'duration_seconds': estimate['expected_seconds'], 'duration_basis': estimate['basis'],
+                  'job': {'service': SERVICE, 'program': request['program'], 'database': request['database'],
+                          'query_length': len(ctx.store.get_artifact(sequence_ref).decode('ascii').strip())}},
                  key=handle, at=started)
     launched = access.launch(ctx, request['resource_id'], job, inputs={QUERY_FILE: sequence_ref}, name=JOB_NAME,
                              estimates={'kind': search_kind(request['program'], request['database']),
@@ -365,9 +373,9 @@ def launch_search(ctx, *, request, estimate, sequence_ref):
 async def monitor_search(ctx, *, handoff_ref, wait_seconds, expected_remaining_seconds):
     """One status request of the held search after the wait (the existing wait helper). What it shows is kept as a check
     row. The estimate is updated: while the search has not ended, the model's revised expected remaining seconds are
-    recorded as a new expectation of the kind ``<kind>:remaining``; the first request that shows the search ended (or a
-    failed request) resolves the launch's estimate with the duration from the submission to that observation, so the
-    next search of the kind learns from it."""
+    kept in this unit's outcome (not on the ledger, which holds one row per launch); the first request that shows the
+    search ended (or a failed request) resolves the launch's row with the duration from the submission to that
+    observation, so the next search of the kind learns from it."""
     table = ctx.services['estimate_table']
     handoff = search_view(ctx.store)['handoff']
     estimates = handoff['detail']['estimates']
@@ -380,11 +388,6 @@ async def monitor_search(ctx, *, handoff_ref, wait_seconds, expected_remaining_s
         return {**_failed(code, retryable, waited_seconds=checked['waited_seconds']), 'handoff_refs': []}
     if checked['state'] in ENDED_STATES:
         _ended(table, estimates['estimate_key'], checked['state'], seconds_between(handoff['at'], checked['observed_at']))
-    else:
-        table.expect(estimates['kind'] + ':remaining',
-                     {'gain': {'value': 0.0, 'lower': 0.0, 'upper': 0.0}, 'cost': 0.0,
-                      'duration_seconds': expected_remaining_seconds, 'duration_basis': 'model_revision_at_status'},
-                     key=job_handle(ctx.operation_key, 'revision', JOB_NAME), at=now_text())
     return {'status': 'completed', 'failure_code': None, 'retryable': False, 'state': checked['state'],
             'result_available': checked['result_available'], 'check_ref': checked['check_ref'],
             'record_refs': [checked['check_ref'], checked['reply_ref']], 'waited_seconds': checked['waited_seconds'],

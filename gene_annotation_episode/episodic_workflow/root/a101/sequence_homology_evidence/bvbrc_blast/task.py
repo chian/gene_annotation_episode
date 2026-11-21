@@ -48,7 +48,9 @@ INSTRUCTIONS = (
     'the job.\n'
     '- estimate: before anything is launched, the program and database you will search and the seconds you expect the '
     'search to take (expected_seconds), with its basis: learned_from_earlier_searches when learned_durations shows '
-    'measured searches of that kind (then rest the number on them), no_earlier_measurement when it shows none. You may '
+    'measured searches of that kind (then rest the number on them: measured is how many, typical_seconds their median, '
+    'latest_seconds the newest first, and size_fit, when present, a line of seconds against query length with the '
+    'seconds it gives for this query), no_earlier_measurement when it shows none. You may '
     'estimate again to revise it while nothing is launched.\n'
     '- launch: the search, with program, database and resource_id as the commission gives them. Refused unless an '
     'estimate is held (state estimated). One launch per estimate.\n'
@@ -117,7 +119,7 @@ def decide(summary, feedback, ctx):
                    'now': None if summary['yield_table'] is None else summary['yield_table']['current_credit']},
         'state': summary['state'], 'held_estimate': facts['estimate'], 'last_failure_code': summary['last_failure_code'],
         'failed_request': facts['failed_request'], 'fixed_field': facts['fixed_field'],
-        'learned_durations': learned_statistics(ctx.services['estimate_table']),
+        'learned_durations': learned_statistics(ctx.services['estimate_table'], summary['query']['length']),
         'unit_rows': summary['unit_rows'],
         'service': {'request_spacing_seconds': description['request_spacing_seconds'],
                     'poll_spacing_seconds': description['poll_spacing_seconds']},
@@ -142,7 +144,7 @@ def action(response, summary, records, ctx):
     name, fields, query, facts = chosen['name'], summary['fields'], summary['query'], summary['state_facts']
     search = search_view(records)
     if name == 'estimate':
-        problems = check_estimate(chosen, state=facts, learned=learned_statistics(ctx.services['estimate_table']),
+        problems = check_estimate(chosen, state=facts, learned=learned_statistics(ctx.services['estimate_table'], query['length']),
                                   query_molecule=query['molecule'])
     elif name == 'launch':
         resources = {item['resource_id']: item['kind'] for item in ctx.services['job_access'].read('resources')}
