@@ -9,8 +9,8 @@ the model fills out one request (the query, the reference sequence record, the p
 from a fixed set). ``action`` runs the library's one deterministic check of that request against what the episode
 holds and the bound resources (``check_pairwise_request``): a request with problems is rejected with the things to
 fix and no unit is made; a request that passes runs as one unit (``pairwise_blast_comparison``: the search, the
-fetch of its report and the grading). The credit counts the graded comparison as soon as its sheet is saved; no
-reasoning commit is needed for it.
+fetch of its report and the grading). The graded comparison is counted by the credit as soon as its sheet is saved (the
+reference sequence is a candidate; ``CREDIT_TEXT`` says how the credit counts); no reasoning commit is needed for it.
 
 Children. The head's child episodes in the A101 tree are ``blast_database_preparation``, ``database_blast`` and
 ``all_vs_all_blast`` (HMMER later). A child is declared in ``CHILD_SLOTS`` when its episode is built (the runner
@@ -80,7 +80,7 @@ COMMISSION_CHECKS = {'database_blast': lambda commission, summary, resources: ch
     commission, summary, resources),
                      'bvbrc_blast': lambda commission, summary, resources: check_bvbrc_blast(
                          commission, summary, resources)}
-# The programs the head commissions: those its credit can score. The A101 native-correspondence projection scores the
+# The programs the head commissions: those its credit can score. The A101 subscore (``route_native_grading``) scores the
 # sheet of a ``blastp`` search; for any other program it raises (``a101_translated_or_nucleotide_map_not_bound``,
 # ``a101_original_protein_mapping_required``), which would end the run (offline run O3). The child itself takes every
 # program of the service.
@@ -114,6 +114,12 @@ HISTORY_GUIDANCE = ('Your own earlier outcomes are shown to you as own_outcomes,
                     'the records each produced; a failed or invalid outcome is shown with its feedback. Your '
                     'children\'s reports are in child_reports. Reading them creates no completed action or '
                     'observation and does not execute or credit the historical work again.\n')
+# What the credit is, in plain words, as every description of an action that earns it states it (the definition record
+# ``credit_binding`` has the fixed fields; ``candidates``, ``tests`` and ``differentials`` of the context are its data).
+CREDIT_TEXT = ('Your credit counts possible annotations (candidates). A candidate found with positive evidence is '
+               'admitted to the list and earns its score; a possible annotation with no positive evidence is not on '
+               'the list. Applying the same test to candidates already on the list earns by how differently they '
+               'respond: the size of the difference of the moves of their scores. A repeat earns nothing.')
 PAIRWISE_TOOL = 'pairwise_blast'
 PROFILE_TOOL = 'hmmer_profile_scan'
 DESCRIPTIONS = {
@@ -129,7 +135,8 @@ DESCRIPTIONS = {
                    'database, and for each matched domain the interval of your sequence, the bit score, the '
                    'independent E-value, the fraction of the profile that is paired and the match strength. A scan '
                    'that matched no family is completed with no family. A scan you already hold is not run again. '
-                   'The grading is automatic. A failed outcome is a fault of the environment and the same request '
+                   'The grading is automatic: each matched family is a candidate (vocabulary profile_family; its '
+                   'accession and name are the profile database\'s) and is counted as soon as the unit completes. ' + CREDIT_TEXT + ' A failed outcome is a fault of the environment and the same request '
                    'is not made again.'),
     'reason': REASONING_COMMIT_REQUIREMENT,
     PAIRWISE_TOOL: ('Compare one query sequence with one reference sequence by a pairwise BLAST on a local resource. Fill '
@@ -146,8 +153,8 @@ DESCRIPTIONS = {
                     'fractions of paired and identical residues, the two lengths, the native E-value with the '
                     'search-space context the report gives) and observation_refs: one alignment observation per '
                     'reported alignment, which you now hold. A comparison you already hold is not run again. The '
-                    'grading is automatic and your credit counts the graded correspondence as soon as the unit '
-                    'completes: no reasoning commit is needed for it and none changes it. A failed outcome is a fault of '
+                    'grading is automatic: the reference sequence is a candidate (vocabulary reference_sequence) and is '
+                    'counted as soon as the unit completes; no reasoning commit is needed for it and none changes it. ' + CREDIT_TEXT + ' A failed outcome is a fault of '
                     'the environment, not of your request: it is reported once and the same request is not made '
                     'again.'),
 }
@@ -157,10 +164,11 @@ DESCRIPTIONS = {
 CHILD_DESCRIPTIONS = {
     'database_blast': (
         'Search one query sequence of your scope against a hosted database through the public NCBI BLAST service: the '
-        'identification of the query from the best hits of the database (the same graded sheet also gives the residue '
-        'correspondence of the best hits, which your credit counts when the search is graded). Fill the five fields of '
+        'identification of the query from the best hits of the database (when the search is graded, each distinct function '
+        'the hits carry is a candidate of vocabulary product, with the score of its hits\' alignments over your scope, and '
+        'is counted as soon as the search is graded; a hit with no function names no candidate). ' + CREDIT_TEXT + ' Fill the five fields of '
         'its commission: query_ref (a sequence of your scope; held_sequences gives the molecule of each), program '
-        '(only blastp is offered: a protein query against a protein database; your credit scores that program only), database (swissprot holds '
+        '(only blastp is offered: a protein query against a protein database), database (swissprot holds '
         'curated protein sequences; core_nt holds nucleotide sequences and no program offered here searches it), hitlist_size (1 to 200) and resource_id (an API '
         'resource of bound_resources). Code checks the commission before the child is commissioned; if something is '
         'wrong it comes back in feedback with the things to fix and nothing was commissioned. The search runs at the '
@@ -174,10 +182,11 @@ CHILD_DESCRIPTIONS = {
     'bvbrc_blast': (
         'Search one query sequence of your scope against a precomputed BV-BRC database through the BV-BRC application '
         'service (the Homology application, run on the owner\'s account): the identification of the query from the best '
-        'hits of the database (the same graded sheet also gives the residue correspondence of the best hits, which your '
-        'credit counts when the search is graded). Fill the five fields of its commission: query_ref (a sequence of '
+        'hits of the database (when the search is extracted, each distinct product the hits carry is a candidate of vocabulary '
+        'product, with the score of its hits\' alignments over your scope, and is counted as soon as the search is extracted; '
+        'product is BV-BRC\'s name of a feature; a hit with no product names no candidate). ' + CREDIT_TEXT + ' Fill the five fields of its commission: query_ref (a sequence of '
         'your scope; held_sequences gives the molecule of each), program (only blastp is offered: a protein query against '
-        'a protein database; your credit scores that program only), database (bacteria-archaea holds the proteins of the '
+        'a protein database), database (bacteria-archaea holds the proteins of the '
         'reference and representative bacterial and archaeal genomes), resource_id (a bvbrc resource of bound_resources) '
         'and until. Code checks the commission before the child is commissioned; if something is wrong it comes back in '
         'feedback with the things to fix and nothing was commissioned. While a child runs, you do nothing else: your next '
@@ -436,7 +445,9 @@ def decide(summary, feedback, ctx):
             'permitted_children': offered},
         'working_state': summary['working_state'], 'visible_record_refs': summary['held_record_refs'],
         'held_source_refs': summary['held_source_refs'],
-        'credit_binding': summary['credit_binding'], 'own_outcomes': summary['units'],
+        'credit_binding': summary['credit_binding'], 'candidates': summary['candidates'], 'tests': summary['tests'],
+        'differentials': summary['differentials'], 'unlabelled_hit_count': summary['unlabelled_hit_count'],
+        'own_outcomes': summary['units'],
         'last_local_outcome': summary['last_local_outcome'], 'child_reports': summary['child_reports'],
         'handoff_refs': summary['handoff_refs'], 'bound_resources': resources,
         'held_sequences': summary['held_sequences'], 'held_comparisons': summary['held_comparisons'],

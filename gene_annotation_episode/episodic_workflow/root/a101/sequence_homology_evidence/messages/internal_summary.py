@@ -29,7 +29,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence import (
     bvbrc_blast_search as bvbrc)
 
-from ..credit import A101SequenceCredit
+from ..credit import A101DifferentialCredit, A101SequenceCredit, held_candidate_table
 from ..task import CHILD_SLOTS, PAIRWISE_TOOL, PROFILE_TOOL
 
 EXECUTED = ('completed', 'partial')
@@ -71,6 +71,17 @@ def _held_profile_scans(records):
             for source in records.list('source') if source['provider'] == PROFILE_PROVIDER]
 
 
+def _candidate_fields(target):
+    """The candidate fields of the finding of one target (``final_to_parent``)."""
+    return {'candidates': target['candidates'], 'candidate_count': len(target['candidates']),
+            'unlabelled_hit_count': target['unlabelled_hit_count'], 'differentials': target['differentials']}
+
+
+def _across_targets(table, name):
+    """The rows ``name`` of every target of the table, each with its target reference."""
+    return [{'target_ref': ref, **row} for ref, target in table['targets'].items() for row in target[name]]
+
+
 def internal_summary(view):
     records = view.records
     parent = view.parent_input
@@ -106,6 +117,9 @@ def internal_summary(view):
                       if ref.split('_')[0] in SEQUENCE_RECORD_TYPES and records.get(ref).get('sequence_ref')}
     details = A101SequenceCredit().read_details(records, parent['scope'], known_record_refs=held,
                                                 details_limit=ALL, details_offset=0)
+    table = held_candidate_table(parent, records)
+    findings = [{**finding, **_candidate_fields(table['targets'][target])}
+                for target, finding in zip(details['a101_sheet']['targets'], axis_features(details), strict=True)]
     return {**parent,
             'path_depth': len(view.path),
             'initial_selection_sha256': scientific_digest(parent['selection']),
@@ -124,7 +138,10 @@ def internal_summary(view):
             'evidence_refs': [row['id'] for kind in EVIDENCE_RECORD_TYPES for row in records.list(kind)],
             'working_state': records.reasoning_view(parent['scope']),
             'reasoning_schema': records.reasoning_schema(),
-            'credit_binding': A101SequenceCredit().as_record(), 'axis_findings': axis_features(details),
+            'credit_binding': A101DifferentialCredit().as_record(), 'axis_findings': findings,
+            'candidates': _across_targets(table, 'candidates'), 'tests': _across_targets(table, 'tests'),
+            'differentials': _across_targets(table, 'differentials'),
+            'unlabelled_hit_count': sum(target['unlabelled_hit_count'] for target in table['targets'].values()),
             'units_consumed': view.units_consumed,
             'action_yields': (None if view.controller_state is None
-                              else yield_table(view.controller_state, forecast_unit='native_correspondence_credit'))}
+                              else yield_table(view.controller_state, forecast_unit='differential_credit'))}

@@ -11,6 +11,8 @@ from method_loop import ChoiceField, Field, RecordForm
 
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.axis_features import (
     FEATURES, MEANINGS)
+from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.candidate_measurements import (
+    VOCABULARIES)
 
 FIELD_TYPES = {'number': 'number', 'count': 'integer', 'boolean': 'boolean'}
 
@@ -26,7 +28,37 @@ WAITING_FORM = RecordForm({
     'seconds_since_launch': Field('number', 'The seconds from the launch to the latest thing the child knew'),
     'expected_remaining_seconds': Field('number', 'The seconds still expected, as the child last knew them'),
 })
-TARGET_FORM = RecordForm({name: feature_field(name, rule) for name, rule in FEATURES.items()})
+CANDIDATE_REFERENCE_FORM = RecordForm({
+    'vocabulary': ChoiceField('text', 'The vocabulary of the candidate: product (a database search\'s function), '
+                                      'profile_family (a family of a profile database) or reference_sequence (a '
+                                      'sequence record it was compared with)', VOCABULARIES),
+    'name': Field('text', 'The candidate\'s name exactly as its source gives it'),
+    'identifier': Field('text', 'The candidate\'s identifier exactly as its source gives it (a family accession or '
+                                'a record reference; a product has none)', required=False),
+})
+CANDIDATE_FORM = RecordForm({
+    **CANDIDATE_REFERENCE_FORM.fields,
+    'score': Field('number', 'The candidate\'s annotation score: the mean over the tests it has undergone of its mean '
+                             'value in each test, 0 to 1'),
+    'tests': Field('list', 'The tests the candidate has undergone, each as the controlled test name'),
+    'measurement_count': Field('integer', 'The measurements of the candidate over all its tests'),
+    'best_value': Field('number', 'The highest single value of the candidate, 0 to 1'),
+})
+DIFFERENTIAL_FORM = RecordForm({
+    'test': Field('text', 'The test two listed candidates both underwent'),
+    'first': Field('record', 'The first candidate', form=CANDIDATE_REFERENCE_FORM),
+    'second': Field('record', 'The second candidate', form=CANDIDATE_REFERENCE_FORM),
+    'value': Field('number', 'The difference of the moves of their scores over the test (the credit it earned)'),
+})
+TARGET_FORM = RecordForm({
+    **{name: feature_field(name, rule) for name, rule in FEATURES.items()},
+    'candidates': Field('list', 'The possible annotations found for the target, each with its score, the leading one '
+                                'first', items=CANDIDATE_FORM),
+    'candidate_count': Field('integer', 'The number of possible annotations found'),
+    'unlabelled_hit_count': Field('integer', 'The hits of database searches that carry no function and name no '
+                                             'candidate'),
+    'differentials': Field('list', 'The tests that differentiated two listed candidates', items=DIFFERENTIAL_FORM),
+})
 FINDING_FORM = RecordForm({
     'evidence_axis': ChoiceField('text', 'The evidence axis', ('A101',)),
     'targets': Field('list', 'One entry per target of the scope: the features of its axis sheet', items=TARGET_FORM),
