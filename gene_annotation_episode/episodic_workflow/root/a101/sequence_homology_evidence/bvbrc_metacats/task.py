@@ -52,6 +52,13 @@ def _trend(summary, ctx):
     return learned(ctx.services['estimate_table'], APPLICATION, summary['fields'], summary['planned']['sequences'])
 
 
+def offered_actions(summary, ctx):
+    """The action types offered at this decision: the names in the answer schema ``decide`` sends (``output_schema``), which
+    are the tool names: ``fix`` only while a failure waits."""
+    schema = output_schema(APPLICATION, summary['state'])
+    return [option['properties']['name']['enum'][0] for option in schema['properties']['action']['anyOf']]
+
+
 def decide(summary, feedback, ctx):
     fields, job, facts = summary['fields'], summary['job'], summary['state_facts']
     description = ctx.services['job_access'].read('describe', _resource(summary))
