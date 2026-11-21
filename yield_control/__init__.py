@@ -947,15 +947,15 @@ class CompletionYieldController:
 # For an offered action ``a`` of the action kind ``k`` (the episode's binding path and the action type):
 #
 # * a bounded action (a finite ceiling c): forecast = (realized fraction of k) x c, a ceiling of 0 forecasts 0. The
-#   realized fraction is the mean of a Beta(alpha, beta) posterior on obtained/ceiling. Its prior is the
-#   uninformative Beta(1, 1) when the ledger has no unit of k with a positive ceiling, otherwise the ledger's history
-#   of k as pseudo-counts (each earlier unit adds f to alpha and 1-f to beta, weighted by the row's age when old rows
-#   are forgotten) whose total strength is capped at ``prior_strength_cap`` (both counts scaled down together); this
-#   episode's own units of k then add f and 1-f each at full weight.
-# * an UNBOUNDED action: there is no ceiling to scale, so the forecast is the typical gain of k: the mean of the
-#   gains obtained, the ledger's history (total weight capped at ``prior_strength_cap``) pooled with this episode's
-#   own units at full weight. With no unit of k anywhere the forecast is unknown, and an unknown forecast never
-#   lets the episode stop (as in the three controllers, unknown stays unknown).
+#   realized fraction is the share of its ceiling that units of k earned (obtained/ceiling). The owner: "count this
+#   current history always more. the ledger should count for equal weight with current history": the ledger's
+#   history of k as a whole (each earlier run's unit weighted by its age when old rows are forgotten) and this
+#   episode's own units of k as a whole each weigh one half: the fraction is the mean of the ledger's mean fraction
+#   and this episode's mean fraction. With only one of the two, that one alone; with neither, one half.
+# * an UNBOUNDED action: there is no ceiling to scale, so the forecast is the typical gain of k, by the same rule: the
+#   mean of the ledger's mean gain and this episode's mean gain, or the one that exists. With no unit of k anywhere
+#   the forecast is unknown, and an unknown forecast never lets the episode stop (as in the three controllers,
+#   unknown stays unknown).
 # * the cost of ``a`` is its expected seconds: for an action type of ``job_kinds`` whose ledger kind has measured
 #   jobs, the median job duration plus the median seconds the model took to decide; otherwise the median measured
 #   wall seconds of the units of k (ledger history and this episode); with none, the median unit seconds of this
@@ -990,22 +990,19 @@ def _fraction(gain, ceiling, what):
 class ForecastParameters:
     """The parameter set of the forecast controller; nothing in it names a credit formula.
 
-    ``prior_strength_cap``: the most pseudo-observations the ledger's history of an action kind may weigh.
     ``exchange_rate``: credit per second; an action is worth taking while its forecast gain exceeds its expected
     seconds times this rate. ``forget_old_rows``: weight each ledger row by the estimate table's
     ``ForgettingPolicy`` (rows past ``history_seconds`` are dropped, the rest halve every
     ``history_half_life_seconds``). ``job_kinds``: action type -> the prefix of the ledger kinds of the jobs that
     action launches, whose measured durations are its expected seconds."""
-    prior_strength_cap: float
     exchange_rate: float
     forget_old_rows: bool
     job_kinds: Mapping
 
     def __post_init__(self):
-        cap = _finite_number("prior_strength_cap", self.prior_strength_cap)
         rate = _finite_number("exchange_rate", self.exchange_rate)
-        if cap <= 0 or rate < 0:
-            raise ValueError("prior_strength_cap_must_be_positive_and_exchange_rate_not_negative")
+        if rate < 0:
+            raise ValueError("exchange_rate_must_not_be_negative")
         if type(self.forget_old_rows) is not bool:
             raise ValueError("forget_old_rows_must_be_a_boolean")
         if (not isinstance(self.job_kinds, Mapping)
@@ -1015,7 +1012,7 @@ class ForecastParameters:
         object.__setattr__(self, "job_kinds", dict(self.job_kinds))
 
     def as_record(self):
-        return {"prior_strength_cap": self.prior_strength_cap, "exchange_rate": self.exchange_rate,
+        return {"exchange_rate": self.exchange_rate,
                 "forget_old_rows": self.forget_old_rows, "job_kinds": dict(self.job_kinds)}
 
 
@@ -1063,7 +1060,6 @@ def forecast_actions(parameters, observations, histories, offered):
     'job_seconds': [seconds]}}``): ``{'action_type', 'ceiling', 'forecast_gain' (``None``: unknown),
     'expected_seconds' (``None``: unknown), 'seconds_basis', 'threshold', 'worth'}``. The formulas are described
     above."""
-    cap = parameters.prior_strength_cap
     decision_pool = [item["decision_seconds"] for item in observations]
     unit_pool = [item["unit_seconds"] for item in observations]
     rows = []
@@ -1074,28 +1070,19 @@ def forecast_actions(parameters, observations, histories, offered):
             if ceiling == 0:
                 forecast = 0.0
             else:
-                alpha = beta = 0.0
-                for row in history["rows"]:
-                    if _is_ceiling_number(row["ceiling"]) and row["ceiling"] > 0:
-                        fraction = _fraction(row["gain"], row["ceiling"], action_type)
-                        alpha += row["weight"] * fraction
-                        beta += row["weight"] * (1.0 - fraction)
-                strength = alpha + beta
-                if strength > cap:
-                    alpha, beta = alpha * cap / strength, beta * cap / strength
-                if strength == 0:
-                    alpha, beta = 1.0, 1.0
-                for item in own:
-                    if _is_ceiling_number(item["ceiling"]) and item["ceiling"] > 0:
-                        fraction = _fraction(item["gain"], item["ceiling"], action_type)
-                        alpha, beta = alpha + fraction, beta + (1.0 - fraction)
-                forecast = alpha / (alpha + beta) * ceiling
+                ledger = [(row["weight"], _fraction(row["gain"], row["ceiling"], action_type))
+                          for row in history["rows"] if _is_ceiling_number(row["ceiling"]) and row["ceiling"] > 0]
+                mine = [_fraction(item["gain"], item["ceiling"], action_type)
+                        for item in own if _is_ceiling_number(item["ceiling"]) and item["ceiling"] > 0]
+                weight = math.fsum(w for w, _ in ledger)
+                means = ([math.fsum(w * f for w, f in ledger) / weight] if weight else []) + (
+                    [math.fsum(mine) / len(mine)] if mine else [])
+                forecast = (math.fsum(means) / len(means) if means else 0.5) * ceiling
         else:
             weight = math.fsum(row["weight"] for row in history["rows"])
-            held = min(weight, cap)
-            mean = math.fsum(row["weight"] * row["gain"] for row in history["rows"]) / weight if weight else 0.0
-            total = held + len(own)
-            forecast = (mean * held + math.fsum(item["gain"] for item in own)) / total if total else None
+            means = ([math.fsum(row["weight"] * row["gain"] for row in history["rows"]) / weight] if weight else []) + (
+                [math.fsum(item["gain"] for item in own) / len(own)] if own else [])
+            forecast = math.fsum(means) / len(means) if means else None
         decision = (_median(decision_pool) if decision_pool
                     else _median([row["decision_seconds"] for row in history["rows"]]) if history["rows"] else None)
         action_seconds = [row["seconds"] for row in history["rows"]] + [item["unit_seconds"] for item in own]
@@ -1167,7 +1154,7 @@ class ForecastYieldState:
 
 def forecast_provenance():
     return {"controller": FORECAST_VERSION, "forecast": "realized_fraction_times_ceiling_or_typical_gain_if_unbounded",
-            "fraction": "beta_posterior_prior_uniform_or_capped_ledger_pseudo_counts_plus_own_units",
+            "fraction": "mean_of_ledger_mean_and_own_mean_each_one_half",
             "cost": "expected_seconds", "stop": "no_offered_forecast_exceeds_expected_seconds_times_exchange_rate",
             "model_estimates": False}
 

@@ -11,8 +11,8 @@ seconds times the exchange rate (``yield_control``, section ``ForecastYieldContr
 The controller is opened through the library's ``checked_yield_declaration`` (the declaration for the task key
 ``A101:<context.a101_task.name>``, or ``A101:a101_native_sequence_correspondence`` when the commission names none, as
 ``read_from_parent`` reads it, must name exactly this credit definition, ``A101DifferentialCredit().as_record()``, and the
-kind ``forecast``) and ``open_yield_controller``, which takes the declaration's parameters: ``prior_strength_cap``,
-``exchange_rate``, ``forget_old_rows`` and ``job_kinds`` (the values and their reasons are in the design note). It reads
+kind ``forecast``) and ``open_yield_controller``, which takes the declaration's parameters: ``exchange_rate``,
+``forget_old_rows`` and ``job_kinds`` (the values and their reasons are in the design note). It reads
 what ``read_from_parent`` produced (the task key), never the assignment; the declarations are this episode's settings
 (``settings['yield_bindings']``)."""
 from gene_annotation_episode.episodic_workflow.episode_support.configuration.yield_declarations import (

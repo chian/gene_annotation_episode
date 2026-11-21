@@ -16,15 +16,15 @@ formula enters only through `credit.ceiling` (the most the credit can rise if an
 
 ### Formula (for an offered action of kind `k` = `<binding path>:<action type>`, e.g. `sequence_homology_evidence:bvbrc_msa`)
 
-- Bounded, ceiling `c`: forecast = `m x c`, `m` the mean of a Beta(alpha, beta) posterior on `obtained / ceiling`.
-  Each earlier unit of `k` in the ledger with a positive ceiling adds `f` to alpha and `1-f` to beta (weighted by age if
-  old rows are forgotten); if their total strength exceeds `prior_strength_cap` both counts are scaled down together. With
-  no such ledger unit the prior is the uninformative Beta(1, 1) (mean 1/2). This episode's own units of `k` then add `f`
-  and `1-f` at full weight (`f` uses the chosen action's ceiling, asked with its arguments). Ceiling 0 forecasts 0.
-  A unit that lost credit raises (`forecast_cannot_learn_a_negative_rise`): a fraction of a ceiling cannot be negative.
-- `UNBOUNDED`: forecast = typical gain of `k`: the mean of the gains obtained (ledger history, total weight capped at
-  `prior_strength_cap`, pooled with this episode's own units at full weight). With no unit of `k` anywhere it is **unknown**,
-  and an unknown forecast never lets the episode stop (unknown stays unknown, as in the other controllers).
+- Bounded, ceiling `c`: forecast = `m x c`, `m` the learned share of its ceiling that units of `k` earned
+  (`obtained / ceiling`). The owner (2026-11-21): "count this current history always more. the ledger should count for
+  equal weight with current history": the ledger's history of `k` as a whole (rows weighted by age if old rows are
+  forgotten) and this episode's own units of `k` as a whole each weigh one half: `m` = the mean of the ledger's mean share
+  and this episode's mean share; with only one of them, that one; with neither, 1/2. Ceiling 0 forecasts 0. A unit that
+  lost credit raises (`forecast_cannot_learn_a_negative_rise`): a share of a ceiling cannot be negative.
+- `UNBOUNDED`: forecast = typical gain of `k` by the same rule: the mean of the ledger's mean gain and this episode's mean
+  gain, or the one that exists. With no unit of `k` anywhere it is **unknown**, and an unknown forecast never lets the
+  episode stop (unknown stays unknown, as in the other controllers).
 - Cost = expected seconds. Action type in `job_kinds` whose ledger kind has measured finished jobs: median job
   duration (ledger, `duration_seconds` of the service's own task record) + median seconds the model took to decide (this
   episode's decisions, else the kind's ledger rows). Otherwise the median measured seconds of units of `k` (ledger + this
@@ -37,14 +37,13 @@ formula enters only through `credit.ceiling` (the most the credit can rise if an
 
 | parameter | value (A101 head) | reason |
 |---|---|---|
-| `prior_strength_cap` | 20 | the ledger's history of a kind counts as at most 20 earlier units: enough to be a strong prior (a unit of this run is 1/21 of the evidence at its start), never so strong that a changed situation cannot move it within a run |
 | `exchange_rate` | 0.01 credit per second | a unit forecast to earn less than a hundredth of a credit unit per second of its cost is not worth it: a 30 s unit must forecast 0.3, about a third of one admitted candidate (an entry earns up to 1) |
 | `forget_old_rows` | true | weight ledger rows by the estimate table's `ForgettingPolicy` (dropped after `history_seconds` = 90 days, half every `history_half_life_seconds` = 14 days), so a changed service or code is learned |
-| `job_kinds` | `bvbrc_blast: "bvbrc_blast:"`, `bvbrc_msa: "bvbrc_msa:"`, `bvbrc_metacats: "bvbrc_metacats:"` | the head's actions that launch a BV-BRC job; the job children record durations under ledger kinds that start with these prefixes |
+| `job_kinds` | none (`{}`) | a job action's cost is its measured unit seconds (launch, monitoring and extraction included); the service's job duration alone undercounted it (about 27 s against 190 s for an MSA unit in C2) |
 
 Declaration to put in the continuation settings of the head (the other agent edits `runs/` settings; this is the exact entry):
-`yield_bindings["A101:a101_native_sequence_correspondence"] = {"kind": "forecast", "parameters": {"prior_strength_cap": 20,
-"exchange_rate": 0.01, "forget_old_rows": true, "job_kinds": {...}}, "credit_definition": A101DifferentialCredit().as_record()}`
+`yield_bindings["A101:a101_native_sequence_correspondence"] = {"kind": "forecast", "parameters": {
+"exchange_rate": 0.01, "forget_old_rows": true, "job_kinds": {}}, "credit_definition": A101DifferentialCredit().as_record()}`
 (credit definition v2, unchanged).
 
 ## Wiring (why here)
