@@ -59,6 +59,17 @@ def _custody(references, summary):
     return found
 
 
+def _continued(assignment, job, summary):
+    """The assignment of a commission that continues the held job ``job``: its handoff, status and closure rows, passed
+    back, and in ``input_refs`` every held record the rows name (and those name in turn): the child returned them with
+    the rows, so the head holds them and passes them back."""
+    rows = [job['handoff_ref'], *job['check_refs'], *job['closure_refs']]
+    assignment.update(handoff_refs=[job['handoff_ref']], check_refs=job['check_refs'], closure_refs=job['closure_refs'],
+                      known_ended=job['known_ended'],
+                      input_refs=list(dict.fromkeys([*assignment['input_refs'],
+                                                     *(ref for ref in _custody(rows, summary) if ref not in rows)])))
+
+
 def _database_blast(arguments, summary):
     """The assignment of one database search: the declared kind, the query and its sequence in custody, the program,
     the database, the hit-list size, the resource, the three credit units and, when the commission continues an
@@ -93,8 +104,7 @@ def _bvbrc_blast(arguments, summary):
     held = [search for search in summary['bvbrc_searches'] if search['query_ref'] == query and search['outstanding']]
     if held:
         (search,) = held
-        assignment.update(handoff_refs=[search['handoff_ref']], check_refs=search['check_refs'],
-                          closure_refs=search['closure_refs'], known_ended=search['known_ended'])
+        _continued(assignment, search, summary)
     return assignment
 
 
@@ -117,8 +127,7 @@ def _bvbrc_msa(arguments, summary):
         'per_candidate': arguments['per_candidate']}]
     if held:
         (job,) = held
-        assignment.update(handoff_refs=[job['handoff_ref']], check_refs=job['check_refs'],
-                          closure_refs=job['closure_refs'], known_ended=job['known_ended'])
+        _continued(assignment, job, summary)
     return assignment
 
 
@@ -139,8 +148,7 @@ def _bvbrc_metacats(arguments, summary):
         'p_value'] and job['resource_id'] == arguments['resource_id'] and job['identity']['groups_ref'] == option['groups_ref']]
     if held:
         (job,) = held
-        assignment.update(handoff_refs=[job['handoff_ref']], check_refs=job['check_refs'],
-                          closure_refs=job['closure_refs'], known_ended=job['known_ended'])
+        _continued(assignment, job, summary)
     return assignment
 
 

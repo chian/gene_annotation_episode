@@ -2,6 +2,7 @@
 state the units give (``bvbrc_job_child.episode_state``); the latest job held (its handoff and check rows) with its latest
 check and the estimate recorded with its launch; the planned size of the job (the groups code builds from the held
 alignment); the graded analyses (``bvbrc_metacats_search.graded_rows``); and the yield table."""
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import returned_with_names
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_job_child import (
     episode_state, job_notice, job_view, resumed_rows, search_facts, unit_row)
@@ -28,14 +29,14 @@ def internal_summary(view):
                        if job is not None and facts['state'] in ('launched', 'finished') else None),
             'unit_rows': rows, 'state_facts': facts, 'state': facts['state'],
             'last_failure_code': facts['last_failure_code'], 'job': search_facts(job), 'graded': graded_rows(records),
-            'handoff_refs': [ref for unit in view.outcomes if unit['tool'] == 'launch'
-                             for ref in unit['outcome']['handoff_refs']],
-            'check_refs': [unit['outcome']['check_ref'] for unit in view.outcomes
-                           if unit['tool'] == 'monitor' and unit['outcome']['status'] == 'completed'],
-            'closure_refs': [unit['outcome']['closure_ref'] for unit in view.outcomes
-                             if unit['tool'] == 'extract' and unit['outcome']['closure_ref'] is not None],
-            'graded_refs': [ref for unit in view.outcomes if unit['tool'] == 'extract'
-                            for ref in unit['outcome'].get('graded_refs', [])],
+            'handoff_refs': returned_with_names(records, [ref for unit in view.outcomes if unit['tool'] == 'launch'
+                                                          for ref in unit['outcome']['handoff_refs']]),
+            'check_refs': returned_with_names(records, [unit['outcome']['check_ref'] for unit in view.outcomes
+                                                        if unit['tool'] == 'monitor' and unit['outcome']['status'] == 'completed']),
+            'closure_refs': returned_with_names(records, [unit['outcome']['closure_ref'] for unit in view.outcomes
+                                                          if unit['tool'] == 'extract' and unit['outcome']['closure_ref'] is not None]),
+            'graded_refs': returned_with_names(records, [ref for unit in view.outcomes if unit['tool'] == 'extract'
+                                                         for ref in unit['outcome'].get('graded_refs', [])]),
             'counts': [{name: unit['outcome'][name] for name in ('group_count', 'sequence_count', 'column_count',
                                                                  'significant_count')}
                        for unit in view.outcomes if unit['tool'] == 'extract' and unit['outcome']['status'] == 'completed'],

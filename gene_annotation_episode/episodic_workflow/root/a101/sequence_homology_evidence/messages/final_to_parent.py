@@ -101,7 +101,7 @@ def final_to_parent(summary, completion, selection):
                            for later in summary['child_reports'][index + 1:])]
     result = {'credit': completion['credit'],
               'finding': {'evidence_axis': 'A101', 'targets': summary['axis_findings'],
-                          'outstanding_handoff_count': max(len(summary['handoff_refs']) - completed, 0),
+                          'outstanding_handoff_count': max(summary['handoff_count'] - completed, 0),
                           **({'waiting_searches': waiting} if waiting else {})}}
     if 'committed_record_refs' in selection:
         result['committed_record_refs'] = summary['committed_record_refs']

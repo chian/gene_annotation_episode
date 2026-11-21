@@ -1,4 +1,4 @@
-"""The return: controlled data only; no path and no text. Always: ``credit`` and the ``finding``: the state of the search
+"""The return: controlled data only; no path and no text. EVERY RETURNED RECORD LIST IS CLOSED UNDER NAMING: ``internal_summary`` builds each with ``job_records.returned_with_names`` (the records the child returns together with everything they name among the records it holds), so the parent holds what the returned records name and nothing private is named (the summary is where the closing runs: ``final_to_parent`` receives no reader). Always: ``credit`` and the ``finding``: the state of the search
 (``no_estimate``, ``estimated``, ``launched``, ``finished``, ``extracted`` or ``failed``), the hit count of the graded
 sheet, the controlled identification features the database feature reader gives
 (``blast_database_features.grading_features``: the sheet's counts, the smallest native E-value and one row per explicit

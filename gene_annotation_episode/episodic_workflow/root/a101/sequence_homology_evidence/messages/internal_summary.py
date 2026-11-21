@@ -8,9 +8,10 @@ For the commissions (``task.commission_fields``, ``msg_to_child``) the summary a
 chosen from and built with: ``held_record_refs`` (the held records), ``held_sequences`` (the held records
 that carry a sequence, each with its molecule: what the two sequences of a comparison are chosen from),
 ``held_comparisons`` (the pairwise comparisons already held: what the check refuses to run again), ``database_searches`` (the searches of the hosted service this episode holds, with their records: what a commission of ``database_blast`` continues), ``held_source_refs`` (the held sources) and ``named_refs`` (for each held
-record, the held records it names: what travels in custody beside it)."""
+record, job ledger rows included, the held records it names: what travels in custody beside it)."""
 import json
 
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import job_rows, named_records
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_homology_evidence.construction_records import (
     scientific_digest)
@@ -42,16 +43,6 @@ CREDITED_TOOLS = ('reason', PAIRWISE_TOOL, PROFILE_TOOL)
 EVIDENCE_RECORD_TYPES = ('observation', 'assessment')
 # The record types that carry a sequence: what the two sequences of a comparison are chosen from.
 SEQUENCE_RECORD_TYPES = ('input', 'reference', 'product')
-
-
-def _named(records, reference):
-    """The held records the held record ``reference`` names (an artifact names none). A pass carries only the
-    records named, so a commission names these beside the record for a child whose code follows them: a source and
-    its artifacts, an observation and its source and subjects, a subject and its sequence."""
-    if reference.startswith('artifact_'):
-        return []
-    return [named for named in dict.fromkeys(records.named_references(reference))
-            if named != reference and records.holds(named)]
 
 
 def _held_comparisons(records):
@@ -140,7 +131,8 @@ def internal_summary(view):
             'held_sequences': held_sequences,
             'database_searches': held_searches(records, {ref: records.get(ref)['sequence_ref'] for ref in held_sequences}),
             'bvbrc_searches': bvbrc.held_searches(records, {ref: records.get(ref)['sequence_ref'] for ref in held_sequences}),
-            'named_refs': {ref: _named(records, ref) for ref in held},
+            'named_refs': {ref: named_records(records, ref) for ref in records.refs()},
+            'handoff_count': sum(1 for row in job_rows(records) if row['event'] == 'handoff'),
             'msa_options': msa.msa_options(records, parent['scope'], table),
             'bvbrc_msa_jobs': job_child.held_jobs(records, msa.APPLICATION),
             'held_alignments': msa.graded_rows(records),
@@ -152,8 +144,8 @@ def internal_summary(view):
                                'settings': row['settings']} for row in held_products],
             'data_product_refs': [row['id'] for row in held_products],
             'alignment_product_refs': [row['id'] for row in alignments],
-            'reusable_alignments': {(row['used'][1], tuple(row['settings']['candidates']),
-                                     row['settings']['per_candidate']): row for row in alignments},
+            'reusable_alignments': {(used, tuple(row['settings']['candidates']), row['settings']['per_candidate']): row
+                                    for row in alignments for used in row['used']},
             'evidence_refs': [row['id'] for kind in EVIDENCE_RECORD_TYPES for row in records.list(kind)],
             'working_state': records.reasoning_view(parent['scope']),
             'reasoning_schema': records.reasoning_schema(),

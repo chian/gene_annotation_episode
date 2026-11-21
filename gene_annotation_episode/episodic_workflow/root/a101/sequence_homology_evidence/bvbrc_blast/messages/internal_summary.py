@@ -6,6 +6,7 @@ for its fix); the latest search held (its handoff and check rows) with its lates
 its launch; the graded result with the controlled features of the feature reader; and the yield table. The seconds
 since the launch are not here (the summary reads no clock): ``decide`` computes them from the recorded decision time and
 ``final_to_parent`` returns the duration observed at the latest check."""
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import returned_with_names
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_blast_search import (
     episode_state, graded_rows, resumed_rows, search_facts, search_notice, search_view)
@@ -53,13 +54,13 @@ def internal_summary(view):
                                                                     'not_asked_hit_count', 'naming_batch_count',
                                                                     'naming_stopped')}
                          for unit in view.outcomes if unit['tool'] == 'extract' and unit['outcome']['status'] == 'completed'],
-            'handoff_refs': [ref for unit in view.outcomes if unit['tool'] == 'launch'
-                             for ref in unit['outcome']['handoff_refs']],
-            'check_refs': [unit['outcome']['check_ref'] for unit in view.outcomes
-                           if unit['tool'] == 'monitor' and unit['outcome']['status'] == 'completed'],
-            'closure_refs': [unit['outcome']['closure_ref'] for unit in view.outcomes
-                             if unit['tool'] == 'extract' and unit['outcome']['closure_ref'] is not None],
-            'graded_refs': [ref for unit in view.outcomes if unit['tool'] == 'extract'
-                            for ref in unit['outcome'].get('graded_refs', [])],
+            'handoff_refs': returned_with_names(records, [ref for unit in view.outcomes if unit['tool'] == 'launch'
+                                                          for ref in unit['outcome']['handoff_refs']]),
+            'check_refs': returned_with_names(records, [unit['outcome']['check_ref'] for unit in view.outcomes
+                                                        if unit['tool'] == 'monitor' and unit['outcome']['status'] == 'completed']),
+            'closure_refs': returned_with_names(records, [unit['outcome']['closure_ref'] for unit in view.outcomes
+                                                          if unit['tool'] == 'extract' and unit['outcome']['closure_ref'] is not None]),
+            'graded_refs': returned_with_names(records, [ref for unit in view.outcomes if unit['tool'] == 'extract'
+                                                         for ref in unit['outcome'].get('graded_refs', [])]),
             'yield_table': (None if view.controller_state is None
                             else yield_table(view.controller_state, forecast_unit='bvbrc_blast_credit'))}

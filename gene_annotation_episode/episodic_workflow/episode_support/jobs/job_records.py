@@ -10,6 +10,7 @@ An **outstanding job** is one whose handoff row the Episode holds and whose clos
 from __future__ import annotations
 
 from episode_runtime.job_access import JOB_LEDGER
+from episode_runtime.work_tables import is_row_ref
 
 
 def job_rows(reader, job=None):
@@ -59,4 +60,39 @@ def outstanding_jobs(reader):
     return found
 
 
-__all__ = ['JOB_LEDGER', 'checks', 'closure', 'handoff', 'job_rows', 'outstanding_jobs']
+def named_records(reader, ref):
+    """The held records the held record ``ref`` names, in the order it names them. A Store record names what the Store's
+    own rule says (``reader.named_references``); an artifact names none; a job ledger row names its reply artifact
+    (``source_ref``), its ``result_refs``, the artifacts a handoff staged as the job's inputs (``detail['input_refs']``,
+    a mapping of file name to artifact) and the handoff a check, window or closure row belongs to
+    (``detail['handoff_ref']``). Only records the reader holds are named."""
+    if ref.startswith('artifact_'):
+        return []
+    if is_row_ref(ref):
+        row = reader.get(ref)
+        detail = row['detail']
+        names = [row['source_ref'], *row['result_refs'], *detail.get('input_refs', {}).values()]
+        if 'handoff_ref' in detail:
+            names.append(detail['handoff_ref'])
+    else:
+        names = reader.named_references(ref)
+    return [name for name in dict.fromkeys(names) if name != ref and reader.holds(name)]
+
+
+def returned_with_names(reader, refs):
+    """THE CLOSING RULE of what a child returns: the records ``refs`` the child chose to return, together with everything
+    they name, and everything those name in turn, among the records the child holds (the walk the head's ``msg_to_child``
+    does when it passes records on). A returned list is closed under naming by construction: what a child returns it
+    returns for the parent to use, and nothing a returned record names stays private to the child. A record that must stay
+    private must not be named by anything returned."""
+    found, pending = [], list(refs)
+    while pending:
+        ref = pending.pop(0)
+        if ref not in found:
+            found.append(ref)
+            pending.extend(named_records(reader, ref))
+    return found
+
+
+__all__ = ['JOB_LEDGER', 'checks', 'closure', 'handoff', 'job_rows', 'named_records', 'outstanding_jobs',
+           'returned_with_names']

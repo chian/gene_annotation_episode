@@ -42,7 +42,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_ho
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_blast_search import (
     PROVIDER as SEARCH_PROVIDER)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_job_child import (
-    JobApplication, check_resource_and_continuation, job_view)
+    JobApplication, check_resource_and_continuation)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.database_blast_search import (
     _choose, _failed)
 
@@ -52,7 +52,7 @@ ALIGNER, ALPHABET = 'Muscle', 'protein'
 TARGET_NAME = 'target'
 PER_CANDIDATE_RANGE = (2, 20)
 MINIMUM_CANDIDATES = 2
-SEQUENCES_FILE, GROUP_FILE, PLAN_FILE, ALIGNMENT_FILE = 'sequences.fasta', 'group.json', 'plan.json', 'msa.afa'
+SEQUENCES_FILE, GROUP_FILE, ALIGNMENT_FILE = 'sequences.fasta', 'group.json', 'msa.afa'
 PRODUCT_KIND = 'multiple_sequence_alignment'
 REQUEST_FIELDS = ('per_candidate', 'resource_id')
 
@@ -150,14 +150,10 @@ def prepare(ctx, request, commission):
     target = store.get_artifact(store.get(commission['query_ref'])['sequence_ref']).decode('ascii').strip().upper()
     fasta_ref = store.artifact(('>' + TARGET_NAME + '\n' + target + '\n').encode('ascii'), 'text/plain')
     group_ref = store.artifact(feature_group_bytes(plan), 'application/json')
-    body = {'query_ref': commission['query_ref'], 'search_ref': commission['search_ref'],
-            'candidates': list(commission['candidates']), 'per_candidate': request['per_candidate'],
-            'target': {'name': TARGET_NAME, 'sequence': target}, 'references': plan, 'feature_group_ref': group_ref}
-    plan_ref = store.artifact(canonical(body), 'application/json')
     lengths = [len(target), *(row['aa_length'] for row in plan)]
     return {'job': {'application': 'MSA', 'aligner': ALIGNER, 'alphabet': ALPHABET, 'sequences_file': SEQUENCES_FILE,
                     'feature_group_file': GROUP_FILE},
-            'inputs': {SEQUENCES_FILE: fasta_ref, GROUP_FILE: group_ref, PLAN_FILE: plan_ref},
+            'inputs': {SEQUENCES_FILE: fasta_ref, GROUP_FILE: group_ref},
             'job_facts': {'sequences': len(lengths), 'residues': sum(lengths), 'longest': max(lengths)},
             'identity': {'query_ref': commission['query_ref'], 'search_ref': commission['search_ref'],
                          'candidates': sorted(commission['candidates']), 'per_candidate': request['per_candidate']}}
@@ -187,11 +183,11 @@ def extract(ctx, handoff_ref, request, commission):
     if fetched['status'] != 'completed':
         return {**_failed(fetched['failure']['code'], False), 'closure_ref': None}
     (result_ref,) = [item['ref'] for item in fetched['results'] if item['name'] == ALIGNMENT_FILE]
-    handoff = job_view(store, APPLICATION)['handoff']
-    plan = json.loads(store.get_artifact(handoff['detail']['input_refs'][PLAN_FILE]))
-    given = [{'name': TARGET_NAME, 'sequence': plan['target']['sequence']},
+    plan = _plan(store, request, commission)
+    target = store.get_artifact(store.get(commission['query_ref'])['sequence_ref']).decode('ascii').strip().upper()
+    given = [{'name': TARGET_NAME, 'sequence': target},
              *({'name': row['name'], 'candidate': row['candidate'], 'accession': row['accession'], 'md5': row['md5']}
-               for row in plan['references'])]
+               for row in plan)]
     try:
         grading = grade_alignment(store.get_artifact(result_ref), given=given, target_name=TARGET_NAME,
                                   aligner=ALIGNER.lower(), alphabet=ALPHABET, source_ref=handoff_ref)
@@ -200,7 +196,7 @@ def extract(ctx, handoff_ref, request, commission):
     sheet = grading['sheet']
     (path,) = [item['workspace_path'] for item in json.loads(store.get_artifact(fetched['reply_ref']))['catalog']
                if item['name'] == ALIGNMENT_FILE]
-    target_ref = plan['query_ref']
+    target_ref = commission['query_ref']
     with store.transaction():
         grading_ref = retain_tool_grading(store, provider=PROVIDER, native_artifact_ref=result_ref, grading=grading)
         source = store.put('source', {
@@ -225,8 +221,8 @@ def extract(ctx, handoff_ref, request, commission):
         sequence_ref = store.get(target_ref)['sequence_ref']
         product = record_product(
             store, artifact_ref=result_ref, kind=PRODUCT_KIND, generated_by=handoff_ref,
-            used=[sequence_ref, plan['search_ref'], plan['feature_group_ref']],
-            settings=settings_of(plan['candidates'], plan['per_candidate']),
+            used=[sequence_ref, commission['search_ref'], feature_group_ref(plan)],
+            settings=settings_of(commission['candidates'], request['per_candidate']),
             locations=[{'service': 'bvbrc_workspace', 'path': path}])
     refs = [source['id'], grading_ref, product['id'], *references, *observations]
     return {'status': 'completed', 'failure_code': None, 'retryable': False, 'closure_ref': fetched['closure_ref'],

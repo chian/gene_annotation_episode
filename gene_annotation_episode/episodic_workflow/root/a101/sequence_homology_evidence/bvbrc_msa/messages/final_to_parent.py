@@ -1,4 +1,4 @@
-"""The return: controlled data only; no path and no text. Always: ``credit`` and the ``finding``: the state of the job
+"""The return: controlled data only; no path and no text. EVERY RETURNED RECORD LIST IS CLOSED UNDER NAMING: ``internal_summary`` builds each with ``job_records.returned_with_names`` (the records the child returns together with everything they name among the records it holds), so the parent holds what the returned records name and nothing private is named (the summary is where the closing runs: ``final_to_parent`` receives no reader). Always: ``credit`` and the ``finding``: the state of the job
 (``no_estimate``, ``estimated``, ``launched``, ``finished``, ``extracted`` or ``failed``), the sequences aligned, the
 alignment columns, the candidates aligned and the shared wait notice, estimate and observed seconds and last failure code
 (``bvbrc_job_child.COMMON_FINDING``). Selectable: ``execution_handoff_refs``, ``check_refs``, ``closure_refs`` and
