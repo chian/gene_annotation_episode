@@ -272,6 +272,12 @@ def offered(settings):
     return [*ACCESS_NAMES, *(entry['name'] for entry in population_entries(settings)), 'reason', 'update_sheet']
 
 
+def offered_actions(summary, ctx):
+    """The action types offered at this decision, by the names the runner records: each tool offered by ``offered``
+    (the list ``decide`` and ``action`` use) under its python name, then each child slot of ``selection_schema``."""
+    return [*(TOOL_NAMES.get(name, name) for name in offered(ctx.settings)), *CHILD_SLOTS]
+
+
 def catalog(names, commit_schema, leads, settings):
     """The tools the model is shown: python tool name, description and input schema (the old catalog; every input
     schema is projected through ``source_location_inputs``)."""
