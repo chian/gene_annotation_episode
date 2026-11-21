@@ -8,7 +8,8 @@ candidate annotation its reference stands for, and its value on the subscoring s
 given in the order they arrived. The tests are ordered by their first measurement.
 
 - A candidate's value in one test is the mean of its measurements in that test (its replicates in that test), in
-  [0, 1].
+  [0, 1] (the alignment's value, a count of new conserved sites x a weight, is not capped at 1: see
+  ``candidate_measurements``).
 - A subscoring sheet is a kind of test: the part of the test name before ``@`` (for example ``database_search:...``,
   ``profile_scan:...``, ``msa:...``). A candidate's value on a sheet is the SUM of its values in the tests of that
   kind.
@@ -108,3 +109,29 @@ def test_ceiling(held, measurable, unseen=0, limit=None):
     if limit is None:
         return float(count * (count - 1) // 2 + new)
     return float(max(m * (m - 1) // 2 + min(limit - m, new) for m in range(min(limit, count) + 1)))
+
+
+def msa_test_ceiling(held, maxima, measurable, full):
+    """The most one further alignment can add to the credit of one target, from where the list and the identified sites
+    stand.
+
+    ``held`` is ``standing`` of the target; ``maxima`` maps each candidate the alignment can measure to the largest value
+    it can still have in one alignment: (the target positions no held alignment has identified as a matched or a mismatched
+    site of it) x the site weight (a new matched site is worth the weight, and a position counts once); ``full`` is that
+    largest value for a candidate none identified (all the target's positions x the weight); ``measurable`` lists the
+    candidates the alignment can measure. An alignment's value is NOT capped at 1 (it is a count of sites x the weight);
+    its bound is its own largest value. The alignment is the last test, so it earns:
+
+    * for a pair of listed candidates it measures, the difference of two values in [0, m_a] and [0, m_b]: at most
+      ``max(m_a, m_b)``;
+    * for a candidate not on the list that it admits, its entry, the value: at most its maximum (the pair with an admitted
+      candidate earns nothing in the test that admits it);
+    * nothing else: an alignment of one listed candidate and no new one earns 0.
+
+    The bound is the sum over the pairs of listed candidates plus the maxima of those it can admit. It is a bound, not a
+    forecast."""
+    measured = list(dict.fromkeys(measurable))
+    listed = [candidate for candidate in measured if held.get(candidate, {}).get('listed')]
+    most = lambda candidate: maxima.get(candidate, full)
+    return (math.fsum(max(most(first), most(second)) for first, second in combinations(listed, 2))
+            + math.fsum(most(candidate) for candidate in measured if candidate not in listed))

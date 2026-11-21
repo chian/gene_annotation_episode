@@ -29,13 +29,19 @@ The kinds of held graded source read, by the content of their retained sheet:
   record's name); its value is the subscore of its alignments.
 
 * a multiple sequence alignment (``msa_alignment_sheet_v1``): test ``msa:<provider>:<aligner>:<alphabet>``; the owner's
-  conserved-site measurement (2026-11-21): the residue conservation pattern of one candidate group against another
+  conserved-site count (2026-11-21): the residue conservation pattern of one candidate group against another
   differentiates function, so the same residue pattern on the same conserved sites adds nothing. A distinguishing site is
   identified by (target position, the group's conserved residue, the group's candidate), never by column or job
   (``msa_alignment_sheet.conserved_sites`` records them). Evidence is cumulative over the head's alignments, in arrival
   order: only the sites not identified by an earlier alignment count. For each candidate with at least one new
-  distinguishing site, one measurement: its new matched sites over its new matched plus new mismatched sites. An alignment
-  that adds no new site gives no measurement.
+  distinguishing site, one measurement: value = (its number of NEW matched sites, where the target carries the group's
+  conserved residue) x ``SITE_WEIGHT`` (= 1 / ``EXPECTED_DISTINGUISHING_SITES``), the owner's weighting. Mismatched sites
+  give no value (the sheet records them). The measurement also records ``fraction`` (new matched / (new matched + new
+  mismatched)), ``new_matched`` and ``new_mismatched``. An alignment that adds no new site gives no measurement. Unlike
+  the other tests an alignment's value is not capped at 1: an alignment that finds the expected number of sites earns about 1,
+  and a candidate's msa sheet cannot exceed (the target's length) x ``SITE_WEIGHT``, because a site counts once.
+  ``unidentified_positions`` gives, per candidate, the target positions that no held alignment has yet identified as a site
+  of it (what the ceiling reads).
 * a MetaCATS report (``metacats_sheet_v1``) gives no measurement: its significant positions are kept on its own sheet and
   confirm which distinguishing sites are statistically supported; they are not used as a filter of the sites.
 
@@ -65,6 +71,17 @@ DATABASE_SHEETS = ('blast_database_sheet_v1', 'blast_database_sheet_v2', 'blast_
 PAIRWISE_SHEET = 'blast_pairwise_sheet_v1'
 PROFILE_SHEET = 'hmmer_search_sheet_v1'
 MSA_SHEET = 'msa_alignment_sheet_v1'
+# The owner (2026-11-21): "if you expect 10 conserve sites per protein on average, you would make the weighting 0.1 -- now I
+# don't know how many conserved regions there generally are, so you will have to figure that out".
+# E is the expected number of distinguishing sites of one candidate in one alignment, derived from the stored real alignments
+# (a direct check, 2026-11-21): 7 distinct alignments of E. coli CspA (70 residues) from runs a101_conserved_ws_C2,
+# a101_returns_ws_R1, a101_msa_ws_M1, a101_msa_ws_M2 (also in metacats_ws_C1), graded by ``conserved_sites``: 23 candidate
+# counts (matched + mismatched at a target position), 3 3 4 4 5 5 5 5 5 6 7 7 7 8 11 12 12 12 12 14 14 15 15, median 7, mean
+# 8.3 (10 per 100 residues at the median). All targets had 70 residues, so whether length matters cannot be told from
+# this data and E is the median count, not a per-residue figure. Re-derive E as more alignments (and targets of other
+# lengths) accumulate: then a per-residue figure x the target's length may replace it.
+EXPECTED_DISTINGUISHING_SITES = 7
+SITE_WEIGHT = 1 / EXPECTED_DISTINGUISHING_SITES
 
 
 def held_sources(reader):
@@ -72,9 +89,9 @@ def held_sources(reader):
     return [ref for ref in reader.refs() if ref.startswith('source_')]
 
 
-def _measurement(target, test, vocabulary, name, identifier, value, source):
+def _measurement(target, test, vocabulary, name, identifier, value, source, extra=None):
     return {'target': target, 'test': test, 'candidate': vocabulary + ':' + (identifier or name), 'value': value,
-            'vocabulary': vocabulary, 'name': name, 'identifier': identifier, 'source': source}
+            'vocabulary': vocabulary, 'name': name, 'identifier': identifier, 'source': source, **(extra or {})}
 
 
 def _by(rows, key):
@@ -124,10 +141,11 @@ def new_site_values(sites, seen, target):
     """The measurements of one alignment's conserved-site section (``msa_alignment_sheet.conserved_sites``) given the
     sites the head's earlier alignments already identified. ``sites`` is the section's ``sites``; ``seen`` is the set of
     identified sites (target, target position, the group's conserved residue, the group's candidate), which this call
-    extends with the sites it counts. Only a distinguishing site not in ``seen`` and with a target position counts (a
-    site at a target gap has no position and is identified by nothing). Returns ``[(candidate, value)]``: for each
-    candidate with at least one new site, its new matched sites over its new matched plus new mismatched sites; a candidate
-    with no new site gives nothing."""
+    extends with the sites it counts (matched or mismatched). Only a distinguishing site not in ``seen`` and with a target
+    position counts (a site at a target gap has no position and is identified by nothing). Returns ``[(candidate, value,
+    fraction, new_matched, new_mismatched)]``: for each candidate with at least one new site, ``value`` = new matched x
+    ``SITE_WEIGHT`` and ``fraction`` = new matched / (new matched + new mismatched); a candidate with no new site gives
+    nothing."""
     new = {}
     for site in sites:
         key = (target, site['target_position'], site['residue'], site['candidate'])
@@ -135,20 +153,24 @@ def new_site_values(sites, seen, target):
             continue
         seen.add(key)
         new.setdefault(site['candidate'], []).append(site['matched'])
-    return [(candidate, sum(found) / len(found)) for candidate, found in new.items()]
+    return [(candidate, sum(found) * SITE_WEIGHT, sum(found) / len(found), sum(found), len(found) - sum(found))
+            for candidate, found in new.items()]
 
 
 def _held_msa(source, grading, seen):
     """A graded multiple sequence alignment (``msa_alignment_sheet_v1``): test ``msa:<provider>:<aligner>:<alphabet>``;
     one measurement per candidate with new distinguishing sites (``new_site_values``): its candidate is the ``product`` the
-    search gave it (the same candidate identity, so the same candidate on the list). Evidence is cumulative over the head's
-    alignments in arrival order (``seen``): the same residue pattern on the same conserved sites adds nothing, and an
-    alignment that adds no new site gives no measurement."""
+    search gave it (the same candidate identity, so the same candidate on the list); its value is its new matched sites x
+    ``SITE_WEIGHT``; the measurement records ``fraction``, ``new_matched`` and ``new_mismatched`` too. Evidence is
+    cumulative over the head's alignments in arrival order (``seen``): the same residue pattern on the same conserved
+    sites adds nothing, and an alignment that adds no new site gives no measurement."""
     sheet = grading['sheet']
     test = 'msa:' + source['provider'] + ':' + sheet['aligner'] + ':' + sheet['alphabet']
     target = source['operand_refs'][0]
-    return [(test, 'product', candidate, None, value)
-            for candidate, value in new_site_values(sheet['conserved_sites']['sites'], seen, target)], 0
+    return [(test, 'product', candidate, None, value,
+             {'fraction': fraction, 'weight': SITE_WEIGHT, 'new_matched': matched, 'new_mismatched': mismatched})
+            for candidate, value, fraction, matched, mismatched
+            in new_site_values(sheet['conserved_sites']['sites'], seen, target)], 0
 
 
 def _profile_scan(source, grading, value_of):
@@ -167,7 +189,8 @@ def _pairwise(reader, source, grading, value_of):
 
 
 def _read(reader, scope, sources):
-    """The measurements in arrival order and the unlabelled hits of each target."""
+    """The measurements in arrival order, the unlabelled hits of each target and the identified conserved sites (target,
+    target position, residue, candidate name) of the held alignments."""
     scope = reader.validate_scope(scope)
     measurements, unlabelled = [], {target: 0 for target in scope['subject_refs']}
     identified = set()
@@ -193,8 +216,8 @@ def _read(reader, scope, sources):
             found, missing = read(source, grading, lambda rows: compile_native_sheet(
                 rows, supplied_length=length, regions=regions)['value'])
             unlabelled[target] += missing
-            measurements.extend(_measurement(target, row[0] + '@' + reference, *row[1:], reference) for row in found)
-    return measurements, unlabelled
+            measurements.extend(_measurement(target, row[0] + '@' + reference, *row[1:5], reference, *row[5:]) for row in found)
+    return measurements, unlabelled, identified
 
 
 def candidate_measurements(reader, scope, sources):
@@ -206,8 +229,25 @@ def candidate_measurements(reader, scope, sources):
 def candidate_standing(reader, scope, sources):
     """Where each candidate stands, per target of the scope (``{target: differential_credit.standing(its
     measurements)}``), after the graded ``sources``: what a further test's ceiling is computed from."""
-    measurements, _ = _read(reader, scope, sources)
+    measurements, _, _ = _read(reader, scope, sources)
     return {target: standing(rows) for target, rows in _by(measurements, 'target').items()}
+
+
+def unidentified_positions(reader, scope, sources):
+    """Per target of the scope, ``{candidate: positions}`` for each candidate (``product:<name>``) that a held alignment has
+    identified a site of: the number of the target's positions that no held alignment has identified as a matched or a
+    mismatched site of it. A candidate absent from the result has all the target's positions."""
+    scope = reader.validate_scope(scope)
+    identified = _read(reader, scope, sources)[2]
+    remaining = {}
+    for target in scope['subject_refs']:
+        taken = {}
+        for site_target, position, _, candidate in identified:
+            if site_target == target:
+                taken.setdefault(candidate, set()).add(position)
+        length = reader.subject_length(target)
+        remaining[target] = {'product:' + candidate: length - len(positions) for candidate, positions in taken.items()}
+    return remaining
 
 
 def _entry(measurements, candidate):
@@ -223,7 +263,7 @@ def candidate_table(reader, scope, sources):
     ``tests`` (each test applied to the target with ``candidate_count``, the admitted candidates it measured),
     ``differentials`` (each: the ``test``, the two candidates and the ``value``), ``unlabelled_hit_count`` and the
     target's ``credit``), and the ``credit`` of the scope: the sum over its targets."""
-    measurements, unlabelled = _read(reader, scope, sources)
+    measurements, unlabelled, _ = _read(reader, scope, sources)
     targets = {}
     for target, rows in _by(measurements, 'target').items():
         result = differential_credit(rows)

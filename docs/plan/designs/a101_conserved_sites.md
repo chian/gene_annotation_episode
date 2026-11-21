@@ -41,9 +41,7 @@ change).
 - A site is identified by (target position, the group's conserved residue, the group's candidate), never by column or job.
 - Per candidate group: `matched_sites` = distinguishing sites where the target carries the group's residue; `mismatched_sites` = where it
   carries another residue.
-- The credit's measurement (cumulative over the head's alignments, in arrival order): only the sites not identified by an earlier alignment count;
-  each candidate with at least one new distinguishing site gets one measurement, value = new matched / (new matched + new mismatched); an
-  alignment that adds no new site gives no measurement. The test name stays kind + '@' + source (`f227c34a8`).
+- The credit's measurement: see the section of 2026-11-21 (the count of new sites x the weight W = 1 / E) at the end of this note.
 
 ## Direct check on R1's stored records (NOT a real run; recomputed from a copy of `runs/a101_returns_ws_R1`, `runs/a101_conserved_direct`)
 
@@ -94,3 +92,18 @@ Limits: at most 1 Homology, 3 MSA, 2 MetaCATS jobs; a guard stops the run's unit
 
 Head actions in order, credit after each: scan 0.8198; `bvbrc_blast` 5.1003; `bvbrc_msa` (3 candidates, per_candidate 10) 5.9645 (+0.8642); `bvbrc_metacats` (alignment 1) 5.9645; `reason` 5.9645; `bvbrc_msa` 5.9645; `bvbrc_msa` 5.9645; `bvbrc_metacats` (alignment 2) 5.9645; then a 3rd `bvbrc_metacats` commission (alignment 3), at which the guard stopped the unit (`systemctl --user stop`) before any estimate or launch. Jobs submitted: 1 Homology, 3 MSA, 2 MetaCATS (the limits exactly); no second MetaCATS on one alignment was tried, so no reuse refusal was seen.
 New distinguishing sites per alignment (direct recomputation on a copy of the stored records, `runs/a101_conserved_direct_c2`): A1 29 new (CspA 1.0, CspB/CspG/CspI 0.4, CspC 0.0); A2 5 new (one measurement: generic "Cold shock protein of CSP family" 0.0); A3 2 new (same candidate, 1.0). MetaCATS: 0 measurements each. Final scores: CspA product 0.9796, CSD 0.8198, hypothetical protein 0.8149, CspB/CspG/CspI 0.6185, generic CSP family 0.6153, CspC 0.4117; credit 5.9645. Units after the last gain (unit 3): 5 completed head units, the estimator had not stopped the head.
+
+## 2026-11-21: the alignment's value is a count of new sites times a weight; the ceiling is read from the current state
+
+The owner's words, verbatim: "ceiling is a function that has to be how much max credit from this current state"; "you should know that a second MSA is going to earn very very little. that's the point of tying to ceiling values. MSA can only add so much more now"; "the residue conservation pattern in one group vs another helps differentiate function ... the same residue pattern on the same conserved sites should not add anything... and so maybe that is what you should be recording, i.e., the number of conserved region matches"; "i think you have to add a weight factor to MSA scoring yes? that will fix it"; "so if you expect 10 conserve sites per protein on average, you would make the weighting 0.1 -- now I don't know how many conserved regions there generally are, so you will have to figure that out".
+
+The measurement. Evidence is cumulative over the head's alignments in arrival order; only sites no earlier alignment identified count (a site is identified by target position, the group's conserved residue and the candidate, matched or mismatched). For each candidate with at least one new distinguishing site, one measurement in the alignment's test (none for a candidate with no new site):
+
+- value = (number of its new matched sites) x W, with W = 1 / E and E = `EXPECTED_DISTINGUISHING_SITES`; mismatched sites give no value (the sheet records them);
+- the measurement record also keeps fraction = new matched / (new matched + new mismatched), the weight W and the counts of new matched and new mismatched sites.
+
+An alignment that finds the expected number of sites earns about 1. The value is not capped at 1 (the other tests' values stay in [0, 1]); a candidate's msa sheet cannot exceed L x W, since a site counts once.
+
+E = 7, derived (direct check, 2026-11-21; `runs/derive_e_1`, copies of the workspaces) from the stored real alignments graded by the current `conserved_sites`: runs a101_conserved_ws_C2 (3 alignments), a101_returns_ws_R1 (4; its first two equal C2's), a101_msa_ws_M1 (1), a101_msa_ws_M2 (1; the same as metacats_ws_C1's), 7 distinct alignments, all of E. coli CspA (70 residues). Per candidate per alignment, the distinguishing sites (matched + mismatched, at a target position), 23 values over the distinct alignments: 3 3 4 4 5 5 5 5 5 6 7 7 7 8 11 12 12 12 12 14 14 15 15; median 7, mean 8.3 (per 100 residues: median 10, from 4.3 to 21.4); including the duplicated alignments, 32 values, median 7, mean 8.7. Every target had 70 residues, so whether length matters cannot be told from this data: E is the median count. It is re-derived as more alignments (and targets of other lengths) accumulate; with other lengths a per-residue figure x the target's length may replace it.
+
+The ceiling of `bvbrc_msa` (`HEAD/credit.ceiling`, arithmetic in `differential_credit.msa_test_ceiling`, positions from `candidate_measurements.unidentified_positions`). For a candidate, m = (the target positions not yet identified as a matched or mismatched site of it by any alignment the head holds) x W is the most its value can be. A pair of listed candidates earns at most max(m_a, m_b); a candidate the alignment can admit earns at most m; a one-candidate alignment of a listed candidate earns 0. The ceiling is the sum of these over the candidates named.

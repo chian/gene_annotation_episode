@@ -21,9 +21,9 @@ from method_loop import UNBOUNDED
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_alignment.native_correspondence import (
     NativeCorrespondenceScoring)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.candidate_measurements import (
-    candidate_standing, candidate_table, held_sources)
+    SITE_WEIGHT, candidate_standing, candidate_table, held_sources, unidentified_positions)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.differential_credit import (
-    test_ceiling)
+    msa_test_ceiling, test_ceiling)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.database_blast_search import (
     HITLIST_RANGE)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.scoring import (
@@ -98,8 +98,8 @@ def ceiling(summary, records, action_type, arguments, ctx):
 
     The credit is, per target, the sum of the entry scores of the candidates and of the differentials
     (``differential_credit``). A unit adds at most one graded source, which is one test appended after the earlier ones.
-    A candidate's score is the sum of its values over the tests, each value in [0, 1], so that test moves a candidate's
-    score by its value, between 0 and 1. ``differential_credit.test_ceiling`` then bounds what the one test can add to
+    A candidate's score is the sum of its values over the tests, each value in [0, 1] except an alignment's (below), so
+    that test moves a candidate's score by its value. ``differential_credit.test_ceiling`` (for the alignment, ``msa_test_ceiling``) then bounds what the one test can add to
     the target's credit: a pair of candidates on the list that the test measures earns at most 1 (the difference of two
     moves in [0, 1]); a candidate the test admits earns its entry, its first score, at most 1, and its pairs earn
     nothing in that test; a test that measures one candidate on the list and admits none earns 0. Per action type:
@@ -114,9 +114,18 @@ def ceiling(summary, records, action_type, arguments, ctx):
       ``hitlist_size`` product candidates, any of those on the list or new ones.
     * ``bvbrc_blast``: the same, with the hits bounded by the application's ``blast_max_hits`` default
       (``bvbrc_hit_bound``).
-    * ``bvbrc_msa``: the alignment measures only the candidates named (``candidates``, product names) of the target
-      ``query_ref``: one measurement each, a fraction of the new distinguishing sites in [0, 1], so at most 1 per pair
-      of listed candidates and 1 per candidate it admits.
+    * ``bvbrc_msa``: derived from the current state (``differential_credit.msa_test_ceiling``). The alignment measures
+      only the candidates named (``candidates``, product names) of the target ``query_ref``. A candidate's value in an
+      alignment is its NEW matched conserved distinguishing sites x ``SITE_WEIGHT`` (the owner's weighting, 1 over the
+      expected number of sites; ``candidate_measurements``), NOT capped at 1, and a site is identified once by (target
+      position, the group's conserved residue, the candidate), whether matched or mismatched. So the most a candidate can
+      still be valued is ``m = (the target positions not yet identified as a site of it by any alignment the head holds)
+      x SITE_WEIGHT`` (``candidate_measurements.unidentified_positions``, read from the held alignment sheets as
+      ``new_site_values`` reads them; all the target's positions for a candidate none identified). A pair of listed
+      candidates earns the difference of two values in [0, m_a] and [0, m_b]: at most ``max(m_a, m_b)``; a candidate the
+      alignment admits earns its entry, at most its ``m``; an alignment of one listed candidate and none to admit earns
+      0. The ceiling is the sum of these over the candidates named. As alignments identify the target's positions the
+      ceiling falls with them.
     * ``bvbrc_metacats``: 0. A MetaCATS report gives no measurement (``candidate_measurements``).
     * ``hmmer_profile_scan``: the scan of the target ``query_ref`` against the profile database ``database`` reports
       each family at most once, so it measures at most as many families as the database holds profiles (``model_count``
@@ -164,7 +173,11 @@ def ceiling(summary, records, action_type, arguments, ctx):
     if action_type == 'bvbrc_msa':
         options = ([(item['query_ref'], item['candidates']) for item in summary['msa_options']]
                    if arguments is None else [(arguments['query_ref'], arguments['candidates'])])
-        return max((test_ceiling(standing.get(query, {}), ['product:' + name for name in names])
+        remaining = unidentified_positions(records, scope, held_sources(records))
+        return max((msa_test_ceiling(standing.get(query, {}),
+                                     {name: count * SITE_WEIGHT for name, count in remaining.get(query, {}).items()},
+                                     ['product:' + name for name in names],
+                                     records.subject_length(query) * SITE_WEIGHT)
                     for query, names in options), default=0.0)
     if action_type == 'hmmer_profile_scan':
         databases = (ctx.settings['profile_databases'] if arguments is None
