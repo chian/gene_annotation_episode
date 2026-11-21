@@ -17,12 +17,20 @@ that names no candidate gives no measurement: a hit never asked (``not_asked``: 
 that carries no name (``no_product``) and a hit with a name but no value (``no_value``: fewer than 3 usable pairs; never
 read as a value of zero) are counted apart, per target.
 
+THE SECOND TEST, ``site_correspondence`` (``site_correspondence_sheet``): one graded source is one (search, site source) and its
+name is ``site_correspondence:<site source>@<source reference>`` (the source that holds the grading). A candidate is the same
+``product:<name>``; its value is the sheet's ``mean_E`` for it (the mean E = B F of its hits with sites). A candidate none of
+whose hits has a site has no measurement (``mean_E`` null), never a zero. ``held_site_tests`` gives the (search source
+reference, site source) pairs already graded, so a repeat can be refused.
+
 The model's facts on the sheet weigh nothing and are not read here. A source whose target is not in the scope is skipped; a
 retained grading of another sheet schema is not A102's round 1 and is skipped."""
 import math
 
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.differential_credit import (
     differential_credit, standing)
+from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.site_correspondence_sheet import (
+    SCHEMA as SITE_SHEET)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.structure_search_sheet import (
     SCHEMA as SEARCH_SHEET)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.tool_grading_artifacts import (
@@ -53,6 +61,17 @@ def test_name(sheet, source):
     return ':'.join(('structure_search', sheet['provider'], sheet['mode'], sheet['database'])) + '@' + source
 
 
+def site_test_name(sheet, source):
+    """The test of the site correspondence graded in ``sheet`` made by the held source ``source``."""
+    return 'site_correspondence:' + sheet['site_source'] + '@' + source
+
+
+def site_rows(sheet):
+    """The ``(product, mean_E)`` of the candidates of a site-correspondence sheet that have a value (at least one hit with
+    sites), in the sheet's order."""
+    return [(row['product'], row['mean_E']) for row in sheet['candidates'] if row['mean_E'] is not None]
+
+
 def search_rows(sheet):
     """The hit rows of a search sheet that name a candidate: ``(product, B)`` in rank order, for the hits with a product
     and a value."""
@@ -69,10 +88,14 @@ def _read(reader, scope, sources):
         source = reader.get(reference)
         for entry in source_tool_grading_entries(reader, reference):
             sheet = entry['grading']['sheet']
-            if sheet['schema'] != SEARCH_SHEET:
+            if sheet['schema'] not in (SEARCH_SHEET, SITE_SHEET):
                 continue
             target = source['operand_refs'][0]
             if target not in scope['subject_refs']:
+                continue
+            if sheet['schema'] == SITE_SHEET:
+                measurements.extend(_measurement(target, site_test_name(sheet, reference), 'product', product, None, value,
+                                                 reference) for product, value in site_rows(sheet))
                 continue
             test = test_name(sheet, reference)
             measurements.extend(_measurement(target, test, 'product', product, None, value, reference)
@@ -110,6 +133,24 @@ def held_searches(reader, scope, sources):
             sheet = entry['grading']['sheet']
             if sheet['schema'] == SEARCH_SHEET:
                 held[target].append((sheet['database'], sheet['model']['model_sha256']))
+    return held
+
+
+def held_site_tests(reader, scope, sources):
+    """Per target of the scope, the site-correspondence tests the episode holds, as ``(search source reference, site source)``
+    in arrival order: the pair that identifies one such test. A further test of the same pair is a repeat (it adds nothing) and
+    the request check refuses it."""
+    scope = reader.validate_scope(scope)
+    held = {target: [] for target in scope['subject_refs']}
+    for reference in sources:
+        source = reader.get(reference)
+        target = source['operand_refs'][0] if source.get('operand_refs') else None
+        if target not in held:
+            continue
+        for entry in source_tool_grading_entries(reader, reference):
+            sheet = entry['grading']['sheet']
+            if sheet['schema'] == SITE_SHEET:
+                held[target].append((sheet['search_source_ref'], sheet['site_source']))
     return held
 
 

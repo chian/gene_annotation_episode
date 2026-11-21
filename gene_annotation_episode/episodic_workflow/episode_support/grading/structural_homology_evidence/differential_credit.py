@@ -16,7 +16,8 @@ the subscoring sheet. Measurements are given in the order they arrived. The test
 
 - A candidate's value in one test is the mean of its measurements in that test (its replicates in that test: the hits of one
   structure search that share a product), times the weight of the test's family. Round 1 has one family, ``structure_search``,
-  whose raw value (the index B of ``scoring.geometry``) lies in [0, 1].
+  whose raw value (the index B of ``scoring.geometry``) lies in [0, 1]; the second family, ``site_correspondence``, has a raw
+  value (the mean E = B F of the hits with sites) in [0, 1] as well.
 - A subscoring sheet is a kind of test: the part of the test name before ``@``
   (``structure_search:foldseek:tmalign:<database>``). A candidate's value on a sheet is the SUM of its values in the tests of
   that kind.
@@ -38,7 +39,9 @@ from itertools import combinations
 # The typical strong value of each sheet's family: the value, in ONE test of the family, of the candidate that leads stored real
 # runs (the derivation is written here when there is one).
 # no real run yet: 1 until real runs give the family's typical strong value (SOP Step 6)
-TYPICAL_STRONG_VALUE = {'structure_search': 1.0}
+TYPICAL_STRONG_VALUE = {'structure_search': 1.0,
+                        # no real run yet: 1 until real runs give the family's typical strong value (SOP Step 6)
+                        'site_correspondence': 1.0}
 SHEET_WEIGHT = {family: 1 / value for family, value in TYPICAL_STRONG_VALUE.items()}
 
 
@@ -151,3 +154,31 @@ def vertex_maximum(held, maxima, measurable):
         outside = len(listed) - len(inside)
         best = max(best, math.fsum(abs(a - b) for a, b in combinations(inside, 2)) + outside * math.fsum(inside))
     return new + best
+
+
+def site_test_ceiling(held, candidates):
+    """The most one ``site_correspondence`` test can add to the credit of one target, from where the list stands (``held`` is
+    ``standing`` of the target; ``candidates``: the identifiers of the candidates of the graded search it grades, all of which
+    are already listed in the search's own test).
+
+    PROOF. A candidate's value in the test is its mean E over its hits with sites, ``E = B F``; ``B`` is in [0, 1]
+    (``B = [2 n / (L_target + L_reference)] / [1 + (RMSD / 2 A)^2]`` with ``n`` at most the shorter length, so the first factor
+    is at most 1) and ``F`` is a mean of residue scores, each a class match 0 or 1 times a kernel in (0, 1]. So the raw value is
+    in [0, 1] and, times the family weight ``w``, the candidate's move ``v_c`` is in [0, w]. A candidate with no hit with sites
+    is not measured (a candidate not measured earns nothing), so each candidate's move is anywhere in [0, w], at most, whatever
+    the sites turn out to be. The test is appended last. By the credit rule it earns the entry score of each candidate it admits
+    (a candidate not yet on the list whose ``v_c`` is above 0: its score becomes ``v_c``) plus ``|v_a - v_b|`` for each pair of
+    candidates both already on the list that it measures. The rise is therefore
+    ``sum_{c not listed} v_c + sum_{a < b listed} |v_a - v_b|``, a convex function of ``v`` (sums of linear terms and absolute
+    values of linear terms) on the box ``0 <= v_c <= w``, so it is largest at a vertex of the box: every ``v_c`` equal to 0 or
+    ``w``. ``vertex_maximum`` takes the maximum over those vertices (exact up to 16 listed candidates, a looser bound above). Here
+    every maximum is the same ``w``, so the maximum has a closed form that is exact for any number of candidates: with ``k``
+    candidates listed and ``u`` not listed, a vertex puts ``s`` listed candidates at ``w`` and the rest at 0; the pairs earn ``w``
+    for each of the ``s (k - s)`` pairs with one candidate in each group and 0 inside a group, so the rise is
+    ``w (u + s (k - s))``, largest at ``s = k // 2``: ``w (u + k^2 // 4)``. That is what is returned (equal to
+    ``vertex_maximum`` whenever that is exact; its looser bound above 16 listed candidates would overstate it twofold).
+    It is a bound, not a forecast."""
+    weight = SHEET_WEIGHT['site_correspondence']
+    candidates = list(dict.fromkeys(candidates))
+    listed = sum(1 for candidate in candidates if held.get(candidate, {}).get('listed'))
+    return weight * float(len(candidates) - listed + listed * listed // 4)

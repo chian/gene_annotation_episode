@@ -98,6 +98,16 @@ KINDS = {
     # holds the alignments and the hits' own C-alpha coordinates, not a superposition). format_3464 JSON.
     'structure_search_results': ('http://edamontology.org/data_0887', 'http://edamontology.org/format_3464',
                                  'Structure alignment report, JSON (Foldseek server result of one search)'),
+    # The residue-level functional sites of the hits of a graded structure search, as the services answered (A102
+    # ``site_correspondence``: UniProt's active-site, binding-site and site features of the hits' accessions, or the M-CSA
+    # catalytic residues, with the request, status and checksum of each reply). EDAM.tsv, read 2026-11-21
+    # (https://edamontology.org/EDAM.tsv), neither obsolete: data_1277 Protein features ("An informative report on intrinsic
+    # positional features of a protein sequence"): the replies are positions in the hits' sequences. Not data_1321 Protein
+    # features (sites), which is obsolete in this release, and not data_0896 Protein report (that is a report of the protein
+    # as a whole, with no positions). format_3464 JSON.
+    'functional_site_annotations': ('http://edamontology.org/data_1277', 'http://edamontology.org/format_3464',
+                                    'Protein features, JSON (UniProt site features or M-CSA catalytic residues of the hits '
+                                    'of a structure search)'),
 }
 EDAM_SOURCE = 'https://edamontology.org/EDAM.tsv, read 2026-11-20'
 
