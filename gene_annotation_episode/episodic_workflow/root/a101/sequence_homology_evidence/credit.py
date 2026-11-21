@@ -123,27 +123,44 @@ def ceiling(summary, records, action_type, arguments, ctx):
       of the manifest the setting ``profile_databases`` names; the family's own reporting threshold only lowers the
       number): at most that many candidates (``profile_family:<accession>``), any on the list or new.
     * ``execute_selected_tool``: ``UNBOUNDED``: a selected registry tool can import a search report of any size and its
-      arguments fix no bound on the candidates it measures."""
+      arguments fix no bound on the candidates it measures.
+
+    An action the head's request checks would refuse as a repeat earns nothing, so its ceiling is 0: a pairwise
+    comparison already held (``held_comparisons``), a profile scan of the same query and database already held
+    (``held_profile_scans``), a search of the same query, program and database already graded (a closed search of
+    ``database_searches`` / ``bvbrc_searches``; an outstanding one can still be continued and keeps its ceiling)."""
     if action_type == 'reason' or action_type == 'bvbrc_metacats':
         return 0.0
     scope = summary['scope']
     standing = candidate_standing(records, scope, held_sources(records))
     sequences = [ref for ref in scope['subject_refs'] if ref in summary['held_sequences']]
     queries = sequences if arguments is None else [arguments['query_ref']]
+    scanned = {(row['query_ref'], row['database']) for row in summary['held_profile_scans']}
+    compared = {(row['query_ref'], row['reference_ref']) for row in summary['held_comparisons']
+                if arguments is None or row['program'] == arguments['program']}
+
+    def searched(view, query):
+        """Whether a search of ``query`` with the arguments' program and database (any, with no arguments) is graded."""
+        return any(row['query_ref'] == query and row['closed']
+                   and (arguments is None or (row.get('program'), row.get('database'))
+                        == (arguments.get('program'), arguments.get('database')))
+                   for row in summary[view])
 
     def products(target):
         return [candidate for candidate in standing.get(target, {}) if candidate.startswith('product:')]
     if action_type == 'pairwise_blast':
         references = list(summary['held_sequences']) if arguments is None else [arguments['reference_ref']]
         return max((test_ceiling(standing.get(query, {}), ['reference_sequence:' + reference])
-                    for query in queries for reference in references), default=0.0)
+                    for query in queries for reference in references if (query, reference) not in compared),
+                   default=0.0)
     if action_type in ('database_blast', 'bvbrc_blast'):
         if action_type == 'bvbrc_blast':
             limit = bvbrc_hit_bound()
         else:
             limit = HITLIST_RANGE[1] if arguments is None else arguments['hitlist_size']
+        view = 'bvbrc_searches' if action_type == 'bvbrc_blast' else 'database_searches'
         return max((test_ceiling(standing.get(query, {}), products(query), unseen=limit, limit=limit)
-                    for query in queries), default=0.0)
+                    for query in queries if not searched(view, query)), default=0.0)
     if action_type == 'bvbrc_msa':
         options = ([(item['query_ref'], item['candidates']) for item in summary['msa_options']]
                    if arguments is None else [(arguments['query_ref'], arguments['candidates'])])
@@ -156,7 +173,8 @@ def ceiling(summary, records, action_type, arguments, ctx):
         families = lambda target: [candidate for candidate in standing.get(target, {})
                                    if candidate.startswith('profile_family:')]
         return max((test_ceiling(standing.get(query, {}), families(query), unseen=size, limit=size)
-                    for query in queries for size in sizes), default=0.0)
+                    for query in queries for name, size in zip(databases, sizes) if (query, name) not in scanned),
+                   default=0.0)
     if action_type == 'execute_selected_tool':
         return UNBOUNDED
     raise ValueError('a101_ceiling_not_derived_for_action_type:' + action_type)
