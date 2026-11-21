@@ -170,8 +170,8 @@ estimate, extract results" (`bvbrc_blast_episode.md`). The built actions are fiv
 - Launch, then `fix` only after a failure, with a request that differs from the failed one in the fixed field. Monitor: a wait
   inside a stated range, one status request, a revised remaining time. Extract: fetch and grade in one unit.
 - Until launched or extracted: the commission names `until`. With `launched` the child estimates, launches and returns at once
-  (it is parked). With `extracted` it follows the job to its end; it is also how a parked job is resumed (same commission, the
-  held handoff passed back, nothing resubmitted). The owner's words: "figure out how to "release" (dangerous word since it can be
+  (it is parked). With `extracted` it follows the job to its end; it is also how a parked job is resumed (the job's commission
+  rebuilt from the identity in its handoff row, the held handoff passed back with everything it names, nothing resubmitted). The owner's words: "figure out how to "release" (dangerous word since it can be
   used multiple ways---find a better one) this child to run in background while other pieces of the episodic workflow can do other
   work (i.e., bounce a waiting notice/info back up to parent with about how long we expect to wait so parent can choose what to do
   next. it could just wait, it could send off another tool, it could go all the way back up to root with the same info)"
@@ -180,11 +180,17 @@ estimate, extract results" (`bvbrc_blast_episode.md`). The built actions are fiv
   (the estimate minus the seconds since launch, not below zero, or a later revised figure). The parent's model is shown the
   seconds since launch and the seconds still expected as of each of its own decisions.
 - The parent finishes every job it parks (owner's decision, 2026-11-21: "the head must finish parked jobs"). Its `task.py`
-  `resume_action` returns the resume of a parked job (the same commission with `until` extracted, which its check accepts) and
+  `resume_action` returns the resume of a parked job (the job's commission rebuilt from its identity with `until` extracted, which its check accepts) and
   whether it is due (its expected remaining seconds have passed). The system then keeps the parent from stopping while a job is
   parked, offers only the resume once it is due and takes it without the model, takes it instead of stopping when nothing else
   is worth its cost, and never lets the forecast gate refuse it. Before it is due the parent's model may do other work worth its
   cost. A parent cannot end with a job parked, so a later parent run never has to resume one.
+- A continuation does the job the launch did. Anything a child derives from its commission (a plan, a file it stages) is a
+  function of the job's identity, never of the order or form in which a commission states it; and what the job was given is read
+  from the handoff row's staged inputs (`detail.input_refs`), never recomputed. The parked child returns its handoff row closed
+  under naming (the staged inputs and the reply come with it) and the resume commission passes them back (`_continued`). A101's
+  MSA resume failed with `record_not_held` on a group-file reference recomputed from the candidates in another order
+  (`a101_child_returns.md`, "A parked job's continuation").
 - One place in the library for the shared machinery: `bvbrc_job_child.py`. A child makes ONE `JobApplication(...)` and its five
   files call the module's functions. Do not copy the machinery into a child; write only what is specific to the application
   (`prepare`, `extract`, `describe_identity`, `field_problems`).

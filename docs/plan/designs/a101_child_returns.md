@@ -22,7 +22,8 @@ or unread field.
   record they name. The head's `outstanding_handoff_count` is the number of held handoff rows whose closure row it does not
   hold (`job_records.outstanding_jobs`); its own profile scan's local job is closed in its unit and is not counted.
 - Private names removed at the source: bvbrc_msa no longer stages `plan.json` as a job input (the job's identity is in the
-  handoff row's estimates; the extract recomputes the plan from the held search, which is deterministic). Feature group,
+  handoff row's estimates; the extract recomputes the plan from the held search for the grading, and names the group file the
+  handoff row staged, below "A parked job's continuation"). Feature group,
   target FASTA, MetaCATS derived alignment and group TSV are named by the BV-BRC handoff rows, which the head reads, and
   are returned. BLAST: query FASTA is the head's own; report, metadata JSON and replies are returned.
 - `reusable_alignments` is order-independent (keyed over every element of `used`).
@@ -107,6 +108,41 @@ closure 29), 948 in some returned list. The 9 held records in no returned list a
 one held artifact that nothing names, and the profile scan's local job (its handoff and closure rows and the five files only those rows
 name: the staged query FASTA, the two replies, `result.json` and `stderr.log`; the scan's three graded texts are returned as its labelled
 products), which the scan closes inside its unit.
+
+## A parked job's continuation (2026-11-21)
+
+Run `a101_goal11_run_cspa` (commit 3ec36ac4a, workspace `runs/a101_goal11_ws_cspa`) parked a `bvbrc_msa` job (child `bvbrc_msa_3`,
+`until launched`), ran `all_vs_all`, then took the owed resume (`bvbrc_msa_5`, `until extracted`). The resume's monitor and its fetch
+of `msa.afa` worked; its extract failed with `CustodyError record_not_held:...bvbrc_msa_5...:artifact_a32d5f68...`.
+
+The record: none. `artifact_a32d5f68...` is in no table of the Store and no receipt: it is the reference the extract COMPUTED for
+the alignment product's `used` (`feature_group_ref(plan)`, the digest of `group.json` rebuilt from the plan), and `record_product`
+refuses a row that names a record the child does not hold. The plan named the references in the commission's candidate order. The
+model's launch commission named CspA first; the job's identity (handoff row's `estimates.identity`) keeps the candidates sorted,
+and the head's `resume_commission` is built from that identity, so the resume named "Cold shock protein of CSP family" first. Same
+job (the head's check compares sorted candidates), different order, different `group.json` bytes, a reference to a file that was
+never made. The `group.json` the job was given (`artifact_21441577...`) was held and passed: the parked child returned its handoff
+row closed under naming (the staged `group.json` and `sequences.fasta` and the reply), and the resume commission passed all of them
+back (`_continued`). Head returns and custody were not the cause.
+
+Fix (`bvbrc_msa_alignment.py`): the plan is a function of the job's identity (`_plan` sorts the candidates), so a launch and any
+later commission of the same job plan the same references and the same group file; and the extract names in `used` the group file
+the handoff row staged (`detail.input_refs['group.json']`), the job's own fact, not a recomputed reference. Every continuation reads
+only what the job's rows name and what the commission passes. The other two: `bvbrc_blast`'s continuation reads the query record and
+its sequence artifact (passed with the query) and the rows; nothing it writes names a recomputed input (the real run resumed a
+parked BLAST, `bvbrc_blast_2`, to its graded result). `bvbrc_metacats`'s job identity is the staged group file itself, the resume
+selects the held alignment whose group file has that reference, and its extract's `used` is that same reference; the alignment and
+its sheet come with the alignment's source, the derived alignment and group file with the handoff row.
+
+Direct check (not a real run; `runs/a101_msa_resume_check_2`, script in the session scratchpad): on a copy of `runs/a101_goal11_ws_cspa`,
+the head's `internal_summary` over a reader of its receipts, `resume_action` and `msg_to_child` give the resume commission the run
+made (record fields equal, 9 records), and its custody holds the handoff row, the staged `group.json` and `sequences.fasta` and the
+reply; no record a passed row names is left out. The child's extract run again over the child's real `Custody` and `ScopedStore`
+(the fetch takes over the closure the crashed attempt wrote; a stub route raises if touched, none was): the old reference
+`artifact_a32d5f68...` is not held; with the fix the extract completes (64 sequences, 70 columns, 4 candidates) and the product's
+`used` is the target's sequence, the search source and `artifact_21441577...`. On a copy of `runs/a101_goal7_ws_reca` (a BLAST parked
+and never resumed) the owed resume is `bvbrc_blast` `until extracted`; its custody (4 records) holds the handoff row, the staged
+`query.fasta` and the reply, nothing missing. Import of the head's subtree: 5 bindings.
 
 ## What the head's credit does with what is returned
 

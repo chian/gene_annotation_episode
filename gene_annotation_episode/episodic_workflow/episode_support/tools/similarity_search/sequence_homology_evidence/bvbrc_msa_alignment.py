@@ -123,8 +123,12 @@ def field_problems(request, commission):
 
 
 def _plan(store, request, commission):
+    """The plan of the job of ``commission``: a function of the job's identity (the target, the search, the candidates
+    SORTED, ``per_candidate``), never of the order a commission names the candidates in. A parked job is resumed by a
+    commission built from that identity (the head's ``resume_commission``), so the continuation plans exactly the job
+    the launch planned, and the group file it names is the one the launch staged."""
     rows = search_rows(store, {'subject_refs': [commission['query_ref']]}, commission['search_ref'])
-    return plan_rows(rows, commission['candidates'], request['per_candidate'])
+    return plan_rows(rows, sorted(commission['candidates']), request['per_candidate'])
 
 
 def feature_group_bytes(plan):
@@ -218,9 +222,10 @@ def extract(ctx, handoff_ref, request, commission):
                     query_selected_length=number(sheet['alignment']['target_length'])),
                 'dependencies': [target_ref, reference['id']]}, origin='tool')['id'])
         sequence_ref = store.get(target_ref)['sequence_ref']
+        # the group file the job was given: the one its handoff row staged (held, passed back with the row on a resume)
         product = record_product(
             store, artifact_ref=result_ref, kind=PRODUCT_KIND, generated_by=handoff_ref,
-            used=[sequence_ref, commission['search_ref'], feature_group_ref(plan)],
+            used=[sequence_ref, commission['search_ref'], store.get(handoff_ref)['detail']['input_refs'][GROUP_FILE]],
             settings=settings_of(commission['candidates'], request['per_candidate']),
             locations=[{'service': 'bvbrc_workspace', 'path': path}])
         grading_product = record_grading_product(store, grading_ref=grading_ref, grading=grading, provider=PROVIDER,
