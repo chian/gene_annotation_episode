@@ -14,12 +14,17 @@ declaration; everything that differs between episodes is a parameter.
   learned shares are on: the sha256 digest of the canonical credit definition record (what credit means) and the
   episode's ceiling version (what its ``ceiling`` means, which is code). The estimate ledger keeps only the rows of
   one definition together (``ForecastParameters.definition``).
+* ``forecast_definitions(credit_definition, ceiling_versions)`` is the same name per action:
+  ``{action type: forecast_definition(credit_definition, version)}`` for ``ceiling_versions`` ``{action type: version}``
+  (each action's own ceiling version), so changing one action's ceiling changes only that action's definition and the
+  ledger keeps every other action's history.
 * ``open_yield_controller(kind, *, epoch, initial_credit, parameters, cutoff=None, maximum_credit=None, target=None,
   definition=None)`` opens the matching ``yield_control`` controller: ``'accumulation'`` (credit without a declared limit),
   ``'bounded_quality'`` (a quality credit whose definition declares ``maximum_credit``), ``'completion'``
   (credit toward the commission's finite ``target``) or ``'forecast'`` (credit whose every offered action declares a
   ceiling: ``ForecastYieldController``; its ``parameters`` are ``ForecastParameters`` (exchange rate, forgetting, job
-  kinds) and it requires ``definition`` (``forecast_definition``; never in the declared parameters), it takes no
+  kinds) and it requires ``definition`` (``forecast_definitions`` per action, or ``forecast_definition`` for every
+  action; never in the declared parameters), it takes no
   ``cutoff``: its cost of one more unit is the expected seconds of each
   action times the exchange rate). An operand the kind does not take, a missing one, or any
   other kind raises. The controller is returned unchanged: it is a ``method_loop`` Controller, so
@@ -71,6 +76,17 @@ def forecast_definition(credit_definition, ceiling_version):
     return 'credit_sha256:' + digest + '|ceiling:' + ceiling_version
 
 
+def forecast_definitions(credit_definition, ceiling_versions):
+    """The definition of credit and ceiling each action's shares are on (see the module docstring)."""
+    if not isinstance(ceiling_versions, Mapping) or not ceiling_versions:
+        raise ValueError('forecast_definitions_require_the_ceiling_version_of_each_action')
+    for action_type in ceiling_versions:
+        if type(action_type) is not str or not action_type:
+            raise ValueError('forecast_definitions_require_action_types')
+    return {action_type: forecast_definition(credit_definition, version)
+            for action_type, version in ceiling_versions.items()}
+
+
 def _parameters(parameters):
     if isinstance(parameters, YieldParameters):
         return parameters
@@ -110,4 +126,4 @@ def open_yield_controller(kind, *, epoch, initial_credit, parameters, cutoff=Non
     raise ValueError('yield_kind_not_available:' + repr(kind))
 
 
-__all__ = ['KINDS', 'checked_yield_declaration', 'forecast_definition', 'open_yield_controller']
+__all__ = ['KINDS', 'checked_yield_declaration', 'forecast_definition', 'forecast_definitions', 'open_yield_controller']

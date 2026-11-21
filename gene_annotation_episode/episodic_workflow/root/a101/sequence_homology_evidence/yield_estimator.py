@@ -16,18 +16,15 @@ kind ``forecast``) and ``open_yield_controller``, which takes the declaration's 
 what ``read_from_parent`` produced (the task key), never the assignment; the declarations are this episode's settings
 (``settings['yield_bindings']``).
 
-The definition the learned shares are on (``forecast_definition``: the digest of the credit definition record and
-``CEILING_VERSION``) is handed to the controller, and the estimate ledger's history of an action is only the rows recorded
-under the same definition. ``CEILING_VERSION`` names what ``credit.ceiling`` (and the library's ``test_ceiling``,
-``msa_test_ceiling``, ``metacats_test_ceiling`` and ``cluster_test_ceiling`` it calls) means: change it whenever a ceiling's
-derivation changes, so shares learned against the old ceilings are not used against the new ones. (It belongs beside ``ceiling`` in ``credit.py``; it is here until that
-file can be edited.)"""
+The definition each action's learned shares are on (``forecast_definitions``: per action type, the digest of the credit
+definition record and that action's own ceiling version, ``credit.CEILING_VERSIONS``) is handed to the controller, and
+the estimate ledger's shares of an action are only the rows recorded under that action's definition; its measured
+seconds are every row of the action, whatever the definition. Changing one action's ceiling therefore discards only that
+action's shares."""
 from gene_annotation_episode.episodic_workflow.episode_support.configuration.yield_declarations import (
-    checked_yield_declaration, forecast_definition, open_yield_controller)
+    checked_yield_declaration, forecast_definitions, open_yield_controller)
 
-from .credit import A101DifferentialCredit
-
-CEILING_VERSION = 'a101_ceiling_v2'
+from .credit import CEILING_VERSIONS, A101DifferentialCredit
 
 
 def yield_controller(initial_credit, settings, parent_input):
@@ -37,4 +34,4 @@ def yield_controller(initial_credit, settings, parent_input):
                                             yield_method=projector.yield_method, code_prefix='scientific')
     return open_yield_controller(declaration['kind'], epoch='sequence_homology_evidence', initial_credit=initial_credit,
                                  parameters=declaration['parameters'],
-                                 definition=forecast_definition(projector.as_record(), CEILING_VERSION))
+                                 definition=forecast_definitions(projector.as_record(), CEILING_VERSIONS))

@@ -290,6 +290,19 @@ def best_arguments(summary, records, action_type, ctx):
     return None
 
 
+# What ``ceiling`` (and the library's ``test_ceiling``, ``msa_test_ceiling``, ``metacats_test_ceiling`` and
+# ``cluster_test_ceiling`` it calls) means for each action type the head offers. The forecast controller learns each
+# action's share of its ceiling only from ledger rows recorded under the same credit definition and the same version of
+# that action's ceiling (``yield_estimator.py``), so change an action's version whenever its ceiling's derivation changes,
+# and only that action's. Every offered action has one; an action without one raises
+# (``forecast_definition_missing_for_action``). ``all_vs_all`` v2: the cluster test's vertex bound minus the dataset best
+# (``cluster_test_ceiling``, commit b95a11691); every other action keeps the derivation it had under v1.
+CEILING_VERSIONS = {'reason': 'a101_ceiling_v1', 'execute_selected_tool': 'a101_ceiling_v1',
+                    'pairwise_blast': 'a101_ceiling_v1', 'hmmer_profile_scan': 'a101_ceiling_v1',
+                    'bvbrc_blast': 'a101_ceiling_v1', 'bvbrc_msa': 'a101_ceiling_v1',
+                    'bvbrc_metacats': 'a101_ceiling_v1', 'all_vs_all': 'a101_ceiling_v2'}
+
+
 def ceiling(summary, records, action_type, arguments, ctx):
     """The most the head's credit can rise if the action ``action_type`` with ``arguments`` is the next unit (with
     ``arguments`` ``None``: the most over every arguments the action type can take now).

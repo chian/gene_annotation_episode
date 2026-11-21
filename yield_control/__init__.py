@@ -958,9 +958,10 @@ class CompletionYieldController:
 #   estimator update faster"): the latest own unit of k has weight 1 and each earlier one half the weight of the one
 #   after it (half-life: one unit), so this episode's own fraction (own mean gain when UNBOUNDED) is that
 #   recency-weighted mean, not the plain mean. The ledger's half and the equal weighting of ledger and own history
-#   are unchanged. The ledger's history of k is only its rows recorded under the same definition of credit and
-#   ceiling (``ForecastParameters.definition``): a share learned under another definition is on another scale and is
-#   not used; with no such row the ledger has no half.
+#   are unchanged. The ledger's shares of k are only its rows recorded under k's own definition of credit and
+#   ceiling (``ForecastParameters.definition_of(k)``: the credit's definition and k's own ceiling version, so changing
+#   one action's ceiling discards only that action's shares): a share learned under another definition is on another
+#   scale and is not used; with no such row the ledger has no half.
 # * an UNBOUNDED action: there is no ceiling to scale, so the forecast is the typical gain of k, by the same rule: the
 #   mean of the ledger's mean gain and this episode's recency-weighted mean gain, or the one that exists. With no unit of k anywhere
 #   the forecast is unknown, and an unknown forecast never lets the episode stop (as in the three controllers,
@@ -968,7 +969,8 @@ class CompletionYieldController:
 # * the cost of ``a`` is its expected seconds: for an action type of ``job_kinds`` whose ledger kind has measured
 #   jobs, the median job duration plus the median seconds the model took to decide; otherwise the median measured
 #   wall seconds of the units of k (ledger history and this episode); with none, the median unit seconds of this
-#   episode so far; with none, unknown (cost 0 in the stop rule).
+#   episode so far; with none, unknown (cost 0 in the stop rule). Seconds are not credit: the ledger's seconds of k
+#   (unit and decision seconds) are every resolved row of k, whatever definition it was recorded under.
 # * the stop rule: stop when no offered action's forecast exceeds expected seconds x ``exchange_rate``.
 # * the per-action gate (``method_loop.episode_type``): the same threshold also refuses the model's chosen action
 #   before it runs when its forecast does not exceed it (the owner: "since the numbers for credit are very similar, you
@@ -1008,14 +1010,17 @@ class ForecastParameters:
     ``ForgettingPolicy`` (rows past ``history_seconds`` are dropped, the rest halve every
     ``history_half_life_seconds``). ``job_kinds``: action type -> the prefix of the ledger kinds of the jobs that
     action launches, whose measured durations are its expected seconds. ``definition``: the name of the definition of
-    credit and ceiling the shares are on (the episode derives it: a digest of its credit definition record and its
-    ceiling version); the controller hands it to the ledger, which writes it on every forecast row and reads as history
-    only the rows written under the same definition (a share learned under another credit or ceiling is on another
+    credit and ceiling the shares of each action are on (the episode derives it: a digest of its credit definition
+    record and the action's ceiling version), as a mapping action type -> name, or one name for every action of an
+    episode whose ceilings have one version together. ``definition_of(action_type)`` is that action's name; an action
+    the mapping does not name raises ``forecast_definition_missing_for_action``. The controller hands
+    ``definition_of`` to the ledger, which writes each action's name on its forecast rows and reads as that action's
+    shares only the rows written under the same name (a share learned under another credit or ceiling is on another
     scale). Required: there is no default."""
     exchange_rate: float
     forget_old_rows: bool
     job_kinds: Mapping
-    definition: str
+    definition: str | Mapping
 
     def __post_init__(self):
         rate = _finite_number("exchange_rate", self.exchange_rate)
@@ -1027,13 +1032,27 @@ class ForecastParameters:
                 or any(type(key) is not str or type(value) is not str or not key or not value
                        for key, value in self.job_kinds.items())):
             raise ValueError("job_kinds_must_map_action_types_to_ledger_kind_prefixes")
-        if type(self.definition) is not str or not self.definition:
+        if isinstance(self.definition, Mapping):
+            if not self.definition or any(type(key) is not str or type(value) is not str or not key or not value
+                                          for key, value in self.definition.items()):
+                raise ValueError("forecast_definition_must_map_action_types_to_names")
+            object.__setattr__(self, "definition", dict(self.definition))
+        elif type(self.definition) is not str or not self.definition:
             raise ValueError("forecast_definition_required")
         object.__setattr__(self, "job_kinds", dict(self.job_kinds))
 
+    def definition_of(self, action_type):
+        """The name of the definition of credit and ceiling the shares of ``action_type`` are on."""
+        if type(self.definition) is str:
+            return self.definition
+        if action_type not in self.definition:
+            raise ValueError(f"forecast_definition_missing_for_action:{action_type}")
+        return self.definition[action_type]
+
     def as_record(self):
+        definition = self.definition if type(self.definition) is str else dict(self.definition)
         return {"exchange_rate": self.exchange_rate, "forget_old_rows": self.forget_old_rows,
-                "job_kinds": dict(self.job_kinds), "definition": self.definition}
+                "job_kinds": dict(self.job_kinds), "definition": definition}
 
 
 def _forecast_parameters(value):
@@ -1082,8 +1101,9 @@ def _recent(values):
 def forecast_actions(parameters, observations, histories, offered):
     """One row per offered action (``{action type: ceiling number or 'unbounded'}``), from this episode's own
     ``observations`` (each ``{'action_type', 'ceiling', 'gain', 'unit_seconds', 'decision_seconds'}``) and the
-    ledger's ``histories`` (``{action type: {'rows': [{'ceiling', 'gain', 'seconds', 'decision_seconds', 'weight'}],
-    'job_seconds': [seconds]}}``): ``{'action_type', 'ceiling', 'forecast_gain' (``None``: unknown),
+    ledger's ``histories`` (``{action type: {'rows': [{'ceiling', 'gain', 'weight'}], 'seconds': [{'seconds',
+    'decision_seconds'}], 'job_seconds': [seconds]}}``: ``rows`` the shares, of the action's own definition only;
+    ``seconds`` every resolved row of the kind whatever its definition): ``{'action_type', 'ceiling', 'forecast_gain' (``None``: unknown),
     'expected_seconds' (``None``: unknown), 'seconds_basis', 'threshold', 'worth'}``. The formulas are described
     above."""
     decision_pool = [item["decision_seconds"] for item in observations]
@@ -1112,8 +1132,8 @@ def forecast_actions(parameters, observations, histories, offered):
                 [math.fsum(w * g for w, g in mine) / math.fsum(w for w, _ in mine)] if mine else [])
             forecast = math.fsum(means) / len(means) if means else None
         decision = (_median(decision_pool) if decision_pool
-                    else _median([row["decision_seconds"] for row in history["rows"]]) if history["rows"] else None)
-        action_seconds = [row["seconds"] for row in history["rows"]] + [item["unit_seconds"] for item in own]
+                    else _median([row["decision_seconds"] for row in history["seconds"]]) if history["seconds"] else None)
+        action_seconds = [row["seconds"] for row in history["seconds"]] + [item["unit_seconds"] for item in own]
         if history["job_seconds"]:
             seconds = _median(history["job_seconds"]) + (0.0 if decision is None else decision)
             basis = "ledger_job_duration_plus_decision"
@@ -1205,11 +1225,12 @@ class ForecastYieldController:
 
     def attach(self, ledger):
         """The runner's read access to the estimate ledger: ``ledger.history(action_type, job_prefix, forget)``. The
-        controller hands the ledger its definition (``ledger.define``), so the ledger writes it on every forecast row
-        and reads as history only the rows of the same definition."""
+        controller hands the ledger each action's definition (``ledger.define(settings.definition_of)``), so the ledger
+        writes an action's definition on its forecast rows and reads as that action's shares only the rows of the same
+        definition."""
         if self._ledger is not None:
             raise RuntimeError("forecast_controller_already_has_a_ledger")
-        ledger.define(self.settings.definition)
+        ledger.define(self.settings.definition_of)
         self._ledger = ledger
 
     def _histories(self, offered):
