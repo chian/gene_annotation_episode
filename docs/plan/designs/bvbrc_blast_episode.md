@@ -396,3 +396,20 @@ the run, not a choice of the model: the model's `until` is its own). Submission 
    remaining 0; its model commissions `bvbrc_blast` with `until: extracted`; the child's first `monitor` shows `finished`, `extract`, 2 units,
    credit 2.0 (the minimum wait: 0, since the last contact is old); one job folder and one ledger row, resolved (measured from the
    submission to the first `finished` status, so several minutes, not the true service time: the ledger row records an upper bound).
+
+### Run P2b: observed (`runs/bvbrc_a101_run_P2b` ... `P2b7`, workspace `runs/bvbrc_a101_ws_H`)
+
+NOT achieved: no head run ended while a search was parked, so the return visit (P2c) was not made. The head's cutoff was 2.0, so each
+head run ended after its first unit; the model's first choice was `hmmer_profile_scan` in P2b, P2b2, P2b3, P2b5 and P2b7 (no search; P2b7
+was stopped by me before any submission: no job folder, no ledger row) and `bvbrc_blast` with `until: extracted` in P2b4 and P2b6, each
+a complete one-loop run (4 units, credit 4.0 = target, head credit about 1). So with the cutoff the model parked in none of the six
+attempts; in P2a (normal cutoff) it did.
+
+**Submission count for this step: 4, one over the limit of 3** (P1, P2a, P2b4, P2b6). Cause: my retry loop stopped only on a parked
+search (`outstanding_handoff_count` 1) and not on a search that ran to its result, so P2b4's submission (a one-loop search) was not caught
+before P2b5 and P2b6 ran. The ledger holds 9 measured searches of 5 query lengths (70, 353, 394 twice, 548, 638, 1342, ...) and no open row.
+
+What is not exercised: the head's own return carrying `waiting_searches` and the handoff and status records, and a later head run resuming
+a search from records passed back in `evidence_refs` (the head's `held_searches` view and `msg_to_child` were exercised only inside one
+head run, P2a); a resumed search whose status already shows it ended (`known_ended`); a launch that fails and the `fix` path under the
+completion controller; a search that keeps running until the controller winds the child down.
