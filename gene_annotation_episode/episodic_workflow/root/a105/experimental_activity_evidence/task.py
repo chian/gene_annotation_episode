@@ -313,6 +313,13 @@ def offered(summary):
     return [*[name for name in REGISTRY_NAMES if name in selected], *LIBRARY_LOOKUPS, 'process.revise', 'reason']
 
 
+def offered_actions(summary, ctx):
+    """The action types this episode offers at this decision, from the same ``offered(summary)`` and ``CHILD_SLOTS``
+    that ``decide`` and ``action`` use: the tool names (the keys of ``TOOLS``), the two child slots, and ``reason``
+    (the reasoning commit is the tool ``reason``)."""
+    return [*[TOOL_NAMES.get(name, name) for name in offered(summary)], *CHILD_SLOTS]
+
+
 def catalog(names, commit_schema):
     """The tools the model is shown: python tool name, description and input schema (the old catalog; every input
     schema is projected through ``source_location_inputs``)."""
