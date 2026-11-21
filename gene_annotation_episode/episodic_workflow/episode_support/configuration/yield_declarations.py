@@ -10,12 +10,17 @@ declaration; everything that differs between episodes is a parameter.
   (``credit_definition``: the episode's credit projector record) and this estimator kind (``yield_method``: the
   kind the projector's credit requires). It raises ``ValueError('<code_prefix>_yield_binding_missing_for_task:...')``,
   ``..._yield_credit_definition_mismatch:...`` or ``..._yield_method_credit_mismatch:...``.
-* ``open_yield_controller(kind, *, epoch, initial_credit, parameters, cutoff=None, maximum_credit=None, target=None)``
-  opens the matching ``yield_control`` controller: ``'accumulation'`` (credit without a declared limit),
+* ``forecast_definition(credit_definition, ceiling_version)`` is the name of the definition a forecast controller's
+  learned shares are on: the sha256 digest of the canonical credit definition record (what credit means) and the
+  episode's ceiling version (what its ``ceiling`` means, which is code). The estimate ledger keeps only the rows of
+  one definition together (``ForecastParameters.definition``).
+* ``open_yield_controller(kind, *, epoch, initial_credit, parameters, cutoff=None, maximum_credit=None, target=None,
+  definition=None)`` opens the matching ``yield_control`` controller: ``'accumulation'`` (credit without a declared limit),
   ``'bounded_quality'`` (a quality credit whose definition declares ``maximum_credit``), ``'completion'``
   (credit toward the commission's finite ``target``) or ``'forecast'`` (credit whose every offered action declares a
-  ceiling: ``ForecastYieldController``; its ``parameters`` are ``ForecastParameters`` (prior strength cap, exchange
-  rate, forgetting, job kinds), it takes no ``cutoff``: its cost of one more unit is the expected seconds of each
+  ceiling: ``ForecastYieldController``; its ``parameters`` are ``ForecastParameters`` (exchange rate, forgetting, job
+  kinds) and it requires ``definition`` (``forecast_definition``; never in the declared parameters), it takes no
+  ``cutoff``: its cost of one more unit is the expected seconds of each
   action times the exchange rate). An operand the kind does not take, a missing one, or any
   other kind raises. The controller is returned unchanged: it is a ``method_loop`` Controller, so
   ``build_controller`` returns it directly.
@@ -23,6 +28,7 @@ declaration; everything that differs between episodes is a parameter.
 from __future__ import annotations
 
 from collections.abc import Mapping
+import hashlib
 
 from method_loop.jsonvalue import canonical
 
@@ -55,6 +61,16 @@ def checked_yield_declaration(declarations, task, *, credit_definition, yield_me
     return declaration
 
 
+def forecast_definition(credit_definition, ceiling_version):
+    """The definition of credit and ceiling a forecast controller's shares are on (see the module docstring)."""
+    if not isinstance(credit_definition, Mapping) or not credit_definition:
+        raise ValueError('forecast_definition_requires_the_credit_definition_record')
+    if type(ceiling_version) is not str or not ceiling_version:
+        raise ValueError('forecast_definition_requires_the_ceiling_version')
+    digest = hashlib.sha256(canonical(credit_definition).encode('utf-8')).hexdigest()
+    return 'credit_sha256:' + digest + '|ceiling:' + ceiling_version
+
+
 def _parameters(parameters):
     if isinstance(parameters, YieldParameters):
         return parameters
@@ -63,12 +79,19 @@ def _parameters(parameters):
     return YieldParameters(**parameters)
 
 
-def open_yield_controller(kind, *, epoch, initial_credit, parameters, cutoff=None, maximum_credit=None, target=None):
+def open_yield_controller(kind, *, epoch, initial_credit, parameters, cutoff=None, maximum_credit=None, target=None,
+                          definition=None):
     """The ``yield_control`` controller of ``kind`` (see the module docstring)."""
     if kind == 'forecast':
         if cutoff is not None or maximum_credit is not None or target is not None:
             raise ValueError('forecast_yield_takes_no_cutoff_maximum_or_target')
-        return ForecastYieldController(epoch, initial_credit, ForecastParameters(**parameters))
+        if definition is None:
+            raise ValueError('forecast_yield_requires_its_definition')
+        if 'definition' in parameters:
+            raise ValueError('forecast_definition_is_derived_not_declared')
+        return ForecastYieldController(epoch, initial_credit, ForecastParameters(**parameters, definition=definition))
+    if definition is not None:
+        raise ValueError('only_the_forecast_yield_takes_a_definition')
     if cutoff is None:
         raise ValueError('yield_cutoff_required:' + str(kind))
     settings = _parameters(parameters)
@@ -87,4 +110,4 @@ def open_yield_controller(kind, *, epoch, initial_credit, parameters, cutoff=Non
     raise ValueError('yield_kind_not_available:' + repr(kind))
 
 
-__all__ = ['KINDS', 'checked_yield_declaration', 'open_yield_controller']
+__all__ = ['KINDS', 'checked_yield_declaration', 'forecast_definition', 'open_yield_controller']

@@ -13,6 +13,13 @@ so the history of a kind carries over to every later run of the same episode. Th
 recorded in the run journal the first time it is asked for in an Episode (like a clock point), so a resumed run, and
 every replay of a decision, sees the history it first saw, whatever the ledger holds by then. The rows of this
 Episode's own units are left out of it (they enter the controller as its own observations).
+
+The definition: the forecast controller hands the ledger, once (``define``), the name of the definition of credit and
+ceiling its shares are on (``ForecastParameters.definition``). Every forecast row ``expect`` writes records it, and
+``history`` reads only the resolved rows whose recorded definition is the same; a row that records none (written before
+definitions were recorded) or another one is not part of any history, since a share learned under another credit or
+ceiling is on another scale. Writing or reading without a definition raises. The job durations (``job_seconds``, the
+service jobs' own rows) are seconds, not credit, and are read whatever the definition.
 """
 from __future__ import annotations
 
@@ -33,6 +40,20 @@ class ForecastLedger:
     def __init__(self, run_services, user, recorder, *, episode_id, binding_path):
         self._services, self._user, self._recorder = run_services, user, recorder
         self._episode_id, self._binding_path = episode_id, binding_path
+        self._definition = None
+
+    def define(self, definition):
+        """The definition of credit and ceiling this Episode's forecasts are on; given once, by the controller."""
+        if type(definition) is not str or not definition:
+            raise ValueError('forecast_ledger_definition_required')
+        if self._definition is not None:
+            raise RuntimeError('forecast_ledger_already_has_a_definition')
+        self._definition = definition
+
+    def _defined(self):
+        if self._definition is None:
+            raise RuntimeError('forecast_ledger_has_no_definition')
+        return self._definition
 
     def _table(self):
         return self._services.service('estimate_table', self._user)
@@ -46,12 +67,14 @@ class ForecastLedger:
     # -- history: read -----------------------------------------------------------------------------------------
     def history(self, action_type, job_prefix, forget):
         """The recorded history of ``action_type`` for the controller: ``{'rows': [{'ceiling', 'gain', 'seconds',
-        'decision_seconds', 'weight'}], 'job_seconds': [seconds]}``; ``job_prefix`` (or ``None``) names the ledger
-        kinds of the jobs the action launches and ``forget`` weights the rows by the table's forgetting policy."""
+        'decision_seconds', 'weight'}], 'job_seconds': [seconds]}``: ``rows`` only those recorded under this Episode's
+        definition; ``job_prefix`` (or ``None``) names the ledger kinds of the jobs the action launches and ``forget``
+        weights the rows by the table's forgetting policy."""
         name = 'forecast_history.' + action_type
-        return self._recorder.recorded(name, lambda: self._read(action_type, job_prefix, forget))
+        definition = self._defined()
+        return self._recorder.recorded(name, lambda: self._read(action_type, job_prefix, forget, definition))
 
-    def _read(self, action_type, job_prefix, forget):
+    def _read(self, action_type, job_prefix, forget, definition):
         table = self._table()
         now = datetime.now(timezone.utc).timestamp()
         policy = table.policy()
@@ -66,7 +89,8 @@ class ForecastLedger:
         own = KEY_PREFIX + self._episode_id + ':'
         rows = []
         for row in table.rows(self.kind(action_type), ROWS_LIMIT):
-            if row['actual'] is None or row['key'].startswith(own) or weight(row) is None:
+            if (row['actual'] is None or row['key'].startswith(own) or row['expected'].get('definition') != definition
+                    or weight(row) is None):
                 continue
             actual, expected = row['actual'], row['expected']
             rows.append({'ceiling': expected['ceiling'], 'gain': actual['gain'], 'seconds': actual['duration_seconds'],
@@ -83,7 +107,8 @@ class ForecastLedger:
     # -- the unit's expectation and resolution: written by the runner only ------------------------------------
     def expect(self, position, action_type, row, at):
         """Record, before unit ``position`` runs, what the controller forecast for its action (``row`` of
-        ``forecast_actions``). A forecast that is unknown is written as a gain of 0 with ``forecast`` null."""
+        ``forecast_actions``), with the definition it was made under. A forecast that is unknown is written as a gain
+        of 0 with ``forecast`` null."""
         forecast, ceiling = row['forecast_gain'], row['ceiling']
         value = 0.0 if forecast is None else forecast
         upper = value if ceiling == UNBOUNDED_TEXT else ceiling
@@ -91,7 +116,7 @@ class ForecastLedger:
             'gain': {'value': value, 'lower': 0.0, 'upper': upper},
             'cost': 0.0 if row['expected_seconds'] is None else row['expected_seconds'],
             'ceiling': ceiling, 'forecast': forecast, 'expected_seconds': row['expected_seconds'],
-            'seconds_basis': row['seconds_basis']}, key=self.key(position), at=at)
+            'seconds_basis': row['seconds_basis'], 'definition': self._defined()}, key=self.key(position), at=at)
 
     def resolve(self, position, rise, unit_seconds, decision_seconds, at):
         """Record what unit ``position`` obtained: the rise of the credit and its measured seconds."""

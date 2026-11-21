@@ -14,11 +14,20 @@ The controller is opened through the library's ``checked_yield_declaration`` (th
 kind ``forecast``) and ``open_yield_controller``, which takes the declaration's parameters: ``exchange_rate``,
 ``forget_old_rows`` and ``job_kinds`` (the values and their reasons are in the design note). It reads
 what ``read_from_parent`` produced (the task key), never the assignment; the declarations are this episode's settings
-(``settings['yield_bindings']``)."""
+(``settings['yield_bindings']``).
+
+The definition the learned shares are on (``forecast_definition``: the digest of the credit definition record and
+``CEILING_VERSION``) is handed to the controller, and the estimate ledger's history of an action is only the rows recorded
+under the same definition. ``CEILING_VERSION`` names what ``credit.ceiling`` (and the library's ``test_ceiling`` and
+``msa_test_ceiling`` it calls) means: change it whenever a ceiling's derivation changes, so shares learned against the
+old ceilings are not used against the new ones. (It belongs beside ``ceiling`` in ``credit.py``; it is here until that
+file can be edited.)"""
 from gene_annotation_episode.episodic_workflow.episode_support.configuration.yield_declarations import (
-    checked_yield_declaration, open_yield_controller)
+    checked_yield_declaration, forecast_definition, open_yield_controller)
 
 from .credit import A101DifferentialCredit
+
+CEILING_VERSION = 'a101_ceiling_v1'
 
 
 def yield_controller(initial_credit, settings, parent_input):
@@ -27,4 +36,5 @@ def yield_controller(initial_credit, settings, parent_input):
                                             credit_definition=projector.as_record(),
                                             yield_method=projector.yield_method, code_prefix='scientific')
     return open_yield_controller(declaration['kind'], epoch='sequence_homology_evidence', initial_credit=initial_credit,
-                                 parameters=declaration['parameters'])
+                                 parameters=declaration['parameters'],
+                                 definition=forecast_definition(projector.as_record(), CEILING_VERSION))

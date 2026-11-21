@@ -22,6 +22,16 @@ formula enters only through `credit.ceiling` (the most the credit can rise if an
   forgotten) and this episode's own units of `k` as a whole each weigh one half: `m` = the mean of the ledger's mean share
   and this episode's mean share; with only one of them, that one; with neither, 1/2. Ceiling 0 forecasts 0. A unit that
   lost credit raises (`forecast_cannot_learn_a_negative_rise`): a share of a ceiling cannot be negative.
+- Same definition only (2026-11-21): the ledger's history of `k` is only the rows recorded under the same definition of credit
+  and ceiling as this episode's (parameter `definition`, below). A share learned under another credit or another ceiling is on
+  another scale and is not used; rows that record no definition (all rows written before this rule) are not used. With no
+  comparable row the ledger has no half, so the share is this episode's own (or 1/2 with no own unit either), exactly as for a
+  kind with no history. The job durations (`job_seconds`, the service jobs' own ledger rows) are seconds, not credit, and are
+  read whatever the definition; a unit's measured seconds are on the same forecast rows and so are used only with them. Found
+  in a real run: `runs/a101_goal3_ws_cspa/model_calls_resume` call-00001 refused the first alignment (forecast 0.889 = share
+  0.038 x ceiling 23.3 < threshold 1.035) because the share came from three `bvbrc_msa` rows of an earlier run whose ceilings
+  (30, 29.3, 55.4) were of an earlier derivation; recomputed under the rule (direct check, not a real run): no comparable row,
+  forecast 0.5 x 23.3 = 11.67 > threshold 1.095 (expected seconds: this episode's median unit, 168.4 s), worth it.
 - Recency within this episode's own units (owner, 2026-11-21: "the yield estimator must learn just like the accumulation
   estimator from past experience after the first round. So after nothing new is added a second time, the yield estimator
   should be very low for that"; "why you can't just threshold better or have the yield estimator update faster"): this
@@ -56,6 +66,7 @@ formula enters only through `credit.ceiling` (the most the credit can rise if an
 | `exchange_rate` | 0.0065 credit per second | chosen from the replay of runs/a101_conserved_ws_C2 (runs/forecast_direct_ws_C2_v5, v5_fine) with the per-action gate and recency weighting: the one rate range that runs units 0 to 2, refuses 3, 4, 7 and 6 and wastes at most unit 5, with no ledger history and with one pass of history, is 0.00641 to 0.00654 (below it unit 6 runs, above it the one-pass history refuses unit 2). The window is narrow; see the section on the gate |
 | `forget_old_rows` | true | weight ledger rows by the estimate table's `ForgettingPolicy` (dropped after `history_seconds` = 90 days, half every `history_half_life_seconds` = 14 days), so a changed service or code is learned |
 | `job_kinds` | none (`{}`) | a job action's cost is its measured unit seconds (launch, monitoring and extraction included); the service's job duration alone undercounted it (about 27 s against 190 s for an MSA unit in C2) |
+| `definition` | derived, never declared: `forecast_definition(A101DifferentialCredit().as_record(), CEILING_VERSION)` = `credit_sha256:<sha256 of the canonical credit definition record>\|ceiling:a101_ceiling_v1` | names the scale the shares are on. The credit's meaning is its definition record (already checked against the declaration's `credit_definition`); the ceiling's meaning is code, so it is a version string (`HEAD/yield_estimator.py` `CEILING_VERSION`, to move beside `ceiling` in `credit.py`) that must change whenever a ceiling's derivation changes. Required: `ForecastParameters` has no default, `open_yield_controller` raises `forecast_yield_requires_its_definition` without it and `forecast_definition_is_derived_not_declared` if the declared parameters carry one; the ledger raises `forecast_ledger_has_no_definition` if asked or written before the controller defined it |
 
 Declaration to put in the continuation settings of the head (the other agent edits `runs/` settings; this is the exact entry):
 `yield_bindings["A101:a101_native_sequence_correspondence"] = {"kind": "forecast", "parameters": {
@@ -87,6 +98,12 @@ Kind `<binding path>:<action type>`, key `forecast:<episode id>:<position>`. Bef
 `forecast: null`), `cost` = expected seconds, plus `ceiling`, `forecast`, `expected_seconds`, `seconds_basis`. After the unit, `resolve`:
 `gain` = rise, `cost` = `duration_seconds` = the unit's seconds, `decision_seconds`, outcome `finished`. A unit that fails stays open
 and is never part of a history. Only the runner writes; no tool or model is handed the table.
+Every `expect` also writes `definition` (the controller's `ForecastParameters.definition`, handed to the `ForecastLedger` by
+`ForecastYieldController.attach` through `ForecastLedger.define`), and `history` reads only resolved rows whose `definition`
+equals this episode's. The history stays recorded in the journal under `forecast_history.<action type>`, so a run journaled
+before the rule, when resumed, keeps the history it first saw (the old, unfiltered one); its recorded units are replayed from
+the journal and are not expected again, but a unit that was expected and not journaled before a crash is expected again with a
+`definition` and raises `identity_conflict:expectation:...` (loud, not repaired).
 
 ## Choices made where the brief left room
 

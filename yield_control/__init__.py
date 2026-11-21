@@ -958,7 +958,9 @@ class CompletionYieldController:
 #   estimator update faster"): the latest own unit of k has weight 1 and each earlier one half the weight of the one
 #   after it (half-life: one unit), so this episode's own fraction (own mean gain when UNBOUNDED) is that
 #   recency-weighted mean, not the plain mean. The ledger's half and the equal weighting of ledger and own history
-#   are unchanged.
+#   are unchanged. The ledger's history of k is only its rows recorded under the same definition of credit and
+#   ceiling (``ForecastParameters.definition``): a share learned under another definition is on another scale and is
+#   not used; with no such row the ledger has no half.
 # * an UNBOUNDED action: there is no ceiling to scale, so the forecast is the typical gain of k, by the same rule: the
 #   mean of the ledger's mean gain and this episode's recency-weighted mean gain, or the one that exists. With no unit of k anywhere
 #   the forecast is unknown, and an unknown forecast never lets the episode stop (as in the three controllers,
@@ -1005,10 +1007,15 @@ class ForecastParameters:
     seconds times this rate. ``forget_old_rows``: weight each ledger row by the estimate table's
     ``ForgettingPolicy`` (rows past ``history_seconds`` are dropped, the rest halve every
     ``history_half_life_seconds``). ``job_kinds``: action type -> the prefix of the ledger kinds of the jobs that
-    action launches, whose measured durations are its expected seconds."""
+    action launches, whose measured durations are its expected seconds. ``definition``: the name of the definition of
+    credit and ceiling the shares are on (the episode derives it: a digest of its credit definition record and its
+    ceiling version); the controller hands it to the ledger, which writes it on every forecast row and reads as history
+    only the rows written under the same definition (a share learned under another credit or ceiling is on another
+    scale). Required: there is no default."""
     exchange_rate: float
     forget_old_rows: bool
     job_kinds: Mapping
+    definition: str
 
     def __post_init__(self):
         rate = _finite_number("exchange_rate", self.exchange_rate)
@@ -1020,11 +1027,13 @@ class ForecastParameters:
                 or any(type(key) is not str or type(value) is not str or not key or not value
                        for key, value in self.job_kinds.items())):
             raise ValueError("job_kinds_must_map_action_types_to_ledger_kind_prefixes")
+        if type(self.definition) is not str or not self.definition:
+            raise ValueError("forecast_definition_required")
         object.__setattr__(self, "job_kinds", dict(self.job_kinds))
 
     def as_record(self):
-        return {"exchange_rate": self.exchange_rate,
-                "forget_old_rows": self.forget_old_rows, "job_kinds": dict(self.job_kinds)}
+        return {"exchange_rate": self.exchange_rate, "forget_old_rows": self.forget_old_rows,
+                "job_kinds": dict(self.job_kinds), "definition": self.definition}
 
 
 def _forecast_parameters(value):
@@ -1195,9 +1204,12 @@ class ForecastYieldController:
         self._decision = ForecastDecision(False, ())
 
     def attach(self, ledger):
-        """The runner's read access to the estimate ledger: ``ledger.history(action_type, job_prefix, forget)``."""
+        """The runner's read access to the estimate ledger: ``ledger.history(action_type, job_prefix, forget)``. The
+        controller hands the ledger its definition (``ledger.define``), so the ledger writes it on every forecast row
+        and reads as history only the rows of the same definition."""
         if self._ledger is not None:
             raise RuntimeError("forecast_controller_already_has_a_ledger")
+        ledger.define(self.settings.definition)
         self._ledger = ledger
 
     def _histories(self, offered):
