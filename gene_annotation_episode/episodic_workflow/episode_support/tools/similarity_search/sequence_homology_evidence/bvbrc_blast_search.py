@@ -443,12 +443,24 @@ def launch_search(ctx, *, request, estimate, sequence_ref):
             'submitted_at': launched['submitted_at']}
 
 
+def _service_seconds(store, reply_ref):
+    """The seconds the service's own task record gives from the submission of the job to its completion (its
+    ``submit_time`` and ``completed_time``, UTC), or ``None`` when the record names no completion time. The reply of
+    the status request is the source artifact of the check row."""
+    reply = json.loads(store.get_artifact(reply_ref))
+    if not reply.get('submit_time') or not reply.get('completed_time'):
+        return None
+    return seconds_between(*(reply[name].replace(' ', 'T') + '+00:00' for name in ('submit_time', 'completed_time')))
+
+
 async def monitor_search(ctx, *, handoff_ref, wait_seconds, expected_remaining_seconds):
     """One status request of the held search after the wait (the existing wait helper). What it shows is kept as a check
     row. The estimate is updated: while the search has not ended, the model's revised expected remaining seconds are
     kept in this unit's outcome (not on the ledger, which holds one row per launch); the first request that shows the
-    search ended (or a failed request) resolves the launch's row with the duration from the submission to that
-    observation, so the next search of the kind learns from it."""
+    search ended (or a failed request) resolves the launch's row, so the next search of the kind learns from it. The
+    duration recorded is the service's own: its task record's completion time minus its submission time
+    (``_service_seconds``). The seconds from the submission to this observation are kept beside it as
+    ``observed_seconds``: they depend on when this unit asked, and are not the duration of the search."""
     table = ctx.services['estimate_table']
     handoff = search_view(ctx.store)['handoff']
     estimates = handoff['detail']['estimates']
@@ -460,7 +472,13 @@ async def monitor_search(ctx, *, handoff_ref, wait_seconds, expected_remaining_s
             _ended(table, estimates['estimate_key'], 'check_failed:' + code, seconds_between(handoff['at'], now_text()))
         return {**_failed(code, retryable, waited_seconds=checked['waited_seconds']), 'handoff_refs': []}
     if checked['state'] in ENDED_STATES:
-        _ended(table, estimates['estimate_key'], checked['state'], seconds_between(handoff['at'], checked['observed_at']))
+        observed = seconds_between(handoff['at'], checked['observed_at'])
+        measured = _service_seconds(ctx.store, checked['reply_ref'])
+        table.resolve(estimates['estimate_key'], {
+            'gain': 0.0, 'cost': 0.0, 'outcome': checked['state'], 'observed_seconds': observed,
+            'duration_seconds': observed if measured is None else measured,
+            'duration_source': 'first_status_showing_the_end' if measured is None else 'service_task_record'},
+            at=now_text())
     return {'status': 'completed', 'failure_code': None, 'retryable': False, 'state': checked['state'],
             'result_available': checked['result_available'], 'check_ref': checked['check_ref'],
             'record_refs': [checked['check_ref'], checked['reply_ref']], 'waited_seconds': checked['waited_seconds'],
