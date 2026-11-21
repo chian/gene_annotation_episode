@@ -88,6 +88,13 @@ def output_schema():
                 one('hold', reason={'type': 'string', 'enum': list(HOLD_REASONS)})]}}}
 
 
+def offered_actions(summary, ctx):
+    """The action types offered at this decision: the names of the actions in the answer schema ``decide`` sends (the
+    tool names ``submit``, ``check``, ``fetch_and_grade`` and ``hold``). The checks refuse an action the state does not
+    allow when it is chosen; it is still offered."""
+    return [option['properties']['name']['enum'][0] for option in output_schema()['properties']['action']['anyOf']]
+
+
 def decide(summary, feedback, ctx):
     fields, search = summary['fields'], summary['search']
     description = ctx.services['job_access'].read('describe', fields['resource_id'])
