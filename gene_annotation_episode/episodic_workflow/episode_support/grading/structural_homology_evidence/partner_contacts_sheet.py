@@ -63,10 +63,11 @@ CONTACT_A = 4.0
 KINDS = ('ligand', 'dna', 'rna', 'protein', 'other_polymer')
 FUNCTIONAL_KINDS = ('ligand', 'dna', 'rna')
 ADDITIVE_STATUSES = ('listed_by_biolip', 'not_listed_by_biolip', 'not_applicable')
-HIT_STATUSES = ('graded', 'no_functional_partner', 'not_asked', 'file_too_large', 'file_not_obtained', 'file_unreadable',
+HIT_STATUSES = ('graded', 'no_functional_partner', 'no_partner_in_entry', 'entry_contents_unknown', 'not_asked', 'file_too_large', 'file_not_obtained', 'file_unreadable',
                 'chain_not_found', 'chain_ambiguous', 'chain_not_protein', 'chain_entity_differs_from_rcsb',
                 'chain_too_long_for_pdb_format', 'chain_has_no_c_alpha', 'alignment_failed')
-FILE_STATUSES = ('parsed', 'too_large', 'not_obtained', 'unreadable')
+SKIPPED_FILE_STATUSES = ('no_partner_in_entry', 'entry_contents_unknown')
+FILE_STATUSES = ('parsed', 'too_large', 'not_obtained', 'unreadable', 'no_partner_in_entry', 'entry_contents_unknown')
 
 
 def _require(condition, code):
@@ -180,7 +181,7 @@ def aggregate(hit_rows):
     the keys first appear (rank order)."""
     by_product, by_partner = {}, {}
     for row in hit_rows:
-        if row['product'] is not None and row['status'] in ('graded', 'no_functional_partner'):
+        if row['product'] is not None and row['status'] in ('graded', 'no_functional_partner', 'no_partner_in_entry'):
             by_product.setdefault(row['product'], []).append(row)
         for partner in row['partners']:
             if partner['E'] is not None:
@@ -236,7 +237,10 @@ def grade_partner_contacts(search_sheet, file_rows, hit_chains, alignments, targ
               'search_model_sha256': search_sheet['model']['model_sha256'], 'contact_A': CONTACT_A,
               'kernel_scale_A': FEATURE_SCALE_A, 'residue_classes': list(CLASSES), 'absent_places': list(ABSENT_PLACES)}
     contacts = {'schema': CONTACTS_SCHEMA, 'provider': CONTACTS_PROVIDER, **common, 'additive_list': additive_list,
-                'entries_asked': len(file_rows), 'entries_parsed': sum(f['status'] == 'parsed' for f in file_rows),
+                'entries_asked': sum(f['status'] not in SKIPPED_FILE_STATUSES for f in file_rows),
+                'entries_skipped_no_partner': sum(f['status'] == 'no_partner_in_entry' for f in file_rows),
+                'entries_skipped_contents_unknown': sum(f['status'] == 'entry_contents_unknown' for f in file_rows),
+                'entries_parsed': sum(f['status'] == 'parsed' for f in file_rows),
                 'entries_too_large': sum(f['status'] == 'too_large' for f in file_rows),
                 'entries_not_obtained': sum(f['status'] == 'not_obtained' for f in file_rows),
                 'entries_unreadable': sum(f['status'] == 'unreadable' for f in file_rows),
@@ -254,5 +258,5 @@ def grade_partner_contacts(search_sheet, file_rows, hit_chains, alignments, targ
 
 
 __all__ = ['ADDITIVE_STATUSES', 'CONTACT_A', 'CONTACTS_PROVIDER', 'CONTACTS_SCHEMA', 'CONTACTS_TEST', 'FILE_STATUSES',
-           'FUNCTIONAL_KINDS', 'HIT_STATUSES', 'KINDS', 'PARTNERS_PROVIDER', 'PARTNERS_SCHEMA', 'PARTNERS_TEST', 'aggregate',
+           'FUNCTIONAL_KINDS', 'HIT_STATUSES', 'KINDS', 'SKIPPED_FILE_STATUSES', 'PARTNERS_PROVIDER', 'PARTNERS_SCHEMA', 'PARTNERS_TEST', 'aggregate',
            'asked_rows', 'grade_chain', 'grade_partner_contacts', 'partner_key', 'picture_rows', 'residue_rows']

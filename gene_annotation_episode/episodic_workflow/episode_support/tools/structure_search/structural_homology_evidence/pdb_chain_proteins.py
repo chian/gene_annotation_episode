@@ -12,7 +12,9 @@ instance is selected here by ``auth_asym_id``. For every polymer entity of the e
 (``rcsb_polymer_entity_container_identifiers.uniprot_ids``), its sequence alignments to reference databases
 (``rcsb_polymer_entity_align``: the UniProt accession and the aligned regions, which give the residues each accession covers),
 the polymer type (``entity_poly.rcsb_entity_polymer_type``), the sample sequence length and the description (kept as
-metadata; never the product), and its instances with ``auth_asym_id``, ``asym_id`` and ``entity_id``.
+metadata; never the product), and its instances with ``auth_asym_id``, ``asym_id`` and ``entity_id``; and, per ENTRY, its non-polymer entities' chemical
+component ids (``nonpolymer_entities { nonpolymer_comp { chem_comp { id } } }``, verified live 2026-11-21 on 8GMS: AGS, MG; 3PF5: MG;
+1MJC: none) which, with the polymer types of its polymer entities, are the partner metadata ``partner_contacts`` reads.
 
 THE CHAIN'S PROTEIN. A chain whose entity has no UniProt accession (an antibody, a designed protein, a peptide, nucleic acid)
 is asked and has NO product (it is not a candidate). A chimeric chain (an entity with more than one UniProt accession) keeps
@@ -51,7 +53,8 @@ QUERY = ('query($ids:[String!]!){entries(entry_ids:$ids){rcsb_id polymer_entitie
          'rcsb_polymer_entity{pdbx_description} entity_poly{rcsb_entity_polymer_type rcsb_sample_sequence_length} '
          'rcsb_polymer_entity_align{reference_database_name reference_database_accession '
          'aligned_regions{entity_beg_seq_id ref_beg_seq_id length}} '
-         'polymer_entity_instances{rcsb_polymer_entity_instance_container_identifiers{entry_id auth_asym_id asym_id entity_id}}}}}')
+         'polymer_entity_instances{rcsb_polymer_entity_instance_container_identifiers{entry_id auth_asym_id asym_id entity_id}}} '
+         'nonpolymer_entities{nonpolymer_comp{chem_comp{id}}}}}')
 
 
 def lookup_entries(entries):
@@ -90,13 +93,21 @@ def chain_record(entry, chain, entry_reply):
     """The record of the chain ``chain`` (an author chain id) of ``entry_reply`` (the RCSB entry object, or ``None`` when the
     reply did not hold the entry): ``{'entry', 'chain', 'status', 'asym_id', 'entity_id', 'polymer_type', 'sample_length',
     'description', 'accessions' (sorted), 'coverage' ({accession: residues} or ``{}``), 'accession' (the one the chain is named
-    by, or ``None``), 'chimeric'}``; ``status`` is ``accession`` (the chain has one or more UniProt accessions),
+    by, or ``None``), 'chimeric', and what the ENTRY holds as RCSB lists it (the partner metadata of ``partner_contacts``): ``entry_nonpolymer_components``
+    (the distinct chemical component ids of its non-polymer entities, sorted), ``entry_polymer_types`` (the distinct polymer types
+    of its polymer entities, sorted: ``Protein``, ``DNA``, ``RNA``, ``NA-hybrid``, ``Other``); both ``None`` when the reply did not hold the entry or the request failed); ``status`` is ``accession`` (the chain has one or more UniProt accessions),
     ``no_uniprot_accession``, ``chain_not_in_entry``, ``chain_ambiguous`` (more than one instance has the author id) or
     ``entry_not_returned``. A record that is not ``accession`` has no product."""
     blank = {'entry': entry, 'chain': chain, 'asym_id': None, 'entity_id': None, 'polymer_type': None, 'sample_length': None,
-             'description': None, 'accessions': [], 'coverage': {}, 'accession': None, 'chimeric': False}
+             'description': None, 'accessions': [], 'coverage': {}, 'accession': None, 'chimeric': False,
+             'entry_nonpolymer_components': None, 'entry_polymer_types': None}
     if entry_reply is None:
         return {**blank, 'status': 'entry_not_returned'}
+    contents = {'entry_nonpolymer_components': sorted({entity['nonpolymer_comp']['chem_comp']['id']
+                                                       for entity in entry_reply['nonpolymer_entities'] or ()}),
+                'entry_polymer_types': sorted({entity['entity_poly']['rcsb_entity_polymer_type']
+                                               for entity in entry_reply['polymer_entities']})}
+    blank = {**blank, **contents}
     found = [(entity, instance['rcsb_polymer_entity_instance_container_identifiers'])
              for entity in entry_reply['polymer_entities'] for instance in entity['polymer_entity_instances']
              if instance['rcsb_polymer_entity_instance_container_identifiers']['auth_asym_id'] == chain]

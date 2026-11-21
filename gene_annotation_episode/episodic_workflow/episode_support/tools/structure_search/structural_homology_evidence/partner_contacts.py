@@ -88,8 +88,6 @@ MAX_BYTES = 8 * 1024 * 1024
 MAX_UNPACKED_BYTES = 128 * 1024 * 1024
 # Every row of ``_atom_site`` of an assembly file has 26 columns, separated by single spaces: at least 52 bytes. So a file
 # that unpacks to at most ``MAX_UNPACKED_BYTES`` has at most this many atom rows, and so at most this many molecules.
-MIN_ATOM_ROW_BYTES = 52
-MAX_ATOMS_PER_FILE = MAX_UNPACKED_BYTES // MIN_ATOM_ROW_BYTES
 TARGET_FILE, PLAN_FILE, DRIVER_FILE = 'target.pdb', 'plan.json', 'driver.py'
 DRIVER_SOURCE = Path(inspect.getsourcefile(usalign_driver)).read_bytes()
 OWN_FAILURE_CODES = ('job_not_accepted', 'job_not_fetched', 'driver_exit_nonzero', 'alignment_report_missing', 'grading_refused')
@@ -122,15 +120,54 @@ def _choose(field, code, **detail):
     return {'field': field, 'code': code, **detail}
 
 
+def entry_contents(metadata):
+    """What each hit's ENTRY holds, from the hit metadata a search kept (``chain_service.chains``, in rank order; see
+    ``pdb_chain_proteins.chain_record``): ``{rank: {'components': the entry's non-polymer chemical component ids, 'types': its
+    polymer types} or None}`` (``None``: RCSB did not state the entry's contents: the hit was never asked or its entry was not
+    returned). A hit metadata made before the partner metadata existed has no such keys: ``KeyError``."""
+    return {rank: (None if chain['entry_polymer_types'] is None else
+                   {'components': chain['entry_nonpolymer_components'], 'types': chain['entry_polymer_types']})
+            for rank, chain in enumerate(metadata['chain_service']['chains'], 1)}
+
+
+def nucleic_kinds(types):
+    """The nucleic-acid kinds (``dna``, ``rna``) a chain of one of the polymer ``types`` of RCSB can be read as by
+    ``_nucleic_kind``: ``DNA`` -> dna, ``RNA`` -> rna, ``NA-hybrid`` -> either (a hybrid chain is read by the majority of its
+    residue names)."""
+    return sorted({kind for type_, kinds in (('DNA', ('dna',)), ('RNA', ('rna',)), ('NA-hybrid', ('dna', 'rna')))
+                   for kind in kinds if type_ in types})
+
+
+def entry_candidates(contents):
+    """The partner candidates an entry with ``contents`` can make: ``[ligand:<id>]`` for its non-additive components and
+    ``nucleic_acid:<kind>`` for its nucleic-acid kinds."""
+    return sorted(['ligand:' + name for name in contents['components'] if name not in ADDITIVES]
+                  + ['nucleic_acid:' + kind for kind in nucleic_kinds(contents['types'])])
+
+
+def possible_partners(metadata):
+    """The SET of partner candidates (keys ``ligand:<id>``, ``nucleic_acid:dna|rna``) the search's hit entries make possible:
+    the union of ``entry_candidates`` over the entries whose contents RCSB stated (the unit asks no other entry). See
+    ``differential_credit.bound_partner_test_ceiling``."""
+    return sorted({key for contents in entry_contents(metadata).values() if contents is not None
+                   for key in entry_candidates(contents)})
+
+
 def partner_search_inputs(reader):
     """``site_correspondence.search_inputs`` with, per search, ``metadata_ref`` (the held ``search_hit_metadata`` product made
-    from its result, or ``None``) and ``metadata_held``."""
+    from its result, or ``None``), ``metadata_held`` and, from the metadata when it is held, ``partner_metadata`` (the
+    metadata carries each entry's contents: False for a search graded before it did) and ``possible_partners``."""
     held = site_correspondence.search_inputs(reader)
     metadata = {tuple(row['used']): row for row in products(reader, foldseek_search.METADATA_KIND)}
     for search in held.values():
         row = metadata.get((search['result_ref'],))
         search['metadata_ref'] = None if row is None else row['artifact_ref']
         search['metadata_held'] = row is not None and reader.holds(row['artifact_ref'])
+        search['partner_metadata'], search['possible_partners'] = False, []
+        if search['metadata_held'] and search['row']['database'] == DATABASE:
+            body = json.loads(reader.get_artifact(search['metadata_ref']))
+            search['partner_metadata'] = all('entry_polymer_types' in chain for chain in body['chain_service']['chains'])
+            search['possible_partners'] = possible_partners(body) if search['partner_metadata'] else []
     return held
 
 
@@ -147,13 +184,16 @@ def check_partner_contacts_request(request, *, searches, analysed, resources, us
     search, resource = request['search_ref'], request['resource_id']
     problems = []
     usable = [reference for reference, held in searches.items() if held['row']['database'] == DATABASE
-              and held['result_held'] and held['model_held'] and held['metadata_held'] and reference not in analysed]
+              and held['result_held'] and held['model_held'] and held['metadata_held'] and held['partner_metadata']
+              and reference not in analysed]
     if search not in searches:
         problems.append(_choose('search_ref', 'search_is_not_a_held_graded_search', choose_from=usable))
     elif searches[search]['row']['database'] != DATABASE:
         problems.append(_choose('search_ref', 'search_database_is_not_pdb100', choose_from=usable))
     elif not (searches[search]['result_held'] and searches[search]['model_held'] and searches[search]['metadata_held']):
         problems.append(_choose('search_ref', 'search_result_sheet_metadata_or_model_not_held', choose_from=usable))
+    elif not searches[search]['partner_metadata']:
+        problems.append(_choose('search_ref', 'search_predates_the_partner_metadata', choose_from=usable))
     elif search in analysed:
         problems.append(_choose('search_ref', 'search_already_analysed', choose_from=usable))
     if resource not in resources:
@@ -247,6 +287,7 @@ def read_assembly(text, wanted):
     model = structure[0]
     entity_of = {row['id']: row['entity_id'] for row in _rows(mm, '_struct_asym', ('id', 'entity_id'))}
     poly_type = {row['entity_id']: row['type'] for row in _rows(mm, '_entity_poly', ('entity_id', 'type'))}
+    branched = {row['id'] for row in _rows(mm, '_entity', ('id', 'type')) if row['type'] == 'branched'}
     author_of = {}
     for asym, author in zip(mm['_atom_site.label_asym_id'], mm['_atom_site.auth_asym_id']):
         author_of.setdefault(asym, author)
@@ -257,6 +298,10 @@ def read_assembly(text, wanted):
             residues = [residue.get_resname() for residue in chain]
             kind = 'protein' if poly_type[entity] in PROTEIN else _nucleic_kind(poly_type[entity], residues)
             molecules[chain.id] = {'polymer': True, 'kind': kind, 'entity': entity, 'author': author_of[chain.id]}
+        elif entity in branched:
+            # a branched entity (a glycan) is no hetero group: it is recorded as a fact beside the protein partners
+            # (``other_polymer``), as RCSB's non-polymer entities do not list it
+            molecules[chain.id] = {'polymer': False, 'kind': 'other_polymer', 'entity': entity, 'author': author_of[chain.id]}
         else:
             molecules[chain.id] = {'polymer': False, 'kind': 'ligand', 'entity': entity, 'author': author_of[chain.id]}
     heavy = [atom for atom in model.get_atoms()
@@ -347,17 +392,23 @@ def read_assembly(text, wanted):
 
 
 # -- the files of a search, the job, the settling rule ------------------------------------------------------------------------
-def entry_files(search_sheet, expected_entities):
+def entry_files(search_sheet, expected_entities, contents):
     """The solved entry files of the asked hits in rank order of their first hit: ``[{'entry', 'assembly', 'ranks': [...],
-    'wanted': {rank: {'chain_label', 'entity_id'}}}]``. ``expected_entities``: the entity id of each hit's chain as RCSB gave it
-    (the held hit metadata), ``{rank: entity id}``."""
+    'wanted': {rank: {'chain_label', 'entity_id'}}, 'contents' (``entry_contents`` of its hits' entry), 'skip' (``None``: ask the
+    file; ``no_partner_in_entry``: the entry's metadata shows no non-additive ligand and no nucleic acid, so the file is not
+    downloaded; ``entry_contents_unknown``: RCSB did not state the entry's contents, so the file is not asked)}]``.
+    ``expected_entities``: the entity id of each hit's chain as RCSB gave it (the held hit metadata), ``{rank: entity id}``;
+    ``contents``: ``entry_contents`` of that metadata."""
     files = {}
     for row in sheets.asked_rows(search_sheet):
         target = pdb_target(row['target_id'])
         entry = files.setdefault((target['entry'], target['assembly']), {'entry': target['entry'], 'assembly': target['assembly'],
-                                                                      'ranks': [], 'wanted': {}})
+                                                                      'ranks': [], 'wanted': {}, 'contents': contents[row['rank']]})
         entry['ranks'].append(row['rank'])
         entry['wanted'][row['rank']] = {'chain_label': target['chain_label'], 'entity_id': expected_entities.get(row['rank'])}
+    for file in files.values():
+        file['skip'] = ('entry_contents_unknown' if file['contents'] is None
+                        else 'no_partner_in_entry' if not entry_candidates(file['contents']) else None)
     return list(files.values())
 
 
@@ -408,6 +459,17 @@ def settled(before, after, batches):
     return batches > 1 and set(after) <= set(before) and all(abs(after[name] - before[name]) <= SETTLE for name in after)
 
 
+def _within_the_entry_contents(file, chains):
+    """The bound of ``differential_credit.bound_partner_test_ceiling`` rests on the entry's listed contents: a partner a file
+    shows outside them is a fault (``ValueError``), not graded."""
+    allowed = set(entry_candidates(file['contents'])) | {'ligand:' + name for name in ADDITIVES}
+    for rank, chain in chains.items():
+        for partner in chain['partners']:
+            key = sheets.partner_key(partner['kind'], partner['identifier'])
+            if key not in allowed:
+                raise ValueError('partner_outside_the_entry_contents:' + file['entry'] + ':' + key)
+
+
 async def analyse(ctx, resource_id, search_sheet, model_ref, model_ca, target_sequence, files):
     """Walk the entry ``files`` in order, in batches of ``BATCH``, by the settling rule (the module). Returns ``{'file_rows',
     'hit_chains', 'alignments', 'jobs', 'stopped' ('settled' or 'all_done'), 'batches', 'not_reached' (files never asked)}``;
@@ -416,6 +478,15 @@ async def analyse(ctx, resource_id, search_sheet, model_ref, model_ca, target_se
     rank_rows = {row['rank']: row for row in sheets.asked_rows(search_sheet)}
     ordered = [rank_rows[rank] for file in files for rank in file['ranks']]
     file_rows, hit_chains, alignments, jobs = [], {}, {}, []
+    for file in files:
+        if file['skip'] is not None:
+            file_rows.append({'entry': file['entry'], 'assembly': file['assembly'], 'url': file_url(file['entry'], file['assembly']),
+                              'status': file['skip'], 'reason': None, 'download_bytes': None, 'download_sha256': None,
+                              'unpacked_bytes': None, 'file_ref': None, 'hit_count': len(file['ranks'])})
+            for rank in file['ranks']:
+                hit_chains[rank] = file['skip']
+    skipped = len(file_rows)
+    files = [file for file in files if file['skip'] is None]
     before, batches, stopped = {}, 0, 'all_done'
     for start in range(0, len(files), BATCH):
         part = files[start:start + BATCH]
@@ -439,6 +510,7 @@ async def analyse(ctx, resource_id, search_sheet, model_ref, model_ca, target_se
                     for rank in file['ranks']:
                         hit_chains[rank] = 'file_unreadable'
                 else:
+                    _within_the_entry_contents(file, read['chains'])
                     row['status'] = 'parsed'
                     hit_chains.update(read['chains'])
                     chain_files.update(read['chain_files'])
@@ -455,7 +527,7 @@ async def analyse(ctx, resource_id, search_sheet, model_ref, model_ca, target_se
             break
         before = after
     return {'file_rows': file_rows, 'hit_chains': hit_chains, 'alignments': alignments, 'jobs': jobs, 'stopped': stopped,
-            'batches': batches, 'not_reached': len(files) - len(file_rows)}
+            'batches': batches, 'not_reached': len(files) - (len(file_rows) - skipped)}
 
 
 def _failed(code, retryable=False, record_refs=(), **detail):
@@ -486,13 +558,16 @@ async def partner_contacts(ctx, *, search_ref, resource_id):
         sequence = foldseek_search.target_sequence(store, query_ref)
         model_ca = foldseek_search.model_positions(store.get_artifact(model_ref), sequence)
         target_sequence = parse_foldseek_result(json.loads(store.get_artifact(result_ref)), DATABASE)['query_sequence']
-        files = entry_files(search_sheet, _expected_entities(json.loads(store.get_artifact(inputs['metadata_ref']))))
+        metadata = json.loads(store.get_artifact(inputs['metadata_ref']))
+        files = entry_files(search_sheet, _expected_entities(metadata), entry_contents(metadata))
     except (ValueError, KeyError) as error:
         return _failed('grading_refused', reason=str(error))
     try:
         walked = await analyse(ctx, resource_id, search_sheet, model_ref, model_ca, target_sequence, files)
     except JobFailed as error:
         return _failed(error.code, record_refs=error.record_refs)
+    except ValueError as error:
+        return _failed('grading_refused', reason=str(error))
     try:
         contacts, bound = sheets.grade_partner_contacts(
             search_sheet, walked['file_rows'], walked['hit_chains'], walked['alignments'], model_ca, target_sequence,
@@ -547,7 +622,7 @@ async def partner_contacts(ctx, *, search_ref, resource_id):
             'stopped': walked['stopped'], 'batch_count': walked['batches']}
 
 
-__all__ = ['ADDITIVES', 'ADDITIVE_FACTS', 'ALIGNMENTS_KIND', 'BATCH', 'DATABASE', 'MAX_ATOMS_PER_FILE', 'MAX_BYTES',
+__all__ = ['ADDITIVES', 'ADDITIVE_FACTS', 'ALIGNMENTS_KIND', 'BATCH', 'DATABASE', 'MAX_BYTES',
            'MAX_UNPACKED_BYTES', 'OWN_FAILURE_CODES', 'PARTNERS_PROVIDER', 'PROVIDER', 'REQUEST_FIELDS', 'STRUCTURE_KIND',
-           'align_batch', 'analyse', 'check_partner_contacts_request', 'entry_files', 'fetch_assembly', 'file_url',
-           'load_additive_list', 'partner_contacts', 'partner_search_inputs', 'picture', 'read_assembly', 'settled']
+           'align_batch', 'analyse', 'check_partner_contacts_request', 'entry_contents', 'entry_files', 'fetch_assembly', 'file_url',
+           'load_additive_list', 'partner_contacts', 'partner_search_inputs', 'picture', 'possible_partners', 'read_assembly', 'settled']

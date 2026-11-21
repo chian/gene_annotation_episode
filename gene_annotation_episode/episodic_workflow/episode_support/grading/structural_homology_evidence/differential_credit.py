@@ -187,33 +187,31 @@ def site_test_ceiling(held, candidates):
     return weight * float(len(candidates) - listed + listed * listed // 4)
 
 
-def bound_partner_test_ceiling(held, partner_slots):
+def bound_partner_test_ceiling(held, possible_partners):
     """The most one ``bound_partner`` test (``partner_contacts``) can add to the credit of one target, from where the list stands
-    (``held`` is ``standing`` of the target), when the partners are not yet known: the candidates of the test are the partners
-    its hits are bound to (``ligand:<id>``, ``nucleic_acid:dna``, ``nucleic_acid:rna``) and nothing known before the unit runs
-    names them. ``partner_slots`` is the most partner candidates the unit can make (see below); ``held`` lists the partner
-    candidates already measured.
+    (``held`` is ``standing`` of the target), given the SET of partner candidates the search's solved entries make possible
+    (``possible_partners``: the keys ``ligand:<component id>`` and ``nucleic_acid:dna|rna`` that ``partner_contacts.
+    possible_partners`` reads from the held hit metadata).
 
-    PROOF. A partner's value in the test is its mean ``E(hit, partner) = B F(hit, partner)`` over the hits bound to it; ``B`` is
-    in [0, 1] and ``F`` is a mean of residue scores, each a class match 0 or 1 times a kernel in (0, 1], so the value times the
-    family weight ``w`` is in [0, w], whatever the structures show. A partner no hit is bound to is not measured and earns
-    nothing. The test is appended last, so by the credit rule it earns the entry score of each candidate it admits (a
-    candidate not yet listed whose value is above 0: at most ``w``) plus ``|v_a - v_b|`` (at most ``w``) for each pair of
-    candidates both already listed that it measures; a listed candidate it does not measure earns nothing. The rise is
-    ``sum_{c not listed} v_c + sum_{a < b listed} |v_a - v_b|``, convex in ``v`` on the box ``0 <= v_c <= w`` and so largest at
-    a vertex (every ``v_c`` 0 or ``w``). With ``k`` partner candidates listed (all of them measured, the worst case) and ``u``
-    not listed a vertex puts ``s`` listed candidates at ``w``: ``w (u + s (k - s))``, largest at ``s = k // 2``: ``w (u + k^2 // 4)``
-    (as ``site_test_ceiling``). The unlisted ones are at most ``partner_slots - k`` (candidates the test makes that are not held):
-    the ceiling is ``w (max(partner_slots - k, 0) + k^2 // 4)``.
-
-    WHAT IS KNOWN BEFORE THE UNIT RUNS. The number of partner candidates is not known from the search: its held hit metadata (the
-    RCSB reply of ``pdb_chain_proteins.QUERY``) lists each entry's POLYMER entities only (the query asks ``polymer_entities``; it
-    asks no non-polymer entity, read in the query text), so it names no ligand and carries no entry's partner count. Nothing short of reading the files bounds the partners except the machine
-    bound the unit enforces: a file is at most ``partner_contacts.MAX_UNPACKED_BYTES`` unpacked and every atom row has at least
-    ``MIN_ATOM_ROW_BYTES`` bytes, so a file holds at most ``MAX_ATOMS_PER_FILE`` atoms and so at most that many molecules, and a
-    candidate needs a molecule of a hit's file. ``partner_slots`` is therefore ``(files the unit can ask) x
-    MAX_ATOMS_PER_FILE`` with the files the unit can ask at most the asked hits of the search (one file per hit at most): a
-    PROVED but very loose bound (the settling rule can stop the unit earlier, never later). It is a bound, not a forecast."""
+    PROOF. The candidates of the test are the partners some hit chain is bound to. A partner of a hit chain is a molecule of
+    the hit's entry, so a ligand candidate is a non-additive chemical component of a non-polymer entity of an entry of the
+    search, and a nucleic-acid candidate is ``dna`` or ``rna`` of a nucleic-acid polymer entity of such an entry (a hybrid
+    entity can give either). The held hit metadata lists exactly those (RCSB ``nonpolymer_entities`` and the polymer types of
+    ``polymer_entities`` per entry); an entry's contents are an UPPER set, since a ligand of the entry need not touch the hit
+    chain; and the unit fails (it does not grade) if a file shows a partner outside the entry's listed contents. So every
+    candidate the test can make is in ``possible_partners`` (a set ``P``). A candidate's value in the test is its mean
+    ``E(hit, partner) = B F(hit, partner)`` over the hits bound to it; ``B`` is in [0, 1] and ``F`` is a mean of residue
+    scores, each a class match 0 or 1 times a kernel in (0, 1], so the value times the family weight ``w`` is in [0, w], whatever
+    the structures show. A candidate no hit is bound to is not measured and earns nothing. The test is appended last, so by the
+    credit rule it earns the entry score of each candidate it admits (a candidate of ``P`` not yet listed whose value is above
+    0: at most ``w``) plus ``|v_a - v_b|`` for each pair of candidates both already listed that it measures (a listed candidate
+    that is not in ``P`` cannot be measured and earns nothing). The rise is ``sum_{c in P, c not listed} v_c + sum_{a < b
+    listed in P} |v_a - v_b|``, convex in ``v`` on the box ``0 <= v_c <= w`` and so largest at a vertex (every ``v_c`` 0 or
+    ``w``). With ``k`` candidates of ``P`` listed and ``u = |P| - k`` of ``P`` not listed, a vertex puts ``s`` listed
+    candidates at ``w`` and the rest at 0; the pairs earn ``w`` for each of the ``s (k - s)`` pairs with one candidate in each
+    group and 0 inside a group, so the rise is ``w (u + s (k - s))``, largest at ``s = k // 2``: ``w (u + k^2 // 4)``
+    (as ``site_test_ceiling``). That is returned. It is a bound, not a forecast."""
     weight = SHEET_WEIGHT['bound_partner']
-    listed = sum(1 for candidate, state in held.items() if state['listed'] and candidate.split(':', 1)[0] in ('ligand', 'nucleic_acid'))
-    return weight * float(max(partner_slots - listed, 0) + listed * listed // 4)
+    candidates = list(dict.fromkeys(possible_partners))
+    listed = sum(1 for candidate in candidates if held.get(candidate, {}).get('listed'))
+    return weight * float(len(candidates) - listed + listed * listed // 4)
