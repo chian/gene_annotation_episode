@@ -23,3 +23,50 @@ def credit(summary, records):
     if not math.isfinite(value):
         raise ValueError('literature_finite_task_credit_required')
     return value
+
+
+def ceiling(summary, records, action_type, arguments, ctx):
+    """The most the credit can rise if the action ``action_type`` with ``arguments`` is the next unit (``arguments``
+    None: the most over every arguments the action type can take now). ``u`` is ``summary['task']['credit_unit']``.
+    ``arguments`` of a tool is the ``ToolCall`` arguments (``{'arguments': the model's, ...}``).
+
+    By task kind:
+
+    * ``a105_experiments``: the credit is the sum of the strategy child's returned credits and nothing else, so every
+      tool is 0. A strategy commission returns the credit of its pages, each the change of 1 - mean resolution of the
+      one commissioned claim's rows over a sheet that starts from the sheet the previous return held; those changes
+      telescope, so one more return adds at most the remaining 1 - R <= 1, times ``u``: ceiling ``u``.
+    * ``verified_source_leads``: credit is ``u`` per relevant lead source. ``reason`` saves at most one source lead
+      (the selection carries one ``source_lead``), so ``u``, or 0 when the given arguments carry no ``source_lead``.
+      Every other tool is 0 (leads come only from ``reason`` units and child returns). The strategy child returns a
+      list of lead sources whose length nothing held bounds: no finite ceiling exists and the call raises.
+    * ``source_answer`` screening: one answer, earned only by ``reason`` (a source-grounded no-applicable-evidence
+      declaration) or by a child returning the spans covered. ``reason`` and the strategy commission: the unit not yet
+      earned, ``u - credit`` (never below 0); every other tool 0.
+    * ``source_answer`` assessment or measurement and ``a105_assembly``: at most one answer, so the credit never
+      exceeds ``u``. The access and acquisition tools only read or acquire sources and cannot create the answer
+      (an assessment, a quantity sheet, an aggregation sheet): 0. ``reason``, the population operations and the
+      strategy commission may create it: the unit not yet earned, ``u - credit`` (0 once answered)."""
+    task = summary['task']
+    unit = task['credit_unit']
+    kind = task['kind']
+    from .task import CHILD_SLOTS, LIBRARY_NAMES, TOOL_NAMES
+    if action_type not in {*TOOL_NAMES.values(), 'reason', *CHILD_SLOTS}:
+        raise LookupError('no_such_action_type:' + str(action_type))
+    child = action_type in CHILD_SLOTS
+    reads = action_type in {TOOL_NAMES[name] for name in LIBRARY_NAMES}
+    if kind == 'a105_experiments':
+        return float(unit) if child else 0.0
+    remaining = max(0.0, unit - credit(summary, records))
+    if kind == 'verified_source_leads':
+        if child:
+            raise ValueError('literature_ceiling_unbounded:strategy_child_returns_an_unbounded_number_of_lead_sources')
+        if action_type != 'reason':
+            return 0.0
+        if arguments is not None and 'source_lead' not in arguments['arguments']:
+            return 0.0
+        return float(unit)
+    if task.get('answer_kind') == 'screening':
+        return remaining if child or action_type == 'reason' else 0.0
+    return 0.0 if reads else remaining
+

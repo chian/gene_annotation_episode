@@ -720,3 +720,9 @@ def action(response, summary, records, ctx):
     return ToolCall(name, {'arguments': arguments, 'scope': summary['scope'],
                            'assignment': summary['literature_assignment'], 'requested': summary['requested'],
                            'proposed_annotation_ref': summary['proposed_annotation_ref']})
+
+
+def offered_actions(summary, ctx):
+    """The action types offered at this decision, from the same ``offered`` and ``CHILD_SLOTS`` that ``decide`` builds
+    its selection schema from: the tool names (as the runner records them), ``reason``, and the child slot."""
+    return [TOOL_NAMES.get(name, name) for name in offered(ctx.settings)] + list(CHILD_SLOTS)
