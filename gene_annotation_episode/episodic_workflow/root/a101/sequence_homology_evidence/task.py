@@ -58,7 +58,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
     bvbrc_msa_alignment as msa)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence import (
     bvbrc_metacats_search as metacats)
-from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.database_blast_search import (
+from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_job_child import (
     seconds_between)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.pairwise_blast_comparison import (
     PROGRAM_MOLECULES, check_pairwise_request, pairwise_blast_comparison)

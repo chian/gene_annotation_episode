@@ -38,9 +38,11 @@ its return uses ``COMMON_FINDING`` and ``common_finding``; its description of it
 What the model answers is ``output_schema``; the checks are ``check_estimate``, ``check_launch``, ``check_fix``,
 ``check_monitor`` and ``check_extract`` (each returns the things to fix; empty means it can run).
 
-Generalised from ``bvbrc_blast_search`` (which is unchanged in behaviour and is not rebound to this module): the functions
-are the same, with the program-and-database pair replaced by the application's request fields."""
+Generalised from ``bvbrc_blast_search`` (which keeps its own five actions and is not rebound to this module; it imports
+only the shared facts, failure vocabulary and outcome helpers below): the functions are the same, with the
+program-and-database pair replaced by the application's request fields."""
 from dataclasses import dataclass
+from datetime import datetime, timezone
 import json
 import math
 from typing import Callable
@@ -52,9 +54,6 @@ from method_loop import ChoiceField, Field
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.duration_trend import duration_trend
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import checks, closure, job_rows
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_wait import wait_for_job
-from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.database_blast_search import (
-    ENDED_STATES, FAILURE_CODES, SPACING, _choose, _ended, _failed, failure_code, now_text, search_facts,
-    seconds_between, seconds_until_allowed, timing)
 
 ROUTE_KIND = 'bvbrc'
 ACTIONS = ('estimate', 'launch', 'fix', 'monitor', 'extract')
@@ -68,6 +67,93 @@ CLOCK_MARGIN_SECONDS = 1.0
 LEDGER_ROWS = 500
 UNITS = ('handoff_unit', 'information_unit', 'graded_unit')
 PRIOR = ('handoff_refs', 'check_refs', 'closure_refs')
+# The fixed vocabulary of failure codes: a failure after a passed check is the environment's and is returned once with
+# one of these (the route, ``jobs/bvbrc_job_route.py``, uses them and keeps the service's own error in the detail).
+FAILURE_CODES = (
+    'provider_spacing_required', 'provider_connection_failed', 'provider_request_timeout', 'provider_http_error',
+    'provider_redirect_not_followed', 'provider_submission_response_invalid', 'provider_status_response_invalid',
+    'provider_result_response_invalid', 'submission_outcome_unknown', 'results_not_available', 'job_state_unknown',
+    'result_file_missing', 'result_not_in_catalog', 'service_reported_failed', 'service_lost_the_job',
+    'grading_refused', 'result_of_another_query', 'result_of_another_database')
+# The service's spacing refusal of a status request (nothing was sent): the one retryable failure.
+SPACING = 'provider_spacing_required'
+
+
+def failure_code(code):
+    """A code of the route as a value of the fixed vocabulary (the HTTP status of ``provider_http_<n>`` is dropped)."""
+    if code.startswith('provider_http_'):
+        return 'provider_http_error'
+    if code not in FAILURE_CODES:
+        raise ValueError('failure_code_not_in_the_vocabulary:' + code)
+    return code
+
+
+def now_text():
+    return datetime.now(timezone.utc).isoformat()
+
+
+def seconds_between(earlier, later):
+    return (datetime.fromisoformat(later) - datetime.fromisoformat(earlier)).total_seconds()
+
+
+def search_facts(search):
+    """The held job as controlled facts (``None`` while none is held): its records, the prediction recorded with its
+    launch, the service's own estimate and its latest check (with the seconds from the launch to it). ``search`` is a
+    view ``{'handoff', 'checks', 'closure'}`` of job ledger rows."""
+    if search is None:
+        return None
+    handoff = search['handoff']
+    shown = search['checks'][-1] if search['checks'] else None
+    estimates = handoff['detail']['estimates']
+    return {'handoff_ref': handoff['id'], 'check_refs': [row['id'] for row in search['checks']],
+            'closure_ref': None if search['closure'] is None else search['closure']['id'],
+            'submitted_at': handoff['at'], 'predicted_seconds': estimates['predicted_seconds'],
+            'prediction_basis': estimates['duration_basis'],
+            'service_estimate_seconds': handoff['detail']['native']['expected_seconds'],
+            'latest_check': None if shown is None else {
+                'check_ref': shown['id'], 'observed_at': shown['at'], 'state': shown['detail']['state'],
+                'result_available': shown['detail']['result_available'],
+                'observed_seconds': seconds_between(handoff['at'], shown['at'])}}
+
+
+def seconds_until_allowed(description, facts, now):
+    """Seconds until the service allows the next status request of the held job (0.0 when now): the longer of the
+    spacing between two contacts, from the latest contact (the launch or the latest check), and the spacing between two
+    status requests of one job, from the latest check (``description`` is the resource's, with both spacings; ``facts``
+    is ``search_facts``)."""
+    shown = facts['latest_check']
+    last = facts['submitted_at'] if shown is None else shown['observed_at']
+    remaining = description['request_spacing_seconds'] - seconds_between(last, now)
+    if shown is not None:
+        remaining = max(remaining, description['poll_spacing_seconds'] - seconds_between(shown['observed_at'], now))
+    return max(0.0, remaining)
+
+
+def timing(facts, now):
+    """The controlled facts of the job's duration as of ``now``: what was predicted (or none), the service's own
+    estimate, the seconds since the launch, and how far past each the job is (negative: before it)."""
+    elapsed = seconds_between(facts['submitted_at'], now)
+    predicted, service = facts['predicted_seconds'], facts['service_estimate_seconds']
+    return {'seconds_since_submission': elapsed, 'predicted_seconds': predicted,
+            'prediction_basis': facts['prediction_basis'], 'service_estimate_seconds': service,
+            'seconds_past_prediction': None if predicted is None else elapsed - predicted,
+            'seconds_past_service_estimate': None if service is None else elapsed - service}
+
+
+def _choose(field, code, **detail):
+    """One thing to fix in the model's JSON: the field, the code and what to choose from."""
+    return {'field': field, 'code': code, **detail}
+
+
+def _failed(code, retryable, **detail):
+    """The outcome of a unit that failed after its check passed, with its code from the fixed vocabulary."""
+    return {'status': 'failed', 'failure_code': failure_code(code), 'retryable': retryable, 'record_refs': [],
+            'detail': detail}
+
+
+def _ended(table, handle, outcome, duration):
+    """Resolve the launch's estimate-ledger row with its outcome and measured duration."""
+    table.resolve(handle, {'gain': 0.0, 'cost': 0.0, 'outcome': outcome, 'duration_seconds': duration}, at=now_text())
 
 
 @dataclass(frozen=True)
@@ -420,7 +506,7 @@ async def monitor_job(ctx, binding, *, handoff_ref, wait_seconds, expected_remai
         if not retryable:
             _ended(table, estimates['estimate_key'], 'check_failed:' + code, seconds_between(handoff['at'], now_text()))
         return {**_failed(code, retryable, waited_seconds=checked['waited_seconds']), 'handoff_refs': []}
-    if checked['state'] in ENDED_STATES:
+    if checked['state'] in ENDED_JOB_STATES:
         observed = seconds_between(handoff['at'], checked['observed_at'])
         measured = service_seconds(ctx.store, checked['reply_ref'])
         table.resolve(estimates['estimate_key'], {
@@ -595,4 +681,5 @@ __all__ = ['ACTIONS', 'COMMON_ASSIGNMENT', 'COMMON_FINDING', 'ESTIMATE_BASES', '
            'check_extract', 'check_fix', 'check_launch', 'check_monitor', 'check_resource_and_continuation',
            'common_finding', 'common_instructions', 'completion_controller', 'episode_state', 'held_jobs', 'job_notice',
            'job_view', 'launch_job', 'ledger_kind', 'learned', 'minimum_wait', 'monitor_job', 'output_schema',
-           'read_common', 'record_estimate', 'resumed_rows', 'search_facts', 'timing', 'unit_row']
+           'read_common', 'record_estimate', 'resumed_rows', 'search_facts', 'seconds_between', 'seconds_until_allowed',
+           'timing', 'unit_row']

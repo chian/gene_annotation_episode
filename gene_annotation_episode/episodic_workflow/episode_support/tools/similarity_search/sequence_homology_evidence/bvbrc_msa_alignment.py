@@ -42,9 +42,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_ho
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_blast_search import (
     PROVIDER as SEARCH_PROVIDER)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_job_child import (
-    JobApplication, check_resource_and_continuation)
-from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.database_blast_search import (
-    _choose, _failed)
+    JobApplication, _choose, _failed, check_resource_and_continuation)
 
 CHILD = 'bvbrc_msa'
 PROVIDER = 'bvbrc_msa'

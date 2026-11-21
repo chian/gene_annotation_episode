@@ -269,7 +269,7 @@ def test_invalid_model_parameters_rejected(model):
 def test_invalid_mode_and_nonfinite_input_rejected():
     native = result()
     native["mode"] = "pairwise"
-    with pytest.raises(ValueError, match="database_blast_mode_required"):
+    with pytest.raises(ValueError, match="blast_database_mode_required"):
         build_database_sheet(native)
     native["mode"] = "database"
     native["hits"][0]["hsps"][0]["bit_score"] = float("nan")

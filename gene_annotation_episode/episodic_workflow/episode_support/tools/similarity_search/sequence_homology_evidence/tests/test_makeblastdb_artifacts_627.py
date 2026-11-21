@@ -15,12 +15,12 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence import blast_database_preparation as p
+from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence import makeblastdb_artifacts as p
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.sequence_homology_evidence import native_blast_standard_database_contracts as standard
 from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_homology_evidence.domain import ContractError
 
 
-EVIDENCE = Path(__file__).resolve().parents[7] / "gene_annotation_episode/episodic_workflow/episode_support/tools/similarity_search/sequence_homology_evidence/tests/fixtures/blast_database_preparation"
+EVIDENCE = Path(__file__).resolve().parents[7] / "gene_annotation_episode/episodic_workflow/episode_support/tools/similarity_search/sequence_homology_evidence/tests/fixtures/makeblastdb_artifacts"
 
 
 def retained(name="build_dna_v5"):

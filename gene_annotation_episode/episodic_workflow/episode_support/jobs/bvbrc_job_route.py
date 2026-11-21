@@ -46,7 +46,7 @@ file are created in the job's own folder (an entry's ``uploads``) and the job ta
 The provider spacing is kept by sleeping before a contact that is part of one operation (a submission, a fetch has
 several), and by refusing a status request that would come too early (``provider_spacing_required``: nothing sent). A
 refusal of the service (an HTTP error status) keeps the service's own JSON-RPC error in the failure detail; other
-failures use the codes of ``database_blast_search.FAILURE_CODES``.
+failures use the codes of ``bvbrc_job_child.FAILURE_CODES``.
 
 Configuration (every part named, nothing has a default): ``service`` (``bvbrc_blast``), ``endpoints``
 (``{'AppService': url, 'Workspace': url}``), ``authorization_env``, ``workspace`` (the local directory of the job

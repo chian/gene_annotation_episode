@@ -78,7 +78,7 @@ def _verify_file(value):
 def _parse_original(plan, directory, manifest):
     from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.blast_database_extraction import _check, _check_bytes, parse_blastdbcmd_sequences
     from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.blast_database_inspection import _metadata_fields, parse_blast_database_inspection, parse_blastdbcheck_diagnostics
-    from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.blast_database_preparation import populate_database_artifact_set, project_prepared_blast_database
+    from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.makeblastdb_artifacts import populate_database_artifact_set, project_prepared_blast_database
     context = plan["context"]
     bundle = plan["capture"]["original_bundle"]
     if _decode(_read_bytes(plan["bundle_file"])) != bundle:

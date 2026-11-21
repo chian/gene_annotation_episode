@@ -29,12 +29,10 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.data_prod
 from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_homology_evidence.tools import (
     measurements, number, ref)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_job_child import (
-    JobApplication, check_resource_and_continuation)
+    JobApplication, _choose, _failed, check_resource_and_continuation)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_metacats_analysis import (
     ALIGNMENT_FILE, CHISQ_FILE, GROUP_FILE, MC_FILE, MINIMUM_GROUPS, MINIMUM_GROUP_SIZE, P_VALUE, build_groups,
     derived_alignment, grade, group_file_text, parse_alignment)
-from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.database_blast_search import (
-    _choose, _failed)
 
 CHILD = 'bvbrc_metacats'
 PROVIDER = 'bvbrc_metacats'

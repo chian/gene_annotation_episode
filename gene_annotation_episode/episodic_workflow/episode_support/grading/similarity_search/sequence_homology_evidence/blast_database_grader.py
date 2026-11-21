@@ -905,7 +905,7 @@ def _build_database_sheet(result: dict, *, reference_metadata: list[dict] | None
     if not isinstance(result, dict) or result.get("schema") != "blast_normalized_result_v1":
         raise ValueError("normalized_blast_result_required")
     if result.get("mode") != "database":
-        raise ValueError("database_blast_mode_required")
+        raise ValueError("blast_database_mode_required")
     if (description_bindings is None) != (sequence_identity_bindings is None):
         raise ValueError("blast_explicit_binding_pair_required")
     explicit = description_bindings is not None

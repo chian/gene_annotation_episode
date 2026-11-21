@@ -11,7 +11,7 @@ import re
 
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.sequence_homology_evidence.blast_utility_contracts import _binding, _diagnostics, _fields, _occurrences, _operation, _outcome, _pointer, _require, validate_blast_utility_operation, validate_blast_utility_record as core
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.sequence_homology_evidence.blast_preparation_contracts import validate_blast_preparation_document
-from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.blast_database_preparation import _check, _failure, _native_file_path
+from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.makeblastdb_artifacts import _check, _failure, _native_file_path
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.sequence_homology_evidence.native_blast_standard_database_contracts import _absolute, _copy
 
 _KINDS = {"convert_gi_list": "identifier_list", "convert_seqid_list": "identifier_list",

@@ -665,7 +665,7 @@ def _prepared_context(value, result, occurrences):
     if manifest is None:
         return value
     if result["version"] == "blast_database_artifact_set_v2":
-        from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.blast_database_preparation import project_prepared_blast_database
+        from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.makeblastdb_artifacts import project_prepared_blast_database
         preparation = manifest["preparation"]
         expected = project_prepared_blast_database(result,
             contract="standard" if manifest["version"] == PREPARED_DATABASE_VERSION else "additional",

@@ -97,7 +97,7 @@ def test_received_native_observation_without_a_grader_fails_explicitly(tmp_path)
         with pytest.raises(A101ScoringUnavailable, match='native_grader_not_attached'):
             score(store, {'subject_refs': [target]}, known_record_refs=[observed])
 
-def test_database_blast_native_grader_is_routed_through_received_hsp_address(tmp_path):
+def test_blast_database_mode_native_grader_is_routed_through_received_hsp_address(tmp_path):
     import json
     from gene_annotation_episode.episodic_workflow.root.a101.sequence_homology_evidence.native_correspondence_credit import A101SequenceCredit
     from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.blast_search import native_hsp_metadata, HSP_PROJECTION_VERSION

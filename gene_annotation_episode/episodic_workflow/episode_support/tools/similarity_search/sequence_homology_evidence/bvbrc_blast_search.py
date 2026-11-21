@@ -7,23 +7,22 @@ Every action has ONE deterministic check over the model's filled JSON and what t
 to fix (each a ``field`` and a ``code``, and what to choose from); an empty list means the action can run, and the
 episode's ``action`` rejects anything else before a unit is made. A tool that runs after a passed check simply works: a
 failure then is the environment's, returned once as ``failed`` with a code of the fixed vocabulary
-``database_blast_search.FAILURE_CODES`` (the route, ``jobs/bvbrc_job_route.py``, uses those codes and keeps the service's
-own error in the detail) and ``retryable`` false; the one exception is the service's spacing refusal of a status request
+``bvbrc_job_child.FAILURE_CODES`` (the route, ``jobs/bvbrc_job_route.py``, uses those codes and keeps the service's own
+error in the detail) and ``retryable`` false; the one exception is the service's spacing refusal of a status request
 (nothing was sent).
 
 What exists and is called, not written again: the route and its spacing (``bvbrc_job_route``), ``JobAccess.launch``,
 ``check`` and ``fetch`` (rows in custody), ``job_wait.wait_for_job`` (the wait of a status request),
-``database_blast_search``: ``search_facts``, ``timing``, ``seconds_until_allowed``, ``failure_code``, ``now_text``,
-``seconds_between``, ``_failed``, ``_ended`` and ``_observations`` (the hit references and comparison observations of a
-graded report: nothing in them is specific to a service; imported, not copied), the grader (``grade_blast_result``: the
-report of ``blast_formatter -outfmt 15`` is the single-query JSON15 the BLAST parser takes), ``retain_tool_grading``, the
-search row ``SEARCHES``, ``job_progress.progress_information`` and the estimate table.
+``bvbrc_job_child``: ``search_facts``, ``timing``, ``seconds_until_allowed``, ``failure_code``, ``now_text``,
+``seconds_between``, ``_choose``, ``_failed`` and ``_ended`` (imported, not copied), the grader (``grade_blast_result``:
+the report of ``blast_formatter -outfmt 15`` is the single-query JSON15 the BLAST parser takes), ``retain_tool_grading``,
+the search row ``SEARCHES``, ``job_progress.progress_information`` and the estimate table.
 
 What is written here, because nothing existing serves: the vocabulary and checks of this episode's five actions, the walk
-over the episode's own units that gives its state (the public episode's ``search_state`` knows one handoff and no fix),
-``search_view`` of the latest handoff (a relaunch after a fix is a second handoff), the estimate recorded before the launch
-and the revision and resolution of it at each status request, and the fetch-and-grade of this service's report (its file
-name and its database name differ from the public service's)."""
+over the episode's own units that gives its state, ``search_view`` of the latest handoff (a relaunch after a fix is a
+second handoff), the estimate recorded before the launch and the revision and resolution of it at each status request,
+the fetch-and-grade of this service's report, and ``_observations`` (the hit references and comparison observations of
+the graded report)."""
 import hashlib
 import json
 import math
@@ -55,15 +54,18 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.data_prod
     find_reusable, record_product)
 from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_homology_evidence.domain import (
     ContractError, canonical)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_homology_evidence.tools import (
+    measurements, number, ref)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search import blast_search
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.blast_search import (
     document as blast_document)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_hit_metadata import (
     SETTLE, lookup, name_hits, reference_metadata)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.blast_search import (
     PROGRAM_UNITS)
-from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.database_blast_search import (
-    ENDED_STATES, FAILURE_CODES, MOLECULE_UNITS, SPACING, STATUS_FIELDS, _choose, _ended, _failed, _observations,
-    failure_code, now_text, search_facts, seconds_between, seconds_until_allowed, timing)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_job_child import (
+    FAILURE_CODES, SPACING, _choose, _ended, _failed, failure_code, now_text, search_facts, seconds_between,
+    seconds_until_allowed, timing)
 
 # The source's provider names the service that ran the search. The Store admits an observation carrying native BLAST
 # rows from a source of this provider (``state.py``: ``NATIVE_BLAST_DATABASE_PROVIDERS``).
@@ -82,6 +84,8 @@ ACTIONS = ('estimate', 'launch', 'fix', 'monitor', 'extract')
 STATES = ('no_estimate', 'estimated', 'launched', 'finished', 'extracted', 'failed')
 UNTIL = ('launched', 'extracted')
 ENDED_SEARCH_STATES = ('finished', 'failed', 'unknown')
+# The unit a query's residues are counted in, by molecule.
+MOLECULE_UNITS = {'protein': 'aa', 'dna': 'nt', 'rna': 'nt'}
 ESTIMATE_BASES = ('learned_from_earlier_searches', 'no_earlier_measurement')
 REQUEST_FIELDS = ('program', 'database', 'resource_id')
 # The range of the seconds an estimate may name, and of one wait of a status request. A wait is a granule the model
@@ -501,7 +505,7 @@ async def monitor_search(ctx, *, handoff_ref, wait_seconds, expected_remaining_s
         if not retryable:
             _ended(table, estimates['estimate_key'], 'check_failed:' + code, seconds_between(handoff['at'], now_text()))
         return {**_failed(code, retryable, waited_seconds=checked['waited_seconds']), 'handoff_refs': []}
-    if checked['state'] in ENDED_STATES:
+    if checked['state'] in ENDED_SEARCH_STATES:
         observed = seconds_between(handoff['at'], checked['observed_at'])
         measured = _service_seconds(ctx.store, checked['reply_ref'])
         table.resolve(estimates['estimate_key'], {
@@ -563,11 +567,60 @@ def ordered_hits(report, grading, length):
     return sorted(((accessions[row['hit_index']], row['value']) for row in rows), key=lambda pair: (-pair[1], pair[0]))
 
 
+def _observations(store, report, grading, grading_ref, result_ref, source_ref, query_ref, program, query_length):
+    """One ``reference`` record for each hit of the report and one ``comparison`` observation for each of its
+    alignments, projected from the already graded cell of the sheet (nothing is calculated or graded again), with the
+    address of that cell and the grading artifact on its source: what the A101 native-correspondence projection reads
+    (``native_correspondence.read_details`` scores the graded cell of each held ``comparison`` observation), in the shape the
+    registry's ``_import_blast`` gives them (without its taxon terms and processing context). An alignment that
+    cannot be projected is counted, never hidden: ``(observation refs, reference refs, unprojected alignment count)``."""
+    _, reference_unit, model_unit = blast_search.PROGRAM_UNITS[program]
+    parsed = blast_search.document(report)
+    observations, references, unprojected = [], [], 0
+    for hit_index, hit in enumerate(parsed['search'].get('hits', [])):
+        first = (hit.get('description') or [{}])[0]
+        accession = first.get('accession') or first.get('id')
+        reference = store.put('reference', {
+            'reference_type': 'protein' if reference_unit == 'aa' else 'sequence', 'source_ref': source_ref,
+            'accession': accession, 'label': first.get('title') or accession, 'sequence_ref': None,
+            'molecule': 'protein' if reference_unit == 'aa' else 'unspecified',
+            'length': blast_search.integer(hit['len'], 'hit_length', minimum=1), 'term_refs': [],
+            'context_refs': []}, origin='external')
+        references.append(reference['id'])
+        for hsp_index, native in enumerate(hit.get('hsps', [])):
+            try:
+                component, address = blast_search.shared_hsp_component(grading, hit_ordinal=hit_index,
+                                                                       hsp_ordinal=hsp_index)
+                row = blast_search.hsp_row(native, component=component, program=program, query_length=query_length,
+                                           reference_length=hit['len'], hit_ordinal=hit_index, hsp_ordinal=hsp_index)
+            except (ValueError, TypeError, KeyError):
+                unprojected += 1
+                continue
+            row['native_blast']['shared_projection'] = {
+                'version': blast_search.HSP_PROJECTION_VERSION, 'grading_artifact_ref': grading_ref,
+                'native_artifact_ref': result_ref, **address}
+            (start, end), (reference_start, reference_end) = row['query_interval'], row['reference_interval']
+            observations.append(store.put('observation', {
+                'kind': 'comparison', 'subject_refs': [query_ref], 'source_subject_refs': [reference['id']],
+                'source_ref': source_ref, 'anchor': None,
+                'measurements': measurements(reference_ref=ref(reference['id']),
+                                             **{name: number(value) for name, value in row['measurements'].items()}),
+                'dependencies': [query_ref, reference['id']],
+                'operand_intervals': [
+                    {'role': 'query', 'subject_ref': query_ref, 'start': start, 'end': end,
+                     'unit': store.subject_unit(query_ref),
+                     'model_unit': model_unit},
+                    {'role': 'reference', 'subject_ref': reference['id'], 'start': reference_start,
+                     'end': reference_end, 'unit': store.subject_unit(reference['id']),
+                     'model_unit': model_unit}],
+                'native_blast': row['native_blast']}, origin='tool')['id'])
+    return observations, references, unprojected
+
+
 def fetch_and_grade_search(ctx, *, handoff_ref, fields, query_ref):
     """Fetch the report of the finished search, learn what its hits are from BV-BRC's data service
     (``bvbrc_hit_metadata``) and grade the report with that as reference metadata, all in the same unit, kept through
-    custody as ``database_blast_search.fetch_and_grade_search`` keeps its sheet: the grading artifact, a source of the
-    provider over the fetched report, the search row that enters the search into the A101 sheet's tool profile, one
+    custody: the grading artifact, a source of the provider over the fetched report, the search row that enters the search into the A101 sheet's tool profile, one
     reference record per hit (its accession and, where the service named it, its product as label) and one comparison
     observation per alignment (what the head's credit reads), and the metadata the hits were graded with (an artifact
     with BV-BRC's field names, and its source). A hit with no metadata is counted as missing by
@@ -626,7 +679,7 @@ def fetch_and_grade_search(ctx, *, handoff_ref, fields, query_ref):
 
 
 __all__ = ['ACTIONS', 'DATABASES', 'ESTIMATE_BASES', 'ESTIMATE_RANGE', 'FAILURE_CODES', 'PROVIDER', 'REQUEST_FIELDS',
-           'PRODUCT_KIND', 'ROUTE_KIND', 'STATES', 'STATUS_FIELDS', 'WAIT_RANGE_MAX', 'check_commission', 'check_estimate', 'held_searches', 'resumed_rows', 'search_notice', 'UNTIL', 'ENDED_SEARCH_STATES',
+           'PRODUCT_KIND', 'ROUTE_KIND', 'STATES', 'WAIT_RANGE_MAX', 'check_commission', 'check_estimate', 'held_searches', 'resumed_rows', 'search_notice', 'UNTIL', 'ENDED_SEARCH_STATES',
            'check_extract', 'check_fix', 'check_launch', 'check_monitor', 'combinations', 'episode_state',
            'fetch_and_grade_search', 'graded_rows', 'launch_search', 'learned_statistics', 'minimum_wait',
            'monitor_search', 'record_estimate', 'record_search_product', 'reusable_search', 'search_facts', 'search_settings', 'search_kind', 'search_view', 'timing']
