@@ -21,9 +21,13 @@ from method_loop import UNBOUNDED
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_alignment.native_correspondence import (
     NativeCorrespondenceScoring)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.candidate_measurements import (
-    SITE_WEIGHT, candidate_standing, candidate_table, held_sources, unidentified_positions)
+    SITE_WEIGHT, alignment_contexts, candidate_standing, candidate_table, held_sources, matched_positions_taken)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.differential_credit import (
     msa_test_ceiling, test_ceiling)
+from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.msa_alignment_sheet import (
+    MINIMUM_GROUP_SIZE)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_msa_alignment import (
+    PER_CANDIDATE_RANGE, plan_rows, search_rows)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.database_blast_search import (
     HITLIST_RANGE)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.scoring import (
@@ -92,6 +96,89 @@ def bvbrc_hit_bound():
     return parameter['default']
 
 
+def msa_state(summary, records):
+    """What the ceiling of one alignment reads, once per call: where the candidates stand, the matched positions taken, the held
+    alignments' inputs, and a cache of the searches' product rows."""
+    scope, sources = summary['scope'], held_sources(records)
+    return {'standing': candidate_standing(records, scope, sources),
+            'taken': matched_positions_taken(records, scope, sources),
+            'contexts': alignment_contexts(records, scope, sources), 'rows': {}, 'plans': {}}
+
+
+def msa_value(state, records, query, search_ref, names, per_candidate):
+    """The proved maximum of one commission of ``bvbrc_msa`` (see ``ceiling``): 0 unless two candidates each have at least
+    ``MINIMUM_GROUP_SIZE`` sequences in the plan and the plan is not exactly a held alignment's input; else
+    ``differential_credit.msa_test_ceiling`` over the eligible candidates."""
+    rows = state['rows'].setdefault(search_ref, search_rows(records, {'subject_refs': [query]}, search_ref))
+    plan = []
+    for name in names:
+        plan.extend(state['plans'].setdefault((search_ref, name, per_candidate),
+                                              plan_rows(rows, [name], per_candidate)))
+    if tuple((row['candidate'], row['md5']) for row in plan) in state['contexts'].get(query, ()):
+        return 0.0
+    sizes = {name: sum(1 for row in plan if row['candidate'] == name) for name in names}
+    eligible = ['product:' + name for name in names if sizes[name] >= MINIMUM_GROUP_SIZE]
+    if len(eligible) < 2:
+        return 0.0
+    length, taken = records.subject_length(query), state['taken'].get(query, {})
+    return msa_test_ceiling(state['standing'].get(query, {}),
+                            {name: (length - taken.get(name, 0)) * SITE_WEIGHT for name in eligible}, eligible)
+
+
+def msa_refused(summary, search_ref, names, per_candidate):
+    """Whether the head's check refuses this commission as a repeat (``task.check_bvbrc_msa``): an alignment product of it is
+    held, or it was commissioned and no outstanding job of it is continued."""
+    ordered = sorted(names)
+    if any(search_ref in row['used'] and row['settings']['candidates'] == ordered
+           and row['settings']['per_candidate'] == per_candidate for row in summary['reusable_alignments']):
+        return True
+    commissioned = [(row['arguments']['search_ref'], sorted(row['arguments']['candidates']),
+                     row['arguments']['per_candidate']) for row in summary['units']
+                    if row['kind'] == 'child' and row['slot'] == 'bvbrc_msa']
+    return (search_ref, ordered, per_candidate) in commissioned and not any(
+        job['outstanding'] and job['identity']['search_ref'] == search_ref
+        and job['identity']['candidates'] == ordered and job['identity']['per_candidate'] == per_candidate
+        for job in summary['bvbrc_msa_jobs'])
+
+
+def msa_best(summary, records):
+    """``(ceiling, arguments)`` of the commission of ``bvbrc_msa`` with the largest proved maximum among those the head's checks
+    would accept now: every held graded search with at least two admitted candidates (``summary['msa_options']``), every
+    subset of at least two of them (in the option's order), every sequence count (largest first); ties go to the
+    larger candidate set, then the larger count, then the first found. ``(0.0, None)`` when there is none. More than 12
+    admitted candidates: only the full set (the maximum is not lowered by adding a candidate, apart from repeats)."""
+    state, best = msa_state(summary, records), (0.0, None)
+    low, high = PER_CANDIDATE_RANGE
+    for item in summary['msa_options']:
+        names = item['candidates']
+        if len(names) < 2 or summary['held_sequences'].get(item['query_ref']) != 'protein':
+            continue
+        subsets = ([names] if len(names) > 12 else [[name for i, name in enumerate(names) if mask >> i & 1]
+                                                   for mask in range((1 << len(names)) - 1, 0, -1)])
+        for chosen in subsets:
+            if len(chosen) < 2:
+                continue
+            for count in range(high, low - 1, -1):
+                if msa_refused(summary, item['search_ref'], chosen, count):
+                    continue
+                value = msa_value(state, records, item['query_ref'], item['search_ref'], chosen, count)
+                if value > best[0] + 1e-12 or (best[1] is not None and abs(value - best[0]) <= 1e-12 and value > 0
+                                               and len(chosen) > len(best[1]['candidates'])):
+                    best = (value, {'query_ref': item['query_ref'], 'search_ref': item['search_ref'],
+                                    'candidates': list(chosen), 'per_candidate': count})
+    return best
+
+
+def best_arguments(summary, records, action_type, ctx):
+    """The commission that reaches the action's ceiling asked with ``arguments`` ``None`` (``ceiling``), as the arguments a
+    decision can name, or ``None`` when no choice of arguments changes the action's ceiling or none can earn
+    (``reason``, ``bvbrc_metacats``, and the actions whose arguments the ceiling does not distinguish here). For ``bvbrc_msa``:
+    the query, the search, the candidates (a subset of those admitted) and the sequences per candidate (``msa_best``)."""
+    if action_type == 'bvbrc_msa':
+        return msa_best(summary, records)[1]
+    return None
+
+
 def ceiling(summary, records, action_type, arguments, ctx):
     """The most the head's credit can rise if the action ``action_type`` with ``arguments`` is the next unit (with
     ``arguments`` ``None``: the most over every arguments the action type can take now).
@@ -114,18 +201,19 @@ def ceiling(summary, records, action_type, arguments, ctx):
       ``hitlist_size`` product candidates, any of those on the list or new ones.
     * ``bvbrc_blast``: the same, with the hits bounded by the application's ``blast_max_hits`` default
       (``bvbrc_hit_bound``).
-    * ``bvbrc_msa``: derived from the current state (``differential_credit.msa_test_ceiling``). The alignment measures
-      only the candidates named (``candidates``, product names) of the target ``query_ref``. A candidate's value in an
-      alignment is its NEW matched conserved distinguishing sites x ``SITE_WEIGHT`` (the owner's weighting, 1 over the
-      expected number of sites; ``candidate_measurements``), NOT capped at 1, and a site is identified once by (target
-      position, the group's conserved residue, the candidate), whether matched or mismatched. So the most a candidate can
-      still be valued is ``m = (the target positions not yet identified as a site of it by any alignment the head holds)
-      x SITE_WEIGHT`` (``candidate_measurements.unidentified_positions``, read from the held alignment sheets as
-      ``new_site_values`` reads them; all the target's positions for a candidate none identified). A pair of listed
-      candidates earns the difference of two values in [0, m_a] and [0, m_b]: at most ``max(m_a, m_b)``; a candidate the
-      alignment admits earns its entry, at most its ``m``; an alignment of one listed candidate and none to admit earns
-      0. The ceiling is the sum of these over the candidates named. As alignments identify the target's positions the
-      ceiling falls with them.
+    * ``bvbrc_msa``: derived from the current state, as a proved maximum (the proof is in
+      ``differential_credit.msa_test_ceiling``). For one commission (the target, the search, the candidates named, the
+      sequences per candidate) the plan is deterministic (``plan_rows``: each candidate's top hits by value, one per distinct
+      sequence), so each candidate's group size in the alignment is known: a candidate with fewer than ``MINIMUM_GROUP_SIZE``
+      sequences, or fewer than two such candidates, earns 0; an alignment whose input (candidates, sequences and order) is
+      exactly a held alignment's earns 0 (a repeat). Otherwise a candidate's value is at most ``SITE_WEIGHT`` x (the target
+      positions whose matched site of it no held alignment identified) and the alignment's rise is at most the vertex
+      maximum of ``msa_test_ceiling``. With ``arguments`` ``None`` the ceiling is the largest over every commission
+      the head's checks would accept now (``msa_best``: every held search, every subset of at least two of its admitted
+      candidates, every sequence count; commissions already held or already commissioned are left out), so that the
+      ceiling of the row shown to the model is the ceiling of one named commission, ``best_arguments``. A group context
+      that differs from every held alignment keeps the open bound: the aligner's columns for a group depend on the other
+      groups in the alignment, so nothing about a pair already compared carries over.
     * ``bvbrc_metacats``: 0. A MetaCATS report gives no measurement (``candidate_measurements``).
     * ``hmmer_profile_scan``: the scan of the target ``query_ref`` against the profile database ``database`` reports
       each family at most once, so it measures at most as many families as the database holds profiles (``model_count``
@@ -171,14 +259,10 @@ def ceiling(summary, records, action_type, arguments, ctx):
         return max((test_ceiling(standing.get(query, {}), products(query), unseen=limit, limit=limit)
                     for query in queries if not searched(view, query)), default=0.0)
     if action_type == 'bvbrc_msa':
-        options = ([(item['query_ref'], item['candidates']) for item in summary['msa_options']]
-                   if arguments is None else [(arguments['query_ref'], arguments['candidates'])])
-        remaining = unidentified_positions(records, scope, held_sources(records))
-        return max((msa_test_ceiling(standing.get(query, {}),
-                                     {name: count * SITE_WEIGHT for name, count in remaining.get(query, {}).items()},
-                                     ['product:' + name for name in names],
-                                     records.subject_length(query) * SITE_WEIGHT)
-                    for query, names in options), default=0.0)
+        if arguments is None:
+            return msa_best(summary, records)[0]
+        return msa_value(msa_state(summary, records), records, arguments['query_ref'], arguments['search_ref'],
+                         arguments['candidates'], arguments['per_candidate'])
     if action_type == 'hmmer_profile_scan':
         databases = (ctx.settings['profile_databases'] if arguments is None
                      else {arguments['database']: ctx.settings['profile_databases'][arguments['database']]})

@@ -111,30 +111,54 @@ def test_ceiling(held, measurable, unseen=0, limit=None):
     return float(max(m * (m - 1) // 2 + min(limit - m, new) for m in range(min(limit, count) + 1)))
 
 
-def msa_test_ceiling(held, maxima, measurable, full):
+def msa_test_ceiling(held, maxima, measurable):
     """The most one further alignment can add to the credit of one target, from where the list and the identified sites
-    stand.
+    stand: a PROVED maximum, not a forecast.
 
-    ``held`` is ``standing`` of the target; ``maxima`` maps each candidate the alignment can measure to the largest value
-    it can still have in one alignment: (the target positions no held alignment has identified as a matched or a mismatched
-    site of it) x the site weight (a new matched site is worth the weight, and a position counts once); ``full`` is that
-    largest value for a candidate none identified (all the target's positions x the weight); ``measurable`` lists the
-    candidates the alignment can measure. An alignment's value is NOT capped at 1 (it is a count of sites x the weight);
-    its bound is its own largest value. The alignment is the last test, so it earns:
+    ``held`` is ``standing`` of the target; ``measurable`` lists the candidates (identifiers) the alignment can measure,
+    each with at least ``MINIMUM_GROUP_SIZE`` sequences in it; ``maxima`` maps each of them to ``m_c``, the most its value
+    can be in this alignment (``SITE_WEIGHT`` x ``room_c``, where ``room_c`` is the number of target positions whose
+    matched site of ``c`` no held alignment identified: ``candidate_measurements.matched_positions_taken``).
 
-    * for a pair of listed candidates it measures, the difference of two values in [0, m_a] and [0, m_b]: at most
-      ``max(m_a, m_b)``;
-    * for a candidate not on the list that it admits, its entry, the value: at most its maximum (the pair with an admitted
-      candidate earns nothing in the test that admits it);
-    * nothing else: an alignment of one listed candidate and no new one earns 0.
+    Proof sketch.
 
-    The bound is the sum over the pairs of listed candidates plus the maxima of those it can admit. It is a bound, not a
-    forecast."""
-    measured = list(dict.fromkeys(measurable))
+    1. An alignment's value for candidate ``c`` is ``W`` x (its NEW matched distinguishing sites). A matched site of
+       ``c`` at target position ``p`` is a column where ``c``'s group conserves the TARGET's own residue ``t_p`` there, so
+       its identity is (``p``, ``t_p``, ``c``) (``new_site_values``); it is new only if that identity is unseen, and every
+       column the target occupies is exactly one position. So the count is at most ``room_c`` = ``L`` minus the positions
+       whose (``p``, ``t_p``, ``c``) is seen, whatever the alignment's columns, groups or sequences are. (A position seen
+       earlier with ANOTHER conserved residue stays open: a different group context can move the columns, so the old rule
+       "every position identified at all is closed" was not a proved bound.) Hence ``0 <= v_c <= m_c = W room_c``.
+    2. The credit adds, for this last test, the entries of the candidates it admits (not yet listed: ``v_c``, at most
+       ``m_c``; a pair with an admitted candidate earns nothing in the test that admits it) and, for each pair of listed
+       candidates both measured, ``|v_a - v_b|`` (``differential_credit``). A candidate with no new site is not measured
+       (it earns nothing and makes no pair), which only lowers the sum, so ``v_c = 0`` is allowed.
+    3. The rise ``R(v)`` is the sum of ``v_c`` over the unlisted candidates plus ``|v_a - v_b|`` over the listed pairs: a
+       convex function of ``v`` (sum of norms and linear terms) on the box ``0 <= v_c <= m_c``, so it is largest at a vertex,
+       ``v_c`` equal to 0 or to ``m_c``. For a set ``S`` of listed candidates at ``m`` and the other listed at 0 it is
+       ``sum_{a<b in S} |m_a - m_b| + sum_{a in S, b not in S} m_a`` (plus the ``m_c`` of the unlisted candidates, always
+       at ``m_c``). The bound is the largest over the sets ``S`` (all of them when 16 or fewer listed candidates are
+       measured, else the looser ``sum over pairs of max(m_a, m_b)``, which is never below it).
+    4. A candidate with fewer than ``MINIMUM_GROUP_SIZE`` sequences has no conserved site and is no partner, and a site
+       needs two groups, so fewer than two eligible candidates, or an alignment that repeats a held one exactly (the same
+       sequences in the same order: the same input, nothing new), earns 0. The caller passes only eligible candidates and
+       decides the repeat (``credit.ceiling``).
+
+    Not bounded further, and why: which columns the aligner gives a group depends on every other group in the alignment
+    (removing or adding a group can move columns), so the positions of one group in a new alignment context are
+    not fixed by its sequences; a count of residues or a share argument over the sequences would need the columns
+    fixed. Those parts keep the open bound (every position not seen as a matched site of the candidate)."""
+    measured = [candidate for candidate in dict.fromkeys(measurable) if maxima[candidate] > 0]
     listed = [candidate for candidate in measured if held.get(candidate, {}).get('listed')]
-    most = lambda candidate: maxima.get(candidate, full)
-    return (math.fsum(max(most(first), most(second)) for first, second in combinations(listed, 2))
-            + math.fsum(most(candidate) for candidate in measured if candidate not in listed))
+    new = math.fsum(maxima[candidate] for candidate in measured if candidate not in listed)
+    if len(listed) > 16:
+        return new + math.fsum(max(maxima[first], maxima[second]) for first, second in combinations(listed, 2))
+    best = 0.0
+    for mask in range(1 << len(listed)):
+        inside = [maxima[listed[i]] for i in range(len(listed)) if mask >> i & 1]
+        outside = len(listed) - len(inside)
+        best = max(best, math.fsum(abs(a - b) for a, b in combinations(inside, 2)) + outside * math.fsum(inside))
+    return new + best
 
 
 def cluster_commission_ceiling(held, candidates, clusterings):

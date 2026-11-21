@@ -40,8 +40,8 @@ The kinds of held graded source read, by the content of their retained sheet:
   mismatched)), ``new_matched`` and ``new_mismatched``. An alignment that adds no new site gives no measurement. Unlike
   the other tests an alignment's value is not capped at 1: an alignment that finds the expected number of sites earns about 1,
   and a candidate's msa sheet cannot exceed (the target's length) x ``SITE_WEIGHT``, because a site counts once.
-  ``unidentified_positions`` gives, per candidate, the target positions that no held alignment has yet identified as a site
-  of it (what the ceiling reads).
+  ``matched_positions_taken`` gives, per candidate, the target positions whose matched site of it a held alignment has
+  identified, and ``alignment_contexts`` the held alignments' inputs (what the ceiling reads).
 * a graded clustering (``cluster_sheet_v1``, the all-vs-all child): test ``cluster:<method>`` (``cluster:mcl``; one test per
   graded clustering, as every test is named, so ``@<source>`` follows); the sheet's groups are the candidate groups (the
   sequences of one ``product`` candidate in the set; the target is in no group), and for each candidate group with a sequence
@@ -254,21 +254,42 @@ def candidate_standing(reader, scope, sources):
     return {target: standing(rows) for target, rows in _by(measurements, 'target').items()}
 
 
-def unidentified_positions(reader, scope, sources):
-    """Per target of the scope, ``{candidate: positions}`` for each candidate (``product:<name>``) that a held alignment has
-    identified a site of: the number of the target's positions that no held alignment has identified as a matched or a
-    mismatched site of it. A candidate absent from the result has all the target's positions."""
+def matched_positions_taken(reader, scope, sources):
+    """Per target of the scope, ``{candidate: count}`` (candidate as ``product:<name>``) of the target positions ``p`` whose
+    matched site of the candidate a held alignment has identified: the identity (target, ``p``, the target's own residue at
+    ``p``, candidate) is in the identified set, so a later alignment can never count a matched site there again
+    (``new_site_values``). A position identified only with another conserved residue (a mismatched site) is NOT counted: a
+    different alignment can still find the target's own residue conserved there. A candidate absent has none taken."""
     scope = reader.validate_scope(scope)
     identified = _read(reader, scope, sources)[2]
-    remaining = {}
+    taken = {}
     for target in scope['subject_refs']:
-        taken = {}
-        for site_target, position, _, candidate in identified:
-            if site_target == target:
-                taken.setdefault(candidate, set()).add(position)
-        length = reader.subject_length(target)
-        remaining[target] = {'product:' + candidate: length - len(positions) for candidate, positions in taken.items()}
-    return remaining
+        sequence_ref = reader.get(target).get('sequence_ref')
+        residues = None if sequence_ref is None else reader.get_artifact(sequence_ref).decode('ascii').strip().upper()
+        found = {}
+        for site_target, position, residue, candidate in identified:
+            if site_target == target and residues is not None and residues[position - 1] == residue.upper():
+                found.setdefault('product:' + candidate, set()).add(position)
+        taken[target] = {name: len(positions) for name, positions in found.items()}
+    return taken
+
+
+def alignment_contexts(reader, scope, sources):
+    """Per target of the scope, the held alignments' inputs: one tuple per held alignment of ``((candidate name, aa_sequence_md5),
+    ...)`` for its reference sequences in the order they were given to the aligner (the sheet's order). Two alignments with
+    the same tuple (the same candidates, sequences and order) are the same input."""
+    scope = reader.validate_scope(scope)
+    contexts = {target: [] for target in scope['subject_refs']}
+    for reference in sources:
+        source = reader.get(reference)
+        target = source['operand_refs'][0] if source.get('operand_refs') else None
+        if target not in contexts:
+            continue
+        for entry in source_tool_grading_entries(reader, reference):
+            sheet = entry['grading']['sheet']
+            if sheet['schema'] == MSA_SHEET:
+                contexts[target].append(tuple((row['candidate'], row['aa_sequence_md5']) for row in sheet['references']))
+    return contexts
 
 
 def _entry(measurements, candidate):
