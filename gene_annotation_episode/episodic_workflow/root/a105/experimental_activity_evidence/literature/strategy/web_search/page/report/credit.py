@@ -60,3 +60,48 @@ async def classify_unknowns(outcome, scope, windows, ctx):
 
 def credit(summary, records):
     return classified_task_credit(summary, records)
+
+
+def ceiling(summary, records, action_type, arguments, ctx):
+    """The most the credit can rise if ``action_type`` is taken as the next unit (``arguments`` is not needed: the
+    bound is over every arguments the action can take).
+
+    The credit is ``credit_unit`` times a count of answers (for an ``a105_experiments`` task, times the sum of the
+    graded shares, each at most 1, of the commissioned experiments' sheets). The count of answers can never pass
+    ``answer_cap``: the number of distinct commissioned experiments for ``a105_experiments``, and one answer for
+    every other task kind (screening, assessment, measurement, aggregation) because each of those looks for a single
+    answer. So no unit can lift the credit above ``credit_unit * answer_cap``, and the rise is at most that less the
+    credit already held (``headroom``).
+
+    - Access tools (``state_query``, ``source_read``, ``source_locate``, ``source_pdf_*``, ``source_archive_*``,
+      ``source_sequence_references``, ``source_experimental_records``): they save no sheet, assessment or lead and
+      write no outcome that a credit answer reads, so they cannot earn: 0.
+    - ``reason``: it saves the assessment and grading sheets, the no-applicable-evidence declarations that cover
+      screening spans, and at most ONE source lead. For a ``verified_source_leads`` task (credit is
+      ``credit_unit`` per relevant lead, no finite target) one unit adds at most one lead, so the ceiling is
+      ``credit_unit``. For every other task kind it is ``headroom``.
+    - Population operations (the ``*_populate`` tools and ``literature_a105_aggregate``), when the settings offer
+      them: they save reader, grading or aggregation sheets, which can complete a measurement, grading or
+      aggregation answer, so for those kinds the ceiling is ``headroom``. They write no lead and no screening
+      declaration, so for ``verified_source_leads`` and for screening tasks they cannot earn: 0. A population
+      operation the settings do not offer cannot be taken: 0."""
+    from .task import ACCESS_NAMES, TOOL_NAMES, offered_populations
+    task = summary['task']
+    unit = task['credit_unit']
+    access = {TOOL_NAMES[name] for name in ACCESS_NAMES}
+    populations = {TOOL_NAMES[name] for name in offered_populations(ctx.settings)}
+    if action_type in access:
+        return 0
+    if action_type == 'reason':
+        if task['kind'] == 'verified_source_leads':
+            return max(0, unit)
+    elif action_type in populations:
+        if task['kind'] == 'verified_source_leads' or task.get('answer_kind') == 'screening':
+            return 0
+    elif action_type in {TOOL_NAMES[name] for name in TOOL_NAMES}:
+        return 0
+    else:
+        raise ValueError('ceiling_unknown_action_type')
+    cap = (len({item['experiment_ref'] for item in task['experiments']}) if task['kind'] == 'a105_experiments'
+           else 1)
+    return max(0, unit * cap - credit(summary, records))

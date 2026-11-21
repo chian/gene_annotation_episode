@@ -569,6 +569,12 @@ TOOLS = {
     'reason': reason}
 
 
+def offered_actions(summary, ctx):
+    """The action types offered at this decision, from the same ``offered`` that ``decide`` and ``action`` use, under
+    the names the runner records (the tool's python name; ``reason``)."""
+    return [TOOL_NAMES.get(name, name) for name in offered(ctx.settings)]
+
+
 def decide(summary, feedback, ctx):
     """Ask the model for the next tool, shown the assignment, the custody of the source, its own read outcomes,
     the goal plan, the features of the sheets it saved, the tools, the measured time and the yield table (the old
