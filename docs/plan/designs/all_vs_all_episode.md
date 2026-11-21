@@ -87,11 +87,30 @@ Child credit (`all_vs_all/credit.py`): the head's three child units, each earned
 `information_unit` for the matrix, `graded_unit` for the committed (graded) clustering; a refused or repeated step earns 0, and a try earns nothing. Child
 ceiling: each tool's unit while its check can pass, else 0 (`cluster` and `hold` 0). Yield: the completion controller to the commission's target.
 
-Head ceiling for `all_vs_all` (`HEAD/credit.ceiling`): the most the cluster test can add from the current state. The test's own credit is bounded as every
-such test's is (`test_ceiling` of the family `cluster`: it measures the named candidates, each raw value in [0, 1]; a pair of listed candidates at most the
-cluster sheet's weight, a candidate the test admits at most that weight, a single listed candidate 0); the dataset already earned its best test credit, so
-the ceiling is that bound minus the dataset's best so far, floored at 0 (`differential_credit.dataset_test_ceiling`, proof in its docstring;
-`candidate_measurements.dataset_bests`); a commission identical to one already commissioned (same search, candidates, per_candidate) 0.
+Head ceiling for `all_vs_all` (`HEAD/credit.ceiling`): the proved, tight maximum the cluster test can add from the current state
+(`differential_credit.cluster_test_ceiling`, proof in its docstring). The test measures each named candidate once, its value w x its share in the
+target's cluster, in [0, w] (w the cluster sheet's weight); appended last, its own credit (the entries it admits plus |v_a - v_b| over the listed pairs)
+is convex on that box, so it is largest at a vertex: with l listed and u unlisted candidates named, w (u + floor(l^2 / 4)) (half the listed candidates
+wholly in the target's cluster, the other half wholly outside; two candidates on the same side earn 0). Every named candidate has at least one sequence in
+the set, so that partition is an outcome the clustering can give: the bound is reached. The dataset already earned its best test credit, so the ceiling is
+that vertex bound minus the dataset's best so far, floored at 0 (`dataset_test_ceiling`; `candidate_measurements.dataset_bests`); a commission identical to
+one already commissioned or graded (same search, candidates, per_candidate) 0. With no arguments the ceiling is that of the best commission the head's check
+accepts now (`HEAD/credit.all_vs_all_best`: larger candidate sets first, the first found on a tie, the largest per_candidate not yet commissioned with that
+set), and `best_arguments` names it, so the row the model sees and a refusal's `choose_from` name a commission that reaches the row's ceiling.
+
+Direct check (labelled: NOT a real run) on a scratchpad copy of `runs/a101_goal5_ws_cspa` (state, journal `journal_cspa.sqlite3`, artifacts; run dir
+`runs/a101_goal5_run_cspa_c60596441`), the head's summary and custody rebuilt as they stood before each unit (journal receipts of earlier units); the
+recomputed old ceilings equal the journal's. Head units 2, 5, 7, 8 were `all_vs_all` of one search (all named candidates listed):
+
+| unit | named | dataset best before | ceiling of the unit's commission, old (journal) -> new | rise | row ceiling (no arguments), old (journal) -> new |
+|---|---|---|---|---|---|
+| 2 | 4 | 0 | 6.0 -> 4.0 | 3.125 | 10.0 -> 6.0 |
+| 5 | 4 | 3.125 | 2.875 -> 0.875 | 0 | 6.875 -> 2.875 |
+| 7 | 5 | 3.125 | 6.875 -> 2.875 | 1.5417 | 6.875 -> 2.875 |
+| 8 | 5 | 4.6667 | 5.3333 -> 1.3333 | 0 | 5.3333 -> 1.3333 |
+
+Every rise is at or below the new ceiling. The best commission at each point was the search with all five admitted products at per_candidate 20; the
+head's check accepts it (no problems), and its ceiling equals the row's.
 
 ## What was reused and what was not
 
@@ -138,4 +157,4 @@ This supersedes the earlier text above where they differ (the head's `inflations
 - `cluster` is a TRY (a working result): it returns controlled facts (cluster count, sizes, the target's cluster size, per candidate its size, its sequences in the target's cluster, the clusters it spans). Nothing is graded. A tuning of a matrix is tried once; a partition already held is reported as the same clustering. `commit_clustering` (once) grades one held try into the cluster sheet: the one graded source the head reads, so tries neither add to nor dilute the head's credit. Child credit: the database, the matrix and the committed clustering earn the three units; a try earns 0 (ceiling 0); `commit_clustering` has the graded unit as its ceiling while a try is held and none committed.
 - On the C2 set (30 sequences; score ratios 0.739 to 1.0): no contrast gives one cluster at every inflation; `rescale` at 4.0 and every inflation at `percentile_50` give two clusters (21 with the target, 9 = the CspC product); `percentile_75` also splits CspB/CspG/CspI off (inflation 1.4: 6 of its 10 stay with the target; 2.0: none). The committed `rescale`, 4.0 clustering gives CspA 10/10, CspB/CspG/CspI 10/10, CspC 0/9, so the shares are 1.0, 1.0 and 0.0, the shape the MSA test gave (1.0, 0.29, 0.0). The cluster test's value rule did not need to change; neither did the child's credit or the ceilings, apart from the weights below.
 - THE SHEET WEIGHTS (`differential_credit.SHEET_WEIGHT`, derivation beside the constants): the weight of each sheet's family is one over its typical strong value, the value in one test of the candidate that leads the stored real runs (C2, H1, the CspA run; all E. coli CspA): database_search 1/0.9593, profile_scan 1/0.8198, msa 7/12 (the leader's first alignment, 12 matched sites x 1/7), cluster 1, pairwise 1 (no stored value). The score is the sum over sheets of weight x sheet value; entries, differentials and the ceilings (`test_ceiling(..., family)`, the msa ceiling's maxima) are in the weighted units. Credit definition `a101_differential_credit_v3` (carries `sheet_weights`). Before and after on the stored records: C2 with the committed clustering 10.5289 to 9.4622 (CspA 3.6736 to 3.0000, CSD 0.8198 to 1.0000); the CspA run (`runs/a101_final_run_cspa`) 8.5289 to 7.4622 (CspA 2.6736 to 2.0000: database 1.0, msa 1.0). The data is one target: re-derive as other targets are run.
-- Head wiring: slot `all_vs_all`; commission fields `query_ref`, `search_ref`, `candidates` (two or more admitted product candidates), `per_candidate`; its one check `all_vs_all_run.check_commission` (a set already commissioned or graded is refused); offered only while a held graded BV-BRC search admits at least two product candidates; the head's ceiling for it is `test_ceiling` of the family `cluster` over the named candidates minus the dataset's best test credit so far, floored at 0 (a one-candidate commission 0; identical to one commissioned or graded 0; with no arguments the largest over the held searches with their admitted candidates). The head's `database_blast` and `blast_database_preparation` children and the old `all_vs_all_blast` skeleton are removed; `database_blast_search.py` stays because the BV-BRC children import its shared functions (`bvbrc_blast_search`, `bvbrc_job_child`, `bvbrc_metacats_search`, `bvbrc_msa_alignment`, and the head's `task.py`: `seconds_between`).
+- Head wiring: slot `all_vs_all`; commission fields `query_ref`, `search_ref`, `candidates` (two or more admitted product candidates), `per_candidate`; its one check `all_vs_all_run.check_commission` (a set already commissioned or graded is refused); offered only while a held graded BV-BRC search admits at least two product candidates; the head's ceiling for it is the vertex bound of the cluster test (`cluster_test_ceiling`) minus the dataset's best test credit so far, floored at 0, with `best_arguments` naming the commission that reaches the no-arguments ceiling (see "Credit and ceilings"). The head's `database_blast` and `blast_database_preparation` children and the old `all_vs_all_blast` skeleton are removed; `database_blast_search.py` stays because the BV-BRC children import its shared functions (`bvbrc_blast_search`, `bvbrc_job_child`, `bvbrc_metacats_search`, `bvbrc_msa_alignment`, and the head's `task.py`: `seconds_between`).

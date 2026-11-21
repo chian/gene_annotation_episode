@@ -180,13 +180,48 @@ def test_ceiling(held, measurable, family, unseen=0, limit=None):
 
 def dataset_test_ceiling(bound, best):
     """The most one further test of a dataset can add to the credit, given ``bound``, the most that test's own credit (its
-    entries plus its differentials) can be (``test_ceiling``), and ``best``, the largest test credit of the dataset's tests held
+    entries plus its differentials) can be (for a clustering, the vertex bound of ``cluster_test_ceiling``), and ``best``, the largest test credit of the dataset's tests held
     so far (``differential_credit(...)['datasets'][dataset]['best']``, 0 with none): ``max(0, bound - best)``.
 
     Proof. The dataset contributes the largest test credit of its tests to the credit, and nothing else of the credit changes
     when a test is appended (earlier entries and differentials are fixed; the new test's entries and differentials are its own
     test credit). So the credit rises by ``max(0, T - best)`` where ``T`` is the new test's credit, and ``T <= bound``."""
     return max(0.0, bound - best)
+
+
+def cluster_test_ceiling(held, measurable, best):
+    """The most one further graded clustering of a dataset can add to the credit of one target: a PROVED, TIGHT maximum.
+
+    ``held`` is ``standing`` of the target; ``measurable`` lists the candidates (identifiers) the clustering's set has a group of
+    sequences for (each named candidate of a commission: it is admitted from the dataset's search, so it has at least one hit of
+    its product and the set holds at least one of its sequences); ``best`` is the dataset's largest test credit so far
+    (``differential_credit(...)['datasets'][dataset]['best']``, 0 with none). With ``w`` = ``SHEET_WEIGHT['cluster']``, ``l`` the
+    listed candidates measured and ``u`` the unlisted ones, the ceiling is ``max(0, w (u + floor(l^2 / 4)) - best)``.
+
+    Proof.
+
+    1. The test measures each candidate group once: its value is ``w`` x the share of the group's sequences in the target's
+       cluster, so ``0 <= v_c <= w`` (``cluster_sheet.group_values``; a group with share 0 is still measured). Nothing else is
+       measured: the set holds only the target and the named candidates' sequences.
+    2. Appended last, the test's own credit ``T`` is the entries of the candidates it admits (each ``v_c``: an unlisted candidate
+       has no earlier value above 0, and its sheet value from the dataset, the largest over the dataset's tests, is ``v_c``) plus
+       ``|v_a - v_b|`` for each pair of listed candidates (``differential_credit``): ``T(v)`` is convex on the box
+       ``0 <= v_c <= w``, so its maximum is at a vertex (``msa_test_ceiling`` step 3; ``vertex_maximum`` with every maximum ``w``).
+       At a vertex with ``k`` of the listed candidates at ``w`` and ``l - k`` at 0, a pair inside either set earns 0 and a pair
+       across earns ``w``, so ``T = w (u + k (l - k))``, largest at ``k = floor(l / 2)``: ``w (u + floor(l^2 / 4))``. This is the
+       vertex bound in closed form, exact for any ``l`` (``vertex_maximum`` loosens above 16 listed candidates).
+    3. The dataset earns the largest test credit of its tests and nothing else of the credit changes when its test is appended
+       (``dataset_test_ceiling``), so the credit rises by ``max(0, T - best) <= max(0, w (u + floor(l^2 / 4)) - best)``.
+    4. Tight: each group has at least one sequence, so a share of 0 and a share of 1 are both outcomes the clustering can give;
+       the partition that puts the groups of ``floor(l / 2)`` listed candidates and of every unlisted one in the target's cluster
+       and the other groups outside it gives exactly ``T = w (u + floor(l^2 / 4))``.
+
+    Not bounded further, and why: which partition MCL gives depends on the sequences and on the tuning the child's model chooses
+    after the commission, so no vertex is excluded before the clustering runs."""
+    weight = SHEET_WEIGHT['cluster']
+    measured = list(dict.fromkeys(measurable))
+    listed = sum(1 for candidate in measured if held.get(candidate, {}).get('listed'))
+    return dataset_test_ceiling(weight * float(len(measured) - listed + listed * listed // 4), best)
 
 
 def msa_test_ceiling(held, maxima, measurable):

@@ -18,16 +18,16 @@ what ``read_from_parent`` produced (the task key), never the assignment; the dec
 
 The definition the learned shares are on (``forecast_definition``: the digest of the credit definition record and
 ``CEILING_VERSION``) is handed to the controller, and the estimate ledger's history of an action is only the rows recorded
-under the same definition. ``CEILING_VERSION`` names what ``credit.ceiling`` (and the library's ``test_ceiling`` and
-``msa_test_ceiling`` it calls) means: change it whenever a ceiling's derivation changes, so shares learned against the
-old ceilings are not used against the new ones. (It belongs beside ``ceiling`` in ``credit.py``; it is here until that
+under the same definition. ``CEILING_VERSION`` names what ``credit.ceiling`` (and the library's ``test_ceiling``,
+``msa_test_ceiling``, ``metacats_test_ceiling`` and ``cluster_test_ceiling`` it calls) means: change it whenever a ceiling's
+derivation changes, so shares learned against the old ceilings are not used against the new ones. (It belongs beside ``ceiling`` in ``credit.py``; it is here until that
 file can be edited.)"""
 from gene_annotation_episode.episodic_workflow.episode_support.configuration.yield_declarations import (
     checked_yield_declaration, forecast_definition, open_yield_controller)
 
 from .credit import A101DifferentialCredit
 
-CEILING_VERSION = 'a101_ceiling_v1'
+CEILING_VERSION = 'a101_ceiling_v2'
 
 
 def yield_controller(initial_credit, settings, parent_input):
