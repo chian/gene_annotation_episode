@@ -106,7 +106,8 @@ def msa_options(reader, scope, table):
     for ref_ in (ref_ for ref_ in reader.list('source') if ref_['provider'] == SEARCH_PROVIDER):
         (entry,) = source_tool_grading_entries(reader, ref_['id'])
         search = entry['grading']['sheet']['normalized_result']['search']
-        test = 'database_search:' + SEARCH_PROVIDER + ':' + search['program'] + ':' + search['request']['database']
+        test = ('database_search:' + SEARCH_PROVIDER + ':' + search['program'] + ':' + search['request']['database']
+                + '@' + ref_['id'])   # one test is one graded source (candidate_measurements)
         target = ref_['operand_refs'][0]
         names = [row['name'] for row in table['targets'][target]['candidates']
                  if row['vocabulary'] == 'product' and test in row['tests']]
