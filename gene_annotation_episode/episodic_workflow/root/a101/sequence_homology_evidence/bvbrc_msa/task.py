@@ -74,6 +74,12 @@ def decide(summary, feedback, ctx):
                         output_schema(APPLICATION, summary['state']))
 
 
+def offered_actions(summary, ctx):
+    """The action types offered at this decision: the names of the options of the schema ``decide`` asks the model with."""
+    schema = output_schema(APPLICATION, summary['state'])
+    return [option['properties']['name']['enum'][0] for option in schema['properties']['action']['anyOf']]
+
+
 def action(response, summary, records, ctx):
     """The model's JSON to a unit; the action's one check runs here, before anything runs."""
     try:
