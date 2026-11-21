@@ -58,3 +58,19 @@ Target: E. coli K-12 CspA (UniProt P0A9X9, 70 residues; the same sequence as run
 - Credit at the end near 4.2 + the family's score (about 5.1). No differential (no two listed candidates undergo a later common test: the family undergoes only the scan, the products only the search).
 - The return: the leading candidate is the CspA product (0.959) unless the family scores higher (then the family leads and the CspA product is second); candidate_count 6; unlabelled 0.
 - After the last gain the estimator stops the head after about 3 to 6 further units that earn nothing (the forecast must fall to 0.1; I cannot predict the number better).
+
+## Run H1: observed (`runs/a101_diff_run_H1`, workspace `runs/a101_diff_ws_H1`, journal `journal_H1.sqlite3`, report `report_H1.json`; run id `a101_diff_H1`; 866 s; exit 0)
+
+Actions the head's model chose, in order, with the credit after each unit (controller steps of the journal):
+
+| unit | action | credit after | gain | estimator's upper bound of the next gain |
+| --- | --- | --- | --- | --- |
+| 0 | `hmmer_profile_scan` (pfam_a, the target, resource local) | 0.8198 | +0.8198 | 2.814 |
+| 1 | child `bvbrc_blast` (blastp, bacteria-archaea, resource bvbrc, until extracted; one commission, the child waited and extracted) | 5.0243 | +4.2045 | 6.703 |
+| 2 to 20 | 19 `reason` commits (assessments, interpretation accounts, a structural proposal) | 5.0243 | 0 each | 3.41, 3.04, 2.34, 1.90, 0.98, 1.37, 1.17, 0.48, 0.87, 0.73, 0.62, 0.54, 0.47, 0.40, 0.13, 0.11, 0.26, 0.20, 0.059 |
+
+The estimator stopped the head (`ended_by yield_stop`, 21 units) when the upper bound fell to 0.059 (cost 0.1). 19 units followed the last gain. The model never chose a pairwise comparison; it chose no other search.
+
+Credit rose by each new candidate's score: the scan admitted one family, CSD (PF00313.29), score 0.8198 (the credit rose 0.8198); the extract admitted five products with D1's scores and the credit rose 4.2045 (= 0.9593 + 0.8212 + 0.8113 + 0.8082 + 0.8046). No differential arose (as predicted). The head's return (`stdout.log`): credit 5.0243; the target's finding carries `candidate_count` 6, `unlabelled_hit_count` 0, `differentials` [] and `candidates` (leading first): product "Cold shock protein of CSP family => CspA (naming convention as in E.coli)" 0.9593 (55 measurements); product "... => CspB/CspG/CspI ..." 0.8212 (156); profile_family CSD PF00313.29 0.8198 (1); product "Cold shock protein of CSP family" 0.8113 (53); "hypothetical protein" 0.8082 (2); "... => CspC ..." 0.8046 (34). The model's decision context from the second decision on showed `candidates` and `tests` (model call 2 and 26 of `model_calls_H1`).
+
+Against the prediction: actions as predicted (scan then search, one `Homology` submission: one job directory in `bvbrc_jobs`), the CSD family scored 0.82 (predicted near 0.9), the credit near 5.02 (predicted about 5.1), the leader the CspA product, six candidates, no differential. Not as predicted: 19 units after the last gain, not 3 to 6: the accumulation controller's bound fell slowly (and rose twice, at units 7, 10, 18) because it was fitted to a first gain of 4.2 within a few units of real time.
