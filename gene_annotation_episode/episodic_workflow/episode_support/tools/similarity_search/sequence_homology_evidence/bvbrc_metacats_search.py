@@ -167,7 +167,7 @@ def extract(ctx, handoff_ref, request, commission):
         references, observations = [], []
         for group, value in zip(sheet['groups'], sheet['values'] or [None] * len(sheet['groups'])):
             reference = store.put('reference', {
-                'reference_type': 'protein', 'source_ref': source['id'], 'accession': None, 'label': group['product'],
+                'reference_type': 'protein', 'source_ref': source['id'], 'accession': group['label'], 'label': group['product'],
                 'sequence_ref': None, 'molecule': 'protein', 'length': None, 'term_refs': [], 'context_refs': []},
                 origin='external')
             references.append(reference['id'])
@@ -176,9 +176,9 @@ def extract(ctx, handoff_ref, request, commission):
                     'kind': 'comparison', 'subject_refs': [target_ref], 'source_subject_refs': [reference['id']],
                     'source_ref': source['id'], 'anchor': None,
                     'measurements': measurements(reference_ref=ref(reference['id']),
-                                                 target_residue_fraction=number(value['value']),
-                                                 significant_position_count=number(sheet['significant_count']),
-                                                 group_size=number(group['size'])),
+                                                 identity_fraction=number(value['value']),
+                                                 count=number(sheet['significant_count']),
+                                                 row_count=number(group['size'])),
                     'dependencies': [target_ref, reference['id']]}, origin='tool')['id'])
         product = record_product(
             store, artifact_ref=result_ref, kind=PRODUCT_KIND, generated_by=handoff_ref,
