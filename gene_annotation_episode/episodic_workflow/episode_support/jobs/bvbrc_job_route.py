@@ -29,6 +29,9 @@ The ``Homology`` job is ``{'application', 'program', 'database', 'query_file'}``
 ``precomputed_database``), ``query_file`` the staged query. The ``MSA`` job is ``{'application', 'aligner', 'alphabet',
 'sequences_file'}``: ``sequences_file`` the staged FASTA (at least two sequences), sent as the application's
 ``fasta_keyboard_input`` with ``input_type`` ``input_sequence``.
+The ``MetaCATS`` job is ``{'application', 'p_value', 'alignment_file', 'group_file'}``: the staged aligned FASTA and group
+file are created in the job's own folder (an entry's ``uploads``) and the job takes their workspace paths with
+``input_type`` ``files`` (the service takes a workspace path of the same account; nothing is uploaded elsewhere).
 
 * ``submit``: finds the home workspace of the login in the service (the listing of ``/``: the one workspace named
   ``home`` the login owns), creates ONE folder for the job under ``<home>/<root_folder>/<handle>`` (the owner's folder
@@ -71,6 +74,9 @@ from gene_annotation_episode.episodic_workflow.episode_support.acquisition.servi
 from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_homology_evidence.domain import (
     parse_sequences)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search import blast_search as blast
+from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_metacats_analysis import (
+    ALIGNMENT_FILE, CHISQ_FILE, GROUP_FILE, GROUP_HEADER, MC_FILE, MINIMUM_GROUPS, P_VALUES as METACATS_P_VALUES,
+    parse_alignment)
 
 from .api_job_route import (CATALOG_FILE, ENDED, INTENT_FILE, REQUEST_FILE, RESULT_DIRECTORY, SPACING,
                             STATUS_FILE, SUBMISSION_FILE, ApiJobRoute, _publish, utc_now)
@@ -172,6 +178,37 @@ def _msa_parameters(prepared, folder, output_file):
             'fasta_keyboard_input': prepared['sequences_fasta'], 'output_path': folder, 'output_file': output_file}
 
 
+def _metacats_prepare(job, files):
+    """The facts a ``MetaCATS`` request is built from, with its two staged files read: the aligned FASTA and the group file
+    (a header line, then one ``identifier<TAB>label`` line per sequence); every sequence of the alignment is in a group
+    (the service makes a sequence of no group a group of its own), at least two groups."""
+    if job['p_value'] not in METACATS_P_VALUES:
+        raise ValueError('bvbrc_metacats_job_p_value_invalid')
+    alignment, groups = (files[job[name]].decode('ascii') for name in ('alignment_file', 'group_file'))
+    rows = parse_alignment(alignment)
+    lines = [line.split('\t') for line in groups.splitlines()[1:]]
+    labels = {label for _, label in lines}
+    if (groups.splitlines()[0] != 'Seq_ID\t' + GROUP_HEADER or any(len(line) != 2 for line in lines)
+            or sorted(name for name, _ in lines) != sorted(name for name, _ in rows) or len(labels) < MINIMUM_GROUPS):
+        raise ValueError('bvbrc_metacats_job_requires_every_sequence_of_the_alignment_in_one_of_two_or_more_groups')
+    return {'p_value': job['p_value'], 'sequence_count': len(rows), 'group_count': len(labels),
+            'columns': len(rows[0][1]), 'alignment_sha256': hashlib.sha256(alignment.encode()).hexdigest(),
+            'groups_sha256': hashlib.sha256(groups.encode()).hexdigest(),
+            'staged': {'alignment': alignment, 'groups': groups}}
+
+
+def _metacats_parameters(prepared, folder, output_file):
+    return {'input_type': 'files', 'alphabet': 'aa', 'alignment_type': 'aligned_protein_fasta',
+            'alignment_file': folder + '/' + ALIGNMENT_FILE, 'group_file': folder + '/' + GROUP_FILE,
+            'p_value': prepared['p_value'], 'output_path': folder, 'output_file': output_file}
+
+
+def _metacats_uploads(prepared, folder):
+    """The two input files, created in the job's own folder (as the Workspace takes them: type and the text itself)."""
+    return [[folder + '/' + ALIGNMENT_FILE, 'aligned_protein_fasta', {}, prepared['staged']['alignment']],
+            [folder + '/' + GROUP_FILE, 'tsv', {}, prepared['staged']['groups']]]
+
+
 def native_params(application, parameters):
     """The ``start_app2`` operands of ``application`` with ``parameters``, checked against the retained definition of the
     application (``forms/application_service_specs/original/<application>.json``, the service's own app spec): every
@@ -205,7 +242,13 @@ APPLICATIONS = {
     'MSA': {'job': ('application', 'aligner', 'alphabet', 'sequences_file'), 'prepare': _msa_prepare,
             'parameters': _msa_parameters, 'native': lambda prepared, parameters: native_params('MSA', parameters),
             'output_file': 'msa', 'bulk': 'sequences_fasta',
-            'result_files': {'msa.afa': 'the aligned FASTA of the sequences'}}}
+            'result_files': {'msa.afa': 'the aligned FASTA of the sequences'}},
+    'MetaCATS': {'job': ('application', 'p_value', 'alignment_file', 'group_file'), 'prepare': _metacats_prepare,
+                 'parameters': _metacats_parameters, 'native': lambda prepared, parameters: native_params(
+                     'MetaCATS', parameters), 'uploads': _metacats_uploads, 'output_file': 'metacats',
+                 'bulk': 'staged',
+                 'result_files': {CHISQ_FILE: 'the positions that differ between the groups (chi-square, TSV)',
+                                  MC_FILE: 'the groups that differ at each such position (TSV)'}}}
 
 
 class BvbrcJobRoute(ApiJobRoute):
@@ -309,6 +352,8 @@ class BvbrcJobRoute(ApiJobRoute):
             made = {'outcome': 'refused', 'failure': None}
             try:
                 self._request('Workspace.create', [{'objects': [[folder, 'folder']]}], 'submit')
+                if 'uploads' in spec:
+                    self._request('Workspace.create', [{'objects': spec['uploads'](prepared, folder)}], 'submit')
                 value, snapshot = self._request('AppService.start_app2', native_params_, 'submit')
             except RouteRequestError as error:
                 if error.failure['code'] == SPACING:

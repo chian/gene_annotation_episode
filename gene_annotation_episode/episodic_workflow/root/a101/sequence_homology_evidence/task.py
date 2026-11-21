@@ -56,6 +56,10 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
     bvbrc_blast_search as bvbrc)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence import (
     bvbrc_msa_alignment as msa)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence import (
+    bvbrc_metacats_search as metacats)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_metacats_analysis import (
+    P_VALUES as METACATS_P_VALUES)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.database_blast_search import (
     seconds_between)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.pairwise_blast_comparison import (
@@ -72,20 +76,24 @@ HEAD = 'sequence_homology_evidence'
 # ``CHILD_DESCRIPTIONS`` and ``SELECTABLE`` and its builder in ``messages/msg_to_child.py``.
 CHILD_SLOTS = {'database_blast': 'sequence_homology_evidence/database_blast',
                'bvbrc_blast': 'sequence_homology_evidence/bvbrc_blast',
-               'bvbrc_msa': 'sequence_homology_evidence/bvbrc_msa'}
+               'bvbrc_msa': 'sequence_homology_evidence/bvbrc_msa',
+               'bvbrc_metacats': 'sequence_homology_evidence/bvbrc_metacats'}
 # What the model supplies to commission each slot: a function of (summary, resources) that returns
 # ``(properties, required)`` of controlled values, or ``None`` while the commission cannot be stated.
 COMMISSIONS = {'database_blast': lambda summary, resources: database_blast_fields(summary, resources),
                'bvbrc_blast': lambda summary, resources: bvbrc_blast_fields(summary, resources),
-               'bvbrc_msa': lambda summary, resources: bvbrc_msa_fields(summary, resources)}
+               'bvbrc_msa': lambda summary, resources: bvbrc_msa_fields(summary, resources),
+               'bvbrc_metacats': lambda summary, resources: bvbrc_metacats_fields(summary, resources)}
 # The one deterministic check of each slot's filled commission: a function of (the model's commission, summary,
-# resources) that returns the things to fix (an empty list: it can be commissioned). Added with the slot.
-COMMISSION_CHECKS = {'database_blast': lambda commission, summary, resources: check_database_blast(
+# resources, records: the custody reader) that returns the things to fix (an empty list: it can be commissioned). Added with the slot.
+COMMISSION_CHECKS = {'database_blast': lambda commission, summary, resources, records: check_database_blast(
     commission, summary, resources),
-                     'bvbrc_blast': lambda commission, summary, resources: check_bvbrc_blast(
+                     'bvbrc_blast': lambda commission, summary, resources, records: check_bvbrc_blast(
                          commission, summary, resources),
-                     'bvbrc_msa': lambda commission, summary, resources: check_bvbrc_msa(
-                         commission, summary, resources)}
+                     'bvbrc_msa': lambda commission, summary, resources, records: check_bvbrc_msa(
+                         commission, summary, resources),
+                     'bvbrc_metacats': lambda commission, summary, resources, records: check_bvbrc_metacats(
+                         commission, summary, resources, records)}
 # The programs the head commissions: those its credit can score. The A101 subscore (``route_native_grading``) scores the
 # sheet of a ``blastp`` search; for any other program it raises (``a101_translated_or_nucleotide_map_not_bound``,
 # ``a101_original_protein_mapping_required``), which would end the run (offline run O3). The child itself takes every
@@ -107,7 +115,7 @@ THOUGHT_FIELDS = ('id', 'name', 'description', 'use_when', 'live_alternatives', 
                   'outcome_contingencies', 'boundary')
 # The optional return fields a commission may select from what the child declares (read from the child's own
 # ``RETURN_FORM``); credit and finding are always returned. A child's entry is added with its commission.
-SELECTABLE = {'database_blast': [], 'bvbrc_blast': [], 'bvbrc_msa': []}
+SELECTABLE = {'database_blast': [], 'bvbrc_blast': [], 'bvbrc_msa': [], 'bvbrc_metacats': []}
 
 # The two bodies the old ``ScientificGoal.instructions`` appended after the goal text, by the entry version of the
 # selected evidence axis (instruction text, unchanged).
@@ -235,6 +243,33 @@ CHILD_DESCRIPTIONS = {
         'a labelled data product (data_products shows it with where it also lies in the BV-BRC workspace) that a later '
         'child that needs an alignment is passed. An alignment already held is not commissioned again; a job that failed is '
         'not commissioned again.'),
+    'bvbrc_metacats': (
+        'Test the alignment you hold with MetaCATS through the BV-BRC application service (the MetaCATS application, protein, '
+        'run on the owner\'s account). The alignment must be a labelled data product of kind multiple_sequence_alignment that '
+        'you hold (data_products shows it; metacats_options shows each one MetaCATS can take, with its candidate groups). '
+        'MetaCATS looks for the alignment positions where the sequences of different groups differ significantly. Code, not '
+        'you, builds the groups: one group per product candidate of the alignment, its members that candidate\'s reference '
+        'sequences; the target is in no group, because it is what is being placed. When the result is extracted, for each '
+        'significant position the residue counts per group and the target\'s residue are saved, and each candidate group '
+        'has a value in one more test, metacats at the p-value you chose: the mean over the significant positions of the '
+        'fraction of the group\'s sequences that carry the target\'s residue there (0 to 1; a position where the target has a '
+        'gap counts 0). Candidates already on your list that both undergo this test can differentiate each other. If no '
+        'position is significant the groups do not differ at that p-value: that is a result, but it places no candidate and '
+        'earns nothing. ' + CREDIT_TEXT + ' Fill the five fields of its commission: query_ref (the alignment\'s target), '
+        'alignment_ref (a row_ref of metacats_options), p_value (0.05 or 0.01), resource_id (a bvbrc resource of '
+        'bound_resources) and until. Code checks the commission before the child is commissioned; if something is wrong it '
+        'comes back in feedback with the things to fix and nothing was commissioned. While a child runs, you do nothing '
+        'else: your next decision comes after it returns. What until means: with until launched the child estimates the '
+        'duration, launches the job and returns at once; the job then keeps running at the service, you can use your other '
+        'actions while it runs, and the child is said to be parked. With until extracted the child follows the job to its '
+        'end and extracts the result into the graded sheet; it is also how a parked job is continued: while '
+        'bvbrc_metacats_jobs shows a job as outstanding, commissioning the child again with the same fields and until '
+        'extracted continues that job and submits nothing. What comes back: the state of the job (no_estimate, estimated, '
+        'launched, finished, extracted or failed), the groups, sequences, columns and significant positions, the seconds '
+        'estimated and observed, the last failure code and the credit; when parked (parked true) a wait notice: '
+        'seconds_since_launch, estimated_seconds and expected_remaining_seconds. The result is also kept as a labelled data '
+        'product (an alignment position report). A report of the same groups and p-value already held is not commissioned '
+        'again; a job that failed is not commissioned again.'),
 }
 
 
@@ -414,6 +449,31 @@ def check_bvbrc_msa(commission, summary, resources):
                                                      commission['per_candidate'])))
 
 
+def bvbrc_metacats_fields(summary, resources):
+    """The commission of ``bvbrc_metacats``: the alignment (a held data-product row of kind ``multiple_sequence_alignment``
+    with at least two candidate groups of at least two sequences: ``metacats_options``), its target, the p-value and the
+    BV-BRC resource, each from a fixed set. Not offered while no such alignment is held or no BV-BRC resource is bound."""
+    options = summary['metacats_options']
+    services = [name for name, kind in resources.items() if kind == bvbrc.ROUTE_KIND]
+    if not options or not services:
+        return None
+    properties = {'query_ref': {'enum': list(dict.fromkeys(item['query_ref'] for item in options))},
+                  'alignment_ref': {'enum': [item['alignment_ref'] for item in options]},
+                  'p_value': {'enum': list(METACATS_P_VALUES)}, 'resource_id': {'enum': services},
+                  'until': {'enum': list(bvbrc.UNTIL)}}
+    return properties, list(properties)
+
+
+def check_bvbrc_metacats(commission, summary, resources, records):
+    """The things to fix in a commission of ``bvbrc_metacats`` (``bvbrc_metacats_search.check_commission``: the requirement
+    that the alignment is a held data product of its kind comes first)."""
+    return metacats.check_commission(
+        commission, reader=records, options=summary['metacats_options'], resources=resources,
+        jobs=summary['bvbrc_metacats_jobs'],
+        commissioned=[(row['arguments']['alignment_ref'], row['arguments']['p_value']) for row in summary['units']
+                      if row['kind'] == 'child' and row['slot'] == 'bvbrc_metacats'])
+
+
 def bvbrc_searches_view(searches, now, msa=False):
     """The BV-BRC searches this episode holds as the model sees them at ``now`` (the decision's recorded time): each with its
     state, whether it is outstanding, and for an outstanding one the seconds since its launch and the seconds still
@@ -525,6 +585,9 @@ def decide(summary, feedback, ctx):
         'msa_options': summary['msa_options'],
         'bvbrc_msa_jobs': bvbrc_searches_view(summary['bvbrc_msa_jobs'], ctx.clock.now, msa=True),
         'held_alignments': summary['held_alignments'], 'data_products': summary['data_products'],
+        'metacats_options': summary['metacats_options'],
+        'bvbrc_metacats_jobs': bvbrc_searches_view(summary['bvbrc_metacats_jobs'], ctx.clock.now, msa=True),
+        'held_metacats': summary['held_metacats'],
         'tools': [{'name': 'reason', 'description': DESCRIPTIONS['reason']}, *own, *tools],
         'child_options': [{'slot': slot, 'binding_path': CHILD_SLOTS[slot], 'description': CHILD_DESCRIPTIONS[slot],
                            'selectable_return_fields': SELECTABLE[slot]} for slot in offered],
@@ -573,7 +636,7 @@ def action(response, summary, records, ctx):
     except (ValueError, KeyError, TypeError, ContractError, ValidationError) as error:
         raise Rejected(rejection_feedback(error, category='action_contract')) from error
     if selection['kind'] == 'episode_child':
-        problems = COMMISSION_CHECKS[selection['slot']](selection, summary, resources)
+        problems = COMMISSION_CHECKS[selection['slot']](selection, summary, resources, records)
         if problems:
             raise Rejected({'status': 'invalid', 'category': selection['slot'] + '_commission',
                             'detail': {'commission': {key: value for key, value in selection.items()

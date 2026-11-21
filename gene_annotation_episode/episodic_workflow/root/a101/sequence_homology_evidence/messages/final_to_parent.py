@@ -24,7 +24,7 @@ def feature_field(name, rule):
 
 
 WAITING_FORM = RecordForm({
-    'slot': ChoiceField('text', 'The child episode the job runs under', ('bvbrc_blast', 'bvbrc_msa')),
+    'slot': ChoiceField('text', 'The child episode the job runs under', ('bvbrc_blast', 'bvbrc_msa', 'bvbrc_metacats')),
     'seconds_since_launch': Field('number', 'The seconds from the launch to the latest thing the child knew'),
     'expected_remaining_seconds': Field('number', 'The seconds still expected, as the child last knew them'),
 })
@@ -87,7 +87,7 @@ RETURN_FORM = RecordForm({
 
 # The slots whose report closes one handoff, by the state of the child's finding that does it. A child is added here when
 # built.
-CLOSING_STATES = {'database_blast': 'graded', 'bvbrc_blast': 'extracted', 'bvbrc_msa': 'extracted'}
+CLOSING_STATES = {'database_blast': 'graded', 'bvbrc_blast': 'extracted', 'bvbrc_msa': 'extracted', 'bvbrc_metacats': 'extracted'}
 
 
 def final_to_parent(summary, completion, selection):
@@ -96,7 +96,7 @@ def final_to_parent(summary, completion, selection):
     waiting = [{'slot': row['slot'], 'seconds_since_launch': row['finding']['seconds_since_launch'],
                 'expected_remaining_seconds': row['finding']['expected_remaining_seconds']}
                for index, row in enumerate(summary['child_reports'])
-               if row['slot'] in ('bvbrc_blast', 'bvbrc_msa') and row['finding'].get('parked')
+               if row['slot'] in ('bvbrc_blast', 'bvbrc_msa', 'bvbrc_metacats') and row['finding'].get('parked')
                and not any(later['slot'] == row['slot'] and later['finding']['state'] == 'extracted'
                            for later in summary['child_reports'][index + 1:])]
     result = {'credit': completion['credit'],

@@ -31,7 +31,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
 
 from gene_annotation_episode.episodic_workflow.episode_support.records.data_products import products
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence import (
-    bvbrc_job_child as job_child, bvbrc_msa_alignment as msa)
+    bvbrc_job_child as job_child, bvbrc_metacats_search as metacats, bvbrc_msa_alignment as msa)
 
 from ..credit import A101DifferentialCredit, A101SequenceCredit, held_candidate_table
 from ..task import CHILD_SLOTS, PAIRWISE_TOOL, PROFILE_TOOL
@@ -144,6 +144,9 @@ def internal_summary(view):
             'msa_options': msa.msa_options(records, parent['scope'], table),
             'bvbrc_msa_jobs': job_child.held_jobs(records, msa.APPLICATION),
             'held_alignments': msa.graded_rows(records),
+            'metacats_options': metacats.held_alignments(records),
+            'bvbrc_metacats_jobs': job_child.held_jobs(records, metacats.APPLICATION),
+            'held_metacats': metacats.graded_rows(records),
             'data_products': [{'row_ref': row['id'], 'kind': row['kind'], 'edam_data': row['edam_data'],
                                'edam_format': row['edam_format'], 'locations': row['locations'],
                                'settings': row['settings']} for row in held_products],
