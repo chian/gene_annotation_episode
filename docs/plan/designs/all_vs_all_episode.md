@@ -30,7 +30,7 @@ folder in the run's local resource workspace, each keeping a labelled data produ
 | `prepare_database` (`resource_id`) | local resource bound; set of at least 2 sequences; no database of this commission held (reuse key); no earlier failure; `makeblastdb`, `blastdbcmd`, python exist | the set's hit sequences fetched once by md5 (`sequences_by_md5`), the set kept as `protein_sequences`; `makeblastdb` (existing `prepare_locally`); the database files packed into ONE tar | `blast_protein_database`: data_1233 Sequence set (protein) / format_3981 TAR |
 | `all_vs_all_blast` (`resource_id`, `database_ref`) | the database is a held `blast_protein_database` product (`require_product`); no matrix of it held; no earlier failure; `blastp` exists | a new job folder: the driver unpacks the tar there and runs `blastp -db` of every sequence of the set; report parsed and checked for self-hits | `sequence_similarity_matrix`: data_2082 Matrix / format_3475 TSV |
 | `cluster` (`resource_id`, `matrix_ref`, `inflation`, `contrast`) | the matrix is a held `sequence_similarity_matrix` product; inflation one of 1.4, 2.0, 4.0 and contrast one of none, rescale, percentile_25, _50, _75, _90 (`cluster_sheet.INFLATIONS`, `CONTRASTS`); the same tuning of the same matrix not tried before; no earlier failure; `mcl` exists | `mcl --abc -I <inflation>` on the score-ratio graph as the contrast leaves it. A TRY: the clusters are kept as a working result, the child's model is shown controlled facts of them, and nothing is graded | `sequence_clusters`: data_1245 Sequence cluster (protein) / format_2171 Sequence cluster format (protein) |
-| `commit_clustering` (`clusters_ref`) | a held clustering; none committed yet | the committed clustering is graded into the cluster sheet: the one graded source the head reads | (the graded source) |
+| `commit_clustering` (`clusters_ref`) | a held clustering of a matrix of which at least two completed tries with different tunings are held (`all_vs_all_run.MINIMUM_TRIES`, `committable`; the tool is offered only then); none committed yet | the committed clustering is graded into the cluster sheet: the one graded source the head reads | (the graded source) |
 | `hold` (a reason) | always valid | nothing | none |
 
 EDAM was read from https://edamontology.org/EDAM.tsv on 2026-11-21 (all six terms exist, none obsolete). EDAM has no term for a BLAST
@@ -79,13 +79,13 @@ and the dataset earns the MAXIMUM of those test credits; a later clustering of t
 (an improvement), a replicate earns 0, and the credit never falls. A candidate's value on the cluster sheet from one dataset reads the same
 maximum: its largest share over that dataset's clusterings, not their sum.
 
-One clustering is graded per commission: the tries of `cluster` are not graded, and `commit_clustering` grades one of them, once; the head refuses an identical commission.
+One clustering is graded per commission: the tries of `cluster` are not graded, and `commit_clustering` grades one of them, once, chosen among at least two tries of the matrix with different tunings; the head refuses an identical commission.
 
 ## Credit and ceilings
 
 Child credit (`all_vs_all/credit.py`): the head's three child units, each earned once and read from the products held: `handoff_unit` for the database,
 `information_unit` for the matrix, `graded_unit` for the committed (graded) clustering; a refused or repeated step earns 0, and a try earns nothing. Child
-ceiling: each tool's unit while its check can pass, else 0 (`cluster` and `hold` 0). Yield: the completion controller to the commission's target.
+ceiling: each tool's unit while its check can pass, else 0 (`cluster` and `hold` 0; `commit_clustering` 0 until two tries of the matrix with different tunings are held). Yield: the completion controller to the commission's target.
 
 Head ceiling for `all_vs_all` (`HEAD/credit.ceiling`): the proved, tight maximum the cluster test can add from the current state
 (`differential_credit.cluster_test_ceiling`, proof in its docstring). The test measures each named candidate once, its value w x its share in the
@@ -154,7 +154,50 @@ The owner: "i'm not going to tune something that needs to be tuned for every sin
 This supersedes the earlier text above where they differ (the head's `inflations` field, one clustering per commission by refusing the second try):
 
 - MCL stays the one algorithm. The tuning is a controlled choice of the child's MODEL per commission: the inflation (1.4, 2.0, 4.0) and the graph contrast (`none`; `rescale`: `(ratio - lowest) / (1 - lowest)`; `percentile_25/50/75/90`: keep only edges at or above that percentile of the set's ratios). The head's commission has no tuning field.
-- `cluster` is a TRY (a working result): it returns controlled facts (cluster count, sizes, the target's cluster size, per candidate its size, its sequences in the target's cluster, the clusters it spans). Nothing is graded. A tuning of a matrix is tried once; a partition already held is reported as the same clustering. `commit_clustering` (once) grades one held try into the cluster sheet: the one graded source the head reads, so tries neither add to nor dilute the head's credit. Child credit: the database, the matrix and the committed clustering earn the three units; a try earns 0 (ceiling 0); `commit_clustering` has the graded unit as its ceiling while a try is held and none committed.
+- `cluster` is a TRY (a working result): it returns controlled facts (cluster count, sizes, the target's cluster size, per candidate its size, its sequences in the target's cluster, the clusters it spans). Nothing is graded. A tuning of a matrix is tried once; a partition already held is reported as the same clustering. `commit_clustering` (once) grades one held try into the cluster sheet: the one graded source the head reads, so tries neither add to nor dilute the head's credit. Child credit: the database, the matrix and the committed clustering earn the three units; a try earns 0 (ceiling 0); `commit_clustering` has the graded unit as its ceiling once two tries of the matrix with different tunings are held and none is committed (below).
 - On the C2 set (30 sequences; score ratios 0.739 to 1.0): no contrast gives one cluster at every inflation; `rescale` at 4.0 and every inflation at `percentile_50` give two clusters (21 with the target, 9 = the CspC product); `percentile_75` also splits CspB/CspG/CspI off (inflation 1.4: 6 of its 10 stay with the target; 2.0: none). The committed `rescale`, 4.0 clustering gives CspA 10/10, CspB/CspG/CspI 10/10, CspC 0/9, so the shares are 1.0, 1.0 and 0.0, the shape the MSA test gave (1.0, 0.29, 0.0). The cluster test's value rule did not need to change; neither did the child's credit or the ceilings, apart from the weights below.
 - THE SHEET WEIGHTS (`differential_credit.SHEET_WEIGHT`, derivation beside the constants): the weight of each sheet's family is one over its typical strong value, the value in one test of the candidate that leads the stored real runs (C2, H1, the CspA run; all E. coli CspA): database_search 1/0.9593, profile_scan 1/0.8198, msa 7/12 (the leader's first alignment, 12 matched sites x 1/7), cluster 1, pairwise 1 (no stored value). The score is the sum over sheets of weight x sheet value; entries, differentials and the ceilings (`test_ceiling(..., family)`, the msa ceiling's maxima) are in the weighted units. Credit definition `a101_differential_credit_v3` (carries `sheet_weights`). Before and after on the stored records: C2 with the committed clustering 10.5289 to 9.4622 (CspA 3.6736 to 3.0000, CSD 0.8198 to 1.0000); the CspA run (`runs/a101_final_run_cspa`) 8.5289 to 7.4622 (CspA 2.6736 to 2.0000: database 1.0, msa 1.0). The data is one target: re-derive as other targets are run.
 - Head wiring: slot `all_vs_all`; commission fields `query_ref`, `search_ref`, `candidates` (two or more admitted product candidates), `per_candidate`; its one check `all_vs_all_run.check_commission` (a set already commissioned or graded is refused); offered only while a held graded BV-BRC search admits at least two product candidates; the head's ceiling for it is the vertex bound of the cluster test (`cluster_test_ceiling`) minus the dataset's best test credit so far, floored at 0, with `best_arguments` naming the commission that reaches the no-arguments ceiling (see "Credit and ceilings"). The head's `database_blast` and `blast_database_preparation` children and the old `all_vs_all_blast` skeleton are removed; `database_blast_search.py` stays because the BV-BRC children import its shared functions (`bvbrc_blast_search`, `bvbrc_job_child`, `bvbrc_metacats_search`, `bvbrc_msa_alignment`, and the head's `task.py`: `seconds_between`).
+
+## 2026-11-21 (later): the tuning is the child's model's, on facts, over at least two tries
+
+Goal criterion: "all_vs_all: prepare_database -> all_vs_all_blast -> MCL tries tuned by the child's model -> commit_clustering; the committed
+clustering is one test on its own subscoring sheet." The owner: "just let MCL be tuned by agent"; "you know, this is why ppl use different
+clustering algorithms on the same data in the first place".
+
+Observed in run `runs/a101_goal8_run_cspa_2a5c36f0e` (workspace `runs/a101_goal8_ws_cspa`, model calls `model_calls_cspa` 00008 to 00011 and
+00028 to 00031, the calls whose instructions start "You are the all-vs-all agent"): each of the two `all_vs_all` children's models made ONE try
+(inflation 2, `percentile_75`), chosen when the decision context held no fact of the matrix, and committed it at the next decision. No tuning
+was shown.
+
+What changed:
+
+- Facts of the matrix before the first try. Once the matrix is held, the decision context shows `matrix_facts` (`all_vs_all_run.held_matrix_facts`
+  over `cluster_sheet.matrix_facts`): the sequences, the pairs and the pairs with an alignment; the score ratios of the aligned pairs (`min`,
+  `percentile_25`, `_50`, `_75`, `_90`, `max`: each percentile is the cut the contrast of that name keeps edges at or above, `min` the ratio
+  `rescale` maps to 0); per candidate its size, the median ratio among its own sequences and the median ratio of its sequences to the target (a
+  pair without an alignment counts 0). Ratios rounded to 4 decimals.
+- At least two tries. `commit_clustering` is offered (`output_schema`), passes its check (`check_commit`: `tries_with_different_tunings_required`,
+  with `held` and `required`) and has a ceiling above 0 (`all_vs_all/credit.py`) only when at least two completed tries of the clustering's matrix
+  with different tunings are held (`MINIMUM_TRIES` = 2; `tunings_by_matrix`, `committable`). The instructions say: try at least two tunings, compare
+  their facts, commit the one that best shows where the target falls among the candidates. `cluster` stays a try earning 0, a repeated tuning is
+  still refused, and one clustering is committed.
+- No credit value changes and no head ceiling changes. The completion controller continues through the zero-gain tries (below).
+
+Direct check (labelled: NOT a real run; no mcl and no model ran) on a scratchpad copy of `runs/a101_goal8_ws_cspa`, both `all_vs_all` children,
+the child's summary rebuilt from its journal units and receipts as they stood at each point:
+
+- The facts the model would have had for its first try (after `all_vs_all_blast`). `all_vs_all_2` (65 sequences): 2080 pairs, 2080 aligned;
+  ratios min 0.7254, p25 0.8085, p50 0.8451, p75 0.8944, p90 0.9433, max 1.0; per candidate (median within / median to the target): CspA (18)
+  0.9507 / 0.9718, CSP family (16) 0.8275 / 0.831, CspB/CspG/CspI (20) 0.9085 / 0.8451, CspC (9) 0.9787 / 0.773, hypothetical protein (1) - / 0.7676.
+  `all_vs_all_6` (64 sequences, CspB/CspG/CspI 19): 2016 aligned of 2016, p25 0.8039, p90 0.9375, the other figures as above.
+- After the one real try (inflation 2, `percentile_75`): offered `cluster`, `hold` (no `commit_clustering`); the recorded response
+  (`commit_clustering` of that try) is refused by the schema; `check_commit` gives `tries_with_different_tunings_required` (held 1, required 2);
+  the ceiling of `commit_clustering` is 0 (row and with the recorded arguments); a repeat of the same tuning is refused
+  (`this_tuning_of_the_matrix_is_already_tried`).
+- After a second try of another tuning (a SYNTHETIC outcome row, inflation 4.0 `rescale`, reported as the same partition so that no new record is
+  needed): offered `cluster`, `commit_clustering`, `hold`; the recorded commit response is accepted (a `ToolCall`), `check_commit` gives no
+  problem and the ceiling is the graded unit (1.0).
+- The completion controller replayed over the children's recorded controller inputs, then zero-gain tries 10 s apart: the upper bound of the
+  next gain is 1.0 after the first, second and third try, then 0.83, 0.69 and 0.62 (`all_vs_all_2`; 0.61 for `all_vs_all_6`), always above the
+  cost 0.5: no stop through six tries before the commit.

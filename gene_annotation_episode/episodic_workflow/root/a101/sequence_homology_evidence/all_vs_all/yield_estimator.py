@@ -1,5 +1,5 @@
 """Continuation: the completion controller (``CompletionYieldController``): continue until the credit reaches the commission's finite
-target (the database, the matrix and a graded clustering for each allowed inflation); the cost is ``settings['cost']`` times the
+target (the database, the matrix and the committed graded clustering; the tries before the commit earn 0); the cost is ``settings['cost']`` times the
 smallest credit unit of the commission, ``settings['parameters']`` are the estimator's."""
 from yield_control import CompletionYieldController
 

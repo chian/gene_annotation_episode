@@ -8,13 +8,16 @@ problems makes ``action`` raise ``Rejected`` (no unit). A passed check runs as o
 * ``all_vs_all_blast`` (``resource_id``, ``database_ref``): REQUIRES the database product; ``blastp`` of every sequence of the set
   against it; the matrix of bit scores is kept as a labelled data product.
 * ``cluster`` (``resource_id``, ``matrix_ref``, ``inflation``, ``contrast``): a TRY. REQUIRES the matrix product; MCL at an inflation
-  and on a graph contrast of the fixed sets (the model's tuning); the clusters are kept as a working result and the model is shown
-  controlled facts of them. Nothing is graded. The same tuning of the same matrix is refused.
-* ``commit_clustering`` (``clusters_ref``): REQUIRES a held clustering, once: it is graded into the cluster sheet, the one graded
+  and on a graph contrast of the fixed sets (the model's tuning, chosen on the facts of the matrix's score ratios it is shown once the
+  matrix is held); the clusters are kept as a working result and the model is shown controlled facts of them. Nothing is graded. The
+  same tuning of the same matrix is refused.
+* ``commit_clustering`` (``clusters_ref``): REQUIRES a held clustering of a matrix of which at least two completed tries with different
+  tunings are held (``all_vs_all_run.committable``; offered only then), once: it is graded into the cluster sheet, the one graded
   source of the head's credit. Tries neither add to nor dilute that credit.
 * ``hold`` (a reason): nothing is run; always a valid answer, so a model with no valid tool is never stuck in rejections.
 
-The decision shows the commission, the planned set, the held products, the tries made (their controlled facts), the committed
+The decision shows the commission, the planned set, the held products, the facts of each held matrix's score ratios
+(``matrix_facts``), the tries made (their controlled facts), the committed
 clustering (each candidate's share of its sequences in the target's cluster), the credit units and each earlier unit. The task never ends the Episode; the yield
 controller does. Settings (``ctx.settings``): ``blast_executable_directory``, ``mcl_executable_directory``, ``python_executable``,
 ``cost`` and ``parameters`` (``yield_estimator.py``)."""
@@ -46,14 +49,17 @@ INSTRUCTIONS = (
     '- cluster, with resource_id, matrix_ref (a held sequence_similarity_matrix product), inflation (lower is coarser clusters, higher '
     'finer) and contrast: a TRY of the clustering. It clusters the matrix with MCL on the bit-score ratio (a pair\'s bit score over the '
     'smaller of the two sequences\' scores against themselves, 0 to 1) as the contrast leaves it: none (as they are), rescale (each '
-    'ratio rescaled to the set\'s own range) or percentile_25, _50, _75, _90 (only the edges at or above that percentile of the set\'s '
-    'ratios are kept). Nothing is graded. You are shown the facts of each try (tries): the clusters, the target\'s cluster and, for each '
-    'candidate, how many of its sequences are in the target\'s cluster and how many clusters they span. A set of one close family '
-    'often comes out as one cluster at first: try another tuning until the clusters say something about the candidates. The same '
-    'tuning of the same matrix is not tried again.\n'
+    'ratio rescaled to the set\'s own range: the lowest ratio becomes 0) or percentile_25, _50, _75, _90 (only the edges at or above '
+    'that percentile of the set\'s ratios are kept). Nothing is graded. Once the matrix is held you are shown its facts '
+    '(matrix_facts): the pairs and those with an alignment, the ratios of the aligned pairs (min, percentile_25, _50, _75, _90: the cut '
+    'each percentile contrast keeps edges at or above, and max) and, for each candidate, the median ratio among its own sequences and '
+    'the median ratio of its sequences to the target (a pair without an alignment counts 0): choose the first tuning on them. You are '
+    'shown the facts of each try (tries): the clusters, the target\'s cluster and, for each candidate, how many of its sequences are in '
+    'the target\'s cluster and how many clusters they span. The same tuning of the same matrix is not tried again.\n'
     '- commit_clustering, with clusters_ref (a held sequence_clusters product): commits that clustering, once. It is graded: for each '
-    'candidate the share of its sequences in the target\'s cluster, the one test the parent reads. Choose the try that best shows where '
-    'the target falls among the candidates.\n'
+    'candidate the share of its sequences in the target\'s cluster, the one test the parent reads. It is offered only when at least '
+    'two tries of the matrix with different tunings are held: try at least two tunings, compare their facts, and commit the one that '
+    'best shows where the target falls among the candidates.\n'
     '- hold, with a reason: do nothing now.\n'
     'If a check finds something wrong you are told each problem as a code with its field (feedback.problems) and nothing has run. '
     'A call that passed its check works; a failure after it is the environment\'s, is reported once as failed and is never '
@@ -78,13 +84,12 @@ def output_schema(summary, resources):
         options.append(one('prepare_database', resource_id=local))
     if databases and not matrices and not summary['failed']['blast']:
         options.append(one('all_vs_all_blast', resource_id=local, database_ref={'type': 'string', 'enum': databases}))
-    clusterings = [row['row_ref'] for row in summary['products'] if row['kind'] == run.CLUSTERS_KIND]
     if matrices and not summary['committed']:
         options.append(one('cluster', resource_id=local, matrix_ref={'type': 'string', 'enum': matrices},
                            inflation={'type': 'number', 'enum': list(run.INFLATIONS)},
                            contrast={'type': 'string', 'enum': list(run.CONTRASTS)}))
-    if clusterings and not summary['committed']:
-        options.append(one('commit_clustering', clusters_ref={'type': 'string', 'enum': clusterings}))
+    if summary['committable'] and not summary['committed']:
+        options.append(one('commit_clustering', clusters_ref={'type': 'string', 'enum': summary['committable']}))
     options.append(one('hold', reason={'type': 'string', 'enum': list(run.HOLD_REASONS)}))
     return {'type': 'object', 'additionalProperties': False, 'required': ['action'], 'properties': {'action': {'anyOf': options}}}
 
@@ -95,7 +100,8 @@ def decide(summary, feedback, ctx):
                'credit': {**summary['units'], 'target': summary['target'],
                           'now': None if summary['yield_table'] is None else summary['yield_table']['current_credit']},
                'state': summary['state'], 'local_resources': sorted(name for name, kind in resources.items() if kind == 'local'),
-               'products': summary['products'], 'tries': summary['tries'], 'clusterings': summary['clusterings'],
+               'products': summary['products'], 'matrix_facts': summary['matrix_facts'], 'tries': summary['tries'],
+               'clusterings': summary['clusterings'],
                'failed': summary['failed'],
                'unit_rows': summary['unit_rows'], 'yield_table': summary['yield_table'], 'feedback': feedback}
     return ModelRequest('REASONING', INSTRUCTIONS, {key: value for key, value in context.items() if value is not None},
@@ -135,7 +141,8 @@ def action(response, summary, records, ctx):
                                      tried={tuple(pair) for pair in summary['tried']},
                                      mcl_directory=settings['mcl_executable_directory'])
     else:
-        problems = run.check_commit(chosen, reader=records, committed=summary['committed'])
+        problems = run.check_commit(chosen, reader=records, committed=summary['committed'],
+                                    tries=[(row['matrix_ref'], row['inflation'], row['contrast']) for row in summary['tries']])
     if problems:
         raise Rejected({'status': 'invalid', 'category': name + '_check', 'problems': problems})
     return ToolCall(name, {'call': {key: value for key, value in chosen.items() if key != 'name'}, 'commission': commission})

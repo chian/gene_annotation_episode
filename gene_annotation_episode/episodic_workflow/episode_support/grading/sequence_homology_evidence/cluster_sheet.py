@@ -18,7 +18,9 @@ protein differently is not tuned by code, the agent does it): the inflation (``I
 the graph's CONTRAST (``CONTRASTS``): ``none`` (the ratios as they are), ``rescale`` (each weight rescaled to the set's own range,
 ``(ratio - lowest) / (1 - lowest)``) or ``percentile_<q>`` (only the edges whose ratio is at or above the q-th percentile of the
 set's ratios are kept, with their ratios). A set of one family has ratios all high (on the C2 set 0.74 to 1.0), so MCL on the
-plain ratios gives one cluster; the contrast lets the model separate what the set itself separates.
+plain ratios gives one cluster; the contrast lets the model separate what the set itself separates. Once the matrix is held the
+model is shown the facts of its ratios (``matrix_facts``: their percentiles and, per candidate, the median ratio within it and to the
+target), so it tunes the first try on them, and of each try (``cluster_facts``), so it compares tunings.
 
 THE SHEET holds the clusters and where the target falls among each candidate's sequences. The test value of a candidate
 group is the SHARE of the group's sequences that are in the target's cluster, in [0, 1]: the same scale as the other
@@ -93,6 +95,41 @@ def with_singletons(clusters, ids):
     return [*clusters, *([name] for name in ids if name not in placed)]
 
 
+def matrix_facts(graph, members):
+    """The controlled facts of the score-ratio graph of a set (``score_ratio_graph``) the child's model is shown once the matrix is held,
+    before any try, so that the first tuning is chosen on facts: ``sequence_count``; ``pair_count`` (the pairs of distinct sequences)
+    and ``aligned_pair_count`` (those with an alignment in either direction: the graph's edges); ``ratio`` (over the aligned pairs:
+    ``min``, ``percentile_25``, ``percentile_50``, ``percentile_75``, ``percentile_90`` and ``max``; each ``percentile_<q>`` is the cut the
+    contrast of that name keeps edges at or above, ``min`` the lowest ratio ``rescale`` maps to 0); and per candidate group ``size``,
+    ``median_ratio_within`` (over the pairs of the group's sequences; a group of one has none) and ``median_ratio_to_target`` (over the
+    group's sequences' pairs with the target). In the medians a pair without an alignment counts 0 (no edge in the graph). Ratios are
+    rounded to 4 decimals."""
+    weight = {}
+    for a, b, value in graph:
+        weight[a, b] = weight[b, a] = value
+    groups = {}
+    for row in members:
+        if row['candidate'] is not None:
+            groups.setdefault(row['candidate'], []).append(row['id'])
+    count = len(members)
+    facts = {'sequence_count': count, 'pair_count': count * (count - 1) // 2, 'aligned_pair_count': len(graph)}
+    values = [value for _, _, value in graph]
+    if values:
+        facts['ratio'] = {'min': round(min(values), 4),
+                          **{'percentile_' + str(q): round(percentile(values, q), 4) for q in (25, 50, 75, 90)},
+                          'max': round(max(values), 4)}
+    rows = []
+    for candidate, names in groups.items():
+        row = {'candidate': candidate, 'size': len(names),
+               'median_ratio_to_target': round(percentile([weight.get((TARGET_ID, name), 0.0) for name in names], 50), 4)}
+        within = [weight.get((names[i], names[j]), 0.0) for i in range(len(names)) for j in range(i + 1, len(names))]
+        if within:
+            row['median_ratio_within'] = round(percentile(within, 50), 4)
+        rows.append(row)
+    facts['groups'] = rows
+    return facts
+
+
 def cluster_facts(clusters, members):
     """The controlled facts of a clustering the child's model sees: ``cluster_count``, ``sizes`` (the largest ten, descending),
     ``target_cluster_size`` and per candidate group ``size``, ``in_target_cluster`` and ``clusters_spanned`` (how many clusters
@@ -147,4 +184,4 @@ def group_values(sheet):
 
 
 __all__ = ['CONTRASTS', 'EDGE_WEIGHT', 'INFLATIONS', 'METHOD', 'SCHEMA', 'TARGET_ID', 'abc_text', 'cluster_facts', 'contrast_graph', 'contrast_undefined',
-           'grade_clustering', 'group_values', 'parse_clusters', 'percentile', 'score_ratio_graph', 'with_singletons']
+           'grade_clustering', 'group_values', 'matrix_facts', 'parse_clusters', 'percentile', 'score_ratio_graph', 'with_singletons']

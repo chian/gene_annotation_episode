@@ -1,8 +1,8 @@
 """Credit, read from what the episode holds (not from what a tool said): ``handoff_unit`` for the established database,
 ``information_unit`` for the established matrix of bit scores and ``graded_unit`` for the committed (graded) clustering; each is earned
 once, and a refused or repeated step earns nothing. The tries of the clustering are working results and earn nothing: the head's credit
-reads only the committed, graded clustering, so tries neither add nor dilute it. The three units are the commission's (the head's child
-credit units)."""
+reads only the committed, graded clustering, so tries neither add nor dilute it; a clustering can be committed only once at least two
+tries of its matrix with different tunings are held. The three units are the commission's (the head's child credit units)."""
 from gene_annotation_episode.episodic_workflow.episode_support.records.data_products import products
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence import (
     all_vs_all_run as run)
@@ -24,8 +24,9 @@ def ceiling(summary, records, action_type, arguments, ctx):
     * ``prepare_database``: ``handoff_unit`` while no database is held and no preparation failed.
     * ``all_vs_all_blast``: ``information_unit`` while a database is held, no matrix is held and no search failed.
     * ``cluster``: 0. A try is a working result and earns nothing (the credit reads the committed clustering only).
-    * ``commit_clustering``: ``graded_unit`` while a clustering is held and none is committed (with ``arguments``: when its
-      ``clusters_ref`` is a held clustering).
+    * ``commit_clustering``: ``graded_unit`` while none is committed and a held clustering may be committed (``summary['committable']``:
+      at least two completed tries of its matrix with different tunings are held; with ``arguments``: when its ``clusters_ref`` is one
+      of them), else 0: until the second tuning is tried its check refuses it.
     * ``hold``: 0. It runs nothing and writes no record."""
     held = [row['kind'] for row in products(records)]
     failed = summary['failed']
@@ -35,10 +36,10 @@ def ceiling(summary, records, action_type, arguments, ctx):
         return (float(summary['units']['information_unit'])
                 if run.DATABASE_KIND in held and run.MATRIX_KIND not in held and not failed['blast'] else 0.0)
     if action_type == 'commit_clustering':
-        if summary['committed'] or run.CLUSTERS_KIND not in held:
+        if summary['committed'] or not summary['committable']:
             return 0.0
-        clusters = [row['id'] for row in products(records, run.CLUSTERS_KIND)]
-        return float(summary['units']['graded_unit']) if arguments is None or arguments['call']['clusters_ref'] in clusters else 0.0
+        return (float(summary['units']['graded_unit'])
+                if arguments is None or arguments['call']['clusters_ref'] in summary['committable'] else 0.0)
     if action_type in ('cluster', 'hold'):
         return 0.0
     raise ValueError('all_vs_all_unknown_action_type:' + str(action_type))

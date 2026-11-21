@@ -29,8 +29,10 @@ component files, the raw report, receipts, logs) stay in the child, which is the
    tuning) at the inflation the model chose. The same tuning of the same matrix again is refused. A try is a working result: its clusters
    are a ``sequence_clusters`` product (a partition already held is reported as the same clustering, not a second product) and the
    model is shown controlled facts of it (``cluster_sheet.cluster_facts``). Nothing is graded and nothing reaches the head's credit.
-4. ``commit_clustering``: REQUIRES a held ``sequence_clusters`` product, once per commission: the clustering is graded into the cluster
-   sheet (``cluster_sheet.grade_clustering``) as a source of provider ``all_vs_all``: the ONE graded test the head reads.
+   Before the first try the model is shown the facts of the matrix's score ratios (``held_matrix_facts``).
+4. ``commit_clustering``: REQUIRES a held ``sequence_clusters`` product of a matrix of which at least ``MINIMUM_TRIES`` (two) completed
+   tries with different tunings are held (``committable``), once per commission: the clustering is graded into the cluster sheet
+   (``cluster_sheet.grade_clustering``) as a source of provider ``all_vs_all``: the ONE graded test the head reads.
 
 Settings (``ctx.settings``): ``blast_executable_directory`` (``makeblastdb``, ``blastdbcmd``, ``blastp``),
 ``mcl_executable_directory`` (``mcl``) and ``python_executable``."""
@@ -48,7 +50,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.similarit
     REPORT_FIELDS, build_edges, completeness, parse_report)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.cluster_sheet import (
     EDGE_WEIGHT, INFLATIONS, METHOD, TARGET_ID, CONTRASTS, abc_text, cluster_facts, contrast_graph, contrast_undefined, grade_clustering,
-    parse_clusters, score_ratio_graph, with_singletons)
+    matrix_facts, parse_clusters, score_ratio_graph, with_singletons)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.tool_grading_artifacts import (
     record_grading_product, retain_tool_grading, source_tool_grading_entries)
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.resource_local import execute_on_local_resource
@@ -75,6 +77,9 @@ SET_KIND, DATABASE_KIND, MATRIX_KIND, CLUSTERS_KIND = ('protein_sequences', 'bla
 BLAST_PROGRAMS = ('makeblastdb', 'blastdbcmd')
 TOOLS = ('prepare_database', 'all_vs_all_blast', 'cluster', 'commit_clustering')
 HOLD_REASONS = ('a_step_failed_and_cannot_be_retried', 'every_step_is_done')
+# The completed tries of one matrix, with different tunings, a clustering of it needs before it can be committed: the owner, "just let
+# MCL be tuned by agent"; a committed clustering is chosen by comparing tunings, not taken from the first one tried.
+MINIMUM_TRIES = 2
 OWN_FAILURE_CODES = ('sequence_not_returned_by_the_service', 'a_sequence_did_not_find_itself', 'blastp_exit_nonzero',
                      'mcl_exit_nonzero', 'job_not_accepted', 'job_not_fetched', 'failed', 'incomplete')
 
@@ -178,13 +183,36 @@ def check_cluster(call, *, reader, ids, resources, tried, mcl_directory):
     return problems
 
 
-def check_commit(call, *, reader, committed):
+def tunings_by_matrix(tries):
+    """The number of different tunings (inflation, contrast) among the completed tries of each matrix, ``{matrix_ref: count}``;
+    ``tries`` are the (``matrix_ref``, ``inflation``, ``contrast``) of each completed try."""
+    found = {}
+    for matrix, inflation, contrast in tries:
+        found.setdefault(matrix, set()).add((inflation, contrast))
+    return {matrix: len(tunings) for matrix, tunings in found.items()}
+
+
+def committable(reader, tries):
+    """The held clusterings that may be committed: the ``sequence_clusters`` products derived from a matrix of which at least
+    ``MINIMUM_TRIES`` completed tries with different tunings are held (``tries`` as in ``tunings_by_matrix``)."""
+    ready = {matrix for matrix, count in tunings_by_matrix(tries).items() if count >= MINIMUM_TRIES}
+    return [row['id'] for row in products(reader, CLUSTERS_KIND) if row['derived_from'][0] in ready]
+
+
+def check_commit(call, *, reader, committed, tries):
     """The things to fix in a ``commit_clustering`` call (``clusters_ref``): the clusters are a held ``sequence_clusters`` product
-    (``require_product``); no clustering is committed yet (one graded clustering per commission)."""
+    (``require_product``); at least ``MINIMUM_TRIES`` completed tries of its matrix with different tunings are held (``tries``: the
+    (``matrix_ref``, ``inflation``, ``contrast``) of each completed try); no clustering is committed yet (one graded clustering per
+    commission)."""
     problems = []
-    _, problem = require_product(reader, call['clusters_ref'], CLUSTERS_KIND)
+    row, problem = require_product(reader, call['clusters_ref'], CLUSTERS_KIND)
     if problem is not None:
         problems.append({'code': problem, 'field': 'clusters_ref'})
+    else:
+        tuned = tunings_by_matrix(tries).get(row['derived_from'][0], 0)
+        if tuned < MINIMUM_TRIES:
+            problems.append({'code': 'tries_with_different_tunings_required', 'field': 'clusters_ref', 'held': tuned,
+                             'required': MINIMUM_TRIES})
     if committed:
         problems.append({'code': 'a_clustering_is_already_committed', 'field': 'clusters_ref'})
     return problems
@@ -379,6 +407,15 @@ def matrix_edges(text):
             for query, subject, bits in rows]
 
 
+def held_matrix_facts(reader, members):
+    """For each held ``sequence_similarity_matrix`` product, ``{'matrix_ref', **cluster_sheet.matrix_facts}``: the facts of its
+    score-ratio graph the child's model is shown before it tunes a try. ``members`` are ``set_members`` of the commission."""
+    ids = [row['id'] for row in members]
+    return [{'matrix_ref': row['id'],
+             **matrix_facts(score_ratio_graph(matrix_edges(reader.get_artifact(row['artifact_ref']).decode()), ids), members)}
+            for row in products(reader, MATRIX_KIND)]
+
+
 async def cluster(ctx, resource_id, matrix_ref, inflation, contrast, commission, per_candidate):
     """One TRY: cluster the matrix with ``mcl`` at ``inflation`` on the graph under ``contrast`` as one unit and keep the clusters as a
     working result with the controlled facts the model is shown. Nothing is graded. A sequence with no edge to any other is a cluster of
@@ -449,6 +486,7 @@ def commit_clustering(ctx, clusters_ref, commission, per_candidate):
 
 
 __all__ = ['BLAST_PROGRAMS', 'CHILD', 'CONTRASTS', 'CLUSTERS_KIND', 'DATABASE_KIND', 'EVALUE', 'HOLD_REASONS', 'INFLATIONS', 'OWN_FAILURE_CODES', 'MATRIX_KIND',
-           'MINIMUM_CANDIDATES', 'PER_CANDIDATE_RANGE', 'PROVIDER', 'SET_KIND', 'TOOLS', 'all_vs_all_blast', 'check_blast',
-           'check_cluster', 'check_commission', 'commission_keys', 'check_commit', 'check_prepare', 'held_clusterings', 'cluster', 'commit_clustering', 'database_settings', 'matrix_settings', 'clusters_settings',
-           'pack_database', 'prepare_database', 'set_members', 'set_settings']
+           'MINIMUM_CANDIDATES', 'MINIMUM_TRIES', 'PER_CANDIDATE_RANGE', 'PROVIDER', 'SET_KIND', 'TOOLS', 'all_vs_all_blast', 'check_blast',
+           'check_cluster', 'check_commission', 'commission_keys', 'check_commit', 'check_prepare', 'held_clusterings', 'held_matrix_facts',
+           'cluster', 'commit_clustering', 'committable', 'database_settings', 'matrix_settings', 'clusters_settings',
+           'pack_database', 'prepare_database', 'set_members', 'set_settings', 'tunings_by_matrix']
