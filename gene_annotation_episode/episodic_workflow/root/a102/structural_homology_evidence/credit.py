@@ -11,7 +11,11 @@ A child's credit is information in the summary and is never added."""
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.candidate_measurements import (
     candidate_standing, candidate_table, held_sources)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.differential_credit import (
-    SHEET_WEIGHT, test_ceiling)
+    SHEET_WEIGHT, site_test_ceiling, test_ceiling)
+from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.site_correspondence_sheet import (
+    SITE_SOURCES)
+from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.tool_grading_artifacts import (
+    source_tool_grading_entries)
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.foldseek_job_route import DATABASES
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.structure_search_child import (
     ROUTE_KIND)
@@ -28,6 +32,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_s
 # ``episode_ceiling_exceeded``: the figure is then wrong and is to be changed with its ``CEILING_VERSIONS`` entry.
 HIT_BOUND = 1000
 SLOT = 'structure_search'
+SITE_TOOL = 'site_correspondence'
 FAMILY = 'structure_search'
 OBTAIN = 'obtain_one'
 
@@ -37,10 +42,12 @@ class A102DifferentialCredit:
     yield_method = 'forecast'
 
     def as_record(self):
-        return {'kind': 'a102_differential_credit', 'version': 'a102_differential_credit_v1', 'axis': 'A102',
+        return {'kind': 'a102_differential_credit', 'version': 'a102_differential_credit_v2', 'axis': 'A102',
                 'measurement': 'index_b_of_each_hit_of_one_structure_search_from_the_aligned_pairs_after_superposition',
+                'site_measurement': 'mean_e_of_the_hits_with_sites_e_is_b_times_the_mean_residue_score_of_class_match_times_kernel',
                 'candidates': 'product_from_the_uniprot_name_of_the_hit',
-                'test': 'one_graded_source_structure_search_foldseek_tmalign_database_at_source',
+                'test': ('one_graded_source_structure_search_foldseek_tmalign_database_at_source_or_site_correspondence_'
+                         'site_source_at_source'),
                 'sheet_weights': dict(SHEET_WEIGHT),
                 'score': 'sum_over_subscoring_sheets_of_weight_times_sum_of_mean_value_in_test_of_that_kind',
                 'admission': 'first_value_above_zero',
@@ -113,13 +120,47 @@ def open_pairs(summary):
             and ((query, database) not in left or outstanding(summary, query, database) is not None)]
 
 
+def graded_site_pairs(summary):
+    """The ``(search source reference, site source)`` pairs of the site tests this episode holds
+    (``candidate_measurements.held_site_tests``, read in ``internal_summary``)."""
+    return {tuple(pair) for pairs in summary['held_site_tests'].values() for pair in pairs}
+
+
+def offered_site_pairs(summary):
+    """The ``(search source reference, site source)`` pairs a ``site_correspondence`` request may name now, in the order of the
+    graded searches and of ``SITE_SOURCES``: a graded search of a protein sequence of the scope whose raw result and model this
+    episode holds (``site_correspondence.search_inputs``), with a site source not yet graded for it. A request of one of these
+    passes ``check_site_correspondence_request``."""
+    graded, targets = graded_site_pairs(summary), queries(summary)
+    return [(search, source) for search, held in summary['site_searches'].items()
+            if held['row']['query_ref'] in targets and held['result_held'] and held['model_held']
+            for source in SITE_SOURCES if (search, source) not in graded]
+
+
+def site_value(summary, records, standing, search):
+    """The proved maximum of one site test of the held search ``search`` (see ``ceiling``): ``site_test_ceiling`` over the
+    product candidates of the search's own test."""
+    (entry,) = source_tool_grading_entries(records, search)
+    candidates = ['product:' + row['product'] for row in entry['grading']['sheet']['candidates'] if row['mean_B'] is not None]
+    return site_test_ceiling(standing.get(summary['site_searches'][search]['row']['query_ref'], {}), candidates)
+
+
 def best_arguments(summary, records, action_type, ctx):
     """The commission that reaches the action's ceiling asked with ``arguments`` ``None`` (``ceiling``), as the arguments a
-    decision can name, or ``None`` when no choice changes it or none can earn. For ``structure_search``: the continuation
+    decision can name, or ``None`` when no choice changes it or none can earn. For ``site_correspondence``: the first offered
+    pair (``offered_site_pairs``) of the search whose site test has the largest ceiling (the ceiling does not depend on the site
+    source; the first in the fixed order on a tie). For ``structure_search``: the continuation
     (``until`` ``extracted``) of the outstanding job when a job is parked (the one commission of that search the head's check
     accepts while it is outstanding: it extracts what the launch started, so its ceiling is the search's); else, with a
     model of a query held, the first database not yet searched with that model; else ``None`` (a search with no model held
     is the model's own commission)."""
+    if action_type == SITE_TOOL:
+        pairs = offered_site_pairs(summary)
+        if not pairs:
+            return None
+        standing = candidate_standing(records, summary['scope'], held_sources(records))
+        search, source = max(pairs, key=lambda pair: site_value(summary, records, standing, pair[0]))
+        return {'search_ref': search, 'site_source': source}
     if action_type != SLOT:
         return None
     parked = next((job for job in summary['structure_search_jobs'] if job['outstanding']), None)
@@ -153,7 +194,7 @@ def outcome_pending(summary, records, position):
 # What ``ceiling`` means for each action type the head offers. The forecast controller learns an action's share of its
 # ceiling only from ledger rows recorded under the same credit definition and the same version of that action's ceiling
 # (``yield_estimator.py``): change an action's version whenever its ceiling's derivation changes, and only that action's.
-CEILING_VERSIONS = {'structure_search': 'a102_ceiling_v1'}
+CEILING_VERSIONS = {'structure_search': 'a102_ceiling_v1', 'site_correspondence': 'a102_ceiling_v1'}
 
 
 def ceiling(summary, records, action_type, arguments, ctx):
@@ -167,6 +208,12 @@ def ceiling(summary, records, action_type, arguments, ctx):
     candidates on the list that the test measures earns at most ``w``; a candidate it admits earns at most its entry, ``w``; a
     test that measures one listed candidate and admits none earns 0.
 
+    * ``site_correspondence``: the one site test of a held graded search measures at most the product candidates of that
+      search's own test (``mean_B`` not null on its sheet), each with a value in [0, w] (its mean E = B F, E in [0, 1]), and
+      the candidates are all listed or unlisted by the search's own test; ``differential_credit.site_test_ceiling`` is the proved
+      maximum (``w (u + k^2 // 4)``, ``k`` listed and ``u`` unlisted candidates; the proof is in its docstring). A pair already
+      graded (``graded_site_pairs``) earns 0: the request check refuses it. With ``arguments`` ``None``: the largest over the
+      pairs still offered (``offered_site_pairs``), 0 when none is offered, and ``best_arguments`` names the pair.
     * ``structure_search``: the one test of one search measures the product candidates of its hits: the ones already on the
       list (``product:`` standing) and at most ``HIT_BOUND`` in all (the most hits one search of the server returns; the
       figure and its source are in the comment of ``HIT_BOUND``: the Foldseek default ``--max-seqs`` 1000, observed results
@@ -176,9 +223,15 @@ def ceiling(summary, records, action_type, arguments, ctx):
       continued). The resume of a parked job (the same fields, ``until`` ``extracted``) is not a repeat and has the
       search's ceiling, which is what the launch started. With ``arguments`` ``None``: the largest over the queries with a
       database not yet searched (``open_pairs``), and ``best_arguments`` names that commission when it can be stated."""
-    if action_type != SLOT:
+    if action_type not in (SLOT, SITE_TOOL):
         raise ValueError('a102_ceiling_not_derived_for_action_type:' + action_type)
     standing = candidate_standing(records, summary['scope'], held_sources(records))
+    if action_type == SITE_TOOL:
+        if arguments is None:
+            return max((site_value(summary, records, standing, search) for search, _ in offered_site_pairs(summary)), default=0.0)
+        if (arguments['search_ref'], arguments['site_source']) in graded_site_pairs(summary):
+            return 0.0
+        return site_value(summary, records, standing, arguments['search_ref'])
     if arguments is None:
         return max((search_value(standing, query) for query, _ in open_pairs(summary)), default=0.0)
     if refused(summary, arguments['query_ref'], arguments['database'], arguments['model_ref']):

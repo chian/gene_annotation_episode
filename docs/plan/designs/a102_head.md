@@ -172,3 +172,49 @@ exceeded).
 commission (a repeat) through the model, `fix` and a failed launch, the second database, a non-protein target. The exchange rate 0.006 is A101's
 and was not re-derived: the two head rows so far (CspA: gain 39.34 over 125.7 s = 0.313 per second; RecA: 6.25 over 217.3 s = 0.029 per second) are
 far above 0.006 per second, so it never stopped a first search; with one database the rate decides nothing yet.
+
+## The tool `site_correspondence` in the head (wired 2026-11-21)
+
+Step zero: called as it is: `check_site_correspondence_request`, `search_inputs`, `site_correspondence(ctx, *, search_ref,
+site_source)`, `held_site_tests`, `differential_credit.site_test_ceiling`, `ToolCall`. New in the head: `task.site_options` (the
+request schema), `task.check_site_request` (the library check fed with the summary's `site_searches` and `held_site_tests`),
+`task.site_correspondence_tool` (the tool function), `credit.offered_site_pairs`, `credit.graded_site_pairs`, `credit.site_value`, the
+`ceiling` and `best_arguments` branches, `internal_summary` rows for tool units, `final_to_parent` `site_tests`.
+
+* Request: action `site_correspondence`, fields `search_ref` and `site_source`. The schema is one option per graded search of a
+  protein sequence of the scope whose raw result and model the head holds, with the site sources left for it (`annotated`,
+  `catalytic`; the graded pairs are not offered), so a request that passes the check works. The tool is offered only while such a
+  pair exists. The description states facts only (what the test does, the two sources, what it needs, that a repeat is refused).
+* Credit: the definition record is version `a102_differential_credit_v2` (it names the site measurement and the second test kind,
+  and its `sheet_weights` carry `site_correspondence` 1.0); the test is `site_correspondence:<site source>@<source>`.
+* Ceiling: `differential_credit.site_test_ceiling` over the product candidates of the named search's own sheet (`mean_B` not null);
+  0 for a graded pair; with arguments `None` the largest over the pairs still offered; `best_arguments` the first pair (searches in
+  order, `annotated` before `catalytic`) with the largest value; `CEILING_VERSIONS['site_correspondence']` `a102_ceiling_v1`.
+* Custody: the tool opens the search's source, its retained grading (artifact), its raw result (artifact), the model (artifact) and
+  the target's sequence; `search_inputs` reports `result_held` and `model_held` and the schema offers only held ones.
+
+Two changes in the library: (a) an absent residue records WHERE: `outside_the_alignment` or `within_the_alignment` (counts per hit and
+per candidate; the value rule is unchanged); (b) the grader no longer calls `_fit` (the search sheet keeps no transform to hand over
+and no hit is fitted twice in one call; 90 percent of `_fit`'s 0.23 s per hit is the record-shape validation of the general fit
+result): `superposed_distances` repeats the same numerical operations. RecA, 397 hits with sites, stored result: 88.1 s before,
+0.1 s after; all 3179 residue rows of the sheet equal in every field (`runs/a102_site_wire/sheet_before.json`, `sheet_after.json`).
+
+## Prediction for the runs with site_correspondence, written before them
+
+RecA (P0A7G6, 353 residues), CspA (P0A9X9, 70 residues). The head's tool and the child as in the runs above.
+
+RecA:
+1. Unit 0 `structure_search` (credit about 6.25 if the child picks the AlphaFold model, as in run 3). Then `site_correspondence`
+   `annotated` is offered with a ceiling `w (u + k^2 // 4)` over the 18 candidates (small, tens); `catalytic` is offered too.
+2. If the model takes `annotated`: about 397 hits with sites of 399 asked, 3 or more candidates measured (the direct check: 3),
+   a credit rise near 0.30 (direct check 0.3016), below the ceiling. The unit takes about 10 s (4 UniProt batches) plus grading
+   (0.1 s per hit-set after the change).
+3. `catalytic`: RecA is no M-CSA reference entry, so 0 hits with sites, a unit that measures nothing and earns 0; the learned share
+   of the tool then falls and a further unit is not worth its cost. The head ends by its estimator, `outstanding_handoff_count` 0.
+4. No custody error; no ceiling breach.
+
+CspA:
+5. `annotated` measures only unrelated hits (lin-28 homologs, CcmE, EfpL, Y-box-binding protein 1): with the stored AlphaFold-model
+   search the direct check measured 9 candidates of 69 and a rise of about 0.81. With an ESMFold model (the child picked `esmfold`
+   in run 2) the search has other hits (754, 135 candidates) and the numbers differ; I predict a few candidates measured (under 15),
+   a rise under 2, below the ceiling (which is large, `u + k^2 // 4` over 135 candidates, about 4000). `catalytic`: 0 measured.

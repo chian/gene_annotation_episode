@@ -533,5 +533,28 @@ class StructuralHomologyEvidenceLibrary:
                     "exception_type": type(error).__name__}}
 
 
-__all__ = ["StructuralHomologyEvidenceLibrary", "catalog", "instruction_entry",
+def freeze_selection(store, *, source, settings, axis, tools):
+    """What ``freeze-libraries`` does for this axis (the general run rule: a run reads a frozen copy of its libraries,
+    so a later edit of the published library cannot change the run). Freezes the published process library ``source``
+    and the tool library (the named ``tools`` of the tool registry) into the directories the head reads
+    (``settings['process_library_directory']``, ``settings['tool_library_directory']``) and gives the selection a parent
+    commissions the head with: the ``axis`` option, the first thought pattern of the library and the tool information
+    of the named tools."""
+    from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.construction_records import (
+        SELECTION_VERSION)
+    from gene_annotation_episode.episodic_workflow.episode_support.tools.structural_homology_evidence.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.episode_support.tools.tool_catalog import ScientificToolLibrary
+    library = StructuralHomologyEvidenceLibrary.freeze(settings["process_library_directory"], source=source)
+    thought = next(header["option_ref"] for header in library.headers()
+                   if header["option_ref"]["slot"] == "thought_pattern")
+    available = ToolRegistry(store, **settings["tool_registry"]).catalog()
+    catalog_entries = [{"name": name, "resources": "local", **available[name]} for name in tools]
+    tool_library = ScientificToolLibrary.freeze(settings["tool_library_directory"], catalog=catalog_entries)
+    information = tool_library.resolve_tool_info([{"name": name, "resources": "local"} for name in tools])
+    return {"process_library_directory": str(library.directory), "tool_library_directory": str(tool_library.directory),
+            "selection": {"version": SELECTION_VERSION, "evidence_axis": library.reference(axis),
+                          "thought_pattern": thought, "child_tool_info": information}}
+
+
+__all__ = ["StructuralHomologyEvidenceLibrary", "catalog", "freeze_selection", "instruction_entry",
            "evidence_axis_instruction_view"]

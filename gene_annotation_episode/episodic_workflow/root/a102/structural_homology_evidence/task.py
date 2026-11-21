@@ -1,8 +1,12 @@
-"""The task of the A102 head: one model-chosen unit per decision. In round 1 the head has one action, the commission of its
-child ``structure_search``: the model chooses the controlled fields of the commission (the target, the structure database, the
+"""The task of the A102 head: one model-chosen unit per decision. The head has two actions. The commission of its child
+``structure_search``: the model chooses the controlled fields of the commission (the target, the structure database, the
 Foldseek resource, the model of the target and where the commission ends) and code builds the child's assignment
-(``messages/msg_to_child.py``). It never ends the Episode: only the yield controller does. The head has no tool of its own yet
-(``TOOLS`` is empty) and no ``reason`` action.
+(``messages/msg_to_child.py``). And its one-shot tool ``site_correspondence`` (SOP Step 3): the model fills out the two fields of
+a request (``search_ref`` and ``site_source``), ONE deterministic check (``check_site_correspondence_request``) runs in ``action``
+before anything runs and refuses with its fix list, and a request that passes runs as ONE unit (``site_correspondence``: ask the
+source, grade, keep the sheet through custody). The tool is offered only while a (graded search, site source) pair that can
+succeed is left (``credit.offered_site_pairs``: the head holds the search's raw result and model and the pair is not graded), so
+a request that passes the check works. It never ends the Episode: only the yield controller does. No ``reason`` action.
 
 The child. A slot is offered while its commission can be stated from what this episode holds: a protein sequence of the scope
 (a target whose molecule is not protein gets no commission) and a bound Foldseek resource (``structure_search_fields``). ONE
@@ -16,7 +20,7 @@ resources a commission may name (``bound_resources``).
 Settings: ``yield_bindings`` (``yield_estimator.py``)."""
 from jsonschema import Draft202012Validator, ValidationError
 
-from episode_runtime import ChildCall, ModelRequest, Rejected
+from episode_runtime import ChildCall, ModelRequest, Rejected, ToolCall
 
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.foldseek_job_route import DATABASES
@@ -25,27 +29,37 @@ from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.re
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import time_accounting
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence import (
     foldseek_search as foldseek)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.site_correspondence import (
+    check_site_correspondence_request, site_correspondence)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.structure_search_child import (
     ROUTE_KIND, UNTIL, _choose, seconds_between)
 
-from .credit import OBTAIN, commissioned, queries
+from .credit import OBTAIN, SITE_TOOL, commissioned, graded_site_pairs, offered_site_pairs, queries
 from .goal import GOAL
 
 CHILD_SLOTS = {'structure_search': 'structural_homology_evidence/structure_search'}
-TOOLS = {}
 SERVICES = ('job_access',)
 SLOT = 'structure_search'
 LEADING = 10
 
+
+def site_correspondence_tool(arguments, ctx):
+    """One site test as one unit, by the library's one function. The arguments are the model's two controlled choices."""
+    return site_correspondence(ctx, search_ref=arguments['search_ref'], site_source=arguments['site_source'])
+
+
+TOOLS = {SITE_TOOL: site_correspondence_tool}
+
 INSTRUCTIONS = (
     GOAL + '\n\n'
     'You are the head of this investigation. At each decision you choose exactly one action, from the actions offered '
-    '(child_options), by answering with the controlled fields of its commission; code builds everything the child is told. '
+    '(child_options and tool_options), by answering with the controlled fields of its commission or request; code builds '
+    'everything the child is told. '
     'The child owns its own iterative work, and the configured yield controller owns continuation: you cannot end the '
     'episode. Recorded facts come from actual records and are shown to you as they are: the targets with their molecule and '
     'length, the models held (origin, residues, mean pLDDT: a model\'s own confidence, not similarity), the graded searches, '
     'the outstanding jobs with the seconds since their launch and the seconds still expected, the leading candidates with '
-    'their scores and subscoring sheets, your earlier units and the yield table. A model that is not held is obtained by the '
+    'their scores and subscoring sheets, the site tests held, your earlier units and the yield table. A model that is not held is obtained by the '
     'child when the commission names obtain_one. Waiting and unchanged observations do not manufacture progress.')
 
 # What the model is told of the child it may commission: what the child does, the controlled fields of its commission (the model
@@ -88,6 +102,34 @@ CHILD_DESCRIPTIONS = {
         'showing the search with the seconds since its launch and the seconds still expected as of each decision. A search of '
         'the same target, database and model that is graded, or that failed, is not commissioned again.'),
 }
+
+SITE_DESCRIPTION = (
+    'Test whether the target has, in place, the functional residues of the proteins that one graded structure search matched. '
+    'For each matched protein of the search that has a product name and a value, code asks one source for the protein\'s '
+    'annotated functional residues and carries each residue through the search\'s structural alignment onto the target model '
+    '(the alignment and the superposition are the search\'s; the residues never enter the fit). Per residue the score is a '
+    'class match (1 when the target\'s residue at the aligned position equals the matched protein\'s residue or shares its '
+    'role class: acidic DE, basic KR, aromatic FWY, hydroxyl STY, amide NQ, sulfur CM, small AGS; else 0) times the kernel '
+    '1 / (1 + (d / 1 A)^2) of the distance d in angstroms between the two C-alpha atoms after the search\'s superposition. A '
+    'residue the alignment does not align to the target is absent in the target: its score is 0 and it stays in the average; '
+    'the sheet records where it is absent, outside_the_alignment (a part of the matched protein the target was not aligned to, '
+    'for example another domain) or within_the_alignment (a gap inside the aligned span). A residue code cannot read (an '
+    'isoform model of the matched protein, a position beyond its sequence, a letter that differs from the source, no model '
+    'coordinate) is dropped with its reason and out of the average. A matched protein with no annotated residue gives no '
+    'measurement. The value of a matched protein is B (its index in the search) times the mean of its residue scores; the '
+    'value of a candidate (a product name) in this test is the mean of that over its matched proteins that have residues. A '
+    'candidate none of whose matched proteins has a residue is not measured: that is not a value of zero. Two site sources: '
+    'annotated (UniProt active-site, binding-site and site features of the matched proteins\' accessions) and catalytic (M-CSA '
+    'catalytic residues of the matched proteins that are M-CSA reference entries). What it needs: a graded structure search '
+    'that you hold with its raw result and model. Fill out the two fields of its request: search_ref (a graded search, '
+    'graded_searches gives each with its source_ref) and site_source. Only pairs not yet graded are offered; the same search '
+    'and site source are not run again. Code checks the request before anything runs; if something is wrong it comes back in '
+    'feedback with the things to fix and nothing ran. A request that passes runs as one unit with no second call: code asks the '
+    'source for every matched protein of the search (UniProt in batches of 100, M-CSA in one request), grades, and keeps the '
+    'sheet. The grading is automatic: each measured candidate\'s value is counted as soon as the unit completes. site_tests shows '
+    'the tests held: for each its search, its site source, the matched proteins asked, those with residues, the candidates '
+    'measured and those without a residue, and the residues absent outside and within the alignment. ' + CREDIT_TEXT +
+    ' A failed outcome is a fault of the environment and the same request is not made again.')
 
 
 def bound_resources(ctx):
@@ -139,6 +181,24 @@ def check_structure_search(commission, summary, resources, records):
     return problems
 
 
+def site_options(summary):
+    """The request of the ``site_correspondence`` tool as the model fills it out: one option per graded search that still has a
+    site source to grade (``credit.offered_site_pairs``), the search and the site sources left for it. Empty while no pair can
+    succeed (no graded search with its raw result and model held, or every pair graded)."""
+    pairs = offered_site_pairs(summary)
+    return [{'type': 'object', 'additionalProperties': False, 'required': ['name', 'search_ref', 'site_source'],
+             'properties': {'name': {'type': 'string', 'enum': [SITE_TOOL]}, 'search_ref': {'type': 'string', 'enum': [search]},
+                            'site_source': {'type': 'string', 'enum': [source for found, source in pairs if found == search]}}}
+            for search in dict.fromkeys(search for search, _ in pairs)]
+
+
+def check_site_request(request, summary):
+    """The things to fix in a request of ``site_correspondence``: the library's one check
+    (``check_site_correspondence_request``) over the searches the head holds with their raw result and model
+    (``site_correspondence.search_inputs`` as ``internal_summary`` reads it) and the site tests already graded."""
+    return check_site_correspondence_request(request, searches=summary['site_searches'], graded=graded_site_pairs(summary))
+
+
 COMMISSIONS = {SLOT: structure_search_fields}
 COMMISSION_CHECKS = {SLOT: check_structure_search}
 
@@ -172,16 +232,17 @@ def child_option(slot, summary, resources):
 
 
 def selection_schema(summary, resources):
-    """What the model answers with: one commission of one offered child."""
+    """What the model answers with: one commission of one offered child, or one request of the tool."""
     return {'type': 'object', 'additionalProperties': False, 'required': ['action'],
             'properties': {'action': {'anyOf': [child_option(slot, summary, resources)
-                                                for slot in offered_children(summary, resources)]}}}
+                                                for slot in offered_children(summary, resources)] + site_options(summary)}}}
 
 
 def offered_actions(summary, ctx):
-    """The action types this decision offers, by the names a unit is recorded under (``ChildCall.slot``): each child slot whose
-    commission can be stated (``offered_children``, the function ``decide`` offers the model with)."""
-    return offered_children(summary, bound_resources(ctx))
+    """The action types this decision offers, by the names a unit is recorded under (``ChildCall.slot``, ``ToolCall.name``): each
+    child slot whose commission can be stated (``offered_children``, the function ``decide`` offers the model with) and
+    ``site_correspondence`` while a request of it can succeed (``site_options``)."""
+    return offered_children(summary, bound_resources(ctx)) + ([SITE_TOOL] if site_options(summary) else [])
 
 
 def parked_jobs(summary):
@@ -221,6 +282,15 @@ def resume_action(summary, records, ctx):
     return {'action_type': SLOT, 'arguments': arguments, 'due': bool(due)}
 
 
+def outcome_row(row):
+    """One earlier unit as the model sees it: a child commission (its slot, state and credit) or a tool request (its name, status and
+    the counts of its result)."""
+    if row['kind'] == 'tool':
+        return {'position': row['position'], 'tool': row['tool'], 'arguments': row['arguments'], 'status': row['status'],
+                **row['result']}
+    return {key: row[key] for key in ('position', 'slot', 'arguments', 'child_state', 'credit', 'parked')}
+
+
 def decide(summary, feedback, ctx):
     """Ask the model for the next unit, shown the commission's scope (the targets), the resources, the models, the graded
     searches, the jobs, the leading candidates, its own outcomes, the child it may use, the measured time and the yield table."""
@@ -236,10 +306,11 @@ def decide(summary, feedback, ctx):
         'structure_search_jobs': jobs_view(summary['structure_search_jobs'], ctx.clock.now),
         'candidates': [{'target_ref': ref, 'candidate_count': row['candidate_count'], 'leading': row['candidates']}
                        for ref, row in summary['credit_table'].items()],
-        'own_outcomes': [{key: row[key] for key in ('position', 'slot', 'arguments', 'child_state', 'credit', 'parked')}
-                         for row in summary['units']],
+        'site_tests': summary['site_test_rows'],
+        'own_outcomes': [outcome_row(row) for row in summary['units']],
         'child_options': [{'slot': slot, 'binding_path': CHILD_SLOTS[slot], 'description': CHILD_DESCRIPTIONS[slot]}
                           for slot in offered],
+        'tool_options': [{'name': SITE_TOOL, 'description': SITE_DESCRIPTION}] if site_options(summary) else None,
         'yield_table': summary['yield_table'], 'time_accounting': time_accounting(ctx.clock.progress_time),
         'feedback': feedback}
     return ModelRequest('REASONING', INSTRUCTIONS, {key: value for key, value in context.items() if value is not None},
@@ -257,6 +328,12 @@ def action(response, summary, records, ctx):
     chosen = response['action']
     slot = chosen['name']
     commission = {key: value for key, value in chosen.items() if key != 'name'}
+    if slot == SITE_TOOL:
+        problems = check_site_request(commission, summary)
+        if problems:
+            raise Rejected({'status': 'invalid', 'category': SITE_TOOL + '_request',
+                            'detail': {'request': commission, 'fix': problems}})
+        return ToolCall(SITE_TOOL, commission)
     problems = COMMISSION_CHECKS[slot](commission, summary, resources, records)
     if problems:
         raise Rejected({'status': 'invalid', 'category': slot + '_commission',

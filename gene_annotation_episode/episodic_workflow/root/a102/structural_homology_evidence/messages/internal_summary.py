@@ -10,24 +10,38 @@ what the commission's check refuses to run again), ``structure_search_jobs`` (th
 the head holds: their request, identity, state and rows) and ``named_refs`` (for each held record, job ledger rows included, the held
 records it names: what travels in custody beside it).
 
+For the tool ``site_correspondence`` the summary holds ``site_searches`` (``site_correspondence.search_inputs``: each graded search
+with its raw result and model and whether this episode holds them: what a site request is checked against), ``held_site_tests``
+(per target the ``[search source reference, site source]`` pairs graded, read by the credit's own reader) and ``site_test_rows``
+(one row per site test held: its source, the search, the site source and the counts of its sheet).
+
 ``returned_refs`` are the record lists ``final_to_parent`` returns (``committed_record_refs``, ``execution_handoff_refs``,
 ``execution_check_refs``, ``execution_closure_refs``, ``data_product_refs``), each CLOSED UNDER NAMING by
 ``job_records.returned_with_names`` (the records chosen with everything they name, recursively, among the held records), as every
 child's returned lists are: the parent holds what a returned record names."""
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.candidate_measurements import (
-    held_searches, held_sources)
+    held_searches, held_site_tests, held_sources)
+from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.tool_grading_artifacts import (
+    source_tool_grading_entries)
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import (
     named_records, outstanding_jobs, returned_with_names)
 from gene_annotation_episode.episodic_workflow.episode_support.records.data_products import products
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.foldseek_search import (
     APPLICATION, MODEL_KIND, graded_rows, target_sequence)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.site_correspondence import (
+    PROVIDER as SITE_PROVIDER, search_inputs)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.structure_search_child import (
     held_jobs)
 
 from ..credit import held_candidate_table
 
 LEADING = 10
+SITE_TEST_FIELDS = ('search_ref', 'site_source', 'hits_asked', 'hits_with_sites', 'candidates_measured',
+                    'candidates_without_site', 'absent_outside_count', 'absent_within_count')
+# What the model is shown of a completed or failed tool unit (the tool's own result fields, numbers and a failure code).
+SITE_RESULT_FIELDS = ('failure_code', 'hits_asked', 'hits_with_sites', 'candidates_measured', 'candidates_without_site',
+                      'request_count')
 # The record types that carry a sequence: what the target of a search is chosen from.
 SEQUENCE_RECORD_TYPES = ('input', 'reference', 'product')
 
@@ -38,10 +52,35 @@ def _leading(target):
             for row in target['candidates'][:LEADING]]
 
 
+def site_test_rows(records):
+    """One row per site test the episode holds, from its source and the counts of its retained sheet."""
+    rows = []
+    for source in records.list('source'):
+        if source['provider'] != SITE_PROVIDER:
+            continue
+        (entry,) = source_tool_grading_entries(records, source['id'])
+        sheet = entry['grading']['sheet']
+        rows.append({'source_ref': source['id'], 'query_ref': source['operand_refs'][0],
+                     'search_ref': sheet['search_source_ref'], 'site_source': sheet['site_source'],
+                     'hits_asked': sheet['hits_asked'], 'hits_with_sites': sheet['hits_with_sites'],
+                     'candidates_measured': sheet['candidates_measured'],
+                     'candidates_without_site': sheet['candidates_without_site'],
+                     'absent_outside_count': sum(row['absent_outside_count'] for row in sheet['hits']),
+                     'absent_within_count': sum(row['absent_within_count'] for row in sheet['hits'])})
+    return rows
+
+
 def internal_summary(view):
     records, parent = view.records, view.parent_input
     units, child_reports, handoff_refs, check_refs, closure_refs, graded = [], [], [], [], [], []
     for position, outcome in enumerate(view.outcomes):
+        if outcome['kind'] == 'tool':
+            result = outcome['outcome']
+            units.append({'position': position, 'kind': 'tool', 'tool': outcome['tool'], 'status': result['status'],
+                          'arguments': outcome['arguments'], 'record_refs': list(result['record_refs']),
+                          'result': {key: result[key] for key in SITE_RESULT_FIELDS if key in result}})
+            graded.extend(ref for ref in result.get('graded_refs', []) if ref not in graded)
+            continue
         report = outcome['report']
         units.append({'position': position, 'kind': 'child', 'slot': outcome['slot'], 'status': 'completed',
                       'arguments': outcome['arguments'], 'child_state': report['finding'].get('state'),
@@ -64,6 +103,7 @@ def internal_summary(view):
                   for row in products(records, MODEL_KIND)]
     table = held_candidate_table(parent, records)
     searches = graded_rows(records)
+    site_rows = site_test_rows(records)
     held_products = products(records)
     findings = []
     for target in targets:
@@ -75,6 +115,7 @@ def internal_summary(view):
             'hit_count': sum(item['hit_count'] for item in mine), 'named_count': sum(item['named_count'] for item in mine),
             'not_asked_count': sum(item['not_asked_count'] for item in mine),
             'candidate_count': len(row['candidates']), 'candidates': _leading(row),
+            'site_tests': [{key: item[key] for key in SITE_TEST_FIELDS} for item in site_rows if item['query_ref'] == ref],
             **({} if model is None else {'model_origin': model['settings']['origin'],
                                          'model_residues': model['settings']['residues_covered'],
                                          'model_mean_plddt': model['settings']['mean_plddt']})})
@@ -87,6 +128,9 @@ def internal_summary(view):
                 ('data_product_refs', [row['id'] for row in held_products]))},
             'held_record_refs': held, 'held_sequences': held_sequences, 'targets': targets,
             'model_rows': model_rows, 'graded_searches': searches,
+            'site_searches': search_inputs(records), 'site_test_rows': site_rows,
+            'held_site_tests': {target: [list(pair) for pair in pairs] for target, pairs in held_site_tests(
+                records, scope, held_sources(records)).items()},
             'held_searches': {target: [list(pair) for pair in pairs] for target, pairs in held_searches(
                 records, scope, held_sources(records)).items()},
             'structure_search_jobs': held_jobs(records, APPLICATION),

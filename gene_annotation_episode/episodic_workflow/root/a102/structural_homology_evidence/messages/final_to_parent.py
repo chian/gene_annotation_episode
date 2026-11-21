@@ -13,6 +13,8 @@ from method_loop import ChoiceField, Field, RecordForm
 
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.candidate_measurements import (
     VOCABULARIES)
+from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.site_correspondence_sheet import (
+    SITE_SOURCES)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.foldseek_search import (
     MODEL_ORIGINS)
 
@@ -32,6 +34,21 @@ CANDIDATE_FORM = RecordForm({
                              '(0 to 1) in each test it has undergone'),
     'sheets': Field('list', 'The candidate\'s subscoring sheets, one per kind of test it has undergone', items=SHEET_FORM),
 })
+SITE_TEST_FORM = RecordForm({
+    'search_ref': Field('text', 'The graded structure search whose matched proteins the test carried onto the target (a record '
+                                'reference)'),
+    'site_source': ChoiceField('text', 'Where the functional residues came from: annotated (UniProt active-site, binding-site and '
+                                       'site features) or catalytic (M-CSA catalytic residues)', SITE_SOURCES),
+    'hits_asked': Field('integer', 'The matched proteins whose residues were asked'),
+    'hits_with_sites': Field('integer', 'The matched proteins that have at least one residue to carry over'),
+    'candidates_measured': Field('integer', 'The candidates with at least one matched protein with residues: those the test measured'),
+    'candidates_without_site': Field('integer', 'The candidates none of whose matched proteins has residues: not measured, not '
+                                                'zero'),
+    'absent_outside_count': Field('integer', 'The residues absent in the target because the alignment did not reach them (a part '
+                                             'of the matched protein the target was not aligned to)'),
+    'absent_within_count': Field('integer', 'The residues absent in the target inside the aligned span (a gap: the target lacks '
+                                            'the residue there)'),
+})
 TARGET_FORM = RecordForm({
     'target_ref': Field('text', 'The target: a subject record of the scope'),
     'molecule': ChoiceField('text', 'The molecule of the target', ('protein', 'dna', 'rna', 'unspecified')),
@@ -43,6 +60,8 @@ TARGET_FORM = RecordForm({
     'candidate_count': Field('integer', 'The possible annotations found for the target'),
     'candidates': Field('list', 'The leading possible annotations found for the target (at most 10), each with its score, the '
                                 'leading one first', items=CANDIDATE_FORM),
+    'site_tests': Field('list', 'The site tests of the target (each: its search, its site source and the counts of its sheet)',
+                        items=SITE_TEST_FORM),
     'model_origin': ChoiceField('text', 'Where the model of the target came from', MODEL_ORIGINS, required=False),
     'model_residues': Field('integer', 'The residues the model covers', required=False),
     'model_mean_plddt': Field('number', 'The mean pLDDT of the model, 0 to 100: its own confidence, not similarity',
