@@ -24,7 +24,7 @@ def feature_field(name, rule):
 
 
 WAITING_FORM = RecordForm({
-    'slot': ChoiceField('text', 'The child episode the search runs under', ('bvbrc_blast',)),
+    'slot': ChoiceField('text', 'The child episode the job runs under', ('bvbrc_blast', 'bvbrc_msa')),
     'seconds_since_launch': Field('number', 'The seconds from the launch to the latest thing the child knew'),
     'expected_remaining_seconds': Field('number', 'The seconds still expected, as the child last knew them'),
 })
@@ -62,7 +62,7 @@ TARGET_FORM = RecordForm({
 FINDING_FORM = RecordForm({
     'evidence_axis': ChoiceField('text', 'The evidence axis', ('A101',)),
     'targets': Field('list', 'One entry per target of the scope: the features of its axis sheet', items=TARGET_FORM),
-    'waiting_searches': Field('list', 'The BV-BRC searches launched and not extracted: for each the slot, the seconds since '
+    'waiting_searches': Field('list', 'The BV-BRC jobs (searches, alignments) launched and not extracted: for each the slot, the seconds since '
                                       'its launch and the seconds still expected, as the child last knew them',
                               items=WAITING_FORM, required=False),
     'outstanding_handoff_count': Field('integer', 'Handoffs its launches returned for which no completed result '
@@ -79,12 +79,15 @@ RETURN_FORM = RecordForm({
                                                 'later visit passes back', required=False),
     'execution_closure_refs': Field('record_refs', 'The closure records its children returned for fetched reports',
                                     required=False),
+    'data_product_refs': Field('record_refs', 'The data-product rows it holds (labelled files: EDAM type and format, what '
+                                              'made them, where else they lie), which a later visit passes back for reuse',
+                               required=False),
 })
 
 
 # The slots whose report closes one handoff, by the state of the child's finding that does it. A child is added here when
 # built.
-CLOSING_STATES = {'database_blast': 'graded', 'bvbrc_blast': 'extracted'}
+CLOSING_STATES = {'database_blast': 'graded', 'bvbrc_blast': 'extracted', 'bvbrc_msa': 'extracted'}
 
 
 def final_to_parent(summary, completion, selection):
@@ -93,8 +96,8 @@ def final_to_parent(summary, completion, selection):
     waiting = [{'slot': row['slot'], 'seconds_since_launch': row['finding']['seconds_since_launch'],
                 'expected_remaining_seconds': row['finding']['expected_remaining_seconds']}
                for index, row in enumerate(summary['child_reports'])
-               if row['slot'] == 'bvbrc_blast' and row['finding'].get('parked')
-               and not any(later['slot'] == 'bvbrc_blast' and later['finding']['state'] == 'extracted'
+               if row['slot'] in ('bvbrc_blast', 'bvbrc_msa') and row['finding'].get('parked')
+               and not any(later['slot'] == row['slot'] and later['finding']['state'] == 'extracted'
                            for later in summary['child_reports'][index + 1:])]
     result = {'credit': completion['credit'],
               'finding': {'evidence_axis': 'A101', 'targets': summary['axis_findings'],
@@ -106,6 +109,8 @@ def final_to_parent(summary, completion, selection):
         result['execution_handoff_refs'] = summary['handoff_refs']
     if 'execution_check_refs' in selection:
         result['execution_check_refs'] = summary['check_refs']
+    if 'data_product_refs' in selection:
+        result['data_product_refs'] = summary['data_product_refs']
     if 'execution_closure_refs' in selection:
         result['execution_closure_refs'] = summary['closure_refs']
     return result

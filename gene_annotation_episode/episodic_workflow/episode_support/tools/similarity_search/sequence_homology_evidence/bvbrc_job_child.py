@@ -22,7 +22,8 @@ child's folder keeps its own five-action ``decide``/``action``/``TOOLS``; each b
         field_problems=lambda request, commission: [...],   # the application's own checks of request fields
         prepare=lambda ctx, request, commission: {'job': {...}, 'inputs': {name: artifact ref}, 'job_facts': {...}},
         extract=lambda ctx, handoff_ref, request, commission: {...outcome...},
-        describe_identity=lambda reader, handoff: {...controlled identity of the job...})
+        describe_identity=lambda reader, handoff: {...controlled identity of the job...},
+        after_launch=None)                 # optional: records the inputs' data products after the launch; returns row refs
 
 ``commission`` is the child's own controlled dictionary (a ``read_from_parent`` result part), handed unchanged to the
 three callables. ``prepare`` runs in the launch unit (it may fetch and keep artifacts); ``extract`` runs in the extract unit
@@ -82,6 +83,7 @@ class JobApplication:
     prepare: Callable
     extract: Callable
     describe_identity: Callable
+    after_launch: Callable = None   # (ctx, request, commission, prepared, launched) -> the data-product row refs it recorded
 
 
 def ledger_kind(binding, fields):
@@ -385,8 +387,9 @@ def launch_job(ctx, binding, *, request, estimate, commission):
         return {**_failed(failure['code'], False, sent=failure['detail'].get('sent'),
                           http_status=failure['detail'].get('http_status'),
                           rpc_error=failure['detail'].get('rpc_error')), 'handoff_refs': [], 'request': dict(request)}
+    products = [] if binding.after_launch is None else binding.after_launch(ctx, request, commission, prepared, launched)
     return {'status': 'completed', 'failure_code': None, 'retryable': False, 'handoff_refs': [launched['handoff_ref']],
-            'record_refs': [launched['handoff_ref'], launched['reply_ref']], 'request': dict(request),
+            'record_refs': [launched['handoff_ref'], launched['reply_ref'], *products], 'request': dict(request),
             'predicted_seconds': estimate['expected_seconds'], 'duration_basis': estimate['basis'],
             'submitted_at': launched['submitted_at']}
 

@@ -54,6 +54,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
     DATABASES, HITLIST_RANGE, check_commission)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence import (
     bvbrc_blast_search as bvbrc)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence import (
+    bvbrc_msa_alignment as msa)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.database_blast_search import (
     seconds_between)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.pairwise_blast_comparison import (
@@ -69,16 +71,20 @@ HEAD = 'sequence_homology_evidence'
 # The child episodes that are built, by slot. A child is added here with its entries in ``COMMISSIONS``,
 # ``CHILD_DESCRIPTIONS`` and ``SELECTABLE`` and its builder in ``messages/msg_to_child.py``.
 CHILD_SLOTS = {'database_blast': 'sequence_homology_evidence/database_blast',
-               'bvbrc_blast': 'sequence_homology_evidence/bvbrc_blast'}
+               'bvbrc_blast': 'sequence_homology_evidence/bvbrc_blast',
+               'bvbrc_msa': 'sequence_homology_evidence/bvbrc_msa'}
 # What the model supplies to commission each slot: a function of (summary, resources) that returns
 # ``(properties, required)`` of controlled values, or ``None`` while the commission cannot be stated.
 COMMISSIONS = {'database_blast': lambda summary, resources: database_blast_fields(summary, resources),
-               'bvbrc_blast': lambda summary, resources: bvbrc_blast_fields(summary, resources)}
+               'bvbrc_blast': lambda summary, resources: bvbrc_blast_fields(summary, resources),
+               'bvbrc_msa': lambda summary, resources: bvbrc_msa_fields(summary, resources)}
 # The one deterministic check of each slot's filled commission: a function of (the model's commission, summary,
 # resources) that returns the things to fix (an empty list: it can be commissioned). Added with the slot.
 COMMISSION_CHECKS = {'database_blast': lambda commission, summary, resources: check_database_blast(
     commission, summary, resources),
                      'bvbrc_blast': lambda commission, summary, resources: check_bvbrc_blast(
+                         commission, summary, resources),
+                     'bvbrc_msa': lambda commission, summary, resources: check_bvbrc_msa(
                          commission, summary, resources)}
 # The programs the head commissions: those its credit can score. The A101 subscore (``route_native_grading``) scores the
 # sheet of a ``blastp`` search; for any other program it raises (``a101_translated_or_nucleotide_map_not_bound``,
@@ -101,7 +107,7 @@ THOUGHT_FIELDS = ('id', 'name', 'description', 'use_when', 'live_alternatives', 
                   'outcome_contingencies', 'boundary')
 # The optional return fields a commission may select from what the child declares (read from the child's own
 # ``RETURN_FORM``); credit and finding are always returned. A child's entry is added with its commission.
-SELECTABLE = {'database_blast': [], 'bvbrc_blast': []}
+SELECTABLE = {'database_blast': [], 'bvbrc_blast': [], 'bvbrc_msa': []}
 
 # The two bodies the old ``ScientificGoal.instructions`` appended after the goal text, by the entry version of the
 # selected evidence axis (instruction text, unchanged).
@@ -204,6 +210,31 @@ CHILD_DESCRIPTIONS = {
         'revised figure of a status request), and bvbrc_searches keeps showing the search with the seconds since its launch '
         'and the seconds still expected as of each decision. A search that failed or is already held extracted is not '
         'commissioned again.'),
+    'bvbrc_msa': (
+        'Align the target (a protein sequence of your scope) with sequences of several candidates of a graded BV-BRC '
+        'database search you hold, through the BV-BRC application service (the MSA application, Muscle, protein, run on the '
+        'owner\'s account). Code, not you, chooses the sequences: for each candidate you name, the hits of that search with '
+        'the highest values (one per distinct sequence), the number per candidate you choose; the target is always in the '
+        'alignment. When the alignment is extracted, each reference sequence is a measurement of its candidate (the product '
+        'it had in the search, the same candidate on your list) in one more test, msa, whose value is the identical aligned '
+        'columns over the target\'s length: candidates already on your list that both undergo this test can differentiate '
+        'each other. ' + CREDIT_TEXT + ' Fill the six fields of its commission: query_ref (a protein sequence of your scope), '
+        'search_ref (a held graded BV-BRC search of that query; msa_options shows each with the product candidates you '
+        'admitted from it), candidates (two or more of those product names, exactly as shown), per_candidate (2 to 20 '
+        'sequences of each), resource_id (a bvbrc resource of bound_resources) and until. Code checks the commission before '
+        'the child is commissioned; if something is wrong it comes back in feedback with the things to fix and nothing was '
+        'commissioned. While a child runs, you do nothing else: your next decision comes after it returns. What until '
+        'means: with until launched the child estimates the duration, launches the job and returns at once; the job then '
+        'keeps running at the service, you can use your other actions while it runs, and the child is said to be parked. '
+        'With until extracted the child follows the job to its end and extracts the alignment into the graded sheet; it is '
+        'also how a parked job is continued: while bvbrc_msa_jobs shows a job as outstanding, commissioning the child again '
+        'with the same fields and until extracted continues that job and submits nothing. What comes back: the state of the '
+        'job (no_estimate, estimated, launched, finished, extracted or failed), the sequences, columns and candidates of the '
+        'alignment, the seconds estimated and observed, the last failure code and the credit; when parked (parked true) a '
+        'wait notice: seconds_since_launch, estimated_seconds and expected_remaining_seconds. The alignment is also kept as '
+        'a labelled data product (data_products shows it with where it also lies in the BV-BRC workspace) that a later '
+        'child that needs an alignment is passed. An alignment already held is not commissioned again; a job that failed is '
+        'not commissioned again.'),
 }
 
 
@@ -350,14 +381,51 @@ def bvbrc_blast_fields(summary, resources):
     return properties, list(properties)
 
 
-def bvbrc_searches_view(searches, now):
+def bvbrc_msa_fields(summary, resources):
+    """The commission of ``bvbrc_msa``: the target and the held graded BV-BRC search (each from the held ones that admit
+    at least two product candidates for it), the candidates (two or more of the admitted names), the number of sequences
+    per candidate and the BV-BRC resource, each from a fixed set. Not offered while no held graded BV-BRC search admits two
+    product candidates or no BV-BRC resource is bound."""
+    options = [item for item in summary['msa_options'] if len(item['candidates']) >= msa.MINIMUM_CANDIDATES
+               and summary['held_sequences'].get(item['query_ref']) == 'protein']
+    services = [name for name, kind in resources.items() if kind == bvbrc.ROUTE_KIND]
+    if not options or not services:
+        return None
+    names = list(dict.fromkeys(name for item in options for name in item['candidates']))
+    properties = {'query_ref': {'enum': list(dict.fromkeys(item['query_ref'] for item in options))},
+                  'search_ref': {'enum': [item['search_ref'] for item in options]},
+                  'candidates': {'type': 'array', 'uniqueItems': True, 'minItems': msa.MINIMUM_CANDIDATES,
+                                 'items': {'enum': names}},
+                  'per_candidate': {'type': 'integer', 'minimum': msa.PER_CANDIDATE_RANGE[0],
+                                    'maximum': msa.PER_CANDIDATE_RANGE[1]},
+                  'resource_id': {'enum': services}, 'until': {'enum': list(bvbrc.UNTIL)}}
+    return properties, list(properties)
+
+
+def check_bvbrc_msa(commission, summary, resources):
+    """The things to fix in a commission of ``bvbrc_msa`` (``bvbrc_msa_alignment.check_commission``)."""
+    return msa.check_commission(
+        commission, scope_subjects=summary['scope']['subject_refs'], sequences=summary['held_sequences'],
+        options=summary['msa_options'], resources=resources, jobs=summary['bvbrc_msa_jobs'],
+        commissioned=[(row['arguments']['search_ref'], sorted(row['arguments']['candidates']),
+                       row['arguments']['per_candidate']) for row in summary['units']
+                      if row['kind'] == 'child' and row['slot'] == 'bvbrc_msa'],
+        reusable=summary['reusable_alignments'].get((commission['search_ref'], tuple(sorted(commission['candidates'])),
+                                                     commission['per_candidate'])))
+
+
+def bvbrc_searches_view(searches, now, msa=False):
     """The BV-BRC searches this episode holds as the model sees them at ``now`` (the decision's recorded time): each with its
     state, whether it is outstanding, and for an outstanding one the seconds since its launch and the seconds still
     expected: the estimate recorded with its launch minus those seconds, not below zero. Facts, never a deadline."""
     shown = []
     for search in searches:
-        row = {key: search[key] for key in ('handoff_ref', 'query_ref', 'program', 'database', 'resource_id',
-                                            'latest_state', 'outstanding', 'closed', 'estimated_seconds')}
+        keys = (('handoff_ref', 'resource_id', 'latest_state', 'outstanding', 'closed', 'estimated_seconds') if msa else
+                ('handoff_ref', 'query_ref', 'program', 'database', 'resource_id', 'latest_state', 'outstanding',
+                 'closed', 'estimated_seconds'))
+        row = {key: search[key] for key in keys}
+        if msa:
+            row['identity'] = search['identity']
         if search['outstanding']:
             elapsed = seconds_between(search['launched_at'], now)
             row.update(seconds_since_launch=elapsed, expected_remaining_seconds=max(search['estimated_seconds'] - elapsed, 0.0))
@@ -454,6 +522,9 @@ def decide(summary, feedback, ctx):
         'held_profile_scans': summary['held_profile_scans'],
         'database_searches': summary['database_searches'],
         'bvbrc_searches': bvbrc_searches_view(summary['bvbrc_searches'], ctx.clock.now),
+        'msa_options': summary['msa_options'],
+        'bvbrc_msa_jobs': bvbrc_searches_view(summary['bvbrc_msa_jobs'], ctx.clock.now, msa=True),
+        'held_alignments': summary['held_alignments'], 'data_products': summary['data_products'],
         'tools': [{'name': 'reason', 'description': DESCRIPTIONS['reason']}, *own, *tools],
         'child_options': [{'slot': slot, 'binding_path': CHILD_SLOTS[slot], 'description': CHILD_DESCRIPTIONS[slot],
                            'selectable_return_fields': SELECTABLE[slot]} for slot in offered],

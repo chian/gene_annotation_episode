@@ -26,11 +26,15 @@ OBJECTIVES = {
     'bvbrc_blast': 'Search the query sequence against the precomputed BV-BRC database through the BV-BRC application '
                    'service, in this one commission: estimate the duration, launch the search, monitor it until the '
                    'service has ended it and extract the graded result, and return what it established.',
+    'bvbrc_msa': 'Align the target with the sequences of the chosen candidates of the held graded BV-BRC search through '
+                 'the BV-BRC application service: estimate the duration, launch the alignment, monitor it until the '
+                 'service has ended it and extract the graded alignment, and return what it established.',
 }
 # The return fields every commission of a slot selects.
 REQUIRED_RETURN = {
     'database_blast': ('execution_handoff_refs', 'check_refs', 'closure_refs', 'graded_refs'),
     'bvbrc_blast': ('execution_handoff_refs', 'check_refs', 'closure_refs', 'graded_refs'),
+    'bvbrc_msa': ('execution_handoff_refs', 'check_refs', 'closure_refs', 'graded_refs'),
 }
 
 
@@ -90,7 +94,31 @@ def _bvbrc_blast(arguments, summary):
     return assignment
 
 
-ASSIGNMENTS = {'database_blast': _database_blast, 'bvbrc_blast': _bvbrc_blast}
+def _bvbrc_msa(arguments, summary):
+    """The assignment of one BV-BRC alignment: the target and the held search in custody (with every held record they
+    name), the candidates (each ``{name}``), ``per_candidate``, the resource, ``until``, the three credit units, the held
+    alignment data-product rows (what the child's launch check looks for a reusable alignment in) and, when the commission
+    continues an outstanding job of the same fields, the records of that job passed back."""
+    query, search = arguments['query_ref'], arguments['search_ref']
+    units = summary['child_credit_units']
+    named = [ref for ref in _custody([query, search], summary) if ref not in (query, search)]
+    assignment = {'query_refs': [query], 'search_refs': [search],
+                  'input_refs': [*named, *summary['alignment_product_refs']],
+                  'candidates': [{'name': name} for name in arguments['candidates']],
+                  'per_candidate': arguments['per_candidate'], 'resource_id': arguments['resource_id'],
+                  'until': arguments['until'], 'handoff_unit': units['handoff_unit'],
+                  'information_unit': units['information_unit'], 'graded_unit': units['acquired_record_unit']}
+    held = [job for job in summary['bvbrc_msa_jobs'] if job['outstanding'] and job['identity'] == {
+        'query_ref': query, 'search_ref': search, 'candidates': sorted(arguments['candidates']),
+        'per_candidate': arguments['per_candidate']}]
+    if held:
+        (job,) = held
+        assignment.update(handoff_refs=[job['handoff_ref']], check_refs=job['check_refs'],
+                          closure_refs=job['closure_refs'], known_ended=job['known_ended'])
+    return assignment
+
+
+ASSIGNMENTS = {'database_blast': _database_blast, 'bvbrc_blast': _bvbrc_blast, 'bvbrc_msa': _bvbrc_msa}
 
 
 def msg_to_child(slot, arguments, summary):

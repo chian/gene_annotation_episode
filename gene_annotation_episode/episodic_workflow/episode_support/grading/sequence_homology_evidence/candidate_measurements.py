@@ -54,6 +54,7 @@ DATABASE_SHEETS = ('blast_database_sheet_v1', 'blast_database_sheet_v2', 'blast_
 PAIRWISE_SHEET = 'blast_pairwise_sheet_v1'
 PROFILE_SHEET = 'hmmer_search_sheet_v1'
 METACATS_SHEET = 'metacats_sheet_v1'
+MSA_SHEET = 'msa_alignment_sheet_v1'
 
 
 def held_sources(reader):
@@ -73,21 +74,47 @@ def _by(rows, key):
     return grouped
 
 
-def _database_search(source, grading, value_of):
+def search_hits(grading, value_of):
+    """The hits of a database search with names, one row per (hit, product name) in hit order: ``hit_index``, ``product``
+    (the function the sheet's reference metadata gives it), ``value`` (the subscore of that hit's alignments), and the
+    hit's ``accession``, ``aa_sequence_md5`` and ``aa_length`` (BV-BRC's feature fields; ``None`` where the metadata has
+    none), plus ``unlabelled`` (a hit that names no product gives one row with ``product`` ``None``)."""
     sheet = grading['sheet']
-    search = sheet['normalized_result']['search']
-    test = 'database_search:' + source['provider'] + ':' + search['program'] + ':' + search['request']['database']
     rows = _by(route_native_grading(grading), 'hit_index')
-    found, unlabelled = [], 0
+    found = []
     for hit in sheet['hits']:
-        names = list(dict.fromkeys(
-            function['function'] for association in hit['associations']
-            for function in sheet['reference_metadata'][association['metadata_index']]['functions']
-            if function['function']))
-        unlabelled += not names
+        names = {}
+        for association in hit['associations']:
+            metadata = sheet['reference_metadata'][association['metadata_index']]
+            for function in metadata['functions']:
+                if function['function']:
+                    names.setdefault(function['function'], (metadata['accession'], function.get('bvbrc_feature', {})))
         value = value_of(rows.get(hit['hit_index'], []))
-        found.extend((test, 'product', name, None, value) for name in names)
-    return found, unlabelled
+        if not names:
+            found.append({'hit_index': hit['hit_index'], 'product': None, 'value': value, 'accession': None,
+                          'aa_sequence_md5': None, 'aa_length': None})
+        found.extend({'hit_index': hit['hit_index'], 'product': name, 'value': value, 'accession': accession,
+                      'aa_sequence_md5': feature.get('aa_sequence_md5'), 'aa_length': feature.get('aa_length')}
+                     for name, (accession, feature) in names.items())
+    return found
+
+
+def _database_search(source, grading, value_of):
+    search = grading['sheet']['normalized_result']['search']
+    test = 'database_search:' + source['provider'] + ':' + search['program'] + ':' + search['request']['database']
+    rows = search_hits(grading, value_of)
+    found = [(test, 'product', row['product'], None, row['value']) for row in rows if row['product'] is not None]
+    return found, sum(1 for row in rows if row['product'] is None)
+
+
+def _held_msa(reader, source, grading, value_of):
+    """A graded multiple sequence alignment (``msa_alignment_sheet_v1``): test ``msa:<provider>:<aligner>:<alphabet>``;
+    one measurement per reference sequence: its candidate is the ``product`` the search gave it (the same candidate
+    identity, so the same candidate on the list) and its value is the sheet's (identical columns over the target's
+    length)."""
+    sheet = grading['sheet']
+    test = 'msa:' + source['provider'] + ':' + sheet['aligner'] + ':' + sheet['alphabet']
+    return [(test, 'product', row['candidate'], None, row['value']) for row in sheet['references']], 0
 
 
 def _profile_scan(source, grading, value_of):
@@ -124,6 +151,8 @@ def _read(reader, scope, sources):
                 read = _database_search
             elif sheet['schema'] == PROFILE_SHEET and sheet['operation']['program'] == 'hmmscan':
                 read = _profile_scan
+            elif sheet['schema'] == MSA_SHEET:
+                read = lambda s, g, v: _held_msa(reader, s, g, v)
             elif sheet['schema'] == METACATS_SHEET:
                 read = _metacats
             elif sheet['schema'] == PAIRWISE_SHEET:

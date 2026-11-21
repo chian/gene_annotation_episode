@@ -29,6 +29,10 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence import (
     bvbrc_blast_search as bvbrc)
 
+from gene_annotation_episode.episodic_workflow.episode_support.records.data_products import products
+from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence import (
+    bvbrc_job_child as job_child, bvbrc_msa_alignment as msa)
+
 from ..credit import A101DifferentialCredit, A101SequenceCredit, held_candidate_table
 from ..task import CHILD_SLOTS, PAIRWISE_TOOL, PROFILE_TOOL
 
@@ -118,6 +122,8 @@ def internal_summary(view):
     details = A101SequenceCredit().read_details(records, parent['scope'], known_record_refs=held,
                                                 details_limit=ALL, details_offset=0)
     table = held_candidate_table(parent, records)
+    held_products = products(records)
+    alignments = [row for row in held_products if row['kind'] == msa.PRODUCT_KIND]
     findings = [{**finding, **_candidate_fields(table['targets'][target])}
                 for target, finding in zip(details['a101_sheet']['targets'], axis_features(details), strict=True)]
     return {**parent,
@@ -135,6 +141,16 @@ def internal_summary(view):
             'database_searches': held_searches(records, {ref: records.get(ref)['sequence_ref'] for ref in held_sequences}),
             'bvbrc_searches': bvbrc.held_searches(records, {ref: records.get(ref)['sequence_ref'] for ref in held_sequences}),
             'named_refs': {ref: _named(records, ref) for ref in held},
+            'msa_options': msa.msa_options(records, parent['scope'], table),
+            'bvbrc_msa_jobs': job_child.held_jobs(records, msa.APPLICATION),
+            'held_alignments': msa.graded_rows(records),
+            'data_products': [{'row_ref': row['id'], 'kind': row['kind'], 'edam_data': row['edam_data'],
+                               'edam_format': row['edam_format'], 'locations': row['locations'],
+                               'settings': row['settings']} for row in held_products],
+            'data_product_refs': [row['id'] for row in held_products],
+            'alignment_product_refs': [row['id'] for row in alignments],
+            'reusable_alignments': {(row['used'][1], tuple(row['settings']['candidates']),
+                                     row['settings']['per_candidate']): row for row in alignments},
             'evidence_refs': [row['id'] for kind in EVIDENCE_RECORD_TYPES for row in records.list(kind)],
             'working_state': records.reasoning_view(parent['scope']),
             'reasoning_schema': records.reasoning_schema(),
