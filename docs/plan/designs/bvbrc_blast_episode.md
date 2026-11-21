@@ -363,3 +363,36 @@ tools and the ledger as in P1; the description of the child as amended. I do not
 ends at the launch (2 units, credit 2.0), the head's model then does something (not predicted), a resuming commission continues
 the same search (one job, one ledger row) with the target 2.0 and ends at the extract. If it chooses `extracted` again: that is
 reported as the model not parking.
+
+### Run P2a: observed (`runs/bvbrc_a101_run_P2a`, workspace `runs/bvbrc_a101_ws_G`, journal `journal_P2a.sqlite3`, report `report_P2a.json`)
+
+Submission 2 of 3 for this step. The model parked this time (with the amended description): `bvbrc_blast` with `until: launched`.
+- Child 1: `estimate` (83 s, learned), `launch`; 2 units, credit 2.0 = the target, `yield_stop` at the launch, no wind-down unit. The
+  return: `state launched`, `parked true`, `seconds_since_launch 0.0`, `estimated_seconds 83`, `expected_remaining_seconds 83.0`, with the
+  handoff record.
+- The head's model then sent off `hmmer_profile_scan` (Pfam-A, local; about 22 s), then commissioned `bvbrc_blast` again with the same query,
+  program, database, resource and `until: extracted` (the resumption), about 28 s after the launch (model-call times).
+- Child 2 (resumed): `monitor` (wait 60 s, expected remaining 55: `finished`), `extract` (300 hits, 300 of 300 metadata, 7 data requests): 2 units,
+  credit 2.0 = the target (ended + graded), `yield_stop` at the extract, no wind-down. No second submission: one job folder
+  (`job_fe0c02496d9e6d44e9bf832c7e7e63f8`) and one ledger row (query length 548) resolved with 93.671343 s (`finished`); the ledger holds 7
+  measured searches and no open row.
+- The head's credit counted the graded result with no further call: 0.9999999999981; 3 head units; 7 model calls (the cold one-loop
+  runs: B1 12, C1 11, D1 16, P1 6 calls); wall time from the first to the last model call 136 s (B1 264 s, C1 341 s, D1 356 s,
+  P1 172 s). The one-loop runs lost most of their time to the repeated estimate units after the extract, which the completion
+  controller has removed (P1 has none); the park path also overlapped the scan with the search.
+
+### Run P2b: prediction (written before the run)
+
+Goal: the head ends while the search is parked, and a later head run resumes the SAME search. Query: E. coli K-12 elongation factor Tu
+(UniProt P0CE47, 394 residues), fresh workspace `runs/bvbrc_a101_ws_H`, run `runs/bvbrc_a101_run_P2b`. The head's yield setting
+(`cutoff`) is set to 2.0, above the 1.0 maximum of its bounded credit, so that its estimator stops it after its first unit (a setting of
+the run, not a choice of the model: the model's `until` is its own). Submission 3 of 3 (the last).
+1. If the model's first action is the `bvbrc_blast` commission with `until: launched`: the child parks (2 units, credit 2.0); the head's
+   estimator ends the head after that one unit (credit 0); the head's return finding has `waiting_searches` with this search and
+   `outstanding_handoff_count` 1, and carries the handoff and status records. If the model's first action is something else, the head
+   ends without a search (no submission is made): I would report it and repeat with another workspace (no submission spent).
+2. The return visit (`runs/bvbrc_a101_run_P2c`, the same workspace, the head's cutoff back to 0.1): the commission passes the returned records
+   in `evidence_refs`; the head's `bvbrc_searches` shows the search outstanding with the seconds since its launch (minutes) and expected
+   remaining 0; its model commissions `bvbrc_blast` with `until: extracted`; the child's first `monitor` shows `finished`, `extract`, 2 units,
+   credit 2.0 (the minimum wait: 0, since the last contact is old); one job folder and one ledger row, resolved (measured from the
+   submission to the first `finished` status, so several minutes, not the true service time: the ledger row records an upper bound).
