@@ -72,7 +72,7 @@ def prepared_features(row):
     features = {'prepared_kind': row['prepared_kind'], 'state': row['state'], 'usable': row['usable'],
                 'input_records': row['input_records'], 'input_residues': row['input_residues'],
                 'files_count': facts.get('files_count'), 'bytes_total': facts.get('bytes_total')}
-    for name in ('sequences', 'letters', 'integrity_ok', 'counts_match', 'inventory_complete', 'masked_residues',
+    for name in ('sequences', 'letters', 'counts_match', 'inventory_complete', 'masked_residues',
                  'masked_fraction'):
         if facts.get(name) is not None:
             features[name] = facts[name]

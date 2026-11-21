@@ -138,7 +138,7 @@ def acquire_prepared_data(ctx, handoff_ref, *, declared_kind):
             'record_refs': refs}
 
 
-PROGRAMS = {'database_build': ('makeblastdb', 'blastdbcmd', 'blastdbcheck')}
+PROGRAMS = {'database_build': ('makeblastdb', 'blastdbcmd')}
 JOB_NAME = 'preparation'
 PROBLEM_CODES = ('resource_not_bound', 'resource_not_local', 'kind_differs_from_commission', 'commission_invalid',
                  'input_not_held', 'input_not_parsable', 'input_above_local_bound', 'program_missing',

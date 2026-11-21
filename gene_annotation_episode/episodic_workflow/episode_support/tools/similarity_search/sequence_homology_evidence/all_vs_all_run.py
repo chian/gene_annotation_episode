@@ -21,13 +21,15 @@ local resource, and keeps its product as a labelled data product (``records/data
    the existing ``blast_all_vs_all_graph.parse_report`` and ``build_edges`` (best alignment of each ordered pair) and checked by
    its ``completeness`` (every sequence found itself: otherwise the run is a failure, never "no relatives"). The pairwise
    matrix of BIT SCORES (``cluster_sheet``: why bit scores) is the ``sequence_similarity_matrix`` product.
-3. ``cluster``: REQUIRES a held ``sequence_similarity_matrix`` product. Its weights are the score ratio
-   (``cluster_sheet.score_ratio_graph``), clustered by ``mcl`` (``cluster_sheet``: why MCL) with the inflation the model chose
-   from the commission's fixed set. Clustering the same matrix with the same inflation again is refused (the product's reuse
-   key). The clusters are the ``sequence_clusters`` product and are graded into the cluster sheet
-   (``cluster_sheet.grade_clustering``): a source of provider ``all_vs_all`` (what the head's credit reads).
+3. ``cluster`` (a TRY): REQUIRES a held ``sequence_similarity_matrix`` product. Its weights are the score ratio
+   (``cluster_sheet.score_ratio_graph``) under the contrast the model chose, clustered by ``mcl`` (``cluster_sheet``: why MCL, and the
+   tuning) at the inflation the model chose. The same tuning of the same matrix again is refused. A try is a working result: its clusters
+   are a ``sequence_clusters`` product (a partition already held is reported as the same clustering, not a second product) and the
+   model is shown controlled facts of it (``cluster_sheet.cluster_facts``). Nothing is graded and nothing reaches the head's credit.
+4. ``commit_clustering``: REQUIRES a held ``sequence_clusters`` product, once per commission: the clustering is graded into the cluster
+   sheet (``cluster_sheet.grade_clustering``) as a source of provider ``all_vs_all``: the ONE graded test the head reads.
 
-Settings (``ctx.settings``): ``blast_executable_directory`` (``makeblastdb``, ``blastdbcmd``, ``blastdbcheck``, ``blastp``),
+Settings (``ctx.settings``): ``blast_executable_directory`` (``makeblastdb``, ``blastdbcmd``, ``blastp``),
 ``mcl_executable_directory`` (``mcl``) and ``python_executable``."""
 import hashlib
 import inspect
@@ -42,9 +44,10 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_
 from gene_annotation_episode.episodic_workflow.episode_support.grading.similarity_search.sequence_homology_evidence.blast_all_vs_all_graph import (
     REPORT_FIELDS, build_edges, completeness, parse_report)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.cluster_sheet import (
-    EDGE_WEIGHT, INFLATIONS, METHOD, TARGET_ID, abc_text, grade_clustering, parse_clusters, score_ratio_graph)
+    EDGE_WEIGHT, INFLATIONS, METHOD, TARGET_ID, CONTRASTS, abc_text, cluster_facts, contrast_graph, contrast_undefined, grade_clustering,
+    parse_clusters, score_ratio_graph, with_singletons)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.tool_grading_artifacts import (
-    retain_tool_grading)
+    retain_tool_grading, source_tool_grading_entries)
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.resource_local import execute_on_local_resource
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.similarity_search.sequence_homology_evidence.blast_preparation_run import (
     prepare_locally)
@@ -66,8 +69,8 @@ REPORT_FILE, GRAPH_FILE, CLUSTERS_FILE = 'graph.tsv', 'graph.abc', 'clusters.txt
 DRIVER_SOURCE = Path(inspect.getsourcefile(all_vs_all_driver)).read_bytes()
 SET_KIND, DATABASE_KIND, MATRIX_KIND, CLUSTERS_KIND = ('protein_sequences', 'blast_protein_database',
                                                        'sequence_similarity_matrix', 'sequence_clusters')
-BLAST_PROGRAMS = ('makeblastdb', 'blastdbcmd', 'blastdbcheck')
-TOOLS = ('prepare_database', 'all_vs_all_blast', 'cluster')
+BLAST_PROGRAMS = ('makeblastdb', 'blastdbcmd')
+TOOLS = ('prepare_database', 'all_vs_all_blast', 'cluster', 'commit_clustering')
 HOLD_REASONS = ('a_step_failed_and_cannot_be_retried', 'every_step_is_done')
 OWN_FAILURE_CODES = ('sequence_not_returned_by_the_service', 'a_sequence_did_not_find_itself', 'blastp_exit_nonzero',
                      'mcl_exit_nonzero', 'job_not_accepted', 'job_not_fetched', 'failed', 'incomplete')
@@ -149,24 +152,38 @@ def check_blast(call, *, commission, per_candidate, reader, resources, failed, b
     return problems
 
 
-def check_cluster(call, *, commission, reader, resources, failed, mcl_directory):
-    """The things to fix in a ``cluster`` call (``resource_id``, ``matrix_ref``, ``inflation``): the resource is a bound local
-    one; the matrix is a held ``sequence_similarity_matrix`` product (``require_product``); the inflation is one the
-    commission allows; the same matrix with the same inflation is not already clustered (the product's reuse key); no
-    earlier clustering of it failed; ``mcl`` exists."""
+def check_cluster(call, *, reader, ids, resources, tried, mcl_directory):
+    """The things to fix in a ``cluster`` call (``resource_id``, ``matrix_ref``, ``inflation``, ``contrast``): the resource is a bound
+    local one; the matrix is a held ``sequence_similarity_matrix`` product (``require_product``); the inflation and the contrast are of
+    the fixed sets; the contrast has a meaning on this matrix (``rescale`` needs ratios below 1); this tuning of this matrix is not
+    already tried (``tried``: the (matrix, inflation, contrast) of the tries made); ``mcl`` exists. ``ids`` are the set's ids in file order."""
     problems = _resource_problems(call, resources)
     row, problem = require_product(reader, call['matrix_ref'], MATRIX_KIND)
     if problem is not None:
         problems.append({'code': problem, 'field': 'matrix_ref'})
-    if call['inflation'] not in commission['inflations']:
-        problems.append({'code': 'inflation_not_allowed_by_the_commission', 'field': 'inflation',
-                         'choose_from': list(commission['inflations'])})
-    elif problem is None and find_reusable(reader, CLUSTERS_KIND, [row['artifact_ref']],
-                                           clusters_settings(call['inflation'])) is not None:
-        problems.append({'code': 'sequence_clusters_of_this_matrix_and_inflation_already_held', 'field': 'inflation'})
-    if (call['matrix_ref'], call['inflation']) in failed:
-        problems.append({'code': 'clustering_already_failed_and_cannot_be_retried', 'field': 'inflation'})
+    if call['inflation'] not in INFLATIONS:
+        problems.append({'code': 'inflation_not_in_the_fixed_set', 'field': 'inflation', 'choose_from': list(INFLATIONS)})
+    if call['contrast'] not in CONTRASTS:
+        problems.append({'code': 'contrast_not_in_the_fixed_set', 'field': 'contrast', 'choose_from': list(CONTRASTS)})
+    if problem is None and call['contrast'] in CONTRASTS:
+        if contrast_undefined(score_ratio_graph(matrix_edges(reader.get_artifact(row['artifact_ref']).decode()), ids),
+                              call['contrast']):
+            problems.append({'code': 'contrast_undefined_on_this_matrix', 'field': 'contrast'})
+    if (call['matrix_ref'], call['inflation'], call['contrast']) in tried:
+        problems.append({'code': 'this_tuning_of_the_matrix_is_already_tried', 'field': 'inflation'})
     problems.extend(_programs(mcl_directory, ('mcl',)))
+    return problems
+
+
+def check_commit(call, *, reader, committed):
+    """The things to fix in a ``commit_clustering`` call (``clusters_ref``): the clusters are a held ``sequence_clusters`` product
+    (``require_product``); no clustering is committed yet (one graded clustering per commission)."""
+    problems = []
+    _, problem = require_product(reader, call['clusters_ref'], CLUSTERS_KIND)
+    if problem is not None:
+        problems.append({'code': problem, 'field': 'clusters_ref'})
+    if committed:
+        problems.append({'code': 'a_clustering_is_already_committed', 'field': 'clusters_ref'})
     return problems
 
 
@@ -181,8 +198,8 @@ def matrix_settings(commission, per_candidate):
             'score': 'bit_score_of_the_best_alignment_of_the_ordered_pair'}
 
 
-def clusters_settings(inflation):
-    return {'method': METHOD, 'inflation': inflation, 'edge_weight': EDGE_WEIGHT}
+def clusters_settings(inflation, contrast):
+    return {'method': METHOD, 'inflation': inflation, 'contrast': contrast, 'edge_weight': EDGE_WEIGHT}
 
 
 def _failed(code, record_refs=(), **facts):
@@ -218,6 +235,52 @@ def pack_database(files, store):
             info.size, info.mtime, info.mode = len(data), 0, 0o644
             archive.addfile(info, io.BytesIO(data))
     return buffer.getvalue(), [item['name'] for item in chosen]
+
+
+# -- the head's side: the options, the held clusterings and the commission check -----------------------------------------
+def held_clusterings(reader):
+    """The committed (graded) clusterings the reader holds, one per source of provider ``all_vs_all``: the commission's identity
+    (``search_ref``, sorted ``candidates``, ``per_candidate``) and the tuning and facts of the clustering."""
+    found = []
+    for source in reader.list('source'):
+        if source['provider'] != PROVIDER:
+            continue
+        (entry,) = source_tool_grading_entries(reader, source['id'])
+        sheet = entry['grading']['sheet']
+        found.append({'source_ref': source['id'], 'query_ref': source['operand_refs'][0], **sheet['commission'],
+                      'inflation': sheet['parameters']['inflation'], 'contrast': sheet['parameters']['contrast'],
+                      'cluster_count': sheet['set']['cluster_count'], 'target_cluster_size': sheet['target_cluster']['size']})
+    return found
+
+
+def check_commission(request, *, scope_subjects, sequences, options, commissioned):
+    """The things to fix in the head's commission of this child (``request``: ``query_ref``, ``search_ref``, ``candidates``,
+    ``per_candidate``). ``options`` is ``msa_options`` (each held graded BV-BRC search with the product candidates the head admitted
+    from it); ``commissioned`` the (search, sorted candidates, per_candidate) of the earlier commissions. The conditions: the query
+    is a protein sequence of the scope; the search is a held graded search of that query; at least two distinct candidates, each
+    admitted from that search; ``per_candidate`` in range; the same set not commissioned before (graded or not)."""
+    problems = []
+    query, search = request['query_ref'], request['search_ref']
+    if query not in scope_subjects or sequences.get(query) != 'protein':
+        problems.append({'field': 'query_ref', 'code': 'query_is_not_a_protein_sequence_of_the_scope',
+                         'choose_from': [ref for ref in scope_subjects if sequences.get(ref) == 'protein']})
+    option = [item for item in options if item['search_ref'] == search and item['query_ref'] == query]
+    if not option:
+        problems.append({'field': 'search_ref', 'code': 'search_is_not_a_held_graded_search_of_the_query',
+                         'choose_from': [item['search_ref'] for item in options if item['query_ref'] == query]})
+    else:
+        outside = [name for name in request['candidates'] if name not in option[0]['candidates']]
+        if outside:
+            problems.append({'field': 'candidates', 'code': 'candidate_is_not_admitted_from_the_search',
+                             'not_admitted': outside, 'choose_from': option[0]['candidates']})
+    if len(set(request['candidates'])) != len(request['candidates']) or len(request['candidates']) < MINIMUM_CANDIDATES:
+        problems.append({'field': 'candidates', 'code': 'two_or_more_distinct_candidates_required'})
+    if not PER_CANDIDATE_RANGE[0] <= request['per_candidate'] <= PER_CANDIDATE_RANGE[1]:
+        problems.append({'field': 'per_candidate', 'code': 'per_candidate_out_of_range', 'minimum': PER_CANDIDATE_RANGE[0],
+                         'maximum': PER_CANDIDATE_RANGE[1]})
+    if (search, sorted(request['candidates']), request['per_candidate']) in commissioned:
+        problems.append({'field': 'candidates', 'code': 'this_set_was_already_commissioned'})
+    return problems
 
 
 # -- the units -------------------------------------------------------------------------------------------------------
@@ -306,51 +369,72 @@ def matrix_edges(text):
             for query, subject, bits in rows]
 
 
-async def cluster(ctx, resource_id, matrix_ref, inflation, commission, per_candidate):
-    """Cluster the matrix with ``mcl`` at ``inflation`` as one unit and grade the clustering. A sequence with no edge to any
-    other is a cluster of its own (``mcl`` reads edges, so an isolated sequence is absent from its output)."""
+async def cluster(ctx, resource_id, matrix_ref, inflation, contrast, commission, per_candidate):
+    """One TRY: cluster the matrix with ``mcl`` at ``inflation`` on the graph under ``contrast`` as one unit and keep the clusters as a
+    working result with the controlled facts the model is shown. Nothing is graded. A sequence with no edge to any other is a cluster of
+    its own (``mcl`` reads edges, so an isolated sequence is absent from its output); a partition already held is the same clustering
+    (``same_as_held``), not a second product."""
     store = ctx.store
     matrix = next(row for row in products(store, MATRIX_KIND) if row['id'] == matrix_ref)
     members = set_members(store, commission, per_candidate)
     ids = [row['id'] for row in members]
-    graph = score_ratio_graph(matrix_edges(store.get_artifact(matrix['artifact_ref']).decode()), ids)
+    ratio = score_ratio_graph(matrix_edges(store.get_artifact(matrix['artifact_ref']).decode()), ids)
+    graph = contrast_graph(ratio, contrast)
     graph_ref = store.artifact(abc_text(graph).encode('ascii'), 'text/tab-separated-values')
     executable = (Path(ctx.settings['mcl_executable_directory']) / 'mcl').resolve()
     ran = await execute_on_local_resource(
         ctx, resource_id, [str(executable), GRAPH_FILE, '--abc', '-I', str(inflation), '-o', CLUSTERS_FILE], {}, wait=True,
-        inputs={GRAPH_FILE: graph_ref}, name='cluster_' + str(inflation))
+        inputs={GRAPH_FILE: graph_ref}, name='cluster_' + str(inflation) + '_' + contrast)
     code = _job_failure(ran, 'mcl')
     if code is not None:
         return _failed(code, [graph_ref])
     handoff, closure = ran['launch']['handoff_ref'], ran['fetch']['closure_ref']
     (clusters_ref,) = [item['ref'] for item in ran['fetch']['results'] if item['name'] == CLUSTERS_FILE]
-    clustered = parse_clusters(store.get_artifact(clusters_ref).decode())
-    placed = {name for found in clustered for name in found}
-    clusters = [*clustered, *([name] for name in ids if name not in placed)]
-    settings = clusters_settings(inflation)
+    clusters = with_singletons(parse_clusters(store.get_artifact(clusters_ref).decode()), ids)
+    facts = {**cluster_facts(clusters, members), 'edges_kept': len(graph), 'edge_count': len(ratio)}
+    held = next((row for row in products(store, CLUSTERS_KIND) if row['artifact_ref'] == clusters_ref), None)
+    if held is None:
+        settings = {**clusters_settings(inflation, contrast), 'software_sha256': hashlib.sha256(executable.read_bytes()).hexdigest()}
+        with store.transaction():
+            held = record_product(store, artifact_ref=clusters_ref, kind=CLUSTERS_KIND, generated_by=handoff,
+                                  used=[matrix['artifact_ref']], derived_from=[matrix['id']], settings=settings)
+    graded = [clusters_ref, held['id']]
+    return {'status': 'completed', 'failure_code': None, 'retryable': False, 'record_refs': [*graded, graph_ref, handoff, closure],
+            'graded_refs': graded, 'handoff_refs': [handoff], 'closure_refs': [closure], 'clusters_ref': held['id'],
+            'same_as_held': held['settings']['inflation'] != inflation or held['settings']['contrast'] != contrast,
+            'facts': facts}
+
+
+def commit_clustering(ctx, clusters_ref, commission, per_candidate):
+    """Commit the held clustering: grade it into the cluster sheet and keep, through custody, the grading artifact and a source of
+    provider ``all_vs_all`` over the clusters (the one graded test of the commission; what the head's credit reads)."""
+    store = ctx.store
+    product = next(row for row in products(store, CLUSTERS_KIND) if row['id'] == clusters_ref)
+    members = set_members(store, commission, per_candidate)
+    clusters = with_singletons(parse_clusters(store.get_artifact(product['artifact_ref']).decode()), [row['id'] for row in members])
+    settings = product['settings']
     grading = grade_clustering(clusters, [{key: row[key] for key in ('id', 'candidate', 'accession', 'md5')} for row in members],
-                               method=METHOD, parameters={'inflation': inflation, 'edge_weight': EDGE_WEIGHT,
-                                                          'software': {'executable': str(executable), 'sha256': hashlib.sha256(
-                                                              executable.read_bytes()).hexdigest()}})
-    target_ref = commission['query_ref']
+                               method=METHOD, parameters={'inflation': settings['inflation'], 'contrast': settings['contrast'],
+                                                          'edge_weight': EDGE_WEIGHT,
+                                                          'software_sha256': settings['software_sha256']},
+                               commission={'search_ref': commission['search_ref'], 'candidates': sorted(commission['candidates']),
+                                           'per_candidate': per_candidate})
     with store.transaction():
-        grading_ref = retain_tool_grading(store, provider=PROVIDER, native_artifact_ref=clusters_ref, grading=grading)
+        grading_ref = retain_tool_grading(store, provider=PROVIDER, native_artifact_ref=product['artifact_ref'], grading=grading)
         source = store.put('source', {
-            'provider': PROVIDER, 'accession': None, 'uri': None, 'artifact_ref': clusters_ref, 'text_ref': None,
-            'request_ref': None, 'version': METHOD + ':' + str(inflation), 'retrieved_at': None,
-            'auxiliary_artifact_refs': [grading_ref], 'operand_refs': [target_ref]}, origin='tool')
-        product = record_product(store, artifact_ref=clusters_ref, kind=CLUSTERS_KIND, generated_by=handoff,
-                                 used=[matrix['artifact_ref']], derived_from=[matrix['id']], settings=settings)
+            'provider': PROVIDER, 'accession': None, 'uri': None, 'artifact_ref': product['artifact_ref'], 'text_ref': None,
+            'request_ref': None, 'version': METHOD + ':' + str(settings['inflation']) + ':' + settings['contrast'],
+            'retrieved_at': None, 'auxiliary_artifact_refs': [grading_ref], 'operand_refs': [commission['query_ref']]},
+            origin='tool')
     graded = [source['id'], grading_ref, product['id']]
     sheet = grading['sheet']
-    return {'status': 'completed', 'failure_code': None, 'retryable': False,
-            'record_refs': [*graded, graph_ref, handoff, closure], 'graded_refs': graded, 'handoff_refs': [handoff],
-            'closure_refs': [closure], 'inflation': inflation, 'cluster_count': sheet['set']['cluster_count'],
-            'target_cluster_size': sheet['target_cluster']['size'], 'clusters_ref': product['id'],
+    return {'status': 'completed', 'failure_code': None, 'retryable': False, 'record_refs': graded, 'graded_refs': graded,
+            'handoff_refs': [], 'closure_refs': [], 'inflation': settings['inflation'], 'contrast': settings['contrast'],
+            'cluster_count': sheet['set']['cluster_count'], 'target_cluster_size': sheet['target_cluster']['size'],
             'source_ref': source['id']}
 
 
-__all__ = ['BLAST_PROGRAMS', 'CHILD', 'CLUSTERS_KIND', 'DATABASE_KIND', 'EVALUE', 'HOLD_REASONS', 'INFLATIONS', 'OWN_FAILURE_CODES', 'MATRIX_KIND',
+__all__ = ['BLAST_PROGRAMS', 'CHILD', 'CONTRASTS', 'CLUSTERS_KIND', 'DATABASE_KIND', 'EVALUE', 'HOLD_REASONS', 'INFLATIONS', 'OWN_FAILURE_CODES', 'MATRIX_KIND',
            'MINIMUM_CANDIDATES', 'PER_CANDIDATE_RANGE', 'PROVIDER', 'SET_KIND', 'TOOLS', 'all_vs_all_blast', 'check_blast',
-           'check_cluster', 'check_prepare', 'cluster', 'database_settings', 'matrix_settings', 'clusters_settings',
+           'check_cluster', 'check_commission', 'check_commit', 'check_prepare', 'held_clusterings', 'cluster', 'commit_clustering', 'database_settings', 'matrix_settings', 'clusters_settings',
            'pack_database', 'prepare_database', 'set_members', 'set_settings']

@@ -6,7 +6,7 @@ record, and it is the only place that decides ``usable``.
 **Usable** means every one of these facts holds, each checked from the receipt and the listing and none assumed:
 
 - the plan the receipt names is the plan that was run, and the staged input was verified against its digest;
-- every step of the plan ran and returned 0 (a database build: build, native summary, full integrity check);
+- every step of the plan ran and returned 0 (a database build: build, native summary);
 - the produced files are present and the route's listing agrees with the receipt on each file's size;
 - a database: the native summary parses and its sequence and letter counts equal the input's, and the files of the
   database (each volume the alias names, or the single set) are all there; a mask: the output parses and, for a
@@ -22,7 +22,7 @@ import re
 
 FAILURE_CODES = ('receipt_missing', 'receipt_plan_conflict', 'input_unverified', 'native_nonzero_exit',
                  'native_not_run', 'output_missing', 'inventory_incomplete', 'info_unparsed', 'counts_mismatch',
-                 'integrity_failed', 'listing_conflict', 'mask_unparsed', 'mask_counts_conflict')
+                 'listing_conflict', 'mask_unparsed', 'mask_counts_conflict')
 BASE = {'protein': ('phr', 'pin', 'psq'), 'nucleotide': ('nhr', 'nin', 'nsq')}
 ALIAS = {'protein': 'pal', 'nucleotide': 'nal'}
 SUPPORT_SUFFIXES = ('.stdout', '.stderr')
@@ -89,9 +89,6 @@ def evaluate(plan, plan_sha256, receipt, catalog, *, ended):
         facts['letters'] = None if info is None else info['letters']
         facts['counts_match'] = (info is not None and info['sequences'] == stated['records']
                                  and info['letters'] == stated['residues'])
-        check = steps.get('check')
-        facts['integrity_ok'] = bool(check and check.get('ran') is True and check.get('returncode') == 0)
-        facts['integrity_scope'] = 'full'
         if not failed_step and not never_ran:
             if not facts['inventory_complete']:
                 codes.append('inventory_incomplete')
@@ -99,8 +96,6 @@ def evaluate(plan, plan_sha256, receipt, catalog, *, ended):
                 codes.append('info_unparsed')
             elif not facts['counts_match']:
                 codes.append('counts_mismatch')
-            if not facts['integrity_ok']:
-                codes.append('integrity_failed')
     else:
         mask = receipt.get('mask')
         output = plan['operation']['output_name']

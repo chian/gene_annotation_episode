@@ -193,12 +193,12 @@ def compile_preparation(fields, *, input_bytes, software, python, scratch_bytes=
                                                                       'db_version')}})[:24]
         argv += ['-title', key]
         steps = [{'name': 'build', 'argv': argv, 'software': build}]
-        for tool, flags in (('blastdbcmd', ['-db', DATABASE_PREFIX, '-info']),
-                            ('blastdbcheck', ['-db', DATABASE_PREFIX, '-dbtype', DBTYPE[fields['molecule']],
-                                              '-full'])):
-            checker = _software(software[tool])
-            steps.append({'name': 'info' if tool == 'blastdbcmd' else 'check',
-                          'argv': [checker['executable'], *flags], 'software': checker})
+        # No ``blastdbcheck`` step: the bundled BLAST+ 2.17.0 ``blastdbcheck`` reports "MetaData: caught exception" for every
+        # valid database (checked 2026-11-21 on databases of versions 4 and 5, with and without -parse_seqids, -full or not),
+        # so it can never succeed. A database is established by ``makeblastdb`` returning 0, the native summary
+        # (``blastdbcmd -info``) counting the input's sequences and letters, and every file of the database being present.
+        info = _software(software['blastdbcmd'])
+        steps.append({'name': 'info', 'argv': [info['executable'], '-db', DATABASE_PREFIX, '-info'], 'software': info})
         prepared = PREPARED_KIND[(kind, fields['molecule'])]
         operation = {'molecule': fields['molecule'], 'parse_seqids': fields['parse_seqids'],
                      'hash_index': fields['hash_index'], 'db_version': fields['db_version'],
