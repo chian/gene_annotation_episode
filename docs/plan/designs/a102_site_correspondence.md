@@ -107,3 +107,13 @@ CspA: "Y-box-binding protein 1" (search mean B 0.203, 9 hits) and "Cytochrome c-
 * Isoform hits cannot be used (positions are canonical): their residues are dropped, and with them the hit's sites; no canonical-to-isoform mapping was built.
 * UniProt site features of whole families can cover a different domain than the one that matched (lin-28 zinc knuckles against CspA): by the rule these residues are absent in the target, so they count against the candidate; the test does not separate "absent because another domain" from "absent because lost".
 * No real run, no model-made request, no head wiring.
+
+## Databases: only afdb-swissprot (2026-11-21, the lead's order)
+
+Both site sources number the UniProt sequence. An AlphaFold DB hit is the canonical sequence, so its `tSeq` positions are UniProt
+positions. A `pdb100` hit is numbered along the solved chain (`tSeq`, the resolved construct): UniProt positions would have to be mapped
+to chain positions (RCSB `rcsb_polymer_entity_align` regions, unresolved residues shifting the numbering). That mapping is NOT built.
+`check_site_correspondence_request` therefore refuses a search of any database outside `UNIPROT_NUMBERED` (`afdb-swissprot`) with the
+code `site_sources_number_the_uniprot_sequence_and_this_search_has_chain_numbering`, and the head offers the tool only for such searches
+(`credit.offered_site_pairs`). Null accessions of pdb100 hits are not handled: no pdb100 hit reaches the grader. The lead plans the mapping
+with the bound-partner site source.

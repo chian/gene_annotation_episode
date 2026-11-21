@@ -17,6 +17,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.structura
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.tool_grading_artifacts import (
     source_tool_grading_entries)
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.foldseek_job_route import DATABASES
+from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.site_correspondence import (
+    UNIPROT_NUMBERED)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.structure_search_child import (
     ROUTE_KIND)
 
@@ -128,12 +130,14 @@ def graded_site_pairs(summary):
 
 def offered_site_pairs(summary):
     """The ``(search source reference, site source)`` pairs a ``site_correspondence`` request may name now, in the order of the
-    graded searches and of ``SITE_SOURCES``: a graded search of a protein sequence of the scope whose raw result and model this
+    graded searches and of ``SITE_SOURCES``: a graded search of a protein sequence of the scope, of a database numbered along the UniProt
+    sequence (``site_correspondence.UNIPROT_NUMBERED``: not ``pdb100``, whose hits are numbered along the solved chain), whose raw result and model this
     episode holds (``site_correspondence.search_inputs``), with a site source not yet graded for it. A request of one of these
     passes ``check_site_correspondence_request``."""
     graded, targets = graded_site_pairs(summary), queries(summary)
     return [(search, source) for search, held in summary['site_searches'].items()
-            if held['row']['query_ref'] in targets and held['result_held'] and held['model_held']
+            if held['row']['query_ref'] in targets and held['row']['database'] in UNIPROT_NUMBERED
+            and held['result_held'] and held['model_held']
             for source in SITE_SOURCES if (search, source) not in graded]
 
 

@@ -10,7 +10,9 @@ control, with a product and a B), in rank order.
 ``check_site_correspondence_request`` is the one check. It refuses, with the fix list (one entry per problem: the field, a code
 and what to choose from): a ``site_source`` that is not offered (``site_source_is_not_offered``); a ``search_ref`` that is not a
 held graded search (``search_is_not_a_held_graded_search``); a search whose raw result or model the caller does not hold
-(``search_result_or_model_not_held``); a (search, site source) already graded (``site_test_already_graded``). A request that
+(``search_result_or_model_not_held``); a search of a database numbered along a solved chain, not the UniProt sequence (see ``UNIPROT_NUMBERED``;
+``site_sources_number_the_uniprot_sequence_and_this_search_has_chain_numbering``); a (search, site source) already graded
+(``site_test_already_graded``). A request that
 passes it simply works.
 
 ``site_correspondence`` runs a request that passed, as one unit: read the search's sheet, its raw result and its model through
@@ -47,6 +49,11 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_s
 PROVIDER = 'site_correspondence'
 PRODUCT_KIND = 'functional_site_annotations'
 REQUEST_FIELDS = ('search_ref', 'site_source')
+# The databases whose hits are numbered along the UniProt sequence (both site sources number that sequence): an AlphaFold DB hit
+# ``AF-<accession>-F1`` is the whole canonical sequence. A ``pdb100`` hit is numbered along the solved chain (``tSeq``, the resolved
+# construct), which is not the UniProt numbering, and no mapping from UniProt positions to chain positions is built, so a search of
+# any other database is refused (``site_sources_number_the_uniprot_sequence_and_this_search_has_chain_numbering``).
+UNIPROT_NUMBERED = ('afdb-swissprot',)
 
 
 def search_inputs(reader):
@@ -76,6 +83,10 @@ def check_site_correspondence_request(request, *, searches, graded):
         problems.append(_choose('site_source', 'site_source_is_not_offered', choose_from=list(SITE_SOURCES)))
     if search not in searches:
         problems.append(_choose('search_ref', 'search_is_not_a_held_graded_search', choose_from=list(searches)))
+    elif searches[search]['row']['database'] not in UNIPROT_NUMBERED:
+        problems.append(_choose('search_ref', 'site_sources_number_the_uniprot_sequence_and_this_search_has_chain_numbering',
+                                choose_from=[reference for reference, held in searches.items()
+                                             if held['row']['database'] in UNIPROT_NUMBERED]))
     elif not (searches[search]['result_held'] and searches[search]['model_held']):
         problems.append(_choose('search_ref', 'search_result_or_model_not_held', choose_from=[
             reference for reference, held in searches.items() if held['result_held'] and held['model_held']]))
@@ -153,5 +164,5 @@ def site_correspondence(ctx, *, search_ref, site_source):
             'candidates_without_site': sheet['candidates_without_site'], 'request_count': len(found['replies'])}
 
 
-__all__ = ['PRODUCT_KIND', 'PROVIDER', 'REQUEST_FIELDS', 'annotation_settings',
+__all__ = ['UNIPROT_NUMBERED', 'PRODUCT_KIND', 'PROVIDER', 'REQUEST_FIELDS', 'annotation_settings',
            'check_site_correspondence_request', 'search_inputs', 'site_correspondence']
