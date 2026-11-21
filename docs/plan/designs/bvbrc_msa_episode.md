@@ -66,8 +66,7 @@ Target CspA (P0A9X9, 70 residues), workspace `runs/a101_msa_ws_M1`, run `runs/a1
    with job facts `{service, application, sequences, residues, longest}` and a measured duration (service's own) of 10 to 30 s.
 4. The alignment: sequences = 1 + (candidates x per_candidate, fewer where a candidate has fewer distinct sequences); columns 70 to 75; the target's own row present.
 5. The credit: the MSA test is the second test of the product candidates that took part. Each took part candidate's value is the mean over its references of identical columns / 70, which I expect
-   0.55 to 0.95 (CspA-like products near 0.9, the CspB/CspG/CspI family lower, near 0.65 to 0.8). The candidate's score becomes the mean of its search value and its MSA value; the differential of a pair of
-   [Superseded 2026-11-21: a score is no longer the mean of its test values: it is the sum over subscoring sheets of the sheet values; see a101_differential_credit.md, section 2026-11-21.]
+   0.55 to 0.95 (CspA-like products near 0.9, the CspB/CspG/CspI family lower, near 0.65 to 0.8). the differential of a pair of
    candidates is |change of A's score - change of B's score| (nonzero unless both move equally); expected credit gain of the MSA extract unit 0.05 to 0.5. A candidate not chosen is unchanged.
 6. The head's later units: reasoning commits until the estimator stops it (as H1: about 10 to 19 units).
 
@@ -83,7 +82,6 @@ Alignment: 41 sequences, 70 columns, the target's row 0; 10 references per candi
 Data product row (the alignment; `state.sqlite3`, table `episode_work_rows`, work table `data_products`): `kind` multiple_sequence_alignment, `edam_data` http://edamontology.org/data_0863, `edam_format` http://edamontology.org/format_1984, `generated_by` row_e184... (the handoff), `used` [target sequence artifact, search source_c135...], `derived_from` [row_48c6... (the protein_sequences product)], `settings` {aligner muscle, alphabet protein, application MSA, candidates [4 names], per_candidate 10}, `locations` [{service bvbrc_workspace, path /<user>/home/gene_annotation_episode_a101/job_88af.../.msa/msa.afa}], `reuse_key` 04d4e3c1....
 
 Values of the MSA test (the sheet, read directly from the grading artifact; mean over 10 references of identical columns / 70): CspA product 0.9814 (0.957 to 1.0), CspB/CspG/CspI 0.8486 (0.814 to 0.886), CspC 0.7557 (0.714 to 0.771), "Cold shock protein of CSP family" 0.8086 (0.771 to 0.900).
-Differential arithmetic by hand (NOT computed by the credit, which did not run after the unit). Scores before are the search's (equal to run H1's, whose head credit after the search the run reproduced: 0.9593, 0.8212, 0.8046, 0.8113); after = mean of the two tests: CspA 0.9704 (+0.0111), CspB/G/I 0.8349 (+0.0137), CspC 0.7802 (-0.0244), CSP family 0.8100 (-0.0014). Pair differentials |change A - change B|: A-B 0.0026, A-C 0.0355, A-D 0.0125, B-C 0.0381, B-D 0.0151, C-D 0.0230; sum 0.127. "hypothetical protein" (admitted by the search) was not chosen and does not move.
 
 Against the prediction: chain as predicted (scan, search, MSA commissioned with 4 candidates, per_candidate 10, estimate basis `no_earlier_measurement`, 4 child units, credit 4.0); the estimate was 120 s (predicted 30 to 120) and the measured duration 15 s (predicted 10 to 30); the alignment had 41 sequences / 70 columns (predicted 70 to 75 columns: it is 70, the target's length); values 0.76 to 0.98 (predicted 0.55 to 0.95); the credit gain was predicted 0.05 to 0.5 and is, by hand, about 0.13. Not observed: the head's units after the child.
 

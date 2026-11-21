@@ -42,7 +42,6 @@ most.
    `msa.afa`, `sequences.fasta`, `group.json`, replies.
 2. The credit after each unit is the sum of the entry scores of the candidates admitted plus differentials (credit
    definition `a101_differential_credit_v1`). The search admits product candidates (H1 gave five products, scores
-   [Superseded 2026-11-21: the definition is now `a101_differential_credit_v2` and a score is a sum over sheets, not a mean; see the section 2026-11-21 at the end.]
    0.80 to 0.96; the batched naming may change them); the profile scan admits the family CSD (0.82 in H1). No differential
    arises before the MSA. After the MSA unit the alignment's `alignment` observations are a second test every aligned
    product underwent: each underwent test 1 (search) and test 2 (MSA); a differential is the absolute difference of the
@@ -61,7 +60,7 @@ What the code now does (commit `b1b8f6049`):
 
 - A candidate's value in one test is the mean of its replicates (the same function on several hits of that test).
 - A subscoring sheet is a test kind. A candidate's sheet value is the SUM of its values over the tests of that kind.
-- The candidate's score is the SUM of its sheet values. The old mean over tests and the old mean of test values are gone.
+- The candidate's score is the SUM of its sheet values.
 - Entry (a candidate's own score, once, when it first has a value above zero) and differentials are unchanged, except that a differential is now the difference of two candidates' values in one test.
 - One test is one graded source, `method@source` (commit `f227c34a8`), so different jobs are never pooled as replicates.
 - The alignment's measurement counts only new conserved distinguishing sites (`a101_conserved_sites.md`).
