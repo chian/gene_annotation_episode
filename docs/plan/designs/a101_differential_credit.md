@@ -47,3 +47,14 @@ Decisions of reading.
 ## Check against the lead's trial (a direct call on stored records of run D1, workspace `runs/bvbrc_a101_ws_D`; not a real run; launcher `runs/trial_D1`)
 
 `candidate_measurements` (300 measurements) + `differential_credit`: five product candidates; scores and hit counts equal the lead's: "... => CspA (naming convention as in E.coli)" 0.9593 (55 hits), "... => CspB/CspG/CspI ..." 0.8212 (156), "Cold shock protein of CSP family" 0.8113 (53), "hypothetical protein" 0.8082 (2), "... => CspC ..." 0.8046 (34); no differentials; credit 4.204514. Unlabelled hits 0. The same module on the stored hmmscan of `runs/a101_hmmer_ws_1/store` (direct call): four `profile_family` candidates (ubiquitin PF00240.30 0.5046, Rad60-SLD 0.4000, Ribosomal_L40e 0.3489, Ubiquitin_2 0.1194), credit 1.3728 (the value of each is `compile_native_sheet` over its domains). The return form admits the candidate fields (a direct call of `RETURN_FORM.admit` with the D1 table).
+
+## Run H1: prediction (written before the run)
+
+Target: E. coli K-12 CspA (UniProt P0A9X9, 70 residues; the same sequence as run D1's), fresh workspace `runs/a101_diff_ws_H1`, run `runs/a101_diff_run_H1` (run id `a101_diff_H1`), local and BV-BRC resources bound, Pfam configured, the global estimate ledger. Continuation: accumulation, cutoff 0.1.
+
+- The model chooses among `hmmer_profile_scan`, `bvbrc_blast` and `reason`. I expect a profile scan and a BV-BRC search (one `Homology` submission), in either order; no pairwise comparison (no second held sequence).
+- The scan: one Pfam family (the cold-shock domain, CSD) with a value near 0.9; the credit rises by that family's score at that unit.
+- The BV-BRC search (as D1's, same sequence, same database): five `product` candidates admitted by the extract unit, with the scores of D1 (0.959, 0.821, 0.811, 0.808, 0.805), so the credit rises by about 4.2045 at the extract unit (the launch and wait units earn 0).
+- Credit at the end near 4.2 + the family's score (about 5.1). No differential (no two listed candidates undergo a later common test: the family undergoes only the scan, the products only the search).
+- The return: the leading candidate is the CspA product (0.959) unless the family scores higher (then the family leads and the CspA product is second); candidate_count 6; unlabelled 0.
+- After the last gain the estimator stops the head after about 3 to 6 further units that earn nothing (the forecast must fall to 0.1; I cannot predict the number better).
