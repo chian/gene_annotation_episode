@@ -144,8 +144,7 @@ def internal_summary(view):
                                'settings': row['settings']} for row in held_products],
             'data_product_refs': [row['id'] for row in held_products],
             'alignment_product_refs': [row['id'] for row in alignments],
-            'reusable_alignments': {(used, tuple(row['settings']['candidates']), row['settings']['per_candidate']): row
-                                    for row in alignments for used in row['used']},
+            'reusable_alignments': alignments,
             'evidence_refs': [row['id'] for kind in EVIDENCE_RECORD_TYPES for row in records.list(kind)],
             'working_state': records.reasoning_view(parent['scope']),
             'reasoning_schema': records.reasoning_schema(),

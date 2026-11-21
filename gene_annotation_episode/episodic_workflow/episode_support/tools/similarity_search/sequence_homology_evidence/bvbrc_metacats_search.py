@@ -171,7 +171,7 @@ def extract(ctx, handoff_ref, request, commission):
         source = store.put('source', {
             'provider': PROVIDER, 'accession': None, 'uri': None, 'artifact_ref': result_ref, 'text_ref': None,
             'request_ref': None, 'version': 'p%g' % request['p_value'], 'retrieved_at': None,
-            'auxiliary_artifact_refs': [grading_ref], 'operand_refs': [target_ref, planned['source_ref']]}, origin='tool')
+            'auxiliary_artifact_refs': [grading_ref], 'operand_refs': [target_ref]}, origin='tool')
         references, observations = [], []
         for group, value in zip(sheet['groups'], sheet['values'] or [None] * len(sheet['groups'])):
             reference = store.put('reference', {

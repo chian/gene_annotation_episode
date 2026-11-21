@@ -445,8 +445,10 @@ def check_bvbrc_msa(commission, summary, resources):
         commissioned=[(row['arguments']['search_ref'], sorted(row['arguments']['candidates']),
                        row['arguments']['per_candidate']) for row in summary['units']
                       if row['kind'] == 'child' and row['slot'] == 'bvbrc_msa'],
-        reusable=summary['reusable_alignments'].get((commission['search_ref'], tuple(sorted(commission['candidates'])),
-                                                     commission['per_candidate'])))
+        reusable=next((row for row in summary['reusable_alignments']
+                       if commission['search_ref'] in row['used'] and row['settings']['candidates'] == sorted(
+                           commission['candidates']) and row['settings']['per_candidate'] == commission['per_candidate']),
+                      None))
 
 
 def bvbrc_metacats_fields(summary, resources):

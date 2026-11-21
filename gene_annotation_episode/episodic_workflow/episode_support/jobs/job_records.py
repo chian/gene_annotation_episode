@@ -10,6 +10,7 @@ An **outstanding job** is one whose handoff row the Episode holds and whose clos
 from __future__ import annotations
 
 from episode_runtime.job_access import JOB_LEDGER
+from episode_runtime.store_scope import named_references
 from episode_runtime.work_tables import is_row_ref
 
 
@@ -62,18 +63,16 @@ def outstanding_jobs(reader):
 
 def named_records(reader, ref):
     """The held records the held record ``ref`` names, in the order it names them. A Store record names what the Store's
-    own rule says (``reader.named_references``); an artifact names none; a job ledger row names its reply artifact
-    (``source_ref``), its ``result_refs``, the artifacts a handoff staged as the job's inputs (``detail['input_refs']``,
-    a mapping of file name to artifact) and the handoff a check, window or closure row belongs to
-    (``detail['handoff_ref']``). Only records the reader holds are named."""
+    own rule says (``reader.named_references``); an artifact names none; a work-table row names what the Store's own rule names in its
+    values (``store_scope.named_references``: a job ledger row its reply artifact ``source_ref``, its ``result_refs``,
+    the ``ref`` of each result and the ``handoff_ref`` of a check or closure; a search row its source and query) and, in
+    a handoff row, the artifacts staged as the job's inputs (``detail['input_refs']``, a mapping of file name to
+    artifact, which the rule does not follow). Only records the reader holds are named."""
     if ref.startswith('artifact_'):
         return []
     if is_row_ref(ref):
         row = reader.get(ref)
-        detail = row['detail']
-        names = [row['source_ref'], *row['result_refs'], *detail.get('input_refs', {}).values()]
-        if 'handoff_ref' in detail:
-            names.append(detail['handoff_ref'])
+        names = [*named_references(row), *row.get('detail', {}).get('input_refs', {}).values()]
     else:
         names = reader.named_references(ref)
     return [name for name in dict.fromkeys(names) if name != ref and reader.holds(name)]
