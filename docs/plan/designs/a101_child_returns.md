@@ -64,6 +64,31 @@ route's `result.json` and `stderr.log`, the staged query FASTA and the two repli
 file of a job it waits for, so a unit that waits for a local job holds them. Removing those needs a system change (a `names`
 argument of `job_access.run`) or the BV-BRC rows replaced by controlled facts, which would change how a parked job is resumed.
 
+### The hit metadata and the gradings (2026-11-21)
+
+An independent check of run `runs/a101_goal7_run_cspa_e4721cd11` (workspace `runs/a101_goal7_ws_cspa`) found the head holding 11
+labelled products and, unlabelled, two kinds of result the head reads: the BV-BRC hit metadata of the `bvbrc_blast` search (the
+artifact of the `bvbrc_data` source, ~100 KB: the feature, family and genome records of the named hits, where the hits' product
+names come from) and the 6 retained gradings (the graded sheets of the scan, the BLAST search, the two alignments, the clustering
+and MetaCATS). Each is now labelled in the unit that makes it, with two new kinds (`records/data_products.py`, EDAM terms read in
+EDAM.tsv on 2026-11-21, neither obsolete, the reasons in the comment beside each):
+
+| Kind | EDAM data, format | Labelled in | `generated_by` | `used` | `derived_from` |
+|---|---|---|---|---|---|
+| `search_hit_metadata` | data_0896 Protein report (synonym "Gene product annotation"), format_3464 JSON | `bvbrc_blast_search.fetch_and_grade_search` (`record_metadata_product`) | the `bvbrc_data` source | the search report | the `sequence_search_results` row |
+| `tool_grading_sheet` | data_2048 Report, format_3464 JSON | `tool_grading_artifacts.record_grading_product`, called beside each `retain_tool_grading` of `fetch_and_grade_search`, `hmmer_profile_scan`, the MSA and MetaCATS `extract`, `all_vs_all_run.commit_clustering` and `pairwise_blast_comparison` | the unit's source over the graded artifact | the artifacts the grader read (BLAST: report and hit metadata; scan: its three texts; MetaCATS: report and alignment) | their product rows |
+
+The settings of a grading are its provider and sheet schema; of the hit metadata, the data service, the fields asked of each
+collection, the batch and the settling step of the naming. Each new row goes into the unit's `graded_refs` (the head's own scan:
+its `record_refs`), so each child's `returned_with_names` returns it with what it names, and the head's `data_product_refs` (every
+held product row) lists it. No credit or grading value changes: the credits read sources, sheets and product kinds that are not
+the new ones.
+
+Direct check (not a real run): on a scratchpad copy of `runs/a101_goal7_ws_cspa`, the new labelling functions were run over the
+stored hit metadata and the 6 gradings with a store stub that captures the rows they write: 7 rows (1 `search_hit_metadata`, 6
+`tool_grading_sheet`), and every reference each row names was already held by the head in that run, so the closing adds only
+the rows; the head would list 18 product rows (11 + 7).
+
 ## What the head's credit does with what is returned
 
 The graded records a child returns (`graded_refs`) are what the head's credit reads, as soon as they are held: the owner's differential credit, additive over tests and subscoring sheets (`a101_differential_credit.md`). The owner's rule, verbatim: "the graders should additively add to the subscoring sheets and then the subscoring sheets additively add to the score". One test is one graded source, `<kind>@<source reference>`. Every episode's credit also supplies `ceiling`; `UNBOUNDED` is used where an action's gain truly has no limit ("UNBOUNDED filled in everywhere is bad; UNBOUNDED where truly unbounded is right").

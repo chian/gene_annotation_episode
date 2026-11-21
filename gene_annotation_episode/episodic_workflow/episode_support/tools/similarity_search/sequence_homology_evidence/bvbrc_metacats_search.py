@@ -24,7 +24,7 @@ import hashlib
 import json
 
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.tool_grading_artifacts import (
-    retain_tool_grading, source_tool_grading_entries)
+    record_grading_product, retain_tool_grading, source_tool_grading_entries)
 from gene_annotation_episode.episodic_workflow.episode_support.records.data_products import (
     find_reusable, products, record_product, require_product)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_homology_evidence.tools import (
@@ -148,7 +148,8 @@ def describe_identity(reader, handoff):
 def extract(ctx, handoff_ref, request, commission):
     """Fetch the chi-square table of the finished job and grade it in the same unit; keep, through custody: the grading
     artifact, a source of provider ``bvbrc_metacats`` over the table, a reference record and a comparison observation per
-    candidate group and the report as an ``alignment_position_report`` data product. A fault of the grading is returned once
+    candidate group, the report as an ``alignment_position_report`` data product and the grading (which read the report and
+    the alignment) as a ``tool_grading_sheet`` data product. A fault of the grading is returned once
     as ``grading_refused``."""
     store = ctx.store
     fetched = ctx.services['job_access'].fetch(ctx, handoff_ref, names=[CHISQ_FILE])
@@ -192,7 +193,10 @@ def extract(ctx, handoff_ref, request, commission):
             used=[group_artifact_ref(planned)], derived_from=[commission['alignment_ref']],
             settings=settings_of([group['product'] for group in sheet['groups']]),
             locations=[{'service': 'bvbrc_workspace', 'path': path}])
-    refs = [source['id'], grading_ref, product['id'], *references, *observations]
+        grading_product = record_grading_product(store, grading_ref=grading_ref, grading=grading, provider=PROVIDER,
+                                                 source_ref=source['id'], used=[result_ref, planned['alignment_artifact']],
+                                                 derived_from=[product['id'], commission['alignment_ref']])
+    refs = [source['id'], grading_ref, product['id'], grading_product['id'], *references, *observations]
     return {'status': 'completed', 'failure_code': None, 'retryable': False, 'closure_ref': fetched['closure_ref'],
             'graded_refs': refs, 'record_refs': [*refs, fetched['closure_ref']], 'product_ref': product['id'],
             'group_count': sheet['group_count'], 'sequence_count': sheet['sequence_count'],

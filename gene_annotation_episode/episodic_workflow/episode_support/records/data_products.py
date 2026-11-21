@@ -5,7 +5,8 @@ always the same product and changed bytes are never the old one) with one row of
 ``data_products`` that says, in established vocabularies:
 
 - WHAT IT IS: its EDAM data type and EDAM format (https://edamontology.org; the terms in ``KINDS`` were taken
-  from EDAM's own release file, EDAM.tsv, on 2026-11-20, none of them obsolete). A step that needs a product
+  from EDAM's own release file, EDAM.tsv, on 2026-11-20 (the terms with no date beside them) or on the date
+  written beside the term, none of them obsolete). A step that needs a product
   asks for its kind (``require_product``), never for a file name.
 - WHERE IT CAME FROM, in the three links of W3C PROV: ``generated_by`` (the activity that made it: the job's
   handoff row, or the source record of the unit), ``used`` (the records and artifacts it was made from) and
@@ -61,6 +62,26 @@ KINDS = {
                           'Sequence cluster (protein), one cluster per line'),
     'alignment_position_report': ('http://edamontology.org/data_0867', 'http://edamontology.org/format_3475',
                                   'Sequence alignment report, TSV (statistics per alignment position)'),
+    # The BV-BRC records of a search's hits (``bvbrc_hit_metadata``: the genome_feature, protein_family_ref and genome
+    # documents of the named hits, BV-BRC's field names unchanged; the hits' product names come from them). EDAM.tsv, read
+    # 2026-11-21 (https://edamontology.org/EDAM.tsv), neither obsolete: data_0896 Protein report, synonym "Gene product
+    # annotation" ("An informative human-readable report about one or more specific protein molecules ... derived from
+    # analysis of primary (sequence or structural) data"): each record is one hit protein's product name, families, genome
+    # and length. Not data_0849 Sequence record ("A molecular sequence and associated metadata"): the records hold no
+    # sequence, only its MD5; not data_1277 Protein features or data_1255 Sequence features: those are positional
+    # annotation, and these records have no positions. format_3464 JSON (the canonical JSON of the lookup).
+    'search_hit_metadata': ('http://edamontology.org/data_0896', 'http://edamontology.org/format_3464',
+                            'Protein report (gene product annotation), JSON (BV-BRC feature, family and genome records of '
+                            'the hits of a search)'),
+    # A tool's graded sheet as retained (``tool_grading_artifacts.retain_tool_grading``: the provider, the graded artifact
+    # and the grading, canonical JSON). EDAM.tsv, read 2026-11-21, neither obsolete: data_2048 Report ("computer-generated
+    # reports of analysis of primary data (e.g. sequence or structural) ... You can use this term by default for any textual
+    # report, in case you can't find another, more specific term"): the sheets grade a database search, a profile scan, an
+    # alignment, a clustering and an analysis of alignment positions, and no narrower term covers each of them
+    # (data_0867 Sequence alignment report fits the alignment sheet only; data_1772 Score is one value, a sheet is many,
+    # with what they were read from). format_3464 JSON.
+    'tool_grading_sheet': ('http://edamontology.org/data_2048', 'http://edamontology.org/format_3464',
+                           'Report, JSON (the graded sheet of one tool result)'),
 }
 EDAM_SOURCE = 'https://edamontology.org/EDAM.tsv, read 2026-11-20'
 

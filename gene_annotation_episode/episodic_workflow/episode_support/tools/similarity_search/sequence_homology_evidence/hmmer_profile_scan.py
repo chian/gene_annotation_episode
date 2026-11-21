@@ -21,8 +21,8 @@ empty list means the request can run. The episode's ``action`` rejects a request
    the profile database's own) and one ``profile_match`` observation for each matched domain (the query's interval
    and the measurements of the already graded domain row), in the shape the registry gives a profile match; and each of
    the three graded texts labelled as a data product (``PRODUCT_KINDS``: the domain table, the per-sequence table and the
-   report). The local route's own files of the job (``result.json``, ``stderr.log``) are fetched with it by the system's
-   ``job_access.run`` and are held as the unit's, unlabelled: they are the job's record, not a result of the scan.
+   report), and the grading labelled as a ``tool_grading_sheet`` data product derived from them. The local route's own
+   files of the job (``result.json``, ``stderr.log``) are fetched with it by the system's ``job_access.run`` and are held as the unit's, unlabelled: they are the job's record, not a result of the scan.
 
 Grading is not a choice of anyone: it follows the fetch in the same unit.
 
@@ -44,7 +44,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.scoring import (
     comparison_weight, hmmer_comparisons)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.tool_grading_artifacts import (
-    retain_tool_grading)
+    record_grading_product, retain_tool_grading)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.similarity_search.sequence_homology_evidence.hmmer_graders import (
     HMMER_DOMAIN_METRICS, grade_hmmer_native_artifacts)
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.resource_local import execute_on_local_resource
@@ -245,7 +245,11 @@ async def hmmer_profile_scan(ctx, *, query_ref, database, resource_id, executabl
                                                   sequence_ref=record['sequence_ref'], manifest_ref=manifest_ref,
                                                   manifest=manifest)
                               for role, kind in PRODUCT_KINDS.items()]
-    refs = [source['id'], grading_ref, product['id'], *(row['id'] for row in labelled), *written]
+        grading_product = record_grading_product(store, grading_ref=grading_ref, grading=grading, provider=PROVIDER,
+                                                 source_ref=source['id'],
+                                                 used=[artifact_refs[role] for role in PRODUCT_KINDS],
+                                                 derived_from=[product['id'], *(row['id'] for row in labelled)])
+    refs = [source['id'], grading_ref, product['id'], *(row['id'] for row in labelled), grading_product['id'], *written]
     return {'status': 'completed', 'record_refs': refs, 'changed_record_refs': refs,
             'result': {'database': manifest['name'], 'database_version': manifest['version'],
                        'profiles_searched': manifest['model_count'], 'product_ref': product['id'], 'family_count': len(families),

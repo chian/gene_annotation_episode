@@ -46,7 +46,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.sequence_ho
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_alignment.native_correspondence import (
     SEARCHES)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.tool_grading_artifacts import (
-    retain_tool_grading)
+    record_grading_product, retain_tool_grading)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.similarity_search.sequence_homology_evidence.blast_graders import (
     grade_blast_result)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.similarity_search.sequence_homology_evidence.blast_pairwise_features import (
@@ -218,7 +218,9 @@ async def pairwise_blast_comparison(ctx, *, program, query_ref, reference_ref, r
             'auxiliary_artifact_refs': [grading_ref], 'operand_refs': [query_ref, reference_ref]}, origin='tool')
         search = store.table(SEARCHES).put({'source_ref': source['id'], 'query_ref': query_ref, 'profile': 'blast'})
         observations = _observations(store, grading, source['id'], program, sequences)
-    refs = [source['id'], grading_ref, search['id'], *observations]
+        grading_product = record_grading_product(store, grading_ref=grading_ref, grading=grading, provider=PROVIDER,
+                                                 source_ref=source['id'], used=[report_ref])
+    refs = [source['id'], grading_ref, search['id'], grading_product['id'], *observations]
     return {'status': 'completed', 'record_refs': refs, 'changed_record_refs': refs,
             'result': {**grading_features(grading, grading_ref), 'observation_refs': observations}, 'feedback': None}
 

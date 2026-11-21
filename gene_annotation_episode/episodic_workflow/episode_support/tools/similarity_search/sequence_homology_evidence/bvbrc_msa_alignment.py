@@ -33,7 +33,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.scoring import (
     compile_native_sheet)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.tool_grading_artifacts import (
-    retain_tool_grading, source_tool_grading_entries)
+    record_grading_product, retain_tool_grading, source_tool_grading_entries)
 from gene_annotation_episode.episodic_workflow.episode_support.records.data_products import (
     find_reusable, record_product)
 from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_homology_evidence.domain import canonical
@@ -175,8 +175,8 @@ def reusable_alignment(reader, commission, per_candidate):
 def extract(ctx, handoff_ref, request, commission):
     """Fetch the alignment of the finished job and grade it in the same unit; keep, through custody: the grading
     artifact, a source of provider ``bvbrc_msa`` over the alignment, a reference record per sequence, one alignment
-    observation per reference sequence and the alignment as a ``multiple_sequence_alignment`` data product (its path in
-    the BV-BRC workspace in ``locations``). A fault of the grading is returned once as ``grading_refused``."""
+    observation per reference sequence, the alignment as a ``multiple_sequence_alignment`` data product (its path in
+    the BV-BRC workspace in ``locations``) and the grading as a ``tool_grading_sheet`` data product. A fault of the grading is returned once as ``grading_refused``."""
     store = ctx.store
     fetched = ctx.services['job_access'].fetch(ctx, handoff_ref, names=[ALIGNMENT_FILE])
     if fetched['status'] != 'completed':
@@ -223,7 +223,9 @@ def extract(ctx, handoff_ref, request, commission):
             used=[sequence_ref, commission['search_ref'], feature_group_ref(plan)],
             settings=settings_of(commission['candidates'], request['per_candidate']),
             locations=[{'service': 'bvbrc_workspace', 'path': path}])
-    refs = [source['id'], grading_ref, product['id'], *references, *observations]
+        grading_product = record_grading_product(store, grading_ref=grading_ref, grading=grading, provider=PROVIDER,
+                                                 source_ref=source['id'], used=[result_ref], derived_from=[product['id']])
+    refs = [source['id'], grading_ref, product['id'], grading_product['id'], *references, *observations]
     return {'status': 'completed', 'failure_code': None, 'retryable': False, 'closure_ref': fetched['closure_ref'],
             'graded_refs': refs, 'record_refs': [*refs, fetched['closure_ref']], 'product_ref': product['id'],
             'sequence_count': sheet['alignment']['sequences'], 'column_count': sheet['alignment']['columns'],

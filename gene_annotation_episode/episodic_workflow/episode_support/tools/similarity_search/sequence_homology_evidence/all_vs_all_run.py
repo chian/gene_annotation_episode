@@ -50,7 +50,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_
     EDGE_WEIGHT, INFLATIONS, METHOD, TARGET_ID, CONTRASTS, abc_text, cluster_facts, contrast_graph, contrast_undefined, grade_clustering,
     parse_clusters, score_ratio_graph, with_singletons)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.tool_grading_artifacts import (
-    retain_tool_grading, source_tool_grading_entries)
+    record_grading_product, retain_tool_grading, source_tool_grading_entries)
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.resource_local import execute_on_local_resource
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.similarity_search.sequence_homology_evidence.blast_preparation_run import (
     prepare_locally)
@@ -416,8 +416,9 @@ async def cluster(ctx, resource_id, matrix_ref, inflation, contrast, commission,
 
 
 def commit_clustering(ctx, clusters_ref, commission, per_candidate):
-    """Commit the held clustering: grade it into the cluster sheet and keep, through custody, the grading artifact and a source of
-    provider ``all_vs_all`` over the clusters (the one graded test of the commission; what the head's credit reads)."""
+    """Commit the held clustering: grade it into the cluster sheet and keep, through custody, the grading artifact (labelled as a
+    ``tool_grading_sheet`` data product) and a source of provider ``all_vs_all`` over the clusters (the one graded test of the
+    commission; what the head's credit reads)."""
     store = ctx.store
     product = next(row for row in products(store, CLUSTERS_KIND) if row['id'] == clusters_ref)
     members = set_members(store, commission, per_candidate)
@@ -436,7 +437,10 @@ def commit_clustering(ctx, clusters_ref, commission, per_candidate):
             'request_ref': None, 'version': METHOD + ':' + str(settings['inflation']) + ':' + settings['contrast'],
             'retrieved_at': None, 'auxiliary_artifact_refs': [grading_ref], 'operand_refs': [commission['query_ref']]},
             origin='tool')
-    graded = [source['id'], grading_ref, product['id']]
+        grading_product = record_grading_product(store, grading_ref=grading_ref, grading=grading, provider=PROVIDER,
+                                                 source_ref=source['id'], used=[product['artifact_ref']],
+                                                 derived_from=[product['id']])
+    graded = [source['id'], grading_ref, product['id'], grading_product['id']]
     sheet = grading['sheet']
     return {'status': 'completed', 'failure_code': None, 'retryable': False, 'record_refs': graded, 'graded_refs': graded,
             'inflation': settings['inflation'], 'contrast': settings['contrast'],
