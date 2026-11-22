@@ -108,8 +108,8 @@ BRIEF = (
     'and experiment type merge unless a stated identity feature conflicts), converted, scored against the proposed '
     'annotation and used to update the persistent subscoring sheet, the main scoring sheet, the credit and the '
     'per-annotation scores. Code does this after a leaf returns records; you do not choose it. The credit of this episode '
-    'is credit_unit times the larger of the best leaf child credit (child_returns: the share of its asked fields it newly '
-    'stated) and the credit of the latest sheet update (context.sheet_update). context.source_bytes is the byte length of '
+    'is credit_unit times the largest credit any sheet update has reached so far (the latest is context.sheet_update): a '
+    'later update can add to it and never takes from it. context.source_bytes is the byte length of '
     'the paper and context.covered_windows lists the byte windows (offset, end, experiment_type, slot) the leaf records '
     'already cover.\n')
 RETURN_GUIDANCE = ('\nWhat returns to your parent is your credit, the per-annotation scores and the features code reads '

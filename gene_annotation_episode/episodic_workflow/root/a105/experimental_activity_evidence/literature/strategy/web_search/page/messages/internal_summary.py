@@ -177,6 +177,9 @@ def internal_summary(view):
         'leaf_record_refs': leaf_record_refs, 'unused_leaf_record_refs': unused_leaf_record_refs,
         'base_state_refs': parent['sheet_state_refs'],
         'sheet_update': sheet_update,
+        # The credit channel of every sheet update so far, in order: the page's credit is the most any of them settled
+        # (``credit.py``), so a later regrouping that lowers the row does not lower the credit.
+        'sheet_update_credits': [update['outcome']['sheet_update']['credit'] for update in updates],
         'sheet_state_refs': sheet_update['sheet_state_refs'] if sheet_update is not None else parent['sheet_state_refs'],
         'lead_source_refs': bearing_lead_sources(records, page['source_ref'], parent['proposed_annotation_ref'],
                                                  parent['sheet_state_refs'], sheet_update),
