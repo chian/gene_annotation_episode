@@ -61,8 +61,8 @@ structural_homology_evidence          HEAD (forecast controller, differential cr
 ├─ surface_faces                      TOOL   P6.
 ├─ ligand_docking                     CHILD  P7. Local job per ligand, minutes each, iterates over a panel. Needs installs.
 │  RNA target
-├─ rna_family_scan                    TOOL   R1. Local Infernal against Rfam (the counterpart in kind of A101's Pfam scan).
-└─ rna_structure_agreement            TOOL   R2 (with R3 as its input when the RNA is known).
+├─ rna_family_scan                    TOOL   R1. Local Infernal against Rfam (the counterpart in kind of A101's Pfam scan). BUILT 2026-11-21 (design: `a102_rna_tools.md`).
+└─ rna_structure_agreement            TOOL   R2 (with R3 as its input when the RNA is known). BUILT 2026-11-21 (design: `a102_rna_tools.md`).
 ```
 
 Tool or child (SOP Step 2): the tools end within the turn (one to a few requests that answer in seconds, then arithmetic);

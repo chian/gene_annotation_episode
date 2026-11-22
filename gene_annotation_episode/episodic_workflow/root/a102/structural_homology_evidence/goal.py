@@ -21,7 +21,10 @@ GOAL = ('A102 owns structural evidence for the assigned scope: what the scope\'s
         'progress, not structural evidence. Report resemblance as resemblance, not as proof of function. Only the yield '
         'controller ends the episode.')
 UNIT = ('One action: one commission of a child episode (a structure search) or one call of a tool (a site correspondence test, '
-        'a partner-contacts analysis of a graded solved-structure search, or the ligand transplants AlphaFill gives an AlphaFold DB model)')
+        'a partner-contacts analysis of a graded solved-structure search, the ligand transplants AlphaFill gives an AlphaFold DB model, or, for '
+        'an RNA target, a scan of the RNA against the covariance models of Rfam and the test of whether the target can form the base pairs '
+        'of the families the scan listed)')
 RESULT = ('The qualified structural findings: the graded structure searches, site tests and partner-contacts analyses the episode '
           'holds, the ligand-transplant tests, the models of the target they used, the possible annotations found with their scores (the leading products, and '
-          'the ligands and nucleic acids bound to the matched proteins or placed in the model), and the differential credit')
+          'the ligands and nucleic acids bound to the matched proteins or placed in the model, and, for an RNA, the Rfam families it matches), '
+          'the RNA family scans and structure-agreement tests, and the differential credit')

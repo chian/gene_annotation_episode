@@ -1,7 +1,9 @@
 """The return. Always returned: ``credit`` (``completion['credit']``: the productivity signal, which no field restates) and
 ``finding``: per target of the scope its leading candidates (at most 10, the leading one first, each with its score and its
 subscoring sheets), the partner candidates (ligand: its chemical component id; nucleic_acid: dna or rna; at most 20), the number of
-candidates of each kind (product, ligand, nucleic_acid), the partner-contacts analyses and the ligand-transplant tests (counts of their sheets), the counts of the hits of the graded searches (hits, named, not asked) and the
+candidates of each kind (product, ligand, nucleic_acid, rna_family), the Rfam family candidates of an RNA target (at most 20, the leading
+one first, by their Rfam identifiers), the partner-contacts analyses, the ligand-transplant tests, the RNA family scans and the RNA
+structure-agreement tests (counts of their sheets), the counts of the hits of the graded searches (hits, named, not asked) and the
 facts of the model of the target (origin, residues, mean pLDDT 0 to 100: the model's own confidence, not similarity), and the
 number of handoffs still waiting for their closure. All of it numbers, counts, values of a fixed vocabulary, the
 annotation names of the candidates (names from the looked-up list of a database) and record references: no paragraph.
@@ -16,6 +18,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.structura
     VOCABULARIES)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.ligand_transplants_sheet import (
     OUTCOMES)
+from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.rna_family_scan_sheet import (
+    OUTCOMES as RNA_SCAN_OUTCOMES)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.site_correspondence_sheet import (
     SITE_SOURCES)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.foldseek_search import (
@@ -32,9 +36,10 @@ SHEET_FORM = RecordForm({
 })
 CANDIDATE_FORM = RecordForm({
     'vocabulary': ChoiceField('text', 'The vocabulary of the candidate: product (the function name of a hit), ligand (a ligand bound '
-                                      'to a matched protein, or placed in the model) or nucleic_acid (DNA or RNA bound to it)', VOCABULARIES),
+                                      'to a matched protein, or placed in the model), nucleic_acid (DNA or RNA bound to it) or rna_family (a structured RNA family '
+                                      'of Rfam that the target matches)', VOCABULARIES),
     'name': Field('text', 'The candidate\'s name exactly as its source gives it: for a product its UniProt recommended name, for a '
-                          'ligand its chemical component id, for a nucleic acid dna or rna'),
+                          'ligand its chemical component id, for a nucleic acid dna or rna, for an rna_family its Rfam identifier'),
     'score': Field('number', 'The candidate\'s annotation score: the sum of its sheet values, that is, of its mean value '
                              '(0 to 1) in each test it has undergone'),
     'sheets': Field('list', 'The candidate\'s subscoring sheets, one per kind of test it has undergone', items=SHEET_FORM),
@@ -78,6 +83,23 @@ TRANSPLANT_TEST_FORM = RecordForm({
     'model_version_differs': Field('boolean', 'Whether the AlphaFold DB model version AlphaFill used differs from the held '
                                               'model\'s', required=False),
 })
+RNA_SCAN_TEST_FORM = RecordForm({
+    'scan_ref': Field('text', 'The source record of the RNA family scan (a record reference)'),
+    'database': Field('text', 'The covariance database scanned: its name in the settings'),
+    'outcome': ChoiceField('text', 'families (at least one hit) or no_family (no model reached its gathering threshold)',
+                           RNA_SCAN_OUTCOMES),
+    'hit_count': Field('integer', 'The hits of the scan'),
+    'overlapped_hit_count': Field('integer', 'The hits a better hit of the same clan overlaps (kept: the competing families)'),
+    'candidates_measured': Field('integer', 'The family candidates the test measured'),
+})
+RNA_AGREEMENT_TEST_FORM = RecordForm({
+    'scan_ref': Field('text', 'The RNA family scan whose families were tested (a record reference)'),
+    'family_count': Field('integer', 'The families aligned'),
+    'candidates_measured': Field('integer', 'The families the test measured'),
+    'families_without_pairs': Field('integer', 'The families whose consensus has no base pair: not measured, not zero'),
+    'consensus_pairs': Field('integer', 'The consensus base pairs of the families, summed'),
+    'pairs_canonical': Field('integer', 'The consensus pairs the target can form as AU, GC or GU, summed over the families'),
+})
 TARGET_FORM = RecordForm({
     'target_ref': Field('text', 'The target: a subject record of the scope'),
     'molecule': ChoiceField('text', 'The molecule of the target', ('protein', 'dna', 'rna', 'unspecified')),
@@ -100,6 +122,13 @@ TARGET_FORM = RecordForm({
                         items=SITE_TEST_FORM),
     'transplant_tests': Field('list', 'The ligand-transplant tests of the target (each: its model, the outcome and the counts of its '
                                       'sheet)', items=TRANSPLANT_TEST_FORM),
+    'rna_family_candidate_count': Field('integer', 'The Rfam family candidates found for the target (an RNA target)'),
+    'rna_family_candidates': Field('list', 'The Rfam family candidates found for the target (at most 20), each with its score, the '
+                                           'leading one first', items=CANDIDATE_FORM),
+    'rna_scan_tests': Field('list', 'The RNA family scans of the target (each: its database, outcome and the counts of its sheet)',
+                            items=RNA_SCAN_TEST_FORM),
+    'rna_agreement_tests': Field('list', 'The RNA structure-agreement tests of the target (each: its scan and the counts of its '
+                                         'sheet)', items=RNA_AGREEMENT_TEST_FORM),
     'model_origin': ChoiceField('text', 'Where the model of the target came from', MODEL_ORIGINS, required=False),
     'model_residues': Field('integer', 'The residues the model covers', required=False),
     'model_mean_plddt': Field('number', 'The mean pLDDT of the model, 0 to 100: its own confidence, not similarity',
@@ -107,7 +136,7 @@ TARGET_FORM = RecordForm({
 })
 FINDING_FORM = RecordForm({
     'evidence_axis': ChoiceField('text', 'The evidence axis', ('A102',)),
-    'targets': Field('list', 'One entry per protein target of the scope', items=TARGET_FORM),
+    'targets': Field('list', 'One entry per target of the scope', items=TARGET_FORM),
     'waiting_searches': Field('list', 'The structure searches launched and not extracted: for each the slot, the seconds since '
                                       'its launch and the seconds still expected, as the child last knew them',
                               items=WAITING_FORM, required=False),

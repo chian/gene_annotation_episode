@@ -8,10 +8,14 @@ moves of the TWO highest-scored candidates already on the list that it measures 
 nothing for any other pair; a repeat changes nothing, so it earns nothing. The sum has no fixed maximum; every action the head offers has a ceiling (``ceiling``), so the
 credit's controller is the forecast controller (``yield_estimator.py``). ``A102DifferentialCredit`` is its definition record.
 A child's credit is information in the summary and is never added."""
+import json
+from pathlib import Path
+
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.candidate_measurements import (
     candidate_standing, candidate_table, held_sources)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.differential_credit import (
-    SHEET_WEIGHT, bound_partner_test_ceiling, ligand_transplant_test_ceiling, site_test_ceiling, test_ceiling)
+    SHEET_WEIGHT, bound_partner_test_ceiling, ligand_transplant_test_ceiling, rna_family_scan_test_ceiling,
+    rna_structure_agreement_test_ceiling, site_test_ceiling, test_ceiling)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.site_correspondence_sheet import (
     SITE_SOURCES)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.tool_grading_artifacts import (
@@ -21,6 +25,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_s
     ORIGIN as TRANSPLANT_ORIGIN)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.partner_contacts import (
     DATABASE as PARTNER_DATABASE)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.rna_structure_agreement import (
+    MINIMUM_FAMILIES)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.site_correspondence import (
     UNIPROT_NUMBERED)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.structure_search_child import (
@@ -41,6 +47,8 @@ SLOT = 'structure_search'
 SITE_TOOL = 'site_correspondence'
 PARTNER_TOOL = 'partner_contacts'
 TRANSPLANT_TOOL = 'ligand_transplants'
+RNA_SCAN_TOOL = 'rna_family_scan'
+RNA_AGREEMENT_TOOL = 'rna_structure_agreement'
 FAMILY = 'structure_search'
 OBTAIN = 'obtain_one'
 
@@ -50,7 +58,7 @@ class A102DifferentialCredit:
     yield_method = 'forecast'
 
     def as_record(self):
-        return {'kind': 'a102_differential_credit', 'version': 'a102_differential_credit_v5', 'axis': 'A102',
+        return {'kind': 'a102_differential_credit', 'version': 'a102_differential_credit_v6', 'axis': 'A102',
                 'measurement': 'index_b_of_each_hit_of_one_structure_search_from_the_aligned_pairs_after_superposition',
                 'site_measurement': 'mean_e_of_the_hits_with_sites_e_is_b_times_the_mean_residue_score_of_class_match_times_kernel',
                 'candidates': 'product_from_the_uniprot_name_of_the_hit',
@@ -59,8 +67,12 @@ class A102DifferentialCredit:
                 'partner_candidates': 'ligand_chemical_component_id_and_nucleic_acid_dna_or_rna_of_the_solved_hit_chains',
                 'transplant_measurement': 'value_of_the_best_alphafill_transplant_of_each_ligand_fit_times_no_clash',
                 'transplant_candidates': 'ligand_chemical_component_id_of_the_solved_donor_of_each_non_additive_transplant',
+                'rna_scan_measurement': 'value_of_the_best_hit_of_each_rfam_family_x_squared_over_one_plus_x_squared_x_is_bits_over_ga',
+                'rna_scan_candidates': 'rfam_family_accession_of_each_hit_of_the_cmscan_over_the_covariance_database',
+                'rna_agreement_measurement': 'canonical_pairs_over_consensus_pairs_of_the_cmalign_span_of_each_scan_family',
                 'test': ('one_graded_source_structure_search_foldseek_tmalign_database_at_source_or_site_correspondence_'
-                         'site_source_at_source_or_site_correspondence_partner_contacts_at_source_or_bound_partner_pdb100_at_source_or_ligand_transplant_alphafill_at_source'),
+                         'site_source_at_source_or_site_correspondence_partner_contacts_at_source_or_bound_partner_pdb100_at_source_or_ligand_transplant_alphafill_at_source'
+                         '_or_rna_family_scan_database_at_source_or_rna_structure_agreement_rfam_at_source'),
                 'sheet_weights': dict(SHEET_WEIGHT),
                 'score': 'sum_over_subscoring_sheets_of_weight_times_sum_of_mean_value_in_test_of_that_kind',
                 'admission': 'first_value_above_zero',
@@ -122,6 +134,42 @@ def search_value(standing, query):
 def queries(summary):
     """The protein sequences of the scope: what a search may be commissioned for."""
     return [ref for ref in summary['scope']['subject_refs'] if summary['held_sequences'].get(ref) == 'protein']
+
+
+def rna_queries(summary):
+    """The RNA sequences of the scope: what an RNA family scan may be requested for (a protein target is offered neither RNA tool,
+    an RNA target none of the protein tools)."""
+    return [ref for ref in summary['scope']['subject_refs'] if summary['held_sequences'].get(ref) == 'rna']
+
+
+def scanned_targets(summary):
+    """The targets that hold an RNA family scan (``candidate_measurements.held_rna_scans``, read in ``internal_summary``)."""
+    return {target for target, refs in summary['held_rna_scans'].items() if refs}
+
+
+def unscanned_queries(summary):
+    """The RNA sequences of the scope not yet scanned: what an ``rna_family_scan`` request may name."""
+    scanned = scanned_targets(summary)
+    return [ref for ref in rna_queries(summary) if ref not in scanned]
+
+
+def agreed_scans(summary):
+    """The scan source references whose ``rna_structure_agreement`` this episode holds (``candidate_measurements.
+    held_rna_agreements``, read in ``internal_summary``)."""
+    return {ref for refs in summary['held_rna_agreements'].values() for ref in refs}
+
+
+def offered_agreement_scans(summary):
+    """The scan source references an ``rna_structure_agreement`` request may name now, in the order of the held scans: a scan of an
+    RNA sequence of the scope that lists at least two families and is not yet tested."""
+    targets, agreed = rna_queries(summary), agreed_scans(summary)
+    return [scan for scan, held in summary['rna_scan_inputs'].items()
+            if held['query_ref'] in targets and len(held['families']) >= MINIMUM_FAMILIES and scan not in agreed]
+
+
+def database_families(settings, database):
+    """The number of families of the covariance database ``database`` of the settings (its manifest's ``model_count``)."""
+    return json.loads(Path(settings['covariance_databases'][database]).read_text())['model_count']
 
 
 def open_pairs(summary):
@@ -224,6 +272,15 @@ def best_arguments(summary, records, action_type, ctx):
     accepts while it is outstanding: it extracts what the launch started, so its ceiling is the search's); else, with a
     model of a query held, the first database not yet searched with that model; else ``None`` (a search with no model held
     is the model's own commission)."""
+    if action_type in (RNA_SCAN_TOOL, RNA_AGREEMENT_TOOL):
+        resource = next((item['resource_id'] for item in ctx.services['job_access'].read('resources') if item['kind'] == 'local'), None)
+        if resource is None:
+            return None
+        if action_type == RNA_AGREEMENT_TOOL:
+            scans = offered_agreement_scans(summary)
+            return {'scan_ref': scans[0], 'resource_id': resource} if scans else None
+        queries_left, databases = unscanned_queries(summary), sorted(ctx.settings['covariance_databases'])
+        return {'query_ref': queries_left[0], 'database': databases[0], 'resource_id': resource} if queries_left else None
     if action_type == TRANSPLANT_TOOL:
         models = offered_transplant_models(summary)
         if not models:
@@ -279,7 +336,8 @@ def outcome_pending(summary, records, position):
 # ceiling only from ledger rows recorded under the same credit definition and the same version of that action's ceiling
 # (``yield_estimator.py``): change an action's version whenever its ceiling's derivation changes, and only that action's.
 CEILING_VERSIONS = {'structure_search': 'a102_ceiling_v2', 'site_correspondence': 'a102_ceiling_v2',
-                    'partner_contacts': 'a102_ceiling_v2', 'ligand_transplants': 'a102_ceiling_v1'}
+                    'partner_contacts': 'a102_ceiling_v2', 'ligand_transplants': 'a102_ceiling_v1',
+                    'rna_family_scan': 'a102_ceiling_v1', 'rna_structure_agreement': 'a102_ceiling_v1'}
 
 
 def ceiling(summary, records, action_type, arguments, ctx):
@@ -315,6 +373,18 @@ def ceiling(summary, records, action_type, arguments, ctx):
       candidates, else ``w 2694``; proof in its docstring; constant and loose). A model already tested earns 0 (the request check
       refuses it). With ``arguments`` ``None``: the largest over the models still offered (``offered_transplant_models``), 0 when
       none is offered.
+    * ``rna_family_scan``: the one test of one scan of an RNA target measures the families of the covariance database
+      (``rna_family:<accession>``, each at most once, each with a value below 1 and at least one half), all admitted by this test (no
+      other test lists an RNA family before a scan), so no differential:
+      ``differential_credit.rna_family_scan_test_ceiling`` is ``w`` times the families of the database (``database_families``:
+      the manifest's ``model_count``), and 0 for a target already scanned (the request check refuses it); constant and loose. With
+      ``arguments`` ``None``: the largest over the databases of the settings when an RNA target of the scope is not yet scanned,
+      else 0. An action that is offered with the ceiling 0 is how an RNA target with nothing left to do ends the episode, as
+      ``structure_search`` does for a protein: the controller finds no offered action worth its cost.
+    * ``rna_structure_agreement``: the one test of a held scan measures the families that scan lists, all listed already, so it
+      admits none and earns one differential at most: ``differential_credit.rna_structure_agreement_test_ceiling``, ``w`` when the
+      scan lists at least two families (a scan with fewer is refused by the request check and earns 0), else 0; a scan already tested
+      earns 0. With ``arguments`` ``None``: ``w`` when a scan is offered (``offered_agreement_scans``), else 0.
     * ``structure_search``: the one test of one search measures the product candidates of its hits: the ones already on the
       list (``product:`` standing) and at most ``HIT_BOUND`` in all (the most hits one search of the server returns; the
       figure and its source are in the comment of ``HIT_BOUND``: the Foldseek default ``--max-seqs`` 1000, observed results
@@ -324,8 +394,22 @@ def ceiling(summary, records, action_type, arguments, ctx):
       continued). The resume of a parked job (the same fields, ``until`` ``extracted``) is not a repeat and has the
       search's ceiling, which is what the launch started. With ``arguments`` ``None``: the largest over the queries with a
       database not yet searched (``open_pairs``), and ``best_arguments`` names that commission when it can be stated."""
-    if action_type not in (SLOT, SITE_TOOL, PARTNER_TOOL, TRANSPLANT_TOOL):
+    if action_type not in (SLOT, SITE_TOOL, PARTNER_TOOL, TRANSPLANT_TOOL, RNA_SCAN_TOOL, RNA_AGREEMENT_TOOL):
         raise ValueError('a102_ceiling_not_derived_for_action_type:' + action_type)
+    if action_type == RNA_SCAN_TOOL:
+        if arguments is None:
+            return max((rna_family_scan_test_ceiling(database_families(ctx.settings, database), not unscanned_queries(summary))
+                        for database in ctx.settings['covariance_databases']), default=0.0)
+        return rna_family_scan_test_ceiling(database_families(ctx.settings, arguments['database']),
+                                            arguments['query_ref'] in scanned_targets(summary))
+    if action_type == RNA_AGREEMENT_TOOL:
+        scans = summary['rna_scan_inputs']
+        if arguments is None:
+            return max((rna_structure_agreement_test_ceiling(len(scans[scan]['families'])) for scan in offered_agreement_scans(summary)),
+                       default=0.0)
+        if arguments['scan_ref'] in agreed_scans(summary):
+            return 0.0
+        return rna_structure_agreement_test_ceiling(len(scans[arguments['scan_ref']]['families']))
     standing = candidate_standing(records, summary['scope'], held_sources(records))
     if action_type == TRANSPLANT_TOOL:
         if arguments is None:

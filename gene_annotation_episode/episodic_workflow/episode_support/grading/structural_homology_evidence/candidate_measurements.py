@@ -28,6 +28,15 @@ answer and its name is ``ligand_transplant:alphafill@<source reference>``. A can
 value of its BEST transplant (one row per candidate). A model with no transplant or no AlphaFill entry has no measurement.
 ``held_transplant_models`` gives the models already tested, so a repeat can be refused.
 
+THE FIFTH TEST, ``rna_family_scan`` (``rna_family_scan_sheet``): one graded source is one scan of an RNA target against a covariance
+database and its name is ``rna_family_scan:<database>@<source reference>``. A candidate is ``rna_family:<Rfam accession>`` (the name
+shown is the family's identifier); its value is the value of its BEST hit. A scan with no family has no measurement.
+``held_rna_scans`` gives the scans held per target. THE SIXTH TEST, ``rna_structure_agreement`` (``rna_structure_agreement_sheet``):
+one graded source is the agreement of one held scan's families and its name is ``rna_structure_agreement:rfam@<source reference>``
+(the source that holds the grading); a candidate is the same ``rna_family:<accession>``; its value is the share of the family's
+consensus pairs the target can form. A family whose consensus has no pair has no measurement (null, never a zero).
+``held_rna_agreements`` gives the scans already tested per target, so a repeat can be refused.
+
 The model's facts on the sheet weigh nothing and are not read here. A source whose target is not in the scope is skipped; a
 retained grading of another sheet schema is not A102's round 1 and is skipped."""
 import math
@@ -38,6 +47,10 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.structura
     SCHEMA as TRANSPLANT_SHEET)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.partner_contacts_sheet import (
     CONTACTS_SCHEMA, PARTNERS_SCHEMA)
+from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.rna_family_scan_sheet import (
+    SCHEMA as RNA_SCAN_SHEET)
+from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.rna_structure_agreement_sheet import (
+    SCHEMA as RNA_AGREEMENT_SHEET)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.site_correspondence_sheet import (
     SCHEMA as SITE_SHEET)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.structure_search_sheet import (
@@ -45,7 +58,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.structura
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.tool_grading_artifacts import (
     source_tool_grading_entries)
 
-VOCABULARIES = ('product', 'ligand', 'nucleic_acid')
+VOCABULARIES = ('product', 'ligand', 'nucleic_acid', 'rna_family')
 
 
 def held_sources(reader):
@@ -103,6 +116,27 @@ def ligand_transplant_rows(sheet):
     return [(row['kind'], row['identifier'], row['best_value']) for row in sheet['candidates']]
 
 
+def rna_family_scan_test_name(sheet, source):
+    """The test of the RNA family scan graded in ``sheet`` made by the held source ``source``."""
+    return 'rna_family_scan:' + sheet['database'] + '@' + source
+
+
+def rna_family_scan_rows(sheet):
+    """The ``(vocabulary, name, identifier, best_value)`` of the family candidates of an RNA family scan sheet, in its order."""
+    return [(row['kind'], row['name'], row['identifier'], row['best_value']) for row in sheet['candidates']]
+
+
+def rna_structure_agreement_test_name(sheet, source):
+    """The test of the RNA structure agreement graded in ``sheet`` made by the held source ``source``."""
+    return 'rna_structure_agreement:rfam@' + source
+
+
+def rna_structure_agreement_rows(sheet):
+    """The ``(vocabulary, name, identifier, value)`` of the family candidates of an RNA structure agreement sheet that have a value
+    (a consensus with at least one pair), in its order."""
+    return [(row['kind'], row['name'], row['identifier'], row['value']) for row in sheet['candidates']]
+
+
 def partner_contacts_rows(sheet):
     """The ``(product, mean_E)`` of the candidates of a partner-contacts sheet that have a value (at least one hit with a
     functional partner), in the sheet's order."""
@@ -131,7 +165,8 @@ def _read(reader, scope, sources):
         source = reader.get(reference)
         for entry in source_tool_grading_entries(reader, reference):
             sheet = entry['grading']['sheet']
-            if sheet['schema'] not in (SEARCH_SHEET, SITE_SHEET, CONTACTS_SCHEMA, PARTNERS_SCHEMA, TRANSPLANT_SHEET):
+            if sheet['schema'] not in (SEARCH_SHEET, SITE_SHEET, CONTACTS_SCHEMA, PARTNERS_SCHEMA, TRANSPLANT_SHEET, RNA_SCAN_SHEET,
+                                    RNA_AGREEMENT_SHEET):
                 continue
             target = source['operand_refs'][0]
             if target not in scope['subject_refs']:
@@ -143,6 +178,15 @@ def _read(reader, scope, sources):
             if sheet['schema'] == PARTNERS_SCHEMA:
                 measurements.extend(_measurement(target, bound_partner_test_name(sheet, reference), vocabulary, identifier, None,
                                                  value, reference) for vocabulary, identifier, value in bound_partner_rows(sheet))
+                continue
+            if sheet['schema'] == RNA_SCAN_SHEET:
+                measurements.extend(_measurement(target, rna_family_scan_test_name(sheet, reference), vocabulary, name, identifier,
+                                                 value, reference) for vocabulary, name, identifier, value in rna_family_scan_rows(sheet))
+                continue
+            if sheet['schema'] == RNA_AGREEMENT_SHEET:
+                measurements.extend(_measurement(target, rna_structure_agreement_test_name(sheet, reference), vocabulary, name,
+                                                 identifier, value, reference)
+                                    for vocabulary, name, identifier, value in rna_structure_agreement_rows(sheet))
                 continue
             if sheet['schema'] == TRANSPLANT_SHEET:
                 measurements.extend(_measurement(target, ligand_transplant_test_name(sheet, reference), vocabulary, identifier, None,
@@ -240,6 +284,39 @@ def held_transplant_models(reader, scope, sources):
             sheet = entry['grading']['sheet']
             if sheet['schema'] == TRANSPLANT_SHEET:
                 held[target].append(sheet['model_ref'])
+    return held
+
+
+def held_rna_scans(reader, scope, sources):
+    """Per target of the scope, the source references of the RNA family scans the episode holds (graded), in arrival order: a
+    further scan of the same target is a repeat (it adds nothing) and the request check refuses it."""
+    scope = reader.validate_scope(scope)
+    held = {target: [] for target in scope['subject_refs']}
+    for reference in sources:
+        source = reader.get(reference)
+        target = source['operand_refs'][0] if source.get('operand_refs') else None
+        if target not in held:
+            continue
+        for entry in source_tool_grading_entries(reader, reference):
+            if entry['grading']['sheet']['schema'] == RNA_SCAN_SHEET:
+                held[target].append(reference)
+    return held
+
+
+def held_rna_agreements(reader, scope, sources):
+    """Per target of the scope, the scan source references whose ``rna_structure_agreement`` the episode holds (graded), in arrival
+    order: a further agreement test of the same scan is a repeat (it adds nothing) and the request check refuses it."""
+    scope = reader.validate_scope(scope)
+    held = {target: [] for target in scope['subject_refs']}
+    for reference in sources:
+        source = reader.get(reference)
+        target = source['operand_refs'][0] if source.get('operand_refs') else None
+        if target not in held:
+            continue
+        for entry in source_tool_grading_entries(reader, reference):
+            sheet = entry['grading']['sheet']
+            if sheet['schema'] == RNA_AGREEMENT_SHEET:
+                held[target].append(sheet['scan_source_ref'])
     return held
 
 

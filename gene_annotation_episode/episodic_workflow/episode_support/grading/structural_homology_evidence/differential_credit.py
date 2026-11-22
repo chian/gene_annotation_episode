@@ -18,7 +18,9 @@ the subscoring sheet. Measurements are given in the order they arrived. The test
   structure search that share a product), times the weight of the test's family. Round 1 has one family, ``structure_search``,
   whose raw value (the index B of ``scoring.geometry``) lies in [0, 1]; the second family, ``site_correspondence``, has a raw
   value (the mean E = B F of the hits with sites) in [0, 1] as well; the third, ``bound_partner`` (the mean E(hit, partner) = B F
-  of the hits bound to a partner), likewise in [0, 1]; the fourth, ``ligand_transplant`` (the value of a ligand's best AlphaFill transplant, fit x no_clash), in (0, 1].
+  of the hits bound to a partner), likewise in [0, 1]; the fourth, ``ligand_transplant`` (the value of a ligand's best AlphaFill transplant, fit x no_clash), in (0, 1]; the fifth,
+  ``rna_family_scan`` (the value ``x^2 / (1 + x^2)`` of a family's best hit, ``x`` = bits over the family's gathering threshold), in
+  [0.5, 1); the sixth, ``rna_structure_agreement`` (the share of the family's consensus base pairs the target can form), in [0, 1].
 - A subscoring sheet is a kind of test: the part of the test name before ``@``
   (``structure_search:foldseek:tmalign:<database>``). A candidate's value on a sheet is the SUM of its values in the tests of
   that kind.
@@ -52,7 +54,11 @@ TYPICAL_STRONG_VALUE = {'structure_search': 1.0,
                         # no real run yet: 1 until real runs give the family's typical strong value (SOP Step 6)
                         'bound_partner': 1.0,
                         # no real run yet: 1 until real runs give the family's typical strong value (SOP Step 6)
-                        'ligand_transplant': 1.0}
+                        'ligand_transplant': 1.0,
+                        # no real run yet: 1 until real runs give the family's typical strong value (SOP Step 6)
+                        'rna_family_scan': 1.0,
+                        # no real run yet: 1 until real runs give the family's typical strong value (SOP Step 6)
+                        'rna_structure_agreement': 1.0}
 SHEET_WEIGHT = {family: 1 / value for family, value in TYPICAL_STRONG_VALUE.items()}
 
 
@@ -221,3 +227,31 @@ def ligand_transplant_test_ceiling(held):
     weight = SHEET_WEIGHT['ligand_transplant']
     listed = sum(1 for candidate, state in held.items() if candidate.startswith('ligand:') and state['listed'])
     return weight * float(ELIGIBLE_COMPOUNDS + (1 if listed >= 2 else 0))
+
+
+def rna_family_scan_test_ceiling(families, scanned):
+    """The most one ``rna_family_scan`` test can add to the credit of one target: a PROVED maximum (``families``: the number of
+    families in the covariance database the scan is made against; ``scanned``: whether the target already has a scan).
+
+    Proof. The candidates of the test are ``rna_family:<accession>`` of the database's families, each at most once (a candidate is a
+    family, whatever the number of its hits), so at most ``families`` of them. A candidate's value in the test is the value of its best
+    hit, ``x^2 / (1 + x^2)`` with ``x`` = bits over GA, which is below 1 (and at least one half, as every hit has at least GA bits), so
+    the family weight ``w`` times it is in (0, w). No ``rna_family`` candidate can be listed before this test, since no other test
+    measures them but the agreement test, which needs a scan, and a target has one scan (a second is refused by the request check; the
+    ceiling of the target scanned is 0). So the test admits every candidate it measures (each an entry of at most ``w``) and earns no
+    differential (a differential needs two candidates listed before the test), and nothing else. The bound is ``w x families``. It is
+    constant and loose, not tight (a sequence of one structured RNA hits a handful of the families). 0 once the target is scanned."""
+    return 0.0 if scanned else SHEET_WEIGHT['rna_family_scan'] * float(families)
+
+
+def rna_structure_agreement_test_ceiling(scan_families):
+    """The most one ``rna_structure_agreement`` test can add to the credit of one target: a PROVED maximum (``scan_families``: the
+    number of families the held scan being tested lists, all listed candidates since each has a hit value above zero).
+
+    Proof. The test measures the candidates of the scan, all already on the list (the scan admitted each with a value above zero), so
+    it admits none and earns no entry. A candidate's value in it is its share of canonical consensus pairs, in [0, 1], times the family
+    weight ``w``: a move in [0, w]. It earns ONE differential, ``|d_a - d_b|`` of the top two of the listed candidates it measures (two
+    numbers in [0, w]): at most ``w``, and only with two or more such candidates, which the request check requires (a scan that lists
+    fewer than two families is refused); nothing else. The bound is ``w`` with two or more families, else 0. Tight: the top two at ``w``
+    and 0."""
+    return SHEET_WEIGHT['rna_structure_agreement'] * float(1 if scan_families >= 2 else 0)

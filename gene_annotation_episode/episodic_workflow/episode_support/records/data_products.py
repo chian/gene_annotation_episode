@@ -133,6 +133,19 @@ KINDS = {
     # a protein in complex with a ligand"): the answer is not a structure. format_3464 JSON.
     'ligand_transplant_results': ('http://edamontology.org/data_1277', 'http://edamontology.org/format_3464',
                                   'Protein features, JSON (AlphaFill ligand transplants of an AlphaFold DB model)'),
+    # A102 ``rna_family_scan`` (Infernal ``cmscan`` of an RNA over the covariance models of Rfam) and ``rna_structure_agreement``
+    # (``cmalign`` of the hit span to each family's model). The data types and the format are the ones this file already uses and
+    # read from EDAM.tsv: data_0858 Sequence signature matches (a sequence scanned against a database of models, as
+    # ``profile_scan_results``), data_0863 Sequence alignment (as ``multiple_sequence_alignment``), format_2330 Textual format (as
+    # the HMMER tables: the cmscan table has whitespace-aligned columns, so TSV would mislabel it). EDAM has no Infernal format and
+    # the Stockholm alignment is labelled with the general format too; EDAM.tsv was not read again for a closer term (no outside
+    # request was allowed in the task that added these kinds), so the closer terms are not claimed.
+    'rna_family_scan_results': ('http://edamontology.org/data_0858', 'http://edamontology.org/format_2330',
+                                'Sequence signature matches, textual (Infernal cmscan table, format 2)'),
+    'rna_family_scan_report': ('http://edamontology.org/data_0858', 'http://edamontology.org/format_2330',
+                               'Sequence signature matches, textual (Infernal cmscan report with the alignments of the hits)'),
+    'rna_family_alignments': ('http://edamontology.org/data_0863', 'http://edamontology.org/format_2330',
+                              'Sequence alignment, textual (Stockholm alignment of the span of the target to one covariance model, by cmalign)'),
 }
 EDAM_SOURCE = 'https://edamontology.org/EDAM.tsv, read 2026-11-20'
 

@@ -13,7 +13,17 @@ graded ``pdb100`` search that can be analysed (``credit.offered_partner_searches
 exist (``partner_options``). Its third tool is ``ligand_transplants``: the request ``model_ref``, ``check_ligand_transplants_request``
 run in ``action``, ONE unit ``ligand_transplants`` that asks AlphaFill for the ligands transplanted into an AlphaFold DB model from solved
 homologs, offered only for a held model whose origin is ``alphafold_db`` and that is not yet tested (``credit.offered_transplant_models``).
-Settings of the head: ``python_executable`` and ``usalign_executable_directory``. It never ends the
+For an RNA target (the molecule of the held sequence record) the head offers two other tools and none of the protein ones, and the
+protein tools are offered for a protein target only. ``rna_family_scan``: the request ``query_ref``, ``database`` and ``resource_id``,
+``check_rna_family_scan_request`` run in ``action``, ONE async unit that runs ``cmscan`` of Infernal over the covariance database of the
+settings as a local job and grades the table; it is offered while an RNA target of the scope exists (with the ceiling 0 once every
+such target is scanned, as ``structure_search`` is offered for a protein with nothing left to search: the yield controller then finds
+nothing worth its cost and stops), its request options only while a target is unscanned and a local resource is bound.
+``rna_structure_agreement``: the request ``scan_ref`` and ``resource_id``, ``check_rna_structure_agreement_request``, ONE async unit that
+aligns the span of each family of the scan to its model (``cmfetch`` and ``cmalign`` as a local job) and grades the consensus pairs the
+target can form; offered only for a held scan that lists at least two families and is not yet tested (``credit.offered_agreement_scans``).
+Settings of the head: ``python_executable``, ``usalign_executable_directory``, ``infernal_executable_directory`` and
+``covariance_databases`` (``{database name: manifest path}``). It never ends the
 Episode: only the yield controller does. No ``reason`` action.
 
 The child. A slot is offered while its commission can be stated from what this episode holds: a protein sequence of the scope
@@ -39,6 +49,10 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_s
     foldseek_search as foldseek)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.ligand_transplants import (
     check_ligand_transplants_request, ligand_transplants)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.rna_family_scan import (
+    check_rna_family_scan_request, rna_family_scan)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.rna_structure_agreement import (
+    check_rna_structure_agreement_request, rna_structure_agreement)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.site_correspondence import (
     check_site_correspondence_request, site_correspondence)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.partner_contacts import (
@@ -46,9 +60,10 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_s
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.structure_search_child import (
     ROUTE_KIND, UNTIL, _choose, seconds_between)
 
-from .credit import (OBTAIN, PARTNER_TOOL, SITE_TOOL, TRANSPLANT_TOOL, analysed_searches, commissioned, graded_site_pairs,
-                     offered_partner_searches, offered_site_pairs, offered_transplant_models, queries, tested_models,
-                     transplant_models)
+from .credit import (OBTAIN, PARTNER_TOOL, RNA_AGREEMENT_TOOL, RNA_SCAN_TOOL, SITE_TOOL, TRANSPLANT_TOOL, agreed_scans,
+                     analysed_searches, commissioned, graded_site_pairs, offered_agreement_scans, offered_partner_searches,
+                     offered_site_pairs, offered_transplant_models, queries, rna_queries, scanned_targets, tested_models,
+                     transplant_models, unscanned_queries)
 from .goal import GOAL
 
 CHILD_SLOTS = {'structure_search': 'structural_homology_evidence/structure_search'}
@@ -73,7 +88,21 @@ def ligand_transplants_tool(arguments, ctx):
     return ligand_transplants(ctx, model_ref=arguments['model_ref'])
 
 
-TOOLS = {SITE_TOOL: site_correspondence_tool, PARTNER_TOOL: partner_contacts_tool, TRANSPLANT_TOOL: ligand_transplants_tool}
+async def rna_family_scan_tool(arguments, ctx):
+    """One RNA family scan as one unit, by the library's one function (an async unit: its local job goes through the job service). The
+    arguments are the model's three controlled choices; the programs' and the database's locations are settings."""
+    return await rna_family_scan(ctx, query_ref=arguments['query_ref'], database=arguments['database'],
+                                 resource_id=arguments['resource_id'])
+
+
+async def rna_structure_agreement_tool(arguments, ctx):
+    """One RNA structure agreement test as one unit, by the library's one function (an async unit: its local job goes through the
+    job service). The arguments are the model's two controlled choices."""
+    return await rna_structure_agreement(ctx, scan_ref=arguments['scan_ref'], resource_id=arguments['resource_id'])
+
+
+TOOLS = {SITE_TOOL: site_correspondence_tool, PARTNER_TOOL: partner_contacts_tool, TRANSPLANT_TOOL: ligand_transplants_tool,
+         RNA_SCAN_TOOL: rna_family_scan_tool, RNA_AGREEMENT_TOOL: rna_structure_agreement_tool}
 
 INSTRUCTIONS = (
     GOAL + '\n\n'
@@ -84,7 +113,7 @@ INSTRUCTIONS = (
     'episode. Recorded facts come from actual records and are shown to you as they are: the targets with their molecule and '
     'length, the models held (origin, residues, mean pLDDT: a model\'s own confidence, not similarity), the graded searches, '
     'the outstanding jobs with the seconds since their launch and the seconds still expected, the leading candidates with '
-    'their scores and subscoring sheets (products, and the partners ligand and nucleic_acid), the site tests, partner tests and transplant tests held, your earlier units and the yield table. A model that is not held is obtained by the '
+    'their scores and subscoring sheets (products, the partners ligand and nucleic_acid and, for an RNA target, the rna_family candidates), the site tests, partner tests, transplant tests, RNA scans and RNA agreement tests held, your earlier units and the yield table. A model that is not held is obtained by the '
     'child when the commission names obtain_one. Waiting and unchanged observations do not manufacture progress.')
 
 # What the model is told of the child it may commission: what the child does, the controlled fields of its commission (the model
@@ -213,6 +242,43 @@ TRANSPLANT_DESCRIPTION = (
     'sheets. ' + CREDIT_TEXT + ' An answer of another shape, or an HTTP status other than 200 and 404, fails the run.')
 
 
+RNA_SCAN_DESCRIPTION = (
+    'Find which structured RNA family (Rfam) the RNA target is, by Infernal\'s covariance models: a family\'s consensus sequence and its '
+    'consensus base pairs. For an RNA target only (a protein target is not offered it). What it needs: an RNA sequence of your scope '
+    'that is not yet scanned (targets gives the molecule of each), a covariance database of the settings and a local resource of '
+    'bound_resources. Fill out the three fields of its request: query_ref, database and resource_id. What code does: one local job, '
+    'cmscan over every model of the database by Rfam\'s own command for annotating a sequence (each family\'s own gathering threshold '
+    'GA decides what is reported; one CPU; Z as Rfam defines it, the nucleotides searched in millions times two for the two strands). '
+    'Per hit the sheet keeps the family, its clan, the bit score, the E-value (it depends on Z and weighs nothing), the model and '
+    'sequence spans, the strand, the truncation and whether a better hit of the same clan overlaps it (such a hit is kept: it is the '
+    'competing family), and the family\'s GA. A hit\'s value is x^2 / (1 + x^2) with x the bit score over GA (a hit at GA has value one '
+    'half, a hit at twice GA 0.8, and it rises gradually towards 1). A candidate is rna_family:<Rfam accession> (its name is the '
+    'family\'s Rfam identifier); its value in the test is the value of its best hit. A sequence with no hit gives no candidate '
+    '(no_family) and counts as the test run. One scan of a target is made; code checks the request before anything runs, and if '
+    'something is wrong it comes back in feedback with the things to fix and nothing ran. A request that passes runs as one unit with '
+    'no second call. rna_scan_tests shows the scans held: for each its target, database, outcome, hits, hits overlapped by a better hit '
+    'of the clan and families measured. candidates shows the rna_family candidates with their scores and subscoring sheets. '
+    + CREDIT_TEXT + ' A failed outcome is a fault of the environment and the same request is not made again.')
+
+RNA_AGREEMENT_DESCRIPTION = (
+    'Test whether the RNA target can form the consensus base pairs of each family that one held scan listed. What it needs: a held '
+    'rna_family_scan that lists at least two families (rna_scan_tests gives each with its source_ref; with one family there is no '
+    'other family to tell it from, so it is not offered) and is not yet tested, and a local resource. Fill out the two fields of its '
+    'request: scan_ref and resource_id. What code does, for every family of the scan: one local job fetches the family\'s model and '
+    'aligns the span of the target the scan\'s best hit of the family covers to it (cmalign, local mode, one CPU); the base pairs are '
+    'the matched brackets of the alignment\'s consensus structure. Per family the sheet counts the consensus pairs, the pairs whose two '
+    'positions both hold a residue of the target, and of those the canonical ones (AU, GC, GU either way); the family\'s value is the '
+    'canonical pairs over the consensus pairs, 0 to 1: the share of the family\'s base pairs this sequence can form. A family whose '
+    'consensus has no base pair is not measured (not zero). The sheet keeps, as facts that weigh nothing, each consensus stem with its '
+    'pairs, pairs present and pairs canonical, the counts of stems wholly, partly and not formable, the target\'s residues inserted '
+    'relative to the model and the consensus positions with no residue. The candidates are the scan\'s rna_family candidates, so the '
+    'test measures the candidates already on the list and earns the differential of the top two. Code checks the request before '
+    'anything runs; if something is wrong it comes back in feedback with the things to fix and nothing ran. A request that passes runs '
+    'as one unit with no second call. rna_agreement_tests shows the tests held: for each its scan, the families aligned, those '
+    'measured and the consensus pairs and canonical pairs summed. ' + CREDIT_TEXT + ' A failed outcome is a fault of the '
+    'environment and the same request is not made again.')
+
+
 def bound_resources(ctx):
     """The resources bound to the job service, each with its kind, which a commission may name (read through the service's read
     handle, so the read is recorded with the decision)."""
@@ -316,6 +382,60 @@ def check_transplant_request(request, summary):
     return check_ligand_transplants_request(request, models=transplant_models(summary), tested=tested_models(summary))
 
 
+def rna_scan_options(summary, resources, settings):
+    """The request of the ``rna_family_scan`` tool as the model fills it out: one option per RNA sequence of the scope not yet scanned,
+    with the databases of the settings and the bound local resources. Only options whose request passes the library's check are
+    offered, so a request taken from the schema works. Empty while no target is left, or no local resource or database is bound."""
+    targets = unscanned_queries(summary)
+    if not targets:
+        return []
+    local = [name for name, kind in resources.items() if kind == 'local']
+    databases = sorted(settings['covariance_databases'])
+    return [{'type': 'object', 'additionalProperties': False, 'required': ['name', 'query_ref', 'database', 'resource_id'],
+             'properties': {'name': {'type': 'string', 'enum': [RNA_SCAN_TOOL]}, 'query_ref': {'type': 'string', 'enum': [query]},
+                            'database': {'type': 'string', 'enum': databases}, 'resource_id': {'type': 'string', 'enum': local}}}
+            for query in targets
+            if local and databases and not check_rna_scan_request(
+                {'query_ref': query, 'database': databases[0], 'resource_id': local[0]}, summary, resources, settings)]
+
+
+def rna_scan_offered(summary, resources, settings):
+    """Whether ``rna_family_scan`` is an offered action: an RNA target of the scope exists and either its request can be stated now
+    (``rna_scan_options``) or every such target is already scanned (the action is then offered with the ceiling 0, as
+    ``structure_search`` is for a protein with nothing left to search, and the yield controller stops the episode)."""
+    return bool(rna_queries(summary)) and (bool(rna_scan_options(summary, resources, settings)) or not unscanned_queries(summary))
+
+
+def check_rna_scan_request(request, summary, resources, settings):
+    """The things to fix in a request of ``rna_family_scan``: the library's one check (``check_rna_family_scan_request``) over the
+    sequences the head holds, the targets already scanned, the bound resources and the databases and programs of the settings."""
+    return check_rna_family_scan_request(
+        request, sequences=summary['held_sequences'], scope_subjects=summary['scope']['subject_refs'], resources=resources,
+        scanned=scanned_targets(summary), databases=settings['covariance_databases'],
+        executable_directory=settings['infernal_executable_directory'])
+
+
+def rna_agreement_options(summary, resources, settings):
+    """The request of the ``rna_structure_agreement`` tool as the model fills it out: one option per held scan that lists at least two
+    families and is not yet tested (``credit.offered_agreement_scans``), with the bound local resources. Only requests that pass the
+    library's check are offered. Empty while none can succeed."""
+    local = [name for name, kind in resources.items() if kind == 'local']
+    return [{'type': 'object', 'additionalProperties': False, 'required': ['name', 'scan_ref', 'resource_id'],
+             'properties': {'name': {'type': 'string', 'enum': [RNA_AGREEMENT_TOOL]}, 'scan_ref': {'type': 'string', 'enum': [scan]},
+                            'resource_id': {'type': 'string', 'enum': local}}}
+            for scan in offered_agreement_scans(summary)
+            if local and not check_rna_agreement_request({'scan_ref': scan, 'resource_id': local[0]}, summary, resources, settings)]
+
+
+def check_rna_agreement_request(request, summary, resources, settings):
+    """The things to fix in a request of ``rna_structure_agreement``: the library's one check
+    (``check_rna_structure_agreement_request``) over the scans the head holds (``rna_family_scan.rna_scan_inputs`` as
+    ``internal_summary`` reads it), the scans already tested, the bound resources and the programs of the settings."""
+    return check_rna_structure_agreement_request(
+        request, scans=summary['rna_scan_inputs'], tested=agreed_scans(summary), resources=resources,
+        executable_directory=settings['infernal_executable_directory'], python=settings['python_executable'])
+
+
 COMMISSIONS = {SLOT: structure_search_fields}
 COMMISSION_CHECKS = {SLOT: check_structure_search}
 
@@ -353,18 +473,23 @@ def selection_schema(summary, resources, settings):
     return {'type': 'object', 'additionalProperties': False, 'required': ['action'],
             'properties': {'action': {'anyOf': [child_option(slot, summary, resources)
                                                 for slot in offered_children(summary, resources)] + site_options(summary)
-                                  + partner_options(summary, resources, settings) + transplant_options(summary)}}}
+                                  + partner_options(summary, resources, settings) + transplant_options(summary)
+                                  + rna_scan_options(summary, resources, settings)
+                                  + rna_agreement_options(summary, resources, settings)}}}
 
 
 def offered_actions(summary, ctx):
     """The action types this decision offers, by the names a unit is recorded under (``ChildCall.slot``, ``ToolCall.name``): each
     child slot whose commission can be stated (``offered_children``, the function ``decide`` offers the model with) and
     ``site_correspondence``, ``partner_contacts`` and ``ligand_transplants`` while a request of it can succeed (``site_options``,
-    ``partner_options``, ``transplant_options``)."""
+    ``partner_options``, ``transplant_options``), ``rna_family_scan`` while an RNA target of the scope exists (its ceiling is 0 once
+    every such target is scanned) and ``rna_structure_agreement`` while a request of it can succeed (``rna_agreement_options``)."""
     resources = bound_resources(ctx)
     return (offered_children(summary, resources) + ([SITE_TOOL] if site_options(summary) else [])
             + ([PARTNER_TOOL] if partner_options(summary, resources, ctx.settings) else [])
-            + ([TRANSPLANT_TOOL] if transplant_options(summary) else []))
+            + ([TRANSPLANT_TOOL] if transplant_options(summary) else [])
+            + ([RNA_SCAN_TOOL] if rna_scan_offered(summary, resources, ctx.settings) else [])
+            + ([RNA_AGREEMENT_TOOL] if rna_agreement_options(summary, resources, ctx.settings) else []))
 
 
 def parked_jobs(summary):
@@ -427,9 +552,11 @@ def decide(summary, feedback, ctx):
                                                        'candidate_count')} for row in summary['graded_searches']],
         'structure_search_jobs': jobs_view(summary['structure_search_jobs'], ctx.clock.now),
         'candidates': [{'target_ref': ref, 'candidate_counts': row['candidate_counts'], 'leading_products': row['products'],
-                        'partners': row['partners']} for ref, row in summary['credit_table'].items()],
+                        'partners': row['partners'], 'rna_families': row['rna_families']}
+                       for ref, row in summary['credit_table'].items()],
         'site_tests': summary['site_test_rows'], 'partner_tests': summary['partner_test_rows'],
-        'transplant_tests': summary['transplant_test_rows'],
+        'transplant_tests': summary['transplant_test_rows'], 'rna_scan_tests': summary['rna_scan_test_rows'],
+        'rna_agreement_tests': summary['rna_agreement_test_rows'],
         'own_outcomes': [outcome_row(row) for row in summary['units']],
         'child_options': [{'slot': slot, 'binding_path': CHILD_SLOTS[slot], 'description': CHILD_DESCRIPTIONS[slot]}
                           for slot in offered],
@@ -437,6 +564,10 @@ def decide(summary, feedback, ctx):
                         + ([{'name': PARTNER_TOOL, 'description': PARTNER_DESCRIPTION}]
                            if partner_options(summary, resources, ctx.settings) else [])
                         + ([{'name': TRANSPLANT_TOOL, 'description': TRANSPLANT_DESCRIPTION}] if transplant_options(summary) else [])
+                        + ([{'name': RNA_SCAN_TOOL, 'description': RNA_SCAN_DESCRIPTION}]
+                           if rna_scan_options(summary, resources, ctx.settings) else [])
+                        + ([{'name': RNA_AGREEMENT_TOOL, 'description': RNA_AGREEMENT_DESCRIPTION}]
+                           if rna_agreement_options(summary, resources, ctx.settings) else [])
                         or None,
         'yield_table': summary['yield_table'], 'time_accounting': time_accounting(ctx.clock.progress_time),
         'feedback': feedback}
@@ -473,6 +604,18 @@ def action(response, summary, records, ctx):
             raise Rejected({'status': 'invalid', 'category': TRANSPLANT_TOOL + '_request',
                             'detail': {'request': commission, 'fix': problems}})
         return ToolCall(TRANSPLANT_TOOL, commission)
+    if slot == RNA_SCAN_TOOL:
+        problems = check_rna_scan_request(commission, summary, resources, ctx.settings)
+        if problems:
+            raise Rejected({'status': 'invalid', 'category': RNA_SCAN_TOOL + '_request',
+                            'detail': {'request': commission, 'fix': problems}})
+        return ToolCall(RNA_SCAN_TOOL, commission)
+    if slot == RNA_AGREEMENT_TOOL:
+        problems = check_rna_agreement_request(commission, summary, resources, ctx.settings)
+        if problems:
+            raise Rejected({'status': 'invalid', 'category': RNA_AGREEMENT_TOOL + '_request',
+                            'detail': {'request': commission, 'fix': problems}})
+        return ToolCall(RNA_AGREEMENT_TOOL, commission)
     problems = COMMISSION_CHECKS[slot](commission, summary, resources, records)
     if problems:
         raise Rejected({'status': 'invalid', 'category': slot + '_commission',
