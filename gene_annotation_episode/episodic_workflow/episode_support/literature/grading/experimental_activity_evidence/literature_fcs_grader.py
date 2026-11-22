@@ -41,12 +41,16 @@ Native values retained: every record quantity as given, plus kd_nM, constant_nam
 labelled_over_kd, particle_number, diffusion_ratio, expected_diffusion_ratio, mass_ratio, incubation_min,
 acquisition_total_s, concentration_count, concentration_low_over_constant, concentration_high_over_constant,
 the recorded facts and refs named above, preparations, spread_kind, fit_model, diffusion_model and readout_signal.
+The stated yes/no result (fact binding_detected) is kept as native 'interaction' ('detected', 'not_detected' or None),
+with the spans that state it ('interaction_refs') and its quote support ('interaction_support'); the converter hands it to
+the sheet as the experiment's stated result when the source gave no binding constant.
 """
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_fcs_criteria import FCS_CRITERIA, MIN_PER_UNIT, NM_PER_UNIT, S_PER_UNIT, US_PER_UNIT, CUBE_ROOT_EXPONENT, PARTICLES_PER_NM_PER_FL
 
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
 VERSION = 'a105_fcs_grade_v1'
+INTERACTION = {'yes': 'detected', 'no': 'not_detected'}   # the stated yes/no result of the fact binding_detected
 CRITERIA = tuple(criterion['id'] for criterion in FCS_CRITERIA)
 CONSTANTS = ('kd',)       # the reported constant of a series: only a KD is a binding constant
 SINGLE_COLOUR_READOUTS = ('diffusion_time', 'diffusion_coefficient', 'brightness')
@@ -327,6 +331,9 @@ def grade_fcs(record):
     constant_name = next((name for name in CONSTANTS if nm[name] is not None), None)
     ratio, _ = _diffusion_ratio(record)
     native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'diffusion_model': record['diffusion_model'], 'readout_signal': record['readout_signal'], 'choice_support': dict(record['choice_support']), 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'concentration_series': dict(record['concentration_series']), 'kd_nM': nm['kd'], 'constant_name': constant_name, 'constant_nM': None if constant_name is None else nm[constant_name], 'labelled_nM': _nm(record, 'labelled_concentration'), 'labelled_over_kd': None, 'particle_number': _value(record, 'particle_number'), 'diffusion_ratio': ratio, 'expected_diffusion_ratio': None, 'mass_ratio': _value(record, 'mass_ratio'), 'incubation_min': _minutes(record, 'incubation_time'), 'measurement_s': _seconds(record, 'measurement_time'), 'acquisition_total_s': None, 'concentration_count': None, 'concentration_low_over_constant': None, 'concentration_high_over_constant': None, 'diffusion_refs': [], 'free_diffusion_time_us': _scaled(record, 'free_diffusion_time', US_PER_UNIT), 'free_diffusion_time_spread_us': _scaled(record, 'free_diffusion_time_spread', US_PER_UNIT), 'diffusion_time_scatter': None, 'brightness_kHz': _value(record, 'brightness'), 'particle_number_used': None, 'particle_number_derived': False, 'count_rate_kHz': None, 'mass_consistency_refs': [], 'fraction_bound_maximum': None, 'fraction_bound_maximum_refs': [], 'labelled_range_refs': [], 'tight_binding_analysis': None, 'labelled_over_kd_refs': [], 'concentration_count_refs': [], 'concentration_span_refs': [], 'incubation_refs': [], 'measurement_repeats_given': None, 'acquisition_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': []}
+    stated = record['facts']['binding_detected']      # the experiment's stated yes/no result: a fact kept for the sheet, read by no criterion
+    known = stated['answer'] in INTERACTION
+    native.update({'interaction': INTERACTION.get(stated['answer']), 'interaction_refs': list(stated['source_refs']) if known else [], 'interaction_support': stated['support'] if known else None})
     outcomes = {name: EVALUATORS[name](record, native) for name in CRITERIA}
     native['support'] = criterion_supports(record, FCS_CRITERIA)      # kept for the sheet: the grader does not judge it
     return {'version': VERSION, 'experiment_type': 'fcs', 'experiment_ref': record['experiment_ref'], 'criteria': {name: {'status': o['status'], 'support_refs': o['support_refs']} for name, o in outcomes.items()}, 'reasons': {name: o['reason'] for name, o in outcomes.items()}, 'native': native}

@@ -69,6 +69,7 @@ MEANING = {
     'residuals_reported': 'Whether the passage says the residuals of the fit are reported.',
     'single_estimate_method': 'Whether the passage says only one method (kinetic or steady-state) was used to estimate the KD.',
     'kd_analysis': 'How the passage says the reported KD was obtained: kinetic_fit when it says the KD came from fitting the association and dissociation phases of the sensorgrams (the rate constants), steady_state_fit when it says it came from the equilibrium (steady-state) response plotted against concentration. The words "equilibrium dissociation constant" only name the constant and do not state the method; a passage that does not say how the KD was obtained does not state this.',
+    'binding_detected': 'The yes/no result of this experiment as the passage states it: yes when it says the experiment showed that the two partners bind (a binding response, binding seen in the sensorgrams, a reported binding constant, or the plain statement that one binds the other as measured by SPR); no when it says the experiment showed no binding (no response above the reference, "did not bind", "no detectable binding"). A passage that only describes how the experiment was done, or names the method without its result, does not state this.',
 }
 
 

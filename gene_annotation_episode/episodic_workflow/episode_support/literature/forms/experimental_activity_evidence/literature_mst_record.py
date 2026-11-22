@@ -59,6 +59,9 @@ label_type     'covalent_nhs_dye' (a dye attached to lysines by an NHS ester), '
                (the intrinsic tryptophan fluorescence of the label-free instrument), 'other' or None.
 facts          name -> {'answer', 'source_refs'}. Names and answer sets in FACTS below. No fact holds text: a
                controlled answer only.
+               binding_detected is the experiment's stated yes/no result (the passage
+               says the two partners bound, or says they did not); no criterion reads
+               it. It lets a result stated without a constant count (owner, 2026-11-22).
 choice_support name -> support of each plain choice field (the choice fields of the extraction: assay_format, spread_kind, fit_model,
                readout_signal, capillary_type, label_type), None when the field is not stated.
 spans          source_ref -> {'locator', 'quote'}: the quoted source span behind each reference the record cites.
@@ -98,7 +101,7 @@ READOUT_SIGNALS = ('thermophoresis', 't_jump', 'initial_fluorescence')
 CAPILLARY_TYPES = ('standard', 'premium', 'hydrophilic', 'other')
 LABEL_TYPES = ('covalent_nhs_dye', 'his_tag_nta_dye', 'fluorescent_protein_fusion', 'label_free_intrinsic_fluorescence', 'other')
 YES_NO = ('yes', 'no', 'unknown', 'not_applicable')
-FACTS = {'initial_fluorescence_checked': YES_NO, 'initial_fluorescence_consistent': YES_NO, 'fluorescence_intensity_in_range': YES_NO, 'aggregation_or_adsorption_checked': YES_NO, 'detergent_or_carrier_in_buffer': YES_NO, 'labelled_partner_at_or_below_kd': YES_NO, 'tight_binding_considered': YES_NO, 'equilibrium_reached': YES_NO, 'labelling_does_not_alter_binding': YES_NO, 'nonspecific_binding_checked': YES_NO, 'independent_titrations': YES_NO, 'single_estimate_method': YES_NO}
+FACTS = {'initial_fluorescence_checked': YES_NO, 'initial_fluorescence_consistent': YES_NO, 'fluorescence_intensity_in_range': YES_NO, 'aggregation_or_adsorption_checked': YES_NO, 'detergent_or_carrier_in_buffer': YES_NO, 'labelled_partner_at_or_below_kd': YES_NO, 'tight_binding_considered': YES_NO, 'equilibrium_reached': YES_NO, 'labelling_does_not_alter_binding': YES_NO, 'nonspecific_binding_checked': YES_NO, 'independent_titrations': YES_NO, 'single_estimate_method': YES_NO, 'binding_detected': YES_NO}
 
 CONCENTRATION_UNITS = ('pM', 'nM', 'uM', 'mM')
 # The unit vocabulary of each quantity (and of the concentration series): the units a record may carry.

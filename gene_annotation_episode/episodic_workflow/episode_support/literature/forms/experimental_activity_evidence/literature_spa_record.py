@@ -75,6 +75,8 @@ spread_kind    'standard_error', 'standard_deviation', 'confidence_interval' or 
 fit_model      'one_site' (a one-site binding model), 'two_site', 'hill' (a model with a free Hill slope), 'competitive_binding' (a one-site
                competition model, for a competition curve), 'other' or None.
 facts          name -> {'answer', 'source_refs'}. Names and answer sets in FACTS below. No fact holds text: a controlled answer only.
+               binding_detected is the experiment's stated yes/no result (the passage says the two partners bound, or says
+               they did not); no criterion reads it. It lets a result stated without a constant count (owner, 2026-11-22).
 choice_support name -> support of each plain choice field (assay_format, radioligand_isotope, bead_type, capture_method, preparation_type,
                counter, spread_kind, fit_model), None when the choice is not stated.
 spans          source_ref -> {'locator', 'quote'}: the quoted source span behind each reference the record cites.
@@ -116,7 +118,7 @@ COUNTERS = ('microbeta', 'topcount', 'other')
 SPREAD_KINDS = ('standard_error', 'standard_deviation', 'confidence_interval')
 FIT_MODELS = ('one_site', 'two_site', 'hill', 'competitive_binding', 'other')
 YES_NO = ('yes', 'no', 'unknown', 'not_applicable')
-FACTS = {'homogeneous_no_wash_format': YES_NO, 'nonspecific_binding_determined': YES_NO, 'nonspecific_ligand_is_radioligand': YES_NO, 'nonproximity_signal_checked': YES_NO, 'bead_only_control_done': YES_NO, 'equilibrium_reached': YES_NO, 'ligand_depletion_checked': YES_NO, 'quench_interference_checked': YES_NO, 'bead_settling_controlled': YES_NO, 'radioligand_purity_checked': YES_NO, 'nonlinear_fit_used': YES_NO, 'cheng_prusoff_applied_with_own_kd': YES_NO, 'independent_experiments': YES_NO, 'single_estimate_method': YES_NO}
+FACTS = {'homogeneous_no_wash_format': YES_NO, 'nonspecific_binding_determined': YES_NO, 'nonspecific_ligand_is_radioligand': YES_NO, 'nonproximity_signal_checked': YES_NO, 'bead_only_control_done': YES_NO, 'equilibrium_reached': YES_NO, 'ligand_depletion_checked': YES_NO, 'quench_interference_checked': YES_NO, 'bead_settling_controlled': YES_NO, 'radioligand_purity_checked': YES_NO, 'nonlinear_fit_used': YES_NO, 'cheng_prusoff_applied_with_own_kd': YES_NO, 'independent_experiments': YES_NO, 'single_estimate_method': YES_NO, 'binding_detected': YES_NO}
 
 CONCENTRATION_UNITS = ('pM', 'nM', 'uM', 'mM')
 TIME_UNITS = ('s', 'min', 'h')

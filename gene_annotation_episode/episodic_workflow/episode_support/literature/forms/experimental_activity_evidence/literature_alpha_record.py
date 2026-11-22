@@ -66,7 +66,10 @@ fit_model      'one_site' (a one-site binding model), 'quadratic' (a quadratic m
                titrated partner), 'four_parameter_logistic', 'bell_shaped_hook' (a model of the curve that falls at a high
                concentration), 'competitive_binding', 'other' or None.
 facts          name -> {'answer', 'source_refs'}. Names and answer sets in FACTS below. No fact holds text: a
-               controlled answer only.
+               controlled answer only. binding_detected is the experiment's stated
+               yes/no result (the passage says the two partners bound, or says
+               they did not); no criterion reads it. It lets a result that is
+               stated without a constant count (owner, 2026-11-22).
 spans          source_ref -> {'locator', 'quote'}: the quoted source span behind each reference the record cites.
 choice_support name -> 'direct', 'implied', 'about_something_else' or None, for each choice field (CHOICE_FIELDS): how well the quote of that
                stated choice supports it; None when the choice is not stated.
@@ -94,7 +97,7 @@ BEAD_COATINGS = ('streptavidin', 'nickel_chelate', 'anti_tag_antibody', 'protein
 SPREAD_KINDS = ('standard_error', 'standard_deviation', 'confidence_interval')
 FIT_MODELS = ('one_site', 'quadratic', 'four_parameter_logistic', 'bell_shaped_hook', 'competitive_binding', 'other')
 YES_NO = ('yes', 'no', 'unknown', 'not_applicable')
-FACTS = {'counter_screen_done': YES_NO, 'hook_effect_handled': YES_NO, 'partner_concentration_below_kd': YES_NO, 'signal_in_linear_range': YES_NO, 'equilibrium_reached': YES_NO, 'nonspecific_binding_checked': YES_NO, 'capture_does_not_alter_binding': YES_NO, 'light_protected': YES_NO, 'avidity_excluded': YES_NO, 'independent_experiments': YES_NO, 'single_estimate_method': YES_NO}
+FACTS = {'counter_screen_done': YES_NO, 'hook_effect_handled': YES_NO, 'partner_concentration_below_kd': YES_NO, 'signal_in_linear_range': YES_NO, 'equilibrium_reached': YES_NO, 'nonspecific_binding_checked': YES_NO, 'capture_does_not_alter_binding': YES_NO, 'light_protected': YES_NO, 'avidity_excluded': YES_NO, 'independent_experiments': YES_NO, 'single_estimate_method': YES_NO, 'binding_detected': YES_NO}
 
 
 def _checked(support):

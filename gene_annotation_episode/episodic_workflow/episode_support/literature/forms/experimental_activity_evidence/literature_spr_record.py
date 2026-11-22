@@ -33,7 +33,10 @@ spread_kind    'standard_error', 'standard_deviation', 'confidence_interval'
 fit_model      '1:1_langmuir', 'heterogeneous_ligand', 'bivalent_analyte',
                'two_state', 'steady_state_affinity', 'other' or None.
 facts          name -> {'answer', 'source_refs'}. Names and answer sets in
-               FACTS below.
+               FACTS below. binding_detected is the experiment's stated
+               yes/no result (the passage says the two partners bound, or says
+               they did not); no criterion reads it. It lets a result that
+               is stated without a constant count (owner, 2026-11-22).
 choice_support name -> support of each plain choice field (spread_kind, fit_model), None when the field is not stated.
 spans          source_ref -> {'locator', 'quote'}: the quoted source span
                behind each reference the record cites.
@@ -55,7 +58,7 @@ PREPARATION_KEYS = ('analyte_preparation_ref', 'immobilized_preparation_ref', 's
 SPREAD_KINDS = ('standard_error', 'standard_deviation', 'confidence_interval')
 FIT_MODELS = ('1:1_langmuir', 'heterogeneous_ligand', 'bivalent_analyte', 'two_state', 'steady_state_affinity', 'other')
 YES_NO = ('yes', 'no', 'unknown', 'not_applicable')
-FACTS = {'reference_surface': YES_NO, 'double_referencing': YES_NO, 'mass_transport': ('checked_not_limited', 'checked_limited', 'not_checked', 'unknown'), 'baseline_drift': YES_NO, 'regeneration': YES_NO, 'independent_surfaces': YES_NO, 'immobilized_activity': YES_NO, 'analyte_bivalent_or_oligomeric': YES_NO, 'residuals_reported': YES_NO, 'single_estimate_method': YES_NO, 'kd_analysis': ('kinetic_fit', 'steady_state_fit', 'unknown')}
+FACTS = {'reference_surface': YES_NO, 'double_referencing': YES_NO, 'mass_transport': ('checked_not_limited', 'checked_limited', 'not_checked', 'unknown'), 'baseline_drift': YES_NO, 'regeneration': YES_NO, 'independent_surfaces': YES_NO, 'immobilized_activity': YES_NO, 'analyte_bivalent_or_oligomeric': YES_NO, 'residuals_reported': YES_NO, 'single_estimate_method': YES_NO, 'kd_analysis': ('kinetic_fit', 'steady_state_fit', 'unknown'), 'binding_detected': YES_NO}
 
 CONCENTRATION_UNITS = ('nM', 'uM', 'mM')
 # The unit vocabulary of each quantity (and of the concentration series): the units a record may carry.

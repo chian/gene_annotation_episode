@@ -39,6 +39,9 @@ chip_type      'planar_polycarboxylate', 'polycarboxylate_hydrogel', 'streptavid
                judges it.
 facts          name -> {'answer', 'source_refs'}. Names and answer sets in FACTS below. No fact holds text: a
                controlled answer only.
+               binding_detected is the experiment's stated yes/no result (the passage
+               says the two partners bound, or says they did not); no criterion reads
+               it. It lets a result stated without a constant count (owner, 2026-11-22).
 choice_support name -> support of each plain choice field (spread_kind, fit_model, chip_type), None when the field is not
                stated.
 spans          source_ref -> {'locator', 'quote'}: the quoted source span behind each reference the record cites.
@@ -53,7 +56,7 @@ SPREAD_KINDS = ('standard_error', 'standard_deviation', 'confidence_interval')
 FIT_MODELS = ('1:1', 'bivalent_analyte', 'heterogeneous_ligand', 'two_state', 'steady_state', 'other')
 CHIP_TYPES = ('planar_polycarboxylate', 'polycarboxylate_hydrogel', 'streptavidin', 'nta', 'other')
 YES_NO = ('yes', 'no', 'unknown', 'not_applicable')
-FACTS = {'reference_channel_subtracted': YES_NO, 'double_referenced': YES_NO, 'bulk_solvent_corrected': YES_NO, 'baseline_stable': YES_NO, 'regeneration': YES_NO, 'independent_channels_or_chips': YES_NO, 'immobilized_partner_active': YES_NO, 'analyte_bivalent_or_oligomeric': YES_NO, 'mass_transport_checked': YES_NO, 'nonspecific_binding_checked': YES_NO, 'single_estimate_method': YES_NO, 'repeated_pulse_kinetics_used': YES_NO}
+FACTS = {'reference_channel_subtracted': YES_NO, 'double_referenced': YES_NO, 'bulk_solvent_corrected': YES_NO, 'baseline_stable': YES_NO, 'regeneration': YES_NO, 'independent_channels_or_chips': YES_NO, 'immobilized_partner_active': YES_NO, 'analyte_bivalent_or_oligomeric': YES_NO, 'mass_transport_checked': YES_NO, 'nonspecific_binding_checked': YES_NO, 'single_estimate_method': YES_NO, 'repeated_pulse_kinetics_used': YES_NO, 'binding_detected': YES_NO}
 
 CONCENTRATION_UNITS = ('pM', 'nM', 'uM', 'mM')
 MASS_UNITS = ('pg/mm2', 'ng/mm2', 'RU')

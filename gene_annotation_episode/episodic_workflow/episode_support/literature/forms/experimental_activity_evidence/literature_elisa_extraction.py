@@ -84,6 +84,7 @@ MEANING = {
     'detection_does_not_interfere': 'Whether the passage says the detection reagent (the antibody or the conjugate) does not interfere with the binding, or does not bind the coated partner or the plate on its own (yes), or says it does (no).',
     'independent_experiments': 'Whether the passage says the replicates were independent experiments (separate plates, dilution series or days).',
     'single_estimate_method': 'Whether the passage itself says that the affinity was estimated only by this plate assay (yes), or says that another method was also used for it (no). A passage that merely reports one constant does not say this: leave it unavailable.',
+    'binding_detected': 'The yes/no result of this experiment as the passage states it: yes when it says the experiment showed that the two partners bind (a signal above the blank or control wells that rises with the titrated partner, a reported binding constant, or the plain statement that one binds the other as measured by ELISA); no when it says the experiment showed no binding (no signal above the blank or control wells, "did not bind", "no detectable binding"). A passage that only describes how the experiment was done, or names the method without its result, does not state this.',
 }
 
 

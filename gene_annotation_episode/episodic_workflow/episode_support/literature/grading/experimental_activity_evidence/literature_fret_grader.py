@@ -37,12 +37,16 @@ partner), labelled_over_kd, ratio_fold, delay_us, integration_us, incubation_min
 concentration_count, concentration_low_over_constant,
 concentration_high_over_constant, preparations, assay_format, spread_kind,
 fit_model, plate_type, donor_acceptor_pair, donor_lanthanide, series_format, z_prime and koff_per_s.
+The stated yes/no result (fact binding_detected) is kept as native 'interaction' ('detected', 'not_detected' or None),
+with the spans that state it ('interaction_refs') and its quote support ('interaction_support'); the converter hands it to
+the sheet as the experiment's stated result when the source gave no binding constant.
 """
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_fret_criteria import FRET_CRITERIA, MIN_PER_UNIT, NM_PER_UNIT, PER_S_PER_UNIT, US_PER_UNIT
 
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
 VERSION = 'a105_fret_grade_v1'
+INTERACTION = {'yes': 'detected', 'no': 'not_detected'}   # the stated yes/no result of the fact binding_detected
 CRITERIA = tuple(criterion['id'] for criterion in FRET_CRITERIA)
 CONSTANTS = ('kd', 'ki', 'ec50', 'ic50')       # the order in which a series' reported constant is taken
 SHORT_LIVED_PAIRS = ('fluorescent_protein_pair', 'organic_dye_pair')
@@ -270,5 +274,8 @@ def grade_fret(record):
     labelled = [value for value in (_nm(record, 'donor_concentration'), _nm(record, 'acceptor_concentration')) if value is not None]
     native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'assay_format': record['assay_format'], 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'plate_type': record['plate_type'], 'donor_acceptor_pair': record['donor_acceptor_pair'], 'donor_lanthanide': record['donor_lanthanide'], 'series_format': record['series_format'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'concentration_series': dict(record['concentration_series']), 'kd_nM': nm['kd'], 'ki_nM': nm['ki'], 'ec50_nM': nm['ec50'], 'ic50_nM': nm['ic50'], 'constant_name': constant_name, 'constant_nM': None if constant_name is None else nm[constant_name], 'labelled_nM': min(labelled) if labelled else None, 'labelled_over_kd': None, 'ratio_fold': None, 'z_prime': None, 'koff_per_s': _per_s(record, 'koff'), 'delay_us': _us(record, 'delay_time'), 'integration_us': _us(record, 'integration_time'), 'incubation_min': _minutes(record, 'incubation_time'), 'concentration_count': None, 'concentration_low_over_constant': None, 'concentration_high_over_constant': None, 'window_refs': [], 'gating_refs': [], 'labelled_refs': [], 'tight_binding_handled': None, 'series_refs': [], 'incubation_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': [], 'estimate_fold': None, 'estimate_refs': []}
     native['support'] = criterion_supports(record, FRET_CRITERIA)      # kept for the sheet: criterion -> supports of the stated fields it reads; the grader does not judge them
+    stated = record['facts']['binding_detected']      # the experiment's stated yes/no result: a fact kept for the sheet, read by no criterion
+    known = stated['answer'] in INTERACTION
+    native.update({'interaction': INTERACTION.get(stated['answer']), 'interaction_refs': list(stated['source_refs']) if known else [], 'interaction_support': stated['support'] if known else None})
     outcomes = {name: EVALUATORS[name](record, native) for name in CRITERIA}
     return {'version': VERSION, 'experiment_type': 'fret', 'experiment_ref': record['experiment_ref'], 'criteria': {name: {'status': o['status'], 'support_refs': o['support_refs']} for name, o in outcomes.items()}, 'reasons': {name: o['reason'] for name, o in outcomes.items()}, 'native': native}

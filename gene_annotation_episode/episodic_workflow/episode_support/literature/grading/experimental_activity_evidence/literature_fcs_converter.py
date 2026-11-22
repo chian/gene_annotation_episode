@@ -12,6 +12,11 @@ Quantities filled
 -----------------
 effect            the reported KD in nM (point operand; the measurement key is
                   fcs_kd). No KD leaves effect null.
+                  With no effect operand the result is the experiment's stated yes/no
+                  result (fact binding_detected): 'qualitative_effect' carries its
+                  statement (interaction_detected, interaction_not_detected, or
+                  interaction_not_stated when the passage states neither) and the spans
+                  that state it.
 effect_variance   variance of that constant, nM_squared, only when the
                   source's spread (kd_spread) allows it: standard_error -> se^2;
                   standard_deviation -> sd^2 / n, and only when the replicates
@@ -144,6 +149,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
 VERSION = 'a105_fcs_converted_v1'
+STATEMENTS = {'detected': 'interaction_detected', 'not_detected': 'interaction_not_detected', None: 'interaction_not_stated'}
 CRITERIA_MAP = {'binding_controls': ('volume_calibration', 'triplet_state', 'brightness', 'crosstalk', 'background', 'aggregates', 'photobleaching', 'surface_adsorption', 'labelling', 'specificity_control'), 'binding_regime': ('saturation', 'labelled_range', 'labelled_over_kd', 'concentration_series', 'equilibrium'), 'binding_parameter_definition': ('diffusion_model', 'fit_model'), 'calibration_applicability': ('diffusion_change', 'mass_consistency', 'acquisition'), 'sampling_basis': ('replicates',)}
 MIN_DIFFUSION_RATIO = 1.3  # EXPERT_REVIEW: smallest slow-over-fast diffusion ratio of the complex and the free labelled partner that can be read as a fraction bound; diffusion times of repeated measurements scatter by about ten percent, so a change below about thirty percent cannot be told from the scatter (with nothing fixed a two-component fit needs about 1.6, Meseth et al. 1999, Biophys J 76:1619; the free time fixed, judged by diffusion_model, lowers it).
 TYPICAL_TIME_SCATTER = 0.10  # EXPERT_REVIEW: the relative scatter of repeated diffusion times (about ten percent) that MIN_DIFFUSION_RATIO was reasoned with. Named here (2026-11-21, grader gap) so that the paper's own stated scatter of the free diffusion time can scale the ratio the same way: the error of a fraction bound is about scatter / (ratio - 1), so the ratio that keeps the committed error is 1 + (MIN_DIFFUSION_RATIO - 1) * scatter / TYPICAL_TIME_SCATTER. The stated scatter can only raise the requirement, never lower it below the typical one: a few repeats on one sample understate the scatter between preparations.
@@ -437,4 +443,11 @@ def convert_fcs(graded):
     extraction = {'version': INPUT_VERSION, 'assay_type': 'ligand_binding', 'assertion_ref': native['assertion_ref'], 'quantity_kind': 'binding_parameter', 'quantities': quantities, 'interpretations': interpretations, 'prediction_model': None}
     preparations = native['preparations']
     dependence = {'analyte_preparation_ref': preparations['titrant_preparation_ref'], 'immobilized_preparation_ref': preparations['fixed_partner_preparation_ref'], 'surface_ref': None, 'dataset_ref': preparations['dataset_ref']}
-    return {'version': VERSION, 'experiment_type': 'fcs', 'experiment_ref': ref, 'source_ref': native['source_ref'], 'dependence': dependence, 'extraction': extraction, 'sheet': grade_assay(extraction), 'null_components': null_components, 'direction_field_support': native['quantities']['kd']['support'] if has_effect else None}
+    converted = {'version': VERSION, 'experiment_type': 'fcs', 'experiment_ref': ref, 'source_ref': native['source_ref'], 'dependence': dependence, 'extraction': extraction, 'sheet': grade_assay(extraction), 'null_components': null_components, 'direction_field_support': None}
+    if quantities['effect'] is None:      # no effect operand: the experiment's stated yes/no result stands (owner, 2026-11-22), scored like any stated result (literature_direction, the qualitative path)
+        converted['qualitative_effect'] = {'statement': STATEMENTS[native['interaction']], 'support_refs': list(native['interaction_refs'])}
+        if native['interaction'] is not None:
+            converted['direction_field_support'] = native['interaction_support']      # the support class of the fact binding_detected
+    else:
+        converted['direction_field_support'] = native['quantities']['kd']['support']
+    return converted

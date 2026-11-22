@@ -63,6 +63,7 @@ MEANING = {
     'mass_transport_considered': 'Whether the passage says mass-transport limitation was considered.',
     'nonspecific_binding_checked': 'Whether the passage says non-specific binding of the analyte to a blank sensor (without the loaded partner) was checked.',
     'single_estimate_method': 'Whether the passage itself says that only one method (kinetic or steady-state) was used to estimate the KD (yes), or says that both were used (no). A passage that merely reports one KD does not say this: leave it unavailable.',
+    'binding_detected': 'The yes/no result of this experiment as the passage states it: yes when it says the experiment showed that the two partners bind (a binding response on the sensor, a reported binding constant, or the plain statement that one binds the other as measured by BLI); no when it says the experiment showed no binding (no response above the reference sensor, "did not bind", "no detectable binding"). A passage that only describes how the experiment was done, or names the method without its result, does not state this.',
 }
 
 

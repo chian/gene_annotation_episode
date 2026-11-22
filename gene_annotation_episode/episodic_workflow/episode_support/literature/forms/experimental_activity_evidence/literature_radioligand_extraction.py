@@ -86,6 +86,7 @@ MEANING = {
     'cheng_prusoff_applied_with_own_kd': 'Whether the passage says the Ki was calculated from the IC50 with the Cheng-Prusoff equation using the KD of the same radioligand on the same preparation (yes), or says it was not, for example that the IC50 is reported without correction as the Ki or that the KD of another radioligand or preparation was used (no). A passage that only names the equation does not say which KD was used: leave it unavailable.',
     'independent_experiments': 'Whether the passage says the replicates were independent experiments (separate experiments, days or preparations).',
     'single_estimate_method': 'Whether the passage itself says that the affinity was estimated only by this radioligand experiment (yes), or says that another method was also used for it (no). A passage that merely reports one constant does not say this: leave it unavailable.',
+    'binding_detected': 'The yes/no result of this experiment as the passage states it: yes when it says the experiment showed that the two partners bind (specific binding of the radioligand above nonspecific binding, a reported binding constant, or the plain statement that one binds the other as measured by a radioligand assay); no when it says the experiment showed no binding (no specific binding above the nonspecific level, "did not bind", "no detectable binding"). A passage that only describes how the experiment was done, or names the method without its result, does not state this.',
 }
 
 

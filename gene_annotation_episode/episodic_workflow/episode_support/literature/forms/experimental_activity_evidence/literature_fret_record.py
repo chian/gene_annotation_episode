@@ -60,6 +60,8 @@ donor_acceptor_pair
                (for example Cy3 and Cy5, or fluorescein and rhodamine), 'other' or None.
 facts          name -> {'answer', 'source_refs'}. Names and answer sets in FACTS below. No fact holds text: a
                controlled answer only.
+               binding_detected is the experiment's stated yes/no result (the passage says the two partners bound, or says
+               they did not); no criterion reads it. It lets a result that is stated without a constant count (owner, 2026-11-22).
 choice_support name -> support of each plain choice field (assay_format, series_format, spread_kind, fit_model, plate_type, donor_lanthanide, donor_acceptor_pair),
                None when the field is not stated.
 spans          source_ref -> {'locator', 'quote'}: the quoted source span behind each reference the record cites.
@@ -101,7 +103,7 @@ LANTHANIDES = ('terbium', 'europium', 'other')
 CHOICES = ('assay_format', 'series_format', 'spread_kind', 'fit_model', 'plate_type', 'donor_lanthanide', 'donor_acceptor_pair')
 PAIRS = ('lanthanide_with_organic_acceptor', 'fluorescent_protein_pair', 'organic_dye_pair', 'other')
 YES_NO = ('yes', 'no', 'unknown', 'not_applicable')
-FACTS = {'time_resolved_read': YES_NO, 'ratiometric_readout_used': YES_NO, 'donor_only_control_measured': YES_NO, 'acceptor_only_control_measured': YES_NO, 'crosstalk_corrected': YES_NO, 'labelled_partner_at_or_below_kd': YES_NO, 'tight_binding_considered': YES_NO, 'equilibrium_reached': YES_NO, 'indirect_labelling_used': YES_NO, 'labelling_does_not_alter_binding': YES_NO, 'compound_interference_checked': YES_NO, 'nonspecific_binding_checked': YES_NO, 'unlabelled_competitor_displaces': YES_NO, 'independent_titrations': YES_NO, 'single_estimate_method': YES_NO}
+FACTS = {'time_resolved_read': YES_NO, 'ratiometric_readout_used': YES_NO, 'donor_only_control_measured': YES_NO, 'acceptor_only_control_measured': YES_NO, 'crosstalk_corrected': YES_NO, 'labelled_partner_at_or_below_kd': YES_NO, 'tight_binding_considered': YES_NO, 'equilibrium_reached': YES_NO, 'indirect_labelling_used': YES_NO, 'labelling_does_not_alter_binding': YES_NO, 'compound_interference_checked': YES_NO, 'nonspecific_binding_checked': YES_NO, 'unlabelled_competitor_displaces': YES_NO, 'independent_titrations': YES_NO, 'single_estimate_method': YES_NO, 'binding_detected': YES_NO}
 
 CONCENTRATION_UNITS = ('pM', 'nM', 'uM', 'mM')
 # The unit vocabulary of each quantity (and of the concentration series): the units a record may carry.

@@ -79,6 +79,7 @@ MEANING = {
     'unlabelled_competitor_displaces': 'Whether the passage says an excess of unlabelled partner or ligand displaced the labelled partner (reduced the signal) (yes), or did not (no).',
     'independent_titrations': 'Whether the passage says the replicates were independent titrations (separate dilution series or preparations).',
     'single_estimate_method': 'Whether the passage itself says that only one method (direct titration or competition) was used to estimate the affinity (yes), or says that both were used (no). A passage that merely reports one constant does not say this: leave it unavailable.',
+    'binding_detected': 'The yes/no result of this experiment as the passage states it: yes when it says the experiment showed that the two partners bind (an energy-transfer signal between the labelled partners, a reported binding constant, or the plain statement that one binds the other as measured by FRET); no when it says the experiment showed no binding (no energy-transfer signal, "did not bind", "no detectable binding"). A FRET measurement that reports only on the shape or state of one molecule (both labels on the same protein) states nothing about binding of two partners and does not state this. A passage that only describes how the experiment was done, or names the method without its result, does not state this.',
 }
 
 

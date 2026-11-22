@@ -47,6 +47,8 @@ plate_type     'black_non_binding', 'black_standard', 'cuvette', 'other' or None
                kept in the record for the reviewer; no criterion judges it.
 facts          name -> {'answer', 'source_refs'}. Names and answer sets in FACTS below. No fact holds text: a
                controlled answer only.
+               binding_detected is the experiment's stated yes/no result (the passage says the two partners bound, or says
+               they did not); no criterion reads it. It lets a result that is stated without a constant count (owner, 2026-11-22).
 choice_support name -> support of each plain choice field (assay_format, spread_kind, fit_model, plate_type), None when the
                field is not stated.
 spans          source_ref -> {'locator', 'quote'}: the quoted source span behind each reference the record cites.
@@ -87,7 +89,7 @@ INTENSITY_DIRECTIONS = ('increase', 'decrease')
 SERIES_KINDS = ('titrant', 'competitor')
 CHOICES = ('assay_format', 'spread_kind', 'fit_model', 'plate_type', 'intensity_change_direction', 'series_kind')
 YES_NO = ('yes', 'no', 'unknown', 'not_applicable')
-FACTS = {'tracer_at_or_below_kd': YES_NO, 'equilibrium_reached': YES_NO, 'tight_binding_considered': YES_NO, 'intensity_change_checked': YES_NO, 'free_probe_baseline_measured': YES_NO, 'nonspecific_binding_checked': YES_NO, 'unlabelled_competitor_displaces': YES_NO, 'surface_adsorption_prevented': YES_NO, 'independent_titrations': YES_NO, 'single_estimate_method': YES_NO}
+FACTS = {'tracer_at_or_below_kd': YES_NO, 'equilibrium_reached': YES_NO, 'tight_binding_considered': YES_NO, 'intensity_change_checked': YES_NO, 'free_probe_baseline_measured': YES_NO, 'nonspecific_binding_checked': YES_NO, 'unlabelled_competitor_displaces': YES_NO, 'surface_adsorption_prevented': YES_NO, 'independent_titrations': YES_NO, 'single_estimate_method': YES_NO, 'binding_detected': YES_NO}
 
 CONCENTRATION_UNITS = ('pM', 'nM', 'uM', 'mM')
 SIGNAL_UNITS = ('mP', 'r')

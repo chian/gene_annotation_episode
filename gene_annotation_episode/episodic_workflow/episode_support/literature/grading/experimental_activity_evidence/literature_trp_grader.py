@@ -30,12 +30,16 @@ constant Ksv is a quenching efficiency, not a binding constant, and is kept apar
 Native values retained: every record quantity as given, plus kd_nM, constant_name, constant_nM, protein_nM,
 protein_over_kd, excitation_nm, incubation_min, concentration_count, concentration_low_over_constant,
 concentration_high_over_constant, preparations, spread_kind, fit_model, change_direction and emission_shift_direction.
+The stated yes/no result (fact binding_detected) is kept as native 'interaction' ('detected', 'not_detected' or None),
+with the spans that state it ('interaction_refs') and its quote support ('interaction_support'); the converter hands it to
+the sheet as the experiment's stated result when the source gave no binding constant.
 """
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_trp_criteria import MIN_PER_UNIT, NM_PER_UNIT, TRP_CRITERIA
 
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
 VERSION = 'a105_trp_grade_v1'
+INTERACTION = {'yes': 'detected', 'no': 'not_detected'}   # the stated yes/no result of the fact binding_detected
 CRITERIA = tuple(criterion['id'] for criterion in TRP_CRITERIA)
 CONSTANTS = ('kd',)       # the reported constant of a series: only a KD is a binding constant
 
@@ -252,5 +256,8 @@ def grade_trp(record):
     constant_name = next((name for name in CONSTANTS if nm[name] is not None), None)
     native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'change_direction': record['change_direction'], 'emission_shift_direction': record['emission_shift_direction'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'concentration_series': dict(record['concentration_series']), 'kd_nM': nm['kd'], 'constant_name': constant_name, 'constant_nM': None if constant_name is None else nm[constant_name], 'protein_nM': _nm(record, 'protein_concentration'), 'protein_over_kd': None, 'excitation_nm': _value(record, 'excitation_wavelength'), 'incubation_min': _minutes(record, 'incubation_time'), 'concentration_count': None, 'concentration_low_over_constant': None, 'concentration_high_over_constant': None, 'fluorescence_change_percent': None, 'change_refs': [], 'excitation_refs': [], 'ligand_absorbance': None, 'absorbance_refs': [], 'added_volume_percent': None, 'added_volume_refs': [], 'protein_refs': [], 'tight_binding_handled': None, 'count_refs': [], 'series_refs': [], 'incubation_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': [], }
     native['support'] = criterion_supports(record, TRP_CRITERIA)      # kept for the sheet: criterion -> supports of the stated fields it reads; the grader does not judge them
+    stated = record['facts']['binding_detected']      # the experiment's stated yes/no result: a fact kept for the sheet, read by no criterion
+    known = stated['answer'] in INTERACTION
+    native.update({'interaction': INTERACTION.get(stated['answer']), 'interaction_refs': list(stated['source_refs']) if known else [], 'interaction_support': stated['support'] if known else None})
     outcomes = {name: EVALUATORS[name](record, native) for name in CRITERIA}
     return {'version': VERSION, 'experiment_type': 'trp_quenching', 'experiment_ref': record['experiment_ref'], 'criteria': {name: {'status': o['status'], 'support_refs': o['support_refs']} for name, o in outcomes.items()}, 'reasons': {name: o['reason'] for name, o in outcomes.items()}, 'native': native}

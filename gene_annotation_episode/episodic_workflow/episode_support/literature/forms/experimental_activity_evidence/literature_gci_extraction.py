@@ -62,6 +62,7 @@ MEANING = {
     'nonspecific_binding_checked': 'Whether the passage says non-specific binding of the analyte to the chip surface (a surface without the immobilized partner) was checked.',
     'single_estimate_method': 'Whether the passage itself says that only one method (kinetic or steady-state) was used to estimate the KD (yes), or says that both were used (no). A passage that merely reports one KD does not say this: leave it unavailable.',
     'repeated_pulse_kinetics_used': 'Whether the passage says the kinetics were measured with repeated short analyte pulses of one concentration (the waveRAPID method). Answer no only if the passage says that method was not used; a passage that only describes another injection scheme states neither: leave it unavailable.',
+    'binding_detected': 'The yes/no result of this experiment as the passage states it: yes when it says the experiment showed that the two partners bind (a binding response on the chip, a reported binding constant, or the plain statement that one binds the other as measured by GCI); no when it says the experiment showed no binding (no response above the reference channel, "did not bind", "no detectable binding"). A passage that only describes how the experiment was done, or names the method without its result, does not state this.',
 }
 
 

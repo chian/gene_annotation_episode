@@ -34,6 +34,9 @@ biosensor_type 'streptavidin', 'anti_his', 'ni_nta', 'protein_a', 'protein_g', '
                and for the sensor identity, no criterion judges it.
 facts          name -> {'answer', 'source_refs'}. Names and answer sets in FACTS below. No fact holds text: a
                controlled answer only.
+               binding_detected is the experiment's stated yes/no result (the passage
+               says the two partners bound, or says they did not); no criterion reads
+               it. It lets a result stated without a constant count (owner, 2026-11-22).
 choice_support name -> support of each plain choice field (spread_kind, fit_model, biosensor_type), None when the field is not
                stated.
 spans          source_ref -> {'locator', 'quote'}: the quoted source span behind each reference the record cites.
@@ -48,7 +51,7 @@ SPREAD_KINDS = ('standard_error', 'standard_deviation', 'confidence_interval')
 FIT_MODELS = ('1:1', '2:1_bivalent_analyte', 'heterogeneous_ligand', 'steady_state', 'other')
 BIOSENSOR_TYPES = ('streptavidin', 'anti_his', 'ni_nta', 'protein_a', 'protein_g', 'anti_human_fc', 'anti_gst', 'amine_reactive', 'other')
 YES_NO = ('yes', 'no', 'unknown', 'not_applicable')
-FACTS = {'reference_sensor_subtracted': YES_NO, 'buffer_reference_subtracted': YES_NO, 'baseline_stable': YES_NO, 'loading_step_documented': YES_NO, 'regeneration': YES_NO, 'independent_sensors': YES_NO, 'immobilized_partner_active': YES_NO, 'analyte_bivalent_or_oligomeric': YES_NO, 'avidity_rebinding_considered': YES_NO, 'mass_transport_considered': YES_NO, 'nonspecific_binding_checked': YES_NO, 'single_estimate_method': YES_NO}
+FACTS = {'reference_sensor_subtracted': YES_NO, 'buffer_reference_subtracted': YES_NO, 'baseline_stable': YES_NO, 'loading_step_documented': YES_NO, 'regeneration': YES_NO, 'independent_sensors': YES_NO, 'immobilized_partner_active': YES_NO, 'analyte_bivalent_or_oligomeric': YES_NO, 'avidity_rebinding_considered': YES_NO, 'mass_transport_considered': YES_NO, 'nonspecific_binding_checked': YES_NO, 'single_estimate_method': YES_NO, 'binding_detected': YES_NO}
 
 CONCENTRATION_UNITS = ('nM', 'uM', 'mM')
 # The unit vocabulary of each quantity (and of the concentration series): the units a record may carry.

@@ -74,6 +74,7 @@ MEANING = {
     'nonspecific_binding_checked': 'Whether the passage says non-specific signal was checked, for example with a non-binding mutant, an unrelated protein, or a sample without one partner.',
     'independent_titrations': 'Whether the passage says the replicates were independent titrations (separate dilution series or preparations).',
     'single_estimate_method': 'Whether the passage itself says that only one method (direct titration or competition) was used to estimate the affinity (yes), or says that both were used (no). A passage that merely reports one constant does not say this: leave it unavailable.',
+    'binding_detected': 'The yes/no result of this experiment as the passage states it: yes when it says the experiment showed that the two partners bind (a thermophoresis shift on titration, a reported binding constant, or the plain statement that one binds the other as measured by MST); no when it says the experiment showed no binding (no shift on titration, "did not bind", "no detectable binding"). A passage that only describes how the experiment was done, or names the method without its result, does not state this.',
 }
 
 

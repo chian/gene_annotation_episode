@@ -67,6 +67,7 @@ MEANING = {
     'surface_adsorption_prevented': 'Whether the passage says adsorption to tubes or plates was prevented, for example by detergent, carrier protein or non-binding plates (yes), or says that no such measure was taken (no). A passage that only mentions adsorption as a possible or actual loss of material says nothing about whether a preventive measure was taken: leave it unavailable.',
     'independent_titrations': 'Whether the passage says the replicates were independent titrations (separate dilution series or preparations).',
     'single_estimate_method': 'Whether the passage itself says that only one method (direct titration or competition) was used to estimate the affinity (yes), or says that both were used (no). A passage that merely reports one constant does not say this: leave it unavailable.',
+    'binding_detected': 'The yes/no result of this experiment as the passage states it: yes when it says the experiment showed that the two partners bind (a rise of the polarization or anisotropy of the tracer on titration, a reported binding constant, or the plain statement that one binds the other as measured by fluorescence polarization); no when it says the experiment showed no binding (no change of the polarization or anisotropy, "did not bind", "no detectable binding"). A passage that only describes how the experiment was done, or names the method without its result, does not state this.',
 }
 
 

@@ -12,6 +12,11 @@ Quantities filled
 -----------------
 effect            the ITC KD in nM (point operand), only when the source
                   gave a KD as a point value. Otherwise null.
+                  With no KD the result is the experiment's stated yes/no
+                  result (fact binding_detected): 'qualitative_effect'
+                  carries its statement (interaction_detected,
+                  interaction_not_detected, or interaction_not_stated when
+                  the passage states neither) and the spans that state it.
 effect_variance   variance of that KD estimate, nM_squared, only when the
                   source's spread allows it: standard_error -> se^2;
                   standard_deviation -> sd^2 / n, and only when the
@@ -216,6 +221,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.reader
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
 VERSION = 'a105_itc_converted_v1'
+STATEMENTS = {'detected': 'interaction_detected', 'not_detected': 'interaction_not_detected', None: 'interaction_not_stated'}
 CRITERIA_MAP = {'binding_controls': ('heat_of_dilution_control', 'buffer_matching'), 'binding_regime': ('c_value_window', 'injections_sufficient', 'temperature_stated_and_controlled'), 'binding_parameter_definition': ('fit_model_appropriate', 'thermodynamic_consistency'), 'binding_species': ('concentration_accuracy_and_active_fraction',), 'calibration_applicability': ('stoichiometry_consistency',), 'sampling_basis': ('replicate_titrations_independent',)}
 N_OVER_EXPECTED_MIN = 0.7  # EXPERT_REVIEW: fitted n / expected n below this suggests an inactive fraction or a concentration error; full agreement from it. The low side is the more lenient (zero at a 3.3-fold deficit vs 2-fold excess): a low n is mostly a cell-side error, absorbed by a freely fitted n (KD unbiased), a high n a syringe-side error that biases KD and dH.
 N_OVER_EXPECTED_ZERO_MIN = 0.3  # EXPERT_REVIEW: fitted n under a third of the expected n is mostly inactive protein or a gross concentration error (no agreement); falls linearly from N_OVER_EXPECTED_MIN.
@@ -421,4 +427,11 @@ def convert_itc(graded):
     extraction = {'version': INPUT_VERSION, 'assay_type': 'ligand_binding', 'assertion_ref': native['assertion_ref'], 'quantity_kind': 'binding_parameter', 'quantities': quantities, 'interpretations': interpretations, 'prediction_model': None}
     preparations = native['preparations']
     dependence = {'analyte_preparation_ref': preparations['syringe_preparation_ref'], 'immobilized_preparation_ref': preparations['cell_preparation_ref'], 'surface_ref': None, 'dataset_ref': preparations['dataset_ref']}
-    return {'version': VERSION, 'experiment_type': 'itc', 'experiment_ref': ref, 'source_ref': native['source_ref'], 'dependence': dependence, 'extraction': extraction, 'sheet': grade_assay(extraction), 'null_components': null_components, 'direction_field_support': kd['support'] if native['kd_nM'] is not None else None}
+    converted = {'version': VERSION, 'experiment_type': 'itc', 'experiment_ref': ref, 'source_ref': native['source_ref'], 'dependence': dependence, 'extraction': extraction, 'sheet': grade_assay(extraction), 'null_components': null_components, 'direction_field_support': None}
+    if native['kd_nM'] is not None:
+        converted['direction_field_support'] = kd['support']      # the support class of the operand that fixes the effect
+    else:      # no binding constant: the experiment's stated yes/no result stands (owner, 2026-11-22), scored like any stated result (literature_direction, the qualitative path)
+        converted['qualitative_effect'] = {'statement': STATEMENTS[native['interaction']], 'support_refs': list(native['interaction_refs'])}
+        if native['interaction'] is not None:
+            converted['direction_field_support'] = native['interaction_support']      # the support class of the fact binding_detected, the one field the statement is derived from
+    return converted

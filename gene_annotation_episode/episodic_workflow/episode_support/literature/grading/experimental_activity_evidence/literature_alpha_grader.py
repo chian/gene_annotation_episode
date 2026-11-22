@@ -44,12 +44,16 @@ the beads plus the step after the beads when stated); with only the step after t
 Native values retained: every record quantity as given, plus kd_nM, ki_nM, ec50_nM, ic50_nM, constant_name, constant_nM,
 signal_over_background, incubation_min, partner_over_constant, concentration_count, concentration_low_over_constant, concentration_high_over_constant,
 the recorded facts and refs named above, preparations, assay_format, titration_design, donor_bead, acceptor_bead, spread_kind and fit_model.
+The stated yes/no result (fact binding_detected) is kept as native 'interaction' ('detected', 'not_detected' or None),
+with the spans that state it ('interaction_refs') and its quote support ('interaction_support'); the converter hands it to
+the sheet as the experiment's stated result when the source gave no effect operand.
 """
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_alpha_criteria import ALPHA_CRITERIA, MIN_PER_UNIT, NM_PER_UNIT
 
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
 VERSION = 'a105_alphascreen_grade_v1'
+INTERACTION = {'yes': 'detected', 'no': 'not_detected'}   # the stated yes/no result of the fact binding_detected
 CRITERIA = tuple(criterion['id'] for criterion in ALPHA_CRITERIA)
 CONSTANTS = ('kd', 'ki', 'ec50', 'ic50')       # the order in which a series' reported constant is taken
 DIRECT_MODELS = ('one_site', 'quadratic', 'bell_shaped_hook')    # models of a titration, not of a competition
@@ -255,6 +259,9 @@ def grade_alpha(record):
     nm = {name: _nm(record, name) for name in CONSTANTS}
     constant_name = next((name for name in CONSTANTS if nm[name] is not None), None)
     native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'assay_format': record['assay_format'], 'titration_design': record['titration_design'], 'donor_bead': record['donor_bead'], 'acceptor_bead': record['acceptor_bead'], 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'choice_support': dict(record['choice_support']), 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'concentration_series': dict(record['concentration_series']), 'kd_nM': nm['kd'], 'ki_nM': nm['ki'], 'ec50_nM': nm['ec50'], 'ic50_nM': nm['ic50'], 'constant_name': constant_name, 'constant_nM': None if constant_name is None else nm[constant_name], 'signal_over_background': None, 'incubation_min': _total_incubation_min(record), 'partner_over_constant': None, 'partner_name': None, 'partner_refs': [],'concentration_count': None, 'concentration_low_over_constant': None, 'concentration_high_over_constant': None, 'signal_window_refs': [], 'z_prime': None, 'z_prime_refs': [], 'incubation_refs': [], 'concentration_count_refs': [], 'concentration_span_refs': [], 'estimate_fold': None, 'estimate_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': []}
+    stated = record['facts']['binding_detected']      # the experiment's stated yes/no result: a fact kept for the sheet, read by no criterion
+    known = stated['answer'] in INTERACTION
+    native.update({'interaction': INTERACTION.get(stated['answer']), 'interaction_refs': list(stated['source_refs']) if known else [], 'interaction_support': stated['support'] if known else None})
     outcomes = {name: EVALUATORS[name](record, native) for name in CRITERIA}
     native['support'] = criterion_supports(record, ALPHA_CRITERIA)      # kept for the sheet: the grader does not judge it
     return {'version': VERSION, 'experiment_type': 'alphascreen', 'experiment_ref': record['experiment_ref'], 'criteria': {name: {'status': o['status'], 'support_refs': o['support_refs']} for name, o in outcomes.items()}, 'reasons': {name: o['reason'] for name, o in outcomes.items()}, 'native': native}

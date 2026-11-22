@@ -17,6 +17,11 @@ effect            the reported binding constant in nM (point operand): the
                   null; an EC50 or an IC50 alone is not a binding constant (it
                   depends on the labelled concentrations) and is not carried
                   into the effect.
+                  With no effect operand the result is the experiment's stated yes/no
+                  result (fact binding_detected): 'qualitative_effect' carries its
+                  statement (interaction_detected, interaction_not_detected, or
+                  interaction_not_stated when the passage states neither) and the spans
+                  that state it.
 effect_variance   variance of that constant, nM_squared, only when the
                   source's spread (kd_spread for a KD, ki_spread for a Ki)
                   allows it: standard_error -> se^2; standard_deviation ->
@@ -172,6 +177,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
 VERSION = 'a105_fret_converted_v1'
+STATEMENTS = {'detected': 'interaction_detected', 'not_detected': 'interaction_not_detected', None: 'interaction_not_stated'}
 BINDING_CONSTANTS = ('kd', 'ki')
 CRITERIA_MAP = {'binding_controls': ('spectral_crosstalk', 'specificity_control', 'compound_interference'), 'binding_regime': ('labelled_concentration', 'concentration_series', 'equilibrium', 'direct_vs_competition'), 'binding_parameter_definition': ('fit_model', 'labelling_scheme', 'ratiometric_readout'), 'calibration_applicability': ('assay_window', 'time_gating'), 'sampling_basis': ('replicates',)}
 MIN_WINDOW_FOLD = 2.0  # EXPERT_REVIEW: smallest signal-over-background of the emission ratio (highest over lowest) that gives a usable curve: with 5 percent variation on both ends a fold of 2 still gives a Z' factor of about 0.5, the usual limit for a robust plate assay; the full-agreement limit.
@@ -427,4 +433,11 @@ def convert_fret(graded):
     extraction = {'version': INPUT_VERSION, 'assay_type': 'ligand_binding', 'assertion_ref': native['assertion_ref'], 'quantity_kind': 'binding_parameter', 'quantities': quantities, 'interpretations': interpretations, 'prediction_model': None}
     preparations = native['preparations']
     dependence = {'analyte_preparation_ref': preparations['titrant_preparation_ref'], 'immobilized_preparation_ref': preparations['fixed_partner_preparation_ref'], 'surface_ref': None, 'dataset_ref': preparations['dataset_ref']}
-    return {'version': VERSION, 'experiment_type': 'fret', 'experiment_ref': ref, 'source_ref': native['source_ref'], 'dependence': dependence, 'extraction': extraction, 'sheet': grade_assay(extraction), 'null_components': null_components, 'direction_field_support': native['quantities'][constant_name]['support'] if constant_name is not None else None}
+    converted = {'version': VERSION, 'experiment_type': 'fret', 'experiment_ref': ref, 'source_ref': native['source_ref'], 'dependence': dependence, 'extraction': extraction, 'sheet': grade_assay(extraction), 'null_components': null_components, 'direction_field_support': None}
+    if quantities['effect'] is None:      # no effect operand: the experiment's stated yes/no result stands (owner, 2026-11-22), scored like any stated result (literature_direction, the qualitative path)
+        converted['qualitative_effect'] = {'statement': STATEMENTS[native['interaction']], 'support_refs': list(native['interaction_refs'])}
+        if native['interaction'] is not None:
+            converted['direction_field_support'] = native['interaction_support']      # the support class of the fact binding_detected
+    else:
+        converted['direction_field_support'] = native['quantities'][constant_name]['support']
+    return converted

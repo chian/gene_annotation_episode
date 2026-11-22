@@ -41,12 +41,16 @@ literature_quote_support.criterion_supports). The grader only carries them; it n
 Native values retained: every record quantity as given, plus kd_nM, ki_nM, ec50_nM, ic50_nM, constant_name, constant_nM,
 signal_over_background, incubation_min, concentration_count, concentration_low_over_constant, concentration_high_over_constant,
 the recorded facts and refs named above, preparations, assay_format, detection_format, spread_kind, fit_model, readout_signal, enzyme_conjugate and blocking_agent.
+The stated yes/no result (fact binding_detected) is kept as native 'interaction' ('detected', 'not_detected' or None),
+with the spans that state it ('interaction_refs') and its quote support ('interaction_support'); the converter hands it to
+the sheet as the experiment's stated result when the source gave no effect operand.
 """
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_elisa_criteria import ELISA_CRITERIA, MIN_PER_UNIT, NM_PER_UNIT
 
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
 VERSION = 'a105_elisa_grade_v1'
+INTERACTION = {'yes': 'detected', 'no': 'not_detected'}   # the stated yes/no result of the fact binding_detected
 CRITERIA = tuple(criterion['id'] for criterion in ELISA_CRITERIA)
 CONSTANTS = ('kd', 'ki', 'ec50', 'ic50')       # the order in which a series' reported constant is taken
 
@@ -245,6 +249,9 @@ def grade_elisa(record):
     nm = {name: _nm(record, name) for name in CONSTANTS}
     constant_name = next((name for name in CONSTANTS if nm[name] is not None), None)
     native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'assay_format': record['assay_format'], 'detection_format': record['detection_format'], 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'readout_signal': record['readout_signal'], 'enzyme_conjugate': record['enzyme_conjugate'], 'blocking_agent': record['blocking_agent'], 'choice_support': dict(record['choice_support']), 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'concentration_series': dict(record['concentration_series']), 'kd_nM': nm['kd'], 'ki_nM': nm['ki'], 'ec50_nM': nm['ec50'], 'ic50_nM': nm['ic50'], 'tracer_concentration_nM': _nm(record, 'tracer_concentration'), 'tracer_kd_nM': _nm(record, 'tracer_kd'), 'ki_cheng_prusoff_nM': None, 'cheng_prusoff_refs': [], 'conversion_fold': None, 'conversion_refs': [], 'detector_linear_limit': None, 'linear_limit_refs': [], 'koff_per_s': None, 'wash_min': None, 'wash_loss_refs': [], 'constant_name': constant_name, 'constant_nM': None if constant_name is None else nm[constant_name], 'signal_over_background': None, 'incubation_min': _minutes(record, 'incubation_time'), 'concentration_count': None, 'concentration_low_over_constant': None, 'concentration_high_over_constant': None, 'signal_window_refs': [], 'plateau_absorbance': None, 'plateau_refs': [], 'incubation_refs': [], 'constant_refs': [], 'concentration_count_refs': [], 'concentration_span_refs': [], 'estimate_fold': None, 'estimate_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': []}
+    stated = record['facts']['binding_detected']      # the experiment's stated yes/no result: a fact kept for the sheet, read by no criterion
+    known = stated['answer'] in INTERACTION
+    native.update({'interaction': INTERACTION.get(stated['answer']), 'interaction_refs': list(stated['source_refs']) if known else [], 'interaction_support': stated['support'] if known else None})
     outcomes = {name: EVALUATORS[name](record, native) for name in CRITERIA}
     native['support'] = criterion_supports(record, ELISA_CRITERIA)      # kept for the sheet: the grader does not judge it
     return {'version': VERSION, 'experiment_type': 'elisa', 'experiment_ref': record['experiment_ref'], 'criteria': {name: {'status': o['status'], 'support_refs': o['support_refs']} for name, o in outcomes.items()}, 'reasons': {name: o['reason'] for name, o in outcomes.items()}, 'native': native}

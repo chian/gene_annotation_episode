@@ -82,6 +82,7 @@ MEANING = {
     'avidity_excluded': 'Whether the passage says multivalent binding (avidity) of the bead-presented partners was excluded or controlled, for example by a low capture density or by agreement with a solution method (yes), or says that multivalent binding contributed (no). A passage that only names the partners or the beads does not say this.',
     'independent_experiments': 'Whether the passage says the replicates were independent experiments (separate plates, dilution series or days).',
     'single_estimate_method': 'Whether the passage itself says that the affinity was estimated only by this bead assay (yes), or says that another method was also used for it (no). A passage that merely reports one constant does not say this: leave it unavailable.',
+    'binding_detected': 'The yes/no result of this experiment as the passage states it: yes when it says the experiment showed that the two partners bind (a bead-proximity signal above background for the pair, a reported binding constant, or the plain statement that one binds the other as measured by AlphaScreen); no when it says the experiment showed no binding (no bead-proximity signal above background, "did not bind", "no detectable binding"). A passage that only describes how the experiment was done, or names the method without its result, does not state this.',
 }
 
 

@@ -32,6 +32,9 @@ ec50_nM, constant_name, constant_nM, labelled_nM, labelled_over_kd, fhot_s,
 incubation_min, concentration_count, concentration_low_over_constant,
 concentration_high_over_constant, preparations, assay_format, spread_kind,
 fit_model, readout_signal, capillary_type and label_type.
+The stated yes/no result (fact binding_detected) is kept as native 'interaction' ('detected', 'not_detected' or None),
+with the spans that state it ('interaction_refs') and its quote support ('interaction_support'); the converter hands it to
+the sheet as the experiment's stated result when the source gave no binding constant.
 """
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_mst_criteria import MIN_PER_UNIT, MST_CRITERIA, NM_PER_UNIT, S_PER_UNIT
 
@@ -39,6 +42,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 
 VERSION = 'a105_mst_grade_v1'
 CRITERIA = tuple(criterion['id'] for criterion in MST_CRITERIA)
+INTERACTION = {'yes': 'detected', 'no': 'not_detected'}   # the stated yes/no result of the fact binding_detected
 CONSTANTS = ('kd', 'ki', 'ec50')       # the order in which a series' reported constant is taken
 LABEL_FREE = 'label_free_intrinsic_fluorescence'
 
@@ -257,5 +261,8 @@ def grade_mst(record):
     constant_name = next((name for name in CONSTANTS if nm[name] is not None), None)
     native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'assay_format': record['assay_format'], 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'readout_signal': record['readout_signal'], 'capillary_type': record['capillary_type'], 'label_type': record['label_type'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'concentration_series': dict(record['concentration_series']), 'kd_nM': nm['kd'], 'ki_nM': nm['ki'], 'ec50_nM': nm['ec50'], 'constant_name': constant_name, 'constant_nM': None if constant_name is None else nm[constant_name], 'labelled_nM': _nm(record, 'labelled_concentration'), 'labelled_over_kd': None, 'fhot_s': _seconds(record, 'fhot_time'), 'incubation_min': _minutes(record, 'incubation_time'), 'concentration_count': None, 'concentration_low_over_constant': None, 'concentration_high_over_constant': None, 'signal_to_noise': None, 'fnorm_amplitude': None, 'fnorm_noise': None, 'signal_refs': [], 'labelled_refs': [], 'tight_binding_handled': None, 'count_refs': [], 'series_refs': [], 'incubation_refs': [], 'incubation_constant_nM': None, 'fhot_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': [], 'estimate_fold': None, 'estimate_refs': []}
     native['support'] = criterion_supports(record, MST_CRITERIA)      # kept for the sheet: criterion -> supports of the stated fields it reads; the grader does not judge them
+    stated = record['facts']['binding_detected']      # the experiment's stated yes/no result: a fact kept for the sheet, read by no criterion
+    known = stated['answer'] in INTERACTION
+    native.update({'interaction': INTERACTION.get(stated['answer']), 'interaction_refs': list(stated['source_refs']) if known else [], 'interaction_support': stated['support'] if known else None})
     outcomes = {name: EVALUATORS[name](record, native) for name in CRITERIA}
     return {'version': VERSION, 'experiment_type': 'mst', 'experiment_ref': record['experiment_ref'], 'criteria': {name: {'status': o['status'], 'support_refs': o['support_refs']} for name, o in outcomes.items()}, 'reasons': {name: o['reason'] for name, o in outcomes.items()}, 'native': native}

@@ -16,6 +16,11 @@ effect            the reported KD in nM (point operand; the measurement key is
                   and is not carried into the effect; a KD whose curve was fitted
                   with the Stern-Volmer equation is not carried either (the fit
                   gives Ksv, so the number is not a KD).
+                  With no effect operand the result is the experiment's stated yes/no
+                  result (fact binding_detected): 'qualitative_effect' carries its
+                  statement (interaction_detected, interaction_not_detected, or
+                  interaction_not_stated when the passage states neither) and the spans
+                  that state it.
 effect_variance   variance of that constant, nM_squared, only when the
                   source's spread (kd_spread) allows it: standard_error -> se^2;
                   standard_deviation -> sd^2 / n, and only when the replicates
@@ -172,6 +177,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
 VERSION = 'a105_trp_converted_v1'
+STATEMENTS = {'detected': 'interaction_detected', 'not_detected': 'interaction_not_detected', None: 'interaction_not_stated'}
 CRITERIA_MAP = {'binding_controls': ('inner_filter', 'dilution', 'buffer_blank', 'ligand_fluorescence', 'specificity_control', 'photobleaching', 'quenching_mechanism'), 'binding_regime': ('saturation', 'concentration_series', 'protein_concentration', 'equilibrium'), 'binding_parameter_definition': ('fit_model', 'excitation_selectivity'), 'calibration_applicability': ('signal_amplitude',), 'sampling_basis': ('replicates',)}
 MIN_FLUORESCENCE_CHANGE_PERCENT = 5.0  # EXPERT_REVIEW: smallest change of the protein's fluorescence (percent) between the free protein and the saturated complex; the reading noise of a steady-state fluorimeter, pipetting and photobleaching together are a few percent, so a smaller change cannot be told from them; the full-agreement limit.
 FLUORESCENCE_CHANGE_ZERO_AGREEMENT_PERCENT = 1.0  # EXPERT_REVIEW: change (percent) at or below which it is smaller than the reading noise of one measurement, conflicting.
@@ -458,4 +464,11 @@ def convert_trp(graded):
     extraction = {'version': INPUT_VERSION, 'assay_type': 'ligand_binding', 'assertion_ref': native['assertion_ref'], 'quantity_kind': 'binding_parameter', 'quantities': quantities, 'interpretations': interpretations, 'prediction_model': None}
     preparations = native['preparations']
     dependence = {'analyte_preparation_ref': preparations['titrant_preparation_ref'], 'immobilized_preparation_ref': preparations['fixed_partner_preparation_ref'], 'surface_ref': None, 'dataset_ref': preparations['dataset_ref']}
-    return {'version': VERSION, 'experiment_type': 'trp_quenching', 'experiment_ref': ref, 'source_ref': native['source_ref'], 'dependence': dependence, 'extraction': extraction, 'sheet': grade_assay(extraction), 'null_components': null_components, 'direction_field_support': native['quantities'][constant_name]['support'] if constant_name is not None else None}
+    converted = {'version': VERSION, 'experiment_type': 'trp_quenching', 'experiment_ref': ref, 'source_ref': native['source_ref'], 'dependence': dependence, 'extraction': extraction, 'sheet': grade_assay(extraction), 'null_components': null_components, 'direction_field_support': None}
+    if quantities['effect'] is None:      # no effect operand: the experiment's stated yes/no result stands (owner, 2026-11-22), scored like any stated result (literature_direction, the qualitative path)
+        converted['qualitative_effect'] = {'statement': STATEMENTS[native['interaction']], 'support_refs': list(native['interaction_refs'])}
+        if native['interaction'] is not None:
+            converted['direction_field_support'] = native['interaction_support']      # the support class of the fact binding_detected
+    else:
+        converted['direction_field_support'] = native['quantities'][constant_name]['support']
+    return converted

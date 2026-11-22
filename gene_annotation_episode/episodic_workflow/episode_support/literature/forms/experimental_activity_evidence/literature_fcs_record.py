@@ -66,6 +66,8 @@ readout_signal 'diffusion_time' (the diffusion time or the fraction bound from i
                (the amplitude of the dual-colour cross-correlation, FCCS, is) or None.
 facts          name -> {'answer', 'source_refs'}. Names and answer sets in FACTS below. No fact holds text: a
                controlled answer only.
+               binding_detected is the experiment's stated yes/no result (the passage says the two partners bound, or says
+               they did not); no criterion reads it. It lets a result that is stated without a constant count (owner, 2026-11-22).
 spans          source_ref -> {'locator', 'quote'}: the quoted source span behind each reference the record cites.
 choice_support name -> 'direct', 'implied', 'about_something_else' or None, for each of the four choice fields (CHOICE_FIELDS): how well the
                quote of that stated choice supports it; None when the choice is not stated.
@@ -92,7 +94,7 @@ FIT_MODELS = ('1:1', 'hill', 'quadratic', 'other')
 DIFFUSION_MODELS = ('one_component', 'two_component', 'anomalous', 'other')
 READOUT_SIGNALS = ('diffusion_time', 'diffusion_coefficient', 'brightness', 'cross_correlation')
 YES_NO = ('yes', 'no', 'unknown', 'not_applicable')
-FACTS = {'confocal_volume_calibrated': YES_NO, 'triplet_state_modelled': YES_NO, 'free_diffusion_time_fixed': YES_NO, 'brightness_change_accounted': YES_NO, 'crosstalk_corrected': YES_NO, 'background_corrected': YES_NO, 'aggregates_checked': YES_NO, 'photobleaching_or_saturation_checked': YES_NO, 'surface_adsorption_prevented': YES_NO, 'labelling_does_not_alter_binding': YES_NO, 'nonbinding_control_done': YES_NO, 'labelled_partner_at_or_below_kd': YES_NO, 'tight_binding_considered': YES_NO, 'equilibrium_reached': YES_NO, 'independent_titrations': YES_NO, 'single_estimate_method': YES_NO}
+FACTS = {'confocal_volume_calibrated': YES_NO, 'triplet_state_modelled': YES_NO, 'free_diffusion_time_fixed': YES_NO, 'brightness_change_accounted': YES_NO, 'crosstalk_corrected': YES_NO, 'background_corrected': YES_NO, 'aggregates_checked': YES_NO, 'photobleaching_or_saturation_checked': YES_NO, 'surface_adsorption_prevented': YES_NO, 'labelling_does_not_alter_binding': YES_NO, 'nonbinding_control_done': YES_NO, 'labelled_partner_at_or_below_kd': YES_NO, 'tight_binding_considered': YES_NO, 'equilibrium_reached': YES_NO, 'independent_titrations': YES_NO, 'single_estimate_method': YES_NO, 'binding_detected': YES_NO}
 
 
 def _checked(support):

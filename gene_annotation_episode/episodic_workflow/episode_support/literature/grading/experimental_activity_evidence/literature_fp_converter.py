@@ -15,6 +15,11 @@ effect            the reported binding constant in nM (point operand): the
                   the Ki of a competition experiment (the grader's
                   'constant_name' says which; the measurement key names it:
                   fp_kd or fp_ki). Neither given leaves effect null.
+                  With no effect operand the result is the experiment's stated yes/no
+                  result (fact binding_detected): 'qualitative_effect' carries its
+                  statement (interaction_detected, interaction_not_detected, or
+                  interaction_not_stated when the passage states neither) and the spans
+                  that state it.
 effect_variance   variance of that constant, nM_squared, only when the
                   source's spread (kd_spread for a KD, ki_spread for a Ki)
                   allows it: standard_error -> se^2; standard_deviation ->
@@ -153,6 +158,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
 VERSION = 'a105_fp_converted_v1'
+STATEMENTS = {'detected': 'interaction_detected', 'not_detected': 'interaction_not_detected', None: 'interaction_not_stated'}
 CRITERIA_MAP = {'binding_controls': ('free_probe_baseline', 'specificity_control', 'surface_adsorption'), 'binding_regime': ('tracer_concentration', 'concentration_series', 'equilibrium', 'direct_vs_competition'), 'binding_parameter_definition': ('fit_model', 'intensity_change'), 'calibration_applicability': ('assay_window',), 'sampling_basis': ('replicates',)}
 MIN_WINDOW_MP = 70.0  # EXPERT_REVIEW: smallest polarization window (bound minus free, in mP) that a typical plate reader (reproducibility of a few mP) resolves into a titration curve; 100 mP or more is common practice (Lea & Simeonov 2011; Rossi & Taylor 2011), this allows for a lower but still usable window; the full-agreement limit. The degree is linear in 1 / window (the error of each fraction-bound point is the reader noise over the window).
 WINDOW_ZERO_AGREEMENT_MP = 20.0  # EXPERT_REVIEW: window (mP) at or below which the sheet takes the titration as unresolved (conflicting): with a reproducibility of a few mP a window of 20 mP or less is lost in the noise of the plate reader.
@@ -391,4 +397,11 @@ def convert_fp(graded):
     extraction = {'version': INPUT_VERSION, 'assay_type': 'ligand_binding', 'assertion_ref': native['assertion_ref'], 'quantity_kind': 'binding_parameter', 'quantities': quantities, 'interpretations': interpretations, 'prediction_model': None}
     preparations = native['preparations']
     dependence = {'analyte_preparation_ref': preparations['titrant_preparation_ref'], 'immobilized_preparation_ref': preparations['tracer_preparation_ref'], 'surface_ref': None, 'dataset_ref': preparations['dataset_ref']}
-    return {'version': VERSION, 'experiment_type': 'fp', 'experiment_ref': ref, 'source_ref': native['source_ref'], 'dependence': dependence, 'extraction': extraction, 'sheet': grade_assay(extraction), 'null_components': null_components, 'direction_field_support': native['quantities'][native['constant_name']]['support'] if native['constant_nM'] is not None else None}
+    converted = {'version': VERSION, 'experiment_type': 'fp', 'experiment_ref': ref, 'source_ref': native['source_ref'], 'dependence': dependence, 'extraction': extraction, 'sheet': grade_assay(extraction), 'null_components': null_components, 'direction_field_support': None}
+    if quantities['effect'] is None:      # no effect operand: the experiment's stated yes/no result stands (owner, 2026-11-22), scored like any stated result (literature_direction, the qualitative path)
+        converted['qualitative_effect'] = {'statement': STATEMENTS[native['interaction']], 'support_refs': list(native['interaction_refs'])}
+        if native['interaction'] is not None:
+            converted['direction_field_support'] = native['interaction_support']      # the support class of the fact binding_detected
+    else:
+        converted['direction_field_support'] = native['quantities'][native['constant_name']]['support']
+    return converted

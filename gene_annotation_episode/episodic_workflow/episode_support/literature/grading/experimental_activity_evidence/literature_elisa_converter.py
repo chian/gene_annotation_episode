@@ -17,6 +17,11 @@ effect            the reported binding constant in nM (point operand): the
                   or an IC50 alone is a half-maximal concentration, not a
                   dissociation constant (it depends on the coating, the detection
                   and the competing ligand) and is not carried into the effect.
+                  With no effect operand the result is the experiment's stated yes/no
+                  result (fact binding_detected): 'qualitative_effect' carries its
+                  statement (interaction_detected, interaction_not_detected, or
+                  interaction_not_stated when the passage states neither) and the
+                  spans that state it.
 effect_variance   variance of that constant, nM_squared, only when the
                   source's spread (kd_spread for a KD, ki_spread for a Ki)
                   allows it: standard_error -> se^2; standard_deviation ->
@@ -193,6 +198,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
 VERSION = 'a105_elisa_converted_v1'
+STATEMENTS = {'detected': 'interaction_detected', 'not_detected': 'interaction_not_detected', None: 'interaction_not_stated'}
 BINDING_CONSTANTS = ('kd', 'ki')
 CRITERIA_MAP = {'binding_controls': ('blank_subtraction', 'specificity_control', 'avidity', 'coated_protein_activity', 'detection_interference'), 'binding_regime': ('saturation', 'concentration_series', 'equilibrium', 'wash_dissociation', 'direct_vs_competition'), 'binding_parameter_definition': ('fit_model',), 'calibration_applicability': ('signal_window', 'detector_range'), 'sampling_basis': ('replicates',)}
 MIN_SIGNAL_OVER_BACKGROUND = 5.0  # EXPERT_REVIEW: smallest ratio of the plateau absorbance to the background absorbance for the curve to have a defined bottom and top; with a well-to-well CV of about ten percent proportional to the signal, Z' = 1 - 3 CV (r + 1) / (r - 1) is 0.55 at r = 5, just past the 0.5 of an excellent assay (Zhang, Chung and Oldenburg 1999 J Biomol Screen 4:67); blank wells read about 0.05 to 0.1 OD and the reader caps the top near 2 to 3 OD, so ELISA windows of 10 to 40 are the usual ceiling.
@@ -436,4 +442,9 @@ def convert_elisa(graded):
     extraction = {'version': INPUT_VERSION, 'assay_type': 'ligand_binding', 'assertion_ref': native['assertion_ref'], 'quantity_kind': 'binding_parameter', 'quantities': quantities, 'interpretations': interpretations, 'prediction_model': None}
     preparations = native['preparations']
     dependence = {'analyte_preparation_ref': preparations['titrant_preparation_ref'], 'immobilized_preparation_ref': preparations['fixed_partner_preparation_ref'], 'surface_ref': None, 'dataset_ref': preparations['dataset_ref']}
-    return {'version': VERSION, 'experiment_type': 'elisa', 'experiment_ref': ref, 'source_ref': native['source_ref'], 'dependence': dependence, 'extraction': extraction, 'sheet': grade_assay(extraction), 'null_components': null_components, 'direction_field_support': native['quantities'][constant_name]['support'] if constant_name is not None else None}
+    converted = {'version': VERSION, 'experiment_type': 'elisa', 'experiment_ref': ref, 'source_ref': native['source_ref'], 'dependence': dependence, 'extraction': extraction, 'sheet': grade_assay(extraction), 'null_components': null_components, 'direction_field_support': native['quantities'][constant_name]['support'] if constant_name is not None else None}
+    if quantities['effect'] is None:      # no effect operand: the experiment's stated yes/no result stands (owner, 2026-11-22), scored like any stated result (literature_direction, the qualitative path)
+        converted['qualitative_effect'] = {'statement': STATEMENTS[native['interaction']], 'support_refs': list(native['interaction_refs'])}
+        if native['interaction'] is not None:
+            converted['direction_field_support'] = native['interaction_support']      # the support class of the fact binding_detected
+    return converted

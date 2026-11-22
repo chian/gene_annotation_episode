@@ -31,6 +31,9 @@ stoichiometry_n, stoichiometry_free, concentration_facts_unknown and the refs of
 each (n_over_expected_refs, c_value_refs, injection_refs, temperature_refs,
 replicate_refs, stoichiometry_refs, dg_refs), preparations, spread_kind and
 fit_model.
+The stated yes/no result (fact binding_detected) is kept as native 'interaction' ('detected', 'not_detected' or None),
+with the spans that state it ('interaction_refs') and its quote support ('interaction_support'); the converter hands it to
+the sheet as the experiment's stated result when the source gave no binding constant.
 """
 import math
 
@@ -40,6 +43,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 
 VERSION = 'a105_itc_grade_v1'
 CRITERIA = tuple(criterion['id'] for criterion in ITC_CRITERIA)
+INTERACTION = {'yes': 'detected', 'no': 'not_detected'}   # the stated yes/no result of the fact binding_detected
 ENTHALPY_TO_KJ = {'kJ/mol': 1.0, 'kcal/mol': KCAL_TO_KJ}
 ENTROPY_TO_J = {'J/mol/K': 1.0, 'cal/mol/K': KCAL_TO_KJ, 'kJ/mol/K': J_PER_KJ}
 
@@ -214,5 +218,8 @@ def grade_itc(record):
     """Grade one ITC experiment record. Returns the criterion answers and native values."""
     native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'titration_mode': record['titration_mode'], 'final_ligand_over_kd': None, 'final_ratio_refs': [], 'enthalpy_ionization_corrected': None, 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'kd_nM': _nm(record, 'kd'), 'temperature_K': _kelvin(record), 'enthalpy_kJ_per_mol': _scaled(record, 'enthalpy', ENTHALPY_TO_KJ), 'entropy_J_per_mol_K': _scaled(record, 'entropy', ENTROPY_TO_J), 'n_over_expected': None, 'c_value': None, 'dg_from_kd_kJ_per_mol': None, 'dg_from_parts_kJ_per_mol': None, 'dg_gap_kJ_per_mol': None, 'n_over_expected_refs': [], 'concentration_facts_unknown': None, 'c_value_refs': [], 'injection_count': None, 'injection_refs': [], 'temperature_refs': [], 'temperature_control': None, 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': [], 'stoichiometry_n': None, 'stoichiometry_free': None, 'stoichiometry_refs': [], 'dg_refs': []}
     native['support'] = criterion_supports(record, ITC_CRITERIA)      # kept for the sheet: the grader does not judge it (criterion id -> supports of the stated fields it reads)
+    stated = record['facts']['binding_detected']      # the experiment's stated yes/no result: a fact kept for the sheet, read by no criterion
+    known = stated['answer'] in INTERACTION
+    native.update({'interaction': INTERACTION.get(stated['answer']), 'interaction_refs': list(stated['source_refs']) if known else [], 'interaction_support': stated['support'] if known else None})
     outcomes = {name: EVALUATORS[name](record, native) for name in CRITERIA}
     return {'version': VERSION, 'experiment_type': 'itc', 'experiment_ref': record['experiment_ref'], 'criteria': {name: {'status': o['status'], 'support_refs': o['support_refs']} for name, o in outcomes.items()}, 'reasons': {name: o['reason'] for name, o in outcomes.items()}, 'native': native}

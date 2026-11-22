@@ -35,12 +35,16 @@ nonspecific_ligand_nM, nonspecific_affinity_nM, nonspecific_excess_ratio, incuba
 concentration_high_over_kd, radioligand_over_kd, calculated_ki_nM, ki_over_calculated, preparations, assay_format, radioligand_isotope,
 bead_type, capture_method, preparation_type, counter, spread_kind and fit_model, and 'support': for each criterion the supports ('direct',
 'implied', 'about_something_else') of the stated fields it reads, copied from the record and not judged here.
+The stated yes/no result (fact binding_detected) is kept as native 'interaction' ('detected', 'not_detected' or None),
+with the spans that state it ('interaction_refs') and its quote support ('interaction_support'); the converter hands it to
+the sheet as the experiment's stated result when the source gave no effect operand.
 """
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_spa_criteria import (
     MIN_PER_UNIT, NM_PER_UNIT, SPA_CRITERIA)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
 VERSION = 'a105_spa_grade_v1'
+INTERACTION = {'yes': 'detected', 'no': 'not_detected'}   # the stated yes/no result of the fact binding_detected
 CRITERIA = tuple(criterion['id'] for criterion in SPA_CRITERIA)
 CONSTANTS = ('kd', 'ki')                      # the order in which the binding constant of a record is taken
 REPORTED = ('kd', 'bmax', 'ki', 'ic50')       # the fitted values whose spans support a fit model
@@ -272,6 +276,9 @@ def grade_spa(record):
     nm = {name: _nm(record, name) for name in ('kd', 'ki', 'ic50')}
     constant_name = next((name for name in CONSTANTS if nm[name] is not None), None)
     native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'assay_format': record['assay_format'], 'radioligand_isotope': record['radioligand_isotope'], 'bead_type': record['bead_type'], 'capture_method': record['capture_method'], 'preparation_type': record['preparation_type'], 'counter': record['counter'], 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'concentration_series': dict(record['concentration_series']), 'kd_nM': nm['kd'], 'ki_nM': nm['ki'], 'ic50_nM': nm['ic50'], 'constant_name': constant_name, 'constant_nM': None if constant_name is None else nm[constant_name], 'radioligand_nM': _nm(record, 'radioligand_concentration'), 'nonspecific_ligand_nM': _nm(record, 'nonspecific_ligand_concentration'), 'nonspecific_affinity_nM': _nm(record, 'nonspecific_ligand_affinity'), 'association_half_min': _minutes(record, 'association_half_time'), 'incubation_over_half_time': None, 'half_time_refs': [], 'nonspecific_excess_ratio': None, 'incubation_min': _minutes(record, 'incubation_time'), 'settling_min': _minutes(record, 'settling_time'), 'concentration_count': None, 'concentration_low_over_kd': None, 'concentration_high_over_kd': None, 'radioligand_over_kd': None, 'calculated_ki_nM': None, 'ki_over_calculated': None, 'percent_bound': None, 'percent_bound_refs': [], 'nonspecific_fraction_percent': None, 'nonspecific_fraction_refs': [], 'nonspecific_excess_refs': [], 'bead_only_percent': None, 'bead_only_refs': [], 'incubation_refs': [], 'kd_refs': [], 'concentration_count_refs': [], 'concentration_span_refs': [], 'radioligand_over_kd_refs': [], 'hill_slope': None, 'hill_slope_refs': [], 'cheng_prusoff_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': []}
+    stated = record['facts']['binding_detected']      # the experiment's stated yes/no result: a fact kept for the sheet, read by no criterion
+    known = stated['answer'] in INTERACTION
+    native.update({'interaction': INTERACTION.get(stated['answer']), 'interaction_refs': list(stated['source_refs']) if known else [], 'interaction_support': stated['support'] if known else None})
     outcomes = {name: EVALUATORS[name](record, native) for name in CRITERIA}
     native['support'] = criterion_supports(record, SPA_CRITERIA)      # kept for the sheet: the grader does not judge it
     return {'version': VERSION, 'experiment_type': 'spa', 'experiment_ref': record['experiment_ref'], 'criteria': {name: {'status': o['status'], 'support_refs': o['support_refs']} for name, o in outcomes.items()}, 'reasons': {name: o['reason'] for name, o in outcomes.items()}, 'native': native}

@@ -39,12 +39,16 @@ signal_maximum_mP, window_mP, incubation_min, concentration_count,
 concentration_low_over_constant, concentration_high_over_constant,
 preparations, assay_format, spread_kind, fit_model and plate_type, and 'support': for each criterion the supports ('direct', 'implied',
 'about_something_else') of the stated fields it reads, kept for the sheet (the grader does not judge them).
+The stated yes/no result (fact binding_detected) is kept as native 'interaction' ('detected', 'not_detected' or None),
+with the spans that state it ('interaction_refs') and its quote support ('interaction_support'); the converter hands it to
+the sheet as the experiment's stated result when the source gave no binding constant.
 """
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_fp_criteria import ANISOTROPY_FACTOR, ANISOTROPY_OFFSET, FP_CRITERIA, MIN_PER_UNIT, MP_PER_POLARIZATION, NM_PER_UNIT
 
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
 VERSION = 'a105_fp_grade_v1'
+INTERACTION = {'yes': 'detected', 'no': 'not_detected'}   # the stated yes/no result of the fact binding_detected
 CRITERIA = tuple(criterion['id'] for criterion in FP_CRITERIA)
 
 
@@ -236,5 +240,8 @@ def grade_fp(record):
     constant_name = 'kd' if kd is not None else 'ki' if ki is not None else None
     native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'assay_format': record['assay_format'], 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'plate_type': record['plate_type'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'concentration_series': dict(record['concentration_series']), 'kd_nM': kd, 'ki_nM': ki, 'constant_name': constant_name, 'constant_nM': kd if kd is not None else ki, 'ic50_nM': _nm(record, 'ic50'), 'series_kind': record['series_kind'], 'series_reference': None, 'intensity_change_direction': record['intensity_change_direction'], 'window_noise_mP': _value(record, 'signal_noise'), 'window_noise_refs': [], 'tracer_nM': _nm(record, 'tracer_concentration'), 'tracer_over_kd': None, 'signal_minimum_mP': _mp(record, 'signal_minimum'), 'signal_maximum_mP': _mp(record, 'signal_maximum'), 'window_mP': None, 'incubation_min': _minutes(record, 'incubation_time'), 'concentration_count': None, 'concentration_low_over_constant': None, 'concentration_high_over_constant': None, 'window_refs': [], 'tracer_refs': [], 'tight_binding_handled': None, 'series_refs': [], 'incubation_refs': [], 'intensity_change_percent': None, 'intensity_change_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': [], 'estimate_fold': None, 'estimate_refs': []}
     native['support'] = criterion_supports(record, FP_CRITERIA)      # kept for the sheet: the grader does not judge it
+    stated = record['facts']['binding_detected']      # the experiment's stated yes/no result: a fact kept for the sheet, read by no criterion
+    known = stated['answer'] in INTERACTION
+    native.update({'interaction': INTERACTION.get(stated['answer']), 'interaction_refs': list(stated['source_refs']) if known else [], 'interaction_support': stated['support'] if known else None})
     outcomes = {name: EVALUATORS[name](record, native) for name in CRITERIA}
     return {'version': VERSION, 'experiment_type': 'fp', 'experiment_ref': record['experiment_ref'], 'criteria': {name: {'status': o['status'], 'support_refs': o['support_refs']} for name, o in outcomes.items()}, 'reasons': {name: o['reason'] for name, o in outcomes.items()}, 'native': native}

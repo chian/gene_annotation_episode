@@ -34,6 +34,9 @@ steady_kinetic_fold, replicate_count, replicate_independent and the refs of each
 (loading_refs, concentration_refs, fit_refs, dissociation_refs, replicate_refs,
 kinetic_refs, steady_kinetic_refs), preparations, spread_kind, fit_model and
 biosensor_type.
+The stated yes/no result (fact binding_detected) is kept as native 'interaction' ('detected', 'not_detected' or None),
+with the spans that state it ('interaction_refs') and its quote support ('interaction_support'); the converter hands it to
+the sheet as the experiment's stated result when the source gave no binding constant.
 """
 import math
 
@@ -43,6 +46,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 
 VERSION = 'a105_bli_grade_v1'
 CRITERIA = tuple(criterion['id'] for criterion in BLI_CRITERIA)
+INTERACTION = {'yes': 'detected', 'no': 'not_detected'}   # the stated yes/no result of the fact binding_detected
 TIME_TO_S = {'s': 1.0, 'min': SECONDS_PER_MINUTE}
 
 
@@ -208,5 +212,8 @@ def grade_bli(record):
     native = {'experiment_ref': record['experiment_ref'], 'source_ref': record['source_ref'], 'assertion_ref': record['assertion_ref'], 'preparations': dict(record['preparations']), 'spread_kind': record['spread_kind'], 'fit_model': record['fit_model'], 'biosensor_type': record['biosensor_type'], 'quantities': {name: dict(operand) for name, operand in record['quantities'].items()}, 'concentration_series': dict(record['concentration_series']), 'kd_nM': _nm(record, 'kd'), 'kd_from_rates_nM': None, 'dissociation_time_s': None if time is None else time * TIME_TO_S[record['quantities']['dissociation_time']['unit']], 'dissociation_decay': None, 'concentration_count': None, 'concentration_low_over_kd': None, 'concentration_high_over_kd': None, 'concentration_refs': [], 'loading_level_nm': None, 'response_max_nm': None, 'loading_documented': None, 'loading_refs': [], 'fit_r_squared': None, 'fit_bivalent_answer': None, 'fit_refs': [], 'dissociation_refs': [], 'replicate_count': None, 'replicate_independent': None, 'replicate_refs': [], 'kinetic_refs': [], 'steady_kinetic_fold': None, 'steady_kinetic_refs': []}
     native.update({'partner_mass_kda': _value(record, 'partner_mass'), 'partner_mass_refs': _refs(record['quantities']['partner_mass']), 'baseline_noise_nm': _value(record, 'baseline_noise'), 'noise_refs': _refs(record['quantities']['baseline_noise'])})      # facts the sheet judges the loading and the response against (None when not stated)
     native['support'] = criterion_supports(record, BLI_CRITERIA)      # kept for the sheet: the grader does not judge it (criterion id -> supports of the stated fields it reads)
+    stated = record['facts']['binding_detected']      # the experiment's stated yes/no result: a fact kept for the sheet, read by no criterion
+    known = stated['answer'] in INTERACTION
+    native.update({'interaction': INTERACTION.get(stated['answer']), 'interaction_refs': list(stated['source_refs']) if known else [], 'interaction_support': stated['support'] if known else None})
     outcomes = {name: EVALUATORS[name](record, native) for name in CRITERIA}
     return {'version': VERSION, 'experiment_type': 'bli', 'experiment_ref': record['experiment_ref'], 'criteria': {name: {'status': o['status'], 'support_refs': o['support_refs']} for name, o in outcomes.items()}, 'reasons': {name: o['reason'] for name, o in outcomes.items()}, 'native': native}

@@ -75,6 +75,7 @@ MEANING = {
     'equilibrium_reached': 'Whether the passage says the binding was at equilibrium when read, for example because the signal was stable over time (yes), or says it was not (no). An incubation time alone does not say this, and a statement of what an incubation was meant to achieve (for example to allow or to ensure equilibrium) is not a statement that equilibrium was reached.',
     'independent_titrations': 'Whether the passage says the replicates were independent titrations (separate dilution series or preparations).',
     'single_estimate_method': 'Whether the passage itself says that the affinity was estimated only by this fluorescence titration (yes), or says that another method was also used for it (no). A passage that merely reports one constant does not say this: leave it unavailable.',
+    'binding_detected': 'The yes/no result of this experiment as the passage states it: yes when it says the experiment showed that the two partners bind (a change of the intrinsic tryptophan fluorescence on titration (quenching or a shift of the emission), a reported binding constant, or the plain statement that one binds the other as measured by tryptophan fluorescence quenching); no when it says the experiment showed no binding (no change of the intrinsic fluorescence on titration, "did not bind", "no detectable binding"). A passage that only describes how the experiment was done, or names the method without its result, does not state this.',
 }
 
 

@@ -39,6 +39,9 @@ titration_mode 'incremental' (a series of discrete injections),
                does not measure how well the curve is sampled.
 facts          name -> {'answer', 'source_refs'}. Names and answer sets in
                FACTS below. No fact holds text: a controlled answer only.
+               binding_detected is the experiment's stated yes/no result (the passage
+               says the two partners bound, or says they did not); no criterion reads
+               it. It lets a result stated without a constant count (owner, 2026-11-22).
 choice_support name -> support of each plain choice field (spread_kind, fit_model, titration_mode), None when the field is not stated.
 spans          source_ref -> {'locator', 'quote'}: the quoted source span
                behind each reference the record cites. The buffer, the
@@ -56,7 +59,7 @@ TITRATION_MODES = ('incremental', 'single_injection', 'continuous')
 FIT_MODELS = ('one_set_of_sites', 'two_sets_of_sites', 'sequential_sites', 'competitive', 'other')
 YES_NO = ('yes', 'no', 'unknown', 'not_applicable')
 BUFFER_MATCHING = ('dialysed_together', 'matched_by_stated_procedure', 'not_matched', 'unknown')
-FACTS = {'dilution_control_performed': YES_NO, 'dilution_control_subtracted': YES_NO, 'baseline_corrected': YES_NO, 'concentrations_determined': YES_NO, 'active_fraction_determined': YES_NO, 'binding_sites_heterogeneous': YES_NO, 'residuals_reported': YES_NO, 'n_fitted_freely': YES_NO, 'buffer_matching': BUFFER_MATCHING, 'temperature_controlled': YES_NO, 'independent_titrations': YES_NO, 'enthalpy_buffer_ionization_corrected': YES_NO}
+FACTS = {'dilution_control_performed': YES_NO, 'dilution_control_subtracted': YES_NO, 'baseline_corrected': YES_NO, 'concentrations_determined': YES_NO, 'active_fraction_determined': YES_NO, 'binding_sites_heterogeneous': YES_NO, 'residuals_reported': YES_NO, 'n_fitted_freely': YES_NO, 'buffer_matching': BUFFER_MATCHING, 'temperature_controlled': YES_NO, 'independent_titrations': YES_NO, 'enthalpy_buffer_ionization_corrected': YES_NO, 'binding_detected': YES_NO}
 
 CONCENTRATION_UNITS = ('nM', 'uM', 'mM')
 # The unit vocabulary of each quantity: the units a record may carry (the docstring above lists them in words).

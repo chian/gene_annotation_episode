@@ -13,6 +13,11 @@ Quantities filled
 effect            the GCI KD in nM (point operand), only when the source
                   gave a KD as a point value. A KD the source did not give
                   leaves effect null.
+                  With no KD the result is the experiment's stated yes/no
+                  result (fact binding_detected): 'qualitative_effect'
+                  carries its statement (interaction_detected,
+                  interaction_not_detected, or interaction_not_stated when
+                  the passage states neither) and the spans that state it.
 effect_variance   variance of that KD estimate, nM_squared, only when the
                   source's spread allows it: standard_error -> se^2;
                   standard_deviation -> sd^2 / n, and only when the
@@ -206,6 +211,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
 VERSION = 'a105_gci_converted_v1'
+STATEMENTS = {'detected': 'interaction_detected', 'not_detected': 'interaction_not_detected', None: 'interaction_not_stated'}
 CRITERIA_MAP = {'binding_controls': ('reference_subtraction', 'bulk_solvent_correction', 'nonspecific_binding_control', 'baseline_and_regeneration'), 'binding_regime': ('concentration_series', 'dissociation_window', 'mass_transport', 'steady_state_vs_kinetic'), 'binding_parameter_definition': ('fit_model', 'kinetic_consistency'), 'binding_species': ('immobilized_activity',), 'calibration_applicability': ('surface_level_and_response', 'rmax_consistency'), 'sampling_basis': ('replicates',)}
 MIN_CONCENTRATIONS = 5  # EXPERT_REVIEW: fewest analyte concentrations for a usable titration series (GCI series are usually 5 to 8 steps); full agreement from it.
 CONCENTRATIONS_ZERO_COUNT = 1  # EXPERT_REVIEW: one concentration in a titration (not waveRAPID) shows no concentration dependence at all, so it defines no binding curve (no credit: degree 0, supported, never conflicting: a short series is weaker evidence, not evidence against); the credit rises from it to MIN_CONCENTRATIONS on the curve of SERIES_COUNT_CURVE_POWER.
@@ -391,4 +397,11 @@ def convert_gci(graded):
     extraction = {'version': INPUT_VERSION, 'assay_type': 'ligand_binding', 'assertion_ref': native['assertion_ref'], 'quantity_kind': 'binding_parameter', 'quantities': quantities, 'interpretations': interpretations, 'prediction_model': None}
     preparations = native['preparations']
     dependence = {'analyte_preparation_ref': preparations['analyte_preparation_ref'], 'immobilized_preparation_ref': preparations['immobilized_preparation_ref'], 'surface_ref': preparations['chip_ref'], 'dataset_ref': preparations['dataset_ref']}
-    return {'version': VERSION, 'experiment_type': 'gci', 'experiment_ref': ref, 'source_ref': native['source_ref'], 'dependence': dependence, 'extraction': extraction, 'sheet': grade_assay(extraction), 'null_components': null_components, 'direction_field_support': kd['support'] if native['kd_nM'] is not None else None}
+    converted = {'version': VERSION, 'experiment_type': 'gci', 'experiment_ref': ref, 'source_ref': native['source_ref'], 'dependence': dependence, 'extraction': extraction, 'sheet': grade_assay(extraction), 'null_components': null_components, 'direction_field_support': None}
+    if native['kd_nM'] is not None:
+        converted['direction_field_support'] = kd['support']      # the support class of the operand that fixes the effect
+    else:      # no binding constant: the experiment's stated yes/no result stands (owner, 2026-11-22), scored like any stated result (literature_direction, the qualitative path)
+        converted['qualitative_effect'] = {'statement': STATEMENTS[native['interaction']], 'support_refs': list(native['interaction_refs'])}
+        if native['interaction'] is not None:
+            converted['direction_field_support'] = native['interaction_support']      # the support class of the fact binding_detected, the one field the statement is derived from
+    return converted

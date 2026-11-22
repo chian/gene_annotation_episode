@@ -66,7 +66,10 @@ enzyme_conjugate
 blocking_agent 'bsa', 'milk', 'casein', 'serum', 'other' or None. The protein used to block the plate, kept in the record for
                the reviewer; no criterion judges it.
 facts          name -> {'answer', 'source_refs'}. Names and answer sets in FACTS below. No fact holds text: a
-               controlled answer only.
+               controlled answer only. binding_detected is the experiment's stated
+               yes/no result (the passage says the two partners bound, or says
+               they did not); no criterion reads it. It lets a result that is
+               stated without a constant count (owner, 2026-11-22).
 spans          source_ref -> {'locator', 'quote'}: the quoted source span behind each reference the record cites.
 choice_support name -> 'direct', 'implied', 'about_something_else' or None, for each choice field (CHOICE_FIELDS): how well the quote of that
                stated choice supports it; None when the choice is not stated.
@@ -96,7 +99,7 @@ READOUT_SIGNALS = ('absorbance', 'chemiluminescence', 'fluorescence')
 ENZYME_CONJUGATES = ('horseradish_peroxidase', 'alkaline_phosphatase', 'other')
 BLOCKING_AGENTS = ('bsa', 'milk', 'casein', 'serum', 'other')
 YES_NO = ('yes', 'no', 'unknown', 'not_applicable')
-FACTS = {'blank_subtracted': YES_NO, 'nonspecific_binding_checked': YES_NO, 'saturation_reached': YES_NO, 'signal_in_linear_range': YES_NO, 'wash_dissociation_considered': YES_NO, 'equilibrium_reached': YES_NO, 'avidity_excluded': YES_NO, 'coated_protein_active': YES_NO, 'detection_does_not_interfere': YES_NO, 'independent_experiments': YES_NO, 'single_estimate_method': YES_NO}
+FACTS = {'blank_subtracted': YES_NO, 'nonspecific_binding_checked': YES_NO, 'saturation_reached': YES_NO, 'signal_in_linear_range': YES_NO, 'wash_dissociation_considered': YES_NO, 'equilibrium_reached': YES_NO, 'avidity_excluded': YES_NO, 'coated_protein_active': YES_NO, 'detection_does_not_interfere': YES_NO, 'independent_experiments': YES_NO, 'single_estimate_method': YES_NO, 'binding_detected': YES_NO}
 
 
 def _checked(support):

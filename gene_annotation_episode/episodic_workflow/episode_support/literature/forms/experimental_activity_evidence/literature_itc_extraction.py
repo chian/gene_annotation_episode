@@ -62,6 +62,7 @@ MEANING = {
     'temperature_controlled': 'Whether the passage says the temperature was controlled (held constant by the instrument).',
     'independent_titrations': 'Whether the passage says the replicate titrations were independent (separate samples or preparations).',
     'enthalpy_buffer_ionization_corrected': 'Whether the passage says the reported binding enthalpy was corrected for the heat of buffer protonation or ionization (an intrinsic, buffer-independent enthalpy): yes if it was corrected, no if the passage says the reported enthalpy is the observed one, not corrected.',
+    'binding_detected': 'The yes/no result of this experiment as the passage states it: yes when it says the experiment showed that the two partners bind (heats of binding, a binding isotherm, a reported binding constant, or the plain statement that one binds the other as measured by ITC); no when it says the experiment showed no binding (no heat beyond dilution, "did not bind", "no detectable binding"). A passage that only describes how the experiment was done, or names the method without its result, does not state this.',
 }
 
 
