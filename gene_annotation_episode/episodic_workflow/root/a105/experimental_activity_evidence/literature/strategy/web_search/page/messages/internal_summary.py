@@ -1,5 +1,5 @@
 """Where the examination stands, as a pure function of the loop's view: the commission (the commissioner's objective, a
-value of this episode's fixed vocabulary, with this episode's meaning of it), the claim's sheet class, the page's input
+value of this episode's fixed vocabulary, with this episode's meaning of it), the relation the claim states, the page's input
 list (nano-graphrag's page, ``literature_page_content``): the candidate input units of the paper (table regions and
 prose chunks, byte offsets), the information needs of the claim, Jev's held assessment, which candidates the leaf
 children consumed, and the planner context over the unconsumed candidates only; the returns of the leaf children
@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_claim import (
     PARTNER_VALUE_TYPES, claim_of_hypothesis, record_name)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_row_contract import (
-    class_of_predicate)
+    classes_of_predicate)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_page_content import (
     CHUNK_SIZE, PROSE_CHUNK, SOURCE_TABLE, TABLE_PREVIEW_CHARS, candidate_text, information_needs, page_candidates,
     planner_context, report_windows)
@@ -146,9 +146,9 @@ def internal_summary(view):
                            'experiment_types': [json.loads(records.get_artifact(ref))['experiment_type']
                                                 for ref in outcome['report']['record_refs']]}
                           for outcome in children],
-        # The sheet class of the claim (a fixed vocabulary value): what the page hands each leaf in place of an experiment
-        # type; the leaf names the method its passage reports.
-        'sheet_class': class_of_predicate(claim['predicate']),
+        # The relation the claim states (a fixed vocabulary value): what the page hands each leaf in place of an experiment
+        # type; the leaf names the methods its passage reports, from the types of every sheet class that lists that relation.
+        'claim_predicate': claim['predicate'],
         'source_bytes': source_bytes, 'covered_windows': covered_windows,
         # The candidates, the needs and Jev's assessment (nano-graphrag ``PageChildProposer``): ``jev_goal`` and
         # ``jev_page_context`` are what the ``assess_content`` unit sends Jev with the needs; ``planner_context`` is the

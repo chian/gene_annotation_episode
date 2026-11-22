@@ -86,7 +86,10 @@ KNOWN_DIRECTIONS = ('supports', 'opposes', 'neutral')
 # units (kcat/Km, kcat, specific activity, a fold over the control), chosen per experiment, so no two results need share a unit and no mean of them has one. The
 # row's pooled effect, variance and precision (and the relative deviation) are null for such a class; the direction, strength and weight are unaffected.
 # transport_response (DRAFT 2026-11-22, owner to confirm): the effect of a result is ONE of six quantities in different units (Km in uM, turnover in s^-1, a conductance in pS, a charge rate, a ratio, a rate per mg), chosen per experiment, so no two results need share a unit and no mean of them has one. As for activity_rate.
-NOT_POOLED_CLASSES = ('activity_rate', 'transport_response')
+# endpoint_conversion (DRAFT 2026-11-22, owner to confirm): the effect of a result is ONE of five quantities in different units (a fraction, minutes, a ratio, micromolar), chosen per experiment, so no two results need share a unit and no mean of them has one. As for activity_rate.
+# product_distribution (DRAFT 2026-11-22, owner to confirm): the effect of a result is ONE of four quantities in two units (a fraction, or a dimensionless ratio) and in different meanings (a product share, a product ratio, an equilibrium share, an equilibrium ratio), chosen per experiment; a mean of a share and a ratio has no unit. As for activity_rate.
+# reaction_coupling (DRAFT 2026-11-22, owner to confirm): the effect of a result is ONE of two dimensionless quantities of different meaning (a productive fraction with the reaction's coefficient applied, a bare product-per-partner ratio) and the protocols measure different links (cofactor per product, closure of a mass or electron balance, share lost as peroxide); both are read in the unit fraction, so a pooled fraction would pass the unit check and then average numbers that do not mean the same thing. As for activity_rate.
+NOT_POOLED_CLASSES = ('activity_rate', 'transport_response', 'endpoint_conversion', 'product_distribution', 'reaction_coupling')
 
 
 def _check_result(result):

@@ -12,7 +12,7 @@ Automatic units (code attached to a unit, no model call; ``decide`` returns the 
 The model's one choice: ONE leaf child per decision (``chunk``: one unconsumed prose chunk; ``table``: one unconsumed table
 region; ``report``: every remaining prose chunk in document order) from Jev's assessment of the unconsumed candidates. The
 page reads nothing, extracts nothing, commits no reasoning and has no other task: a leaf names the method it finds from the
-sheet class of the claim (``messages/msg_to_child.py``). A candidate handed to a child is consumed and offered no more. With
+relation the claim states (``messages/msg_to_child.py``). A candidate handed to a child is consumed and offered no more. With
 no unconsumed candidate and no ungrouped record the page offers no unit; the page cannot end its Episode, only its yield
 estimator does (``yield_estimator.py``)."""
 import functools
@@ -62,28 +62,28 @@ UPDATE = 'update_sheet'
 
 CHILD_DESCRIPTIONS = {
     'table': (
-        'A leaf extractor for ONE unconsumed table region of this paper (candidate_id): it reads the region, names the '
-        'method of the claim\'s sheet class that the region reports (or none) and extracts exactly the inputs that '
+        'A leaf extractor for ONE unconsumed table region of this paper (candidate_id): it reads the region, names every '
+        'method able to support the claim that the region reports (or none) and extracts, for each one, exactly the inputs that '
         'method\'s grader needs, each with its quote. It grades and judges nothing and returns only the immutable leaf '
-        'record. The region is consumed.'),
+        'records. The region is consumed.'),
     'report': (
         'A leaf extractor that reads every remaining prose chunk of this paper in document order, window after window '
-        '(consecutive chunks form one window), each once; for each window it names the method of the claim\'s sheet '
-        'class that the window reports (a window that reports none yields no record) and extracts exactly the inputs '
+        '(consecutive chunks form one window), each once; for each window it names every method able to support the '
+        'claim that the window reports (a window that reports none yields no record) and extracts, for each one, exactly the inputs '
         'that method\'s grader needs, each with its quote. It grades and judges nothing and returns only the immutable '
         'leaf records. The chunks it reads are consumed.'),
     'chunk': (
-        'A leaf extractor: reads ONE unconsumed prose chunk of this paper (candidate_id), names the method of the '
-        'claim\'s sheet class that the chunk reports (or none) and extracts exactly the inputs that method\'s grader '
-        'needs, each with its quote. It grades and judges nothing and returns only the immutable leaf record. The chunk '
+        'A leaf extractor: reads ONE unconsumed prose chunk of this paper (candidate_id), names every method able to '
+        'support the claim that the chunk reports (or none) and extracts, for each one, exactly the inputs that method\'s grader '
+        'needs, each with its quote. It grades and judges nothing and returns only the immutable leaf records. The chunk '
         'is consumed.'),
 }
 CANDIDATES_OF_SLOT = {'chunk': 'unconsumed_chunk_ids', 'table': 'unconsumed_table_ids'}
 
 BRIEF = (
     'THIS EPISODE: page (A105 experimental evidence). One paper (context.literature_assignment: source_ref, '
-    'representation) was found for ONE proposed annotation (context.commission.proposed_annotation_ref) whose claim has '
-    'the sheet class context.sheet_class. You do not read the paper and you extract nothing: you choose which part of it '
+    'representation) was found for ONE proposed annotation (context.commission.proposed_annotation_ref) whose claim states '
+    'the relation context.claim_predicate (for example binds or catalyzes). You do not read the paper and you extract nothing: you choose which part of it '
     'a leaf child reads next. Whether the paper reports an experiment is what the children find out; you do not need to '
     'know it beforehand.\n'
     'THE PAGE\'S CANDIDATES: the paper was split into candidate input units: every table region detected in it '
@@ -100,8 +100,8 @@ BRIEF = (
     '- table: ONE unconsumed table region (candidate_id), with the exact beginning of the region.\n'
     '- report: every remaining prose chunk read in document order, window after window, each once; the choice when '
     'useful pieces appear distributed across chunks.\n'
-    'The child reads its window, names the method of the claim\'s sheet class that the passage reports (or none, and then '
-    'it returns no record) and fills that method\'s record form. You name no experiment type. A candidate handed to a '
+    'The child reads its window, names every method able to support the claim that the passage reports (or none, and then '
+    'it returns no record) and fills the record form of each. You name no experiment type. A candidate handed to a '
     'child is consumed: it is not offered again and its probabilities are no longer shown. No child is compulsory and no '
     'order is prescribed.\n'
     'THE SHEET: the leaf records the children return are grouped into graders (one experiment = one grader; same document '
@@ -252,7 +252,7 @@ def decide(summary, feedback, ctx):
     """The page's decision. Before Jev has assessed the paper's candidates the decision is the assessment itself, and while
     returned leaf records are ungrouped it is the sheet update: both are tool calls made by code, no model call
     (nano-graphrag assesses before its page proposer is asked). Otherwise the model chooses ONE leaf child, shown the
-    commission, the claim's sheet class, the unconsumed candidates with Jev's assessment, what its children returned and
+    commission, the relation the claim states, the unconsumed candidates with Jev's assessment, what its children returned and
     the sheet; it is offered no tool."""
     if summary['content_assessment_ref'] is None:
         return ToolCall(ASSESS, {'source_ref': summary['page']['source_ref'],
@@ -263,7 +263,7 @@ def decide(summary, feedback, ctx):
         return ToolCall(UPDATE, {'leaf_record_refs': summary['leaf_record_refs'],
                                  'base_state_refs': summary['base_state_refs'],
                                  'proposed_annotation_ref': summary['proposed_annotation_ref']})
-    context = {'commission': summary['commission'], 'sheet_class': summary['sheet_class'],
+    context = {'commission': summary['commission'], 'claim_predicate': summary['claim_predicate'],
                'literature_assignment': summary['literature_assignment'],
                'credit_binding': summary['credit_binding'], 'last_local_outcome': summary['last_local_outcome'],
                'child_returns': summary['child_returns'], 'source_bytes': summary['source_bytes'],

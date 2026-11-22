@@ -48,7 +48,7 @@ STAMPS. A subscoring row rests on several results; the page stamps dataset_ref /
 handed to merge_main only when ALL its member results share one non-null value; otherwise None (the row is its own dependence
 unit). Judgement call, flagged for the owner.
 
-CONVERTERS. All 55 (26 ligand_binding, 19 activity_rate and 10 transport_response types) are named convert_<module suffix> and take one argument, the grade dict of the type's grade function.
+CONVERTERS. All 82 (26 ligand_binding, 19 activity_rate, 10 transport_response, 10 endpoint_conversion, 9 product_distribution and 8 reaction_coupling types) are named convert_<module suffix> and take one argument, the grade dict of the type's grade function.
 The suffix differs from the experiment type for trp_quenching (convert_trp) and alphascreen (convert_alpha).
 """
 import hashlib
@@ -135,7 +135,37 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_transport_proteoliposome_tracer_converter import convert_transport_proteoliposome_tracer
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_transport_ssm_electrophysiology_converter import convert_transport_ssm_electrophysiology
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_transport_vesicle_probe_flux_converter import convert_transport_vesicle_probe_flux
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_endpoint_colorimetric_converter import convert_endpoint_colorimetric
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_endpoint_enzymatic_assay_converter import convert_endpoint_enzymatic_assay
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_endpoint_gas_evolution_converter import convert_endpoint_gas_evolution
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_endpoint_gel_band_converter import convert_endpoint_gel_band
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_endpoint_hplc_uv_converter import convert_endpoint_hplc_uv
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_endpoint_ms_quant_converter import convert_endpoint_ms_quant
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_endpoint_nmr_converter import convert_endpoint_nmr
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_endpoint_optical_plateau_converter import convert_endpoint_optical_plateau
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_endpoint_radiometric_converter import convert_endpoint_radiometric
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_endpoint_time_course_completion_converter import convert_endpoint_time_course_completion
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_transport_response_direction import transport_direction_and_ratio
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_endpoint_conversion_direction import endpoint_direction_and_ratio
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_distribution_chiral_converter import convert_distribution_chiral
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_distribution_enzymatic_endpoint_converter import convert_distribution_enzymatic_endpoint
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_distribution_gc_converter import convert_distribution_gc
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_distribution_gel_bands_converter import convert_distribution_gel_bands
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_distribution_hplc_converter import convert_distribution_hplc
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_distribution_lcms_converter import convert_distribution_lcms
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_distribution_nmr_converter import convert_distribution_nmr
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_distribution_optical_equilibrium_converter import convert_distribution_optical_equilibrium
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_distribution_radio_tlc_converter import convert_distribution_radio_tlc
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_product_distribution_direction import product_distribution_direction_and_ratio
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_coupling_atp_product_converter import convert_coupling_atp_product
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_coupling_cofactor_product_converter import convert_coupling_cofactor_product
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_coupling_electron_balance_converter import convert_coupling_electron_balance
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_coupling_isotope_label_converter import convert_coupling_isotope_label
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_coupling_limiting_reagent_converter import convert_coupling_limiting_reagent
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_coupling_mass_balance_converter import convert_coupling_mass_balance
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_coupling_oxygen_product_converter import convert_coupling_oxygen_product
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_coupling_uncoupling_byproduct_converter import convert_coupling_uncoupling_byproduct
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_reaction_coupling_direction import coupling_direction_and_ratio
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_split_reporter_converter import convert_split_reporter
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_spr_converter import convert_spr
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_trp_converter import convert_trp
@@ -176,6 +206,33 @@ CONVERTERS = {
     'transport_proteoliposome_tracer': convert_transport_proteoliposome_tracer,
     'transport_ssm_electrophysiology': convert_transport_ssm_electrophysiology,
     'transport_vesicle_probe_flux': convert_transport_vesicle_probe_flux,
+    'endpoint_colorimetric': convert_endpoint_colorimetric,
+    'endpoint_enzymatic_assay': convert_endpoint_enzymatic_assay,
+    'endpoint_gas_evolution': convert_endpoint_gas_evolution,
+    'endpoint_gel_band': convert_endpoint_gel_band,
+    'endpoint_hplc_uv': convert_endpoint_hplc_uv,
+    'endpoint_ms_quant': convert_endpoint_ms_quant,
+    'endpoint_nmr': convert_endpoint_nmr,
+    'endpoint_optical_plateau': convert_endpoint_optical_plateau,
+    'endpoint_radiometric': convert_endpoint_radiometric,
+    'endpoint_time_course_completion': convert_endpoint_time_course_completion,
+    'distribution_chiral': convert_distribution_chiral,
+    'distribution_enzymatic_endpoint': convert_distribution_enzymatic_endpoint,
+    'distribution_gc': convert_distribution_gc,
+    'distribution_gel_bands': convert_distribution_gel_bands,
+    'distribution_hplc': convert_distribution_hplc,
+    'distribution_lcms': convert_distribution_lcms,
+    'distribution_nmr': convert_distribution_nmr,
+    'distribution_optical_equilibrium': convert_distribution_optical_equilibrium,
+    'distribution_radio_tlc': convert_distribution_radio_tlc,
+    'coupling_atp_product': convert_coupling_atp_product,
+    'coupling_cofactor_product': convert_coupling_cofactor_product,
+    'coupling_electron_balance': convert_coupling_electron_balance,
+    'coupling_isotope_label': convert_coupling_isotope_label,
+    'coupling_limiting_reagent': convert_coupling_limiting_reagent,
+    'coupling_mass_balance': convert_coupling_mass_balance,
+    'coupling_oxygen_product': convert_coupling_oxygen_product,
+    'coupling_uncoupling_byproduct': convert_coupling_uncoupling_byproduct,
 }
 
 
@@ -277,6 +334,15 @@ async def _results_of_grader(grader, converted, record, claims, identify):
         elif CLASS_OF_EXPERIMENT_TYPE[grader['experiment_type']] == 'transport_response':
             # a transport_response converter needs nothing beyond the converted result (no mass-dependent end of any anchor)
             direction = transport_direction_and_ratio(converted)
+        elif CLASS_OF_EXPERIMENT_TYPE[grader['experiment_type']] == 'endpoint_conversion':
+            # an endpoint_conversion converter hands over every anchor quantity in the anchor's own unit: no mass is needed
+            direction = endpoint_direction_and_ratio(converted)
+        elif CLASS_OF_EXPERIMENT_TYPE[grader['experiment_type']] == 'product_distribution':
+            # a product_distribution converter hands over every anchor quantity in the anchor's own unit (fraction or dimensionless): no mass is needed
+            direction = product_distribution_direction_and_ratio(converted)
+        elif CLASS_OF_EXPERIMENT_TYPE[grader['experiment_type']] == 'reaction_coupling':
+            # a reaction_coupling converter hands over its effect in the anchor's own unit (fraction): the direction function needs nothing beyond the converted result
+            direction = coupling_direction_and_ratio(converted)
         else:
             direction = direction_and_ratio(converted)
         known = direction['direction'] != 'unknown'

@@ -1,7 +1,7 @@
-"""The task: the leaf extraction of a source in document order, window after window, for the sheet class of the claim. The
-page has not read the source, so the commission names the sheet class (``sheet_class``), not an experiment type. Unit k is
+"""The task: the leaf extraction of a source in document order, window after window, for the relation the claim states. The
+page has not read the source, so the commission names the relation the claim states (``claim_predicate``), not an experiment type. Unit k is
 asked, with the text of the k-th window (``messages/internal_summary.py``), to NAME the method that window reports, from the
-experiment types of the class (each shown with its plain line) or ``none`` (the library's ``method_request`` and
+experiment types of the classes that list it (each shown with its plain line) or ``none`` (the library's ``method_request`` and
 ``method_call``). The unit, ``extract``, then has the model fill the named type's form with its identity block, quote-only,
 through the unit's recorded model (the library's ``extraction_arguments``); code validates every quote (found once in the
 window), finds its span and holds the immutable leaf record of that window, which carries the type named. A window named
@@ -28,11 +28,11 @@ def decide(summary, feedback, ctx):
     asked for with an empty input list is an error."""
     if not summary['input_list']:
         raise LookupError('leaf_input_list_empty:' + TEXT)
-    return method_request(summary['sheet_class'], summary['window'], feedback, text=TEXT)
+    return method_request(summary['claim_predicate'], summary['window'], feedback, text=TEXT)
 
 
 def action(response, summary, records, ctx):
-    return method_call(response, summary['sheet_class'], summary['window'], summary['already_stated_fields'],
+    return method_call(response, summary['claim_predicate'], summary['window'], summary['already_stated_fields'],
                        summary['not_yet_stated_fields'], source_ref=summary['source_ref'], offset=summary['offset'],
                        limit=summary['limit'], assertion_ref=summary['proposed_annotation_ref'])
 

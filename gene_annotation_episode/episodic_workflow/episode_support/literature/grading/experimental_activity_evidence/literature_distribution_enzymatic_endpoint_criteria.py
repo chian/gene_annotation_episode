@@ -108,6 +108,7 @@ DISTRIBUTION_ENZYMATIC_ENDPOINT_CRITERIA = (
             ('not_applicable', 'fact_not_applicable', 'no cross-reactivity is given and the specificity fact is not_applicable'),
         ),
     },
+    {
         'id': 'first_enzyme_quenched',
         'question': 'Was the reaction of the studied enzyme stopped before the analyses, so that the mixture could not change further or disturb the analysis enzymes?',
         'reads': ('facts.first_enzyme_quenched_before_analysis',),

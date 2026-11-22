@@ -1,5 +1,5 @@
 """The commissions: what this episode sends each of its three children. All three are leaf extractors of this episode's
-own paper in the representation it was commissioned, with the sheet class of the claim (the leaf names the method it
+own paper in the representation it was commissioned, with the relation the claim states (the leaf names the method it
 finds; the page names no experiment type), and each is handed input units of the page's candidate list
 (``messages/internal_summary.py``):
 
@@ -26,7 +26,7 @@ OBJECTIVE = 'find_applicable_evidence'   # whether the candidate holds an experi
 def msg_to_child(slot, arguments, summary):
     page = summary['page']
     assignment = {'source_ref': page['source_ref'], 'passed_refs': list(summary['held_record_refs']),
-                  'representation': page['representation'], 'sheet_class': summary['sheet_class'],
+                  'representation': page['representation'], 'claim_predicate': summary['claim_predicate'],
                   'proposed_annotation_ref': summary['proposed_annotation_ref']}
     if slot == 'report':
         assignment['windows'] = [list(window) for window in summary['report_windows']]

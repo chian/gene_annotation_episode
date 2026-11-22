@@ -111,18 +111,27 @@ FEATURES_VERSION = 'a105_investigation_features_v1'
 # ---------------------------------------------------------------------------------------------------------------
 # (2) Classes (sheet names) and the experiment types
 # ---------------------------------------------------------------------------------------------------------------
-CLASSES = ('activity_rate', 'endpoint_conversion', 'product_distribution', 'reaction_coupling', 'ligand_binding', 'transport_response', 'protein_signal', 'protein_amount')
+# protein_signal and protein_amount were removed on 2026-11-22 (owner: they answer to no claim; a band that is a reaction product is an
+# activity_rate method, a band in a pull-down is the pulldown method, the active fraction is a fact of an activity method, and the
+# presence of a protein is context, not activity).
+CLASSES = ('activity_rate', 'endpoint_conversion', 'product_distribution', 'reaction_coupling', 'ligand_binding', 'transport_response')
 
 EXPERIMENT_TYPES = ('spr', 'itc', 'bli', 'gci', 'fp', 'fret', 'mst', 'trp_quenching', 'fcs', 'elisa', 'alphascreen', 'radioligand', 'spa', 'pulldown', 'emsa', 'sec', 'dialysis', 'auc', 'dsf', 'cetsa', 'bret', 'y2h', 'split_reporter', 'pla', 'proximity',
                     'colocalization', 'spectro_direct',
                     'coupled_enzyme', 'redox_mediator', 'fluorogenic', 'luminescent', 'stopped_flow', 'quench_flow', 'chromatographic', 'stopped_colorimetric', 'radiometric',
                     'separation_band', 'oxygen_electrode', 'ph_stat', 'protein_film_electrochem', 'itc_kinetics', 'continuous_ms', 'nmr_timecourse', 'product_immunodetection', 'zymogram',
                     'transport_cell_tracer_uptake', 'transport_counterflow', 'transport_fluorescent_reporter', 'transport_medium_analysis', 'transport_oocyte_two_electrode',
-                    'transport_patch_clamp', 'transport_planar_bilayer', 'transport_proteoliposome_tracer', 'transport_ssm_electrophysiology', 'transport_vesicle_probe_flux')
+                    'transport_patch_clamp', 'transport_planar_bilayer', 'transport_proteoliposome_tracer', 'transport_ssm_electrophysiology', 'transport_vesicle_probe_flux',
+                    'endpoint_colorimetric', 'endpoint_enzymatic_assay', 'endpoint_gas_evolution', 'endpoint_gel_band', 'endpoint_hplc_uv', 'endpoint_ms_quant', 'endpoint_nmr',
+                    'endpoint_optical_plateau', 'endpoint_radiometric', 'endpoint_time_course_completion',
+                    'distribution_chiral', 'distribution_enzymatic_endpoint', 'distribution_gc', 'distribution_gel_bands', 'distribution_hplc',
+                    'distribution_lcms', 'distribution_nmr', 'distribution_optical_equilibrium', 'distribution_radio_tlc',
+                    'coupling_atp_product', 'coupling_cofactor_product', 'coupling_electron_balance', 'coupling_isotope_label', 'coupling_limiting_reagent',
+                    'coupling_mass_balance', 'coupling_oxygen_product', 'coupling_uncoupling_byproduct')
 
 # The class of each experiment type: the first 26 belong to ligand_binding; the activity_rate class has 19 types, spectro_direct
-# (2026-11-21) and eighteen more (2026-11-22); the transport_response class has 10 types (2026-11-22); the types of the other five
-# classes are added with their converters.
+# (2026-11-21) and eighteen more (2026-11-22); the transport_response class has 10 types (2026-11-22); the endpoint_conversion class has 10 types
+# (2026-11-22); the product_distribution class has 9 types (2026-11-22); the reaction_coupling class has 8 types (2026-11-22); the types of the other two classes are added with their converters.
 CLASS_OF_EXPERIMENT_TYPE = {
     'spr': 'ligand_binding', 'itc': 'ligand_binding', 'bli': 'ligand_binding', 'gci': 'ligand_binding', 'fp': 'ligand_binding', 'fret': 'ligand_binding', 'mst': 'ligand_binding',
     'trp_quenching': 'ligand_binding', 'fcs': 'ligand_binding', 'elisa': 'ligand_binding', 'alphascreen': 'ligand_binding', 'radioligand': 'ligand_binding', 'spa': 'ligand_binding',
@@ -152,6 +161,18 @@ CLASS_OF_EXPERIMENT_TYPE = {
     'transport_medium_analysis': 'transport_response', 'transport_oocyte_two_electrode': 'transport_response', 'transport_patch_clamp': 'transport_response',
     'transport_planar_bilayer': 'transport_response', 'transport_proteoliposome_tracer': 'transport_response', 'transport_ssm_electrophysiology': 'transport_response',
     'transport_vesicle_probe_flux': 'transport_response',
+    # The ten endpoint_conversion types (2026-11-22): 'E catalyzes S' is the class claim (CLAIM_PREDICATES_BY_CLASS).
+    'endpoint_colorimetric': 'endpoint_conversion', 'endpoint_enzymatic_assay': 'endpoint_conversion', 'endpoint_gas_evolution': 'endpoint_conversion',
+    'endpoint_gel_band': 'endpoint_conversion', 'endpoint_hplc_uv': 'endpoint_conversion', 'endpoint_ms_quant': 'endpoint_conversion', 'endpoint_nmr': 'endpoint_conversion',
+    'endpoint_optical_plateau': 'endpoint_conversion', 'endpoint_radiometric': 'endpoint_conversion', 'endpoint_time_course_completion': 'endpoint_conversion',
+    # The nine product_distribution types (2026-11-22): 'E catalyzes P' is the class claim (CLAIM_PREDICATES_BY_CLASS).
+    'distribution_chiral': 'product_distribution', 'distribution_enzymatic_endpoint': 'product_distribution', 'distribution_gc': 'product_distribution',
+    'distribution_gel_bands': 'product_distribution', 'distribution_hplc': 'product_distribution', 'distribution_lcms': 'product_distribution',
+    'distribution_nmr': 'product_distribution', 'distribution_optical_equilibrium': 'product_distribution', 'distribution_radio_tlc': 'product_distribution',
+    # The eight reaction_coupling types (2026-11-22): 'E catalyzes R' is the class claim (CLAIM_PREDICATES_BY_CLASS).
+    'coupling_atp_product': 'reaction_coupling', 'coupling_cofactor_product': 'reaction_coupling', 'coupling_electron_balance': 'reaction_coupling',
+    'coupling_isotope_label': 'reaction_coupling', 'coupling_limiting_reagent': 'reaction_coupling', 'coupling_mass_balance': 'reaction_coupling',
+    'coupling_oxygen_product': 'reaction_coupling', 'coupling_uncoupling_byproduct': 'reaction_coupling',
 }
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -185,11 +206,17 @@ QUALITATIVE_STATEMENT = ('interaction_detected', 'interaction_not_detected', 'in
 # For the transport_response class (DRAFT 2026-11-22, owner to confirm) 'interaction_detected' reads "transport detected" (movement of the claimed
 # substrate or ion above the paper's own control), 'interaction_not_detected' reads "transport not detected" (no movement above the paper's own
 # control or detection limit) and 'interaction_not_stated' reads "transport not stated".
+# For the endpoint_conversion class (DRAFT 2026-11-22, owner to confirm) 'interaction_detected' reads "conversion detected", 'interaction_not_detected'
+# reads "conversion not detected" (no conversion above the paper's own control or detection limit) and 'interaction_not_stated' reads "conversion not stated".
+# For the product_distribution class (DRAFT 2026-11-22, owner to confirm) 'interaction_detected' reads "product detected" (the claimed product is among the
+# products), 'interaction_not_detected' reads "product not detected" and 'interaction_not_stated' reads "product not stated".
+# For the reaction_coupling class (DRAFT 2026-11-22, owner to confirm) 'interaction_detected' reads "coupled product formation detected",
+# 'interaction_not_detected' reads "no product formed above the paper's own control or detection limit" and 'interaction_not_stated' reads "not stated".
 
 # Candidate claim predicates. OWNER_DECISION 1: a candidate carries predicate + subject_id + partner_id (annotation
 # IDs or names from a looked-up list). A claim names molecules only: it never carries a physical prediction or threshold
 # (owner ruling of 2026-11-21); the sheet grades the measurement itself (QUANTITATIVE_STRENGTH).
-# EXTENSION POINT: the predicates of the other seven classes (for example catalyses, transports, changes_amount) are
+# The predicates of the other classes (catalyzes for the four reaction classes, transports) are
 # to be added here WITH THEIR CLASS, by the builder who adds that class; a predicate not listed for a class is refused.
 CLAIM_PREDICATES_BY_CLASS = {
     'ligand_binding': ('binds',),
@@ -199,6 +226,20 @@ CLAIM_PREDICATES_BY_CLASS = {
     # DRAFT 2026-11-22, owner to confirm: 'P transports S' (P the transporter or channel, S a substrate or an ion). Subject = the protein (the
     # record's target_id), partner = the transported molecule or ion (the record's partner_id). NOT symmetric. Do not add to SYMMETRIC_PREDICATES.
     'transport_response': ('transports',),
+    # DRAFT 2026-11-22, owner to confirm: 'E catalyzes the conversion of S' (S a substrate molecule; a reaction term gives a null partner). Subject = the
+    # enzyme (the record's target_id). NOT symmetric. The word is the activity_rate class's too (owner, 2026-11-22: "One word for all four classes");
+    # classes_of_predicate returns both classes.
+    'endpoint_conversion': ('catalyzes',),
+    # DRAFT 2026-11-22, owner to confirm: 'E catalyzes P' where P is a product of the reaction (a molecule). Subject = the enzyme (the record's
+    # target_id); partner = the claimed product. NOT symmetric. The same word as activity_rate and endpoint_conversion (owner, 2026-11-22:
+    # "One word for all four classes"); classes_of_predicate returns every class that holds it; a class none of whose types a paper reports holds no row.
+    'product_distribution': ('catalyzes',),
+    # DRAFT 2026-11-22, owner to confirm: 'E catalyzes R' for the stoichiometric link of a reaction. Subject = the enzyme (the record's target_id);
+    # partner = the substrate whose conversion is coupled to the consumption of a cofactor (the record's partner_id, as stated). NOT symmetric.
+    # A claim names molecules only and carries no threshold. The same word as activity_rate, endpoint_conversion and product_distribution
+    # (owner, 2026-11-22: "One word for all four classes"); classes_of_predicate returns every class that holds it; a class none of whose
+    # types a paper reports holds no row.
+    'reaction_coupling': ('catalyzes',),
 }
 
 # What each experiment type is, in one plain line: the method and what it reports. This is the one place; the page shows these
@@ -260,6 +301,33 @@ EXPERIMENT_TYPE_LINES = {
     'transport_proteoliposome_tracer': 'Proteoliposome tracer transport: one purified transporter reconstituted into liposomes with an imposed gradient (pH, membrane potential, sodium or another ion), uptake or efflux of a labelled substrate counted after stopping, against protein-free liposomes; reports the rate per mg of protein, turnover, Km or the fold over empty liposomes.',
     'transport_ssm_electrophysiology': 'Solid-supported membrane electrophysiology: proteoliposomes on a gold sensor, a substrate concentration jump gives a transient current of electrogenic transport (voltage not clamped); reports the apparent Km of the peak current and the fold over an empty-liposome sensor.',
     'transport_vesicle_probe_flux': 'Vesicle flux read continuously: vesicles (liposomes with a reconstituted protein, or native vesicles) release or take up an ion or substrate while an ion-selective electrode in the bath or a dye trapped inside follows it in real time, and a detergent at the end releases the whole pool; reports the fraction of the pool released over time against protein-free vesicles, a rate constant or half-time and, when stated, a rate per transporter, a rate per mg or the fold over protein-free vesicles; it is not a labelled tracer that is stopped and counted, and not a current.',
+    'endpoint_colorimetric': 'Stopped end-point colour assay: the reaction runs for a set time and is stopped, a colour reagent (malachite green for phosphate, DNS for reducing sugar, DTNB for a thiol, Nessler or Berthelot for ammonia) colours a product class, and the share of the substrate converted, or the amount of product, is read at that one time from a standard curve made in the reaction buffer; reports an end point, never a rate, and names a product class, not a separated product.',
+    'endpoint_enzymatic_assay': 'End-point determination with a second enzyme: after a stated time the first reaction is stopped and the substrate left or the product formed is measured by a second, specific enzyme (formate by formate dehydrogenase, glucose by glucose oxidase, ammonia by glutamate dehydrogenase) against a standard series; reports the share of the substrate converted or the product amount at that time, not a rate.',
+    'endpoint_gas_evolution': 'Gas-evolution end point: an enzyme reaction in a closed vessel whose gas product (H2, CO2, CH4, N2O) is read from the headspace by gas chromatography or manometry at a fixed time; reports the gas amount or the percent of the theoretical yield.',
+    'endpoint_gel_band': 'Gel or TLC separation of substrate and product, read by densitometry: the share of the substrate converted at one stated time, or whether a product band is present.',
+    'endpoint_hplc_uv': 'Fixed-time reaction read by HPLC with an optical or refractive-index detector: the reaction is run for a stated time and stopped, and substrate and product are separated and quantified against an authentic standard; reports the share of the substrate converted (or the product concentration) at that one time, not a rate and not the time to completion.',
+    'endpoint_ms_quant': 'Fixed-time enzyme reaction, stopped at a stated time, whose product is quantified by LC-MS, LC-MS/MS or GC-MS against an internal standard and a matrix-matched calibration of an authentic standard; reports the share of the substrate converted, the product amount or the completion time at that one end point, not a rate.',
+    'endpoint_nmr': 'NMR end-point conversion: an enzyme reaction read as one NMR spectrum at a stated time or at completion, the integrals of an assigned substrate and product signal (product over substrate plus product, or against an internal standard) giving the share of the substrate converted; reports the percent conversion or the product amount at that time, not a rate.',
+    'endpoint_optical_plateau': 'Reaction run to an optical plateau: the absorbance or fluorescence of a chromophoric or fluorogenic substrate or product is read until it stops changing, and the final change is turned into the share of the substrate converted (with an extinction coefficient or a full-conversion reference); reports a conversion fraction, a product amount or the time to the plateau, not a rate.',
+    'endpoint_radiometric': 'Radiometric end point: a radiolabelled substrate is incubated with the enzyme for a stated time, the reaction is stopped, the labelled product is separated (TLC, filter binding, ion exchange, trapped 14CO2) and counted; reports the share of the label converted, or the product amount, at that one time (not a rate).',
+    'endpoint_time_course_completion': 'Sampled time course to a stated completion or equilibrium (followed by NMR, HPLC, mass spectrometry or an optical signal): the reaction is sampled until a stated state is reached; reports the time to completion, possibly only a bound, and its ratio to a reference arm.',
+    'distribution_chiral': 'Chiral-phase chromatography or electrophoresis of stereo-isomeric products (chiral HPLC, GC, SFC or CE, or diastereomers on an ordinary column) with a racemic standard: the enzyme\'s product is separated into its isomers; reports the enantiomeric excess, the enantiomer ratio or the diastereomer ratio of the product.',
+    'distribution_enzymatic_endpoint': 'Enzymatic end-point analysis of a product mixture: after the reaction each species is determined by its own specific enzymatic analysis (a dehydrogenase, oxidase or kinase that turns it to a read reporter, for example NADH at 340 nm) against its own standards; reports the share of each species, a product ratio or the equilibrium ratio, from the concentrations.',
+    'distribution_gc': 'Gas chromatography (GC-FID or GC-MS) of volatile or derivatized products, as an extract, headspace or fibre sample: peaks named by standards, retention index or library match; reports the share of each product in the product spectrum (terpene spectra, regio-isomers, chain lengths).',
+    'distribution_gel_bands': 'gel or capillary electrophoresis of the reaction products by size, read by densitometry or fragment analysis: the share of each product length or cleavage site among the products, or a ratio of two of them',
+    'distribution_hplc': 'HPLC peak-area distribution of products: the reaction (or an equilibrium mixture) is stopped and its species are separated by liquid chromatography (UV, diode-array, fluorescence, refractive-index, ELSD or CAD detection); reports the share of one named product among the products, a ratio of two products, or the composition at equilibrium, and is a molar share only with response factors; not a rate, not the total conversion.',
+    'distribution_lcms': 'LC-MS or LC-MS/MS product profile: the products of an enzyme reaction separated by liquid chromatography and each read by its mass-spectrometric ion signal (extracted ion chromatogram, selected or multiple reaction monitoring); reports the share of one product among the products, or a ratio of two products, quantitative only when each species is calibrated on its own or against isotope-labelled standards.',
+    'distribution_nmr': 'Quantitative NMR of a product mixture: an enzyme reaction (or a mixture left to equilibrium) read by NMR of one nucleus (1H, 13C, 31P, 19F) with no separation, the integrals of each assigned species giving the share of one named product among the products, a ratio of two products or the equilibrium composition; reports shares and ratios, not a rate and not how much substrate was converted.',
+    'distribution_optical_equilibrium': 'Optical equilibrium composition: the absorbance or fluorescence of the reaction mixture is followed to a plateau (the species have their own spectra, for example NADH at 340 nm), ideally reached from both the substrate and the product side, and the plateau signal and the pure-species spectra give the equilibrium share or ratio; no separation; reports an equilibrium fraction or ratio.',
+    'distribution_radio_tlc': 'Radiolabelled product distribution: a radioactively labelled substrate is incubated with the enzyme, the products are separated on a TLC plate, by radio-HPLC or on a gel and the label of each is counted or imaged; reports the share of the labelled counts in each named product (or the ratio of two), not the total conversion or the rate.',
+    'coupling_atp_product': 'ATP or GTP hydrolysis paired with the product it drives: the nucleotide hydrolysed (phosphate dye, pyruvate kinase / lactate dehydrogenase NADH loss, [gamma-32P] release or ADP by chromatography) and the product are measured in the same reaction, with the basal ATPase rate taken off; reports the nucleotides hydrolysed per product (a cost, normally above 1) or the share of the hydrolysis that ends in product.',
+    'coupling_cofactor_product': 'Cofactor consumption paired with an identified product: NAD(P)H loss (absorbance at 340 nm, or HPLC) and the product (by chromatography or mass spectrometry against a standard) measured in the same reaction; reports the coupling (coefficient times product over cofactor, as a percent or fraction) or the product per cofactor.',
+    'coupling_electron_balance': 'Electron balance of a reaction: the electrons delivered (a reductant titrated in, charge passed at an electrode, a reduced donor oxidised) are counted against the electrons recovered in the product (H2 by gas chromatography, a reduced compound), times the electrons the product needs; reports the share of the delivered electrons found in the product (electron recovery, faradaic efficiency).',
+    'coupling_isotope_label': 'Isotope-label flow: the enzyme is given a labelled source (18O2, H2 18O, 13C, 15N, or a double 14C and 3H label) and the product is read by mass spectrometry or counting; reports the share of the product that carries the label of the claimed source (where an atom came from), not an amount of the partner consumed.',
+    'coupling_limiting_reagent': 'Limiting-reagent endpoint: one reaction run to completion with a single reagent (a cofactor or co-substrate) limiting, in one dose or by stepwise titration, and the product at the end set against the limiting reagent used up; reports the equivalents of the limiting reagent per product (for example 2 NADPH per product) or the yield over it, as a productive fraction or a product-per-reagent ratio.',
+    'coupling_mass_balance': 'Mass balance (closure) of a reaction: the substrate that disappeared is set against the sum of the identified products, each quantified in the same samples by HPLC, GC, mass spectrometry or NMR against standards; reports the closure (the share of the consumed substrate that the products account for, as a molar, carbon, nitrogen or mass balance) and the unaccounted residual, not a conversion alone and not a rate.',
+    'coupling_oxygen_product': 'Oxygen uptake paired with an identified product: the oxygen consumed by an enzyme reaction is read with an electrode or optode (Clark, Oroboros, fluorescence) in one vessel and the claimed product is identified and counted by chromatography, mass spectrometry or NMR over the same interval, with the oxygen that went to hydrogen peroxide accounted for; reports the product per oxygen consumed (or a productive fraction), the two amounts or rates, or a stated yes or no.',
+    'coupling_uncoupling_byproduct': 'Peroxide or superoxide formed per cofactor consumed (Amplex Red with peroxidase, ferrous oxidation with xylenol orange, catalase oxygen return, cytochrome c with superoxide dismutase): it reports the uncoupled share of the cofactor and, by difference, the productive share when the by-product is stated to be the only loss; it does not identify the product.',
 }
 
 
@@ -268,16 +336,26 @@ def experiment_types_of_class(sheet_class):
     return tuple(name for name in EXPERIMENT_TYPES if CLASS_OF_EXPERIMENT_TYPE[name] == sheet_class)
 
 
-def class_of_predicate(predicate):
-    """The one sheet class whose claims carry this predicate; a predicate no class lists raises."""
-    classes = [sheet for sheet, predicates in CLAIM_PREDICATES_BY_CLASS.items() if predicate in predicates]
-    if len(classes) != 1:
-        raise ValueError(f'the predicate {predicate!r} belongs to {len(classes)} classes, not one')
-    return classes[0]
+def classes_of_predicate(predicate):
+    """The sheet classes whose claims carry this predicate, in the order of CLASSES. One word may span several classes
+    (owner, 2026-11-22: "One word for all four classes": E catalyzes R is supported by its rate, its endpoint conversion, its
+    product distribution and its reaction coupling alike, each on its own row). A predicate no class lists raises."""
+    classes = tuple(sheet for sheet in CLASSES if predicate in CLAIM_PREDICATES_BY_CLASS.get(sheet, ()))
+    if not classes:
+        raise ValueError(f'the predicate {predicate!r} belongs to no class')
+    return classes
+
+
+def experiment_types_of_predicate(predicate):
+    """The experiment types that can support a claim with this predicate: the types of every class that lists it, in registry
+    order. Not every class applies to every paper: a class none of whose types a paper reports holds no row and gives no
+    score (an unknown row never enters the score), and a result that did not test the claim stays irrelevant (literature_relevance)."""
+    classes = classes_of_predicate(predicate)
+    return tuple(name for name in EXPERIMENT_TYPES if CLASS_OF_EXPERIMENT_TYPE[name] in classes)
 # A symmetric predicate holds both ways: 'A binds B' is 'B binds A'. A result whose target is the claim's partner and whose
 # partner is the claim's subject is then the same target and relevant for the claim (reason partner_route in both).
 SYMMETRIC_PREDICATES = ('binds',)
-CLAIM_PREDICATES = tuple(p for predicates in CLAIM_PREDICATES_BY_CLASS.values() for p in predicates)
+CLAIM_PREDICATES = tuple(dict.fromkeys(p for predicates in CLAIM_PREDICATES_BY_CLASS.values() for p in predicates))   # one word may span several classes: listed once
 CLAIM_FIELDS = {   # OWNER_DECISION 1
     'predicate': 'vocab CLAIM_PREDICATES',
     'subject_id': 'molecule name (is_name; compared after normalize_identity_ref): the target the annotation is about',
@@ -343,6 +421,36 @@ WEIGHT_UNKNOWN_BY_TYPE = {
     'transport_proteoliposome_tracer': 0.85,  # EXPERT_REVIEW, owner to confirm: an absolute rate and Km in a defined system with a trusted reference range of carrier Km and turnover; an unstated control mostly changes magnitude; just under the KD anchor 0.90, as spectro_direct.
     'transport_ssm_electrophysiology': 0.70,  # EXPERT_REVIEW, owner to confirm: a relative readout whose meaning rests on its controls (the solution-exchange artefact is a known false current); no reference range we would trust if the paper said less; level with ELISA and DSF.
     'transport_vesicle_probe_flux': 0.80,  # EXPERT_REVIEW, owner to confirm: a clean defined system whose reference range (transporter and channel turnover) is known, but a rate needs the protein-free control, the response time and the protein amount, and a stated rate without them can be leak or a lag; a little under spectro_direct (0.85).
+    # The ten endpoint_conversion types (2026-11-22, all EXPERT_REVIEW, owner to confirm); the answer chain of each is in its converter docstring. An end point is not a constant of the enzyme (it depends on the loading and the time the paper chose) and has no trusted reference range as KD or kcat have, so none reaches the KD anchor 0.90.
+    'endpoint_colorimetric': 0.80,  # EXPERT_REVIEW, owner to confirm: an absolute amount of a product class only if the standard curve is made in the reaction matrix; the classic false positive is the reagent reacting with substrate, buffer or enzyme preparation; level with stopped_colorimetric.
+    'endpoint_enzymatic_assay': 0.80,  # EXPERT_REVIEW, owner to confirm: absolute readout through a standard series with well-known analytical ranges, but two enzymes can go wrong, not one.
+    'endpoint_gas_evolution': 0.85,  # EXPERT_REVIEW, owner to confirm: an absolute amount of one named gas from a calibrated reading, as trusted as the spectro_direct rate; the real gaps are the controls (gas without the enzyme, a leak).
+    'endpoint_gel_band': 0.75,  # EXPERT_REVIEW, owner to confirm: a relative-within-the-lane, semi-quantitative readout whose band is identified by mobility; level with emsa, the other gel readout.
+    'endpoint_hplc_uv': 0.85,  # EXPERT_REVIEW, owner to confirm: an absolute share or concentration against an authentic standard with substrate and product both visible; level with spectro_direct.
+    'endpoint_ms_quant': 0.85,  # EXPERT_REVIEW, owner to confirm: an absolute, calibrated amount of a named product identified by its mass, but with no natural reference range of conversions; level with spectro_direct.
+    'endpoint_nmr': 0.85,  # EXPERT_REVIEW, owner to confirm: an absolute fraction from integrals (no calibration curve), identified by its shift; an unstated acquisition detail is a real gap; level with spectro_direct.
+    'endpoint_optical_plateau': 0.75,  # EXPERT_REVIEW, owner to confirm: a relative readout in instrument units until a calibration makes it a fraction; an unstated baseline is the main false positive; below spectro_direct and fluorogenic.
+    'endpoint_radiometric': 0.85,  # EXPERT_REVIEW, owner to confirm: the share converted is a ratio of counts of one sample, sensitive, used for weak activities; equal to the activity class's radiometric type.
+    'endpoint_time_course_completion': 0.70,  # EXPERT_REVIEW, owner to confirm: a time to completion is a relative readout (enzyme and substrate amounts, temperature, what the paper calls complete) with no reference range; lower than spectro_direct.
+    # The nine product_distribution types (2026-11-22, all EXPERT_REVIEW, owner to confirm); the answer chain of each is in its converter docstring.
+    'distribution_chiral': 0.85,  # EXPERT_REVIEW, owner to confirm: a ratio of two peak areas of one compound, needing no calibration for enantiomers; a routine, well-trusted number when a racemic standard is run; an unstated standard or control more often leaves a gap than a lie; just under the KD anchor 0.90 and level with spectro_direct.
+    'distribution_enzymatic_endpoint': 0.80,  # EXPERT_REVIEW, owner to confirm: absolute molar shares by each species' own calibration, below the KD anchor 0.90 and just under spectro_direct 0.85, because several determinations must each be right and their errors add in a share; an unstated standard curve, completion or blank is benign typical practice, an unstated specificity, quench or coverage is the method's own classical failure.
+    'distribution_gc': 0.80,  # EXPERT_REVIEW, owner to confirm: a composition within one chromatogram, well defined when species are identified; a terpene-synthase spectrum is reproducible and an FID share of isomers is close to the true share even when little is stated; an unstated no-enzyme extract, identification or injector check can leave a solvent, plastic or thermal-rearrangement peak read as a product (a false product, worse than a wrong magnitude); below the KD anchor 0.90, level with the activity types.
+    'distribution_gel_bands': 0.75,  # EXPERT_REVIEW, owner to confirm: a share of band signals inside one lane (loading cancels, the signal per molecule is arbitrary) whose meaning needs in-lane controls and an equal response per molecule; level with emsa (0.75, the other gel readout), below spectro_direct (0.85, an absolute rate).
+    'distribution_hplc': 0.80,  # EXPERT_REVIEW, owner to confirm: a relative share from peak areas (absolute only with calibration), no trusted reference range as for KD or kcat, and an unstated standard or response correction leaves the identity or the magnitude open; a little under spectro_direct (0.85).
+    'distribution_lcms': 0.75,  # EXPERT_REVIEW, owner to confirm: the readout is RELATIVE (a share of the summed ion signal) unless each species is calibrated and there is no reference range for the size of a share; the presence of a product is well established by mass and retention time, so the direction mostly survives an unstated detail while the share can be off by a multiple; well under the KD anchor 0.90 and the activity types 0.85.
+    'distribution_nmr': 0.85,  # EXPERT_REVIEW, owner to confirm: the shares are read in one spectrum over one denominator and, with full relaxation, need no response factor, so a share is as absolute as an NMR integral; a species is identified by its chemical shift, a structural identity; an unstated acquisition detail (the delay) biases the size of a share rather than the existence of a species; level with spectro_direct, just under the KD anchor 0.90.
+    'distribution_optical_equilibrium': 0.75,  # EXPERT_REVIEW, owner to confirm: the composition is absolute (a state function) but rests on extinction coefficients and is told by spectrum only; what a paper rarely states (what makes the plateau an equilibrium, which species absorb, the controls) can turn a stalled reaction, a second absorbing species or a composite constant into a "composition"; below the NMR (0.85) and spectro_direct (0.85) defaults.
+    'distribution_radio_tlc': 0.80,  # EXPERT_REVIEW, owner to confirm: a RELATIVE share within a lane (no absolute calibration needed; absolute as a share of labelled products only when the label per molecule and the detection are equal); an unstated blank is the dominant false product (a radiochemical impurity of the labelled substrate runs where a product runs), an unstated standard leaves the product named only by position; under KD 0.90 and spectro_direct 0.85.
+    # The eight reaction_coupling types (2026-11-22, all EXPERT_REVIEW, owner to confirm); the answer chain of each is in its converter docstring. The ratio of two measured amounts is absolute and dimensionless, but each side needs its own calibration and the two sides must be matched.
+    'coupling_atp_product': 0.80,  # EXPERT_REVIEW, owner to confirm: a ratio of two absolute amounts, each from its own calibration, only as good as the worse calibration and the match of the sides; a trusted reference range exists only for a few well-studied systems (nitrogenase); under KD (0.90) and spectro_direct (0.85).
+    'coupling_cofactor_product': 0.80,  # EXPERT_REVIEW, owner to confirm: an absolute dimensionless link, but each side needs its own calibration and the two must be matched; P450 couplings run from a few percent to near 100 percent, which does not help with matching or product identity; under spectro_direct (0.85) and KD (0.90).
+    'coupling_electron_balance': 0.75,  # EXPERT_REVIEW, owner to confirm: the share is absolute and dimensionless with a physical bound, but each side needs its own calibration and the controls that separate the enzyme from a bypass are often unstated; below KD (0.90) and spectro_direct (0.85).
+    'coupling_isotope_label': 0.75,  # EXPERT_REVIEW, owner to confirm: an absolute fraction read from one ratio of ion intensities (no external calibration) with labels of known purity, but the claim it supports is indirect and rests on controls a paper may not state; below KD (0.90).
+    'coupling_limiting_reagent': 0.80,  # EXPERT_REVIEW, owner to confirm: an absolute dimensionless ratio fixed by the reaction's own coefficient, but made of two measurements that must agree; a little under spectro_direct (0.85).
+    'coupling_mass_balance': 0.80,  # EXPERT_REVIEW, owner to confirm: a ratio of two quantified amounts, only as good as the calibration of every species, and a low closure is a real result, so no reference range can stand in for an unstated detail; under spectro_direct and endpoint_hplc_uv (0.85).
+    'coupling_oxygen_product': 0.80,  # EXPERT_REVIEW, owner to confirm: the product per oxygen is absolute and dimensionless and the oxygenase stoichiometry gives a trusted expectation, but two measurements must be matched and each needs its own calibration; just under spectro_direct (0.85).
+    'coupling_uncoupling_byproduct': 0.75,  # EXPERT_REVIEW, owner to confirm: a ratio of two absolute amounts, each needing its own calibration; the uncoupled share of a monooxygenase runs from a few percent to nearly all, so no reference range holds, and peroxide reagents are known for artefacts; level with the fret and mst relative readouts.
 }
 # Per sheet criterion overrides where the answers differ within an assay (same document).
 WEIGHT_UNKNOWN_BY_CRITERION = {
@@ -431,6 +539,52 @@ WEIGHT_UNKNOWN_BY_CRITERION = {
     'transport_ssm_electrophysiology': {'background_alternatives': 0.60, 'transport_specificity': 0.60, 'attribution_supported': 0.75, 'calibration_applicability': 0.70, 'transport_endpoint': 0.85, 'sampling_basis': 0.80},
     # transport_vesicle_probe_flux (2026-11-22, EXPERT_REVIEW, owner to confirm; chain in literature_transport_vesicle_probe_flux_converter.py): the protein-free vesicle separates transport from leak; the second ion and the probe's selectivity say which species moved; the detergent total and the response time decide whether a rate is a rate; standard additions and triplicates are usual.
     'transport_vesicle_probe_flux': {'background_alternatives': 0.70, 'transport_specificity': 0.70, 'transport_endpoint': 0.75, 'calibration_applicability': 0.85, 'sampling_basis': 0.90},
+    # The ten endpoint_conversion types (2026-11-22, all EXPERT_REVIEW, owner to confirm; the reasons are in registration/endpoint_<type>.md section 5 and the answer chain in each converter docstring). Criteria not listed take the type default.
+    'endpoint_colorimetric': {'background_alternatives': 0.70, 'attribution_supported': 0.70, 'matrix_interference': 0.70, 'product_identity': 0.60, 'endpoint_alignment': 0.85, 'sampling_basis': 0.90},   # the blanks separate conversion from reagent chemistry; the colour cannot name the product
+    'endpoint_enzymatic_assay': {'background_alternatives': 0.65, 'product_identity': 0.70, 'matrix_interference': 0.75, 'calibration_applicability': 0.85, 'sampling_basis': 0.90},   # the blank without the first enzyme separates conversion from a contaminating analyte; identity rests on the second enzyme's specificity
+    'endpoint_gas_evolution': {'background_alternatives': 0.75, 'attribution_supported': 0.80, 'matrix_interference': 0.80, 'endpoint_alignment': 0.90, 'measurement_identity': 0.90, 'sampling_basis': 0.90},   # the no-enzyme vessel and leak check separate enzyme gas from chemistry and contamination
+    'endpoint_gel_band': {'background_alternatives': 0.70, 'attribution_supported': 0.70, 'product_identity': 0.70, 'calibration_applicability': 0.80, 'conversion_denominator': 0.85, 'sampling_basis': 0.85},   # an unstated no-enzyme lane leaves spontaneous breakdown open; identity by mobility alone is the weakest
+    'endpoint_hplc_uv': {'background_alternatives': 0.75, 'attribution_supported': 0.80, 'matrix_interference': 0.80, 'calibration_applicability': 0.90, 'endpoint_alignment': 0.90, 'sampling_basis': 0.90},   # the no-enzyme control and the time-zero sample separate conversion from spontaneous chemistry; a co-eluting peak adds to the product peak
+    'endpoint_ms_quant': {'background_alternatives': 0.75, 'attribution_supported': 0.85, 'matrix_interference': 0.80, 'calibration_applicability': 0.85, 'endpoint_alignment': 0.80, 'product_identity': 0.90, 'sampling_basis': 0.90},   # an unstated blank is the dominant false positive for a weak conversion; ion suppression changes an amount by a factor
+    'endpoint_nmr': {'background_alternatives': 0.75, 'attribution_supported': 0.75, 'calibration_applicability': 0.80, 'conversion_denominator': 0.90},   # NMR reactions run for hours at high loading where spontaneous conversion is real; unstated acquisition details put the integrals in doubt
+    'endpoint_optical_plateau': {'calibration_applicability': 0.65, 'background_alternatives': 0.65, 'attribution_supported': 0.70, 'product_identity': 0.65, 'matrix_interference': 0.70, 'sampling_basis': 0.85},   # an unstated calibration leaves a signal change that is not a conversion; a plateau is not completion
+    'endpoint_radiometric': {'background_alternatives': 0.70, 'attribution_supported': 0.80, 'product_identity': 0.75, 'calibration_applicability': 0.90, 'matrix_interference': 0.90, 'conversion_denominator': 0.90, 'sampling_basis': 0.90},   # an unstated blank or carry-over control is the dominant false positive of a very sensitive method
+    'endpoint_time_course_completion': {'measurement_identity': 0.55, 'endpoint_alignment': 0.60, 'background_alternatives': 0.65, 'attribution_supported': 0.60, 'product_identity': 0.75, 'conversion_denominator': 0.85, 'sampling_basis': 0.85},   # no stated end state identifies no estimate; completion times of hours are where slow spontaneous chemistry competes
+    # The nine product_distribution types (2026-11-22, EXPERT_REVIEW, owner to confirm); the reason of each entry is in its converter docstring.
+    # distribution_chiral: an unstated racemic standard leaves the assignment of both peaks unproved (a real gap); an unstated no-enzyme control or configurational stability leaves a chemical route or racemization open, but both lower the excess instead of faking it (cautious side, 0.80); the inactive-enzyme control is the enzyme-attribution risk, as in spectro_direct (0.80); two isomers over their own sum have a shared denominator by construction, and replicate counts are benign when unstated (0.90).
+    'distribution_chiral': {'species_identity': 0.75, 'background_alternatives': 0.80, 'attribution_supported': 0.80, 'common_denominator': 0.90, 'sampling_basis': 0.90},
+    # distribution_enzymatic_endpoint: the specificity of the analysis enzymes and the quench of the first enzyme are what the method rests on (an enzyme that also reads the neighbour, a first enzyme that goes on working): unstated counts clearly less; a species with no assay is missing from the denominator (0.75); spontaneous interconversion and loss on standing stay open without a no-enzyme sample and a stability statement (0.75); an equilibrium read from one end point (0.65); the standard curve, completion and blank are routine and benign when unstated (response_factors 0.90, calibration_applicability 0.85), as are triplicates (0.90).
+    'distribution_enzymatic_endpoint': {'species_identity': 0.75, 'matrix_interference': 0.70, 'common_denominator': 0.75, 'background_alternatives': 0.75, 'equilibrium_state': 0.65, 'calibration_applicability': 0.85, 'response_factors': 0.90, 'sampling_basis': 0.90},
+    # distribution_gc: species_identity 0.75 (an unstated identification leaves a neighbouring isomer a possible reading of the peak); background_alternatives 0.70 (solvent, plastic, bleed and spontaneous rearrangement all give peaks, a minor product can be one of them; the real gap of this method); matrix_interference 0.75 (injector rearrangement and extraction loss decide whether the peak is the product made); response_factors 0.85 and calibration_applicability 0.85 (benign for FID isomers); sampling_basis 0.90 (triplicates are usual, an unstated count changes precision, not existence).
+    'distribution_gc': {'species_identity': 0.75, 'background_alternatives': 0.70, 'matrix_interference': 0.75, 'response_factors': 0.85, 'calibration_applicability': 0.85, 'sampling_basis': 0.90},
+    # distribution_gel_bands: species_identity 0.85, size markers are on almost every gel, so a silent paper is a reporting gap; response_factors 0.65, an unstated stain without a length correction can distort a share by the ratio of the fragment lengths (an end label does not); common_denominator 0.70, a band or smear left out of the total is unseen and moves every share; calibration_applicability 0.80, the linear range, the detection limit and the recovery are usual practice; background_alternatives 0.65, an unstated no-enzyme or substrate-only lane leaves a spontaneous breakdown (RNA is labile) or a pre-cleaved substrate counted as product, the leading false positive of a gel; attribution_supported 0.70, a contaminating nuclease is the risk and the inactive-enzyme lane is often not reported; sampling_basis 0.85, triplicate practice.
+    'distribution_gel_bands': {'species_identity': 0.85, 'response_factors': 0.65, 'common_denominator': 0.70, 'calibration_applicability': 0.80, 'background_alternatives': 0.65, 'attribution_supported': 0.70, 'sampling_basis': 0.85},
+    # distribution_hplc: an unstated standard leaves the peak assigned by retention time alone, the main false positive of HPLC (0.70); an unstated no-enzyme injection leaves spontaneous and substrate peaks open (0.75); a composition without equilibrium evidence is a single end point (0.70, counts only for the two equilibrium kinds, where the criterion is required); an unstated calibration range, quench or resolution is ordinary practice (0.85); an unstated replicate count is benign (0.90). The other criteria take the type default 0.80.
+    'distribution_hplc': {'species_identity': 0.70, 'background_alternatives': 0.75, 'equilibrium_state': 0.70, 'calibration_applicability': 0.85, 'matrix_interference': 0.85, 'sampling_basis': 0.90},
+    # distribution_lcms: response_factors 0.60, an unstated per-species calibration is the dominant gap of an ion-signal share (off by a multiple, not by a few percent); matrix_interference 0.65, ion suppression is common and changes the signal by tens of percent when unstated; background_alternatives 0.70, the method is so sensitive that a spontaneous product or contaminant ion is seen, so an unstated no-enzyme blank matters; calibration_applicability 0.80, an unstated calibration range or limit of quantification changes the precision more than the meaning; sampling_basis 0.90, triplicates are usual. The other criteria take the type default 0.75.
+    'distribution_lcms': {'response_factors': 0.60, 'matrix_interference': 0.65, 'background_alternatives': 0.70, 'calibration_applicability': 0.80, 'sampling_basis': 0.90},
+    # distribution_nmr: assignment by chemical shift is the usual practice (0.90); the delay between scans is rarely stated and a short one biases a share (0.80); an unassigned signal or a species left out of the total moves every share (0.80); an unstated no-enzyme spectrum is a real gap because a spontaneous isomerisation, hydrolysis or exchange gives its own distribution without the enzyme (0.75); an unstated inactive-enzyme control leaves a contaminating activity open, and an equilibrium composition is the same for any catalyst, so attribution is the main risk of the class (0.70); a composition counted as an equilibrium that was still moving (0.70, only selected for the equilibrium quantities); a single tube is usual for NMR, so the replicate count is benign when unstated (0.90). calibration_applicability, assertion_relevance and condition_scope take the 0.85 default.
+    'distribution_nmr': {'species_identity': 0.90, 'response_factors': 0.80, 'common_denominator': 0.80, 'background_alternatives': 0.75, 'attribution_supported': 0.70, 'equilibrium_state': 0.70, 'sampling_basis': 0.90},
+    # distribution_optical_equilibrium: species told apart by spectrum only (0.70); the extinction coefficients of the common chromophores are known (0.85); an unaccounted absorbing species or a composite constant moves the share (0.70); the equilibrium is the same without the enzyme, so an unstated no-enzyme sample (0.70) and inactive-enzyme sample (0.65) leave open that the plateau says nothing about THIS enzyme; an unstated plateau or reverse approach can turn a stalled reaction into an "equilibrium" (0.65, the defining evidence of the type); an absorbance below about 1 and triplicates are routine (0.85).
+    'distribution_optical_equilibrium': {'species_identity': 0.70, 'response_factors': 0.85, 'common_denominator': 0.70, 'background_alternatives': 0.70, 'attribution_supported': 0.65, 'equilibrium_state': 0.65, 'calibration_applicability': 0.85, 'sampling_basis': 0.85},
+    # distribution_radio_tlc: an unstated standard leaves the product named only by its position on the plate (a real gap, the claim itself); an unstated no-enzyme or zero-time lane leaves a radiochemical impurity of the labelled substrate free to be counted as a product (a real gap for a minor product); an unstated equal label per molecule or matched detection is benign for one isotope on one plate; an unstated linear range of the imager and the replicate count are ordinary practice. The other criteria take the type default 0.80.
+    'distribution_radio_tlc': {'species_identity': 0.70, 'background_alternatives': 0.70, 'response_factors': 0.85, 'calibration_applicability': 0.85, 'sampling_basis': 0.85},
+    # coupling_atp_product (EXPERT_REVIEW, owner to confirm): a ratio of sides that may not be matched, or of a product that may not be the claimed one, is the least interpretable (matched_windows 0.65, product_identity 0.70); an unstated basal rate counts uncoupled hydrolysis as cost (reporter_specificity 0.70); an unstated blank or no-enzyme control leaves spontaneous hydrolysis open (0.75); hydrolysis dependence is often shown but left unsaid (0.75); an unstated coefficient leaves a bare ratio, not a wrong one (0.75); a phosphate standard curve or the NADH extinction coefficient is routine (0.85); triplicates are usual (0.90).
+    'coupling_atp_product': {'matched_windows': 0.65, 'product_identity': 0.70, 'reporter_specificity': 0.70, 'background_alternatives': 0.75, 'attribution_supported': 0.75, 'stoichiometry': 0.75, 'calibration_applicability': 0.85, 'sampling_basis': 0.90},
+    # coupling_cofactor_product (EXPERT_REVIEW, owner to confirm): a ratio of product to cofactor is uninterpretable when the product is not identified or the two sides are not matched (0.65); the uncoupled cofactor use left unstated (no-substrate control, by-product) leaves the share the method exists to separate open (0.70); an unstated blank (0.75) and an unstated coefficient (a factor of 2 open for reactions that take two cofactors, 0.75) are real gaps; the extinction coefficient of NAD(P)H is well known and a standard series is usual practice (calibration 0.85), and triplicates are usual (0.90).
+    'coupling_cofactor_product': {'product_identity': 0.65, 'matched_windows': 0.65, 'reporter_specificity': 0.70, 'background_alternatives': 0.75, 'stoichiometry': 0.75, 'calibration_applicability': 0.85, 'sampling_basis': 0.90},
+    # coupling_electron_balance (EXPERT_REVIEW, owner to confirm): an unstated no-enzyme blank leaves chemistry or the electrode as a source of product electrons (background_alternatives 0.65); an unstated mediator bypass or oxygen exclusion is the dominant false positive of the method (reporter_specificity 0.60); a share from electrons and product of different intervals or vessels is uninterpretable (matched_windows 0.65); an unstated inactive-enzyme control leaves another catalyst open (attribution_supported 0.70); H2 by gas chromatography identifies itself (product_identity 0.85); the electrons per common product are textbook (stoichiometry 0.85); calibration, matrix and measurement identity are routine when unstated (0.80); triplicate practice (sampling_basis 0.90).
+    'coupling_electron_balance': {'background_alternatives': 0.65, 'reporter_specificity': 0.60, 'matched_windows': 0.65, 'attribution_supported': 0.70, 'product_identity': 0.85, 'stoichiometry': 0.85, 'calibration_applicability': 0.80, 'matrix_interference': 0.80, 'measurement_identity': 0.80, 'sampling_basis': 0.90},
+    # coupling_isotope_label (EXPERT_REVIEW, owner to confirm): the unlabelled run, back-exchange control and label position turn a mass shift into a flow through the claimed reaction; an unstated back-exchange control is the dominant false positive of H2 18O work (attribution_supported 0.65); a shifted ion without a standard can be another molecule (product_identity 0.70); no-enzyme control (0.75); no ratio of two measurements depends on the windows, the isotope ratio is read inside one spectrum (matched_windows 0.80); calibration and sampling are benign when unstated (0.85).
+    'coupling_isotope_label': {'attribution_supported': 0.65, 'product_identity': 0.70, 'background_alternatives': 0.75, 'matched_windows': 0.80, 'calibration_applicability': 0.85, 'sampling_basis': 0.85},
+    # coupling_limiting_reagent (EXPERT_REVIEW, owner to confirm): an unmatched endpoint or an unfinished reaction makes the ratio uninterpretable (matched_windows 0.70); an unidentified product is the case of a cofactor lost without the claimed product (product_identity 0.70); an unstated coefficient, excess or regeneration leaves open that nothing was limiting (stoichiometry 0.75); use of the limiting reagent by something else (an oxidase side activity) is common and usually unstated (reporter_specificity 0.70); sampling_basis 0.90 is benign when unstated.
+    'coupling_limiting_reagent': {'matched_windows': 0.70, 'product_identity': 0.70, 'stoichiometry': 0.75, 'reporter_specificity': 0.70, 'sampling_basis': 0.90},
+    # coupling_mass_balance (EXPERT_REVIEW, owner to confirm): a sum over peaks that were not identified, or over substrate and products taken from different mixtures or time points, is uninterpretable (product_identity 0.70, matched_windows 0.70); the no-enzyme or time-zero sample separates enzymatic consumption from spontaneous loss of the substrate (background_alternatives 0.75); an unquantified expected product or a missing inactive-enzyme control leaves the balance open (attribution_supported 0.75); triplicates are usual (sampling_basis 0.90).
+    'coupling_mass_balance': {'product_identity': 0.70, 'matched_windows': 0.70, 'background_alternatives': 0.75, 'attribution_supported': 0.75, 'sampling_basis': 0.90},
+    # coupling_oxygen_product (EXPERT_REVIEW, owner to confirm): an unstated identity is the dominant false positive, the oxygen goes elsewhere and the product is inferred from the uptake (product_identity 0.55); unmatched vessels or intervals make the ratio one of unrelated numbers (matched_windows 0.65); an unstated no-substrate control or peroxide accounting leaves oxygen used by something else (reporter_specificity 0.65); an unstated electrode calibration and product standard are routine (0.85); drift is measured and small, a no-enzyme blank is usual (background_alternatives 0.80); triplicates are usual (0.90).
+    'coupling_oxygen_product': {'product_identity': 0.55, 'matched_windows': 0.65, 'reporter_specificity': 0.65, 'calibration_applicability': 0.85, 'background_alternatives': 0.80, 'sampling_basis': 0.90},
+    # coupling_uncoupling_byproduct (EXPERT_REVIEW, owner to confirm): an unstated product measurement most likely means none was made, so the ratio does not identify the product (0.55); an unstated accounting of the other loss routes usually means only one route was measured and the difference overstates the coupling (0.60); peroxide reagent artefacts and their checks are real and often unstated (reporter_specificity and matrix_interference 0.65); autoxidation of the cofactor and contaminating iron or heme are real but the blank is ordinary practice (0.70); the cofactor loss and the by-product are often measured separately (matched_windows 0.65); the same enzyme preparation is usual (0.80); a standard curve is usual (0.85); triplicates are usual (0.90).
+    'coupling_uncoupling_byproduct': {'product_identity': 0.55, 'stoichiometry': 0.60, 'reporter_specificity': 0.65, 'matrix_interference': 0.65, 'background_alternatives': 0.70, 'attribution_supported': 0.70, 'matched_windows': 0.65, 'measurement_identity': 0.80, 'calibration_applicability': 0.85, 'sampling_basis': 0.90},
 }
 if set(WEIGHT_UNKNOWN_BY_TYPE) != set(EXPERIMENT_TYPES) or not set(WEIGHT_UNKNOWN_BY_CRITERION) <= set(EXPERIMENT_TYPES):
     raise ValueError('WEIGHT_UNKNOWN_BY_TYPE must name exactly the EXPERIMENT_TYPES (and the overrides only those)')
@@ -599,6 +753,36 @@ QUALITATIVE_LOG_RATIO = {   # OWNER_DECISION 2
     'transport_cell_tracer_uptake': 1.0,  # EXPERT_REVIEW, owner to confirm: the label kept by living cells can also come from other host transporters, metabolism or trapping of the label and surface binding; weaker than a defined system (proteoliposomes 1.5, bilayer 1.4) and stronger than an interval balance in the medium or a dye (0.9).
     'transport_medium_analysis': 0.9,  # EXPERT_REVIEW, owner to confirm: an interval balance of export, re-uptake, lysis and metabolism on a living host with other transporters, not the movement through one protein; weaker than the tracer assay (where the label follows the substrate).
     'transport_fluorescent_reporter': 0.9,  # EXPERT_REVIEW, owner to confirm: an analogue or a surrogate ion and a relative dye signal are not the substrate and not an amount; the weakest of the class, level with the medium analysis.
+    # The ten endpoint_conversion types (2026-11-22, all EXPERT_REVIEW, owner to confirm). The same constant is the magnitude of 'conversion not detected'. Rule: the product named and quantified by the method itself is the strongest; a class of products or a final signal alone is the weakest.
+    'endpoint_ms_quant': 1.4,  # EXPERT_REVIEW, owner to confirm: the product is seen by its mass and quantified against an authentic standard with an internal standard; among the most specific end-point evidence.
+    'endpoint_hplc_uv': 1.3,  # EXPERT_REVIEW, owner to confirm: the product is separated, identified against an authentic standard and quantified; identity by retention time is weaker than by mass.
+    'endpoint_nmr': 1.3,  # EXPERT_REVIEW, owner to confirm: a product assigned by its spectrum and quantified without a response factor; the low sensitivity limits what a non-detection can exclude, not what is seen.
+    'endpoint_radiometric': 1.2,  # EXPERT_REVIEW, owner to confirm: the label follows the substrate's own atoms and the count is very sensitive, but the product is known only through the separation; under the activity radiometric type (1.3).
+    'endpoint_time_course_completion': 1.1,  # EXPERT_REVIEW, owner to confirm: a time to completion is relative to the loading and to the end state the paper chose; a long one cannot be told from slow background chemistry.
+    'endpoint_gas_evolution': 1.1,  # EXPERT_REVIEW, owner to confirm: a gas product named by the detector is specific and direct, but the vessel, the headspace calibration and the dissolved part decide the amount.
+    'endpoint_gel_band': 1.0,  # EXPERT_REVIEW, owner to confirm: densitometry of a band shift is semi-quantitative and the band is identified by its mobility only.
+    'endpoint_enzymatic_assay': 1.0,  # EXPERT_REVIEW, owner to confirm: a second enzyme reports the amount, so identity rests on that enzyme's specificity and on a blank easy to contaminate.
+    'endpoint_colorimetric': 0.9,  # EXPERT_REVIEW, owner to confirm: a reagent reports a product class (phosphate, reducing ends, a thiol), not a named product, and is easily raised by reagent chemistry.
+    'endpoint_optical_plateau': 0.9,  # EXPERT_REVIEW, owner to confirm: a final optical change is one number with no trace to check; a plateau does not show completion and names a reaction only when the product is identified.
+    # The nine product_distribution types (2026-11-22, all EXPERT_REVIEW, owner to confirm). The same constant is the magnitude of 'product not detected'. Rule: the methods that identify the species by structure (NMR, GC, chiral) carry most, those that need response factors or identify by retention or signal alone carry less, and those that tell species apart by size or spectrum alone least.
+    'distribution_chiral': 1.3,  # EXPERT_REVIEW, owner to confirm: chiral chromatography identifies both isomers (racemic standard) and gives a share with no response bias for enantiomers (equal response by symmetry), so it carries as much as NMR and GC for this class; below the label-free binding types (SPR 1.5), above the HPLC area method (1.2), whose response factors are unequal.
+    'distribution_enzymatic_endpoint': 1.1,  # EXPERT_REVIEW, owner to confirm: each species is identified by the specificity of its own enzyme and is molar by calibration, so a stated product is good evidence, but identity rests on enzyme specificity and not on structure, and a species with no assay is invisible; below NMR, GC and chiral (1.3), level with LC-MS (1.1), above gel bands (1.0) and optical equilibrium (0.9).
+    'distribution_gc': 1.3,  # EXPERT_REVIEW, owner to confirm: GC separates and names the species (retention index plus mass spectrum) and an FID share has little response bias for isomers; strong, below the label-free binding types; the same value as NMR and chiral chromatography, above HPLC (area needs response factors) and LC-MS (ion signal is not molar).
+    'distribution_gel_bands': 1.0,  # EXPERT_REVIEW, owner to confirm: a band is identified by its mobility against a ladder only, and a densitometry share rests on an indirect label or stain; below the separation-and-detector methods (HPLC, GC, NMR 1.2 to 1.3).
+    'distribution_hplc': 1.2,  # EXPERT_REVIEW, owner to confirm: the species are separated and a stated share rests on peaks assigned against standards, so a stated product is good evidence; below NMR, GC and chiral (1.3) because an HPLC area needs response factors and identity by retention alone is weaker than by spectrum; level with spectro_direct (1.2).
+    'distribution_lcms': 1.1,  # EXPERT_REVIEW, owner to confirm: a mass and a retention time identify a species specifically, so a stated product is strong evidence; but an ion signal is not a molar amount (ionisation efficiency differs between species, the matrix suppresses it), so the size of a share is weaker than from NMR or GC (1.3) or HPLC with response factors (1.2).
+    'distribution_nmr': 1.3,  # EXPERT_REVIEW, owner to confirm: species identified by their spectrum and quantified by their integrals, with no response curve and no separation step, are strong evidence of which products a reaction gives; the low sensitivity of NMR (about 1 to 5 percent for a minor species, from memory) limits what a non-detection can exclude, which the signal-to-noise criterion carries through the weight, not this magnitude.
+    'distribution_optical_equilibrium': 0.9,  # EXPERT_REVIEW, owner to confirm: the weakest method of the class; species are told apart by their spectra only (no separation, no structural identity) and an equilibrium composition is the same for any catalyst, so it shows where the reaction lies more than that this enzyme makes the product; the gel type is 1.0, NMR, GC and chiral 1.3.
+    'distribution_radio_tlc': 1.2,  # EXPERT_REVIEW, owner to confirm: direct counting of the label in each separated species is sensitive and has no detector-response bias between species of one isotope, but it names a product only by its position beside a standard and sees only products that keep the label; a notch below the methods that identify the species by themselves (NMR, GC, chiral 1.3) and level with HPLC (1.2).
+    # The eight reaction_coupling types (2026-11-22, all EXPERT_REVIEW, owner to confirm). The same constant is the magnitude of 'no product formed above the control'. Rule: a weaker assay carries less evidence.
+    'coupling_atp_product': 1.2,  # EXPERT_REVIEW, owner to confirm: both sides of the reaction are measured in one mixture, so a stated product formed with the nucleotide is strong evidence of an ATP-driven reaction; level with spectro_direct (1.2) and below SPR (1.5), because the product is known through a second assay and the match of the two sides is a weight criterion, not this magnitude.
+    'coupling_cofactor_product': 1.3,  # EXPERT_REVIEW, owner to confirm: a product identified by chromatography or mass spectrometry and tied to the cofactor use of the same reaction shows the claimed reaction itself and not only a signal; a little above spectro_direct (1.2) and below SPR (1.5); an absent product is limited by the detection limit and the conditions tried.
+    'coupling_electron_balance': 1.0,  # EXPERT_REVIEW, owner to confirm: a closed electron count on an identified product is direct evidence that the electrons end in the claimed product, but does not say which catalyst moved them (a mediator dye or the electrode can do it); a little below a direct rate on purified enzyme (spectro_direct 1.2).
+    'coupling_isotope_label': 1.0,  # EXPERT_REVIEW, owner to confirm: a label found in the product shows where an atom came from, direct evidence for the claimed route, but not how much of the consumed partner ended in the product, and open to exchange artefacts (a carbonyl oxygen exchanging with H2 18O); the same level as fret and fcs, below spectro_direct (1.2).
+    'coupling_limiting_reagent': 1.2,  # EXPERT_REVIEW, owner to confirm: a reaction run to completion on one limiting reagent, with the product identified, is the standard direct evidence of a reaction with its stoichiometry, level with spectro_direct (1.2) and below SPR (1.5): the claim is coupling, which needs two measurements to agree, and a ratio is only as sure as its endpoint.
+    'coupling_mass_balance': 1.3,  # EXPERT_REVIEW, owner to confirm: the substrate and every product are separated, identified and quantified in the same samples, so a stated closure or product formation is strong, specific evidence of the claimed reaction; level with endpoint_hplc_uv (1.3), a little under endpoint_ms_quant (1.4) because identity is often by retention time, and under SPR and ITC (1.5).
+    'coupling_oxygen_product': 1.2,  # EXPERT_REVIEW, owner to confirm: two independent measurements (an electrode and an identified, calibrated product) agree on one reaction, the standard evidence that the claimed product comes from the oxygen reaction; level with spectro_direct (1.2) and below SPR (1.5): the two sides are linked only by a matched vessel and window (a weight criterion, not this magnitude).
+    'coupling_uncoupling_byproduct': 0.6,  # EXPERT_REVIEW, owner to confirm: the by-product shows how much cofactor is NOT used for the product; the productive share is the rest by difference, and the product is not identified by the method itself; indirect like thermal stabilisation (dsf, cetsa 0.6) and below the direct paired-rate and direct-readout types (spectro_direct 1.2).
 }
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -637,7 +821,7 @@ QUANTITATIVE_STRENGTH_ANCHORS = {   # OWNER_DECISION 15
 # ---------------------------------------------------------------------------------------------------------------
 # (5b2) STATED_ONLY_STRENGTH (OWNER_DECISION 19; owner, 2026-11-22: "yes/no statement is weakest evidence than experimental
 # measurements"). A type that can report a measured effect (it has anchors in QUANTITATIVE_STRENGTH_ANCHORS, or it is an
-# activity_rate or a transport_response type) may also be stated in words alone ("binds", "no binding was detected", "active"), with no number. Such a
+# activity_rate, transport_response, endpoint_conversion, product_distribution or reaction_coupling type) may also be stated in words alone ("binds", "no binding was detected", "active"), with no number. Such a
 # result says nothing about where on the type's scale the effect sits, so it counts as a fixed low strength on that scale:
 # log_ratio = QUALITATIVE_LOG_RATIO[type] * STATED_ONLY_STRENGTH, for a stated detection and a stated non-detection alike.
 # 0.25 is chosen so that the bare statement of even the strongest type (SPR or ITC, 1.5 * 0.25 = 0.375) stays under the
@@ -654,7 +838,7 @@ OBSERVATION_RESULT_TYPES = ('zymogram',)
 
 def stated_strength(experiment_type):
     """The strength a result stated in words alone takes on its type's scale (OWNER_DECISION 19)."""
-    measures = (experiment_type in QUANTITATIVE_STRENGTH_ANCHORS or CLASS_OF_EXPERIMENT_TYPE[experiment_type] in ('activity_rate', 'transport_response')) and experiment_type not in OBSERVATION_RESULT_TYPES
+    measures = (experiment_type in QUANTITATIVE_STRENGTH_ANCHORS or CLASS_OF_EXPERIMENT_TYPE[experiment_type] in ('activity_rate', 'transport_response', 'endpoint_conversion', 'product_distribution', 'reaction_coupling')) and experiment_type not in OBSERVATION_RESULT_TYPES
     return STATED_ONLY_STRENGTH if measures else 1.0
 
 
@@ -740,6 +924,111 @@ TRANSPORT_RATE_QUANTITY_OF_UNIT = {'s^-1': 'turnover', 'nmol/min/mg': 'normalize
 # The reverse, for a converter that selected a quantity with select_transport_effect and must name the record kind (transport_rate for the two rates).
 TRANSPORT_KIND_OF_QUANTITY = {'transport_km': 'transport_parameter', 'turnover': 'transport_rate', 'unitary_conductance': 'electrical_conductance',
                               'charge_rate': 'charge_equivalent_rate', 'fold_over_control': 'transport_rate_ratio', 'normalized_rate': 'transport_rate'}   # EXPERT_REVIEW, owner to confirm
+
+# ---------------------------------------------------------------------------------------------------------------
+# (5g) COUPLING_STRENGTH_ANCHORS: the reaction_coupling class's gray-scale ends (DRAFT 2026-11-22, owner to confirm; every number
+# below is EXPERT_REVIEW and every literature figure is from memory, to be verified). Anchors are per QUANTITY, not per experiment
+# type: a coupling fraction means the same in every protocol. For both quantities LARGER is stronger (more of what was consumed
+# ends in the claimed product); the position runs on the log10 scale from noise_end (strength 0) to strong_end (strength 1), as
+# for the binding and activity anchors. They are the two ends of a gray scale, never thresholds. Both are read in the unit
+# 'fraction' (mol of product over mol of the consumed partner, times the stated stoichiometric coefficient for the productive fraction).
+# Reference points (from memory): cytochrome P450 monooxygenases with a non-native or poor substrate commonly couple only 1 to 30
+# percent of the NAD(P)H consumed to product (the rest leaves as H2O2, superoxide or water; Guengerich 2018 and Denisov et al.
+# 2005 Chem Rev 105:2253, from memory); the best-coupled systems, the native substrate of P450cam with camphor, are near 100
+# percent; fatty-acid hydroxylation by P450 BM3 is near 60 to 90 percent (from memory).
+# ---------------------------------------------------------------------------------------------------------------
+COUPLING_STRENGTH_ANCHORS = {
+    # productive fraction = stoichiometric coefficient x product per consumed partner, 0 to 1 by definition. noise_end: 1 percent, the
+    # floor of nearly fully uncoupled turnover (and of background chemistry that makes a little product without the enzyme's
+    # help). strong_end: 90 percent, the 'well coupled' end of the oxygenase literature.
+    'productive_fraction': {'unit': 'fraction', 'noise_end': 0.01, 'strong_end': 0.9},    # EXPERT_REVIEW, owner to confirm
+    # stoichiometric ratio = mol of product per mol of the consumed partner, with no coefficient applied (the paper does not state
+    # the reaction's coefficient). noise_end: 1 percent, as above. strong_end: 1, one product per partner consumed (the usual
+    # coefficient; a reaction that takes two partners per product, such as QueF with 2 NADPH, reads 0.5 at full coupling and sits
+    # at p = 0.85 on this scale, a small loss, which is why a coefficient-free ratio ranks after the productive fraction).
+    'stoichiometric_ratio': {'unit': 'fraction', 'noise_end': 0.01, 'strong_end': 1.0},   # EXPERT_REVIEW, owner to confirm
+}
+# Which stated quantity is the effect when a record states several: the best-determined first (DRAFT, owner to confirm). The
+# productive fraction already carries the reaction's own coefficient, so it answers the claimed reaction; the bare ratio does not
+# know the coefficient and is read as one product per partner.
+COUPLING_EFFECT_ORDER = ('productive_fraction', 'stoichiometric_ratio')   # EXPERT_REVIEW, owner to confirm
+# The record's quantity kind (QUANTITY_KINDS['reaction_coupling']) of the effect, and the anchor quantity it is read against.
+# 'balance_residual' (an amount left unaccounted for) has no anchors: amounts have no common scale. A mass or electron balance
+# is stated as the productive fraction (accounted for over consumed), and the residual amount goes in the 'attributed_signal' and
+# 'total_signal' roles of the extraction.
+COUPLING_QUANTITY_OF_KIND = {'productive_fraction': 'productive_fraction', 'stoichiometric_ratio': 'stoichiometric_ratio'}   # EXPERT_REVIEW, owner to confirm
+
+# ---------------------------------------------------------------------------------------------------------------
+# (5f) PRODUCT_DISTRIBUTION_STRENGTH_ANCHORS: the product_distribution class's gray-scale ends (DRAFT 2026-11-22, owner to confirm;
+# every number below is EXPERT_REVIEW and every literature figure is from memory, to be verified). The effect of a result of this
+# class is the share of the CLAIMED product among the products of the reaction (a fraction, or a ratio of two products with the claimed
+# product in the numerator), or where the equilibrium lies (the same two forms). For these quantities LARGER is stronger; the position
+# runs on the log10 scale from noise_end (strength 0) to strong_end (strength 1), as for the binding and activity anchors. They are
+# the two ends of a gray scale, never thresholds.
+# noise_end of a fraction, 0.01: about the smallest minor component that area or integral percentages of HPLC, GC and NMR resolve
+# and quantify without a dedicated trace method (from memory: the reporting limit of a mixture analysis is about 1 percent; below it
+# a "product" is often an impurity, a carry-over or a spontaneous side reaction). strong_end of a fraction, 0.9: a claimed product that
+# is nine tenths of what the reaction gives is the reaction's product, whatever the minor components are; beyond 0.9 a further share says
+# more about selectivity than about whether the enzyme gives this product, and the claim names only the product.
+# The ratio ends are the fraction ends carried through r = f / (1 - f), the ratio of the claimed product to the one other species:
+# f = 0.01 -> r = 0.0101 (rounded to 0.01) and f = 0.9 -> r = 9. So the two ends are the same two points on both forms. BETWEEN the ends
+# the curves differ (the fraction is read on log f, the ratio on log r = log of f / (1 - f)): a share of 0.5 gives strength about 0.95,
+# the equal ratio 1 (the same share) about 0.76. Reported to the owner as an open question.
+# The equilibrium quantities keep their own entries (same ends) so the owner can tune them apart: an equilibrium composition does not
+# depend on the enzyme, so it shows where the reaction lies, not that this enzyme makes the product (the sheet criterion
+# attribution_supported, with a no-enzyme control, carries that; it lowers the weight, not the direction).
+PRODUCT_DISTRIBUTION_STRENGTH_ANCHORS = {
+    'product_fraction': {'unit': 'fraction', 'noise_end': 0.01, 'strong_end': 0.9},                    # EXPERT_REVIEW, owner to confirm
+    'product_fraction_ratio': {'unit': 'dimensionless', 'noise_end': 0.01, 'strong_end': 9.0},         # EXPERT_REVIEW, owner to confirm; claimed product in the numerator; r = f / (1 - f)
+    'equilibrium_fraction': {'unit': 'fraction', 'noise_end': 0.01, 'strong_end': 0.9},                # EXPERT_REVIEW, owner to confirm; fraction of the claimed product at equilibrium
+    'equilibrium_ratio': {'unit': 'dimensionless', 'noise_end': 0.01, 'strong_end': 9.0},              # EXPERT_REVIEW, owner to confirm; [claimed product] / [other species] at equilibrium (K for an isomerization)
+}
+# Which stated quantity is the effect when a record states several: the best-determined first (DRAFT, owner to confirm).
+# product_fraction: the claimed product's own share with its stated denominator; it needs no choice of numerator or direction.
+# product_fraction_ratio: the same measurement as a ratio of two products; the numerator must be the claimed product, so the direction
+# of the ratio is one more thing to get right. equilibrium_fraction and equilibrium_ratio last: the composition at equilibrium is the
+# same for any catalyst (or none), and the equilibrium criterion (reached from both sides, stable in time) must hold for it to mean anything.
+PRODUCT_DISTRIBUTION_EFFECT_ORDER = ('product_fraction', 'product_fraction_ratio', 'equilibrium_fraction', 'equilibrium_ratio')
+
+# ---------------------------------------------------------------------------------------------------------------
+# (5e) ENDPOINT_STRENGTH_ANCHORS: the endpoint_conversion class's gray-scale ends (DRAFT 2026-11-22, owner to confirm; every number below is
+# EXPERT_REVIEW and every literature statement is from memory, not verified). The class asks how much substrate was converted, or how much
+# product there was, at an end point, and how long completion took: one time point or a yield, never a rate (rates are activity_rate's).
+# Anchors are per QUANTITY, not per experiment type: a fraction converted, a completion time and an amount mean the same in every assay.
+# The position runs on the log10 scale from noise_end (strength 0) to strong_end (strength 1), as for the binding and activity anchors.
+# For the conversion quantities and the amount LARGER is stronger; for the completion time SMALLER is stronger (its noise_end is the larger
+# number, so the same formula serves). They are the two ends of a gray scale, never thresholds. 'maximum' is a physical limit (a fraction
+# cannot exceed 1), not a threshold.
+# ---------------------------------------------------------------------------------------------------------------
+ENDPOINT_STRENGTH_ANCHORS = {
+    # fraction converted MINUS the paper's own control (no-enzyme, inactive-enzyme or zero-time) in the same units. noise_end 0.02: integration, pipetting
+    # and control-subtraction noise of HPLC, NMR and gel densitometry is of the order of a few percent (from memory: quantitation limits near 1-5 percent
+    # of the substrate). strong_end 0.9: near-complete conversion; beyond it the product is limited by what the method can tell from residual substrate.
+    'conversion_difference': {'unit': 'fraction', 'noise_end': 0.02, 'strong_end': 0.9, 'maximum': 1.0},   # EXPERT_REVIEW, owner to confirm
+    # fraction converted as stated, not corrected by a control. noise_end 0.05: higher than the net one because it still holds spontaneous conversion and
+    # background (from memory: uncatalysed reactions and autohydrolysis commonly give a few percent over hours). strong_end 0.9 as above.
+    'conversion_fraction': {'unit': 'fraction', 'noise_end': 0.05, 'strong_end': 0.9, 'maximum': 1.0},     # EXPERT_REVIEW, owner to confirm
+    # completion time of the test over the completion time of the paper's own reference (control, earlier preparation, wild type): >1 means the test
+    # completes sooner. noise_end 1: no faster than the reference. strong_end 1e3: three orders of speed-up, the practical range of a time comparison
+    # (the HFP isomerisation case of the owner's old inventory was a ratio above 108, from the old report, not verified).
+    'completion_time_ratio': {'unit': 'dimensionless', 'noise_end': 1.0, 'strong_end': 1e3},               # EXPERT_REVIEW, owner to confirm
+    # time to reach the paper's stated completion or equilibrium, in minutes; SMALLER is stronger. noise_end 1440 (24 h): a reaction that needs a day
+    # is hard to tell from slow background chemistry and enzyme decay at the usual temperatures. strong_end 1: completion within a minute is the fastest
+    # an ordinary sampled assay can resolve (manual quench and sampling; from memory).
+    'completion_time': {'unit': 'min', 'noise_end': 1440.0, 'strong_end': 1.0},                            # EXPERT_REVIEW, owner to confirm
+    # product amount at the end point as a concentration in micromolar. Weakest scale: it depends on how much substrate and enzyme the paper loaded.
+    # noise_end 1 uM: about the quantitation floor of UV-HPLC and colorimetric product assays (from memory). strong_end 1e3 uM (1 mM): a product at
+    # millimolar level is a substantial conversion of a usual assay substrate (about 1 to 10 mM).
+    'endpoint_amount': {'unit': 'uM', 'noise_end': 1.0, 'strong_end': 1e3},                                # EXPERT_REVIEW, owner to confirm
+}
+# Which stated quantity is the effect when a record states several: the best-determined first (DRAFT, owner to confirm). A fraction converted net
+# of the paper's own control isolates the enzyme's contribution from spontaneous conversion and is dimensionless; the raw fraction is still
+# relative to the substrate loaded but holds the background; a time ratio is relative to the paper's own reference but needs the same endpoint
+# definition on both sides; a bare completion time depends on the enzyme and substrate loaded; an absolute amount depends on the loading and has no
+# natural scale of its own.
+ENDPOINT_EFFECT_ORDER = ('conversion_difference', 'conversion_fraction', 'completion_time_ratio', 'completion_time', 'endpoint_amount')   # EXPERT_REVIEW, owner to confirm
+# The record's quantity kind (QUANTITY_KINDS['endpoint_conversion']) of the effect, and the anchor quantity it is read against.
+ENDPOINT_QUANTITY_OF_KIND = {kind: kind for kind in ENDPOINT_EFFECT_ORDER}   # EXPERT_REVIEW, owner to confirm
 
 # ---------------------------------------------------------------------------------------------------------------
 # (4) Field lists. Each field: kind, plus lo/hi for numbers, vocab for vocabularies, nullable.

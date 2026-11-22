@@ -5,7 +5,7 @@ commissioned representation, which is passed in custody. This is the only place 
 from method_loop import ChoiceField, Field, RecordForm
 
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_leaf_extraction import (
-    ARTIFACT_FIELD, SHEET_CLASSES)
+    ARTIFACT_FIELD, CLAIM_PREDICATES)
 
 REPRESENTATIONS = tuple(ARTIFACT_FIELD)
 ASSIGNMENT_FORM = RecordForm({
@@ -15,8 +15,8 @@ ASSIGNMENT_FORM = RecordForm({
                                   'commissioned: its artifact is the one read', REPRESENTATIONS),
     'offset': Field('integer', 'The byte offset of the window that holds the table (0 or more)'),
     'limit': Field('integer', 'The length of the window in bytes (1 or more)'),
-    'sheet_class': ChoiceField('text', 'The sheet class of the claim: the class whose experiment types the table may report',
-                               SHEET_CLASSES),
+    'claim_predicate': ChoiceField('text', 'The relation the claim states: the experiment types of every sheet class that lists it are the ones the table may report',
+                               CLAIM_PREDICATES),
     'proposed_annotation_ref': Field('text', 'The proposed annotation the extraction is for'),
 })
 
@@ -24,5 +24,5 @@ ASSIGNMENT_FORM = RecordForm({
 def read_from_parent(assignment, message):
     return {'source_ref': assignment['source_ref'], 'representation': assignment['representation'],
             'offset': assignment['offset'], 'limit': assignment['limit'],
-            'sheet_class': assignment['sheet_class'],
+            'claim_predicate': assignment['claim_predicate'],
             'proposed_annotation_ref': assignment['proposed_annotation_ref']}
