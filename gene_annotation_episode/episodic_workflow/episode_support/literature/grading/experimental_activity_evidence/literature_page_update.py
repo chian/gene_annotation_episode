@@ -95,6 +95,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     RELEVANCE_ON_ROW,
     TARGET_MATCH_ON_ROW,
     is_name,
+    comparable_identity_name,
     normalize_identity_ref,
     validate_axis,
     validate_features,
@@ -282,6 +283,7 @@ def _identifier(target_sequence_refs, resolve_subject, subject_closeness):
         return closeness_held[pair]
 
     async def identify(assertion_ref, name, database_id, database, organism):
+        name = comparable_identity_name(name)   # the lookup uses the name without a fused tag; the record keeps the name as written
         key = (name, database_id, database, organism)
         if key not in resolved_held:
             resolved_held[key] = resolve_subject(name=name, database_id=database_id, database=database, organism=organism)

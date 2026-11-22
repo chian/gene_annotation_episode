@@ -23,7 +23,7 @@ that chains conflicting records into one component.
 
 THE TARGET MOLECULE (OWNER_DECISION 18). The leaf record states target_id (the molecule the assay is about), optionally
 partner_id and partner_role, as top-level keys. target_id and partner_id are identity-bearing and are compared by
-equality after casefold and whitespace collapse (normalize_identity_ref); a side that does not state one is skipped. A
+equality of the comparable name (comparable_identity_name: casefold, whitespace collapse, fused tags removed); a side that does not state one is skipped. A
 grader whose members state no target_id has no target (state_grader_fields: identity.target_id unavailable,
 not_stated_in_passage); literature_target then gives it target_match not_stated. The identity number fields carry no unit: the leaf
 form states them in the canonical unit (temperature_c in degrees Celsius).
@@ -56,7 +56,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     UNAVAILABLE_CONFLICTING,
     UNAVAILABLE_NOT_STATED,
     canonical_value,
-    normalize_identity_ref,
+    comparable_identity_name,
     validate_grader_ref,
     validate_identity_compare,
     validate_state_grader_fields,
@@ -138,7 +138,7 @@ def _compare_equal_normalized(fields, a, b):
         va, vb = _stated(a, name), _stated(b, name)
         if va is None or vb is None:
             continue
-        compared.append(normalize_identity_ref(va) == normalize_identity_ref(vb))
+        compared.append(comparable_identity_name(va) == comparable_identity_name(vb))
     if not compared:
         return 'missing'
     return 'agree' if all(compared) else 'conflict'
@@ -220,7 +220,7 @@ def _dedupe_key(value, unit, name=None):
     number; a different series (other length, order or numbers) is a different value, so the field is conflicting; a series
     whose unit is not in the table keeps its raw (list, unit) as key."""
     if name is not None and name.startswith('identity.') and name[len('identity.'):] in IDENTITY_NORMALIZED_REF_FIELDS:
-        return json.dumps(['identity', normalize_identity_ref(value)])
+        return json.dumps(['identity', comparable_identity_name(value)])
     quantity = _quantity_of_unit(unit)
     if isinstance(value, (list, tuple)):   # a series of numbers (for example a concentration series) with its unit
         if quantity is not None:

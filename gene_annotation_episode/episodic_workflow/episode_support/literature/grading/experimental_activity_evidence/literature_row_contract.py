@@ -839,9 +839,12 @@ IDENTITY_FEATURES = {   # OWNER_DECISIONS 13, 18
 }
 IDENTITY_BEARING = tuple(name for name, spec in IDENTITY_FEATURES.items() if spec['bearing'])   # OWNER_DECISION 13
 
-# OWNER_DECISION 18: how two target or partner identities are made comparable: casefold, then collapse every run of
-# whitespace to one space (and strip). identity_compare, the grader's field statements, target_match and relevance all use normalize_identity_ref.
+# OWNER_DECISION 18: how two target or partner identities are made stored-comparable: casefold, then collapse every run of
+# whitespace to one space (and strip): normalize_identity_ref, the form a record stores. A molecule NAME is compared (identity_compare,
+# the grader's identity keys, target_match, relevance, the row and main-sheet target tests) and looked up in the protein database in
+# its COMPARABLE form, comparable_identity_name: the normalized name without a fused tag or label at its start or end.
 IDENTITY_REF_NORMALIZATION = ('casefold', 'collapse_whitespace', 'unicode_dashes_to_hyphen')
+IDENTITY_NAME_COMPARISON = IDENTITY_REF_NORMALIZATION + ('fusion_tags_removed_from_start_and_end',)   # the comparable form of a name: comparable_identity_name
 # The dash characters papers use inside a molecule name (hyphen U+2010, non-breaking hyphen, figure dash, en dash, em dash,
 # horizontal bar, minus sign); all compare as the ASCII hyphen so 'PPARγ‐DL' and 'PPARγ-DL' are one molecule.
 _UNICODE_DASHES = dict.fromkeys(map(ord, '‐‑‒–—―−'), '-')
@@ -855,6 +858,43 @@ def normalize_identity_ref(value):
     if not isinstance(value, str):
         raise ValueError(f'an identity reference must be a string: {value!r}')
     return ' '.join(value.translate(_UNICODE_DASHES).split()).casefold()
+
+
+# The tokens a protein name carries as a fused tag or label, not as part of the protein's own name (casefolded). Only tokens that are
+# not themselves ordinary protein names belong here: fluorescent proteins, self-labelling tags, affinity tags, dye labels, and the
+# words 'labeled'/'labelled' after a dye. HA, Myc and V5 are left out: they are proteins too (a name 'HA-X' could be hemagglutinin).
+FUSION_TAG_TOKENS = frozenset({   # EXPERT_REVIEW
+    'gfp', 'egfp', 'sfgfp', 'yfp', 'eyfp', 'cfp', 'ecfp', 'bfp', 'ebfp', 'rfp', 'mcherry', 'mchy', 'pamcherry', 'mkate2', 'mscarlet',
+    'dendra2', 'venus', 'mvenus', 'mneongreen', 'tdtomato', 'meos2', 'meos3.2', 'citrine', 'cerulean', 'mcitrine', 'mcerulean',
+    'mturquoise', 'mturquoise2', 'dsred', 'mruby', 'pagfp', 'pamcherry1',
+    'halo', 'halotag', 'snap', 'snaptag', 'clip',
+    'his', 'his6', '6his', '6xhis', 'his8', 'his10', '10xhis', 'gst', 'mbp', 'sumo', 'strep', 'strepii', 'twinstrep', 'flag', '3xflag',
+    'tap', 'avi',
+    'af488', 'af555', 'af647', 'alexa488', 'alexa647', 'cy3', 'cy5', 'atto488', 'atto647n', 'fitc', 'tmr', 'labeled', 'labelled'})
+
+
+def comparable_identity_name(value):
+    """A molecule name in its comparable form: normalize_identity_ref, then every FUSION_TAG_TOKENS token removed from the START
+    and the END of the name (split on hyphens and whitespace, repeated), together with a pure number left at the end directly
+    after a removed tag ('ctra-eyfp-14' -> 'ctra'). Tokens in the middle are never touched ('bcl-2', 'c-myc', 'il-6' are
+    unchanged); a name that is nothing but tags, or tags and numbers ('gfp', 'gst', 'snap-25'), is kept whole. What remains is
+    joined with the separators the name was written with. A name without a tag comes out exactly as normalize_identity_ref gives it."""
+    name = normalize_identity_ref(value)
+    pieces = re.split(r'([-\s]+)', name)
+    words, separators = pieces[0::2], pieces[1::2]
+    start, end = 0, len(words)
+    while True:
+        if start < end and words[start] in FUSION_TAG_TOKENS:
+            start += 1
+        elif start < end and words[end - 1] in FUSION_TAG_TOKENS:
+            end -= 1
+        elif end - 2 > start and words[end - 1].isdigit() and words[end - 2] in FUSION_TAG_TOKENS:
+            end -= 2
+        else:
+            break
+    if start >= end or all(word.isdigit() for word in words[start:end]):
+        return name
+    return ''.join(word + (separators[index] if index < end - 1 else '') for index, word in zip(range(start, end), words[start:end]))
 
 # Finalizing and stating a field (OWNER_DECISIONS 13 and 14; owner ruling F).
 FINALIZE_WHEN = ('no_unread_chunk_or_table_in_neighbourhood', 'routing_has_no_further_candidate')   # OWNER_DECISION 14
@@ -1339,7 +1379,7 @@ def validate_sheet_state(state):
             raise ValueError('state.member_results holds a result that is not on the row (target_match same or related, relevance relevant or unresolved)')
         if result['sheet'] != row['sheet'] or result['assertion_ref'] != row['assertion_ref']:
             raise ValueError('state.member_results holds a result of another sheet or candidate')
-        if normalize_identity_ref(result['target_id']) != normalize_identity_ref(row['target_id']):
+        if comparable_identity_name(result['target_id']) != comparable_identity_name(row['target_id']):
             raise ValueError("state.member_results holds a result whose target_id differs from the row's target_id (OWNER_DECISION 18)")
         refs.append(result['result_ref'])
     if len(set(refs)) != len(refs):

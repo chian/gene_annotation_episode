@@ -40,7 +40,7 @@ from jsonschema import Draft202012Validator
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_row_contract import (
     CODE_STAMPED_IDENTITY, IDENTITY_FIELDS, IDENTITY_NORMALIZED_REF_FIELDS, IDENTITY_QUANTITY_OF_FIELD, IDENTITY_UNAVAILABLE_REASONS,
     IDENTITY_UNIT_CANONICAL, LEAF_RECORD_IDENTITY, LEAF_RECORD_REF_KEY, NAME_MAX_CHARS, NAME_MAX_WORDS, UNAVAILABLE_NOT_STATED, canonical_value, is_name,
-    normalize_identity_ref, validate_identity)
+    comparable_identity_name, normalize_identity_ref, validate_identity)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import SUPPORTS
 
 KEY = 'identity'   # the one key under which the identity block sits in the answer the model fills
@@ -205,8 +205,8 @@ def validate_identity_answer(answer, chunk):
         if spec['kind'] == 'number' and not spec['lo'] <= stored <= spec['hi']:
             _refuse(name, 'number_outside_its_range', f"{spec['lo']}_to_{spec['hi']}")
     stated = {name for name in ASKED if answer[name]['status'] == 'stated'}
-    if 'partner_id' in stated and 'target_id' in stated and (normalize_identity_ref(answer['partner_id']['value']) ==
-                                                               normalize_identity_ref(answer['target_id']['value'])):
+    if 'partner_id' in stated and 'target_id' in stated and (comparable_identity_name(answer['partner_id']['value']) ==
+                                                               comparable_identity_name(answer['target_id']['value'])):
         _refuse('partner_id', 'partner_is_the_target', 'the_partner_is_the_other_molecule')
     if 'partner_role' in stated and 'partner_id' not in stated:
         _refuse('partner_role', 'partner_role_without_partner_id')

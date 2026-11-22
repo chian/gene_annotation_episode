@@ -30,6 +30,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     CROSS_CLASS_COLLAPSE_RULE,
     MAIN_ROW_INPUT_KEYS,
     NO_ROW_REF,
+    comparable_identity_name,
     normalize_identity_ref,
     validate_main_row,
     validate_row,
@@ -54,7 +55,7 @@ def _dependence_split(row):
 
 
 def _same_target(first, second):
-    return normalize_identity_ref(first) == normalize_identity_ref(second)
+    return comparable_identity_name(first) == comparable_identity_name(second)
 
 
 def _targets(targets, needed):

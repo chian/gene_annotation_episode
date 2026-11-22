@@ -10,7 +10,7 @@ record  a mapping that carries the experiment's identity features (contract IDEN
 claim   the candidate claim (contract CLAIM_FIELDS): predicate, subject_id and partner_id (or null).
 
 OWNER_DECISION 18 (the target molecule). The target is the one identity field the match requires. Values are compared
-after the contract's normalize_identity_ref (casefold, whitespace collapse).
+after the contract's comparable_identity_name (casefold, whitespace collapse, fused tags such as eYFP or His6 removed from the start and end).
 
 Result: {'target_match': one of TARGET_MATCH, 'reasons': [one code of TARGET_MATCH_REASONS]}. Checked in this order:
 
@@ -45,6 +45,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     EXPERIMENT_TYPES,
     TARGET_MATCH,
     is_name,
+    comparable_identity_name,
     normalize_identity_ref,
 )
 
@@ -109,14 +110,14 @@ def _result(target_match, reason):
 
 def is_partner_route(record, claim):
     return (claim['predicate'] in SYMMETRIC_PREDICATES and record['partner_id'] is not None and claim['partner_id'] is not None
-            and normalize_identity_ref(record['target_id']) == normalize_identity_ref(claim['partner_id'])
-            and normalize_identity_ref(record['partner_id']) == normalize_identity_ref(claim['subject_id']))
+            and comparable_identity_name(record['target_id']) == comparable_identity_name(claim['partner_id'])
+            and comparable_identity_name(record['partner_id']) == comparable_identity_name(claim['subject_id']))
 
 
 def assayed_molecule(record, claim):
     """'partner' when the molecule whose sequence must be identified is the record's partner (the symmetric partner route:
     the record's partner is the claim's subject), else 'target'. Names only; the record's target must be stated."""
-    return 'partner' if (normalize_identity_ref(record['target_id']) != normalize_identity_ref(claim['subject_id'])
+    return 'partner' if (comparable_identity_name(record['target_id']) != comparable_identity_name(claim['subject_id'])
                          and is_partner_route(record, claim)) else 'target'
 
 
@@ -130,7 +131,7 @@ def target_match(record, claim, subject_closeness):
         raise ValueError(f'target_match subject_closeness must be in 0..1 or None: {subject_closeness!r}')
     if record['target_id'] is None:
         return _result('not_stated', 'target_not_stated')
-    names_equal = normalize_identity_ref(record['target_id']) == normalize_identity_ref(claim['subject_id'])
+    names_equal = comparable_identity_name(record['target_id']) == comparable_identity_name(claim['subject_id'])
     partner_route = not names_equal and is_partner_route(record, claim)
     if not names_equal and not partner_route and subject_closeness is None:
         return _result('different', 'target_differs_from_subject')

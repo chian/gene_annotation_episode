@@ -65,7 +65,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     CLASSES,
     CLASS_OF_EXPERIMENT_TYPE,
     QUALITATIVE_STATEMENT,
-    normalize_identity_ref,
+    comparable_identity_name,
     on_row,
     ROW_CALLER_FIELDS,
     ROW_DEPENDENCE_KEYS,
@@ -99,7 +99,7 @@ def _check_result(result):
 
 def _target_of(result):
     """The normalized target of a direct result (OWNER_DECISION 18)."""
-    return normalize_identity_ref(result['target_id'])
+    return comparable_identity_name(result['target_id'])
 
 
 def _dependence(result):
@@ -276,7 +276,7 @@ def merge_row_state(sheet, assertion_ref, results, prior_row=None):
         if prior_row['row']['sheet'] != sheet or prior_row['row']['assertion_ref'] != assertion_ref:
             raise ValueError('prior_row is the row of another sheet or candidate')
         held = list(prior_row['member_results'])
-        target = normalize_identity_ref(prior_row['row']['target_id'])
+        target = comparable_identity_name(prior_row['row']['target_id'])
     members = {r['result_ref']: r for r in held}
     for result in results:
         _check_result(result)

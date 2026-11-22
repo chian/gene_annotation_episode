@@ -34,6 +34,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     QUALITATIVE_STATEMENT,
     RELEVANCE,
     is_name,
+    comparable_identity_name,
     normalize_identity_ref,
 )
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_target import is_partner_route
@@ -100,7 +101,7 @@ def relevance(record, claim):
     if claim['partner_id'] is None:
         return _result('relevant', 'claim_names_no_partner')
     if record['partner_id'] is not None:
-        if normalize_identity_ref(record['partner_id']) == normalize_identity_ref(claim['partner_id']):
+        if comparable_identity_name(record['partner_id']) == comparable_identity_name(claim['partner_id']):
             return _result('relevant', 'partner_agrees')
         if record['target_id'] is not None and is_partner_route(record, claim):
             return _result('relevant', 'partner_route')
