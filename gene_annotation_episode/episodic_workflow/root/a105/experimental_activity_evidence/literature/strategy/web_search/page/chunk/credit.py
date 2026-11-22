@@ -18,7 +18,7 @@ def credit(summary, records):
 def ceiling(summary, records, action_type, arguments, ctx):
     """The most the credit can rise if ``action_type`` with ``arguments`` is taken as the next unit.
 
-    The episode has one action, ``extract``, whatever its arguments: it holds one record of the experiment type the model named (none when it named none),
+    The episode has one action, ``extract``, whatever its arguments: it holds one record for each experiment type the model named (none when it named none),
     and the credit is newly_stated / asked, the share of the asked fields that the held records state. That share is a
     fraction of the fields the form asked, so it never exceeds 1 (a field is counted once however many records state it, and
     the asked count of a record is at least the fields it states). A new record can therefore raise it only up to 1, so the

@@ -12,8 +12,9 @@ called with this episode's pieces: the text is called the chunk (``TEXT``) and h
 
 The chunk is the leaf's one input unit (``input_list``): it is named and extracted once and then consumed
 (nano-graphrag's processed chunk), never offered again. The naming and the fill are the model calls of one unit, so the
-item is one unit and the yield estimator's item count is the chunks to do. One method is named per chunk: a chunk that
-reports results of two methods is done when the one named has been extracted. Grading and judging belong to the page's
+item is one unit and the yield estimator's item count is the chunks to do. Every method the chunk reports is named (owner,
+2026-11-22: multiple methods per passage allowed, no cap, behaviour to be watched): a chunk that reports results of two methods
+gives two records, both filled within the one unit. Grading and judging belong to the page's
 update. There is no model call after the extraction."""
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_leaf_extraction import (
     extraction_arguments, leaf_record, method_call, method_request)
@@ -41,13 +42,14 @@ def action(response, summary, records, ctx):
 
 
 async def extract(arguments, ctx):
-    """Fill the form of the type the model named and hold its record; return its ref and the type named. A chunk named
-    ``none`` holds no record (``record_ref`` None)."""
-    if arguments['experiment_type'] is None:
-        return {'status': 'completed', 'experiment_type': None, 'record_ref': None}
-    filled = await extraction_arguments(ctx.model, arguments, text=TEXT)
-    record_ref = ctx.store.artifact(canonical(leaf_record(filled)), 'application/json')
-    return {'status': 'completed', 'experiment_type': arguments['experiment_type'], 'record_ref': record_ref}
+    """Fill the form of every type the model named, one after the other, and hold one record for each; return their refs
+    and the types named, in the order named. A text for which no method was named holds no record (both lists empty).
+    No cap on the number of methods (owner, 2026-11-22: multiple methods per passage allowed; behaviour to be watched)."""
+    record_refs = []
+    for experiment_type in arguments['experiment_types']:
+        filled = await extraction_arguments(ctx.model, {**arguments, 'experiment_type': experiment_type}, text=TEXT)
+        record_refs.append(ctx.store.artifact(canonical(leaf_record(filled)), 'application/json'))
+    return {'status': 'completed', 'experiment_types': list(arguments['experiment_types']), 'record_refs': record_refs}
 
 
 TOOLS = {'extract': extract}

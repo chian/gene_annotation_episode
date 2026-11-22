@@ -48,7 +48,7 @@ STAMPS. A subscoring row rests on several results; the page stamps dataset_ref /
 handed to merge_main only when ALL its member results share one non-null value; otherwise None (the row is its own dependence
 unit). Judgement call, flagged for the owner.
 
-CONVERTERS. All 26 (25 ligand_binding and the activity_rate type spectro_direct) are named convert_<module suffix> and take one argument, the grade dict of the type's grade function.
+CONVERTERS. All 55 (26 ligand_binding, 19 activity_rate and 10 transport_response types) are named convert_<module suffix> and take one argument, the grade dict of the type's grade function.
 The suffix differs from the experiment type for trp_quenching (convert_trp) and alphascreen (convert_alpha).
 """
 import hashlib
@@ -107,6 +107,35 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_sheet_features import row_features
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_spa_converter import convert_spa
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_spectro_direct_converter import convert_spectro_direct
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_coupled_enzyme_converter import convert_coupled_enzyme
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_redox_mediator_converter import convert_redox_mediator
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_fluorogenic_converter import convert_fluorogenic
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_luminescent_converter import convert_luminescent
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_stopped_flow_converter import convert_stopped_flow
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_quench_flow_converter import convert_quench_flow
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_chromatographic_converter import convert_chromatographic
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_stopped_colorimetric_converter import convert_stopped_colorimetric
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_radiometric_converter import convert_radiometric
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_separation_band_converter import convert_separation_band
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_oxygen_electrode_converter import convert_oxygen_electrode
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_ph_stat_converter import convert_ph_stat
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_protein_film_electrochem_converter import convert_protein_film_electrochem
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_itc_kinetics_converter import convert_itc_kinetics
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_continuous_ms_converter import convert_continuous_ms
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_nmr_timecourse_converter import convert_nmr_timecourse
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_product_immunodetection_converter import convert_product_immunodetection
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_zymogram_converter import convert_zymogram
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_transport_cell_tracer_uptake_converter import convert_transport_cell_tracer_uptake
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_transport_counterflow_converter import convert_transport_counterflow
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_transport_fluorescent_reporter_converter import convert_transport_fluorescent_reporter
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_transport_medium_analysis_converter import convert_transport_medium_analysis
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_transport_oocyte_two_electrode_converter import convert_transport_oocyte_two_electrode
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_transport_patch_clamp_converter import convert_transport_patch_clamp
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_transport_planar_bilayer_converter import convert_transport_planar_bilayer
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_transport_proteoliposome_tracer_converter import convert_transport_proteoliposome_tracer
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_transport_ssm_electrophysiology_converter import convert_transport_ssm_electrophysiology
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_transport_vesicle_probe_flux_converter import convert_transport_vesicle_probe_flux
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_transport_response_direction import transport_direction_and_ratio
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_split_reporter_converter import convert_split_reporter
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_spr_converter import convert_spr
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_trp_converter import convert_trp
@@ -119,6 +148,34 @@ CONVERTERS = {
     'dialysis': convert_dialysis, 'auc': convert_auc, 'dsf': convert_dsf, 'cetsa': convert_cetsa, 'bret': convert_bret,
     'y2h': convert_y2h, 'split_reporter': convert_split_reporter, 'pla': convert_pla, 'proximity': convert_proximity, 'colocalization': convert_colocalization,
     'spectro_direct': convert_spectro_direct,
+    'coupled_enzyme': convert_coupled_enzyme,
+    'redox_mediator': convert_redox_mediator,
+    'fluorogenic': convert_fluorogenic,
+    'luminescent': convert_luminescent,
+    'stopped_flow': convert_stopped_flow,
+    'quench_flow': convert_quench_flow,
+    'chromatographic': convert_chromatographic,
+    'stopped_colorimetric': convert_stopped_colorimetric,
+    'radiometric': convert_radiometric,
+    'separation_band': convert_separation_band,
+    'oxygen_electrode': convert_oxygen_electrode,
+    'ph_stat': convert_ph_stat,
+    'protein_film_electrochem': convert_protein_film_electrochem,
+    'itc_kinetics': convert_itc_kinetics,
+    'continuous_ms': convert_continuous_ms,
+    'nmr_timecourse': convert_nmr_timecourse,
+    'product_immunodetection': convert_product_immunodetection,
+    'zymogram': convert_zymogram,
+    'transport_cell_tracer_uptake': convert_transport_cell_tracer_uptake,
+    'transport_counterflow': convert_transport_counterflow,
+    'transport_fluorescent_reporter': convert_transport_fluorescent_reporter,
+    'transport_medium_analysis': convert_transport_medium_analysis,
+    'transport_oocyte_two_electrode': convert_transport_oocyte_two_electrode,
+    'transport_patch_clamp': convert_transport_patch_clamp,
+    'transport_planar_bilayer': convert_transport_planar_bilayer,
+    'transport_proteoliposome_tracer': convert_transport_proteoliposome_tracer,
+    'transport_ssm_electrophysiology': convert_transport_ssm_electrophysiology,
+    'transport_vesicle_probe_flux': convert_transport_vesicle_probe_flux,
 }
 
 
@@ -217,6 +274,9 @@ async def _results_of_grader(grader, converted, record, claims, identify):
         elif CLASS_OF_EXPERIMENT_TYPE[grader['experiment_type']] == 'activity_rate':
             # an activity_rate converter carries 'enzyme_mass_g_per_mol' (the stated molar mass, or None): specific activity ends need it
             direction = activity_direction_and_ratio(converted, converted['enzyme_mass_g_per_mol'])
+        elif CLASS_OF_EXPERIMENT_TYPE[grader['experiment_type']] == 'transport_response':
+            # a transport_response converter needs nothing beyond the converted result (no mass-dependent end of any anchor)
+            direction = transport_direction_and_ratio(converted)
         else:
             direction = direction_and_ratio(converted)
         known = direction['direction'] != 'unknown'

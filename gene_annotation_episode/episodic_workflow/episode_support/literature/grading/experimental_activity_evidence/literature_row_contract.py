@@ -114,16 +114,44 @@ FEATURES_VERSION = 'a105_investigation_features_v1'
 CLASSES = ('activity_rate', 'endpoint_conversion', 'product_distribution', 'reaction_coupling', 'ligand_binding', 'transport_response', 'protein_signal', 'protein_amount')
 
 EXPERIMENT_TYPES = ('spr', 'itc', 'bli', 'gci', 'fp', 'fret', 'mst', 'trp_quenching', 'fcs', 'elisa', 'alphascreen', 'radioligand', 'spa', 'pulldown', 'emsa', 'sec', 'dialysis', 'auc', 'dsf', 'cetsa', 'bret', 'y2h', 'split_reporter', 'pla', 'proximity',
-                    'colocalization', 'spectro_direct')
+                    'colocalization', 'spectro_direct',
+                    'coupled_enzyme', 'redox_mediator', 'fluorogenic', 'luminescent', 'stopped_flow', 'quench_flow', 'chromatographic', 'stopped_colorimetric', 'radiometric',
+                    'separation_band', 'oxygen_electrode', 'ph_stat', 'protein_film_electrochem', 'itc_kinetics', 'continuous_ms', 'nmr_timecourse', 'product_immunodetection', 'zymogram',
+                    'transport_cell_tracer_uptake', 'transport_counterflow', 'transport_fluorescent_reporter', 'transport_medium_analysis', 'transport_oocyte_two_electrode',
+                    'transport_patch_clamp', 'transport_planar_bilayer', 'transport_proteoliposome_tracer', 'transport_ssm_electrophysiology', 'transport_vesicle_probe_flux')
 
-# The class of each experiment type: the first 26 belong to ligand_binding; the activity_rate class has its first type, spectro_direct
-# (2026-11-21); the other types of that class and of the other six classes are added with their converters.
+# The class of each experiment type: the first 26 belong to ligand_binding; the activity_rate class has 19 types, spectro_direct
+# (2026-11-21) and eighteen more (2026-11-22); the transport_response class has 10 types (2026-11-22); the types of the other five
+# classes are added with their converters.
 CLASS_OF_EXPERIMENT_TYPE = {
     'spr': 'ligand_binding', 'itc': 'ligand_binding', 'bli': 'ligand_binding', 'gci': 'ligand_binding', 'fp': 'ligand_binding', 'fret': 'ligand_binding', 'mst': 'ligand_binding',
     'trp_quenching': 'ligand_binding', 'fcs': 'ligand_binding', 'elisa': 'ligand_binding', 'alphascreen': 'ligand_binding', 'radioligand': 'ligand_binding', 'spa': 'ligand_binding',
     'pulldown': 'ligand_binding', 'emsa': 'ligand_binding', 'sec': 'ligand_binding', 'dialysis': 'ligand_binding', 'auc': 'ligand_binding', 'dsf': 'ligand_binding', 'cetsa': 'ligand_binding',
     'bret': 'ligand_binding', 'y2h': 'ligand_binding', 'split_reporter': 'ligand_binding', 'pla': 'ligand_binding', 'proximity': 'ligand_binding', 'colocalization': 'ligand_binding',
     'spectro_direct': 'activity_rate',
+    'coupled_enzyme': 'activity_rate',
+    'redox_mediator': 'activity_rate',
+    'fluorogenic': 'activity_rate',
+    'luminescent': 'activity_rate',
+    'stopped_flow': 'activity_rate',
+    'quench_flow': 'activity_rate',
+    'chromatographic': 'activity_rate',
+    'stopped_colorimetric': 'activity_rate',
+    'radiometric': 'activity_rate',
+    'separation_band': 'activity_rate',
+    'oxygen_electrode': 'activity_rate',
+    'ph_stat': 'activity_rate',
+    'protein_film_electrochem': 'activity_rate',
+    'itc_kinetics': 'activity_rate',
+    'continuous_ms': 'activity_rate',
+    'nmr_timecourse': 'activity_rate',
+    'product_immunodetection': 'activity_rate',
+    'zymogram': 'activity_rate',
+    # The ten transport_response types (2026-11-22): 'P transports S' is the class claim (CLAIM_PREDICATES_BY_CLASS).
+    'transport_cell_tracer_uptake': 'transport_response', 'transport_counterflow': 'transport_response', 'transport_fluorescent_reporter': 'transport_response',
+    'transport_medium_analysis': 'transport_response', 'transport_oocyte_two_electrode': 'transport_response', 'transport_patch_clamp': 'transport_response',
+    'transport_planar_bilayer': 'transport_response', 'transport_proteoliposome_tracer': 'transport_response', 'transport_ssm_electrophysiology': 'transport_response',
+    'transport_vesicle_probe_flux': 'transport_response',
 }
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -154,6 +182,9 @@ QUALITATIVE_STATEMENT = ('interaction_detected', 'interaction_not_detected', 'in
 # activity_rate class (decided 2026-11-21, owner to confirm) 'interaction_detected' reads "activity detected",
 # 'interaction_not_detected' reads "activity not detected" (no activity above the paper's own control or detection limit) and
 # 'interaction_not_stated' reads "activity not stated". No new values: the vocabulary is unchanged.
+# For the transport_response class (DRAFT 2026-11-22, owner to confirm) 'interaction_detected' reads "transport detected" (movement of the claimed
+# substrate or ion above the paper's own control), 'interaction_not_detected' reads "transport not detected" (no movement above the paper's own
+# control or detection limit) and 'interaction_not_stated' reads "transport not stated".
 
 # Candidate claim predicates. OWNER_DECISION 1: a candidate carries predicate + subject_id + partner_id (annotation
 # IDs or names from a looked-up list). A claim names molecules only: it never carries a physical prediction or threshold
@@ -165,6 +196,9 @@ CLAIM_PREDICATES_BY_CLASS = {
     # decided 2026-11-21, owner to confirm: 'E catalyzes R' (R a reaction term or a substrate molecule). Subject = the enzyme
     # (the record's target_id). NOT symmetric. Spelling 'catalyzes' as the A105 hypotheses and A104 already use.
     'activity_rate': ('catalyzes',),
+    # DRAFT 2026-11-22, owner to confirm: 'P transports S' (P the transporter or channel, S a substrate or an ion). Subject = the protein (the
+    # record's target_id), partner = the transported molecule or ion (the record's partner_id). NOT symmetric. Do not add to SYMMETRIC_PREDICATES.
+    'transport_response': ('transports',),
 }
 
 # What each experiment type is, in one plain line: the method and what it reports. This is the one place; the page shows these
@@ -198,6 +232,34 @@ EXPERIMENT_TYPE_LINES = {
     'proximity': 'Proximity labelling in cells (BioID, TurboID, APEX): a labelling enzyme fused to a bait biotinylates nearby proteins, which are identified by mass spectrometry or blot; reports enrichment over a control, detected or not.',
     'colocalization': 'Fluorescence microscopy co-localization or recruitment: one labelled protein is found where the other is (together in cells, recruited to the focus, pole, membrane or condensate the other makes, in a native or heterologous host or as purified proteins in droplets), and not when the other is absent; reports a yes or no, a fraction of cells, foci or droplets, a Pearson coefficient or an enrichment.',
     'spectro_direct': 'Continuous direct spectrophotometric enzyme assay: absorbance of a substrate or product read over time in a cuvette or plate; reports the rate, kcat, Km or specific activity.',
+    'coupled_enzyme': 'Continuous coupled-enzyme assay: the product of the enzyme tested has no signal, so helper (coupling) enzymes turn it into a change of a reporter (usually NADH or NADPH at 340 nm) that is read over time; reports the rate, kcat, Km or specific activity, and how far the helper enzymes keep up with the reaction.',
+    'redox_mediator': 'Artificial redox-mediator enzyme assay: an artificial electron acceptor or donor (DCPIP, ferricyanide, a viologen, a tetrazolium dye, a quinone) takes the place of the enzyme\'s natural redox partner and its colour change is read over time; reports the rate of dye reduction or oxidation, specific activity or kcat with that dye.',
+    'fluorogenic': 'Fluorogenic enzyme assay: the fluorescence of a released or formed fluorophore (an AMC or AFC peptide, a methylumbelliferyl glycoside, resorufin, NADH or NADPH fluorescence, a FRET peptide cut apart) read over time in a cuvette or plate reader; reports a rate in fluorescence units, or after a free-fluorophore standard curve the rate, kcat, Km, kcat/Km or specific activity.',
+    'luminescent': 'Luminescent enzyme assay (ADP-Glo, Kinase-Glo, NAD(P)H-Glo, luciferase-coupled ATP or pyrophosphate detection): a luciferase turns the ADP or ATP made or used by the reaction into light read in a plate and a standard series turns it into an amount of product; reports a rate, a specific activity, kcat, Km, kcat/Km or a signal over background, with a Z\' factor when it is a screen.',
+    'stopped_flow': 'Stopped-flow rapid-mixing enzyme experiment: enzyme and substrate are mixed in about a millisecond and the absorbance or fluorescence is read from then on, before the steady state; reports the rate constant of one phase (single-turnover or burst chemistry, observed k_obs, its dependence on the substrate), not a steady-state slope.',
+    'quench_flow': 'Rapid chemical quench-flow: enzyme and substrate react for milliseconds to seconds, a quench (acid, base, EDTA, denaturant) stops each sample, and the product is separated and counted (radioactivity, HPLC, mass spectrometry); reports the burst amplitude and the rate constant of a single-turnover or burst phase, and the steady-state turnover after it; not an optical trace (that is stopped-flow).',
+    'chromatographic': 'Discontinuous chromatographic enzyme assay: the reaction is sampled at chosen times, each sample is stopped, and the product (or the lost substrate) is separated and quantified against an authentic standard by HPLC, LC-MS, GC, GC-MS or ion chromatography; it reports an amount of product per time that becomes a rate, kcat, kcat/Km or specific activity (not a continuous optical or electrode trace, not a radiometric count, not a gel band).',
+    'stopped_colorimetric': 'A stopped assay: the enzyme reaction runs for a set time and is stopped, a colour reagent (malachite green for phosphate, DNS for reducing sugar, DTNB for thiol, ferric hydroxamate, Nessler/Berthelot for ammonia) then colours a product CLASS, and the amount is read from a product standard curve to give a rate; unlike spectro_direct it has no live trace and no extinction coefficient, and unlike chromatographic it names no separated product.',
+    'radiometric': 'Radiometric enzyme assay: a radiolabelled substrate (14C, 3H, 32P, 35S) is converted, the labelled product is separated from the substrate (TLC, filter binding, ion exchange, trapped gas) and counted; reports the rate, kcat, Km or specific activity in amount of product per time.',
+    'separation_band': 'Gel or thin-layer separation assay: the reaction is stopped at several times, substrate and product are separated on a gel or plate and the band intensities give the fraction converted over time (a discontinuous assay with stopped time points, unlike the continuous trace of spectro_direct and the chromatographic column of the HPLC type); it reports a rate, a turnover, a specific activity or a fold over the no-enzyme lane.',
+    'oxygen_electrode': 'Oxygen-electrode enzyme assay: the dissolved oxygen of a closed, stirred chamber read with a Clark-type electrode, a respirometer or an optical sensor, the slope being the rate of oxygen uptake or evolution; reports the rate (per mg of protein, or a fold over the control), kcat, Km or a stated yes or no.',
+    'ph_stat': 'pH-stat titration enzyme assay: a pH electrode holds the pH of an unbuffered or lightly buffered reaction at a set point and a base is added as fast as the reaction releases protons (esterase, lipase, carbonic anhydrase); reports the base added over time as a rate, kcat, Km or specific activity.',
+    'protein_film_electrochem': 'Protein-film electrochemistry (voltammetry or chronoamperometry): the enzyme is adsorbed as a film on an electrode and its catalytic current with the substrate is the rate; reports the catalytic current or current density, a turnover frequency kcat when the electroactive coverage is measured, an apparent Km and the current over the control.',
+    'itc_kinetics': 'Isothermal titration calorimetry enzyme kinetics: enzyme or substrate injected into a calorimeter cell and the heat of the reaction read as thermal power, which divided by a separately measured reaction enthalpy gives the rate; reports the rate, kcat, Km or specific activity of any reaction that gives heat, with no label and no product identification (not the binding titration of type itc).',
+    'continuous_ms': 'Continuous mass-spectrometry enzyme assay: the reaction is followed live in a mass spectrometer (a membrane-inlet probe for dissolved gases such as CO2, O2 or H2, or online electrospray), the ion current at the mass of the product is calibrated to a concentration with known standards and its initial slope is the rate; reports kcat, Km, kcat/Km, a specific activity or a fold over the no-enzyme baseline. It reads a mass, not an absorbance (no chromophore, product identity by mass or isotope label), and is continuous with no separation step.',
+    'nmr_timecourse': 'Real-time NMR progress-curve enzyme assay: a series of 1H, 13C, 31P or 19F spectra recorded while the enzyme converts its substrate in the NMR tube, the integrals of an assigned substrate and product resonance giving the amounts over time; reports the rate, kcat, Km, kcat/Km or a specific activity, with the product told apart by its chemical shift.',
+    'product_immunodetection': 'Antibody detection of the modified product of a stopped enzyme reaction (TR-FRET/HTRF, ELISA, AlphaScreen/AlphaLISA or an in vitro blot with an antibody against the phospho-, methyl-, acetyl- or ubiquitin product): the antibody signal is the product, read against a no-enzyme control and, when a product standard series is given, as an amount; reports the signal fold over the control, the specific activity, kcat or Km.',
+    'zymogram': 'In-gel activity staining (zymography, activity stain after a native gel): the enzyme is made visible as a cleared or coloured band in a gel that holds or is soaked in its substrate; reports only that an activity band is seen (or not) at a gel position, no rate or constant.',
+    'transport_cell_tracer_uptake': 'Whole-cell tracer uptake or efflux: living cells that make the protein, and matched control cells, take up (or release) a labelled substrate (14C, 3H, 86Rb+), the transport is stopped by filtration or an oil spin and the label kept is counted; reports an uptake rate per mg of cells, a Km or the fold over the empty-vector cells.',
+    'transport_counterflow': 'Counterflow, exchange and trans-stimulation: vesicles, proteoliposomes or cells preloaded with an unlabelled substrate take up a labelled substrate faster than the same preparation without the preload, or hold it above its equilibrium level (overshoot); reports the fold over the non-preloaded baseline, the overshoot ratio or an exchange rate, and shows that the transporter recognizes the molecule on both sides, not how fast it carries it alone.',
+    'transport_fluorescent_reporter': 'Fluorescent reporter of transport in cells: a fluorescent substrate analogue, an indicator dye or a genetically encoded sensor read on a plate reader, microscope or flow cytometer while the substrate or ion moves; reports a fold of the signal over control cells or a Km, usually relative to its own control.',
+    'transport_medium_analysis': 'Transport read by chemical analysis of an unlabelled substrate: cells take up or release the substrate and its amount in the medium (or in cells separated from it) is measured at stated times by HPLC, LC-MS, an enzymatic analyzer or ion analysis; reports a rate per mass of cells or a fold over a control strain over an interval, with no tracer and no continuous probe.',
+    'transport_oocyte_two_electrode': 'Two-electrode voltage clamp of Xenopus oocytes: oocytes injected with the cRNA of the protein are held at a set voltage and the current the substrate induces is recorded over water-injected control oocytes; reports the substrate-induced current, a fold over the control, an apparent Km from a concentration series and whether the current depends on the ion (a charge flow, not the substrate flow itself).',
+    'transport_patch_clamp': 'Patch clamp of cells (whole-cell, inside-out, outside-out or cell-attached): the membrane current of cells that make the protein, set against control cells, under voltage steps or ramps and ion replacement; reports the conductance of one channel, a reversal potential, a charge flow per second or the current as a fold over control cells.',
+    'transport_planar_bilayer': 'Planar lipid bilayer recording: a purified channel or transporter in an artificial bilayer between two solutions, current recorded at a held voltage; reports the single-channel current and conductance and, with two ions in the chambers, the reversal potential and the ion selectivity.',
+    'transport_proteoliposome_tracer': 'Proteoliposome tracer transport: one purified transporter reconstituted into liposomes with an imposed gradient (pH, membrane potential, sodium or another ion), uptake or efflux of a labelled substrate counted after stopping, against protein-free liposomes; reports the rate per mg of protein, turnover, Km or the fold over empty liposomes.',
+    'transport_ssm_electrophysiology': 'Solid-supported membrane electrophysiology: proteoliposomes on a gold sensor, a substrate concentration jump gives a transient current of electrogenic transport (voltage not clamped); reports the apparent Km of the peak current and the fold over an empty-liposome sensor.',
+    'transport_vesicle_probe_flux': 'Vesicle flux read continuously: vesicles (liposomes with a reconstituted protein, or native vesicles) release or take up an ion or substrate while an ion-selective electrode in the bath or a dye trapped inside follows it in real time, and a detergent at the end releases the whole pool; reports the fraction of the pool released over time against protein-free vesicles, a rate constant or half-time and, when stated, a rate per transporter, a rate per mg or the fold over protein-free vesicles; it is not a labelled tracer that is stopped and counted, and not a current.',
 }
 
 
@@ -251,6 +313,36 @@ WEIGHT_UNKNOWN_BY_TYPE = {
     'colocalization': 0.60,
     # spectro_direct (2026-11-21, owner to confirm; the answer chain is in literature_spectro_direct_converter.py and A105_ASSAY_CALIBRATION_DETAILS.md): an absolute rate with a well-known reference range of kcat and kcat/Km, a little under the KD anchor.
     'spectro_direct': 0.85,
+    # The eighteen further activity_rate types (2026-11-22, all EXPERT_REVIEW, owner to confirm; the answer chain of each is in its converter docstring).
+    'coupled_enzyme': 0.80,  # EXPERT_REVIEW, owner to confirm: an absolute rate with the trusted reference range of spectro_direct, but an indirect readout with more ways to be wrong (coupling limits, contaminating activity, no product identity).
+    'redox_mediator': 0.80,  # EXPERT_REVIEW, owner to confirm: absolute in form (extinction coefficient and electron count) but indirect in meaning; a rate with an artificial dye has no trusted reference range.
+    'fluorogenic': 0.80,  # EXPERT_REVIEW, owner to confirm: a relative readout in instrument units until a free-fluorophore standard curve calibrates it, and a fluorescence assay has more ways to be wrong (gain, plate, inner filter, autofluorescence).
+    'luminescent': 0.80,  # EXPERT_REVIEW, owner to confirm: a relative readout (RLU) made absolute only by a standard series, and indirect (it reads ADP or ATP), so a little under spectro_direct.
+    'stopped_flow': 0.80,  # EXPERT_REVIEW, owner to confirm: an absolute rate constant with a trusted range, but the rate is that of a phase and its assignment to the chemical step may be unstated.
+    'quench_flow': 0.85,  # EXPERT_REVIEW, owner to confirm: an absolute rate with a known reference range, with the product identified by separation; level with spectro_direct.
+    'chromatographic': 0.85,  # EXPERT_REVIEW, owner to confirm: an absolute, calibrated amount of product with a well-known reference range, so an unstated detail changes the size of a rate and not the existence of the activity; level with spectro_direct.
+    'stopped_colorimetric': 0.80,  # EXPERT_REVIEW, owner to confirm: an absolute amount only if the standard curve is in the same matrix and the product class is the claimed product; reagent background is the classic false positive, so under spectro_direct.
+    'radiometric': 0.85,  # EXPERT_REVIEW, owner to confirm: an absolute rate (specific radioactivity and counting efficiency turn counts into amount) with the same trusted reference range as spectro_direct.
+    'separation_band': 0.80,  # EXPERT_REVIEW, owner to confirm: an absolute readout (product over lane total) with the same trusted kcat range, but discontinuous and coarser, so a little under spectro_direct.
+    'oxygen_electrode': 0.80,  # EXPERT_REVIEW, owner to confirm: absolute after the two-point calibration but not specific, since oxygen is used by anything oxidizable in the chamber; an unstated blank or coupling can turn background into false catalysis.
+    'ph_stat': 0.80,  # EXPERT_REVIEW, owner to confirm: an absolute readout with a trusted reference range, but not selective (every proton source counts).
+    'protein_film_electrochem': 0.75,  # EXPERT_REVIEW, owner to confirm: the readout is a current per electrode area, a rate per enzyme only when the electroactive coverage is measured; a bare current density has no reference range.
+    'itc_kinetics': 0.80,  # EXPERT_REVIEW, owner to confirm: an absolute rate with a trusted reference range, but the readout is a non-specific heat and the rate depends on a separately measured enthalpy.
+    'continuous_ms': 0.85,  # EXPERT_REVIEW, owner to confirm: an absolute rate with a trusted reference range, as spectro_direct; a mass-specific signal is slightly safer and an instrument calibration slightly less standard, and the two cancel.
+    'nmr_timecourse': 0.85,  # EXPERT_REVIEW, owner to confirm: an absolute, species-specific rate (amounts from integrals against a reference) with the same trusted reference range as spectro_direct, level with it.
+    'product_immunodetection': 0.75,  # EXPERT_REVIEW, owner to confirm: the raw readout is relative and becomes an amount only through a product standard series; an unstated antibody specificity can turn another modification into the claimed one; level with fret.
+    'zymogram': 0.65,  # EXPERT_REVIEW, owner to confirm: a relative, qualitative readout with no calibration and no reference range; a wrong assumption counts another enzyme's band as the target's activity (the existence is wrong, a worse error than a rate's size).
+    # The ten transport_response types (2026-11-22, all EXPERT_REVIEW, owner to confirm); the answer chain of each is in its converter docstring.
+    'transport_cell_tracer_uptake': 0.75,  # EXPERT_REVIEW, owner to confirm: absolute in form but its meaning rests on the matched control cells; an unstated empty-vector control is the dominant false positive (host uptake and metabolism of the label); whole cells have more ways to be wrong than a purified-enzyme rate (spectro_direct 0.85) and a KD (SPR 0.90).
+    'transport_counterflow': 0.80,  # EXPERT_REVIEW, owner to confirm: a relative readout (a ratio of two counts of one label in one preparation) with no well-established reference range of folds or overshoots, whose label calibration cancels; below the KD anchor (0.90) and spectro_direct (0.85).
+    'transport_fluorescent_reporter': 0.65,  # EXPERT_REVIEW, owner to confirm: a relative reading (a fold over the paper's own control), absolute only after calibration; no reference range we would trust; an unstated control cell line or no-substrate control is the dominant false positive; level with AlphaScreen, split reporter and CETSA (0.65).
+    'transport_medium_analysis': 0.75,  # EXPERT_REVIEW, owner to confirm: absolute in units (calibration standards) but an interval balance and not a constant of the protein; a rate per mg of cells depends on expression, the substrate level and the normalizer, so no trusted reference range; an unstated metabolism or control-strain check can turn a host contribution into a false 'transports'.
+    'transport_oocyte_two_electrode': 0.80,  # EXPERT_REVIEW, owner to confirm: a membrane current of one oocyte, absolute in the clamp but its meaning (the protein's carrier rather than the oocyte's own channels or a leak) rests on controls; the water-injected control is universal practice so unstated is mostly benign; under the KD anchor 0.90 and spectro_direct 0.85 (a purified enzyme has no host background).
+    'transport_patch_clamp': 0.80,  # EXPERT_REVIEW, owner to confirm: absolute in form (pS), partly trusted reference range (1 to 100 pS), but its meaning rests on control cells; an unstated host-cell control is the dominant false positive; between spectro_direct 0.85 and transport_cell_tracer_uptake 0.75.
+    'transport_planar_bilayer': 0.85,  # EXPERT_REVIEW, owner to confirm: an absolute, intensive readout (a conductance in pS needs no protein amount) with a well-known range of channel sizes; a little under the KD anchor because a contaminating channel or pore-forming peptide is a false positive a protein-free bilayer does not show; level with spectro_direct.
+    'transport_proteoliposome_tracer': 0.85,  # EXPERT_REVIEW, owner to confirm: an absolute rate and Km in a defined system with a trusted reference range of carrier Km and turnover; an unstated control mostly changes magnitude; just under the KD anchor 0.90, as spectro_direct.
+    'transport_ssm_electrophysiology': 0.70,  # EXPERT_REVIEW, owner to confirm: a relative readout whose meaning rests on its controls (the solution-exchange artefact is a known false current); no reference range we would trust if the paper said less; level with ELISA and DSF.
+    'transport_vesicle_probe_flux': 0.80,  # EXPERT_REVIEW, owner to confirm: a clean defined system whose reference range (transporter and channel turnover) is known, but a rate needs the protein-free control, the response time and the protein amount, and a stated rate without them can be leak or a lag; a little under spectro_direct (0.85).
 }
 # Per sheet criterion overrides where the answers differ within an assay (same document).
 WEIGHT_UNKNOWN_BY_CRITERION = {
@@ -281,6 +373,64 @@ WEIGHT_UNKNOWN_BY_CRITERION = {
     'colocalization': {'binding_controls': 0.50, 'binding_regime': 0.70, 'calibration_applicability': 0.60, 'sampling_basis': 0.80},
     # spectro_direct: the blank is what separates activity from spontaneous chemistry (a real gap); a contaminating activity or a second reaction on the chromophore is the attribution risk; the extinction coefficient of the common chromophores, the mass basis of a specific activity and triplicate practice are benign when unstated.
     'spectro_direct': {'background_alternatives': 0.75, 'attribution_supported': 0.80, 'calibration_applicability': 0.90, 'normalization_basis': 0.90, 'sampling_basis': 0.90},
+    # The eighteen further activity_rate types (2026-11-22, EXPERT_REVIEW, owner to confirm); the reason of each entry is in its converter docstring.
+    # coupled_enzyme: the blank separates a primary activity from a contaminating one in an indirect assay; the product is known only through the reporter; coupling excess and lag are often unstated; NAD(P)H with a known coefficient is the textbook case.
+    'coupled_enzyme': {'background_alternatives': 0.70, 'attribution_supported': 0.75, 'rate_regime': 0.80, 'calibration_applicability': 0.85, 'matrix_interference': 0.90, 'normalization_basis': 0.90, 'sampling_basis': 0.90},
+    # redox_mediator: dyes are reduced by thiols, ascorbate and light, so the blank separates enzyme from chemistry; a contaminating dye-reducing activity is common; the native-partner (bypass) question is the main risk of the method.
+    'redox_mediator': {'background_alternatives': 0.70, 'attribution_supported': 0.75, 'assertion_relevance': 0.65, 'calibration_applicability': 0.85, 'normalization_basis': 0.90, 'sampling_basis': 0.90},
+    # fluorogenic: the no-enzyme blank is the main false positive of fluorescence; a contaminating protease or second reaction can release the fluorophore; an unstated standard curve or inner-filter check leaves the amount instrument-dependent.
+    'fluorogenic': {'background_alternatives': 0.70, 'attribution_supported': 0.80, 'calibration_applicability': 0.75, 'matrix_interference': 0.75, 'normalization_basis': 0.90, 'sampling_basis': 0.90},
+    # luminescent: the no-enzyme and no-substrate controls separate the enzyme from carried-over ATP and autophosphorylation; an unchecked luciferase disturbance looks like extra activity; the reagent cannot tell which reaction made the ADP.
+    'luminescent': {'background_alternatives': 0.75, 'matrix_interference': 0.75, 'attribution_supported': 0.70, 'normalization_basis': 0.90, 'sampling_basis': 0.90},
+    # stopped_flow: the assignment of the phase to the chemical step and the identity of the product are the central gap; the dead time and enzyme excess are usually evident; first-order rate constants do not scale with the enzyme amount; shots are averaged routinely.
+    'stopped_flow': {'attribution_supported': 0.65, 'rate_regime': 0.85, 'normalization_basis': 0.90, 'sampling_basis': 0.90},
+    # quench_flow: the zero-time control and the quench test are the method's safeguards (a leaking quench gives a false burst); the product is separated and identified by the method itself; mass basis and triplicates are benign.
+    'quench_flow': {'background_alternatives': 0.80, 'matrix_interference': 0.80, 'attribution_supported': 0.90, 'calibration_applicability': 0.90, 'normalization_basis': 0.90, 'sampling_basis': 0.90},
+    # chromatographic: the blank (no-enzyme, inactive enzyme, zero-time sample) separates activity from spontaneous chemistry; the retention time narrows a second reaction; an unstated quench or single end point turns a rate into an average; the other four are benign when unstated.
+    'chromatographic': {'background_alternatives': 0.75, 'attribution_supported': 0.85, 'rate_regime': 0.80, 'calibration_applicability': 0.90, 'matrix_interference': 0.90, 'normalization_basis': 0.90, 'sampling_basis': 0.90},
+    # stopped_colorimetric: the blanks separate activity from reagent chemistry; a product class and a possible contaminating activity; a standard curve out of matrix changes every amount; an unstated number of time points leaves linearity unseen.
+    'stopped_colorimetric': {'background_alternatives': 0.70, 'attribution_supported': 0.70, 'calibration_applicability': 0.80, 'rate_regime': 0.80, 'normalization_basis': 0.90, 'sampling_basis': 0.90},
+    # radiometric: the method is used for weak activities where the blank (carry-over, label impurity) is most of the signal; the product is known only through the separation; mass basis and triplicates are benign.
+    'radiometric': {'background_alternatives': 0.70, 'attribution_supported': 0.75, 'normalization_basis': 0.90, 'sampling_basis': 0.90},
+    # separation_band: a copurified nuclease or protease and spontaneous breakage are the dominant false positives of a gel assay; an unmarked band may be a degradation product; stain and film response; a stopped-time rate needs its stop, early points and time count.
+    'separation_band': {'background_alternatives': 0.70, 'attribution_supported': 0.75, 'calibration_applicability': 0.75, 'rate_regime': 0.75, 'normalization_basis': 0.90, 'sampling_basis': 0.85},
+    # oxygen_electrode: autoxidation of reduced cofactors, thiols, catechols and metal ions and sensor drift are the dominant false positive; uncoupled oxygen use and a contaminating oxidase are the attribution risk; calibration, mass basis and triplicates are benign.
+    'oxygen_electrode': {'background_alternatives': 0.65, 'attribution_supported': 0.70, 'calibration_applicability': 0.90, 'normalization_basis': 0.90, 'sampling_basis': 0.90},
+    # ph_stat: an unstated no-enzyme blank or CO2 exclusion is the dominant false positive (ester autohydrolysis, dissolved CO2 consumes base); any proton-releasing contaminant gives signal; titrant standardization changes the magnitude, not the existence.
+    'ph_stat': {'background_alternatives': 0.70, 'attribution_supported': 0.75, 'calibration_applicability': 0.85, 'normalization_basis': 0.90, 'sampling_basis': 0.90},
+    # protein_film_electrochem: the bare-electrode and no-substrate controls separate catalysis from direct electrolysis; without the electroactive coverage and film loss a current is only relative; unstated mass transport leaves a limited current that reads low but exists.
+    'protein_film_electrochem': {'background_alternatives': 0.65, 'attribution_supported': 0.75, 'normalization_basis': 0.60, 'calibration_applicability': 0.85, 'rate_regime': 0.75, 'sampling_basis': 0.85},
+    # itc_kinetics: the dilution heat is the commonest false heat in a calorimeter; heat is non-specific and the product is rarely identified; mass basis and triplicate practice are benign when unstated.
+    'itc_kinetics': {'background_alternatives': 0.70, 'attribution_supported': 0.75, 'normalization_basis': 0.90, 'sampling_basis': 0.90},
+    # continuous_ms: the blank (leak, drift, the preparation giving off the monitored species) separates activity from baseline; there is no known constant for the calibration of a given probe, so an unstated calibration leaves the absolute scale open (magnitude, not existence).
+    'continuous_ms': {'background_alternatives': 0.75, 'calibration_applicability': 0.80, 'matrix_interference': 0.80, 'normalization_basis': 0.90, 'sampling_basis': 0.90},
+    # nmr_timecourse: spectra show substrate and product separately, so an unstated blank or product assignment is more often benign; an unstated relaxation delay, internal standard or signal-to-noise is a real way for the integrals to be wrong; the other criteria take the 0.85 type default.
+    'nmr_timecourse': {'background_alternatives': 0.80, 'attribution_supported': 0.90, 'calibration_applicability': 0.80, 'normalization_basis': 0.90},
+    # product_immunodetection: an unstated no-enzyme or no-cofactor control is the usual false positive of a weak signal; an unstated antibody specificity is the largest gap; an unstated standard curve makes an amount uninterpretable; plate assays are usually run in duplicate or triplicate.
+    'product_immunodetection': {'background_alternatives': 0.65, 'attribution_supported': 0.60, 'calibration_applicability': 0.70, 'normalization_basis': 0.90, 'sampling_basis': 0.85},
+    # zymogram: the no-substrate and inactive lanes tell an enzyme band from a stain artefact; assigning a band in an extract to the protein is the central gap; the band mass against the expected mass; a representative gel of repeats.
+    'zymogram': {'background_alternatives': 0.60, 'attribution_supported': 0.55, 'calibration_applicability': 0.75, 'measurement_identity': 0.70, 'sampling_basis': 0.80},
+    # transport_cell_tracer_uptake (2026-11-22, EXPERT_REVIEW, owner to confirm; chain in literature_transport_cell_tracer_uptake_converter.py): the empty-vector or zero-time control and the label identity / competitor guard are the real gaps (host uptake, metabolism or trapping of the label can be the whole signal); the protein is presumed present (expression), intact cells are routine in filtration assays (integrity, energy test), the labelled compound is usually the substrate named (native substrate), triplicates are usual (sampling); the specific activity of a supplier's label is known (calibration) and the Km is stated even when the series is only in a figure (response model); the interval (transport_endpoint) takes the type default.
+    'transport_cell_tracer_uptake': {'background_alternatives': 0.65, 'transport_specificity': 0.65, 'attribution_supported': 0.80, 'membrane_system': 0.85, 'transport_driving_force': 0.85, 'assertion_relevance': 0.85, 'sampling_basis': 0.85, 'calibration_applicability': 0.90, 'transport_response_model': 0.90},
+    # transport_counterflow: the non-preloaded sample is what the trans-effect is read against (0.75); the protein-free control is what ties the exchange to the protein and not to another carrier or a metabolic trap (0.70); the non-substrate preload is the defining specificity control of a counterflow (0.70, together with label identity); retention of the preload keeps the gradient (0.75); the loading concentrations are in the methods of nearly every paper (0.85) and triplicates are usual for a ratio (0.90), so both are benign when unstated. transport_endpoint, transport_response_model and assertion_relevance take the type default.
+    'transport_counterflow': {'background_alternatives': 0.75, 'attribution_supported': 0.70, 'transport_specificity': 0.70, 'membrane_system': 0.75, 'transport_driving_force': 0.85, 'sampling_basis': 0.90},
+    # transport_fluorescent_reporter (DRAFT 2026-11-22, EXPERT_REVIEW, owner to confirm): the control cells and the no-substrate control are what separate transport by this protein from the host's own (0.50, as the PLA and yeast two-hybrid controls); autofluorescence, bleaching and dye leakage are real ordinary artefacts of a fluorescence reading (0.55); the fluorescent molecule is often an analogue that other carriers also take up (0.55); a relative signal without calibration leaves the fold but not its size (0.55); competition by the natural substrate or an inhibitor is what shows the analogue goes through this carrier (0.60); a viability check is ordinary but a leaky cell takes up a dye (0.65); expression is usually shown but often not said (0.70); the substrate concentration and the buffer are stated in Methods (0.70); triplicates are usual (0.80); transport_endpoint and transport_response_model take the default.
+    'transport_fluorescent_reporter': {'background_alternatives': 0.50, 'matrix_interference': 0.55, 'assertion_relevance': 0.55, 'calibration_applicability': 0.55, 'transport_specificity': 0.60, 'membrane_system': 0.65, 'attribution_supported': 0.70, 'transport_driving_force': 0.70, 'sampling_basis': 0.80},
+    # transport_medium_analysis (2026-11-22, EXPERT_REVIEW, owner to confirm; chain in literature_transport_medium_analysis_converter.py): the control strain and the expression check tie the signal to the protein (the YjeH deletion strain still exported most of the amino acid); metabolism and re-uptake unaddressed is the commonest failure of a medium analysis; an unstated regime, number of sampling times and stop usually mean a two-point interval average; lysis, the internal standard and the cell-free blank are less often a problem; standards in the medium and triplicates are routine.
+    'transport_medium_analysis': {'background_alternatives': 0.80, 'attribution_supported': 0.60, 'matrix_interference': 0.80, 'calibration_applicability': 0.90, 'transport_endpoint': 0.65, 'transport_specificity': 0.65, 'membrane_system': 0.75, 'transport_driving_force': 0.85, 'sampling_basis': 0.85},
+    # transport_oocyte_two_electrode (2026-11-22, EXPERT_REVIEW, owner to confirm; chain in literature_transport_oocyte_two_electrode_converter.py): the water-injected control and the ion or substrate specificity controls are the real gaps (a host current counted as the protein's); a current is charge and not the substrate; inactive-mutant and expression checks are often unsaid; oocyte and batch numbers and the clamp voltage are usually given; the same-oocyte baseline defines the current; the clamp is calibrated by the instrument.
+    'transport_oocyte_two_electrode': {'background_alternatives': 0.70, 'transport_specificity': 0.70, 'assertion_relevance': 0.65, 'attribution_supported': 0.75, 'sampling_basis': 0.85,
+                                       'transport_driving_force': 0.85, 'transport_endpoint': 0.90, 'calibration_applicability': 0.90},
+    # transport_patch_clamp (2026-11-22, EXPERT_REVIEW, owner to confirm; chain in literature_transport_patch_clamp_converter.py): the host-cell control and the substrate-free control (endogenous currents can be the whole current); a mutant or blocker often unstated; charge flow is not ion flow without an ion substitution or a reversal potential; series resistance, seal and leak are benign when unstated; n of cells is usually in the legend.
+    'transport_patch_clamp': {'background_alternatives': 0.65, 'attribution_supported': 0.70, 'transport_specificity': 0.60, 'calibration_applicability': 0.90, 'sampling_basis': 0.85},
+    # transport_planar_bilayer (2026-11-22, EXPERT_REVIEW, owner to confirm; the answer chain is in literature_transport_planar_bilayer_converter.py): the protein-free bilayer and the attribution to the protein are what separate a channel from a contaminant or a failing bilayer (real gaps when unstated); the ion that carries the current is established only by a bi-ionic reversal potential, and charge flow is not ion flow; the usual recording solutions, the amplifier and filter practice and triplicate bilayers are benign when unstated, and a wrong driving force changes the size and not the existence.
+    'transport_planar_bilayer': {'background_alternatives': 0.75, 'attribution_supported': 0.75, 'transport_specificity': 0.80, 'transport_driving_force': 0.90, 'calibration_applicability': 0.90, 'sampling_basis': 0.90},
+    # transport_proteoliposome_tracer (2026-11-22, EXPERT_REVIEW, owner to confirm; chain in literature_transport_proteoliposome_tracer_converter.py): the empty-liposome control separates carrier transport from leak and label sticking (the lowest); vesicle tightness is often unstated and the empty-liposome control is part of it; the gradient and its control define the flux but a uniporter needs none; a competitor is evidence of specificity yet its absence does not invalidate a purified system; the active fraction changes the size of a turnover, not its existence; triplicates are usual.
+    'transport_proteoliposome_tracer': {'background_alternatives': 0.75, 'membrane_system': 0.80, 'transport_driving_force': 0.80, 'transport_specificity': 0.90, 'calibration_applicability': 0.90, 'sampling_basis': 0.90},
+    # transport_ssm_electrophysiology (2026-11-22, EXPERT_REVIEW, owner to confirm; chain in literature_transport_ssm_electrophysiology_converter.py): a jump over an empty sensor also gives a transient, so an unstated empty-liposome or artefact control can leave the current without an owner; charge flow is not identified-ion flow; an inactive-protein control is often left out; a reference jump on the same sensor decides whether Km and fold compare; peak current is the usual readout and triplicate sensors are usual.
+    'transport_ssm_electrophysiology': {'background_alternatives': 0.60, 'transport_specificity': 0.60, 'attribution_supported': 0.75, 'calibration_applicability': 0.70, 'transport_endpoint': 0.85, 'sampling_basis': 0.80},
+    # transport_vesicle_probe_flux (2026-11-22, EXPERT_REVIEW, owner to confirm; chain in literature_transport_vesicle_probe_flux_converter.py): the protein-free vesicle separates transport from leak; the second ion and the probe's selectivity say which species moved; the detergent total and the response time decide whether a rate is a rate; standard additions and triplicates are usual.
+    'transport_vesicle_probe_flux': {'background_alternatives': 0.70, 'transport_specificity': 0.70, 'transport_endpoint': 0.75, 'calibration_applicability': 0.85, 'sampling_basis': 0.90},
 }
 if set(WEIGHT_UNKNOWN_BY_TYPE) != set(EXPERIMENT_TYPES) or not set(WEIGHT_UNKNOWN_BY_CRITERION) <= set(EXPERIMENT_TYPES):
     raise ValueError('WEIGHT_UNKNOWN_BY_TYPE must name exactly the EXPERIMENT_TYPES (and the overrides only those)')
@@ -419,6 +569,36 @@ QUALITATIVE_LOG_RATIO = {   # OWNER_DECISION 2
     'y2h': 0.4,             # EXPERT_REVIEW: heterologous nuclear reporter; high false-positive and false-negative rates.
     'split_reporter': 0.4,  # EXPERT_REVIEW: reporter reconstitution can occur through proximity or forced association; weakest direct-binding evidence.
     'spectro_direct': 1.2,  # EXPERT_REVIEW, owner to confirm (decided 2026-11-21): a direct continuous absorbance readout of the reaction on purified enzyme is the standard evidence of catalysis, so a stated rate is strong (below SPR 1.5: the chromophore change names a reaction only when the product is identified, and that is a weight criterion, not this magnitude). The same constant is the magnitude of 'activity not detected': an absent signal is limited by the assay's detection limit and the substrate and conditions tried, so it is not stronger than 1.2.
+    # The eighteen further activity_rate types (2026-11-22, all EXPERT_REVIEW, owner to confirm). The same constant is the magnitude of 'activity not detected'.
+    'coupled_enzyme': 1.0,  # EXPERT_REVIEW, owner to confirm: a continuous, purified-enzyme rate read through a reporter chain; a contaminating activity feeding the same reporter or a coupling-limited slope can look like (or hide) activity, so it counts less than the direct assay (1.2).
+    'redox_mediator': 1.0,  # EXPERT_REVIEW, owner to confirm: electron transfer to a surrogate dye is strong evidence of a redox enzyme but not of the claimed reaction with its native partner (below spectro_direct 1.2); an absent dye reduction is weaker still, the one constant is the compromise.
+    'fluorogenic': 1.1,  # EXPERT_REVIEW, owner to confirm: a stated rate on enzyme is strong evidence of catalysis, a little under spectro_direct because a fluorescence readout of a mostly synthetic substrate is more open to artefact (autohydrolysis, inner filter, quenching, gain).
+    'luminescent': 1.0,  # EXPERT_REVIEW, owner to confirm: the reagent reads ADP, ATP or NAD(P)H, not the reaction itself (a contaminating ATPase, autophosphorylation and carried-over ATP give the same light), so below spectro_direct 1.2 and above the proximity types 0.5.
+    'stopped_flow': 1.0,  # EXPERT_REVIEW, owner to confirm: a time-resolved optical readout on purified enzyme is direct, but it reports a phase of a signal that counts as chemistry only when assigned to it (a fast optical change can be binding or a conformational step).
+    'quench_flow': 1.3,  # EXPERT_REVIEW, owner to confirm: the product is separated, identified and counted, not read from an optical proxy, and the zero-time and quench controls are standard, so slightly above spectro_direct 1.2 and under SPR/ITC 1.5 (a rate of a chemical step, not of a defined binding pair); an absent product is limited by the substrate, time range and detection limit tried.
+    'chromatographic': 1.3,  # EXPERT_REVIEW, owner to confirm: a separated, identified and calibrated product peak is among the most direct evidence of catalysis, a little above spectro_direct 1.2 and below SPR and ITC 1.5.
+    'stopped_colorimetric': 1.0,  # EXPERT_REVIEW, owner to confirm: a measured rate on purified enzyme is good evidence, but the colour names a product class, is read only at chosen times and is easily raised by the reagent reacting with substrate or buffer; below spectro_direct 1.2, level with fret and fcs.
+    'radiometric': 1.3,  # EXPERT_REVIEW, owner to confirm: the label follows the substrate's own atoms and the count is very sensitive, so slightly above a chromophore proxy (spectro_direct 1.2); below SPR 1.5 because the product is known only through the separation.
+    'separation_band': 1.1,  # EXPERT_REVIEW, owner to confirm: the product is seen as a band of the expected size, which names it better than a bare absorbance change, but the conversion is semi-quantitative densitometry from a few stopped points and an absent band is limited by stain or exposure sensitivity.
+    'oxygen_electrode': 1.0,  # EXPERT_REVIEW, owner to confirm: a direct continuous oxygen readout is real evidence of an oxygen-using reaction but oxygen use is not specific (autoxidation, sensor drift, a contaminating oxidase, uncoupled oxygen use), so it names the reaction less than a chromophore does.
+    'ph_stat': 1.0,  # EXPERT_REVIEW, owner to confirm: the base added is a direct stoichiometric count of protons released, but it counts every proton source (spontaneous hydrolysis, dissolved CO2, acid-producing contaminants); below spectro_direct 1.2, at the level of fret.
+    'protein_film_electrochem': 1.0,  # EXPERT_REVIEW, owner to confirm: a substrate-dependent catalytic current of a film, absent without enzyme, is direct label-free evidence of catalysis, but only for an enzyme that exchanges electrons with the electrode in a film of unknown active fraction and orientation; one step under spectro_direct.
+    'itc_kinetics': 1.0,  # EXPERT_REVIEW, owner to confirm: a stated rate from a direct heat read on purified enzyme is strong evidence, but the heat is non-specific (any process in the cell adds to it, the product is not identified), so under spectro_direct 1.2.
+    'continuous_ms': 1.2,  # EXPERT_REVIEW, owner to confirm: as spectro_direct: a continuous readout of the reaction on purified enzyme is the standard evidence of catalysis; a mass names the product more surely than an absorbance, but the instrument and its calibration are lab-specific, so not above 1.2.
+    'nmr_timecourse': 1.2,  # EXPERT_REVIEW, owner to confirm: an assigned product seen by its chemical shift is strong evidence (better than a dye signal), but the method is insensitive, so 'activity not detected' is bounded by a high detection limit; the two pull opposite ways and the value equals spectro_direct.
+    'product_immunodetection': 0.9,  # EXPERT_REVIEW, owner to confirm: the signal is an antibody's reading of the product and depends on its specificity and on the controls (which lower the weight, not this value); level with the relative immunoassays (elisa 0.8, alphascreen 0.8) but a little higher because the signal is tied to an enzyme-dependent modification.
+    'zymogram': 0.6,  # EXPERT_REVIEW, owner to confirm: a band of activity at a gel position is a direct enzymatic readout (more direct than the nearness types 0.5) but qualitative, on a renatured or partly denatured enzyme, and it names a band, not a protein. See the note on stated_strength in REGISTERED_activity_rate.md.
+    # The ten transport_response types (2026-11-22, all EXPERT_REVIEW, owner to confirm). The same constant is the magnitude of 'transport not detected'. Rule: a weaker assay carries less evidence.
+    'transport_proteoliposome_tracer': 1.5,  # EXPERT_REVIEW, owner to confirm: only protein, lipid and gradient define the flux, so a stated transport is the cleanest evidence that this protein moves this substrate (level with SPR in the binding class); a non-detection can also come from an inactive or badly oriented reconstitution.
+    'transport_planar_bilayer': 1.4,  # EXPERT_REVIEW, owner to confirm: single molecules of the purified protein in a defined bilayer, the ion identified by its reversal potential; the strongest transport evidence after the proteoliposome tracer and stronger than every cell assay.
+    'transport_ssm_electrophysiology': 1.3,  # EXPERT_REVIEW, owner to confirm: a defined system (purified protein, lipid, one substrate jump) but the amplitude is relative to the protein on the sensor and only electrogenic steps give a signal; a little under the planar bilayer and the proteoliposome tracer.
+    'transport_counterflow': 1.2,  # EXPERT_REVIEW, owner to confirm: preloaded vesicles taking up label above the non-preloaded baseline is direct evidence that the transporter exchanges the two molecules, but it infers the substrate from trans-stimulation and is a relative ratio; below the proteoliposome tracer (1.5), level with vesicle probe flux, patch clamp and oocyte clamp.
+    'transport_vesicle_probe_flux': 1.2,  # EXPERT_REVIEW, owner to confirm: a defined vesicle system followed in real time with a protein-free control has no host background (stronger than a cell assay) but the species is only as sure as the probe's selectivity and the second-ion control.
+    'transport_patch_clamp': 1.2,  # EXPERT_REVIEW, owner to confirm: a direct electrical readout of charge movement with its own signature (reversal potential, block, ion dependence), but in a cell whose own channels and transporters add a background, and charge flow is not the flow of one ion; as the oocyte clamp, below the bilayer, above whole-cell tracer uptake.
+    'transport_oocyte_two_electrode': 1.2,  # EXPERT_REVIEW, owner to confirm: a current of oocytes that make one injected protein, read against water-injected oocytes, is a direct and sensitive readout in a defined host; but the host has its own carriers, the current is charge and not the substrate, and an electroneutral transporter gives no current; under the vesicle and bilayer systems, above whole-cell tracer uptake.
+    'transport_cell_tracer_uptake': 1.0,  # EXPERT_REVIEW, owner to confirm: the label kept by living cells can also come from other host transporters, metabolism or trapping of the label and surface binding; weaker than a defined system (proteoliposomes 1.5, bilayer 1.4) and stronger than an interval balance in the medium or a dye (0.9).
+    'transport_medium_analysis': 0.9,  # EXPERT_REVIEW, owner to confirm: an interval balance of export, re-uptake, lysis and metabolism on a living host with other transporters, not the movement through one protein; weaker than the tracer assay (where the label follows the substrate).
+    'transport_fluorescent_reporter': 0.9,  # EXPERT_REVIEW, owner to confirm: an analogue or a surrogate ion and a relative dye signal are not the substrate and not an amount; the weakest of the class, level with the medium analysis.
 }
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -457,7 +637,7 @@ QUANTITATIVE_STRENGTH_ANCHORS = {   # OWNER_DECISION 15
 # ---------------------------------------------------------------------------------------------------------------
 # (5b2) STATED_ONLY_STRENGTH (OWNER_DECISION 19; owner, 2026-11-22: "yes/no statement is weakest evidence than experimental
 # measurements"). A type that can report a measured effect (it has anchors in QUANTITATIVE_STRENGTH_ANCHORS, or it is an
-# activity_rate type) may also be stated in words alone ("binds", "no binding was detected", "active"), with no number. Such a
+# activity_rate or a transport_response type) may also be stated in words alone ("binds", "no binding was detected", "active"), with no number. Such a
 # result says nothing about where on the type's scale the effect sits, so it counts as a fixed low strength on that scale:
 # log_ratio = QUALITATIVE_LOG_RATIO[type] * STATED_ONLY_STRENGTH, for a stated detection and a stated non-detection alike.
 # 0.25 is chosen so that the bare statement of even the strongest type (SPR or ITC, 1.5 * 0.25 = 0.375) stays under the
@@ -468,9 +648,13 @@ QUANTITATIVE_STRENGTH_ANCHORS = {   # OWNER_DECISION 15
 STATED_ONLY_STRENGTH = 0.25   # EXPERT_REVIEW; confirmed by the owner 2026-11-22
 
 
+# Types of a measuring class whose OWN result is a yes/no observation (a band of activity in the gel): they keep their full value, like pulldown or y2h.
+OBSERVATION_RESULT_TYPES = ('zymogram',)
+
+
 def stated_strength(experiment_type):
     """The strength a result stated in words alone takes on its type's scale (OWNER_DECISION 19)."""
-    measures = experiment_type in QUANTITATIVE_STRENGTH_ANCHORS or CLASS_OF_EXPERIMENT_TYPE[experiment_type] == 'activity_rate'
+    measures = (experiment_type in QUANTITATIVE_STRENGTH_ANCHORS or CLASS_OF_EXPERIMENT_TYPE[experiment_type] in ('activity_rate', 'transport_response')) and experiment_type not in OBSERVATION_RESULT_TYPES
     return STATED_ONLY_STRENGTH if measures else 1.0
 
 
@@ -507,6 +691,55 @@ REFERENCE_ENZYME_MASS_G_PER_MOL = 5.0e4   # EXPERT_REVIEW, owner to confirm: use
 ACTIVITY_EFFECT_ORDER = ('catalytic_efficiency', 'turnover', 'specific_activity', 'rate_over_control')
 # The record's quantity kind (QUANTITY_KINDS['activity_rate']) of the effect, and the anchor quantity it is read against.
 ACTIVITY_QUANTITY_OF_KIND = {'catalytic_efficiency': 'catalytic_efficiency', 'turnover': 'turnover', 'rate': 'specific_activity', 'rate_ratio': 'rate_over_control'}
+
+# ---------------------------------------------------------------------------------------------------------------
+# (5d) TRANSPORT_STRENGTH_ANCHORS: the transport_response class's gray-scale ends (DRAFT 2026-11-22, owner to confirm; every number below is
+# EXPERT_REVIEW and every literature figure is from memory, not verified). Anchors are per QUANTITY, not per experiment type: the physics of a
+# Km, a turnover or a unitary conductance is the same in every assay. The position runs on the log10 scale from noise_end (strength 0) to
+# strong_end (strength 1), as for the binding and activity anchors. They are the two ends of a gray scale, never thresholds.
+# Direction: for transport_km a SMALLER value is stronger (noise_end > strong_end, as for a binding constant); for every other quantity a LARGER
+# value is stronger.
+# ---------------------------------------------------------------------------------------------------------------
+TRANSPORT_STRENGTH_ANCHORS = {
+    # Apparent Km (or K0.5) of the transported substrate, in uM. noise_end 1e4 uM (10 mM): saturation is hardly reachable in an uptake assay and a
+    # Km this large is not told from a linear, non-mediated uptake; strong_end 1 uM: a high-affinity carrier (BioY about 0.25 uM, BtsT about 16 uM,
+    # most nutrient carriers 1 to 1000 uM; from memory).
+    'transport_km': {'unit': 'uM', 'noise_end': 1e4, 'strong_end': 1.0},                                   # EXPERT_REVIEW, owner to confirm
+    # Turnover per transporter molecule or channel, in s^-1 (the same ends as the activity turnover). noise_end 1e-2: about one turnover per
+    # two minutes, the slow end of carriers and ATP-driven pumps; strong_end 1e2: the upper range of carriers (typical carriers 1 to 100 s^-1; a
+    # channel is far above and caps at 1; from memory).
+    'turnover': {'unit': 's^-1', 'noise_end': 1e-2, 'strong_end': 1e2},                                    # EXPERT_REVIEW, owner to confirm
+    # Unitary (single-channel) conductance, in pS, already corrected for the driving force (g = I / (V - Vrev)). noise_end 1 pS: about 0.1 pA at
+    # 100 mV, the least a single-channel recording resolves above its own noise (about 0.1 pA rms, from memory); strong_end 100 pS: the large
+    # end of ordinary ion channels (many are 10 to 100 pS; the fluoride channel Fluc about 7 pS; from memory).
+    'unitary_conductance': {'unit': 'pS', 'noise_end': 1.0, 'strong_end': 1e2},                            # EXPERT_REVIEW, owner to confirm
+    # Charge-equivalent rate of one channel (elementary charges per second, current / e). The ends are the two conductance ends read at 100 mV
+    # (1 pS = 6.2e5 charges/s, 100 pS = 6.2e7 charges/s), rounded: so the two channel scales agree. Used when only a current and not a conductance is stated.
+    'charge_rate': {'unit': 'elementary_charge_equivalents_per_s', 'noise_end': 6e5, 'strong_end': 6e7},  # EXPERT_REVIEW, owner to confirm
+    # A rate or an accumulated amount over the paper's own matched negative control (empty vector, protein-free liposomes, uninjected oocyte,
+    # no substrate), as a dimensionless ratio. noise_end 1: no better than the control; strong_end 30: the control then holds about 3 percent of the
+    # signal, so it no longer limits the reading (typical empty-vector backgrounds are 3 to 30 percent of a good uptake signal; from memory).
+    # A ratio at or under 1 is strength 0 (neutral), never opposition.
+    'fold_over_control': {'unit': 'dimensionless', 'noise_end': 1.0, 'strong_end': 30.0},                  # EXPERT_REVIEW, owner to confirm
+    # Rate per mass of the preparation (cells, vesicles or purified protein), in nmol/min/mg. noise_end 1e-3 (1 pmol/min/mg): about 90 counts per
+    # minute at 40 mCi/mmol (88.8 dpm per pmol), the floor of a filtration assay over its blank; strong_end 1e1 (10 nmol/min/mg): a well expressed
+    # carrier in whole cells (from memory). Weak evidence: it depends on expression level, the substrate and the normalizer (open question).
+    'normalized_rate': {'unit': 'nmol/min/mg', 'noise_end': 1e-3, 'strong_end': 1e1},                      # EXPERT_REVIEW, owner to confirm
+}
+# Which stated quantity is the effect when a record states several: the best-determined first (DRAFT, owner to confirm). Km is an intensive
+# property: it needs neither the amount of transporter nor a normalizer, and a fitted saturable curve already shows signal over background.
+# Turnover and unitary conductance are intensive per molecule too, but need the active amount or a single-channel record. The charge-equivalent
+# rate comes after the conductance, which has the driving force removed. A fold over the paper's own control shows that the protein transports
+# at all but depends on the control's own background. A rate per mg depends on expression, substrate concentration and the normalizer, so it is last.
+TRANSPORT_EFFECT_ORDER = ('transport_km', 'turnover', 'unitary_conductance', 'charge_rate', 'fold_over_control', 'normalized_rate')   # EXPERT_REVIEW, owner to confirm
+# The record's quantity kind (QUANTITY_KINDS['transport_response']) of the effect and the anchor quantity it is read against. The kind
+# 'transport_rate' holds two anchor quantities and is told apart by the effect's unit (the converter has converted it exactly).
+TRANSPORT_QUANTITY_OF_KIND = {'transport_parameter': 'transport_km', 'electrical_conductance': 'unitary_conductance', 'charge_equivalent_rate': 'charge_rate',
+                              'transport_rate_ratio': 'fold_over_control', 'substrate_response_ratio': 'fold_over_control'}   # EXPERT_REVIEW, owner to confirm
+TRANSPORT_RATE_QUANTITY_OF_UNIT = {'s^-1': 'turnover', 'nmol/min/mg': 'normalized_rate'}   # EXPERT_REVIEW, owner to confirm
+# The reverse, for a converter that selected a quantity with select_transport_effect and must name the record kind (transport_rate for the two rates).
+TRANSPORT_KIND_OF_QUANTITY = {'transport_km': 'transport_parameter', 'turnover': 'transport_rate', 'unitary_conductance': 'electrical_conductance',
+                              'charge_rate': 'charge_equivalent_rate', 'fold_over_control': 'transport_rate_ratio', 'normalized_rate': 'transport_rate'}   # EXPERT_REVIEW, owner to confirm
 
 # ---------------------------------------------------------------------------------------------------------------
 # (4) Field lists. Each field: kind, plus lo/hi for numbers, vocab for vocabularies, nullable.

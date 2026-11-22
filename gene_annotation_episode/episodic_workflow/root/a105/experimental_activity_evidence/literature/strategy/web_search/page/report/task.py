@@ -8,8 +8,9 @@ window), finds its span and holds the immutable leaf record of that window, whic
 ``none`` is done without a record. The experiment ref is ``kind:source:offset-end`` of the window, so each window's record
 is its own. The windows are the page's remaining prose chunks in document order (``windows`` of the commission); each is
 read once and removed from the input list (``input_list``), never re-read. The naming and the fill are the model calls of
-one unit, so a window is one unit and the yield estimator's item count (the windows) is the windows to do. One method is
-named per window. The leaf grades and judges nothing: the page groups the leaf records of its chunk, table and report
+one unit, so a window is one unit and the yield estimator's item count (the windows) is the windows to do. Every method a
+window reports is named and filled within its unit, one record per method (owner, 2026-11-22: multiple methods per passage
+allowed, no cap, behaviour to be watched). The leaf grades and judges nothing: the page groups the leaf records of its chunk, table and report
 children into graders."""
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_leaf_extraction import (
     extraction_arguments, leaf_record, method_call, method_request)
@@ -37,13 +38,14 @@ def action(response, summary, records, ctx):
 
 
 async def extract(arguments, ctx):
-    """Fill the form of the type the model named for this window and hold its record; return its ref and the type named.
-    A window named ``none`` holds no record (``record_ref`` None)."""
-    if arguments['experiment_type'] is None:
-        return {'status': 'completed', 'experiment_type': None, 'record_ref': None}
-    filled = await extraction_arguments(ctx.model, arguments, text=TEXT)
-    record_ref = ctx.store.artifact(canonical(leaf_record(filled)), 'application/json')
-    return {'status': 'completed', 'experiment_type': arguments['experiment_type'], 'record_ref': record_ref}
+    """Fill the form of every type the model named, one after the other, and hold one record for each; return their refs
+    and the types named, in the order named. A text for which no method was named holds no record (both lists empty).
+    No cap on the number of methods (owner, 2026-11-22: multiple methods per passage allowed; behaviour to be watched)."""
+    record_refs = []
+    for experiment_type in arguments['experiment_types']:
+        filled = await extraction_arguments(ctx.model, {**arguments, 'experiment_type': experiment_type}, text=TEXT)
+        record_refs.append(ctx.store.artifact(canonical(leaf_record(filled)), 'application/json'))
+    return {'status': 'completed', 'experiment_types': list(arguments['experiment_types']), 'record_refs': record_refs}
 
 
 TOOLS = {'extract': extract}

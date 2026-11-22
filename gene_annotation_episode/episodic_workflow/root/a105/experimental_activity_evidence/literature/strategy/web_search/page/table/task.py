@@ -13,7 +13,8 @@ The selection is a byte window only. A sheet selection (an XLSX sheet's rows) ha
 (``source.xlsx.*`` has no A105 implementation), so it is not offered. The experiment ref is ``kind:source:offset-end`` of
 the window. The window is the leaf's one input unit (``input_list``): it is named and extracted once and then consumed
 (nano-graphrag's selected table region), never offered again. The naming and the fill are the model calls of one unit, so
-the item is one unit and the yield estimator's item count is the table regions to do. One method is named per table region."""
+the item is one unit and the yield estimator's item count is the table regions to do. Every method the table region reports is
+named and filled within the one unit, one record per method (owner, 2026-11-22: multiple methods per passage allowed)."""
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_leaf_extraction import (
     extraction_arguments, leaf_record, method_call, method_request)
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import (
@@ -45,13 +46,14 @@ def action(response, summary, records, ctx):
 
 
 async def extract(arguments, ctx):
-    """Fill the form of the type the model named and hold its record; return its ref and the type named. A table named
-    ``none`` holds no record (``record_ref`` None)."""
-    if arguments['experiment_type'] is None:
-        return {'status': 'completed', 'experiment_type': None, 'record_ref': None}
-    filled = await extraction_arguments(ctx.model, arguments, text=TEXT, reading=READING)
-    record_ref = ctx.store.artifact(canonical(leaf_record(filled)), 'application/json')
-    return {'status': 'completed', 'experiment_type': arguments['experiment_type'], 'record_ref': record_ref}
+    """Fill the form of every type the model named, one after the other, and hold one record for each; return their refs
+    and the types named, in the order named. A text for which no method was named holds no record (both lists empty).
+    No cap on the number of methods (owner, 2026-11-22: multiple methods per passage allowed; behaviour to be watched)."""
+    record_refs = []
+    for experiment_type in arguments['experiment_types']:
+        filled = await extraction_arguments(ctx.model, {**arguments, 'experiment_type': experiment_type}, text=TEXT, reading=READING)
+        record_refs.append(ctx.store.artifact(canonical(leaf_record(filled)), 'application/json'))
+    return {'status': 'completed', 'experiment_types': list(arguments['experiment_types']), 'record_refs': record_refs}
 
 
 TOOLS = {'extract': extract}

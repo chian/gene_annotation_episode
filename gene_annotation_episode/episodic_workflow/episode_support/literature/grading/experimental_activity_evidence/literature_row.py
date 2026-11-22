@@ -85,7 +85,8 @@ KNOWN_DIRECTIONS = ('supports', 'opposes', 'neutral')
 # Classes whose results are NOT pooled (decided 2026-11-21, owner to confirm): the effect of an activity_rate result is ONE of several quantities in different
 # units (kcat/Km, kcat, specific activity, a fold over the control), chosen per experiment, so no two results need share a unit and no mean of them has one. The
 # row's pooled effect, variance and precision (and the relative deviation) are null for such a class; the direction, strength and weight are unaffected.
-NOT_POOLED_CLASSES = ('activity_rate',)
+# transport_response (DRAFT 2026-11-22, owner to confirm): the effect of a result is ONE of six quantities in different units (Km in uM, turnover in s^-1, a conductance in pS, a charge rate, a ratio, a rate per mg), chosen per experiment, so no two results need share a unit and no mean of them has one. As for activity_rate.
+NOT_POOLED_CLASSES = ('activity_rate', 'transport_response')
 
 
 def _check_result(result):
