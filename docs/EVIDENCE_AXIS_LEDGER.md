@@ -19265,3 +19265,17 @@ public BLAST result through the A101 episodes is still not shown. Nothing was su
 ## 2026-11-19 — A101 literature episodes renamed to the reference names
 
 The seven A101 literature folders under `root/a101/sequence_homology_evidence/` were renamed to the grain names of the reference binding, nesting kept: `published_evidence_assessment` to `run`, `evidence_search_strategy_improvement` to `strategy`, `source_relevance_assessment` to `search`, `source_evidence_examination` to `page`, `table_evidence_extraction` to `source_table`, `source_coverage_improvement` to `report`, `passage_evidence_extraction` to `lexical_probe`. Binding paths, imports, child slots and tests follow; no behaviour changed.
+
+## 2026-11-21 — A101 and A102 heads: real runs under the top-two differential
+
+Scope: the A101 head `sequence_homology_evidence` and the A102 head `structural_homology_evidence` with the credit in which a test's
+differential is the top two candidates' only (A101 `01b21742a`, A102 `d58439311`) and the forecast controller's exchange rate 0.002
+(`da6bb7f78`). Not in scope: the root episode, the other axes, the A102 nodes not built yet (`ligand_transplants`, the RNA tools,
+`surface_faces`, docking; the heavy tools DALI and co-folding wait for later or HPC, see `docs/plan/designs/a102_tree.md`).
+Four real runs from the pinned worktree `gae_top2_da6bb7f78`, real model and real services, fresh workspace and run id each:
+A101 CspA credit 7.69 (6 units), A101 RecA 2.57 (3 units), A102 CspA 55.14 (5 units), A102 RecA 17.49 (4 units). Each exited 0, was
+ended by its yield estimator, had no gate refusal, no fall of credit and no rise above a unit's ceiling; a parked job and its resume
+ran in both RecA runs. An independent read-only check of the journals found no violation of the credit rule. Records and unit tables:
+`docs/plan/designs/a101_differential_credit.md` and `docs/plan/designs/a102_head.md` (their last sections). Open and not changed:
+in A102 the partner test is refused by the estimator once the ledger holds its CspA row; for CspA the A102 leading product is CspB,
+not CspA (as in the runs before the rule change); the A102 sum of entries and differentials could not be recomputed from the output.

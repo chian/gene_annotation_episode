@@ -103,3 +103,42 @@ The code had summed the differential over every pair of listed candidates; the o
 | goal10 cspa, 5 `all_vs_all` (second clustering, the dataset's replicate with "hypothetical protein") | 11.61 -> 7.5788 | 0.8333, 0.0625 (0.6167, no improvement) | 1.4341 -> 0.1833 (row 0.2015) |
 
 Final credits: goal12 cspa 11.6100 -> 7.5788, goal12 reca 2.5695 -> 2.5695, goal10 cspa 11.6100 -> 7.5788. Every rise is at or below its v7 ceiling.
+
+## 2026-11-21: real runs under the top-two rule (worktree `gae_top2_da6bb7f78`, commit `da6bb7f78`, exchange rate 0.002)
+
+Two real runs of the head, each a fresh workspace and run id. Predictions were written first (`runs/top2_notes/predictions.md`): CspA near 7.6, RecA 2.57.
+Both: exit 0, empty `stderr.log`, `ended_by` `yield_stop`, no `action_forecast_not_worth_its_cost` refusal, no abandoned receipt, credit never falls,
+no rise above its unit's ceiling, journal credit equal to the completion credit. Read from the journals by the lead and again by an independent
+read-only check.
+
+CspA (P0A9X9): workspace `runs/top2_a101_ws_cspa`, run dir `runs/top2_a101_run_cspa_da6bb7f78`, run id `top2_a101_cspa`, 956 s, 27 model calls,
+4 BV-BRC jobs, credit 7.6895.
+
+| unit | action | ceiling | rise | credit after | unit s |
+|---|---|---|---|---|---|
+| 0 | `hmmer_profile_scan` | 64982.7 | 1.0 | 1.0 | 21.7 |
+| 1 | `bvbrc_blast` | 312.7 | 4.4622 | 5.4622 | 343.0 |
+| 2 | `bvbrc_msa` | 5.8333 | 0.75 | 6.2122 | 169.8 |
+| 3 | `bvbrc_metacats` | 0.9167 | 0.75 | 6.9622 | 130.0 |
+| 4 | `all_vs_all` | 0.8182 | 0.7273 | 7.6895 | 111.1 |
+| 5 | `bvbrc_msa` (a repeat, another group) | 5.8333 | 0 | 7.6895 | 163.6 |
+
+Three differentials, one pair per test, the pair CspA and CspB/CspG/CspI each time: alignment 0.9167 - 0.1667 = 0.75; MetaCATS 0.75; clustering
+0.8889 x evidence 0.8182 = 0.7273. Entries (five products of the BLAST and the profile family CSD) 5.4622; entries + differentials = 7.6895, the
+credit, difference 0. Leading: CspA 3.72, CspB/CspG/CspI 1.21, Cold shock protein of CSP family 0.97. The repeat alignment (unit 5) measured one
+listed candidate, so it has no pair and earned nothing; after it the alignment's forecast (0.25 over 187 s) was below its threshold and the head stopped.
+
+RecA (P0A7G6): workspace `runs/top2_a101_ws_reca`, run dir `runs/top2_a101_run_reca_da6bb7f78`, run id `top2_a101_reca`, 416 s, 8 model calls,
+1 BV-BRC job, credit 2.5695.
+
+| unit | action | ceiling | rise | credit after | unit s |
+|---|---|---|---|---|---|
+| 0 | `bvbrc_blast`, parked at `launched` (pending) | 312.7 | 0 | 0 | 45.3 |
+| 1 | `hmmer_profile_scan` | 64982.7 | 1.6002 | 1.6002 | 23.2 |
+| 2 | `bvbrc_blast`, the resume of unit 0 | 312.7 | 0.9693 | 2.5695 | 327.2 |
+
+No differential (one product candidate, "RecA protein" 0.97; profile families RecA_N 0.91, Rad51 0.24). The alignment, MetaCATS and all_vs_all
+actions were not offered in this run; why was not examined.
+
+Not verified by the check: the clustering's evidence count n behind 0.8182 (the output does not carry it); the per-test moves are not written to
+the output or the journal, so the differentials were recomputed from the sheet values.

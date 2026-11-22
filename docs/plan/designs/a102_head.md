@@ -452,3 +452,49 @@ chose; with arguments `None` it was equal in every unit):
 2 site_correspondence | old after 43.5737 rise 0.0 journal {'credit': 43.5737} | NEW after 6.311 rise 0.0 | ceil chosen old 81.0 new 1.0 | none old 81.0 new 1.0 | rise<=ceil True | journal ceil {'position': 2, 'offered': {'site_correspondence': 81.0, 'structure_search': 0.0}, 'chosen': {'action_type': 'site_correspondence', 'ceiling': 81.0}, 'rise': 0.0}
      old pairs 0 old sum 0
 ```
+
+## Real runs under the top-two rule (2026-11-21, worktree `gae_top2_da6bb7f78`, commit `da6bb7f78`, exchange rate 0.002)
+
+Two real runs of the head, each a fresh workspace and run id (builder: the scratchpad `build_ws_top2.py`, `build_ws2.py` with the names and the
+rate changed). Predictions written first (`runs/top2_notes/predictions.md`): CspA near 61.5, RecA near 19.8 if the head took the earlier runs'
+actions. Both: exit 0, empty `stderr.log`, `ended_by` `yield_stop`, no `action_forecast_not_worth_its_cost` refusal, no abandoned receipt, credit
+never falls, no rise above its unit's ceiling, journal credit equal to the completion credit, 2 Foldseek tickets each. Read from the journals by
+the lead and again by an independent read-only check.
+
+CspA: workspace `runs/top2_a102_ws_cspa`, run dir `runs/top2_a102_run_cspa_da6bb7f78`, run id `top2_a102_cspa`, 741 s, 14 model calls, credit 55.14.
+
+| unit | action | ceiling | rise | credit after | unit s |
+|---|---|---|---|---|---|
+| 0 | `structure_search` | 1000 | 26.287 | 26.287 | 132.6 |
+| 1 | `structure_search` (the second database) | 1000 | 28.501 | 54.788 | 135.3 |
+| 2 | `partner_contacts` | 49 | 0.219 | 55.007 | 421.3 |
+| 3 | `site_correspondence` (annotated) | 1 | 0.131 | 55.139 | 35.7 |
+| 4 | `site_correspondence` (catalytic; measured 0 candidates) | 1 | 0 | 55.139 | 10.8 |
+
+RecA: workspace `runs/top2_a102_ws_reca`, run dir `runs/top2_a102_run_reca_da6bb7f78`, run id `top2_a102_reca`, 663 s, 13 model calls, credit 17.49.
+
+| unit | action | ceiling | rise | credit after | unit s |
+|---|---|---|---|---|---|
+| 0 | `structure_search`, parked at `launched` (pending) | 1000 | 0 | 0 | 32.5 |
+| 1 | `structure_search`, the resume of unit 0 | 1000 | 12.249 | 12.249 | 254.2 |
+| 2 | `structure_search` (the second database) | 1000 | 5.180 | 17.429 | 327.6 |
+| 3 | `site_correspondence` (annotated) | 1 | 0.061 | 17.490 | 42.3 |
+
+First exercised in a real run here: a parked search (`until` `launched`) and its resume through `resume_action`.
+
+### What the runs show
+
+* `partner_contacts` under the top-two rule. CspA unit 2 measured 47 product candidates and 35 partner candidates; its rise 0.2193 is four partner
+  entries (rna 0.1040, dna 0.0243, MG 0.0210, VDY 0.0024; sum 0.1517) plus one differential, CspB against Y-box-binding protein 2
+  (0.4530 - 0.3854 = 0.0676). Forecast before it: 24.5 (half its ceiling 49, no history) over 691 s. With that one row in the ledger the RecA run
+  forecast `partner_contacts` at 0.327 against a threshold of 0.934 and never ran it (its ceiling there 73). In the earlier RecA run this was the
+  test that found the P-loop with ATP-gamma-S (8GMS); the replay of that run under the top-two rule gave its unit a rise of 2.35. So with the
+  present credit and rate the head does not run the partner test once the ledger holds the CspA row. Open, the owner's to decide; nothing was changed.
+* The true protein is not the leading product for CspA: Cold shock protein CspB 2.055, Cold shock-like protein CspC 1.624, Probable cold shock
+  protein A 1.589, Cold shock protein 1.586, Cold shock protein CspA 1.423 (fifth). The same order held in the earlier runs (the replay above:
+  CspB 2.0458, CspA 1.5174), so it is not an effect of the top-two rule. Facts of the code that bear on it: a product's value in a search is the
+  mean B over every hit carrying that name, whatever its organism, and the target's own AlphaFold DB entry is the self control and names no
+  candidate (`structure_search_sheet.py`). All five leading names are cold shock proteins. Whether structure should be asked to tell these
+  apart, and how names are grouped, is open. For RecA the true function leads (Protein RecA 1.579, Protein RecA 2 1.210).
+* Not verified by the check: sum of entries and differentials against the credit for A102 (the output lists only the leading 10 products and
+  carries no per-test differentials or entries); per-unit agreement was confirmed for CspA units 2 and 4 and RecA unit 3 only.
