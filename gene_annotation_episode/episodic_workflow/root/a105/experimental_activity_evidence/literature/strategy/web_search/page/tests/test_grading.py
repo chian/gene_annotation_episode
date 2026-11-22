@@ -6,6 +6,7 @@ recorded answers."""
 import asyncio
 import importlib
 import json
+import types
 
 import pytest
 
@@ -68,6 +69,72 @@ def test_the_first_decision_is_the_jev_assessment_of_every_candidate_against_the
     assert EPISODE.offered_actions(summary, None) == ['assess_content']
     assert EPISODE.credit(summary, run.view.records) == 0
     assert list((tmp_path / 'model_calls').glob('call-*')) == []
+    world['store'].close()
+
+
+def table_world(directory):
+    """The PopZ page of ``popz_world`` with a markdown table after the paragraph: the paper has prose chunks and one table
+    region, so each of the three leaf children is offered."""
+    world = popz_world(directory)
+    store = world['store']
+    text = world['text'] + '\n\n| strain | kd |\n|---|---|\n| wt | 1.2 |\n| mutant | 3.4 |\n'
+    artifact = store.artifact(text, 'text/plain')
+    source = store.put('source', {'provider': 'real_a105_popz_paragraph_and_table', 'accession': None, 'uri': None,
+                                  'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': None,
+                                  'version': None, 'retrieved_at': None, 'parent_source_refs': []},
+                       origin='caller')['id']
+    assignment = dict(world['input']['assignment'])
+    assignment.update({'source_ref': source, 'artifact_ref': artifact, 'received_record_refs': [
+        *(ref for ref in assignment['received_record_refs'] if ref not in (world['source'], world['artifact'])),
+        source, artifact]})
+    world['input'] = {**world['input'], 'assignment': assignment}
+    return world
+
+
+@pytest.mark.parametrize('slot', CHILD_PATHS)
+def test_the_leaf_commission_the_model_picks_is_built_by_the_page_and_admitted_by_the_leaf(tmp_path, slot):
+    """Hand-off page -> chunk, table and report, from the model's answer as it writes it (the slot and, for a chunk or a
+    table, the candidate id): ``action`` and ``msg_to_child`` build the commission; the leaf's own forms admit the
+    assignment (the sheet class of the claim, the window, the representation) and the selection (``record_refs``), its
+    ``read_from_parent`` reads it and every record it passes is held by the page. The return the leaf builds for the
+    selection asked is admitted by its form and read by the page's ``read_from_child`` and ``internal_summary``."""
+    world = table_world(tmp_path)
+    run = linked_run(tmp_path, world, 'a105-page-leaf-' + slot)
+    asyncio.run(run.next_decision())
+    records = run.view.records
+    summary = EPISODE()._summary(run.view)
+    assert summary['unconsumed_table_ids'] and summary['unconsumed_chunk_ids']
+    arguments = {'chunk': {'candidate_id': summary['unconsumed_chunk_ids'][0]},
+                 'table': {'candidate_id': summary['unconsumed_table_ids'][0]}, 'report': {}}[slot]
+    call = EPISODE.action({'selection': {'slot': slot, 'arguments': arguments}}, summary, records, None)
+    message = EPISODE.msg_to_child(call.slot, call.arguments, summary)
+    child = CHILD_CLASSES[list(CHILD_PATHS).index(slot)]
+    form = child.return_form.select(message.selection)
+    admitted = child.assignment_form.admit(message.assignment, 'test')
+    parent_input = child.read_from_parent(dict(admitted), message.message)
+    assert parent_input['source_ref'] == summary['page']['source_ref']
+    assert parent_input['representation'] == summary['page']['representation']
+    assert parent_input['sheet_class'] == 'ligand_binding' == summary['sheet_class']
+    assert parent_input['proposed_annotation_ref'] == world['proposed']
+    passed = child.assignment_form.record_refs(admitted)
+    assert summary['page']['source_ref'] in passed and all(records.holds(ref) for ref in passed)
+    assert set(form.fields) == {'credit', 'finding', 'record_refs'}
+    returned = child.final_to_parent({'counts': {'stated': 0, 'newly_stated': 0, 'asked': 3}, 'record_refs': []},
+                                     {'credit': 0.0}, message.selection)
+    result = form.admit(returned, 'test')
+    report = EPISODE.read_from_child(call.slot, result, summary, records)
+    assert report['counts'] == {'stated': 0, 'newly_stated': 0, 'asked': 3} and report['record_refs'] == []
+    outcome = {'kind': 'child', 'slot': call.slot, 'arguments': dict(call.arguments),
+               'message': {'objective': message.objective, 'message': dict(message.message),
+                           'assignment': dict(message.assignment), 'selection': list(message.selection)},
+               'completion': {'ended_by': 'yield_stop', 'units_consumed': 1, 'credit': 0.0},
+               'result': result, 'report': report}
+    view = types.SimpleNamespace(parent_input=run.view.parent_input, records=records, goal=run.view.goal,
+                                 units_consumed=2, controller_state=None, outcomes=[*run.view.outcomes, outcome])
+    after = EPISODE()._summary(view)
+    assert after['child_returns'][0]['slot'] == slot and after['unused_leaf_record_refs'] == []
+    if slot != 'report':
+        assert arguments['candidate_id'] in after['consumed_candidate_ids']
     world['store'].close()
 
 

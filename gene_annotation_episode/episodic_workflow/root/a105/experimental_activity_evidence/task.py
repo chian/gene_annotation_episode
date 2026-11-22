@@ -177,9 +177,8 @@ CHILD_ARGUMENTS = {
         'Commission a narrower A105 experimental-activity investigation over a sub-scope of this scope with its own '
         'selection (the evidence axis, a thought pattern and tools) and its own typed return; it returns its credit '
         'and the typed findings it retained. Name every record it needs in evidence_refs: the records of the '
-        "sub-scope's subjects and the evidence. request_results asks for its recorded process result.",
-        obj({'objective': OBJECTIVE, 'scope': SCOPE, 'assignment': HEAD_ASSIGNMENT,
-             'request_results': {'type': 'boolean'}}, required=['objective', 'scope', 'assignment'])),
+        "sub-scope's subjects and the evidence.",
+        obj({'objective': OBJECTIVE, 'scope': SCOPE, 'assignment': HEAD_ASSIGNMENT})),
     'literature': (
         'Commission an A105 published-evidence assessment of one proposed annotation: it proposes searches, has them '
         'run, opens the papers they find, grades each experiment those report with its purpose-specific subscoring '
@@ -646,12 +645,13 @@ def validate_selection(value, schema):
 
 
 def named_records(slot, arguments):
-    """The records the model's own commission names (the old ``evidence_refs`` and the literature sources)."""
+    """The records the model's own commission names (the old ``evidence_refs``; a literature commission names its
+    question context and the proposed annotation, and no sources: the literature chain finds its own)."""
     assignment = arguments['assignment']
     if slot == 'experimental_activity_evidence':
         return [*assignment['evidence_refs'], *([assignment['proposed_annotation_ref']]
                                                   if 'proposed_annotation_ref' in assignment else [])]
-    return [*assignment['question_context_refs'], *assignment['source_refs'], assignment['proposed_annotation_ref']]
+    return [*assignment['question_context_refs'], assignment['proposed_annotation_ref']]
 
 
 def action(response, summary, records, ctx):

@@ -162,6 +162,28 @@ def test_accumulation_stops_when_no_item_remains():
         controller.observe("extra", {"credit": 12})
 
 
+def test_accumulation_stops_when_the_episode_reports_no_item_left_on_its_list():
+    """An episode whose list is not known at its start reports the number left with each unit; nothing is counted down."""
+    controller = AccumulationYieldController("e", 0, ADAPTIVE_CONTROL)
+
+    def unit(label, credit, remaining):
+        context = {"progress_time": {}} if remaining is None else {"progress_time": {}, "items_remaining": remaining}
+        return controller.observe(label, {"credit": credit, "estimation_context": context})
+
+    first = unit("list not built yet", 0, None)
+    assert not first.stop and first.decision.items_remaining is None
+    second = unit("list built", 0, 5)
+    assert not second.stop and second.decision.items_remaining == 5
+    third = unit("one leaf used three", 4, 2)
+    assert not third.stop and third.decision.items_remaining == 2
+    last = unit("the rest", 6, 0)
+    assert last.stop and last.decision.as_record()["stopped_by"] == ["items"] and controller.state().stop
+    for wrong in (-1, True, 1.0, "2"):
+        with pytest.raises(ValueError, match="accumulation_items_remaining_must_be_an_integer_at_least_0"):
+            AccumulationYieldController("e", 0, ADAPTIVE_CONTROL).observe(
+                "u", {"credit": 0, "estimation_context": {"items_remaining": wrong}})
+
+
 def test_accumulation_replays_exactly_and_state_reads_do_not_move_the_warm_start():
     sequence = [5, 4, 3, 3, 2, 2, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0]
     plain = _accumulate(AccumulationYieldController("e", 0, ADAPTIVE_CONTROL), sequence)

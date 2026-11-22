@@ -42,13 +42,16 @@ HIT_CANDIDATES = [
      'description': 'Journal of Tests, 2024. Abstract of A third article.'}]
 
 
-def held_world(directory, held_articles=(), examined_articles=()):
+def held_world(directory, held_articles=(), examined_articles=(), protein=None, hold_sequence=False):
     """The Store, the entry input of the episode at ``search_assignment_v1`` and the records the model would name.
     ``search_query_ref`` is the strategy's record of the query to run (``request``); ``search`` is the retained search
     response that query returns when it is run. ``held_articles`` are PMCIDs of articles held in full and
     ``examined_articles`` the held ones an earlier run's page examined (the assignment names them)."""
     store = Store(directory / 'store')
-    store.create_problem(raw_sequence='ATGGCT', molecule='dna')
+    # ``protein``: the target is this protein sequence (as the run's inputs are); its sequence artifact is held only when
+    # ``hold_sequence`` (the commission must name it, as it names the input).
+    store.create_problem(raw_sequence='ATGGCT' if protein is None else protein,
+                         molecule='dna' if protein is None else 'protein')
     target = store.problem()['subject_refs'][0]
     scope = {'subject_refs': [target]}
     artifact = store.artifact('The question context.', 'text/plain')
@@ -82,6 +85,8 @@ def held_world(directory, held_articles=(), examined_articles=()):
                                              'version': None, 'retrieved_at': None, 'parent_source_refs': []},
                                   origin='caller')['id'])
     held = [target, context, artifact, reaction, proposed, request, query, search, response, *articles]
+    if hold_sequence:
+        held.append(store.get(target)['sequence_ref'])
     assignment = {'version': 'search_assignment_v1', 'question_context_refs': [context], 'search_query_ref': request,
                   'literature_task': task, 'proposed_annotation_ref': proposed, 'scope': scope,
                   'received_record_refs': held}

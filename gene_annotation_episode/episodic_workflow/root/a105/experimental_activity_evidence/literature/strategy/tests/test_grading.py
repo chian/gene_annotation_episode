@@ -83,3 +83,58 @@ def test_a_written_query_is_a_record_of_this_episode_and_is_handed_out_by_its_re
     handed = {'kind': 'child', 'slot': 'web_search', 'arguments': {'objective': 'o', 'search_query_ref': written}}
     assert summary_module.consumed_results([handed]) == [written]
     world['store'].close()
+
+
+def test_the_search_commission_the_model_writes_is_built_by_this_episode_and_admitted_by_the_web_search(tmp_path):
+    """Hand-off strategy -> web_search, from the model's two answers: the writing of a query (a tool answer, run as the
+    unit it names) and the search child with the reference of that query (a child answer). ``action`` and ``msg_to_child``
+    build the commission; the web search's own forms admit the assignment and the selection, its ``read_from_parent`` reads
+    it, and every record it passes (the query record and its artifact among them) is held by this episode. The return the
+    web search builds for the selection asked is admitted by its form and read by this episode."""
+    from ..web_search.episode import SourceRelevanceAssessment as WebSearch
+    world = held_world(tmp_path)
+    run = linked_run(tmp_path, world, 'a105-strategy-web-search')
+    asyncio.run(run.next_decision())
+    summary = EPISODE()._summary(run.view)
+    write = EPISODE.action({'selection': {'kind': 'tool', 'tool': 'write_search',
+                                          'arguments': {'query': 'PopZ ParB binding assay', 'size': 25}}},
+                           summary, run.view.records, None)
+    unit = asyncio.run(run.run_unit(write))
+    written = unit['outcome']['result']['search_ref']
+    records = run.view.records
+    summary = EPISODE()._summary(run.view)
+    answer = {'selection': {'kind': 'child', 'slot': 'web_search',
+                            'arguments': {'objective': 'Find the paper that reports the binding experiment.',
+                                          'search_query_ref': written}}}
+    call = EPISODE.action(answer, summary, records, None)
+    message = EPISODE.msg_to_child(call.slot, call.arguments, summary)
+    form = WebSearch.return_form.select(message.selection)
+    admitted = WebSearch.assignment_form.admit(message.assignment, 'test')
+    parent_input = WebSearch.read_from_parent(dict(admitted), message.message)
+    assert parent_input['search']['search_query_ref'] == written and parent_input['scope'] == world['scope']
+    assert set(form.fields) >= {'credit', 'finding', 'sheet_state_refs', 'examined_article_refs',
+                                'literature_source_lead_dispositions'}
+    passed = WebSearch.assignment_form.record_refs(admitted)
+    assert written in passed and records.get(written)['request_ref'] in passed
+    assert all(records.holds(ref) for ref in passed)
+    returned = WebSearch.final_to_parent({'scores': [], 'features': [], 'sheet_state_refs': [],
+                                          'examined_article_refs': ['source_x'], 'lead_source_refs': []},
+                                         {'credit': 0.0}, message.selection)
+    result = form.admit(returned, 'test')
+    report = EPISODE.read_from_child(call.slot, result, summary, records)
+    outcome = {'kind': 'child', 'slot': call.slot, 'arguments': dict(call.arguments),
+               'message': {'objective': message.objective, 'message': dict(message.message),
+                           'assignment': dict(message.assignment), 'selection': list(message.selection)},
+               'completion': {'ended_by': 'yield_stop', 'units_consumed': 1, 'credit': 0.0},
+               'result': result, 'report': report}
+    view = types.SimpleNamespace(parent_input=run.view.parent_input, records=records, goal=run.view.goal,
+                                 units_consumed=2, controller_state=None, outcomes=[*run.view.outcomes, outcome])
+    after = EPISODE()._summary(view)
+    assert after['input_list'] == [] and after['consumed_inputs'] == [written]
+    assert after['examined_article_refs'] == ['source_x'] == after['all_examined_article_refs']
+    assert EPISODE.credit(after, records) == 0
+    sent = EPISODE.final_to_parent(after, {'credit': 0.0}, ('sheet_state_refs', 'examined_article_refs',
+                                                           'literature_source_lead_dispositions'))
+    assert EPISODE.return_form.select(('sheet_state_refs', 'examined_article_refs',
+                                       'literature_source_lead_dispositions')).admit(sent, 'test') == sent
+    world['store'].close()

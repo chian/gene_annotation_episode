@@ -865,6 +865,11 @@ def _completed(value):
 #
 # The items. ``items`` is None or the number of items of the episode's input list when the episode starts. Every
 # completed unit consumes one item; the controller stops when nano-graphrag's rule stops it or when no item remains.
+# An episode whose list is not known at its start, or whose units do not use one item each, reports the number of
+# items left on its list with each unit instead (``estimation_context['items_remaining']``, an integer >= 0): the
+# reported number is then the number remaining (nothing is counted down), and 0 stops the episode (the owner,
+# 2026-11-21: "add one more condition which is if the number of items on the list is zero we stop"; nano-graphrag's
+# physical exhaustion of a page's or a search's list).
 # ============================================================================
 
 ACCUMULATION_ESTIMATOR_VERSION = "preferential_incidence_estimator_v2"
@@ -1426,7 +1431,9 @@ def accumulation_provenance():
 class AccumulationYieldController:
     """Continue while nano-graphrag's estimator controller does not stop and an item remains (see the section
     comment). ``control`` is ``ADAPTIVE_CONTROL`` or ``FIXED_CONTROL``; ``items`` is None or the number of items of
-    the episode's input list at its start (a positive integer: the loop runs at least one unit). No cost."""
+    the episode's input list at its start (a positive integer: the loop runs at least one unit). A unit whose
+    ``estimation_context`` carries ``items_remaining`` sets the number remaining to it (see the section comment). No
+    cost."""
 
     def __init__(self, epoch, initial_credit, control, *, items=None):
         self.epoch = _epoch(epoch)
@@ -1480,12 +1487,15 @@ class AccumulationYieldController:
         return self._record(channel, expected_next, False, "flat_progressing")
 
     def observe(self, unit_label, value, is_root=False):
-        cumulative, _context = _completed(value)
+        cumulative, context = _completed(value)
         discovery = cumulative - self._current_credit
         if discovery < 0:
             raise ValueError(f"accumulation_credit_cannot_fall:{unit_label}:{discovery!r}")
         if self._items_remaining == 0:
             raise RuntimeError(f"accumulation_no_item_left_for_unit:{unit_label}")
+        reported = None if context is None else context.get("items_remaining")
+        if reported is not None and (type(reported) is not int or reported < 0):
+            raise ValueError(f"accumulation_items_remaining_must_be_an_integer_at_least_0:{unit_label}:{reported!r}")
         before = self._estimator.snapshot()
         self._estimator.observe(discovery)
         after = self._estimator.snapshot()
@@ -1504,7 +1514,9 @@ class AccumulationYieldController:
         if update.ready:
             self._gamma = update.gamma.value
         self._threshold_update = update
-        if self._items_remaining is not None:
+        if reported is not None:
+            self._items_remaining = reported      # the episode's own count of its list after this unit
+        elif self._items_remaining is not None:
             self._items_remaining -= 1
         self._current_credit = cumulative
         self._history.append(discovery)

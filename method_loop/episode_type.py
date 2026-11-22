@@ -12,7 +12,7 @@ services (``BoundEpisode``); this type only calls them, and an episode's own fil
 | ``goal.py`` | ``binding_path``, ``goal``, ``unit``, ``result`` (text) |
 | ``task.py`` | ``child_slots`` ({slot: child binding path}), ``tools`` ({name: ``tool(arguments, ctx)``}), ``services`` (names), ``decide(summary, feedback, ctx)``, ``offered_actions(summary, ctx)`` -> the action types this decision offers, ``action(response, summary, records, ctx)``; optional ``resume_action(summary, records, ctx)`` (``OPTIONAL_MEMBERS``) |
 | ``credit.py`` | ``credit(summary, records)`` -> finite number; ``ceiling(summary, records, action_type, arguments, ctx)`` -> ``UNBOUNDED`` or a finite number >= 0; optional ``best_arguments(summary, records, action_type, ctx)`` and ``outcome_pending(summary, records, position)`` (``OPTIONAL_MEMBERS``) |
-| ``yield_estimator.py`` | ``yield_controller(initial_credit, settings, parent_input)`` -> a ``yield_control`` controller |
+| ``yield_estimator.py`` | ``yield_controller(initial_credit, settings, parent_input)`` -> a ``yield_control`` controller; optional ``items_remaining(summary)`` -> ``None`` or the number of items left on the episode's list (``OPTIONAL_MEMBERS``) |
 | ``messages/read_from_parent.py`` | ``assignment_form``, ``read_from_parent(assignment, message)`` -> parent input |
 | ``messages/msg_to_child.py`` | ``msg_to_child(slot, arguments, summary)`` -> ``ChildMessage(objective, message, assignment, selection)`` |
 | ``messages/read_from_child.py`` | ``read_from_child(slot, result, summary, records)`` -> report |
@@ -207,7 +207,12 @@ CHILD_MEMBERS = ('msg_to_child', 'read_from_child')
 # ``task.py`` ``resume_action(summary, records, ctx)`` returns ``None`` or the unit that resumes work the Episode started and
 # has not finished, ``{'action_type', 'arguments', 'due'}`` (module docstring, step 3). An Episode with a forecast controller
 # and child slots must supply it.
-OPTIONAL_MEMBERS = ('best_arguments', 'outcome_pending', 'resume_action')
+# ``yield_estimator.py`` ``items_remaining(summary)`` (``summary`` after a unit) returns ``None`` while the episode's list
+# is not settled (it is not built yet, or the episode owes a unit of its own), else the number of items left on the list
+# (an integer >= 0). The number goes to the episode's yield controller with the unit
+# (``estimation_context['items_remaining']``); an ``AccumulationYieldController`` stops at 0. The stop stays the yield
+# controller's alone: this is the count of the list it stops on, for an episode whose list is not known at its start.
+OPTIONAL_MEMBERS = ('best_arguments', 'outcome_pending', 'resume_action', 'items_remaining')
 SUPPLIED = tuple(name for names in SUPPLIED_BY_FILE.values() for name in names)
 # Each function member: the parameters it takes, and the module (below the episode package) that defines it.
 SIGNATURES = MappingProxyType({
@@ -218,6 +223,7 @@ SIGNATURES = MappingProxyType({
     'best_arguments': ('summary', 'records', 'action_type', 'ctx'),
     'outcome_pending': ('summary', 'records', 'position'),
     'resume_action': ('summary', 'records', 'ctx'),
+    'items_remaining': ('summary',),
     'offered_actions': ('summary', 'ctx'),
     'yield_controller': ('initial_credit', 'settings', 'parent_input'),
     'read_from_parent': ('assignment', 'message'),
@@ -227,7 +233,7 @@ SIGNATURES = MappingProxyType({
     'final_to_parent': ('summary', 'completion', 'selection'),
 })
 FILE_OF = MappingProxyType({
-    'decide': 'task', 'action': 'task', 'offered_actions': 'task', 'credit': 'credit', 'ceiling': 'credit', 'best_arguments': 'credit', 'outcome_pending': 'credit', 'resume_action': 'task', 'yield_controller': 'yield_estimator',
+    'decide': 'task', 'action': 'task', 'offered_actions': 'task', 'credit': 'credit', 'ceiling': 'credit', 'best_arguments': 'credit', 'outcome_pending': 'credit', 'resume_action': 'task', 'yield_controller': 'yield_estimator', 'items_remaining': 'yield_estimator',
     'read_from_parent': 'messages.read_from_parent', 'msg_to_child': 'messages.msg_to_child',
     'read_from_child': 'messages.read_from_child', 'internal_summary': 'messages.internal_summary',
     'final_to_parent': 'messages.final_to_parent'})
@@ -428,6 +434,8 @@ class EpisodeBinding:
         ``controller``, the yield controller the episode's ``yield_controller`` builds."""
         member = self._member
         progress, stopping = _controller_text(controller)
+        if getattr(type(self), 'items_remaining', None) is not None:
+            stopping += ITEMS_REMAINING_STOPPING_TEXT
         components = (_function('action', 'action', member('action')),
                       *(_function('tool.' + tool, 'tool', function) for tool, function in self.tools.items()))
         slots = tuple(EpisodeChildSlot(
@@ -552,6 +560,9 @@ def _accumulation_stopping_text(controller):
     return text
 
 
+ITEMS_REMAINING_STOPPING_TEXT = '; or when no item remains on its list (the episode counts its list after each unit)'
+
+
 def _written(ceiling):
     """A ceiling as the journal and the forecast controller write it: a number, or ``'unbounded'``."""
     return UNBOUNDED_TEXT if ceiling is UNBOUNDED else ceiling
@@ -569,6 +580,14 @@ class _SystemSource:
         context = {'progress_time': self._bound.progress.receipt(position)}
         if isinstance(view.controller_state, ForecastYieldState):
             context['forecast'] = self._forecast_facts(summary, position, chosen)
+        member = getattr(type(self._binding), 'items_remaining', None)
+        if member is not None:
+            remaining = member(summary)
+            if remaining is not None:
+                if type(remaining) is not int or remaining < 0:
+                    raise TypeError('episode_items_remaining_must_be_none_or_an_integer_at_least_0:'
+                                    + self._binding.binding_path + ':' + repr(remaining))
+                context['items_remaining'] = remaining
         return JsonRecord({'credit': self._binding._credit_of(summary, self._bound), 'estimation_context': context})
 
     def _unit_seconds(self, position):

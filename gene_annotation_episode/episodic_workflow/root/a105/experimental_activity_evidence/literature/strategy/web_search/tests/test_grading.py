@@ -7,7 +7,9 @@ import asyncio
 import importlib
 import types
 
-from episode_runtime import BindingRegistry, RunJournal, ToolCall, link
+import pytest
+
+from episode_runtime import BindingRegistry, CustodyError, RunJournal, ToolCall, link
 from gene_annotation_episode.model_provider import ModelProvider, load_config
 
 from .grading_world import HIT_CANDIDATES, SETTINGS, held_world
@@ -74,6 +76,114 @@ def test_the_first_decision_is_the_search_of_the_query_handed_over_run_from_its_
     assert called == {'name': 'public.literature.search',
                       'arguments': {'query': 'PopZ ParB binding assay', 'size': 25}}
     world['store'].close()
+
+
+def test_the_units_run_in_the_order_the_code_decides_and_the_page_commission_is_admitted_by_the_page(tmp_path, monkeypatch):
+    """Hand-off web_search -> page, through the real runner and the units in the order code decides them: ``run_search``
+    (the query read from the strategy's record through custody), Jev's ``assess_search_results`` (the one measurement
+    of every hit), the model's pick of a hit (its answer, as the model writes it), ``fetch_search_hit`` (a held article), and
+    then the page commissioned by code. Only the provider search and Jev's call are stood in for (their results are the
+    world's retained response and a measurement of the hits); every summary field each unit reads exists when it runs. The
+    page's own forms admit the commission, its ``read_from_parent`` reads it, every record it passes is held here, and the
+    return the page builds for the selection asked is read by this episode."""
+    from ..page.episode import SourceEvidenceExamination as Page
+    task = importlib.import_module(PACKAGE + '.task')
+    world = held_world(tmp_path, held_articles=['PMC100'])
+    run = linked_run(tmp_path, world, 'a105-search-page')
+
+    async def run_operation(name, arguments, scope, ctx):
+        assert (name, arguments) == ('public.literature.search', {'query': 'PopZ ParB binding assay', 'size': 25})
+        return {'status': 'completed', 'record_refs': [world['search']], 'changed_record_refs': [], 'result': None,
+                'feedback': None}
+
+    async def assess_results(jev, *, goal, results):
+        return {'version': 'model_planned_from_jev_evidence_v5', 'assessments': [
+            {**item, 'relevance_probability': 0.5, 'window_probabilities': [0.5], 'text_source': 'description',
+             'text_tokens': 10, 'attempts': 1} for item in results]}
+    monkeypatch.setattr(task, 'run_operation', run_operation)
+    monkeypatch.setattr(task, 'assess_results', assess_results)
+    monkeypatch.setattr(task, 'JevDecisionClient', types.SimpleNamespace(from_repository_env=lambda: None))
+    searched = asyncio.run(run.next_decision())
+    assert isinstance(searched, ToolCall) and searched.name == task.RUN_SEARCH
+    assert asyncio.run(run.run_unit(searched))['outcome']['status'] == 'completed'
+    assessed = asyncio.run(run.next_decision())
+    assert isinstance(assessed, ToolCall) and assessed.name == task.ASSESS
+    assert asyncio.run(run.run_unit(assessed))['outcome']['status'] == 'completed'
+    request = asyncio.run(run.next_decision())
+    summary = EPISODE()._summary(run.view)
+    assert summary['input_list'] == ['PMC100', 'PMC300']
+    assert [item['option_id'] for item in request.context['page_candidates']['unprocessed_page_candidates']] == [
+        'PMC100', 'PMC300']
+    pick = EPISODE.action({'selection': {'kind': 'tool', 'tool': task.FETCH, 'arguments': {'hit': 'PMC100'}}},
+                          summary, run.view.records, None)
+    fetched = asyncio.run(run.run_unit(pick))
+    assert fetched['outcome']['status'] == 'completed' and fetched['outcome']['result'] == {
+        'source_ref': world['articles'][0]}
+    call = asyncio.run(run.next_decision())
+    records = run.view.records
+    summary = EPISODE()._summary(run.view)
+    assert call.slot == 'page' and call.arguments == summary['pending_page']
+    message = EPISODE.msg_to_child(call.slot, call.arguments, summary)
+    form = Page.return_form.select(message.selection)
+    admitted = Page.assignment_form.admit(message.assignment, 'test')
+    parent_input = Page.read_from_parent(dict(admitted), message.message)
+    assert parent_input['page']['source_ref'] == world['articles'][0] and parent_input['scope'] == world['scope']
+    assert parent_input['objective']['value'] == 'evidence_location_unknown'
+    assert set(form.fields) >= {'credit', 'finding', 'sheet_state_refs', 'literature_source_lead_dispositions'}
+    passed = Page.assignment_form.record_refs(admitted)
+    assert world['articles'][0] in passed and all(records.holds(ref) for ref in passed)
+    returned = Page.final_to_parent({'sheet_update': None, 'sheet_state_refs': [], 'lead_source_refs': []},
+                                    {'credit': 0.0}, message.selection)
+    result = form.admit(returned, 'test')
+    report = EPISODE.read_from_child(call.slot, result, summary, records)
+    outcome = {'kind': 'child', 'slot': call.slot, 'arguments': dict(call.arguments),
+               'message': {'objective': message.objective, 'message': dict(message.message),
+                           'assignment': dict(message.assignment), 'selection': list(message.selection)},
+               'completion': {'ended_by': 'yield_stop', 'units_consumed': 3, 'credit': 0.0},
+               'result': result, 'report': report}
+    view = types.SimpleNamespace(parent_input=run.view.parent_input, records=records, goal=run.view.goal,
+                                 units_consumed=5, controller_state=None, outcomes=[*run.view.outcomes, outcome])
+    after = EPISODE()._summary(view)
+    assert after['examined_article_refs'] == [world['articles'][0]] and after['input_list'] == ['PMC300']
+    assert after['prior_page_outcomes'][0]['result_id'] == 'PMC100' and after['pending_page'] is None
+    assert EPISODE.credit(after, records) == 0
+    sent = EPISODE.final_to_parent(after, {'credit': 0.0}, ('sheet_state_refs', 'examined_article_refs',
+                                                           'literature_source_lead_dispositions'))
+    assert EPISODE.return_form.select(('sheet_state_refs', 'examined_article_refs',
+                                       'literature_source_lead_dispositions')).admit(sent, 'test') == sent
+    world['store'].close()
+
+
+def test_a_protein_target_is_looked_up_right_after_the_search_and_its_sequence_artifact_must_be_named_in_the_commission(
+        tmp_path, monkeypatch):
+    """The listing unit (``list_record_publications``) comes right after ``run_search`` and before Jev's measurement, for the
+    protein subjects of the claim that carry a sequence. It reads the subject's sequence artifact through custody, and
+    holding the input record does not hold its artifact: the commission (the entry assignment's ``evidence_refs``) must name
+    the sequence artifact of every input, or the unit fails with the custody error."""
+    task = importlib.import_module(PACKAGE + '.task')
+
+    async def run_operation(name, arguments, scope, ctx):
+        return {'status': 'completed', 'record_refs': [world['search']], 'changed_record_refs': [], 'result': None,
+                'feedback': None}
+    monkeypatch.setattr(task, 'run_operation', run_operation)
+    for hold in (False, True):
+        directory = tmp_path / str(hold)
+        directory.mkdir()
+        world = held_world(directory, protein='MKVLAAGIVGLLLAQPSMAEEHHHHHH', hold_sequence=hold)
+        run = linked_run(directory, world, 'a105-search-listing-' + str(hold))
+        searched = asyncio.run(run.next_decision())
+        assert searched.name == task.RUN_SEARCH
+        asyncio.run(run.run_unit(searched))
+        listed = asyncio.run(run.next_decision())
+        assert isinstance(listed, ToolCall) and listed.name == task.LIST
+        assert listed.arguments == {'subject_refs': [world['target']], 'scope': world['scope']}
+        if hold:
+            with pytest.raises(ValueError, match='sequence_identity_lookup_not_held'):
+                asyncio.run(run.run_unit(listed))
+        else:
+            with pytest.raises(CustodyError):
+                asyncio.run(run.run_unit(listed))
+        world['store'].close()
 
 
 def test_a_search_that_ran_is_not_run_again(tmp_path):
