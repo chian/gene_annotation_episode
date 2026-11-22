@@ -40,7 +40,8 @@ the result never depends on arrival):
   choice have no place for a reason in the record shape (the identity key 'unavailable_reasons' is the identity fields' own map).
   * preparations: a key stated by exactly one distinct value takes it; different values, or none, give None (unknown, so
     dependent).
-  * identity keys: the same normalized value (target_id and partner_id after normalize_identity_ref) is one value; the two
+  * identity keys: the same normalized value is one value (target_id and partner_id are compared, and carried, as the name without a
+    fused tag or label, comparable_identity_name); the two
     number fields temperature_c and ph agree when their stated values are closer than IDENTITY_NUMBER_TOLERANCE (the first
     member's value is kept); a conflict or no statement gives None with its reason in 'unavailable_reasons'; span_start and
     span_end are the hull of the members' chunk spans.
@@ -59,8 +60,15 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     SUPPORT_WEAKEST_ORDER,
     UNAVAILABLE_CONFLICTING,
     UNAVAILABLE_NOT_STATED,
+    comparable_identity_name,
     normalize_identity_ref,
 )
+
+# The two molecule names of a record. Members that write one protein with and without a fused tag (ChpT, mCherry-ChpT) state the
+# SAME molecule: they are merged on the name without tags (the grouping already put them in one grader on that name), and the merged
+# record carries that name. Found in the real run a105_head_popz_chpt_16: the two spellings were read as a conflict, the merged
+# target became unavailable, the result left the row and the page's credit fell.
+MOLECULE_NAME_FIELDS = ('target_id', 'partner_id')
 
 _LOCATOR = re.compile(r'^bytes (\d+)-(\d+) of the source$')
 _OPERAND_KEYS = ('status', 'value', 'unit', 'source_refs')
@@ -206,7 +214,8 @@ def _identity(members, spans):
             if value is None:
                 entries.append(_entry(member, False, reason=(member.get('unavailable_reasons') or {}).get(name)))
             else:
-                entries.append(_entry(member, True, normalize_identity_ref(value) if name in IDENTITY_NORMALIZED_REF_FIELDS else value))
+                entries.append(_entry(member, True, comparable_identity_name(value) if name in MOLECULE_NAME_FIELDS else
+                                      normalize_identity_ref(value) if name in IDENTITY_NORMALIZED_REF_FIELDS else value))
         value, reason, chosen = _identity_value(name, entries)
         keys[name] = value
         if value is None:
