@@ -43,7 +43,7 @@ not selected. Sheet criteria with no counterpart here are not selected, and the 
 Dependence keys handed to the merger (the same four keys as the other converters): analyte_preparation_ref = the first protein, immobilized_preparation_ref = the second protein,
 surface_ref = None (a cell, a droplet or a membrane is not a surface reference), dataset_ref = the dataset.
 
-THE VALUES BELOW ARE A FIRST DRAFT FOR THE OWNER (2026-11-22): every number is EXPERT_REVIEW, owner to confirm, and every one is from the drafter's memory of imaging practice and the
+THE VALUES BELOW ARE A FIRST DRAFT FOR THE OWNER (2026-11-22): every number is EXPERT_REVIEW, confirmed by the owner 2026-11-22, and every one is from the drafter's memory of imaging practice and the
 literature, NOT web-verified and NOT checked against a method paper; verify before relying on any of them. The owner's questions are asked of each value (Q1 failure caught, Q2 general or
 lab-specific, Q3 absolute or relative, Q4 how badly a wrong value misleads, Q5 consistency with the other binding assays).
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -83,17 +83,17 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 
 VERSION = 'a105_colocalization_converted_v1'
 CRITERIA_MAP = {'binding_controls': ('specificity_control',), 'binding_regime': ('directness',), 'binding_parameter_definition': ('colocalization_observed', 'colocalization_readout'), 'calibration_applicability': ('expression_validity',), 'sampling_basis': ('objects_counted', 'replicates')}
-ENRICHMENT_FULL_AGREEMENT = 3.0  # EXPERT_REVIEW, owner to confirm: smallest enrichment (signal at the partner's site over the signal elsewhere) taken as a clear recruitment; a focus or a droplet that stands out about threefold is visible by eye. From memory, not verified.
-ENRICHMENT_ZERO_AGREEMENT = 1.0  # EXPERT_REVIEW, owner to confirm: enrichment at or below which the site is no brighter than its surroundings (a ratio of 1 is no enrichment): no recruitment; in between the degree rises linearly in the LOG of the ratio (a quotient of two intensities, whose error is multiplicative; the same scale as the PLA fold).
-PEARSON_FULL_AGREEMENT = 0.7  # EXPERT_REVIEW, owner to confirm: Pearson coefficient of the two channels taken as a strong correlation (the usual reading puts 0.7 and above as strong). From memory, not verified.
-PEARSON_ZERO_AGREEMENT = 0.2  # EXPERT_REVIEW, owner to confirm: Pearson coefficient at or below which the two channels are taken as uncorrelated (bleed-through and crowding give about this much by themselves); the degree falls linearly in between (a coefficient is an additive scale). From memory, not verified.
-FRACTION_FULL_AGREEMENT_PERCENT = 80.0  # EXPERT_REVIEW, owner to confirm: percent of the scored cells, foci or droplets that show the co-localization taken as the usual full reading of a recruitment that a paper builds on. From memory, not verified.
-FRACTION_ZERO_AGREEMENT_PERCENT = 10.0  # EXPERT_REVIEW, owner to confirm: percent at or below which the co-localization is as rare as stray overlap of an unrelated protein; the degree rises linearly in between (a proportion is an additive scale). From memory, not verified.
-# EXPERT_REVIEW, owner to confirm: number of cells, foci or droplets scored that gets full credit; a proportion needs about a hundred objects for a standard error near 5 points. Gradual (not a pass/fail minimum):
+ENRICHMENT_FULL_AGREEMENT = 3.0  # EXPERT_REVIEW, confirmed by the owner 2026-11-22: smallest enrichment (signal at the partner's site over the signal elsewhere) taken as a clear recruitment; a focus or a droplet that stands out about threefold is visible by eye. From memory, not verified.
+ENRICHMENT_ZERO_AGREEMENT = 1.0  # EXPERT_REVIEW, confirmed by the owner 2026-11-22: enrichment at or below which the site is no brighter than its surroundings (a ratio of 1 is no enrichment): no recruitment; in between the degree rises linearly in the LOG of the ratio (a quotient of two intensities, whose error is multiplicative; the same scale as the PLA fold).
+PEARSON_FULL_AGREEMENT = 0.7  # EXPERT_REVIEW, confirmed by the owner 2026-11-22: Pearson coefficient of the two channels taken as a strong correlation (the usual reading puts 0.7 and above as strong). From memory, not verified.
+PEARSON_ZERO_AGREEMENT = 0.2  # EXPERT_REVIEW, confirmed by the owner 2026-11-22: Pearson coefficient at or below which the two channels are taken as uncorrelated (bleed-through and crowding give about this much by themselves); the degree falls linearly in between (a coefficient is an additive scale). From memory, not verified.
+FRACTION_FULL_AGREEMENT_PERCENT = 80.0  # EXPERT_REVIEW, confirmed by the owner 2026-11-22: percent of the scored cells, foci or droplets that show the co-localization taken as the usual full reading of a recruitment that a paper builds on. From memory, not verified.
+FRACTION_ZERO_AGREEMENT_PERCENT = 10.0  # EXPERT_REVIEW, confirmed by the owner 2026-11-22: percent at or below which the co-localization is as rare as stray overlap of an unrelated protein; the degree rises linearly in between (a proportion is an additive scale). From memory, not verified.
+# EXPERT_REVIEW, confirmed by the owner 2026-11-22: number of cells, foci or droplets scored that gets full credit; a proportion needs about a hundred objects for a standard error near 5 points. Gradual (not a pass/fail minimum):
 # below it the degree is sqrt(n / 100), the precision of the mean over n objects relative to that over a hundred (50 objects ~0.71, 10 objects ~0.32), smooth, rising with n and reaching 1 at a hundred.
 # Fewer objects are weaker evidence, not evidence against. From memory, not verified.
 OBJECTS_COUNTED_FULL_CREDIT = 100
-# EXPERT_REVIEW, owner to confirm: number of independent experiments (separate experiments on separate days or cultures; cells, foci and droplets of one sample do not count) that gets full credit.
+# EXPERT_REVIEW, confirmed by the owner 2026-11-22: number of independent experiments (separate experiments on separate days or cultures; cells, foci and droplets of one sample do not count) that gets full credit.
 # Gradual: below it the degree is sqrt(n / 3) (owner rule: replicates mean precision in every assay); 1 -> about 0.58, 2 -> about 0.82, full from three.
 REPLICATES_FULL_CREDIT = 3
 STATEMENTS = {'detected': 'interaction_detected', 'not_detected': 'interaction_not_detected', None: 'interaction_not_stated'}

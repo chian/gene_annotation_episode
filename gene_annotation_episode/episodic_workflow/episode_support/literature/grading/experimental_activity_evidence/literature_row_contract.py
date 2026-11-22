@@ -247,7 +247,7 @@ WEIGHT_UNKNOWN_BY_TYPE = {
     'fcs': 0.80, 'elisa': 0.70, 'alphascreen': 0.65, 'radioligand': 0.85, 'spa': 0.80, 'pulldown': 0.70, 'emsa': 0.75,
     'sec': 0.75, 'dialysis': 0.85, 'auc': 0.85, 'dsf': 0.70, 'cetsa': 0.65, 'bret': 0.70, 'y2h': 0.60,
     'split_reporter': 0.65, 'pla': 0.55, 'proximity': 0.60,
-    # colocalization (2026-11-22, EXPERT_REVIEW, owner to confirm): a relative image readout (where fluorescence lies) whose meaning rests on controls (an unrelated protein, the absent partner, a binding-region mutant) and on a tag and an expression level that a paper may not state; a little above PLA, whose antibody artefacts are worse, and level with proximity labelling.
+    # colocalization (2026-11-22, EXPERT_REVIEW, confirmed by the owner 2026-11-22): a relative image readout (where fluorescence lies) whose meaning rests on controls (an unrelated protein, the absent partner, a binding-region mutant) and on a tag and an expression level that a paper may not state; a little above PLA, whose antibody artefacts are worse, and level with proximity labelling.
     'colocalization': 0.60,
     # spectro_direct (2026-11-21, owner to confirm; the answer chain is in literature_spectro_direct_converter.py and A105_ASSAY_CALIBRATION_DETAILS.md): an absolute rate with a well-known reference range of kcat and kcat/Km, a little under the KD anchor.
     'spectro_direct': 0.85,
@@ -277,7 +277,7 @@ WEIGHT_UNKNOWN_BY_CRITERION = {
     'split_reporter': {'binding_controls': 0.55, 'binding_regime': 0.60},
     'pla': {'binding_controls': 0.50, 'calibration_applicability': 0.50, 'binding_regime': 0.70, 'sampling_basis': 0.80},
     'proximity': {'binding_parameter_definition': 0.55, 'calibration_applicability': 0.85, 'sampling_basis': 0.80},
-    # colocalization (EXPERT_REVIEW, owner to confirm): an unstated specificity control (an unrelated protein or tag alone, the absent partner) counts clearly less, as in PLA (a crowded or sticky site recruits any protein); an unstated heterologous or in-vitro system or binding-region mutant leaves a native bridge open but is common practice (0.70); an unstated tag-function or expression check is a real but ordinary gap (0.60); the number of objects and the replicates are benign when unstated (0.80).
+    # colocalization (EXPERT_REVIEW, confirmed by the owner 2026-11-22): an unstated specificity control (an unrelated protein or tag alone, the absent partner) counts clearly less, as in PLA (a crowded or sticky site recruits any protein); an unstated heterologous or in-vitro system or binding-region mutant leaves a native bridge open but is common practice (0.70); an unstated tag-function or expression check is a real but ordinary gap (0.60); the number of objects and the replicates are benign when unstated (0.80).
     'colocalization': {'binding_controls': 0.50, 'binding_regime': 0.70, 'calibration_applicability': 0.60, 'sampling_basis': 0.80},
     # spectro_direct: the blank is what separates activity from spontaneous chemistry (a real gap); a contaminating activity or a second reaction on the chromophore is the attribution risk; the extinction coefficient of the common chromophores, the mass basis of a specific activity and triplicate practice are benign when unstated.
     'spectro_direct': {'background_alternatives': 0.75, 'attribution_supported': 0.80, 'calibration_applicability': 0.90, 'normalization_basis': 0.90, 'sampling_basis': 0.90},
@@ -415,7 +415,7 @@ QUALITATIVE_LOG_RATIO = {   # OWNER_DECISION 2
     'bret': 0.5,            # EXPERT_REVIEW: cellular proximity (about 10 nm), not direct binding; overexpression artefacts.
     'proximity': 0.5,       # EXPERT_REVIEW: cellular proximity labelling shows nearness, not binding.
     'pla': 0.5,             # EXPERT_REVIEW: in-situ proximity ligation shows nearness within about 40 nm, not binding.
-    'colocalization': 0.5,  # EXPERT_REVIEW, owner to confirm: microscopy co-localization or recruitment shows nearness (within about 250 nm with diffraction-limited imaging), not contact, in the same family as bret, proximity and pla; a heterologous or purified system and the controls raise the weight through the criteria, not this value.
+    'colocalization': 0.5,  # EXPERT_REVIEW, confirmed by the owner 2026-11-22: microscopy co-localization or recruitment shows nearness (within about 250 nm with diffraction-limited imaging), not contact, in the same family as bret, proximity and pla; a heterologous or purified system and the controls raise the weight through the criteria, not this value.
     'y2h': 0.4,             # EXPERT_REVIEW: heterologous nuclear reporter; high false-positive and false-negative rates.
     'split_reporter': 0.4,  # EXPERT_REVIEW: reporter reconstitution can occur through proximity or forced association; weakest direct-binding evidence.
     'spectro_direct': 1.2,  # EXPERT_REVIEW, owner to confirm (decided 2026-11-21): a direct continuous absorbance readout of the reaction on purified enzyme is the standard evidence of catalysis, so a stated rate is strong (below SPR 1.5: the chromophore change names a reaction only when the product is identified, and that is a weight criterion, not this magnitude). The same constant is the magnitude of 'activity not detected': an absent signal is limited by the assay's detection limit and the substrate and conditions tried, so it is not stronger than 1.2.
@@ -465,7 +465,7 @@ QUANTITATIVE_STRENGTH_ANCHORS = {   # OWNER_DECISION 15
 # it is tighter than about 11 uM (strength above 0.25). A type whose own result IS a yes/no observation (pulldown, y2h, pla, colocalization,
 # proximity: no anchors) keeps its full QUALITATIVE_LOG_RATIO: there the observed band, growth or signal is the measurement.
 # ---------------------------------------------------------------------------------------------------------------
-STATED_ONLY_STRENGTH = 0.25   # EXPERT_REVIEW, owner to confirm
+STATED_ONLY_STRENGTH = 0.25   # EXPERT_REVIEW; confirmed by the owner 2026-11-22
 
 
 def stated_strength(experiment_type):

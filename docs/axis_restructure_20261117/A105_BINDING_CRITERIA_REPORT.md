@@ -825,7 +825,7 @@ The concentration_series degree is the smallest of the count, the low end and th
 | sampling_basis (replicates) | Number of independent experiments | 3 | none (1 gives about 0.58, 2 about 0.82) | min(1, sqrt(n / 3)) | Only if independence is stated no (grader) | Absolute count |
 
 - Facts that decide without a curve: colocalization_observed (sets the statement; a stated yes or no both make the criterion supported), the facts of specificity_control, directness and expression_validity, quantified_over_many_cells (sampling_basis).
-- Values marked "owner to confirm" in the code: all of them: ENRICHMENT_FULL_AGREEMENT 3 / ENRICHMENT_ZERO_AGREEMENT 1, PEARSON_FULL_AGREEMENT 0.7 / PEARSON_ZERO_AGREEMENT 0.2, FRACTION_FULL_AGREEMENT_PERCENT 80 / FRACTION_ZERO_AGREEMENT_PERCENT 10, OBJECTS_COUNTED_FULL_CREDIT 100, REPLICATES_FULL_CREDIT 3, and the contract values (QUALITATIVE_LOG_RATIO 0.5, type weight 0.60, criterion weights).
+- Values confirmed by the owner on 2026-11-22 (from memory, not checked against sources): all of them: ENRICHMENT_FULL_AGREEMENT 3 / ENRICHMENT_ZERO_AGREEMENT 1, PEARSON_FULL_AGREEMENT 0.7 / PEARSON_ZERO_AGREEMENT 0.2, FRACTION_FULL_AGREEMENT_PERCENT 80 / FRACTION_ZERO_AGREEMENT_PERCENT 10, OBJECTS_COUNTED_FULL_CREDIT 100, REPLICATES_FULL_CREDIT 3, and the contract values (QUALITATIVE_LOG_RATIO 0.5, type weight 0.60, criterion weights).
 - Not collected, with the stated reason:
   - Fraction or Pearson coefficient of the unrelated protein under the same conditions: not collected; the fact unrelated_protein_not_recruited carries it as yes or no.
   - Imaging mode: recorded for the reviewer, not judged; diffraction-limited imaging limits the claim to nearness, which the type weight carries.
