@@ -183,3 +183,16 @@ families enter at nearly 1 each (bit scores 1579, 1025, 725, 694) and it is the 
 value is a share of each family's OWN consensus pairs, so a smaller model (microsporidia, 366 pairs) can stand above a larger one
 (archaea, 457) that fits worse in absolute pairs. Not exercised in a real run: a hit on the minus strand; `no_family`; a family with
 no consensus pair.
+
+### The protein side after the RNA change, and the independent check (2026-11-21)
+
+RecA again from the same worktree (`bb77b45c1`): workspace `runs/a102_lt_ws_reca_2`, run dir `runs/a102_lt_run_reca_2_bb77b45c1`, run id
+`a102_lt_reca_2`, exit 0, 1052 s, 5 units (search, `ligand_transplants`, search, `partner_contacts`, `site_correspondence`), `yield_stop`,
+no refusal, credit 29.047012492406107: equal to the last digit to the run before the RNA change (`a102_lt_reca_1`), the units in another
+order. Leading: Protein RecA 1.782; ligands MN 1.432, MG 1.100, CA 1.085.
+
+An independent read-only check of the six runs (three with `ligand_transplants`, three RNA) found no discrepancy: every credit, unit
+table and stop matches the journals; five RecA ligand values recomputed by hand from the stored AlphaFill answer and every RNA family
+value recomputed from bits and GA match; the 16S differential equals |0.93723 - 0.87090| exactly; the `cmscan` command run is the
+design's. Not confirmable from the final output, which lists the leading 10 products and 20 partners only: the hidden part (0.426) of
+RecA's `partner_contacts` rise and RecA's one nucleic-acid candidate, which the output does not show.
