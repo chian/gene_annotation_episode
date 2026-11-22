@@ -19279,3 +19279,14 @@ ran in both RecA runs. An independent read-only check of the journals found no v
 `docs/plan/designs/a101_differential_credit.md` and `docs/plan/designs/a102_head.md` (their last sections). Open and not changed:
 in A102 the partner test is refused by the estimator once the ledger holds its CspA row; for CspA the A102 leading product is CspB,
 not CspA (as in the runs before the rule change); the A102 sum of entries and differentials could not be recomputed from the output.
+
+## 2026-11-21 — A102 tool `ligand_transplants` built and run for real
+
+Scope: the A102 head's third tool, `ligand_transplants` (AlphaFill transplants for a held AlphaFold DB model: fit of the ligand's
+surroundings times absence of clash, scales at AlphaFill's published confidence boundaries; ligand candidates named as
+`partner_contacts` names them), commit `6976e24d5`, and one sentence of fact in the `structure_search` child's instructions
+(`7adfe873b`). Not in scope: the remaining light nodes of `docs/plan/designs/a102_tree.md` (`surface_faces`, the RNA tools) and the
+heavy tools. Real runs from pinned worktrees: RecA credit 29.05 (the tool +10.56 as predicted, 14 ligand candidates); CspA 61.50
+(the tool ran and returned `no_transplants`, as predicted). A first CspA run never offered the tool because the child had taken an
+ESMFold model. Records: `docs/plan/designs/a102_ligand_transplants.md`. Open: metal ions lead the ligand list ahead of the
+nucleotide for RecA; no independent check of these three runs yet.

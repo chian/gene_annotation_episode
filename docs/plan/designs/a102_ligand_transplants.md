@@ -132,3 +132,52 @@ Run through the launcher (`runs/a102_ligand_transplants_check`), script outside 
   model already tested are refused with the fix list. All edited modules and the head episode import.
 * Not verified: the unit `ligand_transplants` against a real store (custody writes), the model's choice of the tool, the forecast
   controller with the new ceiling version (`a102_ceiling_v1`).
+
+## Real runs (2026-11-21; head from pinned worktrees, real model and services, exchange rate 0.002, fresh workspace and run id each)
+
+All three: exit 0, empty `stderr.log`, `ended_by` `yield_stop`, no `action_forecast_not_worth_its_cost` refusal, no rise above a ceiling.
+Read from the journals by the lead; no independent check yet.
+
+RecA, worktree `gae_lt_6976e24d5`: workspace `runs/a102_lt_ws_reca`, run dir `runs/a102_lt_run_reca_6976e24d5`, run id `a102_lt_reca_1`,
+1020 s, credit 29.05. Predicted for the tool: +10.56.
+
+| unit | action | ceiling | rise | credit after | unit s |
+|---|---|---|---|---|---|
+| 0 | `structure_search` | 1000 | 6.250 | 6.250 | 320.4 |
+| 1 | `structure_search` (second database) | 1000 | 11.234 | 17.485 | 274.3 |
+| 2 | `ligand_transplants` | 2694 | 10.565 | 28.050 | 7.9 |
+| 3 | `partner_contacts` | 63 | 0.936 | 28.986 | 373.7 |
+| 4 | `site_correspondence` | 1 | 0.061 | 29.047 | 38.8 |
+
+The tool's rise equals the prediction (14 entries, no ligand listed before). `partner_contacts` ran: the credit definition changed
+with the new family (v5), so the ledger rows of the old definition were not read and its forecast was half its ceiling; it earned
+0.936, the ligands being listed before it. Leading product Protein RecA 1.782. Ligands at the end: MN 1.432 (transplant 0.954,
+bound partner 0.478), MG 1.100, CA 1.085, ALF 1.060, POP 0.974, D48 0.902, ADP 0.811, ..., ANP 0.674, DTP 0.611, AGS 0.102 (bound
+partner only). The nucleotide does not lead: a metal ion collides with little and fits well wherever a homolog holds one, and the
+nucleotide's evidence is divided among the names ADP, ANP, AGS, DTP and GTP. Both are properties of this measurement and of
+naming a ligand by its component; neither is changed here.
+
+CspA, first run, worktree `gae_lt_6976e24d5`: workspace `runs/a102_lt_ws_cspa`, run dir `runs/a102_lt_run_cspa_6976e24d5`, run id
+`a102_lt_cspa_1`, 263 s, credit 54.79, 2 units (two searches). The tool was never offered: the search child's model took its
+model from `esmfold` (as in `runs/top2_a102_ws_cspa`), which has no accession. The head then stopped: `partner_contacts` forecast
+0.729 against a threshold of 0.888 and `site_correspondence` 0.061 against 0.075, each from the one ledger row the RecA run had
+just written (the prior weight, to be tuned later: `forecast_yield_controller.md`). Change made (`7adfe873b`): the child's
+instructions state that only an `alphafold_db` model carries the accession the parent's accession-keyed test needs (a fact, no
+recommendation).
+
+CspA, second run, worktree `gae_lt_7adfe873b`: workspace `runs/a102_lt_ws_cspa_2`, run dir `runs/a102_lt_run_cspa_2_7adfe873b`, run id
+`a102_lt_cspa_2`, 672 s, credit 61.50. The child took the `alphafold_db` model.
+
+| unit | action | ceiling | rise | credit after | unit s |
+|---|---|---|---|---|---|
+| 0 | `structure_search`, parked at `launched` (pending) | 1000 | 0 | 0 | 35.6 |
+| 1 | `ligand_transplants` (`no_transplants`, 0 hits, 0 candidates) | 2694 | 0 | 0 | 7.6 |
+| 2 | `structure_search`, the resume | 1000 | 41.408 | 41.408 | 125.3 |
+| 3 | `structure_search` (second database) | 1000 | 19.635 | 61.043 | 141.3 |
+| 4 | `partner_contacts` | 80 | 0.459 | 61.502 | 357.3 |
+
+The tool's outcome is the predicted one (`no_transplants`, rise 0, `model_version_differs` true). One choice of the model from one
+added sentence is one observation, not a proof that the child will always take the AlphaFold DB model.
+
+Not exercised in a real run: `no_alphafill_entry` (an accession AlphaFill does not hold); a second ligand test after this one
+measuring two listed ligands in the other order (the differential inside this tool: direct check only).
