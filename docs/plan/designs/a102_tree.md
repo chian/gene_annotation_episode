@@ -56,7 +56,7 @@ structural_homology_evidence          HEAD (forecast controller, differential cr
 │                                            catalytic (M-CSA), annotated (UniProt features), ligand_contacts (the candidate's
 │                                            experimental structure). The functional-pocket comparison is this tool with
 │                                            ligand_contacts. Inserted and missing segments at the sites (P5) are on its sheet.
-├─ ligand_transplants                 TOOL   P3. AlphaFill for the model's accession.
+├─ ligand_transplants                 TOOL   P3. AlphaFill for the model's accession. BUILT 2026-11-21 (design: `a102_ligand_transplants.md`).
 ├─ bound_in_experiment                TOOL   P4. Solved structures of the same sequence and what they hold.
 ├─ surface_faces                      TOOL   P6.
 ├─ ligand_docking                     CHILD  P7. Local job per ligand, minutes each, iterates over a panel. Needs installs.

@@ -1,7 +1,7 @@
 """The return. Always returned: ``credit`` (``completion['credit']``: the productivity signal, which no field restates) and
 ``finding``: per target of the scope its leading candidates (at most 10, the leading one first, each with its score and its
 subscoring sheets), the partner candidates (ligand: its chemical component id; nucleic_acid: dna or rna; at most 20), the number of
-candidates of each kind (product, ligand, nucleic_acid), the partner-contacts analyses (counts of their sheets), the counts of the hits of the graded searches (hits, named, not asked) and the
+candidates of each kind (product, ligand, nucleic_acid), the partner-contacts analyses and the ligand-transplant tests (counts of their sheets), the counts of the hits of the graded searches (hits, named, not asked) and the
 facts of the model of the target (origin, residues, mean pLDDT 0 to 100: the model's own confidence, not similarity), and the
 number of handoffs still waiting for their closure. All of it numbers, counts, values of a fixed vocabulary, the
 annotation names of the candidates (names from the looked-up list of a database) and record references: no paragraph.
@@ -14,6 +14,8 @@ from method_loop import ChoiceField, Field, RecordForm
 
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.candidate_measurements import (
     VOCABULARIES)
+from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.ligand_transplants_sheet import (
+    OUTCOMES)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.site_correspondence_sheet import (
     SITE_SOURCES)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.foldseek_search import (
@@ -30,7 +32,7 @@ SHEET_FORM = RecordForm({
 })
 CANDIDATE_FORM = RecordForm({
     'vocabulary': ChoiceField('text', 'The vocabulary of the candidate: product (the function name of a hit), ligand (a ligand bound '
-                                      'to a matched protein) or nucleic_acid (DNA or RNA bound to it)', VOCABULARIES),
+                                      'to a matched protein, or placed in the model) or nucleic_acid (DNA or RNA bound to it)', VOCABULARIES),
     'name': Field('text', 'The candidate\'s name exactly as its source gives it: for a product its UniProt recommended name, for a '
                           'ligand its chemical component id, for a nucleic acid dna or rna'),
     'score': Field('number', 'The candidate\'s annotation score: the sum of its sheet values, that is, of its mean value '
@@ -64,6 +66,18 @@ PARTNER_TEST_FORM = RecordForm({
     'candidates_measured': Field('integer', 'The product candidates the test measured'),
     'partner_candidates_measured': Field('integer', 'The partner candidates (ligand, nucleic_acid) the test measured'),
 })
+TRANSPLANT_TEST_FORM = RecordForm({
+    'model_ref': Field('text', 'The held AlphaFold DB model whose AlphaFill transplants were read (a record reference)'),
+    'outcome': ChoiceField('text', 'What AlphaFill answered: transplants (hits), no_transplants (the model exists, nothing was '
+                                   'transplanted) or no_alphafill_entry (AlphaFill has no entry for the accession)', OUTCOMES),
+    'hit_count': Field('integer', 'The solved homologs AlphaFill transplanted from'),
+    'transplant_count': Field('integer', 'The transplants AlphaFill reports'),
+    'additive_count': Field('integer', 'The transplants of a ligand on the additive list: no value, no candidate'),
+    'distinct_compound_count': Field('integer', 'The distinct non-additive compounds transplanted'),
+    'candidates_measured': Field('integer', 'The ligand candidates the test measured'),
+    'model_version_differs': Field('boolean', 'Whether the AlphaFold DB model version AlphaFill used differs from the held '
+                                              'model\'s', required=False),
+})
 TARGET_FORM = RecordForm({
     'target_ref': Field('text', 'The target: a subject record of the scope'),
     'molecule': ChoiceField('text', 'The molecule of the target', ('protein', 'dna', 'rna', 'unspecified')),
@@ -84,6 +98,8 @@ TARGET_FORM = RecordForm({
                            items=PARTNER_TEST_FORM),
     'site_tests': Field('list', 'The site tests of the target (each: its search, its site source and the counts of its sheet)',
                         items=SITE_TEST_FORM),
+    'transplant_tests': Field('list', 'The ligand-transplant tests of the target (each: its model, the outcome and the counts of its '
+                                      'sheet)', items=TRANSPLANT_TEST_FORM),
     'model_origin': ChoiceField('text', 'Where the model of the target came from', MODEL_ORIGINS, required=False),
     'model_residues': Field('integer', 'The residues the model covers', required=False),
     'model_mean_plddt': Field('number', 'The mean pLDDT of the model, 0 to 100: its own confidence, not similarity',

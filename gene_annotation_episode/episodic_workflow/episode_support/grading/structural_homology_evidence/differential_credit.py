@@ -18,7 +18,7 @@ the subscoring sheet. Measurements are given in the order they arrived. The test
   structure search that share a product), times the weight of the test's family. Round 1 has one family, ``structure_search``,
   whose raw value (the index B of ``scoring.geometry``) lies in [0, 1]; the second family, ``site_correspondence``, has a raw
   value (the mean E = B F of the hits with sites) in [0, 1] as well; the third, ``bound_partner`` (the mean E(hit, partner) = B F
-  of the hits bound to a partner), likewise in [0, 1].
+  of the hits bound to a partner), likewise in [0, 1]; the fourth, ``ligand_transplant`` (the value of a ligand's best AlphaFill transplant, fit x no_clash), in (0, 1].
 - A subscoring sheet is a kind of test: the part of the test name before ``@``
   (``structure_search:foldseek:tmalign:<database>``). A candidate's value on a sheet is the SUM of its values in the tests of
   that kind.
@@ -39,6 +39,9 @@ the subscoring sheet. Measurements are given in the order they arrived. The test
 model. A102 has no dataset rule and no evidence weighting in round 1 (those are A101's, for its clustering test)."""
 import math
 
+from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.ligand_transplants_sheet import (
+    ELIGIBLE_COMPOUNDS)
+
 
 # The typical strong value of each sheet's family: the value, in ONE test of the family, of the candidate that leads stored real
 # runs (the derivation is written here when there is one).
@@ -47,7 +50,9 @@ TYPICAL_STRONG_VALUE = {'structure_search': 1.0,
                         # no real run yet: 1 until real runs give the family's typical strong value (SOP Step 6)
                         'site_correspondence': 1.0,
                         # no real run yet: 1 until real runs give the family's typical strong value (SOP Step 6)
-                        'bound_partner': 1.0}
+                        'bound_partner': 1.0,
+                        # no real run yet: 1 until real runs give the family's typical strong value (SOP Step 6)
+                        'ligand_transplant': 1.0}
 SHEET_WEIGHT = {family: 1 / value for family, value in TYPICAL_STRONG_VALUE.items()}
 
 
@@ -197,3 +202,22 @@ def bound_partner_test_ceiling(held, possible_partners):
     candidates = list(dict.fromkeys(possible_partners))
     listed = sum(1 for candidate in candidates if held.get(candidate, {}).get('listed'))
     return weight * float(len(candidates) - listed + (1 if listed >= 2 else 0))
+
+
+def ligand_transplant_test_ceiling(held):
+    """The most one ``ligand_transplant`` test (``ligand_transplants``) can add to the credit of one target, from where the list
+    stands: a PROVED maximum (``held`` is ``standing`` of the target).
+
+    Proof. The candidates of the test are ``ligand:<compound id>`` of the non-additive compounds of the AlphaFill answer, and
+    AlphaFill transplants a fixed list of compounds ("Currently, we are transplanting 2,694 different compounds", the paper);
+    the unit raises if an answer holds more distinct non-additive compounds than ``ligand_transplants_sheet.ELIGIBLE_COMPOUNDS``,
+    so the test measures at most ``u`` = that many candidates. A candidate's value in the test is the value of its best transplant,
+    ``fit x no_clash`` with both degrees in (0, 1], so in (0, 1], and times the family weight ``w`` in (0, w]. The test is appended
+    last, so it earns (1) the entry score of each candidate it admits (a first value above zero, which every measured candidate
+    has): at most ``w`` each, at most ``u`` of them; (2) ONE differential, ``|d_a - d_b|`` of the top two of the listed candidates it
+    measures (two numbers in [0, w]): at most ``w``, and only when at least two listed candidates are measured, which needs at
+    least two listed ``ligand:`` candidates; (3) nothing else. The bound is ``w (u + 1)`` with two or more listed ligand candidates,
+    else ``w u``. It is constant and loose, not tight. Tight in form: the top two at ``w`` and 0, every unlisted candidate at ``w``."""
+    weight = SHEET_WEIGHT['ligand_transplant']
+    listed = sum(1 for candidate, state in held.items() if candidate.startswith('ligand:') and state['listed'])
+    return weight * float(ELIGIBLE_COMPOUNDS + (1 if listed >= 2 else 0))

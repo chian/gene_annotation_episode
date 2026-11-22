@@ -17,14 +17,16 @@ partner request is checked against). For ``site_correspondence`` it holds ``held
 (per target the ``[search source reference, site source]`` pairs graded, read by the credit's own reader) and ``site_test_rows``
 (one row per site test held: its source, the search, the site source and the counts of its sheet). For ``partner_contacts`` it holds
 ``held_partner_analyses`` (per target the search source references analysed, read by the credit's own reader) and
-``partner_test_rows`` (one row per analysis held: its source, the search and the counts of its contacts sheet).
+``partner_test_rows`` (one row per analysis held: its source, the search and the counts of its contacts sheet). For
+``ligand_transplants`` it holds ``held_transplant_models`` (per target the model references tested, read by the credit's own reader)
+and ``transplant_test_rows`` (one row per test held: its source, its model, the outcome and the counts of its sheet).
 
 ``returned_refs`` are the record lists ``final_to_parent`` returns (``committed_record_refs``, ``execution_handoff_refs``,
 ``execution_check_refs``, ``execution_closure_refs``, ``data_product_refs``), each CLOSED UNDER NAMING by
 ``job_records.returned_with_names`` (the records chosen with everything they name, recursively, among the held records), as every
 child's returned lists are: the parent holds what a returned record names."""
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.candidate_measurements import (
-    held_partner_analyses, held_searches, held_site_tests, held_sources)
+    held_partner_analyses, held_searches, held_site_tests, held_sources, held_transplant_models)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.tool_grading_artifacts import (
     source_tool_grading_entries)
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import (
@@ -33,6 +35,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.data_prod
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.foldseek_search import (
     APPLICATION, MODEL_KIND, graded_rows, target_sequence)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.ligand_transplants import (
+    PROVIDER as TRANSPLANT_PROVIDER)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.partner_contacts import (
     PARTNERS_PROVIDER, PROVIDER as PARTNER_PROVIDER, partner_search_inputs)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.site_correspondence import (
@@ -47,13 +51,17 @@ SITE_TEST_FIELDS = ('search_ref', 'site_source', 'hits_asked', 'hits_with_sites'
                     'candidates_without_site', 'absent_outside_count', 'absent_within_count')
 PARTNER_TEST_FIELDS = ('search_ref', 'entries_asked', 'entries_skipped_no_partner', 'entries_too_large', 'entries_not_obtained',
                        'entries_not_asked', 'hits_with_partners', 'candidates_measured', 'partner_candidates_measured')
+TRANSPLANT_TEST_FIELDS = ('model_ref', 'outcome', 'hit_count', 'transplant_count', 'additive_count', 'distinct_compound_count',
+                          'candidates_measured', 'model_version_differs')
 LEADING_PARTNERS = 20
 # What the model is shown of a completed or failed tool unit (the tool's own result fields, numbers and a failure code).
 RESULT_FIELDS = {'site_correspondence': ('failure_code', 'hits_asked', 'hits_with_sites', 'candidates_measured',
                                          'candidates_without_site', 'request_count'),
                  'partner_contacts': ('failure_code', 'entries_asked', 'entries_skipped_no_partner', 'entries_too_large',
                                       'entries_not_asked', 'hits_with_partners', 'product_candidates_measured',
-                                      'partner_candidates_measured', 'stopped', 'batch_count')}
+                                      'partner_candidates_measured', 'stopped', 'batch_count'),
+                 'ligand_transplants': ('failure_code', 'alphafill_outcome', 'hit_count', 'transplant_count', 'additive_count',
+                                        'candidates_measured', 'model_version_differs')}
 # The record types that carry a sequence: what the target of a search is chosen from.
 SEQUENCE_RECORD_TYPES = ('input', 'reference', 'product')
 
@@ -99,6 +107,20 @@ def partner_test_rows(records):
             by_search[entry['grading']['sheet']['contacts_source_ref']] = entry['grading']['sheet']['candidates_measured']
     for row in rows:
         row['partner_candidates_measured'] = by_search[row['source_ref']]
+    return rows
+
+
+def transplant_test_rows(records):
+    """One row per ligand-transplants test the episode holds, from its source and the counts of its retained sheet."""
+    rows = []
+    for source in records.list('source'):
+        if source['provider'] != TRANSPLANT_PROVIDER:
+            continue
+        (entry,) = source_tool_grading_entries(records, source['id'])
+        sheet = entry['grading']['sheet']
+        rows.append({'source_ref': source['id'], 'query_ref': source['operand_refs'][0],
+                     # model_version_differs is absent when AlphaFill has no entry (nothing to compare)
+                     **{key: sheet[key] for key in TRANSPLANT_TEST_FIELDS if sheet[key] is not None}})
     return rows
 
 
@@ -155,6 +177,7 @@ def internal_summary(view):
     searches = graded_rows(records)
     site_rows = site_test_rows(records)
     partner_rows = partner_test_rows(records)
+    transplant_rows = transplant_test_rows(records)
     held_products = products(records)
     findings = []
     for target in targets:
@@ -170,6 +193,8 @@ def internal_summary(view):
             'partner_candidates': _partners(row),
             'partner_tests': [{key: item[key] for key in PARTNER_TEST_FIELDS} for item in partner_rows if item['query_ref'] == ref],
             'site_tests': [{key: item[key] for key in SITE_TEST_FIELDS} for item in site_rows if item['query_ref'] == ref],
+            'transplant_tests': [{key: item[key] for key in TRANSPLANT_TEST_FIELDS if key in item} for item in transplant_rows
+                                 if item['query_ref'] == ref],
             **({} if model is None else {'model_origin': model['settings']['origin'],
                                          'model_residues': model['settings']['residues_covered'],
                                          'model_mean_plddt': model['settings']['mean_plddt']})})
@@ -183,6 +208,9 @@ def internal_summary(view):
             'held_record_refs': held, 'held_sequences': held_sequences, 'targets': targets,
             'model_rows': model_rows, 'graded_searches': searches,
             'search_inputs': partner_search_inputs(records), 'site_test_rows': site_rows, 'partner_test_rows': partner_rows,
+            'transplant_test_rows': transplant_rows,
+            'held_transplant_models': {target: list(refs) for target, refs in held_transplant_models(
+                records, scope, held_sources(records)).items()},
             'held_partner_analyses': {target: list(refs) for target, refs in held_partner_analyses(
                 records, scope, held_sources(records)).items()},
             'held_site_tests': {target: [list(pair) for pair in pairs] for target, pairs in held_site_tests(

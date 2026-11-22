@@ -11,12 +11,14 @@ A child's credit is information in the summary and is never added."""
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.candidate_measurements import (
     candidate_standing, candidate_table, held_sources)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.differential_credit import (
-    SHEET_WEIGHT, bound_partner_test_ceiling, site_test_ceiling, test_ceiling)
+    SHEET_WEIGHT, bound_partner_test_ceiling, ligand_transplant_test_ceiling, site_test_ceiling, test_ceiling)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.site_correspondence_sheet import (
     SITE_SOURCES)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.tool_grading_artifacts import (
     source_tool_grading_entries)
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.foldseek_job_route import DATABASES
+from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.ligand_transplants import (
+    ORIGIN as TRANSPLANT_ORIGIN)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.partner_contacts import (
     DATABASE as PARTNER_DATABASE)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.site_correspondence import (
@@ -38,6 +40,7 @@ HIT_BOUND = 1000
 SLOT = 'structure_search'
 SITE_TOOL = 'site_correspondence'
 PARTNER_TOOL = 'partner_contacts'
+TRANSPLANT_TOOL = 'ligand_transplants'
 FAMILY = 'structure_search'
 OBTAIN = 'obtain_one'
 
@@ -47,15 +50,17 @@ class A102DifferentialCredit:
     yield_method = 'forecast'
 
     def as_record(self):
-        return {'kind': 'a102_differential_credit', 'version': 'a102_differential_credit_v4', 'axis': 'A102',
+        return {'kind': 'a102_differential_credit', 'version': 'a102_differential_credit_v5', 'axis': 'A102',
                 'measurement': 'index_b_of_each_hit_of_one_structure_search_from_the_aligned_pairs_after_superposition',
                 'site_measurement': 'mean_e_of_the_hits_with_sites_e_is_b_times_the_mean_residue_score_of_class_match_times_kernel',
                 'candidates': 'product_from_the_uniprot_name_of_the_hit',
                 'partner_measurement': ('mean_e_of_the_hits_with_a_functional_partner_per_product_and_mean_e_of_the_hits_bound_to_'
                                         'each_partner_e_is_b_times_the_mean_residue_score_of_the_partners_contact_residues'),
                 'partner_candidates': 'ligand_chemical_component_id_and_nucleic_acid_dna_or_rna_of_the_solved_hit_chains',
+                'transplant_measurement': 'value_of_the_best_alphafill_transplant_of_each_ligand_fit_times_no_clash',
+                'transplant_candidates': 'ligand_chemical_component_id_of_the_solved_donor_of_each_non_additive_transplant',
                 'test': ('one_graded_source_structure_search_foldseek_tmalign_database_at_source_or_site_correspondence_'
-                         'site_source_at_source_or_site_correspondence_partner_contacts_at_source_or_bound_partner_pdb100_at_source'),
+                         'site_source_at_source_or_site_correspondence_partner_contacts_at_source_or_bound_partner_pdb100_at_source_or_ligand_transplant_alphafill_at_source'),
                 'sheet_weights': dict(SHEET_WEIGHT),
                 'score': 'sum_over_subscoring_sheets_of_weight_times_sum_of_mean_value_in_test_of_that_kind',
                 'admission': 'first_value_above_zero',
@@ -165,6 +170,32 @@ def offered_partner_searches(summary):
             and search not in analysed]
 
 
+def tested_models(summary):
+    """The model references whose ``ligand_transplants`` this episode holds (``candidate_measurements.held_transplant_models``,
+    read in ``internal_summary``)."""
+    return {ref for refs in summary['held_transplant_models'].values() for ref in refs}
+
+
+def transplant_models(summary):
+    """The held models as the library's check reads them: ``{model row reference: {'origin', 'accession', 'query_ref'}}``."""
+    return {row['id']: {'origin': row['settings']['origin'], 'accession': row['settings']['accession'],
+                        'query_ref': row['query_ref']} for row in summary['model_rows']}
+
+
+def offered_transplant_models(summary):
+    """The model references a ``ligand_transplants`` request may name now, in the order of the held models: a held model of a
+    protein sequence of the scope whose origin is ``alphafold_db`` (it has an accession) and that is not yet tested."""
+    targets, tested = queries(summary), tested_models(summary)
+    return [row['id'] for row in summary['model_rows']
+            if row['query_ref'] in targets and row['settings']['origin'] == TRANSPLANT_ORIGIN and row['id'] not in tested]
+
+
+def transplant_value(summary, standing, model):
+    """The proved maximum of one ``ligand_transplants`` unit of the held model ``model`` (see ``ceiling``)."""
+    query = next(row['query_ref'] for row in summary['model_rows'] if row['id'] == model)
+    return ligand_transplant_test_ceiling(standing.get(query, {}))
+
+
 def partner_value(summary, records, standing, search):
     """The proved maximum of one ``partner_contacts`` unit of the held search ``search`` (see ``ceiling``): the first test's
     ``site_test_ceiling`` over the product candidates of the search's own test plus the second test's
@@ -193,6 +224,12 @@ def best_arguments(summary, records, action_type, ctx):
     accepts while it is outstanding: it extracts what the launch started, so its ceiling is the search's); else, with a
     model of a query held, the first database not yet searched with that model; else ``None`` (a search with no model held
     is the model's own commission)."""
+    if action_type == TRANSPLANT_TOOL:
+        models = offered_transplant_models(summary)
+        if not models:
+            return None
+        standing = candidate_standing(records, summary['scope'], held_sources(records))
+        return {'model_ref': max(models, key=lambda found: transplant_value(summary, standing, found))}
     if action_type == PARTNER_TOOL:
         standing = candidate_standing(records, summary['scope'], held_sources(records))
         searches = offered_partner_searches(summary)
@@ -242,7 +279,7 @@ def outcome_pending(summary, records, position):
 # ceiling only from ledger rows recorded under the same credit definition and the same version of that action's ceiling
 # (``yield_estimator.py``): change an action's version whenever its ceiling's derivation changes, and only that action's.
 CEILING_VERSIONS = {'structure_search': 'a102_ceiling_v2', 'site_correspondence': 'a102_ceiling_v2',
-                    'partner_contacts': 'a102_ceiling_v2'}
+                    'partner_contacts': 'a102_ceiling_v2', 'ligand_transplants': 'a102_ceiling_v1'}
 
 
 def ceiling(summary, records, action_type, arguments, ctx):
@@ -271,6 +308,13 @@ def ceiling(summary, records, action_type, arguments, ctx):
       set with ``u`` of them unlisted and at least two listed, ``w u`` otherwise; proof in its docstring). Test 1 adds only product candidates, so it changes no partner
       candidate's standing and the two bounds add. A search already analysed earns 0 (the request check refuses it). With
       ``arguments`` ``None``: the largest over the searches still offered (``offered_partner_searches``), 0 when none is offered.
+    * ``ligand_transplants``: the one test of one held AlphaFold DB model (``ligand_transplant:alphafill``) measures ligand candidates
+      (``ligand:<compound id>``, the non-additive compounds AlphaFill transplants, at most ``ELIGIBLE_COMPOUNDS`` distinct),
+      each with a value in (0, w] (the value of its best transplant, fit x no_clash);
+      ``differential_credit.ligand_transplant_test_ceiling`` is the proved maximum (``w (2694 + 1)`` with two or more listed ligand
+      candidates, else ``w 2694``; proof in its docstring; constant and loose). A model already tested earns 0 (the request check
+      refuses it). With ``arguments`` ``None``: the largest over the models still offered (``offered_transplant_models``), 0 when
+      none is offered.
     * ``structure_search``: the one test of one search measures the product candidates of its hits: the ones already on the
       list (``product:`` standing) and at most ``HIT_BOUND`` in all (the most hits one search of the server returns; the
       figure and its source are in the comment of ``HIT_BOUND``: the Foldseek default ``--max-seqs`` 1000, observed results
@@ -280,9 +324,15 @@ def ceiling(summary, records, action_type, arguments, ctx):
       continued). The resume of a parked job (the same fields, ``until`` ``extracted``) is not a repeat and has the
       search's ceiling, which is what the launch started. With ``arguments`` ``None``: the largest over the queries with a
       database not yet searched (``open_pairs``), and ``best_arguments`` names that commission when it can be stated."""
-    if action_type not in (SLOT, SITE_TOOL, PARTNER_TOOL):
+    if action_type not in (SLOT, SITE_TOOL, PARTNER_TOOL, TRANSPLANT_TOOL):
         raise ValueError('a102_ceiling_not_derived_for_action_type:' + action_type)
     standing = candidate_standing(records, summary['scope'], held_sources(records))
+    if action_type == TRANSPLANT_TOOL:
+        if arguments is None:
+            return max((transplant_value(summary, standing, model) for model in offered_transplant_models(summary)), default=0.0)
+        if arguments['model_ref'] in tested_models(summary):
+            return 0.0
+        return transplant_value(summary, standing, arguments['model_ref'])
     if action_type == PARTNER_TOOL:
         if arguments is None:
             return max((partner_value(summary, records, standing, search) for search in offered_partner_searches(summary)),

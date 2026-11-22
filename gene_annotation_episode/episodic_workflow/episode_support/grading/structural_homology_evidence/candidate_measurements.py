@@ -23,12 +23,19 @@ name is ``site_correspondence:<site source>@<source reference>`` (the source tha
 whose hits has a site has no measurement (``mean_E`` null), never a zero. ``held_site_tests`` gives the (search source
 reference, site source) pairs already graded, so a repeat can be refused.
 
+THE FOURTH TEST, ``ligand_transplant`` (``ligand_transplants_sheet``): one graded source is one held AlphaFold DB model's AlphaFill
+answer and its name is ``ligand_transplant:alphafill@<source reference>``. A candidate is ``ligand:<compound id>``; its value is the
+value of its BEST transplant (one row per candidate). A model with no transplant or no AlphaFill entry has no measurement.
+``held_transplant_models`` gives the models already tested, so a repeat can be refused.
+
 The model's facts on the sheet weigh nothing and are not read here. A source whose target is not in the scope is skipped; a
 retained grading of another sheet schema is not A102's round 1 and is skipped."""
 import math
 
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.differential_credit import (
     differential_credit, standing)
+from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.ligand_transplants_sheet import (
+    SCHEMA as TRANSPLANT_SHEET)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.partner_contacts_sheet import (
     CONTACTS_SCHEMA, PARTNERS_SCHEMA)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.site_correspondence_sheet import (
@@ -85,6 +92,17 @@ def bound_partner_test_name(sheet, source):
     return 'bound_partner:' + sheet['search_database'] + '@' + source
 
 
+def ligand_transplant_test_name(sheet, source):
+    """The test of the ligand transplants graded in ``sheet`` made by the held source ``source``."""
+    return 'ligand_transplant:alphafill@' + source
+
+
+def ligand_transplant_rows(sheet):
+    """The ``(vocabulary, identifier, best_value)`` of the ligand candidates of a ligand-transplants sheet: one row per candidate,
+    the value of its best transplant."""
+    return [(row['kind'], row['identifier'], row['best_value']) for row in sheet['candidates']]
+
+
 def partner_contacts_rows(sheet):
     """The ``(product, mean_E)`` of the candidates of a partner-contacts sheet that have a value (at least one hit with a
     functional partner), in the sheet's order."""
@@ -113,7 +131,7 @@ def _read(reader, scope, sources):
         source = reader.get(reference)
         for entry in source_tool_grading_entries(reader, reference):
             sheet = entry['grading']['sheet']
-            if sheet['schema'] not in (SEARCH_SHEET, SITE_SHEET, CONTACTS_SCHEMA, PARTNERS_SCHEMA):
+            if sheet['schema'] not in (SEARCH_SHEET, SITE_SHEET, CONTACTS_SCHEMA, PARTNERS_SCHEMA, TRANSPLANT_SHEET):
                 continue
             target = source['operand_refs'][0]
             if target not in scope['subject_refs']:
@@ -125,6 +143,10 @@ def _read(reader, scope, sources):
             if sheet['schema'] == PARTNERS_SCHEMA:
                 measurements.extend(_measurement(target, bound_partner_test_name(sheet, reference), vocabulary, identifier, None,
                                                  value, reference) for vocabulary, identifier, value in bound_partner_rows(sheet))
+                continue
+            if sheet['schema'] == TRANSPLANT_SHEET:
+                measurements.extend(_measurement(target, ligand_transplant_test_name(sheet, reference), vocabulary, identifier, None,
+                                                 value, reference) for vocabulary, identifier, value in ligand_transplant_rows(sheet))
                 continue
             if sheet['schema'] == SITE_SHEET:
                 measurements.extend(_measurement(target, site_test_name(sheet, reference), 'product', product, None, value,
@@ -201,6 +223,23 @@ def held_partner_analyses(reader, scope, sources):
             sheet = entry['grading']['sheet']
             if sheet['schema'] == CONTACTS_SCHEMA:
                 held[target].append(sheet['search_source_ref'])
+    return held
+
+
+def held_transplant_models(reader, scope, sources):
+    """Per target of the scope, the model references whose ``ligand_transplants`` the episode holds (graded), in arrival order: a
+    further ``ligand_transplants`` of the same model is a repeat (it adds nothing) and the request check refuses it."""
+    scope = reader.validate_scope(scope)
+    held = {target: [] for target in scope['subject_refs']}
+    for reference in sources:
+        source = reader.get(reference)
+        target = source['operand_refs'][0] if source.get('operand_refs') else None
+        if target not in held:
+            continue
+        for entry in source_tool_grading_entries(reader, reference):
+            sheet = entry['grading']['sheet']
+            if sheet['schema'] == TRANSPLANT_SHEET:
+                held[target].append(sheet['model_ref'])
     return held
 
 

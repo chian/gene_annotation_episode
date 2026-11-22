@@ -124,6 +124,15 @@ KINDS = {
     # molecular tertiary structure alignment-derived data"), the same data type as ``structure_search_results``; format_3464 JSON.
     'pairwise_structure_alignments': ('http://edamontology.org/data_0887', 'http://edamontology.org/format_3464',
                                       'Structure alignment report, JSON (US-align alignments of the target with hit chains)'),
+    # AlphaFill's answer for the accession of one AlphaFold DB model (A102 ``ligand_transplants``: ``GET https://alphafill.eu/v1/aff/
+    # <accession>/json``, kept as the service answered, also the 404 body of an accession it has no entry for): per solved homolog
+    # the ligands transplanted into the model with their local RMSD, clash score and the model residues near them. EDAM.tsv, read
+    # 2026-11-21 (https://edamontology.org/EDAM.tsv), neither obsolete: data_1277 Protein features ("An informative report on
+    # intrinsic positional features of a protein sequence"), the data type of ``functional_site_annotations`` for the same reason
+    # (positions in the protein's sequence; the answer holds no coordinates). Not data_1461 Protein-ligand complex ("The structure of
+    # a protein in complex with a ligand"): the answer is not a structure. format_3464 JSON.
+    'ligand_transplant_results': ('http://edamontology.org/data_1277', 'http://edamontology.org/format_3464',
+                                  'Protein features, JSON (AlphaFill ligand transplants of an AlphaFold DB model)'),
 }
 EDAM_SOURCE = 'https://edamontology.org/EDAM.tsv, read 2026-11-20'
 

@@ -10,7 +10,10 @@ a request that passes the check works. Its second tool is ``partner_contacts``: 
 ``resource_id``, ``check_partner_contacts_request`` run in ``action``, ONE async unit ``partner_contacts`` that downloads the solved
 structures of the matched entries, runs the local US-align jobs through the job service and keeps two gradings), offered only for a
 graded ``pdb100`` search that can be analysed (``credit.offered_partner_searches``) and a bound local resource, and whose programs
-exist (``partner_options``). Settings of the head: ``python_executable`` and ``usalign_executable_directory``. It never ends the
+exist (``partner_options``). Its third tool is ``ligand_transplants``: the request ``model_ref``, ``check_ligand_transplants_request``
+run in ``action``, ONE unit ``ligand_transplants`` that asks AlphaFill for the ligands transplanted into an AlphaFold DB model from solved
+homologs, offered only for a held model whose origin is ``alphafold_db`` and that is not yet tested (``credit.offered_transplant_models``).
+Settings of the head: ``python_executable`` and ``usalign_executable_directory``. It never ends the
 Episode: only the yield controller does. No ``reason`` action.
 
 The child. A slot is offered while its commission can be stated from what this episode holds: a protein sequence of the scope
@@ -34,6 +37,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.re
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import time_accounting
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence import (
     foldseek_search as foldseek)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.ligand_transplants import (
+    check_ligand_transplants_request, ligand_transplants)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.site_correspondence import (
     check_site_correspondence_request, site_correspondence)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.partner_contacts import (
@@ -41,8 +46,9 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_s
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.structure_search_child import (
     ROUTE_KIND, UNTIL, _choose, seconds_between)
 
-from .credit import (OBTAIN, PARTNER_TOOL, SITE_TOOL, analysed_searches, commissioned, graded_site_pairs, offered_partner_searches,
-                     offered_site_pairs, queries)
+from .credit import (OBTAIN, PARTNER_TOOL, SITE_TOOL, TRANSPLANT_TOOL, analysed_searches, commissioned, graded_site_pairs,
+                     offered_partner_searches, offered_site_pairs, offered_transplant_models, queries, tested_models,
+                     transplant_models)
 from .goal import GOAL
 
 CHILD_SLOTS = {'structure_search': 'structural_homology_evidence/structure_search'}
@@ -62,7 +68,12 @@ async def partner_contacts_tool(arguments, ctx):
     return await partner_contacts(ctx, search_ref=arguments['search_ref'], resource_id=arguments['resource_id'])
 
 
-TOOLS = {SITE_TOOL: site_correspondence_tool, PARTNER_TOOL: partner_contacts_tool}
+def ligand_transplants_tool(arguments, ctx):
+    """One ligand-transplants test as one unit, by the library's one function. The argument is the model's one controlled choice."""
+    return ligand_transplants(ctx, model_ref=arguments['model_ref'])
+
+
+TOOLS = {SITE_TOOL: site_correspondence_tool, PARTNER_TOOL: partner_contacts_tool, TRANSPLANT_TOOL: ligand_transplants_tool}
 
 INSTRUCTIONS = (
     GOAL + '\n\n'
@@ -73,7 +84,7 @@ INSTRUCTIONS = (
     'episode. Recorded facts come from actual records and are shown to you as they are: the targets with their molecule and '
     'length, the models held (origin, residues, mean pLDDT: a model\'s own confidence, not similarity), the graded searches, '
     'the outstanding jobs with the seconds since their launch and the seconds still expected, the leading candidates with '
-    'their scores and subscoring sheets (products, and the partners ligand and nucleic_acid), the site tests and partner tests held, your earlier units and the yield table. A model that is not held is obtained by the '
+    'their scores and subscoring sheets (products, and the partners ligand and nucleic_acid), the site tests, partner tests and transplant tests held, your earlier units and the yield table. A model that is not held is obtained by the '
     'child when the commission names obtain_one. Waiting and unchanged observations do not manufacture progress.')
 
 # What the model is told of the child it may commission: what the child does, the controlled fields of its commission (the model
@@ -179,6 +190,28 @@ PARTNER_DESCRIPTION = (
     'and the partner candidates, each with its score and subscoring sheets. ' + CREDIT_TEXT + ' A failed outcome is a fault of '
     'the environment and the same request is not made again.')
 
+TRANSPLANT_DESCRIPTION = (
+    'Ask AlphaFill (alphafill.eu) which ligands and cofactors have a place in one AlphaFold DB model of the target, as they sit in '
+    'solved homologs. What it needs: a held model whose origin is alphafold_db (held_models; a model of another origin is not '
+    'offered, and a model already tested is not offered again). Fill out the one field of its request: model_ref. What code does: one '
+    'request to AlphaFill for the model\'s accession. AlphaFill superposes the surroundings of each ligand of a solved homolog '
+    '(more than 25% identity over at least 85 aligned residues) onto the model and reports, per transplant, local_rmsd (how well the '
+    'ligand\'s surroundings fit, angstroms) and the clash score (how much the placed ligand collides with the model, angstroms). Per '
+    'transplant the sheet keeps these facts (with the donor entry and chain, the donor\'s ligand and the ligand AlphaFill placed, the '
+    'alignment identity and length, the global RMSD, the clash count and atom count, the mean PAE and the model residues near the '
+    'ligand) and two degrees, each 1 / (1 + (x / s)^2): fit of local_rmsd with s = 0.92 A and no_clash of the clash score with s = '
+    '0.64 A (AlphaFill\'s own boundaries between high and medium confidence); the transplant\'s value is fit times no_clash, 0 to 1. '
+    'A ligand on the BioLiP list of crystallization and buffer components is recorded as additive, has no value and is no '
+    'candidate. A candidate is ligand:<chemical component id of the solved donor> (the same name partner_contacts gives a ligand); '
+    'its value in the test is the value of its best transplant and the sheet shows how many transplants it has. A model AlphaFill '
+    'holds with no transplant (no_transplants) or has no entry for (no_alphafill_entry) gives no candidate; both count as the test '
+    'run. The model the numbers are for is the AlphaFold DB model AlphaFill used (a version that may differ from the model you hold: '
+    'recorded as model_version_differs); only AlphaFill\'s numbers are used. Code checks the request before anything runs; if '
+    'something is wrong it comes back in feedback with the things to fix and nothing ran. A request that passes runs as one unit '
+    'with no second call. transplant_tests shows the tests held: for each its model, the outcome, the hits and transplants, the '
+    'additive transplants and the candidates measured. candidates shows the ligand candidates with their scores and subscoring '
+    'sheets. ' + CREDIT_TEXT + ' An answer of another shape, or an HTTP status other than 200 and 404, fails the run.')
+
 
 def bound_resources(ctx):
     """The resources bound to the job service, each with its kind, which a commission may name (read through the service's read
@@ -269,6 +302,20 @@ def check_partner_request(request, summary, resources, settings):
         request, searches=summary['search_inputs'], analysed=analysed_searches(summary), resources=resources,
         usalign_directory=settings['usalign_executable_directory'], python=settings['python_executable'])
 
+def transplant_options(summary):
+    """The request of the ``ligand_transplants`` tool as the model fills it out: one option per held AlphaFold DB model not yet
+    tested (``credit.offered_transplant_models``). Empty while none is."""
+    return [{'type': 'object', 'additionalProperties': False, 'required': ['name', 'model_ref'],
+             'properties': {'name': {'type': 'string', 'enum': [TRANSPLANT_TOOL]}, 'model_ref': {'type': 'string', 'enum': [model]}}}
+            for model in offered_transplant_models(summary)]
+
+
+def check_transplant_request(request, summary):
+    """The things to fix in a request of ``ligand_transplants``: the library's one check (``check_ligand_transplants_request``) over
+    the held models and the models already tested."""
+    return check_ligand_transplants_request(request, models=transplant_models(summary), tested=tested_models(summary))
+
+
 COMMISSIONS = {SLOT: structure_search_fields}
 COMMISSION_CHECKS = {SLOT: check_structure_search}
 
@@ -306,16 +353,18 @@ def selection_schema(summary, resources, settings):
     return {'type': 'object', 'additionalProperties': False, 'required': ['action'],
             'properties': {'action': {'anyOf': [child_option(slot, summary, resources)
                                                 for slot in offered_children(summary, resources)] + site_options(summary)
-                                  + partner_options(summary, resources, settings)}}}
+                                  + partner_options(summary, resources, settings) + transplant_options(summary)}}}
 
 
 def offered_actions(summary, ctx):
     """The action types this decision offers, by the names a unit is recorded under (``ChildCall.slot``, ``ToolCall.name``): each
     child slot whose commission can be stated (``offered_children``, the function ``decide`` offers the model with) and
-    ``site_correspondence`` and ``partner_contacts`` while a request of it can succeed (``site_options``, ``partner_options``)."""
+    ``site_correspondence``, ``partner_contacts`` and ``ligand_transplants`` while a request of it can succeed (``site_options``,
+    ``partner_options``, ``transplant_options``)."""
     resources = bound_resources(ctx)
     return (offered_children(summary, resources) + ([SITE_TOOL] if site_options(summary) else [])
-            + ([PARTNER_TOOL] if partner_options(summary, resources, ctx.settings) else []))
+            + ([PARTNER_TOOL] if partner_options(summary, resources, ctx.settings) else [])
+            + ([TRANSPLANT_TOOL] if transplant_options(summary) else []))
 
 
 def parked_jobs(summary):
@@ -380,12 +429,15 @@ def decide(summary, feedback, ctx):
         'candidates': [{'target_ref': ref, 'candidate_counts': row['candidate_counts'], 'leading_products': row['products'],
                         'partners': row['partners']} for ref, row in summary['credit_table'].items()],
         'site_tests': summary['site_test_rows'], 'partner_tests': summary['partner_test_rows'],
+        'transplant_tests': summary['transplant_test_rows'],
         'own_outcomes': [outcome_row(row) for row in summary['units']],
         'child_options': [{'slot': slot, 'binding_path': CHILD_SLOTS[slot], 'description': CHILD_DESCRIPTIONS[slot]}
                           for slot in offered],
         'tool_options': ([{'name': SITE_TOOL, 'description': SITE_DESCRIPTION}] if site_options(summary) else [])
                         + ([{'name': PARTNER_TOOL, 'description': PARTNER_DESCRIPTION}]
-                           if partner_options(summary, resources, ctx.settings) else []) or None,
+                           if partner_options(summary, resources, ctx.settings) else [])
+                        + ([{'name': TRANSPLANT_TOOL, 'description': TRANSPLANT_DESCRIPTION}] if transplant_options(summary) else [])
+                        or None,
         'yield_table': summary['yield_table'], 'time_accounting': time_accounting(ctx.clock.progress_time),
         'feedback': feedback}
     return ModelRequest('REASONING', INSTRUCTIONS, {key: value for key, value in context.items() if value is not None},
@@ -415,6 +467,12 @@ def action(response, summary, records, ctx):
             raise Rejected({'status': 'invalid', 'category': PARTNER_TOOL + '_request',
                             'detail': {'request': commission, 'fix': problems}})
         return ToolCall(PARTNER_TOOL, commission)
+    if slot == TRANSPLANT_TOOL:
+        problems = check_transplant_request(commission, summary)
+        if problems:
+            raise Rejected({'status': 'invalid', 'category': TRANSPLANT_TOOL + '_request',
+                            'detail': {'request': commission, 'fix': problems}})
+        return ToolCall(TRANSPLANT_TOOL, commission)
     problems = COMMISSION_CHECKS[slot](commission, summary, resources, records)
     if problems:
         raise Rejected({'status': 'invalid', 'category': slot + '_commission',
