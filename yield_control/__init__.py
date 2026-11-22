@@ -867,7 +867,8 @@ def _completed(value):
 # completed unit consumes one item; the controller stops when nano-graphrag's rule stops it or when no item remains.
 # An episode whose list is not known at its start, or whose units do not use one item each, reports the number of
 # items left on its list with each unit instead (``estimation_context['items_remaining']``, an integer >= 0): the
-# reported number is then the number remaining (nothing is counted down), and 0 stops the episode (the owner,
+# reported number is then the number remaining (nothing is counted down; a unit that reports none leaves the list
+# unsettled, which stops nothing; a controller given ``items`` at its start takes no report), and 0 stops the episode (the owner,
 # 2026-11-21: "add one more condition which is if the number of items on the list is zero we stop"; nano-graphrag's
 # physical exhaustion of a page's or a search's list).
 # ============================================================================
@@ -1496,6 +1497,8 @@ class AccumulationYieldController:
         reported = None if context is None else context.get("items_remaining")
         if reported is not None and (type(reported) is not int or reported < 0):
             raise ValueError(f"accumulation_items_remaining_must_be_an_integer_at_least_0:{unit_label}:{reported!r}")
+        if reported is not None and self.items is not None:
+            raise ValueError(f"accumulation_items_are_counted_from_the_start_or_reported_not_both:{unit_label}")
         before = self._estimator.snapshot()
         self._estimator.observe(discovery)
         after = self._estimator.snapshot()
@@ -1514,9 +1517,10 @@ class AccumulationYieldController:
         if update.ready:
             self._gamma = update.gamma.value
         self._threshold_update = update
-        if reported is not None:
-            self._items_remaining = reported      # the episode's own count of its list after this unit
-        elif self._items_remaining is not None:
+        if self.items is None:
+            # The episode's own count of its list after this unit; None while its list is not settled (no item stop).
+            self._items_remaining = reported
+        else:
             self._items_remaining -= 1
         self._current_credit = cumulative
         self._history.append(discovery)

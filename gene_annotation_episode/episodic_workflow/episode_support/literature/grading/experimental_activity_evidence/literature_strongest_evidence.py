@@ -16,7 +16,8 @@ more distant protein adds a little, and nothing adds nothing. Support and opposi
 annotation. Dependent results (one group) are pooled inside the row and do not add twice.
 
 A row has one current state: when the references hold several states of the same row, the last one stands (a later state
-carries its member results forward). No sheet for the annotation gives 0.0. No constant is introduced; nothing is bounded,
+carries its member results forward). No sheet for the annotation gives 0.0, and so does a row whose results state no
+direction (``row_status`` 'unknown': the row has no totals). No constant is introduced; nothing is bounded,
 clamped or rescaled beyond what the row defines.
 
 ``evidence_gain`` is what an episode's held sheet adds to the sheet it was given at its start."""
@@ -29,7 +30,8 @@ def evidence_held(records, sheet_state_refs, assertion_ref):
         row = json.loads(records.get_artifact(ref))['row']
         if row['assertion_ref'] == assertion_ref:
             rows[row['row_ref']] = row      # the last state of a row stands
-    return sum(row['support'] + row['opposition'] for row in rows.values())
+    # A row whose results state no direction (row_status 'unknown') has no totals (null): it holds no evidence either way.
+    return sum(row['support'] + row['opposition'] for row in rows.values() if row['support'] is not None)
 
 
 def evidence_gain(records, held_state_refs, given_state_refs, assertion_ref):

@@ -176,6 +176,14 @@ def test_accumulation_stops_when_the_episode_reports_no_item_left_on_its_list():
     assert not second.stop and second.decision.items_remaining == 5
     third = unit("one leaf used three", 4, 2)
     assert not third.stop and third.decision.items_remaining == 2
+    owed = unit("a unit the episode owes is pending: the list is not settled", 4, None)
+    assert not owed.stop and owed.decision.items_remaining is None
+    one = unit("one left", 4, 1)
+    owed = unit("the last one is used and a unit is owed: not counted down to 0", 5, None)
+    assert not one.stop and not owed.stop and owed.decision.items_remaining is None
+    with pytest.raises(ValueError, match="accumulation_items_are_counted_from_the_start_or_reported_not_both"):
+        AccumulationYieldController("e", 0, ADAPTIVE_CONTROL, items=3).observe(
+            "u", {"credit": 0, "estimation_context": {"items_remaining": 2}})
     last = unit("the rest", 6, 0)
     assert last.stop and last.decision.as_record()["stopped_by"] == ["items"] and controller.state().stop
     for wrong in (-1, True, 1.0, "2"):
