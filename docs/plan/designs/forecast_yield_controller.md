@@ -183,3 +183,15 @@ The pending rule and the rule that started work is finished (`resume_action`) ra
 rule as `finished` with gain 0 and 47.4 s and is unchanged (the ledger is not rewritten here): until it is resolved
 `pending`, later runs read it as a 0 share and a 47.4 s unit of `bvbrc_blast` (on a copy: the ledger's share falls from
 0.0115 to about 0.0092 and its median seconds from 355.4 to 348.2 s).
+
+## To be tuned later: how much the prior weighs (owner, 2026-11-21)
+
+The owner's terms: the prior is the ledger; an episode either knows nothing (an empty ledger for the action: half the ceiling) or has a prior.
+"Wonder if we need to change the learning formula but that's it. It is a tuning of how much to weigh the prior"; "The prior is the ledger. So that
+one test is what i mean by the prior. You can assume you know nothing or have a prior"; "Leave it to be tuned later".
+
+What the formula does today: a ledger with any rows of the action's definition is taken at full weight whatever its size; with a result of this
+run too, the ledger's mean and the run's recency-weighted mean each weigh one half. What was seen (real runs, `a102_head.md`, "What the runs
+show"): after one `partner_contacts` row (0.22 of a ceiling of 49, a share of 0.0045) the next run's forecast for that action was 0.327 against
+a threshold of 0.934 and it was not run, where with an empty ledger it had been 24.5. The tuning would weigh the ledger by how much it holds, so
+that a ledger of one test moves the forecast only part of the way from half the ceiling. Not changed; the formula is in `yield_control/`.
