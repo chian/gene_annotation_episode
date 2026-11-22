@@ -78,6 +78,14 @@ binding only indirectly. Each has different goodness metrics, controls, noise an
 number from different experiments means different things. Several different experiments agreeing is stronger
 because their error sources differ.
 
+Which results reach a row (owner, 2026-11-21: "Use target and relevance. It does make sense you need both"). Two separate
+checks of a result against the claim, both by code from controlled fields. Target: who was measured; is the experiment's
+target the claim's protein (`same`, `related`, `different`, `not_stated`). Relevance: what was asked; did the experiment test
+the claim's question (`relevant`, `irrelevant`, `unresolved`). An ultracentrifugation of PopZ alone, with no partner, no
+interaction stated and no measured effect, has the right target but is `irrelevant` to "PopZ binds ParB": it never tested
+binding. A result enters a row only when its target is `same` or `related` and its relevance is `relevant` or `unresolved`
+(`unresolved`: an interaction was measured but the passage names no partner; a missing link is graded, not thrown out).
+
 ## 6b. The activity_rate class (DRAFT, written 2026-11-21, owner to confirm)
 
 The list is a draft for the owner to correct, drafted from the sources found and domain knowledge (no owner-supplied

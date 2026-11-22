@@ -17,15 +17,18 @@ ARGUMENTS
                a claim (CLAIM_FIELDS) carries no assertion_ref, so the candidate's ref is the key of the mapping.
 
 PER GRADER (finalized): merged_record(type, members, grader_ref) -> GRADERS[type] (the grade function) -> CONVERTERS[type]
-(the converter) -> per claim: bearing; direction_and_ratio only when the bearing is 'direct' (else direction unknown, with null
+(the converter) -> per claim: relevance (what was asked), then target_match (who was measured); direction_and_ratio only when
+the result is on the row (target match same or related, relevance relevant or unresolved; else direction unknown, with null
 log_ratio and effect_support); the weight of the one result by literature_resolution.row_weight; the converted RESULT is
 assembled from the converter output and checked with validate_result.
 
-HOW THE TARGET AND THE PARTNER REACH BEARING (OWNER_DECISION 18). The merged record of the grader carries the identity keys
+HOW THE TARGET AND THE PARTNER REACH TARGET_MATCH AND RELEVANCE (OWNER_DECISION 18). The merged record of the grader carries the identity keys
 target_id and partner_id (the single normalized value its members state; None when no member states one or they conflict).
-The page hands bearing exactly {'experiment_type', 'target_id', 'partner_id'} read from that merged record, and the claim
-(its subject_id is the target, its partner_id the partner). The result's target_id is the record's normalized target (None when
-the grader states none, which bearing answers with none / target_not_stated: no score, and the grader still counts in credit).
+The page hands target_match exactly {'experiment_type', 'target_id', 'partner_id'} read from that merged record, and relevance
+the same three plus 'statement' (the qualitative statement or None) and 'effect_measured' (whether the converted grader has a
+point effect), and the claim (its subject_id is the target, its partner_id the partner). The result's target_id is the record's
+normalized target (None when the grader states none, which target_match answers with not_stated / target_not_stated: no score,
+and the grader still counts in credit). An irrelevant result stays off every row and is never scored.
 
 HOW THE TARGETS REACH merge_main. merge_main takes them as its optional last argument: {assertion_ref: normalize_identity_ref(
 claim['subject_id'])}, derived from the claims here. classes_needed is derived from the claims too: for each candidate, the
@@ -54,7 +57,8 @@ import json
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_alpha_converter import convert_alpha
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_auc_converter import convert_auc
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_axis_output import axis_output
-from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_bearing import assayed_molecule, bearing
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_target import assayed_molecule, target_match
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_relevance import relevance
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_bli_converter import convert_bli
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_bret_converter import convert_bret
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_cetsa_converter import convert_cetsa
@@ -80,7 +84,6 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_resolution import credit_change, row_resolution, row_weight
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_row import complete_row, group_by_candidate, merge_row_state
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_row_contract import (
-    BEARING_SCORING,
     CLAIM_FIELDS,
     CLAIM_PREDICATES_BY_CLASS,
     CLASS_OF_EXPERIMENT_TYPE,
@@ -88,6 +91,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     REF_PATTERN,
     ROW_CALLER_FIELDS,
     SKIPPED_GRADER,
+    RELEVANCE_ON_ROW,
+    TARGET_MATCH_ON_ROW,
     is_name,
     normalize_identity_ref,
     validate_axis,
@@ -167,21 +172,20 @@ SUBJECT_KEYS = {'target': ('target_id', 'subject_database_id', 'subject_database
                 'partner': ('partner_id', 'partner_database_id', 'partner_database', 'partner_organism')}
 
 
-async def _identified_subject(record, bearing_record, claim, assertion_ref, identify):
+async def _identified_subject(record, target_record, claim, assertion_ref, identify, relevance_of_claim):
     """What the page knows of the assayed protein for this claim: the I2 resolution (reference record, sequence, how it resolved,
     how many records matched) and the I3 closeness of its sequence to the claim subject's, or the unidentified record.
-    Resolved only where the grader bears on the claim by its names (a molecule is stated, the predicate is borne, the partner
-    does not contradict): other results never score and need no identification. The molecule identified is the record's target,
-    or its partner on the symmetric partner route (the partner is the claim's subject)."""
-    first = bearing(bearing_record, claim, None)
-    if first['bearing'] == 'none' or first['reasons'] == ['partner_contradicts_claim']:
+    Resolved only where a molecule is stated and the experiment is not irrelevant to the claim: other results never score and
+    need no identification. The molecule identified is the record's target, or its partner on the symmetric partner route
+    (the partner is the claim's subject)."""
+    if target_record['target_id'] is None or relevance_of_claim['relevance'] == 'irrelevant':
         return UNIDENTIFIED
-    name_key, id_key, database_key, organism_key = SUBJECT_KEYS[assayed_molecule(bearing_record, claim)]
+    name_key, id_key, database_key, organism_key = SUBJECT_KEYS[assayed_molecule(target_record, claim)]
     return await identify(assertion_ref, record[name_key], record[id_key], record[database_key], record[organism_key])
 
 
 async def _results_of_grader(grader, converted, record, claims, identify):
-    """One converted RESULT per claim (RESULT_FIELDS), validated; direction only for bearing 'direct' or 'transfer'. ``identify``
+    """One converted RESULT per claim (RESULT_FIELDS), validated; direction only for a result on the row. ``identify``
     is identify(assertion_ref, name, database_id, database, organism) -> the identified subject (see page_update)."""
     quantities = converted['extraction']['quantities']
     effect, variance = quantities.get('effect'), quantities.get('effect_variance')
@@ -190,20 +194,23 @@ async def _results_of_grader(grader, converted, record, claims, identify):
                        for name, item in converted['extraction']['interpretations'].items()}
     qualitative = converted.get('qualitative_effect')
     support_refs = list(dict.fromkeys(qualitative['support_refs'])) if qualitative is not None else []
-    bearing_record = {'experiment_type': grader['experiment_type'], 'target_id': record.get('target_id'), 'partner_id': record.get('partner_id')}
+    target_record = {'experiment_type': grader['experiment_type'], 'target_id': record.get('target_id'), 'partner_id': record.get('partner_id')}
+    relevance_record = {**target_record, 'statement': None if qualitative is None else qualitative['statement'], 'effect_measured': has_effect}
     dependence = converted['dependence']
     results = []
     for assertion_ref in sorted(claims):
         claim = claims[assertion_ref]
-        subject = await _identified_subject(record, bearing_record, claim, assertion_ref, identify)
-        is_direct = bearing(bearing_record, claim, subject['closeness'])['bearing']
+        claim_relevance = relevance(relevance_record, claim)
+        subject = await _identified_subject(record, target_record, claim, assertion_ref, identify, claim_relevance)
+        claim_target_match = target_match(target_record, claim, subject['closeness'])['target_match']
         subject_fields = {
             'subject_record_ref': subject['record_ref'], 'subject_sequence_ref': subject['sequence_ref'],
             'subject_resolution': subject['resolution'], 'subject_match_count': subject['match_count'],
             'subject_closeness': subject['closeness'], 'comparison_ref': subject['comparison_ref'],
         }
         weight = row_weight([_weight_input({'interpretations': interpretations, 'experiment_type': grader['experiment_type'], **subject_fields})])
-        if is_direct not in BEARING_SCORING:
+        scored = claim_target_match in TARGET_MATCH_ON_ROW and claim_relevance['relevance'] in RELEVANCE_ON_ROW
+        if not scored:
             direction = {'direction': 'unknown', 'log_ratio': None, 'effect_support': None}
         elif CLASS_OF_EXPERIMENT_TYPE[grader['experiment_type']] == 'activity_rate':
             # an activity_rate converter carries 'enzyme_mass_g_per_mol' (the stated molar mass, or None): specific activity ends need it
@@ -215,10 +222,11 @@ async def _results_of_grader(grader, converted, record, claims, identify):
             'result_ref': _result_ref(grader['grader_ref'], assertion_ref),
             'experiment_ref': grader['grader_ref'],
             'assertion_ref': assertion_ref,
-            'target_id': None if record.get('target_id') is None else normalize_identity_ref(claim['subject_id'] if is_direct in BEARING_SCORING else record['target_id']),
+            'target_id': None if record.get('target_id') is None else normalize_identity_ref(claim['subject_id'] if scored else record['target_id']),
             'experiment_type': grader['experiment_type'],
             'sheet': CLASS_OF_EXPERIMENT_TYPE[grader['experiment_type']],
-            'bearing': is_direct,
+            'target_match': claim_target_match,
+            'relevance': claim_relevance['relevance'],
             'direction': direction['direction'],
             'log_ratio': direction['log_ratio'],
             'weight': weight,

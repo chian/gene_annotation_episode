@@ -5,7 +5,7 @@ converted  one converter output (convert_<type>): 'experiment_type', 'extraction
            optional 'qualitative_effect' ({'statement', ...}), and 'direction_field_support' (see below).
 
 The claim is not an argument: a claim names molecules only and carries no physical prediction or threshold (owner ruling
-of 2026-11-21). Whether the result bears on the claim is bearing's question; the caller calls this only for a direct result.
+of 2026-11-21). Whether the result is the claim's target and tested its question is target_match's and relevance's; the caller calls this only for a result on the row.
 
 Result: {'direction': DIRECTION, 'log_ratio': number >= 0 or None, 'effect_support': number 0..1 or None}.
 

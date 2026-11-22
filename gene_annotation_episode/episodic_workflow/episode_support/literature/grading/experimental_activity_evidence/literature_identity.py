@@ -25,7 +25,7 @@ THE TARGET MOLECULE (OWNER_DECISION 18). The leaf record states target_id (the m
 partner_id and partner_role, as top-level keys. target_id and partner_id are identity-bearing and are compared by
 equality after casefold and whitespace collapse (normalize_identity_ref); a side that does not state one is skipped. A
 grader whose members state no target_id has no target (state_grader_fields: identity.target_id unavailable,
-not_stated_in_passage); literature_bearing then gives it bearing none. The identity number fields carry no unit: the leaf
+not_stated_in_passage); literature_target then gives it target_match not_stated. The identity number fields carry no unit: the leaf
 form states them in the canonical unit (temperature_c in degrees Celsius).
 
 VALUE NORMALIZATION. Before two stated values are compared or deduplicated, both are normalized to the canonical unit
@@ -424,7 +424,7 @@ def finalize_grader(grader):
     the argument is not changed. A grader that is already finalized is refused. Every grader, incomplete ones included,
     is finalized; the only grader the page skips is a SKIPPED_GRADER finding, which never reaches this function. A grader
     with no stated target is finalized like any other (it counts in the credit); it bears on no candidate, which
-    literature_bearing decides from the target the members state (OWNER_DECISION 18)."""
+    literature_target decides from the target the members state (OWNER_DECISION 18)."""
     validate_grader_ref(grader)
     if grader['finalized']:
         raise ValueError('grader is already finalized')

@@ -60,13 +60,13 @@ import hashlib
 import json
 import math
 
-from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_bearing import identified_closeness
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_target import identified_closeness
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_row_contract import (
-    BEARING_SCORING,
     CLASSES,
     CLASS_OF_EXPERIMENT_TYPE,
     QUALITATIVE_STATEMENT,
     normalize_identity_ref,
+    on_row,
     ROW_CALLER_FIELDS,
     ROW_DEPENDENCE_KEYS,
     ROW_REF_HASH_CHARS,
@@ -90,10 +90,10 @@ NOT_POOLED_CLASSES = ('activity_rate',)
 
 def _check_result(result):
     validate_result(result)
-    if result['bearing'] not in BEARING_SCORING:
-        raise ValueError(f"result {result['result_ref']} has bearing {result['bearing']!r}: only direct and transfer results enter a row")
+    if not on_row(result):
+        raise ValueError(f"result {result['result_ref']} has target_match {result['target_match']!r} and relevance {result['relevance']!r}: only results on the row enter a row")
     if result['target_id'] is None:
-        raise ValueError(f"result {result['result_ref']} is direct and has no target_id (OWNER_DECISION 18)")
+        raise ValueError(f"result {result['result_ref']} is on the row and has no target_id (OWNER_DECISION 18)")
     return result
 
 
@@ -140,13 +140,13 @@ def dependence_groups(results):
 
 
 def group_by_candidate(results):
-    """{(sheet, assertion_ref): [results with bearing direct]}; results of another bearing are left out. A direct result
+    """{(sheet, assertion_ref): [results on the row]}; results not on the row are left out. A result on the row
     has a target_id, and the results of one (sheet, assertion_ref) must share one normalized target_id (OWNER_DECISION 18):
     a candidate's score is about one target; different targets raise ValueError."""
     grouped, targets = {}, {}
     for result in results:
         validate_result(result)
-        if result['bearing'] not in BEARING_SCORING:
+        if not on_row(result):
             continue
         key = (result['sheet'], result['assertion_ref'])
         target = _target_of(result)

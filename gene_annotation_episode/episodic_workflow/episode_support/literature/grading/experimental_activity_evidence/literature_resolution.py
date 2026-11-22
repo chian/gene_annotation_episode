@@ -9,7 +9,7 @@ All constants come from literature_row_contract (WEIGHT_*, RESOLVED_*, CREDIT_QU
 """
 import math
 
-from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_bearing import identified_closeness
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_target import identified_closeness
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_row_contract import (
     CREDIT_QUESTIONS_EXTRA,
     CRITERION_STATUS,

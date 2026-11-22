@@ -90,8 +90,10 @@ So the protocol the traces support is the following. Repeat it per class:
   or an enum, cannot be read into a claim today. Raise this with the owner and do not patch it silently.
 - **Acceptance:**
   - `G/literature_page_update._check_claims` accepts a claim with the new predicate and maps it to the class.
-  - `G/literature_bearing.bearing` returns `direct` for a record of a type of the class whose `target_id` equals the
-    claim's subject.
+  - `G/literature_target.target_match` returns `same` for a record whose `target_id` equals the claim's subject (who was
+    measured), and `G/literature_relevance.relevance` returns `relevant` for a record of a type of the class whose partner
+    agrees with the claim (what was asked). A result is on the row only when the target is `same` or `related` and the
+    relevance is `relevant` or `unresolved`. (Owner, 2026-11-21: "Use target and relevance. It does make sense you need both".)
 
 ### 0c. The class's decisions to make before the first type
 
@@ -450,7 +452,7 @@ Added automatically by `F/literature_identity_extraction.py` through `answer_sch
 it.
 
 - `ASKED` holds the contract's identity fields minus the code-stamped ones.
-- `target_id` is required for bearing. A grader with no stated target bears on nothing (`target_not_stated`) and
+- `target_id` is required for the target match. A grader with no stated target matches nothing (`target_not_stated`) and
   still counts in credit.
 - `partner_id` is optional.
 - The model gives the name **as written**, inside a unique quote. Code normalizes it with `normalize_identity_ref`
@@ -577,7 +579,8 @@ For every field stated on the real paragraph, check that the quote really says i
 `page_update(sheet_state, graders, claims)` in `G/literature_page_update.py` runs:
 
 1. `merged_record`, then `GRADERS[<t>]`, then `CONVERTERS[<t>]`;
-2. per claim, `bearing`; only a `direct` result gets `direction_and_ratio`;
+2. per claim, `relevance` and `target_match`; only a result on the row (target `same` or `related`, relevance `relevant`
+   or `unresolved`) gets `direction_and_ratio`;
 3. `row_weight`;
 4. `validate_result`;
 5. `merge_row_state`, `complete_row`, `merge_main`, `axis_output` and `row_features`.
@@ -595,7 +598,7 @@ For each new type, copy this test with:
 
 ### Acceptance (all from the page's return)
 
-- **Bearing direct:** a feature row exists with `target_id` equal to the claim's subject, `assertion_ref` equal to
+- **On the row (target same, relevance relevant):** a feature row exists with `target_id` equal to the claim's subject, `assertion_ref` equal to
   the hypothesis, and `experiments >= 1`.
 - **Graded direction:**
   - a quantitative result has `supports` with `0 < log_ratio <= QUALITATIVE_LOG_RATIO[<t>]`, or `neutral` at

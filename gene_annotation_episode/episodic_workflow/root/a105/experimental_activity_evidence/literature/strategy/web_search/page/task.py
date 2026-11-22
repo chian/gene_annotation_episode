@@ -179,7 +179,7 @@ async def update_sheet(arguments, ctx):
     """The page's update of the persistent subscoring sheet (OWNER_DECISION 10), automatic. Reads the immutable leaf records
     the leaf children returned and the sheet states passed in, groups the leaf records into graders (``group_leaf_records``:
     one experiment = one grader, default merge, split on a positive identity conflict), finalizes every grader
-    (``finalize_grader``), and runs ``page_update`` (merged record, grade, convert, bearing and direction against the claim of
+    (``finalize_grader``), and runs ``page_update`` (merged record, grade, convert, target match, relevance and direction against the claim of
     the proposed annotation, subscoring rows, main sheet, axis, credit, scores, features). Every call regroups ALL the leaf
     records from the states passed in, so a grader whose members grow is re-derived and never counted twice; the latest call
     is the page's whole result. The library functions are pure; this unit alone writes, through the custody store, each row

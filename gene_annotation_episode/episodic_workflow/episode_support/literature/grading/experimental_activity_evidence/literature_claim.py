@@ -27,9 +27,9 @@ PARTNER_VALUE_TYPES = ('term_ref', 'reference')
 # reaction term (a 'term_ref' whose term record has term_type 'reaction'), which is not a molecule. The claim is built from
 # the hypothesis record and the LABELS of the records it points at; the term_type is on the term record and is not given to
 # this module, so a 'term_ref' that is a reaction cannot be told from a 'term_ref' that is a chemical here. For 'catalyzes'
-# a 'term_ref' value therefore gives partner_id null (bearing by the target, the enzyme, alone). A 'reference' value points
+# a 'term_ref' value therefore gives partner_id null (relevance then does not look at the partner; the target, the enzyme, alone decides). A 'reference' value points
 # at a molecule record (the substrate) and stays the partner, so the record's stated substrate must then agree with it
-# (bearing, partner_contradicts_claim). MISSING, needs a change outside G: the caller (the page's hypothesis_claim in task.py)
+# (relevance irrelevant, other_partner). MISSING, needs a change outside G: the caller (the page's hypothesis_claim in task.py)
 # would have to pass the term types for a chemical term_ref to be kept as a substrate partner.
 TERM_PARTNER_IS_NOT_A_MOLECULE = ('catalyzes',)
 

@@ -10,7 +10,7 @@ the custody reader it is handed) and returns, over the rows of ``assertion_ref``
 
 These are the row's own totals as ``literature_row`` computes them: each independent group of results adds its magnitude
 (the graded strength of the measurement times the result's weight), and the weight already carries
-``literature_bearing.identified_closeness`` (how close the assayed protein is to the claim's target, smooth, never a gate).
+``literature_target.identified_closeness`` (how close the assayed protein is to the claim's target, smooth, never a gate).
 So the measure is additive and weighed by distance: a strong result on the closest protein adds the most, a result on a
 more distant protein adds a little, and nothing adds nothing. Support and opposition both count: either is knowledge of the
 annotation. Dependent results (one group) are pooled inside the row and do not add twice.

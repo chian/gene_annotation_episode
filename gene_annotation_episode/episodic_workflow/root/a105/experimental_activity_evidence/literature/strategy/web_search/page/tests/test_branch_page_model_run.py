@@ -184,7 +184,7 @@ def test_the_page_commissioned_for_popz_binds_parb_returns_credit_scores_feature
     assert 0 <= result['credit'] <= 1
     scores = result['finding']['scores']
     assert scores and all(score['target_id'] == 'popz' for score in scores)
-    # The return carries no bearing field (the form holds scores and features only): a direct bearing for the claim shows
+    # The return carries no target_match or relevance field (the form holds scores and features only): a result on the row for the claim shows
     # as a subscoring row of the target popz that holds at least one experiment, for the commissioned hypothesis.
     features = result['finding']['features']
     assert any(item['target_id'] == 'popz' and item['assertion_ref'] == world['proposed'] and item['experiments'] >= 1
@@ -293,8 +293,8 @@ def test_the_page_commissioned_for_thdf_catalyzes_flavin_reduction_returns_credi
         row = held['row']
         print('PAGE_ROW', json.dumps(row)[:1500])
         for member in held['member_results']:
-            print('PAGE_RESULT', json.dumps({name: member[name] for name in ('experiment_type', 'bearing', 'direction', 'log_ratio', 'weight', 'effect_support', 'measured_effect', 'effect_unit', 'direction_field_support', 'statement')}))
-            assert member['sheet'] == 'activity_rate' and member['experiment_type'] == 'spectro_direct' and member['bearing'] == 'direct'
+            print('PAGE_RESULT', json.dumps({name: member[name] for name in ('experiment_type', 'target_match', 'relevance', 'direction', 'log_ratio', 'weight', 'effect_support', 'measured_effect', 'effect_unit', 'direction_field_support', 'statement')}))
+            assert member['sheet'] == 'activity_rate' and member['experiment_type'] == 'spectro_direct' and member['target_match'] == 'same' and member['relevance'] == 'relevant'
             assert member['direction'] in ('supports', 'neutral') and member['direction'] != 'opposes'      # a stated rate never opposes
             assert member['direction'] != 'supports' or 0 < member['log_ratio'] <= 1.2      # QUALITATIVE_LOG_RATIO['spectro_direct']
             assert 0 <= member['weight'] <= 1

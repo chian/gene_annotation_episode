@@ -566,9 +566,9 @@ log_ratio = QUALITATIVE_LOG_RATIO[type] * s
 
 **Decided and implemented in `G`:** `catalyzes` is in `CLAIM_PREDICATES_BY_CLASS['activity_rate']`, not symmetric. Subject =
 the enzyme (the record's `target_id`). When the hypothesis value is a `reference` to a molecule record, that molecule is the
-claim's partner (the substrate); the record's stated substrate must then agree, else `different_subject`
-(`partner_contradicts_claim`). When the value is a `term_ref` (the existing A105 hypotheses carry a reaction term), the
-claim's partner is null and bearing is by the target alone (`literature_claim.TERM_PARTNER_IS_NOT_A_MOLECULE`). **Limit:** G
+claim's partner (the substrate); the record's stated substrate must then agree, else the result is `irrelevant`
+(relevance, `other_partner`) and stays off the row. When the value is a `term_ref` (the existing A105 hypotheses carry a reaction term), the
+claim's partner is null and the target alone decides (relevance does not look at the partner) (`literature_claim.TERM_PARTNER_IS_NOT_A_MOLECULE`). **Limit:** G
 sees only the labels of the records, not the term type, so a `term_ref` that is a chemical (a substrate given as a term) is
 also read as target-only. Keeping it as a substrate partner needs the caller (the page's `hypothesis_claim` in `task.py`)
 to pass the term types: a change outside G, reported, not made.
@@ -585,11 +585,11 @@ Earlier analysis:
   hypotheses carry `value: {'type': 'term_ref', 'ref': <reaction term>}` (term_type `reaction`, label e.g.
   "Hydrolysis"). `claim_of_hypothesis` accepts `term_ref`, so a claim **is** read, but its `partner_id` becomes the
   reaction term's label. A leaf names the partner "as written" in the passage, normally a substrate ("p-nitrophenyl
-  acetate"), and bearing compares partner names by normalized equality. A reaction label and a substrate name will
-  almost never be equal, so a stated partner gives `different_subject` instead of `direct`. Options for the owner:
+  acetate"), and relevance compares partner names by normalized equality. A reaction label and a substrate name will
+  almost never be equal, so a stated partner makes the result `irrelevant` instead of `relevant`. Options for the owner:
   1. Partner = the substrate (hypothesis value a `reference` to the substrate molecule); the leaf states the substrate
      as `partner_id` with `partner_role` substrate. Fits "a claim names molecules only".
-  2. Partner = null for `catalyzes`; bearing by target only; the reaction stays a hypothesis value the sheet does not
+  2. Partner = null for `catalyzes`; the target alone decides; the reaction stays a hypothesis value the sheet does not
      read. Simplest; loses substrate specificity.
   3. Partner = the reaction term, with the leaf asked for the reaction name. Breaks "a claim names molecules only".
   Draft recommendation: option 1, with option 2 as the behaviour when the hypothesis has no substrate.

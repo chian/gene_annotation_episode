@@ -1,14 +1,15 @@
-"""The activity_rate class before its first experiment type (SOP 0b, 0c): the predicate 'catalyzes', the claim and bearing
-rule for it, and the class-scoped direction/strength function with its anchors. No activity_rate experiment type exists yet, so
-the bearing and direction tests register one placeholder type id ('activity_probe') in the contract's tables for the duration of
+"""The activity_rate class before its first experiment type (SOP 0b, 0c): the predicate 'catalyzes', the claim, target match and relevance
+rules for it, and the class-scoped direction/strength function with its anchors. No activity_rate experiment type exists yet, so
+the target, relevance and direction tests register one placeholder type id ('activity_probe') in the contract's tables for the duration of
 one test (monkeypatch); nothing else is replaced, all the code under test is real."""
 import math
 
 import pytest
-from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence import literature_bearing
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence import literature_relevance, literature_target
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_activity_direction import (
     activity_direction_and_ratio, activity_strength, select_activity_effect, specific_activity_ends)
-from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_bearing import bearing
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_relevance import relevance
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_target import target_match
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_claim import claim_of_hypothesis
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_direction import direction_and_ratio, strength
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_page_update import _check_claims
@@ -21,7 +22,8 @@ PROBE = 'activity_probe'
 
 @pytest.fixture
 def probe_type(monkeypatch):
-    monkeypatch.setattr(literature_bearing, 'EXPERIMENT_TYPES', (*EXPERIMENT_TYPES, PROBE))
+    monkeypatch.setattr(literature_target, 'EXPERIMENT_TYPES', (*EXPERIMENT_TYPES, PROBE))
+    monkeypatch.setattr(literature_relevance, 'EXPERIMENT_TYPES', (*EXPERIMENT_TYPES, PROBE))
     monkeypatch.setitem(CLASS_OF_EXPERIMENT_TYPE, PROBE, 'activity_rate')
     monkeypatch.setitem(QUALITATIVE_LOG_RATIO, PROBE, 1.0)
     return PROBE
@@ -69,43 +71,53 @@ def test_binding_claims_keep_a_term_ref_partner():
     assert claim == {'predicate': 'binds', 'subject_id': 'popz', 'partner_id': 'parb'}
 
 
-# ---- bearing -------------------------------------------------------------------------------------------------------
+# ---- target match and relevance ------------------------------------------------------------------------------------
 
 def record(target, partner=None):
     return {'experiment_type': PROBE, 'target_id': target, 'partner_id': partner}
 
 
-def test_enzyme_claim_on_a_reaction_term_is_direct_for_a_record_of_that_enzyme(probe_type):
+def relevance_record(target, partner=None, statement=None, effect_measured=False):
+    return {**record(target, partner), 'statement': statement, 'effect_measured': effect_measured}
+
+
+def test_enzyme_claim_on_a_reaction_term_is_the_same_target_and_relevant_for_a_record_of_that_enzyme(probe_type):
     claim = claim_of_hypothesis(hypothesis('catalyzes', 'term_ref'), {'s': 'EstA', 'v': 'Hydrolysis'})
-    assert bearing(record('esta'), claim, None) == {'bearing': 'direct', 'reasons': ['predicate_and_target_agree']}
+    assert target_match(record('esta'), claim, None) == {'target_match': 'same', 'reasons': ['target_names_agree']}
+    assert relevance(relevance_record('esta'), claim) == {'relevance': 'relevant', 'reasons': ['claim_names_no_partner']}
     # the record's stated substrate is not compared when the claim has no molecule partner
-    assert bearing(record('esta', 'pnpa'), claim, None)['bearing'] == 'direct'
+    assert target_match(record('esta', 'pnpa'), claim, None)['target_match'] == 'same'
+    assert relevance(relevance_record('esta', 'pnpa'), claim)['relevance'] == 'relevant'
 
 
-def test_a_record_of_another_enzyme_is_a_different_subject(probe_type):
+def test_a_record_of_another_enzyme_is_a_different_target(probe_type):
     claim = claim_of_hypothesis(hypothesis('catalyzes', 'term_ref'), {'s': 'EstA', 'v': 'Hydrolysis'})
-    assert bearing(record('estb'), claim, None) == {'bearing': 'different_subject', 'reasons': ['target_differs_from_subject']}
+    assert target_match(record('estb'), claim, None) == {'target_match': 'different', 'reasons': ['target_differs_from_subject']}
 
 
 def test_a_record_of_another_name_is_judged_by_its_sequence_once_identified(probe_type):
     claim = claim_of_hypothesis(hypothesis('catalyzes', 'term_ref'), {'s': 'EstA', 'v': 'Hydrolysis'})
-    assert bearing(record('estb'), claim, 1.0) == {'bearing': 'direct', 'reasons': ['target_sequence_identical']}
-    assert bearing(record('estb'), claim, 0.6) == {'bearing': 'transfer', 'reasons': ['target_sequence_related']}
-    assert bearing(record('esta'), claim, 0.6) == {'bearing': 'transfer', 'reasons': ['target_sequence_related']}
-    assert bearing(record('esta'), claim, 1.0) == {'bearing': 'direct', 'reasons': ['predicate_and_target_agree']}
+    assert target_match(record('estb'), claim, 1.0) == {'target_match': 'same', 'reasons': ['target_sequence_identical']}
+    assert target_match(record('estb'), claim, 0.6) == {'target_match': 'related', 'reasons': ['target_sequence_related']}
+    assert target_match(record('esta'), claim, 0.6) == {'target_match': 'related', 'reasons': ['target_sequence_related']}
+    assert target_match(record('esta'), claim, 1.0) == {'target_match': 'same', 'reasons': ['target_names_agree']}
 
 
-def test_a_substrate_claim_does_not_bear_on_a_record_with_another_substrate(probe_type):
+def test_a_substrate_claim_is_irrelevant_to_a_record_with_another_substrate(probe_type):
     claim = claim_of_hypothesis(hypothesis('catalyzes', 'reference'), {'s': 'EstA', 'v': 'pNPA'})
-    assert bearing(record('esta', 'pnpb'), claim, None) == {'bearing': 'different_subject', 'reasons': ['partner_contradicts_claim']}
-    assert bearing(record('esta', 'pnpa'), claim, None)['bearing'] == 'direct'
-    assert bearing(record('esta'), claim, None)['bearing'] == 'direct'
+    assert relevance(relevance_record('esta', 'pnpb'), claim) == {'relevance': 'irrelevant', 'reasons': ['other_partner']}
+    assert target_match(record('esta', 'pnpb'), claim, None)['target_match'] == 'same'      # who was measured is not the question here
+    assert relevance(relevance_record('esta', 'pnpa'), claim) == {'relevance': 'relevant', 'reasons': ['partner_agrees']}
+    # a record that names no substrate and measured no effect tested no substrate (CHANGED 2026-11-21: it used to bear directly)
+    assert relevance(relevance_record('esta'), claim) == {'relevance': 'irrelevant', 'reasons': ['no_partner_in_experiment']}
+    assert relevance(relevance_record('esta', effect_measured=True), claim) == {'relevance': 'unresolved', 'reasons': ['partner_not_stated']}
 
 
 def test_catalyzes_is_not_symmetric(probe_type):
     claim = {'predicate': 'catalyzes', 'subject_id': 'esta', 'partner_id': 'pnpa'}
-    # the target is the claim's partner and the record's partner the claim's subject: direct for a symmetric predicate only
-    assert bearing(record('pnpa', 'esta'), claim, None)['bearing'] == 'different_subject'
+    # the target is the claim's partner and the record's partner the claim's subject: the same target for a symmetric predicate only
+    assert target_match(record('pnpa', 'esta'), claim, None)['target_match'] == 'different'
+    assert relevance(relevance_record('pnpa', 'esta'), claim) == {'relevance': 'irrelevant', 'reasons': ['other_partner']}
 
 
 # ---- the anchors and the strength curve -----------------------------------------------------------------------------

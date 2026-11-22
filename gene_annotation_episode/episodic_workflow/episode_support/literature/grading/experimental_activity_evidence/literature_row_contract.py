@@ -1,6 +1,6 @@
 """The A105 row contract: every vocabulary, field list, version, constant and function signature of the A105 scoring
 paradigm, in one place. Constants and schemas only; the only code is small validators of a record against a schema.
-Every later builder (resolution, bearing, direction, row merger, main-sheet merger, axis output, sheet features,
+Every later builder (resolution, target, relevance, direction, row merger, main-sheet merger, axis output, sheet features,
 per-class rows, wiring) imports from here and never redefines anything.
 
 CONTRACT (the owner's paradigm, 2026-11-20; it wins over what the code did before):
@@ -17,8 +17,8 @@ CONTRACT (the owner's paradigm, 2026-11-20; it wins over what the code did befor
 * Everything passed upward is a number, a count, a vocabulary value or a record reference. No prose field anywhere.
 * The grader holds facts only; the converter and the sheet side judge and own every threshold.
 * Unknown is never zero and never opposition. A measured zero stays scored (status measured_zero, neutral).
-* Only a result with bearing 'direct' (the exact sequence) or 'transfer' (a related protein) gives support or opposition,
-  each by its identified_closeness (literature_bearing; 2026-11-21: closeness of the assayed protein's sequence to the target's). The degree and the quote-support factor are applied
+* Only a result on the row (target match 'same' or 'related', relevance 'relevant' or 'unresolved'; on_row) gives support or
+  opposition, each by its identified_closeness (literature_target; 2026-11-21: closeness of the assayed protein's sequence to the target's). The degree and the quote-support factor are applied
   once (converter, via literature_quote_support) and are never reapplied by a merger or the main sheet.
 
 OWNER RULINGS OF 2026-11-20 ON WHERE THE WORK RUNS AND WHAT AN EXPERIMENT IS (A-G; they replace the earlier proposal
@@ -77,8 +77,8 @@ OWNER RULING OF 2026-11-20 ON THE TARGET MOLECULE (OWNER_DECISION 18; replaces p
   (the target: an annotation ID or normalized name), partner_id (OPTIONAL: the other molecule the target is tested
   against, for example the ligand or the binding partner) and partner_role (optional, ROLE vocabulary). Nothing in the
   contract is symmetrical any more: the target is the subject of the experiment, the partner is the counterpart.
-* BEARING requires the target (it is the one identity field bearing requires): a grader no member record of which states
-  target_id bears on no candidate (bearing none, reason target_not_stated), earns no score, and still counts in the
+* The target match requires the target (it is the one identity field it requires): a grader no member record of which states
+  target_id matches no candidate (target_match not_stated, reason target_not_stated), earns no score, and still counts in the
   credit as the credit resolution says. An open question 'target known' is NOT added to CREDIT_QUESTIONS_EXTRA; a target
   left unknown leaves the direction unknown (the direction_known question already carries that).
 * Identity: target_id and partner_id are identity-bearing (a stated conflict splits graders); both compare by equality
@@ -129,8 +129,20 @@ CLASS_OF_EXPERIMENT_TYPE = {
 # ---------------------------------------------------------------------------------------------------------------
 # (3) Vocabularies
 # ---------------------------------------------------------------------------------------------------------------
-BEARING = ('direct', 'different_subject', 'transfer', 'none')   # 'direct' (the exact sequence) and 'transfer' (a related protein) give support or opposition; each by its identified_closeness
-BEARING_SCORING = ('direct', 'transfer')                        # the bearings whose results enter a row
+# Two separate checks of a result against a claim (owner, 2026-11-21: "Use target and relevance. It does make sense you need both"):
+# TARGET_MATCH asks who was measured (is the experiment's target the claim's protein: 'same' the exact sequence, 'related' a related
+# protein, 'different', 'not_stated'); RELEVANCE asks what was asked (did the experiment test the claim's question: 'relevant',
+# 'irrelevant', 'unresolved' = it measured an interaction but names no partner). A result is on the row, and gives support or
+# opposition by its identified_closeness, exactly when its target match is in TARGET_MATCH_ON_ROW and its relevance in RELEVANCE_ON_ROW.
+TARGET_MATCH = ('same', 'related', 'different', 'not_stated')
+TARGET_MATCH_ON_ROW = ('same', 'related')
+RELEVANCE = ('relevant', 'irrelevant', 'unresolved')
+RELEVANCE_ON_ROW = ('relevant', 'unresolved')
+
+
+def on_row(result):
+    """True when the converted result may carry a direction, enter a row and be a member result of a sheet state."""
+    return result['target_match'] in TARGET_MATCH_ON_ROW and result['relevance'] in RELEVANCE_ON_ROW
 # How the protein a paper assayed was identified against the target's sequence (2026-11-21 owner goal: "find the exact sequence
 # associated with the experimental data so we know how close the real evidence is"; "no gate").
 SUBJECT_RESOLUTION = ('database_id', 'name_unique', 'name_ambiguous', 'unresolved')
@@ -200,7 +212,7 @@ def class_of_predicate(predicate):
         raise ValueError(f'the predicate {predicate!r} belongs to {len(classes)} classes, not one')
     return classes[0]
 # A symmetric predicate holds both ways: 'A binds B' is 'B binds A'. A result whose target is the claim's partner and whose
-# partner is the claim's subject is then direct for the claim (bearing, reason partner_route).
+# partner is the claim's subject is then the same target and relevant for the claim (reason partner_route in both).
 SYMMETRIC_PREDICATES = ('binds',)
 CLAIM_PREDICATES = tuple(p for predicates in CLAIM_PREDICATES_BY_CLASS.values() for p in predicates)
 CLAIM_FIELDS = {   # OWNER_DECISION 1
@@ -505,10 +517,11 @@ RESULT_FIELDS = {
     'result_ref': _f('ref'),
     'experiment_ref': _f('ref'),
     'assertion_ref': _f('ref'),
-    'target_id': _f('name', nullable=True),   # OWNER_DECISION 18: the experiment's target (normalized); null only when the experiment states none (bearing none); required non-null when bearing is direct
+    'target_id': _f('name', nullable=True),   # OWNER_DECISION 18: the experiment's target (normalized); null only when the experiment states none (target_match not_stated); required non-null when the result is on the row
     'experiment_type': _f('vocab', vocab=EXPERIMENT_TYPES),
     'sheet': _f('vocab', vocab=CLASSES),
-    'bearing': _f('vocab', vocab=BEARING),
+    'target_match': _f('vocab', vocab=TARGET_MATCH),
+    'relevance': _f('vocab', vocab=RELEVANCE),
     'direction': _f('vocab', vocab=DIRECTION),
     'log_ratio': _f('number', lo=0.0, nullable=True),            # >= 0 or null; null exactly when direction is unknown
     'weight': _f('number', lo=0.0, hi=1.0),
@@ -607,7 +620,7 @@ PARTIAL_ROW_FIELDS = {name: spec for name, spec in ROW_FIELDS.items() if name no
 
 # The persistent subscoring sheet STATE of one (sheet, assertion_ref): what merge_row_state returns and takes back as its
 # optional last argument. 'row' is the PARTIAL row of merge_row_state (the caller may store the completed row instead:
-# both are accepted); 'member_results' are the converted results (bearing direct) the row was built from, ordered by
+# both are accepted); 'member_results' are the converted results (on the row) the row was built from, ordered by
 # result_ref, with distinct result_refs; 'version' is ROW_SHEET_VERSION. A result whose result_ref is already held changes
 # nothing and earns no credit (CREDIT_FOR_REPEATED_FACT).
 SHEET_STATE_FIELDS = {
@@ -719,7 +732,7 @@ PH_RANGE = (0.0, 14.0)
 IDENTITY_FIELDS = {
     'source_ref': _f('ref'),                                                      # the document; stamped by code
     'experiment_type': _f('vocab', vocab=EXPERIMENT_TYPES),
-    'target_id': _f('name', nullable=True),                                       # OWNER_DECISION 18: the molecule the assay is about (annotation ID or normalized name); the one identity field bearing requires
+    'target_id': _f('name', nullable=True),                                       # OWNER_DECISION 18: the molecule the assay is about (annotation ID or normalized name); the one identity field the target match requires
     'partner_id': _f('name', nullable=True),                                      # OPTIONAL: the other molecule the target is tested against (ligand, binding partner)
     'partner_role': _f('vocab', vocab=ROLE, nullable=True),                       # optional: the role of the partner
     # Which sequence the molecule is (owner goal 2026-11-21): the identifier exactly as the passage writes it, the database it belongs
@@ -800,7 +813,7 @@ IDENTITY_FEATURES = {   # OWNER_DECISIONS 13, 18
 IDENTITY_BEARING = tuple(name for name, spec in IDENTITY_FEATURES.items() if spec['bearing'])   # OWNER_DECISION 13
 
 # OWNER_DECISION 18: how two target or partner identities are made comparable: casefold, then collapse every run of
-# whitespace to one space (and strip). identity_compare, the grader's field statements and bearing all use normalize_identity_ref.
+# whitespace to one space (and strip). identity_compare, the grader's field statements, target_match and relevance all use normalize_identity_ref.
 IDENTITY_REF_NORMALIZATION = ('casefold', 'collapse_whitespace', 'unicode_dashes_to_hyphen')
 # The dash characters papers use inside a molecule name (hyphen U+2010, non-breaking hyphen, figure dash, en dash, em dash,
 # horizontal bar, minus sign); all compare as the ASCII hyphen so 'PPARγ‐DL' and 'PPARγ-DL' are one molecule.
@@ -904,12 +917,18 @@ STATE_FIELD_FIELDS = {
 # (6) SIGNATURES: documentation constants for the functions the later steps write (not implementations).
 # ---------------------------------------------------------------------------------------------------------------
 SIGNATURES = {
-    'bearing': {
-        'module': 'literature_bearing',
+    'target_match': {
+        'module': 'literature_target',
+        'args': ('record', 'claim', 'subject_closeness'),
+        'returns': {'target_match': 'TARGET_MATCH', 'reasons': 'list of controlled reason codes (not prose)'},
+        'target_note': 'OWNER_DECISION 18: a converted result carries the experiment target_id (non-null when on the row); a row, main row, axis output and feature record carry the target_id of the score (equal to the claim subject_id)',
+        'note': 'code, not the model; who was measured. record carries experiment_type, target_id and partner_id; not_stated when no target is stated (reason target_not_stated); when the assayed protein was identified (closeness not null) the sequence decides: same at the exact sequence (EXACT_SEQUENCE_CLOSENESS), related for a related protein; when it was not identified the names decide: same when the normalized target_id equals the claim subject_id (or by the symmetric partner route), else different',
+    },
+    'relevance': {
+        'module': 'literature_relevance',
         'args': ('record', 'claim'),
-        'returns': {'bearing': 'BEARING', 'reasons': 'list of controlled reason codes (not prose)'},
-        'target_note': 'OWNER_DECISION 18: a converted result carries the experiment target_id (non-null when direct); a row, main row, axis output and feature record carry the target_id of the score (equal to the claim subject_id)',
-        'note': 'code, not the model; only direct gives support or opposition. OWNER_DECISION 18: record carries experiment_type, target_id and partner_id; direct iff the class bears the predicate and the normalized target_id equals the normalized claim subject_id and, when both sides state a partner, partner_id equals the claim partner_id; different_subject when a target is stated and differs from the subject (or both partners are stated and differ); none when the target is not stated (reason target_not_stated) or the predicate is not borne. 2026-11-21: bearing also takes the closeness of the assayed protein to the target (literature_bearing.bearing(record, claim, subject_closeness)): when the assayed protein was identified (closeness not null) the sequence decides, direct at the exact sequence (EXACT_SEQUENCE_CLOSENESS) and transfer for a related protein; when it was not identified the names decide as above',
+        'returns': {'relevance': 'RELEVANCE', 'reasons': 'list of controlled reason codes (not prose)'},
+        'note': 'code, not the model; what was asked. record carries experiment_type, target_id, partner_id, statement and effect_measured; irrelevant when the type cannot test the predicate, when the partners differ, or when the claim names a partner and the experiment neither names one nor measured an interaction; unresolved when it measured an interaction but names no partner; relevant otherwise. Irrelevant results stay off the row and are never scored',
     },
     'direction_and_ratio': {
         'module': 'literature_direction',
@@ -946,7 +965,7 @@ SIGNATURES = {
     'group_by_candidate': {
         'module': 'literature_row',
         'args': ('results',),
-        'returns': '{(sheet, assertion_ref): [results with bearing direct]}',
+        'returns': '{(sheet, assertion_ref): [results on the row]}',
     },
     'merge_row_state': {
         'module': 'literature_row',
@@ -1045,7 +1064,7 @@ OWNER_DECISIONS = {
     14: ('immutable leaf records, derived grader grouping (OWNER RULINGS B, C, F, G, 2026-11-20)', 'one experiment = one grader (one version, one document, never spanning documents); leaf records are immutable; a grader is a code-derived, re-derivable grouping of them until the page finalizes; every grader is finalized and converted, incomplete ones included, except a source-grounded no-applicable-experiment finding; dedupe on absolute byte spans; a repeat earns no credit; the page assigns grader_ref (GRADER_REF_FIELDS, FINALIZE_WHEN, SKIPPED_GRADER, STATE_DEDUPE_KEY, LEAF_RECORDS_IMMUTABLE, GRADER_DERIVED_BY, CREDIT_FOR_REPEATED_FACT)'),
     15: ('graded strength of a quantitative result; criteria never gate it (owner ruling of 2026-11-21)', 'the strength s = smoothstep(p) / (1 + r^2), p the position of log10 of the constant between the type noise end (0) and strong end (1), r = sqrt(v) / e the relative uncertainty (0 when not stated); the anchors are the ends of a gray scale, never thresholds; log_ratio = QUALITATIVE_LOG_RATIO[type] * s; criteria statuses and degrees lower the weight only and never remove a direction (QUANTITATIVE_STRENGTH, QUANTITATIVE_STRENGTH_ANCHORS)'),
     16: ('cross-class collapse rule (revision of 2026-11-20; default)', 'main rows sharing a dataset_ref (first) or else a source_ref collapse to one unit using the MEAN support and opposition over the unit rows of known status; a row with neither key is independent; the axis sums over units (CROSS_CLASS_COLLAPSE_RULE, MAIN_ROW_INPUT_KEYS, CROSS_CLASS_DEPENDENCE_KEYS)'),
-    18: ('target molecule (OWNER RULING, 2026-11-20)', "every experimental grader has a target molecule: target_id (the molecule the assay is about), optional partner_id and partner_role replace partner_a_*/partner_b_*; bearing requires the target: no stated target gives bearing none (target_not_stated), no score, credit as the resolution says, and no 'target known' question is added; direct iff the class bears the predicate and the normalized target_id equals the claim subject_id and, when both sides state a partner, the partner_ids are equal; different_subject when the stated target differs from the subject or both partners are stated and differ; a result of a SYMMETRIC predicate (SYMMETRIC_PREDICATES, binds) whose target is the claim's partner and whose partner is the claim's subject IS direct (reason partner_route); the row and score still belong to the claim's subject; transfer stays unused; the target applies at every level: a converted result, every subscoring row, every main row (placeholders too), the axis score channel and the investigation_finding features carry the target_id the score is about (the scoring sheet IS the annotation score, one per candidate per target; credit stays a separate quantity); target_id and partner_id are identity-bearing, compared by equality after casefold and whitespace collapse, missing skipped, agreeing is a positive tie; every identity number is stated by the leaf form in the field's canonical unit (IDENTITY_FIELDS, IDENTITY_FEATURES, POSITIVE_TIE_FEATURES, IDENTITY_REF_NORMALIZATION)"),
+    18: ('target molecule (OWNER RULING, 2026-11-20)', "every experimental grader has a target molecule: target_id (the molecule the assay is about), optional partner_id and partner_role replace partner_a_*/partner_b_*; the target match requires the target: no stated target gives target_match not_stated (target_not_stated), no score, credit as the resolution says, and no 'target known' question is added; the target is the same when the normalized target_id equals the claim subject_id (or the sequence decides, see target_match), different when it differs; the partner is judged by relevance, not by the target match (2026-11-21, owner: 'Use target and relevance. It does make sense you need both': target asks who was measured, relevance asks what was asked; an irrelevant result stays off the row and is never scored, an unresolved one measured an interaction but names no partner and is treated on the row as before); a result of a SYMMETRIC predicate (SYMMETRIC_PREDICATES, binds) whose target is the claim's partner and whose partner is the claim's subject is the same target and relevant (reason partner_route); the row and score still belong to the claim's subject; the target applies at every level: a converted result, every subscoring row, every main row (placeholders too), the axis score channel and the investigation_finding features carry the target_id the score is about (the scoring sheet IS the annotation score, one per candidate per target; credit stays a separate quantity); target_id and partner_id are identity-bearing, compared by equality after casefold and whitespace collapse, missing skipped, agreeing is a positive tie; every identity number is stated by the leaf form in the field's canonical unit (IDENTITY_FIELDS, IDENTITY_FEATURES, POSITIVE_TIE_FEATURES, IDENTITY_REF_NORMALIZATION)"),
     17: ('effect support (revision of 2026-11-20; default)', 'a converted result carries direction_field_support, copied from the support class of the field that fixes the direction: the KD operand for a quantitative result, the field(s) the statement derives from for a qualitative one, the weakest if several; effect_support = SUPPORT_FACTORS[direction_field_support] (EFFECT_SUPPORT_FIELD, SUPPORT_WEAKEST_ORDER, RESULT_FIELDS.direction_field_support)'),
 }
 
@@ -1184,19 +1203,19 @@ def _require_null(owner, record, names, because):
 
 def validate_result(result):
     """Refuse a converted result that misses a field, leaves its vocabulary or range, carries prose or an extra field,
-    or breaks the direction rules: unknown (and any bearing other than direct) means null log_ratio and effect_support;
+    or breaks the direction rules: unknown (and any result not on the row) means null log_ratio and effect_support;
     neutral means log_ratio exactly 0.0. Cross-field rules of the revision of 2026-11-20: an effect variance needs an
     effect, an effect needs its unit; a statement refs list needs a statement; a qualitative result (no measured_effect,
-    bearing direct, a statement given) has the direction its statement states (detected supports, not detected opposes,
+    on the row, a statement given) has the direction its statement states (detected supports, not detected opposes,
     not stated unknown); direction_field_support is required when the direction is known and null (or absent) when it is
     unknown (OWNER_DECISION 17); log_ratio never depends on the criteria (OWNER_DECISION 15)."""
     _validate('result', result, RESULT_FIELDS)
     if CLASS_OF_EXPERIMENT_TYPE.get(result['experiment_type']) != result['sheet']:
         raise ValueError('result.sheet is not the class of result.experiment_type')
-    if result['bearing'] not in BEARING_SCORING and result['direction'] != 'unknown':
-        raise ValueError("result.direction must be 'unknown' unless bearing is 'direct' or 'transfer'")
-    if result['bearing'] in BEARING_SCORING and result['target_id'] is None:
-        raise ValueError("result.target_id is required when bearing is 'direct' or 'transfer' (OWNER_DECISION 18)")
+    if not on_row(result) and result['direction'] != 'unknown':
+        raise ValueError("result.direction must be 'unknown' unless the result is on the row (target_match same or related, relevance relevant or unresolved)")
+    if on_row(result) and result['target_id'] is None:
+        raise ValueError('result.target_id is required when the result is on the row (OWNER_DECISION 18)')
     if result['subject_resolution'] == 'unresolved':
         if result['subject_record_ref'] is not None or result['subject_sequence_ref'] is not None or result['subject_closeness'] is not None:
             raise ValueError("an unresolved subject has no record, sequence or closeness")
@@ -1213,7 +1232,7 @@ def validate_result(result):
     if result.get('statement') is None and result.get('statement_support_refs') is not None:
         raise ValueError('result.statement_support_refs is given without result.statement')
     statement = result.get('statement')
-    if statement is not None and result['bearing'] in BEARING_SCORING and result.get('measured_effect') is None:
+    if statement is not None and on_row(result) and result.get('measured_effect') is None:
         stated_direction = {'interaction_detected': 'supports', 'interaction_not_detected': 'opposes', 'interaction_not_stated': 'unknown'}[statement]
         if result['direction'] != stated_direction:
             raise ValueError(f'result.direction must be {stated_direction!r} for the qualitative statement {statement!r}')
@@ -1277,7 +1296,7 @@ def validate_row(row):
 
 def validate_sheet_state(state):
     """Refuse a subscoring sheet STATE (SHEET_STATE_FIELDS) whose row is neither a valid partial nor a valid complete
-    row, whose member results are not valid converted results of bearing direct for the row's (sheet, assertion_ref),
+    row, whose member results are not valid converted results on the row for the row's (sheet, assertion_ref),
     repeat a result_ref or are not ordered by result_ref, or whose version is not ROW_SHEET_VERSION."""
     _validate('state', state, SHEET_STATE_FIELDS)
     row = state['row']
@@ -1288,8 +1307,8 @@ def validate_sheet_state(state):
     refs = []
     for result in state['member_results']:
         validate_result(result)
-        if result['bearing'] not in BEARING_SCORING:
-            raise ValueError('state.member_results holds a result whose bearing is neither direct nor transfer')
+        if not on_row(result):
+            raise ValueError('state.member_results holds a result that is not on the row (target_match same or related, relevance relevant or unresolved)')
         if result['sheet'] != row['sheet'] or result['assertion_ref'] != row['assertion_ref']:
             raise ValueError('state.member_results holds a result of another sheet or candidate')
         if normalize_identity_ref(result['target_id']) != normalize_identity_ref(row['target_id']):

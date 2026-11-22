@@ -4,13 +4,13 @@ import asyncio
 
 import pytest
 
-from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_bearing import (
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_target import (
     SUBJECT_UNIDENTIFIED_STANDING, identified_closeness)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_identity import finalize_grader, group_leaf_records
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_page_update import page_update
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_row_contract import (
     LEAF_RECORD_IDENTITY, QUALITATIVE_LOG_RATIO, SUPPORT_FACTORS)
-from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.tests.spectro_direct_cases import real_record, synthetic_record
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.tests.spectro_direct_cases import real_record, sparse_record, synthetic_record
 
 
 def leaf(record, target, partner=None):
@@ -43,8 +43,8 @@ def closeness_of(value):
     return subject_closeness
 
 
-def run(record, claim, resolve=None, closeness=1.0, name='thdf'):
-    leaves = [leaf(record, name, 'fad')]
+def run(record, claim, resolve=None, closeness=1.0, name='thdf', partner='fad'):
+    leaves = [leaf(record, name, partner)]
     graders = [finalize_grader(grader) for grader in group_leaf_records(leaves)]
     items = [{'grader': grader, 'member_records': leaves} for grader in graders]
     return asyncio.run(page_update(None, items, {'hypothesis_1': claim}, {'hypothesis_1': 'target_record'}, resolve or resolver(), closeness_of(closeness)))
@@ -54,7 +54,7 @@ def test_a_stated_turnover_bears_directly_and_supports_by_its_graded_strength():
     update = run(real_record(), {'predicate': 'catalyzes', 'subject_id': 'ThdF', 'partner_id': None})
     (state,) = update['sheet_state'].values()
     (member,) = state['member_results']
-    assert member['sheet'] == 'activity_rate' and member['experiment_type'] == 'spectro_direct' and member['bearing'] == 'direct'
+    assert member['sheet'] == 'activity_rate' and member['experiment_type'] == 'spectro_direct' and member['target_match'] == 'same' and member['relevance'] == 'relevant'
     assert member['direction'] == 'supports' and member['measured_effect'] == 0.21 and member['effect_unit'] == 's^-1'
     p = (-0.6777807052660807 + 2) / 4      # log10(0.21) against the turnover anchors 1e-2 .. 1e2
     assert member['log_ratio'] == pytest.approx(QUALITATIVE_LOG_RATIO['spectro_direct'] * (3 * p ** 2 - 2 * p ** 3), rel=1e-6)      # no variance: the spread kind is not stated
@@ -73,9 +73,23 @@ def test_a_synthetic_record_with_every_criterion_decided_has_a_near_full_weight_
 
 def test_a_claim_naming_another_substrate_does_not_bear_and_a_claim_naming_the_stated_substrate_does():
     other = run(real_record(), {'predicate': 'catalyzes', 'subject_id': 'ThdF', 'partner_id': 'NADH'})
-    assert not other['sheet_state']      # partner_contradicts_claim: different_subject, no row
+    assert not other['sheet_state']      # relevance irrelevant (other_partner): no row
     same = run(real_record(), {'predicate': 'catalyzes', 'subject_id': 'ThdF', 'partner_id': 'FAD'})
-    assert next(iter(same['sheet_state'].values()))['member_results'][0]['bearing'] == 'direct'
+    member = next(iter(same['sheet_state'].values()))['member_results'][0]
+    assert member['target_match'] == 'same' and member['relevance'] == 'relevant'
+
+
+def test_an_experiment_that_names_no_partner_and_measured_nothing_is_irrelevant_to_a_claim_that_names_one_and_stays_off_every_row():
+    # sparse_record states no effect and no statement: like the ultracentrifugation of PopZ alone against 'PopZ binds ParB'
+    claim = {'predicate': 'catalyzes', 'subject_id': 'ThdF', 'partner_id': 'FAD'}
+    update = run(sparse_record(), claim, partner=None)
+    assert not update['sheet_state']
+
+
+def test_an_experiment_that_measured_an_effect_but_names_no_partner_is_unresolved_and_enters_the_row():
+    claim = {'predicate': 'catalyzes', 'subject_id': 'ThdF', 'partner_id': 'FAD'}
+    member = only_result(run(real_record(), claim, partner=None))[1]
+    assert member['target_match'] == 'same' and member['relevance'] == 'unresolved' and member['direction'] == 'supports'
 
 
 def test_a_claim_about_another_enzyme_does_not_bear_when_the_assayed_protein_is_not_identified():
@@ -93,7 +107,7 @@ def only_result(update):
 
 def test_the_exact_sequence_is_direct_at_full_standing_and_carries_its_identification():
     row, member = only_result(run(real_record(), CLAIM))
-    assert member['bearing'] == 'direct' and member['subject_resolution'] == 'database_id' and member['subject_match_count'] == 1
+    assert member['target_match'] == 'same' and member['relevance'] == 'relevant' and member['subject_resolution'] == 'database_id' and member['subject_match_count'] == 1
     assert member['subject_record_ref'] == 'record_of_thdf' and member['subject_sequence_ref'] == 'sequence_of_thdf'
     assert member['subject_closeness'] == 1.0 and member['comparison_ref'] == 'comparison_of_record_of_thdf'
     assert identified_closeness(member) == 1.0 and row['identified_closeness'] == 1.0 and row['comparison_ref'] == 'comparison_of_record_of_thdf'
@@ -102,7 +116,7 @@ def test_the_exact_sequence_is_direct_at_full_standing_and_carries_its_identific
 def test_a_protein_of_another_name_whose_sequence_is_the_targets_bears_directly():
     update = run(real_record(), {**CLAIM, 'subject_id': 'BorF'}, name='thdf')
     _, member = only_result(update)
-    assert member['bearing'] == 'direct' and member['target_id'] == 'borf'
+    assert member['target_match'] == 'same' and member['relevance'] == 'relevant' and member['target_id'] == 'borf'
 
 
 def test_the_score_and_the_credit_scale_smoothly_with_the_closeness():
@@ -111,7 +125,7 @@ def test_the_score_and_the_credit_scale_smoothly_with_the_closeness():
     for closeness in (0.0, 0.25, 0.5, 0.75, 0.9):
         update = run(real_record(), CLAIM, closeness=closeness)
         row, member = only_result(update)
-        assert member['bearing'] == 'transfer' and member['direction'] == 'supports'
+        assert member['target_match'] == 'related' and member['relevance'] == 'relevant' and member['direction'] == 'supports'
         scores.append(row['support'])
         credits.append(update['credit']['hypothesis_1'])
         standing = SUBJECT_UNIDENTIFIED_STANDING + (1 - SUBJECT_UNIDENTIFIED_STANDING) * closeness
@@ -136,7 +150,7 @@ def test_the_closest_of_several_matches_carries_the_result_and_their_number_lowe
 def test_an_unresolved_subject_stands_at_the_bottom_of_the_scale_and_still_counts():
     update = run(real_record(), CLAIM, resolve=resolver('unresolved'))
     row, member = only_result(update)
-    assert member['bearing'] == 'direct' and member['subject_resolution'] == 'unresolved' and member['subject_closeness'] is None
+    assert member['target_match'] == 'same' and member['relevance'] == 'relevant' and member['subject_resolution'] == 'unresolved' and member['subject_closeness'] is None
     assert member['subject_record_ref'] is None and member['comparison_ref'] is None
     assert row['identified_closeness'] == SUBJECT_UNIDENTIFIED_STANDING
     full = run(real_record(), CLAIM)
