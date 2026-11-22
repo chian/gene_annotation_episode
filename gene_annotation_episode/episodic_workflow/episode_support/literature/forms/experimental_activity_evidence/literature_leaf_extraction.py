@@ -25,7 +25,7 @@ from episode_runtime import ModelRequest, Rejected, ToolCall
 
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence import literature_identity_extraction as identity
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence import (
-    literature_alpha_extraction, literature_auc_extraction, literature_bli_extraction, literature_bret_extraction,
+    literature_alpha_extraction, literature_auc_extraction, literature_bli_extraction, literature_bret_extraction, literature_colocalization_extraction,
     literature_cetsa_extraction, literature_dialysis_extraction, literature_dsf_extraction, literature_elisa_extraction,
     literature_emsa_extraction, literature_fcs_extraction, literature_fp_extraction, literature_fret_extraction,
     literature_gci_extraction, literature_itc_extraction, literature_mst_extraction, literature_pla_extraction,
@@ -38,7 +38,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.ex
     decode_response, generation_schema)
 
 # The extraction module of each experiment type: the commission's controlled value picks it (code, never the model).
-FORMS = {'spr': literature_spr_extraction, 'itc': literature_itc_extraction, 'bli': literature_bli_extraction, 'gci': literature_gci_extraction, 'fp': literature_fp_extraction, 'fret': literature_fret_extraction, 'mst': literature_mst_extraction, 'trp_quenching': literature_trp_extraction, 'fcs': literature_fcs_extraction, 'elisa': literature_elisa_extraction, 'alphascreen': literature_alpha_extraction, 'radioligand': literature_radioligand_extraction, 'spa': literature_spa_extraction, 'pulldown': literature_pulldown_extraction, 'emsa': literature_emsa_extraction, 'sec': literature_sec_extraction, 'dialysis': literature_dialysis_extraction, 'auc': literature_auc_extraction, 'split_reporter': literature_split_reporter_extraction, 'cetsa': literature_cetsa_extraction, 'y2h': literature_y2h_extraction, 'dsf': literature_dsf_extraction, 'pla': literature_pla_extraction, 'proximity': literature_proximity_extraction, 'bret': literature_bret_extraction, 'spectro_direct': literature_spectro_direct_extraction}
+FORMS = {'spr': literature_spr_extraction, 'itc': literature_itc_extraction, 'bli': literature_bli_extraction, 'gci': literature_gci_extraction, 'fp': literature_fp_extraction, 'fret': literature_fret_extraction, 'mst': literature_mst_extraction, 'trp_quenching': literature_trp_extraction, 'fcs': literature_fcs_extraction, 'elisa': literature_elisa_extraction, 'alphascreen': literature_alpha_extraction, 'radioligand': literature_radioligand_extraction, 'spa': literature_spa_extraction, 'pulldown': literature_pulldown_extraction, 'emsa': literature_emsa_extraction, 'sec': literature_sec_extraction, 'dialysis': literature_dialysis_extraction, 'auc': literature_auc_extraction, 'split_reporter': literature_split_reporter_extraction, 'cetsa': literature_cetsa_extraction, 'y2h': literature_y2h_extraction, 'dsf': literature_dsf_extraction, 'pla': literature_pla_extraction, 'proximity': literature_proximity_extraction, 'bret': literature_bret_extraction, 'colocalization': literature_colocalization_extraction, 'spectro_direct': literature_spectro_direct_extraction}
 
 SPR_INSTRUCTIONS = (
     'You are the extraction step of a system that scores how well published experiments support a proposed '
@@ -771,6 +771,50 @@ PLA_INSTRUCTIONS = (
     'itself states the value or fact; implied if the quote states it only by implication; about_something_else if the '
     'quote is on the topic but is really about another measurement or condition. For an unavailable field set support '
     'to null.')
+COLOCALIZATION_INSTRUCTIONS = (
+    'You are the extraction step of a system that scores how well published experiments support a proposed '
+    'annotation of a protein. You are given one {text} of text from a published source. The {text} may report a '
+    'fluorescence microscopy co-localization or recruitment experiment: one labelled protein (a fluorescent protein '
+    'fusion, a dye-labelled purified protein or an immunofluorescence stain) is found where the other protein is, '
+    'that is, the two co-localize in cells, or one is recruited to the site (a focus, a pole, a membrane, a '
+    'condensate or droplet, a bead) that the other makes, in the native host, in a heterologous host that has '
+    'neither protein, or as purified proteins in vitro; and the localization is lost when the other protein is '
+    'absent or its binding region is removed. The result is qualitative nearness evidence; it is no binding '
+    'constant. FRET, proximity ligation, split reporters and BiFC are other methods, and the localization or the '
+    'mobility of one protein alone is not this method. '
+    'Controls and conditions (a protein not expected to bind or the tag alone that is not recruited, the loss '
+    'without the partner, the loss when the binding region is removed, the following of the partner when it is '
+    'moved, near-native expression, a functional tagged protein, the number of cells, foci or droplets scored, the '
+    'fraction that showed it, the Pearson coefficient, the enrichment, independent experiments) decide how much the '
+    'result means. '
+    'A fixed program will later check the quality of that experiment from the statements and numbers you extract, so '
+    'you extract exactly the items listed in the answer form and nothing else. You do not judge the experiment, you '
+    'do not decide whether it is good, and you add no commentary.\n'
+    'What to return: one JSON object that answers every field of the answer form. Each field is either stated or '
+    'unavailable.\n'
+    '- stated: the {text} itself says it. Give the value (a number or one word of the fixed list the field offers), '
+    'its unit from the fixed list the field offers, and the quote, which is the exact words of the {text} that state '
+    'it, copied character for character (including any special spaces, signs and Greek letters). Keep the quote '
+    'short, only the words that state this value, but long enough that it occurs once in the {text}. You give no '
+    'positions; a program finds them.\n'
+    '- unavailable: the {text} does not state it. Give the reason from the fixed list and set value, unit and quote '
+    'to null. Never guess, never infer a value the {text} does not state, never calculate one from other numbers, and '
+    'never write 0 for a value that is not given (a percent of objects is 0 only when the {text} says that none '
+    'showed it). '
+    'For a yes/no field, answer no only when the {text} says the thing was not done or did not happen; silence is '
+    'unavailable, not no.\n'
+    'Give a value only in the field whose meaning it has: the fraction, the Pearson coefficient and the enrichment of '
+    'the test condition are different fields, and those of a control, a mutant or a deletion strain are not offered. '
+    'A fraction written as a proportion of 1 is not converted: answer unavailable with the reason '
+    'unit_not_in_vocabulary. The heterologous-host and purified-proteins fields are stated only when the {text} says in what cells, or with what purified proteins, the experiment was done. '
+    'A value that the {text} only cites from earlier work or from another method is not stated. If the {text} reports '
+    'no such co-localization or recruitment experiment at all, every field is unavailable. If it reports several such '
+    'experiments, extract the one that tests whether the two proteins the {text} is about are found together, using '
+    'only statements about that experiment.\n'
+    'For every stated field also give support, which says how well the quote supports that value: direct if the quote '
+    'itself states the value or fact; implied if the quote states it only by implication; about_something_else if the '
+    'quote is on the topic but is really about another measurement or condition. For an unavailable field set support '
+    'to null.')
 Y2H_INSTRUCTIONS = (
     'You are the extraction step of a system that scores how well published experiments support a proposed '
     'annotation of a protein. You are given one {text} of text from a published source. The {text} may report a '
@@ -1058,7 +1102,7 @@ IDENTITY_PARAGRAPH = (
     'experiment\'s organism. Give a number only when the {text} writes it, '
     'and a class only when the {text} states what the class describes. The reference to a figure, table or section is '
     'the quote of the reference as the {text} writes it, with its kind, number and panel letter.')
-INSTRUCTIONS = {'spr': SPR_INSTRUCTIONS, 'itc': ITC_INSTRUCTIONS, 'bli': BLI_INSTRUCTIONS, 'gci': GCI_INSTRUCTIONS, 'fp': FP_INSTRUCTIONS, 'fret': FRET_INSTRUCTIONS, 'mst': MST_INSTRUCTIONS, 'trp_quenching': TRP_INSTRUCTIONS, 'fcs': FCS_INSTRUCTIONS, 'elisa': ELISA_INSTRUCTIONS, 'alphascreen': ALPHA_INSTRUCTIONS, 'radioligand': RADIOLIGAND_INSTRUCTIONS, 'spa': SPA_INSTRUCTIONS, 'pulldown': PULLDOWN_INSTRUCTIONS, 'emsa': EMSA_INSTRUCTIONS, 'sec': SEC_INSTRUCTIONS, 'dialysis': DIALYSIS_INSTRUCTIONS, 'auc': AUC_INSTRUCTIONS, 'split_reporter': SPLIT_REPORTER_INSTRUCTIONS, 'cetsa': CETSA_INSTRUCTIONS, 'y2h': Y2H_INSTRUCTIONS, 'dsf': DSF_INSTRUCTIONS, 'pla': PLA_INSTRUCTIONS, 'proximity': PROXIMITY_INSTRUCTIONS, 'bret': BRET_INSTRUCTIONS, 'spectro_direct': SPECTRO_DIRECT_INSTRUCTIONS}
+INSTRUCTIONS = {'spr': SPR_INSTRUCTIONS, 'itc': ITC_INSTRUCTIONS, 'bli': BLI_INSTRUCTIONS, 'gci': GCI_INSTRUCTIONS, 'fp': FP_INSTRUCTIONS, 'fret': FRET_INSTRUCTIONS, 'mst': MST_INSTRUCTIONS, 'trp_quenching': TRP_INSTRUCTIONS, 'fcs': FCS_INSTRUCTIONS, 'elisa': ELISA_INSTRUCTIONS, 'alphascreen': ALPHA_INSTRUCTIONS, 'radioligand': RADIOLIGAND_INSTRUCTIONS, 'spa': SPA_INSTRUCTIONS, 'pulldown': PULLDOWN_INSTRUCTIONS, 'emsa': EMSA_INSTRUCTIONS, 'sec': SEC_INSTRUCTIONS, 'dialysis': DIALYSIS_INSTRUCTIONS, 'auc': AUC_INSTRUCTIONS, 'split_reporter': SPLIT_REPORTER_INSTRUCTIONS, 'cetsa': CETSA_INSTRUCTIONS, 'y2h': Y2H_INSTRUCTIONS, 'dsf': DSF_INSTRUCTIONS, 'pla': PLA_INSTRUCTIONS, 'proximity': PROXIMITY_INSTRUCTIONS, 'bret': BRET_INSTRUCTIONS, 'colocalization': COLOCALIZATION_INSTRUCTIONS, 'spectro_direct': SPECTRO_DIRECT_INSTRUCTIONS}
 
 
 # Shown only from the second extraction of a window on: what the earlier extraction already states and leaves unstated.

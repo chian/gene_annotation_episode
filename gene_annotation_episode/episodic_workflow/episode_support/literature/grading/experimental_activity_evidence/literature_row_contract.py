@@ -114,15 +114,15 @@ FEATURES_VERSION = 'a105_investigation_features_v1'
 CLASSES = ('activity_rate', 'endpoint_conversion', 'product_distribution', 'reaction_coupling', 'ligand_binding', 'transport_response', 'protein_signal', 'protein_amount')
 
 EXPERIMENT_TYPES = ('spr', 'itc', 'bli', 'gci', 'fp', 'fret', 'mst', 'trp_quenching', 'fcs', 'elisa', 'alphascreen', 'radioligand', 'spa', 'pulldown', 'emsa', 'sec', 'dialysis', 'auc', 'dsf', 'cetsa', 'bret', 'y2h', 'split_reporter', 'pla', 'proximity',
-                    'spectro_direct')
+                    'colocalization', 'spectro_direct')
 
-# The class of each experiment type: the first 25 belong to ligand_binding; the activity_rate class has its first type, spectro_direct
+# The class of each experiment type: the first 26 belong to ligand_binding; the activity_rate class has its first type, spectro_direct
 # (2026-11-21); the other types of that class and of the other six classes are added with their converters.
 CLASS_OF_EXPERIMENT_TYPE = {
     'spr': 'ligand_binding', 'itc': 'ligand_binding', 'bli': 'ligand_binding', 'gci': 'ligand_binding', 'fp': 'ligand_binding', 'fret': 'ligand_binding', 'mst': 'ligand_binding',
     'trp_quenching': 'ligand_binding', 'fcs': 'ligand_binding', 'elisa': 'ligand_binding', 'alphascreen': 'ligand_binding', 'radioligand': 'ligand_binding', 'spa': 'ligand_binding',
     'pulldown': 'ligand_binding', 'emsa': 'ligand_binding', 'sec': 'ligand_binding', 'dialysis': 'ligand_binding', 'auc': 'ligand_binding', 'dsf': 'ligand_binding', 'cetsa': 'ligand_binding',
-    'bret': 'ligand_binding', 'y2h': 'ligand_binding', 'split_reporter': 'ligand_binding', 'pla': 'ligand_binding', 'proximity': 'ligand_binding',
+    'bret': 'ligand_binding', 'y2h': 'ligand_binding', 'split_reporter': 'ligand_binding', 'pla': 'ligand_binding', 'proximity': 'ligand_binding', 'colocalization': 'ligand_binding',
     'spectro_direct': 'activity_rate',
 }
 
@@ -196,6 +196,7 @@ EXPERIMENT_TYPE_LINES = {
     'split_reporter': 'Split reporter or protein-fragment complementation (split luciferase, split GFP, BiFC): the two partners fused to halves of a reporter that reconstitutes on binding; reports a signal, detected or not.',
     'pla': 'Proximity ligation assay: antibodies against the two partners with ligatable oligonucleotides give a fluorescent spot when the partners are within about 40 nm in fixed cells; reports spots per cell, detected or not.',
     'proximity': 'Proximity labelling in cells (BioID, TurboID, APEX): a labelling enzyme fused to a bait biotinylates nearby proteins, which are identified by mass spectrometry or blot; reports enrichment over a control, detected or not.',
+    'colocalization': 'Fluorescence microscopy co-localization or recruitment: one labelled protein is found where the other is (together in cells, recruited to the focus, pole, membrane or condensate the other makes, in a native or heterologous host or as purified proteins in droplets), and not when the other is absent; reports a yes or no, a fraction of cells, foci or droplets, a Pearson coefficient or an enrichment.',
     'spectro_direct': 'Continuous direct spectrophotometric enzyme assay: absorbance of a substrate or product read over time in a cuvette or plate; reports the rate, kcat, Km or specific activity.',
 }
 
@@ -246,6 +247,8 @@ WEIGHT_UNKNOWN_BY_TYPE = {
     'fcs': 0.80, 'elisa': 0.70, 'alphascreen': 0.65, 'radioligand': 0.85, 'spa': 0.80, 'pulldown': 0.70, 'emsa': 0.75,
     'sec': 0.75, 'dialysis': 0.85, 'auc': 0.85, 'dsf': 0.70, 'cetsa': 0.65, 'bret': 0.70, 'y2h': 0.60,
     'split_reporter': 0.65, 'pla': 0.55, 'proximity': 0.60,
+    # colocalization (2026-11-22, EXPERT_REVIEW, owner to confirm): a relative image readout (where fluorescence lies) whose meaning rests on controls (an unrelated protein, the absent partner, a binding-region mutant) and on a tag and an expression level that a paper may not state; a little above PLA, whose antibody artefacts are worse, and level with proximity labelling.
+    'colocalization': 0.60,
     # spectro_direct (2026-11-21, owner to confirm; the answer chain is in literature_spectro_direct_converter.py and A105_ASSAY_CALIBRATION_DETAILS.md): an absolute rate with a well-known reference range of kcat and kcat/Km, a little under the KD anchor.
     'spectro_direct': 0.85,
 }
@@ -274,6 +277,8 @@ WEIGHT_UNKNOWN_BY_CRITERION = {
     'split_reporter': {'binding_controls': 0.55, 'binding_regime': 0.60},
     'pla': {'binding_controls': 0.50, 'calibration_applicability': 0.50, 'binding_regime': 0.70, 'sampling_basis': 0.80},
     'proximity': {'binding_parameter_definition': 0.55, 'calibration_applicability': 0.85, 'sampling_basis': 0.80},
+    # colocalization (EXPERT_REVIEW, owner to confirm): an unstated specificity control (an unrelated protein or tag alone, the absent partner) counts clearly less, as in PLA (a crowded or sticky site recruits any protein); an unstated heterologous or in-vitro system or binding-region mutant leaves a native bridge open but is common practice (0.70); an unstated tag-function or expression check is a real but ordinary gap (0.60); the number of objects and the replicates are benign when unstated (0.80).
+    'colocalization': {'binding_controls': 0.50, 'binding_regime': 0.70, 'calibration_applicability': 0.60, 'sampling_basis': 0.80},
     # spectro_direct: the blank is what separates activity from spontaneous chemistry (a real gap); a contaminating activity or a second reaction on the chromophore is the attribution risk; the extinction coefficient of the common chromophores, the mass basis of a specific activity and triplicate practice are benign when unstated.
     'spectro_direct': {'background_alternatives': 0.75, 'attribution_supported': 0.80, 'calibration_applicability': 0.90, 'normalization_basis': 0.90, 'sampling_basis': 0.90},
 }
@@ -381,7 +386,8 @@ OLD_PATH_DELETED = ('per_assertion_aggregate', 'reason_required_grading_for_a105
 # ---------------------------------------------------------------------------------------------------------------
 # (5) QUALITATIVE_LOG_RATIO: PROPOSALS, not facts. Natural-log-ratio units, the unit of grade_assay's
 # source_log_evidence_ratio and of tanh(overall / 2). Used for 'interaction_detected' (supports) and
-# 'interaction_not_detected' (opposes) alike (OWNER_DECISION 2), and the per-type maximum of a quantitative result
+# 'interaction_not_detected' (opposes) alike (OWNER_DECISION 2; times STATED_ONLY_STRENGTH for a type that can report a
+# measured effect, OWNER_DECISION 19), and the per-type maximum of a quantitative result
 # (log_ratio = QUALITATIVE_LOG_RATIO[type] * strength, QUANTITATIVE_STRENGTH). Rule: a weaker assay carries less evidence.
 # Each value is an EXPERT_REVIEW constant for the owner or an expert to correct.
 # ---------------------------------------------------------------------------------------------------------------
@@ -409,6 +415,7 @@ QUALITATIVE_LOG_RATIO = {   # OWNER_DECISION 2
     'bret': 0.5,            # EXPERT_REVIEW: cellular proximity (about 10 nm), not direct binding; overexpression artefacts.
     'proximity': 0.5,       # EXPERT_REVIEW: cellular proximity labelling shows nearness, not binding.
     'pla': 0.5,             # EXPERT_REVIEW: in-situ proximity ligation shows nearness within about 40 nm, not binding.
+    'colocalization': 0.5,  # EXPERT_REVIEW, owner to confirm: microscopy co-localization or recruitment shows nearness (within about 250 nm with diffraction-limited imaging), not contact, in the same family as bret, proximity and pla; a heterologous or purified system and the controls raise the weight through the criteria, not this value.
     'y2h': 0.4,             # EXPERT_REVIEW: heterologous nuclear reporter; high false-positive and false-negative rates.
     'split_reporter': 0.4,  # EXPERT_REVIEW: reporter reconstitution can occur through proximity or forced association; weakest direct-binding evidence.
     'spectro_direct': 1.2,  # EXPERT_REVIEW, owner to confirm (decided 2026-11-21): a direct continuous absorbance readout of the reaction on purified enzyme is the standard evidence of catalysis, so a stated rate is strong (below SPR 1.5: the chromophore change names a reaction only when the product is identified, and that is a weight criterion, not this magnitude). The same constant is the magnitude of 'activity not detected': an absent signal is limited by the assay's detection limit and the substrate and conditions tried, so it is not stronger than 1.2.
@@ -420,7 +427,7 @@ QUALITATIVE_LOG_RATIO = {   # OWNER_DECISION 2
 # nM_squared), so each scale runs on log10 of the constant. noise_end: a constant this weak is indistinguishable from the
 # type's nonspecific background or detection floor (strength 0); strong_end: a constant this tight is the strongest signal
 # the type resolves (strength 1). They are never thresholds: every value between them gets a smoothly graded strength.
-# Types whose converters fill no effect (pulldown, y2h, pla, proximity: qualitative only) have no anchors.
+# Types whose converters fill no effect (pulldown, y2h, pla, proximity, colocalization: qualitative only) have no anchors.
 # Each pair is an EXPERT_REVIEW proposal for the owner or an expert to correct.
 # ---------------------------------------------------------------------------------------------------------------
 QUANTITATIVE_STRENGTH_ANCHORS = {   # OWNER_DECISION 15
@@ -446,6 +453,26 @@ QUANTITATIVE_STRENGTH_ANCHORS = {   # OWNER_DECISION 15
     'bret': {'quantity': 'KD or Ki', 'unit': 'nM', 'noise_end': 1e5, 'strong_end': 1.0},         # EXPERT_REVIEW: cellular tracer engagement.
     'split_reporter': {'quantity': 'KD', 'unit': 'nM', 'noise_end': 1e5, 'strong_end': 10.0},    # EXPERT_REVIEW: reporter reconstitution titration; coarse.
 }
+
+# ---------------------------------------------------------------------------------------------------------------
+# (5b2) STATED_ONLY_STRENGTH (OWNER_DECISION 19; owner, 2026-11-22: "yes/no statement is weakest evidence than experimental
+# measurements"). A type that can report a measured effect (it has anchors in QUANTITATIVE_STRENGTH_ANCHORS, or it is an
+# activity_rate type) may also be stated in words alone ("binds", "no binding was detected", "active"), with no number. Such a
+# result says nothing about where on the type's scale the effect sits, so it counts as a fixed low strength on that scale:
+# log_ratio = QUALITATIVE_LOG_RATIO[type] * STATED_ONLY_STRENGTH, for a stated detection and a stated non-detection alike.
+# 0.25 is chosen so that the bare statement of even the strongest type (SPR or ITC, 1.5 * 0.25 = 0.375) stays under the
+# observed result of the weakest type (yeast two-hybrid, 0.4); a measured SPR constant counts more than the sentence whenever
+# it is tighter than about 11 uM (strength above 0.25). A type whose own result IS a yes/no observation (pulldown, y2h, pla, colocalization,
+# proximity: no anchors) keeps its full QUALITATIVE_LOG_RATIO: there the observed band, growth or signal is the measurement.
+# ---------------------------------------------------------------------------------------------------------------
+STATED_ONLY_STRENGTH = 0.25   # EXPERT_REVIEW, owner to confirm
+
+
+def stated_strength(experiment_type):
+    """The strength a result stated in words alone takes on its type's scale (OWNER_DECISION 19)."""
+    measures = experiment_type in QUANTITATIVE_STRENGTH_ANCHORS or CLASS_OF_EXPERIMENT_TYPE[experiment_type] == 'activity_rate'
+    return STATED_ONLY_STRENGTH if measures else 1.0
+
 
 # ---------------------------------------------------------------------------------------------------------------
 # (5c) ACTIVITY_STRENGTH_ANCHORS: the activity_rate class's gray-scale ends (decided 2026-11-21, owner to confirm; every
@@ -1066,6 +1093,7 @@ OWNER_DECISIONS = {
     16: ('cross-class collapse rule (revision of 2026-11-20; default)', 'main rows sharing a dataset_ref (first) or else a source_ref collapse to one unit using the MEAN support and opposition over the unit rows of known status; a row with neither key is independent; the axis sums over units (CROSS_CLASS_COLLAPSE_RULE, MAIN_ROW_INPUT_KEYS, CROSS_CLASS_DEPENDENCE_KEYS)'),
     18: ('target molecule (OWNER RULING, 2026-11-20)', "every experimental grader has a target molecule: target_id (the molecule the assay is about), optional partner_id and partner_role replace partner_a_*/partner_b_*; the target match requires the target: no stated target gives target_match not_stated (target_not_stated), no score, credit as the resolution says, and no 'target known' question is added; the target is the same when the normalized target_id equals the claim subject_id (or the sequence decides, see target_match), different when it differs; the partner is judged by relevance, not by the target match (2026-11-21, owner: 'Use target and relevance. It does make sense you need both': target asks who was measured, relevance asks what was asked; an irrelevant result stays off the row and is never scored, an unresolved one measured an interaction but names no partner and is treated on the row as before); a result of a SYMMETRIC predicate (SYMMETRIC_PREDICATES, binds) whose target is the claim's partner and whose partner is the claim's subject is the same target and relevant (reason partner_route); the row and score still belong to the claim's subject; the target applies at every level: a converted result, every subscoring row, every main row (placeholders too), the axis score channel and the investigation_finding features carry the target_id the score is about (the scoring sheet IS the annotation score, one per candidate per target; credit stays a separate quantity); target_id and partner_id are identity-bearing, compared by equality after casefold and whitespace collapse, missing skipped, agreeing is a positive tie; every identity number is stated by the leaf form in the field's canonical unit (IDENTITY_FIELDS, IDENTITY_FEATURES, POSITIVE_TIE_FEATURES, IDENTITY_REF_NORMALIZATION)"),
     17: ('effect support (revision of 2026-11-20; default)', 'a converted result carries direction_field_support, copied from the support class of the field that fixes the direction: the KD operand for a quantitative result, the field(s) the statement derives from for a qualitative one, the weakest if several; effect_support = SUPPORT_FACTORS[direction_field_support] (EFFECT_SUPPORT_FIELD, SUPPORT_WEAKEST_ORDER, RESULT_FIELDS.direction_field_support)'),
+    19: ('a result stated in words alone is weaker than a measured one (owner, 2026-11-22)', 'for a type that can report a measured effect, a stated detection or non-detection without a number counts QUALITATIVE_LOG_RATIO[type] * STATED_ONLY_STRENGTH (stated_strength); a type whose own result is a yes/no observation keeps its full value'),
 }
 
 

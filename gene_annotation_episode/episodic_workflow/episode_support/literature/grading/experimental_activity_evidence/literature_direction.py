@@ -23,7 +23,9 @@ point value in the anchors' unit and the variance (when stated) a positive numbe
 converter error and raises ValueError. No unit is converted.
 
 QUALITATIVE (no effect operand, converted['qualitative_effect']['statement']): interaction_detected -> supports,
-interaction_not_detected -> opposes, both with log_ratio = QUALITATIVE_LOG_RATIO[experiment_type];
+interaction_not_detected -> opposes, both with log_ratio = QUALITATIVE_LOG_RATIO[experiment_type] * stated_strength(type):
+for a type that can report a measured effect a result stated in words alone counts STATED_ONLY_STRENGTH of the type's value,
+so it is weaker than a measured one (OWNER_DECISION 19); a type whose own result is a yes/no observation keeps the full value;
 interaction_not_stated -> unknown with null. A missing result is never opposition.
 
 Neither case present (no effect and no qualitative statement): unknown with null.
@@ -39,6 +41,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     QUALITATIVE_LOG_RATIO,
     QUALITATIVE_STATEMENT,
     QUANTITATIVE_STRENGTH_ANCHORS,
+    stated_strength,
     SUPPORT_CLASSES,
     SUPPORT_FACTORS,
 )
@@ -94,7 +97,8 @@ def _qualitative(converted):
     if statement == 'interaction_not_stated':
         return _unknown()
     return {'direction': 'supports' if statement == 'interaction_detected' else 'opposes',
-            'log_ratio': QUALITATIVE_LOG_RATIO[converted['experiment_type']], 'effect_support': _effect_support(converted)}
+            'log_ratio': QUALITATIVE_LOG_RATIO[converted['experiment_type']] * stated_strength(converted['experiment_type']),
+            'effect_support': _effect_support(converted)}
 
 
 def _check_output(result):

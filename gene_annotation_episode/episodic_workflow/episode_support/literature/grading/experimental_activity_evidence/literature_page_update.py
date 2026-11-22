@@ -76,6 +76,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_itc_converter import convert_itc
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_main_sheet import merge_main
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_mst_converter import convert_mst
+from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_colocalization_converter import convert_colocalization
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_pla_converter import convert_pla
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_populated_grader import GRADERS
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_proximity_converter import convert_proximity
@@ -115,7 +116,7 @@ CONVERTERS = {
     'mst': convert_mst, 'trp_quenching': convert_trp, 'fcs': convert_fcs, 'elisa': convert_elisa, 'alphascreen': convert_alpha,
     'radioligand': convert_radioligand, 'spa': convert_spa, 'pulldown': convert_pulldown, 'emsa': convert_emsa, 'sec': convert_sec,
     'dialysis': convert_dialysis, 'auc': convert_auc, 'dsf': convert_dsf, 'cetsa': convert_cetsa, 'bret': convert_bret,
-    'y2h': convert_y2h, 'split_reporter': convert_split_reporter, 'pla': convert_pla, 'proximity': convert_proximity,
+    'y2h': convert_y2h, 'split_reporter': convert_split_reporter, 'pla': convert_pla, 'proximity': convert_proximity, 'colocalization': convert_colocalization,
     'spectro_direct': convert_spectro_direct,
 }
 

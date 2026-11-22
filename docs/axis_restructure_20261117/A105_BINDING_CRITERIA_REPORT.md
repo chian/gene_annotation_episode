@@ -806,3 +806,29 @@ The concentration_series degree is the smallest of the count, the low end and th
   - Binding constant: an enrichment is never a KD.
   - Matrix recovery, attribution fractions, nuisance-condition response, target prediction, degrees of freedom: not filled (NULL_REASONS).
 
+
+
+### Microscopy co-localization / recruitment (colocalization)
+
+- Effect: none. A fraction of scored objects, a Pearson coefficient or an enrichment is never a KD and never pools, so there is no effect, no variance and no strength anchors. Only the stated co-localized or recruited (detected) or not (not detected) counts, with QUALITATIVE_LOG_RATIO = 0.5. "Detected" here means nearness (within about 250 nm with diffraction-limited imaging), not contact. The enrichment is carried beside the result. Draft of 2026-11-22; every number below is EXPERT_REVIEW, owner to confirm, from the drafter's memory and not web-verified. The five files were written and read but not run.
+- Unknown weight: type 0.60. Overrides: binding_controls 0.50, calibration_applicability 0.60, binding_regime 0.70, sampling_basis 0.80.
+
+| Sheet criterion | What is read from the paper | Full agreement at | Zero at | Shape between | Can it conflict | Relative to what |
+|---|---|---|---|---|---|---|
+| binding_parameter_definition (colocalization_readout, fraction) | Percent of the scored cells, foci or droplets that show the co-localization | 80 percent | 10 percent | linear in the percent | Only when every stated readout number is at or below its zero end (the best degree of the stated numbers counts) | Absolute (no unrelated-protein fraction collected) |
+| binding_parameter_definition (colocalization_readout, Pearson) | Pearson coefficient of the two channels | 0.7 | 0.2 | linear | As above | Absolute (a coefficient reads low for a small focus in a large cell, hence the best-of rule) |
+| binding_parameter_definition (colocalization_readout, enrichment) | Signal at the partner's site over the signal elsewhere (partition coefficient) | 3 | 1 | linear in the log of the ratio | As above | The paper's own surroundings |
+| binding_controls (specificity_control) | Facts: an unrelated protein or the tag alone is not recruited; the localization is lost without the partner | yes on either (one stated control is a control) | a stated no on either | fact rule | Yes, any no | The paper's own controls |
+| binding_regime (directness) | Facts: a binding-region mutant no longer co-localizes; the protein follows the partner when it is moved; the facts heterologous_host and purified_proteins (either yes gives a supported reading by itself) | a yes fact, or a heterologous host or purified proteins stated | a stated no on either fact | fact rule; the native host alone is unknown, never conflicting | Yes, a stated no on a fact | The paper's own mutants |
+| calibration_applicability (expression_validity) | Facts: near-native expression (not applicable for purified proteins); the tagged protein is functional or the tag does not change the localization | yes on both | a stated no on either | shared fact rule | Yes, any no | The paper's own checks |
+| sampling_basis (objects_counted) | Number of cells, foci or droplets scored; the quantification fact (a stated no, one representative image, conflicts) | 100 objects | none (10 objects give about 0.32, 50 about 0.71) | min(1, sqrt(n / 100)) | Only through the fact stated no | Absolute count |
+| sampling_basis (replicates) | Number of independent experiments | 3 | none (1 gives about 0.58, 2 about 0.82) | min(1, sqrt(n / 3)) | Only if independence is stated no (grader) | Absolute count |
+
+- Facts that decide without a curve: colocalization_observed (sets the statement; a stated yes or no both make the criterion supported), the facts of specificity_control, directness and expression_validity, quantified_over_many_cells (sampling_basis).
+- Values marked "owner to confirm" in the code: all of them: ENRICHMENT_FULL_AGREEMENT 3 / ENRICHMENT_ZERO_AGREEMENT 1, PEARSON_FULL_AGREEMENT 0.7 / PEARSON_ZERO_AGREEMENT 0.2, FRACTION_FULL_AGREEMENT_PERCENT 80 / FRACTION_ZERO_AGREEMENT_PERCENT 10, OBJECTS_COUNTED_FULL_CREDIT 100, REPLICATES_FULL_CREDIT 3, and the contract values (QUALITATIVE_LOG_RATIO 0.5, type weight 0.60, criterion weights).
+- Not collected, with the stated reason:
+  - Fraction or Pearson coefficient of the unrelated protein under the same conditions: not collected; the fact unrelated_protein_not_recruited carries it as yes or no.
+  - Imaging mode: recorded for the reviewer, not judged; diffraction-limited imaging limits the claim to nearness, which the type weight carries.
+  - Pearson significance test per image (Costes randomisation): not collected; no stated number to judge.
+  - Binding constant: a fraction, a coefficient or an enrichment is never a KD.
+  - Matrix recovery, attribution fractions, nuisance-condition response, target prediction, degrees of freedom: not filled (NULL_REASONS).
