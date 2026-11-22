@@ -44,7 +44,7 @@ from episode_runtime import ChildCall, CustodyError, ModelRequest, Rejected, Too
 
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.search_result_assessment import (
-    article_sources, assess_search_results as assess_results, source_kind)
+    articles_held_with_text, assess_search_results as assess_results, source_kind)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_record_publications import (
     PARTIAL_LIST, record_publications, resolve_queries, target_record_refs, with_full_text)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_sequence_discovery import (
@@ -232,10 +232,11 @@ async def fetch_search_hit(arguments, ctx):
     """The paper of the picked hit: the operation of ``public.literature.read`` on the hit's PMCID, run by code for the
     model's pick. Its outcome is the unit's outcome like any other, whatever the provider answered: a failed fetch is an
     outcome that completes the hit and is reported to the model with the provider status. An article this episode
-    already holds in full (an earlier run fetched it) is not fetched again: the unit completes on the held source, so
-    the article has one record. The page is commissioned by code once this unit completed (``decide``)."""
+    already holds with its text (an earlier fetch whose records it was given) is not fetched again: the unit completes
+    on the held source, so the article has one record. A source record held without its text is fetched: the page
+    reads the text. The page is commissioned by code once this unit completed (``decide``)."""
     pmcid = arguments['arguments']['hit']
-    held = article_sources(ctx.store).get(pmcid)
+    held = articles_held_with_text(ctx.store).get(pmcid)
     if held:
         return {'status': 'completed',
                 'operation_ref': identity('operation', {'key': ctx.operation_key, 'name': FETCH, 'arguments': arguments}),

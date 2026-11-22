@@ -240,6 +240,21 @@ def article_sources(records):
     return held
 
 
+def articles_held_with_text(records):
+    """``article_sources`` narrowed to the sources whose text artifact ``records`` holds too. Holding a source record
+    does not hold the text it names (custody: "holding a record does not hold the records it names"): an episode handed
+    only the source record of a paper another episode fetched knows the article (``article_sources``: it is the same
+    article, and what was examined stays examined) but cannot hand its text to a page, and has to fetch it (found in the
+    real run a105_head_popz_chpt_17: a second literature round received the lead source records of the first without
+    their texts, took a paper as held, and its page failed with ``record_not_held`` on the text)."""
+    held = {}
+    for accession, refs in article_sources(records).items():
+        with_text = [ref for ref in refs if records.holds(records.get(ref)['text_ref'])]
+        if with_text:
+            held[accession] = with_text
+    return held
+
+
 def hit_candidate(hit):
     """One hit as a possible page child: its id (the PMCID the planner selects), its provider rank, its title and its
     description (journal, year and the abstract the provider returned, which Jev measures when the result has no
@@ -248,6 +263,6 @@ def hit_candidate(hit):
             'description': f"{hit['journal']}, {hit['year']}. {hit['abstract']}"}
 
 
-__all__ = ['JEV_PAGE_TEXT_TOKEN_LIMIT', 'SEARCH_PAGE_SELECTION_VERSION', 'article_sources',
+__all__ = ['JEV_PAGE_TEXT_TOKEN_LIMIT', 'SEARCH_PAGE_SELECTION_VERSION', 'article_sources', 'articles_held_with_text',
            'assess_search_results', 'hit_candidate', 'is_article', 'is_search_response', 'provider_hits', 'ranked_hits',
            'search_planner_context', 'source_kind']
