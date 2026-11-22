@@ -19290,3 +19290,15 @@ heavy tools. Real runs from pinned worktrees: RecA credit 29.05 (the tool +10.56
 (the tool ran and returned `no_transplants`, as predicted). A first CspA run never offered the tool because the child had taken an
 ESMFold model. Records: `docs/plan/designs/a102_ligand_transplants.md`. Open: metal ions lead the ligand list ahead of the
 nucleotide for RecA; no independent check of these three runs yet.
+
+## 2026-11-21 — A102 head runs RNA targets: `rna_family_scan` and `rna_structure_agreement`
+
+Scope: two tools of the A102 head for a target whose molecule is RNA (commit `bb77b45c1`): a local Infernal `cmscan` over Rfam 15.1
+(which structured RNA family; value from the bit score against the family's curated threshold) and, when the scan lists at least two
+families, the share of each family's consensus base pairs the target can form (`cmalign`). A protein target is offered neither and an
+RNA target none of the protein tools. Not in scope: an RNA gene supplied as DNA, the thermodynamic fold (ViennaRNA) and a curated
+structure of the exact RNA (both recorded as later, light), the heavy tools. Three real runs from the pinned worktree
+`gae_rna_bb77b45c1`, the first RNA targets the head has run: E. coli RNase P RNA (credit 0.906), the thiM TPP riboswitch leader
+(0.632) and 16S rRNA (4.053: four families of one clan, then one differential of 0.066 from the agreement test); each ended by its
+estimator, each credit equal to its prediction. Records: `docs/plan/designs/a102_rna_tools.md`. Open: no independent check of the
+runs yet; the scan's value saturates far above the threshold.

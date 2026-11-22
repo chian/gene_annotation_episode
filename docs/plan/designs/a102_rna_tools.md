@@ -159,3 +159,27 @@ Not verified: the units against the real store and the job service (custody, the
 model's choice of the tools, the forecast controller with the new ceiling versions (`a102_ceiling_v1` for both) and the credit
 definition v6, the minus-strand span (`span_of` reverse complements; no minus-strand hit occurred), a family whose consensus has no
 pair.
+
+## Real runs (2026-11-21; worktree `gae_rna_bb77b45c1`, commit `bb77b45c1`, real model, local Infernal jobs through the job service, exchange rate 0.002)
+
+The first RNA targets the head has run. Each a fresh workspace and run id (builder: the scratchpad `build_ws_rna.py`: `init --molecule
+rna`, the settings `infernal_executable_directory` and `covariance_databases`). All three: exit 0, empty `stderr.log`, `ended_by`
+`yield_stop`, no `action_forecast_not_worth_its_cost` refusal, no rise above a ceiling; every credit equals its prediction. Read from
+the journals by the lead; no independent check yet.
+
+| target | workspace, run dir, run id | s | unit | action | ceiling | rise | credit after | unit s |
+|---|---|---|---|---|---|---|---|---|
+| rnpB (377 nt) | `runs/a102_rna_ws_rnpb_1`, `runs/a102_rna_run_rnpb_1_bb77b45c1`, `a102_rna_rnpb_1` | 19 | 0 | `rna_family_scan` | 4227 | 0.9059 | 0.9059 | 13.0 |
+| thiM leader (181 nt) | `runs/a102_rna_ws_thim_1`, `runs/a102_rna_run_thim_1_bb77b45c1`, `a102_rna_thim_1` | 17 | 0 | `rna_family_scan` | 4227 | 0.6323 | 0.6323 | 11.7 |
+| 16S rRNA (1542 nt) | `runs/a102_rna_ws_rrs_1`, `runs/a102_rna_run_rrs_1_bb77b45c1`, `a102_rna_rrs_1` | 46 | 0 | `rna_family_scan` | 4227 | 3.9867 | 3.9867 | 27.4 |
+| | | | 1 | `rna_structure_agreement` | 1 | 0.0663 | 4.0531 | 14.1 |
+
+Families at the end: rnpB RNaseP_bact_a 0.906; thiM TPP 0.632; 16S SSU_rRNA_bacteria 1.936 (scan 0.999, agreement 0.937),
+SSU_rRNA_microsporidia 1.908 (0.995, 0.913), SSU_rRNA_archaea 1.869 (0.998, 0.871), SSU_rRNA_eukarya 1.773 (0.995, 0.779). The true
+family leads in each. After a one-family scan the only offered action had ceiling 0 and the estimator ended the head after one unit.
+
+What the runs show and is left as it is: the scan's value saturates for a hit far above its family's threshold, so the four 16S
+families enter at nearly 1 each (bit scores 1579, 1025, 725, 694) and it is the agreement test that separates them; the agreement
+value is a share of each family's OWN consensus pairs, so a smaller model (microsporidia, 366 pairs) can stand above a larger one
+(archaea, 457) that fits worse in absolute pairs. Not exercised in a real run: a hit on the minus strand; `no_family`; a family with
+no consensus pair.
