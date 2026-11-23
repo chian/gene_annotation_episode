@@ -60,6 +60,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_s
     FAILURE_CODES, JobApplication, _choose, _failed, check_resource_and_continuation)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.uniprot_hit_names import (
     BATCH, FIELDS as UNIPROT_FIELDS, SEARCH_URL as UNIPROT_URL, SETTLE, name_hits)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.bvbrc_family_of_proteins import (
+    BATCH as FAMILY_BATCH, SERVICE as FAMILY_SERVICE, SOURCE as FAMILY_SOURCE, lookup as family_lookup)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.pdb_chain_proteins import (
     GRAPHQL_URL as RCSB_URL, SERVICE as RCSB_SERVICE, name_pdb_hits)
 
@@ -217,9 +219,11 @@ def reusable_search(reader, model_artifact_ref, database):
 
 def metadata_settings(database):
     """The settings of the hit metadata as a data product (closed JSON): the data service, the fields asked of each hit's
-    entry, the batch and the settling step of the naming (``uniprot_hit_names.name_hits``); for ``pdb100`` also the service
+    entry, the batch and the settling step of the naming (``uniprot_hit_names.name_hits``), and the BV-BRC family service of the
+    named proteins (``bvbrc_family_of_proteins``); for ``pdb100`` also the service
     that gives the chain's accession (``pdb_chain_proteins``)."""
-    settings = {'service': METADATA_PROVIDER, 'url': UNIPROT_URL, 'fields': UNIPROT_FIELDS, 'batch': BATCH, 'settle': SETTLE}
+    settings = {'service': METADATA_PROVIDER, 'url': UNIPROT_URL, 'fields': UNIPROT_FIELDS, 'batch': BATCH, 'settle': SETTLE,
+                'family_service': FAMILY_SERVICE, 'family_source': FAMILY_SOURCE, 'family_batch': FAMILY_BATCH}
     return settings if database != 'pdb100' else {**settings, 'chain_service': RCSB_SERVICE, 'chain_url': RCSB_URL}
 
 
@@ -273,7 +277,7 @@ def describe_identity(reader, handoff):
 def extract(ctx, handoff_ref, request, commission):
     """Fetch the result of the finished job and grade it, in the same unit; keep through custody: the result (labelled
     ``structure_search_results``), the grading artifact and a source of provider ``foldseek_search`` over the result, the UniProt
-    replies (``search_hit_metadata``, with a source of provider ``uniprot_data``) and the grading as a ``tool_grading_sheet``
+    replies and the BV-BRC family replies of the named proteins (``search_hit_metadata``, with a source of provider ``uniprot_data``) and the grading as a ``tool_grading_sheet``
     data product. What the job was given is read from the handoff row (its identity and its staged model file). A fault of the
     parsing or grading is returned once as ``grading_refused`` (or ``result_of_another_query``)."""
     store, query_ref = ctx.store, commission['query_ref']
@@ -299,8 +303,16 @@ def extract(ctx, handoff_ref, request, commission):
         measured = measure_hits(parsed['hits'], model_ca, len(sequence))
         values = [None if is_model_itself(hit, facts) else value['B'] for hit, value in zip(parsed['hits'], measured)]
         hits, found = name_and_chain_hits(identity['database'], parsed['hits'], values)
+        families = family_lookup(list(found['products']))
+        identifiers = {accession: [*found['metadata'][accession]['function_identifiers'],
+                                   *({'source': FAMILY_SOURCE, 'identifier': family}
+                                     for family in families['families'].get(accession, ()))]
+                       for accession in found['products']}
         sheet = grade_structure_search(hits, model_ca, len(sequence),
-                                       {'products': found['products'], 'asked': found['asked']},
+                                       {'products': found['products'], 'asked': found['asked'],
+                                        'function_identifiers': identifiers,
+                                        'not_looked_up': [accession for accession in found['products']
+                                                          if accession not in families['looked_up']]},
                                        database=identity['database'], mode=identity['mode'], model_facts=facts,
                                        measured=measured)
     except (ValueError, ContractError) as error:
@@ -309,6 +321,12 @@ def extract(ctx, handoff_ref, request, commission):
     grading = {'sheet': sheet}
     remote = handoff['detail']['native']['remote_id']
     metadata = {'service': METADATA_PROVIDER, 'url': UNIPROT_URL, 'fields': UNIPROT_FIELDS, 'batch': BATCH, 'settle': SETTLE,
+                'family_service': {'service': FAMILY_SERVICE, 'source': FAMILY_SOURCE, 'batch': FAMILY_BATCH,
+                                   'families': families['families'], 'looked_up': families['looked_up'],
+                                   'failures': families['failures'],
+                                   'replies': [{'collection': reply['collection'], 'request': reply['request'],
+                                                'sha256': reply['sha256'], 'media_type': reply['media_type'],
+                                                'body': json.loads(reply['content'])} for reply in families['replies']]},
                 'replies': [{'url': reply['url'], 'status': reply['status'], 'sha256': reply['sha256'],
                              'media_type': reply['media_type'], 'body': json.loads(reply['content'])}
                             for reply in found['replies']],
@@ -349,9 +367,10 @@ def extract(ctx, handoff_ref, request, commission):
             'hit_count': sheet['hit_count'], 'named_count': sheet['named_count'], 'not_asked_count': sheet['not_asked_count'],
             'control_count': sheet['control_count'],
             'candidate_count': sum(1 for row in sheet['candidates'] if row['mean_B'] is not None),
-            'metadata_request_count': (len(found['replies']) + len(found['failures'])
+            'metadata_request_count': (len(found['replies']) + len(found['failures']) + len(families['replies'])
+                                       + len(families['failures'])
                                        + len(found.get('rcsb_replies', ())) + len(found.get('rcsb_failures', ()))),
-            'metadata_failure_count': len(found['failures']) + len(found.get('rcsb_failures', ())), 'naming_batch_count': found['naming']['batches'],
+            'metadata_failure_count': len(found['failures']) + len(families['failures']) + len(found.get('rcsb_failures', ())), 'naming_batch_count': found['naming']['batches'],
             'naming_stopped': found['naming']['stopped']}
 
 

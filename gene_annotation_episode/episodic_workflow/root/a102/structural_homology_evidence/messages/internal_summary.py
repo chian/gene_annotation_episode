@@ -32,7 +32,8 @@ source, its target and the counts of its sheet).
 ``job_records.returned_with_names`` (the records chosen with everything they name, recursively, among the held records), as every
 child's returned lists are: the parent holds what a returned record names."""
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.candidate_measurements import (
-    held_partner_analyses, held_rna_agreements, held_rna_scans, held_searches, held_site_tests, held_sources, held_transplant_models)
+    held_partner_analyses, held_rna_agreements, held_rna_scans, held_searches, held_site_tests, held_sources, held_transplant_models,
+    matched_proteins)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.tool_grading_artifacts import (
     source_tool_grading_entries)
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import (
@@ -231,6 +232,7 @@ def internal_summary(view):
     model_rows = [{**row, 'query_ref': next(sequence_of[ref] for ref in row['used'] if ref in sequence_of)}
                   for row in products(records, MODEL_KIND)]
     table = held_candidate_table(parent, records)
+    behind = matched_proteins(records, scope, held_sources(records))
     searches = graded_rows(records)
     site_rows = site_test_rows(records)
     partner_rows = partner_test_rows(records)
@@ -248,7 +250,8 @@ def internal_summary(view):
             'target_ref': ref, 'molecule': target['molecule'], 'search_count': len(mine),
             'hit_count': sum(item['hit_count'] for item in mine), 'named_count': sum(item['named_count'] for item in mine),
             'not_asked_count': sum(item['not_asked_count'] for item in mine),
-            'candidate_count': _counts(row)['product'], 'candidates': _leading(row),
+            'candidate_count': _counts(row)['product'],
+            'candidates': [{**candidate, **behind[ref][candidate['name']]} for candidate in _leading(row)],
             'ligand_candidate_count': _counts(row)['ligand'], 'nucleic_acid_candidate_count': _counts(row)['nucleic_acid'],
             'partner_candidates': _partners(row),
             'partner_tests': [{key: item[key] for key in PARTNER_TEST_FIELDS} for item in partner_rows if item['query_ref'] == ref],

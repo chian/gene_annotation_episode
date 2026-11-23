@@ -15,7 +15,7 @@ CLOSED UNDER NAMING: each is ``internal_summary``'s ``returned_refs`` entry, bui
 from method_loop import ChoiceField, Field, RecordForm
 
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.candidate_measurements import (
-    VOCABULARIES)
+    LEADING_PROTEINS, VOCABULARIES)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.ligand_transplants_sheet import (
     OUTCOMES)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.rna_family_scan_sheet import (
@@ -24,6 +24,12 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.structura
     SITE_SOURCES)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.foldseek_search import (
     MODEL_ORIGINS)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.uniprot_hit_names import (
+    IDENTIFIER_SOURCES as ENTRY_IDENTIFIER_SOURCES, PANTHER_SUBFAMILY)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.bvbrc_family_of_proteins import (
+    SOURCE as FAMILY_SOURCE)
+
+IDENTIFIER_SOURCES = (FAMILY_SOURCE, *ENTRY_IDENTIFIER_SOURCES.values(), PANTHER_SUBFAMILY)
 
 WAITING_FORM = RecordForm({
     'slot': ChoiceField('text', 'The child episode the job runs under', ('structure_search', 'partner_cofolding')),
@@ -34,6 +40,19 @@ SHEET_FORM = RecordForm({
     'sheet': Field('text', 'The subscoring sheet: the kind of test (the part of the test name before the @)'),
     'value': Field('number', 'The candidate\'s value on the sheet: the sum of its values in the tests of that kind'),
 })
+FUNCTION_IDENTIFIER_FORM = RecordForm({
+    'source': ChoiceField('text', 'Where the identifier is from: the BV-BRC global protein family of a matched '
+                                  'protein, or a cross reference of its UniProt entry (NCBIfam, PANTHER subfamily, HAMAP rule, '
+                                  'OrthoDB group, eggNOG group, PIRSF)',
+                          IDENTIFIER_SOURCES),
+    'identifier': Field('text', 'The identifier exactly as its source gives it'),
+    'hit_count': Field('integer', 'The matched proteins of the candidate whose entry carries it'),
+})
+LEADING_PROTEIN_FORM = RecordForm({
+    'source': ChoiceField('text', 'The database the accession is from', ('uniprot',)),
+    'accession': Field('text', 'The protein\'s accession'),
+    'value': Field('number', 'Its highest value (B) in the searches that matched it'),
+})
 CANDIDATE_FORM = RecordForm({
     'vocabulary': ChoiceField('text', 'The vocabulary of the candidate: product (the function name of a hit), ligand (a ligand bound '
                                       'to a matched protein, or placed in the model), nucleic_acid (DNA or RNA bound to it) or rna_family (a structured RNA family '
@@ -43,6 +62,18 @@ CANDIDATE_FORM = RecordForm({
     'score': Field('number', 'The candidate\'s annotation score: the sum of its sheet values, that is, of its mean value '
                              '(0 to 1) in each test it has undergone'),
     'sheets': Field('list', 'The candidate\'s subscoring sheets, one per kind of test it has undergone', items=SHEET_FORM),
+    'hit_count': Field('integer', 'For a product: the matched proteins that carry this name and have a value (a protein matched '
+                                  'by several searches counts once)', required=False),
+    'function_identifiers': Field('list', 'For a product: the function-level identifiers of the proteins behind it, read from '
+                                          'the UniProt entries of its matched proteins, the one most of them carry first. The '
+                                          'candidates are returned as found: none is merged with another',
+                                  items=FUNCTION_IDENTIFIER_FORM, required=False),
+    'hits_without_identifier': Field('integer', 'For a product: its matched proteins that carry no identifier of any source '
+                                                'and whose BV-BRC family lookup was made', required=False),
+    'hits_not_looked_up': Field('integer', 'For a product: its matched proteins whose BV-BRC family lookup was not made or failed '
+                                           '(their family is unknown, not absent)', required=False),
+    'leading_proteins': Field('list', 'For a product: the matched proteins behind it, the highest value first, at most '
+                                      + str(LEADING_PROTEINS), items=LEADING_PROTEIN_FORM, required=False),
 })
 SITE_TEST_FORM = RecordForm({
     'search_ref': Field('text', 'The graded structure search whose matched proteins the test carried onto the target (a record '

@@ -15,7 +15,12 @@ is not HTTP 200 is a failure of that batch (``uniprot_http_<status>``): its hits
 THE PRODUCT NAME of an accession is UniProt's RECOMMENDED protein name (``proteinDescription.recommendedName.fullName``).
 An entry with no recommended name but a submitted one takes its first submitted name (``submissionNames[0]``) and is flagged
 ``name_source`` ``submitted``; an entry with neither has no name (asked, no product). The EC numbers (``ecNumbers`` of the
-recommended name) and the GO ids (cross references of database ``GO``) are kept as metadata.
+recommended name) and the GO ids (cross references of database ``GO``) are kept as metadata, and so are the entry's
+FUNCTION-LEVEL IDENTIFIERS (``function_identifiers``): its HAMAP, NCBIfam, PANTHER SUBFAMILY, OrthoDB, eggNOG and PIRSF cross
+references, asked for in the same request (``xref_*`` fields). A PANTHER cross reference without ``:SF`` is a family, wider than one
+function: it is not kept. They say what the protein behind a name is, for a parent that decides which candidate annotations are
+the same; this module and the head merge nothing by them. The BV-BRC global family of an accession is asked for by
+``bvbrc_family_of_proteins``.
 
 THE NAMING RULE is that of A101's ``bvbrc_hit_metadata.name_hits``: the hits are named in RANK ORDER in batches of ``BATCH``
 (100). After each batch the candidate list of the hits named so far is computed with the axis's own arithmetic
@@ -40,7 +45,11 @@ SETTLE = 0.01
 SPACING_SECONDS = 3
 SOURCE = 'uniprot:uniprotkb_search'
 SEARCH_URL = 'https://rest.uniprot.org/uniprotkb/search'
-FIELDS = 'accession,protein_name,ec,go_id,annotation_score,reviewed'
+FIELDS = ('accession,protein_name,ec,go_id,annotation_score,reviewed,'
+          'xref_hamap,xref_ncbifam,xref_panther,xref_orthodb,xref_eggnog,xref_pirsf')
+# The function-level identifiers of an entry, read from its cross references: the source name of each database.
+IDENTIFIER_SOURCES = {'HAMAP': 'hamap', 'NCBIfam': 'ncbifam', 'OrthoDB': 'orthodb', 'eggNOG': 'eggnog', 'PIRSF': 'pirsf'}
+PANTHER_SUBFAMILY = 'panther_subfamily'
 
 
 def _batches(values):
@@ -58,9 +67,22 @@ def product_name(entry):
     return None, None
 
 
+def function_identifiers(entry):
+    """The function-level identifiers of one UniProt JSON entry, in the order of its cross references: ``[{'source',
+    'identifier'}]`` with the identifier exactly as UniProt gives it; a PANTHER cross reference without ``:SF`` is not returned."""
+    found = []
+    for ref in entry.get('uniProtKBCrossReferences', ()):
+        if ref['database'] in IDENTIFIER_SOURCES:
+            found.append({'source': IDENTIFIER_SOURCES[ref['database']], 'identifier': ref['id']})
+        elif ref['database'] == 'PANTHER' and ':SF' in ref['id']:
+            found.append({'source': PANTHER_SUBFAMILY, 'identifier': ref['id']})
+    return found
+
+
 def _entry_metadata(entry):
     description = entry.get('proteinDescription', {})
     return {'ec': [ec['value'] for ec in description.get('recommendedName', {}).get('ecNumbers', ())],
+            'function_identifiers': function_identifiers(entry),
             'go': sorted(ref['id'] for ref in entry.get('uniProtKBCrossReferences', ()) if ref.get('database') == 'GO'),
             'annotation_score': entry.get('annotationScore'),
             'reviewed': entry.get('entryType', '').startswith('UniProtKB reviewed')}
@@ -68,7 +90,7 @@ def _entry_metadata(entry):
 
 def lookup(accessions):
     """One request for the entries of ``accessions`` (at most ``BATCH``): ``{'products': {accession: {'product',
-    'name_source'}}, 'metadata': {accession: {'ec', 'go', 'annotation_score', 'reviewed'}}, 'reply': {...}}`` or, when the
+    'name_source'}}, 'metadata': {accession: {'ec', 'function_identifiers', 'go', 'annotation_score', 'reviewed'}}, 'reply': {...}}`` or, when the
     service did not answer 200 (``'uniprot_http_<status>'``) or the transport failed (``'uniprot_request_failed:<error type>'``),
     ``{'failure': code, ...}``. An entry is matched to the accession asked by
     its primary accession or one of its secondary accessions. The ``reply`` keeps the request, the URL, the status and the

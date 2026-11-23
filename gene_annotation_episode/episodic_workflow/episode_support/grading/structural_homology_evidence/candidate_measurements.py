@@ -183,7 +183,7 @@ def _read(reader, scope, sources):
         for entry in source_tool_grading_entries(reader, reference):
             sheet = entry['grading']['sheet']
             if sheet['schema'] not in (SEARCH_SHEET, SITE_SHEET, CONTACTS_SCHEMA, PARTNERS_SCHEMA, TRANSPLANT_SHEET, RNA_SCAN_SHEET,
-                                    RNA_AGREEMENT_SHEET):
+                                    RNA_AGREEMENT_SHEET, COFOLDING_SHEET):
                 continue
             target = source['operand_refs'][0]
             if target not in scope['subject_refs']:
@@ -224,6 +224,58 @@ def _read(reader, scope, sources):
             unnamed[target]['no_product'] += sheet['no_name_count']
             unnamed[target]['no_value'] += sum(1 for row in sheet['hits'] if row['product'] is not None and row['B'] is None)
     return measurements, unnamed
+
+
+LEADING_PROTEINS = 5
+
+
+def matched_proteins(reader, scope, sources):
+    """The proteins behind each product candidate, per target of the scope: ``{target: {product name: {'hit_count',
+    'function_identifiers', 'hits_without_identifier', 'hits_not_looked_up', 'leading_proteins'}}}``, over the hits of the held
+    graded structure searches that carry that name and have a value (a protein hit by several searches counts once and takes
+    its highest value). ``hit_count``: those proteins. ``function_identifiers``: ``[{'source', 'identifier', 'hit_count'}]``,
+    one entry per (source, identifier) with the number of the candidate's proteins that carry it, the one most carry first
+    (ties in the order found). ``hits_without_identifier``: the proteins that carry no identifier of any source (and whose
+    BV-BRC family lookup was made). ``hits_not_looked_up``: the proteins whose BV-BRC family lookup was not made or failed (no
+    family is not known for them). ``leading_proteins``: ``[{'source': 'uniprot', 'accession', 'value'}]``, the highest value
+    first, at most ``LEADING_PROTEINS``. A parent reads what a candidate is from these, never from the name; nothing here merges
+    two candidates."""
+    scope = reader.validate_scope(scope)
+    found = {target: {} for target in scope['subject_refs']}
+    for reference in sources:
+        source = reader.get(reference)
+        for entry in source_tool_grading_entries(reader, reference):
+            sheet = entry['grading']['sheet']
+            target = source['operand_refs'][0]
+            if sheet['schema'] != SEARCH_SHEET or target not in found:
+                continue
+            for row in sheet['hits']:
+                if row['product'] is not None and row['B'] is not None:
+                    protein = found[target].setdefault(row['product'], {}).setdefault(
+                        row['accession'], {'value': row['B'], 'identifiers': row['function_identifiers'],
+                                           'looked_up': row['family_looked_up']})
+                    protein['value'] = max(protein['value'], row['B'])
+    table = {}
+    for target, products in found.items():
+        table[target] = {}
+        for product, proteins in products.items():
+            counts = {}
+            for protein in proteins.values():
+                for item in protein['identifiers']:
+                    key = (item['source'], item['identifier'])
+                    counts[key] = counts.get(key, 0) + 1
+            order = list(counts)
+            leading = sorted(proteins, key=lambda accession: (-proteins[accession]['value'], accession))[:LEADING_PROTEINS]
+            table[target][product] = {
+                'hit_count': len(proteins),
+                'function_identifiers': [{'source': key[0], 'identifier': key[1], 'hit_count': counts[key]}
+                                         for key in sorted(counts, key=lambda key: (-counts[key], order.index(key)))],
+                'hits_without_identifier': sum(1 for protein in proteins.values()
+                                               if protein['looked_up'] and not protein['identifiers']),
+                'hits_not_looked_up': sum(1 for protein in proteins.values() if not protein['looked_up']),
+                'leading_proteins': [{'source': 'uniprot', 'accession': accession, 'value': proteins[accession]['value']}
+                                     for accession in leading]}
+    return table
 
 
 def candidate_measurements(reader, scope, sources):

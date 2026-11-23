@@ -155,12 +155,19 @@ def _facts(model_facts):
 
 
 def _names(names):
-    _require(isinstance(names, dict) and set(names) == {'products', 'asked'}, 'names_fields')
+    _require(isinstance(names, dict) and set(names) == {'products', 'asked', 'function_identifiers', 'not_looked_up'}, 'names_fields')
+    _require(isinstance(names['function_identifiers'], dict) and set(names['function_identifiers']) <= set(names['asked'])
+             and all(isinstance(found, list) and all(isinstance(item, dict) and set(item) == {'source', 'identifier'}
+                                                     and type(item['source']) is str and type(item['identifier']) is str
+                                                     for item in found)
+                     for found in names['function_identifiers'].values()), 'function_identifiers')
     _require(set(names['products']) <= set(names['asked']), 'named_but_not_asked')
+    _require(set(names['function_identifiers']) == set(names['products']) and set(names['not_looked_up']) <= set(names['products']),
+             'identifiers_of_the_named')
     for entry in names['products'].values():
         _require(isinstance(entry, dict) and set(entry) == {'product', 'name_source'} and type(entry['product']) is str
                  and entry['product'] and entry['name_source'] in NAME_SOURCES, 'name_entry')
-    return names['products'], set(names['asked'])
+    return names['products'], set(names['asked']), names['function_identifiers'], set(names['not_looked_up'])
 
 
 def is_model_itself(hit, model_facts):
@@ -174,7 +181,10 @@ def grade_structure_search(hits, model_ca, target_length, names, *, database, mo
     """The sheet ``a102_structure_search_sheet`` of one search.
 
     ``hits``: the parsed hit rows (``parse_foldseek_result(...)['hits']``); ``model_ca``, ``target_length``: see the module;
-    ``names``: ``{'products': {accession: {'product', 'name_source'}}, 'asked': [accessions asked]}`` (what
+    ``names``: ``{'products': {accession: {'product', 'name_source'}}, 'asked': [accessions asked], 'function_identifiers':
+    {accession: [{'source', 'identifier'}]} of each NAMED accession, 'not_looked_up': [named accessions whose BV-BRC family
+    lookup was not made or failed]}`` (the function-level identifiers of the protein, kept on the row of a named hit as
+    ``function_identifiers``, and ``family_looked_up`` false for an accession in ``not_looked_up``; what
     ``uniprot_hit_names.name_hits`` gives, or ``pdb_chain_proteins.name_pdb_hits``: a ``pdb100`` hit then carries its chain's
     ``pdb`` dict with ``entry``, ``chain``, ``accessions`` and ``asked``, ``accession`` being the one the chain is named by; a hit not in ``asked`` was NOT ASKED, a hit asked and not in ``products`` was asked
     and has no name); ``model_facts``: ``origin``, ``accession``, ``mean_plddt``, ``residues_covered`` and ``model_sha256`` (the
@@ -188,7 +198,7 @@ def grade_structure_search(hits, model_ca, target_length, names, *, database, mo
     ``candidates`` (per product: ``hit_count`` of its hits with a B and the ``mean_B``: its value in this test; a product
     none of whose hits has a B is listed with ``mean_B`` null) and ``hits`` (the rows listed in the module docstring)."""
     _require(database in DATABASES and mode in MODES, 'database_or_mode')
-    products, asked = _names(names)
+    products, asked, identifiers, not_looked_up = _names(names)
     facts = _facts(model_facts)
     measured = measure_hits(hits, model_ca, target_length) if measured is None else measured
     _require(len(measured) == len(hits), 'measured_does_not_match_the_hits')
@@ -207,6 +217,8 @@ def grade_structure_search(hits, model_ca, target_length, names, *, database, mo
                      'asked': pdb['asked'] if pdb is not None else hit['accession'] in asked, 'named': name is not None,
                      'product': None if name is None else name['product'],
                      'name_source': None if name is None else name['name_source'],
+                     'function_identifiers': [] if name is None else identifiers[hit['accession']],
+                     'family_looked_up': name is not None and hit['accession'] not in not_looked_up,
                      'B': None if itself else value['B'],
                      'no_value_reason': None if itself else value['no_value_reason'], 'aligned_pairs': value['aligned_pairs'],
                      'usable_pairs': value['usable_pairs'], 'dropped_pairs': value['dropped_pairs'],
