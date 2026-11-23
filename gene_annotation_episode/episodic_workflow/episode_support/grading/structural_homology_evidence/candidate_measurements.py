@@ -41,10 +41,21 @@ one graded source is the agreement of one held scan's families and its name is `
 consensus pairs the target can form. A family whose consensus has no pair has no measurement (null, never a zero).
 ``held_rna_agreements`` gives the scans already tested per target, so a repeat can be refused.
 
+A GROUPING (``candidate_grouping``: the groups of candidates a commissioner passes down, members named as the head returned
+them) can be asked of ``candidate_measurements``, ``candidate_standing`` and ``candidate_table``: every measurement row of a member
+is then read under the key of its group before ``differential_credit`` runs, so the rows of the members of one group in one test
+are replicates of that test. ``None`` is no grouping. ``candidate_credit`` gives, per target, the ADMISSION part of the credit (the
+sum of the entry scores, as found, never changed by a grouping) and the DISCRIMINATION part (the sum of the differentials' values)
+under a grouping, and the credit that takes the highest discrimination over no grouping and the groupings given. An annotation
+score is how well one candidate is supported (recomputed under any grouping); credit is the progress, which changes only when
+the highest discrimination or the admission changes.
+
 The model's facts on the sheet weigh nothing and are not read here. A source whose target is not in the scope is skipped; a
 retained grading of another sheet schema is not A102's round 1 and is skipped."""
 import math
 
+from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.candidate_grouping import (
+    apply_grouping, group_lookup, member_key)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.differential_credit import (
     differential_credit, standing)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.ligand_transplants_sheet import (
@@ -95,9 +106,10 @@ def site_test_name(sheet, source):
 
 
 def site_rows(sheet):
-    """The ``(product, mean_E)`` of the candidates of a site-correspondence sheet that have a value (at least one hit with
-    sites), in the sheet's order."""
-    return [(row['product'], row['mean_E']) for row in sheet['candidates'] if row['mean_E'] is not None]
+    """The ``(product, E)`` of the matched proteins of a site-correspondence sheet that have sites, in the sheet's order: one
+    row per protein, so a candidate's value in the test is the mean over its proteins (the sheet's ``mean_E`` for it), and
+    under a grouping the mean over the proteins of all the group's members."""
+    return [(row['product'], row['E']) for row in sheet['hits'] if row['has_sites']]
 
 
 def partner_contacts_test_name(sheet, source):
@@ -155,9 +167,10 @@ def rna_structure_agreement_rows(sheet):
 
 
 def partner_contacts_rows(sheet):
-    """The ``(product, mean_E)`` of the candidates of a partner-contacts sheet that have a value (at least one hit with a
-    functional partner), in the sheet's order."""
-    return [(row['product'], row['mean_E']) for row in sheet['candidates'] if row['mean_E'] is not None]
+    """The ``(product, E)`` of the matched proteins of a partner-contacts sheet that have a functional partner, in the sheet's
+    order: one row per protein, so a candidate's value in the test is the mean over its proteins (the sheet's ``mean_E`` for
+    it), and under a grouping the mean over the proteins of all the group's members."""
+    return [(row['product'], row['E']) for row in sheet['hits'] if row['product'] is not None and row['E'] is not None]
 
 
 def bound_partner_rows(sheet):
@@ -284,16 +297,17 @@ def matched_proteins(reader, scope, sources):
     return table
 
 
-def candidate_measurements(reader, scope, sources):
+def candidate_measurements(reader, scope, sources, grouping=None):
     """The measurements (``{'test', 'candidate', 'value'}`` and what the head shows: ``target``, ``vocabulary``, ``name``,
-    ``identifier``, ``source``) of the graded ``sources`` over ``scope``, in the order of ``sources``."""
-    return _read(reader, scope, sources)[0]
+    ``identifier``, ``source``) of the graded ``sources`` over ``scope``, in the order of ``sources``, read under ``grouping``
+    (``None``: as found)."""
+    return apply_grouping(_read(reader, scope, sources)[0], grouping)
 
 
-def candidate_standing(reader, scope, sources):
+def candidate_standing(reader, scope, sources, grouping=None):
     """Where each candidate stands, per target of the scope (``{target: differential_credit.standing(its
-    measurements)}``), after the graded ``sources``: what a further test's ceiling is computed from."""
-    return {target: standing(rows) for target, rows in _by(candidate_measurements(reader, scope, sources), 'target').items()}
+    measurements)}``), after the graded ``sources`` and under ``grouping``: what a further test's ceiling is computed from."""
+    return {target: standing(rows) for target, rows in _by(candidate_measurements(reader, scope, sources, grouping), 'target').items()}
 
 
 def held_searches(reader, scope, sources):
@@ -405,18 +419,67 @@ def _entry(measurements, candidate):
             **({} if first['identifier'] is None else {'identifier': first['identifier']})}
 
 
-def candidate_table(reader, scope, sources):
-    """What the head shows and returns, per target of the scope (``targets``: target reference -> ``candidates`` (one row per
-    admitted candidate, highest score first, ties in arrival order: its vocabulary, name and identifier, its ``score``, the
-    ``sheets`` and ``tests`` it has undergone, its ``measurement_count`` and its ``best_value``), ``tests`` (each test applied
-    to the target with ``candidate_count``, the admitted candidates it measured), ``differentials`` (each: the ``test``, the
-    two candidates and the ``value``), ``not_asked_hit_count`` (the hits of searches whose name was never asked: the naming
-    stopped once the candidates settled), ``no_product_hit_count`` (the hits asked that carry no name), ``no_value_hit_count``
-    (the hits with a name and no value) and the target's ``credit``), and the ``credit`` of the scope: the sum over its
-    targets."""
-    measurements, unnamed = _read(reader, scope, sources)
+def _parts(rows):
+    """The admission (sum of the entry scores) and the discrimination (sum of the differentials' values) of the rows of one target."""
+    result = differential_credit(rows)
+    return {'admission': math.fsum(result['entries'].values()),
+            'discrimination': math.fsum(row['value'] for row in result['differentials']), 'credit': result['credit']}
+
+
+def _target_parts(rows, groupings):
+    """The admission as found and the discrimination of the rows of one target under each of ``groupings`` (``None`` among them: as
+    found), and the credit as found."""
+    if not rows:
+        return {'admission': 0.0, 'discrimination': [0.0 for _ in groupings], 'credit': 0.0, 'as_found': 0.0}
+    plain = _parts(rows)
+    return {'admission': plain['admission'], 'credit': plain['credit'], 'as_found': plain['discrimination'],
+            'discrimination': [plain['discrimination'] if not grouping else _parts(apply_grouping(rows, grouping))['discrimination']
+                               for grouping in groupings]}
+
+
+def admission_and_discrimination(reader, scope, sources, grouping=None):
+    """Per target of the scope: ``{'admission': the sum of the entry scores read as found (a grouping never changes it),
+    'discrimination': the sum of the differentials' values read under grouping}`` (``None``: as found)."""
+    found = _by(_read(reader, scope, sources)[0], 'target')
+    parts = {target: _target_parts(found.get(target, []), [grouping]) for target in reader.validate_scope(scope)['subject_refs']}
+    return {target: {'admission': row['admission'], 'discrimination': row['discrimination'][0]} for target, row in parts.items()}
+
+
+def candidate_credit(reader, scope, sources, groupings=()):
+    """The credit of the held graded ``sources`` over ``scope``, given the groupings the head holds: per target of the scope
+    (``targets``: target reference -> ``admission`` (the sum of the entry scores as found), ``discrimination`` (the highest sum of the
+    differentials' values over no grouping and every grouping of ``groupings``) and ``credit`` (admission plus that
+    discrimination: it is written as ``differential_credit``'s credit of the rows as found plus the rise of the highest
+    discrimination over the discrimination as found, which is the same sum, so that with no grouping held it is exactly that credit))
+    and ``credit``, the sum over the targets. It rises when the admission or the highest discrimination rises and never falls: going
+    back to a grouping already held, or applying one again, leaves it where it was."""
+    found = _by(_read(reader, scope, sources)[0], 'target')
     targets = {}
-    for target, rows in _by(measurements, 'target').items():
+    for target in reader.validate_scope(scope)['subject_refs']:
+        row = _target_parts(found.get(target, []), list(groupings))
+        highest = max([row['as_found'], *row['discrimination']])
+        targets[target] = {'admission': row['admission'], 'discrimination': highest,
+                           'credit': row['credit'] + (highest - row['as_found'])}
+    return {'targets': targets, 'credit': math.fsum(row['credit'] for row in targets.values())}
+
+
+def candidate_table(reader, scope, sources, grouping=None):
+    """What the head shows and returns, per target of the scope, read under ``grouping`` (``None``: as found) (``targets``: target
+    reference -> ``candidates`` (one row per admitted candidate, highest score first, ties in arrival order: its vocabulary, name and
+    identifier, its ``score``, the ``sheets`` and ``tests`` it has undergone, its ``measurement_count`` and its ``best_value``; under a
+    grouping a candidate that is a group also carries ``members``, the group's members the target holds, each ``{vocabulary, name,
+    identifier?}``, and is named by the member that names the group), ``tests`` (each test applied to the target with
+    ``candidate_count``, the admitted candidates it measured), ``differentials`` (each: the ``test``, the two candidates and the
+    ``value``), ``not_asked_hit_count`` (the hits of searches whose name was never asked: the naming stopped once the candidates
+    settled), ``no_product_hit_count`` (the hits asked that carry no name), ``no_value_hit_count`` (the hits with a name and no
+    value) and the target's ``credit``: the credit of the rows as read under this grouping alone, not the head's credit
+    (``candidate_credit``)), and the ``credit`` of the scope: the sum over its targets."""
+    measurements, unnamed = _read(reader, scope, sources)
+    lookup = group_lookup(grouping)
+    targets = {}
+    for target, held in _by(measurements, 'target').items():
+        rows = apply_grouping(held, grouping)
+        held_keys = {row['candidate'] for row in held}
         result = differential_credit(rows)
         candidates = [{**_entry(rows, candidate), 'score': score,
                        'sheets': [{'sheet': kind, 'value': value} for kind, value in result['sheets'][candidate].items()],
@@ -424,6 +487,10 @@ def candidate_table(reader, scope, sources):
                        'measurement_count': sum(1 for row in rows if row['candidate'] == candidate),
                        'best_value': max(row['value'] for row in rows if row['candidate'] == candidate)}
                       for candidate, score in result['scores'].items()]
+        for row in candidates:
+            key = row['vocabulary'] + ':' + row.get('identifier', row['name'])
+            if key in lookup and lookup[key]['key'] == key:
+                row['members'] = [member for member in lookup[key]['members'] if member_key(member) in held_keys]
         arrival = list(dict.fromkeys(row['candidate'] for row in rows))
         candidates.sort(key=lambda row: (-row['score'], arrival.index(row['vocabulary'] + ':' + row.get('identifier', row['name']))))
         tests = [{'test': test, 'candidate_count': len({row['candidate'] for row in rows

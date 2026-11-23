@@ -1,9 +1,15 @@
 """Credit: the owner's differential credit over the candidate annotations the head holds structural evidence for (the rule of
 2026-11-20, as A101 counts it; A102 has its own library copy of the arithmetic).
 
-``credit(summary, records)`` is ``candidate_table(...)['credit']`` (library: ``grading/structural_homology_evidence/
+``credit(summary, records)`` is ``candidate_credit(...)['credit']`` (library: ``grading/structural_homology_evidence/
 candidate_measurements.py``, which reads the held graded sources in the order the head obtained them and calls
-``differential_credit``): a candidate annotation with positive evidence is admitted and earns its score; a test earns the size of the difference of the
+``differential_credit``). Per target it is the ADMISSION (the sum of the entry scores of the candidates as found; a grouping never
+changes it) plus the HIGHEST DISCRIMINATION (the sum of the differentials' values) over no grouping and every grouping the head
+holds (``summary['held_groupings']``: the groupings of its candidates its commissioner passed down and it has kept, tool
+``apply_grouping``). With no grouping held it is the credit of the rows as found. A grouping only changes which candidates the
+measurement rows are read under (``candidate_grouping``); the credit never falls, and going back to a grouping already held, or
+applying one again, earns nothing. The ceilings and the offers read the held standing under the GROUPING IN FORCE
+(``summary['grouping_in_force']``: the commission's grouping once it is kept, else none). A candidate annotation with positive evidence is admitted and earns its score; a test earns the size of the difference of the
 moves of the TWO highest-scored candidates already on the list that it measures (the top two, whatever their kind), and
 nothing for any other pair; a repeat changes nothing, so it earns nothing. The sum has no fixed maximum; every action the head offers has a ceiling (``ceiling``), so the
 credit's controller is the forecast controller (``yield_estimator.py``). ``A102DifferentialCredit`` is its definition record.
@@ -12,7 +18,7 @@ import json
 from pathlib import Path
 
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.candidate_measurements import (
-    candidate_standing, candidate_table, held_sources)
+    candidate_credit, candidate_standing, held_sources)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.differential_credit import (
     SHEET_WEIGHT, bound_partner_test_ceiling, ligand_transplant_test_ceiling, rna_family_scan_test_ceiling,
     partner_cofolding_test_ceiling, rna_structure_agreement_test_ceiling, site_test_ceiling, test_ceiling)
@@ -21,6 +27,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.structura
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.tool_grading_artifacts import (
     source_tool_grading_entries)
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.foldseek_job_route import DATABASES
+from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.apply_grouping import (
+    TOOL_NAME as GROUPING_TOOL)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.ligand_transplants import (
     ORIGIN as TRANSPLANT_ORIGIN)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.partner_cofolding import (
@@ -86,18 +94,34 @@ class A102DifferentialCredit:
                 'differential': ('abs_difference_of_the_score_moves_in_a_test_of_the_top_two_candidates_listed_before_the_test_that_the_test_measures_'
                                  'ties_by_candidate_key_nothing_for_any_other_pair_none_with_fewer_than_two'),
                 'credit': 'sum_of_entry_scores_and_differentials', 'maximum': 'none',
+                'regrouping': ('credit_is_the_admission_as_found_plus_the_highest_sum_of_differentials_over_no_grouping_and_every_'
+                               'grouping_held_a_grouping_only_changes_which_candidates_the_measurement_rows_are_read_under'),
                 'repeat': 'earns_nothing'}
 
 
-def held_candidate_table(summary, records):
-    """The table of candidates of the records this episode holds over the commissioned scope."""
-    return candidate_table(records, summary['scope'], held_sources(records))
+def groupings_held(summary):
+    """The groupings the head holds (kept by ``apply_grouping``, read in ``internal_summary``), each a canonical grouping."""
+    return summary['held_groupings']
+
+
+def grouping_owed(summary):
+    """The commission's grouping when the head has not kept it yet (``apply_grouping`` is owed), else ``None``: an empty grouping
+    is none, a grouping already held is kept."""
+    groups = summary['candidate_groups']
+    return groups if groups and groups not in groupings_held(summary) else None
+
+
+def held_standing(summary, records):
+    """Where each candidate stands, per target, read under the grouping in force: what the ceilings and the offers compare keys
+    with."""
+    return candidate_standing(records, summary['scope'], held_sources(records), summary['grouping_in_force'])
 
 
 def credit(summary, records):
-    """The differential credit of the held graded sources over the commissioned scope: counted as soon as a graded sheet is
-    held. No model step stands between a graded result and its being counted. A child's credit is never added."""
-    return held_candidate_table(summary, records)['credit']
+    """The credit of the held graded sources over the commissioned scope (``candidate_credit`` with the groupings held): counted as
+    soon as a graded sheet is held. No model step stands between a graded result and its being counted. A child's credit is never
+    added."""
+    return candidate_credit(records, summary['scope'], held_sources(records), groupings_held(summary))['credit']
 
 
 def model_sha256(summary, model_ref):
@@ -344,10 +368,10 @@ def best_arguments(summary, records, action_type, ctx):
         models = offered_transplant_models(summary)
         if not models:
             return None
-        standing = candidate_standing(records, summary['scope'], held_sources(records))
+        standing = held_standing(summary, records)
         return {'model_ref': max(models, key=lambda found: transplant_value(summary, standing, found))}
     if action_type == PARTNER_TOOL:
-        standing = candidate_standing(records, summary['scope'], held_sources(records))
+        standing = held_standing(summary, records)
         searches = offered_partner_searches(summary)
         if not searches:
             return None
@@ -358,7 +382,7 @@ def best_arguments(summary, records, action_type, ctx):
         pairs = offered_site_pairs(summary)
         if not pairs:
             return None
-        standing = candidate_standing(records, summary['scope'], held_sources(records))
+        standing = held_standing(summary, records)
         search, source = max(pairs, key=lambda pair: site_value(summary, records, standing, pair[0]))
         return {'search_ref': search, 'site_source': source}
     if action_type == COFOLDING_SLOT:
@@ -371,7 +395,7 @@ def best_arguments(summary, records, action_type, ctx):
         queries_left = offered_cofolding_queries(summary)
         if resource is None or not queries_left:
             return None
-        standing = candidate_standing(records, summary['scope'], held_sources(records))
+        standing = held_standing(summary, records)
         query = max(queries_left, key=lambda found: cofolding_value(summary, standing, found,
                                                                     available_ligands(summary, found)[:LIGAND_COUNT[1]]))
         return {'query_ref': query, 'ligands': available_ligands(summary, query)[:LIGAND_COUNT[1]], 'resource_id': resource,
@@ -412,7 +436,7 @@ def outcome_pending(summary, records, position):
 CEILINGS = {'structure_search': 'a102_ceiling', 'site_correspondence': 'a102_ceiling',
             'partner_contacts': 'a102_ceiling', 'ligand_transplants': 'a102_ceiling',
             'rna_family_scan': 'a102_ceiling', 'rna_structure_agreement': 'a102_ceiling',
-            'partner_cofolding': 'a102_ceiling'}
+            'partner_cofolding': 'a102_ceiling', GROUPING_TOOL: 'a102_ceiling'}
 
 
 def ceiling(summary, records, action_type, arguments, ctx):
@@ -426,6 +450,9 @@ def ceiling(summary, records, action_type, arguments, ctx):
     plus ONE differential, the difference of the moves of the top two listed candidates it measures (at most ``w``, and only with
     two such candidates); nothing else.
 
+    * ``apply_grouping``: not a test but a recomputation, so its ceiling is exact: the credit with the commission's grouping held
+      (``summary['candidate_groups']``) minus the credit now. A grouping already held, or none, gives 0. The model is never offered
+      it; the head owes it (``task.resume_action``).
     * ``site_correspondence``: the one site test of a held graded search measures at most the product candidates of that
       search's own test (``mean_B`` not null on its sheet), each with a value in [0, w] (its mean E = B F, E in [0, 1]), and
       the candidates are all listed or unlisted by the search's own test; ``differential_credit.site_test_ceiling`` is the proved
@@ -476,8 +503,13 @@ def ceiling(summary, records, action_type, arguments, ctx):
       continued). The resume of a parked job (the same fields, ``until`` ``extracted``) is not a repeat and has the
       search's ceiling, which is what the launch started. With ``arguments`` ``None``: the largest over the queries with a
       database not yet searched (``open_pairs``), and ``best_arguments`` names that commission when it can be stated."""
-    if action_type not in (SLOT, COFOLDING_SLOT, SITE_TOOL, PARTNER_TOOL, TRANSPLANT_TOOL, RNA_SCAN_TOOL, RNA_AGREEMENT_TOOL):
+    if action_type not in (SLOT, COFOLDING_SLOT, SITE_TOOL, PARTNER_TOOL, TRANSPLANT_TOOL, RNA_SCAN_TOOL, RNA_AGREEMENT_TOOL,
+                           GROUPING_TOOL):
         raise ValueError('a102_ceiling_not_derived_for_action_type:' + action_type)
+    if action_type == GROUPING_TOOL:
+        held = groupings_held(summary)
+        return (candidate_credit(records, summary['scope'], held_sources(records), [*held, summary['candidate_groups']])['credit']
+                - candidate_credit(records, summary['scope'], held_sources(records), held)['credit'])
     if action_type == RNA_SCAN_TOOL:
         if arguments is None:
             return max((rna_family_scan_test_ceiling(database_families(ctx.settings, database), not unscanned_queries(summary))
@@ -492,7 +524,7 @@ def ceiling(summary, records, action_type, arguments, ctx):
         if arguments['scan_ref'] in agreed_scans(summary):
             return 0.0
         return rna_structure_agreement_test_ceiling(len(scans[arguments['scan_ref']]['families']))
-    standing = candidate_standing(records, summary['scope'], held_sources(records))
+    standing = held_standing(summary, records)
     if action_type == COFOLDING_SLOT:
         if arguments is None:
             return max((cofolding_value(summary, standing, query, available_ligands(summary, query)[:LIGAND_COUNT[1]])

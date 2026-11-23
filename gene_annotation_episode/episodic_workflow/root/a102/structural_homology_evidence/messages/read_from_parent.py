@@ -7,12 +7,18 @@ of a model of the target obtained by the child).
 
 This is the only place the assignment is read. It checks what needs nothing but the value: the selection names the evidence axis
 A102, the proposed annotation is one reference, every reference has the reference form, the evidence task is the closed
-``evidence_axis_task`` of A102 and the credit units are positive. ``yield_task`` is the key of the head's declaration in
+``evidence_axis_task`` of A102, the credit units are positive, and the groups have the shape of ``candidate_grouping.
+validate_groups`` (a wrong shape raises; absent or empty is no grouping). The parent input carries ``candidate_groups`` in canonical
+form: each group's members sorted by candidate key, the groups sorted by their first key. ``yield_task`` is the key of the head's declaration in
 ``yield_bindings`` (``yield_estimator.py``). Custody holds every record named in a ``record_refs`` field."""
 import re
 
 from method_loop import Field, RecordForm
 
+from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.candidate_grouping import (
+    validate_groups)
+from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.candidate_measurements import (
+    VOCABULARIES)
 from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.construction_records import (
     validate_selection)
 from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.domain import (
@@ -38,6 +44,9 @@ ASSIGNMENT_FORM = RecordForm({
     'scope': Field('record', 'The Store scope this episode investigates'),
     'scope_refs': Field('record_refs', 'The records the scope names, passed in custody'),
     'child_credit_units': Field('record', 'The credit units of the child this episode commissions, by unit name'),
+    'candidate_groups': Field('list', 'The grouping of the head\'s own candidates the commissioner decided: groups of members, each '
+                                      'member {vocabulary, name, identifier when the candidate has its own} exactly as the head '
+                                      'returned it', required=False),
 })
 
 
@@ -59,4 +68,5 @@ def read_from_parent(assignment, message):
     return {'selection': selection, 'proposed_annotation_ref': proposed, 'evidence_refs': list(assignment['evidence_refs']),
             'constraints': assignment['constraints'], 'context': context, 'scope': assignment['scope'],
             'scope_refs': list(assignment['scope_refs']), 'child_credit_units': dict(units), 'yield_task': YIELD_TASK,
+            'candidate_groups': validate_groups(assignment.get('candidate_groups', []), VOCABULARIES),
             'message': dict(message)}

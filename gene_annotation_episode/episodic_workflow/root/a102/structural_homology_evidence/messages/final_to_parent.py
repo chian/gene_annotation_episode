@@ -5,7 +5,10 @@ candidates of each kind (product, ligand, nucleic_acid, rna_family), the Rfam fa
 one first, by their Rfam identifiers), the partner-contacts analyses, the ligand-transplant tests, the RNA family scans and the RNA
 structure-agreement tests (counts of their sheets), the counts of the hits of the graded searches (hits, named, not asked) and the
 facts of the model of the target (origin, residues, mean pLDDT 0 to 100: the model's own confidence, not similarity), and the
-number of handoffs still waiting for their closure. All of it numbers, counts, values of a fixed vocabulary, the
+number of handoffs still waiting for their closure. A candidate of the finding is always as found (``candidates``: none is merged with
+another); while the commission's grouping is kept (``grouping_in_force``, echoed in the shape of the commission's ``candidate_groups``)
+each target also returns ``grouped_candidates``: every product candidate read under that grouping, a candidate in no group as a group of
+one, the leading one first, each with its members, score and subscoring sheets; ``groupings_held`` counts the groupings kept. All of it numbers, counts, values of a fixed vocabulary, the
 annotation names of the candidates (names from the looked-up list of a database) and record references: no paragraph.
 
 Selectable: ``committed_record_refs`` (the graded records this episode holds: the records its credit reads, which a parent passes
@@ -56,6 +59,18 @@ LEADING_PROTEIN_FORM = RecordForm({
     'source': ChoiceField('text', 'The database the accession is from', ('uniprot',)),
     'accession': Field('text', 'The protein\'s accession'),
     'value': Field('number', 'Its highest value (B) in the searches that matched it'),
+})
+MEMBER_FORM = RecordForm({
+    'vocabulary': ChoiceField('text', 'The vocabulary of the candidate the member names', VOCABULARIES),
+    'name': Field('text', 'The candidate\'s name exactly as the head returned it'),
+    'identifier': Field('text', 'The candidate\'s own identifier, when it has one', required=False),
+})
+GROUPED_CANDIDATE_FORM = RecordForm({
+    'members': Field('list', 'The candidates of the group the head returned, each named as it was found (one member: a candidate '
+                             'in no group)', items=MEMBER_FORM),
+    'score': Field('number', 'The group\'s annotation score: the sum of its sheet values, each its mean value in the tests of that '
+                             'kind, the rows of all its members read as one candidate'),
+    'sheets': Field('list', 'The group\'s subscoring sheets, one per kind of test it has undergone', items=SHEET_FORM),
 })
 CANDIDATE_FORM = RecordForm({
     'vocabulary': ChoiceField('text', 'The vocabulary of the candidate: product (the function name of a hit), ligand (a ligand bound '
@@ -159,6 +174,9 @@ TARGET_FORM = RecordForm({
                              items=COFOLDING_TEST_FORM),
     'candidates': Field('list', 'The leading possible annotations found for the target (at most 10), each with its score, the '
                                 'leading one first', items=CANDIDATE_FORM),
+    'grouped_candidates': Field('list', 'Present while the commission\'s grouping is kept: every product candidate of the target read '
+                                        'under that grouping (a candidate in no group is a group of one), the leading one first',
+                                items=GROUPED_CANDIDATE_FORM, required=False),
     'partner_candidates': Field('list', 'The partner candidates found for the target (ligand and nucleic_acid; at most 20), each with '
                                         'its score, the leading one first', items=CANDIDATE_FORM),
     'partner_tests': Field('list', 'The partner-contacts analyses of the target (each: its search and the counts of its sheet)',
@@ -185,6 +203,10 @@ FINDING_FORM = RecordForm({
     'waiting_searches': Field('list', 'The structure searches and co-folding jobs launched and not extracted: for each the slot, the seconds since '
                                       'its launch and the seconds still expected, as the child last knew them',
                               items=WAITING_FORM, required=False),
+    'grouping_in_force': Field('list', 'The commission\'s grouping once the head has kept it, in the shape of the commission\'s '
+                                       'candidate_groups: a list of groups, each a list of members {vocabulary, name, identifier?}; '
+                                       'absent when none is in force', required=False),
+    'groupings_held': Field('integer', 'The groupings of its candidates the head has kept'),
     'outstanding_handoff_count': Field('integer', 'The job handoffs it holds (those its child returned) whose closure it does '
                                                   'not hold'),
 })
@@ -213,6 +235,8 @@ def final_to_parent(summary, completion, selection):
     result = {'credit': completion['credit'],
               'finding': {'evidence_axis': 'A102', 'targets': summary['findings'],
                           'outstanding_handoff_count': summary['outstanding_handoff_count'],
+                          'groupings_held': len(summary['held_groupings']),
+                          **({} if summary['grouping_in_force'] is None else {'grouping_in_force': summary['grouping_in_force']}),
                           **({'waiting_searches': waiting} if waiting else {})}}
     result.update({name: refs for name, refs in summary['returned_refs'].items() if name in selection})
     return result

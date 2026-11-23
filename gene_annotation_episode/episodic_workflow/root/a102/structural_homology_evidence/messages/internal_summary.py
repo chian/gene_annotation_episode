@@ -2,6 +2,12 @@
 commission), what the child reported, the graded searches and the models the episode holds, the job rows of the child's jobs, the
 candidates with their scores and the controller's yield table.
 
+GROUPING. ``held_groupings`` are the groupings of its candidates the head has kept (``apply_grouping.held_groupings``) and
+``grouping_in_force`` is the commission's grouping (``candidate_groups``) once it is kept, else ``None``. The candidate table the
+model is shown (``credit_table``) is read under the grouping in force (a candidate that is a group carries ``members``); the
+finding keeps ``candidates`` as found, and adds ``grouped_candidates`` (every product candidate of the grouped table, a candidate
+in no group as a group of one) while a grouping is in force.
+
 For the commission (``task.structure_search_fields``, ``msg_to_child``) the summary also holds what a commission is chosen from and
 built with: ``held_sequences`` (the held records that carry a sequence, each with its molecule), ``model_rows`` (the held data-product
 rows of kind ``protein_structure_model``, each with the target it was made from), ``graded_searches`` (the searches graded: what the
@@ -31,8 +37,10 @@ source, its target and the counts of its sheet).
 ``execution_check_refs``, ``execution_closure_refs``, ``data_product_refs``), each CLOSED UNDER NAMING by
 ``job_records.returned_with_names`` (the records chosen with everything they name, recursively, among the held records), as every
 child's returned lists are: the parent holds what a returned record names."""
+from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.candidate_grouping import (
+    member_of)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.candidate_measurements import (
-    held_partner_analyses, held_rna_agreements, held_rna_scans, held_searches, held_site_tests, held_sources, held_transplant_models,
+    candidate_table, held_partner_analyses, held_rna_agreements, held_rna_scans, held_searches, held_site_tests, held_sources, held_transplant_models,
     matched_proteins)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.tool_grading_artifacts import (
     source_tool_grading_entries)
@@ -40,6 +48,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records 
     named_records, outstanding_jobs, returned_with_names)
 from gene_annotation_episode.episodic_workflow.episode_support.records.data_products import products
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
+from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.apply_grouping import (
+    TOOL_NAME as GROUPING_TOOL, held_groupings)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.foldseek_search import (
     APPLICATION, MODEL_KIND, graded_rows, target_sequence)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.ligand_transplants import (
@@ -57,8 +67,6 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_s
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.structure_search_child import (
     held_jobs)
 
-from ..credit import held_candidate_table
-
 LEADING = 10
 SITE_TEST_FIELDS = ('search_ref', 'site_source', 'hits_asked', 'hits_with_sites', 'candidates_measured',
                     'candidates_without_site', 'absent_outside_count', 'absent_within_count')
@@ -73,7 +81,8 @@ RNA_AGREEMENT_TEST_FIELDS = ('scan_ref', 'family_count', 'candidates_measured', 
 LEADING_PARTNERS = 20
 LEADING_FAMILIES = 20
 # What the model is shown of a completed or failed tool unit (the tool's own result fields, numbers and a failure code).
-RESULT_FIELDS = {'site_correspondence': ('failure_code', 'hits_asked', 'hits_with_sites', 'candidates_measured',
+RESULT_FIELDS = {GROUPING_TOOL: ('failure_code', 'group_count', 'member_count', 'discrimination_before', 'discrimination_after'),
+                 'site_correspondence': ('failure_code', 'hits_asked', 'hits_with_sites', 'candidates_measured',
                                          'candidates_without_site', 'request_count'),
                  'partner_contacts': ('failure_code', 'entries_asked', 'entries_skipped_no_partner', 'entries_too_large',
                                       'entries_not_asked', 'hits_with_partners', 'product_candidates_measured',
@@ -90,13 +99,22 @@ SEQUENCE_RECORD_TYPES = ('input', 'reference', 'product')
 
 def _of(target, vocabularies, limit):
     """The candidates of one target of the candidate table of the given vocabularies: name, score and sheets, the leading one first."""
-    return [{'vocabulary': row['vocabulary'], 'name': row['name'], 'score': row['score'], 'sheets': row['sheets']}
+    return [{'vocabulary': row['vocabulary'], 'name': row['name'], 'score': row['score'], 'sheets': row['sheets'],
+             **({'members': row['members']} if 'members' in row else {})}
             for row in target['candidates'] if row['vocabulary'] in vocabularies][:limit]
 
 
 def _leading(target):
     """The leading product candidates of one target (at most ``LEADING``)."""
     return _of(target, ('product',), LEADING)
+
+
+def _grouped(target):
+    """Every product candidate of one target of the grouped table, the leading one first: ``{members, score, sheets}``; a candidate that
+    is a group lists its members, a candidate in no group is a group of one."""
+    return [{'members': row['members'] if 'members' in row else [member_of({'identifier': None, **row})],
+             'score': row['score'], 'sheets': row['sheets']}
+            for row in target['candidates'] if row['vocabulary'] == 'product']
 
 
 def _partners(target):
@@ -231,7 +249,10 @@ def internal_summary(view):
     sequence_of = {records.get(ref)['sequence_ref']: ref for ref in held_sequences}
     model_rows = [{**row, 'query_ref': next(sequence_of[ref] for ref in row['used'] if ref in sequence_of)}
                   for row in products(records, MODEL_KIND)]
-    table = held_candidate_table(parent, records)
+    groupings = held_groupings(records)
+    in_force = parent['candidate_groups'] if parent['candidate_groups'] in groupings else None
+    found = candidate_table(records, scope, held_sources(records))
+    table = found if in_force is None else candidate_table(records, scope, held_sources(records), in_force)
     behind = matched_proteins(records, scope, held_sources(records))
     searches = graded_rows(records)
     site_rows = site_test_rows(records)
@@ -244,7 +265,7 @@ def internal_summary(view):
     findings = []
     for target in targets:
         ref = target['target_ref']
-        row, mine = table['targets'][ref], [item for item in searches if item['query_ref'] == ref]
+        row, mine = found['targets'][ref], [item for item in searches if item['query_ref'] == ref]
         model = next((item for item in model_rows if item['query_ref'] == ref), None)
         findings.append({
             'target_ref': ref, 'molecule': target['molecule'], 'search_count': len(mine),
@@ -252,6 +273,7 @@ def internal_summary(view):
             'not_asked_count': sum(item['not_asked_count'] for item in mine),
             'candidate_count': _counts(row)['product'],
             'candidates': [{**candidate, **behind[ref][candidate['name']]} for candidate in _leading(row)],
+            **({} if in_force is None else {'grouped_candidates': _grouped(table['targets'][ref])}),
             'ligand_candidate_count': _counts(row)['ligand'], 'nucleic_acid_candidate_count': _counts(row)['nucleic_acid'],
             'partner_candidates': _partners(row),
             'partner_tests': [{key: item[key] for key in PARTNER_TEST_FIELDS} for item in partner_rows if item['query_ref'] == ref],
@@ -279,8 +301,9 @@ def internal_summary(view):
             'search_inputs': partner_search_inputs(records), 'site_test_rows': site_rows, 'partner_test_rows': partner_rows,
             'transplant_test_rows': transplant_rows, 'rna_scan_test_rows': rna_scan_rows,
             'rna_agreement_test_rows': rna_agreement_rows, 'cofolding_test_rows': cofolding_test_rows,
+            'held_groupings': groupings, 'grouping_in_force': in_force,
             'held_ligands': {ref: [row['vocabulary'] + ':' + row.get('identifier', row['name']) for row in target['candidates']
-                                   if row['vocabulary'] == 'ligand'] for ref, target in table['targets'].items()},
+                                   if row['vocabulary'] == 'ligand'] for ref, target in found['targets'].items()},
             'rna_scan_inputs': rna_scan_inputs(records),
             'held_rna_scans': {target: list(refs) for target, refs in held_rna_scans(records, scope, held_sources(records)).items()},
             'held_rna_agreements': {target: list(refs) for target, refs in held_rna_agreements(

@@ -22,6 +22,10 @@ nothing worth its cost and stops), its request options only while a target is un
 ``rna_structure_agreement``: the request ``scan_ref`` and ``resource_id``, ``check_rna_structure_agreement_request``, ONE async unit that
 aligns the span of each family of the scan to its model (``cmfetch`` and ``cmalign`` as a local job) and grades the consensus pairs the
 target can form; offered only for a held scan that lists at least two families and is not yet tested (``credit.offered_agreement_scans``).
+Its one tool the model is never offered is ``apply_grouping``: when the commission carries ``candidate_groups`` (the grouping of the
+head's own candidates its commissioner decided) that the head has not kept yet, the head owes the unit (``resume_action``: due at once,
+before the resume of a parked job; ``offered_actions`` lists it while owed), which checks every member is a candidate the head holds, keeps
+the grouping through custody and recomputes (``apply_grouping.keep_grouping``). The head merges nothing by itself.
 Settings of the head: ``python_executable``, ``usalign_executable_directory``, ``infernal_executable_directory`` and
 ``covariance_databases`` (``{database name: manifest path}``). It never ends the
 Episode: only the yield controller does. No ``reason`` action.
@@ -55,6 +59,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_s
     foldseek_search as foldseek)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence import (
     partner_cofolding as cofolding)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.apply_grouping import (
+    TOOL_NAME as GROUPING_TOOL, keep_grouping)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.ligand_transplants import (
     check_ligand_transplants_request, ligand_transplants)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.rna_family_scan import (
@@ -70,7 +76,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_s
 
 from .credit import (COFOLDING_SLOT, OBTAIN, PARTNER_TOOL, RNA_AGREEMENT_TOOL, RNA_SCAN_TOOL, SITE_TOOL, TRANSPLANT_TOOL,
                      agreed_scans, analysed_searches, available_ligands, cofolded_ligands, commissioned, commissioned_cofoldings,
-                     graded_site_pairs, held_ligands, offered_agreement_scans, offered_cofolding_queries, offered_partner_searches,
+                     graded_site_pairs, grouping_owed, held_ligands, offered_agreement_scans, offered_cofolding_queries, offered_partner_searches,
                      offered_site_pairs, offered_transplant_models, queries, rna_queries, scanned_targets, tested_models,
                      transplant_models, unscanned_queries)
 from .goal import GOAL
@@ -113,7 +119,13 @@ async def rna_structure_agreement_tool(arguments, ctx):
     return await rna_structure_agreement(ctx, scan_ref=arguments['scan_ref'], resource_id=arguments['resource_id'])
 
 
-TOOLS = {SITE_TOOL: site_correspondence_tool, PARTNER_TOOL: partner_contacts_tool, TRANSPLANT_TOOL: ligand_transplants_tool,
+def apply_grouping_tool(arguments, ctx):
+    """Keep the commission's grouping as one unit, by the library's one function. The system takes it (``resume_action``); the model
+    is never offered it. The arguments are the canonical grouping and the scope."""
+    return keep_grouping(ctx, candidate_groups=arguments['candidate_groups'], scope=arguments['scope'])
+
+
+TOOLS = {GROUPING_TOOL: apply_grouping_tool, SITE_TOOL: site_correspondence_tool, PARTNER_TOOL: partner_contacts_tool, TRANSPLANT_TOOL: ligand_transplants_tool,
          RNA_SCAN_TOOL: rna_family_scan_tool, RNA_AGREEMENT_TOOL: rna_structure_agreement_tool}
 
 INSTRUCTIONS = (
@@ -125,7 +137,7 @@ INSTRUCTIONS = (
     'episode. Recorded facts come from actual records and are shown to you as they are: the targets with their molecule and '
     'length, the models held (origin, residues, mean pLDDT: a model\'s own confidence, not similarity), the graded searches, '
     'the outstanding jobs with the seconds since their launch and the seconds still expected, the leading candidates with '
-    'their scores and subscoring sheets (products, the partners ligand and nucleic_acid and, for an RNA target, the rna_family candidates), the site tests, partner tests, transplant tests, co-folding tests, RNA scans and RNA agreement tests held, your earlier units and the yield table. A model that is not held is obtained by the '
+    'their scores and subscoring sheets (products, the partners ligand and nucleic_acid and, for an RNA target, the rna_family candidates; when the commissioner passed a grouping of candidates, a candidate may be shown merged with the others of its group, the group\'s members listed under members, and the head merges nothing itself), the site tests, partner tests, transplant tests, co-folding tests, RNA scans and RNA agreement tests held, your earlier units and the yield table. A model that is not held is obtained by the '
     'child when the commission names obtain_one. Waiting and unchanged observations do not manufacture progress.')
 
 # What the model is told of the child it may commission: what the child does, the controlled fields of its commission (the model
@@ -554,9 +566,10 @@ def offered_actions(summary, ctx):
     child slot whose commission can be stated (``offered_children``, the function ``decide`` offers the model with) and
     ``site_correspondence``, ``partner_contacts`` and ``ligand_transplants`` while a request of it can succeed (``site_options``,
     ``partner_options``, ``transplant_options``), ``rna_family_scan`` while an RNA target of the scope exists (its ceiling is 0 once
-    every such target is scanned) and ``rna_structure_agreement`` while a request of it can succeed (``rna_agreement_options``)."""
+    every such target is scanned) and ``rna_structure_agreement`` while a request of it can succeed (``rna_agreement_options``); ``apply_grouping`` while the commission's grouping is not yet kept (``credit.grouping_owed``): the model
+    is never offered it (it is not in ``selection_schema``), the head owes it (``resume_action``)."""
     resources = bound_resources(ctx)
-    return (offered_children(summary, resources) + ([SITE_TOOL] if site_options(summary) else [])
+    return (([GROUPING_TOOL] if grouping_owed(summary) else []) + offered_children(summary, resources) + ([SITE_TOOL] if site_options(summary) else [])
             + ([PARTNER_TOOL] if partner_options(summary, resources, ctx.settings) else [])
             + ([TRANSPLANT_TOOL] if transplant_options(summary) else [])
             + ([RNA_SCAN_TOOL] if rna_scan_offered(summary, resources, ctx.settings) else [])
@@ -590,13 +603,18 @@ RESUME_COMMISSIONS = {SLOT: resume_commission, COFOLDING_SLOT: resume_cofolding_
 
 
 def resume_action(summary, records, ctx):
-    """The resume this episode owes (``method_loop.episode_type``; the owner, 2026-11-21: "the head must finish parked jobs"):
+    """The resume this episode owes (``method_loop.episode_type``). FIRST the keeping of the commission's grouping while it is not yet
+    kept (``credit.grouping_owed``): ``{'action_type': 'apply_grouping', 'arguments': {'candidate_groups', 'scope'}, 'due': True}``,
+    taken at once, before any resume of a parked job. Else the owner's rule of 2026-11-21 ("the head must finish parked jobs"):
     ``None`` while no job is parked (of either child), else the resume of one parked job as ``{'action_type': its slot, 'arguments':
     resume_commission(...), 'due': ...}``. ``due`` is True once the job's expected remaining seconds have passed: the estimate
     recorded with its launch minus the seconds from the launch to this decision's recorded time (the wait notice ``jobs_view``
     shows), at or below zero. The job chosen: the earliest launched among the due ones, else the earliest launched. The
     commission passes the head's own check (``COMMISSION_CHECKS``), else this raises: a resume the check refuses is a fault of
     the episode."""
+    owed = grouping_owed(summary)
+    if owed:
+        return {'action_type': GROUPING_TOOL, 'arguments': {'candidate_groups': owed, 'scope': summary['scope']}, 'due': True}
     parked = parked_jobs(summary)
     if not parked:
         return None
