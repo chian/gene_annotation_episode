@@ -231,11 +231,14 @@ LEADING_PROTEINS = 5
 
 def matched_proteins(reader, scope, sources):
     """The proteins behind each product candidate, per target of the scope: ``{target: {product name: {'hit_count',
-    'function_identifiers', 'hits_without_identifier', 'hits_not_looked_up', 'leading_proteins'}}}``, over the hits of the held
+    'function_identifiers', 'identifier_sources', 'hits_without_identifier', 'hits_not_looked_up', 'leading_proteins'}}}``, over
+    the hits of the held
     graded structure searches that carry that name and have a value (a protein hit by several searches counts once and takes
     its highest value). ``hit_count``: those proteins. ``function_identifiers``: ``[{'source', 'identifier', 'hit_count'}]``,
     one entry per (source, identifier) with the number of the candidate's proteins that carry it, the one most carry first
-    (ties in the order found). ``hits_without_identifier``: the proteins that carry no identifier of any source (and whose
+    (ties in the order found). ``identifier_sources``: ``[{'source', 'protein_count'}]``, per source the number of the
+    candidate's proteins that carry ANY identifier of it (one protein can carry two identifiers of one source: with this number
+    a parent tells that from proteins that split over two identifiers). ``hits_without_identifier``: the proteins that carry no identifier of any source (and whose
     BV-BRC family lookup was made). ``hits_not_looked_up``: the proteins whose BV-BRC family lookup was not made or failed (no
     family is not known for them). ``leading_proteins``: ``[{'source': 'uniprot', 'accession', 'value'}]``, the highest value
     first, at most ``LEADING_PROTEINS``. A parent reads what a candidate is from these, never from the name; nothing here merges
@@ -259,17 +262,20 @@ def matched_proteins(reader, scope, sources):
     for target, products in found.items():
         table[target] = {}
         for product, proteins in products.items():
-            counts = {}
+            counts, carrying = {}, {}
             for protein in proteins.values():
                 for item in protein['identifiers']:
                     key = (item['source'], item['identifier'])
                     counts[key] = counts.get(key, 0) + 1
+                for name in dict.fromkeys(item['source'] for item in protein['identifiers']):
+                    carrying[name] = carrying.get(name, 0) + 1
             order = list(counts)
             leading = sorted(proteins, key=lambda accession: (-proteins[accession]['value'], accession))[:LEADING_PROTEINS]
             table[target][product] = {
                 'hit_count': len(proteins),
                 'function_identifiers': [{'source': key[0], 'identifier': key[1], 'hit_count': counts[key]}
                                          for key in sorted(counts, key=lambda key: (-counts[key], order.index(key)))],
+                'identifier_sources': [{'source': name, 'protein_count': count} for name, count in carrying.items()],
                 'hits_without_identifier': sum(1 for protein in proteins.values()
                                                if protein['looked_up'] and not protein['identifiers']),
                 'hits_not_looked_up': sum(1 for protein in proteins.values() if not protein['looked_up']),

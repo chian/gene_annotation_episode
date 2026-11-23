@@ -48,6 +48,10 @@ FUNCTION_IDENTIFIER_FORM = RecordForm({
     'identifier': Field('text', 'The identifier exactly as its source gives it'),
     'hit_count': Field('integer', 'The matched proteins of the candidate whose entry carries it'),
 })
+IDENTIFIER_SOURCE_FORM = RecordForm({
+    'source': ChoiceField('text', 'The source of identifiers', IDENTIFIER_SOURCES),
+    'protein_count': Field('integer', 'The matched proteins of the candidate that carry any identifier of that source'),
+})
 LEADING_PROTEIN_FORM = RecordForm({
     'source': ChoiceField('text', 'The database the accession is from', ('uniprot',)),
     'accession': Field('text', 'The protein\'s accession'),
@@ -70,6 +74,9 @@ CANDIDATE_FORM = RecordForm({
                                   items=FUNCTION_IDENTIFIER_FORM, required=False),
     'hits_without_identifier': Field('integer', 'For a product: its matched proteins that carry no identifier of any source '
                                                 'and whose BV-BRC family lookup was made', required=False),
+    'identifier_sources': Field('list', 'For a product: per source, how many of its matched proteins carry any identifier of '
+                                        'that source (a protein can carry two identifiers of one source)',
+                                items=IDENTIFIER_SOURCE_FORM, required=False),
     'hits_not_looked_up': Field('integer', 'For a product: its matched proteins whose BV-BRC family lookup was not made or failed '
                                            '(their family is unknown, not absent)', required=False),
     'leading_proteins': Field('list', 'For a product: the matched proteins behind it, the highest value first, at most '
