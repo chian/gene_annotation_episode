@@ -11,7 +11,8 @@
 - ``annotation_rows``: the score channel of a head that scores annotations it finds (``ANNOTATION_ROWS``). One row per
   candidate annotation: which annotation (``vocabulary``, and the ``name`` and ``identifier`` its source gives it), the
   ``status`` of the evidence (``ROW_STATUS``) and its ``score``: the one number that head's scoring sheet gives the
-  annotation, on that head's own scale, never bounded, clamped or rescaled here.
+  annotation, on that head's own scale, never bounded, clamped or rescaled here. With them, where the head returns
+  them, the function-level identifiers of the proteins behind the candidate.
 - ``claim_rows``: the score channel of a head that checks claims (``CLAIM_ROWS``). One row per claim its sheet scored:
   the claim (the hypothesis record the root made from an annotation and commissioned the head on), the ``status`` and
   the ``support`` and ``opposition`` of the head's sheet (absent when the status is unknown, never written as 0).
@@ -86,16 +87,23 @@ ROW_STATUS = ('measured', 'measured_zero', 'unknown')
 # The vocabularies of a candidate annotation, as the sequence-homology head names its candidates: a database search's
 # function, a family of a profile database, a sequence record it was compared with.
 VOCABULARIES = ('product', 'profile_family', 'reference_sequence')
+# The sources of function-level identifiers the linked heads return with a candidate (read from the proteins behind
+# it): the global protein family of a BV-BRC feature.
+FUNCTION_SOURCES = ('bvbrc_global_family',)
 
 
 def sequence_homology_rows(finding):
     """A101. The finding holds one entry per target of the scope, and the root annotates one subject: one target. Each
     of its candidates (the possible annotations found, each with its annotation score: the sum of its values on the
     head's subscoring sheets, never negative) is a row with that score. This head's sheets hold no evidence against a
-    candidate, so its rows have no support and opposition apart from the score."""
+    candidate, so its rows have no support and opposition apart from the score. A candidate a database search named
+    carries the function-level identifiers of the proteins behind it (``function_identifiers``: source, identifier and
+    the number of its hits that carry it) and ``hits_without_identifier``; the root decides with them which names are
+    one function (``internal_summary.same_function``)."""
     (target,) = finding['targets']
     return [{'vocabulary': candidate['vocabulary'], 'name': candidate['name'],
-             **({'identifier': candidate['identifier']} if 'identifier' in candidate else {}),
+             **{name: candidate[name] for name in ('identifier', 'function_identifiers', 'hits_without_identifier')
+                if name in candidate},
              'status': 'measured' if candidate['score'] else 'measured_zero', 'score': candidate['score']}
             for candidate in target['candidates']]
 

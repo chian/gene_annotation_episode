@@ -12,7 +12,8 @@ from ..credit import AXIS_WEIGHTS
 from gene_annotation_episode.episodic_workflow.episode_support.tools.annotation_claims.claim_generation import (
     PARTNER_KINDS, PREDICATES as CLAIM_PREDICATES)
 
-from .read_from_child import ROW_STATUS, VOCABULARIES
+from .internal_summary import IDENTITY_FIELDS
+from .read_from_child import FUNCTION_SOURCES, ROW_STATUS, VOCABULARIES
 
 _ABSENT = ' (absent when the status is unknown)'
 AXIS_ROW_FORM = RecordForm({
@@ -23,6 +24,18 @@ AXIS_ROW_FORM = RecordForm({
     'support': Field('number', "The summed support of the annotation's claims, for an axis that checks claims",
                      required=False),
     'opposition': Field('number', "The summed opposition of the annotation's claims, for such an axis", required=False),
+})
+FUNCTION_IDENTIFIER_FORM = RecordForm({
+    'source': ChoiceField('text', 'Where the identifier is from', FUNCTION_SOURCES),
+    'identifier': Field('text', 'The function-level identifier exactly as its source gives it'),
+    'hit_count': Field('integer', 'The proteins behind the annotation that carry it'),
+})
+MEMBER_FORM = RecordForm({
+    'vocabulary': ChoiceField('text', 'The vocabulary of the annotation', VOCABULARIES),
+    'name': Field('text', 'Its name exactly as its source gives it', required=False),
+    'identifier': Field('text', 'Its own identifier: a family accession or a record reference', required=False),
+    'axis': ChoiceField('text', 'The axis whose head named it', tuple(AXIS_WEIGHTS)),
+    'score': Field('number', 'The score that axis gave it'),
 })
 ANNOTATION_FORM = RecordForm({
     'vocabulary': ChoiceField('text', 'The vocabulary of the candidate annotation: product (a database search\'s '
@@ -36,9 +49,14 @@ ANNOTATION_FORM = RecordForm({
     'score': Field('number', 'The annotation score: the hypervolume prod_i (1 + k * s_i) ** w_i - 1 over the scores '
                              's_i the axes give the annotation (0 for an axis that has not scored it)' + _ABSENT,
                    required=False),
+    'function_identifiers': Field('list', 'The function-level identifiers of the proteins behind the annotation',
+                                  items=FUNCTION_IDENTIFIER_FORM, required=False),
+    'hits_without_identifier': Field('integer', 'The proteins behind it that carry no such identifier', required=False),
     'rows': Field('list', 'One row per axis whose head scored the annotation', items=AXIS_ROW_FORM),
+    'members': Field('list', 'Every annotation on this line (the names the heads gave this one function), with the axis '
+                             'that named it and the score that axis gave it', items=MEMBER_FORM),
 })
-ANNOTATION_IDENTITY_FORM = RecordForm({name: ANNOTATION_FORM.fields[name] for name in ('vocabulary', 'name', 'identifier')})
+ANNOTATION_IDENTITY_FORM = RecordForm({name: ANNOTATION_FORM.fields[name] for name in IDENTITY_FIELDS})
 CLAIM_FORM = RecordForm({
     'claim_ref': Field('text', 'The claim: a hypothesis record the root made from the annotation'),
     'annotation': Field('record', 'The candidate annotation the claim was made from', form=ANNOTATION_IDENTITY_FORM),

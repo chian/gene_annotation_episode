@@ -56,7 +56,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.annotation_
     TOOL_NAME as MAKE_CLAIMS, generate_claims)
 
 from .credit import AXIS_WEIGHTS, K, annotation_credit
-from .messages.internal_summary import annotation_key
+from .messages.internal_summary import annotation_key, identity_of
 
 # Slot (the axis role) -> the binding path of the axis head in its axis folder: the heads the root is linked with.
 # The owner, 2026-11-23: link A101 to A105 through a real root and run it from start to finish ("modify the root episode
@@ -111,11 +111,6 @@ def axis_view(slot, summary, credits, current):
             'finding': axis['finding'], 'outstanding_jobs': axis['outstanding_jobs'],
             'annotation_gain_of_one_credit':
                 annotation_credit({**credits, slot: credits[slot] + 1.0}) - current}
-
-
-def identity_of(annotation):
-    """The identity of an annotation as the sheet carries it: its vocabulary and its name and identifier."""
-    return {name: annotation[name] for name in ('vocabulary', 'name', 'identifier') if name in annotation}
 
 
 def claim_view(claim, summary):

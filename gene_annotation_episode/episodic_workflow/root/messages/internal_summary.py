@@ -19,13 +19,33 @@ was called for that annotation: nothing attaches a claim to an annotation afterw
 looked-up name of its molecule) and its records; ``claims_made`` holds the annotations the tool was called for.
 ``units`` says of every unit, in order, whether its outcome is pending (``credit.outcome_pending``).
 
-The root's scoring sheet (``annotations``): one line per candidate annotation (same vocabulary and identifier, or name
-when it has no identifier: the identity the sequence-homology head gives its candidates), with one row per axis that
-scored it. An axis that scores annotations gives its row directly. An axis that checks claims gives the annotation one
-row made from its rows of that annotation's claims (``claim_axis_row``): the support of the claims of known status
+The root's scoring sheet (``annotations``): one line per function, with one row per axis that scored it.
+
+Which names are one function is decided here, where all the evidence is (the owner, 2026-11-23: an annotation is a
+function; "leave a101 names alone until root"). Two heads, and one head, name one function in several ways: scoring it
+on several lines wastes work, and joining two different functions corrupts the score. The rule (``same_function``;
+its starting point is the note on deduplicating candidate annotations of 2026-11-23, not settled knowledge):
+
+1. A name or an alias never joins two annotations.
+2. Two annotations are one function only when a source of function-level identifiers gives both the same identifier
+   and no source that gives both an identifier separates them. The identifiers are read by the head from the proteins
+   behind its candidate, never from a search by a name.
+3. An annotation whose hits carry several identifiers of one source has no identifier in that source: it is unsettled
+   there and is joined to nothing by it.
+4. A line holds annotations that are one function pair by pair (the relation does not chain: A with B and B with C does
+   not join A with C when a source separates them).
+Two annotations of the same vocabulary and the same identifier of their own (a family accession, a record reference)
+are the same annotation. Everything else stands on its own line.
+
+A line is shown under its leading member (the one with the highest score): its vocabulary, name and identifiers, and
+``members``: every annotation on the line with the axis that named it and the score that axis gave it. The row an axis
+gives a line. An axis that scores annotations: the highest score it gave a member (the members are names of one
+function, so their scores are not added: that would count the same tests twice). An axis that checks claims gives the
+line one row made from its rows of the line's claims (``claim_axis_row``): the support of the claims of known status
 summed, their opposition summed, and the score ``tanh((support - opposition) / CLAIM_SCALAR_DIVISOR)``, which for one
 claim is exactly the scalar that head's own sheet gives it (A105's rule for its sheet, applied over the claims of one
-annotation: each claim is a separate thing the annotation says, checked on its own).
+annotation: each claim is a separate thing the annotation says, checked on its own). A claim is on the line of the
+annotation it was made from.
 
 The merger of the axes is the root's hypervolume (``credit.hypervolume``, the owner's rule for the root): the score of
 an annotation is ``prod_i (1 + K * s_i) ** w_i - 1`` over the nine axes, where ``s_i`` is the score axis ``i`` gives
@@ -52,10 +72,42 @@ ROW_FIELDS = ('status', 'score', 'support', 'opposition')
 CLAIM_SCALAR_DIVISOR = 2.0
 
 
+IDENTITY_FIELDS = ('vocabulary', 'name', 'identifier', 'function_identifiers', 'hits_without_identifier')
+
+
+def settled_identifiers(annotation):
+    """``{source: identifier}`` for every source of function-level identifiers in which the annotation's hits carry
+    exactly one identifier (rule 3 of the module text)."""
+    by_source = {}
+    for row in annotation.get('function_identifiers', ()):
+        by_source.setdefault(row['source'], []).append(row['identifier'])
+    return {source: identifiers[0] for source, identifiers in by_source.items() if len(identifiers) == 1}
+
+
+def same_function(first, second):
+    """Whether two annotations are one function (rules 1 and 2 of the module text), or the same annotation by their
+    own vocabulary and identifier."""
+    one, other = settled_identifiers(first), settled_identifiers(second)
+    shared = [source for source in one if source in other]
+    if shared:
+        return all(one[source] == other[source] for source in shared)
+    return ('identifier' in first and 'identifier' in second and first['vocabulary'] == second['vocabulary']
+            and first['identifier'] == second['identifier'])
+
+
 def annotation_key(annotation):
-    """The identity of a candidate annotation: its vocabulary and its identifier, or its name when it has none."""
+    """The identity of a candidate annotation as one text: its settled function-level identifiers when it has any, else
+    its vocabulary and its own identifier, or its name when it has none."""
+    settled = settled_identifiers(annotation)
+    if settled:
+        return 'function:' + ';'.join(source + '=' + settled[source] for source in sorted(settled))
     return annotation['vocabulary'] + ':' + (annotation['identifier'] if 'identifier' in annotation
                                              else annotation['name'])
+
+
+def identity_of(annotation):
+    """The identity fields of an annotation as the sheet carries them."""
+    return {name: annotation[name] for name in IDENTITY_FIELDS if name in annotation}
 
 
 def claim_axis_row(rows):
@@ -70,36 +122,75 @@ def claim_axis_row(rows):
             'support': support, 'opposition': opposition}
 
 
+def on_line(annotation, line):
+    """Whether ``annotation`` (the annotation a claim was made from) is on ``line``: it is one function with a member, or
+    it is that member."""
+    return any(same_function(annotation, member) or annotation_key(annotation) == annotation_key(member)
+               for _, member in line)
+
+
+def function_lines(axes):
+    """The annotations the axes named, grouped into lines (rule 4 of the module text): each line a list of
+    ``(slot, row)``, the annotation with the highest score first. An annotation joins the first line every member of
+    which it is one function with (or is the same annotation as)."""
+    named = [(slot, row) for slot, axis in axes.items() for row in axis['annotation_rows']]
+    lines = []
+    for slot, row in sorted(named, key=lambda item: -item[1]['score']):
+        line = next((line for line in lines if all(same_function(row, member) for _, member in line)), None)
+        if line is None:
+            lines.append([(slot, row)])
+        else:
+            line.append((slot, row))
+    return lines
+
+
 def scoring_sheet(axes, claims):
     """The root's scoring sheet from the rows of the axes and the claims (see the module text)."""
-    table, identities = {}, {}
-    for slot, axis in axes.items():
-        for row in axis['annotation_rows']:
-            key = annotation_key(row)
-            identities.setdefault(key, {name: row[name] for name in ('vocabulary', 'name', 'identifier') if name in row})
-            table.setdefault(key, {})[slot] = row
-        by_annotation = {}
-        for claim in claims:
-            if claim['claim_ref'] in axis['claim_rows']:
-                key = annotation_key(claim['annotation'])
-                identities.setdefault(key, claim['annotation'])
-                by_annotation.setdefault(key, []).append(axis['claim_rows'][claim['claim_ref']])
-        for key, rows in by_annotation.items():
-            table.setdefault(key, {})[slot] = claim_axis_row(rows)
     sheet = []
-    for key, by_axis in table.items():
-        annotation = dict(identities[key])
-        known = {slot: row for slot, row in by_axis.items() if row['status'] != 'unknown'}
-        if known:
-            annotation.update(
-                status='measured_zero' if all(row['status'] == 'measured_zero' for row in known.values())
-                else 'measured',
-                score=hypervolume({slot: known[slot]['score'] if slot in known else 0.0 for slot in AXIS_WEIGHTS}))
-        else:
-            annotation['status'] = 'unknown'
-        sheet.append({**annotation, 'rows': [{'axis': slot, **{field: row[field] for field in ROW_FIELDS if field in row}}
-                                             for slot, row in by_axis.items()]})
+    lines = function_lines(axes)
+    placed = set()
+    for line in lines:
+        leader = line[0][1]
+        by_axis = {}
+        for slot, row in line:
+            if slot not in by_axis or row['score'] > by_axis[slot]['score']:
+                by_axis[slot] = {name: row[name] for name in ROW_FIELDS if name in row}
+        for slot, axis in axes.items():
+            rows = [axis['claim_rows'][claim['claim_ref']] for claim in claims
+                    if claim['claim_ref'] in axis['claim_rows'] and on_line(claim['annotation'], line)]
+            if rows:
+                by_axis[slot] = claim_axis_row(rows)
+        placed.update(claim['claim_ref'] for claim in claims if on_line(claim['annotation'], line))
+        sheet.append(_line(identity_of(leader), by_axis,
+                           [{**{name: row[name] for name in ('vocabulary', 'name', 'identifier') if name in row},
+                             'axis': slot, 'score': row['score']} for slot, row in line]))
+    # a claim whose annotation no axis names any more still has its line (the annotation it was made from)
+    orphans = {}
+    for claim in claims:
+        if claim['claim_ref'] not in placed:
+            orphans.setdefault(annotation_key(claim['annotation']), []).append(claim)
+    for group in orphans.values():
+        by_axis = {}
+        for slot, axis in axes.items():
+            rows = [axis['claim_rows'][claim['claim_ref']] for claim in group if claim['claim_ref'] in axis['claim_rows']]
+            if rows:
+                by_axis[slot] = claim_axis_row(rows)
+        if by_axis:
+            sheet.append(_line(identity_of(group[0]['annotation']), by_axis, []))
     return sorted(sheet, key=lambda annotation: (annotation['status'] == 'unknown', -annotation.get('score', 0.0)))
+
+
+def _line(identity, by_axis, members):
+    """One line of the sheet: the identity it is shown under, its merged score, its axis rows and its members."""
+    line = dict(identity)
+    known = {slot: row for slot, row in by_axis.items() if row['status'] != 'unknown'}
+    if known:
+        line.update(
+            status='measured_zero' if all(row['status'] == 'measured_zero' for row in known.values()) else 'measured',
+            score=hypervolume({slot: known[slot]['score'] if slot in known else 0.0 for slot in AXIS_WEIGHTS}))
+    else:
+        line['status'] = 'unknown'
+    return {**line, 'rows': [{'axis': slot, **row} for slot, row in by_axis.items()], 'members': members}
 
 
 def internal_summary(view):
