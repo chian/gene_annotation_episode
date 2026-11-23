@@ -86,7 +86,7 @@ def final_to_parent(summary, completion, selection):
                              if annotations and annotations[0]['status'] != 'unknown' else {}),
                           'commissions': len(summary['commissions']),
                           'axes': {slot: {'credit': axis['credit'], 'commissions': len(axis['credit_after_each_return']),
-                                          'outstanding_jobs': len(axis['outstanding_job_refs'])}
+                                          'outstanding_jobs': axis['outstanding_jobs']}
                                    for slot, axis in axes.items()}}}
     if 'record_refs' in selection:
         result['record_refs'] = list(dict.fromkeys(ref for axis in axes.values() for ref in axis['record_refs']))

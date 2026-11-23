@@ -8,8 +8,8 @@ credit after each return, in order), ``finding`` (the numbers and flags of its l
 (the rows of a head that checks claims, by claim: the latest row its sheet gave each claim), ``claim_sheets`` (by
 claim, the sheet states of the head's latest return on that claim, which go back to it when it is commissioned on that
 claim again), ``claim_commissions`` (by claim, how often the head was commissioned on it), ``record_refs`` (every record
-its head returned so far, which goes back to that head at its next commission) and ``outstanding_job_refs`` (the job
-records its head left outstanding at its latest return). ``commissions`` lists the axes commissioned, in order.
+its head returned so far, which goes back to that head at its next commission), ``outstanding_job_refs`` (the job
+records of its latest return) and ``outstanding_jobs`` (how many jobs its head left running at its latest return). ``commissions`` lists the axes commissioned, in order.
 
 The axis credit is made from what the head's returned credit measures (``read_from_child.CREDIT_RETURNED``): a
 ``standing`` return is the axis credit itself; a ``rise`` return is added to the axis credit before it.
@@ -103,7 +103,8 @@ def scoring_sheet(axes, claims):
 
 def internal_summary(view):
     axes = {slot: {'credit': 0.0, 'credit_after_each_return': [], 'finding': {}, 'record_refs': [],
-                   'outstanding_job_refs': [], 'annotation_rows': [], 'claim_rows': {}, 'claim_sheets': {},
+                   'outstanding_job_refs': [], 'outstanding_jobs': 0, 'annotation_rows': [], 'claim_rows': {},
+                   'claim_sheets': {},
                    'claim_commissions': {}}
             for slot in AXIS_WEIGHTS}
     claims, claims_made, commissions = [], [], []
@@ -128,5 +129,6 @@ def internal_summary(view):
             axis['claim_commissions'][claim_ref] = axis['claim_commissions'].get(claim_ref, 0) + 1
         axis['record_refs'].extend(ref for ref in report['record_refs'] if ref not in axis['record_refs'])
         axis['outstanding_job_refs'] = report['outstanding_job_refs']
+        axis['outstanding_jobs'] = report['outstanding_jobs']
     return {**view.parent_input, 'axes': axes, 'claims': claims, 'claims_made': claims_made,
             'annotations': scoring_sheet(axes, claims), 'commissions': commissions}

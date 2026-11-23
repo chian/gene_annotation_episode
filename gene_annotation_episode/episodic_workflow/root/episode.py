@@ -21,6 +21,7 @@ class RootAnnotation(EpisodeBinding):
     credit = credit_file.credit
     ceiling = credit_file.ceiling
     yield_controller = yield_file.yield_controller
+    items_remaining = yield_file.items_remaining
     assignment_form = from_parent_file.ASSIGNMENT_FORM
     read_from_parent = from_parent_file.read_from_parent
     msg_to_child = to_child_file.msg_to_child

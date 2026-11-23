@@ -19,8 +19,10 @@
   The score never reads a credit, and the credit never reads a score.
 - ``record_refs``: the records the head returned in the fields the root selected (``RECORD_FIELDS``), which the
   root now holds and passes back to that head at its next commission.
-- ``outstanding_job_refs``: the records of the jobs the head left outstanding when it ended its turn
-  (``JOB_FIELDS``).
+- ``outstanding_job_refs``: the job records the head returned (``JOB_FIELDS``).
+- ``outstanding_jobs``: how many jobs the head left running when it ended its turn, by the head's own count
+  (``OUTSTANDING_JOBS``). A head that left none ran fully: its own yield estimator ended it because nothing more was
+  worth doing with what it held.
 
 Each head's fields are named here against its own ``messages/final_to_parent.py``, read as data."""
 
@@ -124,6 +126,22 @@ CLAIM_ROWS = {
 }
 
 
+def sequence_homology_outstanding(finding):
+    """A101. The job handoffs it holds whose closure it does not hold, as its finding counts them."""
+    return finding['outstanding_handoff_count']
+
+
+def none_outstanding(finding):
+    return 0
+
+
+# How many jobs each linked head left running at its return, read from its own finding.
+OUTSTANDING_JOBS = {
+    'sequence_homology_evidence': sequence_homology_outstanding,
+    'experimental_activity_evidence': none_outstanding,
+}
+
+
 def references(result, fields):
     """The references of the named fields of a return, in order, each once."""
     return list(dict.fromkeys(ref for field in fields for ref in result[field]))
@@ -137,4 +155,5 @@ def read_from_child(slot, result, summary, records):
             'claim_rows': CLAIM_ROWS[slot](result['finding']),
             'record_refs': references(result, (*RECORD_FIELDS[slot], *SHEET_FIELDS[slot])),
             'sheet_state_refs': references(result, SHEET_FIELDS[slot]),
-            'outstanding_job_refs': references(result, JOB_FIELDS[slot])}
+            'outstanding_job_refs': references(result, JOB_FIELDS[slot]),
+            'outstanding_jobs': OUTSTANDING_JOBS[slot](result['finding'])}

@@ -16,9 +16,16 @@ the root sees the claims and nothing of the process. A claim is then handed to a
 (``CLAIM_CHECKERS``), and what that head finds is that head's score of the annotation the claim was made from: both
 heads score the same annotation, on one line of the root's scoring sheet. One claim may go to several heads.
 
-The steps offered at a decision (``choices``): a commission of the sequence-homology head; ``make_claims`` for each
-annotation on the sheet whose claims were not made yet; and, for each claim and each head that can check it, a
-commission of that head on that claim. The model answers with the number of one of them.
+The steps offered at a decision (``choices``). A step is offered only when there is something new for it (the
+owner, 2026-11-23: "it's not at all reasonable to expect new results under the same controller and purely deterministic
+tools"; the yield estimator should say "a101 ran and we expect nothing else b/c it ran fully"). Every head is ended by
+its own yield estimator, which is that head's verdict that nothing more is worth doing with what it holds; a head that
+returned and left no job running ran fully, and commissioning it again on the same input asks the same question again.
+So: a commission of the sequence-homology head is offered before its first return and while it has a job outstanding;
+``make_claims`` is offered for each annotation on the sheet whose claims were not made yet; and a commission of a
+claim-checking head on a claim is offered while that head was not commissioned on that claim or has a job
+outstanding. The model answers with the number of one of the offered steps. When no step is left the controller ends
+the episode (``yield_estimator.items_remaining``).
 
 What the model is shown is controlled data only: the annotation credit, the root's scoring sheet (every candidate
 annotation the heads scored, with its merged score and each axis's row), the claims made, the steps it may take, and
@@ -67,7 +74,7 @@ CLAIM_CHECKERS = {
 INSTRUCTIONS = """You direct the annotation of one protein. The aim is to find its best annotation and how well the evidence supports it.
 
 Each step you take one of the `choices`, by its number:
-- `sequence_homology_evidence`: its episode searches sequence databases, finds candidate annotations for the protein and scores each from sequence. It holds the records it returned before and continues from them.
+- `sequence_homology_evidence`: its episode searches sequence databases, finds candidate annotations for the protein and scores each from sequence.
 - `make_claims` for one candidate annotation: turns what that annotation says the protein does into claims an experiment could check ("binds", "catalyzes" or "transports" a named molecule). It is quick, it is done once for an annotation, and it earns no credit by itself: it is what makes the next kind of step possible. An annotation that states no function gives no claims.
 - `experimental_activity_evidence` on one claim: its episode searches the literature for experiments that test that claim. It takes hours. What it finds is its score of the annotation the claim was made from.
 
@@ -79,6 +86,8 @@ The annotation credit is prod_i (1 + k * v_i) ** w_i - 1 over the axis credits v
 
 `axes` shows for each axis: `credit`; `credit_after_each_return` (an axis whose credit has stopped rising has stopped being productive); `commissions`; `finding` (the numbers and flags of its latest finding); and `outstanding_jobs` (how many job records its episode left outstanding). A job that is still running is not evidence: take other steps and return to that axis later.
 
+Only steps that have something new to run on are offered: an episode that has returned without a job outstanding did everything worth doing with what it held, so it is not offered again on the same input.
+
 Spend the expensive steps where they tell the leading annotations apart: a claim that the leading annotation makes and its rival does not is worth more than one both make. Choose the step you expect to raise the annotation credit most. You cannot end this episode: its controller ends it when further steps stop earning credit."""
 
 
@@ -88,7 +97,7 @@ def axis_view(slot, summary, credits, current):
     return {'axis': slot, 'weight': AXIS_WEIGHTS[slot], 'credit': axis['credit'],
             'credit_after_each_return': axis['credit_after_each_return'],
             'commissions': len(axis['credit_after_each_return']),
-            'finding': axis['finding'], 'outstanding_jobs': len(axis['outstanding_job_refs']),
+            'finding': axis['finding'], 'outstanding_jobs': axis['outstanding_jobs'],
             'annotation_gain_of_one_credit':
                 annotation_credit({**credits, slot: credits[slot] + 1.0}) - current}
 
@@ -107,16 +116,26 @@ def claim_view(claim, summary):
                             for slot, predicates in CLAIM_CHECKERS.items() if claim['predicate'] in predicates}}
 
 
+def has_something_new(slot, summary, claim_ref=None):
+    """Whether a commission of ``slot`` (on ``claim_ref`` for a claim-checking head) has something new to run on: the
+    head has not run on this input yet, or it left a job running at its latest return."""
+    axis = summary['axes'][slot]
+    ran = bool(axis['credit_after_each_return']) if claim_ref is None else claim_ref in axis['claim_commissions']
+    return not ran or axis['outstanding_jobs'] > 0
+
+
 def choices(summary):
     """The steps offered now, in a fixed order (see the module text). Each is the action the system takes for it and
     what the model is shown of it."""
-    offered = [{'action': ANNOTATION_FINDER}]
+    offered = []
+    if has_something_new(ANNOTATION_FINDER, summary):
+        offered.append({'action': ANNOTATION_FINDER})
     for annotation in summary['annotations']:
         if annotation_key(annotation) not in summary['claims_made']:
             offered.append({'action': MAKE_CLAIMS, 'annotation': identity_of(annotation)})
     for claim in summary['claims']:
         for slot, predicates in CLAIM_CHECKERS.items():
-            if claim['predicate'] in predicates:
+            if claim['predicate'] in predicates and has_something_new(slot, summary, claim['claim_ref']):
                 offered.append({'action': slot, 'claim_ref': claim['claim_ref'], **claim_view(claim, summary)})
     return [{'choice': number, **step} for number, step in enumerate(offered)]
 
