@@ -2,8 +2,8 @@
 results). Always returned: the Episode's credit (the system hands it in ``completion``) and the finding (the
 investigation_finding): the per-annotation scores (target_id, status, support, opposition, net, scalar) and the controlled
 row features (sheet_ref, evidence_type, assertion_ref, target_id, experiments, independent_groups, relative_deviation, net,
-support, opposition, status) of the latest child return (the whole sheet as it stands after it), as numbers, counts and
-vocabulary values; nothing is combined or recomputed here. The row resolution is the credit channel and is not part of the
+support, opposition, status) of the latest child return that changed the sheet (the whole sheet as it stands), as numbers,
+counts and vocabulary values; nothing is combined or recomputed here. The row resolution is the credit channel and is not part of the
 finding (the contract keeps the score and credit channels apart; the credit goes up as ``credit``). Selectable:
 ``sheet_state_refs`` (the persisted sheet states of the latest child return, or the states this episode was given when it
 commissioned none, handed to the next run) and ``committed_record_refs`` (the assessments the head committed, the

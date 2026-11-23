@@ -55,7 +55,9 @@ def internal_summary(view):
         # this episode was given (the states its commissioner passed, no scores, no features).
         'sheet_state_refs': children[-1]['report']['sheet_state_refs'] if children else parent['sheet_state_refs'],
         'given_sheet_state_refs': list(parent['sheet_state_refs']),
-        'scores': children[-1]['report']['scores'] if children else [],
-        'features': children[-1]['report']['features'] if children else [],
+        # A child that changed nothing returns the sheet it was given and no finding, so the finding of the sheet as it
+        # stands is the one of the latest child return that carries one (none before any child changed the sheet).
+        'scores': next((child['report']['scores'] for child in reversed(children) if child['report']['features']), []),
+        'features': next((child['report']['features'] for child in reversed(children) if child['report']['features']), []),
         'lead_source_refs': relevant_lead_sources(view.outcomes, parent['proposed_annotation_ref'], records),
     }

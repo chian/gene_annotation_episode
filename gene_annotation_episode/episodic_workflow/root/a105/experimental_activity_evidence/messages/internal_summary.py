@@ -64,8 +64,10 @@ def internal_summary(view):
                           for outcome in children],
         'sheet_state_refs': sheet_state_refs,
         'given_sheet_state_refs': list(parent['sheet_state_refs']),
-        'scores': children[-1]['report']['scores'] if children else [],
-        'features': children[-1]['report']['features'] if children else [],
+        # A child that changed nothing returns the sheet it was given and no finding, so the finding of the sheet as it
+        # stands is the one of the latest child return that carries one (none before any child changed the sheet).
+        'scores': next((child['report']['scores'] for child in reversed(children) if child['report']['features']), []),
+        'features': next((child['report']['features'] for child in reversed(children) if child['report']['features']), []),
         'no_applicable_spans': no_applicable_spans(view.outcomes, records),
         'committed_record_refs': list(dict.fromkeys([
             *committed(view), *(ref for outcome in children for ref in outcome['report']['committed_record_refs']),
