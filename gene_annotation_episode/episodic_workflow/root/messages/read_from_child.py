@@ -8,13 +8,15 @@
 - ``finding``: the numbers and flags of the head's finding, under the head's own field names. Text, lists and
   nested records of a finding stay with the head that wrote them and are not read, except the annotation rows below:
   nothing a model wrote reaches the root's summary or the root's model.
-- ``annotation_rows``: the score channel. One row per candidate annotation the head scored, read from the head's own
-  scoring sheet as it returned it in its finding (``ANNOTATION_ROWS``): which annotation (``vocabulary``, and the
-  ``name`` and ``identifier`` its source gives it), the ``status`` of the evidence (``ROW_STATUS``) and its ``score``:
-  the one number that head's scoring sheet gives the annotation, on that head's own scale, never bounded, clamped or
-  rescaled here (absent when the status is unknown, never written as 0). A head whose sheet keeps support and
-  opposition apart returns them too, so conflict stays visible. These rows are what ``messages/internal_summary.py``
-  merges into the root's scoring sheet. The score never reads a credit, and the credit never reads a score.
+- ``annotation_rows``: the score channel of a head that scores annotations it finds (``ANNOTATION_ROWS``). One row per
+  candidate annotation: which annotation (``vocabulary``, and the ``name`` and ``identifier`` its source gives it), the
+  ``status`` of the evidence (``ROW_STATUS``) and its ``score``: the one number that head's scoring sheet gives the
+  annotation, on that head's own scale, never bounded, clamped or rescaled here.
+- ``claim_rows``: the score channel of a head that checks claims (``CLAIM_ROWS``). One row per claim its sheet scored:
+  the claim (the hypothesis record the root made from an annotation and commissioned the head on), the ``status`` and
+  the ``support`` and ``opposition`` of the head's sheet (absent when the status is unknown, never written as 0).
+  ``messages/internal_summary.py`` puts each claim's row on the line of the annotation the claim was made from.
+  The score never reads a credit, and the credit never reads a score.
 - ``record_refs``: the records the head returned in the fields the root selected (``RECORD_FIELDS``), which the
   root now holds and passes back to that head at its next commission.
 - ``outstanding_job_refs``: the records of the jobs the head left outstanding when it ended its turn
@@ -79,10 +81,9 @@ JOB_FIELDS = {
 
 # The status of the evidence of a row, as the heads' scoring sheets name it.
 ROW_STATUS = ('measured', 'measured_zero', 'unknown')
-# The vocabularies of a candidate annotation: the three of the sequence-homology head's candidates (a database search's
-# function, a family of a profile database, a sequence record it was compared with) and the proposed annotation (a
-# hypothesis record), which is what the experimental-activity head scores.
-VOCABULARIES = ('product', 'profile_family', 'reference_sequence', 'proposed_annotation')
+# The vocabularies of a candidate annotation, as the sequence-homology head names its candidates: a database search's
+# function, a family of a profile database, a sequence record it was compared with.
+VOCABULARIES = ('product', 'profile_family', 'reference_sequence')
 
 
 def sequence_homology_rows(finding):
@@ -98,20 +99,27 @@ def sequence_homology_rows(finding):
 
 
 def experimental_activity_rows(finding):
-    """A105. The finding holds one score per candidate annotation of the head's main scoring sheet: the hypothesis
-    record it is about (``assertion_ref``), the status, the summed support and opposition, and the head's one scalar for
-    the annotation: ``tanh((support - opposition) / 2)``, between -1 and 1, negative when the evidence says the claim
-    does not hold. The scalar is the row's score. The head omits the numbers when the status is unknown."""
-    return [{'vocabulary': 'proposed_annotation', 'identifier': score['assertion_ref'], 'status': score['status'],
-             **({'score': score['scalar']} if 'scalar' in score else {}),
+    """A105. The finding holds one score per candidate of the head's main scoring sheet: the hypothesis record it is
+    about (``assertion_ref``: the claim the head was commissioned on), the status, and the summed support and opposition
+    (omitted by the head when the status is unknown)."""
+    return [{'claim_ref': score['assertion_ref'], 'status': score['status'],
              **{name: score[name] for name in ('support', 'opposition') if name in score}}
             for score in finding['scores']]
 
 
-# How the annotation rows of each linked head's return are read from its finding, written against that head's own
-# ``messages/final_to_parent.py``. A head is listed here when it is linked (``task.CHILD_SLOTS``).
+def no_rows(finding):
+    return []
+
+
+# How the rows of each linked head's return are read from its finding, written against that head's own
+# ``messages/final_to_parent.py``. A head is listed here when it is linked (``task.CHILD_SLOTS``): a head that scores
+# the annotations it finds gives annotation rows, a head that checks claims gives claim rows.
 ANNOTATION_ROWS = {
     'sequence_homology_evidence': sequence_homology_rows,
+    'experimental_activity_evidence': no_rows,
+}
+CLAIM_ROWS = {
+    'sequence_homology_evidence': no_rows,
     'experimental_activity_evidence': experimental_activity_rows,
 }
 
@@ -126,6 +134,7 @@ def read_from_child(slot, result, summary, records):
             'finding': {name: value for name, value in result['finding'].items()
                         if type(value) in (bool, int, float)},
             'annotation_rows': ANNOTATION_ROWS[slot](result['finding']),
+            'claim_rows': CLAIM_ROWS[slot](result['finding']),
             'record_refs': references(result, (*RECORD_FIELDS[slot], *SHEET_FIELDS[slot])),
             'sheet_state_refs': references(result, SHEET_FIELDS[slot]),
             'outstanding_job_refs': references(result, JOB_FIELDS[slot])}

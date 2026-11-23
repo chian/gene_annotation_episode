@@ -144,6 +144,7 @@ def credit(summary, records):
 
 
 def ceiling(summary, records, action_type, arguments, ctx):
-    """The most the annotation credit can rise if the axis ``action_type`` is commissioned next: an axis credit has no
-    upper bound (this file never bounds one), so neither has the rise: ``UNBOUNDED``, for every axis."""
-    return UNBOUNDED
+    """The most the annotation credit can rise if ``action_type`` is taken next. A commission of an axis head: an axis
+    credit has no upper bound (this file never bounds one), so neither has the rise: ``UNBOUNDED``. The making of an
+    annotation's claims (the tool ``make_claims``) changes no axis credit: 0."""
+    return UNBOUNDED if action_type in AXIS_WEIGHTS else 0.0

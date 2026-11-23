@@ -9,7 +9,8 @@ A commission carries controlled data only. Nothing in it was written by a model:
 - the objective, a fixed sentence of this file for each axis;
 - the head's selection (its evidence-axis option, thought pattern and tools), which the root's settings give for
   the axis and ``task.action`` put into ``arguments``;
-- the proposed annotation and the scope, as the root was given them;
+- the proposed annotation and the scope, as the root was given them; for a head that checks claims, the claim it is
+  commissioned on (a hypothesis record the root's own tool made from a candidate annotation) in its place;
 - the whole-axis finding task with the root's credit unit of the axis (``credit.AXIS_CREDIT_UNITS``): the setting
   that makes the nine axis scales comparable; for the heads that take them, the credit units of their
   operational children (``credit.OPERATIONAL_CREDIT_UNITS``);
@@ -130,22 +131,26 @@ def evolutionary_history_evidence(arguments, summary):
 
 
 def experimental_activity_evidence(arguments, summary):
-    """A105. The proposed annotation as text; one custody field, ``evidence_refs``, for the scope records, the
-    proposed annotation and the evidence; its context is exactly the finding task. Once its head has returned a sheet,
-    the sheet states of its latest return go back as ``sheet_state_refs``: the head continues that sheet and returns
-    the rise of its credit since it (``read_from_child.CREDIT_RETURNED``)."""
+    """A105. It is commissioned on one claim (``arguments['claim_ref']``): a hypothesis record the root made from a
+    candidate annotation (``task.make_claims``), which the head evaluates as its proposed annotation. One custody field,
+    ``evidence_refs``, for the scope records, the claim with the records it names, and the evidence; its context is
+    exactly the finding task. Once its head has returned a sheet for this claim, the sheet states of that return go back
+    as ``sheet_state_refs``: the head continues that sheet and returns the rise of its credit since it
+    (``read_from_child.CREDIT_RETURNED``). A sheet belongs to one claim: the states of another claim's sheet are not
+    passed as this one's."""
     slot = 'experimental_activity_evidence'
-    proposed = summary['proposed_annotation_ref']
+    (claim,) = [made for made in summary['claims'] if made['claim_ref'] == arguments['claim_ref']]
     assignment = {
         'selection': arguments['selection'],
-        'proposed_annotation_ref': proposed,
-        'evidence_refs': unique(summary['scope_refs'], [proposed], summary['evidence_refs'],
+        'proposed_annotation_ref': claim['claim_ref'],
+        'evidence_refs': unique(summary['scope_refs'], claim['record_refs'], summary['evidence_refs'],
                                 summary['received_record_refs'], returned(slot, summary)),
         'constraints': {},
         'context': {'evidence_task': evidence_task(slot, 'A105')},
         'scope': summary['scope']}
-    if summary['axes'][slot]['sheet_state_refs']:
-        assignment['sheet_state_refs'] = list(summary['axes'][slot]['sheet_state_refs'])
+    sheets = summary['axes'][slot]['claim_sheets']
+    if claim['claim_ref'] in sheets and sheets[claim['claim_ref']]:
+        assignment['sheet_state_refs'] = list(sheets[claim['claim_ref']])
     return ChildMessage(objective='Establish what the experimental-activity evidence shows about the proposed '
                                   'annotation of the assigned subject',
                         message={}, assignment=assignment, selection=SELECTION[slot])
