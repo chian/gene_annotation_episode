@@ -201,7 +201,8 @@ APPLICATION = JobApplication(
                    'resource_id': {'type': 'string', 'minLength': 1}},
     size_field='residues', kind=lambda fields: str(len(fields['ligands'])),
     field_problems=field_problems, prepare=prepare, extract=extract, describe_identity=describe_identity,
-    route_kind=ROUTE_KIND, model_sources=(), first_job_seconds=FIRST_JOB_SECONDS)
+    route_kind=ROUTE_KIND, model_sources=(), first_job_seconds=FIRST_JOB_SECONDS,
+    service_estimate=lambda native: None)   # the PBS route records no estimate of its own
 
 __all__ = ['APPLICATION', 'CHILD', 'FIRST_JOB_SECONDS', 'LIGAND_COUNT', 'PROVIDER', 'RESULTS_KIND', 'REQUEST_FIELDS', 'ROUTE_KIND',
            'STATES', 'check_commission', 'cofolding_settings', 'component_id', 'graded_rows', 'reusable_cofolding',

@@ -37,10 +37,10 @@ def internal_summary(view):
             'target': parent['target'],
             'query': {'subject_ref': query_ref, 'sequence_ref': record['sequence_ref'], 'molecule': record.get('molecule'),
                       'length': len(sequence)},
-            'notice': (job_notice(search_facts(job), revised[-1] if revised else None)
+            'notice': (job_notice(search_facts(APPLICATION, job), revised[-1] if revised else None)
                        if job is not None and facts['state'] in ('launched', 'finished') else None),
             'unit_rows': rows, 'state_facts': facts, 'state': facts['state'],
-            'last_failure_code': facts['last_failure_code'], 'job': search_facts(job), 'graded': graded_rows(records),
+            'last_failure_code': facts['last_failure_code'], 'job': search_facts(APPLICATION, job), 'graded': graded_rows(records),
             'counts': [{name: outcome[name] for name in COUNTS} for outcome in extracted],
             'handoff_refs': returned_with_names(records, [ref for unit in view.outcomes if unit['tool'] == 'launch'
                                                           for ref in unit['outcome']['handoff_refs']]),

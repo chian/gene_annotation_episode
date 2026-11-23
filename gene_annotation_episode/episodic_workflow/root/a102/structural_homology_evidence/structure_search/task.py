@@ -125,7 +125,7 @@ def action(response, summary, records, ctx):
         problems = check_fix(APPLICATION, chosen, state=facts)
     elif name == 'monitor':
         description = ctx.services['job_access'].read('describe', _resource(summary))
-        minimum = 0 if job is None else minimum_wait(description, search_facts(job), ctx.clock.now)
+        minimum = 0 if job is None else minimum_wait(description, search_facts(APPLICATION, job), ctx.clock.now)
         problems = check_monitor(chosen, state=facts, job=job, minimum=minimum)
     else:
         problems = check_extract(chosen, state=facts, job=job)

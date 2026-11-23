@@ -101,7 +101,7 @@ def seconds_between(earlier, later):
     return (datetime.fromisoformat(later) - datetime.fromisoformat(earlier)).total_seconds()
 
 
-def search_facts(search):
+def search_facts(binding, search):
     """The held job as controlled facts (``None`` while none is held): its records, the prediction recorded with its
     launch, the service's own estimate (none for this service) and its latest check (with the seconds from the launch to
     it). ``search`` is a view ``{'handoff', 'checks', 'closure'}`` of job ledger rows."""
@@ -114,7 +114,7 @@ def search_facts(search):
             'closure_ref': None if search['closure'] is None else search['closure']['id'],
             'submitted_at': handoff['at'], 'predicted_seconds': estimates['predicted_seconds'],
             'prediction_basis': estimates['duration_basis'],
-            'service_estimate_seconds': handoff['detail']['native']['expected_seconds'],
+            'service_estimate_seconds': binding.service_estimate(handoff['detail']['native']),
             'latest_check': None if shown is None else {
                 'check_ref': shown['id'], 'observed_at': shown['at'], 'state': shown['detail']['state'],
                 'result_available': shown['detail']['result_available'],
@@ -183,6 +183,9 @@ class JobApplication:
     model_sources: tuple = MODEL_SOURCES
     # The seconds of the first job of a kind, when the ledger has measured none.
     first_job_seconds: float = FIRST_JOB_SECONDS
+    # The service's own estimate of the job's seconds, read from the route's native handoff record (None: the route
+    # records none).
+    service_estimate: Callable = lambda native: native['expected_seconds']
 
 
 def ledger_kind(binding, fields):

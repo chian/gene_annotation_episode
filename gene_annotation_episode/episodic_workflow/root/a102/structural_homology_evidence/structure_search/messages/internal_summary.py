@@ -50,10 +50,10 @@ def internal_summary(view):
             'sources': sources_offered(APPLICATION, rows, model_held=model is not None, sequence=sequence),
             'model_tries': [{name: row[name] for name in ('source', 'model_status', 'residues', 'mean_plddt')}
                             for row in rows if row['action'] == 'get_model' and row['status'] == 'completed'],
-            'notice': (job_notice(search_facts(job), revised[-1] if revised else None)
+            'notice': (job_notice(search_facts(APPLICATION, job), revised[-1] if revised else None)
                        if job is not None and facts['state'] in ('launched', 'finished') else None),
             'unit_rows': rows, 'state_facts': facts, 'state': facts['state'],
-            'last_failure_code': facts['last_failure_code'], 'job': search_facts(job), 'graded': graded_rows(records),
+            'last_failure_code': facts['last_failure_code'], 'job': search_facts(APPLICATION, job), 'graded': graded_rows(records),
             'counts': [{name: outcome[name] for name in COUNTS} for outcome in extracted],
             'handoff_refs': returned_with_names(records, [ref for unit in view.outcomes if unit['tool'] == 'launch'
                                                           for ref in unit['outcome']['handoff_refs']]),

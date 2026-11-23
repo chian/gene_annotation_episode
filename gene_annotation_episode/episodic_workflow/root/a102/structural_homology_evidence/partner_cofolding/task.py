@@ -130,7 +130,7 @@ def action(response, summary, records, ctx):
     elif name == 'fix':
         problems = check_fix(APPLICATION, chosen, state=facts)
     elif name == 'monitor':
-        minimum = 0 if job is None else minimum_wait(NO_SPACING, search_facts(job), ctx.clock.now)
+        minimum = 0 if job is None else minimum_wait(NO_SPACING, search_facts(APPLICATION, job), ctx.clock.now)
         problems = check_monitor(chosen, state=facts, job=job, minimum=minimum)
     else:
         problems = check_extract(chosen, state=facts, job=job)
