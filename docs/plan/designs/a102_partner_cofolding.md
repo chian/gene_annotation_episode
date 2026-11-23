@@ -27,7 +27,7 @@ names model sources. `structure_search` behaves as before.
 
 - Commission fields: `query_ref` (one protein subject record), `ligands` (2 to 4 distinct held ligand candidates not co-folded
   before for that query), `until` (`launched` or `extracted`), `resource_id` (a bound `pbs` resource). The allocation is the
-  run's setting, not the model's: account `bvbrc`, queue `debug`, `select` `1:system=polaris`, walltime `00:30:00`,
+  run's setting, not the model's: account `IMPROVE_Aim1` (owner, 2026-11-23), queue `debug`, `select` `1:system=polaris`, walltime `00:30:00`,
   filesystems `home:eagle`.
 - Prepare: the target sequence from the subject record; each ligand's SMILES from the RCSB chemical-component service
   (`data.rcsb.org/rest/v1/core/chemcomp/<id>`, `pdbx_chem_comp_descriptor`, the `SMILES_CANONICAL` entry; checked live for ATP).

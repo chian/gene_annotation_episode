@@ -196,8 +196,8 @@ def check_commission(request, *, scope_subjects, sequences, held_ligands, resour
 APPLICATION = JobApplication(
     application=APPLICATION_NAME, child=CHILD, service=SERVICE, provider=PROVIDER, product_kind=RESULTS_KIND,
     request_fields=REQUEST_FIELDS, estimate_fields=('ligands',),
-    field_schemas={'ligands': {'type': 'array', 'minItems': LIGAND_COUNT[0], 'maxItems': LIGAND_COUNT[1], 'uniqueItems': True,
-                               'items': {'type': 'string', 'pattern': LIGAND_PATTERN}},
+    field_schemas={'ligands': {'type': 'array', 'minItems': LIGAND_COUNT[0], 'maxItems': LIGAND_COUNT[1],
+                               'items': {'type': 'string', 'minLength': 1}},
                    'resource_id': {'type': 'string', 'minLength': 1}},
     size_field='residues', kind=lambda fields: str(len(fields['ligands'])),
     field_problems=field_problems, prepare=prepare, extract=extract, describe_identity=describe_identity,

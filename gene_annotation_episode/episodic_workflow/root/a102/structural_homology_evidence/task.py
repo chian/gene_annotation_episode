@@ -352,7 +352,7 @@ def cofolding_fields(summary, resources):
     ligands = list(dict.fromkeys(ligand for target in targets for ligand in available_ligands(summary, target)))
     properties = {'query_ref': {'type': 'string', 'enum': targets},
                   'ligands': {'type': 'array', 'minItems': cofolding.LIGAND_COUNT[0], 'maxItems': cofolding.LIGAND_COUNT[1],
-                              'uniqueItems': True, 'items': {'type': 'string', 'enum': ligands}},
+                              'items': {'type': 'string', 'enum': ligands}},
                   'resource_id': {'type': 'string', 'enum': services}, 'until': {'type': 'string', 'enum': list(UNTIL)}}
     return properties, list(properties)
 
