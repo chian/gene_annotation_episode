@@ -3,7 +3,7 @@ page has not read the source, so the commission names the relation the claim sta
 asked, with the text of the k-th window (``messages/internal_summary.py``), to NAME the method that window reports, from the
 experiment types of the classes that list it (each shown with its plain line) or ``none`` (the library's ``method_request`` and
 ``method_call``). The unit, ``extract``, then has the model fill the named type's form with its identity block, quote-only,
-through the unit's recorded model (the library's ``extraction_arguments``); code validates every quote (found once in the
+through the unit's recorded model (the library's ``extraction_attempt``); code validates every quote (found once in the
 window), finds its span and holds the immutable leaf record of that window, which carries the type named. A window named
 ``none`` is done without a record. The experiment ref is ``kind:source:offset-end`` of the window, so each window's record
 is its own. The windows are the page's remaining prose chunks in document order (``windows`` of the commission); each is
@@ -11,11 +11,14 @@ read once and removed from the input list (``input_list``), never re-read. The n
 one unit, so a window is one unit and the yield estimator's item count (the windows) is the windows to do. Every method a
 window reports is named and filled within its unit, one record per method (owner, 2026-11-22: multiple methods per passage
 allowed, no cap, behaviour to be watched). The leaf grades and judges nothing: the page groups the leaf records of its chunk, table and report
-children into graders."""
+children into graders.
+A form the validator refuses (a quote that is not in the text, a value that is not written in its quote) is an outcome of
+the unit: no record is held for that type and the unit lists it under ``refused`` with the reason. The text then stays on
+the input list, and the next unit reads it again for the refused types only, each with its reason shown to the model; a
+further attempt is a unit like any other, so the yield estimator sees it and ends the leaf when attempts stop earning
+(the earlier loop inside the unit, "asked again until accepted", had no end: see ``extraction_attempt``)."""
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_leaf_extraction import (
-    extraction_arguments, leaf_record, method_call, method_request)
-from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import (
-    canonical)
+    extract_types, method_call, method_request)
 
 CHILD_SLOTS = {}
 SERVICES = ()
@@ -28,24 +31,23 @@ def decide(summary, feedback, ctx):
     asked for with an empty input list is an error."""
     if not summary['input_list']:
         raise LookupError('leaf_input_list_empty:' + TEXT)
-    return method_request(summary['claim_predicate'], summary['window'], feedback, text=TEXT)
+    return method_request(summary['claim_predicate'], summary['window'], feedback or summary['refused'] or None,
+                          text=TEXT)
 
 
 def action(response, summary, records, ctx):
     return method_call(response, summary['claim_predicate'], summary['window'], summary['already_stated_fields'],
                        summary['not_yet_stated_fields'], source_ref=summary['source_ref'], offset=summary['offset'],
-                       limit=summary['limit'], assertion_ref=summary['proposed_annotation_ref'])
+                       limit=summary['limit'], assertion_ref=summary['proposed_annotation_ref'],
+                       refused=summary['refused'])
 
 
 async def extract(arguments, ctx):
-    """Fill the form of every type the model named, one after the other, and hold one record for each; return their refs
-    and the types named, in the order named. A text for which no method was named holds no record (both lists empty).
-    No cap on the number of methods (owner, 2026-11-22: multiple methods per passage allowed; behaviour to be watched)."""
-    record_refs = []
-    for experiment_type in arguments['experiment_types']:
-        filled = await extraction_arguments(ctx.model, {**arguments, 'experiment_type': experiment_type}, text=TEXT)
-        record_refs.append(ctx.store.artifact(canonical(leaf_record(filled)), 'application/json'))
-    return {'status': 'completed', 'experiment_types': list(arguments['experiment_types']), 'record_refs': record_refs}
+    """One attempt at the form of every type named, one after the other: an accepted form is held as one record, a
+    refused one is listed with its reason (the library's ``extract_types``). Returns the record refs, the types named and
+    what was refused. A text for which no method was named holds no record. No cap on the number of methods (owner,
+    2026-11-22: multiple methods per passage allowed; behaviour to be watched)."""
+    return await extract_types(ctx.model, ctx.store, arguments, text=TEXT)
 
 
 TOOLS = {'extract': extract}

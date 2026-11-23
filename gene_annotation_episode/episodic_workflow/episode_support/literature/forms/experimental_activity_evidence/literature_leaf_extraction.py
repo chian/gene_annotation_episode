@@ -10,8 +10,8 @@ type: the page has not read the text. The methods offered are the types of every
 word may span several classes: owner, 2026-11-22).
 The leaf's model first NAMES every method the text reports (``method_request``/``method_call``: types of that class, each
 shown with its plain line; an empty list when the text reports none, in which case the window is done without a record); the
-unit's tool then has the model fill the form of each named type in turn (``extraction_arguments``; the decision's naming and
-the tool's fills are the calls of one unit). A text that reports results of several methods gives one record per method
+unit's tool then has the model fill the form of each named type in turn, once (``extract_types``, ``extraction_attempt``; the
+decision's naming and the tool's fills are the calls of one unit; a form the validator refuses is tried again in a further unit). A text that reports results of several methods gives one record per method
 (owner, 2026-11-22: "Multiple methods per passage allowed"; no cap is set, the behaviour is to be watched in real runs). Code
 picks, by the named value, the extraction module (``FORMS``) and, through the record's own type, the grader; the model never
 picks either and never calls the grader. The model fills, with the text, the answer form derived from that kind's
@@ -26,6 +26,8 @@ With ``text='chunk'`` they are the chunk leaf's instructions word for word."""
 import json
 
 from episode_runtime import ModelRequest, Rejected, ToolCall
+
+from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import canonical
 
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence import literature_identity_extraction as identity
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence import (
@@ -3903,37 +3905,79 @@ def method_request(claim_predicate, content, feedback, *, text):
     return ModelRequest('REASONING', METHOD_INSTRUCTIONS.format(text=text), context, generation_schema(method_schema(claim_predicate)))
 
 
-def method_call(response, claim_predicate, content, already_stated, not_yet_stated, *, source_ref, offset, limit, assertion_ref):
+def method_call(response, claim_predicate, content, already_stated, not_yet_stated, *, source_ref, offset, limit, assertion_ref,
+                refused):
     """The ``extract`` call of the model's naming ``response``: ``experiment_types`` are the types named, each once, in the
     order named (an empty list: the window is done without a record). A method that is not one of the class's is rejected
-    before any unit exists. No cap on the number named (owner, 2026-11-22; it cannot exceed the types of the class)."""
+    before any unit exists. No cap on the number named (owner, 2026-11-22; it cannot exceed the types of the class).
+
+    ``refused`` is what the last extraction of this text left refused (``{experiment type: the validator's reason}``,
+    empty when nothing is). The text is then read again only for those types: of the types the model names now, the ones
+    still refused are extracted, each with its reason shown to the model; a type whose form was accepted is not filled
+    again, and a refused type the model no longer names is dropped (the text does not report it after all)."""
     schema = method_schema(claim_predicate)
     methods = list(dict.fromkeys(decode_response(response, schema)['methods']))
     for method in methods:
         if method not in schema['properties']['methods']['items']['enum']:
             raise Rejected({'status': 'invalid', 'category': 'method_not_listed', 'detail': method})
+    if refused:
+        methods = [method for method in methods if method in refused]
     return ToolCall('extract', {'experiment_types': methods, 'claim_predicate': claim_predicate,
                                 'source_ref': source_ref, 'chunk': content, 'offset': offset, 'limit': limit,
                                 'assertion_ref': assertion_ref, 'already_stated_fields': already_stated,
-                                'not_yet_stated_fields': not_yet_stated})
+                                'not_yet_stated_fields': not_yet_stated,
+                                'refused': {method: refused[method] for method in methods if method in refused}})
 
 
-async def extraction_arguments(model, arguments, *, text, reading=''):
-    """The arguments of the leaf record of the type named in ``arguments`` (the ``extract`` call of ``method_call``): the
-    model (the unit's recorded ``ctx.model``) fills that type's form with its identity block, quote-only; an answer the
-    validator refuses is asked again with the reason, until one is accepted."""
-    feedback = None
-    while True:
-        request = extraction_request(arguments['experiment_type'], arguments['chunk'], feedback,
-                                     arguments['already_stated_fields'], arguments['not_yet_stated_fields'],
-                                     text=text, reading=reading)
-        response = await model.complete(request.role, request.instructions, request.context, request.output_schema)
-        try:
-            return extraction_call(response, arguments['experiment_type'], arguments['chunk'],
-                                   source_ref=arguments['source_ref'], offset=arguments['offset'],
-                                   limit=arguments['limit'], assertion_ref=arguments['assertion_ref']).arguments
-        except Rejected as refused:
-            feedback = refused.feedback
+async def extraction_attempt(model, arguments, *, text, reading=''):
+    """ONE attempt at the leaf record of the type named in ``arguments`` (the ``extract`` call of ``method_call``): the
+    model (the unit's recorded ``ctx.model``) fills that type's form with its identity block, quote-only, once. Returns
+    ``{'accepted': the arguments of the leaf record}`` or, when the validator refuses the answer, ``{'refused': its
+    reason}``. The reason the last attempt of this type on this text was refused (``arguments['refused']``, when it was)
+    is shown to the model.
+
+    A refused answer is an outcome of the unit, not something asked again inside it (``AGENTS.md``: a unit that
+    executes and returns enters its iterator, an invalid result included; stopping belongs to the episode's yield
+    estimator alone). The earlier form of this function asked again "until one is accepted", with no end: in four real
+    runs (A105 head runs 19 and 20, root runs 05 and 06) 105 of 133 forms were accepted at the first attempt, 13 at the
+    second or third, and 15 took 4 to 134 attempts, which was 70 percent of all the form calls; in root run 06 one
+    text was asked 134 times for the same refusal (a figure panel letter that is not in its quote) until the run was
+    stopped by hand. A further attempt is now a unit of the leaf (the text stays on its input list while a form is
+    refused), so the leaf's yield estimator sees every attempt and ends them."""
+    request = extraction_request(arguments['experiment_type'], arguments['chunk'],
+                                 arguments['refused'].get(arguments['experiment_type']),
+                                 arguments['already_stated_fields'], arguments['not_yet_stated_fields'],
+                                 text=text, reading=reading)
+    response = await model.complete(request.role, request.instructions, request.context, request.output_schema)
+    try:
+        return {'accepted': extraction_call(response, arguments['experiment_type'], arguments['chunk'],
+                                            source_ref=arguments['source_ref'], offset=arguments['offset'],
+                                            limit=arguments['limit'], assertion_ref=arguments['assertion_ref']).arguments}
+    except Rejected as refused:
+        return {'refused': refused.feedback}
+
+
+async def extract_types(model, store, arguments, *, text, reading=''):
+    """The outcome of one ``extract`` unit of a reading leaf: one attempt at the form of every type named, in the order
+    named; an accepted form is held as a leaf record (through the scoped ``store``), a refused one is listed with its
+    reason. ``refused`` empty: the text is read. The leaf's ``internal_summary`` keeps the text on its input list while
+    ``refused`` is not empty."""
+    record_refs, refused = [], {}
+    for experiment_type in arguments['experiment_types']:
+        attempt = await extraction_attempt(model, {**arguments, 'experiment_type': experiment_type}, text=text,
+                                           reading=reading)
+        if 'refused' in attempt:
+            refused[experiment_type] = attempt['refused']
+        else:
+            record_refs.append(store.artifact(canonical(leaf_record(attempt['accepted'])), 'application/json'))
+    return {'status': 'completed', 'experiment_types': list(arguments['experiment_types']), 'record_refs': record_refs,
+            'refused': refused}
+
+
+def refused_forms(extractions):
+    """What the latest of a text's ``extractions`` (the outcomes of its ``extract`` units) left refused: ``{experiment
+    type: reason}``, empty when there is none or its forms were all accepted."""
+    return dict(extractions[-1]['outcome']['refused']) if extractions else {}
 
 
 def leaf_record(arguments):

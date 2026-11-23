@@ -14,3 +14,9 @@ ITEMS = 1        # the input list: the one window [offset, offset + limit] of th
 def yield_controller(initial_credit, settings, parent_input):
     return ListBoundCompletionYieldController('table', initial_credit, settings['cost'], TARGET,
                                               settings['parameters'], items=ITEMS)
+
+
+def items_remaining(summary):
+    """The texts still on the input list: a text leaves it when an extraction of it had every form accepted (or named no
+    method); while a form is refused it stays, and the further attempt is a unit the estimator sees."""
+    return len(summary['input_list'])

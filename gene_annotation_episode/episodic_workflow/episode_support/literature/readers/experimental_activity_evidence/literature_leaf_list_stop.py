@@ -4,12 +4,16 @@ stopping condition of an episode with an input list: when the number of items on
 ``ListBoundCompletionYieldController`` is a ``CompletionYieldController`` (the runner admits only the ``yield_control``
 controllers, by type, and describes this one to the model as the completion controller it is): its estimator, cost,
 target, estimate and stop rule are the completion controller's own, unchanged. It adds only the list: ``items`` is the
-number of items on the leaf's input list when the leaf starts (from what ``read_from_parent`` produced), every completed
-unit consumes one item (a leaf's one action is ``extract``, which consumes the item it reads), and once no item remains
-the step and the state say stop. While an item remains, every step and state is the completion controller's own, as it
+number of items on the leaf's input list when the leaf starts (from what ``read_from_parent`` produced); after every
+completed unit the episode says how many remain (its ``items_remaining(summary)``, which the system puts into the
+unit's ``estimation_context``): a leaf's one action is ``extract``, which consumes the item it reads when every form
+it asked was accepted, and leaves it on the list when a form was refused, so that the further attempt is a unit this
+estimator sees. A unit that reports no number consumes one item. Once no item remains the step and the state say
+stop. While an item remains, every step and state is the completion controller's own, as it
 made it. With no item left the decision is the completion controller's decision with ``stop`` set and the list in its
 record (``items``, ``items_remaining``, ``stopped_by``). A resumed leaf replays its recorded units through ``observe``,
 so its list is consumed again unit by unit and its state stops where the run stopped."""
+from collections.abc import Mapping
 from dataclasses import dataclass, replace
 
 from yield_control import CompletionYieldController, ContinuationDecision
@@ -51,7 +55,9 @@ class ListBoundCompletionYieldController(CompletionYieldController):
         if self._items_remaining == 0:
             raise RuntimeError(f'leaf_list_no_item_left_for_unit:{unit_label}')
         step = super().observe(unit_label, value, is_root)
-        self._items_remaining -= 1
+        record = value.as_record() if hasattr(value, 'as_record') else value
+        reported = (record.get('estimation_context') or {}).get('items_remaining') if isinstance(record, Mapping) else None
+        self._items_remaining = self._items_remaining - 1 if reported is None else reported
         return replace(step, decision=self._with_list(step.decision))
 
     def state(self):

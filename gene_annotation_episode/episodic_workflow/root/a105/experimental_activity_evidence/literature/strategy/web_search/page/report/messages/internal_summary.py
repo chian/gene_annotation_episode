@@ -6,13 +6,17 @@ commissioned representation, ``representation_content``); with the list empty th
 ``extraction_state`` over the extractions (the leaf records held, the field counts, the records that stand: one per window),
 and ``windows_total``, the number of commissioned windows."""
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_leaf_extraction import (
-    extraction_state, representation_content)
+    extraction_state, refused_forms, representation_content)
 
 
 def internal_summary(view):
     parent = view.parent_input
     extracted = [outcome for outcome in view.outcomes if outcome['tool'] == 'extract']
-    remaining = parent['windows'][len(extracted):]
+    # a window is read when an extraction of it had every form accepted; one whose latest extraction left a form refused
+    # stays first on the list and is read again for the refused types
+    read = [outcome for outcome in extracted if not outcome['outcome']['refused']]
+    remaining = parent['windows'][len(read):]
+    refused = refused_forms(extracted)
     current = {'offset': None, 'limit': None, 'window': None, 'window_bytes': 0}
     start = None
     if remaining:
@@ -21,4 +25,5 @@ def internal_summary(view):
         current = {'offset': start, 'limit': end - start, 'window': content[start:end].decode('utf-8'),
                    'window_bytes': end - start}
     return {**parent, **current, **extraction_state(view.records, extracted, window_start=start),
-            'windows_total': len(parent['windows']), 'input_list': remaining, 'units_consumed': view.units_consumed}
+            'windows_total': len(parent['windows']), 'input_list': remaining, 'refused': refused,
+            'units_consumed': view.units_consumed}

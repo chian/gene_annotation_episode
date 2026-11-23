@@ -15,3 +15,9 @@ TARGET = 1.0
 def yield_controller(initial_credit, settings, parent_input):
     return ListBoundCompletionYieldController('report', initial_credit, settings['cost'], TARGET,
                                               settings['parameters'], items=len(parent_input['windows']))
+
+
+def items_remaining(summary):
+    """The texts still on the input list: a text leaves it when an extraction of it had every form accepted (or named no
+    method); while a form is refused it stays, and the further attempt is a unit the estimator sees."""
+    return len(summary['input_list'])
