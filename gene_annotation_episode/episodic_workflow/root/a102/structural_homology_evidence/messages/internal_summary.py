@@ -7,7 +7,9 @@ built with: ``held_sequences`` (the held records that carry a sequence, each wit
 rows of kind ``protein_structure_model``, each with the target it was made from), ``graded_searches`` (the searches graded: what the
 decision shows), ``held_searches`` (per target the ``[database, model SHA-256]`` of each graded search, read by the credit's own reader:
 what the commission's check refuses to run again), ``structure_search_jobs`` (the child's jobs, read ONLY from the job ledger rows
-the head holds: their request, identity, state and rows) and ``named_refs`` (for each held record, job ledger rows included, the held
+the head holds: their request, identity, state and rows) and ``partner_cofolding_jobs`` (the same for the child ``partner_cofolding``), ``cofolding_test_rows`` (one row per graded co-folding held:
+its source, target, ligands and counts), ``held_ligands`` (per target the ligand candidates the head holds, ``ligand:<id>``, the
+leading one first: what a co-folding commission is chosen from) and ``named_refs`` (for each held record, job ledger rows included, the held
 records it names: what travels in custody beside it).
 
 For the tools the summary holds ``search_inputs`` (``partner_contacts.partner_search_inputs``, which extends ``site_correspondence.
@@ -41,6 +43,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_s
     APPLICATION, MODEL_KIND, graded_rows, target_sequence)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.ligand_transplants import (
     PROVIDER as TRANSPLANT_PROVIDER)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.partner_cofolding import (
+    APPLICATION as COFOLDING_APPLICATION, graded_rows as cofolding_rows)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.partner_contacts import (
     PARTNERS_PROVIDER, PROVIDER as PARTNER_PROVIDER, partner_search_inputs)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.rna_family_scan import (
@@ -62,6 +66,7 @@ PARTNER_TEST_FIELDS = ('search_ref', 'entries_asked', 'entries_skipped_no_partne
 TRANSPLANT_TEST_FIELDS = ('model_ref', 'outcome', 'hit_count', 'transplant_count', 'additive_count', 'distinct_compound_count',
                           'candidates_measured', 'model_version_differs')
 RNA_SCAN_TEST_FIELDS = ('scan_ref', 'database', 'outcome', 'hit_count', 'overlapped_hit_count', 'candidates_measured')
+COFOLDING_TEST_FIELDS = ('source_ref', 'ligand_count', 'candidate_count')
 RNA_AGREEMENT_TEST_FIELDS = ('scan_ref', 'family_count', 'candidates_measured', 'families_without_pairs', 'consensus_pairs',
                              'pairs_canonical')
 LEADING_PARTNERS = 20
@@ -232,6 +237,7 @@ def internal_summary(view):
     transplant_rows = transplant_test_rows(records)
     rna_scan_rows = rna_scan_test_rows(records)
     rna_agreement_rows = rna_agreement_test_rows(records)
+    cofolding_test_rows = cofolding_rows(records)
     held_products = products(records)
     findings = []
     for target in targets:
@@ -249,6 +255,8 @@ def internal_summary(view):
             'site_tests': [{key: item[key] for key in SITE_TEST_FIELDS} for item in site_rows if item['query_ref'] == ref],
             'transplant_tests': [{key: item[key] for key in TRANSPLANT_TEST_FIELDS if key in item} for item in transplant_rows
                                  if item['query_ref'] == ref],
+            'cofolding_tests': [{key: item[key] for key in COFOLDING_TEST_FIELDS} for item in cofolding_test_rows
+                                if item['query_ref'] == ref],
             'rna_family_candidate_count': _counts(row)['rna_family'], 'rna_family_candidates': _families(row),
             'rna_scan_tests': [{key: item[key] for key in RNA_SCAN_TEST_FIELDS} for item in rna_scan_rows if item['query_ref'] == ref],
             'rna_agreement_tests': [{key: item[key] for key in RNA_AGREEMENT_TEST_FIELDS} for item in rna_agreement_rows
@@ -267,7 +275,10 @@ def internal_summary(view):
             'model_rows': model_rows, 'graded_searches': searches,
             'search_inputs': partner_search_inputs(records), 'site_test_rows': site_rows, 'partner_test_rows': partner_rows,
             'transplant_test_rows': transplant_rows, 'rna_scan_test_rows': rna_scan_rows,
-            'rna_agreement_test_rows': rna_agreement_rows, 'rna_scan_inputs': rna_scan_inputs(records),
+            'rna_agreement_test_rows': rna_agreement_rows, 'cofolding_test_rows': cofolding_test_rows,
+            'held_ligands': {ref: [row['vocabulary'] + ':' + row.get('identifier', row['name']) for row in target['candidates']
+                                   if row['vocabulary'] == 'ligand'] for ref, target in table['targets'].items()},
+            'rna_scan_inputs': rna_scan_inputs(records),
             'held_rna_scans': {target: list(refs) for target, refs in held_rna_scans(records, scope, held_sources(records)).items()},
             'held_rna_agreements': {target: list(refs) for target, refs in held_rna_agreements(
                 records, scope, held_sources(records)).items()},
@@ -280,6 +291,7 @@ def internal_summary(view):
             'held_searches': {target: [list(pair) for pair in pairs] for target, pairs in held_searches(
                 records, scope, held_sources(records)).items()},
             'structure_search_jobs': held_jobs(records, APPLICATION),
+            'partner_cofolding_jobs': held_jobs(records, COFOLDING_APPLICATION),
             'named_refs': {ref: named_records(records, ref) for ref in records.refs()},
             # the held handoffs whose closure is not held (``job_records.outstanding_jobs``): a child's job counts until the
             # closure it returns is held

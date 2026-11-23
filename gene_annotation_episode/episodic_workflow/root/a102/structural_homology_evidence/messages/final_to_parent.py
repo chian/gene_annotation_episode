@@ -26,7 +26,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_s
     MODEL_ORIGINS)
 
 WAITING_FORM = RecordForm({
-    'slot': ChoiceField('text', 'The child episode the job runs under', ('structure_search',)),
+    'slot': ChoiceField('text', 'The child episode the job runs under', ('structure_search', 'partner_cofolding')),
     'seconds_since_launch': Field('number', 'The seconds from the launch to the latest thing the child knew'),
     'expected_remaining_seconds': Field('number', 'The seconds still expected, as the child last knew them'),
 })
@@ -100,6 +100,11 @@ RNA_AGREEMENT_TEST_FORM = RecordForm({
     'consensus_pairs': Field('integer', 'The consensus base pairs of the families, summed'),
     'pairs_canonical': Field('integer', 'The consensus pairs the target can form as AU, GC or GU, summed over the families'),
 })
+COFOLDING_TEST_FORM = RecordForm({
+    'source_ref': Field('text', 'The source record of the co-folding (a record reference)'),
+    'ligand_count': Field('integer', 'The ligands co-folded with the target'),
+    'candidate_count': Field('integer', 'The ligand candidates the test measured'),
+})
 TARGET_FORM = RecordForm({
     'target_ref': Field('text', 'The target: a subject record of the scope'),
     'molecule': ChoiceField('text', 'The molecule of the target', ('protein', 'dna', 'rna', 'unspecified')),
@@ -112,6 +117,8 @@ TARGET_FORM = RecordForm({
     'ligand_candidate_count': Field('integer', 'The ligand candidates found for the target: ligands bound to its matched proteins'),
     'nucleic_acid_candidate_count': Field('integer', 'The nucleic-acid candidates found for the target: dna or rna bound to its '
                                                       'matched proteins'),
+    'cofolding_tests': Field('list', 'The Chai-1 co-foldings of the target (each: its source and the counts of its sheet)',
+                             items=COFOLDING_TEST_FORM),
     'candidates': Field('list', 'The leading possible annotations found for the target (at most 10), each with its score, the '
                                 'leading one first', items=CANDIDATE_FORM),
     'partner_candidates': Field('list', 'The partner candidates found for the target (ligand and nucleic_acid; at most 20), each with '
@@ -137,7 +144,7 @@ TARGET_FORM = RecordForm({
 FINDING_FORM = RecordForm({
     'evidence_axis': ChoiceField('text', 'The evidence axis', ('A102',)),
     'targets': Field('list', 'One entry per target of the scope', items=TARGET_FORM),
-    'waiting_searches': Field('list', 'The structure searches launched and not extracted: for each the slot, the seconds since '
+    'waiting_searches': Field('list', 'The structure searches and co-folding jobs launched and not extracted: for each the slot, the seconds since '
                                       'its launch and the seconds still expected, as the child last knew them',
                               items=WAITING_FORM, required=False),
     'outstanding_handoff_count': Field('integer', 'The job handoffs it holds (those its child returned) whose closure it does '
@@ -163,7 +170,8 @@ def final_to_parent(summary, completion, selection):
                 'expected_remaining_seconds': row['finding']['expected_remaining_seconds']}
                for index, row in enumerate(summary['child_reports'])
                if row['finding'].get('parked')
-               and not any(later['finding']['state'] == 'extracted' for later in summary['child_reports'][index + 1:])]
+               and not any(later['slot'] == row['slot'] and later['finding']['state'] == 'extracted'
+                           for later in summary['child_reports'][index + 1:])]
     result = {'credit': completion['credit'],
               'finding': {'evidence_axis': 'A102', 'targets': summary['findings'],
                           'outstanding_handoff_count': summary['outstanding_handoff_count'],

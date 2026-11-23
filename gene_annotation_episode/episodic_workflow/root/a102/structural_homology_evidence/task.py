@@ -1,4 +1,4 @@
-"""The task of the A102 head: one model-chosen unit per decision. The head has two actions. The commission of its child
+"""The task of the A102 head: one model-chosen unit per decision. The head has two child commissions and its tools. The commission of its child
 ``structure_search``: the model chooses the controlled fields of the commission (the target, the structure database, the
 Foldseek resource, the model of the target and where the commission ends) and code builds the child's assignment
 (``messages/msg_to_child.py``). And its one-shot tool ``site_correspondence`` (SOP Step 3): the model fills out the two fields of
@@ -26,6 +26,12 @@ Settings of the head: ``python_executable``, ``usalign_executable_directory``, `
 ``covariance_databases`` (``{database name: manifest path}``). It never ends the
 Episode: only the yield controller does. No ``reason`` action.
 
+Its second child is ``partner_cofolding`` (``cofolding_fields``, ``check_partner_cofolding``): the commission names a protein sequence
+of the scope, two to four of the ligand candidates the head holds for it that are not yet co-folded for it, a bound PBS resource and
+``until``; it is offered while a protein sequence holds at least two such ligands and a PBS resource is bound. Its job is parked and
+resumed as a ``structure_search`` job is (``parked_jobs``, ``resume_action``).
+Settings the child reads: ``allocation``, ``chai_python_executable``, ``chai_environment``.
+
 The child. A slot is offered while its commission can be stated from what this episode holds: a protein sequence of the scope
 (a target whose molecule is not protein gets no commission) and a bound Foldseek resource (``structure_search_fields``). ONE
 deterministic check of the filled commission runs in ``action`` before any child exists (``COMMISSION_CHECKS``): a search of the
@@ -47,6 +53,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.re
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import time_accounting
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence import (
     foldseek_search as foldseek)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence import (
+    partner_cofolding as cofolding)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.ligand_transplants import (
     check_ligand_transplants_request, ligand_transplants)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.rna_family_scan import (
@@ -60,15 +68,19 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_s
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.structure_search_child import (
     ROUTE_KIND, UNTIL, _choose, seconds_between)
 
-from .credit import (OBTAIN, PARTNER_TOOL, RNA_AGREEMENT_TOOL, RNA_SCAN_TOOL, SITE_TOOL, TRANSPLANT_TOOL, agreed_scans,
-                     analysed_searches, commissioned, graded_site_pairs, offered_agreement_scans, offered_partner_searches,
+from .credit import (COFOLDING_SLOT, OBTAIN, PARTNER_TOOL, RNA_AGREEMENT_TOOL, RNA_SCAN_TOOL, SITE_TOOL, TRANSPLANT_TOOL,
+                     agreed_scans, analysed_searches, available_ligands, cofolded_ligands, commissioned, commissioned_cofoldings,
+                     graded_site_pairs, held_ligands, offered_agreement_scans, offered_cofolding_queries, offered_partner_searches,
                      offered_site_pairs, offered_transplant_models, queries, rna_queries, scanned_targets, tested_models,
                      transplant_models, unscanned_queries)
 from .goal import GOAL
 
-CHILD_SLOTS = {'structure_search': 'structural_homology_evidence/structure_search'}
+CHILD_SLOTS = {'structure_search': 'structural_homology_evidence/structure_search',
+               COFOLDING_SLOT: 'structural_homology_evidence/partner_cofolding'}
 SERVICES = ('job_access',)
 SLOT = 'structure_search'
+# The summary's list of each slot's held jobs (read ONLY from the job ledger rows the head holds).
+JOBS = {SLOT: 'structure_search_jobs', COFOLDING_SLOT: 'partner_cofolding_jobs'}
 LEADING = 10
 
 
@@ -113,7 +125,7 @@ INSTRUCTIONS = (
     'episode. Recorded facts come from actual records and are shown to you as they are: the targets with their molecule and '
     'length, the models held (origin, residues, mean pLDDT: a model\'s own confidence, not similarity), the graded searches, '
     'the outstanding jobs with the seconds since their launch and the seconds still expected, the leading candidates with '
-    'their scores and subscoring sheets (products, the partners ligand and nucleic_acid and, for an RNA target, the rna_family candidates), the site tests, partner tests, transplant tests, RNA scans and RNA agreement tests held, your earlier units and the yield table. A model that is not held is obtained by the '
+    'their scores and subscoring sheets (products, the partners ligand and nucleic_acid and, for an RNA target, the rna_family candidates), the site tests, partner tests, transplant tests, co-folding tests, RNA scans and RNA agreement tests held, your earlier units and the yield table. A model that is not held is obtained by the '
     'child when the commission names obtain_one. Waiting and unchanged observations do not manufacture progress.')
 
 # What the model is told of the child it may commission: what the child does, the controlled fields of its commission (the model
@@ -156,6 +168,32 @@ CHILD_DESCRIPTIONS = {
         'since the launch, not below zero, or the later revised figure of a status request), and structure_search_jobs keeps '
         'showing the search with the seconds since its launch and the seconds still expected as of each decision. A search of '
         'the same target, database and model that is graded, or that failed, is not commissioned again.'),
+    COFOLDING_SLOT: (
+        'Co-fold one protein sequence of your scope with two to four of the ligand candidates you hold for it, by Chai-1 on the '
+        'Polaris cluster (a PBS resource; the job runs one ligand per GPU). What it measures: for each ligand code takes the ligand\'s '
+        'SMILES from the RCSB chemical-component service and Chai-1 predicts the complex of the target with that ligand in five '
+        'samples; a sample\'s value is its iptm (the model\'s predicted interface score of the target with the ligand, 0 to 1), and 0 '
+        'when the sample has an inter-chain clash; a ligand candidate\'s value in the test is the mean of its five samples. The '
+        'value is the model\'s predicted structural compatibility, never measured binding. It admits no candidate (the ligands are '
+        'already on your list) and earns only the differential of the two highest-scored ligands it measures. ' + CREDIT_TEXT +
+        ' A ligand already co-folded for the query is not commissioned again. Fill the four fields of its commission: query_ref '
+        '(a protein sequence of your scope), ligands (two to four distinct ligand:<chemical component id> candidates from the '
+        'ligand candidates you hold for that query, in cofoldable_ligands), resource_id (a pbs resource of bound_resources) and '
+        'until. Code checks the commission before the child is commissioned; if something is wrong it comes back in feedback with '
+        'the things to fix and nothing was commissioned. While a child runs, you do nothing else: your next decision comes after '
+        'it returns. What until means: with until launched the child estimates the duration, launches the job and returns at '
+        'once; the job then keeps running on the cluster, you can use your other actions while it runs, and the child is said to '
+        'be parked. ' + PARKED_TEXT + ' With until extracted the child follows the job to its end, waiting between status '
+        'requests for as long as it takes, and extracts the result into the graded sheet; it is also how a parked job is '
+        'continued: while partner_cofolding_jobs shows a job of the query with these ligands as outstanding, commissioning the '
+        'child again with the same query, ligands and resource and until extracted continues that job and submits nothing (code '
+        'passes back the records the child returned). The seconds a job takes include its wait in the cluster\'s queue, which can '
+        'be tens of minutes; the estimate is learned from the jobs measured so far. What comes back: the state of the job (ready, '
+        'estimated, launched, finished, extracted or failed), the ligand, candidate, sample and clashing-sample counts of the '
+        'graded sheet, the highest and lowest ligand value, the seconds estimated and observed, the last failure code and the '
+        'credit; the scores and the graded sheet are kept as labelled data products. When the job is parked (parked true) the '
+        'report is a wait notice, as for structure_search, and partner_cofolding_jobs keeps showing the job with the seconds since '
+        'its launch and the seconds still expected as of each decision.'),
 }
 
 SITE_DESCRIPTION = (
@@ -303,6 +341,36 @@ def structure_search_fields(summary, resources):
     return properties, list(properties)
 
 
+def cofolding_fields(summary, resources):
+    """What the model supplies to commission ``partner_cofolding``, as ``(properties, required)``: controlled values only. ``None``
+    while no protein sequence of the scope holds two ligand candidates not yet co-folded for it, or no PBS resource is bound: the
+    slot is then not offered."""
+    targets = offered_cofolding_queries(summary)
+    services = [name for name, kind in resources.items() if kind == cofolding.ROUTE_KIND]
+    if not targets or not services:
+        return None
+    ligands = list(dict.fromkeys(ligand for target in targets for ligand in available_ligands(summary, target)))
+    properties = {'query_ref': {'type': 'string', 'enum': targets},
+                  'ligands': {'type': 'array', 'minItems': cofolding.LIGAND_COUNT[0], 'maxItems': cofolding.LIGAND_COUNT[1],
+                              'uniqueItems': True, 'items': {'type': 'string', 'enum': ligands}},
+                  'resource_id': {'type': 'string', 'enum': services}, 'until': {'type': 'string', 'enum': list(UNTIL)}}
+    return properties, list(properties)
+
+
+def check_partner_cofolding(commission, summary, resources, records):
+    """The things to fix in a commission of ``partner_cofolding``: the child's own commission check
+    (``partner_cofolding.check_commission``: the query is a protein sequence of the scope, the ligands are two to four, distinct and
+    held, the resource is a bound PBS resource, an outstanding job of this commission is continued with ``until`` ``extracted``
+    and another one blocks it, the same set commissioned and not outstanding is not commissioned again), and the rule that a
+    ligand co-folded for the query before is not co-folded again (the graded co-folding sheets of the summary,
+    ``cofolded_ligands``)."""
+    query = commission['query_ref']
+    return cofolding.check_commission(
+        commission, scope_subjects=summary['scope']['subject_refs'], sequences=summary['held_sequences'],
+        held_ligands=held_ligands(summary).get(query, []), resources=resources, jobs=summary['partner_cofolding_jobs'],
+        commissioned=commissioned_cofoldings(summary), cofolded=cofolded_ligands(summary))
+
+
 def check_structure_search(commission, summary, resources, records):
     """The things to fix in a commission of ``structure_search``: the child's own commission check
     (``foldseek_search.check_commission``: the query is a protein sequence of the scope, the database is offered, the model is a
@@ -436,18 +504,21 @@ def check_rna_agreement_request(request, summary, resources, settings):
         executable_directory=settings['infernal_executable_directory'], python=settings['python_executable'])
 
 
-COMMISSIONS = {SLOT: structure_search_fields}
-COMMISSION_CHECKS = {SLOT: check_structure_search}
+COMMISSIONS = {SLOT: structure_search_fields, COFOLDING_SLOT: cofolding_fields}
+COMMISSION_CHECKS = {SLOT: check_structure_search, COFOLDING_SLOT: check_partner_cofolding}
+# What of a job's identity the model is shown, per slot (beside the query).
+IDENTITY_VIEWS = {SLOT: lambda identity: {'database': identity['database']},
+                  COFOLDING_SLOT: lambda identity: {'ligands': identity['ligands']}}
 
 
-def jobs_view(jobs, now):
-    """The searches this episode's child launched as the model sees them at ``now`` (the decision's recorded time): each with
-    its state, whether it is outstanding, and for an outstanding one the seconds since its launch and the seconds still
+def jobs_view(slot, jobs, now):
+    """The jobs of the child ``slot`` this episode launched as the model sees them at ``now`` (the decision's recorded time): each
+    with its state, whether it is outstanding, and for an outstanding one the seconds since its launch and the seconds still
     expected: the estimate recorded with its launch minus those seconds, not below zero. Facts, never a deadline."""
     shown = []
     for job in jobs:
         row = {'handoff_ref': job['handoff_ref'], 'query_ref': job['identity']['query_ref'],
-               'database': job['identity']['database'], 'resource_id': job['resource_id'], 'latest_state': job['latest_state'],
+               **IDENTITY_VIEWS[slot](job['identity']), 'resource_id': job['resource_id'], 'latest_state': job['latest_state'],
                'outstanding': job['outstanding'], 'closed': job['closed'], 'estimated_seconds': job['estimated_seconds']}
         if job['outstanding']:
             elapsed = seconds_between(job['launched_at'], now)
@@ -493,9 +564,16 @@ def offered_actions(summary, ctx):
 
 
 def parked_jobs(summary):
-    """The jobs of this episode's child that are parked (outstanding: launched, no closure held, not shown failed or lost),
-    from the summary's view of the job ledger rows."""
-    return [job for job in summary['structure_search_jobs'] if job['outstanding']]
+    """The jobs of this episode's children that are parked (outstanding: launched, no closure held, not shown failed or lost),
+    from the summary's view of the job ledger rows, each as ``(slot, job)``."""
+    return [(slot, job) for slot, name in JOBS.items() for job in summary[name] if job['outstanding']]
+
+
+def resume_cofolding_commission(job, summary):
+    """The commission that resumes the parked co-folding ``job``: its own commission again with ``until`` ``extracted``."""
+    identity = job['identity']
+    return {'query_ref': identity['query_ref'], 'ligands': list(identity['ligands']), 'resource_id': job['resource_id'],
+            'until': 'extracted'}
 
 
 def resume_commission(job, summary):
@@ -508,9 +586,12 @@ def resume_commission(job, summary):
             'model_ref': model, 'until': 'extracted'}
 
 
+RESUME_COMMISSIONS = {SLOT: resume_commission, COFOLDING_SLOT: resume_cofolding_commission}
+
+
 def resume_action(summary, records, ctx):
     """The resume this episode owes (``method_loop.episode_type``; the owner, 2026-11-21: "the head must finish parked jobs"):
-    ``None`` while no job is parked, else the resume of one parked job as ``{'action_type': its slot, 'arguments':
+    ``None`` while no job is parked (of either child), else the resume of one parked job as ``{'action_type': its slot, 'arguments':
     resume_commission(...), 'due': ...}``. ``due`` is True once the job's expected remaining seconds have passed: the estimate
     recorded with its launch minus the seconds from the launch to this decision's recorded time (the wait notice ``jobs_view``
     shows), at or below zero. The job chosen: the earliest launched among the due ones, else the earliest launched. The
@@ -520,13 +601,13 @@ def resume_action(summary, records, ctx):
     if not parked:
         return None
     remaining = lambda job: job['estimated_seconds'] - seconds_between(job['launched_at'], ctx.clock.now)
-    due = [job for job in parked if remaining(job) <= 0]
-    job = min(due or parked, key=lambda item: item['launched_at'])
-    arguments = resume_commission(job, summary)
-    problems = COMMISSION_CHECKS[SLOT](arguments, summary, bound_resources(ctx), records)
+    due = [item for item in parked if remaining(item[1]) <= 0]
+    slot, job = min(due or parked, key=lambda item: item[1]['launched_at'])
+    arguments = RESUME_COMMISSIONS[slot](job, summary)
+    problems = COMMISSION_CHECKS[slot](arguments, summary, bound_resources(ctx), records)
     if problems:
-        raise ContractError('a102_resume_commission_refused_by_its_check:' + SLOT + ':' + repr(problems))
-    return {'action_type': SLOT, 'arguments': arguments, 'due': bool(due)}
+        raise ContractError('a102_resume_commission_refused_by_its_check:' + slot + ':' + repr(problems))
+    return {'action_type': slot, 'arguments': arguments, 'due': bool(due)}
 
 
 def outcome_row(row):
@@ -550,7 +631,10 @@ def decide(summary, feedback, ctx):
                         for row in summary['model_rows']],
         'graded_searches': [{key: row[key] for key in ('source_ref', 'query_ref', 'database', 'hit_count', 'named_count',
                                                        'candidate_count')} for row in summary['graded_searches']],
-        'structure_search_jobs': jobs_view(summary['structure_search_jobs'], ctx.clock.now),
+        'structure_search_jobs': jobs_view(SLOT, summary['structure_search_jobs'], ctx.clock.now),
+        'partner_cofolding_jobs': jobs_view(COFOLDING_SLOT, summary['partner_cofolding_jobs'], ctx.clock.now) or None,
+        'cofoldable_ligands': {query: available_ligands(summary, query) for query in offered_cofolding_queries(summary)} or None,
+        'cofolding_tests': summary['cofolding_test_rows'] or None,
         'candidates': [{'target_ref': ref, 'candidate_counts': row['candidate_counts'], 'leading_products': row['products'],
                         'partners': row['partners'], 'rna_families': row['rna_families']}
                        for ref, row in summary['credit_table'].items()],

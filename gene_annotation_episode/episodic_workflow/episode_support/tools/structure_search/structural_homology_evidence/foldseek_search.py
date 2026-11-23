@@ -397,7 +397,7 @@ def check_commission(request, *, scope_subjects, sequences, resources, jobs, com
     same = lambda job: (job['identity']['query_ref'] == query and job['identity']['database'] == database
                         and job['resource_id'] == request['resource_id']
                         and (model is None or job['identity']['model_sha256'] == model['settings']['sha256']))
-    problems.extend(check_resource_and_continuation(request, resources=resources, jobs=jobs, same=same))
+    problems.extend(check_resource_and_continuation(request, route_kind=APPLICATION.route_kind, resources=resources, jobs=jobs, same=same))
     if model is not None and any(row['query_ref'] == query and row['database'] == database
                                  and row['model_sha256'] == model['settings']['sha256'] for row in searches):
         problems.append(_choose('database', 'search_already_held'))

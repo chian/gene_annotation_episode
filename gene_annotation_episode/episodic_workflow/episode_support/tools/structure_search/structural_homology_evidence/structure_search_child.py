@@ -76,7 +76,10 @@ FAILURE_CODES = (
     'provider_result_response_invalid', 'submission_outcome_unknown', 'results_not_available', 'job_state_unknown',
     'result_file_missing', 'result_not_in_catalog', 'service_reported_failed', 'service_lost_the_job',
     'grading_refused', 'result_of_another_query', 'result_of_another_database',
-    'model_source_request_failed', 'model_source_response_invalid')
+    'model_source_request_failed', 'model_source_response_invalid',
+    'transport_unavailable', 'transport_or_remote_program_failed', 'scheduler_command_unavailable',
+    'scheduler_command_failed', 'job_not_found', 'result_differs_from_its_catalog_entry',
+    'file_name_outside_the_job_directory')
 # The service's spacing refusal of a status request (nothing was sent): the one retryable failure.
 SPACING = 'provider_spacing_required'
 
@@ -174,6 +177,12 @@ class JobApplication:
     prepare: Callable
     extract: Callable
     describe_identity: Callable
+    # The kind of the resource the job runs on (the route's ``kind``); the model sources ``get_model`` offers (none: the
+    # application needs no model of the target and the child has no ``get_model``).
+    route_kind: str = ROUTE_KIND
+    model_sources: tuple = MODEL_SOURCES
+    # The seconds of the first job of a kind, when the ledger has measured none.
+    first_job_seconds: float = FIRST_JOB_SECONDS
 
 
 def ledger_kind(binding, fields):
@@ -182,7 +191,7 @@ def ledger_kind(binding, fields):
     return binding.child + ':' + binding.service + ':' + binding.kind(fields)
 
 
-def ledger_estimate(trend, learned_basis):
+def ledger_estimate(trend, learned_basis, first_job_seconds=FIRST_JOB_SECONDS):
     """THE ESTIMATE THE LEDGER GIVES for a job, from the trend of its kind (``duration_trend``): ``{'basis',
     'expected_seconds'}``. With measured jobs the basis is ``learned_basis`` and the seconds are what the line of duration
     against size gives for this job when the line is fitted, else the median of the measured jobs; with none the basis is
@@ -194,7 +203,7 @@ def ledger_estimate(trend, learned_basis):
                    else trend['typical_seconds'])
         basis = learned_basis
     else:
-        seconds, basis = FIRST_JOB_SECONDS, 'no_earlier_measurement'
+        seconds, basis = first_job_seconds, 'no_earlier_measurement'
     return {'basis': basis, 'expected_seconds': min(max(round(seconds, 1), ESTIMATE_RANGE[0]), ESTIMATE_RANGE[1])}
 
 
@@ -217,7 +226,7 @@ def learned(table, binding, fields, size):
     ``ledger_estimate``: the basis and seconds an estimate of this job must state."""
     trend = duration_trend(table.read('rows', ledger_kind(binding, fields), LEDGER_ROWS),
                            size_field=binding.size_field, size=size)
-    return {**trend, 'ledger_estimate': ledger_estimate(trend, 'learned_from_earlier_jobs')}
+    return {**trend, 'ledger_estimate': ledger_estimate(trend, 'learned_from_earlier_jobs', binding.first_job_seconds)}
 
 
 # -- what the episode holds ------------------------------------------------------------------------------------------
@@ -239,7 +248,7 @@ def held_jobs(reader, binding):
     commission (``until`` ``extracted``)."""
     found = []
     for handoff in (row for row in job_rows(reader) if row['event'] == 'handoff'
-                    and row['detail']['kind'] == ROUTE_KIND
+                    and row['detail']['kind'] == binding.route_kind
                     and row['detail']['estimates']['kind'].startswith(binding.child + ':')):
         shown, ended = checks(reader, handoff['job']), closure(reader, handoff['job'])
         state = 'submitted' if not shown else shown[-1]['detail']['state']
@@ -284,14 +293,15 @@ def resumed_rows(binding, job):
     return rows
 
 
-def episode_state(rows, model_held):
+def episode_state(rows, model_held, ready_state=None):
     """The state the episode's own units give, walked in order. ``rows`` are the unit rows: ``action``, ``status``,
     ``failure_code``, ``retryable`` and by action ``estimate``, ``request``, ``state`` and ``fix``; ``model_held``: whether a
     model of the target is held (a get_model unit that found one, or one the commission passed, or the job's own). Returns
     ``{'state', 'estimate', 'request', 'failed_request', 'fixed_field', 'last_failure_code', 'estimates_made',
     'launches'}``. Before a launch the state is ``estimated`` only with an estimate AND a model held, ``model_held`` with a
     model only, ``no_model`` otherwise (an estimate may be held without a model: it is the job's duration, which depends on
-    the size of the target, and a launch is refused until a model is held)."""
+    the size of the target, and a launch is refused until a model is held). An application that needs no model passes
+    ``model_held`` true and its ``ready_state``: the state before an estimate is then ``ready_state``."""
     held = {'estimate': None, 'request': None, 'failed_request': None, 'fixed_field': None, 'last_failure_code': None,
             'estimates_made': 0, 'launches': 0}
     active = finished = extracted = needs_fix = False
@@ -333,7 +343,7 @@ def episode_state(rows, model_held):
             needs_fix, held['fixed_field'] = False, row['fix']['field']
     state = ('extracted' if extracted else 'failed' if needs_fix else 'finished' if finished else
              'launched' if active else 'estimated' if held['estimate'] is not None and model_held else
-             'model_held' if model_held else 'no_model')
+             ready_state if ready_state is not None else 'model_held' if model_held else 'no_model')
     return {'state': state, **held}
 
 
@@ -364,14 +374,15 @@ def unit_row(position, unit):
 
 
 # -- the checks: the things to fix in the model's JSON -----------------------------------------------------------------
-def sources_offered(rows, *, model_held, sequence):
+def sources_offered(binding, rows, *, model_held, sequence):
     """The model sources ``get_model`` offers: none while a model is held; else each source not tried by an earlier
     ``get_model`` unit of this episode (whatever its outcome), and ``esmfold`` only for a sequence the service takes (standard
-    amino acids, at most ``ESMFOLD_MAX_LENGTH``); no source when the sequence has other letters."""
-    if model_held or PROTEIN_ALPHABET.fullmatch(sequence) is None:
+    amino acids, at most ``ESMFOLD_MAX_LENGTH``); no source when the sequence has other letters, and none for an application
+    that names no model sources."""
+    if not binding.model_sources or model_held or PROTEIN_ALPHABET.fullmatch(sequence) is None:
         return []
     tried = {row['source'] for row in rows if row['action'] == 'get_model'}
-    return [source for source in MODEL_SOURCES if source not in tried
+    return [source for source in binding.model_sources if source not in tried
             and not (source == 'esmfold' and len(sequence) > ESMFOLD_MAX_LENGTH)]
 
 
@@ -423,11 +434,11 @@ def check_launch(binding, request, *, state, fields, resources, commission, mode
     elif any(state['estimate'][name] != request[name] for name in binding.estimate_fields):
         problems.append(_choose('action', 'differs_from_the_estimate', estimate={
             name: state['estimate'][name] for name in binding.estimate_fields}))
-    if model is None:
+    if binding.model_sources and model is None:
         problems.append(_choose('action', 'model_required', take_first='get_model'))
-    if resources.get(request['resource_id']) != ROUTE_KIND:
-        problems.append(_choose('resource_id', 'resource_is_not_a_foldseek_service',
-                                choose_from=[name for name, kind in resources.items() if kind == ROUTE_KIND]))
+    if resources.get(request['resource_id']) != binding.route_kind:
+        problems.append(_choose('resource_id', 'resource_is_not_a_' + binding.route_kind + '_service',
+                                choose_from=[name for name, kind in resources.items() if kind == binding.route_kind]))
     if state['state'] in ('launched', 'finished', 'extracted'):
         problems.append(_choose('action', {'launched': 'job_already_launched', 'finished': 'job_already_finished',
                                            'extracted': 'result_already_held'}[state['state']]))
@@ -478,7 +489,7 @@ def check_monitor(request, *, state, job, minimum):
     have ended; the handoff is the held job; the wait is within its range, whose lower end is ``minimum``."""
     problems = _held(request, job)
     if not problems and state['state'] != 'launched':
-        problems.append(_choose('action', {'no_model': 'nothing_launched', 'model_held': 'nothing_launched',
+        problems.append(_choose('action', {'no_model': 'nothing_launched', 'model_held': 'nothing_launched', 'ready': 'nothing_launched',
                                            'estimated': 'nothing_launched', 'finished': 'job_already_shows_finished',
                                            'extracted': 'result_already_held',
                                            'failed': 'job_failed_fix_required'}[state['state']]))
@@ -495,21 +506,21 @@ def check_extract(request, *, state, job):
     available; the result is not already held."""
     problems = _held(request, job)
     if not problems and state['state'] != 'finished':
-        problems.append(_choose('action', {'no_model': 'nothing_launched', 'model_held': 'nothing_launched',
+        problems.append(_choose('action', {'no_model': 'nothing_launched', 'model_held': 'nothing_launched', 'ready': 'nothing_launched',
                                            'estimated': 'nothing_launched', 'launched': 'job_not_known_to_be_finished',
                                            'extracted': 'result_already_held',
                                            'failed': 'job_failed_fix_required'}[state['state']]))
     return problems
 
 
-def check_resource_and_continuation(request, *, resources, jobs, same):
-    """The commission conditions every job child shares: the resource is a bound Foldseek service; a job outstanding for this
+def check_resource_and_continuation(request, *, route_kind, resources, jobs, same):
+    """The commission conditions every job child shares: the resource is a bound service of ``route_kind``; a job outstanding for this
     commission (``same(job)``: the job's identity and request are the commission's) is continued with ``until``
     ``extracted`` and one that is not the commission's blocks it; a job already closed for it is not commissioned again."""
     problems = []
-    if resources.get(request['resource_id']) != ROUTE_KIND:
-        problems.append(_choose('resource_id', 'resource_is_not_a_foldseek_service',
-                                choose_from=[name for name, kind in resources.items() if kind == ROUTE_KIND]))
+    if resources.get(request['resource_id']) != route_kind:
+        problems.append(_choose('resource_id', 'resource_is_not_a_' + route_kind + '_service',
+                                choose_from=[name for name, kind in resources.items() if kind == route_kind]))
     for job in jobs:
         if job['outstanding'] and not same(job):
             problems.append(_choose('until', 'commission_must_continue_the_outstanding_job', job=job['identity']))
@@ -691,14 +702,16 @@ COMMON_ASSIGNMENT = {
 }
 
 
-def read_common(assignment, name):
+def read_common(assignment, name, *, with_model=True):
     """The part of ``read_from_parent`` every job child shares: ``units``, ``until``, ``prior``, ``resumed``,
     ``known_ended``, ``model_passed`` and the commission's finite ``target``: the credit still obtainable under ``until``: the
     model (unless one is passed or a handoff is passed back), the estimate and the launch (unless a handoff is passed
-    back), the job known ended (unless already known) and the graded result (the last two for ``until`` ``extracted``)."""
-    if any(not math.isfinite(assignment[unit]) or assignment[unit] <= 0 for unit in UNITS):
+    back), the job known ended (unless already known) and the graded result (the last two for ``until`` ``extracted``).
+    ``with_model`` false: an application with no model (no ``model_unit``, no model term in the target)."""
+    names = UNITS if with_model else tuple(unit for unit in UNITS if unit != 'model_unit')
+    if any(not math.isfinite(assignment[unit]) or assignment[unit] <= 0 for unit in names):
         raise ValueError(name + '_credit_units_must_be_positive')
-    units, until = {unit: assignment[unit] for unit in UNITS}, assignment['until']
+    units, until = {unit: assignment[unit] for unit in names}, assignment['until']
     prior = {key: list(assignment.get(key, [])) for key in PRIOR}
     resumed, known_ended = bool(prior['handoff_refs']), assignment.get('known_ended', False)
     model_passed = bool(assignment.get('model_refs'))
@@ -707,7 +720,7 @@ def read_common(assignment, name):
     if resumed and model_passed:
         raise ValueError(name + '_a_continuation_reads_its_model_from_the_handoff')
     target = 0.0 if resumed else units['information_unit'] + units['handoff_unit'] + (
-        0.0 if model_passed else units['model_unit'])
+        0.0 if model_passed or not with_model else units['model_unit'])
     if until == 'extracted':
         target += units['graded_unit'] + (0.0 if known_ended else units['information_unit'])
     return {'units': units, 'until': until, 'prior': prior, 'resumed': resumed, 'known_ended': known_ended,

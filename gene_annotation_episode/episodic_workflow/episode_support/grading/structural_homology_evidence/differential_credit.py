@@ -58,7 +58,9 @@ TYPICAL_STRONG_VALUE = {'structure_search': 1.0,
                         # no real run yet: 1 until real runs give the family's typical strong value (SOP Step 6)
                         'rna_family_scan': 1.0,
                         # no real run yet: 1 until real runs give the family's typical strong value (SOP Step 6)
-                        'rna_structure_agreement': 1.0}
+                        'rna_structure_agreement': 1.0,
+                        # no real run yet: 1 until real runs give the family's typical strong value (SOP Step 6)
+                        'partner_cofolding': 1.0}
 SHEET_WEIGHT = {family: 1 / value for family, value in TYPICAL_STRONG_VALUE.items()}
 
 
@@ -255,3 +257,18 @@ def rna_structure_agreement_test_ceiling(scan_families):
     fewer than two families is refused); nothing else. The bound is ``w`` with two or more families, else 0. Tight: the top two at ``w``
     and 0."""
     return SHEET_WEIGHT['rna_structure_agreement'] * float(1 if scan_families >= 2 else 0)
+
+
+def partner_cofolding_test_ceiling(held, ligands):
+    """The most one ``partner_cofolding`` test can add to the credit of one target, from where the list stands: a PROVED maximum
+    (``held`` is ``standing`` of the target; ``ligands``: the identifiers (``ligand:<component id>``) of the ligands the test is
+    commissioned with).
+
+    Proof. A candidate's value in the test is the mean over its samples of ``iptm`` (in [0, 1]) or 0, times the family weight ``w``: a
+    move in [0, w]. The commissioned ligands are candidates the head already holds, so the test admits none (a candidate of value 0
+    is not admitted either) and earns no entry. It earns ONE differential, ``|d_a - d_b|`` of the top two of the listed candidates it
+    measures (two numbers in [0, w]): at most ``w``, and only when at least two of the commissioned ligands are listed; nothing else.
+    The bound is ``w`` then, else 0. Tight: the top two at ``w`` and 0."""
+    weight = SHEET_WEIGHT['partner_cofolding']
+    listed = sum(1 for candidate in dict.fromkeys(ligands) if held.get(candidate, {}).get('listed'))
+    return weight * float(1 if listed >= 2 else 0)

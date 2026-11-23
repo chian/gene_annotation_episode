@@ -19307,7 +19307,8 @@ surroundings times absence of clash, scales at AlphaFill's published confidence 
 heavy tools. Real runs from pinned worktrees: RecA credit 29.05 (the tool +10.56 as predicted, 14 ligand candidates); CspA 61.50
 (the tool ran and returned `no_transplants`, as predicted). A first CspA run never offered the tool because the child had taken an
 ESMFold model. Records: `docs/plan/designs/a102_ligand_transplants.md`. Open: metal ions lead the ligand list ahead of the
-nucleotide for RecA; no independent check of these three runs yet.
+nucleotide for RecA. An independent read-only check of these three runs (recorded in `docs/plan/designs/a102_rna_tools.md`,
+commit `66368de48`) found no discrepancy.
 
 ## 2026-11-21 — A102 head runs RNA targets: `rna_family_scan` and `rna_structure_agreement`
 
@@ -19318,5 +19319,5 @@ RNA target none of the protein tools. Not in scope: an RNA gene supplied as DNA,
 structure of the exact RNA (both recorded as later, light), the heavy tools. Three real runs from the pinned worktree
 `gae_rna_bb77b45c1`, the first RNA targets the head has run: E. coli RNase P RNA (credit 0.906), the thiM TPP riboswitch leader
 (0.632) and 16S rRNA (4.053: four families of one clan, then one differential of 0.066 from the agreement test); each ended by its
-estimator, each credit equal to its prediction. Records: `docs/plan/designs/a102_rna_tools.md`. Open: no independent check of the
-runs yet; the scan's value saturates far above the threshold.
+estimator, each credit equal to its prediction. Records: `docs/plan/designs/a102_rna_tools.md`. An independent read-only check of these three runs (same
+record, commit `66368de48`) found no discrepancy. Open: the scan's value saturates far above the threshold.

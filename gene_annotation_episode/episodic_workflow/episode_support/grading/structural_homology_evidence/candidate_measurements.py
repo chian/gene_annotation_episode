@@ -28,6 +28,10 @@ answer and its name is ``ligand_transplant:alphafill@<source reference>``. A can
 value of its BEST transplant (one row per candidate). A model with no transplant or no AlphaFill entry has no measurement.
 ``held_transplant_models`` gives the models already tested, so a repeat can be refused.
 
+THE SEVENTH TEST, ``partner_cofolding`` (``partner_cofolding_sheet``): one graded source is one co-folding of the target with several
+held ligands and its name is ``partner_cofolding:chai1@<source reference>``. A candidate is ``ligand:<compound id>``; its value is the
+mean over its samples of ``iptm`` (0 for a clashing sample).
+
 THE FIFTH TEST, ``rna_family_scan`` (``rna_family_scan_sheet``): one graded source is one scan of an RNA target against a covariance
 database and its name is ``rna_family_scan:<database>@<source reference>``. A candidate is ``rna_family:<Rfam accession>`` (the name
 shown is the family's identifier); its value is the value of its BEST hit. A scan with no family has no measurement.
@@ -47,6 +51,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.structura
     SCHEMA as TRANSPLANT_SHEET)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.partner_contacts_sheet import (
     CONTACTS_SCHEMA, PARTNERS_SCHEMA)
+from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.partner_cofolding_sheet import (
+    SCHEMA as COFOLDING_SHEET)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.rna_family_scan_sheet import (
     SCHEMA as RNA_SCAN_SHEET)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.rna_structure_agreement_sheet import (
@@ -114,6 +120,17 @@ def ligand_transplant_rows(sheet):
     """The ``(vocabulary, identifier, best_value)`` of the ligand candidates of a ligand-transplants sheet: one row per candidate,
     the value of its best transplant."""
     return [(row['kind'], row['identifier'], row['best_value']) for row in sheet['candidates']]
+
+
+def partner_cofolding_test_name(sheet, source):
+    """The test of the partner co-folding graded in ``sheet`` made by the held source ``source``."""
+    return 'partner_cofolding:chai1@' + source
+
+
+def partner_cofolding_rows(sheet):
+    """The ``(vocabulary, identifier, value)`` of the ligand candidates of a partner-cofolding sheet: one row per candidate, the mean
+    over its samples of ``iptm`` (0 for a clashing sample)."""
+    return [(row['kind'], row['identifier'], row['value']) for row in sheet['candidates']]
 
 
 def rna_family_scan_test_name(sheet, source):
@@ -191,6 +208,10 @@ def _read(reader, scope, sources):
             if sheet['schema'] == TRANSPLANT_SHEET:
                 measurements.extend(_measurement(target, ligand_transplant_test_name(sheet, reference), vocabulary, identifier, None,
                                                  value, reference) for vocabulary, identifier, value in ligand_transplant_rows(sheet))
+                continue
+            if sheet['schema'] == COFOLDING_SHEET:
+                measurements.extend(_measurement(target, partner_cofolding_test_name(sheet, reference), vocabulary, identifier, None,
+                                                 value, reference) for vocabulary, identifier, value in partner_cofolding_rows(sheet))
                 continue
             if sheet['schema'] == SITE_SHEET:
                 measurements.extend(_measurement(target, site_test_name(sheet, reference), 'product', product, None, value,

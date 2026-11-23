@@ -146,6 +146,12 @@ KINDS = {
                                'Sequence signature matches, textual (Infernal cmscan report with the alignments of the hits)'),
     'rna_family_alignments': ('http://edamontology.org/data_0863', 'http://edamontology.org/format_2330',
                               'Sequence alignment, textual (Stockholm alignment of the span of the target to one covariance model, by cmalign)'),
+    # The scores of one A102 ``partner_cofolding`` job (``scores.json`` of ``run_chai.py``: per ligand and sample the interface and
+    # chain scores and the clash flags of Chai-1's prediction of the target with that ligand). Data type data_2048 Report (a
+    # generic report; EDAM.tsv was not read again for a closer term, no outside request was allowed in the task that added
+    # this kind, so no closer term is claimed); format_3464 JSON. The scores are the model's confidence, never measured binding.
+    'cofolding_results': ('http://edamontology.org/data_2048', 'http://edamontology.org/format_3464',
+                          'Report, JSON (Chai-1 co-folding scores of the target with each of several ligands)'),
 }
 EDAM_SOURCE = 'https://edamontology.org/EDAM.tsv, read 2026-11-20'
 

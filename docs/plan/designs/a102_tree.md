@@ -91,6 +91,44 @@ Recorded so they are not lost; none is built. Facts: `a102_structural_aligners.m
 | Docking (AutoDock Vina, gnina, DiffDock) | row P7 in its light form | needs installs (Vina, rdkit, meeko); least reliable of the rows; after the partners are known |
 | Local Foldseek with its databases; Merizo or Chainsaw domain splitting | searches without the server's 1000-hit cap; domains for a model with no AlphaFold accession | database downloads; torch |
 
+**Where the heavy tools are installed (2026-11-22).** The owner chose Polaris (Aurora has no active allocation): "Polaris
+is good enough. Get set up". Workspace `/lus/eagle/projects/bvbrc/chian/gene_annotation` on Polaris; its `WORKSPACE.md`
+is the index (versions, hashes, the one local fix to DaliLite, the GPU check). Installed and checked by hand, none wired
+into the head: Foldseek binary; DaliLite v5 (self-test: import, pairwise and systematic search equal the expected output);
+Chai 0.6.1 and Boltz 2.2.1 with their weights (GPU check on one A100 node: CspA with DNA TTTTTTT, Chai 133 s for five
+models, pTM 0.90, ipTM 0.67; Boltz 72 s for one model with `--no_kernels`, pTM 0.76, ipTM 0.60).
+
+The search set (the owner: "Just choose one pdb"): the PDB at 90% sequence identity, one chain per RCSB cluster that
+holds an experimental entity, the member with the best resolution. 77,901 chains written (12,215 clusters are shorter
+than 30 residues, 201 had no entry file); the same chain files feed both tools, and a table maps each 4-character id
+back to entry, chain and protein name. Foldseek database: built in 21 s; CspA model search 3 s, 1,832 hits. DALI
+database: 77,587 chains; CspA against 6,400 chains took 10 s on 64 processes (about 0.1 CPU-second per comparison for
+70 residues, so a whole-set search is minutes on one node); top hit 1MJC chain A, Z 15.4, the same hit and Z the DALI
+web server gave.
+
+AlphaFold Swiss-Prot v6 as a second Foldseek database: 550,122 models, built in 53 s straight from EBI's archive. A CspA
+search takes 4 s. Foldseek's default lets 1,000 hits per query through (985 came back); with `--max-seqs 100000` the
+same search returns 14,338, so the local search has no cap once that limit is raised.
+
+Docking: AutoDock Vina 1.2.7 with rdkit and meeko 0.8.0, CPU only; gnina and DiffDock are not installed. Re-docking
+check on four CPUs: biotin into streptavidin (1STP) in 6 s, best pose 0.61 Å from the crystal pose; folate into DHFR
+(1RX2) with the cofactor NADP+ left out of the receptor in 21 s, best pose 5.82 Å away and no better at four times the
+search depth. So a docking test must put a bound cofactor into the receptor, and a pose is not evidence by itself.
+
+**The job route to Polaris (2026-11-22).** The owner: "make a job route to Polaris. this was implied as necessary when I
+told you to set up there". The library already had the route (`LIB/jobs/pbs_job_route.py`, `PbsSshRoute`, resource kind
+`pbs`, with `pbs_batch_job.py` building a batch job from an allocation the caller supplies); it was written for Aurora. Added:
+the transport `tools/polaris_ssh.sh` (a copy of `tools/aurora_ssh.sh` with the second hop to `polaris.alcf.anl.gov`: it reuses
+the owner's bastion master, never logs in, and fails closed when the master is gone) and the resource configuration
+`examples/polaris_pbs_resource.json` (the `pbs` part of a run's services file: Python 3.12 from cray-python on the login node
+runs the route's remote program; job directories under the workspace's `runs/jobs`; the PBS commands under `/opt/pbs/bin`).
+Direct check through the route (`runs/polaris_route_check_1`): a batch job in the debug queue on `bvbrc` submitted, submitted
+again with the same handle (adopted, the same job id, nothing submitted twice), followed to its end (45 s, `finished`), its
+five result files listed and read (the node's host name, its four A100 GPUs, the Foldseek version). Not exercised: `cancel`; the
+route's `login` mode, whose state is read from the process table of the node the transport reaches, while Polaris spreads
+connections over four login nodes (seen during the setup), so a later request can reach another node; only `batch` is used.
+Every run that uses the route needs the owner's bastion session alive.
+
 The standalone aligner is no longer deferred: US-align is installed (`resources/software/usalign-20261019`) and is the
 correspondence under `partner_contacts`; the RCSB alignment service (TM-align, FATCAT rigid and flexible, CE) was verified
 and is a candidate for a flexible alignment when a rigid one fails.

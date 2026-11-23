@@ -7,6 +7,7 @@ fails (the check is the head's ``task.check_structure_search``, before the child
 
 Every record the child's code reads is named in a ``record_refs`` field of the assignment: the query subject record and, in
 ``input_refs``, every held record it names (a subject and its sequence artifact: ``_custody`` over the summary's ``named_refs``).
+The child ``partner_cofolding`` is commissioned the same way (``_partner_cofolding``: no model, the ligands named in the assignment).
 WHEN A HELD MODEL IS PASSED the row of the data product ``protein_structure_model`` goes in ``model_refs`` and, in ``input_refs``,
 the artifact it names (the model file the child stages for the job): a data-product row passed alone does not hold the artifact it
 names (``docs/plan/designs/a102_structure_search_episode.md``). When this episode holds an outstanding job of the search that the
@@ -21,16 +22,20 @@ Required return fields: every kind of record the child returns for its job (hand
 this episode holds the job's rows, reads its state from them and can pass them back on a later visit."""
 from episode_runtime import ChildMessage
 
-from ..credit import OBTAIN
+from ..credit import COFOLDING_SLOT, OBTAIN
 
 OBJECTIVES = {
     'structure_search': 'Search the target sequence against the structure database through a model of the target on the Foldseek '
                         'structure search server, in this one commission: obtain the model unless one is passed, estimate the '
                         'duration, launch the search and, when the commission goes to its result, monitor it until the service '
                         'has ended it and extract the graded result, and return what it established.',
+    COFOLDING_SLOT: 'Co-fold the target with each of the ligand candidates on the PBS resource by Chai-1, in this one commission: '
+                    'estimate the duration, launch the job and, when the commission goes to its result, monitor it until the '
+                    'service has ended it and extract the graded result, and return what it established.',
 }
 REQUIRED_RETURN = {
     'structure_search': ('execution_handoff_refs', 'execution_check_refs', 'execution_closure_refs', 'graded_refs'),
+    COFOLDING_SLOT: ('execution_handoff_refs', 'execution_check_refs', 'execution_closure_refs', 'graded_refs'),
 }
 
 
@@ -74,7 +79,29 @@ def _structure_search(arguments, summary):
     return assignment
 
 
-ASSIGNMENTS = {'structure_search': _structure_search}
+def _partner_cofolding(arguments, summary):
+    """The assignment of one co-folding: the query and its sequence in custody, the ligands, the resource, ``until``, the three
+    credit units (the child has no model: no ``model_unit``) and, when the commission continues an outstanding job of the same
+    co-folding, the records of that job passed back (its handoff, status and closure rows with everything they name)."""
+    query, units = arguments['query_ref'], summary['child_credit_units']
+    named = [ref for ref in _custody([query], summary) if ref != query]
+    assignment = {'query_refs': [query], 'ligands': list(arguments['ligands']), 'resource_id': arguments['resource_id'],
+                  'until': arguments['until'], 'handoff_unit': units['handoff_unit'],
+                  'information_unit': units['information_unit'], 'graded_unit': units['acquired_record_unit']}
+    held = [job for job in summary['partner_cofolding_jobs'] if job['outstanding'] and job['resource_id'] == arguments['resource_id']
+            and job['identity']['query_ref'] == query and set(job['identity']['ligands']) == set(arguments['ligands'])]
+    if held:
+        (job,) = held
+        rows = [job['handoff_ref'], *job['check_refs'], *job['closure_refs']]
+        assignment.update(handoff_refs=[job['handoff_ref']], check_refs=job['check_refs'], closure_refs=job['closure_refs'],
+                          known_ended=job['known_ended'],
+                          input_refs=list(dict.fromkeys([*named, *(ref for ref in _custody(rows, summary) if ref not in rows)])))
+    else:
+        assignment['input_refs'] = named
+    return assignment
+
+
+ASSIGNMENTS = {'structure_search': _structure_search, COFOLDING_SLOT: _partner_cofolding}
 
 
 def msg_to_child(slot, arguments, summary):

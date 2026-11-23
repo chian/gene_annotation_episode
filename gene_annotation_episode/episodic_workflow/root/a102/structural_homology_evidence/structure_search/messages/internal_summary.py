@@ -47,7 +47,7 @@ def internal_summary(view):
             'query': {'subject_ref': query_ref, 'sequence_ref': record['sequence_ref'], 'molecule': record.get('molecule'),
                       'length': len(sequence)},
             'model': model,
-            'sources': sources_offered(rows, model_held=model is not None, sequence=sequence),
+            'sources': sources_offered(APPLICATION, rows, model_held=model is not None, sequence=sequence),
             'model_tries': [{name: row[name] for name in ('source', 'model_status', 'residues', 'mean_plddt')}
                             for row in rows if row['action'] == 'get_model' and row['status'] == 'completed'],
             'notice': (job_notice(search_facts(job), revised[-1] if revised else None)

@@ -15,7 +15,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.structura
     candidate_standing, candidate_table, held_sources)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.differential_credit import (
     SHEET_WEIGHT, bound_partner_test_ceiling, ligand_transplant_test_ceiling, rna_family_scan_test_ceiling,
-    rna_structure_agreement_test_ceiling, site_test_ceiling, test_ceiling)
+    partner_cofolding_test_ceiling, rna_structure_agreement_test_ceiling, site_test_ceiling, test_ceiling)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.site_correspondence_sheet import (
     SITE_SOURCES)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.tool_grading_artifacts import (
@@ -23,6 +23,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.structura
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.foldseek_job_route import DATABASES
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.ligand_transplants import (
     ORIGIN as TRANSPLANT_ORIGIN)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.partner_cofolding import (
+    LIGAND_COUNT, ROUTE_KIND as COFOLDING_ROUTE_KIND)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.partner_contacts import (
     DATABASE as PARTNER_DATABASE)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.rna_structure_agreement import (
@@ -44,6 +46,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_s
 # ``episode_ceiling_exceeded``: the figure is then wrong and is to be changed with its ``CEILING_VERSIONS`` entry.
 HIT_BOUND = 1000
 SLOT = 'structure_search'
+COFOLDING_SLOT = 'partner_cofolding'
 SITE_TOOL = 'site_correspondence'
 PARTNER_TOOL = 'partner_contacts'
 TRANSPLANT_TOOL = 'ligand_transplants'
@@ -58,7 +61,7 @@ class A102DifferentialCredit:
     yield_method = 'forecast'
 
     def as_record(self):
-        return {'kind': 'a102_differential_credit', 'version': 'a102_differential_credit_v6', 'axis': 'A102',
+        return {'kind': 'a102_differential_credit', 'version': 'a102_differential_credit_v7', 'axis': 'A102',
                 'measurement': 'index_b_of_each_hit_of_one_structure_search_from_the_aligned_pairs_after_superposition',
                 'site_measurement': 'mean_e_of_the_hits_with_sites_e_is_b_times_the_mean_residue_score_of_class_match_times_kernel',
                 'candidates': 'product_from_the_uniprot_name_of_the_hit',
@@ -70,9 +73,12 @@ class A102DifferentialCredit:
                 'rna_scan_measurement': 'value_of_the_best_hit_of_each_rfam_family_x_squared_over_one_plus_x_squared_x_is_bits_over_ga',
                 'rna_scan_candidates': 'rfam_family_accession_of_each_hit_of_the_cmscan_over_the_covariance_database',
                 'rna_agreement_measurement': 'canonical_pairs_over_consensus_pairs_of_the_cmalign_span_of_each_scan_family',
+                'cofolding_measurement': 'mean_over_five_samples_of_iptm_of_the_target_with_each_ligand_zero_for_a_clashing_sample',
+                'cofolding_candidates': 'the_ligand_candidates_the_head_already_holds_none_is_admitted_by_the_test',
                 'test': ('one_graded_source_structure_search_foldseek_tmalign_database_at_source_or_site_correspondence_'
                          'site_source_at_source_or_site_correspondence_partner_contacts_at_source_or_bound_partner_pdb100_at_source_or_ligand_transplant_alphafill_at_source'
-                         '_or_rna_family_scan_database_at_source_or_rna_structure_agreement_rfam_at_source'),
+                         '_or_rna_family_scan_database_at_source_or_rna_structure_agreement_rfam_at_source'
+                         '_or_partner_cofolding_chai1_at_source'),
                 'sheet_weights': dict(SHEET_WEIGHT),
                 'score': 'sum_over_subscoring_sheets_of_weight_times_sum_of_mean_value_in_test_of_that_kind',
                 'admission': 'first_value_above_zero',
@@ -122,6 +128,59 @@ def commissioned(summary):
     or ``OBTAIN``)."""
     return [(row['arguments']['query_ref'], row['arguments']['database'], row['arguments']['model_ref'])
             for row in summary['units'] if row['kind'] == 'child' and row['slot'] == SLOT]
+
+
+def held_ligands(summary):
+    """Per protein sequence of the scope, the ligand candidates the head holds (``ligand:<id>``, the leading one first): the
+    candidates a ``partner_cofolding`` commission may name (``internal_summary`` reads them from the candidate table)."""
+    return {query: summary['held_ligands'].get(query, []) for query in queries(summary)}
+
+
+def cofolded_ligands(summary):
+    """Per target, the ligand names (``ligand:<id>``) already co-folded for it: the graded ``partner_cofolding`` sheets the head
+    holds (``partner_cofolding.graded_rows``, read in ``internal_summary``)."""
+    found = {}
+    for row in summary['cofolding_test_rows']:
+        found.setdefault(row['query_ref'], set()).update(row['ligands'])
+    return found
+
+
+def available_ligands(summary, query):
+    """The ligand candidates of ``query`` a ``partner_cofolding`` commission may name now: held and not co-folded for it before."""
+    done = cofolded_ligands(summary).get(query, set())
+    return [ligand for ligand in held_ligands(summary).get(query, []) if ligand not in done]
+
+
+def offered_cofolding_queries(summary):
+    """The protein sequences of the scope that hold at least ``LIGAND_COUNT[0]`` ligand candidates not yet co-folded for them."""
+    return [query for query in queries(summary) if len(available_ligands(summary, query)) >= LIGAND_COUNT[0]]
+
+
+def commissioned_cofoldings(summary):
+    """The ``(query, frozenset of ligands)`` of the commissions of ``partner_cofolding`` this episode made."""
+    return [(row['arguments']['query_ref'], frozenset(row['arguments']['ligands']))
+            for row in summary['units'] if row['kind'] == 'child' and row['slot'] == COFOLDING_SLOT]
+
+
+def outstanding_cofolding(summary, query, ligands, resource_id=None):
+    """The outstanding job of the co-folding of ``query`` with exactly ``ligands`` (on ``resource_id`` when given), or ``None``."""
+    return next((job for job in summary['partner_cofolding_jobs']
+                 if job['outstanding'] and job['identity']['query_ref'] == query
+                 and set(job['identity']['ligands']) == set(ligands)
+                 and (resource_id is None or job['resource_id'] == resource_id)), None)
+
+
+def cofolding_refused(summary, query, ligands):
+    """Whether the head's check refuses this commission as a repeat (``task.check_partner_cofolding``): a ligand of it co-folded
+    for the query before, or the same set commissioned and no outstanding job of it continued."""
+    if set(ligands) & cofolded_ligands(summary).get(query, set()):
+        return True
+    return (query, frozenset(ligands)) in commissioned_cofoldings(summary) and outstanding_cofolding(summary, query, ligands) is None
+
+
+def cofolding_value(summary, standing, query, ligands):
+    """The proved maximum of one ``partner_cofolding`` unit of ``query`` with ``ligands`` (see ``ceiling``)."""
+    return partner_cofolding_test_ceiling(standing.get(query, {}), ligands)
 
 
 def search_value(standing, query):
@@ -302,6 +361,21 @@ def best_arguments(summary, records, action_type, ctx):
         standing = candidate_standing(records, summary['scope'], held_sources(records))
         search, source = max(pairs, key=lambda pair: site_value(summary, records, standing, pair[0]))
         return {'search_ref': search, 'site_source': source}
+    if action_type == COFOLDING_SLOT:
+        parked = next((job for job in summary['partner_cofolding_jobs'] if job['outstanding']), None)
+        if parked is not None:
+            return {'query_ref': parked['identity']['query_ref'], 'ligands': list(parked['identity']['ligands']),
+                    'resource_id': parked['resource_id'], 'until': 'extracted'}
+        resource = next((item['resource_id'] for item in ctx.services['job_access'].read('resources')
+                         if item['kind'] == COFOLDING_ROUTE_KIND), None)
+        queries_left = offered_cofolding_queries(summary)
+        if resource is None or not queries_left:
+            return None
+        standing = candidate_standing(records, summary['scope'], held_sources(records))
+        query = max(queries_left, key=lambda found: cofolding_value(summary, standing, found,
+                                                                    available_ligands(summary, found)[:LIGAND_COUNT[1]]))
+        return {'query_ref': query, 'ligands': available_ligands(summary, query)[:LIGAND_COUNT[1]], 'resource_id': resource,
+                'until': 'extracted'}
     if action_type != SLOT:
         return None
     parked = next((job for job in summary['structure_search_jobs'] if job['outstanding']), None)
@@ -337,7 +411,8 @@ def outcome_pending(summary, records, position):
 # (``yield_estimator.py``): change an action's version whenever its ceiling's derivation changes, and only that action's.
 CEILING_VERSIONS = {'structure_search': 'a102_ceiling_v2', 'site_correspondence': 'a102_ceiling_v2',
                     'partner_contacts': 'a102_ceiling_v2', 'ligand_transplants': 'a102_ceiling_v1',
-                    'rna_family_scan': 'a102_ceiling_v1', 'rna_structure_agreement': 'a102_ceiling_v1'}
+                    'rna_family_scan': 'a102_ceiling_v1', 'rna_structure_agreement': 'a102_ceiling_v1',
+                    'partner_cofolding': 'a102_ceiling_v1'}
 
 
 def ceiling(summary, records, action_type, arguments, ctx):
@@ -385,6 +460,13 @@ def ceiling(summary, records, action_type, arguments, ctx):
       admits none and earns one differential at most: ``differential_credit.rna_structure_agreement_test_ceiling``, ``w`` when the
       scan lists at least two families (a scan with fewer is refused by the request check and earns 0), else 0; a scan already tested
       earns 0. With ``arguments`` ``None``: ``w`` when a scan is offered (``offered_agreement_scans``), else 0.
+    * ``partner_cofolding``: the one test of one co-folding of a target with two to four of its held ligand candidates measures
+      those ligands, all listed already, so it admits none and earns one differential at most:
+      ``differential_credit.partner_cofolding_test_ceiling``, ``w`` when at least two of the commissioned ligands are listed, else
+      0. A commission the head's check would refuse as a repeat earns 0 (``cofolding_refused``: a ligand of it co-folded for the
+      query before, or the same set commissioned and not continued). The resume of a parked job (the same fields, ``until``
+      ``extracted``) is not a repeat and has the ceiling of what the launch started. With ``arguments`` ``None``: the largest
+      over the queries that hold at least two ligand candidates not yet co-folded (``offered_cofolding_queries``), 0 when none.
     * ``structure_search``: the one test of one search measures the product candidates of its hits: the ones already on the
       list (``product:`` standing) and at most ``HIT_BOUND`` in all (the most hits one search of the server returns; the
       figure and its source are in the comment of ``HIT_BOUND``: the Foldseek default ``--max-seqs`` 1000, observed results
@@ -394,7 +476,7 @@ def ceiling(summary, records, action_type, arguments, ctx):
       continued). The resume of a parked job (the same fields, ``until`` ``extracted``) is not a repeat and has the
       search's ceiling, which is what the launch started. With ``arguments`` ``None``: the largest over the queries with a
       database not yet searched (``open_pairs``), and ``best_arguments`` names that commission when it can be stated."""
-    if action_type not in (SLOT, SITE_TOOL, PARTNER_TOOL, TRANSPLANT_TOOL, RNA_SCAN_TOOL, RNA_AGREEMENT_TOOL):
+    if action_type not in (SLOT, COFOLDING_SLOT, SITE_TOOL, PARTNER_TOOL, TRANSPLANT_TOOL, RNA_SCAN_TOOL, RNA_AGREEMENT_TOOL):
         raise ValueError('a102_ceiling_not_derived_for_action_type:' + action_type)
     if action_type == RNA_SCAN_TOOL:
         if arguments is None:
@@ -411,6 +493,13 @@ def ceiling(summary, records, action_type, arguments, ctx):
             return 0.0
         return rna_structure_agreement_test_ceiling(len(scans[arguments['scan_ref']]['families']))
     standing = candidate_standing(records, summary['scope'], held_sources(records))
+    if action_type == COFOLDING_SLOT:
+        if arguments is None:
+            return max((cofolding_value(summary, standing, query, available_ligands(summary, query)[:LIGAND_COUNT[1]])
+                        for query in offered_cofolding_queries(summary)), default=0.0)
+        if cofolding_refused(summary, arguments['query_ref'], arguments['ligands']):
+            return 0.0
+        return cofolding_value(summary, standing, arguments['query_ref'], arguments['ligands'])
     if action_type == TRANSPLANT_TOOL:
         if arguments is None:
             return max((transplant_value(summary, standing, model) for model in offered_transplant_models(summary)), default=0.0)
