@@ -74,6 +74,8 @@ def _candidate_fields(target):
     return {'candidates': target['candidates'], 'candidate_count': len(target['candidates']),
             'not_asked_hit_count': target['not_asked_hit_count'], 'no_product_hit_count': target['no_product_hit_count'],
             'uncharacterized_hit_count': target['uncharacterized_hit_count'],
+            **({'uncharacterized_best_value': target['uncharacterized_best_value']}
+               if 'uncharacterized_best_value' in target else {}),
             'differentials': target['differentials']}
 
 

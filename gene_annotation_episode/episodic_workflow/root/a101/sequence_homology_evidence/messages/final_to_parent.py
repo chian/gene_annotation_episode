@@ -73,6 +73,9 @@ TARGET_FORM = RecordForm({
     'uncharacterized_hit_count': Field('integer', 'The hits of database searches whose every function is a label of '
                                                   'ignorance (hypothetical protein, uncharacterized protein): they '
                                                   'name no candidate'),
+    'uncharacterized_best_value': Field('number', 'The highest value among those hits, on the scale of a candidate\'s '
+                                                  'best_value: how close the target is to a protein nobody has '
+                                                  'characterized (absent when there is no such hit)', required=False),
     'differentials': Field('list', 'The tests that differentiated the top two listed candidates they measured (one per test)', items=DIFFERENTIAL_FORM),
 })
 FINDING_FORM = RecordForm({

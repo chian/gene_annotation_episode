@@ -176,11 +176,14 @@ def search_hits(grading, value_of):
     return found
 
 
-def uncharacterized_hits(grading):
-    """The hits of a database search with names all of whose functions are labels of ignorance."""
-    rows = [row for row in search_hits(grading, lambda alignments: None) if row['product'] is not None]
+def uncharacterized_hits(grading, value_of):
+    """The values of the hits of a database search with names all of whose functions are labels of ignorance: one value
+    per such hit (the subscore of its alignments, on the scale of a candidate's value in that test). The owner,
+    2026-11-23: listing this evidence tells "if it's closer to something else unknown or closer to an actually named
+    function and by how much"."""
+    rows = [row for row in search_hits(grading, value_of) if row['product'] is not None]
     stated = {row['hit_index'] for row in rows if not is_uncharacterized_label(row['product'])}
-    return len({row['hit_index'] for row in rows} - stated)
+    return list({row['hit_index']: row['value'] for row in rows if row['hit_index'] not in stated}.values())
 
 
 def _database_search(source, grading, value_of):
@@ -319,11 +322,11 @@ def _pairwise(reader, source, grading, value_of):
 def _read(reader, scope, sources):
     """The measurements in arrival order, per target the hits of database searches that name no candidate
     (``{'not_asked', 'no_product', 'uncharacterized'}``: the hits whose function was never asked, those asked that carry
-    no product, and those whose every function is a label of ignorance), the
+    no product, and the values of those whose every function is a label of ignorance), the
     identified conserved sites (target, target position, residue, candidate name) of the held alignments and the matched
     sites the held MetaCATS reports confirmed (the same identities)."""
     scope = reader.validate_scope(scope)
-    measurements, unnamed = [], {target: {'not_asked': 0, 'no_product': 0, 'uncharacterized': 0}
+    measurements, unnamed = [], {target: {'not_asked': 0, 'no_product': 0, 'uncharacterized': []}
                                  for target in scope['subject_refs']}
     identified, confirmed = set(), set()
     for reference in sources:
@@ -349,8 +352,8 @@ def _read(reader, scope, sources):
             if target not in scope['subject_refs']:
                 continue
             length, regions = reader.subject_length(target), _regions(reader, scope, target)
-            found, missing = read(source, grading, lambda rows: compile_native_sheet(
-                rows, supplied_length=length, regions=regions)['value'])
+            value_of = lambda rows: compile_native_sheet(rows, supplied_length=length, regions=regions)['value']
+            found, missing = read(source, grading, value_of)
             if missing:
                 naming = hit_naming(reader, source)
                 not_asked = 0 if naming is None else naming['not_asked']
@@ -359,7 +362,7 @@ def _read(reader, scope, sources):
                 unnamed[target]['not_asked'] += not_asked
                 unnamed[target]['no_product'] += missing - not_asked
             if read is _database_search:
-                unnamed[target]['uncharacterized'] += uncharacterized_hits(grading)
+                unnamed[target]['uncharacterized'].extend(uncharacterized_hits(grading, value_of))
             measurements.extend(_measurement(target, row[0] + '@' + reference, *row[1:5], reference, *row[5:]) for row in found
                                 if not (row[1] == 'product' and is_uncharacterized_label(row[2])))
     return measurements, unnamed, identified, confirmed
@@ -446,6 +449,11 @@ def _entry(measurements, candidate):
             **({} if first['identifier'] is None else {'identifier': first['identifier']})}
 
 
+def _uncharacterized(values):
+    """The count of the uncharacterized hits and, when there is one, the highest value among them."""
+    return {'uncharacterized_hit_count': len(values), **({'uncharacterized_best_value': max(values)} if values else {})}
+
+
 def candidate_table(reader, scope, sources):
     """What the head shows and returns, per target of the scope (``targets``: target reference -> ``candidates``
     (one row per admitted candidate, highest score first, ties in arrival order: its vocabulary, name and
@@ -454,7 +462,9 @@ def candidate_table(reader, scope, sources):
     ``differentials`` (each: the ``test``, the two candidates and the ``value``), ``not_asked_hit_count`` (the hits of
     database searches whose function was never asked: the naming stopped once the candidates settled), ``no_product_hit_count``
     (the hits asked that carry no product), ``uncharacterized_hit_count`` (the hits whose every function is a label of
-    ignorance) and the target's ``credit``), and the ``credit`` of the scope: the sum over its targets."""
+    ignorance) with ``uncharacterized_best_value`` (the highest value among them, on the scale of a candidate's
+    ``best_value``; absent when there is none) and the target's ``credit``), and the ``credit`` of the scope: the sum
+    over its targets."""
     measurements, unnamed = _read(reader, scope, sources)[:2]
     targets = {}
     for target, rows in _by(measurements, 'target').items():
@@ -475,10 +485,10 @@ def candidate_table(reader, scope, sources):
         targets[target] = {'candidates': candidates, 'tests': tests, 'differentials': differentials,
                            'not_asked_hit_count': unnamed[target]['not_asked'],
                            'no_product_hit_count': unnamed[target]['no_product'],
-                           'uncharacterized_hit_count': unnamed[target]['uncharacterized'], 'credit': result['credit']}
+                           **_uncharacterized(unnamed[target]['uncharacterized']), 'credit': result['credit']}
     for target, counts in unnamed.items():
         targets.setdefault(target, {'candidates': [], 'tests': [], 'differentials': [],
                                     'not_asked_hit_count': counts['not_asked'], 'no_product_hit_count': counts['no_product'],
-                                    'uncharacterized_hit_count': counts['uncharacterized'],
+                                    **_uncharacterized(counts['uncharacterized']),
                                     'credit': 0.0})
     return {'targets': targets, 'credit': math.fsum(row['credit'] for row in targets.values())}
