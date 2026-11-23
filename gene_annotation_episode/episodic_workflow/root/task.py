@@ -6,7 +6,8 @@ over nine axes (``credit.AXIS_WEIGHTS``); ``CHILD_SLOTS`` holds the heads the ro
 whose head is not linked stands at credit 0 (see the comment at ``CHILD_SLOTS``). The root has no tools: everything
 it does is a commission. It never ends its own Episode; its yield controller does.
 
-What the model is shown is controlled data only: the annotation credit, and for each axis its credit, the credit
+What the model is shown is controlled data only: the annotation credit, the root's scoring sheet (every candidate
+annotation the heads scored, with its merged score and each axis's row), and for each axis its credit, the credit
 at each of its returns (the trend of an axis's credit says whether it is still productive), how often it was
 commissioned, the numbers and flags of its latest finding and how many job records its head left outstanding.
 The answer is the name of one of the linked axes.
@@ -45,6 +46,8 @@ The annotation credit is prod_i (1 + k * v_i) ** w_i - 1 over the axis credits v
 
 `axes` shows for each axis: `credit` (what its episode returned at its latest return; 0 before its first return); `credit_after_each_return` (the axis credit after each of its returns, in order: an axis whose credit has stopped rising has stopped being productive); `commissions` (how often you commissioned it); `finding` (the numbers and flags of its latest finding); and `outstanding_jobs` (how many job records its episode left outstanding when it ended its turn). `commissions` lists your earlier commissions in order.
 
+`annotations` is the scoring sheet: every candidate annotation the axes have scored so far, the highest `score` first. Each has its `vocabulary` and its `name` or `identifier`, its `score`, and `rows`: the score each axis that scored it gives it, on that axis's own scale (negative when that axis's evidence says the annotation does not hold). The annotation's score is prod_i (1 + k * s_i) ** w_i - 1 over the axis scores s_i, with 0 for an axis that has not scored it: an annotation supported on several axes scores more than the same support on one, and an axis that speaks against it discounts the rest. The first is the best annotation as the evidence stands. The scores say which annotation the evidence favours; the credit says how productive the work was. They are separate.
+
 A job that is still running is not evidence. Do not spend commissions waiting for it: commission other axes and return to that axis later. Every commission of an axis passes its records back to its episode, so the episode can check the job and take its results.
 
 Choose the axis whose next commission you expect to raise the annotation credit most, and answer with that axis. You cannot end this episode: its controller ends it when further commissions stop earning credit."""
@@ -70,6 +73,7 @@ def decide(summary, feedback, ctx):
     current = annotation_credit(credits)
     context = {'annotation_credit': current, 'k': K,
                'axes': [axis_view(slot, summary, credits, current) for slot in CHILD_SLOTS],
+               'annotations': summary['annotations'],
                'commissions': summary['commissions'], 'feedback': feedback}
     return ModelRequest('REASONING', INSTRUCTIONS, context, OUTPUT_SCHEMA)
 

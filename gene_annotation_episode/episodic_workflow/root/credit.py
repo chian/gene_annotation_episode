@@ -111,22 +111,32 @@ OPERATIONAL_CREDIT_UNITS = {
 }
 
 
-def axis_gain(axis_credit, weight):
-    """``(1 + K * axis_credit) ** weight - 1``, without forming ``1 + x`` (which loses a small credit and rounds
-    a large one). With weight 1 it is ``K * axis_credit`` itself."""
-    scaled = K * axis_credit
+def axis_gain(axis_value, weight):
+    """``(1 + K * axis_value) ** weight - 1``, without forming ``1 + x`` (which loses a small value and rounds
+    a large one). With weight 1 it is ``K * axis_value`` itself. The factor ``1 + K * axis_value`` of an axis must be
+    positive: a value at or below ``-1 / K`` is outside the hypervolume and fails."""
+    scaled = K * axis_value
+    if scaled <= -1.0:
+        raise ValueError('hypervolume_axis_factor_not_positive:' + repr(axis_value))
     if weight == 1:
         return scaled
     return math.expm1(weight * math.log1p(scaled))
 
 
-def annotation_credit(axis_credits):
-    """``prod_i (1 + K * v_i) ** w_i - 1`` over the axis credits ``{slot: v_i}`` of the nine axes."""
+def hypervolume(axis_values):
+    """``prod_i (1 + K * v_i) ** w_i - 1`` over the values ``{slot: v_i}`` of the nine axes: the root's one
+    arithmetic. Over the axis credits it is the annotation credit (below); over the scores the axes give one candidate
+    annotation it is that annotation's score (``messages/internal_summary.py``). The two never read each other."""
     total = 0.0
     for slot, weight in AXIS_WEIGHTS.items():
-        gain = axis_gain(axis_credits[slot], weight)
+        gain = axis_gain(axis_values[slot], weight)
         total = total + gain + total * gain          # (1 + total) * (1 + gain) - 1
     return total
+
+
+def annotation_credit(axis_credits):
+    """The hypervolume over the axis credits ``{slot: v_i}`` of the nine axes."""
+    return hypervolume(axis_credits)
 
 
 def credit(summary, records):
