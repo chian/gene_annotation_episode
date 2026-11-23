@@ -73,6 +73,7 @@ def _candidate_fields(target):
     """The candidate fields of the finding of one target (``final_to_parent``)."""
     return {'candidates': target['candidates'], 'candidate_count': len(target['candidates']),
             'not_asked_hit_count': target['not_asked_hit_count'], 'no_product_hit_count': target['no_product_hit_count'],
+            'uncharacterized_hit_count': target['uncharacterized_hit_count'],
             'differentials': target['differentials']}
 
 
@@ -164,6 +165,7 @@ def internal_summary(view):
             'differentials': _across_targets(table, 'differentials'),
             'not_asked_hit_count': sum(target['not_asked_hit_count'] for target in table['targets'].values()),
             'no_product_hit_count': sum(target['no_product_hit_count'] for target in table['targets'].values()),
+            'uncharacterized_hit_count': sum(target['uncharacterized_hit_count'] for target in table['targets'].values()),
             'units_consumed': view.units_consumed,
             'action_yields': (None if view.controller_state is None
                               else yield_table(view.controller_state, forecast_unit='differential_credit'))}

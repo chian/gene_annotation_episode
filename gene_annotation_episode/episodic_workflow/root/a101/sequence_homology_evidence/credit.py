@@ -67,7 +67,7 @@ class A101DifferentialCredit:
         return {'kind': 'a101_differential_credit', 'version': 'a101_differential_credit', 'axis': 'A101',
                 'measurement': 'subscore_of_one_references_alignments_over_the_scope_regions',
                 'subscore_version': VERSION,
-                'candidates': 'product_from_database_search_functions_profile_family_reference_sequence',
+                'candidates': 'product_from_database_search_functions_that_are_no_label_of_ignorance_profile_family_reference_sequence',
                 'test': 'one_graded_source_kind_with_its_program_and_database',
                 'sheet_weights': dict(SHEET_WEIGHT),
                 'score': 'sum_over_subscoring_sheets_of_weight_times_sum_of_mean_value_in_test_of_that_kind',

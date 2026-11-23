@@ -655,6 +655,7 @@ def decide(summary, feedback, ctx):
         'credit_binding': summary['credit_binding'], 'candidates': summary['candidates'], 'tests': summary['tests'],
         'differentials': summary['differentials'], 'not_asked_hit_count': summary['not_asked_hit_count'],
         'no_product_hit_count': summary['no_product_hit_count'],
+        'uncharacterized_hit_count': summary['uncharacterized_hit_count'],
         'own_outcomes': summary['units'],
         'last_local_outcome': summary['last_local_outcome'], 'child_reports': summary['child_reports'],
         'handoff_refs': summary['handoff_refs'], 'bound_resources': resources,

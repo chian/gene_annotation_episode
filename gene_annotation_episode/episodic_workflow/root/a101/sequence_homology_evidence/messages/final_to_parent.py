@@ -70,6 +70,9 @@ TARGET_FORM = RecordForm({
                                             'hits stopped once the candidates settled, so their function is unknown, not absent'),
     'no_product_hit_count': Field('integer', 'The hits of database searches whose function was asked and that carry no '
                                              'product: they name no candidate'),
+    'uncharacterized_hit_count': Field('integer', 'The hits of database searches whose every function is a label of '
+                                                  'ignorance (hypothetical protein, uncharacterized protein): they '
+                                                  'name no candidate'),
     'differentials': Field('list', 'The tests that differentiated the top two listed candidates they measured (one per test)', items=DIFFERENTIAL_FORM),
 })
 FINDING_FORM = RecordForm({
