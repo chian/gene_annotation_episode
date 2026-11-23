@@ -5,6 +5,24 @@ This is the central progress record for evidence axes. Individual implementation
 documents and dated run reports supply detail; they do not independently set an
 axis's current status.
 
+## 2026-11-23 — A105 head: a standalone real-model run returns from start to finish (one "binds" claim)
+
+Scope: one evidence-axis head run from the command line (`run --entry experimental_activity_evidence`), standing in for
+the root with `init` and `propose-annotation`; the claim is PopZ (every second position mutated) binds ChpT. Not
+shared-root integration (no root run has called this head), and only the binding sheet class has read real passages:
+no "catalyzes" or "transports" claim has run. Evidence: run `a105_head_popz_chpt_20`, code `6eacf363c`
+(`runs/a105_head_real_20261121_01/`: `run_u.out`, `workspace_u/journal.sqlite3`, `prediction_u.md`). All 61 episodes
+closed by their own yield estimators; the head stopped after 4 units (one literature round of 7 strategies, then three
+record queries) with credit 0.249, 250 model calls, 2 h 13 min. It returned the sheet state and a finding with one row
+for the claim (6 results: 2 SPR and 2 microscopy say the proteins bind, 1 ultracentrifugation says they do not, 1 FRET
+says neither; 0.159 for, 0.023 against). No credit fell in any of its 236 units. Run 19 (`5380955eb`, 494 model calls,
+3 h 07 min) was the first to return, after two literature rounds, but with an empty finding: fixed in `6eacf363c`
+(each level passes up the finding of the latest child return that changed the sheet). Stop settings (`5380955eb`): head
+first forecast after 3 units, stops after 2 flat forecasts; literature round 5 and 3; strategy, search and page 8 and 4.
+Open: the report leaf's own credit is a share of fields filled and dropped once in each of runs 17 and 19 and twice in
+run 18 when a later passage named a second method (no error; it did not occur in run 20); whether it should be held at
+its highest value is the owner's.
+
 ## 2026-11-19 — A101 literature episodes: a commission-specific brief replaces the old investigation text
 
 Scope: the model request of the seven A101 literature episodes
