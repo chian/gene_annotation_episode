@@ -143,8 +143,26 @@ def credit(summary, records):
     return annotation_credit({slot: summary['axes'][slot]['credit'] for slot in AXIS_WEIGHTS})
 
 
+# The record of this credit's definition: what the forecast controller's learned gains are on (``yield_estimator.py``).
+CREDIT_DEFINITION = {'kind': 'root_annotation_hypervolume', 'formula': 'prod_i (1 + K * v_i) ** w_i - 1',
+                     'epsilon': EPSILON, 'axis_weights': dict(AXIS_WEIGHTS), 'axis_credit_units': dict(AXIS_CREDIT_UNITS)}
+# What ``ceiling`` means for each action type the root offers. The forecast controller learns an action's gains only
+# from ledger rows recorded under the same credit definition and the same name of that action's ceiling; the name of
+# an action's ceiling changes when the derivation of that action's ceiling changes, and only that action's.
+CEILINGS = {'sequence_homology_evidence': 'root_ceiling', 'experimental_activity_evidence': 'root_ceiling',
+            'make_claims': 'root_ceiling'}
+
+
 def ceiling(summary, records, action_type, arguments, ctx):
     """The most the annotation credit can rise if ``action_type`` is taken next. A commission of an axis head: an axis
     credit has no upper bound (this file never bounds one), so neither has the rise: ``UNBOUNDED``. The making of an
     annotation's claims (the tool ``make_claims``) changes no axis credit: 0."""
     return UNBOUNDED if action_type in AXIS_WEIGHTS else 0.0
+
+
+def outcome_pending(summary, records, position):
+    """Whether the outcome of unit ``position`` is pending (``method_loop.episode_type``; ``summary`` after the unit): a
+    commission of a head that left a job running when it ended its turn. Its rise does not yet measure the commission
+    (the job's results are not in), so the forecast controller learns nothing from it; the commission that returns to
+    the head is the observation. A unit of ``make_claims`` ends its work in the unit and is never pending."""
+    return summary['units'][position]['pending']

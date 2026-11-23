@@ -18,10 +18,11 @@ class RootAnnotation(EpisodeBinding):
     decide = task_file.decide
     offered_actions = task_file.offered_actions
     action = task_file.action
+    resume_action = task_file.resume_action
     credit = credit_file.credit
     ceiling = credit_file.ceiling
+    outcome_pending = credit_file.outcome_pending
     yield_controller = yield_file.yield_controller
-    items_remaining = yield_file.items_remaining
     assignment_form = from_parent_file.ASSIGNMENT_FORM
     read_from_parent = from_parent_file.read_from_parent
     msg_to_child = to_child_file.msg_to_child

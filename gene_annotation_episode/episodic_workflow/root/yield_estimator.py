@@ -1,34 +1,35 @@
-"""Continuation: the annotation credit accumulates without a declared limit, so the root's controller is the
-accumulation controller of ``yield_control``. It is given the annotation credit after every step, forecasts the credit
-the next step adds, and stops this episode after ``streak_length`` forecasts in a row whose upper bound is flat.
-Nothing else ends this episode.
+"""Continuation: the forecast yield controller (``ForecastYieldController``) over the annotation credit (the owner,
+2026-11-23: "this does seem to suggest we do need the forecast yield controller ... make that switch"). The root
+chooses among steps of very different cost, and each kind of step is forecast on its own: the gain steps of that kind
+realized before (this episode's units and the estimate ledger's history of the kind ``root:<action type>``) against
+the seconds they took. A commission of an axis head has no ceiling (``credit.ceiling``: ``UNBOUNDED``), so its forecast
+is the typical gain of that kind; with no unit of the kind anywhere it is unknown, and an unknown forecast is neither
+refused nor lets the episode stop. The episode stops when no offered step's forecast exceeds its expected seconds times
+the exchange rate and no work is owed (``task.resume_action``). Nothing else ends this episode.
 
-``ROOT_CONTROL`` is the root's own tuning (the owner, 2026-11-22: the window and the streak are "tuned parameters based
-on what behavior you want"). The root's steps are of two costs: a commission of an axis head costs from minutes to
-hours, and the making of an annotation's claims costs seconds and earns no credit by itself (it is what lets a head
-check the annotation). The claims of several annotations may be made one after the other, so the window is long
-enough that those steps alone do not end the episode: the first forecast comes after 4 steps and the episode stops
-after 3 flat forecasts in a row, that is, after 6 steps in a row that earned nothing. These are first values; they are
-to be tuned from the root's own run records.
+``ROOT_FORECAST`` is the root's own tuning (the owner, 2026-11-22: the stop settings are "tuned parameters based on
+what behavior you want"). ``exchange_rate`` is the price of a second in annotation credit: 0.00003. A first value,
+from the one measured check of a claim by the literature (A105 head run 20: axis credit 0.249 in 2 h 13 min, which
+beside a sequence-homology credit of 0.9 is an annotation credit of 0.47, 0.00006 per second): half of that rate, so
+a check expected to earn as much is taken and one expected to earn less than half as much is not. A commission of the
+sequence-homology head earns far above it (0.9 in about 8 minutes). It is to be tuned from the root's own run records.
+``forget_old_rows``: ledger rows are weighted by age, as for the other forecast episodes. ``job_kinds``: none; a
+step's cost is its measured unit seconds.
 
-The steps the root can take are a list that grows and shrinks as it works (``task.choices``: only steps with
-something new to run on are offered), so the root counts the steps left after every unit (``items_remaining``) and the
-controller ends the episode when none is left: every head ran fully and every claim was checked.
+The definition the learned gains are on (``forecast_definitions``: the digest of the credit definition record and
+each action's ceiling name, ``credit.CEILINGS``) is handed to the controller: the ledger's history of an action is
+only the rows recorded under that action's definition.
 
 The annotation task sets no target and no maximum, so the controller takes nothing from ``parent_input`` (what
 ``messages/read_from_parent.py`` produced). The assignment is not read here."""
-from yield_control import ADAPTIVE_CONTROL, AccumulationControl, AccumulationYieldController
+from gene_annotation_episode.episodic_workflow.episode_support.configuration.yield_declarations import (
+    forecast_definitions, open_yield_controller)
 
-from .task import choices
+from .credit import CEILINGS, CREDIT_DEFINITION
 
-ROOT_CONTROL = AccumulationControl(ADAPTIVE_CONTROL.threshold, ADAPTIVE_CONTROL.gamma, ADAPTIVE_CONTROL.rho,
-                                   streak_length=3, window_size=4, subsample_size=4, alpha=ADAPTIVE_CONTROL.alpha)
+ROOT_FORECAST = {'exchange_rate': 0.00003, 'forget_old_rows': True, 'job_kinds': {}}
 
 
 def yield_controller(initial_credit, settings, parent_input):
-    return AccumulationYieldController('root', initial_credit, ROOT_CONTROL, items=None)
-
-
-def items_remaining(summary):
-    """The steps left to take: the ones ``task.choices`` offers now."""
-    return len(choices(summary))
+    return open_yield_controller('forecast', epoch='root', initial_credit=initial_credit, parameters=ROOT_FORECAST,
+                                 definition=forecast_definitions(CREDIT_DEFINITION, CEILINGS))

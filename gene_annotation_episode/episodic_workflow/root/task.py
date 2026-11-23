@@ -16,16 +16,24 @@ the root sees the claims and nothing of the process. A claim is then handed to a
 (``CLAIM_CHECKERS``), and what that head finds is that head's score of the annotation the claim was made from: both
 heads score the same annotation, on one line of the root's scoring sheet. One claim may go to several heads.
 
-The steps offered at a decision (``choices``). A step is offered only when there is something new for it (the
-owner, 2026-11-23: "it's not at all reasonable to expect new results under the same controller and purely deterministic
-tools"; the yield estimator should say "a101 ran and we expect nothing else b/c it ran fully"). Every head is ended by
-its own yield estimator, which is that head's verdict that nothing more is worth doing with what it holds; a head that
-returned and left no job running ran fully, and commissioning it again on the same input asks the same question again.
-So: a commission of the sequence-homology head is offered before its first return and while it has a job outstanding;
-``make_claims`` is offered for each annotation on the sheet whose claims were not made yet; and a commission of a
-claim-checking head on a claim is offered while that head was not commissioned on that claim or has a job
-outstanding. The model answers with the number of one of the offered steps. When no step is left the controller ends
-the episode (``yield_estimator.items_remaining``).
+The steps (``choices``, ``resume_action``). A step is offered only when there is something new for it (the owner,
+2026-11-23: "it's not at all reasonable to expect new results under the same controller and purely deterministic
+tools"). Every head is ended by its own yield estimator, which is that head's verdict that nothing more is worth doing
+with what it holds; a head that returned and left no job running ran fully, and commissioning it again on the same
+input asks the same question again. So the model is offered: a commission of the sequence-homology head before its
+first return and while it has a job outstanding; and a commission of a claim-checking head on a claim while that head
+was not commissioned on that claim or has a job outstanding. The model answers with the number of one of them.
+
+Making the claims of an annotation is no decision: it is a set path that is always taken, once, for every candidate
+annotation ("you find all the info, you reason about it and add anything else to the list. that's it. done"). So it is
+not offered to the model: an annotation on the sheet whose claims were not made yet is work the root has started and
+must finish, and the root owes the unit that makes them (``resume_action``, due at once: the system takes it without
+asking the model, and the forecast gate does not refuse it). A head that left a job outstanding is owed its return
+too, not due: the model may take other steps worth their cost first, and the return is taken when nothing else is.
+
+The root's controller is the forecast yield controller (``yield_estimator.py``): the system adds to what the model is
+shown the forecast of every offered action (``action_forecasts``), refuses a chosen step whose forecast is not worth
+its cost, and ends the episode when no offered step is worth its cost and no work is owed.
 
 What the model is shown is controlled data only: the annotation credit, the root's scoring sheet (every candidate
 annotation the heads scored, with its merged score and each axis's row), the claims made, the steps it may take, and
@@ -75,20 +83,23 @@ INSTRUCTIONS = """You direct the annotation of one protein. The aim is to find i
 
 Each step you take one of the `choices`, by its number:
 - `sequence_homology_evidence`: its episode searches sequence databases, finds candidate annotations for the protein and scores each from sequence.
-- `make_claims` for one candidate annotation: turns what that annotation says the protein does into claims an experiment could check ("binds", "catalyzes" or "transports" a named molecule). It is quick, it is done once for an annotation, and it earns no credit by itself: it is what makes the next kind of step possible. An annotation that states no function gives no claims.
 - `experimental_activity_evidence` on one claim: its episode searches the literature for experiments that test that claim. It takes hours. What it finds is its score of the annotation the claim was made from.
+
+Claims are made for you: for every candidate annotation found, what it says the protein does is turned into claims an experiment could check ("binds", "catalyzes" or "transports" a named molecule). An annotation that states no function gives no claims.
 
 `annotations` is the scoring sheet: every candidate annotation scored so far, the highest `score` first. Each has its `vocabulary` and its `name` or `identifier`, its `score`, and `rows`: the score each axis gives it, on that axis's own scale (negative when that axis's evidence says the annotation does not hold). The annotation's score is prod_i (1 + k * s_i) ** w_i - 1 over the axis scores s_i, with 0 for an axis that has not scored it: an annotation supported on several axes scores more than the same support on one, and an axis that speaks against it discounts the rest. The first is the best annotation as the evidence stands.
 
-`claims` lists the claims made: the annotation each was made from, what it says, and for each head that can check it how often it was commissioned on it.
+`claims` lists the claims made: the annotation each was made from, what it says, and for each episode that can check it how often it was commissioned on it.
 
 The annotation credit is prod_i (1 + k * v_i) ** w_i - 1 over the axis credits v_i; `k` and the `weight` w_i of each axis are given. Progress on one axis alone raises it linearly. The same progress spread over several axes raises it more. `annotation_gain_of_one_credit` is what one more unit of credit on that axis would add now. The scores say which annotation the evidence favours; the credit says how productive the work was. They are separate.
 
-`axes` shows for each axis: `credit`; `credit_after_each_return` (an axis whose credit has stopped rising has stopped being productive); `commissions`; `finding` (the numbers and flags of its latest finding); and `outstanding_jobs` (how many job records its episode left outstanding). A job that is still running is not evidence: take other steps and return to that axis later.
+`axes` shows for each axis: `credit`; `credit_after_each_return`; `commissions`; `finding` (the numbers and flags of its latest finding); and `outstanding_jobs` (how many jobs its episode left running). A job that is still running is not evidence: take other steps and return to that axis later.
+
+`action_forecasts` gives, for each kind of step offered, what steps of that kind have earned before (`forecast_gain`), how long they took (`expected_seconds`) and whether one is worth its cost now (`worth`). A step that is not worth its cost is refused.
 
 Only steps that have something new to run on are offered: an episode that has returned without a job outstanding did everything worth doing with what it held, so it is not offered again on the same input.
 
-Spend the expensive steps where they tell the leading annotations apart: a claim that the leading annotation makes and its rival does not is worth more than one both make. Choose the step you expect to raise the annotation credit most. You cannot end this episode: its controller ends it when further steps stop earning credit."""
+Spend the expensive steps where they tell the leading annotations apart: a claim that the leading annotation makes and its rival does not is worth more than one both make. Choose the step you expect to raise the annotation credit most. You cannot end this episode: its controller ends it when no step is worth its cost."""
 
 
 def axis_view(slot, summary, credits, current):
@@ -125,19 +136,39 @@ def has_something_new(slot, summary, claim_ref=None):
 
 
 def choices(summary):
-    """The steps offered now, in a fixed order (see the module text). Each is the action the system takes for it and
-    what the model is shown of it."""
+    """The steps the model is offered now, in a fixed order (see the module text). Each is the action the system takes
+    for it and what the model is shown of it."""
     offered = []
     if has_something_new(ANNOTATION_FINDER, summary):
         offered.append({'action': ANNOTATION_FINDER})
-    for annotation in summary['annotations']:
-        if annotation_key(annotation) not in summary['claims_made']:
-            offered.append({'action': MAKE_CLAIMS, 'annotation': identity_of(annotation)})
     for claim in summary['claims']:
         for slot, predicates in CLAIM_CHECKERS.items():
             if claim['predicate'] in predicates and has_something_new(slot, summary, claim['claim_ref']):
                 offered.append({'action': slot, 'claim_ref': claim['claim_ref'], **claim_view(claim, summary)})
     return [{'choice': number, **step} for number, step in enumerate(offered)]
+
+
+def annotations_without_claims(summary):
+    """The annotations on the sheet whose claims were not made yet, in the order of the sheet."""
+    return [identity_of(annotation) for annotation in summary['annotations']
+            if annotation_key(annotation) not in summary['claims_made']]
+
+
+def resume_action(summary, records, ctx):
+    """The unit this episode owes (``method_loop.episode_type``, step 3): the making of the claims of the first
+    annotation on the sheet that has none yet, due at once; else the return to a head that left a job running, not due
+    (the model may take other steps worth their cost first); else ``None``."""
+    waiting = annotations_without_claims(summary)
+    if waiting:
+        (subject,) = summary['scope']['subject_refs']
+        return {'action_type': MAKE_CLAIMS, 'due': True,
+                'arguments': {'annotation': waiting[0], 'subject_ref': subject,
+                              'rivals': [identity_of(annotation) for annotation in summary['annotations']
+                                         if identity_of(annotation) != waiting[0]]}}
+    if summary['axes'][ANNOTATION_FINDER]['outstanding_jobs'] > 0:
+        return {'action_type': ANNOTATION_FINDER, 'due': False,
+                'arguments': {'selection': ctx.settings['axis_selections'][ANNOTATION_FINDER]}}
+    return None
 
 
 def decide(summary, feedback, ctx):
@@ -158,19 +189,16 @@ def decide(summary, feedback, ctx):
 
 
 def offered_actions(summary, ctx):
-    """The action types this decision offers: the actions of ``choices(summary)``, each once."""
-    return list(dict.fromkeys(step['action'] for step in choices(summary)))
+    """The action types this decision offers: the actions of ``choices(summary)``, each once, and ``make_claims`` while
+    an annotation's claims are owed."""
+    return list(dict.fromkeys([step['action'] for step in choices(summary)]
+                              + ([MAKE_CLAIMS] if annotations_without_claims(summary) else [])))
 
 
 def action(response, summary, records, ctx):
-    """The step the model chose: the making of an annotation's claims, or the commission of a head with the selection
-    the root's settings give that axis (and, for a head that checks claims, the claim)."""
+    """The step the model chose: the commission of a head with the selection the root's settings give that axis (and,
+    for a head that checks claims, the claim)."""
     step = choices(summary)[response['choice']]
-    if step['action'] == MAKE_CLAIMS:
-        (subject,) = summary['scope']['subject_refs']
-        return ToolCall(MAKE_CLAIMS, {'annotation': step['annotation'], 'subject_ref': subject,
-                                      'rivals': [identity_of(annotation) for annotation in summary['annotations']
-                                                 if identity_of(annotation) != step['annotation']]})
     arguments = {'selection': ctx.settings['axis_selections'][step['action']]}
     if step['action'] != ANNOTATION_FINDER:
         arguments['claim_ref'] = step['claim_ref']

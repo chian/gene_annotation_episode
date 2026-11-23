@@ -17,6 +17,7 @@ The axis credit is made from what the head's returned credit measures (``read_fr
 Claims. ``claims`` lists the claims the tool ``make_claims`` made, each with the annotation it was made from (the tool
 was called for that annotation: nothing attaches a claim to an annotation afterwards), what it says (predicate and the
 looked-up name of its molecule) and its records; ``claims_made`` holds the annotations the tool was called for.
+``units`` says of every unit, in order, whether its outcome is pending (``credit.outcome_pending``).
 
 The root's scoring sheet (``annotations``): one line per candidate annotation (same vocabulary and identifier, or name
 when it has no identifier: the identity the sequence-homology head gives its candidates), with one row per axis that
@@ -107,8 +108,9 @@ def internal_summary(view):
                    'claim_sheets': {},
                    'claim_commissions': {}}
             for slot in AXIS_WEIGHTS}
-    claims, claims_made, commissions = [], [], []
+    claims, claims_made, commissions, units = [], [], [], []
     for outcome in view.outcomes:
+        units.append({'pending': outcome['kind'] == 'child' and outcome['report']['outstanding_jobs'] > 0})
         if outcome['kind'] == 'tool':
             annotation = outcome['arguments']['annotation']
             claims_made.append(annotation_key(annotation))
@@ -131,4 +133,4 @@ def internal_summary(view):
         axis['outstanding_job_refs'] = report['outstanding_job_refs']
         axis['outstanding_jobs'] = report['outstanding_jobs']
     return {**view.parent_input, 'axes': axes, 'claims': claims, 'claims_made': claims_made,
-            'annotations': scoring_sheet(axes, claims), 'commissions': commissions}
+            'annotations': scoring_sheet(axes, claims), 'commissions': commissions, 'units': units}
