@@ -31,7 +31,7 @@ def final_to_parent(summary, completion, selection):
     axes = summary['axes']
     result = {'credit': completion['credit'],
               'finding': {'commissions': len(summary['commissions']),
-                          'axes': {slot: {'credit': axis['credit'], 'commissions': len(axis['returned_credits']),
+                          'axes': {slot: {'credit': axis['credit'], 'commissions': len(axis['credit_after_each_return']),
                                           'outstanding_jobs': len(axis['outstanding_job_refs'])}
                                    for slot, axis in axes.items()}}}
     if 'record_refs' in selection:

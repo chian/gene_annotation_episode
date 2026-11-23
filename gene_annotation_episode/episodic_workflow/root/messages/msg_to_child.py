@@ -36,7 +36,7 @@ SELECTION = {
     'structural_homology_evidence': ('committed_record_refs',),
     'gene_context_evidence': ('committed_record_refs',),
     'evolutionary_history_evidence': ('committed_record_refs',),
-    'experimental_activity_evidence': ('committed_record_refs',),
+    'experimental_activity_evidence': ('committed_record_refs', 'sheet_state_refs'),
     'perturbation_evidence': ('committed_record_refs',),
     'partner_presence_evidence': ('committed_record_refs',),
     'sample_context_evidence': ('committed_record_refs',),
@@ -131,7 +131,9 @@ def evolutionary_history_evidence(arguments, summary):
 
 def experimental_activity_evidence(arguments, summary):
     """A105. The proposed annotation as text; one custody field, ``evidence_refs``, for the scope records, the
-    proposed annotation and the evidence; its context is exactly the finding task."""
+    proposed annotation and the evidence; its context is exactly the finding task. Once its head has returned a sheet,
+    the sheet states of its latest return go back as ``sheet_state_refs``: the head continues that sheet and returns
+    the rise of its credit since it (``read_from_child.CREDIT_RETURNED``)."""
     slot = 'experimental_activity_evidence'
     proposed = summary['proposed_annotation_ref']
     assignment = {
@@ -142,6 +144,8 @@ def experimental_activity_evidence(arguments, summary):
         'constraints': {},
         'context': {'evidence_task': evidence_task(slot, 'A105')},
         'scope': summary['scope']}
+    if summary['axes'][slot]['sheet_state_refs']:
+        assignment['sheet_state_refs'] = list(summary['axes'][slot]['sheet_state_refs'])
     return ChildMessage(objective='Establish what the experimental-activity evidence shows about the proposed '
                                   'annotation of the assigned subject',
                         message={}, assignment=assignment, selection=SELECTION[slot])

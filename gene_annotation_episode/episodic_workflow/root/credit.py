@@ -69,6 +69,8 @@ The estimate credit (the scores of the time estimates a head makes about its job
 not an axis credit and does not enter this credit."""
 import math
 
+from method_loop import UNBOUNDED
+
 EPSILON = 0.5
 K = (1.0 - EPSILON) / EPSILON
 
@@ -129,3 +131,9 @@ def annotation_credit(axis_credits):
 
 def credit(summary, records):
     return annotation_credit({slot: summary['axes'][slot]['credit'] for slot in AXIS_WEIGHTS})
+
+
+def ceiling(summary, records, action_type, arguments, ctx):
+    """The most the annotation credit can rise if the axis ``action_type`` is commissioned next: an axis credit has no
+    upper bound (this file never bounds one), so neither has the rise: ``UNBOUNDED``, for every axis."""
+    return UNBOUNDED
