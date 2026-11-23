@@ -180,12 +180,88 @@ def differential_credit(measurements):
             held['earned'][test] = max(0.0, test_credits[test] - held['best'])
             if held['best_test'] is None or test_credits[test] > held['best']:
                 held['best'], held['best_test'] = test_credits[test], test
+    entry_credits = {test: math.fsum(evidence[test, candidate] * entries[candidate] for candidate in entries
+                                     if tests[admitted[candidate]] == test) for test in tests}
     return {'scores': {candidate: score(candidate) for candidate in sorted(entries)},
             'sheets': {candidate: {kind: _sheet_value(held) for kind, held in sheets[candidate].items()}
                        for candidate in sorted(entries)},
-            'entries': entries, 'differentials': differentials, 'test_credits': test_credits, 'datasets': datasets,
+            'entries': entries, 'entry_credits': entry_credits, 'differentials': differentials,
+            'test_credits': test_credits, 'datasets': datasets,
             'credit': math.fsum([credit for test, credit in test_credits.items() if test not in dataset_of]
                                 + [held['best'] for held in datasets.values()])}
+
+
+GROUP_PREFIX = 'group:'
+
+
+def group_key(members):
+    """The candidate key of a group of candidates (their own keys): the same whatever the order they are given in."""
+    return GROUP_PREFIX + '|'.join(sorted(members))
+
+
+def regrouped(measurements, groups):
+    """The measurements read under a grouping (the owner, 2026-11-23: "regrouping AUTOMATICALLY merges and rescores
+    annotation scorings"; the design ``docs/plan/designs/a102_regrouping.md``). ``groups`` is a list of groups, each a
+    list of candidate keys; a candidate in no group is read as before. The records stay as observed: only the candidate a
+    measurement is read as changes, to its group's key (``group_key``). The measurements of the members of one group in
+    one test are then that one candidate's replicates, so its value in the test is their mean: for a database search,
+    whose measurements are the hits, exactly the value the test would have given under one name. A ``cluster`` test gives
+    one measurement per candidate (its share of its sequences in the target's cluster, with its ``size``), so the members
+    of a group are joined into one measurement there: the group's share over all its sequences (the sum of
+    ``in_target_cluster`` over the sum of ``size``), with the summed size as its evidence, again as one name would have
+    measured."""
+    key_of = {member: group_key(group) for group in groups for member in group}
+    rows, joined = [], {}
+    for row in measurements:
+        if row['candidate'] not in key_of:
+            rows.append(row)
+        elif row['test'].split('@', 1)[0].split(':', 1)[0] == 'cluster':
+            held = joined.get((row['test'], key_of[row['candidate']]))
+            if held is None:
+                held = joined[row['test'], key_of[row['candidate']]] = {**row, 'candidate': key_of[row['candidate']]}
+                rows.append(held)
+            else:
+                held['size'] += row['size']
+                held['in_target_cluster'] += row['in_target_cluster']
+            held['value'] = held['in_target_cluster'] / held['size']
+        else:
+            rows.append({**row, 'candidate': key_of[row['candidate']]})
+    return rows
+
+
+def credit_under(measurements, groups):
+    """The credit of ``measurements`` with each test's differential taken under the grouping ``groups`` and each test's
+    entries taken as found: the entry of a candidate is paid once, by its name as found, and does not change with a
+    grouping; the differential of a test is that of the two leading candidates of the table read under the grouping.
+    A test's credit is the sum of the two, and the tests add up as in ``differential_credit`` (the tests of one dataset
+    together earn the largest of their test credits). With no group it is ``differential_credit(measurements)['credit']``.
+
+    For a fixed grouping it never falls as measurements are added: a held test's entries and its differential depend
+    only on the tests before it, so every term is fixed once computed, the terms are never negative, and a dataset's
+    largest test credit can only rise."""
+    found = differential_credit(measurements)
+    if not groups:
+        return found['credit']
+    grouped = differential_credit(regrouped(measurements, groups))
+    dataset_of = _datasets(measurements)
+    test_credits = {test: math.fsum([found['entry_credits'][test]]
+                                    + [row['value'] for row in grouped['differentials'] if row['test'] == test])
+                    for test in found['test_credits']}
+    best = {}
+    for test, credit in test_credits.items():
+        if test in dataset_of:
+            best[dataset_of[test]] = max(best.get(dataset_of[test], 0.0), credit)
+    return math.fsum([credit for test, credit in test_credits.items() if test not in dataset_of] + list(best.values()))
+
+
+def grouped_credit(measurements, groupings):
+    """The credit of ``measurements`` given the groupings the episode holds (each a list of groups): the HIGHEST
+    ``credit_under`` over them, no grouping being one of them (the owner, 2026-11-23: "improving that honesty should earn
+    credit"; "flipping back and forth without new evidence should be net neutral"). A grouping that makes the two leading
+    candidates two different functions gives real differentials and raises it; a grouping already held, or one that is
+    no better, adds nothing; it never falls, because each ``credit_under`` never falls and a grouping, once held, stays
+    held. With no grouping held it is the credit as before."""
+    return max([credit_under(measurements, ())] + [credit_under(measurements, groups) for groups in groupings])
 
 
 def standing(measurements):

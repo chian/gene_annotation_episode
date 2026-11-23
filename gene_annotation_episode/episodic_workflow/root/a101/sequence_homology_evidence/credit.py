@@ -17,15 +17,18 @@ import heapq
 import json
 from pathlib import Path
 
+import math
+
 from method_loop import UNBOUNDED
 
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_alignment.native_correspondence import (
     NativeCorrespondenceScoring)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.candidate_measurements import (
-    SITE_WEIGHT, alignment_contexts, candidate_standing, candidate_table, dataset_bests, held_sources, matched_positions_taken,
-    unconfirmed_matched_sites)
+    SITE_WEIGHT, alignment_contexts, candidate_measurements, candidate_standing, candidate_table, dataset_bests,
+    grouping_keys, held_groupings, held_sources, matched_positions_taken, unconfirmed_matched_sites)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.differential_credit import (
-    CLUSTER_PSEUDO_COUNT, SHEET_WEIGHT, cluster_test_ceiling, metacats_test_ceiling, msa_test_ceiling, test_ceiling)
+    CLUSTER_PSEUDO_COUNT, SHEET_WEIGHT, cluster_test_bound, cluster_test_ceiling, grouped_credit, metacats_test_ceiling,
+    msa_test_ceiling, test_ceiling)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence import (
     bvbrc_metacats_search as metacats)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.msa_alignment_sheet import (
@@ -82,9 +85,54 @@ class A101DifferentialCredit:
                 'repeat': 'earns_nothing'}
 
 
+APPLY_GROUPING = 'apply_grouping'
+
+
+def grouping_in_force(summary, records):
+    """The grouping of the current commission once this episode holds it (``task.apply_grouping`` keeps it), else
+    ``None``: with no grouping in the commission, or before the owed unit has kept it, the table is read as found."""
+    owed = summary['candidate_groups']
+    return owed if owed and owed in held_groupings(records) else None
+
+
 def held_candidate_table(summary, records):
-    """The table of candidates of the records this episode holds over the commissioned scope."""
-    return candidate_table(records, summary['scope'], held_sources(records))
+    """The table of candidates of the records this episode holds over the commissioned scope, its credit over the
+    groupings it holds and, with a grouping in force, its candidates rescored under it."""
+    return candidate_table(records, summary['scope'], held_sources(records), grouping_in_force(summary, records))
+
+
+def grouping_gain(summary, records):
+    """What keeping the grouping of the current commission adds to the credit, exactly: the credit over the held
+    groupings with it less the credit over the held groupings (``differential_credit.grouped_credit``), summed over the
+    targets; 0 when the commission has none or it is held already."""
+    owed, held = summary['candidate_groups'], held_groupings(records)
+    if not owed or owed in held:
+        return 0.0
+    keys = [grouping_keys(grouping) for grouping in held]
+    by_target = {}
+    for row in candidate_measurements(records, summary['scope'], held_sources(records)):
+        by_target.setdefault(row['target'], []).append(row)
+    return math.fsum(grouped_credit(rows, keys + [grouping_keys(owed)]) - grouped_credit(rows, keys)
+                     for rows in by_target.values())
+
+
+def grouping_room(summary, records, action_type):
+    """What a grouping can add to the as-found ceiling of one further test: one differential. The ceilings below are
+    proved for the table as found. With a grouping held, the credit is the highest ``credit_under`` over the held
+    groupings, and one further test raises each of them by its entries as found (which the as-found ceiling covers)
+    plus ONE differential of the two leading candidates read under that grouping, which may be a pair the as-found
+    ceiling did not count (a group whose listed member the test does not measure, a group against a third candidate).
+    That differential is the difference of two values of the test, so it is at most the largest value the test can
+    give one candidate: the sheet weight for a test whose values are in [0, 1] (search, scan, pairwise comparison,
+    clustering: the evidence of a clustering is at most 1), and the whole target for an alignment or a MetaCATS report
+    (a candidate's sites are at most the target's positions: length x ``SITE_WEIGHT`` x the msa sheet weight). So the
+    as-found ceiling plus this is a proved bound under every held grouping; it is not tight."""
+    family = {'pairwise_blast': 'pairwise', 'bvbrc_blast': 'database_search', 'hmmer_profile_scan': 'profile_scan',
+              'all_vs_all': 'cluster'}.get(action_type)
+    if family is not None:
+        return SHEET_WEIGHT[family]
+    return max(records.subject_length(target) for target in summary['scope']['subject_refs']
+               if target in summary['held_sequences']) * SITE_WEIGHT * SHEET_WEIGHT['msa']
 
 
 def credit(summary, records):
@@ -372,13 +420,40 @@ def outcome_pending(summary, records, position):
 # that action's ceiling (``yield_estimator.py``). Every offered action has one; an action without one raises
 # (``forecast_definition_missing_for_action``). The differential of a test is ONE pair's (the top two of the listed
 # candidates it measures).
-CEILINGS = {'reason': 'a101_ceiling', 'execute_selected_tool': 'a101_ceiling',
+CEILINGS = {'reason': 'a101_ceiling', 'execute_selected_tool': 'a101_ceiling', APPLY_GROUPING: 'a101_ceiling',
             'pairwise_blast': 'a101_ceiling', 'hmmer_profile_scan': 'a101_ceiling',
             'bvbrc_blast': 'a101_ceiling', 'bvbrc_msa': 'a101_ceiling',
             'bvbrc_metacats': 'a101_ceiling', 'all_vs_all': 'a101_ceiling'}
 
 
 def ceiling(summary, records, action_type, arguments, ctx):
+    """The most the head's credit can rise if the action ``action_type`` with ``arguments`` is the next unit: the ceiling
+    proved for the table as found (``found_ceiling``), and, while this episode holds a grouping of its candidates, that
+    plus the one differential a grouping can add (``grouping_room``). A clustering is then bounded by its own test
+    credit (``cluster_test_bound``), not by the improvement over the dataset's best: under a grouping the dataset's
+    best is another number. Keeping the commission's grouping (``apply_grouping``) has its exact gain as its ceiling
+    (``grouping_gain``). An action that earns nothing as found because its check refuses it as a repeat (ceiling 0)
+    earns nothing under a grouping either: no test is run."""
+    if action_type == APPLY_GROUPING:
+        return grouping_gain(summary, records)
+    found = found_ceiling(summary, records, action_type, arguments, ctx)
+    if found is UNBOUNDED or action_type == 'reason' or not held_groupings(records):
+        return found
+    if action_type == 'all_vs_all':
+        if arguments is not None and (arguments['search_ref'], sorted(arguments['candidates'])) in all_vs_all_commission_keys(summary):
+            return 0.0
+        standing = candidate_standing(records, summary['scope'], held_sources(records))
+        if arguments is None:
+            return SHEET_WEIGHT['cluster'] * (1 + max((len([name for name in held if name.startswith('product:')])
+                                                       for held in standing.values()), default=0))
+        return (cluster_test_bound(standing.get(arguments['query_ref'], {}),
+                                   all_vs_all_sizes(records, arguments['query_ref'], arguments['search_ref'],
+                                                    arguments['candidates'], arguments['per_candidate']))
+                + grouping_room(summary, records, action_type))
+    return 0.0 if found == 0.0 else found + grouping_room(summary, records, action_type)
+
+
+def found_ceiling(summary, records, action_type, arguments, ctx):
     """The most the head's credit can rise if the action ``action_type`` with ``arguments`` is the next unit (with
     ``arguments`` ``None``: the most over every arguments the action type can take now).
 

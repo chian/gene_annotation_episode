@@ -109,7 +109,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.cluster_sheet import (
     SCHEMA as CLUSTER_SHEET, group_values)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.differential_credit import (
-    differential_credit, standing)
+    GROUP_PREFIX, differential_credit, group_key, grouped_credit, regrouped, standing)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.uncharacterized_labels import is_uncharacterized_label
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.scoring import (
     compile_native_sheet, hmmer_comparisons, route_native_grading)
@@ -140,6 +140,30 @@ HIT_METADATA_KIND = 'search_hit_metadata'
 # lengths) accumulate: then a per-residue figure x the target's length may replace it.
 EXPECTED_DISTINGUISHING_SITES = 7
 SITE_WEIGHT = 1 / EXPECTED_DISTINGUISHING_SITES
+
+
+# The provider of the records in which an episode keeps the groupings of its candidates it was given (one ``source``
+# record per grouping, its artifact the grouping itself).
+GROUPING_PROVIDER = 'candidate_grouping'
+
+
+def member_key(member):
+    """The candidate key of a member of a group, named as the head returned it: its vocabulary and its own identifier,
+    or its name when it has none (the key ``_measurement`` gives a measurement)."""
+    return member['vocabulary'] + ':' + (member.get('identifier') or member['name'])
+
+
+def grouping_keys(grouping):
+    """A grouping (``[{'members': [{'vocabulary', 'name', 'identifier'?}]}]``) as lists of candidate keys."""
+    return [[member_key(member) for member in group['members']] for group in grouping]
+
+
+def held_groupings(reader):
+    """The groupings of its candidates the episode holds, in the order it obtained them (the design
+    ``docs/plan/designs/a102_regrouping.md``: only the root decides which candidates are one function; the head keeps
+    each grouping it was given as a record, and its credit reads them)."""
+    return [json.loads(reader.get_artifact(reader.get(ref)['artifact_ref'])) for ref in held_sources(reader)
+            if reader.get(ref)['provider'] == GROUPING_PROVIDER]
 
 
 def held_sources(reader):
@@ -505,7 +529,19 @@ def _identity(candidate, families):
             'hits_without_identifier': len(families[candidate['name']]) - len(carried)}
 
 
-def candidate_table(reader, scope, sources):
+def _grouped(rows, in_force):
+    """The candidates of one target rescored under the grouping in force: one entry per candidate of the table read
+    under it (a candidate in no group is a group of one), its ``members`` named as the head returned them, its ``score``
+    and its ``sheets``, the highest score first."""
+    result = differential_credit(regrouped(rows, grouping_keys(in_force)))
+    members = {group_key(keys): group['members'] for group, keys in zip(in_force, grouping_keys(in_force))}
+    return sorted(({'members': members[candidate] if candidate.startswith(GROUP_PREFIX) else [_entry(rows, candidate)],
+                    'score': score,
+                    'sheets': [{'sheet': kind, 'value': value} for kind, value in result['sheets'][candidate].items()]}
+                   for candidate, score in result['scores'].items()), key=lambda entry: -entry['score'])
+
+
+def candidate_table(reader, scope, sources, in_force=None):
     """What the head shows and returns, per target of the scope (``targets``: target reference -> ``candidates``
     (one row per admitted candidate, highest score first, ties in arrival order: its vocabulary, name and
     identifier, its ``score``, the ``tests`` it has undergone, its ``measurement_count`` and its ``best_value``),
@@ -516,8 +552,16 @@ def candidate_table(reader, scope, sources):
     ignorance) with ``uncharacterized_best_value`` (the highest value among them, on the scale of a candidate's
     ``best_value``; absent when there is none) and ``uncharacterized_families`` (those hits by family) and the target's
     ``credit``), and the ``credit`` of the scope: the sum over its targets. A product candidate also carries its
-    ``function_identifiers`` and ``hits_without_identifier`` (the module text)."""
+    ``function_identifiers`` and ``hits_without_identifier`` (the module text).
+
+    Groupings (the design ``docs/plan/designs/a102_regrouping.md``; the owner, 2026-11-23: only the root decides which
+    candidates are one function, and its grouping comes back down "to make the arms annotation scores honest"). The
+    ``candidates`` stay as found, by name. The target's ``credit`` is ``differential_credit.grouped_credit`` over the
+    groupings the episode holds (``held_groupings``): with none held, the credit as before. With ``in_force`` (the
+    grouping of the current commission, once the episode holds it) the target also carries ``grouped_candidates`` (its
+    candidates rescored under that grouping, ``_grouped``) and ``grouping_in_force``."""
     measurements, unnamed = _read(reader, scope, sources)[:2]
+    groupings = [grouping_keys(grouping) for grouping in held_groupings(reader)]
     targets = {}
     for target, rows in _by(measurements, 'target').items():
         result = differential_credit(rows)
@@ -538,7 +582,10 @@ def candidate_table(reader, scope, sources):
         targets[target] = {'candidates': candidates, 'tests': tests, 'differentials': differentials,
                            'not_asked_hit_count': unnamed[target]['not_asked'],
                            'no_product_hit_count': unnamed[target]['no_product'],
-                           **_uncharacterized(unnamed[target]['uncharacterized']), 'credit': result['credit']}
+                           **_uncharacterized(unnamed[target]['uncharacterized']),
+                           **({} if in_force is None else {'grouped_candidates': _grouped(rows, in_force),
+                                                           'grouping_in_force': in_force}),
+                           'credit': grouped_credit(rows, groupings)}
     for target, counts in unnamed.items():
         targets.setdefault(target, {'candidates': [], 'tests': [], 'differentials': [],
                                     'not_asked_hit_count': counts['not_asked'], 'no_product_hit_count': counts['no_product'],

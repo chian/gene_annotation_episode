@@ -148,11 +148,13 @@ def member_identity(row):
 
 
 def groups_of(slot, lines):
-    """The grouping of the candidates of ``slot`` the lines give: one group per line that holds two or more of that
-    axis's own candidates, each member named exactly as the head returned it, in a fixed order."""
+    """The grouping of the candidates of ``slot`` the lines give, in the form a head's commission takes it
+    (``[{'members': [...]}]``): one group per line that holds two or more of that axis's own candidates, each member
+    named exactly as the head returned it, in a fixed order."""
     groups = [sorted((member_identity(row) for member_slot, row in line if member_slot == slot),
                      key=lambda member: (member['vocabulary'], member['name'])) for line in lines]
-    return sorted((group for group in groups if len(group) > 1), key=lambda group: (group[0]['vocabulary'], group[0]['name']))
+    return [{'members': group} for group in sorted((group for group in groups if len(group) > 1),
+                                                   key=lambda group: (group[0]['vocabulary'], group[0]['name']))]
 
 
 def function_lines(axes):

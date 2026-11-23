@@ -37,12 +37,15 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.data_prod
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence import (
     all_vs_all_run as all_vs_all, bvbrc_job_child as job_child, bvbrc_metacats_search as metacats, bvbrc_msa_alignment as msa)
 
-from ..credit import A101DifferentialCredit, A101SequenceCredit, held_candidate_table
+from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.candidate_measurements import (
+    held_groupings)
+
+from ..credit import APPLY_GROUPING, A101DifferentialCredit, A101SequenceCredit, held_candidate_table
 from ..task import CHILD_SLOTS, PAIRWISE_TOOL, PROFILE_TOOL
 
 EXECUTED = ('completed', 'partial')
 # The tools whose records this episode's credit reads and so returns: its reasoning commits and its graded comparisons.
-CREDITED_TOOLS = ('reason', PAIRWISE_TOOL, PROFILE_TOOL)
+CREDITED_TOOLS = ('reason', PAIRWISE_TOOL, PROFILE_TOOL, APPLY_GROUPING)
 EVIDENCE_RECORD_TYPES = ('observation', 'assessment')
 # The record types that carry a sequence: what the two sequences of a comparison are chosen from.
 SEQUENCE_RECORD_TYPES = ('input', 'reference', 'product')
@@ -77,6 +80,7 @@ def _candidate_fields(target):
             **({'uncharacterized_best_value': target['uncharacterized_best_value']}
                if 'uncharacterized_best_value' in target else {}),
             'uncharacterized_families': target['uncharacterized_families'],
+            **{name: target[name] for name in ('grouped_candidates', 'grouping_in_force') if name in target},
             'differentials': target['differentials']}
 
 
@@ -164,6 +168,9 @@ def internal_summary(view):
             'working_state': records.reasoning_view(parent['scope']),
             'reasoning_schema': records.reasoning_schema(),
             'credit_binding': A101DifferentialCredit().as_record(), 'axis_findings': findings,
+            # the commission carries a grouping of this episode's candidates it does not hold yet: the unit that keeps it
+            # is owed (``task.resume_action``)
+            'grouping_owed': bool(parent['candidate_groups']) and parent['candidate_groups'] not in held_groupings(records),
             'candidates': _across_targets(table, 'candidates'), 'tests': _across_targets(table, 'tests'),
             'differentials': _across_targets(table, 'differentials'),
             'not_asked_hit_count': sum(target['not_asked_hit_count'] for target in table['targets'].values()),

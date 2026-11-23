@@ -31,7 +31,9 @@ from jsonschema import Draft202012Validator, ValidationError
 
 from episode_runtime import ChildCall, CustodyError, ModelRequest, Rejected, ToolCall
 
-from gene_annotation_episode.domain import ContractError
+from gene_annotation_episode.domain import ContractError, canonical, identity
+from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.candidate_measurements import (
+    GROUPING_PROVIDER)
 from gene_annotation_episode.episodic_workflow.episode_support.configuration.sequence_homology_evidence.process_options import (
     SequenceHomologyEvidenceLibrary, evidence_axis_instruction_view)
 from gene_annotation_episode.episodic_workflow.episode_support.instructions.instruction_spans import replace_span
@@ -69,6 +71,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
 from gene_annotation_episode.episodic_workflow.episode_support.tools.tool_catalog import ScientificToolLibrary
 from gene_annotation_episode.episodic_workflow.episode_support.tools.unit_outcomes import failure_outcome
 
+from .credit import APPLY_GROUPING
 from .goal import GOAL
 
 HEAD = 'sequence_homology_evidence'
@@ -567,7 +570,7 @@ def offered_actions(summary, ctx):
         names.append(PAIRWISE_TOOL)
     if profile_scan_options(summary, resources, ctx.settings.get('profile_databases', {})):
         names.append(PROFILE_TOOL)
-    return names + offered_children(summary, resources)
+    return names + offered_children(summary, resources) + ([APPLY_GROUPING] if summary['grouping_owed'] else [])
 
 
 def parked_jobs(summary):
@@ -598,6 +601,26 @@ def resume_commission(slot, job, summary):
             'until': 'extracted'}
 
 
+def apply_grouping(arguments, ctx):
+    """Keep the grouping of this episode's candidates the commission carries (the design
+    ``docs/plan/designs/a102_regrouping.md``: only the root decides which candidates are one function; the head applies
+    its grouping in code, with no model decision). The grouping is kept as a record of this episode (a ``source``
+    record whose artifact is the grouping): nothing held is rewritten, the candidate table is read under the grouping
+    from then on (``credit.held_candidate_table``), and the credit reads every grouping kept
+    (``differential_credit.grouped_credit``). The record goes back to the commissioner with the committed records and
+    returns at the next commission, so a grouping given twice is known."""
+    grouping = arguments['candidate_groups']
+    artifact = ctx.store.artifact(canonical(grouping), 'application/json')
+    source = ctx.store.put('source', {'provider': GROUPING_PROVIDER, 'accession': None, 'uri': None,
+                                      'artifact_ref': artifact, 'text_ref': None, 'request_ref': None,
+                                      'version': None, 'retrieved_at': None}, origin='tool')
+    return {'status': 'completed',
+            'operation_ref': identity('operation', {'key': ctx.operation_key, 'name': APPLY_GROUPING,
+                                                    'arguments': grouping}),
+            'record_refs': [source['id']], 'changed_record_refs': [], 'result': {'groups': len(grouping)},
+            'feedback': None}
+
+
 def resume_action(summary, records, ctx):
     """The resume this episode owes (``method_loop.episode_type``, step 3; the owner, 2026-11-21: "the head must finish
     parked jobs"): ``None`` while no child's BV-BRC job is parked, else the resume of one parked job as
@@ -608,6 +631,9 @@ def resume_action(summary, records, ctx):
     once it is due its resume is the only action offered; before that the model may choose other work worth its cost,
     and when none is worth it the resume is taken in place of a stop (the system's rule). The commission passes the
     head's own check (``COMMISSION_CHECKS``), else this raises: a resume the check refuses is a fault of the episode."""
+    if summary['grouping_owed']:
+        return {'action_type': APPLY_GROUPING, 'arguments': {'candidate_groups': summary['candidate_groups']},
+                'due': True}
     parked = parked_jobs(summary)
     if not parked:
         return None
@@ -782,5 +808,5 @@ async def profile_scan(arguments, ctx):
         manifest_path=ctx.settings['profile_databases'][arguments['database']])
 
 
-TOOLS = {'reason': reason, 'execute_selected_tool': execute_selected_tool, PAIRWISE_TOOL: pairwise_blast,
+TOOLS = {'reason': reason, 'execute_selected_tool': execute_selected_tool, APPLY_GROUPING: apply_grouping, PAIRWISE_TOOL: pairwise_blast,
          PROFILE_TOOL: profile_scan}

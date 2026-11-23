@@ -120,13 +120,22 @@ def no_groups(finding):
     return {'grouped_rows': [], 'grouping_in_force': []}
 
 
+def sequence_homology_groups(finding):
+    """A101. With a grouping in force its one target carries ``grouped_candidates`` (every candidate rescored under
+    it: members and score) and ``grouping_in_force``; without one, neither."""
+    (target,) = finding['targets']
+    return {'grouped_rows': [{'members': group['members'], 'score': group['score']}
+                             for group in target.get('grouped_candidates', ())],
+            'grouping_in_force': target.get('grouping_in_force', [])}
+
+
 # How the candidates of a head that applies the root's grouping are read once a grouping is in force (the design
 # ``docs/plan/designs/a102_regrouping.md``, agreed between the sessions on 2026-11-23): ``grouped_rows``, one per group
 # of the head's table under that grouping (``members``, each named exactly as the head returned it, and the group's
 # ``score``, rescored by the head from its own records), and ``grouping_in_force``, the grouping it applied. A head is
 # listed with its own reader when it takes a grouping (``task.TAKES_GROUPING``); until then it has none in force.
 GROUPED_ROWS = {
-    'sequence_homology_evidence': no_groups,
+    'sequence_homology_evidence': sequence_homology_groups,
     'experimental_activity_evidence': no_groups,
 }
 

@@ -82,8 +82,8 @@ CLAIM_CHECKERS = {
 
 # The heads that take the root's grouping of their candidates in their commission (``candidate_groups``) and return
 # their candidates rescored under it (``docs/plan/designs/a102_regrouping.md``). A head is listed here when its own
-# side is built; until then the root sends it none and reads its candidates as found.
-TAKES_GROUPING = ()
+# side is built; a head not listed is sent none and its candidates are read as found.
+TAKES_GROUPING = ('sequence_homology_evidence',)
 
 INSTRUCTIONS = """You direct the annotation of one protein. The aim is to find its best annotation and how well the evidence supports it.
 
@@ -170,7 +170,8 @@ def resume_action(summary, records, ctx):
                                          if identity_of(annotation) != waiting[0]]}}
     if summary['axes'][ANNOTATION_FINDER]['outstanding_jobs'] > 0:
         return {'action_type': ANNOTATION_FINDER, 'due': False,
-                'arguments': {'selection': ctx.settings['axis_selections'][ANNOTATION_FINDER]}}
+                'arguments': {'selection': ctx.settings['axis_selections'][ANNOTATION_FINDER],
+                              'candidate_groups': summary['groups'][ANNOTATION_FINDER]}}
     return None
 
 

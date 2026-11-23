@@ -18,7 +18,10 @@ preparation, the selection's library and tools resolve) are not carried here: cu
 a record_refs field, and the others need the old journal (machinery)."""
 import re
 
-from method_loop import Field, RecordForm
+from method_loop import ChoiceField, Field, RecordForm
+
+from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.candidate_measurements import (
+    VOCABULARIES)
 
 from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_homology_evidence.construction_records import (
     validate_revision_origin, validate_selection)
@@ -34,6 +37,14 @@ _EVIDENCE_TASK = obj({'version': {'const': 'evidence_axis_task'}, 'kind': {'cons
                                                                                          'credit_unit'])
 _UNITS = ('handoff_unit', 'acquired_record_unit', 'information_unit', 'completion_target')
 
+MEMBER_FORM = RecordForm({
+    'vocabulary': ChoiceField('text', 'The vocabulary of the candidate', VOCABULARIES),
+    'name': Field('text', 'Its name exactly as this episode returned it'),
+    'identifier': Field('text', 'Its own identifier, when it has one', required=False),
+})
+GROUP_FORM = RecordForm({
+    'members': Field('list', 'The candidates of the group', items=MEMBER_FORM),
+})
 ASSIGNMENT_FORM = RecordForm({
     'selection': Field('record', 'The selected evidence axis (A101), thought pattern and the child tool info '
                                  '(name, resources, description, instructions of each selected tool)'),
@@ -51,6 +62,10 @@ ASSIGNMENT_FORM = RecordForm({
                                       required=False),
     'child_credit_units': Field('record', 'The credit units of the children this episode commissions, by unit '
                                           'name (new field)'),
+    'candidate_groups': Field('list', "The commissioner's grouping of this episode's own candidates: each group the "
+                                      'candidates that are one function, each member named exactly as this episode '
+                                      'returned it; a candidate in no group stands alone', items=GROUP_FORM,
+                              required=False),
 })
 
 
@@ -81,7 +96,8 @@ def read_from_parent(assignment, message):
     parent_input = {'selection': selection, 'proposed_annotation_ref': proposed,
                     'evidence_refs': list(assignment['evidence_refs']), 'constraints': assignment['constraints'],
                     'context': context, 'scope': assignment['scope'], 'scope_refs': list(assignment['scope_refs']),
-                    'child_credit_units': dict(units), 'yield_task': yield_task, 'message': dict(message)}
+                    'child_credit_units': dict(units), 'yield_task': yield_task, 'message': dict(message),
+                    'candidate_groups': list(assignment.get('candidate_groups', []))}
     if 'revision_origin' in assignment:
         parent_input['revision_origin'] = validate_revision_origin(assignment['revision_origin'])
     return parent_input

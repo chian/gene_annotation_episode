@@ -83,6 +83,20 @@ DIFFERENTIAL_FORM = RecordForm({
                              'scores over the test times the weaker evidence of the two (1 except in a cluster test, where '
                              'a candidate with n sequences in the set has evidence n/(n+4))'),
 })
+MEMBER_FORM = RecordForm({
+    'vocabulary': ChoiceField('text', 'The vocabulary of the candidate', VOCABULARIES),
+    'name': Field('text', 'Its name exactly as it was found'),
+    'identifier': Field('text', 'Its own identifier, when it has one', required=False),
+})
+GROUP_FORM = RecordForm({
+    'members': Field('list', 'The candidates of the group', items=MEMBER_FORM),
+})
+GROUPED_CANDIDATE_FORM = RecordForm({
+    'members': Field('list', 'The candidates read as this one (a candidate in no group: itself)', items=MEMBER_FORM),
+    'score': Field('number', 'Its annotation score under the grouping in force: the measurements of all its members '
+                             'read as one candidate\'s'),
+    'sheets': Field('list', 'Its subscoring sheets under the grouping in force', items=SHEET_FORM),
+})
 TARGET_FORM = RecordForm({
     **{name: feature_field(name, rule) for name, rule in FEATURES.items()},
     'candidates': Field('list', 'The possible annotations found for the target, each with its score, the leading one '
@@ -101,6 +115,11 @@ TARGET_FORM = RecordForm({
     'uncharacterized_families': Field('list', 'Those hits by family, the family with the highest value first',
                                       items=UNCHARACTERIZED_FAMILY_FORM),
     'differentials': Field('list', 'The tests that differentiated the top two listed candidates they measured (one per test)', items=DIFFERENTIAL_FORM),
+    'grouped_candidates': Field('list', 'With a grouping of the candidates in force (the commissioner\'s): every '
+                                        'candidate rescored under it, the leading one first',
+                                items=GROUPED_CANDIDATE_FORM, required=False),
+    'grouping_in_force': Field('list', 'The grouping in force, as the commission gave it', items=GROUP_FORM,
+                               required=False),
 })
 FINDING_FORM = RecordForm({
     'evidence_axis': ChoiceField('text', 'The evidence axis', ('A101',)),

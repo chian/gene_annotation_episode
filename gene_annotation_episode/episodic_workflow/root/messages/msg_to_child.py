@@ -63,7 +63,9 @@ def returned(slot, summary):
 
 def sequence_homology_evidence(arguments, summary):
     """A101. The proposed annotation as text and in custody; the scope records in ``scope_refs``; the credit
-    units of its operational children."""
+    units of its operational children; and, when the root's lines join two or more of this head's own candidates, the
+    grouping of them (``candidate_groups``, ``internal_summary.groups_of``), which the head applies and rescores
+    under."""
     slot = 'sequence_homology_evidence'
     proposed = summary['proposed_annotation_ref']
     assignment = {
@@ -75,6 +77,8 @@ def sequence_homology_evidence(arguments, summary):
         'scope': summary['scope'], 'scope_refs': summary['scope_refs'],
         'proposed_annotation_refs': [proposed],
         'child_credit_units': dict(OPERATIONAL_CREDIT_UNITS)}
+    if arguments['candidate_groups']:
+        assignment['candidate_groups'] = arguments['candidate_groups']
     return ChildMessage(objective='Establish what the sequence-homology evidence shows about the proposed '
                                   'annotation of the assigned subject',
                         message={}, assignment=assignment, selection=SELECTION[slot])
