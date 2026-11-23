@@ -20,9 +20,9 @@ from .data_acquisition_receipts import acquisition_receipt_schema, validate_acqu
 
 
 TOOL = "public.ensembl.request"
-VERSION = "ensembl_biomart_acquisition_result_v1"
-MODEL_VIEW_VERSION = "ensembl_biomart_model_view_v1"
-VALUE_VERSION = "ensembl_biomart_acquisition_value_v1"
+VERSION = "ensembl_biomart_acquisition_result"
+MODEL_VIEW_VERSION = "ensembl_biomart_model_view"
+VALUE_VERSION = "ensembl_biomart_acquisition_value"
 RESOURCE = "ensembl116_biomart"
 URL = "https://jun2026.archive.ensembl.org/biomart/martservice"
 MAX_RESPONSE_BYTES = 8 * 1024 * 1024

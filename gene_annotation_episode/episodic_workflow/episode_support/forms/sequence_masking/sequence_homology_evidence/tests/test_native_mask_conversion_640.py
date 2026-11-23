@@ -48,8 +48,8 @@ def conversion_job(tmp_path, *, molecule="dna", fmt="maskinfo_xml", parse_seqids
     binary.chmod(0o700)
     source = tmp_path / "supplied.fa"
     source.write_bytes(content if content is not None else PROTEIN if molecule == "protein" else DNA)
-    return {"version": "native_blast_masking_job_v1", "operation": {
-        "version": "sequence_masking_operation_v1", "program": "convert2blastmask", "mode": "convert_mask",
+    return {"version": "native_blast_masking_job", "operation": {
+        "version": "sequence_masking_operation", "program": "convert2blastmask", "mode": "convert_mask",
         "engine_version": engine_version, "input_format": "fasta", "input_mask_basis": "lowercase_input",
         "molecule": molecule, "output_format": fmt, "masking_style": "interval", "parse_seqids": parse_seqids,
         # Deliberately reversed mapping order: compilation uses the shared schema.

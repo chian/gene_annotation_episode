@@ -1,7 +1,7 @@
 """The grader and the sheets of A102's ``partner_contacts``: what a solved structure shows bound to a protein that matches the
 target, and whether the target has the contact residues of that binding in place.
 
-INPUTS. One held graded ``pdb100`` structure search (its sheet ``a102_structure_search_sheet_v1``: the hits with entry, chain,
+INPUTS. One held graded ``pdb100`` structure search (its sheet ``a102_structure_search_sheet``: the hits with entry, chain,
 product and B), the target's model (C-alpha by target position) and sequence, and, per solved entry file the unit fetched,
 what the unit read from it (``tools/.../partner_contacts``): per hit chain its residues (C-alpha), its partners with their
 contact residues, and the alignment of the target to that chain (``usalign_driver``: both TM-scores with their
@@ -32,10 +32,10 @@ THE RULE (SOP Step 6; the test sister of ``site_correspondence``: same residue s
 
 TWO TESTS from one unit, each its own sheet (one test is one graded source):
 
-* ``site_correspondence:partner_contacts@<source>`` (sheet ``a102_partner_contacts_sheet_v1``): candidates are the PRODUCTS of
+* ``site_correspondence:partner_contacts@<source>`` (sheet ``a102_partner_contacts_sheet``): candidates are the PRODUCTS of
   the hits (``product:<name>``); a product's value is the mean ``E(hit)`` over its hits that have at least one functional
   partner; a product with no such hit has no measurement (``mean_E`` null, never a zero). Family ``site_correspondence``.
-* ``bound_partner:pdb100@<source>`` (sheet ``a102_bound_partner_sheet_v1``): candidates are the PARTNERS (``ligand:<id>``,
+* ``bound_partner:pdb100@<source>`` (sheet ``a102_bound_partner_sheet``): candidates are the PARTNERS (``ligand:<id>``,
   ``nucleic_acid:dna``, ``nucleic_acid:rna``); a partner's value is the mean ``E(hit, partner) = B(hit) F(hit, partner)`` over
   the hits bound to it. Family ``bound_partner``.
 
@@ -50,8 +50,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.structura
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.structure_search_sheet import (
     SCHEMA as SEARCH_SHEET)
 
-CONTACTS_SCHEMA = 'a102_partner_contacts_sheet_v1'
-PARTNERS_SCHEMA = 'a102_bound_partner_sheet_v1'
+CONTACTS_SCHEMA = 'a102_partner_contacts_sheet'
+PARTNERS_SCHEMA = 'a102_bound_partner_sheet'
 CONTACTS_PROVIDER = 'partner_contacts'
 PARTNERS_PROVIDER = 'bound_partner'
 CONTACTS_TEST = 'site_correspondence:partner_contacts'

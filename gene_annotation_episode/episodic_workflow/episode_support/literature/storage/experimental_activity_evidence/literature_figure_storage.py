@@ -15,7 +15,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_figure_inputs import COMPONENTS, LITERAL_FIELDS, REASONS, figure_population_schema, read_figure_inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_rate_storage import LiteratureRateRepository
 PROVIDER = 'literature.experimental.figure'
-FORMULA_CODES = {'first_ordinate': 'native_first_bar_linear_v1', 'second_ordinate': 'native_second_bar_linear_v1', 'ordinate_difference': 'native_first_minus_second_v1'}
+FORMULA_CODES = {'first_ordinate': 'native_first_bar_linear', 'second_ordinate': 'native_second_bar_linear', 'ordinate_difference': 'native_first_minus_second'}
 BINDINGS = {'first_subject_ref': ('first_subject', 'reference'), 'first_partner_ref': ('first_partner', 'reference'), 'second_subject_ref': ('second_subject', 'reference'), 'second_partner_ref': ('second_partner', 'reference'), 'experiment_ref': ('experiment', 'reference'), 'endpoint_ref': ('endpoint', 'term'), 'first_condition_ref': ('first_condition', 'context'), 'second_condition_ref': ('second_condition', 'context'), 'normalization_ref': ('normalization', 'term'), 'function_ref': ('function', 'term')}
 NATIVE_UNITS = ('relative_turnover_percent', 'arbitrary_signal', 'nanomolar')
 BOUND_KIND = 'conditional_digitization_not_confidence_interval'
@@ -65,7 +65,7 @@ RECEIVED = received_ledger('literature_figure_received')
 class LiteratureFigureRepository(LiteratureRateRepository):
     provider = PROVIDER
     components = COMPONENTS
-    record_version = 'literature_figure_record_v1'
+    record_version = 'literature_figure_record'
     operations = OPERATIONS
     received = RECEIVED
     binding_fields = tuple(BINDINGS)
@@ -200,11 +200,11 @@ class LiteratureFigureRepository(LiteratureRateRepository):
         require(operation is not None and operation['signature'] == canonical({'arguments': args, 'scope': request['scope']}))
         require(set(saved) == {'version', 'input_source_ref', 'input_artifact_ref', 'input_source_refs', 'direct_input_source_refs', 'data_source_ref', 'extraction', 'experimental_bindings', 'sheet'})
         require(source['version'] == self.record_version and source['text_ref'] == source['artifact_ref'])
-        require(extraction['version'] == 'a105_figure_inputs_v1' and extraction['arguments'] == args)
+        require(extraction['version'] == 'a105_figure_inputs' and extraction['arguments'] == args)
         require(set(extraction) == {'version', 'arguments', 'sources', 'literals', 'interpretations', 'recipe', 'measurements', 'cells'})
         recipe = extraction['recipe']
         require(set(recipe) == {'version', 'first', 'second', 'design'})
-        require(recipe['version'] == 'literature_figure_selection_v1')
+        require(recipe['version'] == 'literature_figure_selection')
         validate_schema(recipe['design'], _design_schema())
         require((recipe['second'] is None) == (recipe['design']['second_repeat'] is None))
         for repeat in (recipe['design']['first_repeat'], recipe['design']['second_repeat']):
@@ -250,7 +250,7 @@ class LiteratureFigureRepository(LiteratureRateRepository):
             require(set(selected) == {'image_source_ref', 'image_origin', 'axis_scale', 'selection'})
             require(selected['image_origin'] in ('published', 'synthetic') and selected['axis_scale'] == 'linear')
             require(set(measurement) == {'version', 'image_sha256', 'image_size', 'selection', 'qualifying_runs', 'pixel_edge', 'cell'})
-            require(measurement['version'] == 'literature_bar_ordinate_v1')
+            require(measurement['version'] == 'literature_bar_ordinate')
             require(measurement['selection'] == selected['selection'])
             require('artifact_' + measurement['image_sha256'] == self.store.get(selected['image_source_ref'])['artifact_ref'])
             require(measurement['cell'] == extraction['cells'][side + '_ordinate'])

@@ -17,7 +17,7 @@ import math
 import re
 
 
-SCHEMA = "blast_profile_search_sheet_v1"
+SCHEMA = "blast_profile_search_sheet"
 SHEET_FIELDS = {"schema", "search", "report_source", "search_binding", "query_binding",
                 "profile_records", "profile_bindings", "function_bindings",
                 "model_relations", "target_context"}
@@ -157,7 +157,7 @@ def _validate_sheet(sheet):
     if search["operand_binding"] is not None:
         _operand(search["operand_binding"])
     normalized = search["normalized"]
-    if (normalized.get("schema") != "blast_normalized_result_v1"
+    if (normalized.get("schema") != "blast_normalized_result"
             or normalized.get("format") not in ("json2", "tabular")
             or any(type(normalized.get(key)) is not dict for key in ("query", "search", "native"))
             or type(normalized.get("hits")) is not list
@@ -252,7 +252,7 @@ def _validate_sheet(sheet):
 def populate_blast_profile_sheet(search, *, report_source, search_binding,
         query_binding, profile_records, profile_bindings, function_bindings,
         model_relations, target_context=None) -> dict:
-    """Copy the exact v1 fields; retain conflicts for the separate calculator.
+    """Copy the exact fields; retain conflicts for the separate calculator.
 
     A missing QueryBinding, model length, threshold, stage or database is not a
     measured zero. Syntactically invalid caller inputs raise specific ValueErrors;

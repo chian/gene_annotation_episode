@@ -50,7 +50,7 @@ default it to 'direct'; the default is only for forms built by tests that do not
 answer).
 """
 
-VERSION = 'a105_ph_stat_record_v1'
+VERSION = 'a105_ph_stat_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'ph_stat'
 QUANTITIES = ('catalytic_efficiency', 'catalytic_efficiency_spread', 'turnover', 'turnover_spread', 'specific_activity', 'specific_activity_spread',

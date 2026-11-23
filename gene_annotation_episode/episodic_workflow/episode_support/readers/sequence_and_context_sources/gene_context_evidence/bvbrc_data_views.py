@@ -245,7 +245,7 @@ class _View:
             _require(self.sheet["population"]["population_key"] == self.prepared["query_population"]["population_key"], "population_binding")
             _require(self.sheet["mode"] == self.prepared["effective_request"]["mode"]
                      and self.sheet["selected_fields"] == self.prepared["effective_request"]["fields"], "effective_selection")
-            _require(self.sheet["custody"]["native_profile"] == "solr_json_envelope_v1", "native_profile")
+            _require(self.sheet["custody"]["native_profile"] == "solr_json_envelope", "native_profile")
             self._add_page(self.binding, self.sheet)
         else:
             _require(self.g["parse_result"]["status"] == "failed" and bool(self.g["parse_result"]["failures"]), "failed_sheet_status")
@@ -871,7 +871,7 @@ def materialize_bvbrc_received_values(qualified_results: list[dict], *, admitted
         context = views[0].q["host_qualification"] if views else {"run_id": None, "receiver_episode_id": None}
         key = json_digest({"run_id": context["run_id"], "receiver_episode_id": context["receiver_episode_id"],
             "original_schema": original_schema, "form_field": name, "fact_source": source, "facts": rows})
-        result.append(validate("ReceiverMaterialization", {"version": "bvbrc_received_values_v1",
+        result.append(validate("ReceiverMaterialization", {"version": "bvbrc_received_values",
             "admission_key": key, "form_field": name, "fact_source": source,
             "facts": rows, "cells": selected_cells, "unavailable": unavailable}))
     return result

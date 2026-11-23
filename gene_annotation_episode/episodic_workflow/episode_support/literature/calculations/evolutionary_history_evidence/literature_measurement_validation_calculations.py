@@ -17,7 +17,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
     _array, measurement_validation_extraction_schema, validate_measurement_validation_extraction,
 )
 
-VERSION = 'a105_measurement_validation_components_v1'
+VERSION = 'a105_measurement_validation_components'
 PRECISION_COMPONENTS = ('reported_cv', 'cv_fraction', 'relative_bias_squared',
     'relative_variance_plugin', 'relative_squared_deviation_plugin', 'relative_rms_percent')
 ZPRIME_COMPONENTS = ('reported_zprime', 'control_band_ratio')

@@ -15,7 +15,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
     validate_ion_discrimination_extraction,canonical_activity_owner)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.evolutionary_history_evidence.literature_ion_discrimination_numbers import fraction, rational
 
-VERSION='a105_ion_discrimination_sheet_v1'
+VERSION='a105_ion_discrimination_sheet'
 FORMULAS={'preferred_activity':'selected_preferred_activity_or_limit','alternative_activity':'selected_alternative_activity_or_limit',
  'activity_ratio':'preferred_activity/alternative_activity','log_activity_ratio':'ln(activity_ratio)',
  'activity_ratio_variance':'J_R*C*J_R_transpose','activity_ratio_standard_uncertainty':'sqrt(activity_ratio_variance)',
@@ -149,7 +149,7 @@ def _compiled(e,cells):
     values=[]
     for role,name in zip(ROLES,('preferred_activity','alternative_activity')):
         row=ops[role]['row'];v=row['value'];why=None
-        if (row['status']!='populated' or v is None or row['formula_code']!='corrected_activity_compiled_v1'
+        if (row['status']!='populated' or v is None or row['formula_code']!='corrected_activity_compiled'
                 or row['formula'] not in ('(q-g)*v/(k*E*u)','source_already_corrected_amount_normalized_value')):why='selected_activity_unavailable'
         elif row['unit']!='per_min':why='different_physical_quantities'
         if row['endpoint_kind']!='transport_flux':reasons.append('endpoint_not_transport_flux')

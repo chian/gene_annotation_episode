@@ -144,7 +144,7 @@ def admitted_return_meanings(context, repository):
                 'display_status': ('supplied_definition' if safe else
                     'retained_for_scoped_access' if known else 'unresolved_source_meaning')})
         sheets.append({'sheet_ref': reference, 'roles': meanings})
-    return {'version': 'ratio_source_prompt_meanings_v1', 'sheets': sheets}
+    return {'version': 'ratio_source_prompt_meanings', 'sheets': sheets}
 
 
 def _domain(region):

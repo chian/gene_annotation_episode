@@ -31,7 +31,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     ENDPOINT_ENZYMATIC_ASSAY_CRITERIA, MIN_PER_UNIT, NMOL_PER_UNIT, UM_PER_UNIT)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_endpoint_enzymatic_assay_grade_v1'
+VERSION = 'a105_endpoint_enzymatic_assay_grade'
 CRITERIA = tuple(criterion['id'] for criterion in ENDPOINT_ENZYMATIC_ASSAY_CRITERIA)
 CONVERSION = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact conversion_detected_above_control
 EFFECT_QUANTITIES = ('net_conversion_percent', 'conversion_percent', 'product_amount')

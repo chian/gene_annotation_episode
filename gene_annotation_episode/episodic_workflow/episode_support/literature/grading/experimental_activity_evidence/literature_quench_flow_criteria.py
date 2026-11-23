@@ -23,7 +23,7 @@ returns     every case the criterion can return, as (status, reason_code, when).
             as 'never' cannot occur for this criterion.
 """
 
-VERSION = 'a105_quench_flow_criteria_v1'
+VERSION = 'a105_quench_flow_criteria'
 
 SECONDS_PER_TIME_UNIT = {'ms': 1.0e-3, 's': 1.0}                  # FIXED_BY_DEFINITION: one millisecond is a thousandth of a second.
 PER_SECOND_PER_RATE_UNIT = {'s^-1': 1.0, 'min^-1': 1.0 / 60.0}    # FIXED_BY_DEFINITION: one per minute is a sixtieth of one per second.

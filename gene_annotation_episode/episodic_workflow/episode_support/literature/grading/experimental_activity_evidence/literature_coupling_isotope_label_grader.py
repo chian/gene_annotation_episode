@@ -30,7 +30,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     COUPLING_ISOTOPE_LABEL_CRITERIA, FRACTION_PER_UNIT)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_coupling_isotope_label_grade_v1'
+VERSION = 'a105_coupling_isotope_label_grade'
 CRITERIA = tuple(criterion['id'] for criterion in COUPLING_ISOTOPE_LABEL_CRITERIA)
 LABEL_FLOW = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact label_detected_in_product
 

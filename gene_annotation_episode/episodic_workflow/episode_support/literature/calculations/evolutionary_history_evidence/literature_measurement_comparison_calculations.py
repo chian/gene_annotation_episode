@@ -313,7 +313,7 @@ def populate_measurement_comparison(inputs: dict) -> dict:
     if status=='estimated':assumptions.append('estimated_weights_treated_as_plugin')
     if any(c['uncertainty']['scope']=='first_order_operand_propagation' and c['status']!='unavailable' for c in cells.values()):assumptions.append('first_order_covariance_propagation')
     assumptions.append('no_reference_distribution_assumed')
-    result=dict(version='a105_measurement_comparison_sheet_v1',axis='A105',section='measurement_comparison_validity',
+    result=dict(version='a105_measurement_comparison_sheet',axis='A105',section='measurement_comparison_validity',
         assertion_key=data['assertion_key'],contribution_key=data['contribution_key'],cells=[cells[n] for n in args['requested_cells']],
         relationship_meanings=relation,estimate_bindings=[{'role':r,**{k:v[k] for k in ('owner_key','physical_owner_key','dependency_keys','estimator_scale')},'unit':v['canonical_unit']}
             for r,v in quantities.items() if v is not None],dependence=dependence,assumptions=list(dict.fromkeys(assumptions)),annotation_credit=None,remaining_limits=list(_LIMITS))

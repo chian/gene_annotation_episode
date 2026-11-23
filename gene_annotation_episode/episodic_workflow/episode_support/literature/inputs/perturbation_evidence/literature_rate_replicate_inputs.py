@@ -17,7 +17,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.perturbation_evidence.literature_rate_reader import _measurement
 
 
-VERSION = "a105_rate_replicates_v1"
+VERSION = "a105_rate_replicates"
 HEADERS = ("subject", "experiment", "arm", "condition", "endpoint",
            "normalization", "sampling_unit", "sampling_basis", "observation_id",
            "value", "unit", "origin")

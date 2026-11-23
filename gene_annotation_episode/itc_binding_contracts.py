@@ -10,13 +10,13 @@ import json
 import math
 
 
-SUPPLIED_VERSION = "itc_binding_supplied_v1"
-SHEET_VERSION = "itc_binding_sheet_v1"
-FIT_SELECTION_VERSION = "itc_binding_fit_selection_v1"
-FIT_OBSERVATION_VERSION = "itc_binding_fit_observation_v1"
-SELECTION_VERSION = "itc_binding_selection_v1"
-PREDICTION_VERSION = "itc_binding_prediction_v1"
-COMPONENTS_VERSION = "itc_binding_components_v1"
+SUPPLIED_VERSION = "itc_binding_supplied"
+SHEET_VERSION = "itc_binding_sheet"
+FIT_SELECTION_VERSION = "itc_binding_fit_selection"
+FIT_OBSERVATION_VERSION = "itc_binding_fit_observation"
+SELECTION_VERSION = "itc_binding_selection"
+PREDICTION_VERSION = "itc_binding_prediction"
+COMPONENTS_VERSION = "itc_binding_components"
 PARAMETERS = ("kd", "n", "delta_h")
 PARAMETER_UNITS = {"kd": "mol/L", "n": "sites_per_macromolecule", "delta_h": "J/mol"}
 QUANTITY_FIELDS = ("value", "unit", "canonical_unit", "to_canonical_factor", "source_ref", "source_pointer")

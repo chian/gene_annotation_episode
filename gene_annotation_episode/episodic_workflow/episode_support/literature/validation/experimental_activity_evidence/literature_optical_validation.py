@@ -15,7 +15,7 @@ import re
 import numpy as np
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import identity
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_experimental_contracts import ExperimentalContractError
-VERSION = 'a105_optical_saved_validation_v1'
+VERSION = 'a105_optical_saved_validation'
 ERROR_CODES = ('optical_validation_closed_fields', 'optical_validation_text', 'optical_validation_enum', 'optical_validation_witness', 'optical_validation_witness_binding', 'optical_validation_witness_overlap', 'optical_validation_interpretation', 'optical_validation_number', 'optical_validation_finite', 'optical_validation_range', 'optical_validation_unit', 'optical_validation_quantity', 'optical_validation_positive_operand', 'optical_validation_dependency', 'optical_validation_reuse', 'optical_validation_covariance', 'optical_validation_covariance_owner', 'optical_validation_calculation_inputs', 'optical_validation_reasons', 'optical_validation_source_roster', 'optical_validation_selection')
 _ORDER = ('sample_slope', 'blank_slope', 'epsilon', 'path_length')
 _CONTEXT = ('molecule', 'construct', 'preparation', 'condition', 'measured_entity')
@@ -273,7 +273,7 @@ def _covariance(source, observations, scales, refs, witnesses):
         _fail('covariance_owner', 'covariance_source')
     data = source['data']
     _keys(data, ('version', 'primitive_order', 'primitive_measurement_keys', 'primitive_physical_observation_keys', 'primitive_owner_keys', 'primitive_units', 'covariance', 'origin', 'covariance_status'), 'covariance_source.data')
-    expected = {'version': 'a105_optical_covariance_v1', 'primitive_order': list(_ORDER), 'primitive_measurement_keys': [r['measurement_key'] for r in rows], 'primitive_physical_observation_keys': [r['physical_observation_key'] for r in rows], 'primitive_owner_keys': [r['owner_key'] for r in rows], 'primitive_units': [r['unit']['raw_unit'] for r in rows]}
+    expected = {'version': 'a105_optical_covariance', 'primitive_order': list(_ORDER), 'primitive_measurement_keys': [r['measurement_key'] for r in rows], 'primitive_physical_observation_keys': [r['physical_observation_key'] for r in rows], 'primitive_owner_keys': [r['owner_key'] for r in rows], 'primitive_units': [r['unit']['raw_unit'] for r in rows]}
     _same({k: data[k] for k in expected}, expected, 'covariance_owner', 'covariance_source.data')
     _enum(data['origin'], ('reported', 'derived', 'synthetic'), 'covariance_source.origin')
     _enum(data['covariance_status'], ('known', 'estimated', 'unknown'), 'covariance_source.status')
@@ -289,7 +289,7 @@ def _covariance(source, observations, scales, refs, witnesses):
 def validate_optical_extraction(extraction):
     """Validate saved035 relationships; return an independent, unchanged copy."""
     _keys(extraction, ('version', 'source_ref', 'source_kind', 'context', *_INTERPRETATIONS, 'signals', 'calibration', 'covariance_source', 'calculation_inputs', 'input_unavailable_reasons', 'dependencies', 'source_refs'), 'extraction')
-    _enum(extraction['version'], ('a105_optical_inputs_v1',), 'version')
+    _enum(extraction['version'], ('a105_optical_inputs',), 'version')
     _enum(extraction['source_kind'], ('primary_source', 'retained_extraction', 'synthetic_fixture'), 'source_kind')
     _text(extraction['source_ref'], 'source_ref', reference=True)
     witnesses = _Witnesses(extraction['source_ref'])
@@ -320,7 +320,7 @@ def validate_optical_extraction(extraction):
                 reasons[role].append('optical_signal_unit_mismatch')
         values[role] = row['value'] if row and (not reasons[role]) else None
     reasons['covariance'] = ['covariance_unreported'] if covariance is None else ['covariance_status_unknown'] if status == 'unknown' else []
-    expected = {'version': 'a105_nadh_optical_rate_operands_v1', **values, 'covariance': covariance, 'covariance_status': status, **{name: extraction[name]['value'] for name in _INTERPRETATIONS if name != 'signal_kind'}, 'primitive_observation_refs': refs}
+    expected = {'version': 'a105_nadh_optical_rate_operands', **values, 'covariance': covariance, 'covariance_status': status, **{name: extraction[name]['value'] for name in _INTERPRETATIONS if name != 'signal_kind'}, 'primitive_observation_refs': refs}
     _same(extraction['calculation_inputs'], expected, 'calculation_inputs', 'calculation_inputs')
     _same(extraction['input_unavailable_reasons'], reasons, 'reasons', 'input_unavailable_reasons')
     _same(extraction['source_refs'], witnesses.refs, 'source_roster', 'source_refs')

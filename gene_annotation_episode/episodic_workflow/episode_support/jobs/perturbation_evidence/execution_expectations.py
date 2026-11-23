@@ -12,7 +12,7 @@ from types import MappingProxyType
 from gene_annotation_episode.episodic_workflow.episode_support.calculations.run_statistics import ExecutionClass, RunHistory
 
 
-VERSION = "episode_execution_expectation_binding_v3"
+VERSION = "episode_execution_expectation_binding"
 
 
 def capture_execution_scopes(path, scopes, *, assigned_execution_class_ref=None):

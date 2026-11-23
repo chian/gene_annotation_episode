@@ -10,7 +10,7 @@ import time
 import zlib
 
 
-VERSION = 'component_axis_native_v1'
+VERSION = 'component_axis_native'
 PROGRAM = 'component_axis_scientific_native'
 
 

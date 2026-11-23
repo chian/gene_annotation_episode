@@ -34,7 +34,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     COLOCALIZATION_CRITERIA)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_colocalization_grade_v1'
+VERSION = 'a105_colocalization_grade'
 CRITERIA = tuple(criterion['id'] for criterion in COLOCALIZATION_CRITERIA)
 INTERACTION = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact colocalization_observed
 NO_NATIVE_BRIDGE = ('heterologous_host', 'purified_proteins')   # the facts that say no native third protein could bridge the two

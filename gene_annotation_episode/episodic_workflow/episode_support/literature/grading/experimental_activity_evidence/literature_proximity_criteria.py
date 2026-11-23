@@ -38,7 +38,7 @@ What this method does not ask (kept in the record for the reviewer, no criterion
 peroxide concentration.
 """
 
-VERSION = 'a105_proximity_criteria_v1'
+VERSION = 'a105_proximity_criteria'
 
 # ---- Threshold constants -------------------------------------------------
 PERCENT_PER_FRACTION = 100.0  # FIXED_BY_DEFINITION: percent per unit fraction (a false discovery rate given as a fraction is recorded in percent).

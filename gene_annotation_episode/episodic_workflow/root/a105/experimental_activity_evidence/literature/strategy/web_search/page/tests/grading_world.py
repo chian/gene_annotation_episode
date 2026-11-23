@@ -33,7 +33,7 @@ TEXT = '\n'.join(LINES)
 
 
 def held_world(directory):
-    """The Store and the entry input of the episode at ``page_assignment_v1``."""
+    """The Store and the entry input of the episode at ``page_assignment``."""
     store = Store(directory / 'store')
     store.create_problem(raw_sequence='ATGGCT', molecule='dna')
     target = store.problem()['subject_refs'][0]
@@ -49,9 +49,9 @@ def held_world(directory):
     proposed = store.put('hypothesis', {'subject_refs': [target], 'predicate': 'catalyzes',
                                         'value': {'type': 'term_ref', 'ref': reaction}, 'context_refs': []},
                          origin='reasoning')['id']
-    task = {'version': 'literature_local_task_v1', 'kind': 'verified_source_leads', 'evidence_axis': 'A105',
+    task = {'version': 'literature_local_task', 'kind': 'verified_source_leads', 'evidence_axis': 'A105',
             'credit_unit': 1.0}
-    page = {'version': 'page_assignment_v1', 'source_ref': source, 'representation': 'original',
+    page = {'version': 'page_assignment', 'source_ref': source, 'representation': 'original',
             'artifact_ref': artifact, 'question_context_refs': [], 'prior_delivery_refs': []}
     held = [target, source, artifact, reaction, proposed]
     assignment = {**page, 'literature_task': task, 'proposed_annotation_ref': proposed, 'scope': scope,

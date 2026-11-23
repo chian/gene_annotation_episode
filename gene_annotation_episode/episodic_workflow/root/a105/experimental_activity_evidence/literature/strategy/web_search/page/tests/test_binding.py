@@ -31,9 +31,9 @@ def own_files():
 
 
 def assignment():
-    task = {'version': 'literature_local_task_v1', 'kind': 'verified_source_leads', 'evidence_axis': 'A105',
+    task = {'version': 'literature_local_task', 'kind': 'verified_source_leads', 'evidence_axis': 'A105',
             'credit_unit': 1.0}
-    return {'version': 'page_assignment_v1', 'source_ref': 'src_1', 'representation': 'text',
+    return {'version': 'page_assignment', 'source_ref': 'src_1', 'representation': 'text',
             'artifact_ref': 'art_1', 'question_context_refs': ['ctx_1'], 'prior_delivery_refs': [],
             'literature_task': task, 'proposed_annotation_ref': 'hyp_1',
             'scope': {'subject_refs': ['sub_1']}, 'received_record_refs': ['src_1', 'art_1', 'ctx_1']}
@@ -125,7 +125,7 @@ def test_a_source_is_the_lead_only_when_its_sheet_row_of_the_claim_is_measured_a
 
 
 def leaf_summary(**changes):
-    task = {'version': 'literature_local_task_v1', 'kind': 'verified_source_leads', 'evidence_axis': 'A105',
+    task = {'version': 'literature_local_task', 'kind': 'verified_source_leads', 'evidence_axis': 'A105',
             'credit_unit': 1.0}
     value = {'task': task, 'content_assessment_ref': 'assessment_1', 'report_windows': [[0, 10]],
              'unconsumed_chunk_ids': ['prose_chunk:0000'], 'unconsumed_table_ids': ['source_table:0001'],

@@ -16,7 +16,7 @@ def msg_to_child(slot, arguments, summary):
         objective='Assess the progress of job ' + dependency['handle'] + ', which job '
                   + summary['job']['handle'] + ' directly depends on.',
         message={},
-        assignment={'version': 'monitor_assignment_v2', 'handoff_refs': [dependency['handoff_ref']],
+        assignment={'version': 'monitor_assignment', 'handoff_refs': [dependency['handoff_ref']],
                     'known_progress_refs': list(dependency['check_refs']), 'dependency_handoff_refs': [],
                     'requested_fields': list(summary['requested_fields']),
                     'information_unit': summary['information_unit']},

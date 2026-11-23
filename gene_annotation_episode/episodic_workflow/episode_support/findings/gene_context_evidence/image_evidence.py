@@ -11,7 +11,7 @@ from PIL import Image, UnidentifiedImageError, __version__ as PILLOW_VERSION
 
 from gene_annotation_episode.episodic_workflow.episode_support.records.gene_context_evidence.domain import ContractError, canonical
 
-VERSION = "selected_native_image_frame_v1"
+VERSION = "selected_native_image_frame"
 
 
 def prepare_image(store, source_ref, *, frame=0, colour_conversion="preserve"):

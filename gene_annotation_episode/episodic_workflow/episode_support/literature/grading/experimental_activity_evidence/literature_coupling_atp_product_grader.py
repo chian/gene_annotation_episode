@@ -30,7 +30,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     COUPLING_ATP_PRODUCT_CRITERIA, RATE_UNIT_SCALE)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_coupling_atp_product_grade_v1'
+VERSION = 'a105_coupling_atp_product_grade'
 CRITERIA = tuple(criterion['id'] for criterion in COUPLING_ATP_PRODUCT_CRITERIA)
 COUPLING = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact coupled_product_detected
 CHOICE_NAMES = ('spread_kind', 'nucleotide', 'hydrolysis_readout')

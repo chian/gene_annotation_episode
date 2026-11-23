@@ -35,8 +35,8 @@ UNCERTAINTIES = ('reported_sample_sd', 'descriptive_sample_sd', 'unreported')
 FEATURES = {
     'evidence_type': (('choice', (EVIDENCE_TYPE,)), 'The A110 evidence type of a reaction sheet: prediction_contrast'),
     'sheet_refs': (('refs',), 'The saved sheet (one reference)'),
-    'sheet_view': (('choice', VIEWS), 'numerical: literature_reaction_cells (record v2); semantic: the same cells '
-                   'with source-bound meanings (record v3)'),
+    'sheet_view': (('choice', VIEWS), 'numerical: literature_reaction_cells; semantic: the same cells '
+                   'with source-bound meanings'),
     **{name: (('number', 'optional'), 'The value of the ' + name + ' cell, absent when the cell is unavailable')
        for name in COMPONENTS},
     **{name + '_status': (('choice', STATUSES), 'Whether the ' + name + ' cell is populated or unavailable')

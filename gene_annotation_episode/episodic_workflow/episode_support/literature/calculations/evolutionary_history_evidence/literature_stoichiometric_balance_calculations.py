@@ -93,7 +93,7 @@ def populate_stoichiometric_balance_components(extraction):
             'status': 'point', 'origin': 'calculated', 'meaning': MEANINGS[role],
             'formula': FORMULAS[role], 'source_cell_addresses': addresses,
             'input_measurement_keys': [key(a) for a in addresses]}
-    return {'version': 'a105_stoichiometric_balance_sheet_v1', 'axis': 'A105',
+    return {'version': 'a105_stoichiometric_balance_sheet', 'axis': 'A105',
         'evaluation_scope': 'source_soluble_product_stoichiometric_balance',
         'cells': cells, 'one_pi_per_transfer_premise': extraction['model_premise'],
         'ratio_sd': None, 'ratio_se': None, 'ratio_confidence_interval': None,

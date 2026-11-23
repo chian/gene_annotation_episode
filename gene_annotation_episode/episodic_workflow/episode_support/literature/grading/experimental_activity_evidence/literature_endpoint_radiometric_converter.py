@@ -114,7 +114,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_endpoint_conversion_direction import select_endpoint_effect
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import SUPPORT_DEGREE, apply_support
 
-VERSION = 'a105_endpoint_radiometric_converted_v1'
+VERSION = 'a105_endpoint_radiometric_converted'
 CRITERIA_MAP = {'background_alternatives': ('spontaneous_conversion_control', 'separation_background_control'),
                 'calibration_applicability': ('counts_over_background', 'specific_radioactivity_stated'), 'matrix_interference': ('counting_efficiency',),
                 'attribution_supported': ('enzyme_dependence',), 'product_identity': ('product_identity', 'label_in_product_position'),

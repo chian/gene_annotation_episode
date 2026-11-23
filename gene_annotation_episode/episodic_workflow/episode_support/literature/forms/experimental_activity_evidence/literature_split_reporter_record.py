@@ -49,7 +49,7 @@ def fact(answer, refs=(), support='direct'):
     return {**literature_spr_record.fact(answer, refs), 'support': None if answer == 'unknown' else support}
 
 
-VERSION = 'a105_split_reporter_record_v1'
+VERSION = 'a105_split_reporter_record'
 EXPERIMENT_TYPE = 'split_reporter'
 QUANTITIES = ('kd', 'kd_spread', 'signal_to_background', 'signal_over_negative_control', 'orientation_pairs_tested', 'orientation_pairs_positive', 'loaded_concentration_lowest', 'loaded_concentration_highest', 'fixed_partner_concentration', 'concentration_count', 'replicate_count')
 PREPARATION_KEYS = ('component_a_preparation_ref', 'component_b_preparation_ref', 'dataset_ref')

@@ -321,7 +321,7 @@ def _join_multiple_queries(grading, bundle, records, inputs):
             native["queries"] = [q for q in native["queries"] if q["record_key"] == qkey]
             rebuilt = build_nhmmer_sheet(native, inputs=selected_inputs)
         else:
-            native = {**sheet, "schema": "hmmer_search_native_v1"}
+            native = {**sheet, "schema": "hmmer_search_native"}
             for name in ("hits", "domains", "iterations"):
                 native[name] = [row for row in sheet[name] if row.get("query_record_key") == qkey]
             native["queries"] = [q for q in sheet["queries"] if q["record_key"] == qkey]
@@ -399,7 +399,7 @@ def run(plan):
     bundle, paths = plan["bundle"], plan["artifacts"]
     selector = validate_native_hmmer_result_selector(plan["selector"], program=bundle["program"])
     diagnostics = deepcopy(plan.get("failures", []))
-    manifest = {"version": "native_hmmer_worker_result_v1", "sheet_schema": None, "scores_schema": None,
+    manifest = {"version": "native_hmmer_worker_result", "sheet_schema": None, "scores_schema": None,
                 "numerical_complete": False, "failures": []}
     try:
         records = _input_records(bundle, paths, diagnostics)
@@ -452,7 +452,7 @@ def run(plan):
                     diagnostics.append({"stage": "binding", "code": "native_hmmer_operand_association_failed",
                         "record_key": key, "exception_type": type(error).__name__, "detail": str(error)})
                     operands = {"subject_operand": None, "subject_interval": None, "related_operands": []}
-                row = {"version": "native_hmmer_selected_row_v1", "family": family, "native_ordinal": ordinal,
+                row = {"version": "native_hmmer_selected_row", "family": family, "native_ordinal": ordinal,
                     "record_key": key, "locator": deepcopy(score.get("locator")),
                     "query_occurrence": score.get("query_occurrence"), "target_occurrence": score.get("target_occurrence"),
                     "iteration": score.get("iteration"), "strand": score.get("strand"),

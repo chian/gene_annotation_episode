@@ -20,7 +20,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.similarity_search.evolutionary_history_evidence.native_blast_local import local_blast_plan, OWNER_NAME
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.evolutionary_history_evidence.practical_execution_state import _immutable, _read
 
-VERSION = "native_blast_capture_v1"
+VERSION = "native_blast_capture"
 PROVIDER = "episode.execution_result"
 ORIGIN = {"content_location": "retained_complete_producer_bundle",
     "attempt_output_version": "original_producer_manifest_and_verified_file_digests",
@@ -53,7 +53,7 @@ def _plan(value):
     """Pure qualification; unlike the producer's preflight, performs no I/O."""
     plan = finite_json_copy(value)
     if (type(plan) is not dict or set(plan) != {"version", "identity", "requested_job", "attempt_directory", "policy"}
-            or plan["version"] != "native_blast_run_plan_v1"):
+            or plan["version"] != "native_blast_run_plan"):
         raise ContractError("native_blast_run_plan_required")
     owner = plan["identity"]
     keys = {"run_id", "episode_id", "resource_id", "execution_id", "attempt_id", "operation_key", "requested_job_sha256"}
@@ -77,7 +77,7 @@ def validate_original_bundle(bundle, plan):
         "realized_argv", "environment", "inputs", "operand_bindings", "returncode",
         "artifacts", "failures", "started_at", "finished_at"}
     if (type(bundle) is not dict or set(bundle) != fields
-            or bundle["version"] != "native_blast_bundle_v1" or bundle["identity"] != plan["identity"]
+            or bundle["version"] != "native_blast_bundle" or bundle["identity"] != plan["identity"]
             or bundle["requested_job"] != plan["requested_job"]):
         raise ContractError("native_blast_original_bundle_identity_conflict")
     job, root = plan["requested_job"]["native_blast"], Path(plan["attempt_directory"])
@@ -358,14 +358,14 @@ def capture_local_bundle(store, *, target, directory):
 def original_source_payload(*, bundle, capture, prepared):
     capture = _capture_shape(capture)
     if (not capture["bundle_validated"] or type(bundle) is not dict
-            or bundle.get("version") != "native_blast_bundle_v1"):
+            or bundle.get("version") != "native_blast_bundle"):
         raise ContractError("native_blast_source_validated_manifest_required")
     auxiliary = [row["artifact_ref"] for row in capture["artifacts"] + capture["invalid_artifacts"]]
     if prepared is not None and prepared.get("source_grading_artifact_ref") is not None:
         auxiliary.append(prepared["source_grading_artifact_ref"])
     return {"provider": PROVIDER, "accession": "native_blast_" + native_blast_digest(bundle["identity"]),
         "uri": None, "artifact_ref": capture["bundle_artifact_ref"], "text_ref": None,
-        "request_ref": None, "version": "native_blast_bundle_v1", "retrieved_at": bundle["finished_at"],
+        "request_ref": None, "version": "native_blast_bundle", "retrieved_at": bundle["finished_at"],
         "auxiliary_artifact_refs": sorted(set(auxiliary))}
 
 

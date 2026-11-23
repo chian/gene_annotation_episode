@@ -17,7 +17,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.perturbatio
 from gene_annotation_episode.episodic_workflow.episode_support.records.perturbation_evidence.domain import ContractError, canonical, identity
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.perturbation_evidence import literature_sheet_policy
 
-VERSION = 'literature_sheet_dependencies_v1'
+VERSION = 'literature_sheet_dependencies'
 DEPENDENCIES = TableDeclaration(name='literature_sheet_dependencies',
     columns=('sheet_ref', 'family', 'provider', 'adapter', 'method', 'arguments', 'assignment',
         'possessed', 'dependencies', 'receipt'),

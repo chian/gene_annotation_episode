@@ -14,8 +14,8 @@ import re
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import REF, obj
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_assay_inputs import SOURCE_KINDS, _Sources, _fail, _finite, _keys, _nullable, _numeric, _text, _witness_schema
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_experimental_contracts import ExperimentalContractError
-VERSION = 'a106_perturbation_inputs_v1'
-DATA_VERSION = 'a106_source_measurements_v1'
+VERSION = 'a106_perturbation_inputs'
+DATA_VERSION = 'a106_source_measurements'
 PRIMITIVE_ORDER = ('W', 'K', 'R', 'A_reference', 'A_restored', 'B_pert', 'B_rest')
 LITERAL_FIELDS = ('molecule', 'recipient', 'donor', 'experiment', 'reference_arm', 'perturbed_arm', 'restored_arm', 'partner', 'endpoint', 'normalization', 'condition', 'intended_change')
 DESIGNS = ('native_deletion_restoration', 'selective_perturbation_restoration', 'cas_free_reconstitution', 'variant_replacement', 'other_explicit', 'unknown', 'conflicting')
@@ -96,7 +96,7 @@ def _measurements(reference, sources, status):
         return (observations, 'unreported', 'unreported', None, 'unreported', None)
     source = sources.source(reference, 'original')
     data = _json_measurements(source['content'])
-    if isinstance(data, dict) and data.get('version') == 'a106_source_measurements_v2':
+    if isinstance(data, dict) and data.get('version') == 'a106_source_summary_measurements':
         from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_perturbation_summary import read_summary_measurements
         observations, summary = read_summary_measurements(data, sources=sources, reference=reference, artifact_ref=source['artifact_ref'], status=status, key_function=_measurement_key)
         return (observations, data['endpoint_unit'], data['exposure_unit'], data['origin'], 'per_measurement', summary)
@@ -182,7 +182,7 @@ def read_perturbation_inputs(arguments, *, read_source):
         observations, endpoint_unit, exposure_unit, origin, uncertainty, summary, number_sources = read_source_measurements(source_measurements, sources=sources, reference=arguments['source_ref'], status=arguments['measurement_status'], origin='synthetic' if arguments['source_kind'] == 'synthetic_fixture' else 'reported')
     result = {'version': VERSION, 'source_ref': arguments['source_ref'], 'source_kind': arguments['source_kind'], 'data_source_ref': arguments['data_source_ref'], 'literals': literals, **{field: arguments[field] for field in _INTERPRETATIONS}, 'orientation': orientation, 'interpretation_witnesses': witnesses, 'primitive_order': list(PRIMITIVE_ORDER), 'values': {role: item['value'] if item is not None else None for role, item in observations.items()}, 'measurement_keys': {role: item['measurement_key'] if item is not None else None for role, item in observations.items()}, 'primitive_observations': observations, 'endpoint_unit': endpoint_unit, 'exposure_unit': exposure_unit, 'data_origin': origin, 'uncertainty_basis': uncertainty, 'source_refs': list(sources.references)}
     if summary is not None:
-        result.update(version='a106_perturbation_inputs_v2', summary_data=summary)
+        result.update(version='a106_perturbation_summary_inputs', summary_data=summary)
     if number_sources is not None:
         result['reported_number_sources'] = number_sources
     return result

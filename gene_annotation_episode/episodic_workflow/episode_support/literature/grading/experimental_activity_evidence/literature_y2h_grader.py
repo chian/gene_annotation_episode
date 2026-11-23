@@ -34,7 +34,7 @@ Native values retained: every record quantity as given, plus reporter_fold, repo
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_y2h_criteria import Y2H_CRITERIA
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_y2h_grade_v1'
+VERSION = 'a105_y2h_grade'
 CRITERIA = tuple(criterion['id'] for criterion in Y2H_CRITERIA)
 INTERACTION = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact interaction_detected
 

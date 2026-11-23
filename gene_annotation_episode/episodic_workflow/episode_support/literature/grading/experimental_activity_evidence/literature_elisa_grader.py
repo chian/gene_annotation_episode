@@ -49,7 +49,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_elisa_grade_v1'
+VERSION = 'a105_elisa_grade'
 INTERACTION = {'yes': 'detected', 'no': 'not_detected'}   # the stated yes/no result of the fact binding_detected
 CRITERIA = tuple(criterion['id'] for criterion in ELISA_CRITERIA)
 CONSTANTS = ('kd', 'ki', 'ec50', 'ic50')       # the order in which a series' reported constant is taken

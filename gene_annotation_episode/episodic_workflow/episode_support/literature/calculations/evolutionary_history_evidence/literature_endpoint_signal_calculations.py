@@ -18,7 +18,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
     _enum, _const, _TEXT, _exact, _fraction, _schema_check,
 )
 
-VERSION='a105_endpoint_signal_components_v1'
+VERSION='a105_endpoint_signal_components'
 COMPONENTS=ALL_COMPONENTS
 _BASE=COMPONENTS[:5]
 FORMULAS=dict(zip(COMPONENTS,('s*(a-t)','s*(a-b)','s*(b-t)','(a-b)/(a-t)',

@@ -33,7 +33,7 @@ def metadata_rows():
 def test_a_stoichiometric_balance_sheet_is_saved_read_back_and_projected(world):
     data = workbook({'Data': data_rows(), 'Metadata': metadata_rows()})
     saved_source, artifact = source(world, data, MEDIA_TYPE)
-    selection = {'version': 'a105_stoichiometric_balance_xlsx_selection_v1', 'source_ref': saved_source,
+    selection = {'version': 'a105_stoichiometric_balance_xlsx_selection', 'source_ref': saved_source,
                  'expected_sha256': sha256(data).hexdigest(), 'sheet_name': 'Data', 'panel': 'D', 'row_number': 53,
                  'time_minutes': 30}
     populated, held, saved, cells = run(world, 'balance', [

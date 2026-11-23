@@ -86,7 +86,7 @@ the converter (the sheet side) turns it into a degree.
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence import literature_spr_record
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import SUPPORTS
 
-VERSION = 'a105_alphascreen_record_v1'
+VERSION = 'a105_alphascreen_record'
 EXPERIMENT_TYPE = 'alphascreen'
 QUANTITIES = ('kd', 'ki', 'ec50', 'ic50', 'kd_spread', 'ki_spread', 'signal_maximum', 'signal_background', 'signal_to_background', 'z_prime', 'bead_concentration', 'labelled_partner_concentration', 'tagged_partner_concentration', 'plate_well_count', 'titration_point_count', 'technical_replicate_count', 'incubation_time', 'bead_incubation_time', 'temperature', 'replicate_count')
 PREPARATION_KEYS = ('titrant_preparation_ref', 'fixed_partner_preparation_ref', 'dataset_ref')

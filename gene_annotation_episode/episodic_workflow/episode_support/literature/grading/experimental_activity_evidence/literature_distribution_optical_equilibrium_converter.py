@@ -114,7 +114,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_product_distribution_direction import select_product_distribution_effect
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_distribution_optical_equilibrium_converted_v1'
+VERSION = 'a105_distribution_optical_equilibrium_converted'
 CRITERIA_MAP = {'species_identity': ('pure_species_spectra',), 'response_factors': ('extinction_coefficient_stated',), 'common_denominator': ('denominator_and_coverage',),
                 'calibration_applicability': ('absorbance_range',), 'background_alternatives': ('no_enzyme_sample',), 'attribution_supported': ('inactive_enzyme_sample',),
                 'equilibrium_state': ('plateau_stability', 'equilibrium_from_both_sides'), 'sampling_basis': ('replicates',),

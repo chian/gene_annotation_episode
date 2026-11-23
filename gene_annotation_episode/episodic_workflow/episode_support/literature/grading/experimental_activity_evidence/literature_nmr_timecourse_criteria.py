@@ -28,7 +28,7 @@ returns     every case the criterion can return, as (status, reason_code, when).
             as 'never' cannot occur for this criterion.
 """
 
-VERSION = 'a105_nmr_timecourse_criteria_v1'
+VERSION = 'a105_nmr_timecourse_criteria'
 S_PER_UNIT = {'s': 1.0, 'ms': 1.0e-3}   # FIXED_BY_DEFINITION: a millisecond is a thousandth of a second.
 
 _fact_returns = (

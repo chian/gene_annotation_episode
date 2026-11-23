@@ -46,7 +46,7 @@ converter does. The constructors take ``support`` and default it to 'direct'; th
 through the extraction (the extraction always passes the model's answer).
 """
 
-VERSION = 'a105_transport_planar_bilayer_record_v1'
+VERSION = 'a105_transport_planar_bilayer_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'transport_planar_bilayer'
 QUANTITIES = ('unitary_conductance', 'unitary_conductance_spread', 'unitary_current', 'baseline_noise', 'holding_voltage', 'reversal_potential',

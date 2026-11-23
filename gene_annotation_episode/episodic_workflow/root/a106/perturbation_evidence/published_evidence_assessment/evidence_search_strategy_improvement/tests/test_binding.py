@@ -26,7 +26,7 @@ QUERY = 'source_' + 'b' * 24
 OTHER = 'source_' + 'c' * 24
 CTX = 'record_' + 'd' * 24
 TASK = {'kind': 'verified_source_leads', 'evidence_axis': 'A106', 'credit_unit': 1.0}
-ASSIGNMENT = {'version': 'strategy_assignment_v1', 'question_context_refs': [CTX],
+ASSIGNMENT = {'version': 'strategy_assignment', 'question_context_refs': [CTX],
               'literature_task': TASK, 'proposed_annotation_ref': 'hyp_1', 'scope': {'subject_refs': ['sub_1']},
               'received_record_refs': [CTX, 'hyp_1']}
 
@@ -70,7 +70,7 @@ def test_the_commission_form_admits_a_strategy_assignment_and_refuses_an_unknown
     form = EPISODE.assignment_form
     admitted = form.admit(ASSIGNMENT, 'test')
     parent_input = EPISODE.read_from_parent(admitted, {'objective': 'strategy'})
-    assert parent_input['strategy'] == {'version': 'strategy_assignment_v1', 'question_context_refs': [CTX]}
+    assert parent_input['strategy'] == {'version': 'strategy_assignment', 'question_context_refs': [CTX]}
     assert parent_input['task_key'] == 'A106:verified_source_leads'
     assert set(form.record_refs(admitted)) == {CTX, 'hyp_1'}
     with pytest.raises(FormError, match='unknown_field'):

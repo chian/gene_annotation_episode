@@ -7,7 +7,7 @@ never substitute a newer claim or inspect an unreceived assessment.
 from copy import deepcopy
 
 
-VERSION = 'received_component_assessment_dependencies_v1'
+VERSION = 'received_component_assessment_dependencies'
 
 
 def assessment_dependencies(store, reference, known, *, anchor=None):

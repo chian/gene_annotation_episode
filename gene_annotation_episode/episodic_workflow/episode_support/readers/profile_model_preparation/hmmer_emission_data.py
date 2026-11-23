@@ -17,7 +17,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.readers.profile_m
 from gene_annotation_episode.episodic_workflow.episode_support.readers.sequence_alignment.hmmalign_inputs import iter_hmmalign_stockholm_records
 
 
-SCHEMA = "hmmer_emission_sheet_v1"
+SCHEMA = "hmmer_emission_sheet"
 MODES = frozenset({"sample_core_unaligned", "sample_core_aligned",
                    "consensus_simple", "consensus_thresholded", "sample_profile"})
 ISSUE_CODES = frozenset({

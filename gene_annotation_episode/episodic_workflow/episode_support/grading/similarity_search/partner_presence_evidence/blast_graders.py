@@ -47,7 +47,7 @@ def grade_blast_result(content: bytes, *, mode: str, resource: str,
             return {"sheet": build_pairwise_sheet(normalized), "probabilities": None}
         sheet, common_sheet, calculated = build_pairwise_artifacts(normalized)
         return {"sheet": sheet, "probabilities": None, "correspondence": {
-            "version": ARTIFACT_SCHEMA, "instances": [{"legacy_pointer": "/sheet", "axis_basis": "reported",
+            "version": ARTIFACT_SCHEMA, "instances": [{"source_pointer": "/sheet", "axis_basis": "reported",
                 "sheet": common_sheet, "components": calculated}]}}
     if mode != "database":
         raise ValueError("unsupported_blast_grading_mode")
@@ -58,7 +58,7 @@ def grade_blast_result(content: bytes, *, mode: str, resource: str,
     result = {"sheet": sheet, "probabilities": calculate_database_probabilities(sheet, model=model)}
     if _retain_correspondence:
         for instance in correspondence["instances"]:
-            instance["legacy_pointer"] = "/sheet" + instance["legacy_pointer"]
+            instance["source_pointer"] = "/sheet" + instance["source_pointer"]
         result["correspondence"] = correspondence
     return result
 

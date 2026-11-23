@@ -31,7 +31,7 @@ def panel(product_formula='H2O'):
                                    'source_locator': 'table 2'},
                 'activities': [{'species_id': name, 'value': 1, 'unit': 'dimensionless_activity',
                                 'source_locator': 'methods'} for name in ('H2', 'O2', 'H2O')]}
-    return {'version': 'a110_chemical_panel_v1', 'dataset_id': 'fixture', 'origin': 'synthetic',
+    return {'version': 'a110_chemical_panel', 'dataset_id': 'fixture', 'origin': 'synthetic',
             'species': [species('H2', 'H2', 0), species('O2', 'O2', 0), species('H2O', product_formula, 0)],
             'reactions': [reaction], 'pathway': [{'reaction_id': 'r1', 'multiplier': '1', 'source_locator': 'scheme'}],
             'carrier_pools': [], 'reported_constraints': None}

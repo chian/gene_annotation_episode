@@ -8,9 +8,9 @@ from __future__ import annotations
 from copy import deepcopy
 from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation import fluorescence_event_contracts as core
 from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.native_fluorescence_contracts import _input, path_value
-FACS_PROFILE = 'biomni_facs_log_548_v1'
-CYTOKINE_LOG_PROFILE = 'biomni_cytokine_log_548_v1'
-CYTOKINE_CSV_PROFILE = 'biomni_cytokine_csv_548_v1'
+FACS_PROFILE = 'biomni_facs_log_548'
+CYTOKINE_LOG_PROFILE = 'biomni_cytokine_log_548'
+CYTOKINE_CSV_PROFILE = 'biomni_cytokine_csv_548'
 PROFILE_SOURCES = {FACS_PROFILE: dict(operation='perform_facs_cell_sorting'), CYTOKINE_LOG_PROFILE: dict(operation='analyze_cytokine_production_in_cd4_tcells')}
 PROFILE_SOURCES[CYTOKINE_CSV_PROFILE] = deepcopy(PROFILE_SOURCES[CYTOKINE_LOG_PROFILE])
 CSV_COLUMNS = {'IFN-γ', 'IL-17', 'IFN-γ (background-subtracted)', 'IL-17 (background-subtracted)'}

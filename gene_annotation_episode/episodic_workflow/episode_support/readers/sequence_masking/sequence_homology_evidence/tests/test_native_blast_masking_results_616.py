@@ -15,7 +15,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.readers.sequence_
 
 
 def selector(**changes):
-    return {"version": "native_blast_masking_result_selector_v1", "mode": "native_result",
+    return {"version": "native_blast_masking_result_selector", "mode": "native_result",
         "records": {"mode": "all"}, "quantities": [], "statistics_fields": [],
         "statistics_unit_codes": [], "include_checks": False, "artifacts": [],
         "saved_data": [], "saved_sheet_ref": None, **changes}

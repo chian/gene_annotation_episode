@@ -60,7 +60,7 @@ def fact(answer, refs=(), support='direct'):
     return {**literature_spr_record.fact(answer, refs), 'support': None if answer == 'unknown' else support}
 
 
-VERSION = 'a105_bret_record_v1'
+VERSION = 'a105_bret_record'
 EXPERIMENT_TYPE = 'bret'
 QUANTITIES = ('kd', 'kd_spread', 'ki', 'ki_spread', 'bret50', 'bret50_negative_control', 'bret_max', 'bret_ratio_pair', 'bret_ratio_negative_control', 'ratio_lowest', 'ratio_highest', 'titration_point_count', 'tracer_concentration', 'fit_r_squared', 'replicate_count', 'bret50_spread', 'bret50_negative_control_spread', 'bret_ratio_pair_spread', 'bret_ratio_negative_control_spread', 'bret_ratio_donor_only', 'tracer_kd')
 PREPARATION_KEYS = ('component_a_preparation_ref', 'component_b_preparation_ref', 'dataset_ref')

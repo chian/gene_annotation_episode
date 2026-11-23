@@ -27,7 +27,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.similarit
 from gene_annotation_episode.episodic_workflow.episode_support.grading.similarity_search.sequence_homology_evidence.phmmer_format import alignment_rows, hit_rows, sequence_hits
 from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.hmmer_search_inputs import build_hmmer_search_sheet, iter_hmmer_stdout_events, iter_hmmer_table_rows
 
-VERSION = 'phmmer_printed_alignment_with_hmmer_sheet_v1'
+VERSION = 'phmmer_printed_alignment_with_hmmer_sheet'
 NATIVE_ROWS = TableDeclaration(
     name='a101_phmmer_native_rows',
     columns=('capture', 'ordinal', 'kind', 'role', 'record_key', 'query_key', 'query_occurrence', 'target_name',
@@ -156,7 +156,7 @@ class PhmmerGradingValues:
             key=lambda row: row['ordinal']) if row['query_key'] in (printed['query_record_key'], None)]
         query['complete'] = any(row.get('native_query_terminated') for row in annotations)
         complete = bool(self.termination) and all(self.termination.values()) and query['complete']
-        native = {'schema': 'hmmer_search_native_v1',
+        native = {'schema': 'hmmer_search_native',
             'operation': {'program': 'phmmer', 'format': 'hmmer3_protein_text',
                           'engine_version': None if self.version_conflict else self.version,
                           'alphabet': 'amino', 'mode': 'sequence_database_search'},

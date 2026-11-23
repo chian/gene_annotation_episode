@@ -3,7 +3,7 @@ the proposed annotation that this episode holds.
 
 Carried from the old ``credit.py`` (``PerturbationEvidenceCredit``, ``original_task_projector``) at 97308b94c: credit
 kind ``scientific``; the projector ``ScientificFindingProgress(FindingProgressPolicy(credit_unit))`` built from the
-assignment's ``context.evidence_task`` (``evidence_axis_task_v1``, ``whole_axis_findings``, A106); the credit view
+assignment's ``context.evidence_task`` (``evidence_axis_task``, ``whole_axis_findings``, A106); the credit view
 went through ``services.scientific_credit`` with the assignment and the scope. Here the projector's own function,
 ``project_finding_progress`` of the library (``findings/perturbation_evidence/investigation_progress.py``), is called
 over the records this episode holds; ``ScientificFindingProgress.read_details`` restricted the known assessments to

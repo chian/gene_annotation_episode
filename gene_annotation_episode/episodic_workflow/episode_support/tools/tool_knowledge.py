@@ -14,7 +14,7 @@ import shutil
 import tempfile
 
 
-VERSION = 'tool_knowledge_v1'
+VERSION = 'tool_knowledge'
 INSTRUCTIONS = (' Tool-specific and resource instructions are available through '
     'knowledge.search, knowledge.entry and knowledge.read. The tool_knowledge '
     'context identifies the run-frozen library. Retrieve sections when useful; '

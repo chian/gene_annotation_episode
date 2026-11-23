@@ -148,7 +148,7 @@ def assert_retained(packet, out):
         assert set(marker) == {"record_key", "byte_span", "line_number", "exact_text", "scope", "issue_codes"}
         start, end = marker["byte_span"]
         assert packet["report_contents"][start:end].decode() == marker["exact_text"]
-        token = ["v1", packet["bundle"]["identity"]["attempt_id"], packet["artifact_key"], out["report"]["sha256"], start, end]
+        token = ["blast-native-convergence", packet["bundle"]["identity"]["attempt_id"], packet["artifact_key"], out["report"]["sha256"], start, end]
         assert marker["record_key"] == "blast-native-convergence:" + digest(token)
 
 

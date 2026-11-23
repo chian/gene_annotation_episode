@@ -1,5 +1,5 @@
-"""The investigation finding of a retained A101 BLAST database grading (``blast_database_sheet_v1/v2/v3`` with its
-``blast_database_probabilities_v1``): controlled features that code reads from the saved grading artifact, each with
+"""The investigation finding of a retained A101 BLAST database grading (``blast_database_sheet`` with its
+``blast_database_probabilities``): controlled features that code reads from the saved grading artifact, each with
 its validator (``INVESTIGATION_FINDING_FEATURES_a101.md`` sections 1 and 5.3).
 
 One entry per saved grading: the evidence type (fixed by the sheet schema; the model never picks it), the grading
@@ -17,7 +17,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.similarit
     DEFAULT_TABLES, SOURCE_CLASSES, source_class_counts)
 
 EVIDENCE_TYPE = 'protein_database_homologs'
-SHEET_SCHEMAS = ('blast_database_sheet_v1', 'blast_database_sheet_v2', 'blast_database_sheet_v3')
+SHEET_SCHEMAS = ('blast_database_sheet', 'blast_database_sheet_record_locator', 'blast_database_sheet_population')
 UNCERTAINTY_KIND = 'native_evalue'
 SAMPLING_BASIS = 'native_search_space'
 # The rank that fixes ``target_taxon_matching_fraction`` (owner point 3 of the feature table is open; genus is the
@@ -130,7 +130,7 @@ def grading_features(grading, sheet_ref):
 
 
 def saved_grading_features(reader, grading_ref):
-    """The features of one retained grading artifact this Episode holds (``tool_grading_artifact_v1/v2``)."""
+    """The features of one retained grading artifact this Episode holds (``tool_grading_artifact``)."""
     body = json.loads(reader.get_artifact(grading_ref))
     return grading_features(body['grading'], grading_ref)
 

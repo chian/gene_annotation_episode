@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.reader
 )
 
 
-VERSION = "relative_signal_extraction_v1"
+VERSION = "relative_signal_extraction"
 _NUMBER = r"[+−-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+−-]?\d+)?"
 _PERCENT = re.compile(
     rf"(?<![\w.,+−-])(?P<number>{_NUMBER})\s*%\s*\((?P<label>[^()]*)\)"

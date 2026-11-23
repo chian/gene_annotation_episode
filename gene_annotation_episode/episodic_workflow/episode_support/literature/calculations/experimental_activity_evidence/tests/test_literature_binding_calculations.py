@@ -14,7 +14,7 @@ def row(value, *, index=0, relation='eq', spread=None, ligand='reference'):
     return {'value': value, 'relation': relation, 'reported_spread': spread, 'origin': 'synthetic', 'subject': 'synthetic protein', 'state': 'apo', 'experiment': 'synthetic competition', 'ligand': ligand, 'source': {'source_ref': 'synthetic source', 'artifact_ref': 'synthetic table', 'representation': 'synthetic_fixture', 'table_id': 'synthetic table 1', 'row_index': index, 'locator': {'row_index': index, 'column': 'IC50'}, 'expression': expression}}
 
 def extraction(reference=None, test=None):
-    return {'version': 'binding_parameter_extraction_v1', 'parameter_kind': 'ic50', 'unit': 'nM', 'uncertainty_basis': 'fit_to_averaged_curve', 'minimum_experiment_count': 3, 'reference_rows': [row(40, spread=4)] if reference is None else reference, 'test_rows': [row(120, index=1, ligand='test')] if test is None else test}
+    return {'version': 'binding_parameter_extraction', 'parameter_kind': 'ic50', 'unit': 'nM', 'uncertainty_basis': 'fit_to_averaged_curve', 'minimum_experiment_count': 3, 'reference_rows': [row(40, spread=4)] if reference is None else reference, 'test_rows': [row(120, index=1, ligand='test')] if test is None else test}
 
 def test_point_cells_keep_raw_spread_and_minimum_count_without_statistical_claims():
     inputs = extraction()
@@ -22,7 +22,7 @@ def test_point_cells_keep_raw_spread_and_minimum_count_without_statistical_claim
     sheet = populate_binding_contrast(inputs)
     assert inputs == before
     assert set(sheet) == {'version', 'parameter_kind', 'unit', 'reference_rows', 'test_rows', 'uncertainty_basis', 'minimum_experiment_count', 'independent_preparation_count', 'cells', 'annotation_credit'}
-    assert sheet['version'] == 'binding_parameter_sheet_v1'
+    assert sheet['version'] == 'binding_parameter_sheet'
     assert set(sheet['cells']) == set(COMPONENTS)
     assert sheet['cells']['reference_parameter']['value'] == 40
     assert sheet['cells']['reference_reported_spread']['value'] == 4
@@ -226,7 +226,7 @@ def test_serialized_recalculation_preserves_kind_basis_and_source_indices():
 
 def test_synthetic_reader_to_calculator_normalizes_without_reinterpreting_tokens():
     from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_binding_reader import read_binding_parameter_table
-    table = {'version': 'binding_parameter_table_v1', 'table_id': 'synthetic source table', 'parameter_kind': 'ic50', 'unit': 'µM', 'uncertainty_basis': 'fit_to_averaged_curve', 'minimum_experiment_count': 2, 'rows': [{'subject': 'synthetic protein', 'state': 'apo', 'experiment': 'competition', 'ligand': 'reference', 'expression': '.04 ± .004', 'locator': {'row_index': 20, 'column': 'IC50'}}, {'subject': 'synthetic protein', 'state': 'apo', 'experiment': 'competition', 'ligand': 'test', 'expression': '> .12', 'locator': {'row_index': 21, 'column': 'IC50'}}]}
+    table = {'version': 'binding_parameter_table', 'table_id': 'synthetic source table', 'parameter_kind': 'ic50', 'unit': 'µM', 'uncertainty_basis': 'fit_to_averaged_curve', 'minimum_experiment_count': 2, 'rows': [{'subject': 'synthetic protein', 'state': 'apo', 'experiment': 'competition', 'ligand': 'reference', 'expression': '.04 ± .004', 'locator': {'row_index': 20, 'column': 'IC50'}}, {'subject': 'synthetic protein', 'state': 'apo', 'experiment': 'competition', 'ligand': 'test', 'expression': '> .12', 'locator': {'row_index': 21, 'column': 'IC50'}}]}
     source = {'source_ref': 'synthetic source', 'artifact_ref': 'synthetic JSON', 'text': json.dumps(table), 'representation': 'synthetic_fixture'}
     normalized = read_binding_parameter_table(source, expected_subject='synthetic protein', expected_state='apo', expected_experiment='competition', reference_ligand='reference', test_ligand='test', parameter_kind='ic50')
     sheet = populate_binding_contrast(normalized)

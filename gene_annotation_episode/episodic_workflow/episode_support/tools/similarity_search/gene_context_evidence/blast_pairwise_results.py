@@ -87,7 +87,7 @@ def _validate(search, bindings):
         raise ValueError('blast_pairwise_program_context_conflict')
     normalized = search['normalized']
     if (type(normalized) is not dict or set(normalized) != {'schema', 'mode', 'resource', 'format',
-            'query', 'search', 'hits', 'native', 'issues'} or normalized.get('schema') != 'blast_normalized_result_v1'
+            'query', 'search', 'hits', 'native', 'issues'} or normalized.get('schema') != 'blast_normalized_result'
             or normalized.get('mode') != 'pairwise' or type(normalized.get('search')) is not dict
             or normalized['search'].get('program') != context['execution_program']
             or type(normalized.get('query')) is not dict or type(normalized.get('hits')) is not list
@@ -217,7 +217,7 @@ def populate_blast_pairwise_sheet(search, *, operand_bindings):
     search, operand_bindings = finite_json_copy(search), finite_json_copy(operand_bindings)
     _validate(search, operand_bindings)
     _selected_intervals(search, operand_bindings)
-    return {'schema': 'blast_pairwise_result_sheet_v1', 'search': search, 'operand_bindings': operand_bindings}
+    return {'schema': 'blast_pairwise_result_sheet', 'search': search, 'operand_bindings': operand_bindings}
 
 
 def calculate_blast_pairwise_components(sheet, *, _retain_correspondence=False):
@@ -225,7 +225,7 @@ def calculate_blast_pairwise_components(sheet, *, _retain_correspondence=False):
         raise ValueError('blast_pairwise_private_retention_flag_invalid')
     sheet = finite_json_copy(sheet)
     if (type(sheet) is not dict or set(sheet) != {'schema', 'search', 'operand_bindings'}
-            or sheet['schema'] != 'blast_pairwise_result_sheet_v1'):
+            or sheet['schema'] != 'blast_pairwise_result_sheet'):
         raise ValueError('blast_pairwise_result_sheet_required')
     search, bindings = sheet['search'], sheet['operand_bindings']
     normalized = deepcopy(_validate(search, bindings))
@@ -282,9 +282,9 @@ def calculate_blast_pairwise_components(sheet, *, _retain_correspondence=False):
         selected_coverage[axis] = {'numerator': selected['execution_qualified_numerator'],
             'denominator': selected['denominator'], 'value': selected['execution_qualified_value'], 'unit': 'fraction'}
     components['selected_operand_coverage'] = selected_coverage
-    result = {'schema': 'blast_pairwise_result_components_v1', 'components': components}
+    result = {'schema': 'blast_pairwise_result_components', 'components': components}
     if _retain_correspondence:
         result['correspondence'] = {'version': ARTIFACT_SCHEMA, 'instances': [
-            {'legacy_pointer': '/components', 'axis_basis': 'qualified',
+            {'source_pointer': '/components', 'axis_basis': 'qualified',
              'sheet': common_sheet, 'components': common_components}]}
     return result

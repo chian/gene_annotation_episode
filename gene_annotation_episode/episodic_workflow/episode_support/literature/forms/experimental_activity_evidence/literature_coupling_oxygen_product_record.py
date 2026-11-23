@@ -48,7 +48,7 @@ carry None. The grader does not judge it; the converter does. The constructors t
 tests that do not go through the extraction (the extraction always passes the model's answer).
 """
 
-VERSION = 'a105_coupling_oxygen_product_record_v1'
+VERSION = 'a105_coupling_oxygen_product_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'coupling_oxygen_product'
 QUANTITIES = ('productive_fraction', 'productive_fraction_spread', 'stoichiometric_ratio', 'stoichiometric_ratio_spread', 'oxygen_per_product', 'stoichiometric_coefficient',

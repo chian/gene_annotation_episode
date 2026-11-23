@@ -15,7 +15,7 @@ from jsonschema import Draft202012Validator, validators
 from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.domain import ContractError
 from gene_annotation_episode.episodic_workflow.episode_support.forms.protein_structure.structural_homology_evidence.native_protein_structure_contracts import ScientificRequest, Software
 from gene_annotation_episode.episodic_workflow.episode_support.forms.protein_structure.structural_homology_evidence.protein_structure_contracts import (
-    FileIdentity, ResultCustody, SavedSheetDescriptor, StructureSequenceDescriptor,
+    FileIdentity, ProteinStructureCustody, SavedSheetDescriptor, StructureSequenceDescriptor,
     StructuredIssue, protein_structure_schema_definitions,
 )
 from gene_annotation_episode.episodic_workflow.episode_support.readers.protein_structure.structural_homology_evidence.protein_structure_result_views import (
@@ -31,7 +31,7 @@ class ProteinFactGroups(TypedDict):
 
 
 class ProteinResultAuthorityRecord(TypedDict):
-    custody: ResultCustody
+    custody: ProteinStructureCustody
     selector: ProteinResultSelector
     request: ScientificRequest
     software: Software

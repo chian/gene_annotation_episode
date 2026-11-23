@@ -22,10 +22,10 @@ from .sequence_extraction_grader import frozen_reverse_complement
 from .tool_grading_artifacts import validate_tool_correspondence
 
 
-REQUEST_VERSION = "reference_edit_outcome_request_v1"
-SHEET_VERSION = "reference_edit_outcome_sheet_v1"
-COMPONENT_VERSION = "reference_edit_outcome_components_v1"
-RETURN_VERSION = "reference_edit_outcome_return_v1"
+REQUEST_VERSION = "reference_edit_outcome_request"
+SHEET_VERSION = "reference_edit_outcome_sheet"
+COMPONENT_VERSION = "reference_edit_outcome_components"
+RETURN_VERSION = "reference_edit_outcome_return"
 _SOURCE = re.compile(r"source_[a-f0-9]{24,64}\Z")
 _SYMBOLS = frozenset("ACGTURYSWKMBDHVNacgturyswkmbdhvn")
 _KINDS = ("unchanged", "substitution_only", "insertion_only", "deletion_only", "mixed")
@@ -459,7 +459,7 @@ _TEMPLATE = _object(dict(comparison_ordinal=_INT, **_COMPARISON_SELECTION, templ
 _PAIR = _object(dict(pair_ordinal=_INT, reference_ref=_REF, edited_ref=_REF, alignment_ref=_nullable(_REF), group_label=_nullable(_TEXT),
     source_ref=_nullable(_REF), state=_enum(_STATES), alignment_state=_nullable(_enum(("alignment", "no_alignment", "conflicting"))),
     coverage_scope=_enum(("not_selected", "unavailable", "no_alignment", "full_global", "selected_alignment")),
-    full_global_pair=dict(type="boolean"), native=_nullable(_object(dict(format=_nullable(_enum(("biopython_pairwise_native_v2",))),
+    full_global_pair=dict(type="boolean"), native=_nullable(_object(dict(format=_nullable(_enum(("biopython_pairwise_native",))),
         molecule=_enum(("dna", "rna")), mode=_enum(("local", "global")), version=_nullable(_TEXT),
         parameters=_object(dict(matrix=_nullable(_TEXT), gap_open=_nullable(dict(type="number")), gap_extend=_nullable(dict(type="number")))),
         score=_nullable(dict(type="number")), score_unit=dict(type="string", const="native_alignment_score"),

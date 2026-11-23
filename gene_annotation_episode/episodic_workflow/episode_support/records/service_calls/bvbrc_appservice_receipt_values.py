@@ -548,7 +548,7 @@ def build_appservice_receipt(prepared, event, snapshot, *, common_receipt, effec
             "scheduler_returned_parameters": scheduler, "effective_parameters": None,
             "submission_receipt_ref": common["receipt_ref"], "submission_operation_key": common["origin"]["operation_key"],
             "submission_source_ref": source_ref}
-        return _finish("TaskHandoff", {"version": "bvbrc_appservice_task_handoff_v1",
+        return _finish("TaskHandoff", {"version": "bvbrc_appservice_task_handoff",
             "original_job_owner": bindings["original_job_owner"], "original_task": original,
             "native_submission_record": task["raw"], "definition_evidence": preparation["definition_evidence"],
             "input_evidence_refs": args["input_evidence_refs"], "effect_receipt_ref": confirmed[0]["effect_ref"],

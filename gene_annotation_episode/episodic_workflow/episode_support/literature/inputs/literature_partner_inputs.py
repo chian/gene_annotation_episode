@@ -11,8 +11,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.partner_p
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.partner_presence_evidence.literature_assay_inputs import SOURCE_KINDS, _Sources, _fail, _keys, _nullable, _numeric, _text, _witness_schema
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.literature_contract_error import ExperimentalContractError
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.literature_partner_calculations import COMPONENTS, populate_partner_components
-VERSION = 'literature_partner_inputs_extraction_v1'
-DATA_VERSION = 'literature_partner_selection_v1'
+VERSION = 'literature_partner_inputs_extraction'
+DATA_VERSION = 'literature_partner_selection'
 LITERAL_FIELDS = ('subject', 'partner', 'experiment', 'endpoint', 'normalization', 'reference_condition', 'omitted_condition', 'addback_condition', 'function')
 _ARGS = ('source_ref', 'data_source_ref', 'source_kind', 'literals', 'interpretation_witnesses')
 

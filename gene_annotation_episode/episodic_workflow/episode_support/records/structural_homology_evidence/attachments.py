@@ -19,7 +19,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.readers.sequence_
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.tool_grading_artifacts import retain_tool_grading, source_tool_grading_entries
 
 
-VERSION = 'measurement_entity_and_trait_attribution_v1'
+VERSION = 'measurement_entity_and_trait_attribution'
 PROVIDER = 'native.a102.tool_attachment'
 REQUEST_PROVIDER = 'native.a102.attachment_request'
 CHEMICAL_ROLES = {'acidic': 'DE', 'basic_KR': 'KR', 'aromatic': 'FWY',
@@ -78,7 +78,7 @@ def _dependencies(link):
 
 
 def _publish(store, key, body, refs):
-    body = {'schema': 'a102_tool_attachment_v1', 'version': VERSION,
+    body = {'schema': 'a102_tool_attachment', 'version': VERSION,
         'request_ref': key, **body, 'evidence_refs': sorted(set(refs))}
     artifact = store.artifact(canonical(body),'application/json')
     grading = retain_tool_grading(store, provider=PROVIDER,
@@ -112,7 +112,7 @@ def _direct(store, ref, grade, known):
     q = _binding(store,grade['target_binding_ref'],known)
     t = _binding(store,grade['reference_ref'],known)
     require(q['target_ref']==grade['target_ref'], 'attachment_direct_subject_conflict')
-    return {'measurement_ref':ref,'target_ref':grade['target_ref'],'policy':'direct_native_geometry_v1',
+    return {'measurement_ref':ref,'target_ref':grade['target_ref'],'policy':'direct_native_geometry',
         'producer_operation':DIRECT_PRODUCERS[grade['producer']], 'level':'entity',
         'actual_subject_refs':[grade['target_binding_ref'],grade['reference_ref']],
         'state':'direct','score':grade['components']['B'],'raw_score':grade['components']['B'],
@@ -132,7 +132,7 @@ def _fold(store, body, known):
         'attachment_reference_subject_conflict')
     if not grade['eligible'] or not grade['primary']:
         return {'measurement_ref':body['measurement_ref'],'target_ref':body['target_ref'],
-            'policy':'reference_fold_native_map_and_local_distance_v1','producer_operation':'structure.reference_align',
+            'policy':'reference_fold_native_map_and_local_distance','producer_operation':'structure.reference_align',
             'level':'entity','actual_subject_refs':[body['measured_binding_ref'],grade['reference_ref']],
             'raw_score':grade['components']['B'],'score':None,'regions':body['regions'],
             'state':'excluded','exclusion':grade['exclusion'] or 'nonprimary_comparison',
@@ -140,7 +140,7 @@ def _fold(store, body, known):
     link = sequence_link(store,body['target_ref'],q['sequence'],known,
         alignment_ref=body.get('sequence_alignment_ref'))
     out = {'measurement_ref':body['measurement_ref'],'target_ref':body['target_ref'],
-        'policy':'reference_fold_native_map_and_local_distance_v1','producer_operation':'structure.reference_align',
+        'policy':'reference_fold_native_map_and_local_distance','producer_operation':'structure.reference_align',
         'level':'entity','actual_subject_refs':[body['measured_binding_ref'],grade['reference_ref']],
         'raw_score':grade['components']['B'],'regions':body['regions'], 'sequence_link':link,
         'comparison_group':digest([body['target_ref'],digest(q['sequence']),
@@ -190,7 +190,7 @@ def reference_region_value(attachment,start,end,*,evidence_regions=None):
 def qualified_feature(store,reference,body,known):
     if not body.get('attachment_required'): return body
     attachment=next((row for row in received_attachments(store,known)
-        if row.get('measurement_ref')==reference and row['policy']=='feature_geometry_local_scaffold_v1'),None)
+        if row.get('measurement_ref')==reference and row['policy']=='feature_geometry_local_scaffold'),None)
     return {**body,'raw_E':body.get('raw_E',body['E']),
         'E':attachment['E'] if attachment else None,
         'E_bounds':[attachment['E'],attachment['E']] if attachment and attachment['E'] is not None else [0.,body['B']],
@@ -364,7 +364,7 @@ def _feature_geometry(store,ref,body,known):
             'correspondence_route':route,
             'target_position':definition['target_position'],'reference_position':definition['reference_position']})
     value = math.fsum(r['score'] for r in rows)/len(rows) if all(r['score'] is not None for r in rows) else None
-    return {'measurement_ref':ref,'target_ref':body['target_ref'],'policy':'feature_geometry_local_scaffold_v1',
+    return {'measurement_ref':ref,'target_ref':body['target_ref'],'policy':'feature_geometry_local_scaffold',
         'producer_operation':'structure.feature_geometry','level':'feature_trait',
         'actual_subject_refs':[grade['target_binding_ref'],grade['reference_ref']],
         'state':'evaluated' if value is not None else 'unresolved','score':value,
@@ -404,7 +404,7 @@ def _interface(store,ref,body,known):
     factor=min(values) if all(v is not None for v in values) else None
     value=body['raw_score']*factor if factor is not None and body['raw_score'] is not None else None
     if body['raw_score'] is None: missing.append('native_contact_atoms')
-    return {'measurement_ref':ref,'target_ref':body['target_ref'],'policy':'interface_required_components_local_contacts_v1',
+    return {'measurement_ref':ref,'target_ref':body['target_ref'],'policy':'interface_required_components_local_contacts',
         'producer_operation':'structure.interface_geometry','level':'feature_trait',
         'actual_subject_refs':body['binding_refs'],'state':'evaluated_transfer' if value is not None else 'unresolved',
         'score':value,'raw_score':body['raw_score'],'component_links':component_links,
@@ -413,7 +413,7 @@ def _interface(store,ref,body,known):
 
 
 def _reported(store,ref,body,known):
-    result={'measurement_ref':ref,'target_ref':body['target_ref'],'policy':'reported_subject_scope_and_specific_distance_v1',
+    result={'measurement_ref':ref,'target_ref':body['target_ref'],'policy':'reported_subject_scope_and_specific_distance',
         'producer_operation':'structure.reported_comparison','level':'entity','score':None,
         'reported_metric':{k:body[k] for k in ('metric_name','metric_value','metric_unit','matched_extent')},
         'native_B':None,'actual_subject_refs':body.get('measured_subject_refs',[]),
@@ -451,7 +451,7 @@ def refresh(store, known, scope):
             binding=_binding(store,ref,known)
             if binding['target_ref'] not in targets:continue
             mapped=sum(p is not None for p in binding['coordinate_to_input_mapping'])
-            result={'measurement_ref':ref,'target_ref':binding['target_ref'],'policy':'model_sequence_entity_binding_v1',
+            result={'measurement_ref':ref,'target_ref':binding['target_ref'],'policy':'model_sequence_entity_binding',
                 'producer_operation':'structure.bind','level':'entity','state':'mapped_model','score':None,
                 'actual_subject_refs':[ref],'sequence_distance':len(binding['mapping_algorithm']['substitutions'])/max(1,mapped),
                 'mapped_sequence_positions':mapped,'observed_coordinate_positions':len(binding['coordinates']),
@@ -527,7 +527,7 @@ def refresh(store, known, scope):
             supporting_refs=[addresses[r] for r in raw['supporting_source_refs']],
             opposing_refs=[addresses[r] for r in raw['opposing_source_refs']],
             contrast_witness_refs=raw.get('contrast_witness_refs',[]),scope_ref=raw['scope_ref'])
-        body={'measurement_ref':ref,'target_ref':raw['target_ref'],'policy':'contrast_from_qualified_local_features_v1',
+        body={'measurement_ref':ref,'target_ref':raw['target_ref'],'policy':'contrast_from_qualified_local_features',
             'producer_operation':'structure.contrast','level':'qualified_panel','score':panel['A102_f'],
             'state':panel['status'],'missing':[],'qualified_panel':panel}
         produced.append(_publish(store,ref,body,[ref,raw['target_ref'],*selected]))

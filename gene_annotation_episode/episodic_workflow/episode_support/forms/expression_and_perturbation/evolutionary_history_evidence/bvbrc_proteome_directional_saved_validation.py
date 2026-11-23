@@ -6,7 +6,7 @@ immutable publication. These checks do not claim custody for caller dictionaries
 """
 from copy import deepcopy
 from decimal import Decimal
-from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.evolutionary_history_evidence import bvbrc_proteome_bundle_v2_contracts as c
+from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.evolutionary_history_evidence import bvbrc_proteome_bundle_contracts as c
 from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.evolutionary_history_evidence import bvbrc_proteome_directional_numerical_contracts as n
 from gene_annotation_episode.episodic_workflow.episode_support.forms.service_calls.evolutionary_history_evidence.bvbrc_appservice_contracts import validate_contract
 from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.evolutionary_history_evidence.bvbrc_proteome_sheet_contracts import validate_proteome_sheet_data
@@ -68,7 +68,7 @@ def _ref_scope(reference, scope, observed, path):
     try:
         n._resolve(observed, reference, path)
     except ValueError as error:
-        raise c.ProteomeBundleV2Error(_NUMERICAL, path) from error
+        raise c.ProteomeBundleError(_NUMERICAL, path) from error
     if scope is None:
         return
     _require(reference['report_ordinal'] == scope['report_ordinal'], path)
@@ -92,7 +92,7 @@ def _relations(value, observed, params, path='', scope=None):
                 if 'column_ordinal' in value:
                     _require(owner['query_symbols']['state'] == owner['subject_symbols']['state'] == 'present' and value['column_ordinal'] < len(owner['query_symbols']['value']) == len(owner['subject_symbols']['value']), path)
             except (ValueError, KeyError, IndexError) as error:
-                raise c.ProteomeBundleV2Error(_NUMERICAL, path) from error
+                raise c.ProteomeBundleError(_NUMERICAL, path) from error
             if scope is not None:
                 _require(all((value[f] == scope[f] for f in value.keys() & scope.keys())), path)
             return
@@ -169,7 +169,7 @@ def _trace(counts, fractions, params, path, columns=None):
     try:
         n._validate_fractions(fractions, counts, params, path + '/fractions')
     except ValueError as error:
-        raise c.ProteomeBundleV2Error(_NUMERICAL, getattr(error, 'pointer', path)) from error
+        raise c.ProteomeBundleError(_NUMERICAL, getattr(error, 'pointer', path)) from error
     if columns is not None:
         width = counts['alignment_columns']
         if width['state'] != 'value':
@@ -256,7 +256,7 @@ def _graph(graph, subject, path):
             _require(cell['state'] == expected_state, path + '/' + name)
 
 def validate_directional_saved(result, observed, parameters):
-    c.validate_shape_v2('DirectionalDirectionalComponentsResult', result, code=_NUMERICAL)
+    c.validate_shape('DirectionalDirectionalComponentsResult', result, code=_NUMERICAL)
     if result['components'] is None:
         for issue in result['diagnostics']:
             _require(issue['code'] in n._ARGUMENT_CODES and issue['argument_pointer'] is not None and (not any((issue[f] for f in ('fields', 'columns', 'hsps')))), '/diagnostics')
@@ -304,7 +304,7 @@ def validate_directional_saved(result, observed, parameters):
                     try:
                         n._validate_reported(hsp['reported'], nh, hk, parameters, hp + '/reported')
                     except ValueError as error:
-                        raise c.ProteomeBundleV2Error(_NUMERICAL, getattr(error, 'pointer', hp)) from error
+                        raise c.ProteomeBundleError(_NUMERICAL, getattr(error, 'pointer', hp)) from error
                     missing = [] if hsp['blocks'] else [hk]
                     for field in ('strings_support', 'pair_geometry_support'):
                         _support(hsp[field], hsp['blocks'], missing, hp + '/' + field)
@@ -335,13 +335,13 @@ def validate_directional_saved(result, observed, parameters):
     codes = {i['code'] for i in result['diagnostics']} - {'printed_zero_expectation', 'no_execution_or_occurrence_evidence'}
     _require(result['state'] == ('partial' if codes else 'available'), '/state')
 
-def validate_saved_provider_v2(sheet, components, *, parameters, requested_form, original_task, bundle_sha256, bundle):
-    parameters = c.validate_parameters_v2(parameters)
+def validate_saved_provider(sheet, components, *, parameters, requested_form, original_task, bundle_sha256, bundle):
+    parameters = c.validate_parameters(parameters)
     form = c.validate_form_parameters(requested_form, parameters)
     if sheet is None:
         c._require(components is None, path='/components')
         return (None, None)
-    saved = c.validate_provider_sheet_v2(sheet)
+    saved = c.validate_provider_sheet(sheet)
     c._require(c.canonical(saved['parameters']) == c.canonical(parameters) and saved['requested_form'] == form and (c.canonical(saved['original_task']) == c.canonical(original_task)) and (saved['bundle_sha256'] == bundle_sha256), path='/sheet')
     _bundle_binding(saved, bundle)
     native = None if saved['native_sheet_result'] is None else saved['native_sheet_result']['value']
@@ -349,15 +349,15 @@ def validate_saved_provider_v2(sheet, components, *, parameters, requested_form,
     if components is None:
         c._require(native is None and observed is None, path='/components')
         return (saved, None)
-    components = c.validate_shape_v2('ProviderComponentsV2', components)
+    components = c.validate_shape('ProviderComponents', components)
     c._require(components['provider_sheet_sha256'] == c.digest(saved), path='/components/provider_sheet_sha256')
-    c._require(components['legacy'] is not None or components['directional'] is not None, path='/components')
-    c._require((components['legacy'] is not None) == (native is not None) and (components['directional'] is not None) == (observed is not None), path='/components')
-    if components['legacy'] is not None:
-        legacy = c._checked(validate_proteome_sheet_data, 'NativeComponentsResult', components['legacy'], path='/components/legacy')
-        if legacy['value'] is not None:
-            c._require(legacy['value']['sheet_sha256'] == c.digest(native) and c.canonical(legacy['value']['parameters']) == c.canonical(parameters['calculation_parameters']), path='/components/legacy/value')
+    c._require(components['native'] is not None or components['directional'] is not None, path='/components')
+    c._require((components['native'] is not None) == (native is not None) and (components['directional'] is not None) == (observed is not None), path='/components')
+    if components['native'] is not None:
+        retained_native = c._checked(validate_proteome_sheet_data, 'NativeComponentsResult', components['native'], path='/components/native')
+        if retained_native['value'] is not None:
+            c._require(retained_native['value']['sheet_sha256'] == c.digest(native) and c.canonical(retained_native['value']['parameters']) == c.canonical(parameters['calculation_parameters']), path='/components/legacy/value')
     if components['directional'] is not None:
         validate_directional_saved(components['directional'], observed, parameters['directional_calculation_parameters'])
     return (deepcopy(saved), deepcopy(components))
-__all__ = ['validate_saved_provider_v2']
+__all__ = ['validate_saved_provider']

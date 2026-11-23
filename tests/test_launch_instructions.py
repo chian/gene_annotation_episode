@@ -24,7 +24,7 @@ def source_library(tmp_path):
         entries.append({'entry_id': name, 'title': name, 'summary': 'Launch instructions',
             'tags': ['execution'], 'tool_names': [], 'provenance': ['test_fixture'],
             'resource_kinds': [kind], 'sections': sections})
-    (source/'index.json').write_text(json.dumps({'version': 'tool_knowledge_v1', 'entries': entries}))
+    (source/'index.json').write_text(json.dumps({'version': 'tool_knowledge', 'entries': entries}))
     return source
 
 

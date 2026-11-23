@@ -22,7 +22,7 @@ def test_all_sixty_native_specs_are_concrete_and_independently_accessible():
         assert metric in c._DEFS['MeasurementSelector']['oneOf'][1]['properties']['metric']['enum']
     for metric in SAMSTAT_COMPONENTS:
         spec=component_spec(metric)
-        assert spec['method']=='samstat_report_mapping_v1'
+        assert spec['method']=='samstat_report_mapping'
         assert spec['meaning']=='native_report_derived'
         assert spec['units']==['fraction'] and spec['uncertainty']=='not_estimated'
         assert 'MAPQ255' in spec['denominator']
@@ -38,7 +38,7 @@ def test_precision_differences_are_explicit_and_no_slash_delimited_cell_meaning(
 
 def test_closed_new_calculation_request_and_finite_mirrors():
     selected=dict(selection='semantic',document_id='report',population_key='samstat_report_records',population_ordinal=0)
-    request=dict(calculation_id='report_mapping',method='samstat_report_mapping_v1',populations=[selected])
+    request=dict(calculation_id='report_mapping',method='samstat_report_mapping',populations=[selected])
     assert c.validate_contract('CalculationRequest',request)==request
     for changed in [dict(request,populations=[]),dict(request,populations=[selected,selected]),
                     dict(request,populations=[selected,dict(selected,population_ordinal=1),dict(selected,population_ordinal=2)]),
@@ -47,7 +47,7 @@ def test_closed_new_calculation_request_and_finite_mirrors():
     for name,path in [('ParseContext','declared_format'),('Artifact','actual_format'),('DocumentBinding','format')]:
         assert {'samstat_html_2_2_3','samstat_html_2_5_0','samstat_bvbrc_error_html'}<=set(c._DEFS[name]['properties'][path]['enum'])
     for name in ('Component','CalculationBinding','ComponentPayload'):
-        assert 'samstat_report_mapping_v1' in c._DEFS[name]['properties']['method']['enum']
+        assert 'samstat_report_mapping' in c._DEFS[name]['properties']['method']['enum']
     assert all(value in c._DEFS['Diagnostic']['properties']['code']['enum'] for value in
                ('samstat_svg_values_not_retained','samstat_native_prefix','samstat_caller_failure','samstat_mapq255_merged'))
 

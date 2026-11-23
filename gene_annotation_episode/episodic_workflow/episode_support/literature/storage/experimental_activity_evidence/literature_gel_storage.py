@@ -40,7 +40,7 @@ def _check(value, schema, code):
 def implementation_descriptor(*, evidence_origin='reported_source'):
     if evidence_origin not in ('reported_source', 'synthetic_fixture'):
         raise ContractError('gel_native_evidence_profile_invalid')
-    return {'version': 'gel_native_implementation_v1', 'provider': PROVIDER, 'record_version': VERSION, 'evidence_origin': evidence_origin, 'native_schema_sha256': _sha(gel_cells_schema()), 'pillow_version': inputs.PILLOW_VERSION, 'jsonschema_version': importlib.metadata.version('jsonschema')}
+    return {'version': 'gel_native_implementation', 'provider': PROVIDER, 'record_version': VERSION, 'evidence_origin': evidence_origin, 'native_schema_sha256': _sha(gel_cells_schema()), 'pillow_version': inputs.PILLOW_VERSION, 'jsonschema_version': importlib.metadata.version('jsonschema')}
 
 def _token(value):
     return quote(value, safe='-._~', encoding='utf8', errors='strict')
@@ -175,7 +175,7 @@ def _component_rows(payload, sheet_ref):
             if source['background_region'] is None:
                 continue
             original = next((r for r in original_assignments[d['assignment_id']]['lanes'] if r['lane_id'] == source['lane_id']))
-            record = {'assignment_id': d['assignment_id'], 'lane_id': source['lane_id'], 'background_method': original.get('background_method', 'mean'), 'method_basis': 'explicit_v2_nomination' if 'background_method' in original else 'v1_mean_definition'}
+            record = {'assignment_id': d['assignment_id'], 'lane_id': source['lane_id'], 'background_method': original['background_method']}
             if record not in methods:
                 methods.append(record)
         context = {'global': cp(payload['meanings']['global']), 'lanes': [cp(science_lanes[i]) for i in scientific_ids], 'comparison_roles': roles if view in ('comparison', 'sensitivity') else None, 'interpretation': cp(sheet['assignments'][0]['scientific_interpretation']) if view in ('comparison', 'sensitivity') else None, **{k: cp(sheet[k]) for k in ('sampling_uncertainty', 'detector_response_calibration', 'unimplemented_quantities', 'independent_preparation_count')}, 'interpretation_basis': extraction['interpretation_basis'], 'intensity_meaning': extraction['intensity_meaning']}
@@ -346,9 +346,7 @@ class LiteratureGelRepository(LiteratureRatioSourceRepository):
         sheet = payload['sheet']
         if canonical(extraction['selection']) != canonical(args['selection']) or canonical(sheet['comparison']) != canonical(args['comparison']) or extraction['extraction_digest'] != inputs._hash(inputs._canonical({k: v for k, v in extraction.items() if k != 'extraction_digest'})) or (sheet['extraction_digest'] != extraction['extraction_digest']) or (sheet['sheet_digest'] != inputs._hash(inputs._canonical({k: v for k, v in sheet.items() if k != 'sheet_digest'}))) or (canonical(extraction['sources']) != canonical(payload['source_associations'])):
             raise ContractError('gel_native_saved_payload_mismatch')
-        expected_version = inputs.EXTRACTION_VERSION if args['selection']['version'] == inputs.VERSION else inputs.EXTRACTION_VERSION_V2
-        expected_sheet = calculations.VERSION if expected_version == inputs.EXTRACTION_VERSION else calculations.VERSION_V2
-        if extraction['version'] != expected_version or sheet['version'] != expected_sheet:
+        if extraction['version'] != inputs.EXTRACTION_VERSION or sheet['version'] != calculations.VERSION:
             raise ContractError('gel_native_saved_version_mismatch')
         for association in payload['source_associations']:
             source = self._record(association['source_ref'], 'source')

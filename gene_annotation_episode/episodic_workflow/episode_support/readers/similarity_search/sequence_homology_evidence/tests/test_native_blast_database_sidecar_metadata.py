@@ -44,7 +44,7 @@ def sidecar(case, role):
 
 
 def payload_for(case, roles=ROLES):
-    payload = dict(schema="native_blast_database_query_metadata_v1", documents=[], sequence_records=[],
+    payload = dict(schema="native_blast_database_query_metadata", documents=[], sequence_records=[],
         effective_msa_masters=[], master_subjects=[], search_bindings=[], target_contexts=[])
     docs = []
     for index, role in enumerate(roles):
@@ -72,7 +72,7 @@ def validate(case, payload, descriptor, catalog):
 
 def prepare(case, payload, tmp_path):
     """Real native6 preparation, with captured files and selected metadata bytes."""
-    assert case["job"]["version"] == "native_blast_database_job_v1"
+    assert case["job"]["version"] == "native_blast_database_job"
     raw = canonical(payload)
     path = tmp_path / "selected-sidecar-metadata.json"
     path.write_bytes(raw)

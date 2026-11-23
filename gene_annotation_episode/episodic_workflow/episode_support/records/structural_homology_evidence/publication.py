@@ -29,7 +29,7 @@ def publish_comparison(store, native):
     with store.transaction():
         artifact=store.artifact(canonical(native),'application/json')
         grading=retain_tool_grading(store,provider=PROVIDER,native_artifact_ref=artifact,
-            grading={'grader':'a102_native_alignment_grader_v1','failure':None,'sheet':grade})
+            grading={'grader':'a102_native_alignment_grader','failure':None,'sheet':grade})
         source=store.put('source',{'provider':PROVIDER,'accession':identity('a102_comparison',native),
             'uri':None,'artifact_ref':artifact,'text_ref':artifact,'request_ref':None,
             'version':VERSION,'retrieved_at':None,'auxiliary_artifact_refs':[grading],
@@ -58,7 +58,7 @@ def received_grade(store, reference):
     require(len(entries)==1 and entries[0]['artifact_ref']==row['grading_artifact_ref'],
         'a102_native_grader_not_attached',source_ref=reference)
     grading=entries[0]['grading']
-    require(grading.get('failure') is None and grading.get('grader')=='a102_native_alignment_grader_v1',
+    require(grading.get('failure') is None and grading.get('grader')=='a102_native_alignment_grader',
         'a102_native_grader_failed')
     grade=grading.get('sheet')
     require(isinstance(grade,dict) and grade.get('schema')==GRADE_SCHEMA

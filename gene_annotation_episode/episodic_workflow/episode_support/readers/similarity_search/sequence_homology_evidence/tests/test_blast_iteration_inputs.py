@@ -126,7 +126,7 @@ def add_pssm(arguments, *, key="checkpoint", length=12, sequence=None, role="aft
 
 
 def evidence(original=None):
-    return dict(origin="supplied_source_record", source=provenance("/observation"), source_format="synthetic_contract_record_v1",
+    return dict(origin="supplied_source_record", source=provenance("/observation"), source_format="synthetic_contract_record",
                 original_record={"synthetic_supplied_record": True} if original is None else original, extractor=None)
 
 

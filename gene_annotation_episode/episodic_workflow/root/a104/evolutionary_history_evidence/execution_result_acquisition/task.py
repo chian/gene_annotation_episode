@@ -49,7 +49,7 @@ CHILD_SLOTS = {}
 SERVICES = ('job_access',)
 
 RESULT_PROVIDER = 'episode.execution_result'
-RESULT_VERSION = 'execution_result_information_v3'
+RESULT_VERSION = 'execution_result_information'
 FILE_LIMIT = 1024 * 1024
 OFFSET = {'type': 'integer', 'minimum': 0}
 LIMIT = {'type': 'integer', 'minimum': 1}

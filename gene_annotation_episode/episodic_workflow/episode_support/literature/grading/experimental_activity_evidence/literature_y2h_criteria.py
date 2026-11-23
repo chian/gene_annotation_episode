@@ -41,7 +41,7 @@ What this method does not ask (kept in the record for the reviewer, no criterion
 fusion domains, the yeast strain and the selective medium.
 """
 
-VERSION = 'a105_y2h_criteria_v1'
+VERSION = 'a105_y2h_criteria'
 
 
 def _fact_returns():

@@ -94,7 +94,7 @@ def entry_input(w, launch_run, handoff_ref, *, selector=None, selection=SELECTIO
     launched = w['journal'].units(launch_run, (('job_probe', launch_run),))[0][2]['outcome']
     directory = str(w['jobs'] / launched['job'])
     w['result_path'] = directory + '/result.txt'
-    assignment = {'version': 'execution_results_assignment_v1', 'handoff_ref': [handoff_ref],
+    assignment = {'version': 'execution_results_assignment', 'handoff_ref': [handoff_ref],
                   'selector': {'paths': [w['result_path']]} if selector is None else selector(w['result_path']),
                   'resource_kind': 'local', 'workspace': directory, 'acquired_record_unit': 1.0}
     return {'assignment': assignment, 'message': {}, 'selection': list(selection)}

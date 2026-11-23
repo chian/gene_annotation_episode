@@ -98,7 +98,7 @@ def preflight_masking_input_fasta(content: bytes, *, molecule: str) -> dict:
     """Validate bytes before artifact capture, without invented custody identities."""
     records, failures = _input_observations(content, molecule, "complete")
     failures += [failure for record in records for failure in record["failures"]]
-    return {"version": "sequence_masking_preflight_v1", "valid": bool(records) and not failures,
+    return {"version": "sequence_masking_preflight", "valid": bool(records) and not failures,
             "record_count": len(records), "failures": failures}
 
 
@@ -128,6 +128,6 @@ def populate_sequence_masking_sheet(*, operation: dict, inputs: list[dict], pars
                          "fail" if native_outcome["state"] == "failed" else "unknown",
                          reason=None if native_outcome["state"] == "succeeded" else "native_" + native_outcome["state"]))
     return validate_sequence_masking_record("SequenceMaskingSheet", {
-        "version": "sequence_masking_sheet_v1", "operation": operation, "inputs": inputs,
+        "version": "sequence_masking_sheet", "operation": operation, "inputs": inputs,
         "parsed_output": parsed_output, "statistics": statistics, "native_outcome": native_outcome,
         "checks": checks, "failures": failures})

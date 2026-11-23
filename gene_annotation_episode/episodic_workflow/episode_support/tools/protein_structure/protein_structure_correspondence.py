@@ -9,7 +9,7 @@ import hashlib
 from typing import Literal
 
 from gene_annotation_episode.episodic_workflow.episode_support.forms.protein_structure.structural_homology_evidence.protein_structure_contracts import (
-    BiopythonPairwiseSheetV1, BiopythonPairwiseNative, AlignmentDescriptor,
+    BiopythonPairwiseSheet, BiopythonPairwiseNative, AlignmentDescriptor,
     StructureSequence, StructureSequenceDescriptor, ExplicitMapDocument, FileIdentity,
     Correspondence, canonical, issue, same, validate_structure_sequence,
     validate_structure_sequence_descriptor, validate_alignment_descriptor,
@@ -23,7 +23,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_
 def _base(fixed, moving, origin):
     if fixed["selection"]["structure_role"] != "fixed" or moving["selection"]["structure_role"] != "moving":
         raise ValueError("conflicting_identity")
-    return {"version": "protein_structure_correspondence_v1", "state": "complete", "population_available": True,
+    return {"version": "protein_structure_correspondence", "state": "complete", "population_available": True,
         "origin": origin, "alignment_native": None, "explicit_map": None, "map_file": None,
         "fixed_sequence_selection": deepcopy(fixed["selection"]), "moving_sequence_selection": deepcopy(moving["selection"]),
         "rows": [], "unmapped_fixed": [], "unmapped_moving": [], "issues": [], "qualifications": []}
@@ -75,7 +75,7 @@ def _descriptor(sequence, descriptor, role):
     return desc
 
 
-def correspondence_from_pairwise_sheet(pairwise_sheet: BiopythonPairwiseSheetV1, *,
+def correspondence_from_pairwise_sheet(pairwise_sheet: BiopythonPairwiseSheet, *,
     native: BiopythonPairwiseNative, alignment: AlignmentDescriptor,
     fixed: StructureSequence, moving: StructureSequence,
     fixed_descriptor: StructureSequenceDescriptor, moving_descriptor: StructureSequenceDescriptor,
@@ -130,7 +130,7 @@ def validate_explicit_residue_map(map_value: ExplicitMapDocument, *, map_file: F
     fixed: StructureSequence, moving: StructureSequence) -> Correspondence:
     fixed, moving = validate_structure_sequence(fixed), validate_structure_sequence(moving)
     document, file = validate_explicit_residue_map_document(map_value), validate_file_identity(map_file)
-    if file["format"] != "protein_residue_map_v1":
+    if file["format"] != "protein_residue_map":
         raise ValueError("unsupported_format")
     for side, sequence in (("fixed", fixed), ("moving", moving)):
         if not same(document[side + "_selection"], sequence["selection"]):

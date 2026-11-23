@@ -6,13 +6,13 @@ from copy import deepcopy as cp
 from PIL import Image
 import pytest
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence import literature_controlled_response_inputs as shared
-from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence import literature_controlled_response_v3_inputs as source
-from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence import literature_controlled_response_v3_population as population
+from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence import literature_controlled_response_source_inputs as source
+from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence import literature_controlled_response_population as population
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence import literature_controlled_response_local_calculations as local
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence import literature_controlled_response_owner_calculations as owner
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence import literature_controlled_response_figure_inputs as graph
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_experimental_contracts import ExperimentalContractError
-from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.tests.test_literature_controlled_response_v3_inputs import Fixture
+from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.tests.test_literature_controlled_response_source_inputs import Fixture
 
 def unique_local_fixture(*, second_pair=False):
     f = Fixture()
@@ -47,14 +47,14 @@ def test_original_unknown_global_request_preserves_supported_local_variance():
     assert f.args['local_pair_assignments'] == original_local
     assert f.args['covariance'] == original_covariance
     assert f.calls == shared._reference_closure(f.args)
-    assert source.validate_controlled_response_v3_extraction(f.args, result) == result
+    assert source.validate_controlled_response_extraction(f.args, result) == result
     recorded = result['local_pair_extractions'][0]['variance_status']
     assert recorded['selection'] == original_local[0]['variance_status']
     assert recorded['witnesses'][0]['authentication'] == 'exact_utf8_byte_span'
     assert result['requested_model']['variance_status']['effective_value'] == 'unknown'
     assert result['effective_model']['variance_status'] == 'unknown'
     assert result['effective_model']['model_kind'] == 'none'
-    populated = population.populate_controlled_response_v3(result)
+    populated = population.populate_controlled_response(result)
     pair = populated['local_sheet']['pairs'][0]
     assert pair['difference']['value'] == 0.00395
     assert pair['difference']['bound_kind'] == 'conditional_digitization'
@@ -70,14 +70,14 @@ def test_all_three_local_interpretations_keep_their_own_actual_witnesses():
     f.args['covariance'] = None
     result = f.read()
     assert result['covariance'] is None
-    assert source.validate_controlled_response_v3_extraction(f.args, result) == result
+    assert source.validate_controlled_response_extraction(f.args, result) == result
     for pair, row in zip(f.args['local_pair_assignments'], result['local_pair_extractions']):
         assert row['pair_key'] == pair['pair_key']
         for name in ('admissibility', 'scope', 'variance_status'):
             assert row[name]['selection'] == pair[name]
             assert [w['selection'] for w in row[name]['witnesses']] == pair[name]['witnesses']
             assert all((w['authentication'] == 'exact_utf8_byte_span' for w in row[name]['witnesses']))
-    assert all((row['variance']['value'] is not None for row in population.populate_controlled_response_v3(result)['local_sheet']['pairs']))
+    assert all((row['variance']['value'] is not None for row in population.populate_controlled_response(result)['local_sheet']['pairs']))
 
 @pytest.mark.parametrize('name', ['admissibility', 'scope', 'variance_status'])
 def test_unavailable_unique_local_witness_remains_unknown(name):
@@ -93,15 +93,15 @@ def test_unavailable_unique_local_witness_remains_unknown(name):
             f.calls.append((reference, representation))
             raise EOFError('constructed missing retained source')
         return original(reference, representation)
-    result = source.read_controlled_response_v3_inputs(f.args, read_source=unavailable)
+    result = source.read_controlled_response_inputs(f.args, read_source=unavailable)
     row = result['local_pair_extractions'][0][name]
     assert row['selection']['value'] == selected['value']
     assert row['effective_value'] == 'unknown'
     assert row['witnesses'][0]['authentication'] == 'unavailable'
     assert row['witnesses'][0]['canonical_locator'] is None
     assert f.calls == shared._reference_closure(f.args)
-    assert source.validate_controlled_response_v3_extraction(f.args, result) == result
-    pair = population.populate_controlled_response_v3(result)['local_sheet']['pairs'][0]
+    assert source.validate_controlled_response_extraction(f.args, result) == result
+    pair = population.populate_controlled_response(result)['local_sheet']['pairs'][0]
     assert pair['variance']['value'] is None
     assert (pair['difference']['value'] is not None) == (name == 'variance_status')
 
@@ -117,8 +117,8 @@ def test_image_local_witnesses_keep_geometry_and_interpretation_attribution():
             assert witness['authentication'] == 'image_bytes_and_geometry_only'
             assert witness['attribution'] == 'investigating_episode_interpretation'
             assert witness['canonical_locator']['kind'] == 'image'
-    assert source.validate_controlled_response_v3_extraction(f.args, result) == result
-    assert population.populate_controlled_response_v3(result)['local_sheet']['pairs'][0]['variance']['value'] == 4.5e-07
+    assert source.validate_controlled_response_extraction(f.args, result) == result
+    assert population.populate_controlled_response(result)['local_sheet']['pairs'][0]['variance']['value'] == 4.5e-07
 
 @pytest.mark.parametrize('mutation', ['pair_key', 'row_order', 'row_deletion', 'witness_deletion', 'witness_substitution', 'witness_identity', 'effective_value', 'selection_value', 'unexpected_field', 'rows_missing'])
 def test_saved_local_associations_cannot_be_substituted_deleted_or_reordered(mutation):
@@ -146,7 +146,7 @@ def test_saved_local_associations_cannot_be_substituted_deleted_or_reordered(mut
     else:
         result = without_local_pair_rows(result)
     with pytest.raises(ExperimentalContractError):
-        source.validate_controlled_response_v3_extraction(f.args, result)
+        source.validate_controlled_response_extraction(f.args, result)
 
 
 def test_saved_local_reconstruction_opens_no_sources_or_images_or_calculators(monkeypatch):
@@ -156,10 +156,10 @@ def test_saved_local_reconstruction_opens_no_sources_or_images_or_calculators(mo
 
     def forbidden(*args, **kwargs):
         raise AssertionError('saved reconstruction attempted acquisition/decoding/scientific population')
-    for module, names in ((shared, ('open_controlled_response_sources', '_Inputs', '_Sources', '_native_number', '_native_unit')), (graph, ('read_controlled_response_rate_figure', '_strict_decode', '_count_bar_runs')), (local, ('populate_controlled_response_local',)), (owner, ('populate_controlled_response_owner',)), (population, ('populate_controlled_response_v3',))):
+    for module, names in ((shared, ('open_controlled_response_sources', '_Inputs', '_Sources', '_native_number', '_native_unit')), (graph, ('read_controlled_response_rate_figure', '_strict_decode', '_count_bar_runs')), (local, ('populate_controlled_response_local',)), (owner, ('populate_controlled_response_owner',)), (population, ('populate_controlled_response',))):
         for name in names:
             monkeypatch.setattr(module, name, forbidden)
     monkeypatch.setattr(Image, 'open', forbidden)
-    assert source.validate_controlled_response_v3_extraction(f.args, result) == result
+    assert source.validate_controlled_response_extraction(f.args, result) == result
     assert f.calls == calls
 

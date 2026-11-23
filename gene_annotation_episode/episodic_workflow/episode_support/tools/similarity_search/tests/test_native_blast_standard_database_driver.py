@@ -72,7 +72,7 @@ raise SystemExit(7 if behavior == "nonzero" else 0)
     job['inputs'].append({'input_key': 'metadata', 'role': 'metadata', 'format': 'json',
         **write(base/'metadata.json', b'declared JSON deliberately opaque to producer\x00\xff')})
     job['metadata_inputs'] = [{'input_key': 'metadata', 'consumer': 'sequence_database',
-        'schema_id': 'native_blast_database_sequence_metadata_v1'}]
+        'schema_id': 'native_blast_database_sequence_metadata'}]
     db = job['databases'][0]; m = db['manifest']; prefix = base/'selected-db'
     db['native_paths'] = m['native_paths'] = [str(prefix)]
     letter = 'p' if db['kind'] == 'blast_protein_sequence' else 'n'
@@ -92,7 +92,7 @@ raise SystemExit(7 if behavior == "nonzero" else 0)
     owner['attempt_id'] = c._digest(owner['operation_key'])
     owner['submission_token'] = c._digest({k: owner[k] for k in ['run_id', 'episode_id', 'assignment_sha256', 'operation_key']})
     attempt = base/'attempt'; attempt.mkdir()
-    plan = {'version': 'native_blast_standard_database_run_plan_v1', 'identity': owner,
+    plan = {'version': 'native_blast_standard_database_run_plan', 'identity': owner,
         'requested_job': request, 'attempt_directory': str(attempt),
         'input_paths': {r['input_key']: str(attempt/'inputs'/r['input_key']) for r in job['inputs']},
         'database_paths': {db['database_key']: db['native_paths']}, 'output_directory': str(attempt/'outputs'),

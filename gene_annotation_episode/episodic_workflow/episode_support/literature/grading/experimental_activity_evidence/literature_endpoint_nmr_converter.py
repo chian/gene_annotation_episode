@@ -124,7 +124,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_row_contract import SUPPORT_WEAKEST_ORDER
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_endpoint_nmr_converted_v1'
+VERSION = 'a105_endpoint_nmr_converted'
 CRITERIA_MAP = {'background_alternatives': ('spontaneous_reaction_control',), 'attribution_supported': ('enzyme_dependence',),
                 'product_identity': ('product_assignment', 'mass_balance'), 'calibration_applicability': ('relaxation_delay', 'signal_to_noise', 'non_detection_limit'),
                 'matrix_interference': ('signals_resolved',), 'endpoint_alignment': ('time_alignment',), 'conversion_denominator': ('integral_denominator',),

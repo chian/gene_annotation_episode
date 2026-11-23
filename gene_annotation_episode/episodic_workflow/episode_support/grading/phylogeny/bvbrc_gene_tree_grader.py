@@ -22,12 +22,12 @@ def calculate_gene_tree(sheet: dict, parameters: dict) -> dict:
     """
     validated = validate_gene_tree_sheet(sheet)
     if (type(parameters) is not dict or set(parameters) != {"version", *COMMON_PARAMETER_FIELDS}
-            or parameters["version"] != "gene_tree_components_v1"):
+            or parameters["version"] != "gene_tree_components"):
         raise ValueError("gene_tree_calculation_parameters_invalid")
     copied = deepcopy(parameters)
     common = calculate_common_components(validated, provider="gene_tree",
         parameters={name: copied[name] for name in COMMON_PARAMETER_FIELDS})
-    return {"schema_version": "bvbrc_gene_tree_components_v1",
+    return {"schema_version": "bvbrc_gene_tree_components",
             "parameters": copied, **common}
 
 

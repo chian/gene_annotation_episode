@@ -17,8 +17,8 @@ from .sequence_composition_grader import (
 from .sequence_mapping import validate_mapping, map_interval
 
 
-SHEET_SCHEMA = "glycosylation_measurement_sheet_v1"
-COMPONENTS_SCHEMA = "glycosylation_measurement_components_v1"
+SHEET_SCHEMA = "glycosylation_measurement_sheet"
+COMPONENTS_SCHEMA = "glycosylation_measurement_components"
 _N = "find_n_glycosylation_motifs"
 _O = "predict_o_glycosylation_hotspots"
 _PROFILES = {

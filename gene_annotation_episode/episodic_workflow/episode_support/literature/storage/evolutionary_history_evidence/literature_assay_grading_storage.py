@@ -43,7 +43,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.evolution
 from gene_annotation_episode.episodic_workflow.episode_support.forms.evolutionary_history_evidence.communication import plain
 
 PROVIDER = GRADING_PROVIDER
-VERSION = 'literature_assay_grading_record_v2'
+VERSION = 'literature_assay_grading_record'
 NAMESPACE = 'literature_assay_grading_cells'
 REQUESTED = 'requested_assay_grading_components'
 SCOPE = 'assay_type_experimental_evidence'

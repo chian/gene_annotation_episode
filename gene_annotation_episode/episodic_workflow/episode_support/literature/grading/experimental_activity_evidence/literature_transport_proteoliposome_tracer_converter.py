@@ -117,7 +117,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_transport_response_direction import select_transport_effect
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_transport_proteoliposome_tracer_converted_v1'
+VERSION = 'a105_transport_proteoliposome_tracer_converted'
 CRITERIA_MAP = {'background_alternatives': ('empty_liposome_control',), 'membrane_system': ('empty_liposome_control', 'leak_check'),
                 'attribution_supported': ('inactive_protein_control', 'protein_amount_basis'), 'calibration_applicability': ('active_fraction',),
                 'transport_driving_force': ('no_gradient_control', 'gradient_verified'), 'transport_specificity': ('competitor_control', 'substrate_identity'),

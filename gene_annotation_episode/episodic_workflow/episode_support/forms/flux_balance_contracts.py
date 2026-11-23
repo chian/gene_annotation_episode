@@ -105,7 +105,7 @@ _XML_ELEMENT = _record("FBAXmlSourceElement", source_record_index=_UINT,
     path={**_array(_XML_STEP), "minItems": 1}, parent_source_record_index=_nullable(_UINT),
     child_source_record_indices=_array(_UINT), namespace_declarations=_array(_XML_NAMESPACE),
     attributes=_array(_XML_ATTRIBUTE), text=_nullable(_RAW), tail=_nullable(_RAW))
-_SOURCE_AUDIT = _record("FBASourceAudit", version=_enum("cobra_fba_source_audit_v1"),
+_SOURCE_AUDIT = _record("FBASourceAudit", version=_enum("cobra_fba_source_audit"),
     input_profile=_enum("sbml cobra_json"), original_model=_LOCATION,
     xml_elements=_nullable(_array(_XML_ELEMENT)), issues=_array(_ISSUE))
 _ASSOCIATION = _record("Association", database=_nullable(_TEXT), accession=_TEXT, source=_LOCATION)
@@ -131,7 +131,7 @@ _OPTION_NAMES = ("feasibility_tolerance", "optimality_tolerance", "integrality_t
 _OPTION_APPLICATION = _record("FBASolverOptionApplication", name=_enum(_OPTION_NAMES),
     application=_enum("applied not_requested rejected not_attempted unknown"),
     requested_source=_LOCATION, effective_source=_nullable(_LOCATION), issue_code=_nullable(_ISSUE_CODE))
-_REQUEST_APPLICATION = _record("FBARequestApplication", version=_enum("cobra_fba_request_application_v1"),
+_REQUEST_APPLICATION = _record("FBARequestApplication", version=_enum("cobra_fba_request_application"),
     selected_request=_LOCATION, constraint_changes=_nullable(_array(_CHANGE)), objective_request=_REQUEST,
     objective_application=_enum("applied model_default rejected not_attempted unknown"),
     objective_requested_source=_LOCATION, objective_effective_source=_nullable(_LOCATION),
@@ -144,7 +144,7 @@ _SOLVER = _record("Solver", interface=_nullable(_TEXT), name=_nullable(_TEXT), v
 _FLUX = _record("FluxRow", source_row_index=_UINT, reaction_id=_TEXT, reaction_position=_nullable(_UINT),
     reaction_name=_nullable(_TEXT), flux=_NUMBER, csv_lower=_BOUND, csv_upper=_BOUND,
     association=_enum("matched unknown duplicate conflicting"))
-_NATIVE = _record("NativeFBAResult", version=_enum("native_fba_result_v1"), solver=_SOLVER, objective=_NUMBER,
+_NATIVE = _record("NativeFBAResult", version=_enum("native_fba_result"), solver=_SOLVER, objective=_NUMBER,
     flux_rows=_array(_FLUX), solve_call_count=_nullable(_UINT), constraint_changes=_nullable(_array(_CHANGE)), objective_request=_nullable(_REQUEST),
     objective_application=_enum("applied model_default rejected not_attempted unknown"), request_realization=_REALIZATION,
     execution_outcome=_enum("completed partial failed not_executed unknown"), source_active_count=_nullable(_UINT), source_active_threshold=_NUMBER,
@@ -164,7 +164,7 @@ _OBJECTIVE = _record("Objective", direction=_enum("min max unknown"), native_dir
 _REACTION_VARIABLES = _record("ReactionVariables", reaction_position=_UINT, reaction_id=_TEXT,
     forward_variable_position=_UINT, forward_variable_id=_TEXT, reverse_variable_position=_UINT, reverse_variable_id=_TEXT,
     flux_expression_pointer=_POINTER)
-_PROBLEM = _record("ProblemSnapshot", version=_enum("cobra_glpk_problem_snapshot_v1"), phase=_enum("loaded_original effective"),
+_PROBLEM = _record("ProblemSnapshot", version=_enum("cobra_glpk_problem_snapshot"), phase=_enum("loaded_original effective"),
     variable_count=_UINT, constraint_count=_UINT, variables=_array(_VARIABLE), constraints=_array(_CONSTRAINT), objective=_OBJECTIVE,
     reaction_variables=_array(_REACTION_VARIABLES),
     representation=_enum("complete_continuous_linear complete_mixed_integer_linear partial unsupported"),
@@ -177,7 +177,7 @@ _CONFIG = _record("SolverConfiguration", interface=_enum("optlang.glpk_interface
     presolve=_enum([False, True, "auto"]), verbosity=_INT, timeout_seconds=_nullable(_UINT),
     feasibility_tolerance=_NUMBER, integrality_tolerance=_NUMBER, optimality_tolerance=_NUMBER,
     simplex_controls=_CONTROLS, integer_controls_pointer=_POINTER)
-_PROBLEM_PAYLOAD = _record("EffectiveProblemPayload", version=_enum("cobra_glpk_problem_capture_v1"),
+_PROBLEM_PAYLOAD = _record("EffectiveProblemPayload", version=_enum("cobra_glpk_problem_capture"),
     loaded_original=_nullable(_PROBLEM), effective=_nullable(_PROBLEM), configuration_before_solve=_nullable(_CONFIG), issues=_array(_ISSUE))
 _ID_JOIN = _record("SourceIdJoin", kind=_enum("model compartment gene metabolite reaction group"),
     source_record_index=_nullable(_UINT), source_id=_nullable(_TEXT), loaded_id=_nullable(_TEXT), loaded_position=_nullable(_UINT),
@@ -198,7 +198,7 @@ _MODEL = _record("ModelSnapshot", model_id=_nullable(_TEXT), model_name=_nullabl
 _optional(_MODEL, native_capture_evidence=_nullable(_JSON_OBJECT))
 _LOADER = _object(name=_enum("read_sbml_model load_json_model"), cobra_version=_TEXT,
     number_type=_enum("float64"), id_replacement=_enum("cobra_F_REPLACE none"))
-_MODEL_PAYLOAD = _record("EffectiveModelPayload", version=_enum("cobra_model_capture_v1"),
+_MODEL_PAYLOAD = _record("EffectiveModelPayload", version=_enum("cobra_model_capture"),
     loaded_original=_nullable(_MODEL), effective=_nullable(_MODEL), input_profile=_enum("sbml cobra_json"), loader=_LOADER,
     source_to_loaded_ids=_array(_ID_JOIN), source_feature_audit=_array(_FEATURE), issues=_array(_ISSUE))
 _optional(_MODEL_PAYLOAD, source_audit=_nullable(_SOURCE_AUDIT))
@@ -208,7 +208,7 @@ _REACTION_VALUE = _record("ReactionValue", reaction_position=_UINT, reaction_id=
 _PASS = _record("NativePass", position=_UINT, routine=_enum("glp_simplex glp_intopt"), return_code=_nullable(_INT),
     raw_status_code=_nullable(_INT), primal_status_code=_nullable(_INT), dual_status_code=_nullable(_INT),
     parameters_pointer=_POINTER, exception_pointer=_nullable(_POINTER))
-_SOLUTION = _record("SolutionPayload", version=_enum("cobra_glpk_solution_capture_v1"), model_optimize_call_count=_UINT,
+_SOLUTION = _record("SolutionPayload", version=_enum("cobra_glpk_solution_capture"), model_optimize_call_count=_UINT,
     native_passes=_array(_PASS), solution_object_state=_enum("returned not_returned not_executed"),
     optlang_status=_nullable(_RAW), cobra_solution_status=_nullable(_RAW), glpk_status_code=_nullable(_INT),
     glpk_primal_status_code=_nullable(_INT), glpk_dual_status_code=_nullable(_INT),
@@ -228,10 +228,10 @@ _PARSED_ROWS = _record("ParsedFluxRows", rows=_array(_FLUX), issues=_array(_ISSU
 _BUNDLE_FIELDS = dict(models=_MODELS, problems=_PROBLEMS, native_solution=_NATIVE_SOLUTION, native=_NATIVE,
     original_request_file=_nullable(_FILE), native_manifest_file=_nullable(_FILE), retained_files=_array(_FILE), issues=_array(_ISSUE))
 _record("ParsedFBABundle", **_BUNDLE_FIELDS)
-_record("FluxBalanceSheet", version=_enum("flux_balance_sheet_v1"), operation=_enum("perform_flux_balance_analysis"),
+_record("FluxBalanceSheet", version=_enum("flux_balance_sheet"), operation=_enum("perform_flux_balance_analysis"),
     mode=_enum("steady_state_linear_fba"), **_BUNDLE_FIELDS)
 _TOLERANCE = _record("Tolerance", subject_id=_TEXT, value={"type": "number", "minimum": 0}, unit=_UNIT)
-_PARAMETERS = _record("FBACalculationParameters", version=_enum("fba_calculation_parameters_v1"),
+_PARAMETERS = _record("FBACalculationParameters", version=_enum("fba_calculation_parameters"),
     reaction_bound_tolerances=_array(_TOLERANCE), constraint_tolerances=_array(_TOLERANCE), active_flux_thresholds=_array(_TOLERANCE),
     objective_absolute_tolerance=_nullable({"type": "number", "minimum": 0}), variable_bound_tolerances=_array(_TOLERANCE),
     reaction_flux_tolerances=_array(_TOLERANCE), constraint_activity_tolerances=_array(_TOLERANCE))
@@ -252,7 +252,7 @@ _OBJECTIVE_CHECK = _record("ObjectiveCheck", native_basis_calculated=_CELL, full
     native_glpk=_NUMBER, native_optlang=_NUMBER, native_cobra=_NUMBER, native_legacy=_NUMBER,
     glpk_minus_calculated=_CELL, optlang_minus_calculated=_CELL, cobra_minus_calculated=_CELL, legacy_minus_calculated=_CELL,
     glpk_comparison=_AGREEMENT, optlang_comparison=_AGREEMENT, cobra_comparison=_AGREEMENT, legacy_comparison=_AGREEMENT)
-_record("FluxBalanceCalculations", version=_enum("flux_balance_calculations_v1"), sheet_sha256=_SHA, parameters=_PARAMETERS,
+_record("FluxBalanceCalculations", version=_enum("flux_balance_calculations"), sheet_sha256=_SHA, parameters=_PARAMETERS,
     reaction_checks=_array(_REACTION_CHECK), constraint_checks=_array(_CONSTRAINT_CHECK), variable_checks=_array(_VARIABLE_CHECK),
     objective=_OBJECTIVE_CHECK, expected_reaction_count=_nullable(_UINT), valid_flux_count=_nullable(_UINT), flux_coverage_fraction=_CELL,
     expected_variable_count=_nullable(_UINT), valid_variable_count=_nullable(_UINT), variable_coverage_fraction=_CELL,
@@ -268,14 +268,14 @@ _DISTRIBUTION = _record("Distribution", name=_TEXT, version=_TEXT)
 _ABS_PATH = {**_TEXT, "pattern": r"^/[^\x00-\x1f\x7f]+$"}
 _FILE_PIN = _record("FilePin", path=_ABS_PATH, sha256=_SHA, size_bytes=_UINT)
 _SOFTWARE_FILE = _record("SoftwareFile", path=_ABS_PATH)
-_SOFTWARE = _record("FBASoftware", version=_enum("fba_software_v1"), python=_SOFTWARE_FILE, python_version=_TEXT,
+_SOFTWARE = _record("FBASoftware", version=_enum("fba_software"), python=_SOFTWARE_FILE, python_version=_TEXT,
     python_home=_ABS_PATH, module_root=_ABS_PATH, dependency_roots=_array(_ABS_PATH),
     implementation_files=_array(_SOFTWARE_FILE), runtime_files=_array(_SOFTWARE_FILE), distributions=_array(_DISTRIBUTION),
     solver_interface=_TEXT, solver_runtime_files=_array(_SOFTWARE_FILE))
 _REQUESTED_CHANGE = _record("RequestedBoundChange", reaction_id=_TEXT, lower=_BOUND, upper=_BOUND)
 _OPTIONS = _record("RequestedSolverOptions", feasibility_tolerance=_nullable(_REAL),
     optimality_tolerance=_nullable(_REAL), integrality_tolerance=_nullable(_REAL))
-_JOB = _record("FBAJob", version=_enum("native_flux_balance_job_v1"), operation=_enum("perform_flux_balance_analysis"),
+_JOB = _record("FBAJob", version=_enum("native_flux_balance_job"), operation=_enum("perform_flux_balance_analysis"),
     mode=_enum("steady_state_linear_fba"), source_alias=_enum("biomni.tool.systems_biology.perform_flux_balance_analysis"),
     model_input=_object(file=_FILE_PIN, artifact_ref=_nullable(_TEXT), format=_enum("sbml cobra_json"),
         original_loader_selection=_enum("sbml_file json_file repository_identifier"), repository_identifier=_nullable(_TEXT),
@@ -284,10 +284,10 @@ _JOB = _record("FBAJob", version=_enum("native_flux_balance_job_v1"), operation=
 _REQUESTED_JOB = _record("FBARequestedJob", argv=_array(_TEXT),
     environment={"type": "object", "propertyNames": {"type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"},
         "additionalProperties": _RAW}, native_flux_balance=_JOB)
-_record("SelectedRequestPayload", version=_enum("flux_balance_selected_request_v1"), attempt=_ATTEMPT, requested_job=_REQUESTED_JOB)
+_record("SelectedRequestPayload", version=_enum("flux_balance_selected_request"), attempt=_ATTEMPT, requested_job=_REQUESTED_JOB)
 _MANIFEST_FILE = _record("ManifestFile", role=_enum("original_model selected_request effective_model effective_problem solution flux_csv native_log"),
     relative_path=_TEXT, format=_TEXT, state=_STATE, identity=_nullable(_IDENTITY))
-_MANIFEST = _record("FBANativeManifest", version=_enum("flux_balance_native_manifest_v1"), sealed=_BOOL, attempt=_ATTEMPT,
+_MANIFEST = _record("FBANativeManifest", version=_enum("flux_balance_native_manifest"), sealed=_BOOL, attempt=_ATTEMPT,
     software_sha256=_SHA, model_identity=_IDENTITY, actual_distributions=_array(_DISTRIBUTION), actual_solver=_SOLVER,
     effective_problem_sha256=_nullable(_SHA), files=_array(_MANIFEST_FILE),
     solve_call_count=_UINT, execution_outcome=_OUTCOME, request_realization=_REALIZATION, issues=_array(_ISSUE))
@@ -504,11 +504,11 @@ def _application_source(location, format_name, pointer, path, *, file=None):
 
 def _option_application_relationships(value, path):
     name, application = value["name"], value["application"]
-    _application_source(value["requested_source"], "flux_balance_selected_request_v1",
+    _application_source(value["requested_source"], "flux_balance_selected_request",
         "/requested_job/native_flux_balance/solver_options/" + name, path + "/requested_source")
     effective = value["effective_source"]
     if effective is not None:
-        _application_source(effective, "cobra_glpk_problem_capture_v1",
+        _application_source(effective, "cobra_glpk_problem_capture",
             "/configuration_before_solve/" + name, path + "/effective_source")
     if application == "applied" and (effective is None or name == "optimality_tolerance"):
         _fail("request_effective_mismatch", path + "/application")
@@ -525,12 +525,12 @@ def _application_states(value):
 
 def _request_application_relationships(value, path):
     selected = value["selected_request"]
-    _application_source(selected, "flux_balance_selected_request_v1", "/requested_job", path + "/selected_request")
-    _application_source(value["objective_requested_source"], "flux_balance_selected_request_v1",
+    _application_source(selected, "flux_balance_selected_request", "/requested_job", path + "/selected_request")
+    _application_source(value["objective_requested_source"], "flux_balance_selected_request",
         "/requested_job/native_flux_balance/objective", path + "/objective_requested_source", file=selected["file"])
     effective = value["objective_effective_source"]
     if effective is not None:
-        _application_source(effective, "cobra_glpk_problem_capture_v1", "/effective/objective", path + "/objective_effective_source")
+        _application_source(effective, "cobra_glpk_problem_capture", "/effective/objective", path + "/objective_effective_source")
     objective = value["objective_application"]
     if objective in {"applied", "model_default"} and (effective is None or
             (objective == "model_default") != (value["objective_request"]["kind"] == "model_default")):
@@ -558,7 +558,7 @@ def _request_application_relationships(value, path):
                 source = change["requested_" + side]["source"]
                 if source is None:
                     _fail("request_effective_mismatch", where + "/requested_" + side + "/source")
-                _application_source(source, "flux_balance_selected_request_v1",
+                _application_source(source, "flux_balance_selected_request",
                     f"/requested_job/native_flux_balance/constraints/{index}/{side}",
                     where + "/requested_" + side + "/source", file=selected["file"])
             if change["application"] == "applied":

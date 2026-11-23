@@ -27,7 +27,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.
 )
 
 
-VERSION = "a105_rate_extraction_v2"
+VERSION = "a105_rate_native_extraction"
 SOURCE_KINDS = ("primary_source", "retained_extraction", "synthetic_fixture")
 ROLES = ("reference", "test")
 MEANINGS = ("subject", "construct", "preparation", "experiment", "label",

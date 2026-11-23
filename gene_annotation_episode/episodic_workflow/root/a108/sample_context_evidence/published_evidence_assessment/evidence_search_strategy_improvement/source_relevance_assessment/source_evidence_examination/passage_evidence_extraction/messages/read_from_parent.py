@@ -1,4 +1,4 @@
-"""What the parent gives: the reading assignment ``reading_assignment_v1`` (the page of one source and the one chunk of
+"""What the parent gives: the reading assignment ``reading_assignment`` (the page of one source and the one chunk of
 it to extract), the commissioned literature task (``verified_source_leads``, the only task accepted), the proposed
 annotation, the Store scope of the commission and the records passed in custody. This is the only place the assignment is
 read. A chunk is a window of the page's representation; the text is not passed, it is read from the artifact."""
@@ -9,7 +9,7 @@ from method_loop import ChoiceField, DeclaredField, Field, RecordForm
 REPRESENTATIONS = ('text', 'original', 'stdout', 'stderr')
 
 PAGE_FORM = RecordForm({
-    'version': DeclaredField('text', 'The page assignment version', 'page_assignment_v1'),
+    'version': DeclaredField('text', 'The page assignment version', 'page_assignment'),
     'source_ref': Field('text', 'The source being read'),
     'representation': ChoiceField('text', 'The representation of the source that is read', REPRESENTATIONS),
     'artifact_ref': Field('text', "The source's artifact for that representation"),
@@ -26,7 +26,7 @@ SELECTION_FORM = RecordForm({
     'spans': Field('list', 'The chunk to extract: exactly one window', items=WINDOW_FORM),
 })
 ASSIGNMENT_FORM = RecordForm({
-    'version': DeclaredField('text', 'The reading assignment version', 'reading_assignment_v1'),
+    'version': DeclaredField('text', 'The reading assignment version', 'reading_assignment'),
     'page': Field('record', 'The source being read', form=PAGE_FORM),
     'selection': Field('record', 'The chunk of that source to extract', form=SELECTION_FORM),
     'literature_task': Field('record', 'The commissioned literature task: kind verified_source_leads, evidence_axis '

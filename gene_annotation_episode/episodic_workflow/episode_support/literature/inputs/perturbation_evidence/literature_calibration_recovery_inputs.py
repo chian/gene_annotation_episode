@@ -17,7 +17,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.perturbation_evidence.literature_experimental_contracts import ExperimentalContractError
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.perturbation_evidence.literature_partner_source_fields import _ALL_TAGS, _TABLE_BOUNDARY, _soft_break_numeric_token, _unit_contexts, _unit_continuation, number_selector_schema, read_source_number
 
-VERSION = "a105_calibration_recovery_inputs_v1"
+VERSION = "a105_calibration_recovery_inputs"
 SOURCE_KINDS = ("primary_source", "retained_extraction", "synthetic_fixture")
 LITERAL_FIELDS = ("experiment", "analyte", "matrix", "endpoint", "blank_treatment",
                   "expected_quantity_basis")

@@ -29,8 +29,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.gene_cont
 
 
 SERVICE = "bvbrc_minhash"
-GRADING_SCHEMA = "bvbrc_minhash_grading_v1"
-GRADING_SCHEMA_V2 = "bvbrc_minhash_grading_v2"
+GRADING_SCHEMA = "bvbrc_minhash_grading"
 LAUNCH_OPERATIONS = {mode: "api.bvbrc.minhash." + mode for mode in METHODS}
 RESULT_OPERATION = "api.bvbrc.minhash.result"
 NATIVE_ARGUMENTS = (
@@ -267,7 +266,7 @@ class BVBRCMinhashService:
                         "response_sha256": snapshot.sha256})
             components = (calculate_minhash_components(parsed["sheet"]) if inputs is None else
                 calculate_minhash_components(parsed["sheet"], pair_metadata=inputs["pair_metadata"]))
-            grading = {"schema": GRADING_SCHEMA if inputs is None else GRADING_SCHEMA_V2,
+            grading = {"schema": GRADING_SCHEMA,
                 "request": prepared["request"], "rpc_request": prepared["rpc_request"], "selector": selected,
                 "parse_status": parsed["status"], "sheet": parsed["sheet"],
                 "components": components, "diagnostics": parsed["diagnostics"]}
@@ -305,5 +304,5 @@ class BVBRCMinhashService:
         return None
 
 
-__all__ = ["BVBRCMinhashService", "SERVICE", "GRADING_SCHEMA", "GRADING_SCHEMA_V2", "REQUEST_SCHEMA",
+__all__ = ["BVBRCMinhashService", "SERVICE", "GRADING_SCHEMA", "REQUEST_SCHEMA",
            "LAUNCH_OPERATIONS", "RESULT_OPERATION"]

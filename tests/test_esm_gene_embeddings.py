@@ -21,7 +21,7 @@ RAW = b">same header\r\nAC\r\n>same header\nD\n>long\nAAAAA\n>lower\nac\n>unrequ
 def deployment():
     """Deliberately nonexistent paths; pure metadata is not deployed software."""
     pin = lambda path: dict(path=path, sha256="1"*64, size_bytes=1)
-    return dict(version="esm_gene_embedding_deployment_v1", model_name=contracts.MODEL,
+    return dict(version="esm_gene_embedding_deployment", model_name=contracts.MODEL,
         layer_count=6, embedding_dimension=320, device="cpu",torch_threads=1,
         checkpoint=pin("/engineering/models/"+contracts.MODEL+".pt"),
         regression_checkpoint=pin("/engineering/models/"+contracts.MODEL+"-contact-regression.pt"),

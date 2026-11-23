@@ -205,7 +205,7 @@ SCOPE_SCHEMA = {**obj({
 
 def option_schema(slot, prefix):
     """The old ``_ref_schema``: a pinned option reference."""
-    return obj({'version': {'const': 'sample_context_evidence_option_ref_v1'}, 'library_id': SHA256,
+    return obj({'version': {'const': 'sample_context_evidence_option_ref'}, 'library_id': SHA256,
                 'slot': {'const': slot}, 'option_id': {'type': 'string', 'pattern': '^' + prefix + '[0-9]+$'},
                 'entry_sha256': SHA256})
 
@@ -227,7 +227,7 @@ HELD_REFS = {'type': 'array', 'items': REF, 'uniqueItems': True}
 COMMITTED = 'committed_record_refs'
 LITERATURE_FIELDS = ['literature_source_lead_dispositions',
                      'literature_a108_grading_cells', 'literature_a108_aggregation_cells']
-LITERATURE_VERSION = 'literature_local_task_v1'
+LITERATURE_VERSION = 'literature_local_task'
 
 
 def literature_task_schema():
@@ -447,7 +447,7 @@ def knowledge_read(arguments, ctx):
 
 def process_revise(arguments, ctx):
     """The old ``process.revise``: prepare a different thought pattern and/or tool selection for a new child on the same
-    axis. It returns ``sample_context_evidence_child_selection_v1`` and a ``revision_origin``, changes nothing now and
+    axis. It returns ``sample_context_evidence_child_selection`` and a ``revision_origin``, changes nothing now and
     starts no child. The proposal is the initial selection with the new thought pattern and the tool information the
     tool library resolves for the named tools (the old ``_proposed_selection``)."""
     revised, initial = arguments['arguments'], arguments['selection']

@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.readers.protein_s
 from gene_annotation_episode.episodic_workflow.episode_support.forms.protein_structure.structural_homology_evidence.protein_structure_contracts import validate_structure_selection
 
 
-BINDING_SCHEMA='a102_structure_binding_v1'
+BINDING_SCHEMA='a102_structure_binding'
 MAX_RESIDUES=4096
 MAX_FILE_BYTES=8*1024**2
 

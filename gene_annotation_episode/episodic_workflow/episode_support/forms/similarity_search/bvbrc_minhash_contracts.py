@@ -12,8 +12,8 @@ import math
 import re
 
 
-_SELECTOR_VERSION = "bvbrc_minhash_result_selector_v2"
-_INPUTS_VERSION = "bvbrc_minhash_publication_inputs_v1"
+_SELECTOR_VERSION = "bvbrc_minhash_result_selector"
+_INPUTS_VERSION = "bvbrc_minhash_publication_inputs"
 _METADATA_FIELDS = ("kmer_length", "query_length", "reference_length", "alphabet_size")
 _OPERANDS = ("query", "max_pvalue", "max_distance", "max_hits", "include_reference",
              "include_representative", "bacterial", "viral")
@@ -63,7 +63,7 @@ def _metadata_schema():
 
 
 def minhash_result_selector_schema() -> dict:
-    """Return a detached closed schema for the empty selector or the V2 selector."""
+    """Return a detached closed schema for the empty selector or the selector."""
     reference = {"type": "string", "pattern": "^" + _SOURCE_PATTERN + r"(?![\s\S])",
                  "format": "reference", "x-reference-namespace": "execution_result"}
     selected = _object({
@@ -227,7 +227,7 @@ def _saved_result(value, *, request, source_ref, code):
     # These are copies of the existing common contracts, not a new sheet. The
     # host authenticates the original publication and its full saved contents.
     _fields(sheet, ("schema", "mode", "request", "provenance", "native_result", "rows", "search_metadata"), code)
-    _require(sheet["schema"] == "bvbrc_minhash_sheet_v1"
+    _require(sheet["schema"] == "bvbrc_minhash_sheet"
              and sheet["mode"] == request["mode"], code)
     rpc = sheet["request"]
     _fields(rpc, ("version", "id", "method", "params"), code)
@@ -239,14 +239,14 @@ def _saved_result(value, *, request, source_ref, code):
                                        "kmer_length", "hash_seed", "sketch_size"), code)
     _require(all(item is None for item in sheet["search_metadata"].values()), code)
     _fields(components, ("schema", "rows", "diagnostics"), code)
-    _require(components["schema"] == "bvbrc_minhash_components_v1", code)
+    _require(components["schema"] == "bvbrc_minhash_components", code)
     _require(type(sheet["native_result"]) is list and type(sheet["rows"]) is list
              and type(components["rows"]) is list and type(components["diagnostics"]) is list, code)
     _require(len(sheet["native_result"]) == len(sheet["rows"]) == len(components["rows"]), code)
 
 
 def validate_minhash_publication_inputs(value, *, request, selector) -> dict:
-    """Validate a frozen V2 envelope; custody and byte verification stay in host.
+    """Validate a frozen envelope; custody and byte verification stay in host.
 
     The empty selection has no publication-input envelope. Each supplied nonnull
     field has exactly one binding keyed by its original metadata-list position.

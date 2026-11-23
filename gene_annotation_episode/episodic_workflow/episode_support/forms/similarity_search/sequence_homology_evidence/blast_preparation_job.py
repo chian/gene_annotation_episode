@@ -31,7 +31,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_
     finite_json_copy, native_blast_digest)
 
 PLAN_VERSION = PREPARATION_PLAN_VERSION
-RECEIPT_VERSION = 'blast_preparation_receipt_v1'
+RECEIPT_VERSION = 'blast_preparation_receipt'
 KINDS = PREPARATION_KINDS
 MOLECULES = ('protein', 'nucleotide')
 DB_VERSIONS = (4, 5)

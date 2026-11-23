@@ -46,7 +46,7 @@ def parse_blast_fasta_source_records(contents: bytes) -> dict:
     """
     if not isinstance(contents, bytes):
         raise ValueError("blast_fasta_bytes_required")
-    result = dict(schema="blast_fasta_source_records_v1",
+    result = dict(schema="blast_fasta_source_records",
                   file_sha256=hashlib.sha256(contents).hexdigest(),
                   size_bytes=len(contents), records=[], issues=[])
     try:

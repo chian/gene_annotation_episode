@@ -27,7 +27,7 @@ returns     every case the criterion can return, as (status, reason_code, when).
 A supported or conflicting result always cites the quoted spans of the stated fields it rests on. No criterion rests on a plain choice (the spread kind is recorded only).
 """
 
-VERSION = 'a105_coupling_oxygen_product_criteria_v1'
+VERSION = 'a105_coupling_oxygen_product_criteria'
 
 _fact_returns = (
     ('supported', 'facts_answered_yes', 'the fact is yes'),

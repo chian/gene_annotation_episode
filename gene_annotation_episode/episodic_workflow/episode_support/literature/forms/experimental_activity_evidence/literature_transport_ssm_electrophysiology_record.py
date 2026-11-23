@@ -47,7 +47,7 @@ converter does. The constructors take ``support`` and default it to 'direct'; th
 through the extraction (the extraction always passes the model's answer).
 """
 
-VERSION = 'a105_transport_ssm_electrophysiology_record_v1'
+VERSION = 'a105_transport_ssm_electrophysiology_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'transport_ssm_electrophysiology'
 QUANTITIES = ('km', 'km_spread', 'fold_over_control', 'fold_over_control_spread', 'peak_current', 'charge', 'decay_time', 'jump_substrate_concentration',

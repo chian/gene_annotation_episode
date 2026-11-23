@@ -51,7 +51,7 @@ format, the spread and the statement that only this method was used are kept in
 the record for the reviewer; no criterion judges them.
 """
 
-VERSION = 'a105_elisa_criteria_v1'
+VERSION = 'a105_elisa_criteria'
 
 # ---- Threshold constants -------------------------------------------------
 NM_PER_UNIT = {'pM': 0.001, 'nM': 1.0, 'uM': 1000.0, 'mM': 1000000.0}  # FIXED_BY_DEFINITION: nanomolar per concentration unit.

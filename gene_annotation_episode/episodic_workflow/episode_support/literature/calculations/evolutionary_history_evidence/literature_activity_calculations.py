@@ -16,7 +16,7 @@ import numpy as np
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.evolutionary_history_evidence.literature_experimental_contracts import ExperimentalContractError
 
 
-VERSION = "a105_corrected_activity_v2"
+VERSION = "a105_corrected_activity"
 PRIMITIVE_ORDER = ("q", "g", "k", "E", "u", "v")
 COMPONENTS = ("corrected_activity", "effect_variance", "effect_standard_uncertainty",
               "effect_precision", "source_profile_log_ratio", "source_presence_index")

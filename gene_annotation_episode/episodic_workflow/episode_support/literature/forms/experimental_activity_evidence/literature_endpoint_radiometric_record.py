@@ -52,7 +52,7 @@ converter does. The constructors take ``support`` and default it to 'direct'; th
 through the extraction (the extraction always passes the model's answer).
 """
 
-VERSION = 'a105_endpoint_radiometric_record_v1'
+VERSION = 'a105_endpoint_radiometric_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'endpoint_radiometric'
 QUANTITIES = ('conversion', 'conversion_spread', 'control_conversion', 'control_conversion_spread', 'net_conversion', 'net_conversion_spread',

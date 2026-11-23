@@ -76,7 +76,7 @@ def build(directory, refined, output):
         if path.is_file():
             exclusions.extend(row['primaryAccession'] for row in json.loads(path.read_text())['results']
                               if row['primaryAccession'] not in records)
-    value = {'version': 'a104_real_input_bundle_v1', 'case_id': 'mj0044', 'target_accession': 'Q60352',
+    value = {'version': 'a104_real_input_bundle', 'case_id': 'mj0044', 'target_accession': 'Q60352',
         'records': records, 'analyses': analyses, 'source_files': source_files,
         'excluded_initial_query_leads': sorted(set(exclusions)),
         'panel_curation': {'basis': 'amino_acid_kinase_IPK_and_FomA_comparison_leads',

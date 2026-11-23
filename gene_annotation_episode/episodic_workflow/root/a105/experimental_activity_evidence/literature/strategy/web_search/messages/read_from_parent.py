@@ -1,4 +1,4 @@
-"""What the parent gives: the search assignment ``search_assignment_v1`` (the records that give the assigned question its
+"""What the parent gives: the search assignment ``search_assignment`` (the records that give the assigned question its
 context and ONE query: ``search_query_ref``, a record of the strategy that holds the provider search request, read
 through custody), the commissioned literature task (the one kind, ``verified_source_leads``), the proposed annotation,
 the persisted sheet states, the articles already examined, the Store scope of the commission and the records passed in
@@ -16,10 +16,10 @@ from method_loop import DeclaredField, Field, RecordForm
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import (
     ContractError, obj, validate_schema)
 
-VERSION = 'literature_local_task_v1'
+VERSION = 'literature_local_task'
 
 ASSIGNMENT_FORM = RecordForm({
-    'version': DeclaredField('text', 'The search assignment version', 'search_assignment_v1'),
+    'version': DeclaredField('text', 'The search assignment version', 'search_assignment'),
     'question_context_refs': Field('record_refs', 'Records giving the assigned question its context'),
     'search_query_ref': Field('text', 'The query to run: the record of the strategy that holds one provider search '
                               'request, whose results are to be assessed for their relevance to the assigned '

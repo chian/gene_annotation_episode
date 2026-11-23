@@ -29,7 +29,7 @@ plateau_change_percent, plateau_refs, replicate_count, replicate_independent, re
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_distribution_optical_equilibrium_criteria import DISTRIBUTION_OPTICAL_EQUILIBRIUM_CRITERIA
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_distribution_optical_equilibrium_grade_v1'
+VERSION = 'a105_distribution_optical_equilibrium_grade'
 CRITERIA = tuple(criterion['id'] for criterion in DISTRIBUTION_OPTICAL_EQUILIBRIUM_CRITERIA)
 INTERACTION = {'yes': 'detected', 'no': 'not_detected'}   # the stated yes/no result of the fact claimed_product_detected
 

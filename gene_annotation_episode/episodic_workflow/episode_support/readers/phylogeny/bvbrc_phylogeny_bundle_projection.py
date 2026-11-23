@@ -362,8 +362,8 @@ def consume_bundle(bundle, *, artifact_bytes, supplied_values, requested_form, p
     """Compose actual providers and save all analyses, including invalid members."""
     tool = "C-L194-GeneTree" if provider == "gene_tree" else "C-L193-CodonTree"
     output = {"adapter_id": "bvbrc_" + provider, "adapter_version": "1", "status": "invalid",
-        "sheet": {"schema_version": "bvbrc_phylogeny_sheet_set_v1", "tool": tool, "selections": [], "analyses": []},
-        "components": {"schema_version": "bvbrc_phylogeny_component_set_v1", "analyses": []},
+        "sheet": {"schema_version": "bvbrc_phylogeny_sheet_set", "tool": tool, "selections": [], "analyses": []},
+        "components": {"schema_version": "bvbrc_phylogeny_component_set", "analyses": []},
         "facts": {}, "missing_requirements": [], "diagnostics": []}
     try:
         parameters = c.validate_parameters(parameters, provider=provider)

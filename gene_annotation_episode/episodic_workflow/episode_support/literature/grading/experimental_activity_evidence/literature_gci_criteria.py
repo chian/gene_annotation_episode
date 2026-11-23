@@ -50,7 +50,7 @@ question (a bivalent or oligomeric analyte is asked as a fact of the fit-model
 criterion).
 """
 
-VERSION = 'a105_gci_criteria_v1'
+VERSION = 'a105_gci_criteria'
 
 # ---- Constants -----------------------------------------------------------
 PG_MM2_PER_RU = 1.0  # EXPERT_REVIEW: the usual approximation that one response unit is about 1 pg/mm2 of protein; a source reporting RU is read through it (a unit reading, not a goodness threshold).

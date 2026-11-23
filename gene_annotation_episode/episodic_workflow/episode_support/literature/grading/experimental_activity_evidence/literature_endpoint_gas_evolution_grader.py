@@ -29,7 +29,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     ENDPOINT_GAS_EVOLUTION_CRITERIA, NMOL_PER_UNIT, PERCENT_PER_FRACTION)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_endpoint_gas_evolution_grade_v1'
+VERSION = 'a105_endpoint_gas_evolution_grade'
 CRITERIA = tuple(criterion['id'] for criterion in ENDPOINT_GAS_EVOLUTION_CRITERIA)
 GAS = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact gas_detected_above_control
 CONTROL_PAIRS = (('gas_amount', 'control_gas_amount'), ('conversion_percent', 'control_conversion_percent'))   # a test value and its control of the same kind, amounts first

@@ -158,7 +158,7 @@ def test_the_first_unit_is_the_ledger_lookup_and_the_credit_is_the_ledgers_unbou
 
 
 def _practical(resource_id):
-    return {'version': 'practical_assignment_v1', 'assignment_id': 'a-' + resource_id, 'resource_id': resource_id,
+    return {'version': 'practical_assignment', 'assignment_id': 'a-' + resource_id, 'resource_id': resource_id,
             'resource_kind': 'hpc', 'workspace': '/work/space', 'endpoint': 'usable_handoff',
             'requested_job': {'argv': ['/bin/true'], 'environment': {}},
             'progress_requirements': [{'key': 'handoff', 'credit': 4.0, 'predicate': {'kind': 'requested_job_handoff'}}],
@@ -168,7 +168,7 @@ def _practical(resource_id):
 
 def _plan(handoff_ref=None):
     return {'plan_ref': 'plan_1', 'plan_id': 'p1', 'candidate_id': 'k1', 'closed': False, 'handoff_ref': handoff_ref,
-            'launch_assignment': {'version': 'execution_launch_assignment_v1',
+            'launch_assignment': {'version': 'execution_launch_assignment',
                                   'requests': {'hpc1': _practical('hpc1')}, 'immutable_input_versions': [],
                                   'constraints': {'allowed_resource_ids': ['hpc1'], 'allowed_kinds': ['hpc']}},
             'manifest': {'workspace': '/work/space/hpc/p1', 'units': []}}

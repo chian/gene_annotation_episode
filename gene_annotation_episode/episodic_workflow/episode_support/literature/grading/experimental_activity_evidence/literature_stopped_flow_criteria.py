@@ -23,7 +23,7 @@ returns     every case the criterion can return, as (status, reason_code, when).
             as 'never' cannot occur for this criterion.
 """
 
-VERSION = 'a105_stopped_flow_criteria_v1'
+VERSION = 'a105_stopped_flow_criteria'
 PER_SECOND = {'s^-1': 1.0, 'min^-1': 1.0 / 60.0}      # FIXED_BY_DEFINITION: a rate constant in min^-1 is a sixtieth of the same in s^-1.
 SECONDS = {'ms': 0.001, 's': 1.0}                     # FIXED_BY_DEFINITION: a millisecond is a thousandth of a second.
 PER_SITE_UNIT = 'mol/mol_site'                        # FIXED_BY_DEFINITION: the unit spelling of an amount per active site of the enzyme.

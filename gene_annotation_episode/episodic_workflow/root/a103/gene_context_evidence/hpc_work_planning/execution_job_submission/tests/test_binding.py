@@ -30,7 +30,7 @@ LOCAL = {'kind': 'local', 'workspace': WORKSPACE, 'python_executable': '/usr/bin
 
 
 def request(resource_id, kind, credit=3.0):
-    return {'version': 'practical_assignment_v1', 'assignment_id': 'job_' + resource_id, 'resource_id': resource_id,
+    return {'version': 'practical_assignment', 'assignment_id': 'job_' + resource_id, 'resource_id': resource_id,
             'resource_kind': kind, 'workspace': WORKSPACE, 'endpoint': 'usable_handoff',
             'requested_job': {'argv': ['run_search', '--query', 'q'], 'environment': {}},
             'progress_requirements': [{'key': 'handoff', 'credit': credit,
@@ -40,7 +40,7 @@ def request(resource_id, kind, credit=3.0):
             'inventory_snapshot': {}, 'constraints': {}}
 
 
-ASSIGNMENT = {'version': 'execution_launch_assignment_v1',
+ASSIGNMENT = {'version': 'execution_launch_assignment',
               'requests': {'aurora': request('aurora', 'hpc'), 'here': request('here', 'local')},
               'immutable_input_versions': [], 'constraints': {}, 'handoff_unit': 1.5}
 
@@ -103,7 +103,7 @@ def test_the_commission_form_admits_the_old_launch_assignment_and_read_from_pare
     with pytest.raises(ValueError, match='explicit_positive_operational_credit_units_required'):
         parent_input({**ASSIGNMENT, 'handoff_unit': 0})
     with pytest.raises(ValueError, match='execution_request_version_unknown'):
-        parent_input({**ASSIGNMENT, 'requests': {'x': {'version': 'blast_graded_request_v1'}}})
+        parent_input({**ASSIGNMENT, 'requests': {'x': {'version': 'blast_graded_request'}}})
 
 
 def test_the_controller_is_the_bounded_quality_controller_capped_by_the_uncredited_requests():

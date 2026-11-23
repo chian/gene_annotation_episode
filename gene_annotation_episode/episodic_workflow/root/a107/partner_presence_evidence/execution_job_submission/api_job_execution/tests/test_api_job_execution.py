@@ -17,7 +17,7 @@ TEN_FILES = {'__init__.py', 'goal.py', 'task.py', 'credit.py', 'yield_estimator.
              'messages/__init__.py', 'messages/read_from_parent.py', 'messages/internal_summary.py',
              'messages/final_to_parent.py'}
 ROOT_PACKAGE = 'gene_annotation_episode.episodic_workflow.root'
-ASSIGNMENT = {'scope': {'subject_refs': []}, 'version': 'api_service_assignment_v1', 'service': 'ncbi_blast',
+ASSIGNMENT = {'scope': {'subject_refs': []}, 'version': 'api_service_assignment', 'service': 'ncbi_blast',
               'algorithm': 'blastp', 'database': 'swissprot', 'resource_id': 'ncbi_blast',
               'request': {'program': 'blastp'}, 'input_refs': [], 'immutable_input_versions': {},
               'completion_target': 2.0}
@@ -62,7 +62,7 @@ def test_the_assignment_form_admits_one_assignment_and_refuses_a_missing_field(e
     with pytest.raises(FormError):
         form.admit({name: value for name, value in ASSIGNMENT.items() if name != 'completion_target'}, 'assignment')
     with pytest.raises(FormError):
-        form.admit({**ASSIGNMENT, 'version': 'practical_assignment_v1'}, 'assignment')
+        form.admit({**ASSIGNMENT, 'version': 'practical_assignment'}, 'assignment')
 
 
 def test_the_return_form_declares_credit_finding_and_selectable_facts(episode_module):

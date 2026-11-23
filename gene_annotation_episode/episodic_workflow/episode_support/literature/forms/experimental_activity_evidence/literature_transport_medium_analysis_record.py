@@ -48,7 +48,7 @@ converter does. The constructors take ``support`` and default it to 'direct'; th
 through the extraction (the extraction always passes the model's answer).
 """
 
-VERSION = 'a105_transport_medium_analysis_record_v1'
+VERSION = 'a105_transport_medium_analysis_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'transport_medium_analysis'
 QUANTITIES = ('normalized_rate', 'normalized_rate_spread', 'fold_over_control', 'fold_over_control_spread', 'substrate_moved_percent', 'interval',

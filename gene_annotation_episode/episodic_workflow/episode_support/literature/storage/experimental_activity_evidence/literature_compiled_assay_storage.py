@@ -13,34 +13,31 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.experimen
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import canonical, identity, obj, validate_schema
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_rate_storage import LiteratureRateRepository
-from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_compiled_assay_inputs import ROLES, ALLOWLIST, ASSAY_LITERAL_FIELDS, ENDPOINTS, ARRANGEMENTS, STAGES, STAGE_VALUES, LINKS, LINK_LIMITS, compiled_assay_population_schema, read_compiled_assay_inputs, source_schema, NS_ASSAY, NS_OPTICAL, NS_RECOVERY, NS_ACTIVE, NS_AMOUNT, NS_NATIVE, NS_REPLICATE, POPULATION_V2
-from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence.literature_compiled_assay_calculations import VERSION as SHEET_VERSION, PRIMITIVES, COMPONENTS, SECTIONS, MEANINGS, REASONS, FORMULA_VARIANTS, QUALIFICATIONS, populate_compiled_assay, VERSION_V2 as SHEET_VERSION_V2, COMPONENTS_V2, SECTIONS_V2, MEANINGS_V2, REASONS_V2, FORMULAS_V2
+from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_compiled_assay_inputs import ROLES, ALLOWLIST, ASSAY_LITERAL_FIELDS, ENDPOINTS, ARRANGEMENTS, STAGES, STAGE_VALUES, LINKS, LINK_LIMITS, compiled_assay_population_schema, read_compiled_assay_inputs, source_schema, NS_ASSAY, NS_OPTICAL, NS_RECOVERY, NS_ACTIVE, NS_AMOUNT, NS_NATIVE, NS_REPLICATE, POPULATION
+from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence.literature_compiled_assay_calculations import VERSION as SHEET_VERSION, PRIMITIVES, COMPONENTS, SECTIONS, MEANINGS, REASONS, FORMULAS, FORMULA_VARIANTS, QUALIFICATIONS, populate_compiled_assay
 PROVIDER = 'literature.a105.compiled_assay'
-VERSION = 'literature_compiled_assay_record_v1'
+VERSION = 'literature_compiled_assay_record'
 NAMESPACE = 'literature_compiled_assay_cells'
 REQUESTED = 'requested_compiled_assay_components'
 VIEW = 'compiled_assay_components'
-VERSION_V2 = 'literature_compiled_assay_record_v2'
-NAMESPACE_V2 = 'literature_compiled_assay_v2_cells'
-REQUESTED_V2 = 'requested_compiled_assay_components_v2'
-VERSION_V3 = 'literature_compiled_assay_record_v3'
-NAMESPACE_V3 = 'literature_compiled_assay_v3_cells'
-REQUESTED_V3 = 'requested_compiled_assay_components_v3'
+COMMON_VERSION = 'literature_common_assessment_record'
+COMMON_NAMESPACE = 'literature_common_assessment_cells'
+COMMON_REQUESTED = 'requested_common_assessment_components'
 COMMON_SCOPE = 'common_assertion_contrast'
 
 def compiled_assay_operation_schema():
-    """Expose the installed common binding alongside unchanged old requests."""
-    from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_compiled_assay_inputs import compiled_assay_operation_schema as legacy, common_assessment_population_schema
-    return {'type': 'object', 'anyOf': [*legacy()['anyOf'], common_assessment_population_schema()]}
+    """Expose the common binding alongside the compiled-assay request."""
+    from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_compiled_assay_inputs import compiled_assay_operation_schema as compiled_operation_schema, common_assessment_population_schema
+    return {'type': 'object', 'anyOf': [*compiled_operation_schema()['anyOf'], common_assessment_population_schema()]}
 
-def compiled_assay_v3_cells_schema():
+def common_assessment_cells_schema():
     from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_compiled_assay_inputs import common_assessment_inputs_schema
     from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence.literature_compiled_assay_calculations import common_assessment_sheet_schema, COMMON_COMPONENTS
     sheet = common_assessment_sheet_schema()['properties']
     metadata = {name: deepcopy(schema) for name, schema in sheet.items() if name not in ('version', 'cells', 'evaluation_scope')}
     covariance = deepcopy(common_assessment_inputs_schema()['properties']['covariance_blocks']['items']['properties'])
     del covariance['matrix_exact']
-    return {**_array(obj({**deepcopy(sheet['cells']['items']['properties']), **metadata, 'sheet_ref': _ref(), 'evidence_source_ref': _ref(), 'evaluation_scope': {'const': COMMON_SCOPE}, 'scientific_sheet_version': deepcopy(sheet['version']), 'formula_code': {'enum': [name + '_compiled_v3' for name in COMMON_COMPONENTS]}, 'covariance_provenance': {'anyOf': [obj(covariance), {'type': 'null'}]}})), 'x-source': NAMESPACE_V3}
+    return {**_array(obj({**deepcopy(sheet['cells']['items']['properties']), **metadata, 'sheet_ref': _ref(), 'evidence_source_ref': _ref(), 'evaluation_scope': {'const': COMMON_SCOPE}, 'scientific_sheet_version': deepcopy(sheet['version']), 'formula_code': {'enum': [name + '_common_assessment' for name in COMMON_COMPONENTS]}, 'covariance_provenance': {'anyOf': [obj(covariance), {'type': 'null'}]}})), 'x-source': COMMON_NAMESPACE}
 
 def _project_common_saved(saved, reference, components):
     """Copy saved scientific output; never recalculate or parse input values."""
@@ -59,7 +56,7 @@ def _project_common_saved(saved, reference, components):
             if len(blocks) != 1:
                 raise ContractError('common_assessment_saved_covariance_binding_mismatch')
             covariance = {k: deepcopy(v) for k, v in blocks[0].items() if k != 'matrix_exact'}
-        rows.append({**deepcopy(cell), **deepcopy(metadata), 'sheet_ref': reference, 'evidence_source_ref': saved['input_source_ref'], 'evaluation_scope': COMMON_SCOPE, 'scientific_sheet_version': sheet['version'], 'formula_code': name + '_compiled_v3', 'covariance_provenance': covariance})
+        rows.append({**deepcopy(cell), **deepcopy(metadata), 'sheet_ref': reference, 'evidence_source_ref': saved['input_source_ref'], 'evaluation_scope': COMMON_SCOPE, 'scientific_sheet_version': sheet['version'], 'formula_code': name + '_common_assessment', 'covariance_provenance': covariance})
     return rows
 
 def _array(schema, unique=False):
@@ -77,8 +74,8 @@ def _selector():
 def _dependency():
     return obj({'role': {'type': 'string', 'enum': list(ROLES)}, 'selection': {'anyOf': [_selector(), {'type': 'null'}]}, 'component_key': _text(True), 'quantity_key': _text(True), 'canonical_physical_keys': _array(_text(), True), 'recorded_dependency_keys': _array(_text(), True), 'physical_identity_status': {'type': 'string', 'enum': ['partly_canonical', 'cross_component_identity_unknown', 'definition_identity']}, 'identity_stage': {'type': ['string', 'null'], 'enum': [*STAGES, None]}})
 
-def _numerical_cell(version=1):
-    return obj({'value': {'type': ['number', 'null']}, 'unit': {'type': ['string', 'null'], 'enum': ['uM/min', 'uM', 'dimensionless', 'per_min', 'per_min_squared', 'min_squared', 'nM', 'fraction', 'umol/min', 'nmol/min', 'mmol/min', 'nM/min', 'per_s', 'umol/min/mg', 'nmol/min/mg', 'mg/ml', None]}, 'status': {'type': 'string', 'enum': ['populated', 'unavailable']}, 'unavailable_reason': {'type': ['string', 'null'], 'enum': [None, *(REASONS_V2 if version == 2 else REASONS)]}, 'formula': {'type': 'string', 'enum': list(dict.fromkeys((*FORMULA_VARIANTS, *FORMULAS_V2.values()))) if version == 2 else list(FORMULA_VARIANTS)}, 'origin': {'type': 'string', 'enum': ['reported', 'derived', 'graph_derived', 'synthetic', 'proposed', 'definition_identity']}, 'section': {'type': 'string', 'enum': list(dict.fromkeys(SECTIONS.values()))}, 'meaning': {'type': 'string', 'enum': list(dict.fromkeys((MEANINGS_V2 if version == 2 else MEANINGS).values()))}, 'conditional_on': _array({'type': 'string', 'enum': ['first_order_covariance_propagation', 'known_variance', 'known_normal_nonnegative_presence']}), 'qualifications': _array({'type': 'string', 'enum': list(QUALIFICATIONS)})})
+def _numerical_cell():
+    return obj({'value': {'type': ['number', 'null']}, 'unit': {'type': ['string', 'null'], 'enum': ['uM/min', 'uM', 'dimensionless', 'per_min', 'per_min_squared', 'min_squared', 'nM', 'fraction', 'umol/min', 'nmol/min', 'mmol/min', 'nM/min', 'per_s', 'umol/min/mg', 'nmol/min/mg', 'mg/ml', None]}, 'status': {'type': 'string', 'enum': ['populated', 'unavailable']}, 'unavailable_reason': {'type': ['string', 'null'], 'enum': [None, *REASONS]}, 'formula': {'type': 'string', 'enum': list(dict.fromkeys((*FORMULA_VARIANTS, *FORMULAS.values())))}, 'origin': {'type': 'string', 'enum': ['reported', 'derived', 'graph_derived', 'synthetic', 'proposed', 'definition_identity']}, 'section': {'type': 'string', 'enum': list(dict.fromkeys(SECTIONS.values()))}, 'meaning': {'type': 'string', 'enum': list(dict.fromkeys(MEANINGS.values()))}, 'conditional_on': _array({'type': 'string', 'enum': ['first_order_covariance_propagation', 'known_variance', 'known_normal_nonnegative_presence']}), 'qualifications': _array({'type': 'string', 'enum': list(QUALIFICATIONS)})})
 
 def _native_quantity_schema():
     properties = [source_schema(ns)['items']['properties'] for ns in (NS_ASSAY, NS_OPTICAL, NS_RECOVERY, NS_ACTIVE, NS_AMOUNT, NS_NATIVE, NS_REPLICATE)]
@@ -96,35 +93,25 @@ def _native_quantity(extraction, component):
     row = operand['row']
     return {'value': row.get('value'), 'source_unit': row.get('unit'), 'threshold': row.get('threshold'), 'bound': row.get('bound', 'none'), 'approximate': row.get('approximate'), 'reported_domain': deepcopy(row.get('reported_domain')), 'exact_domain': deepcopy(row.get('exact_domain')), 'meaning': 'unchanged_selected_native_component_domain', 'domain_conversion': 'not_converted'}
 
-def compiled_assay_cells_schema(version=1):
-    if version == 3:
-        return compiled_assay_v3_cells_schema()
-    components = COMPONENTS_V2 if version == 2 else COMPONENTS
-    schema = {**_array(obj({'sheet_ref': _ref(), 'evidence_source_ref': _ref(), 'evaluation_scope': {'type': 'string', 'const': 'compiled_source_endpoint'}, 'component': {'type': 'string', 'enum': list(components)}, **_numerical_cell(version)['properties'], 'formula_code': {'type': 'string', 'enum': [name + ('_compiled_v2' if version == 2 else '_compiled_v1') for name in components]}, 'dependencies': _array(_dependency()), 'native_quantity': _native_quantity_schema(), 'operand_meanings': obj({role: {'type': 'string', 'enum': [*LINKS[role], *LINK_LIMITS]} for role in ROLES}), 'assay_meanings': obj({name: _text(True) for name in ASSAY_LITERAL_FIELDS}), 'endpoint_kind': {'type': 'string', 'enum': list(ENDPOINTS)}, 'arrangement_kind': {'type': 'string', 'enum': list(ARRANGEMENTS)}, 'correction_stages': obj({name: {'type': 'string', 'enum': list(STAGE_VALUES)} for name in STAGES}), 'variance_status': {'type': 'string', 'enum': ['known', 'estimated', 'unknown']}, 'observation_model': {'type': 'string', 'enum': ['none', 'known_normal_nonnegative_presence']}, 'covariance_source_ref': _ref(nullable=True), 'residual_variance_source_ref': _ref(nullable=True), 'operand_eligibility': obj({role: {'type': ['string', 'null'], 'enum': [None, *REASONS]} for role in ROLES}), 'partial_uncertainty_status': {'type': 'string', 'const': 'unimplemented'}, 'covariance_input_status': {'type': 'string', 'enum': ['not_selected', 'selected_known', 'selected_estimated', 'selected_unknown']}, 'annotation_credit': {'type': 'null'}})), 'x-source': NAMESPACE_V2 if version == 2 else NAMESPACE}
-    if version == 2:
-        properties = schema['items']['properties']
-        properties['partial_uncertainty_status'] = {'type': 'string', 'const': 'component_scoped'}
-        properties['uncertainty'] = obj({'estimand_component': {'type': ['string', 'null'], 'enum': [None, 'measured_endpoint_per_selected_amount', 'calibrated_measured_endpoint_per_selected_amount', 'corrected_activity']}, 'scope': {'type': 'string', 'enum': ['not_applicable', 'operand_propagated', 'total_with_distinct_residual']}, 'covariance_source_ref': _ref(nullable=True), 'source_primitive_order': _array({'type': 'string', 'enum': list(ROLES)}, True), 'operand_order': _array({'type': 'string', 'enum': list(ROLES)}, True), 'operand_keys': _array(_text()), 'variance_status': {'type': 'string', 'enum': ['known', 'estimated', 'unknown']}, 'covariance_origin': {'type': ['string', 'null'], 'enum': [None, 'reported', 'derived', 'synthetic']}, 'propagation_model': {'type': 'string', 'enum': ['none', 'first_order_covariance_propagation']}})
-        schema['items']['required'] = list(properties)
-    elif version != 1:
-        raise ValueError('unsupported_compiled_assay_population_version')
+def compiled_assay_cells_schema():
+    components = COMPONENTS
+    schema = {**_array(obj({'sheet_ref': _ref(), 'evidence_source_ref': _ref(), 'evaluation_scope': {'type': 'string', 'const': 'compiled_source_endpoint'}, 'component': {'type': 'string', 'enum': list(components)}, **_numerical_cell()['properties'], 'formula_code': {'type': 'string', 'enum': [name + '_compiled' for name in components]}, 'dependencies': _array(_dependency()), 'native_quantity': _native_quantity_schema(), 'operand_meanings': obj({role: {'type': 'string', 'enum': [*LINKS[role], *LINK_LIMITS]} for role in ROLES}), 'assay_meanings': obj({name: _text(True) for name in ASSAY_LITERAL_FIELDS}), 'endpoint_kind': {'type': 'string', 'enum': list(ENDPOINTS)}, 'arrangement_kind': {'type': 'string', 'enum': list(ARRANGEMENTS)}, 'correction_stages': obj({name: {'type': 'string', 'enum': list(STAGE_VALUES)} for name in STAGES}), 'variance_status': {'type': 'string', 'enum': ['known', 'estimated', 'unknown']}, 'observation_model': {'type': 'string', 'enum': ['none', 'known_normal_nonnegative_presence']}, 'covariance_source_ref': _ref(nullable=True), 'residual_variance_source_ref': _ref(nullable=True), 'operand_eligibility': obj({role: {'type': ['string', 'null'], 'enum': [None, *REASONS]} for role in ROLES}), 'partial_uncertainty_status': {'type': 'string', 'const': 'unimplemented'}, 'covariance_input_status': {'type': 'string', 'enum': ['not_selected', 'selected_known', 'selected_estimated', 'selected_unknown']}, 'annotation_credit': {'type': 'null'}})), 'x-source': NAMESPACE}
+    properties = schema['items']['properties']
+    properties['partial_uncertainty_status'] = {'type': 'string', 'const': 'component_scoped'}
+    properties['uncertainty'] = obj({'estimand_component': {'type': ['string', 'null'], 'enum': [None, 'measured_endpoint_per_selected_amount', 'calibrated_measured_endpoint_per_selected_amount', 'corrected_activity']}, 'scope': {'type': 'string', 'enum': ['not_applicable', 'operand_propagated', 'total_with_distinct_residual']}, 'covariance_source_ref': _ref(nullable=True), 'source_primitive_order': _array({'type': 'string', 'enum': list(ROLES)}, True), 'operand_order': _array({'type': 'string', 'enum': list(ROLES)}, True), 'operand_keys': _array(_text()), 'variance_status': {'type': 'string', 'enum': ['known', 'estimated', 'unknown']}, 'covariance_origin': {'type': ['string', 'null'], 'enum': [None, 'reported', 'derived', 'synthetic']}, 'propagation_model': {'type': 'string', 'enum': ['none', 'first_order_covariance_propagation']}})
+    schema['items']['required'] = list(properties)
     return schema
 
-def compiled_assay_v2_cells_schema():
-    return compiled_assay_cells_schema(2)
-
 def _project_saved(saved, reference, components):
-    if saved['version'] == VERSION_V3:
+    if saved['version'] == COMMON_VERSION:
         return _project_common_saved(saved, reference, components)
     sheet, extraction = (saved['sheet'], saved['extraction'])
-    v2 = saved['version'] == VERSION_V2
     meanings = {name: None if extraction['assay'][name] is None else extraction['assay'][name]['value'] for name in ASSAY_LITERAL_FIELDS}
-    return [{'sheet_ref': reference, 'evidence_source_ref': saved['input_source_ref'], 'evaluation_scope': 'compiled_source_endpoint', 'component': name, **deepcopy(sheet['cells'][name]), 'formula_code': name + ('_compiled_v2' if v2 else '_compiled_v1'), 'dependencies': deepcopy(sheet['dependencies'][name]), 'assay_meanings': deepcopy(meanings), 'native_quantity': _native_quantity(extraction, name), 'operand_meanings': {role: extraction['relationships'][role]['value'] for role in ROLES}, 'endpoint_kind': extraction['assay']['endpoint']['value'], 'arrangement_kind': extraction['assay']['arrangement']['value'], 'correction_stages': {stage: extraction['correction_stages'][stage]['value'] for stage in STAGES}, 'variance_status': extraction['variance_status'], 'observation_model': extraction['observation_model'], 'covariance_source_ref': sheet['uncertainty'][name]['covariance_source_ref'] if v2 else extraction['covariance_source']['source_ref'] if extraction['covariance_source'] else None, 'residual_variance_source_ref': extraction['distinct_residual_observation']['witness']['source_ref'] if extraction['distinct_residual_observation'] else None, 'operand_eligibility': deepcopy(sheet['operand_eligibility_reasons']), 'partial_uncertainty_status': 'component_scoped' if v2 else 'unimplemented', 'covariance_input_status': ('not_selected' if sheet['uncertainty'][name]['covariance_source_ref'] is None else 'selected_' + sheet['uncertainty'][name]['variance_status']) if v2 else 'not_selected' if extraction['covariance_source'] is None else 'selected_' + extraction['variance_status'], 'annotation_credit': None, **({'uncertainty': deepcopy(sheet['uncertainty'][name])} if v2 else {})} for name in components]
+    return [{'sheet_ref': reference, 'evidence_source_ref': saved['input_source_ref'], 'evaluation_scope': 'compiled_source_endpoint', 'component': name, **deepcopy(sheet['cells'][name]), 'formula_code': name + '_compiled', 'dependencies': deepcopy(sheet['dependencies'][name]), 'assay_meanings': deepcopy(meanings), 'native_quantity': _native_quantity(extraction, name), 'operand_meanings': {role: extraction['relationships'][role]['value'] for role in ROLES}, 'endpoint_kind': extraction['assay']['endpoint']['value'], 'arrangement_kind': extraction['assay']['arrangement']['value'], 'correction_stages': {stage: extraction['correction_stages'][stage]['value'] for stage in STAGES}, 'variance_status': extraction['variance_status'], 'observation_model': extraction['observation_model'], 'covariance_source_ref': sheet['uncertainty'][name]['covariance_source_ref'], 'residual_variance_source_ref': extraction['distinct_residual_observation']['witness']['source_ref'] if extraction['distinct_residual_observation'] else None, 'operand_eligibility': deepcopy(sheet['operand_eligibility_reasons']), 'partial_uncertainty_status': 'component_scoped', 'covariance_input_status': ('not_selected' if sheet['uncertainty'][name]['covariance_source_ref'] is None else 'selected_' + sheet['uncertainty'][name]['variance_status']), 'annotation_credit': None, 'uncertainty': deepcopy(sheet['uncertainty'][name])} for name in components]
 
 OPERATIONS = operations_ledger('literature_compiled_assay_operations')
 RECEIVED = received_ledger('literature_compiled_assay_received')
-RECEIVED_V2 = received_ledger('literature_compiled_assay_v2_received')
-RECEIVED_V3 = received_ledger('literature_compiled_assay_v3_received')
+COMMON_RECEIVED = received_ledger('literature_common_assessment_received')
 
 class LiteratureCompiledAssayRepository(LiteratureRateRepository):
     provider, components, record_version = (PROVIDER, COMPONENTS, VERSION)
@@ -132,24 +119,16 @@ class LiteratureCompiledAssayRepository(LiteratureRateRepository):
     received = RECEIVED
     binding_fields = ()
 
-    def __init__(self, store, run_id, version=1):
+    def __init__(self, store, run_id, common=False):
         super().__init__(store, run_id)
-        if version not in (1, 2, 3):
-            raise ValueError('unsupported_compiled_assay_population_version')
-        self.population_version = version
-        if version == 2:
-            self.components, self.record_version = (COMPONENTS_V2, VERSION_V2)
-            self.received = RECEIVED_V2
-        elif version == 3:
+        self.common = common
+        if common:
             from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence.literature_compiled_assay_calculations import COMMON_COMPONENTS
-            self.components, self.record_version = (COMMON_COMPONENTS, VERSION_V3)
-            self.received = RECEIVED_V3
+            self.components, self.record_version = (COMMON_COMPONENTS, COMMON_VERSION)
+            self.received = COMMON_RECEIVED
 
-    def v2_projection(self):
-        return type(self)(self.store, self.run_id, 2)
-
-    def v3_projection(self):
-        return type(self)(self.store, self.run_id, 3)
+    def common_projection(self):
+        return type(self)(self.store, self.run_id, True)
 
     def _components(self, components):
         if not isinstance(components, (list, tuple)) or any((type(name) is not str or name not in self.components for name in components)) or len(set(components)) != len(components):
@@ -198,19 +177,17 @@ class LiteratureCompiledAssayRepository(LiteratureRateRepository):
 
     def populate(self, context, arguments, operation_key):
         from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_compiled_assay_inputs import COMMON_POPULATION
-        if arguments.get('population_version') == COMMON_POPULATION and self.population_version == 1:
-            return self.v3_projection().populate(context, arguments, operation_key)
-        if self.population_version == 3:
+        if arguments.get('population_version') == COMMON_POPULATION and not self.common:
+            return self.common_projection().populate(context, arguments, operation_key)
+        if self.common:
             return self._populate_common(context, arguments, operation_key)
-        if arguments.get('population_version') == POPULATION_V2 and self.population_version == 1:
-            return self.v2_projection().populate(context, arguments, operation_key)
         if context.run_id != self.run_id:
             raise ContractError('literature_run_mismatch')
         if not isinstance(operation_key, str) or not operation_key:
             raise ContractError('operation_key_required')
         args = plain(arguments)
-        validate_schema(args, compiled_assay_population_schema(self.population_version))
-        requested = self._components(plain(context.assignment.get(REQUESTED_V2 if self.population_version == 2 else REQUESTED, [])))
+        validate_schema(args, compiled_assay_population_schema())
+        requested = self._components(plain(context.assignment.get(REQUESTED, [])))
         request = {'run_id': self.run_id, 'episode_id': context.episode_id, 'operation_key': operation_key, 'arguments': args, 'scope': plain(context.scope), 'components': requested}
         signature = canonical(request)
         old = self._operation(context.episode_id, operation_key)
@@ -266,7 +243,7 @@ class LiteratureCompiledAssayRepository(LiteratureRateRepository):
             exists = self.store.holds(reference)
             self.store.put('source', value, origin='tool', scope=plain(context.scope))
             rows = _project_saved(payload, reference, requested)
-            validate_schema(rows, compiled_assay_cells_schema(self.population_version))
+            validate_schema(rows, compiled_assay_cells_schema())
             outcome = {'status': 'completed', 'operation_ref': identity('operation', {'run_id': self.run_id, 'episode_id': context.episode_id, 'key': operation_key}), 'record_refs': [reference], 'changed_record_refs': [] if exists else [reference], 'result': {'sheet_ref': reference, 'view': VIEW, 'cells': rows}, 'feedback': None}
             self._save_operation(operation_key, signature, outcome)
         return outcome
@@ -289,7 +266,7 @@ class LiteratureCompiledAssayRepository(LiteratureRateRepository):
             raise ContractError('operation_key_required')
         args = plain(arguments)
         validate_schema(args, common_assessment_population_schema())
-        requested = self._components(plain(context.assignment.get(REQUESTED_V3, [])))
+        requested = self._components(plain(context.assignment.get(COMMON_REQUESTED, [])))
         if args['requested_cells'] != requested:
             raise ContractError('common_assessment_requested_subset_mismatch')
         request = {'run_id': self.run_id, 'episode_id': context.episode_id, 'operation_key': operation_key, 'scope': plain(context.scope), 'arguments': args, 'components': requested, 'role': context.role, 'assignment': plain(context.assignment), 'received_record_refs': list(context.received_record_refs)}
@@ -352,17 +329,17 @@ class LiteratureCompiledAssayRepository(LiteratureRateRepository):
         selected = [item['selection'] for item in snapshots]
         direct = extraction['source_refs']
         parents = self._ancestors(context.scope, [*direct, *(s['sheet_ref'] for s in selected)])
-        payload = {'version': VERSION_V3, 'input_source_ref': args['source_ref'], 'input_artifact_ref': source['artifact_ref'], 'direct_input_source_refs': direct, 'input_source_refs': parents, 'selection': args, 'component_selections': selected, 'input_snapshots': snapshots, 'public_input_records': public_records, 'source_metadata': {ref: self.store.get(ref) for ref in parents}, 'extraction': extraction, 'sheet': sheet}
+        payload = {'version': COMMON_VERSION, 'input_source_ref': args['source_ref'], 'input_artifact_ref': source['artifact_ref'], 'direct_input_source_refs': direct, 'input_source_refs': parents, 'selection': args, 'component_selections': selected, 'input_snapshots': snapshots, 'public_input_records': public_records, 'source_metadata': {ref: self.store.get(ref) for ref in parents}, 'extraction': extraction, 'sheet': sheet}
         with self.store.transaction():
             artifact = self.store.artifact(canonical(payload), 'application/json')
             request_ref = self.store.artifact(canonical(request), 'application/json')
-            value = {'provider': PROVIDER, 'accession': None, 'uri': None, 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': request_ref, 'version': VERSION_V3, 'retrieved_at': None, 'parent_source_refs': parents}
+            value = {'provider': PROVIDER, 'accession': None, 'uri': None, 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': request_ref, 'version': COMMON_VERSION, 'retrieved_at': None, 'parent_source_refs': parents}
             reference = identity('source', {'origin': 'tool', 'record': value})
             exists = self.store.holds(reference)
             self.store.put('source', value, origin='tool', scope=plain(context.scope))
             rows = _project_common_saved(payload, reference, requested)
-            validate_schema(rows, compiled_assay_v3_cells_schema())
-            outcome = {'status': 'completed', 'operation_ref': identity('operation', {'run_id': self.run_id, 'episode_id': context.episode_id, 'key': operation_key}), 'record_refs': [reference], 'changed_record_refs': [] if exists else [reference], 'result': {'sheet_ref': reference, 'view': VIEW, 'cells': rows, 'record_version': VERSION_V3, 'scientific_sheet_version': sheet['version']}, 'feedback': None}
+            validate_schema(rows, common_assessment_cells_schema())
+            outcome = {'status': 'completed', 'operation_ref': identity('operation', {'run_id': self.run_id, 'episode_id': context.episode_id, 'key': operation_key}), 'record_refs': [reference], 'changed_record_refs': [] if exists else [reference], 'result': {'sheet_ref': reference, 'view': VIEW, 'cells': rows, 'record_version': COMMON_VERSION, 'scientific_sheet_version': sheet['version']}, 'feedback': None}
             self._save_operation(operation_key, signature, outcome)
         return outcome
 
@@ -381,10 +358,10 @@ class LiteratureCompiledAssayRepository(LiteratureRateRepository):
         from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence.literature_compiled_assay_calculations import common_assessment_sheet_schema, _COMMON_FORMULAS, _COMMON_MEANINGS
         source = self.store.get(reference)
         value = {k: v for k, v in source.items() if k not in ('id', 'record_type', 'origin')}
-        if source.get('record_type') != 'source' or source.get('origin') != 'tool' or source.get('provider') != PROVIDER or (source.get('version') != VERSION_V3) or (source['text_ref'] != source['artifact_ref']) or (identity('source', {'origin': 'tool', 'record': value}) != reference):
+        if source.get('record_type') != 'source' or source.get('origin') != 'tool' or source.get('provider') != PROVIDER or (source.get('version') != COMMON_VERSION) or (source['text_ref'] != source['artifact_ref']) or (identity('source', {'origin': 'tool', 'record': value}) != reference):
             raise ContractError('literature_compiled_assay_sheet_required')
         request = self._json(source['request_ref'])
-        if set(request) != {'run_id', 'episode_id', 'operation_key', 'scope', 'arguments', 'components', 'role', 'assignment', 'received_record_refs'} or request['run_id'] != self.run_id or (not all((isinstance(request[k], str) and request[k] for k in ('episode_id', 'operation_key', 'role')))) or (request['components'] != request['assignment'].get(REQUESTED_V3, [])) or (request['components'] != request['arguments']['requested_cells']):
+        if set(request) != {'run_id', 'episode_id', 'operation_key', 'scope', 'arguments', 'components', 'role', 'assignment', 'received_record_refs'} or request['run_id'] != self.run_id or (not all((isinstance(request[k], str) and request[k] for k in ('episode_id', 'operation_key', 'role')))) or (request['components'] != request['assignment'].get(COMMON_REQUESTED, [])) or (request['components'] != request['arguments']['requested_cells']):
             raise ContractError('common_assessment_saved_request_mismatch')
         validate_schema(request['arguments'], common_assessment_population_schema())
         self._components(request['components'])
@@ -394,7 +371,7 @@ class LiteratureCompiledAssayRepository(LiteratureRateRepository):
             raise ContractError('literature_sheet_not_selected_output')
         saved = self._json(source['artifact_ref'])
         keys = {'version', 'input_source_ref', 'input_artifact_ref', 'direct_input_source_refs', 'input_source_refs', 'selection', 'component_selections', 'input_snapshots', 'public_input_records', 'source_metadata', 'extraction', 'sheet'}
-        if set(saved) != keys or saved['version'] != VERSION_V3 or saved['selection'] != request['arguments'] or (saved['input_source_ref'] != request['arguments']['source_ref']) or (saved['input_source_refs'] != source['parent_source_refs']) or (saved['input_artifact_ref'] != self.store.get(saved['input_source_ref'])['artifact_ref']):
+        if set(saved) != keys or saved['version'] != COMMON_VERSION or saved['selection'] != request['arguments'] or (saved['input_source_ref'] != request['arguments']['source_ref']) or (saved['input_source_refs'] != source['parent_source_refs']) or (saved['input_artifact_ref'] != self.store.get(saved['input_source_ref'])['artifact_ref']):
             raise ContractError('common_assessment_saved_selection_mismatch')
         selected = saved['component_selections']
         e, sheet = (saved['extraction'], saved['sheet'])
@@ -454,14 +431,14 @@ class LiteratureCompiledAssayRepository(LiteratureRateRepository):
             if cov_ref is not None and (not any((cov_ref == b['source_ref'] and cell['uncertainty']['variance_status'] == b['variance_status'] and (cell['uncertainty']['basis'] == b['basis']) for b in e['covariance_blocks']))):
                 raise ContractError('common_assessment_saved_covariance_binding_mismatch')
         rows = _project_common_saved(saved, reference, request['components'])
-        validate_schema(rows, compiled_assay_v3_cells_schema())
+        validate_schema(rows, common_assessment_cells_schema())
         outcome = json.loads(operation['outcome'])
-        if outcome.get('status') != 'completed' or outcome.get('record_refs') != [reference] or outcome.get('feedback') is not None or (canonical(outcome.get('result')) != canonical({'sheet_ref': reference, 'view': VIEW, 'cells': rows, 'record_version': VERSION_V3, 'scientific_sheet_version': sheet['version']})) or (outcome.get('operation_ref') != identity('operation', {'run_id': self.run_id, 'episode_id': request['episode_id'], 'key': request['operation_key']})):
+        if outcome.get('status') != 'completed' or outcome.get('record_refs') != [reference] or outcome.get('feedback') is not None or (canonical(outcome.get('result')) != canonical({'sheet_ref': reference, 'view': VIEW, 'cells': rows, 'record_version': COMMON_VERSION, 'scientific_sheet_version': sheet['version']})) or (outcome.get('operation_ref') != identity('operation', {'run_id': self.run_id, 'episode_id': request['episode_id'], 'key': request['operation_key']})):
             raise ContractError('common_assessment_saved_outcome_mismatch')
         return saved
 
     def read(self, reference):
-        if self.population_version == 3:
+        if self.common:
             return self._read_common(reference)
         source = self.store.get(reference)
         value = {k: v for k, v in source.items() if k not in ('id', 'record_type', 'origin')}
@@ -470,7 +447,7 @@ class LiteratureCompiledAssayRepository(LiteratureRateRepository):
         request = self._json(source['request_ref'])
         if set(request) != {'run_id', 'episode_id', 'operation_key', 'arguments', 'scope', 'components'} or request['run_id'] != self.run_id:
             raise ContractError('compiled_assay_saved_request_mismatch')
-        validate_schema(request['arguments'], compiled_assay_population_schema(self.population_version))
+        validate_schema(request['arguments'], compiled_assay_population_schema())
         self._components(request['components'])
         operation = self._operation(request['episode_id'], request['operation_key'])
         if operation is None or operation['signature'] != canonical(request):
@@ -486,7 +463,7 @@ class LiteratureCompiledAssayRepository(LiteratureRateRepository):
         if self.store.get(saved['input_source_ref'])['artifact_ref'] != saved['input_artifact_ref']:
             raise ContractError('compiled_assay_saved_source_mismatch')
         extraction = saved['extraction']
-        if extraction['source_ref'] != saved['input_source_ref'] or extraction['artifact_ref'] != saved['input_artifact_ref'] or extraction['source_refs'] != saved['direct_input_source_refs'] or (saved['sheet']['version'] != (SHEET_VERSION_V2 if self.population_version == 2 else SHEET_VERSION)) or (saved['sheet']['original_extraction'] != extraction):
+        if extraction['source_ref'] != saved['input_source_ref'] or extraction['artifact_ref'] != saved['input_artifact_ref'] or extraction['source_refs'] != saved['direct_input_source_refs'] or (saved['sheet']['version'] != SHEET_VERSION) or (saved['sheet']['original_extraction'] != extraction):
             raise ContractError('compiled_assay_saved_extraction_mismatch')
         selected = [request['arguments']['operands'][role] for role in ROLES if request['arguments']['operands'][role] is not None]
         if selected != saved['component_selections'] or selected != [row['selection'] for row in saved['input_snapshots']]:
@@ -503,11 +480,11 @@ class LiteratureCompiledAssayRepository(LiteratureRateRepository):
         if set(saved['sheet']['cells']) != set(self.components) or set(saved['sheet']['dependencies']) != set(self.components):
             raise ContractError('compiled_assay_saved_component_mismatch')
         for name, cell in saved['sheet']['cells'].items():
-            validate_schema(cell, _numerical_cell(self.population_version))
-            if cell['section'] != (SECTIONS_V2 if self.population_version == 2 else SECTIONS)[name] or cell['meaning'] != (MEANINGS_V2 if self.population_version == 2 else MEANINGS)[name] or (cell['value'] is None) != (cell['status'] == 'unavailable') or ((cell['unavailable_reason'] is None) != (cell['status'] == 'populated')):
+            validate_schema(cell, _numerical_cell())
+            if cell['section'] != SECTIONS[name] or cell['meaning'] != MEANINGS[name] or (cell['value'] is None) != (cell['status'] == 'unavailable') or ((cell['unavailable_reason'] is None) != (cell['status'] == 'populated')):
                 raise ContractError('compiled_assay_saved_cell_mismatch')
         rows = _project_saved(saved, reference, request['components'])
-        validate_schema(rows, compiled_assay_cells_schema(self.population_version))
+        validate_schema(rows, compiled_assay_cells_schema())
         outcome = json.loads(operation['outcome'])
         expected = {'sheet_ref': reference, 'view': VIEW, 'cells': rows}
         if outcome.get('status') != 'completed' or canonical(outcome.get('result')) != canonical(expected) or outcome.get('record_refs') != [reference] or (outcome.get('operation_ref') != identity('operation', {'run_id': self.run_id, 'episode_id': request['episode_id'], 'key': request['operation_key']})):
@@ -527,7 +504,7 @@ class LiteratureCompiledAssayRepository(LiteratureRateRepository):
         refs = list(dict.fromkeys(sheet_refs))
         if self.store.reference_subset(refs, plain(context.scope)) != refs:
             raise ContractError('literature_source_outside_scope')
-        if self.population_version == 3:
+        if self.common:
             selected = self._components(components)
             received = None
             result = []
@@ -547,9 +524,9 @@ class LiteratureCompiledAssayRepository(LiteratureRateRepository):
     def has_work(self, context):
         if context.run_id != self.run_id:
             raise ContractError('literature_run_mismatch')
-        if self.population_version == 3:
+        if self.common:
             return bool(self.available_sheet_refs(context))
-        own = any((self.store.get(json.loads(row['outcome'])['result']['sheet_ref']).get('version') in (VERSION, VERSION_V2) for row in self._operations(context.episode_id)))
+        own = any((self.store.get(json.loads(row['outcome'])['result']['sheet_ref']).get('version') == VERSION for row in self._operations(context.episode_id)))
         received = self.store.table(self.received).select({'run_id': self.run_id, 'episode_id': context.episode_id}, limit=1)
         return bool(own or received)
 
@@ -567,7 +544,7 @@ class LiteratureCompiledAssayRepository(LiteratureRateRepository):
 
     def validate_empty_return_family(self, context):
         versions = {self.store.get(json.loads(row['outcome'])['result']['sheet_ref']).get('version') for row in self._operations(context.episode_id)}
-        if self.population_version != 3 and VERSION_V3 not in versions:
+        if not self.common and COMMON_VERSION not in versions:
             return
         if versions and self.record_version not in versions:
             raise ContractError('literature_compiled_assay_projection_version_mismatch')
@@ -595,4 +572,4 @@ class LiteratureCompiledAssayRepository(LiteratureRateRepository):
             visit(cells)
             return list(dict.fromkeys(result))
         return list(dict.fromkeys((ref for row in cells for ref in [row['sheet_ref'], row['evidence_source_ref'], *(d['selection']['sheet_ref'] for d in row['dependencies'] if d['selection'] is not None), *[row[name] for name in ('covariance_source_ref', 'residual_variance_source_ref') if row[name] is not None]])))
-__all__ = ['LiteratureCompiledAssayRepository', 'compiled_assay_cells_schema', 'compiled_assay_v2_cells_schema', 'compiled_assay_v3_cells_schema', 'compiled_assay_operation_schema', 'PROVIDER', 'VERSION', 'VERSION_V2', 'VERSION_V3', 'NAMESPACE', 'NAMESPACE_V2', 'NAMESPACE_V3', 'REQUESTED', 'REQUESTED_V2', 'REQUESTED_V3', 'VIEW', 'COMPONENTS', 'COMPONENTS_V2']
+__all__ = ['LiteratureCompiledAssayRepository', 'compiled_assay_cells_schema', 'common_assessment_cells_schema', 'compiled_assay_operation_schema', 'PROVIDER', 'VERSION', 'COMMON_VERSION', 'NAMESPACE', 'COMMON_NAMESPACE', 'REQUESTED', 'COMMON_REQUESTED', 'VIEW', 'COMPONENTS']

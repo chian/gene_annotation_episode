@@ -11,7 +11,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.perturbation_evidence.literature_perturbation_calculations import COMPONENTS, CONDITIONAL_CODES, REASONS, populate_source_restoration, populate_source_summary_restoration
 
 PROVIDER = 'literature.experimental.perturbation'
-FORMULA_CODES = {name: 'perturbation_' + name + '_v1' for name in COMPONENTS}
+FORMULA_CODES = {name: 'perturbation_' + name for name in COMPONENTS}
 BINDINGS = {'assayed_subject_ref': ('molecule', 'reference'),
     'recipient_ref': ('recipient', 'reference'), 'donor_ref': ('donor', 'reference'),
     'experiment_ref': ('experiment', 'reference'), 'reference_arm_ref': ('reference_arm', 'reference'),
@@ -33,7 +33,7 @@ def _metadata(extraction):
 class LiteraturePerturbationRepository(LiteratureRateRepository):
     provider = PROVIDER
     components = COMPONENTS
-    record_version = 'literature_perturbation_record_v1'
+    record_version = 'literature_perturbation_rate_record'
     received_table = 'literature_perturbation_received'
     binding_fields = tuple(BINDINGS)
 
@@ -87,7 +87,7 @@ class LiteraturePerturbationRepository(LiteratureRateRepository):
         origin = extraction['data_origin'] or {'primary_source': 'reported',
             'retained_extraction': 'derived', 'graph_extraction': 'graph_derived',
             'synthetic_fixture': 'synthetic'}[args['source_kind']]
-        summary = extraction['version'] == 'a106_perturbation_inputs_v2'
+        summary = extraction['version'] == 'a106_perturbation_summary_inputs'
         if summary:
             sheet = populate_source_summary_restoration(extraction, origin=origin)
         else:
@@ -105,7 +105,7 @@ class LiteraturePerturbationRepository(LiteratureRateRepository):
             if assessment['revises_sheet_ref'] is not None:
                 parents.append(assessment['revises_sheet_ref'])
         parents = list(dict.fromkeys(parents))
-        record_version = 'literature_perturbation_record_v2' if summary else self.record_version
+        record_version = 'literature_perturbation_record' if summary else self.record_version
         payload = {'version': record_version, 'input_source_ref': source['id'],
             'input_artifact_ref': source['artifact_ref'], 'input_source_refs': parents,
             'direct_input_source_refs': direct, 'extraction': extraction, 'sheet': sheet,
@@ -181,7 +181,7 @@ class LiteraturePerturbationRepository(LiteratureRateRepository):
         return outcome
 
     def read(self, sheet_ref):
-        if self.store.get(sheet_ref).get('version') == 'literature_perturbation_record_v2':
+        if self.store.get(sheet_ref).get('version') == 'literature_perturbation_record':
             return self.summary_projection().read(sheet_ref)
         saved = super().read(sheet_ref)
         source = self.store.get(sheet_ref)
@@ -212,7 +212,7 @@ class LiteraturePerturbationRepository(LiteratureRateRepository):
         if context.run_id != self.run_id:
             raise ContractError('literature_run_mismatch')
         versions = {self.store.get(reference).get('version') for reference in self.produced_sheet_refs(context)}
-        if self.record_version not in versions and versions & {'literature_perturbation_record_v1', 'literature_perturbation_record_v2'}:
+        if self.record_version not in versions and versions & {'literature_perturbation_rate_record', 'literature_perturbation_record'}:
             raise ContractError('literature_perturbation_projection_version_mismatch')
 
     def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):

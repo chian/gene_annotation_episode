@@ -18,7 +18,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.rna_structu
 def _cell(name, value, *, origin, fields, state="present", reason=None, numerator=None, denominator=None):
     return {"name": name, "value": value, "unit": METRIC_UNITS[name], "state": state, "reason": reason,
         "numerator": numerator, "denominator": denominator, "origin": origin,
-        "formula_id": "native:mfe" if name == "mfe_kcal_mol" else "native:eval_structure" if name == "evaluated_energy_kcal_mol" else "rna_v1:" + name,
+        "formula_id": "native:mfe" if name == "mfe_kcal_mol" else "native:eval_structure" if name == "evaluated_energy_kcal_mol" else "rna:" + name,
         "input_fields": fields, "uncertainty": no_native_uncertainty()}
 
 
@@ -71,7 +71,7 @@ def _topology(sheet, parameters):
     ratio("unpaired_fraction", unpaired, n, ["/topology/pairs", "/topology/length_nt"], "rna_zero_length_denominator")
     ratio("mean_pair_span_nt", sum(spans), pair_count, ["/topology/pairs"], "zero_pair_denominator")
     add("stem_count", stem_count, ["/topology/stems"])
-    # The explicit v1 empty-maximum convention is zero pairs for zero stems.
+    # The explicit empty-maximum convention is zero pairs for zero stems.
     add("longest_stem_pairs", max(lengths, default=0), ["/topology/stems"])
     ratio("mean_stem_pairs", sum(lengths), stem_count, ["/topology/stems"], "zero_stem_denominator")
     add("stack_count", sum(length - 1 for length in lengths), ["/topology/stems"])
@@ -178,7 +178,7 @@ def _energy(sheet, parameters):
 def _parameter_subset(name, value):
     # These validation-only values are not implicit calculation choices. Each
     # public specialized function consumes and returns only its supplied subset.
-    parameters = {"schema": "rna_calculation_parameters_v1",
+    parameters = {"schema": "rna_calculation_parameters",
         "topology": {"long_stem_min_pairs": 1, "include_exterior_in_loop_size_statistics": False},
         "pair_composition": {"accepted_ordered_pair_types": [], "denominator": "unambiguous_pairs"},
         "energy": {"normalization": "none"}}
@@ -213,8 +213,8 @@ def _calculate(sheet, parameters):
         "/native_mfe/numeric_text", "/native_mfe/engine", "/native_mfe/engine_version", "/native_mfe/model_key",
         "/native_evaluation/numeric_text", "/native_evaluation/engine", "/native_evaluation/engine_version",
         "/native_evaluation/model_key", "/analysis_sequence/symbol_counts", "/original_input/sequence_id"]
-    return {"schema": "rna_structure_components_v1", "sheet_schema": sheet["schema"], "record_key": sheet["record_key"],
-        "parameters": deepcopy(parameters), "calculator_version": "rna_structure_calculations_v1",
+    return {"schema": "rna_structure_components", "sheet_schema": sheet["schema"], "record_key": sheet["record_key"],
+        "parameters": deepcopy(parameters), "calculator_version": "rna_structure_calculations",
         "summary": summary, "pairs": topology["pairs"], "stems": topology["stems"], "regions": topology["regions"],
         "issues": deepcopy(sheet["issues"]), "used_native_fields": used, "unused_native_fields": unused}
 

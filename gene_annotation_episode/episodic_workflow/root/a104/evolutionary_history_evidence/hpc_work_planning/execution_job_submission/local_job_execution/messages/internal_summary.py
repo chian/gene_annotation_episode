@@ -43,7 +43,7 @@ def _completion(assignment, initial_validations, receipts):
 
 
 def _selected_execution_task(parent_input):
-    """The old ``selected_execution_task_v1`` of the decision context: present only when the request is exactly one
+    """The old ``selected_execution_task`` of the decision context: present only when the request is exactly one
     A104 native job and the parent supplied the scientific task (its question and the selected tool information).
     The resource of the task is added by ``decide`` from the settings."""
     assignment = parent_input['assignment']
@@ -61,7 +61,7 @@ def _selected_execution_task(parent_input):
     request = {'resource_id': assignment['resource_id'], 'resource_kind': 'local',
                'endpoint': deepcopy(assignment['endpoint']), 'constraints': deepcopy(assignment['constraints']),
                'job': job}
-    return {'version': 'selected_execution_task_v1', 'scientific_question': task['scientific_question'],
+    return {'version': 'selected_execution_task', 'scientific_question': task['scientific_question'],
             'selected_tool_info': task['selected_tool_info'], 'requests': [request],
             'constraints': deepcopy(assignment['constraints']), 'selector': None, 'result_description': None}
 

@@ -54,7 +54,7 @@ def _batches(values):
 def _ask(client, collection, key, values, fields, state):
     """One public request for the records of ``collection`` whose ``key`` is in ``values``: the documents, or ``None``
     when the service did not answer (the code is kept in ``state['failures']``). Sleeps the spacing first."""
-    request = {'version': 'bvbrc_data_request_v2', 'collection': collection, 'mode': 'page',
+    request = {'version': 'bvbrc_data_request', 'collection': collection, 'mode': 'page',
                'filters': [{'field': key, 'operator': 'in', 'value': values}], 'fields': fields,
                'limit': max(len(values) * 4, 25), 'offset': 0}
     prepared = encode_native_query(request, base_url=DEFAULT_BASE_URL)

@@ -11,7 +11,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.perturbation_evidence.literature_product_partition_calculations import COMPONENTS, REASONS, CONDITIONS, component_roles, populate_product_partition_components
 
 PROVIDER = "literature.a105.product_partition_population"
-VERSION = "literature_product_partition_population_record_v1"
+VERSION = "literature_product_partition_population_record"
 NAMESPACE = "literature_product_partition_cells"
 
 

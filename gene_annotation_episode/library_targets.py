@@ -12,7 +12,7 @@ import json
 from .domain import ContractError, canonical, identity
 from gene_annotation_episode import materials_packing as packing
 
-VERSION = "fixed_original_read_position_measure_v1"
+VERSION = "fixed_original_read_position_measure"
 
 
 def install_tables(store):

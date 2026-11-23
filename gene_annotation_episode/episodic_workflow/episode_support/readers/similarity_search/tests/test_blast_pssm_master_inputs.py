@@ -64,7 +64,7 @@ def test_retained_native_master_full_sequence_encoding_length_and_mapping():
     assert expected[:10] == "QIKDLLVSSS" and expected[-1] == "P"
     result = EXTRACT(sheet)
     assert set(result) == {"schema", "artifact_key", "source_ref", "input_identity", "records", "issues"}
-    assert result["schema"] == "blast_pssm_master_metadata_v1"
+    assert result["schema"] == "blast_pssm_master_metadata"
     assert {k: result[k] for k in ("artifact_key", "source_ref", "input_identity")} == {
         k: sheet[k] for k in ("artifact_key", "source_ref", "input_identity")}
     assert sheet["input_identity"] == {

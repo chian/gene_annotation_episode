@@ -218,14 +218,14 @@ def _union(intervals):
 
 def calculate_hmmer_search_scores(sheet, *, parameters=None):
     """Calculate only from saved sheet; reject all undeclared parameters."""
-    if type(sheet) is not dict or sheet.get("schema") != "hmmer_search_sheet_v1":
+    if type(sheet) is not dict or sheet.get("schema") != "hmmer_search_sheet":
         raise ValueError("hmmer_invalid_search_sheet_schema")
     if parameters is not None and type(parameters) is not dict: raise ValueError("hmmer_parameters_must_be_object")
     finite_json(sheet); finite_json(parameters)
     if parameters: raise ValueError("hmmer_unsupported_calculator_parameters:" + ",".join(sorted(parameters)))
     for key in ("hits", "domains", "queries", "iterations"):
         if not isinstance(sheet.get(key), list): raise ValueError("hmmer_sheet_rows_must_be_arrays:" + key)
-    result = {"schema": "hmmer_search_scores_v1", "operation": deepcopy(sheet["operation"]), "parameters": {},
+    result = {"schema": "hmmer_search_scores", "operation": deepcopy(sheet["operation"]), "parameters": {},
               "hits": [], "domains": [], "queries": [], "iterations": [], "definitions": _definitions(), "issues": deepcopy(sheet.get("issues", []))}
     for source in sheet["domains"]:
         if not isinstance(source, dict) or "record_key" not in source or "locator" not in source:

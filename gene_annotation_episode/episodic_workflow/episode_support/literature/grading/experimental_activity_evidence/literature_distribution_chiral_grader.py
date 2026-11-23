@@ -29,7 +29,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     DISTRIBUTION_CHIRAL_CRITERIA, ISOMERS_IN_A_PAIR, PERCENT_PER_FRACTION)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_distribution_chiral_grade_v1'
+VERSION = 'a105_distribution_chiral_grade'
 CRITERIA = tuple(criterion['id'] for criterion in DISTRIBUTION_CHIRAL_CRITERIA)
 PRODUCT = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact product_detected
 

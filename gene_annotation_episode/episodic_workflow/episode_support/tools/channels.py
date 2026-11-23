@@ -67,7 +67,7 @@ def publish_channels(store,args):
         require(len(numbers)==1,'a103_conflicting_native_channel_rows')
         number = next(iter(numbers))
         require(type(number) in {int,float} and 0<=number<=1,'a103_native_channel_scale_invalid')
-        body = {'schema':'a103_channel_v1','producer_operation':'context.association_channels',
+        body = {'schema':'a103_channel','producer_operation':'context.association_channels',
             **args,'channel':channel,'native_field':field,'native_value':number,
             'native_unit':'STRING_channel_0_to_1','native_taxon_id':value['requested']['taxon_id'],
             'native_request_url':value['response']['request_url'],

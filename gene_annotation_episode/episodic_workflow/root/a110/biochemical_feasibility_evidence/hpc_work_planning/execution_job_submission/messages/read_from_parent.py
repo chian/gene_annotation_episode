@@ -1,4 +1,4 @@
-"""What the commissioner gives: the launch assignment (the old ``execution_launch_assignment_v1``, one field per
+"""What the commissioner gives: the launch assignment (the old ``execution_launch_assignment``, one field per
 property of the old assignment schema, under the same names) and what the new form needs besides.
 
 This is the only place the assignment is read. ``read_from_parent`` admits it as the old ``prepare_assignment``
@@ -23,7 +23,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.biochemic
 from gene_annotation_episode.episodic_workflow.episode_support.records.hpc.resource_records import (
     INPUT_VERSION_SCHEMA)
 
-LAUNCH_VERSION = 'execution_launch_assignment_v1'
+LAUNCH_VERSION = 'execution_launch_assignment'
 
 ASSIGNMENT_FORM = RecordForm({
     'version': DeclaredField('text', 'The launch assignment version', LAUNCH_VERSION),

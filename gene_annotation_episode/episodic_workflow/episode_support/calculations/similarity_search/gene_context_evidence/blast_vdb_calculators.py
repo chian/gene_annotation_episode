@@ -1011,6 +1011,6 @@ def calculate_blast_vdb_components(sheet) -> dict:
                     and samples["complete_for_origin_members"] and all(t["status"] == "available" for t in taxonomy["subject_taxa"])
                     and bool(features) and bool(population["records"]) and all(r["status"] == "available" for r in population["records"]))
         status = "complete" if required and not issues else "partial"
-    return dict(schema="blast_vdb_components_v1", search_key=deepcopy(key), status=status, hsps=hsps, subjects=subjects,
+    return dict(schema="blast_vdb_components", search_key=deepcopy(key), status=status, hsps=hsps, subjects=subjects,
         membership=membership, sequence_groups=sequences, sample_groups=samples, feature_components=features,
         taxonomy=taxonomy, source_quality=quality, population_components=population, issues=issues)

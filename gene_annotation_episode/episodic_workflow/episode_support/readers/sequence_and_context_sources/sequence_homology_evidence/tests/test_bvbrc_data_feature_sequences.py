@@ -85,13 +85,13 @@ def fixture_sheet(collection, native_rows, fields=None, *, raw_bytes=None):
                      "cells": cells, "numerical_cells": numeric, "issues": []})
     valid_count = sum(row["status"] == "valid" for row in rows)
     return validate("DataSheet", {
-        "version": "bvbrc_data_sheet_v1", "collection": collection, "mode": "page",
+        "version": "bvbrc_data_sheet", "collection": collection, "mode": "page",
         "custody": {"native_sha256": digest, "retrieved_at": "synthetic_supplied_sheet_fixture",
                     "requested_url": "https://fixture.invalid/" + collection,
                     "effective_url": "https://fixture.invalid/" + collection,
                     "media_type": "application/solr+json",
-                    "native_profile": "solr_json_envelope_v1", "prepared_sha256": "0" * 64,
-                    "field_contract_version": "bvbrc_data_fields_2026_10_24_v1"},
+                    "native_profile": "solr_json_envelope", "prepared_sha256": "0" * 64,
+                    "field_contract_version": "bvbrc_data_fields_2026_10_24"},
         "transport": {"http_status": 200, "body_complete": True, "headers": [], "failure_code": None,
                       "automatic_redirects": False, "native_query_time_ms": None},
         "qualification": {"service_matches": True, "request_matches": True, "transport_complete": True,
@@ -401,7 +401,7 @@ def test_saved_sheet_calculator_counts_unjoined_rows_and_repeated_representation
     monkeypatch.setattr(socket, "socket", forbidden)
     monkeypatch.setattr(subprocess, "Popen", forbidden)
     components = calculate_feature_sequence_counts(saved)
-    assert components == {"version": "bvbrc_feature_sequence_components_v1", "selected_feature_count": 1,
+    assert components == {"version": "bvbrc_feature_sequence_components", "selected_feature_count": 1,
         "retained_feature_row_count": 1, "native_sequence_record_count": 3, "distinct_joined_aa_sequence_count": 1,
         "distinct_joined_na_sequence_count": 0, "relation_count": 1, "missing_key_count": 0,
         "missing_record_count": 0, "conflicting_relation_count": 0, "length_agreement_count": 1}

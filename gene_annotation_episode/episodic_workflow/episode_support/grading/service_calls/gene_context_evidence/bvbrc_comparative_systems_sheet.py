@@ -463,12 +463,12 @@ def build_comparative_systems_sheet(documents: tuple[dict, ...], *, analysis_id:
     """Populate an immutable numerical sheet, preserving every selected source."""
     if type(analysis_id) is not str or not analysis_id:
         raise ValueError("comparative_systems_analysis_id_required")
-    original = validate_shape("OriginalRequestV1", original_request)
-    selection = validate_shape("DocumentSelectionV1", document_selection)
-    assignments = validate_shape("PopulationAssignmentsV1", population_assignments)
-    evidence = [validate_shape("ProducerEvidenceV1", item) for item in producer_evidence]
-    supplied = validate_shape("SuppliedRecordSetsV1", supplied_record_sets) if supplied_record_sets is not None else None
-    references = [validate_shape("ReferenceMembershipV1", item) for item in reference_memberships]
+    original = validate_shape("OriginalRequest", original_request)
+    selection = validate_shape("DocumentSelection", document_selection)
+    assignments = validate_shape("PopulationAssignments", population_assignments)
+    evidence = [validate_shape("ProducerEvidence", item) for item in producer_evidence]
+    supplied = validate_shape("SuppliedRecordSets", supplied_record_sets) if supplied_record_sets is not None else None
+    references = [validate_shape("ReferenceMembership", item) for item in reference_memberships]
     natives = [validate_native_document(item) for item in documents]
     # Validate explicit references before extraction; missing selected artifacts
     # remain requirements, while duplicate/conflicting selections fail the call.
@@ -495,7 +495,7 @@ def build_comparative_systems_sheet(documents: tuple[dict, ...], *, analysis_id:
                 invalid |= assignment["entity"] is not None or assignment["component_kind"] is not None
         if invalid:
             raise ValueError("comparative_systems_population_assignment_selector_invalid")
-    sheet = {"version": "bvbrc_comparative_systems_sheet_v1", "analysis_id": analysis_id,
+    sheet = {"version": "bvbrc_comparative_systems_sheet", "analysis_id": analysis_id,
              "original_request": original, "source_documents": [deepcopy(item["document"]) for item in natives],
              "producer_evidence": evidence, "populations": [], "document_selection": selection,
              "population_assignments": assignments, "native_documents": natives,

@@ -10,7 +10,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.perturbation_evidence.literature_perturbation_assessments import assessment_schema, validate_assessment
 
 PROVIDER = "literature.a106.intervention_grading"
-VERSION = "literature_intervention_grading_record_v1"
+VERSION = "literature_intervention_grading_record"
 NAMESPACE = "literature_intervention_grading_cells"
 REQUESTED = "requested_intervention_grading_components"
 SCOPE = EVALUATION_SCOPE

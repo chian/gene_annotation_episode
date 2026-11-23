@@ -39,7 +39,7 @@ def calculate_genome_alignment_components(data: dict, *, calculation_plan: dict)
     data = validate_genome_alignment_data(data)
     plan = c.validate_genome_alignment_calculation_plan(calculation_plan, document_slots=tuple(data['document_slots']))
     _, resolutions, documents = c._indexes(data)
-    result = {'schema_version': 'bvbrc_genome_alignment_components_v2', 'analysis_id': data['analysis_id'],
+    result = {'schema_version': 'bvbrc_genome_alignment_components', 'analysis_id': data['analysis_id'],
         'calculation_plan': plan, 'source_bindings': [], 'outcomes': [], 'requirements': [], 'diagnostics': []}
     bindings = {}
     for index, request in enumerate(plan['requests']):

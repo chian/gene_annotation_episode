@@ -1,4 +1,4 @@
-"""What the parent gives: the literature assignment ``literature_assignment_v1`` (the records that give the assigned
+"""What the parent gives: the literature assignment ``literature_assignment`` (the records that give the assigned
 question its context), the commissioned literature task (the one kind, ``verified_source_leads``), the proposed
 annotation (the claim, by reference), the persisted sheet states, the Store scope of the commission and the records
 passed in custody. No search, paper or source is given: this chain finds them. This is the only place the assignment
@@ -16,10 +16,10 @@ from method_loop import DeclaredField, Field, RecordForm
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import (
     ContractError, obj, validate_schema)
 
-VERSION = 'literature_local_task_v1'
+VERSION = 'literature_local_task'
 
 ASSIGNMENT_FORM = RecordForm({
-    'version': DeclaredField('text', 'The literature assignment version', 'literature_assignment_v1'),
+    'version': DeclaredField('text', 'The literature assignment version', 'literature_assignment'),
     'question_context_refs': Field('record_refs', 'Records giving the assigned question its context'),
     'literature_task': Field('record', 'The commissioned literature task: its kind (verified_source_leads), '
                              'evidence_axis A105 and credit_unit'),

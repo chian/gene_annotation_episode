@@ -19,8 +19,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.records import na
 
 
 OPERATION = "protein_phylogeny_iqtree_native"
-REQUEST_VERSION = "iqtree_phylogeny_native_request_v1"
-MANIFEST_VERSION = "iqtree_phylogeny_native_manifest_v1"
+REQUEST_VERSION = "iqtree_phylogeny_native_request"
+MANIFEST_VERSION = "iqtree_phylogeny_native_manifest"
 NATIVE_DIRECTORY_NAME = "iqtree-phylogeny-native"
 INT_MAX = 2147483647
 _FILES = (

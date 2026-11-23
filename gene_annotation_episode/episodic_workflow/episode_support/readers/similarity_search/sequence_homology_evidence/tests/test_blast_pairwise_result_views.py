@@ -10,7 +10,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.sequence_ho
 
 
 def selector(family="pairwise_hsp", metrics=None, rows=None):
-    return {"version": "native_blast_result_selector_v1", "acquisition": "complete_bound_bundle",
+    return {"version": "native_blast_result_selector", "acquisition": "complete_bound_bundle",
         "projection": {"family": family, "metrics": metrics or list(NATIVE_BLAST_METRICS[family]),
                        "rows": rows or {"offset": 0, "limit": 20}}}
 

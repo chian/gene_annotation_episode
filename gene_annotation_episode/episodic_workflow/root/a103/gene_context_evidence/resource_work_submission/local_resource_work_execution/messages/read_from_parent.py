@@ -1,4 +1,4 @@
-"""What the commissioning launch parent supplies: the persisted ``resource_launch_assignment_v1`` (old
+"""What the commissioning launch parent supplies: the persisted ``resource_launch_assignment`` (old
 ``from_parent.py`` ``assignment_schema`` = ``LAUNCH_SCHEMA``), one field per property of that schema under its old
 name, and the values the old request message carried beside it.
 
@@ -17,7 +17,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.hpc.resou
     LAUNCH_SCHEMA, RESOURCE_ROLES, _validate)
 
 ASSIGNMENT_FORM = RecordForm({
-    'version': Field('text', 'resource_launch_assignment_v1'),
+    'version': Field('text', 'resource_launch_assignment'),
     'job_request': Field('record', "The scientific parent's job, fixed"),
     'immutable_input_versions': Field('list', 'reference, version and content_sha256 of each input, fixed'),
     'constraints': Field('record', 'allowed_resource_ids, allowed_kinds, resource_id, kind; fixed'),
@@ -33,11 +33,11 @@ ASSIGNMENT_FORM = RecordForm({
     'completion_target': Field('number', 'The credit a usable execution handoff earns'),
 })
 
-OLD_PROPERTIES = tuple(LAUNCH_SCHEMA['properties'])
+ASSIGNMENT_PROPERTIES = tuple(LAUNCH_SCHEMA['properties'])
 
 
 def read_from_parent(assignment, message):
-    launch = {name: assignment[name] for name in OLD_PROPERTIES if name in assignment}
+    launch = {name: assignment[name] for name in ASSIGNMENT_PROPERTIES if name in assignment}
     launch.setdefault('launch_instructions', None)
     launch = _validate(launch, LAUNCH_SCHEMA)
     if launch['resource_selection'] is None:

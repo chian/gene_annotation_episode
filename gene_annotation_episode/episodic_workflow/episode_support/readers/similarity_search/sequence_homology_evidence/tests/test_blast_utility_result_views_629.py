@@ -20,7 +20,7 @@ SOURCE = "source_original_utility"
 
 
 def selector(**changes):
-    return {"version": "native_blast_utility_result_selector_v1", "sequences": None,
+    return {"version": "native_blast_utility_result_selector", "sequences": None,
         "database_fields": [], "integrity": None, "preparation": None,
         "prepared_database": False, "include_checks": False, "artifacts": [], "saved_data": [], **changes}
 
@@ -32,12 +32,12 @@ def selected_sequences(*ordinals, fields=("normalized_sequence",)):
 def retained(result):
     """Assign synthetic Store identities and distinct original slots, without IO."""
     result = deepcopy(result)
-    if result["version"] == "blast_database_artifact_set_v1":
+    if result["version"] == "blast_database_artifact_set":
         rows = result["inputs"] + result["outputs"]
     else:
         rows = [occurrence("db-file", direction="input", role="database_file", fmt="blastdb_binary")]
         rows.extend([result["stdout_occurrence"], result["stderr_occurrence"]]
-                    if result["version"] == "blast_database_integrity_v1" else [result["output_occurrence"]])
+                    if result["version"] == "blast_database_integrity" else [result["output_occurrence"]])
     ordinals = {}
     for row in rows:
         slot = row["direction"], row["role"]

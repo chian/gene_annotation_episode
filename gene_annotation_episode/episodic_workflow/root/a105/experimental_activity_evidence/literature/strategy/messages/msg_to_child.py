@@ -22,7 +22,7 @@ EXAMINED = 'examined_article_refs'
 def msg_to_child(slot, arguments, summary):
     if slot != 'web_search':
         raise LookupError('no_such_child_slot:' + slot)
-    assignment = {'version': 'search_assignment_v1',
+    assignment = {'version': 'search_assignment',
                   'question_context_refs': summary['strategy']['question_context_refs'],
                   'search_query_ref': arguments['search_query_ref'],
                   'literature_task': summary['task'], 'proposed_annotation_ref': summary['proposed_annotation_ref'],

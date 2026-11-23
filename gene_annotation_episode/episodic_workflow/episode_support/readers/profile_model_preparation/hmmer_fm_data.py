@@ -277,7 +277,7 @@ def extract_hmmer_fm_database(content: bytes, *, occurrence, producer_contract):
     """
     if not isinstance(content, bytes):
         raise TypeError("content must be bytes")
-    result = {"schema": "hmmer_fm_extraction_v1", "occurrence": deepcopy(occurrence),
+    result = {"schema": "hmmer_fm_extraction", "occurrence": deepcopy(occurrence),
               "producer_contract": deepcopy(producer_contract), "metadata": None,
               "segments": [], "ambiguity_ranges": [], "blocks": [],
               "population": {"state": "unsupported", "complete": False,
@@ -594,7 +594,7 @@ def _associate_queries(groups, queries, issues):
 
 def populate_hmmer_fm_sheet(*, operation, inputs, outputs, producer_contract, source_binding=None):
     """Populate one operation sheet from occurrence-bearing role payloads."""
-    sheet = {"schema": "hmmer_fm_sheet_v1", "operation": deepcopy(operation),
+    sheet = {"schema": "hmmer_fm_sheet", "operation": deepcopy(operation),
              "artifact_occurrences": [], "producer_contract": deepcopy(producer_contract),
              "source_binding": deepcopy(source_binding), "database": None, "input_records": [],
              "native_rows": [], "associations": {"source_binding_state": "unknown", "segments": [],

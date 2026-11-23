@@ -50,7 +50,7 @@ spans          source_ref -> {'locator', 'quote'}: the quoted source span
 """
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_spr_record import SUPPORTS, fact, point, unavailable   # support: see literature_spr_record (every stated value carries 'support'; the constructors default it to 'direct' for forms built outside the extraction)
 
-VERSION = 'a105_itc_record_v1'
+VERSION = 'a105_itc_record'
 EXPERIMENT_TYPE = 'itc'
 QUANTITIES = ('kd', 'kd_spread', 'stoichiometry', 'expected_stoichiometry', 'enthalpy', 'entropy', 'temperature', 'cell_concentration', 'syringe_concentration', 'injection_count', 'replicate_count', 'final_molar_ratio')
 PREPARATION_KEYS = ('syringe_preparation_ref', 'cell_preparation_ref', 'dataset_ref')

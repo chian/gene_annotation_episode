@@ -23,7 +23,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.storag
 
 
 PROVIDER = "literature.experimental.binding_model"
-FORMULA_CODES = {name: "binding_model_" + name + "_v1" for name in COMPONENTS}
+FORMULA_CODES = {name: "binding_model_" + name for name in COMPONENTS}
 FORMULA_MEANINGS = {FORMULA_CODES[name]: FORMULAS[name] for name in COMPONENTS}
 
 
@@ -36,10 +36,10 @@ def binding_model_population_schema():
 def _model_metadata(sheet):
     model = sheet["model"]
     return {
-        # Preserve the exact old projection. A missing selected input in v2
+        # A missing selected input
         # establishes no claim about absence from the underlying publication.
         "model_kind": ("known_normal_log_parameters" if model is not None else
-                       "unreported" if sheet["version"] == "binding_model_sheet_v1" else "not_supplied"),
+                       "not_supplied"),
         "variance_status": model["variance_status"] if model is not None else "not_supplied",
         "censoring_model": model["censoring_model"] if model is not None else "not_supplied",
         "model_origin": model["origin"] if model is not None else "not_supplied",
@@ -49,8 +49,8 @@ def _model_metadata(sheet):
 class LiteratureBindingModelRepository(LiteratureBindingRepository):
     provider = PROVIDER
     components = COMPONENTS
-    record_version = "literature_binding_model_record_v2"
-    readable_record_versions = ("literature_binding_model_record_v1", record_version)
+    record_version = "literature_binding_model_record"
+    readable_record_versions = (record_version,)
 
     def _binding(self, reference):
         # The ordinary binding repository checks the saved sheet's version and source parents.
@@ -212,7 +212,7 @@ def binding_model_cells_schema():
         "parameter_kind": {"type": "string", "enum": list(PARAMETER_KINDS)},
         "contrast_meaning": {"type": "string", "enum": ["test_parameter_exceeds_reference"]},
         "evaluated_scope": {"type": "string", "enum": ["interpreted_source_parameter_contrast"]},
-        "model_kind": {"type": "string", "enum": ["unreported", "not_supplied", "known_normal_log_parameters"]},
+        "model_kind": {"type": "string", "enum": ["not_supplied", "known_normal_log_parameters"]},
         "variance_status": {"type": "string", "enum": ["not_supplied", "known", "estimated", "unknown"]},
         "censoring_model": {"type": "string", "enum": ["not_supplied", "none", "threshold_of_log_estimate", "unknown"]},
         "model_origin": {"type": "string", "enum": ["not_supplied", "reported", "derived", "synthetic"]},

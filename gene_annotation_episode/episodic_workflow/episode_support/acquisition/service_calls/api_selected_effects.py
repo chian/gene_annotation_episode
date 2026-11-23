@@ -18,10 +18,10 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.perturbatio
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.perturbation_evidence.practical_execution_state import _immutable, _read
 
 
-RESERVATION_VERSION = 'selected_api_effect_reservation_v1'
-INTENT_VERSION = 'selected_api_effect_intent_v1'
-STATE_VERSION = 'selected_api_effect_state_v1'
-RECEIPT_VERSION = 'selected_api_effect_receipt_v1'
+RESERVATION_VERSION = 'selected_api_effect_reservation'
+INTENT_VERSION = 'selected_api_effect_intent'
+STATE_VERSION = 'selected_api_effect_state'
+RECEIPT_VERSION = 'selected_api_effect_receipt'
 _RESERVATION_FIELDS = {'version', 'reservation_ref', 'run_id', 'episode_id',
     'operation_key', 'original_job_owner', 'resource_id', 'effect_refs'}
 _OUTCOME_FIELDS = {'effect_ref', 'state', 'confirmation_source_ref',
@@ -120,7 +120,7 @@ class SelectedAPIEffects:
 
     @staticmethod
     def _action_invocation(reservation):
-        return {'version': 'selected_api_effect_action_invocation_v1',
+        return {'version': 'selected_api_effect_action_invocation',
             'operation_key': reservation['operation_key'],
             'original_job_owner': deepcopy(reservation['original_job_owner']),
             'reservation_ref': reservation['reservation_ref']}
@@ -248,7 +248,7 @@ class SelectedAPIEffects:
             row = _read(path)
             if (set(row) != {'version', 'original_job_owner', 'resource_id', 'aliases',
                             'identity', 'merged_identities', 'evidence_refs'}
-                    or row['version'] != 'selected_api_object_identity_v1'
+                    or row['version'] != 'selected_api_object_identity'
                     or path.stem != digest(row) or self._job(row['original_job_owner']) != job):
                 raise ValueError('api_effect_object_alias_record_conflict')
             aliases = self._object_aliases(**row['aliases'])
@@ -317,7 +317,7 @@ class SelectedAPIEffects:
                 if value is not None and (kind, value) in known})
             identity = (found[0] if found else 'api_workspace_object_' + digest({
                 'owner': original_job_invocation, 'resource_id': resource_id, 'aliases': aliases}))
-            row = {'version': 'selected_api_object_identity_v1',
+            row = {'version': 'selected_api_object_identity',
                 'original_job_owner': deepcopy(original_job_invocation), 'resource_id': resource_id,
                 'aliases': aliases, 'identity': identity,
                 'merged_identities': found or [identity], 'evidence_refs': sorted(set(evidence_refs))}

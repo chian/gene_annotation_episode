@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_an
 from gene_annotation_episode.episodic_workflow.episode_support.records.hpc.partner_presence_evidence.hpc_result_receipts import planned_input_files
 
 
-VERSION = 'a103_shared_hpc_custody_v1'
+VERSION = 'a103_shared_hpc_custody'
 REQUEST_PROVIDER = 'host.a103.hpc_request'
 RESULT_PROVIDER = 'host.a103.hpc_admission'
 HPC_REQUESTS = TableDeclaration(name='a103_hpc_requests', columns=('source_ref','body'), key=('source_ref',),

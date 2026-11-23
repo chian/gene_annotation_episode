@@ -19,7 +19,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.render
 from gene_annotation_episode.episodic_workflow.episode_support.literature.rendering.experimental_activity_evidence import literature_product_partition_render as product_partition
 from gene_annotation_episode.episodic_workflow.episode_support.literature.rendering.experimental_activity_evidence import literature_assay_grading_render as assay_grading
 from gene_annotation_episode.episodic_workflow.episode_support.literature.rendering.experimental_activity_evidence import literature_aggregation_render as aggregation
-from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_worksheet import VERSION, VERSION_V2
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_worksheet import VERSION
 
 def _native(parts, rows, records, hidden, *, section, table):
     """Native adapter: use only actual delivered roles and public safe labels."""
@@ -62,7 +62,7 @@ def render_a105_worksheet(parts, form, *, section, table, public_records):
     """
     if not isinstance(form, Mapping):
         return
-    contexts = [v for v in form.values() if isinstance(v, Mapping) and v.get('version') in (VERSION, VERSION_V2)]
+    contexts = [v for v in form.values() if isinstance(v, Mapping) and v.get('version') == VERSION]
     if len(contexts) != 1:
         return
     context = contexts[0]

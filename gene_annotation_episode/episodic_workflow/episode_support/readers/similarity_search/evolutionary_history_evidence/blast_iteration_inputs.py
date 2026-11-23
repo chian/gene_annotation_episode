@@ -146,7 +146,7 @@ def _evidence(value, path):
 
 def _collection(value):
     if (type(value) is not dict or set(value) != {"schema", "invocation", "artifacts", "searches", "issues"}
-            or value["schema"] != "blast_report_collection_v1"):
+            or value["schema"] != "blast_report_collection"):
         raise ValueError("blast_iteration_collection_schema_invalid")
     inv = value["invocation"]
     _keys(inv, {"execution_program", "scientific_mode", "resource_kind", "query_kind", "reference_kind",
@@ -216,7 +216,7 @@ def _collection(value):
             and (reporting["native_returncode"] is None or type(reporting["native_returncode"]) is int)
             and (reporting["producer_complete"] is None or type(reporting["producer_complete"]) is bool), path + "/reporting")
         norm = search["normalized"]
-        _is(norm, norm.get("schema") == "blast_normalized_result_v1"
+        _is(norm, norm.get("schema") == "blast_normalized_result"
             and norm.get("format") in ("json2", "tabular")
             and all(type(norm.get(k)) is dict for k in ("query", "search", "native"))
             and type(norm.get("hits")) is list and type(norm.get("issues")) is list, path + "/normalized")
@@ -227,10 +227,10 @@ def _collection(value):
 def _validate(sheet):
     sheet = _copy(sheet)
     version = sheet.get("schema") if type(sheet) is dict else None
-    per_search = version in ("blast_iteration_sheet_v2", "blast_iteration_sheet_v3")
-    population = version == "blast_iteration_sheet_v3"
+    per_search = version in ("blast_iteration_sheet_target_context", "blast_iteration_sheet_population")
+    population = version == "blast_iteration_sheet_population"
     fields = _FIELDS | {"target_contexts"} if per_search else _FIELDS
-    if type(sheet) is not dict or set(sheet) != fields or version not in ("blast_iteration_sheet_v1", "blast_iteration_sheet_v2", "blast_iteration_sheet_v3"):
+    if type(sheet) is not dict or set(sheet) != fields or version not in ("blast_iteration_sheet", "blast_iteration_sheet_target_context", "blast_iteration_sheet_population"):
         raise ValueError("blast_iteration_sheet_fields_invalid")
     _collection(sheet["collection"])
     for name in _LISTS:
@@ -277,7 +277,7 @@ def _validate(sheet):
                 if name == "sequence_metadata":
                     if population and row["database_population_associations"] is not None:
                         from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.blast_database_population_associations import validate_blast_database_population_context
-                        validate_blast_database_population_context(dict(schema="blast_database_population_context_v1",
+                        validate_blast_database_population_context(dict(schema="blast_database_population_context",
                             search_key=row["search_key"], associations=row["database_population_associations"]))
                     _is(row["database_profile"], row["database_profile"] is None or type(row["database_profile"]) is dict, p + "/database_profile")
                     for field in ("description_bindings", "sequence_identity_bindings"):
@@ -358,13 +358,13 @@ def populate_blast_iteration_sheet(collection, *, report_sources, query_bindings
         invocation_source=None, target_context=None, target_contexts=None,
         database_population_associations=None) -> dict:
     """Detach exact input fields; preserve conflicting associations for calculation."""
-    sheet = dict(schema="blast_iteration_sheet_v1", collection=collection,
+    sheet = dict(schema="blast_iteration_sheet", collection=collection,
         report_sources=report_sources, query_bindings=query_bindings, search_bindings=search_bindings,
         pssm_sheets=pssm_sheets, checkpoint_bindings=checkpoint_bindings, sequence_metadata=sequence_metadata,
         profile_metadata=profile_metadata, comparison_pairs=comparison_pairs, inclusion_records=inclusion_records,
         convergence_records=convergence_records, invocation_source=invocation_source, target_context=target_context)
     if target_contexts is not None:
-        sheet.update(schema="blast_iteration_sheet_v2", target_contexts=target_contexts)
+        sheet.update(schema="blast_iteration_sheet_target_context", target_contexts=target_contexts)
     if database_population_associations is not None:
         mappings = _copy(database_population_associations)
         _is(mappings, type(mappings) is list, "/database_population_associations")
@@ -387,7 +387,7 @@ def populate_blast_iteration_sheet(collection, *, report_sources, query_bindings
             selected[token] = row["associations"]
         for row in rows:
             row["database_population_associations"] = selected.get(_token(row["search_key"]))
-        sheet.update(schema="blast_iteration_sheet_v3", sequence_metadata=rows,
+        sheet.update(schema="blast_iteration_sheet_population", sequence_metadata=rows,
             target_contexts=[] if target_contexts is None else target_contexts)
     return _validate(sheet)
 

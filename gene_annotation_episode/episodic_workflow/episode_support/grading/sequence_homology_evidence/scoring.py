@@ -12,7 +12,7 @@ from copy import deepcopy
 from types import MappingProxyType
 
 
-VERSION = 'a101_native_correspondence_015_v1'
+VERSION = 'a101_native_correspondence_015'
 SCALES = MappingProxyType({'blast': 0.025, 'hmmer': 0.020})
 
 
@@ -131,8 +131,8 @@ def compile_native_sheet(rows, *, supplied_length, regions=None, profile=None):
 def hmmer_comparisons(grading):
     """R3 native fields/maps, with phmmer's query-profile orientation intact."""
     sheet, scores = grading.get('sheet'), grading.get('scores')
-    _require(isinstance(sheet, dict) and sheet.get('schema') == 'hmmer_search_sheet_v1'
-        and isinstance(scores, dict) and scores.get('schema') == 'hmmer_search_scores_v1',
+    _require(isinstance(sheet, dict) and sheet.get('schema') == 'hmmer_search_sheet'
+        and isinstance(scores, dict) and scores.get('schema') == 'hmmer_search_scores',
         'a101_hmmer_grading_unavailable')
     program = sheet['operation']['program']
     _require(program in {'phmmer', 'hmmsearch', 'hmmscan'},
@@ -179,7 +179,7 @@ def hmmer_comparisons(grading):
 def route_native_grading(grading):
     """Hard-coded schema dispatch. Neither callers nor models name a route."""
     schema = (grading.get('sheet') or {}).get('schema')
-    if schema == 'hmmer_search_sheet_v1':
+    if schema == 'hmmer_search_sheet':
         return hmmer_comparisons(grading)
     if schema and schema.startswith('blast_'):
         return blast_comparisons(grading)
@@ -193,9 +193,9 @@ def blast_comparisons(grading):
     program = normalized.get('search', {}).get('program')
     _require(program == 'blastp', 'a101_translated_or_nucleotide_map_not_bound', program=program)
     result = []
-    if sheet['schema'] == 'blast_pairwise_sheet_v1':
+    if sheet['schema'] == 'blast_pairwise_sheet':
         populations = [(0, sheet['hsps'], sheet['reference']['length'])]
-    elif sheet['schema'] in {'blast_database_sheet_v1', 'blast_database_sheet_v2', 'blast_database_sheet_v3'}:
+    elif sheet['schema'] in {'blast_database_sheet', 'blast_database_sheet_record_locator', 'blast_database_sheet_population'}:
         populations = [(hit['hit_index'], [
             {'native': normalized['hits'][hit['hit_index']]['hsps'][address['hsp_index']],
              'components': component, 'hsp_index': address['hsp_index']}

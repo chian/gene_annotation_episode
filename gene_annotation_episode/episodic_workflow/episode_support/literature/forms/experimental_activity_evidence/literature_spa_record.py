@@ -105,7 +105,7 @@ def fact(answer, refs=(), support='direct'):
     return {**literature_spr_record.fact(answer, refs), 'support': None if answer == 'unknown' else support}
 
 
-VERSION = 'a105_spa_record_v1'
+VERSION = 'a105_spa_record'
 EXPERIMENT_TYPE = 'spa'
 QUANTITIES = ('kd', 'bmax', 'ki', 'ic50', 'hill_slope', 'kd_spread', 'ki_spread', 'specific_activity', 'radioligand_concentration', 'radioligand_range_lowest', 'radioligand_range_highest', 'bead_amount', 'bead_concentration', 'receptor_amount', 'percent_bound', 'nonspecific_fraction', 'nonspecific_ligand_concentration', 'nonspecific_ligand_affinity', 'nonspecific_excess', 'bead_only_fraction', 'counting_efficiency', 'incubation_time', 'association_half_time', 'settling_time', 'temperature', 'titration_point_count', 'technical_replicate_count', 'replicate_count')
 PREPARATION_KEYS = ('radioligand_preparation_ref', 'receptor_preparation_ref', 'dataset_ref')

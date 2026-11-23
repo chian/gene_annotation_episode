@@ -99,7 +99,7 @@ def align_pair(query: str, reference: str, *, molecule: str, mode: str = "local"
     results = iter(aligner.align(query, reference))
     result = next(results, None)
     metadata = {
-        "native_format": "biopython_pairwise_native_v2",
+        "native_format": "biopython_pairwise_native",
         "query_length": len(query), "reference_length": len(reference),
         "mode": mode, "matrix": matrix, "gap_open": gap_open, "gap_extend": gap_extend,
         "biopython_version": version("biopython"),

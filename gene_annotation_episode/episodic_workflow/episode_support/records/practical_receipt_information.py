@@ -18,8 +18,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.structura
 
 
 PROVIDER = 'episode.practical_receipt'
-VERSION = 'practical_receipt_information_v1'
-ASSIGNMENT_SNAPSHOT_VERSION = 'practical_receipt_assignment_v1'
+VERSION = 'practical_receipt_information'
+ASSIGNMENT_SNAPSHOT_VERSION = 'practical_receipt_assignment'
 BODY_FIELDS = {'version', 'run_id', 'episode_id', 'assignment_sha256', 'scope', 'receipt'}
 SNAPSHOT_FIELDS = {'version', 'run_id', 'episode_id', 'scope', 'assignment'}
 

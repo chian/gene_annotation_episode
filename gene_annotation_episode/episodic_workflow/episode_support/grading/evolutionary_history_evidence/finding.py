@@ -21,8 +21,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.evolution
 from gene_annotation_episode.episodic_workflow.episode_support.grading.evolutionary_history_evidence.history_explanation import (
     EXPLANATIONS, LEVELS)
 
-EVIDENCE_TYPES = {'a104_placement_v1': 'clade_placement', 'a104_history_comparison_v1': 'history_comparison',
-                  'a104_clade_composition_v1': 'characterized_clade', 'a104_robustness_v1': 'placement_robustness'}
+EVIDENCE_TYPES = {'a104_placement': 'clade_placement', 'a104_history_comparison': 'history_comparison',
+                  'a104_clade_composition': 'characterized_clade', 'a104_robustness': 'placement_robustness'}
 CLADE_STATUSES = ('function_identity_mapping_unresolved', 'mixed_characterized_functions', 'uncharacterized',
                   'partially_characterized', 'uniform_observed_activity_in_sampled_references')
 ATTRIBUTION_STATUSES = ('attributed_phylogeny_received', 'unresolved_attribution',
@@ -81,14 +81,14 @@ SHEET_FEATURES = {
 }
 TARGET_FEATURES = {
     'target_refs': (('refs',), 'The target'),
-    'attribution_status': (('choice', ATTRIBUTION_STATUSES), 'V1: attribution status of the target'),
-    'placement_max': (('number', 0, 1), 'V2: highest placement value over the target cells'),
-    'history_comparison_max': (('number', 0, 1), 'V3: highest history-comparison value over the target cells'),
-    'characterized_clade_max': (('number', 0, 1), 'V4: highest characterized-clade value over the target cells'),
-    'supported_length': (('count',), 'V5: residues with any native dimension above zero'),
-    'assigned_length': (('count',), 'V6: residues assigned'),
-    'pending_measurement_count': (('count',), 'V8: measurements whose attribution misses inputs'),
-    'competing_configuration_count': (('count',), 'V9: variant groups whose configurations disagree'),
+    'attribution_status': (('choice', ATTRIBUTION_STATUSES), 'F1: attribution status of the target'),
+    'placement_max': (('number', 0, 1), 'F2: highest placement value over the target cells'),
+    'history_comparison_max': (('number', 0, 1), 'F3: highest history-comparison value over the target cells'),
+    'characterized_clade_max': (('number', 0, 1), 'F4: highest characterized-clade value over the target cells'),
+    'supported_length': (('count',), 'F5: residues with any native dimension above zero'),
+    'assigned_length': (('count',), 'F6: residues assigned'),
+    'pending_measurement_count': (('count',), 'F8: measurements whose attribution misses inputs'),
+    'competing_configuration_count': (('count',), 'F9: variant groups whose configurations disagree'),
 }
 
 
@@ -221,11 +221,11 @@ def sheet_features(reader, known):
                     'attribution_state': attachment['state'], 'missing_input_count': len(attachment['missing']),
                     **_present(attributed_score=attachment['score'], attributed_lower=attachment['bounds'][0],
                                attributed_upper=attachment['bounds'][1])}
-        if body['schema'] == 'a104_placement_v1':
+        if body['schema'] == 'a104_placement':
             features.update(_placement(reader, body, competing))
-        elif body['schema'] == 'a104_history_comparison_v1':
+        elif body['schema'] == 'a104_history_comparison':
             features.update(_history(body))
-        elif body['schema'] == 'a104_clade_composition_v1':
+        elif body['schema'] == 'a104_clade_composition':
             features.update(_clade(attachment))
         else:
             features.update(_robustness(body))

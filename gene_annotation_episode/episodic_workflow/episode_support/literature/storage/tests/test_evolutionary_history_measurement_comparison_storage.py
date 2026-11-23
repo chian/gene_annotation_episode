@@ -1,7 +1,7 @@
 """The measurement-comparison repository on the custody-scoped store: population from a retained synthetic source,
 the saved sheet read back and its requested cells projected, through the real runner."""
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.tests.test_literature_measurement_comparison_components_258 import source_fixture
-from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.evolutionary_history_evidence.literature_measurement_comparison_storage import MEASUREMENT_COMPARISON_REQUEST_SCHEMA_V2, POPULATION, REQUESTED
+from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.evolutionary_history_evidence.literature_measurement_comparison_storage import MEASUREMENT_COMPARISON_REQUEST_SCHEMA, POPULATION, REQUESTED
 
 from .evolutionary_history_world import call, read, run, source, world  # noqa: F401
 from .test_evolutionary_history_endpoint_signal_storage import bound
@@ -26,7 +26,7 @@ def test_a_measurement_comparison_sheet_is_saved_read_back_and_its_cells_project
     selection = bound(selection, {placeholder: reference})
     requested = selection['requested_cells']
     arguments = {'version': POPULATION, 'selection': selection,
-                 **{name: nothing_selected(MEASUREMENT_COMPARISON_REQUEST_SCHEMA_V2['properties'][name])
+                 **{name: nothing_selected(MEASUREMENT_COMPARISON_REQUEST_SCHEMA['properties'][name])
                     for name in ('return_context', 'return_assertion_context')}}
     populate = call(REPOSITORY, 'populate', arguments, scope=world['scope'], assignment={REQUESTED: requested})
     populate['arguments']['role'] = 'reader'

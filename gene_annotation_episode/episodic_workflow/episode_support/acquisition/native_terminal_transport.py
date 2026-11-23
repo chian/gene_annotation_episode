@@ -319,7 +319,7 @@ def publish(path,value):
 name=os.path.basename(sys.argv[0]);real=os.environ['EPISODE_NATIVE_'+name.upper()]
 root=os.environ['EPISODE_SCHEDULER_AUDIT'];event_root=os.path.join(root,'events',uuid.uuid4().hex)
 os.makedirs(event_root);argv=[real,*sys.argv[1:]]
-event={'version':'native_scheduler_command_v1','command':name,'selected_argv':sys.argv[1:],
+event={'version':'native_scheduler_command','command':name,'selected_argv':sys.argv[1:],
     'actual_argv':argv,'cwd':os.getcwd(),'command_intent':os.environ['EPISODE_COMMAND_INTENT'],
     'started_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'script':None,
     'native_job':None}

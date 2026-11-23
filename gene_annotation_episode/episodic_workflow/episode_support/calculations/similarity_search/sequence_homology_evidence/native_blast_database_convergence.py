@@ -87,7 +87,7 @@ _RECORD = _object(record_key=_TEXT, search_key={"type": "null"}, query_operand=_
         source_format={"const": "ncbi_blastplus_2.17.0_tabular7"}, original_record=_TEXT,
         extractor=_object(module={"const": "gene_annotation_episode.episodic_workflow.episode_support.records.similarity_search.sequence_homology_evidence.blast_native_iteration_records"},
             function={"const": "extract_blast_tabular7_convergence"}, version={"const": "1"})))
-_EXTRACTION = _object(schema={"const": "blast_native_convergence_extraction_v1"},
+_EXTRACTION = _object(schema={"const": "blast_native_convergence_extraction"},
     status=_enum("complete", "partial", "unavailable", "incompatible"),
     report=_object(artifact_key=_TOKEN, source_ref=_REF, sha256=_SHA, size_bytes=_I0,
         format=_nullable(_TEXT), fields=_nullable(_array(_TEXT)), delimiter=_nullable(_TEXT),
@@ -95,7 +95,7 @@ _EXTRACTION = _object(schema={"const": "blast_native_convergence_extraction_v1"}
     query=_object(input_key=_nullable(_TEXT), artifact_key=_nullable(_TEXT), sha256=_SHA, size_bytes=_I0,
         native_text=_nullable(_TEXT), native_bytes_base64=_TEXT, record_count=_nullable(_I0), query_operand=_nullable(_OPERAND)),
     source_context=_CONTEXT, markers=_array(_MARKER), convergence_records=_array(_RECORD), issues=_array(_NATIVE_ISSUE))
-_BINDING = _object(schema={"const": "native_blast_database_convergence_binding_v1"},
+_BINDING = _object(schema={"const": "native_blast_database_convergence_binding"},
     invocation=_enum("invoked", "not_invoked"), source_context=_CONTEXT,
     selected=_object(report_output_key=_TOKEN, query_input_key=_TOKEN, report=_INPUT_STATE, query=_INPUT_STATE),
     query_binding=_object(status=_enum("zero", "unique", "multiple", "conflicting"),
@@ -119,7 +119,7 @@ _SEARCH = _object(search_key=_SEARCH_KEY, program_context=_object(execution_prog
     operand_binding=_nullable(_OPERAND), reporting=_object(native_hit_array_present=dict(type="boolean"), native_hit_count=_nullable(_I0),
         requested_hit_limit=_nullable(_I0), requested_hsp_limit=_nullable(_I0), native_returncode=_nullable(dict(type="integer")),
         producer_complete=_nullable(dict(type="boolean"))), native=dict(type="object"), issues=_array(dict(type="object")))
-_COLLECTION = _object(schema={"const": "blast_report_collection_v1"}, invocation=_INVOCATION,
+_COLLECTION = _object(schema={"const": "blast_report_collection"}, invocation=_INVOCATION,
     artifacts=_array(_COLLECTION_ARTIFACT), searches=_array(_SEARCH), issues=_array(dict(type="object")))
 _Validator = validators.extend(Draft202012Validator, type_checker=Draft202012Validator.TYPE_CHECKER.redefine_many({
     "integer": lambda checker, value: type(value) is int,
@@ -309,7 +309,7 @@ def bind_native_blast_database_convergence(*, original_job, bundle, attempt_iden
         issues.extend(found)
     binding, found = _classify(collection, query["input_key"], selected["query"]["artifact_key"])
     issues.extend(found)
-    result = dict(schema="native_blast_database_convergence_binding_v1", invocation="not_invoked",
+    result = dict(schema="native_blast_database_convergence_binding", invocation="not_invoked",
         source_context=context, selected=selected, query_binding=binding, issues=issues, extraction=None, extraction_artifact=None)
     if binding["status"] == "unique" and all(selected[k]["status"] == "available" for k in ("report", "query")):
         from gene_annotation_episode.episodic_workflow.episode_support.records.similarity_search.sequence_homology_evidence.blast_native_iteration_records import extract_blast_tabular7_convergence
@@ -405,7 +405,7 @@ def _saved_extraction(binding, collection, report_descriptor):
         _require(marker["exact_text"].encode("utf-8") == raw[start:end], "binding", path + "/exact_text")
         _require((start == 0 or raw[start - 1:start] == b"\n") and marker["line_number"] == raw.count(b"\n", 0, start) + 1,
             "binding", path + "/line_number")
-        token = json.dumps(["v1", context["bundle"]["identity"]["attempt_id"], selected["report"]["artifact_key"],
+        token = json.dumps([context["bundle"]["identity"]["attempt_id"], selected["report"]["artifact_key"],
             extraction["report"]["sha256"], start, end], ensure_ascii=False, separators=(",", ":"), allow_nan=False)
         expected_key = "blast-native-convergence:" + hashlib.sha256(token.encode("utf-8")).hexdigest()
         _require(marker["record_key"] == expected_key and expected_key not in marker_keys, "binding", path + "/record_key")

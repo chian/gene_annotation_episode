@@ -23,7 +23,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.jobs.hpc.structur
 from gene_annotation_episode.episodic_workflow.episode_support.records.hpc.structural_homology_evidence.hpc_result_receipts import planned_input_files
 
 
-VERSION = 'a102_shared_hpc_custody_v1'
+VERSION = 'a102_shared_hpc_custody'
 REQUEST_PROVIDER = 'host.a102.hpc_request'
 RESULT_PROVIDER = 'host.a102.hpc_admission'
 HPC_REQUESTS = TableDeclaration(name='a102_hpc_requests', columns=('source_ref', 'body'), key=('source_ref',),

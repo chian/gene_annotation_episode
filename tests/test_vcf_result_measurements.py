@@ -42,7 +42,7 @@ def _input(raw, *, original=None, capture_state="complete", source_ref=None):
 
 
 def _selection(**changes):
-    value = dict(version="vcf_result_selection_v1", record_ordinals=None,
+    value = dict(version="vcf_result_selection", record_ordinals=None,
         sample_ordinals=None, info_keys=None, format_keys=None, offset=0, limit=1000)
     value.update(changes)
     return value
@@ -405,7 +405,7 @@ def test_validate_and_projection_do_not_call_calculator_parser_or_external_IO(mo
     assert core.validate_vcf_sheet(sheet) == sheet
     assert core.validate_vcf_components(components) == components
     returned = core.project_vcf_return(components, source_ref=RESULT_SOURCE)
-    assert returned == dict(version="vcf_result_return_v1", source_ref=RESULT_SOURCE, value=original["value"])
+    assert returned == dict(version="vcf_result_return", source_ref=RESULT_SOURCE, value=original["value"])
     assert core.validate_vcf_return(returned) == returned
     returned["value"]["records"].clear()
     assert components == original

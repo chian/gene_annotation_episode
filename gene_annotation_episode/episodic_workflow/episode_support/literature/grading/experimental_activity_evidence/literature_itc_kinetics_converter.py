@@ -135,7 +135,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_row_contract import SECONDS_PER_MINUTE
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_itc_kinetics_converted_v1'
+VERSION = 'a105_itc_kinetics_converted'
 CRITERIA_MAP = {'background_alternatives': ('substrate_dilution_control', 'enzyme_dilution_control', 'signal_over_blank'), 'attribution_supported': ('enzyme_dependence', 'product_identity'),
                 'calibration_applicability': ('enthalpy_stated', 'enthalpy_determined', 'signal_over_noise'), 'rate_regime': ('initial_rate_regime', 'response_time_accounted', 'enzyme_substrate_ratio'),
                 'kinetic_model': ('substrate_range',), 'normalization_basis': ('active_enzyme_amount',), 'sampling_basis': ('replicates',),

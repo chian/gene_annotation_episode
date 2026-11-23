@@ -81,7 +81,7 @@ def parse_atac_bam_reference(content: bytes | BinaryIO | None, *, artifact: Atac
     except UnicodeEncodeError as error:
         raise ValueError('invalid_atac_bam_reference_binding') from error
     key = callpeak_run_key + ':input:' + str(input_ordinal)
-    result = _start(artifact, key, 'atac_bam_reference_parsed_v1', 'sam_header_text',
+    result = _start(artifact, key, 'atac_bam_reference_parsed', 'sam_header_text',
                     missing=content is None)
     result.update(callpeak_run_key=callpeak_run_key, input_ordinal=input_ordinal,
                   input_artifact_ref=input_artifact_ref)

@@ -43,7 +43,7 @@ HIT_CANDIDATES = [
 
 
 def held_world(directory, held_articles=(), examined_articles=(), protein=None, hold_sequence=False):
-    """The Store, the entry input of the episode at ``search_assignment_v1`` and the records the model would name.
+    """The Store, the entry input of the episode at ``search_assignment`` and the records the model would name.
     ``search_query_ref`` is the strategy's record of the query to run (``request``); ``search`` is the retained search
     response that query returns when it is run. ``held_articles`` are PMCIDs of articles held in full and
     ``examined_articles`` the held ones an earlier run's page examined (the assignment names them)."""
@@ -65,7 +65,7 @@ def held_world(directory, held_articles=(), examined_articles=(), protein=None, 
     proposed = store.put('hypothesis', {'subject_refs': [target], 'predicate': 'catalyzes',
                                         'value': {'type': 'term_ref', 'ref': reaction}, 'context_refs': []},
                          origin='reasoning')['id']
-    task = {'version': 'literature_local_task_v1', 'kind': 'verified_source_leads', 'evidence_axis': 'A105',
+    task = {'version': 'literature_local_task', 'kind': 'verified_source_leads', 'evidence_axis': 'A105',
             'credit_unit': 1.0}
     response = store.artifact(json.dumps(SEARCH_RESPONSE), 'application/json')
     search = store.put('source', {'provider': 'europepmc', 'accession': None,
@@ -87,7 +87,7 @@ def held_world(directory, held_articles=(), examined_articles=(), protein=None, 
     held = [target, context, artifact, reaction, proposed, request, query, search, response, *articles]
     if hold_sequence:
         held.append(store.get(target)['sequence_ref'])
-    assignment = {'version': 'search_assignment_v1', 'question_context_refs': [context], 'search_query_ref': request,
+    assignment = {'version': 'search_assignment', 'question_context_refs': [context], 'search_query_ref': request,
                   'literature_task': task, 'proposed_annotation_ref': proposed, 'scope': scope,
                   'received_record_refs': held}
     if examined_articles:

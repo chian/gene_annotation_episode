@@ -83,7 +83,7 @@ def population_catalog(*, ratio_source_population=False, controlled_response_pop
             "input_schema": kinetic_operation_schema()})
     from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_kinetic_model_storage import kinetic_model_population_schema
     result.append({"name": "literature.kinetic.model.populate",
-            "description": "Populate the existing four conditional kinetic log-model cells from an actually received committed native kinetic sheet and an optional received retained model source. Model JSON uses a105_kinetic_log_model_v1 fields except source; provenance is bound from actual bytes. Preserve exact numerator/denominator physical estimate owners, natural-log canonical-parameter basis, full covariance, known/estimated/unknown variance and source interpretation witnesses. Reported SD/SEM/counts never supply covariance. These dependent parameter-contrast statistics are not assay reliability, function probabilities, target transfer or annotation credit.",
+            "description": "Populate the existing four conditional kinetic log-model cells from an actually received committed native kinetic sheet and an optional received retained model source. Model JSON uses a105_kinetic_log_model fields except source; provenance is bound from actual bytes. Preserve exact numerator/denominator physical estimate owners, natural-log canonical-parameter basis, full covariance, known/estimated/unknown variance and source interpretation witnesses. Reported SD/SEM/counts never supply covariance. These dependent parameter-contrast statistics are not assay reliability, function probabilities, target transfer or annotation credit.",
             "input_schema": kinetic_model_population_schema()})
     from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.perturbation_evidence.literature_binding_interaction_inputs import binding_interaction_arguments_schema
     result.append({"name": "literature.binding.interaction.populate",
@@ -91,7 +91,7 @@ def population_catalog(*, ratio_source_population=False, controlled_response_pop
             "input_schema": binding_interaction_arguments_schema()})
     from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_binding_interaction_model_storage import binding_interaction_model_population_schema
     result.append({"name": "literature.binding.interaction.model.populate",
-            "description": "Populate the existing four conditional binding interaction log-model cells from an actually received committed native interaction sheet and an optional explicit received model packet. The prepared binding_interaction_log_model_v1 JSON omits source; provenance is bound from actual bytes. Keep four exact physical fit owners and canonical estimate keys, natural-log nM basis, full covariance, known/estimated/unknown status and source-defined reporting-event support. No paper-covariance packet producer is supplied here. SD/SEM/counts and distinct preparations do not establish covariance or independence. These dependent parameter-interaction statistics are not intrinsic affinity, reliability, function probabilities, target transfer or annotation credit.",
+            "description": "Populate the existing four conditional binding interaction log-model cells from an actually received committed native interaction sheet and an optional explicit received model packet. The prepared binding_interaction_log_model JSON omits source; provenance is bound from actual bytes. Keep four exact physical fit owners and canonical estimate keys, natural-log nM basis, full covariance, known/estimated/unknown status and source-defined reporting-event support. No paper-covariance packet producer is supplied here. SD/SEM/counts and distinct preparations do not establish covariance or independence. These dependent parameter-interaction statistics are not intrinsic affinity, reliability, function probabilities, target transfer or annotation credit.",
             "input_schema": binding_interaction_model_population_schema()})
     if ion_discrimination_population:
             from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.perturbation_evidence.literature_ion_discrimination_inputs import ion_discrimination_population_schema
@@ -146,7 +146,7 @@ def population_catalog(*, ratio_source_population=False, controlled_response_pop
     if controlled_response_population:
             from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_controlled_response_storage import controlled_response_population_schema
             from gene_annotation_episode.episodic_workflow.episode_support.literature.prompts.perturbation_evidence.literature_controlled_response_prompt import CONTROLLED_RESPONSE_OPERATION_DESCRIPTION
-            result.append({"name": "literature.controlled_response.source_v3.populate",
+            result.append({"name": "literature.controlled_response.source.populate",
                 "description": CONTROLLED_RESPONSE_OPERATION_DESCRIPTION,
                 "input_schema": controlled_response_population_schema()})
     if gel_population:

@@ -51,21 +51,21 @@ def held_world(directory, task_kind='a105_experiments'):
     proposed = store.put('hypothesis', {'subject_refs': [target], 'predicate': 'catalyzes',
                                         'value': {'type': 'term_ref', 'ref': reaction}, 'context_refs': []},
                          origin='reasoning')['id']
-    task = ({'version': 'literature_local_task_v1', 'kind': 'a105_experiments', 'evidence_axis': 'A105', 'credit_unit': 1.0,
+    task = ({'version': 'literature_local_task', 'kind': 'a105_experiments', 'evidence_axis': 'A105', 'credit_unit': 1.0,
              'experiments': [{'experiment_ref': assay, 'assay_type': 'activity_rate'}]}
             if task_kind == 'a105_experiments' else
-            {'version': 'literature_local_task_v1', 'kind': 'verified_source_leads', 'evidence_axis': 'A105',
+            {'version': 'literature_local_task', 'kind': 'verified_source_leads', 'evidence_axis': 'A105',
              'credit_unit': 1.0})
-    page = {'version': 'page_assignment_v1', 'source_ref': source, 'representation': 'original',
+    page = {'version': 'page_assignment', 'source_ref': source, 'representation': 'original',
             'artifact_ref': artifact, 'question_context_refs': [], 'prior_delivery_refs': []}
     held = [target, source, artifact, assay, reaction, proposed]
-    option = {'version': 'experimental_activity_evidence_option_ref_v1', 'library_id': 'a' * 64, 'entry_sha256': 'b' * 64}
-    selection = {'version': 'experimental_activity_evidence_selection_v1',
+    option = {'version': 'experimental_activity_evidence_option_ref', 'library_id': 'a' * 64, 'entry_sha256': 'b' * 64}
+    selection = {'version': 'experimental_activity_evidence_selection',
                  'evidence_axis': {**option, 'slot': 'evidence_axis', 'option_id': 'A105'},
                  'thought_pattern': {**option, 'slot': 'thought_pattern', 'option_id': 'P1'},
                  'child_tool_info': [{'name': 'source.read', 'resources': 'api'}]}
     assignment = {'selection': selection, 'proposed_annotation_ref': proposed, 'evidence_refs': held, 'constraints': {},
-                  'context': {'evidence_task': {'version': 'evidence_axis_task_v1', 'kind': 'whole_axis_findings',
+                  'context': {'evidence_task': {'version': 'evidence_axis_task', 'kind': 'whole_axis_findings',
                                                 'evidence_axis': 'A105', 'credit_unit': 1.0}}, 'scope': scope}
     names = {'store': store, 'target': target, 'source': source, 'artifact': artifact, 'assay': assay,
              'reaction': reaction, 'proposed': proposed, 'scope': scope}

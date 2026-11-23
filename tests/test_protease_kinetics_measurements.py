@@ -25,18 +25,18 @@ def supplied_fixture():
     selected_pin = {"path": "/constructed/runtime/python", "sha256": "0"*64, "size_bytes": 0}
     source_pin = {"path": "/constructed/biochemistry.py", "sha256": "1"*64, "size_bytes": 41579}
     manifest_pin = {"path": "/constructed/software.json", "sha256": "0"*64, "size_bytes": 0}
-    request = {"version": "molecular_sequence_request_v3", "operation": "analyze_protease_kinetics",
+    request = {"version": "molecular_sequence_protease_request", "operation": "analyze_protease_kinetics",
         "arguments": {**deepcopy(measurements), "output_prefix": "selected", "output_dir": "/constructed/output/native"},
-        "deployment": {"version": "molecular_sequence_deployment_v3", "runtime": {"executable": selected_pin, "home": "/constructed/runtime"},
+        "deployment": {"version": "molecular_sequence_protease_deployment", "runtime": {"executable": selected_pin, "home": "/constructed/runtime"},
             "module": source_pin, "import_roots": ["/constructed/runtime"], "software_files_ref": "artifact_" + "0"*64,
             "software_files_file": manifest_pin}, "output_workspace": "/constructed/output",
         "environment": {"MPLBACKEND": "Agg", "MPLCONFIGDIR": "/constructed/output/config", "XDG_CACHE_HOME": "/constructed/output/cache"}}
-    capture = {"version": "molecular_sequence_execution_v3", "request": request, "request_canonical_sha256": None, "stage": "completed",
-        "native_record": {"schema": "biomni_protease_kinetics_native_v1", "outcome": "completed", "result_kind": "analysis_report", "failure": None,
+    capture = {"version": "molecular_sequence_protease_execution", "request": request, "request_canonical_sha256": None, "stage": "completed",
+        "native_record": {"schema": "biomni_protease_kinetics_native", "outcome": "completed", "result_kind": "analysis_report", "failure": None,
             "result": "Vmax: 12.0000; KM: 3.0000", "source_identity": {"callable": "analyze_protease_kinetics",
                 "path": source_pin["path"]}}, "native_call_state": "returned", "reference_data": None,
         "execution_receipt": {}, "stdout": "", "stderr": "", "failure": None,
-        "observer": {"schema": "native_selected_return_observation_v1", "mechanism": "selected_code_return_profile",
+        "observer": {"schema": "native_selected_return_observation", "mechanism": "selected_code_return_profile",
             "state": "captured", "reason": None, "selected_call_count": 1, "selected_terminal_event_count": 1,
             "profile_restored": True, "failures": [], "locals": {"initial_velocities": [3., 6., 8.],
                 "params": [12., 3.], "vmax": 12., "km": 3., "covariance": [[4., 1.], [1., 1.]],
@@ -44,7 +44,7 @@ def supplied_fixture():
     context = {"sample_key": "constructed-numerical-fixture", "substrate_identity": None, "enzyme_identity": None,
         "conditions": None, "replicate_ids": None,
         "units": {"time": "s", "signal": "RFU", "substrate": "uM", "enzyme": "uM"},
-        "calibration": {"schema": "protease_signal_calibration_v1", "response_per_product_concentration": 2,
+        "calibration": {"schema": "protease_signal_calibration", "response_per_product_concentration": 2,
             "signal_unit": "RFU", "product_concentration_unit": "uM", "curve_ordinals": [0, 1, 2],
             "applicability": "supported", "source_ref": "constructed-calibration-fixture"},
         "enzyme_basis": "total_enzyme_concentration", "product_per_cleavage": 1}
@@ -70,7 +70,7 @@ def result_for(measurements, capture, context):
 def test_full_covariance_and_calibrated_apparent_turnover_hand_answer():
     data, capture, context = supplied_fixture()
     result = result_for(data, capture, context)
-    assert result["schema"] == "protease_kinetics_components_v2"
+    assert result["schema"] == "protease_kinetics_components"
     physical = result["physical_components"]
     assert physical["product_vmax"]["value"] == 6
     assert physical["apparent_turnover"]["value"] == 12
@@ -186,10 +186,10 @@ def test_zero_enzyme_and_zero_km_have_explicit_denominator_failures():
 
 
 @pytest.mark.parametrize("change", ["request_version", "missing_output_argument", "numeric_report", "wrong_result_kind"])
-def test_saved_capture_requires_actual_closed_v3_protocol(change):
+def test_saved_capture_requires_actual_closed_protease_protocol(change):
     data, capture, context = supplied_fixture()
     if change == "request_version":
-        capture["request"]["version"] = "molecular_sequence_request_v2"
+        capture["request"]["version"] = "molecular_sequence_request"
     elif change == "missing_output_argument":
         del capture["request"]["arguments"]["output_dir"]
     elif change == "numeric_report":

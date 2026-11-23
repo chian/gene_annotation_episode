@@ -29,7 +29,7 @@ def fractions(sheet):
 def test_empty_docs_do_not_become_zero_population():
     sheet = facet_sheet()
     assert calculate_page_counts(sheet) == {
-        "version": "bvbrc_data_page_components_v1", "native_row_count": 0,
+        "version": "bvbrc_data_page_components", "native_row_count": 0,
         "valid_row_count": 0, "invalid_row_count": 0,
         "reported_population_count": 2, "population_exactness": "exact"}
 
@@ -38,7 +38,7 @@ def test_count_all_rows_with_partial_invalid_rows_and_no_new_scientific_score():
     sheet = parse_docs("genome", ["genome_id", "plasmids"],
         [{"genome_id": "a", "plasmids": 0}, {"genome_id": "b", "plasmids": True}], total=10)["sheet"]
     assert calculate_page_counts(sheet) == {
-        "version": "bvbrc_data_page_components_v1", "native_row_count": 2,
+        "version": "bvbrc_data_page_components", "native_row_count": 2,
         "valid_row_count": 1, "invalid_row_count": 1,
         "reported_population_count": 10, "population_exactness": "exact"}
 

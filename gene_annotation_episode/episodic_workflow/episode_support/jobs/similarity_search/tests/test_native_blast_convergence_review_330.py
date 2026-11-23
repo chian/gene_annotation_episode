@@ -47,12 +47,12 @@ raise SystemExit(manifest["status"] == "failed")
     (tmp_path / "fresh-worker.stderr").write_bytes(completed.stderr)
     assert completed.returncode == 0, completed.stdout.decode() + completed.stderr.decode()
     manifest = load(request, "worker-manifest.json")
-    assert manifest["version"] == "native_blast_database_result_worker_manifest_v1"
+    assert manifest["version"] == "native_blast_database_result_worker_manifest"
     assert "native_convergence" not in {r["role"] for r in manifest["artifacts"]}
-    assert load(request, "sheets.json")["schema"] == "native_blast_database_sheet_set_v1"
+    assert load(request, "sheets.json")["schema"] == "native_blast_database_sheet_set"
 
 
-def test_noninvoked_v2_reuse_preserves_absent_extraction_and_candidate_list(tmp_path, monkeypatch):
+def test_noninvoked_native_convergence_reuse_preserves_absent_extraction_and_candidate_list(tmp_path, monkeypatch):
     request = request_from_packet(tmp_path, query=b">q\nACDEFGHI\n>other\nACDEFGHI\n")
     first = run_request(tmp_path, request)
     assert first["status"] != "failed", load(request, "diagnostics.json")
@@ -63,7 +63,7 @@ def test_noninvoked_v2_reuse_preserves_absent_extraction_and_candidate_list(tmp_
     no_interpretation(monkeypatch)
     second = run_request(tmp_path, new, "reuse.json")
     assert second["status"] != "failed", load(new, "diagnostics.json")
-    assert second["version"] == first["version"] == "native_blast_database_result_worker_manifest_v2"
+    assert second["version"] == first["version"] == "native_blast_database_result_worker_manifest_with_native_convergence"
     assert load(new, "sheets.json") == saved
     assert "native_convergence" not in {r["role"] for r in second["artifacts"]}
     assert not (Path(new["output_directory"]) / "native-convergence.json").exists()

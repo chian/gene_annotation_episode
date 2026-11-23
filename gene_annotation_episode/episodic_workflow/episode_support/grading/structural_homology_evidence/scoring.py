@@ -13,9 +13,9 @@ import json
 import math
 
 
-VERSION = 'a102_rmsd_2A_features_1A_v1'
-NATIVE_SCHEMA = 'a102_native_alignment_v1'
-GRADE_SCHEMA = 'a102_comparison_grade_v1'
+VERSION = 'a102_rmsd_2A_features_1A'
+NATIVE_SCHEMA = 'a102_native_alignment'
+GRADE_SCHEMA = 'a102_comparison_grade'
 
 
 class A102ScoringUnavailable(ValueError):
@@ -157,7 +157,7 @@ def feature_sheet(grade, definition):
     bounds = [math.fsum(low)/count,math.fsum(high)/count]
     base = grade['components']['B']
     eligible=grade['eligible']
-    return {'schema':'a102_feature_sheet_v1','version':VERSION,
+    return {'schema':'a102_feature_sheet','version':VERSION,
         'function_ref':definition['function_ref'],'comparison_ref':grade['variant_ref'],
         'comparison_group':grade['comparison_group'],'primary':grade['primary'],'eligible':eligible,
         'definition_source_refs':deepcopy(definition['definition_source_refs']),
@@ -198,7 +198,7 @@ def contrast_panel(rows, *, function_ref, supporting_refs, opposing_refs,
     contrasted = bool(contrast_witness_refs) and bool(opposing_refs)
     value = max(0,support-opposition) if contrasted and support is not None and opposition is not None else None
     bounds = [max(0,sb[0]-ob[1]),max(0,sb[1]-ob[0])]
-    return {'schema':'a102_contrast_sheet_v1','version':VERSION,'function_ref':function_ref,
+    return {'schema':'a102_contrast_sheet','version':VERSION,'function_ref':function_ref,
         'scope_ref':scope_ref,'profile':profile,'supporting_refs':list(supporting_refs or []),
         'opposing_refs':list(opposing_refs or []),'contrast_witness_refs':list(contrast_witness_refs),
         'S':support,'O':opposition,'A102_f':value,'bounds':bounds,
@@ -246,7 +246,7 @@ def compile_native_sheet(grades, *, target_ref, supplied_length, regions=None, e
             'comparisons':comparisons})
     components=[row['value'] for row in values]
     value=math.exp(math.fsum(math.log(x) for x in components)/len(components)) if all(components) else 0.0
-    return {'schema':'a102_native_sheet_v1','version':VERSION,'axis':'A102','value':value,
+    return {'schema':'a102_native_sheet','version':VERSION,'axis':'A102','value':value,
         'profile':VERSION,'scope':regions,'regions':values,'excluded':excluded,
         'comparison_count':len(selected),'status':'derived' if selected else 'not_observed',
         'interpretation':'native_structural_correspondence_not_function_probability',

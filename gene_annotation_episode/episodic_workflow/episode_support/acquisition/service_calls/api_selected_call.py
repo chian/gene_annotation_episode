@@ -17,7 +17,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.perturbatio
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.perturbation_evidence.practical_execution_state import _immutable, _read
 
 
-VERSION = 'selected_api_call_v1'
+VERSION = 'selected_api_call'
 _PHASES = {'custody', 'prepare', 'transport', 'native_decode', 'association',
            'publication', 'recovery', 'return'}
 
@@ -63,7 +63,7 @@ async def perform_selected_call(execution, context, service, prepared, *,
     remote operations make at most one invocation across recovery.
     """
     prepared = validate_contract('PreparedOperation', prepared)
-    if (prepared['execution_contract'] != 'bvbrc_appservice_execution_v1'
+    if (prepared['execution_contract'] != 'bvbrc_appservice_execution'
             or prepared['bound_inputs']['original_job_owner']['run_id'] != context.run_id
             or context.run_id != execution.run_id
             or prepared['mutates_remote'] != bool(prepared['effects'])):

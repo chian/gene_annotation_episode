@@ -96,7 +96,7 @@ _EXECUTION_DEFINITIONS = {'Policy': {'type': 'object',
                 'required': ['file_key', 'role', 'set_key', 'comparison_key', 'relative_path', 'format'],
                 'additionalProperties': False},
  'NativeJob': {'type': 'object',
-               'properties': {'version': {'const': 'native_genomic_overlap_job_v1'},
+               'properties': {'version': {'const': 'native_genomic_overlap_job'},
                               'program': {'const': 'bedtools_intersect_all_pairs'},
                               'request': {'$ref': '#/$defs/Request'},
                               'software': {'$ref': '#/$defs/SoftwareBinding'},
@@ -146,7 +146,7 @@ _EXECUTION_DEFINITIONS = {'Policy': {'type': 'object',
                                   'assignment_sha256'],
                      'additionalProperties': False},
  'RunPlan': {'type': 'object',
-             'properties': {'version': {'const': 'native_genomic_overlap_run_plan_v1'},
+             'properties': {'version': {'const': 'native_genomic_overlap_run_plan'},
                             'identity': {'$ref': '#/$defs/AttemptIdentity'},
                             'requested_job': {'$ref': '#/$defs/RequestedJob'},
                             'attempt_directory': {'type': 'string', 'minLength': 1},
@@ -281,7 +281,7 @@ _EXECUTION_DEFINITIONS = {'Policy': {'type': 'object',
                                        'failure_indices'],
                           'additionalProperties': False},
  'BatchManifest': {'type': 'object',
-                   'properties': {'version': {'const': 'genomic_overlap_native_batch_v1'},
+                   'properties': {'version': {'const': 'genomic_overlap_native_batch'},
                                   'identity': {'$ref': '#/$defs/NativeIdentity'},
                                   'plan_sha256': {'type': 'string', 'pattern': '^[0-9a-f]{64}$'},
                                   'requested_job_sha256': {'type': 'string', 'pattern': '^[0-9a-f]{64}$'},
@@ -479,7 +479,7 @@ def _request(value):
     artifacts = {}
     for spec in specs:
         source = spec["source"]
-        kind = "bed_artifact" if spec["format"] == "bed_outer_span_v1" else "coordinate_rows_artifact"
+        kind = "bed_artifact" if spec["format"] == "bed_outer_span" else "coordinate_rows_artifact"
         _require(source["kind"] == kind and source["file"]["format"] == spec["format"],
                  "genomic_overlap_input_format_binding")
         identity = source["file"]
@@ -497,28 +497,28 @@ def genomic_overlap_output_files(request: Request) -> list[dict]:
         rows.append({"file_key": key, "role": role, "set_key": set_key, "comparison_key": comparison_key,
                      "relative_path": path, "format": format_name})
 
-    add("stdout", "stdout", "stdout.log", "genomic_overlap_driver_log_v1")
-    add("stderr", "stderr", "stderr.log", "native_stderr_text_v1")
-    add("version_stdout", "version_stdout", prefix + "/software/version.stdout.txt", "native_stdout_text_v1")
-    add("version_stderr", "version_stderr", prefix + "/software/version.stderr.txt", "native_stderr_text_v1")
+    add("stdout", "stdout", "stdout.log", "genomic_overlap_driver_log")
+    add("stderr", "stderr", "stderr.log", "native_stderr_text")
+    add("version_stdout", "version_stdout", prefix + "/software/version.stdout.txt", "native_stdout_text")
+    add("version_stderr", "version_stderr", prefix + "/software/version.stderr.txt", "native_stderr_text")
     for i, spec in enumerate(request["region_sets"]):
         stem = "s" + str(i)
         root = prefix + "/sets/" + stem + "/"
         for suffix, role, filename, format_name in (
             ("original", "original_input", "original.data", spec["format"]),
             ("rejected", "rejected_input", "rejected-source.data", spec["format"]),
-            ("parsed", "parsed_set", "parsed-set.json", "genomic_overlap_parsed_set_v1"),
-            ("canonical", "canonical_set", "canonical.bed", "bed4_occurrence_v1")):
+            ("parsed", "parsed_set", "parsed-set.json", "genomic_overlap_parsed_set"),
+            ("canonical", "canonical_set", "canonical.bed", "bed4_occurrence")):
             add(stem + ":" + suffix, role, root + filename, format_name, set_key=spec["set_key"])
     for pair in request["comparisons"]:
         stem = "p" + str(pair["ordinal"])
         root = prefix + "/pairs/" + stem + "/"
         for suffix, role, filename, format_name in (
-            ("manifest", "pair_manifest", "manifest.json", "genomic_overlap_native_manifest_v1"),
-            ("stdout", "overlap_stdout", "overlap.wo.tsv", "bedtools_intersect_wo_bed4_v1"),
-            ("stderr", "overlap_stderr", "stderr.txt", "native_stderr_text_v1")):
+            ("manifest", "pair_manifest", "manifest.json", "genomic_overlap_native_manifest"),
+            ("stdout", "overlap_stdout", "overlap.wo.tsv", "bedtools_intersect_wo_bed4"),
+            ("stderr", "overlap_stderr", "stderr.txt", "native_stderr_text")):
             add(stem + ":" + suffix, role, root + filename, format_name, comparison_key=pair["comparison_key"])
-    add("batch_manifest", "batch_manifest", BATCH_FILENAME, "genomic_overlap_native_batch_v1")
+    add("batch_manifest", "batch_manifest", BATCH_FILENAME, "genomic_overlap_native_batch")
     reserved = [PurePosixPath(name) for name in (RUN_PLAN_FILENAME, OWNER_FILENAME, STARTED_FILENAME,
         "tmp", "cache", "native.json", "invoke.json", "request.json", "ready.json", "release.json",
         "status.json", "result.json", "launcher.json")]

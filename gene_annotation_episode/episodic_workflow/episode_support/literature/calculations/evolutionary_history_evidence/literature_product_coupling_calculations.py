@@ -12,7 +12,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
     QUANTITY_MEANINGS, RELATIONSHIPS, ROLES, RELATIONS,
 )
 
-VERSION='a105_product_coupling_components_v1'
+VERSION='a105_product_coupling_components'
 COMPONENTS=('reported_product_activity','reported_cofactor_activity','product_per_cofactor',
     'productive_fraction','calculated_coupling_percent','reported_coupling_percent',
     'displayed_coupling_difference_pp','reconstructed_product_activity',

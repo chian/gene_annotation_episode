@@ -17,7 +17,7 @@ import sys
 import time
 
 
-VERSION='whole_workflow_budget_v2'
+VERSION='whole_workflow_budget'
 WINDOW_ENV='GENE_EPISODE_WORKFLOW_SLOT'
 WINDOW_ID=os.environ.get(WINDOW_ENV)
 

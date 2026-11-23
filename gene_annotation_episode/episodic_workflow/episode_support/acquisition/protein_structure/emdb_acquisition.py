@@ -19,7 +19,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.acquisition.struc
 
 SERVICE = "emdb"
 ENTRY_ROOT = "https://www.ebi.ac.uk/emdb/api/entry/"
-VERSION = "emdb_entry_result_v1"
+VERSION = "emdb_entry_result"
 ISSUE_CODES = (
     "invalid_native_json", "response_not_object", "native_entry_id_missing",
     "native_entry_id_null", "native_entry_id_invalid", "native_entry_id_differs_from_request",

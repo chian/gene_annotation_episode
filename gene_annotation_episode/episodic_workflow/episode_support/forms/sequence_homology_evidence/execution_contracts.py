@@ -18,7 +18,7 @@ def obj(properties, required=None):
 TEXT = {'type': 'string', 'minLength': 1}
 SHA256 = {'type': 'string', 'pattern': '^[0-9a-f]{64}$'}
 API_ASSIGNMENT_SCHEMA = obj({
-    'version': {'type': 'string', 'const': 'api_execution_assignment_v1'},
+    'version': {'type': 'string', 'const': 'api_execution_assignment'},
     'resource_id': TEXT, 'service': {'type': 'string', 'const': 'ebi_hmmer'},
     'subject_ref': TEXT, 'algorithm': {'type': 'string', 'enum': ['phmmer', 'hmmscan']},
     'database': TEXT, 'parameters': {'type': 'object'},
@@ -27,7 +27,7 @@ API_ASSIGNMENT_SCHEMA = obj({
     'constraints': {'type': 'object'},
 })
 API_ASSIGNMENT_SCHEMA['properties']['launch_instructions'] = deepcopy(SELECTION_SCHEMA)
-API_SERVICE_ASSIGNMENT_VERSION = 'api_service_assignment_v1'
+API_SERVICE_ASSIGNMENT_VERSION = 'api_service_assignment'
 API_SERVICE_ASSIGNMENT_SCHEMA = obj({
     'version': {'type': 'string', 'const': API_SERVICE_ASSIGNMENT_VERSION},
     'resource_id': TEXT,
@@ -40,7 +40,7 @@ API_SERVICE_ASSIGNMENT_SCHEMA = obj({
 })
 API_SERVICE_ASSIGNMENT_SCHEMA['properties']['launch_instructions'] = deepcopy(SELECTION_SCHEMA)
 TARGET_SCHEMA = obj({
-    'version': {'type': 'string', 'const': 'execution_target_v1'},
+    'version': {'type': 'string', 'const': 'execution_target'},
     'handle': TEXT, 'run_id': TEXT, 'resource_id': TEXT,
     'resource_kind': {'type': 'string', 'enum': ['api', 'local', 'hpc']},
     'execution_id': TEXT, 'request_sha256': SHA256, 'origin_episode_id': TEXT,
@@ -70,7 +70,7 @@ def checked(value, schema, code):
 def validate_api_assignment(value):
     value = plain(value)
     schema = (API_ASSIGNMENT_SCHEMA if isinstance(value, dict)
-        and value.get('version') == 'api_execution_assignment_v1'
+        and value.get('version') == 'api_execution_assignment'
         else API_SERVICE_ASSIGNMENT_SCHEMA)
     value = checked(value, schema, 'invalid_api_execution_assignment')
     if 'launch_instructions' in value:

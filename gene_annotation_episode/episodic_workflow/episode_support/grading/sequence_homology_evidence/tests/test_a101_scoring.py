@@ -41,7 +41,7 @@ def test_zero_and_negative_bits_are_actual_zero_native_strength():
 def hmmer_grading():
     domain = {'record_key': 'native-domain', 'target_name': 'reference', 'alignment': {'model': 'AB.CD', 'aseq': 'AXY-D'}}
     scores = {'record_key': 'native-domain', 'intervals': {'model': [0, 4], 'sequence': [0, 4]}, 'paired_positions': 3, 'sequence_length': 4, 'model_length': 4, 'native_domain_score_bits': 50, 'native_independent_evalue': 1e-10, 'sequence_identity_fraction': 2 / 3}
-    return {'sheet': {'schema': 'hmmer_search_sheet_v1', 'operation': {'program': 'phmmer'}, 'domains': [domain]}, 'scores': {'schema': 'hmmer_search_scores_v1', 'domains': [scores]}}
+    return {'sheet': {'schema': 'hmmer_search_sheet', 'operation': {'program': 'phmmer'}, 'domains': [domain]}, 'scores': {'schema': 'hmmer_search_scores', 'domains': [scores]}}
 
 def test_hmmer_route_preserves_query_profile_orientation_and_paired_positions():
     grade = hmmer_grading()
@@ -67,7 +67,7 @@ def test_unknown_profile_and_unmapped_iterated_query_are_explicit():
 def test_blast_route_uses_native_bits_reference_denominator_and_all_column_identity():
     native = {'qseq': 'A-CD', 'hseq': 'ABXD', 'query_from': 1, 'hit_from': 1}
     component = {'counts': {'paired_columns': 3, 'identical_pairs': 2}, 'native_scores': {'bit_score': 40, 'evalue': 1e-08}}
-    grade = {'sheet': {'schema': 'blast_pairwise_sheet_v1', 'input': {'search': {'program': 'blastp'}}, 'reference': {'length': 5}, 'hsps': [{'hsp_index': 0, 'native': native, 'components': component}]}}
+    grade = {'sheet': {'schema': 'blast_pairwise_sheet', 'input': {'search': {'program': 'blastp'}}, 'reference': {'length': 5}, 'hsps': [{'hsp_index': 0, 'native': native, 'components': component}]}}
     populated, = route_native_grading(grade)
     assert populated['alignment_identity'] == 0.5
     assert populated['reference_paired_count'] == 3

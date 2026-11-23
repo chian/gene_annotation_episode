@@ -19,7 +19,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.storag
 
 
 PROVIDER = "literature.a105.rate_replicate_population"
-VERSION = "literature_rate_replicate_record_v1"
+VERSION = "literature_rate_replicate_record"
 NAMESPACE = "literature_rate_replicate_cells"
 REQUESTED = "requested_rate_replicate_components"
 COMPONENTS = ("reference_rate", "test_rate", "rate_difference", "retained_fraction",
@@ -116,17 +116,17 @@ def _extraction_schema():
         "status": {"enum": ["observed", "not_detected", "censored", "unavailable"]},
         "bound": {"enum": ["none", "lt", "le", "gt", "ge"]}, "approximate": {"type": "boolean"},
         "origin": {"enum": list(ORIGINS)}, "source": _source_row_schema()})
-    return obj({"version": {"const": "a105_rate_replicates_v1"}, "subject": deepcopy(_TEXT),
+    return obj({"version": {"const": "a105_rate_replicates"}, "subject": deepcopy(_TEXT),
         "experiment": deepcopy(_TEXT), "table": table, "rows": _array(row)})
 
 
 def _sheet_schema():
-    summary = obj({"version": {"const": "a105_rate_replicate_summary_v1"}, "axis": {"const": "A105"},
+    summary = obj({"version": {"const": "a105_rate_replicate_summary"}, "axis": {"const": "A105"},
         "scope": {"const": "source_preparation_endpoint"}, "subject": deepcopy(_TEXT), "experiment": deepcopy(_TEXT),
         "model": obj({"unit_model": {"enum": ["none", "iid_units"]}, "sampling_basis_inferred": {"const": False}}),
         "extraction": _extraction_schema(), "groups": _array(_group_schema(numeric=True)),
         "annotation_credit": {"type": "null"}, "assay_error_rate": {"type": "null"}})
-    return obj({"version": {"const": "a105_rate_replicate_contrast_v1"}, "axis": {"const": "A105"},
+    return obj({"version": {"const": "a105_rate_replicate_contrast"}, "axis": {"const": "A105"},
         "scope": {"const": "source_preparation_endpoint"}, "subject": deepcopy(_TEXT), "experiment": deepcopy(_TEXT),
         "reference": _selection_schema(), "test": _selection_schema(), "summary": summary,
         "dependence": {"enum": ["unknown", "independent", "paired_units"]},

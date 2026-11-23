@@ -67,7 +67,7 @@ def calculate_blast_hsp_column_components(sheet: dict) -> dict:
             component_status[name] = "incompatible"
         else:
             component_status[name] = "unavailable"
-    return {"schema": "blast_hsp_column_components_v1", "status": sheet["status"],
+    return {"schema": "blast_hsp_column_components", "status": sheet["status"],
             "summary": summary, "ratios": ratios, "component_status": component_status,
             "issues": deepcopy(sheet["issues"]), "definitions": _definitions(PROGRAM_UNITS[sheet["program"]])}
 

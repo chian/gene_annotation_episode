@@ -1,4 +1,4 @@
-"""Deterministic nucleotide-locus calculations from saved nhmmer_sheet_v1.
+"""Deterministic nucleotide-locus calculations from saved nhmmer_sheet.
 
 No program execution, source reading, model invocation, or network acquisition
 occurs here. Native E-values, scores, bias and rounded accuracy are independent
@@ -343,7 +343,7 @@ all numerical calculations unchanged.
     if type(sheet) is not dict:
         raise ValueError("nhmmer_invalid_sheet_type")
     sheet = finite_json(sheet, name="sheet")
-    if sheet.get("schema") != "nhmmer_sheet_v1":
+    if sheet.get("schema") != "nhmmer_sheet":
         raise ValueError("nhmmer_invalid_sheet_schema")
     if parameters is not None and type(parameters) is not dict:
         raise ValueError("nhmmer_invalid_parameters_type")
@@ -385,7 +385,7 @@ all numerical calculations unchanged.
             "name": (sheet.get("inputs", {}).get("query") or {}).get("name"), "occurrence": None,
             "native_terminated": None, "native_reported_locus_count": None,
             "unions": unbound, "searched_space": [], "issues": []})
-    return {"schema": "nhmmer_scores_v1", "operation": deepcopy(operation), "parameters": parameters,
+    return {"schema": "nhmmer_scores", "operation": deepcopy(operation), "parameters": parameters,
         "loci": loci, "queries": queries, "definitions": _definitions(), "issues": issues,
         "completeness": deepcopy(sheet.get("completeness", {})),
         "supplied_native_parameters": deepcopy(sheet.get("inputs", {}).get("native_parameters")),

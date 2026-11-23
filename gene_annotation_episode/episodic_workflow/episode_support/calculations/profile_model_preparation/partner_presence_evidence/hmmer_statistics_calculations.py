@@ -14,7 +14,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.calculations.prof
 from gene_annotation_episode.episodic_workflow.episode_support.readers.profile_model_preparation.hmmer_statistics_data import SCHEMA as SHEET_SCHEMA, valid_operation
 
 
-SCHEMA = "hmmer_statistics_components_v1"
+SCHEMA = "hmmer_statistics_components"
 AMINO_BACKGROUND_3_4 = dict(zip("ACDEFGHIKLMNPQRSTVWY", (
     .0787945, .0151600, .0535222, .0668298, .0397062, .0695071, .0229198,
     .0590092, .0594422, .0963728, .0237718, .0414386, .0482904, .0395639,

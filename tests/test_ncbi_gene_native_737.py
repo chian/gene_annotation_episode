@@ -271,7 +271,7 @@ def test_detached_outputs_and_exported_schema_are_not_authority_or_mutable_valid
     validated['records'][0]['loci'][0]['commentaries'][0]['locations'][0]['native']['text'] = 'changed'
     assert result == original
     exported = deepcopy(NCBI_GENE_NATIVE_SCHEMA)
-    assert exported['properties']['version']['const'] == 'ncbi_gene_native_v1'
+    assert exported['properties']['version']['const'] == 'ncbi_gene_native'
     assert 'confidence' not in exported['properties']
     assert validate_ncbi_gene_native(json.loads(json.dumps(original))) == original
 

@@ -19,12 +19,12 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.rna_structu
     _same, validate_rna_sheet,
 )
 
-SELECTOR_VERSION = "native_rna_structure_comparison_selector_v1"
-SHEET_VERSION = "rna_structure_comparison_sheet_v1"
-COMPONENTS_VERSION = "rna_structure_comparison_components_v1"
-CALCULATOR_VERSION = "rna_comparison_calculators_v1"
+SELECTOR_VERSION = "native_rna_structure_comparison_selector"
+SHEET_VERSION = "rna_structure_comparison_sheet"
+COMPONENTS_VERSION = "rna_structure_comparison_components"
+CALCULATOR_VERSION = "rna_comparison_calculators"
 COLUMN_COORDINATE_SYSTEM = "zero_based_declared_alignment_columns"
-PROFILE = "vienna_2_7_retained_linear_model_v1"
+PROFILE = "vienna_2_7_retained_linear_model"
 UNCERTAINTY_REASON = "selected_inputs_do_not_produce_comparison_uncertainty"
 COMPARISON_REASONS = frozenset("""
 not_requested not_supplied not_tested received_failure zero_denominator
@@ -147,8 +147,8 @@ def _identifier(namespace):
 
 
 RNA_COMPARISON_PARAMETERS_SCHEMA = obj({
-    "schema": {"const": "rna_comparison_parameters_v1"},
-    "arithmetic": {"const": "retained_binary64_values_v1"},
+    "schema": {"const": "rna_comparison_parameters"},
+    "arithmetic": {"const": "retained_binary64_values"},
     "tie_rule": {"const": "exact_selected_numeric_value"},
     "site_denominator": {"const": "decidable_selected_shared_sites"},
     "pair_difference": {"const": "alignment_column_pair_sets"},
@@ -201,7 +201,7 @@ _OLD_ISSUE = obj({"stage": enum(("input", "native", "capture", "parse", "calcula
     "code": enum(sorted(RNA_ISSUE_CODES)), "record_key": nullable(_OLD_ID), "field": nullable(_OLD_ID),
     "index": nullable(COUNT), "artifact_role": nullable(enum(("input", "model_parameter_input",
         "native_result", "model", "effective_parameters", "stdout", "stderr")))})
-SAVED_INPUT_SCHEMA = obj({"schema": {"const": "rna_structure_saved_sheet_input_v1"},
+SAVED_INPUT_SCHEMA = obj({"schema": {"const": "rna_structure_saved_sheet_input"},
     "result_receipt_key": _old_identifier("native_rna_structure_result_receipt"),
     "handoff_ref": _old_reference("execution_handoff"), "source_ref": _old_reference("execution_result"),
     "bundle_artifact_ref": _old_reference("artifact"), "sheet_artifact_ref": _old_reference("artifact"),
@@ -265,15 +265,15 @@ RNA_COMPARISON_SELECTOR_SCHEMA = obj({"version": {"const": SELECTOR_VERSION},
 METRIC_SPECS = {}
 for _metric in PAIR_METRICS:
     _unit = "fraction" if _metric.endswith("fraction") else "nt" if _metric.startswith("alignment_") else "pairs"
-    METRIC_SPECS["rna_pair_compare_v1." + _metric] = {
+    METRIC_SPECS["rna_pair_compare." + _metric] = {
         "metric": _metric, "units": (_unit,),
         "origins": ("derived_correspondence",) if _metric.startswith("alignment_") else ("derived_topology_comparison",)}
 for _metric in (*SITE_METRICS, "change_indicator"):
-    METRIC_SPECS["rna_site_compare_v1." + _metric] = {"metric": _metric,
+    METRIC_SPECS["rna_site_compare." + _metric] = {"metric": _metric,
         "units": ("indicator" if _metric == "change_indicator" else "fraction" if _metric.endswith("fraction") else "sites",),
         "origins": ("derived_topology_comparison",)}
 for _metric in ENERGY_METRICS:
-    METRIC_SPECS["rna_energy_compare_v1." + _metric] = {"metric": _metric,
+    METRIC_SPECS["rna_energy_compare." + _metric] = {"metric": _metric,
         "units": ("kcal/mol",) if "native_energy" in _metric else ("kcal/mol", "kcal/mol/nt"),
         "origins": ("derived_energy_difference",) if _metric in ("energy_delta", "energy_absolute_delta", "baseline_tolerance")
             else ("retained_native_prediction", "retained_native_evaluation")}
@@ -286,10 +286,10 @@ for _metric in (*SCAN_ENERGY_METRICS, *SCAN_MEMBER_RANK_METRICS):
     _origins = (("derived_energy_difference",) if _metric == "baseline_energy_above_minimum" else
         ("retained_native_prediction", "retained_native_evaluation") if _energy_metric else
         ("derived_scan_rank",) if _unit == "rank" else ("derived_scan_count",))
-    METRIC_SPECS["rna_scan_energy_v1." + _metric] = {"metric": _metric,
+    METRIC_SPECS["rna_scan_energy." + _metric] = {"metric": _metric,
         "units": ("kcal/mol", "kcal/mol/nt") if _energy_metric else (_unit,), "origins": _origins}
 for _metric in SCAN_SITE_METRICS:
-    METRIC_SPECS["rna_scan_site_v1." + _metric] = {"metric": _metric,
+    METRIC_SPECS["rna_scan_site." + _metric] = {"metric": _metric,
         "units": ("fraction" if _metric.endswith("fraction") else "variants",), "origins": ("derived_scan_count",)}
 COMPARISON_FORMULAS = frozenset(METRIC_SPECS)
 NUMERIC_CELL_SCHEMA = obj({"metric": enum(sorted(COMPARISON_METRICS)), "value": nullable(NUMBER),
@@ -355,8 +355,8 @@ def _original_sheet_schema():
         "start": COUNT, "end": COUNT, "strand": enum(("+", "-"))})
     base = {"record_key": _OLD_ID, "sequence_id": nullable(_OLD_ID), "normalization": enum(("exact", "uppercase_ascii")),
         "subject_binding": nullable(binding)}
-    original = {"oneOf": [obj({**base, "schema": {"const": "rna_prediction_input_v1"}, "sequence": TEXT}),
-        obj({**base, "schema": {"const": "rna_feature_input_v1"}, "sequence": nullable(TEXT),
+    original = {"oneOf": [obj({**base, "schema": {"const": "rna_prediction_input"}, "sequence": TEXT}),
+        obj({**base, "schema": {"const": "rna_feature_input"}, "sequence": nullable(TEXT),
             "structure_id": nullable(_OLD_ID), "dot_bracket": TEXT,
             "structure_origin": enum(("supplied_unknown", "supplied_prediction", "supplied_observation")),
             "structure_source_ref": nullable(_OLD_ID), "energy_mode": enum(("none", "viennarna_evaluate"))})]}
@@ -377,17 +377,17 @@ def _original_sheet_schema():
         "five_prime_unpaired_indices": nullable(array(COUNT)), "three_prime_unpaired_indices": nullable(array(COUNT))})
     position = obj({"index": COUNT, "input_index": COUNT, "bracket": TEXT, "partner_index": nullable(COUNT),
         "pair_key": nullable(_OLD_ID), "stem_key": nullable(_OLD_ID), "unpaired_region_key": nullable(_OLD_ID)})
-    topology = obj({"schema": {"const": "rna_topology_v1"}, "coordinate_system": {"const": COORDINATE_SYSTEM},
+    topology = obj({"schema": {"const": "rna_topology"}, "coordinate_system": {"const": COORDINATE_SYSTEM},
         "dot_bracket": TEXT, "length_nt": COUNT, "status": enum(("valid", "invalid", "unsupported")),
         "positions": nullable(array(position)), "pairs": nullable(array(pair)), "stems": nullable(array(stem)),
         "regions": nullable(array(region)), "issues": array(_OLD_ISSUE)})
     settings = {"temperature_c": NUMBER, "dangles": COUNT, "min_loop_size": COUNT,
         "max_bp_span": {"type": "integer"}, **{name: BOOLEAN for name in
             ("noLP", "noGU", "noGUclosure", "special_hp", "logML", "circ", "gquad")}}
-    selected = obj({"schema": {"const": "vienna_rna_model_spec_v1"}, **settings,
+    selected = obj({"schema": {"const": "vienna_rna_model_spec"}, **settings,
         "hard_constraints": NULL, "soft_constraints": NULL,
         "parameters": obj({"kind": enum(("turner2004", "supplied_parameter_file")), "operand_role": nullable(_OLD_ID)})})
-    model = obj({"schema": {"const": "vienna_rna_effective_model_v1"}, "model_key": _OLD_ID,
+    model = obj({"schema": {"const": "vienna_rna_effective_model"}, "model_key": _OLD_ID,
         "selected": selected, "engine": {"const": "ViennaRNA"}, "engine_version": _OLD_ID,
         "effective_settings": obj(settings), "other_observed_settings": array(obj({"name": _OLD_ID,
             "value": {"anyOf": [NUMBER, BOOLEAN, TEXT, NULL]}, "state": enum(("observed", "unavailable"))})),
@@ -395,7 +395,7 @@ def _original_sheet_schema():
         "parameter_load_return": {"type": "integer"}, "parameter_save_return": {"type": "integer"}})
     uncertainty = obj({"state": {"const": "not_produced"}, "value": NULL,
         "reason": {"const": "selected_algorithm_does_not_produce_uncertainty"}})
-    return obj({"schema": enum(("rna_mfe_prediction_sheet_v1", "rna_supplied_structure_feature_sheet_v1")),
+    return obj({"schema": enum(("rna_mfe_prediction_sheet", "rna_supplied_structure_feature_sheet")),
         "operation": enum(OPERATIONS.values()), "mode": enum(OPERATIONS), "record_key": _OLD_ID,
         "original_input": nullable(original), "coordinate_system": {"const": COORDINATE_SYSTEM},
         "analysis_sequence": nullable(analysis), "structure": nullable(structure), "topology": nullable(topology),
@@ -405,7 +405,7 @@ def _original_sheet_schema():
         "native_uncertainty": obj({name: uncertainty for name in ("pair_probabilities", "ensemble_free_energy_kcal_mol",
             "mfe_frequency", "ensemble_diversity", "energy_standard_error", "energy_interval")}),
         "model": nullable(model), "subject_binding": nullable(binding), "status": enum(("complete", "partial", "invalid")),
-        "issues": array(_OLD_ISSUE), "native_input": nullable(obj({"format": enum(("rna_native_record_json_v1", "biomni_rna_structure_text_v0")),
+        "issues": array(_OLD_ISSUE), "native_input": nullable(obj({"format": enum(("rna_native_record_json", "biomni_rna_structure_text")),
             "sha256": SHA256, "byte_count": COUNT})), "legacy_quantities": NULL})
 
 
@@ -786,7 +786,7 @@ def _validate_site_rows(rows, inputs, baseline, variant, sheet):
             mapping = correspondence[map_field] if valid_map else None
             _partner_relationship(row[side + "_partner"], index, original, mapping)
         indicator = row["change_indicator"]
-        _cell_relationship(indicator, sheet, prefix="rna_site_compare_v1")
+        _cell_relationship(indicator, sheet, prefix="rna_site_compare")
         _require(indicator["metric"] == "change_indicator")
         if row["transition"] in SITE_TRANSITIONS[:5]:
             _require(indicator["state"] == "present" and indicator["value"] == int(row["transition"] in SITE_TRANSITIONS[2:5]))
@@ -857,7 +857,7 @@ def _energy_relationship(value, inputs, baseline, variant, sheet):
         _require(outcomes <= {"equal", "equal_by_versioned_generation_rule"})
     elif "different" in outcomes:
         _require(compatibility["state"] == "incompatible")
-    cells = _cells(value["components"], sheet, prefix="rna_energy_compare_v1", expected=ENERGY_METRICS)
+    cells = _cells(value["components"], sheet, prefix="rna_energy_compare", expected=ENERGY_METRICS)
     unit = "kcal/mol" if request["normalization"] == "none" else "kcal/mol/nt"
     for metric, cell in cells.items():
         _require(cell["unit"] == ("kcal/mol" if "native_energy" in metric else unit))
@@ -906,7 +906,7 @@ def _validate_components(value, sheet):
             _require(selection is None or selection in selections)
             groups.setdefault(selection, []).append(cell)
         pair_cells = groups.pop(None, [])
-        _cells(pair_cells, sheet, prefix="rna_pair_compare_v1", expected=PAIR_METRICS if inputs["calculate_pair_changes"] else None)
+        _cells(pair_cells, sheet, prefix="rna_pair_compare", expected=PAIR_METRICS if inputs["calculate_pair_changes"] else None)
         if not inputs["calculate_pair_changes"]:
             _require(all(c["state"] == "not_requested" for c in pair_cells))
         _require(set(groups) == set(selections))
@@ -925,7 +925,7 @@ def _validate_components(value, sheet):
                     _require(cell["state"] != "present")
         invalid_selections = {i["selection_id"] for i in inputs["issues"] if i["code"] == "invalid_site_selection"}
         for selection, rows in groups.items():
-            _cells(rows, sheet, prefix="rna_site_compare_v1", selection_id=selection, expected=SITE_METRICS)
+            _cells(rows, sheet, prefix="rna_site_compare", selection_id=selection, expected=SITE_METRICS)
             if selection in invalid_selections:
                 _require(all(c["state"] != "present" and c["reason"] == "invalid_site_selection" for c in rows))
             elif not (valid_topology and valid_map):
@@ -961,7 +961,7 @@ def _validate_scan(scan, sheet, comparisons):
         for field, metric in (("exact_rank_start", "member_rank_start"), ("exact_rank_end", "member_rank_end")):
             cell = member[field]
             if cell is not None:
-                _cell_relationship(cell, sheet, prefix="rna_scan_energy_v1")
+                _cell_relationship(cell, sheet, prefix="rna_scan_energy")
                 _require(cell["metric"] == metric)
                 if member["energy_state"] != "comparable":
                     _require(cell["state"] != "present")
@@ -974,7 +974,7 @@ def _validate_scan(scan, sheet, comparisons):
     if request["energy"] is None:
         _require(not scan["energy_components"] and scan["baseline_rank_class"] == "not_requested")
     else:
-        _cells(scan["energy_components"], sheet, prefix="rna_scan_energy_v1", expected=SCAN_ENERGY_METRICS)
+        _cells(scan["energy_components"], sheet, prefix="rna_scan_energy", expected=SCAN_ENERGY_METRICS)
     selections = {}
     for inputs in sheet["comparisons"]:
         for item in inputs["resolved_selections"]:
@@ -983,4 +983,4 @@ def _validate_scan(scan, sheet, comparisons):
     expected_sites = [(key, i) for key in request["topology_selection_ids"] for i in selections[key]["indices"]]
     _require([(r["selection_id"], r["baseline_index"]) for r in scan["site_components"]] == expected_sites)
     for row in scan["site_components"]:
-        _cells(row["components"], sheet, prefix="rna_scan_site_v1", selection_id=row["selection_id"], expected=SCAN_SITE_METRICS)
+        _cells(row["components"], sheet, prefix="rna_scan_site", selection_id=row["selection_id"], expected=SCAN_SITE_METRICS)

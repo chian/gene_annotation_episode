@@ -391,7 +391,7 @@ def test_a_dependency_the_commissioner_passes_is_offered_and_its_commission_pass
     message = Monitor.msg_to_child('monitor', {'dependency_handle': dependency}, summary)
     assert message.selection == () and message.message == {}
     assert read_from_parent.ASSIGNMENT_FORM.admit(message.assignment, 'assignment') == {
-        'version': 'monitor_assignment_v2', 'handoff_refs': [dependency_ref], 'known_progress_refs': [],
+        'version': 'monitor_assignment', 'handoff_refs': [dependency_ref], 'known_progress_refs': [],
         'dependency_handoff_refs': [], 'requested_fields': list(read_from_parent.FIELD_OPTIONS),
         'information_unit': 1.0}
     with pytest.raises(KeyError):                             # a job the commissioner did not pass as a dependency

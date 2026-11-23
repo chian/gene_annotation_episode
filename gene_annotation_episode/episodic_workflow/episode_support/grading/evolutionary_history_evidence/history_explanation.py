@@ -17,13 +17,13 @@ from gene_annotation_episode.episodic_workflow.episode_support.jobs.hpc.evolutio
 from gene_annotation_episode.episodic_workflow.episode_support.grading.evolutionary_history_evidence.scoring import VERSION, digest
 
 PROVIDER = 'native.a104.history_explanation'
-SCHEMA = 'a104_history_explanation_v1'
+SCHEMA = 'a104_history_explanation'
 CRITERION = 'hgt_outlier_explanation'
 GRADE_SCORES = {'contradicted': 0, 'plausible_only': 1, 'corroborated': 2}
 LEVELS = (*GRADE_SCORES, 'unknown')
 # The HGT numerical route requires an actual phylogeny: the explained measurement is a received native placement
 # or history comparison.
-EXPLAINED_KINDS = ('a104_placement_v1', 'a104_history_comparison_v1')
+EXPLAINED_KINDS = ('a104_placement', 'a104_history_comparison')
 EXPLANATIONS = TableDeclaration(name='a104_history_explanations', columns=('source_ref', 'measurement_ref', 'body'),
     key=('source_ref',), record_refs=('source_ref', 'measurement_ref'))
 GRADING_INSTRUCTIONS = (

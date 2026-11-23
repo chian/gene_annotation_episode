@@ -19,8 +19,8 @@ from PIL import Image, UnidentifiedImageError
 from gene_annotation_episode.episodic_workflow.episode_support.records.perturbation_evidence.domain import ContractError
 
 
-BAR_VERSION = "literature_bar_ordinate_v1"
-DIFFERENCE_VERSION = "literature_ordinate_difference_v1"
+BAR_VERSION = "literature_bar_ordinate"
+DIFFERENCE_VERSION = "literature_ordinate_difference"
 BOUND_KIND = "conditional_digitization_not_confidence_interval"
 UNITS = ("relative_turnover_percent", "arbitrary_signal", "nanomolar")
 _CELL_KEYS = ("value", "lower", "upper", "unit", "origin", "bound_kind",

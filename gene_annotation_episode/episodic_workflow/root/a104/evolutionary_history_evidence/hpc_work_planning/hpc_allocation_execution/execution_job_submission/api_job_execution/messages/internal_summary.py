@@ -8,7 +8,7 @@ old service read back from its own files and from the Store is in the outcomes o
 
 The tool outcome this reads is the one ``task.launch_operation`` returns."""
 
-OPERATIONAL_CREDIT_BINDING = {'version': 'execution_episode_v1', 'scientific_credit': False,
+OPERATIONAL_CREDIT_BINDING = {'version': 'execution_episode', 'scientific_credit': False,
                               'monitoring_credit': False}
 
 

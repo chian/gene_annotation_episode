@@ -223,7 +223,7 @@ def scan(registry, arguments, scope, permitted_inputs):
         candidates.append(candidate)
     if approved - used:
         raise ContractError('formatting_hyphen_not_in_recognized_sequence')
-    return {'version': 'source_sequence_blocks_v1', 'subject_ref': arguments['subject_ref'],
+    return {'version': 'source_sequence_blocks', 'subject_ref': arguments['subject_ref'],
         'source_ref': source_ref, 'artifact_ref': artifact['id'], 'representation': representation,
         'start': offset, 'examined_end': offset + len(raw), 'total_bytes': total,
         'candidates': candidates, 'normalization': 'case_whitespace_numbering_soft_hyphens_and_explicitly_selected_hard_hyphens',

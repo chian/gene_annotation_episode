@@ -1,4 +1,4 @@
-"""What the parent gives: one practical assignment (``practical_assignment_v1``) for the configured HPC resource.
+"""What the parent gives: one practical assignment (``practical_assignment``) for the configured HPC resource.
 
 Every field is a property of the old ``ASSIGNMENT_SCHEMA`` (``practical_execution_records``) under its own name;
 ``resource_kind`` is the one the old request schema fixed for this role (``hpc``). The old schema's nested shapes
@@ -6,7 +6,7 @@ Every field is a property of the old ``ASSIGNMENT_SCHEMA`` (``practical_executio
 ``read_from_parent`` (a form has no union and no null). ``launch_instructions`` (``null`` or a selection) and
 ``scientific_manifest`` (the optional native database run plan) are optional here (omitted when absent).
 
-The old episode also read its parent's own ``execution_launch_assignment_v1`` (``requests``,
+The old episode also read its parent's own ``execution_launch_assignment`` (``requests``,
 ``immutable_input_versions``, ``constraints``) and the parent's recorded request, and chose its request among the
 parent's frozen HPC requests (``child_assignment_schema``, ``frozen_hpc_launch_request_missing``): a child cannot
 read its parent's assignment, and the old runner tables are gone, so none of that is carried
@@ -41,7 +41,7 @@ ASSIGNMENT_FORM = RecordForm({
 
 
 def request_yield_class(request):
-    """The old ``ExecutionEpisodeYield._request_yield_class`` for a ``practical_assignment_v1`` request: the class
+    """The old ``ExecutionEpisodeYield._request_yield_class`` for a ``practical_assignment`` request: the class
     of the original execution request without generated identities (copied; the other versions it classified were
     the API sibling's)."""
     requested = request['requested_job']

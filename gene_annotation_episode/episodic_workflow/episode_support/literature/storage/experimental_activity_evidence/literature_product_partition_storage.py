@@ -11,7 +11,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.storag
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_product_partition_inputs import MEANINGS, ROLES, BASES, STAGES, RELATIONS, RELATIONSHIPS, QUALIFICATIONS, EVIDENCE_ROLES, product_partition_arguments_schema, read_product_partition_inputs, validate_product_partition_extraction
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence.literature_product_partition_calculations import COMPONENTS, REASONS, CONDITIONS, component_roles, populate_product_partition_components
 PROVIDER = 'literature.a105.product_partition_population'
-VERSION = 'literature_product_partition_population_record_v1'
+VERSION = 'literature_product_partition_population_record'
 NAMESPACE = 'literature_product_partition_cells'
 
 def _number_spans(extraction):

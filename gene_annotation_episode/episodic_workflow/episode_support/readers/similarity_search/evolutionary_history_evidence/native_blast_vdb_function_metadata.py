@@ -20,7 +20,7 @@ __all__ = ["validate_native_blast_vdb_function_metadata_payload",
            "native_blast_vdb_function_metadata_schema"]
 
 _CONSUMER = "vdb_function"
-_SCHEMA_ID = "native_blast_vdb_function_metadata_v1"
+_SCHEMA_ID = "native_blast_vdb_function_metadata"
 _object, _array = _metadata._object, _metadata._array
 _nullable, _enum = _metadata._nullable, _metadata._enum
 _TOKEN, _I0, _I1 = _metadata._TOKEN, _metadata._I0, _metadata._I1
@@ -40,7 +40,7 @@ _DEPENDENCY = _object(dependency_key=_TOKEN,
     entities=_array(_ADDRESS), sources=_array(_PROV), native_record={"type": ["object", "string"]})
 _SEQUENCE_IDENTITY = _object(molecule=_enum("nt"), sha256=_SHA, length=_I1)
 _TARGET_IDENTITY = _object(assignment_scope=_enum("whole_sequence", "feature"),
-    representation=_enum("full_member_nt_v1", "oriented_feature_nt_v1"), molecule=_enum("nt"),
+    representation=_enum("full_member_nt", "oriented_feature_nt"), molecule=_enum("nt"),
     sha256=_SHA, length=_I1, coding=_nullable(_object(genetic_code=_I1,
         codon_start={"type": "integer", "enum": [1, 2, 3]}, translation_sha256=_SHA, translation_length=_I1)))
 _CENSUS = _object(census_key=_TOKEN, assignment_scope=_enum("whole_sequence", "feature"),
@@ -58,7 +58,7 @@ _CENSUS = _object(census_key=_TOKEN, assignment_scope=_enum("whole_sequence", "f
     annotation_bindings=_array(_object(assignment_key=_TOKEN, census_entity_key=_TOKEN,
         annotation_snapshot_sha256=_SHA, source=_PROV)),
     identity_proofs=_array(_object(entity_key=_TOKEN, sequence_source=_PROV, linkage_source=_PROV,
-        normalization=_enum("full_member_nt_v1", "oriented_feature_nt_v1"), symbols={"type": "string", "minLength": 1})),
+        normalization=_enum("full_member_nt", "oriented_feature_nt"), symbols={"type": "string", "minLength": 1})),
     source=_PROV, native_record={"type": "object"})
 _UNIT_FIELDS = dict(supplied_assignments=_array(_ASSIGNMENT), dependency_records=_array(_DEPENDENCY),
                     census_records=_array(_CENSUS))
@@ -95,7 +95,7 @@ def _record_relationships(value, schema, pointer=""):
             raise _metadata._Invalid(pointer, "entity_slots_invalid")
     elif schema is _TARGET_IDENTITY:
         whole = value["assignment_scope"] == "whole_sequence"
-        if whole != (value["representation"] == "full_member_nt_v1") or whole and value["coding"] is not None:
+        if whole != (value["representation"] == "full_member_nt") or whole and value["coding"] is not None:
             raise _metadata._Invalid(pointer, "entity_slots_invalid")
     if type(value) is list:
         for i, row in enumerate(value):
@@ -243,9 +243,9 @@ caller. It does not read catalog paths or populate/reparse the base VDB sheet.
 Each scientific sheet retains its complete base and342's exact LinkResults.
 """
     base, prepared = _metadata._copy([base_sheet_set, prepared_inputs])
-    if (type(base) is not dict or base.get("schema") != "native_blast_database_sheet_set_v1"
+    if (type(base) is not dict or base.get("schema") != "native_blast_database_sheet_set"
             or type(base.get("vdb")) is not list or type(prepared) is not dict
-            or prepared.get("schema") != "native_blast_database_prepared_inputs_v1"
+            or prepared.get("schema") != "native_blast_database_prepared_inputs"
             or type(prepared.get("metadata")) is not list or type(artifact_catalog) is not dict
             or type(artifact_catalog.get("entries")) is not list or type(artifact_catalog.get("retained_sources")) is not list):
         raise ValueError("blast_vdb_function_sheet_schema_invalid")
@@ -262,7 +262,7 @@ Each scientific sheet retains its complete base and342's exact LinkResults.
         raise ValueError("blast_vdb_function_sheet_schema_invalid")
     if any(type(row) is not dict for row in prepared["metadata"]):
         raise ValueError("blast_vdb_function_sheet_schema_invalid")
-    result = dict(schema="native_blast_vdb_function_population_v1", sheets=[], issues=[])
+    result = dict(schema="native_blast_vdb_function_population", sheets=[], issues=[])
     units = []
     for validation in prepared["metadata"]:
         if validation.get("consumer") != _CONSUMER:

@@ -872,7 +872,7 @@ def publish_result(ctx, body):
     stored = ctx.store.put('source', {
         'provider': 'episode.hpc_result', 'accession': 'hpc_' + digest([ctx.run_id, ctx.episode_id, body]),
         'uri': None, 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': None,
-        'version': 'hpc_result_v1',
+        'version': 'hpc_result',
         'retrieved_at': datetime.fromtimestamp(body['unit']['finished_at'], timezone.utc).isoformat()},
         origin='tool')
     return stored['id']

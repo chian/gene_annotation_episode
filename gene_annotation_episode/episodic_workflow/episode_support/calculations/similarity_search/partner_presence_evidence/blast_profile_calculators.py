@@ -29,7 +29,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.readers.similarit
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.blast_program_context import resolve_blast_program_context
 
 
-SCHEMA = "blast_profile_components_v1"
+SCHEMA = "blast_profile_components"
 # Closed diagnostic categories. Wrapped collector/alignment issues retain their
 # entire original objects in details, including the original codes and fields.
 ISSUE_CODES = frozenset({
@@ -486,7 +486,7 @@ def _threshold(record, name, records):
 
 
 def calculate_blast_profile_components(sheet) -> dict:
-    """Recalculate inspectable v1 quantities without any I/O or model calls."""
+    """Recalculate inspectable quantities without any I/O or model calls."""
     sheet = _validate_sheet(sheet)
     search, key = sheet["search"], sheet["search"]["search_key"]
     issues = _collector_issues(search)

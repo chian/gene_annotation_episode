@@ -12,7 +12,7 @@ import math
 import statistics
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_experimental_contracts import ExperimentalContractError, RATE_UNITS
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_rate_replicate_inputs import GROUP_FIELDS, validate_rate_replicate_extraction
-VERSION = 'a105_rate_replicate_summary_v1'
+VERSION = 'a105_rate_replicate_summary'
 _BASE = {'amount_rate': 'umol/min', 'concentration_rate': 'uM/min', 'turnover_rate': 'per_min', 'specific_amount_rate': 'umol/min/mg'}
 
 def _quantity(row):
@@ -221,5 +221,5 @@ def populate_rate_replicate_contrast(extraction, *, reference, test, unit_model=
                     se, se_reason = (None, 'numerical_model_range')
     cells['paired_sample_sd'] = _cell(paired_sd, unit, 'sample_sd(reference_unit_mean-test_unit_mean)', rows, reason=paired_reason)
     cells['difference_se'] = _cell(se, unit, 'paired_sample_sd/sqrt(pair_count)' if dependence == 'paired_units' else 'sqrt(reference_mean_se^2+test_mean_se^2)', rows, reason=se_reason, conditional=conditional)
-    return {'version': 'a105_rate_replicate_contrast_v1', 'axis': 'A105', 'scope': 'source_preparation_endpoint', 'subject': data['subject'], 'experiment': data['experiment'], 'reference': deepcopy(reference), 'test': deepcopy(test), 'summary': summary, 'dependence': dependence, 'pairing': {'shared_units': sorted(unit_a & unit_b), 'reference_only': sorted(unit_a - unit_b), 'test_only': sorted(unit_b - unit_a)}, 'cells': cells, 'annotation_credit': None, 'assay_error_rate': None}
+    return {'version': 'a105_rate_replicate_contrast', 'axis': 'A105', 'scope': 'source_preparation_endpoint', 'subject': data['subject'], 'experiment': data['experiment'], 'reference': deepcopy(reference), 'test': deepcopy(test), 'summary': summary, 'dependence': dependence, 'pairing': {'shared_units': sorted(unit_a & unit_b), 'reference_only': sorted(unit_a - unit_b), 'test_only': sorted(unit_b - unit_a)}, 'cells': cells, 'annotation_credit': None, 'assay_error_rate': None}
 __all__ = ['VERSION', 'summarize_rate_replicates', 'populate_rate_replicate_contrast']

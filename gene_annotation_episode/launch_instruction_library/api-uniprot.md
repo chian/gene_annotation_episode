@@ -9,7 +9,7 @@ establish an experiment on the annotation target.
 
 ## Assigned request and available operations
 
-This API resource uses service `uniprot` in `api_service_assignment_v1`. Its
+This API resource uses service `uniprot` in `api_service_assignment`. Its
 closed request is either `{operation: "record", accession: "..."}` or
 `{operation: "search", query: "...", size?: integer, cursor?: "..."}`. Search
 size is 1–500; an omitted size is resolved to 10 in the actual command without

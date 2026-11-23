@@ -46,7 +46,7 @@ choice carry None. The grader does not judge it; the converter does. The constru
 forms built by tests that do not go through the extraction (the extraction always passes the model's answer).
 """
 
-VERSION = 'a105_coupling_limiting_reagent_record_v1'
+VERSION = 'a105_coupling_limiting_reagent_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'coupling_limiting_reagent'
 QUANTITIES = ('productive_fraction', 'productive_fraction_spread', 'yield_over_limiting_reagent', 'yield_over_limiting_reagent_spread', 'limiting_reagent_per_product',

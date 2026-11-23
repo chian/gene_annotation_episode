@@ -83,7 +83,7 @@ def _validate_parameters(parameters):
 def _validate_sheet(sheet):
     fields = set(AtacNativeSheet.__annotations__) | {'bam_references'}
     if (not isinstance(sheet, dict) or set(sheet) not in (fields, fields - {'bam_references'})
-            or sheet['version'] != 'atac_differential_native_sheet_v1'
+            or sheet['version'] != 'atac_differential_native_sheet'
             or sheet['tool_row'] != 'B-L125-analyze_atac_seq_differential_accessibility'):
         raise ValueError('invalid_atac_native_sheet')
     validate_atac_reference(sheet['reference'])
@@ -120,11 +120,11 @@ def _validate_sheet(sheet):
             validator(record)
     if len(sheet['conditions']) != 2:
         raise ValueError('two_atac_conditions_required')
-    for field, version in (('tracks', 'atac_bedgraph_parsed_v1'),
-                            ('peaks_xls', 'macs2_peaks_xls_parsed_v1'),
-                            ('narrowpeaks', 'macs2_narrowpeak_parsed_v1'),
-                            ('summits', 'macs2_summits_parsed_v1'),
-                            ('native_differential', 'macs2_bdgdiff_parsed_v1')):
+    for field, version in (('tracks', 'atac_bedgraph_parsed'),
+                            ('peaks_xls', 'macs2_peaks_xls_parsed'),
+                            ('narrowpeaks', 'macs2_narrowpeak_parsed'),
+                            ('summits', 'macs2_summits_parsed'),
+                            ('native_differential', 'macs2_bdgdiff_parsed')):
         if type(sheet[field]) is not list:
             raise ValueError('invalid_atac_' + field)
         for table in sheet[field]:
@@ -134,7 +134,7 @@ def _validate_sheet(sheet):
     if type(bam_references) is not list:
         raise ValueError('invalid_atac_bam_references')
     for table in bam_references:
-        validate_atac_parsed_table(table, version='atac_bam_reference_parsed_v1')
+        validate_atac_parsed_table(table, version='atac_bam_reference_parsed')
         _validate_issues(table['issues'])
     samples = _unique(sheet['samples'], 'sample_id', 'duplicate_atac_sample_id')
     conditions = _unique(sheet['conditions'], 'condition_id', 'duplicate_atac_condition_id')

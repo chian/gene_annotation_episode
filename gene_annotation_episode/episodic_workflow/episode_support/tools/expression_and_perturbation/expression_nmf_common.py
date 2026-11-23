@@ -9,12 +9,12 @@ import json
 import math
 import re
 
-INPUT_SCHEMA = 'expression_nmf_input_v1'
-PREPARED_SCHEMA = 'expression_nmf_prepared_v1'
-NATIVE_SCHEMA = 'expression_nmf_native_result_v1'
-FACTOR_SCHEMA = 'expression_nmf_factors_v1'
-SHEET_SCHEMA = 'expression_nmf_sheet_v1'
-CALCULATION_SCHEMA = 'expression_nmf_calculations_v1'
+INPUT_SCHEMA = 'expression_nmf_input'
+PREPARED_SCHEMA = 'expression_nmf_prepared'
+NATIVE_SCHEMA = 'expression_nmf_native_result'
+FACTOR_SCHEMA = 'expression_nmf_factors'
+SHEET_SCHEMA = 'expression_nmf_sheet'
+CALCULATION_SCHEMA = 'expression_nmf_calculations'
 MODE = 'gene_expression_nmf_cd_frobenius'
 OPERATION = 'perform_gene_expression_nmf_analysis'
 _DATA_TEXT = {'type': ['string', 'null'], 'minLength': 1, 'maxLength': 128, 'pattern': '^[^\\u0000-\\u001f\\u007f]+$'}

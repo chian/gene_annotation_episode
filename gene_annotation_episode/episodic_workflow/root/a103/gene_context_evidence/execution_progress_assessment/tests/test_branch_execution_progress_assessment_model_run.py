@@ -96,7 +96,7 @@ def started_job(held, finished, name=None):
 
 def monitor(held, handoff_ref, run_id, *, known=(), dependencies=(), settings=SETTINGS, fields=None):
     """Link the monitor on the job of ``handoff_ref``: the handoff row is passed as a record."""
-    assignment = {'version': 'monitor_assignment_v2', 'handoff_refs': [handoff_ref],
+    assignment = {'version': 'monitor_assignment', 'handoff_refs': [handoff_ref],
                   'known_progress_refs': list(known), 'dependency_handoff_refs': list(dependencies),
                   'requested_fields': list(read_from_parent.FIELD_OPTIONS if fields is None else fields),
                   'information_unit': 1.0}
@@ -245,7 +245,7 @@ def test_the_head_commissions_the_monitor_on_a_job_it_holds_and_passes_the_hando
     print('MONITOR RESULT', outcome['result'], outcome['completion'])
     print('MONITOR MODEL ANSWERS', [item['response'] for item in held['journal'].model_calls(run_id, child)])
     assert outcome['message']['assignment'] == {
-        'version': 'monitor_assignment_v2', 'handoff_refs': [handoff_ref], 'known_progress_refs': [],
+        'version': 'monitor_assignment', 'handoff_refs': [handoff_ref], 'known_progress_refs': [],
         'dependency_handoff_refs': [], 'requested_fields': list(read_from_parent.FIELD_OPTIONS),
         'information_unit': 1.0}
     assert outcome['message']['selection'] == ['job_returncode'] and outcome['message']['message'] == {}

@@ -40,14 +40,14 @@ def _absolute_path(value):
 def standard_blast_database_input_identity(request: dict) -> str:
     """Hash selected inputs and original attempt, without local capture paths."""
     request = views._copy(request)
-    value = dict(version=PREFIX + "input_identity_v1",
+    value = dict(version=PREFIX + "input_identity",
         bundle=dict(artifact_ref=request["bundle_artifact_ref"], **{k: request["bundle_capture"][k] for k in ("sha256", "size_bytes")}),
         authenticated_attempt=request["authenticated_attempt"],
         artifacts=[{k: r[k] for k in ("artifact_key", *_FILE_ID)} for r in request["artifacts"]],
         metadata_descriptors=request["metadata_descriptors"],
         retained_sources=[{k: r[k] for k in ("source_ref", *_FILE_ID)} for r in request["retained_sources"]],
         subject_snapshots=[{k: r[k] for k in _SNAPSHOT} for r in request["subject_snapshots"]])
-    _shape(value, views._object(dict(version={"const": PREFIX + "input_identity_v1"}, bundle=views._object(_FILE_ID),
+    _shape(value, views._object(dict(version={"const": PREFIX + "input_identity"}, bundle=views._object(_FILE_ID),
         authenticated_attempt=_ATTEMPT, artifacts=views._array(views._object(dict(artifact_key=views.TOKEN, **_FILE_ID))),
         metadata_descriptors=views._array(_DESCRIPTOR), retained_sources=views._array(views._object(dict(source_ref=views.REF, **_FILE_ID))),
         subject_snapshots=views._array(views._object(_SNAPSHOT)))))
@@ -57,9 +57,9 @@ def standard_blast_database_input_identity(request: dict) -> str:
 def standard_blast_database_calculation_identity(*, input_identity: str, sequence_model: dict | None) -> dict:
     _shape(input_identity, views.SHA)
     model = calculators.validate_sequence_model(sequence_model)
-    interpretation = views._hash(dict(version=PREFIX + "interpretation_identity_v1",
+    interpretation = views._hash(dict(version=PREFIX + "interpretation_identity",
         input_identity=input_identity))
-    return dict(input_interpretation_id=interpretation, calculation_id=views._hash(dict(version=PREFIX + "calculation_identity_v1",
+    return dict(input_interpretation_id=interpretation, calculation_id=views._hash(dict(version=PREFIX + "calculation_identity",
         input_interpretation_id=interpretation, sequence_model=model)))
 
 class _WorkerFailure(Exception):
@@ -86,7 +86,7 @@ def _metadata_failures(issues):
     return result
 
 def _resolved_population_failures(issues, sheets, calculations):
-    """Resolve only original binding notes answered by the calculated v3 facts.
+    """Resolve only original binding notes answered by the calculated facts.
 
     The original issues and binding remain intact. The returned failure objects
     retain their original issue index and complete search address; no other
@@ -103,18 +103,18 @@ def _resolved_population_failures(issues, sheets, calculations):
         if len(selected) != 1 or len(calculated) != 1:
             continue
         scientific, result = selected[0], calculated[0]
-        if (scientific.get("schema") != "blast_sequence_database_result_sheet_v3"
+        if (scientific.get("schema") != "blast_sequence_database_result_sheet_population"
                 or not scientific["database_population_associations"] or result is None
                 or result.get("search_key") != key):
             continue
         database = result["components"].get("database_sheet")
-        if database is None or database.get("schema") != "blast_database_sheet_v3":
+        if database is None or database.get("schema") != "blast_database_sheet_population":
             continue
-        context = dict(schema="blast_database_population_context_v1", search_key=key,
+        context = dict(schema="blast_database_population_context", search_key=key,
             associations=scientific["database_population_associations"])
         relation = database.get("database_population_relation")
         if (database.get("database_population_context") == context and relation is not None
-                and relation.get("schema") == "blast_database_population_relation_v1"
+                and relation.get("schema") == "blast_database_population_relation"
                 and relation.get("search_key") == key and relation.get("status") == "available"
                 and relation.get("reason_codes") == [] and relation.get("association_results")
                 and all(r["status"] == "available" and r["reason_codes"] == [] for r in relation["association_results"])):

@@ -11,8 +11,8 @@ def obj(fields):
 
 ROLES = ('launch', 'launch_api', 'launch_local', 'launch_hpc', 'results')
 RESOURCE_ROLES = {'launch_api': 'api', 'launch_local': 'local', 'launch_hpc': 'hpc'}
-LAUNCH_VERSION = 'resource_launch_assignment_v1'
-RESULTS_VERSION = 'resource_results_assignment_v1'
+LAUNCH_VERSION = 'resource_launch_assignment'
+RESULTS_VERSION = 'resource_results_assignment'
 FAILURE_CODES = ('resource_unavailable', 'resource_authentication_required',
     'resource_availability_unknown', 'resource_not_bound', 'resource_selection_conflict',
     'resource_assignment_conflict', 'receiving_interface_unavailable',
@@ -58,7 +58,7 @@ FAILURE_SCHEMA = obj({'code': {'type': 'string', 'enum': list(FAILURE_CODES)},
 RECEIVER_SCHEMA = obj({'provider_id': _reference('resource_binding'),
     'target_handle': _reference('resource_execution'),
     'contract_ref': _reference('resource_interface')})
-HANDOFF_SCHEMA = obj({'version': {'type': 'string', 'const': 'execution_handoff_v1'},
+HANDOFF_SCHEMA = obj({'version': {'type': 'string', 'const': 'execution_handoff'},
     'execution_handle': _reference('resource_execution'), 'resource_selection': SELECTION_SCHEMA,
     'submitted_input_versions': _array(INPUT_VERSION_SCHEMA),
     'monitoring': RECEIVER_SCHEMA, 'results': RECEIVER_SCHEMA,

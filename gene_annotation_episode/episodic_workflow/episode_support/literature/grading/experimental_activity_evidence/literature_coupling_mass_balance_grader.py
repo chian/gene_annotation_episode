@@ -36,7 +36,7 @@ each with its refs (None or empty when not available).
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_coupling_mass_balance_criteria import COUPLING_MASS_BALANCE_CRITERIA
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import SUPPORTS, criterion_supports
 
-VERSION = 'a105_coupling_mass_balance_grade_v1'
+VERSION = 'a105_coupling_mass_balance_grade'
 CRITERIA = tuple(criterion['id'] for criterion in COUPLING_MASS_BALANCE_CRITERIA)
 DETECTION = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact product_formation_detected
 PERCENT_PER_FRACTION = 100.0   # FIXED_BY_DEFINITION: a percent is a hundredth.

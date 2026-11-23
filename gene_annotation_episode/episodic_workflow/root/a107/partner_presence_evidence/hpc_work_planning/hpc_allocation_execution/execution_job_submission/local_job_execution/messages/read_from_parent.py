@@ -1,4 +1,4 @@
-"""What the parent gives: the practical assignment for the bound local resource (the old ``practical_assignment_v1``
+"""What the parent gives: the practical assignment for the bound local resource (the old ``practical_assignment``
 of ``from_parent.assignment_schema``: one field per property, under the same names), and the records the job's inputs
 name.
 
@@ -17,7 +17,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.partner_p
     validate_assignment)
 
 ASSIGNMENT_FORM = RecordForm({
-    'version': DeclaredField('text', 'The assignment version', 'practical_assignment_v1'),
+    'version': DeclaredField('text', 'The assignment version', 'practical_assignment'),
     'assignment_id': Field('text', 'The identity of this assignment'),
     'resource_id': Field('text', 'The assigned local resource'),
     'resource_kind': DeclaredField('text', 'The resource kind: local', 'local'),

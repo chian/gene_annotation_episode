@@ -1,8 +1,8 @@
 """What the commissioning parent gives (carried from ``from_parent.py``; the only place the assignment is read).
 
-Old assignment properties of ``execution_launch_assignment_v1``, under the same names: ``version``, ``requests``
-(a map resource_id -> one concrete execution request: ``practical_assignment_v1`` for a local or HPC resource, an
-``api_execution_assignment_v1`` or ``api_service_assignment_v1`` for an API service), ``immutable_input_versions``,
+Old assignment properties of ``execution_launch_assignment``, under the same names: ``version``, ``requests``
+(a map resource_id -> one concrete execution request: ``practical_assignment`` for a local or HPC resource, an
+``api_execution_assignment`` or ``api_service_assignment`` for an API service), ``immutable_input_versions``,
 ``constraints`` (``allowed_resource_ids``, ``allowed_kinds``, ``resource_id``, ``kind``) and
 ``launch_instructions``.
 
@@ -26,9 +26,9 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.gene_contex
 from gene_annotation_episode.episodic_workflow.episode_support.records.gene_context_evidence.practical_execution_records import (
     validate_assignment)
 
-VERSION = 'execution_launch_assignment_v1'
-PRACTICAL_VERSION = 'practical_assignment_v1'
-API_VERSIONS = ('api_execution_assignment_v1', 'api_service_assignment_v1')
+VERSION = 'execution_launch_assignment'
+PRACTICAL_VERSION = 'practical_assignment'
+API_VERSIONS = ('api_execution_assignment', 'api_service_assignment')
 
 ASSIGNMENT_FORM = RecordForm({
     'version': DeclaredField('text', 'The launch assignment version', VERSION),

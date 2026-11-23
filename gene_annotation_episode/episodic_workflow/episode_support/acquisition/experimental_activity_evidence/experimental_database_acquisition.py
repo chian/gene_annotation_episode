@@ -287,7 +287,7 @@ def publish(registry, operation, arguments, snapshot):
     accession = next((str(arguments[key]) for key in ('entry_id', 'aid', 'record_id', 'urn')
                       if key in arguments), None)
     source = registry._source(snapshot.service, None, snapshot=snapshot, text=text, accession=accession)
-    result = {'version': 'experimental_database_source_v1', 'provider': operation.split('.')[1],
+    result = {'version': 'experimental_database_source', 'provider': operation.split('.')[1],
               'operation': operation, 'source_ref': source['id'], 'artifact_ref': source['artifact_ref'],
               'http_status': status, 'captured_bytes': len(snapshot.content), 'capture_complete': complete,
               'source_format': snapshot.media_type, 'next_query': None,

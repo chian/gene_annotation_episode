@@ -25,7 +25,7 @@ def context(mode, *, molecule="dna", database_path="/explicit/database", returnc
         {"full": full, "stride": None if full else 2, "random_count": None, "ends_count": None,
          "no_isam": False, "legacy_file_checks": False, "require_taxids": False, "cdd_delta": False})
     return {
-        "operation": {"version": "blast_utility_operation_v1", "program": "blastdbcheck" if mode == "integrity" else "blastdbcmd",
+        "operation": {"version": "blast_utility_operation", "program": "blastdbcheck" if mode == "integrity" else "blastdbcmd",
             "mode": mode, "input_occurrence_ids": ["db-file"], "database_key": "db", "molecule": molecule, "parameters": parameters},
         "database_binding": {"database_key": "db", "kind": "blast_nucleotide_sequence" if molecule == "dna" else "blast_protein_sequence",
             "molecule": molecule, "identity": {"namespace": "explicit_fixture", "value": "db", "version": None, "release": None},

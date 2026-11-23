@@ -24,7 +24,7 @@ returns     every case the criterion can return, as (status, reason_code, when).
             as 'never' cannot occur for this criterion.
 """
 
-VERSION = 'a105_coupling_electron_balance_criteria_v1'
+VERSION = 'a105_coupling_electron_balance_criteria'
 
 PERCENT_PER_FRACTION = 100.0  # FIXED_BY_DEFINITION: a percent is a hundredth.
 FARADAY_C_PER_MOL = 96485.33212  # FIXED_BY_DEFINITION: the Faraday constant (elementary charge times the Avogadro constant, both exact since 2019), coulomb per mole of electrons.

@@ -15,7 +15,6 @@ from typing import TYPE_CHECKING, TypedDict, get_args
 from jsonschema import Draft202012Validator, validators
 
 from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_alignment.structural_homology_evidence.alignment_site_native import immutable_record
-from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.domain import plain
 from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.domain import ContractError, RECORD_SCHEMAS
 from gene_annotation_episode.episodic_workflow.episode_support.forms.structural_homology_evidence.execution_contracts import canonical, digest
 from gene_annotation_episode.episodic_workflow.episode_support.acquisition.protein_structure.native_protein_structure_acquisition import (
@@ -30,13 +29,11 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.protein_str
 from gene_annotation_episode.episodic_workflow.episode_support.forms.protein_structure.structural_homology_evidence import protein_structure_contracts as a
 from gene_annotation_episode.episodic_workflow.episode_support.calculations.protein_structure_calculations import validate_recorded_protein_structure_components
 from gene_annotation_episode.episodic_workflow.episode_support.readers.protein_structure.structural_homology_evidence.protein_structure_result_views import (
-    ProteinResultSelector, validate_protein_structure_projection_result,
     validate_protein_structure_projection_rows,
 )
-from gene_annotation_episode.episodic_workflow.episode_support.readers.protein_structure.protein_structure_selection import validate_protein_structure_result_selector
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.tool_grading_artifacts import (
     MEDIA_TYPE as GRADING_MEDIA_TYPE, SCHEMA as GRADING_SCHEMA,
-    SCHEMA_V2 as GRADING_SCHEMA_V2, validate_tool_correspondence,
+    SCHEMA_WITH_CORRESPONDENCE as GRADING_SCHEMA_WITH_CORRESPONDENCE, validate_tool_correspondence,
 )
 
 if TYPE_CHECKING:
@@ -56,7 +53,7 @@ class ResolvedProteinStructureOperands(TypedDict):
 
 
 _SUBJECTS = frozenset({"input", "read_subject", "feature", "product", "reference"})
-_FAMILY = "native_protein_structure_bundle_v1"
+_FAMILY = "native_protein_structure_bundle"
 _CODES = frozenset(get_args(a.IssueCode))
 _STRICT = validators.extend(Draft202012Validator,
     type_checker=Draft202012Validator.TYPE_CHECKER
@@ -90,7 +87,7 @@ def _checked(function, *args, stage="authority", field="descriptor", code=None,
 
 def _authority(function, *args, code="original_commission_mismatch", field="receipt", **kwargs):
     # Returns owns its original/frozen proof errors. Preserve its typed errors;
-    # deliberately translate a legacy untyped proof error, never its prose.
+    # deliberately translate an untyped proof error, never its prose.
     try:
         return function(*args, **kwargs)
     except ProteinStructureOperandError:
@@ -200,18 +197,11 @@ def _json_file(store, identity, *, format=None, role=None, canonical_bytes=True,
 
 
 def _source(store, custody):
-    if custody.get("version") == "protein_structure_action_custody_v1":
-        from gene_annotation_episode.episodic_workflow.episode_support.records.protein_structure_action_records import SAVED_ACTION_SOURCE_VERSION
-        _checked(a.validate_protein_structure_action_custody, custody)
-        source = _record(store, custody["source_ref"], {"source"})
-        _require(source["origin"] == "tool" and source["provider"] == "episode.execution_result"
-            and source["version"] in {_FAMILY, SAVED_ACTION_SOURCE_VERSION})
-        return source
+    from gene_annotation_episode.episodic_workflow.episode_support.records.protein_structure_action_records import SAVED_ACTION_SOURCE_VERSION
+    _checked(a.validate_protein_structure_custody, custody)
     source = _record(store, custody["source_ref"], {"source"})
     _require(source["origin"] == "tool" and source["provider"] == "episode.execution_result"
-        and source["version"] == _FAMILY and source["artifact_ref"] == custody["bundle_artifact_ref"])
-    # The host read view has already proved the exact ordinary publisher payload.
-    # Do not reconstruct it from this deliberately smaller scientific view.
+        and source["version"] in {_FAMILY, SAVED_ACTION_SOURCE_VERSION})
     return source
 
 
@@ -222,10 +212,8 @@ def _sequence_refs(descriptor):
 
 
 def _custody_refs(custody):
-    if custody.get("version") == "protein_structure_action_custody_v1":
-        _checked(a.validate_protein_structure_action_custody, custody)
-        return [custody["source_ref"]]
-    return [custody[key] for key in ("handoff_ref", "source_ref", "bundle_artifact_ref")]
+    _checked(a.validate_protein_structure_custody, custody)
+    return [custody["source_ref"]]
 
 
 def _saved_refs(descriptor):
@@ -249,7 +237,7 @@ def _sequence(store, context, descriptor, *, required_use, returns):
         _require(a.same(original[field], descriptor[field]),
             "sequence_artifact_mismatch", stage="sequence", field="sequence" if field == "sequence_file" else "residue_map")
     _require(original["native_file"] is not None, "original_commission_mismatch", field="receipt")
-    native = _json_file(store, original["native_file"], format="protein_structure_sequence_native_v1", role="native_result")
+    native = _json_file(store, original["native_file"], format="protein_structure_sequence_native", role="native_result")
     native = _checked(validate_native_protein_structure_result, native, stage="sequence", field="sequence")
     _require(a.same(native["request"], request) and a.same(native["producer"], original["software"]),
         "original_commission_mismatch", field="request")
@@ -257,12 +245,12 @@ def _sequence(store, context, descriptor, *, required_use, returns):
     _require(a.same(sequence["selection"], descriptor["selection"])
         and sequence["sequence_available"] and sequence["sequence_length"] == descriptor["sequence_length"],
         "sequence_artifact_mismatch", stage="sequence", field="sequence")
-    if descriptor["version"] != "structure_sequence_descriptor_v2":
+    if descriptor["version"] != "structure_sequence_descriptor":
         _file(store, descriptor["structure_file"], role="single_structure")
-    raw_map = _bytes(store, descriptor["residue_map_file"], format="protein_structure_sequence_v1", role="residue_map")
+    raw_map = _bytes(store, descriptor["residue_map_file"], format="protein_structure_sequence", role="residue_map")
     _require(raw_map == canonical(sequence).encode("utf-8"), "sequence_artifact_mismatch",
         stage="sequence", field="residue_map")
-    raw_sequence = _bytes(store, descriptor["sequence_file"], format="ascii_protein_sequence_v1", role="sequence")
+    raw_sequence = _bytes(store, descriptor["sequence_file"], format="ascii_protein_sequence", role="sequence")
     _require(raw_sequence == sequence["alignment_sequence"].encode("ascii"), "sequence_artifact_mismatch",
         stage="sequence", field="sequence")
     reference = _record(store, descriptor["reference_ref"], {"reference"})
@@ -331,24 +319,24 @@ def authenticate_selected_alignment(store, context, alignment, *, fixed, moving,
             candidates.append(ref)
     _require(candidates == [alignment["grading_file"]["artifact_ref"]], "alignment_operand_mismatch", **mismatch)
     grading_format = alignment["grading_file"]["format"]
-    _require(grading_format in {GRADING_SCHEMA, GRADING_SCHEMA_V2}, "unsupported_format", **mismatch)
+    _require(grading_format in {GRADING_SCHEMA, GRADING_SCHEMA_WITH_CORRESPONDENCE}, "unsupported_format", **mismatch)
     grading = _json_file(store, alignment["grading_file"], format=grading_format,
         role="alignment_grading", canonical_bytes=False, stage="correspondence", field="traceback", code="invalid_traceback")
     version = grading.get("schema") if type(grading) is dict else None
     fields = {"schema", "provider", "native_artifact_ref", "grading"}
-    if version == GRADING_SCHEMA_V2:
+    if version == GRADING_SCHEMA_WITH_CORRESPONDENCE:
         fields.add("correspondence")
     _require(type(grading) is dict and set(grading) == fields
-        and version in {GRADING_SCHEMA, GRADING_SCHEMA_V2},
+        and version in {GRADING_SCHEMA, GRADING_SCHEMA_WITH_CORRESPONDENCE},
         "alignment_operand_mismatch" if grading_format == GRADING_SCHEMA else "invalid_traceback",
         stage="correspondence", field="alignment" if grading_format == GRADING_SCHEMA else "traceback")
     _require(version == grading_format and grading["provider"] == source["provider"]
         and grading["native_artifact_ref"] == source["artifact_ref"], "alignment_operand_mismatch", **mismatch)
     _require(type(grading["grading"]) is dict and set(grading["grading"]) == {"sheet", "scores"}
         and type(grading["grading"]["scores"]) is dict
-        and grading["grading"]["scores"].get("schema") == "biopython_pairwise_scores_v1",
+        and grading["grading"]["scores"].get("schema") == "biopython_pairwise_scores",
         "invalid_traceback", stage="correspondence", field="traceback")
-    if version == GRADING_SCHEMA_V2:
+    if version == GRADING_SCHEMA_WITH_CORRESPONDENCE:
         _checked(validate_tool_correspondence, grading["grading"], grading["correspondence"],
             admission=False, stage="correspondence", field="traceback", code="invalid_traceback")
     snapshot = _checked(a.validate_alignment_snapshot, {"descriptor": alignment,
@@ -374,7 +362,7 @@ def _known(context):
 
 def _received_reference(store, context, reference, *, returns, known):
     _require(reference in known, "original_commission_mismatch", field="receipt")
-    # Specialized denial runs before ordinary receipt visibility. Old recursive
+    # Specialized denial runs before ordinary receipt visibility. Recursive
     # source expansion cannot turn hidden protein bytes into an input grant.
     for port in (returns.resolve_received, returns.retained_reference_access):
         decision = _authority(port, context, reference, None)
@@ -468,8 +456,8 @@ def _saved_sheet(store, context, descriptor, *, returns, before_decision_index=N
     request = _checked(validate_protein_structure_request, original["request"], field="request")
     _require(request["operation"] == "compare", "original_commission_mismatch", field="request")
     sheet = _checked(a.validate_protein_structure_sheet,
-        _json_file(store, descriptor["sheet_file"], format="protein_structure_comparison_sheet_v1"), field="request")
-    components = _json_file(store, descriptor["original_components_file"], format="protein_structure_components_v1")
+        _json_file(store, descriptor["sheet_file"], format="protein_structure_comparison_sheet"), field="request")
+    components = _json_file(store, descriptor["original_components_file"], format="protein_structure_components")
     _require(sheet["native_baseline"] is not None and a.same(components, sheet["native_baseline"])
         and a.same(components.get("parameters"), sheet["native_request"])
         and descriptor["original_mode"] == sheet["scientific_mode"]
@@ -498,84 +486,6 @@ def _transform_refs(transform):
 def authenticate_received_structure_transform(store, context, transform: a.DeclaredTransform, *, returns,
         before_decision_index=None) -> a.ProteinStructureComponents:
     _binding(store, context, returns)
-    if a._contains_action_custody(transform):
-        return _authenticate_action_structure_transform(store, context, transform, returns=returns,
-            before_decision_index=before_decision_index)
-    transform = _checked(a.validate_declared_transform_record, transform, field="rotation")
-    _require(transform["origin"] == "received_fitted" and transform["received_from"] is not None,
-        "invalid_transform", field="rotation")
-    received = transform["received_from"]
-    cutoff = {} if before_decision_index is None else {"before_decision_index": before_decision_index}
-    descriptor = received["saved_sheet"]
-    _authority(returns.authenticate_received_saved_sheet, context, descriptor,
-        required_use="use_transform", code="saved_sheet_not_received", field="descriptor", **cutoff)
-    sheet, original = _saved_sheet(store, context, descriptor, returns=returns,
-        before_decision_index=before_decision_index)
-    projections = _authority(returns.received_transform_projections, context, transform,
-        code="invalid_transform", field="rotation", **cutoff)
-    _require(bool(projections), "invalid_transform", field="rotation")
-    host = returns.owner.native_protein_structure_results
-    calculation = _authority(host.read_result_authority, received["calculation_custody"], scope=plain(context.scope))
-    _source(store, received["calculation_custody"])
-    _require(a.same(calculation["custody"], received["calculation_custody"])
-        and a.same(calculation["sheet_file"], descriptor["sheet_file"])
-        and a.same(calculation["original_components_file"], descriptor["original_components_file"])
-        and a.same(calculation["request"], original["request"])
-        and a.same(calculation["software"], original["software"])
-        and a.same(calculation["components_file"], received["components_file"]),
-        "invalid_transform", field="rotation")
-    components = _json_file(store, received["components_file"], format="protein_structure_components_v1",
-        role="received_transform_components")
-    components = _checked(validate_recorded_protein_structure_components, sheet, components=components, field="rotation")
-    selected_parameters = calculation["selector"]["parameters"]
-    if selected_parameters is None:
-        selected_parameters = calculation["request"]["parameters"]
-    _require(components["calculation_id"] == received["calculation_id"]
-        and a.same(components["parameters"], selected_parameters)
-        and components["transform"]["state"] == "identifiable_fit", "invalid_transform", field="rotation")
-    for side in ("fixed", "moving"):
-        _require(a.same(transform[side + "_selection"], sheet["sequences"][side]["selection"]),
-            "invalid_transform", field="rotation")
-    for field, declared in (("rotation", "rotation"), ("translation", "translation_A")):
-        cell = components["transform"][field]
-        _require(cell["state"] == "present" and a.same(cell["value"], transform[declared]),
-            "invalid_transform", field=field)
-    for value in projections:
-        projection = _checked(validate_protein_structure_projection_result, value, field="rotation")
-        _require(any(a.same(projection, row) for row in calculation["facts"]["execution_protein_structure_projections"]),
-            "original_commission_mismatch", field="receipt")
-        identity = {"calculation_id": components["calculation_id"],
-            "input_numerical_sha256": components["input_numerical_sha256"], "components_file": received["components_file"]}
-        if (projection["family"] != "transform" or not a.same(projection["calculation"], identity)
-                or not a.same(projection["custody"], received["calculation_custody"])):
-            continue
-        delivery = projection["delivery"]
-        if delivery["kind"] == "values":
-            rows = delivery["rows"]
-        else:
-            table = _json_file(store, delivery["table_file"], format="protein_structure_projection_table_v1")
-            _require(type(table) is dict and set(table) == {"version", "rows"}
-                and table["version"] == "protein_structure_projection_table_v1", "invalid_transform", field="rotation")
-            rows = table["rows"]
-            envelope = {key: deepcopy(projection[key]) for key in (
-                "projection_id", "family", "selection", "coordinate_set", "requested_count", "matched_count",
-                "returned_count", "omitted_count", "state", "issues", "qualifications")}
-            envelope.update(version="protein_structure_projection_rows_v1", rows=rows,
-                calculation_id=components["calculation_id"])
-            _checked(validate_protein_structure_projection_rows, envelope, field="rotation", code="invalid_transform")
-        for row in rows:
-            if row["identity"]["kind"] != "transform":
-                continue
-            fields = {cell["field"]: cell["value"] for cell in row["values"]}
-            if not {"rotation", "translation"} <= fields.keys():
-                continue
-            for field in ("rotation", "translation"):
-                _require(a.same(fields[field], components["transform"][field]), "invalid_transform", field=field)
-            return deepcopy(components)
-    _fail("invalid_transform", field="rotation")
-
-
-def _authenticate_action_structure_transform(store, context, transform, *, returns, before_decision_index=None):
     from gene_annotation_episode.episodic_workflow.episode_support.records.protein_structure_action_records import VIEW_SOURCE, validate_protein_structure_action_view
     transform = _checked(a.validate_declared_transform_record, transform, field="rotation")
     _require(transform["origin"] == "received_fitted" and transform["received_from"] is not None,
@@ -583,8 +493,8 @@ def _authenticate_action_structure_transform(store, context, transform, *, retur
     received = transform["received_from"]
     cutoff = {} if before_decision_index is None else {"before_decision_index": before_decision_index}
     descriptor = received["saved_sheet"]
-    _require(descriptor["version"] == "protein_structure_saved_sheet_v2"
-        and received["calculation_custody"]["version"] == "protein_structure_action_custody_v1",
+    _require(descriptor["version"] == "protein_structure_saved_sheet"
+        and received["calculation_custody"]["version"] == "protein_structure_custody",
         "invalid_transform", field="rotation")
     _authority(returns.authenticate_received_saved_sheet, context, descriptor,
         required_use="use_transform", code="saved_sheet_not_received", field="descriptor", **cutoff)
@@ -600,7 +510,7 @@ def _authenticate_action_structure_transform(store, context, transform, *, retur
         and a.same(calculation["request"], original["request"])
         and a.same(calculation["software"], original["software"])
         and a.same(calculation["components_file"], received["components_file"]), "invalid_transform", field="rotation")
-    components = _json_file(store, received["components_file"], format="protein_structure_components_v1",
+    components = _json_file(store, received["components_file"], format="protein_structure_components",
         role="received_transform_components")
     components = _checked(validate_recorded_protein_structure_components, sheet, components=components, field="rotation")
     selected_parameters = calculation["selector"].get("parameters")
@@ -623,17 +533,17 @@ def _authenticate_action_structure_transform(store, context, transform, *, retur
         outcome = projection["outcome"]
         if (projection["source_ref"] != received["calculation_custody"]["source_ref"]
                 or projection["selection"]["family"] != "transform"
-                or outcome["version"] == "protein_structure_action_unavailable_v1"
+                or outcome["version"] == "protein_structure_action_unavailable"
                 or outcome["calculation_id"] != components["calculation_id"]):
             continue
-        if outcome["version"] == "protein_structure_projection_rows_v1":
+        if outcome["version"] == "protein_structure_projection_rows":
             rows = outcome["rows"]
         else:
-            table = _json_file(store, outcome["delivery"]["table_file"], format="protein_structure_projection_table_v1")
+            table = _json_file(store, outcome["delivery"]["table_file"], format="protein_structure_projection_table")
             _require(type(table) is dict and set(table) == {"version", "rows"}
-                and table["version"] == "protein_structure_projection_table_v1", "invalid_transform", field="rotation")
+                and table["version"] == "protein_structure_projection_table", "invalid_transform", field="rotation")
             envelope = {key: deepcopy(item) for key, item in outcome.items() if key != "delivery"}
-            envelope.update(version="protein_structure_projection_rows_v1", rows=table["rows"])
+            envelope.update(version="protein_structure_projection_rows", rows=table["rows"])
             _checked(validate_protein_structure_projection_rows, envelope, field="rotation", code="invalid_transform")
             rows = table["rows"]
         for row in rows:
@@ -648,39 +558,10 @@ def _authenticate_action_structure_transform(store, context, transform, *, retur
     _fail("invalid_transform", field="rotation")
 
 
-def validate_protein_structure_selected_inputs(store, context, selector: ProteinResultSelector, *, handoff_ref: str, returns) -> list[str]:
-    _binding(store, context, returns)
-    selector = _checked(validate_protein_structure_result_selector, selector, field="request")
-    if context.role == "results":
-        assignment = plain(context.assignment)
-        _require(assignment.get("version") == "execution_results_assignment_v1"
-            and assignment.get("handoff_ref") == handoff_ref and a.same(assignment.get("selector"), selector),
-            "original_commission_mismatch", field="request")
-    _received_reference(store, context, handoff_ref, returns=returns, known=_known(context))
-    _record(store, handoff_ref, {"source"}, field="receipt")
-    if selector["acquisition"] == "complete_bound_bundle":
-        # The result host owns the original qualified target/request. This
-        # selection adds no saved-input or source-auxiliary grant.
-        return [handoff_ref]
-    descriptor = selector["saved_sheet"]
-    _require(descriptor["custody"]["handoff_ref"] == handoff_ref,
-        "original_commission_mismatch", field="request")
-    _authority(returns.authenticate_received_saved_sheet, context, descriptor,
-        required_use="recalculate", code="saved_sheet_not_received", field="descriptor")
-    _, original = _saved_sheet(store, context, descriptor, returns=returns)
-    _checked(validate_protein_structure_result_selector, selector, request=original["request"], field="request")
-    references = _saved_refs(descriptor)
-    transform = selector["parameters"]["declared_transform"]
-    if transform is not None and transform["origin"] == "received_fitted":
-        authenticate_received_structure_transform(store, context, transform, returns=returns)
-        references.extend(_transform_refs(transform))
-    return list(dict.fromkeys(references))
-
-
 __all__ = ["ResolvedComparisonOperands", "ProteinStructureOperandError",
     "is_protein_structure_sequence_operand", "authenticate_structure_sequence_reference",
     "authenticate_selected_alignment", "resolve_comparison_operands",
     "validate_saved_structure_sheet_operand", "authenticate_received_structure_transform",
-    "validate_protein_structure_job_inputs", "validate_protein_structure_selected_inputs"]
+    "validate_protein_structure_job_inputs"]
 
 __all__ += ["ResolvedProteinStructureOperands", "resolve_protein_structure_operands"]

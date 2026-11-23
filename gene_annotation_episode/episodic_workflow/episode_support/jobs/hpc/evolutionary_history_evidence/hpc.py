@@ -25,7 +25,7 @@ NATIVE_RESULTS = TableDeclaration(name='a104_native_results', columns=('source_r
                                  record_refs=('source_ref',))
 REQUEST_PROVIDER = 'host.a104.native_request'
 RESULT_PROVIDER = 'native.a104.phylogeny'
-VERSION = 'a104_shared_hpc_custody_v1'
+VERSION = 'a104_shared_hpc_custody'
 
 
 def require(condition, code):
@@ -85,7 +85,7 @@ def sequence(store, reference):
         parent = sequence(store, row['subject_ref'])
         value = ''.join(parent[span['start']:span['end']] for span in row['segments'])
     elif row['record_type'] == 'read_subject':
-        from gene_annotation_episode.episodic_workflow.episode_support.records.documents.evolutionary_history_evidence import materials_packing as packing
+        from gene_annotation_episode import materials_packing as packing
         value = packing.component_window(store, store.get(row['member_ref']), 'sequence', 0, row['length']).decode('ascii')
     else:
         raise ContractError('a104_protein_sequence_unavailable')
@@ -313,7 +313,7 @@ def import_result(store, *, request_ref, hpc_result_ref, known_record_refs, scop
             'a104_hpc_original_scope_conflict')
     source = store.get(hpc_result_ref)
     require(source['record_type'] == 'source' and source.get('provider') == 'episode.hpc_result'
-            and source['origin'] == 'tool' and source['version'] == 'hpc_result_v1', 'a104_actual_hpc_result_required')
+            and source['origin'] == 'tool' and source['version'] == 'hpc_result', 'a104_actual_hpc_result_required')
     raw_receipt = store.get_artifact(source['artifact_ref'])
     receipt = json.loads(raw_receipt)
     require(same_scope(receipt['scope'], expected['scope']), 'a104_hpc_receiving_scope_conflict')

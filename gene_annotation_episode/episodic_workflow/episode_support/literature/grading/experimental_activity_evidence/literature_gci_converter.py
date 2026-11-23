@@ -210,7 +210,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_gci_criteria import NM_PER_UNIT
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_gci_converted_v1'
+VERSION = 'a105_gci_converted'
 STATEMENTS = {'detected': 'interaction_detected', 'not_detected': 'interaction_not_detected', None: 'interaction_not_stated'}
 CRITERIA_MAP = {'binding_controls': ('reference_subtraction', 'bulk_solvent_correction', 'nonspecific_binding_control', 'baseline_and_regeneration'), 'binding_regime': ('concentration_series', 'dissociation_window', 'mass_transport', 'steady_state_vs_kinetic'), 'binding_parameter_definition': ('fit_model', 'kinetic_consistency'), 'binding_species': ('immobilized_activity',), 'calibration_applicability': ('surface_level_and_response', 'rmax_consistency'), 'sampling_basis': ('replicates',)}
 MIN_CONCENTRATIONS = 5  # EXPERT_REVIEW: fewest analyte concentrations for a usable titration series (GCI series are usually 5 to 8 steps); full agreement from it.

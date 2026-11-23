@@ -1,4 +1,4 @@
-"""V1 selection over retained native D1 envelopes; synthetic corruptions labeled.
+"""Selection over retained native D1 envelopes; synthetic corruptions labeled.
 
 Native bytes are graded before projection. The projection purity test disables
 all readers/calculators and IO after preparing saved envelopes. These tests do
@@ -35,7 +35,7 @@ def prepared(args):
 
 
 def selection(collection="calculations", *, quantities=None, checks=None, rows=None, artifacts=None):
-    return {"version": "native_hmmer_preparation_result_selector_v1", "acquisition": "complete_bound_bundle",
+    return {"version": "native_hmmer_preparation_result_selector", "acquisition": "complete_bound_bundle",
         "projection": None if collection is None else {"collection": collection,
             "rows": {"offset": 0, "limit": 100000} if rows is None else rows,
             "quantities": [] if quantities is None else quantities, "checks": [] if checks is None else checks},

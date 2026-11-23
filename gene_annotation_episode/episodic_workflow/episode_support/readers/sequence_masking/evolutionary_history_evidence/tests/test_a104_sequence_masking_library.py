@@ -24,7 +24,7 @@ def occurrence(content, oid='input', role='sequences', completeness='complete'):
     return {'occurrence_id': oid, 'direction': 'output' if role == 'mask' else 'input', 'role': role, 'ordinal': 0, 'artifact_ref': 'retained:' + oid, 'sha256': hashlib.sha256(content).hexdigest(), 'size_bytes': len(content), 'completeness': completeness}
 
 def operation(program='dustmasker', format='interval', style=None, mode='mask', parse_seqids=False):
-    return {'version': 'sequence_masking_operation_v1', 'program': program, 'mode': mode, 'engine_version': None, 'input_format': 'fasta', 'output_format': format, 'masking_style': style or ('not_applicable' if mode == 'create_counts' else 'interval' if format == 'interval' else 'soft'), 'parse_seqids': parse_seqids, 'requested_parameters': {k: None for k in PARAMETERS[program, mode]}}
+    return {'version': 'sequence_masking_operation', 'program': program, 'mode': mode, 'engine_version': None, 'input_format': 'fasta', 'output_format': format, 'masking_style': style or ('not_applicable' if mode == 'create_counts' else 'interval' if format == 'interval' else 'soft'), 'parse_seqids': parse_seqids, 'requested_parameters': {k: None for k in PARAMETERS[program, mode]}}
 
 def custody(records, *, complete=True, returncode=0, producer='authenticated_native', explicit=False):
     basis = 'native_fasta_iteration' if producer == 'authenticated_native' else 'caller_declared'
@@ -218,7 +218,7 @@ def test_preflight_and_captured_parser_share_exact_input_validation(raw, molecul
     preflight = preflight_masking_input_fasta(raw, molecule=molecule)
     parsed = parse_masking_input_fasta(raw, occurrence=occurrence(raw), molecule=molecule)
     ordinals = {r['record_key']: r['record_ordinal'] for r in parsed['records']}
-    assert preflight == {'version': 'sequence_masking_preflight_v1', 'valid': bool(parsed['records']) and (not parsed['failures']), 'record_count': len(parsed['records']), 'failures': [{'code': f['code'], 'record_ordinal': ordinals.get(f['record_key']), 'line_number': f['line_number']} for f in parsed['failures']]}
+    assert preflight == {'version': 'sequence_masking_preflight', 'valid': bool(parsed['records']) and (not parsed['failures']), 'record_count': len(parsed['records']), 'failures': [{'code': f['code'], 'record_ordinal': ordinals.get(f['record_key']), 'line_number': f['line_number']} for f in parsed['failures']]}
     assert not {'artifact_ref', 'occurrence_id', 'record_key'} & set(preflight)
 
 
@@ -299,7 +299,7 @@ def test_actual_A104_worker_saved_stage_and_immutable_replay(tmp_path, monkeypat
     directory = tmp_path / 'worker'
     directory.mkdir()
     source = 'execution_result_' + 'a' * 64
-    selector = {'version': 'native_blast_masking_result_selector_v1', 'mode': mode, 'records': {'mode': 'all'}, 'quantities': ['masked_positions', 'masked_fraction'], 'statistics_fields': [], 'statistics_unit_codes': [], 'include_checks': False, 'artifacts': [], 'saved_data': [], 'saved_sheet_ref': 'artifact_' + 'b' * 64 if mode == 'saved_recalculation' else None}
+    selector = {'version': 'native_blast_masking_result_selector', 'mode': mode, 'records': {'mode': 'all'}, 'quantities': ['masked_positions', 'masked_fraction'], 'statistics_fields': [], 'statistics_unit_codes': [], 'include_checks': False, 'artifacts': [], 'saved_data': [], 'saved_sheet_ref': 'artifact_' + 'b' * 64 if mode == 'saved_recalculation' else None}
     plan = {'version': worker.PLAN_VERSION, 'task': 'project_saved', 'directory': str(directory), 'source_ref': source, 'operation': sheet['operation'], 'native_outcome': sheet['native_outcome'], 'occurrences': [sheet['inputs'][0]['occurrence'], sheet['parsed_output']['occurrence']], 'selector': selector, 'saved_data': [], 'failures': [], 'files': {'sheet': saved('sheet', sheet), 'calculations': saved('calculations', calculated), 'statistics': None}}
     manifest = worker.run(plan)
     assert manifest['completed'] is True and (not manifest['failures'])

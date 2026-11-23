@@ -141,7 +141,7 @@ def _bound(summary, ctx):
         config = settings['resources'].get(resource_id)
         if config is None:
             raise ValueError('execution_resource_not_bound')
-        kind = 'api' if request['version'] != 'practical_assignment_v1' else request['resource_kind']
+        kind = 'api' if request['version'] != 'practical_assignment' else request['resource_kind']
         if KINDS[config['kind']] != kind:
             raise ValueError('execution_resource_kind_conflict')
         if kind == 'api':

@@ -1,5 +1,5 @@
 """A held world for the A110 literature reaction grading: a Store with the problem, a short reaction paper, the
-retained ``a110_source_reaction_measurements_v1`` dataset of its numbers, a source of literal witnesses and an
+retained ``a110_source_reaction_measurements`` dataset of its numbers, a source of literal witnesses and an
 interpretation source (the fixtures of the old ``root/a110/tests/test_literature_reaction_storage.py`` at
 ``97308b94c``), the entry assignment that passes all of them in custody and the population arguments the model
 would select (literal witnesses as source locations). Real records; nothing is faked."""
@@ -26,12 +26,12 @@ def source(store, text, parents=(), alias=False):
 
 
 def dataset():
-    """The old fixture's v1 dataset: two independent ratio units, one named alternative, a complete budget."""
+    """The old fixture's dataset: two independent ratio units, one named alternative, a complete budget."""
     ratio = {'mode': 'independent_units', 'ratio_kind': 'product_pair', 'unit': 'mol_per_mol', 'origin': 'synthetic',
              'observations': [{'measurement_key': 'prep1', 'value': .7}, {'measurement_key': 'prep2', 'value': .9}],
              'mean': None, 'sample_sd': None, 'independent_n': None, 'claim': 1,
              'alternatives': [{'key': 'half', 'prediction': .5}]}
-    return {'version': 'a110_source_reaction_measurements_v1', 'ratio': ratio,
+    return {'version': 'a110_source_reaction_measurements', 'ratio': ratio,
             'budget': {'basis': 'usable_batch', 'unit': 'umol', 'origin': 'synthetic', 'resources_complete': True,
                        'resources': [{'resource_key': 'resource1', 'value': 12, 'lower': 12, 'upper': 12,
                                       'coefficient': 1},
@@ -64,10 +64,10 @@ def held_world(directory, requested=None, selection='window'):
                                                                      'end': length}]}
     sources = (provenance, paper, data, literal, interpretation)
     held = [*scope['subject_refs'], *(row['id'] for row in sources), *(row['artifact_ref'] for row in sources)]
-    page = {'version': 'page_assignment_v1', 'source_ref': paper['id'], 'representation': 'original',
+    page = {'version': 'page_assignment', 'source_ref': paper['id'], 'representation': 'original',
             'artifact_ref': paper['artifact_ref'], 'question_context_refs': [], 'prior_delivery_refs': []}
     window = {'source_ref': paper['id'], 'representation': 'original', 'offset': 0, 'limit': len(PAPER.encode())}
-    assignment = {'version': 'reading_assignment_v1', 'page': page,
+    assignment = {'version': 'reading_assignment', 'page': page,
                   'selection': window if selection == 'window' else {'spans': [window]},
                   'scope': scope, 'finding_unit': 1.0, 'received_record_refs': list(dict.fromkeys(held))}
     if requested is not None:

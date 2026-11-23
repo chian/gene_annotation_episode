@@ -25,9 +25,9 @@ FILES = {'__init__.py', 'goal.py', 'task.py', 'credit.py', 'yield_estimator.py',
 ROOT = 'gene_annotation_episode.episodic_workflow.root'
 BINDING = 'perturbation_evidence/execution_job_submission'
 
-API_REQUEST = {'version': 'api_service_assignment_v1', 'resource_id': 'bvbrc', 'service': 'bvbrc_appservice',
+API_REQUEST = {'version': 'api_service_assignment', 'resource_id': 'bvbrc', 'service': 'bvbrc_appservice',
                'request': {'application': 'rnaseq'}, 'endpoint': 'usable_handoff', 'constraints': {}}
-ASSIGNMENT = {'version': 'execution_launch_assignment_v1', 'requests': {'bvbrc': API_REQUEST},
+ASSIGNMENT = {'version': 'execution_launch_assignment', 'requests': {'bvbrc': API_REQUEST},
               'immutable_input_versions': [], 'constraints': {}, 'record_refs': ['input_1'], 'handoff_unit': 2.0,
               'scope': {'subjects': ['input_1']}}
 CLASSES = 'api_bvbrc_appservice_handoff'
@@ -136,7 +136,7 @@ def test_the_slot_commissions_the_chosen_request_and_selects_the_return_fields_i
 
 
 def test_the_launch_instructions_the_commissioner_pinned_reach_a_request_that_has_none():
-    pinned = {'version': 'launch_instruction_selection_v1', 'sections': []}
+    pinned = {'version': 'launch_instruction_selection', 'sections': []}
     value = summary()
     value['assignment'] = {**value['assignment'], 'launch_instructions': pinned}
     assert EPISODE.msg_to_child('launch_api', {'resource_id': 'bvbrc'}, value).assignment[

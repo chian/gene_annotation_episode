@@ -138,7 +138,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_row_contract import SECONDS_PER_MINUTE
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_chromatographic_converted_v1'
+VERSION = 'a105_chromatographic_converted'
 CRITERIA_MAP = {'background_alternatives': ('spontaneous_reaction_control', 'substrate_independent_signal', 'starting_material_blank'), 'attribution_supported': ('enzyme_dependence', 'product_identity'),
                 'calibration_applicability': ('calibration_standard', 'calibration_range', 'product_over_detection_limit'), 'matrix_interference': ('internal_standard',),
                 'rate_regime': ('initial_rate_regime', 'enzyme_substrate_ratio', 'time_points', 'reaction_stopped'),

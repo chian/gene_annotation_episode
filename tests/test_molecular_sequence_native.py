@@ -73,27 +73,23 @@ def test_manifest_artifact_identity_conflict_is_not_resolved_or_opened(monkeypat
 
 
 @pytest.mark.parametrize("version,operation,arguments,deployment_version,code,path", [
-    ("molecular_sequence_request_v1", "find_n_glycosylation_motifs",
-        {"sequence": "NNST", "allow_overlap": False}, "molecular_sequence_deployment_v1",
-        "operation_not_supported", "/operation"),
-    ("molecular_sequence_request_v1", "predict_o_glycosylation_hotspots",
-        {"sequence": "ASA", "window": 3, "min_st_fraction": 0.3333, "disallow_proline_next": True},
-        "molecular_sequence_deployment_v1",
-        "operation_not_supported", "/operation"),
-    ("molecular_sequence_request_v2", "find_n_glycosylation_motifs",
-        {"sequence": "NNST", "allow_overlap": False}, "molecular_sequence_deployment_v1",
+    ("molecular_sequence_protease_deployment", "find_n_glycosylation_motifs",
+        {"sequence": "NNST", "allow_overlap": False}, "molecular_sequence_deployment",
+        "request_version_required", "/version"),
+    ("molecular_sequence_request", "find_n_glycosylation_motifs",
+        {"sequence": "NNST", "allow_overlap": False}, "molecular_sequence_protease_deployment",
         "deployment_version_required", "/deployment/version"),
-    ("molecular_sequence_request_v1", "annotate_open_reading_frames",
+    ("molecular_sequence_request", "annotate_open_reading_frames",
         {"sequence": "ATGTAA", "min_length": 6, "search_reverse": False, "filter_subsets": False},
-        "molecular_sequence_deployment_v2",
+        "molecular_sequence_protease_deployment",
         "deployment_version_required", "/deployment/version"),
-    ("molecular_sequence_request_v2", "predict_o_glycosylation_hotspots",
+    ("molecular_sequence_request", "predict_o_glycosylation_hotspots",
         {"sequence": "ASA", "window": 3, "min_st_fraction": 0.4},
-        "molecular_sequence_deployment_v2",
+        "molecular_sequence_deployment",
         "closed_fields_required", "/arguments"),
-    ("molecular_sequence_request_v2", "find_n_glycosylation_motifs",
+    ("molecular_sequence_request", "find_n_glycosylation_motifs",
         {"sequence": "NNST", "allow_overlap": False, "callable": "list_glycoengineering_resources"},
-        "molecular_sequence_deployment_v2",
+        "molecular_sequence_deployment",
         "closed_fields_required", "/arguments"),
 ])
 def test_fixed_private_versions_and_source_profiles_fail_before_file_reads(
@@ -114,8 +110,7 @@ def test_fixed_private_versions_and_source_profiles_fail_before_file_reads(
         guarded.setattr(Path, "read_bytes", forbidden)
         result = native.execute_molecular_sequence_request(selected)
     assert not reads
-    assert result["version"] == ("molecular_sequence_execution_v2"
-        if version == "molecular_sequence_request_v2" else "molecular_sequence_execution_v1")
+    assert result["version"] == "molecular_sequence_execution"
     assert result["failure"]["code"] == "molecular_sequence_" + code
     assert result["failure"]["path"] == path
     assert result["request"] == selected == before

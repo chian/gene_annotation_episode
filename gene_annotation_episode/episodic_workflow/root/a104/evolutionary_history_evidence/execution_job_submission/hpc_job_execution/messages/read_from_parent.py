@@ -1,4 +1,4 @@
-"""What the parent gives: the one practical HPC job assignment (``practical_assignment_v1``) to run.
+"""What the parent gives: the one practical HPC job assignment (``practical_assignment``) to run.
 
 The form has one field per property of the old assignment schema. ``read_from_parent`` is the only place the
 assignment is read: it admits the assignment with the library's closed practical-assignment contract and
@@ -8,7 +8,7 @@ from method_loop import Field, RecordForm
 from gene_annotation_episode.episodic_workflow.episode_support.records.evolutionary_history_evidence.practical_execution_records import validate_assignment
 
 ASSIGNMENT_FORM = RecordForm({
-    'version': Field('text', 'The assignment contract version: practical_assignment_v1'),
+    'version': Field('text', 'The assignment contract version: practical_assignment'),
     'assignment_id': Field('text', 'The identity of the assigned job'),
     'resource_kind': Field('text', 'The kind of the assigned resource: hpc'),
     'workspace': Field('text', 'The absolute workspace of the job on the resource'),

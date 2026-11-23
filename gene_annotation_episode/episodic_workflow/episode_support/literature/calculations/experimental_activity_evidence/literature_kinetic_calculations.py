@@ -15,9 +15,9 @@ import hashlib
 import json
 import math
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_experimental_contracts import ExperimentalContractError
-VERSION = 'a105_kinetic_contrast_sheet_v1'
-INPUT_VERSION = 'a105_kinetic_contrast_inputs_v1'
-MODEL_VERSION = 'a105_kinetic_log_model_v1'
+VERSION = 'a105_kinetic_contrast_sheet'
+INPUT_VERSION = 'a105_kinetic_contrast_inputs'
+MODEL_VERSION = 'a105_kinetic_log_model'
 ROLES = ('numerator', 'denominator')
 PARAMETER_UNITS = {'Km': 'uM', 'kcat': 'per_min', 'catalytic_efficiency': 'uM^-1min^-1'}
 COMPONENTS = ('numerator_parameter', 'denominator_parameter', 'parameter_difference', 'parameter_ratio', 'log_parameter_contrast', 'log_contrast_variance', 'log_contrast_standard_uncertainty', 'source_profile_log_ratio', 'source_signed_index')
@@ -161,7 +161,7 @@ def _operand_keys(inputs):
     keys = {}
     for role in ROLES:
         operand = inputs[role]
-        keys[role] = 'kinetic_estimate_' + hashlib.sha256(_encoded({'version': 'kinetic_estimate_identity_v1', 'operand': operand}).encode('utf-8')).hexdigest() if operand is not None and operand['physical_measurement_id'] is not None else None
+        keys[role] = 'kinetic_estimate_' + hashlib.sha256(_encoded({'version': 'kinetic_estimate_identity', 'operand': operand}).encode('utf-8')).hexdigest() if operand is not None and operand['physical_measurement_id'] is not None else None
     return keys
 
 def kinetic_operand_keys(inputs):

@@ -24,7 +24,7 @@ from ..goal import GOAL
 from .read_from_parent import REQUESTED_AGGREGATION, REQUESTED_GRADING
 
 OUTCOME_PAGE_SIZE = 8        # the old configuration outcome_page_size
-LITERATURE_ASSIGNMENT = 'literature_assignment_v1'
+LITERATURE_ASSIGNMENT = 'literature_assignment'
 HISTORY_MEANING = ('Own outcome metadata only. Read exact prior outcomes through own_literature_outcomes.')
 GRADING_NAMESPACE = 'literature_a108_grading_cells'
 AGGREGATION_NAMESPACE = 'literature_a108_aggregation_cells'

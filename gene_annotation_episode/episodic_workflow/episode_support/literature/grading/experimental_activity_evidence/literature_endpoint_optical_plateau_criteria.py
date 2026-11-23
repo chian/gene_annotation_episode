@@ -24,7 +24,7 @@ returns     every case the criterion can return, as (status, reason_code, when).
             as 'never' cannot occur for this criterion.
 """
 
-VERSION = 'a105_endpoint_optical_plateau_criteria_v1'
+VERSION = 'a105_endpoint_optical_plateau_criteria'
 
 FRACTION_PER_UNIT = {'percent': 0.01, 'fraction': 1.0}      # FIXED_BY_DEFINITION: a percent is a hundredth.
 M_PER_UNIT = {'nM': 1e-9, 'uM': 1e-6, 'mM': 1e-3}      # FIXED_BY_DEFINITION: the molar scale of a concentration unit.

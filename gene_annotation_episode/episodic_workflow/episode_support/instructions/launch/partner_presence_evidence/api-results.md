@@ -1,6 +1,6 @@
 # API results, failures and timing
 
-The `results` episode receives `execution_results_assignment_v1` with the
+The `results` episode receives `execution_results_assignment` with the
 original `handoff_ref` and `selector` containing positive `page` and optional
 `page_size`. Its `api.hmmer.result` action takes empty arguments: it cannot
 change the job or substitute a different requested page. Another page can be

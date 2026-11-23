@@ -50,7 +50,7 @@ converter does. The constructors take ``support`` and default it to 'direct'; th
 through the extraction (the extraction always passes the model's answer).
 """
 
-VERSION = 'a105_quench_flow_record_v1'
+VERSION = 'a105_quench_flow_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'quench_flow'
 QUANTITIES = ('chemical_rate_constant', 'chemical_rate_constant_spread', 'turnover', 'turnover_spread', 'burst_amplitude', 'burst_amplitude_per_enzyme',

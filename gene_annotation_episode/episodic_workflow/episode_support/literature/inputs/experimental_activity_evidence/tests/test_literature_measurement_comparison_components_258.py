@@ -128,7 +128,7 @@ def bind_covariance(selection, sources, read, matrix, *, roles=('left', 'right')
     base['covariance_source_refs'] = []
     data = read_measurement_comparison_inputs(base, read_source=read)
     q = {r: data['quantities'][r]['value'] for r in roles}
-    document = dict(version='a105_measurement_comparison_covariance_v1', roles=list(roles), owner_keys=[q[r]['owner_key'] for r in roles], units=[q[r]['canonical_unit'] for r in roles], dependency_keys=[q[r]['dependency_keys'] for r in roles], covariance=matrix, basis='joint_covariance_of_selected_estimates', variance_status=status, origin='synthetic', systematic_coverage='included_as_declared', derivation=derivation)
+    document = dict(version='a105_measurement_comparison_covariance', roles=list(roles), owner_keys=[q[r]['owner_key'] for r in roles], units=[q[r]['canonical_unit'] for r in roles], dependency_keys=[q[r]['dependency_keys'] for r in roles], covariance=matrix, basis='joint_covariance_of_selected_estimates', variance_status=status, origin='synthetic', systematic_coverage='included_as_declared', derivation=derivation)
     content = (json.dumps(document, separators=(',', ':')) + '\n').encode()
     h = hashlib.sha256(content).hexdigest()
     ref = 'source_' + h

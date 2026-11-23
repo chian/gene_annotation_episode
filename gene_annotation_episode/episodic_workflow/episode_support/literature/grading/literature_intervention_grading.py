@@ -4,8 +4,8 @@ from copy import deepcopy
 from gene_annotation_episode.episodic_workflow.episode_support.records.perturbation_evidence.domain import obj
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.perturbation_evidence.literature_assay_grading import COMPONENTS, ROLES, REQUIRED_ROLES, COMMON_CRITERIA, operand_schema, interpretation_schema, prediction_model_schema, assay_grading_cell_schema, grade_experimental_measurement
 
-INPUT_VERSION = "a106_intervention_grading_inputs_v1"
-VERSION = "a106_intervention_grading_sheet_v1"
+INPUT_VERSION = "a106_intervention_grading_inputs"
+VERSION = "a106_intervention_grading_sheet"
 EVALUATION_SCOPE = "intervention_experimental_evidence"
 QUANTITY_KINDS = ("native_endpoint", "endpoint_difference", "endpoint_ratio",
                   "log2_fold_change", "fitness_difference")

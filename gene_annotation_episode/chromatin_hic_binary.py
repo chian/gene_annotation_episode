@@ -157,7 +157,7 @@ def read_header(stream, file_size):
             # Fragment coordinates are not selected by the BP adapter. Validate
             # their byte extent without manufacturing a BP interpretation.
             c.skip(count * 4)
-    header = {'version': 'hic_native_header_v1', 'bin_id_space': 'chromosome_local',
+    header = {'version': 'hic_native_header', 'bin_id_space': 'chromosome_local',
               'source_version': 9, 'byte_order': 'little', 'header_range': c.range(),
               'footer_position': footer, 'normalization_index_position': nvi,
               'normalization_index_length': nvi_size, 'genome_id': genome,

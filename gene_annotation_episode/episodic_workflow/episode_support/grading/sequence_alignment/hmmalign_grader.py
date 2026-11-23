@@ -236,7 +236,7 @@ def calculate_hmmalign_scores(sheet, *, parameters=None):
         "fragment_sequence_count": sum(r.get("fragment") in {"native_missing_data", "declared"} for r in sequences),
         "acquisition": deepcopy(sheet.get("acquisition")),
         "meaning": "supplied_alignment_measurements; inherited_rows_are_not_new_support; no_function_confidence_or_independence_claim"}
-    result = {"schema": "hmmalign_scores_v1", "operation": deepcopy(sheet["operation"]), "parameters": {},
+    result = {"schema": "hmmalign_scores", "operation": deepcopy(sheet["operation"]), "parameters": {},
         "sequences": sequences, "columns": columns, "summary": summary, "definitions": _definitions(), "issues": issues}
     require_finite_json(result, "hmmalign_scores_finite_json_required")
     return result

@@ -40,7 +40,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     ML_PER_VOLUME_UNIT, MM_PER_SALT_UNIT, NM_PER_UNIT, PERCENT_PER_FRACTION, SEC_CRITERIA)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_sec_grade_v1'
+VERSION = 'a105_sec_grade'
 CRITERIA = tuple(criterion['id'] for criterion in SEC_CRITERIA)
 INTERACTION = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact complex_peak_detected
 NO_KD = 'no_apparent_kd_reported'

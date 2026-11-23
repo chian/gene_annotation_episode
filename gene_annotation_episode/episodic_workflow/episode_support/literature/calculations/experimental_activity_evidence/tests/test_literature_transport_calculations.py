@@ -19,7 +19,7 @@ def test_exact_interface_analytic_example_and_detached_inputs():
     before = deepcopy(inputs)
     result = populate_transport_response(inputs)
     assert set(result) == {'version', 'primitive_order', 'inputs', 'cells'}
-    assert result['version'] == VERSION == 'a105_transport_response_v2'
+    assert result['version'] == VERSION == 'a105_transport_response'
     assert result['primitive_order'] == list(PRIMITIVE_ORDER)
     assert set(result['cells']) == set(COMPONENTS)
     expected = {'substrate_test': 8.0, 'substrate_reference': 32.0, 'apparent_km': 12.0, 'test_saturation': 0.4, 'reference_saturation': 8 / 11, 'condition_response': 0.55, 'log_condition_response': math.log(0.55)}

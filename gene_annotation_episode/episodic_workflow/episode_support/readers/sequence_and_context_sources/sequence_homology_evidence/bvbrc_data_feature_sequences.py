@@ -161,7 +161,7 @@ def _check_page(value: dict, collection: str) -> dict:
             or counts["invalid_row_count"] != len(rows) - valid_count):
         _invalid("page_row_counts")
     digest = page["custody"]["native_sha256"]
-    prefix = "/response/docs/" if page["custody"]["native_profile"] == "solr_json_envelope_v1" else "/"
+    prefix = "/response/docs/" if page["custody"]["native_profile"] == "solr_json_envelope" else "/"
     identity_field = FIELD_REGISTRY[collection]["unique_key"]
     for index, row in enumerate(rows):
         if (row["row_index"] != index or row["row_key"] != digest + "/row/" + str(index)
@@ -410,7 +410,7 @@ def extract_feature_sequence_join(feature_pages: list[dict], sequence_pages: lis
     native rows, including identical sequence rows, keep separate source locators.
     """
     result = validate("FeatureSequenceSheet", {
-        "version": "bvbrc_feature_sequence_sheet_v1",
+        "version": "bvbrc_feature_sequence_sheet",
         "selection": {"feature_ids": feature_ids, "sequence_kind": sequence_kind},
         "input_native_sha256s": [], "input_page_counts": [], "edges": [], "requirements": [], "issues": [],
     })

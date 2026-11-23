@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.evolution
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.evolutionary_history_evidence.literature_rate_storage import LiteratureRateRepository
 
 PROVIDER = 'literature.experimental.relative_signal_source'
-VERSION = 'literature_relative_signal_source_record_v3'
+VERSION = 'literature_relative_signal_source_record'
 COMPONENTS = ('reported_ratio', 'difference_from_reference', 'log_reported_ratio',
     'calibrated_amount_ratio', 'amount_adjusted_effect', 'source_profile_log_ratio', 'source_signed_index')
 MEANINGS = ('subject', 'variant', 'reference', 'organism', 'genotype', 'construct_variant',
@@ -139,7 +139,7 @@ class LiteratureRatioSourceRepository(LiteratureRateRepository):
         self._artifact_metadata(display['artifact_ref'])
         if (view['origin'] != 'tool' or display['origin'] != 'tool'
                 or display['provider'] != 'image.view'
-                or view['representation'] != 'selected_native_image_frame_v1'
+                or view['representation'] != 'selected_native_image_frame'
                 or original['artifact_ref'] != view['original_artifact_ref']
                 or display['artifact_ref'] != view['image_artifact_ref']
                 or display.get('text_ref') is not None
@@ -262,7 +262,7 @@ class LiteratureRatioSourceRepository(LiteratureRateRepository):
                 'own_action_receipt': receipts[view_ref]}
         extraction = read_relative_signal_source_inputs(args, read_source=read_source,
             read_view=read_view, evidence_origin=self.evidence_origin)
-        sheet = calculations.populate_relative_signal_v2(extraction)
+        sheet = calculations.populate_relative_signal_from_source(extraction)
         root = self._source(context, args['source_ref'])
         with self.store.transaction():
             created = []
@@ -274,7 +274,7 @@ class LiteratureRatioSourceRepository(LiteratureRateRepository):
                     created.append(row['id'])
                 return row['id']
             bindings, measurements = self._bindings(extraction, root['id'], publish)
-            calculation = {'version': 'relative_signal_calculation_v2', 'input_extraction_sha256': _sha(extraction),
+            calculation = {'version': 'relative_signal_calculation', 'input_extraction_sha256': _sha(extraction),
                 'sheet': sheet}
             calculation_ref = self.store.artifact(canonical(calculation), 'application/json')
             payload = {'version': VERSION, 'input_source_ref': root['id'], 'input_artifact_ref': root['artifact_ref'],
@@ -338,7 +338,7 @@ class LiteratureRatioSourceRepository(LiteratureRateRepository):
                 raise ContractError('relative_signal_saved_view_identity_mismatch')
         calculation = self._json(payload['calculation_artifact_ref'])
         if (set(calculation) != {'version', 'input_extraction_sha256', 'sheet'}
-                or calculation['version'] != 'relative_signal_calculation_v2'
+                or calculation['version'] != 'relative_signal_calculation'
                 or calculation['input_extraction_sha256'] != _sha(payload['extraction'])
                 or calculation['sheet'] != payload['sheet']):
             raise ContractError('relative_signal_saved_calculation_mismatch')

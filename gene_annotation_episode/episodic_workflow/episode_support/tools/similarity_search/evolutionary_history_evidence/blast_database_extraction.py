@@ -139,7 +139,7 @@ def parse_blastdbcmd_sequences(content: bytes, *, occurrence: dict, operation: d
     occurrence, operation, database_binding, outcome = _reader_context(
         occurrence, operation, database_binding, outcome,
         program="blastdbcmd", modes={"extract_sequences"})
-    if occurrence["role"] not in {"extracted_sequences", "stdout"} or occurrence["native_format"] != "blastdbcmd_tabular_v1":
+    if occurrence["role"] not in {"extracted_sequences", "stdout"} or occurrence["native_format"] != "blastdbcmd_tabular":
         raise ContractError("blast_utility_reader_output_occurrence")
     oid = occurrence["occurrence_id"]
     checks = [_check_bytes(content, occurrence)]
@@ -261,7 +261,7 @@ def parse_blastdbcmd_sequences(content: bytes, *, occurrence: dict, operation: d
     checks.append(_check("selection", "pass" if complete else "unknown", [database_binding["database_key"]],
                          "selected_record_match", [oid], None if complete else "selection_incomplete"))
     return validate_sequence_extraction({
-        "version": "blast_sequence_extraction_v1", "operation": operation,
+        "version": "blast_sequence_extraction", "operation": operation,
         "database_binding": database_binding, "output_occurrence": occurrence,
         "original_outcome": outcome, "records": records, "missing_selector_ordinals": missing,
         "unexpected_record_keys": unexpected,

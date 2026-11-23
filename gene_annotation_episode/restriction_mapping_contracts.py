@@ -51,7 +51,7 @@ SCHEMAS["Issue"] = _obj(code=_enum("input_invalid", "sequence_binding_conflict",
     "unsupported_native_version", "native_failure", "request_conflict"),
     phase=_enum("input", "catalog", "search", "capture", "association", "read"),
     enzyme_ordinal=_null(UINT), match_ordinal=_null(UINT), position_ordinal=_null(UINT))
-SCHEMAS["SequenceBinding"] = _obj(version=_enum("restriction_selected_sequence_v1"),
+SCHEMAS["SequenceBinding"] = _obj(version=_enum("restriction_selected_sequence"),
     namespace=_enum("subject", "reference"), sequence_ref=TEXT, source_ref=TEXT,
     sequence_version=_null(UINT), content_sha256=SHA256,
     length_nt={"type": "integer", "minimum": 1}, origin_mapping_ref=_null(TEXT))
@@ -65,7 +65,7 @@ SCHEMAS["CatalogRow"] = _obj(ordinal=UINT, name=TEXT, native_site=STRING, size_n
     cut_kind=_enum("one_cut", "two_cuts", "no_cut", "unknown"),
     symmetry=_enum("palindromic", "nonpalindromic", "unknown"), position_meaning=MEANING,
     is_commercial=BOOL, rebase_id=_null(INT), rebase_uri=_null(STRING), dictionary_entry_json=STRING)
-SCHEMAS["Catalog"] = _obj(version=_enum("restriction_catalog_snapshot_v1"),
+SCHEMAS["Catalog"] = _obj(version=_enum("restriction_catalog_snapshot"),
     biopython_version=TEXT, dictionary_file=SCHEMAS["FilePin"], selection=SCHEMAS["EnzymeSelection"],
     resolved_names=_arr(TEXT, unique=True), enzymes=_arr(SCHEMAS["CatalogRow"]))
 SCHEMAS["SearchRow"] = _obj(catalog_ordinal=UINT, name=TEXT, search_ordinal=_null(UINT),
@@ -77,7 +77,7 @@ SCHEMAS["MatchCall"] = _obj(call_ordinal=UINT, owner_ordinals=_arr(UINT, unique=
     native_pattern=SCHEMAS["Pattern"], site_size_nt=UINT, linear=BOOL,
     state=_enum("returned", "failed"), matches=_null(_arr(SCHEMAS["Match"])),
     error=_null(SCHEMAS["NativeException"]))
-SCHEMAS["NativeResult"] = _obj(version=_enum("restriction_mapping_native_v1"),
+SCHEMAS["NativeResult"] = _obj(version=_enum("restriction_mapping_native"),
     request=_obj(sequence=STRING, normalized_sequence=STRING, sequence_binding=SCHEMAS["SequenceBinding"],
         enzyme_selection=SCHEMAS["EnzymeSelection"], topology=TOPOLOGY),
     software=_obj(biopython_version=_null(TEXT), dictionary_file=_null(SCHEMAS["FilePin"]),
@@ -104,7 +104,7 @@ SCHEMAS["ResultRow"] = _obj(catalog_ordinal=UINT, name=TEXT,
     native_search_positions_1based=_null(_arr(INT)), returned_position_count=_null(UINT),
     recognition_match_count=_null(UINT), recognition_events=_null(_arr(SCHEMAS["RecognitionEvent"])),
     positions=_null(_arr(SCHEMAS["Position"])), issues=_arr(SCHEMAS["Issue"]))
-SCHEMAS["MappingResult"] = _obj(version=_enum("restriction_mapping_result_v1"),
+SCHEMAS["MappingResult"] = _obj(version=_enum("restriction_mapping_result"),
     native_sha256=_null(SHA256), selected_sequence=SCHEMAS["SequenceBinding"],
     native_sequence=_null(SCHEMAS["SequenceBinding"]),
     binding_status=_enum("matched", "conflicting", "unavailable"), topology=_null(TOPOLOGY),

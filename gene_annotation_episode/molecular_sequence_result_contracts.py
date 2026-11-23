@@ -17,30 +17,30 @@ from .sequence_mapping import path_length
 
 OPERATIONS = ("annotate_open_reading_frames", "align_sequences", "find_n_glycosylation_motifs",
     "predict_o_glycosylation_hotspots", "analyze_protease_kinetics")
-SELECTOR_VERSION = "molecular_sequence_result_selector_v1"
-PLAN_VERSION = "molecular_sequence_result_worker_plan_v1"
-RESULT_VERSION = "molecular_sequence_result_worker_result_v1"
-PROJECTION_VERSION = "molecular_sequence_private_projection_v1"
-PUBLIC_VERSION = "molecular_sequence_selected_values_v1"
-N_SELECTOR_VERSION = "molecular_sequence_result_selector_v3"
-N_PROJECTION_VERSION = "molecular_sequence_private_projection_v2"
-N_PUBLIC_VERSION = "molecular_sequence_selected_values_v2"
-O_SELECTOR_VERSION = "molecular_sequence_result_selector_v4"
-O_PROJECTION_VERSION = "molecular_sequence_private_projection_v3"
-O_PUBLIC_VERSION = "molecular_sequence_selected_values_v3"
-PROTEASE_SELECTOR_VERSION = "molecular_sequence_result_selector_v5"
-PROTEASE_PROJECTION_VERSION = "molecular_sequence_private_projection_v4"
-PROTEASE_PUBLIC_VERSION = "molecular_sequence_selected_values_v4"
-PROTEASE_CONTEXT_VERSION = "protease_kinetics_public_context_v1"
-PLACEMENT_SELECTOR_VERSION = "molecular_sequence_result_selector_v6"
-PLACEMENT_PROJECTION_VERSION = "molecular_sequence_private_projection_v5"
-PLACEMENT_PUBLIC_VERSION = "molecular_sequence_selected_values_v5"
+SELECTOR_VERSION = "molecular_sequence_result_selector"
+PLAN_VERSION = "molecular_sequence_result_worker_plan"
+RESULT_VERSION = "molecular_sequence_result_worker_result"
+PROJECTION_VERSION = "molecular_sequence_private_projection"
+PUBLIC_VERSION = "molecular_sequence_selected_values"
+N_SELECTOR_VERSION = "molecular_sequence_n_glycosylation_result_selector"
+N_PROJECTION_VERSION = "molecular_sequence_n_glycosylation_private_projection"
+N_PUBLIC_VERSION = "molecular_sequence_n_glycosylation_selected_values"
+O_SELECTOR_VERSION = "molecular_sequence_o_glycosylation_result_selector"
+O_PROJECTION_VERSION = "molecular_sequence_o_glycosylation_private_projection"
+O_PUBLIC_VERSION = "molecular_sequence_o_glycosylation_selected_values"
+PROTEASE_SELECTOR_VERSION = "molecular_sequence_protease_result_selector"
+PROTEASE_PROJECTION_VERSION = "molecular_sequence_protease_private_projection"
+PROTEASE_PUBLIC_VERSION = "molecular_sequence_protease_selected_values"
+PROTEASE_CONTEXT_VERSION = "protease_kinetics_public_context"
+PLACEMENT_SELECTOR_VERSION = "molecular_sequence_primer_placement_result_selector"
+PLACEMENT_PROJECTION_VERSION = "molecular_sequence_primer_placement_private_projection"
+PLACEMENT_PUBLIC_VERSION = "molecular_sequence_primer_placement_selected_values"
 PLACEMENT_MAX_NESTING = 32
-_LEGACY_PROFILE = "legacy_v1"
-_N_PROFILE = "n_glycosylation_v3"
-_O_PROFILE = "o_glycosylation_v4"
-_PROTEASE_PROFILE = "protease_kinetics_v5"
-_PLACEMENT_PROFILE = "primer_placement_v6"
+_BASE_PROFILE = "base"
+_N_PROFILE = "n_glycosylation"
+_O_PROFILE = "o_glycosylation"
+_PROTEASE_PROFILE = "protease_kinetics"
+_PLACEMENT_PROFILE = "primer_placement"
 MODES = ("original_attempt", "saved_sheet_calculation")
 FILE_ROLES = ("sheet", "components", "capture", "native_results", "native_plot")
 FILE_STATES = ("retained", "retained_undeclared", "retention_failed", "producer_absent",
@@ -52,11 +52,11 @@ FAILURE_SOURCE = "molecular_sequence_result_failures"
 FACT_SOURCES = (PROJECTION_SOURCE, SAVED_SOURCE, FAILURE_SOURCE)
 OUTPUTS = ("projection", "calculated_components", "diagnostics")
 SCHEMAS = {
-    OPERATIONS[0]: ("orf_measurement_sheet_v1", ("orf_measurement_components_v1",)),
-    OPERATIONS[1]: ("primer_placement_sheet_v1", ("primer_placement_components_v1",)),
-    OPERATIONS[2]: ("glycosylation_measurement_sheet_v1", ("glycosylation_measurement_components_v1",)),
-    OPERATIONS[3]: ("glycosylation_measurement_sheet_v1", ("glycosylation_measurement_components_v1",)),
-    OPERATIONS[4]: ("protease_kinetics_sheet_v1", ("protease_kinetics_components_v2",)),
+    OPERATIONS[0]: ("orf_measurement_sheet", ("orf_measurement_components",)),
+    OPERATIONS[1]: ("primer_placement_sheet", ("primer_placement_components",)),
+    OPERATIONS[2]: ("glycosylation_measurement_sheet", ("glycosylation_measurement_components",)),
+    OPERATIONS[3]: ("glycosylation_measurement_sheet", ("glycosylation_measurement_components",)),
+    OPERATIONS[4]: ("protease_kinetics_sheet", ("protease_kinetics_components",)),
 }
 QUANTITIES = ("product_vmax", "product_formation_per_enzyme_concentration", "apparent_turnover", "kcat",
     "apparent_catalytic_efficiency", "catalytic_efficiency")
@@ -77,7 +77,7 @@ REASONS_COMMON = ("native_fit_parameters_unavailable", "native_fit_population_in
     "propagated_variance_numerical_range", "not_supplied_or_estimated", "calibration_enzyme_and_joint_relationships_unknown",
     "native_rate_vector_unavailable", "native_substrate_vector_unavailable", "insufficient_residual_population",
     "residual_summary_unavailable", "zero_model_denominator", "native_vector_slot_has_no_measured_curve", "model_numerical_range")
-REASONS = {"protease_kinetics_components_v2": (*REASONS_COMMON, "native_covariance_symmetric_part_indefinite",
+REASONS = {"protease_kinetics_components": (*REASONS_COMMON, "native_covariance_symmetric_part_indefinite",
         "propagated_variance_negative", "propagated_variance_overflow", "propagated_variance_positive_underflow",
         "physical_ratio_overflow", "physical_ratio_positive_underflow")}
 
@@ -169,9 +169,9 @@ GLYCO_SUMMARY = ("original_symbol_count", "processed_symbol_count", "native_repo
     "scan_exhaustiveness_verified", "native_count_rows_compatible", "native_metadata_matches_operands", "native_total_within_operand_upper_bound")
 
 
-def field_table(operation, identity, *, profile=_LEGACY_PROFILE):
+def field_table(operation, identity, *, profile=_BASE_PROFILE):
     """Map semantic names to exact stored paths/types/populations; no formula."""
-    require(profile == _LEGACY_PROFILE or profile == _N_PROFILE and operation == OPERATIONS[2]
+    require(profile == _BASE_PROFILE or profile == _N_PROFILE and operation == OPERATIONS[2]
         or profile == _O_PROFILE and operation == OPERATIONS[3]
         or profile == _PROTEASE_PROFILE and operation == OPERATIONS[4]
         or profile == _PLACEMENT_PROFILE and operation == OPERATIONS[1])
@@ -390,7 +390,7 @@ def field_table(operation, identity, *, profile=_LEGACY_PROFILE):
 
 def _selector_profile(value):
     if value["version"] == SELECTOR_VERSION:
-        return _LEGACY_PROFILE
+        return _BASE_PROFILE
     if value["version"] == N_SELECTOR_VERSION and value["operation"] == OPERATIONS[2]:
         return _N_PROFILE
     if value["version"] == PROTEASE_SELECTOR_VERSION and value["operation"] == OPERATIONS[4]:
@@ -405,7 +405,7 @@ def _public_profile(value):
     require(type(value) is dict)
     if value.get("schema") == PUBLIC_VERSION:
         require(value.get("operation") in OPERATIONS)
-        return _LEGACY_PROFILE
+        return _BASE_PROFILE
     if value.get("schema") == N_PUBLIC_VERSION and value.get("operation") == OPERATIONS[2]:
         return _N_PROFILE
     if value.get("schema") == PROTEASE_PUBLIC_VERSION and value.get("operation") == OPERATIONS[4]:
@@ -561,7 +561,7 @@ def stored(document, path, typ, source):
 
 
 def _qualifiers(operation, identity, sheet, components, sources, specifications=None):
-    result = {"schema": "molecular_sequence_scientific_qualifiers_v1", "operation": operation,
+    result = {"schema": "molecular_sequence_scientific_qualifiers", "operation": operation,
         "component_schema": None if components is None else components.get("schema"), "states": {}}
     def add(name, path, typ, role="components"):
         if specifications is not None: specifications[name] = (path, typ, role)
@@ -661,8 +661,8 @@ _N_CONTEXT_SPEC = {
         "selected_metadata": ("sheet", "/native/selected_metadata", "n_glyco_selected_metadata")},
     "completeness": ("sheet", "/completeness", "n_glyco_completeness"),
     "component_issues": ("components", "/issues", "n_glyco_issues")}
-_N_CONTEXT_VERSION = "n_glycosylation_public_context_v1"
-_O_CONTEXT_VERSION = "o_glycosylation_public_context_v1"
+_N_CONTEXT_VERSION = "n_glycosylation_public_context"
+_O_CONTEXT_VERSION = "o_glycosylation_public_context"
 _O_CONTEXT_SPEC = {
     **_N_CONTEXT_SPEC,
     "parameters": {
@@ -854,7 +854,7 @@ def _valid_protease_literal(value, typ):
         if typ == "protease_covariance_assessment":
             closed(value, ("schema", "native_symmetry", "symmetric_part_positive_semidefinite",
                 "assessment_arithmetic", "propagation_basis", "statistical_covariance_validity", "qualifications"))
-            require(value["schema"] == "protease_covariance_assessment_v1"
+            require(value["schema"] == "protease_covariance_assessment"
                 and value["native_symmetry"] in ("exact", "asymmetric", "unavailable")
                 and (value["symmetric_part_positive_semidefinite"] is None
                     or type(value["symmetric_part_positive_semidefinite"]) is bool)
@@ -874,7 +874,7 @@ def _valid_protease_literal(value, typ):
 
 def _protease_quantity_context(base):
     """Only original qualification paths; numerical values stay in selected rows."""
-    reason = REASONS["protease_kinetics_components_v2"]
+    reason = REASONS["protease_kinetics_components"]
     result = {name: ("components", base + "/" + name, typ) for name, typ in (
         ("state", ("present", "unavailable")), ("reason", reason), ("unit", "text"),
         ("unit_state", ("unknown", "declared_or_derived")),
@@ -910,19 +910,19 @@ _PROTEASE_CONTEXT_SPEC = {
         "selected_terminal_event_count": ("sheet", "/native_observation/observer/selected_terminal_event_count", "protease_observation_count"),
         "profile_restored": ("sheet", "/native_observation/observer/profile_restored", "bool")},
     "fit": {name: ("components", "/fit_components/" + name, typ) for name, typ in (
-        ("state", ("present", "qualified", "unavailable")), ("reason", REASONS["protease_kinetics_components_v2"]),
+        ("state", ("present", "qualified", "unavailable")), ("reason", REASONS["protease_kinetics_components"]),
         ("qualifications", "fit_codes"), ("complete_population_eligible", "bool"),
-        ("parameter_order", "protease_parameter_order"), ("model_prediction_reason", REASONS["protease_kinetics_components_v2"]),
+        ("parameter_order", "protease_parameter_order"), ("model_prediction_reason", REASONS["protease_kinetics_components"]),
         ("residual_sum_squares", "number"), ("residual_degrees_of_freedom", "count"),
         ("native_n_minus_parameter_count_diagnostic", "int"),
-        ("residual_degrees_of_freedom_reason", REASONS["protease_kinetics_components_v2"]))},
+        ("residual_degrees_of_freedom_reason", REASONS["protease_kinetics_components"]))},
     "parameters": {name: _protease_quantity_context("/fit_components/" + name) for name in ("vmax", "km")},
     "covariance": {name: ("components", "/fit_components/" + path, typ) for name, path, typ in (
         ("raw_matrix", "covariance", "protease_native_literal"),
         ("parameter_order", "parameter_order", "protease_parameter_order"),
         ("parameter_units", "covariance_parameter_units", "protease_parameter_units"),
         ("state", "covariance_state", ("present", "qualified", "unavailable")),
-        ("reason", "covariance_reason", REASONS["protease_kinetics_components_v2"]),
+        ("reason", "covariance_reason", REASONS["protease_kinetics_components"]),
         ("assessment", "covariance_assessment", "protease_covariance_assessment"),
         ("native_diagonal_only_uncertainty", "native_diagonal_only_uncertainty", "protease_native_literal"))},
     "physical": {name: _protease_quantity_context("/physical_components/" + name) for name in QUANTITIES},
@@ -988,7 +988,7 @@ def select_stored_molecular_sequence_values(*, operation, sheet, components, sel
     require(components is None or type(components) is dict and schema in SCHEMAS[operation][1], "molecular_sequence_component_schema")
     require(sheet is None or type(sheet) is dict and sheet.get("schema") == SCHEMAS[operation][0], "molecular_sequence_sheet_schema")
     if profile == _PROTEASE_PROFILE:
-        require(components is None or schema == "protease_kinetics_components_v2", "molecular_sequence_component_schema")
+        require(components is None or schema == "protease_kinetics_components", "molecular_sequence_component_schema")
     if profile in _GLYCO_PROFILES:
         require(sheet is None or type(sheet.get("inputs")) is dict and sheet["inputs"].get("operation") == operation,
             "molecular_sequence_sheet_operation")
@@ -1034,7 +1034,7 @@ def select_stored_molecular_sequence_values(*, operation, sheet, components, sel
             if cell["value_state"] in ("path_missing", "invalid_type"):
                 issues.append(failure("selected_path_missing" if cell["value_state"] == "path_missing" else "selected_type_invalid",
                     "selection", role="components", row_id=identity, source_ref=cell["source_ref"], source_pointer=path))
-    public = dict(schema={_LEGACY_PROFILE: PUBLIC_VERSION, _N_PROFILE: N_PUBLIC_VERSION, _O_PROFILE: O_PUBLIC_VERSION,
+    public = dict(schema={_BASE_PROFILE: PUBLIC_VERSION, _N_PROFILE: N_PUBLIC_VERSION, _O_PROFILE: O_PUBLIC_VERSION,
         _PROTEASE_PROFILE: PROTEASE_PUBLIC_VERSION, _PLACEMENT_PROFILE: PLACEMENT_PUBLIC_VERSION}[profile], operation=operation, source_kind="original_stored" if selection["mode"] == MODES[0] else "selected_saved_calculation",
         source_sheet_ref=None if sources["sheet"]["file"] is None else sources["sheet"]["file"]["artifact_ref"],
         source_components_ref=None if sources["components"]["file"] is None else sources["components"]["file"]["artifact_ref"],
@@ -1042,7 +1042,7 @@ def select_stored_molecular_sequence_values(*, operation, sheet, components, sel
         original_attempt_association="unavailable" if association is None else association["state"], rows=rows, failures=issues)
     if profile in _GLYCO_PROFILES: public["context"] = _glyco_context(sheet, components, sources, profile)
     if profile == _PROTEASE_PROFILE: public["context"] = _protease_context(sheet, components, sources)
-    return dict(schema={_LEGACY_PROFILE: PROJECTION_VERSION, _N_PROFILE: N_PROJECTION_VERSION, _O_PROFILE: O_PROJECTION_VERSION,
+    return dict(schema={_BASE_PROFILE: PROJECTION_VERSION, _N_PROFILE: N_PROJECTION_VERSION, _O_PROFILE: O_PROJECTION_VERSION,
         _PROTEASE_PROFILE: PROTEASE_PROJECTION_VERSION, _PLACEMENT_PROFILE: PLACEMENT_PROJECTION_VERSION}[profile], selector=selection, source_files=sources, association=deepcopy(association),
         calculation=deepcopy(calculation), public=public)
 
@@ -1051,7 +1051,7 @@ def validate_molecular_sequence_projection(value):
     closed(value, ("schema", "selector", "source_files", "association", "calculation", "public"))
     selector = validate_molecular_sequence_result_selector(value["selector"])
     profile = _selector_profile(selector)
-    require(value["schema"] == {_LEGACY_PROFILE: PROJECTION_VERSION, _N_PROFILE: N_PROJECTION_VERSION, _O_PROFILE: O_PROJECTION_VERSION,
+    require(value["schema"] == {_BASE_PROFILE: PROJECTION_VERSION, _N_PROFILE: N_PROJECTION_VERSION, _O_PROFILE: O_PROJECTION_VERSION,
         _PROTEASE_PROFILE: PROTEASE_PROJECTION_VERSION, _PLACEMENT_PROFILE: PLACEMENT_PROJECTION_VERSION}[profile]
         and _public_profile(value["public"]) == profile)
     closed(value["source_files"], FILE_ROLES)
@@ -1086,12 +1086,12 @@ def validate_molecular_sequence_fact_values(source, rows, *, allow_unretained=Fa
     for value in rows:
         require(type(value) is dict)
         if source == FAILURE_SOURCE:
-            require(value.get("version") != "molecular_sequence_supplied_failure_v1", "private_supplied_failure_not_public")
-            if value.get("version") == "molecular_sequence_supplied_failure_v2": validate_supplied_failure(value)
+            require(value.get("version") != "molecular_sequence_supplied_failure", "private_supplied_failure_not_public")
+            if value.get("version") == "molecular_sequence_supplied_failure_view": validate_supplied_failure(value)
             else: validate_failure(value)
             continue
         if source == SAVED_SOURCE:
-            if value.get("version") == "molecular_sequence_retained_file_v2":
+            if value.get("version") == "molecular_sequence_retained_file":
                 validate_supplied_file_fact(value); continue
             closed(value, ("operation", "role", "artifact_ref", "source_kind", "source_sheet_ref", "components_schema"))
             require(value["operation"] in OPERATIONS and value["role"] in FILE_ROLES and reference(value["artifact_ref"]))
@@ -1109,7 +1109,7 @@ def validate_molecular_sequence_fact_values(source, rows, *, allow_unretained=Fa
         require(allow_unretained or "produced_unretained" not in value["source_states"].values())
         require(value["components_schema"] is None or value["components_schema"] in SCHEMAS[value["operation"]][1])
         if profile == _PROTEASE_PROFILE:
-            require(value["components_schema"] in (None, "protease_kinetics_components_v2"))
+            require(value["components_schema"] in (None, "protease_kinetics_components"))
         require(type(value["rows"]) is list and type(value["failures"]) is list)
         if profile == _PROTEASE_PROFILE: _validate_protease_context(value["context"], value)
         if profile == _PLACEMENT_PROFILE:
@@ -1168,7 +1168,7 @@ def validate_molecular_sequence_fact_values(source, rows, *, allow_unretained=Fa
                             and unit_source["source_state"] == value["source_states"][role])
             qualifier = row["scientific_qualifiers"]
             closed(qualifier, ("schema", "operation", "component_schema", "states", "interpretation"))
-            require(qualifier["schema"] == "molecular_sequence_scientific_qualifiers_v1" and qualifier["operation"] == value["operation"]
+            require(qualifier["schema"] == "molecular_sequence_scientific_qualifiers" and qualifier["operation"] == value["operation"]
                 and qualifier["component_schema"] == value["components_schema"])
             # Exact names and value types are validated by reconstructing only
             # the qualifier shape with unavailable sources, never a calculator.
@@ -1205,7 +1205,7 @@ def validate_molecular_sequence_fact_values(source, rows, *, allow_unretained=Fa
 
 
 def validate_molecular_sequence_result_worker_plan(value):
-    if type(value) is dict and value.get("version") == "molecular_sequence_result_worker_plan_v2":
+    if type(value) is dict and value.get("version") == "molecular_sequence_supplied_result_worker_plan":
         return validate_supplied_worker_plan(value)
     closed(value, ("version", "directory", "selector", "source_files", "inputs", "association", "received_sheet_receipt_file", "software", "selected_environment", "policy"))
     require(value["version"] == PLAN_VERSION and type(value["directory"]) is str and value["directory"].startswith("/"))
@@ -1236,14 +1236,14 @@ def validate_molecular_sequence_result_worker_plan(value):
     if selector["mode"] == MODES[1]:
         require(value["received_sheet_receipt_file"] is not None and value["source_files"]["sheet"]["file"] is not None
             and value["source_files"]["sheet"]["file"]["artifact_ref"] == selector["saved_sheet_ref"])
-        require(value["received_sheet_receipt_file"]["format"] == "molecular_sequence_received_sheet_v1"
+        require(value["received_sheet_receipt_file"]["format"] == "molecular_sequence_received_sheet"
             and [row["role"] for row in value["inputs"]] == ["sheet"]
             and all(source["file"] is None for role, source in value["source_files"].items() if role != "sheet"))
     return copy_json(value)
 
 
 def validate_molecular_sequence_result_worker_result(value):
-    if type(value) is dict and value.get("version") == "molecular_sequence_result_worker_result_v2":
+    if type(value) is dict and value.get("version") == "molecular_sequence_supplied_result_worker_result":
         return validate_supplied_worker_result(value)
     closed(value, ("version", "plan_sha256", "selector", "outputs", "failures"))
     require(value["version"] == RESULT_VERSION and type(value["plan_sha256"]) is str and re.fullmatch("[0-9a-f]{64}", value["plan_sha256"]) is not None)
@@ -1343,7 +1343,7 @@ def _protease_literal_schema(typ, *, obj, nullable, arr):
             "complete_supplied_curve_population": {"type": "boolean"}, "negative_substrate_ordinals": arr(count),
             "replicate_independence_inferred": {"const": False, "type": "boolean"}})
     if typ == "protease_assay_context":
-        calibration = obj({"schema": {"type": "string", "const": "protease_signal_calibration_v1"},
+        calibration = obj({"schema": {"type": "string", "const": "protease_signal_calibration"},
             "response_per_product_concentration": {"type": "number", "exclusiveMinimum": 0},
             "signal_unit": {"type": "string", "minLength": 1}, "product_concentration_unit": {"type": "string", "minLength": 1},
             "curve_ordinals": arr(count), "applicability": {"type": "string", "enum": ["supported", "unknown", "conflicting", "unsupported"]},
@@ -1355,7 +1355,7 @@ def _protease_literal_schema(typ, *, obj, nullable, arr):
             "calibration": nullable(calibration), "enzyme_basis": {"type": "string", "enum": ["unknown", "total_enzyme_concentration", "active_site_concentration"]},
             "product_per_cleavage": nullable({"type": "number", "exclusiveMinimum": 0})})
     require(typ == "protease_covariance_assessment")
-    return obj({"schema": {"type": "string", "const": "protease_covariance_assessment_v1"},
+    return obj({"schema": {"type": "string", "const": "protease_covariance_assessment"},
         "native_symmetry": {"type": "string", "enum": ["exact", "asymmetric", "unavailable"]},
         "symmetric_part_positive_semidefinite": nullable({"type": "boolean"}),
         "assessment_arithmetic": {"type": "string", "const": "exact_rational_retained_entries"},
@@ -1390,9 +1390,9 @@ def _placement_json_definitions():
     return definitions
 
 
-def molecular_sequence_fact_sources(*, profile=_LEGACY_PROFILE):
+def molecular_sequence_fact_sources(*, profile=_BASE_PROFILE):
     """Closed private definitions; no public episode/catalog is registered."""
-    require(profile in (_LEGACY_PROFILE, _N_PROFILE, _O_PROFILE, _PROTEASE_PROFILE, _PLACEMENT_PROFILE))
+    require(profile in (_BASE_PROFILE, _N_PROFILE, _O_PROFILE, _PROTEASE_PROFILE, _PLACEMENT_PROFILE))
     def obj(properties):
         return {"type": "object", "properties": properties, "required": list(properties), "additionalProperties": False}
     def nullable(schema): return {"anyOf": [schema, {"type": "null"}]}
@@ -1478,7 +1478,7 @@ def molecular_sequence_fact_sources(*, profile=_LEGACY_PROFILE):
             if not table: continue
             specs = {}; unavailable = {role: empty_file_state() for role in FILE_ROLES}
             qualifier = _qualifiers(operation, identity, None, {"schema": SCHEMAS[operation][1][-1]}, unavailable, specs)
-            reason_union = REASONS["protease_kinetics_components_v2"]
+            reason_union = REASONS["protease_kinetics_components"]
             qualifier_schema = obj({"schema": {"type": "string", "const": qualifier["schema"]},
                 "operation": {"type": "string", "const": operation}, "component_schema": nullable({"type": "string", "enum": list(SCHEMAS[operation][1])}),
                 "states": obj({name: stored_schema(reason_union if "reason" in name and operation == OPERATIONS[4] else spec[1]) for name, spec in specs.items()}),
@@ -1581,7 +1581,7 @@ def molecular_sequence_fact_sources(*, profile=_LEGACY_PROFILE):
                     "then": {"properties": {"value": {"not": {"type": "null"}}}},
                     "else": {"properties": {"value": {"type": "null"}}}})
             variants.append(cell)
-        projection = obj({"schema": {"type": "string", "const": {_LEGACY_PROFILE: PUBLIC_VERSION, _N_PROFILE: N_PUBLIC_VERSION, _O_PROFILE: O_PUBLIC_VERSION,
+        projection = obj({"schema": {"type": "string", "const": {_BASE_PROFILE: PUBLIC_VERSION, _N_PROFILE: N_PUBLIC_VERSION, _O_PROFILE: O_PUBLIC_VERSION,
             _PROTEASE_PROFILE: PROTEASE_PUBLIC_VERSION, _PLACEMENT_PROFILE: PLACEMENT_PUBLIC_VERSION}[profile]}, "operation": {"type": "string", "const": operation},
             "source_kind": {"type": "string", "enum": ["original_stored", "selected_saved_calculation"]}, "source_sheet_ref": nullable(ref), "source_components_ref": nullable(ref),
             "source_states": obj({role: {"type": "string", "enum": [s for s in FILE_STATES if s != "produced_unretained"]} for role in ("sheet", "components")}),
@@ -1591,7 +1591,7 @@ def molecular_sequence_fact_sources(*, profile=_LEGACY_PROFILE):
             projection["properties"]["context"] = _glyco_context_schema(profile, obj=obj, nullable=nullable, arr=arr, stored_schema=stored_schema)
             projection["required"].append("context")
         if profile == _PROTEASE_PROFILE:
-            projection["properties"]["components_schema"] = nullable({"type": "string", "const": "protease_kinetics_components_v2"})
+            projection["properties"]["components_schema"] = nullable({"type": "string", "const": "protease_kinetics_components"})
             projection["properties"]["context"] = _protease_context_schema(obj=obj, stored_schema=stored_schema)
             projection["required"].append("context")
         projections.append(projection)
@@ -1607,20 +1607,20 @@ def molecular_sequence_fact_sources(*, profile=_LEGACY_PROFILE):
     return result
 
 
-# Explicit private supplied-data branch. Legacy profile/schema tables above
+# Explicit private supplied-data branch. Profile and schema tables above
 # retain their closed meanings; this metadata does not install a public tool.
 SUPPLIED_OPERATION = "analyze_arsenic_speciation_hplc_icpms"
-SUPPLIED_SELECTOR_VERSION = "molecular_sequence_result_selector_v2"
-SUPPLIED_ASSIGNMENT_VERSION = "molecular_sequence_supplied_results_assignment_v1"
-SUPPLIED_PLAN_VERSION = "molecular_sequence_result_worker_plan_v2"
-SUPPLIED_RESULT_VERSION = "molecular_sequence_result_worker_result_v2"
-CALCULATION_RECORD_VERSION = "molecular_sequence_calculation_record_v1"
+SUPPLIED_SELECTOR_VERSION = "molecular_sequence_supplied_result_selector"
+SUPPLIED_ASSIGNMENT_VERSION = "molecular_sequence_supplied_results_assignment"
+SUPPLIED_PLAN_VERSION = "molecular_sequence_supplied_result_worker_plan"
+SUPPLIED_RESULT_VERSION = "molecular_sequence_supplied_result_worker_result"
+CALCULATION_RECORD_VERSION = "molecular_sequence_calculation_record"
 SUPPLIED_OUTPUTS = ("sheet", "calculated_components", "diagnostics")
 SUPPLIED_PROFILE = {
     "operation": SUPPLIED_OPERATION, "mode": "supplied_measurements",
-    "sheet_tag_key": "version", "sheet_version": "calibrated_signal_sheet_v1",
-    "components_tag_key": "version", "components_version": "calibrated_signal_components_v1",
-    "selection_tag_key": "version", "selection_version": "calibrated_signal_selection_v1",
+    "sheet_tag_key": "version", "sheet_version": "calibrated_signal_sheet",
+    "components_tag_key": "version", "components_version": "calibrated_signal_components",
+    "selection_tag_key": "version", "selection_version": "calibrated_signal_selection",
     "calculator_id": "calibrated_signal_calculations.calculate_calibrated_signal_components",
 }
 SUPPLIED_FAILURES = ("input_unavailable", "input_invalid", "selection_invalid", "stored_linkage_conflict",
@@ -1679,13 +1679,13 @@ def supplied_execution_constraints(value):
 
 
 def supplied_failure(code, stage, *, role=None, source_ref=None, source_pointer=None):
-    return validate_supplied_failure(dict(version="molecular_sequence_supplied_failure_v1",
+    return validate_supplied_failure(dict(version="molecular_sequence_supplied_failure",
         operation=SUPPLIED_OPERATION, code=code, stage=stage, role=role,
         source_ref=source_ref, source_pointer=source_pointer))
 
 
 def validate_supplied_failure(value):
-    if type(value) is dict and value.get("version") == "molecular_sequence_supplied_failure_v2":
+    if type(value) is dict and value.get("version") == "molecular_sequence_supplied_failure_view":
         closed(value, ("version", "operation", "code", "stage", "role", "source_ref", "source_location"))
         require(value["operation"] == SUPPLIED_OPERATION and value["code"] in SUPPLIED_FAILURES
             and value["stage"] in STAGES and value["role"] in (None, "sheet", "components")
@@ -1693,7 +1693,7 @@ def validate_supplied_failure(value):
             and (value["source_location"] is None or value["source_location"] in SUPPLIED_FAILURE_LOCATIONS.values()))
         return copy_json(value)
     closed(value, ("version", "operation", "code", "stage", "role", "source_ref", "source_pointer"))
-    require(value["version"] == "molecular_sequence_supplied_failure_v1" and value["operation"] == SUPPLIED_OPERATION
+    require(value["version"] == "molecular_sequence_supplied_failure" and value["operation"] == SUPPLIED_OPERATION
         and value["code"] in SUPPLIED_FAILURES and value["stage"] in STAGES
         and value["role"] in (None, "sheet", "components"))
     require(value["source_ref"] is None or reference(value["source_ref"]))
@@ -1703,9 +1703,9 @@ def validate_supplied_failure(value):
 
 def supplied_failure_view(value):
     value = validate_supplied_failure(value)
-    require(value["version"] == "molecular_sequence_supplied_failure_v1")
+    require(value["version"] == "molecular_sequence_supplied_failure")
     pointer = value.pop("source_pointer")
-    value.update(version="molecular_sequence_supplied_failure_v2",
+    value.update(version="molecular_sequence_supplied_failure_view",
         source_location=None if pointer is None else SUPPLIED_FAILURE_LOCATIONS[pointer])
     return validate_supplied_failure(value)
 
@@ -1713,7 +1713,7 @@ def supplied_failure_view(value):
 def validate_supplied_file_fact(value):
     closed(value, ("version", "operation", "role", "artifact_ref", "source_kind", "source_sheet_ref",
         "components_tag_key", "components_version", "validation_state", "calculation_origin", "linkage_state"))
-    require(value["version"] == "molecular_sequence_retained_file_v2" and value["operation"] == SUPPLIED_OPERATION
+    require(value["version"] == "molecular_sequence_retained_file" and value["operation"] == SUPPLIED_OPERATION
         and value["role"] in ("sheet", "components") and reference(value["artifact_ref"])
         and value["source_kind"] in ("admitted_input", "selected_supplied_calculation", "admitted_stored")
         and (value["source_sheet_ref"] is None or reference(value["source_sheet_ref"]))
@@ -1736,7 +1736,7 @@ def validate_supplied_worker_plan(value):
     absolute_path(value["directory"]); absolute_path(value["input_path"])
     file_identity(value["input_file"]); file_identity(value["input_evidence_file"])
     require(value["input_file"]["format"] == "json"
-        and value["input_evidence_file"]["format"] == "molecular_sequence_supplied_input_evidence_v1")
+        and value["input_evidence_file"]["format"] == "molecular_sequence_supplied_input_evidence")
     environment(value["selected_environment"])
     supplied_execution_constraints({"policy": value["policy"], "environment": value["selected_environment"]})
     if value["software"] is None:
@@ -1760,7 +1760,7 @@ def validate_supplied_worker_result(value):
         require(row["declaration"]["relative_path"] == row["role"] + ".json" and row["declaration"]["format"] == "json")
     require(type(value["failures"]) is list)
     for issue in value["failures"]:
-        require(issue.get("version") == "molecular_sequence_supplied_failure_v1"); validate_supplied_failure(issue)
+        require(issue.get("version") == "molecular_sequence_supplied_failure"); validate_supplied_failure(issue)
     return value
 
 
@@ -1792,7 +1792,7 @@ def validate_molecular_sequence_calculation_record(value):
     require(all(state in ("valid", "invalid", "unavailable") for state in value["validation_states"].values()))
     require(type(value["failures"]) is list)
     for issue in value["failures"]:
-        require(issue.get("version") == "molecular_sequence_supplied_failure_v1"); validate_supplied_failure(issue)
+        require(issue.get("version") == "molecular_sequence_supplied_failure"); validate_supplied_failure(issue)
     if value["kind"] == "admitted_stored_read":
         require(count == 0 and value["origin_state"] == "admitted_stored_unverified" and value["selection"] is None
             and value["calculation_state"] == "stored_read" and value["software"] is None
@@ -1822,7 +1822,7 @@ def supplied_file_fact_sources():
     def code(values, nullable=False):
         return dict(type=["string", "null"] if nullable else "string", enum=[*values, *([None] if nullable else [])])
     ref = dict(type="string", format="reference", **{"x-reference-namespace": "artifact"})
-    file = obj({"version": code(("molecular_sequence_retained_file_v2",)), "operation": code((SUPPLIED_OPERATION,)),
+    file = obj({"version": code(("molecular_sequence_retained_file",)), "operation": code((SUPPLIED_OPERATION,)),
         "role": code(("sheet", "components")), "artifact_ref": ref,
         "source_kind": code(("admitted_input", "selected_supplied_calculation", "admitted_stored")),
         "source_sheet_ref": {**ref, "type": ["string", "null"]}, "components_tag_key": code(("version",), True),
@@ -1830,7 +1830,7 @@ def supplied_file_fact_sources():
         "validation_state": code(("valid", "invalid", "unavailable")),
         "calculation_origin": code(("selected_action_only", "selected_calculation_recorded", "admitted_stored_unverified")),
         "linkage_state": code(("not_assessed", "matched", "conflict", "sheet_unavailable", "components_unavailable"))})
-    issue = obj({"version": code(("molecular_sequence_supplied_failure_v2",)), "operation": code((SUPPLIED_OPERATION,)),
+    issue = obj({"version": code(("molecular_sequence_supplied_failure_view",)), "operation": code((SUPPLIED_OPERATION,)),
         "code": code(SUPPLIED_FAILURES), "stage": code(STAGES), "role": code(("sheet", "components"), True),
         "source_ref": {**ref, "type": ["string", "null"]}, "source_location": code(tuple(SUPPLIED_FAILURE_LOCATIONS.values()), True)})
     return {source: {"report_schema": {"type": "array", "items": item, "x-source": source}, "description": description}
@@ -1841,15 +1841,15 @@ def supplied_file_fact_sources():
 # Ordinary custody is additive. None of the five private result profiles or
 # their existing artifact-reference report contracts is changed by this port.
 ORDINARY_ORF_TOOL = OPERATIONS[0]
-ORDINARY_ORF_INTENT_VERSION = "molecular_sequence_ordinary_intent_v1"
-ORDINARY_ORF_CUSTODY_VERSION = "ordinary_orf_publication_v1"
-ORDINARY_ORF_PUBLIC_VERSION = "ordinary_orf_values_v1"
-ORDINARY_ORF_SOURCE_VERSION = "ordinary_orf_result_v1"
+ORDINARY_ORF_INTENT_VERSION = "molecular_sequence_ordinary_intent"
+ORDINARY_ORF_CUSTODY_VERSION = "ordinary_orf_publication"
+ORDINARY_ORF_PUBLIC_VERSION = "ordinary_orf_values"
+ORDINARY_ORF_SOURCE_VERSION = "ordinary_orf_result"
 ORDINARY_ORF_FACT_SOURCE = "orf_measurements"
-ORDINARY_ORF_PACKET_FORMAT = "ordinary_orf_values_packet_v1"
+ORDINARY_ORF_PACKET_FORMAT = "ordinary_orf_values_packet"
 ORDINARY_ORF_POLICY = {'memory_bytes': 5368709120, 'scratch_bytes': 4294967296}
-ORDINARY_ORF_SAVED_INTENT_VERSION = "molecular_sequence_ordinary_saved_intent_v1"
-ORDINARY_ORF_SAVED_CUSTODY_VERSION = "ordinary_orf_saved_publication_v1"
+ORDINARY_ORF_SAVED_INTENT_VERSION = "molecular_sequence_ordinary_saved_intent"
+ORDINARY_ORF_SAVED_CUSTODY_VERSION = "ordinary_orf_saved_publication"
 ORDINARY_ORF_CALCULATOR = "orf_measurements.calculate_orf_components"
 ORDINARY_MOLECULAR_SEQUENCE_OPERATIONS = (ORDINARY_ORF_TOOL, OPERATIONS[2], OPERATIONS[3], OPERATIONS[1])
 
@@ -1865,21 +1865,21 @@ def ordinary_molecular_sequence_profile(operation):
     stem = "ordinary_n_glycosylation" if n else "ordinary_o_glycosylation" if glyco else "ordinary_orf"
     return dict(operation=operation, fact_source="n_glycosylation_motif_outcomes" if n else "o_glycosylation_hotspot_outcomes" if glyco else ORDINARY_ORF_FACT_SOURCE,
         native_source="glyco" if glyco else "molecular",
-        native_request_version="molecular_sequence_request_v2" if glyco else "molecular_sequence_request_v1",
-        deployment_version="molecular_sequence_deployment_v2" if glyco else "molecular_sequence_deployment_v1",
-        driver_request_version="molecular_sequence_driver_request_v1",
+        native_request_version="molecular_sequence_request",
+        deployment_version="molecular_sequence_deployment",
+        driver_request_version="molecular_sequence_driver_request",
         native_argument_names=["allow_overlap"] if n else ["window", "min_st_fraction", "disallow_proline_next"] if glyco else ["min_length", "search_reverse", "filter_subsets"],
-        molecule_model="protein" if glyco else "dna", operand_version=stem + "_sequence_operand_v1",
-        prepared_version=stem + "_prepared_v1", execution_version=stem + "_execution_v1",
-        binding_version=stem + "_attempt_binding_v1",
+        molecule_model="protein" if glyco else "dna", operand_version=stem + "_sequence_operand",
+        prepared_version=stem + "_prepared", execution_version=stem + "_execution",
+        binding_version=stem + "_attempt_binding",
         binding_filename="ordinary-n-glycosylation-input-binding.json" if n else "ordinary-o-glycosylation-input-binding.json" if glyco else "ordinary-orf-input-binding.json",
-        intent_version=stem + "_intent_v1" if glyco else ORDINARY_ORF_INTENT_VERSION,
-        saved_intent_version=stem + "_saved_intent_v1" if glyco else ORDINARY_ORF_SAVED_INTENT_VERSION,
-        custody_version=stem + "_publication_v1", saved_custody_version=stem + "_saved_publication_v1",
-        public_version=stem + "_values_v1", source_version=stem + "_result_v1", packet_format=stem + "_values_packet_v1",
-        publication_request_version=stem + "_publication_request_v1", saved_request_version=stem + "_saved_request_v1",
-        read_receipt_version=stem + "_read_receipt_v1", calculation_started_version=stem + "_calculation_started_v1",
-        calculation_result_version=stem + "_calculation_result_v1", calculation_diagnostic_version=stem + "_calculation_diagnostic_v1",
+        intent_version=stem + "_intent" if glyco else ORDINARY_ORF_INTENT_VERSION,
+        saved_intent_version=stem + "_saved_intent" if glyco else ORDINARY_ORF_SAVED_INTENT_VERSION,
+        custody_version=stem + "_publication", saved_custody_version=stem + "_saved_publication",
+        public_version=stem + "_values", source_version=stem + "_result", packet_format=stem + "_values_packet",
+        publication_request_version=stem + "_publication_request", saved_request_version=stem + "_saved_request",
+        read_receipt_version=stem + "_read_receipt", calculation_started_version=stem + "_calculation_started",
+        calculation_result_version=stem + "_calculation_result", calculation_diagnostic_version=stem + "_calculation_diagnostic",
         calculator_id="glycosylation_measurements.calculate_glycosylation_components" if glyco else ORDINARY_ORF_CALCULATOR,
         selector_version=N_SELECTOR_VERSION if n else O_SELECTOR_VERSION if glyco else SELECTOR_VERSION,
         projection_version=N_PROJECTION_VERSION if n else O_PROJECTION_VERSION if glyco else PROJECTION_VERSION,
@@ -2046,7 +2046,7 @@ def validate_ordinary_molecular_sequence_execution(value, *, operation=None):
         declaration = value["declaration"]
         closed(declaration, ("version", "mode", "operation", "request_file", "request_file_pin_verified", "attempt_identity",
             "native_call_state", "native_failure", "driver_failure", "files", "qualification"))
-        require(declaration["version"] == "molecular_sequence_driver_declaration_v1" and declaration["mode"] == "native"
+        require(declaration["version"] == "molecular_sequence_driver_declaration" and declaration["mode"] == "native"
             and declaration["operation"] == operation and declaration["request_file_pin_verified"] is True
             and declaration["attempt_identity"] == plan["selection"]["driver_request"]["attempt_identity"]
             and declaration["request_file"] == {**plan["selection"]["request_file"], "path":
@@ -2143,10 +2143,10 @@ def validate_ordinary_molecular_sequence_custody(value, *, operation=None):
         file_identity(original[key])
     for key in ("bundle_file", "declaration_file"):
         if original[key] is not None: file_identity(original[key])
-    formats = dict(plan_file="molecular_sequence_selected_plan_v1", driver_request_file=profile["driver_request_version"],
-        native_handle_file="durable_systemd_native_job_v2", native_request_file="native_local_job_request",
-        execution_file=profile["execution_version"], association_file="molecular_sequence_ordinary_association_v1",
-        bundle_file="molecular_sequence_attempt_bundle_v1", declaration_file="molecular_sequence_driver_declaration_v1")
+    formats = dict(plan_file="molecular_sequence_selected_plan", driver_request_file=profile["driver_request_version"],
+        native_handle_file="durable_systemd_native_job", native_request_file="native_local_job_request",
+        execution_file=profile["execution_version"], association_file="molecular_sequence_ordinary_association",
+        bundle_file="molecular_sequence_attempt_bundle", declaration_file="molecular_sequence_driver_declaration")
     require(all(original[key] is None or original[key]["format"] == fmt for key, fmt in formats.items()))
     closed(original["identity"], ("run_id", "episode_id", "resource_id", "execution_id", "attempt_id", "operation_key", "assignment_sha256", "requested_job_sha256"))
     require(all(type(item) is str and item for item in original["identity"].values())
@@ -2193,7 +2193,7 @@ def validate_ordinary_molecular_sequence_saved_custody(value, *, operation=None)
         and type(invoke["decision_index"]) is int and invoke["decision_index"] == int(intent["operation_key"].rsplit(":", 1)[1])
         and invoke["request_sha256"] == intent["original_request_sha256"])
     file_identity(request["source_admission_file"])
-    require(request["source_admission_file"]["format"] == "molecular_sequence_received_source_result_v1")
+    require(request["source_admission_file"]["format"] == "molecular_sequence_received_source_result")
     original = value["original_source"]
     closed(original, ("source_ref", "record_sha256", "custody_file", "packet_file"))
     require(original["source_ref"] == intent["arguments"]["result_ref"]
@@ -2236,7 +2236,7 @@ def ordinary_molecular_sequence_fact_sources(operation):
     if operation == OPERATIONS[1]:
         from .primer_placement_result_contracts import fact_sources
         return fact_sources()
-    selection_profile = _N_PROFILE if operation == OPERATIONS[2] else _O_PROFILE if operation == OPERATIONS[3] else _LEGACY_PROFILE
+    selection_profile = _N_PROFILE if operation == OPERATIONS[2] else _O_PROFILE if operation == OPERATIONS[3] else _BASE_PROFILE
     original = molecular_sequence_fact_sources(profile=selection_profile)
     projection = deepcopy(original[PROJECTION_SOURCE]["report_schema"]["items"]["anyOf"][0])
     issue = deepcopy(original[FAILURE_SOURCE]["report_schema"]["items"])

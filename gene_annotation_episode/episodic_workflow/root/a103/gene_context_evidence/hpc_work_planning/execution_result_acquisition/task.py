@@ -45,7 +45,7 @@ CHILD_SLOTS = {}
 SERVICES = ('job_access',)
 
 RESULT_PROVIDER = 'episode.execution_result'
-RESULT_VERSION = 'execution_result_information_v3'
+RESULT_VERSION = 'execution_result_information'
 FILE_LIMIT_BYTES = 1024 * 1024
 
 STATUS = {'name': 'execution_results_status',

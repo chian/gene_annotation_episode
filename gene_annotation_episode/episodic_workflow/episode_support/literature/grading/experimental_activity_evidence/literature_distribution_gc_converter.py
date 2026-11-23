@@ -138,7 +138,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_product_distribution_direction import select_product_distribution_effect
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_distribution_gc_converted_v1'
+VERSION = 'a105_distribution_gc_converted'
 CRITERIA_MAP = {'species_identity': ('species_identification',), 'response_factors': ('response_factors_applied',), 'common_denominator': ('denominator_coverage',),
                 'calibration_applicability': ('detection_limit_ratio',), 'matrix_interference': ('injector_stability', 'extraction_recovery'),
                 'background_alternatives': ('no_enzyme_control', 'product_stability'), 'attribution_supported': ('inactive_enzyme_control',),

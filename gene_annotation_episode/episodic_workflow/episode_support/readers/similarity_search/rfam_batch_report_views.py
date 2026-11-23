@@ -12,7 +12,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_
 
 
 def project_rfam_batch_report_result(sheet, calculation, *, projection, artifact_bindings) -> dict:
-    if isinstance(sheet, dict) and sheet.get("schema") == "infernal_search_sheet_v2":
+    if isinstance(sheet, dict) and sheet.get("schema") == "infernal_search_sheet":
         from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.rfam_batch_infernal import project_rfam_infernal_result
         return project_rfam_infernal_result(sheet, calculation, projection=projection,
             artifact_bindings=artifact_bindings, representation="out")
@@ -52,7 +52,7 @@ def project_rfam_batch_report_result(sheet, calculation, *, projection, artifact
         result.append(dict(record_key=keys[index], query_occurrence_key=row["query_occurrence_key"],
             family_accession=row.get("family_accession"), model_name=row.get("model_name"),
             strand=row["strand"], measured=measured, unavailable=unavailable))
-    return dict(version="rfam_selected_projection_v1", source_ref=bindings["source_ref"],
+    return dict(version="rfam_selected_projection", source_ref=bindings["source_ref"],
         sheet_ref=bindings["sheet_ref"], calculation_ref=bindings["calculation_ref"], family=family,
         selection=deepcopy(projection), available_row_count=len(rows), selected_row_count=len(result),
         more_rows=len(result) < len(rows), population_complete=calculation["population_complete"] if family == "hit"

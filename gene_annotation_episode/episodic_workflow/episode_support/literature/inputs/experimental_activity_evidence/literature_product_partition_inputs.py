@@ -12,7 +12,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.experimen
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_assay_inputs import _Sources, _nullable, _witness_schema, _keys, _fail, _index
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_partner_source_fields import _NUMBER, _relation, _unit_continuation
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_rate_native_inputs import _field_contexts, _APPROX, _UPPER, _LOWER, _saved_number, _saved_witness
-VERSION = 'a105_product_partition_inputs_v1'
+VERSION = 'a105_product_partition_inputs'
 ROLES = ('a', 'b')
 SOURCE_KINDS = ('primary_source', 'retained_extraction', 'synthetic_fixture')
 MEANINGS = ('subject', 'organism', 'construct', 'preparation', 'compound', 'endpoint', 'condition', 'stage', 'time', 'denominator', 'measurement_basis', 'measurement_identity')

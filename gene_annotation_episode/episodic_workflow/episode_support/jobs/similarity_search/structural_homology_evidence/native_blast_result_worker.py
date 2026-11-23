@@ -240,7 +240,7 @@ def _row(bundle, search, family, records, values, *, hit=None, hsp=None,
                 if (name.startswith("query_") and "query" not in records or
                     name.startswith("reference_") and "reference" not in records)
                 else "incompatible_input" if native_status == "partial" else "not_measured")
-    return {"version": "native_blast_complete_row_v1", "family": family,
+    return {"version": "native_blast_complete_row", "family": family,
         "record_key": key, "search_key": search["search_key"], "hit_ordinal": hit, "hsp_ordinal": hsp,
         "program": bundle["program"], "coordinate_units": dict(zip(("query", "reference", "alignment"), units)),
         "native_status": native_status, "invalid": invalid,
@@ -252,9 +252,9 @@ def _row(bundle, search, family, records, values, *, hit=None, hsp=None,
 def validate_native_blast_correspondence_collections(sheet, scores, *, admission=False):
     """Authenticate the explicit new collection companion without frozen regrading."""
     if (set(sheet) != {"schema", "collection", "searches", "publication_inputs", "correspondence"}
-            or sheet["schema"] != "native_blast_sheet_collection_v2"
+            or sheet["schema"] != "native_blast_sheet_collection"
             or set(scores) != {"schema", "searches", "rows", "metric_definitions", "correspondence", "fallback_hsp_components"}
-            or scores["schema"] != "native_blast_scores_collection_v2"
+            or scores["schema"] != "native_blast_scores_collection"
             or not _same(sheet["correspondence"], scores["correspondence"])):
         raise ValueError("native_blast_correspondence_collections_required")
     companion = validate_correspondence_artifacts(scores["correspondence"], admission=admission)
@@ -264,26 +264,26 @@ def validate_native_blast_correspondence_collections(sheet, scores, *, admission
             expected["/searches/" + str(index) + "/scores/components"] = entry["scores"]["components"]
     for index, entry in enumerate(scores["fallback_hsp_components"]):
         expected["/fallback_hsp_components/" + str(index) + "/component"] = entry["component"]
-    if {instance["legacy_pointer"] for instance in companion["instances"]} != set(expected):
+    if {instance["source_pointer"] for instance in companion["instances"]} != set(expected):
         raise ValueError("native_blast_correspondence_instances_conflict")
     for instance in companion["instances"]:
         if instance["axis_basis"] != "qualified":
             raise ValueError("native_blast_correspondence_axis_conflict")
-        validate_blast_correspondence_instance(expected[instance["legacy_pointer"]], instance)
+        validate_blast_correspondence_instance(expected[instance["source_pointer"]], instance)
 
 
 def run(plan):
-    if plan.get("version") != "native_blast_grading_plan_v2":
-        raise ValueError("native_blast_grading_plan_v2_required")
+    if plan.get("version") != "native_blast_grading_plan":
+        raise ValueError("native_blast_grading_plan_required")
     directory = Path(plan["directory"])
     bundle, paths = plan["bundle"], plan["artifacts"]
     selector = validate_native_blast_result_selector(plan["selector"], program=bundle["program"])
     diagnostics = deepcopy(plan.get("failures", []))
     rows = {family: [] for family in NATIVE_BLAST_METRICS}
     correspondence = {"version": ARTIFACT_SCHEMA, "instances": []}
-    sheet = {"schema": "native_blast_sheet_collection_v2", "collection": None,
+    sheet = {"schema": "native_blast_sheet_collection", "collection": None,
              "searches": [], "publication_inputs": {}, "correspondence": correspondence}
-    scores = {"schema": "native_blast_scores_collection_v2", "searches": [], "rows": rows,
+    scores = {"schema": "native_blast_scores_collection", "searches": [], "rows": rows,
               "metric_definitions": metric_definitions(), "correspondence": correspondence,
               "fallback_hsp_components": []}
     try:
@@ -319,7 +319,7 @@ def run(plan):
                 validate_correspondence_artifacts(companion, admission=True)
                 validate_blast_correspondence_instance(calculated["components"], companion["instances"][0])
                 instance = companion["instances"][0]
-                instance["legacy_pointer"] = "/searches/" + str(len(scores["searches"])) + "/scores/components"
+                instance["source_pointer"] = "/searches/" + str(len(scores["searches"])) + "/scores/components"
                 correspondence["instances"].append(instance)
             except (ValueError, KeyError, TypeError) as error:
                 calculated = None
@@ -345,7 +345,7 @@ def run(plan):
                         fallback_index = len(scores["fallback_hsp_components"])
                         scores["fallback_hsp_components"].append({"search_key": search["search_key"],
                             "hit_ordinal": mapping["hit_index"], "hsp_ordinal": ordinal, "component": comp})
-                        correspondence["instances"].append({"legacy_pointer": "/fallback_hsp_components/" + str(fallback_index) + "/component",
+                        correspondence["instances"].append({"source_pointer": "/fallback_hsp_components/" + str(fallback_index) + "/component",
                             "axis_basis": "qualified", "sheet": common_sheet, "components": common_components})
                         common_row = common_components["rows"][0]
                     else:
@@ -403,7 +403,7 @@ def run(plan):
             values, unavailable = projected_measurements(row, projection["metrics"])
             if unavailable:
                 _failure(diagnostics, "selection", "native_blast_requested_measurements_unavailable", row["record_key"])
-            selected = {"version": "native_blast_selected_row_v1", "family": projection["family"],
+            selected = {"version": "native_blast_selected_row", "family": projection["family"],
                         "record_key": row["record_key"], "native_ordinal": ordinal,
                         "measurements": values, "unavailable": unavailable}
             output.write(json.dumps(selected, sort_keys=True, allow_nan=False, separators=(",", ":")) + "\n")
@@ -414,7 +414,7 @@ def run(plan):
     failures = list({(r["stage"], r["code"], r["record_key"]):
         {key: r[key] for key in ("stage", "code", "record_key")} for r in diagnostics
         if not r.get("diagnostic_only")}.values())
-    manifest = {"version": "native_blast_worker_result_v2", "sheet_schema": sheet["schema"],
+    manifest = {"version": "native_blast_worker_result", "sheet_schema": sheet["schema"],
                 "scores_schema": scores["schema"], "failures": failures,
                 "numerical_complete": bool(sheet["collection"] and sheet["collection"]["searches"])
                     and bundle["returncode"] == 0 and not failures}

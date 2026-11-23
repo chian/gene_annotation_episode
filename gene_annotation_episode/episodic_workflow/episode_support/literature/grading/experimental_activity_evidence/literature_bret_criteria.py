@@ -36,7 +36,7 @@ BRET ratio of the negative control (both in ratio units; 1 mBU = 0.001 ratio). L
 What this method does not ask (kept in the record for the reviewer, no criterion judges them): BRETmax alone, the apparent KD and Ki and their spread, the spread kind, the format, the donor, the acceptor, the expression system and the statement that only this method was used.
 """
 
-VERSION = 'a105_bret_criteria_v1'
+VERSION = 'a105_bret_criteria'
 
 # ---- Threshold constants -------------------------------------------------
 NM_PER_UNIT = {'pM': 0.001, 'nM': 1.0, 'uM': 1000.0, 'mM': 1000000.0}  # FIXED_BY_DEFINITION: nanomolar per concentration unit.

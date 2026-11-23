@@ -28,7 +28,7 @@ replicate_count, replicate_independent and replicate_refs, conversion, conversio
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_endpoint_gel_band_criteria import ENDPOINT_GEL_BAND_CRITERIA, PERCENT_PER_FRACTION
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_endpoint_gel_band_grade_v1'
+VERSION = 'a105_endpoint_gel_band_grade'
 CRITERIA = tuple(criterion['id'] for criterion in ENDPOINT_GEL_BAND_CRITERIA)
 CONVERSION = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact conversion_detected_above_control
 

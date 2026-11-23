@@ -417,10 +417,10 @@ def _facts(record):
 
 
 def _validate_preparation_record(record):
-    """Shared semantic validator, called after the exact common v2 shape check."""
+    """Shared semantic validator, called after the exact common shape check."""
     op, outcome = record["operation"], record["original_outcome"]
     _operation(op); _outcome(outcome)
-    _require(op["version"] == "blast_utility_operation_v2" and _KINDS.get(op["mode"]) == record["kind"], "artifact_set_operation")
+    _require(op["version"] == "blast_preparation_operation" and _KINDS.get(op["mode"]) == record["kind"], "artifact_set_operation")
     _pointer(record["identity"]["source"]["pointer"])
     for path in record["native_paths"]:
         _absolute(path)
@@ -519,7 +519,7 @@ def populate_blast_preparation_artifact_set(*, operation: dict, inputs: list,
         database_key: str, identity: dict, software: dict, argv: list,
         native_paths: list, documents: list, outcome: dict) -> dict:
     operation = validate_blast_utility_operation(operation)
-    _require(operation["version"] == "blast_utility_operation_v2" and operation["mode"] in _KINDS, "preparation_operation_required")
+    _require(operation["version"] == "blast_preparation_operation" and operation["mode"] in _KINDS, "preparation_operation_required")
     _require(all(type(x) is list for x in (inputs, outputs, database_bindings, materializations, documents)), "preparation_lists_required")
     inputs = [core("ArtifactOccurrence", r) for r in inputs]
     outputs = [core("ArtifactOccurrence", r) for r in outputs]
@@ -559,7 +559,7 @@ def populate_blast_preparation_artifact_set(*, operation: dict, inputs: list,
                 failures.append(_failure("supplied_binding_conflict", stage="association", occurrence_id=oid))
         if not any(r["kind"] == "list_rewrite" and r["input_key"] == oid for r in receipts):
             failures.append(_failure("dependency_unavailable", stage="input", occurrence_id=oid if oid in by_id else None))
-    record = {"version": "blast_database_artifact_set_v2", "kind": _KINDS[operation["mode"]],
+    record = {"version": "blast_prepared_database_artifact_set", "kind": _KINDS[operation["mode"]],
         "operation": operation, "original_outcome": outcome, "database_key": database_key, "identity": identity,
         "software": software, "argv": argv, "native_paths": native_paths, "inputs": inputs, "outputs": outputs,
         "database_bindings": bindings, "materializations": receipts,
@@ -575,7 +575,7 @@ def populate_blast_preparation_artifact_set(*, operation: dict, inputs: list,
 
 
 def validate_blast_preparation_relationships(record: dict) -> dict:
-    _require(type(record) is dict and record.get("version") == "blast_database_artifact_set_v2", "preparation_result_version")
+    _require(type(record) is dict and record.get("version") == "blast_prepared_database_artifact_set", "preparation_result_version")
     return core("DatabaseArtifactSet", record)
 
 

@@ -1,4 +1,4 @@
-"""Authoritative detached v2 relationship checks and exact numerical primitives.
+"""Authoritative detached relationship checks and exact numerical primitives.
 
 Saved validation uses retained operands and recorded associations only: no source
 callbacks, XML reader, image decoder or population function is called. It checks

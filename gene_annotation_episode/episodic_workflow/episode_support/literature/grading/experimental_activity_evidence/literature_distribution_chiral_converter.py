@@ -103,7 +103,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_distribution_chiral_criteria import ISOMERS_IN_A_PAIR, PERCENT_PER_FRACTION
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_distribution_chiral_converted_v1'
+VERSION = 'a105_distribution_chiral_converted'
 CRITERIA_MAP = {'species_identity': ('racemic_standard_run', 'configuration_assigned_by_standard'), 'response_factors': ('isomer_response_factors',),
                 'common_denominator': ('isomer_pair_one_measurement',), 'background_alternatives': ('no_enzyme_control', 'product_configurational_stability'),
                 'attribution_supported': ('inactive_enzyme_control',), 'calibration_applicability': ('peak_resolution', 'minor_isomer_detection'),

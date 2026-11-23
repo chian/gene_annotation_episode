@@ -90,7 +90,7 @@ async def command(arguments, ctx):
 async def wait(arguments, ctx):
     """Wait for the end of the job of a held handoff row; the event's receipt comes into custody."""
     row = ctx.store.table(JOB_LEDGER).get(arguments['handoff_ref'])
-    condition = {'version': 'event_condition_v1', 'reconsider_at': None, 'events': [
+    condition = {'version': 'event_condition', 'reconsider_at': None, 'events': [
         {'handle': row['detail']['native']['event_target'], 'event': 'state_changed', 'after_cursor': 0}]}
     return await ctx.services['native_events'].wait(ctx, condition)
 

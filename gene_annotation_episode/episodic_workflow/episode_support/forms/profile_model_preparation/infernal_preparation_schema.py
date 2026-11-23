@@ -12,8 +12,8 @@ import math
 import re
 
 
-SHEET_SCHEMA = "infernal_preparation_sheet_v1"
-CALCULATIONS_SCHEMA = "infernal_preparation_calculations_v1"
+SHEET_SCHEMA = "infernal_preparation_sheet"
+CALCULATIONS_SCHEMA = "infernal_preparation_calculations"
 PROGRAM_MODES = {
     "cmbuild": frozenset({"build", "refine"}),
     "cmcalibrate": frozenset({"calibrate", "forecast", "memory_estimate",

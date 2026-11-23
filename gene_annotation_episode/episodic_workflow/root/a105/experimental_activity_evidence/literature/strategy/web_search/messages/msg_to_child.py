@@ -34,7 +34,7 @@ def child_page(arguments, summary):
 def msg_to_child(slot, arguments, summary):
     if slot != 'page':
         raise LookupError('no_such_child_slot:' + slot)
-    assignment = {'version': 'page_assignment_v1', **child_page(arguments, summary),
+    assignment = {'version': 'page_assignment', **child_page(arguments, summary),
                   'literature_task': summary['task'], 'proposed_annotation_ref': summary['proposed_annotation_ref'],
                   SHEET_STATE_REFS: list(summary['sheet_state_refs']),
                   'scope': summary['scope'], 'received_record_refs': list(summary['held_record_refs'])}

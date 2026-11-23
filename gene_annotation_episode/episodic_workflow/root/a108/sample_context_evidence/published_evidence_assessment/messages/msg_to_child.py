@@ -1,5 +1,5 @@
 """The commission of the evidence search strategy improvement child. The parent states what the child takes in its own
-assignment: the strategy assignment ``strategy_assignment_v1`` (the records that give the question its context; no
+assignment: the strategy assignment ``strategy_assignment`` (the records that give the question its context; no
 search and no source is handed down), the commissioned literature task, the proposed annotation, the A108 components
 the parent wants returned, the scope and the records the child reads.
 
@@ -39,7 +39,7 @@ def msg_to_child(slot, arguments, summary):
     if slot != 'evidence_search_strategy_improvement':
         raise LookupError('no_such_child_slot:' + slot)
     assignment = summary['literature_assignment']
-    child = {'version': 'strategy_assignment_v1',
+    child = {'version': 'strategy_assignment',
              'question_context_refs': assignment['question_context_refs'],
              'literature_task': summary['task'], 'proposed_annotation_ref': summary['proposed_annotation_ref'],
              **{name: assignment[name] for name in (REQUESTED_GRADING, REQUESTED_AGGREGATION)

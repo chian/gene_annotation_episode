@@ -682,7 +682,7 @@ def _publish(ctx, episode, body):
     artifact = ctx.store.artifact(hpc_queue.canonical(body), 'application/json')
     return ctx.store.put('source', {
         'provider': 'episode.hpc_result', 'accession': 'hpc_' + hpc_queue.digest([ctx.run_id, ctx.episode_id, body]),
-        'uri': None, 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': None, 'version': 'hpc_result_v1',
+        'uri': None, 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': None, 'version': 'hpc_result',
         'retrieved_at': datetime.fromtimestamp(body['unit']['finished_at'], timezone.utc).isoformat()},
         origin='tool')['id']
 

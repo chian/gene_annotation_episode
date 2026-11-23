@@ -125,7 +125,7 @@ al. 2020 eLife 9:e57264; Lakowicz, Principles of Fluorescence Spectroscopy, 3rd 
     difference between two methods, which the stated within-method spreads do not describe. Q4 a fold gap is multiplicative and the sheet reads
     constants on a log scale, so equal ratios should cost the same; the old linear-in-fold ramp gave 3 -> 4 fold almost nothing. CHANGED: linear in
     log(fold) (fold 6.5: 0.50 -> 0.36; fold 5.5: 0.64 -> 0.50). Values kept. Q5 MST and FRET hold the same values and the old shape (flagged).
-Grader gaps of the range review, and what was done with them (form v2; needs a real-model run):
+Grader gaps of the range review, and what was done with them (needs a real-model run):
   1. mP noise of the reads (assay_window): ADDED as the quantity signal_noise (mP only; the Z' is not collected, it is derived from the same SDs). When
      stated, the window is also judged over that noise: full agreement at WINDOW_OVER_NOISE_FULL = 12 (Z' 0.5), conflicting at WINDOW_OVER_NOISE_ZERO = 3
      (limit of detection), linear in noise / window between them; the weaker of this and the absolute-mP degree counts (in addition, not instead).
@@ -157,7 +157,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_fp_converted_v1'
+VERSION = 'a105_fp_converted'
 STATEMENTS = {'detected': 'interaction_detected', 'not_detected': 'interaction_not_detected', None: 'interaction_not_stated'}
 CRITERIA_MAP = {'binding_controls': ('free_probe_baseline', 'specificity_control', 'surface_adsorption'), 'binding_regime': ('tracer_concentration', 'concentration_series', 'equilibrium', 'direct_vs_competition'), 'binding_parameter_definition': ('fit_model', 'intensity_change'), 'calibration_applicability': ('assay_window',), 'sampling_basis': ('replicates',)}
 MIN_WINDOW_MP = 70.0  # EXPERT_REVIEW: smallest polarization window (bound minus free, in mP) that a typical plate reader (reproducibility of a few mP) resolves into a titration curve; 100 mP or more is common practice (Lea & Simeonov 2011; Rossi & Taylor 2011), this allows for a lower but still usable window; the full-agreement limit. The degree is linear in 1 / window (the error of each fraction-bound point is the reader noise over the window).

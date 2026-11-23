@@ -1,4 +1,4 @@
-"""What the commissioner supplies: the persisted ``resource_launch_assignment_v1`` (old ``from_parent.py``
+"""What the commissioner supplies: the persisted ``resource_launch_assignment`` (old ``from_parent.py``
 ``ResourceFromParent.assignment_schema`` = ``LAUNCH_SCHEMA``), one field per property of that schema under its old
 name. This is the only place the assignment is read.
 
@@ -33,11 +33,11 @@ ASSIGNMENT_FORM = RecordForm({
     'completion_target': Field('number', 'The credit a usable execution handoff earns'),
 })
 
-OLD_PROPERTIES = tuple(LAUNCH_SCHEMA['properties'])
+ASSIGNMENT_PROPERTIES = tuple(LAUNCH_SCHEMA['properties'])
 
 
 def read_from_parent(assignment, message):
-    launch = {name: assignment[name] for name in OLD_PROPERTIES if name in assignment}
+    launch = {name: assignment[name] for name in ASSIGNMENT_PROPERTIES if name in assignment}
     launch.setdefault('resource_selection', None)
     launch.setdefault('launch_instructions', None)
     launch = _validate(launch, LAUNCH_SCHEMA)

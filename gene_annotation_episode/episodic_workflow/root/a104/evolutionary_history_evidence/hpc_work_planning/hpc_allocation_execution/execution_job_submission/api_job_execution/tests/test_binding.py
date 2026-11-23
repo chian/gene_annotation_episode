@@ -18,7 +18,7 @@ FILES = {'__init__.py', 'goal.py', 'task.py', 'credit.py', 'yield_estimator.py',
          'messages/__init__.py', 'messages/read_from_parent.py', 'messages/internal_summary.py',
          'messages/final_to_parent.py', 'tests/__init__.py', 'tests/test_binding.py'}
 ROOT = 'gene_annotation_episode.episodic_workflow.root'
-ASSIGNMENT = {'version': 'api_service_assignment_v1', 'resource_id': 'blast', 'service': 'ncbi_blast',
+ASSIGNMENT = {'version': 'api_service_assignment', 'resource_id': 'blast', 'service': 'ncbi_blast',
               'request': {'program': 'blastp'}, 'endpoint': 'usable_handoff', 'constraints': {},
               'input_refs': ['sub_1'], 'handoff_unit': 1.0, 'acquired_record_unit': 0.5}
 MESSAGE = {'scientific_question': 'Which family?', 'selected_tool_info': {'name': 'blast'}}

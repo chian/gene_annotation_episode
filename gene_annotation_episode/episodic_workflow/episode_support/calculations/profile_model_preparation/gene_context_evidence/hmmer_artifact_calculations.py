@@ -23,7 +23,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.calculations.prof
 )
 
 
-SCHEMA = "hmmer_artifact_components_v1"
+SCHEMA = "hmmer_artifact_components"
 COMPONENT_STATES = frozenset({"present", "missing", "incomplete", "incompatible", "nonfinite", "failed"})
 CHECK_STATES = frozenset({"pass", "fail", "unknown", "not_applicable"})
 ISSUE_CODES = DATA_ISSUE_CODES | frozenset({"sheet_invalid", "saved_reference_invalid", "parameter_invalid",
@@ -512,7 +512,7 @@ def _validate_sheet(sheet):
     records = {"input": [], "output": []}
     for e in sheet["model_extractions"]:
         if (not isinstance(e, dict) or set(e) != {"schema", "occurrence", "format", "records", "population", "issues"}
-                or e["schema"] != "hmmer_model_extraction_v1" or not _occurrence_valid(e["occurrence"])
+                or e["schema"] != "hmmer_model_extraction" or not _occurrence_valid(e["occurrence"])
                 or not isinstance(e["records"], list) or not isinstance(e["population"], dict)):
             return "saved_reference_invalid"
         oid = e["occurrence"]["occurrence_id"]

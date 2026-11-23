@@ -11,7 +11,7 @@ requirement), ``already_handed_off`` (the plan's resource when its handoff is al
 (the plan record, held as produced by ``hpc_plan``, which the file the job reads is made of). Return fields: the
 Launch child always returns its handoff references and completion.
 
-``monitor``: the ``monitor_assignment_v1`` the model wrote, unchanged (the old request "preserves the selected
+``monitor``: the ``monitor_assignment`` the model wrote, unchanged (the old request "preserves the selected
 target, known observations, requested fields and permitted records"), with the monitor's new ``information_unit``
 and the snapshots of the known observations this episode received. The parent selects the progress observations
 and their snapshots (the old received progress).
@@ -55,7 +55,7 @@ def launch_message(arguments, summary):
 
 
 def monitor_message(arguments, summary):
-    assignment = {'version': 'monitor_assignment_v1', **arguments['assignment'],
+    assignment = {'version': 'monitor_assignment', **arguments['assignment'],
                   'information_unit': arguments['information_unit']}
     known = {ref: summary['received_progress_snapshots'][ref] for ref in assignment['known_progress_refs']
              if ref in summary['received_progress_snapshots']}
@@ -75,7 +75,7 @@ def results_message(arguments, summary):
         objective='Acquire the original results of the allocation of plan ' + plan['plan_id']
                   + ' through its original handoff',
         message={'plan_ref': arguments['plan_ref']},
-        assignment={'version': 'execution_results_assignment_v1',
+        assignment={'version': 'execution_results_assignment',
                     'handoff_ref': [hpc['handoffs'][plan['plan_id']]['handoff_ref']],
                     'selector': arguments['selector'], 'resource_kind': 'hpc',
                     'workspace': plan['manifest']['workspace'],

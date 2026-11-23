@@ -2,7 +2,7 @@
 from copy import deepcopy
 import math
 from gene_annotation_episode.episodic_workflow.episode_support.forms.sample_context_evidence.communication import plain
-VERSION = 'signed_root_axis_scalar_mappings_v1'
+VERSION = 'signed_root_axis_scalar_mappings'
 
 def _result(value, *, formula, inputs, reasons=(), status=None):
     if value is not None and (type(value) not in (int, float) or not math.isfinite(value) or value < -1 or (value > 1)):

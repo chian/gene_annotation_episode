@@ -28,7 +28,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.valida
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.evolutionary_history_evidence.literature_experimental_contracts import ExperimentalContractError
 
 PROVIDER = "literature.a105.binding_interaction_population"
-VERSION = "literature_binding_interaction_population_record_v1"
+VERSION = "literature_binding_interaction_population_record"
 EVALUATION_SCOPE = "source_binding_discrimination_interaction"
 MODEL_INPUT_STATUS = "not_supplied_by_native_operation"
 MODEL_CAPABILITY = "unimplemented"

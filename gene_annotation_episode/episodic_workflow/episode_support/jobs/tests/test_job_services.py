@@ -181,7 +181,7 @@ def test_a_job_is_launched_checked_left_outstanding_and_fetched_by_a_later_run(w
     waited, finished, fetched, read = outcomes(world, 'extracting')
     assert waited['status'] == 'completed' and waited['result']['reason'] == 'state_changed'
     receipt = json.loads(world['store'].get_artifact(waited['receipts'][0]['receipt_ref']))
-    assert receipt['version'] == 'detached_job_receipt_v1' and receipt['returncode'] == 0
+    assert receipt['version'] == 'detached_job_receipt' and receipt['returncode'] == 0
     assert waited['record_refs'] == [waited['receipts'][0]['row_ref'], waited['receipts'][0]['receipt_ref']]
     assert finished['state'] == 'finished' and finished['result_available'] is True
     assert fetched['status'] == 'completed' and fetched['outcome'] == 'results_acquired'
@@ -380,10 +380,10 @@ def test_the_remote_route_submits_a_handle_once_and_reports_cancels_and_reads_it
 # -- native events ---------------------------------------------------------------------------------------------
 def test_a_wait_returns_at_its_reconsideration_time_and_an_unknown_target_is_a_failed_outcome(world):
     soon = (datetime.now(timezone.utc) + timedelta(seconds=0.3)).isoformat()
-    unknown = {'version': 'event_condition_v1', 'reconsider_at': None, 'events': [
+    unknown = {'version': 'event_condition', 'reconsider_at': None, 'events': [
         {'handle': 'native_event_target_' + '0' * 24, 'event': 'state_changed', 'after_cursor': 0}]}
     result = run(world, 'waits', [
-        step('wait_condition', condition={'version': 'event_condition_v1', 'events': [], 'reconsider_at': soon}),
+        step('wait_condition', condition={'version': 'event_condition', 'events': [], 'reconsider_at': soon}),
         step('wait_condition', condition=unknown)])
     reconsidered, refused = outcomes(world, 'waits')
     assert reconsidered['status'] == 'completed' and reconsidered['result']['reason'] == 'reconsideration'

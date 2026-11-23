@@ -12,8 +12,8 @@ import subprocess
 import zlib
 
 
-PROFILE = 'a107_genomic_detection_v1'
-REFERENCE_CDS_VERSION = 'a107_reference_cds_verifications_v1'
+PROFILE = 'a107_genomic_detection'
+REFERENCE_CDS_VERSION = 'a107_reference_cds_verifications'
 
 
 def require(condition, code):
@@ -85,7 +85,7 @@ def validate_reference_translations(native, request):
             'a107_reference_translation_sequence_conflict')
         calculation = row['translation_calculation']
         call = calculation['translation_call']
-        require(calculation['version'] == 'a103_translation_calculation_v1'
+        require(calculation['version'] == 'a103_translation_calculation'
             and calculation['completed'] is True and calculation['qualification'] is None
             and calculation['codon_start'] == translation['codon_start']
             and call['table'] == translation['genetic_code'] and type(call['cds']) is bool

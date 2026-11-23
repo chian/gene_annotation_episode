@@ -17,7 +17,7 @@ PROVIDER = 'literature.experimental.reaction_source_selection'
 OPERATION = 'literature.reaction.source.populate'
 
 def native_selection_schema():
-    """Closed operands for the original a110_source_reaction_selection_v1."""
+    """Closed operands for the original a110_source_reaction_selection."""
     witness = _witness_schema()
     number = number_selector_schema()
     witnesses = {'type': 'array', 'items': deepcopy(witness)}

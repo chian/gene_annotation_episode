@@ -21,7 +21,7 @@ FILES = {'__init__.py', 'goal.py', 'task.py', 'credit.py', 'yield_estimator.py',
          'tests/__init__.py', 'tests/test_binding.py', 'tests/grading_world.py',
          'tests/test_decision_schema.py'}
 ROOT = 'gene_annotation_episode.episodic_workflow.root'
-OPTION = {'version': 'experimental_activity_evidence_option_ref_v1', 'library_id': 'a' * 64,
+OPTION = {'version': 'experimental_activity_evidence_option_ref', 'library_id': 'a' * 64,
           'entry_sha256': 'b' * 64}
 SCOPE = {'subject_refs': ['sub_1']}
 
@@ -32,14 +32,14 @@ def own_files():
 
 
 def assignment():
-    return {'selection': {'version': 'experimental_activity_evidence_selection_v1',
+    return {'selection': {'version': 'experimental_activity_evidence_selection',
                           'evidence_axis': {**OPTION, 'slot': 'evidence_axis', 'option_id': 'A105'},
                           'thought_pattern': {**OPTION, 'slot': 'thought_pattern', 'option_id': 'P1'},
                           'child_tool_info': [{'name': 'state.query', 'resources': 'api'},
                                               {'name': 'source.read', 'resources': 'api'},
                                               {'name': 'public.literature.search', 'resources': 'api'}]},
             'proposed_annotation_ref': 'hyp_1', 'evidence_refs': ['sub_1', 'hyp_1'], 'constraints': {},
-            'context': {'evidence_task': {'version': 'evidence_axis_task_v1', 'kind': 'whole_axis_findings',
+            'context': {'evidence_task': {'version': 'evidence_axis_task', 'kind': 'whole_axis_findings',
                                           'evidence_axis': 'A105', 'credit_unit': 1.0}},
             'scope': SCOPE}
 

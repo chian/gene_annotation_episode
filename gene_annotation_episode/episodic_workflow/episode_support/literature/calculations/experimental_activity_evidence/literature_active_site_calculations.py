@@ -7,7 +7,7 @@ from fractions import Fraction
 import math
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_active_site_inputs import ROLES, validate_active_site_extraction
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_rate_domains import _contains_zero, _divide, _multiply, _subtract, _point, _encode, _project, INF
-VERSION = 'a105_active_site_components_v1'
+VERSION = 'a105_active_site_components'
 COMPONENTS = ('protein_mass_concentration', 'assumed_molecular_weight', 'total_monomer_concentration', 'active_site_concentration', 'sites_per_total_monomer', 'conditional_active_monomer_fraction', 'conditional_nominal_to_active_denominator_factor', 'reported_active_fraction', 'derived_minus_reported_fraction')
 COMPONENT_ROLES = {name: (name,) for name in ROLES}
 COMPONENT_ROLES.update(total_monomer_concentration=ROLES[:2], sites_per_total_monomer=ROLES[:3], conditional_active_monomer_fraction=ROLES[:3], conditional_nominal_to_active_denominator_factor=ROLES[:3], derived_minus_reported_fraction=ROLES)

@@ -16,7 +16,7 @@ import json
 from episode_runtime import TableDeclaration
 from gene_annotation_episode.episodic_workflow.episode_support.forms.partner_presence_evidence.communication import plain
 from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence.domain import ContractError, canonical, identity
-VERSION = 'literature_sheet_dependencies_v1'
+VERSION = 'literature_sheet_dependencies'
 SECTION = 'literature_sheet_updating'
 DEPENDENCIES = TableDeclaration(name='literature_sheet_dependencies', columns=('sheet_ref', 'family', 'provider', 'adapter', 'method', 'arguments', 'assignment', 'possessed', 'dependencies', 'receipt'), key=('sheet_ref',), record_refs=('sheet_ref',))
 CURRENT = TableDeclaration(name='literature_current_scoring_sheets', columns=('family', 'sheet_ref', 'status', 'detail'), key=('family',), record_refs=('sheet_ref',))

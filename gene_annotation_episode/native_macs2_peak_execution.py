@@ -38,9 +38,9 @@ OWNER_FILENAME = '.native-macs2-peak-owner.json'
 STARTED_FILENAME = '.native-macs2-peak-started.json'
 SEAL_FILENAME = 'macs2-peak-seal.json'
 POLICY = deepcopy(shared.POLICY)
-REQUEST_VERSION = 'macs2_peak_request_v1'
-PLAN_VERSION = 'macs2_peak_run_plan_v1'
-SEAL_VERSION = 'macs2_peak_command_seal_v1'
+REQUEST_VERSION = 'macs2_peak_request'
+PLAN_VERSION = 'macs2_peak_run_plan'
+SEAL_VERSION = 'macs2_peak_command_seal'
 
 require, canonical, digest = shared.require, shared.canonical, shared.digest
 failure, unique_failures = shared.failure, shared.unique_failures

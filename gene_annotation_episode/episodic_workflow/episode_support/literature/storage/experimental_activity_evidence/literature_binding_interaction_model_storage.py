@@ -21,9 +21,9 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.storag
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_rate_storage import LiteratureRateRepository
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_binding_interaction_model_inputs import read_binding_interaction_model
 PROVIDER = 'literature.a105.binding_interaction_model_population'
-VERSION = 'literature_binding_interaction_model_population_record_v1'
+VERSION = 'literature_binding_interaction_model_population_record'
 COMPONENTS = MODEL_COMPONENTS
-FORMULA_CODES = {name: 'binding_interaction_model_' + name + '_v1' for name in COMPONENTS}
+FORMULA_CODES = {name: 'binding_interaction_model_' + name for name in COMPONENTS}
 FORMULA_MEANINGS = {FORMULA_CODES[name]: FORMULAS[name] for name in COMPONENTS}
 VIEW = 'binding_interaction_log_model_components'
 REASONS = (*CALCULATION_REASONS, 'observation_model_missing', 'covariance_status_unknown', 'variance_representation_range', 'censored_joint_likelihood_unimplemented', 'covariance_estimated_not_known', 'normal_log_observation_model_unspecified', 'zero_interaction_variance', 'profile_log_ratio_representation_range', 'signed_index_representation_range', 'common_parameter_kind_unknown', 'common_parameter_kind_conflicting', 'common_parameter_kind_source_unavailable')

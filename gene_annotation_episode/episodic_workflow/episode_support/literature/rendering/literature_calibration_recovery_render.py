@@ -30,7 +30,7 @@ def task_relevant(state):
     assignment = state.get('literature_assignment', {})
     if isinstance(assignment, Mapping) and assignment.get('requested_calibration_recovery_components'):
         return True
-    if state.get('literature_calibration_recovery_work', {}).get('version') == 'literature_calibration_recovery_task_v1':
+    if state.get('literature_calibration_recovery_work', {}).get('version') == 'literature_calibration_recovery_task':
         return True
     outcome = state.get('last_local_outcome') or {}
     return isinstance(outcome, Mapping) and isinstance(outcome.get('result'), Mapping) and outcome['result'].get('view') == 'calibration_recovery_components'

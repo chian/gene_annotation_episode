@@ -111,9 +111,9 @@ def test_constraint_images_contain_actual_maps_on_independent_finite_grid():
                     assert cell['lower'] is None or value >= cell['lower']
                     assert cell['upper'] is None or value <= cell['upper']
 
-def test_native_v2_is_an_explicit_unimplemented_binding_not_silent_conversion():
-    with pytest.raises(ExperimentalContractError, match='table_v1_extraction_required'):
-        calculate({'version': 'a105_rate_extraction_v2'})
+def test_native_extraction_is_an_explicit_unimplemented_binding_not_silent_conversion():
+    with pytest.raises(ExperimentalContractError, match='table_extraction_required'):
+        calculate({'version': 'a105_rate_native_extraction'})
 
 def test_exact_source_decimals_survive_rounded_float_projections():
     cells = calculate(extraction('10000000000000001', '10000000000000000'))['cells']

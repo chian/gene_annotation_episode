@@ -1,4 +1,4 @@
-"""Common-calculator delegate and unchanged saved-v1 table validation helpers."""
+"""Common-calculator delegate and unchanged saved table validation helpers."""
 from __future__ import annotations
 
 from copy import deepcopy
@@ -10,7 +10,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.rfam_batch_table import RfamBatchTableParseResult
 
 
-VERSION = "rfam_batch_table_calculation_v1"
+VERSION = "rfam_batch_table_calculation"
 PARAMETERS = {"hit_scope": "reported"}
 
 
@@ -18,11 +18,11 @@ def validate_rfam_table_inputs(parsed):
     code = "rfam_projection_reference_conflict"
     parsed = finite_json_copy(parsed, code=code)
     closed_object(parsed, RfamBatchTableParseResult.__annotations__, code=code)
-    if (parsed["version"] != "rfam_batch_tblout_parse_result_v1"
+    if (parsed["version"] != "rfam_batch_tblout_parse_result"
             or parsed["status"] not in {"complete", "partial"}
             or parsed["format"] != "infernal_tblout_1_cmscan_1_1_5"
             or type(parsed["sheet"]) is not dict
-            or parsed["sheet"].get("schema") != "infernal_search_sheet_v1"
+            or parsed["sheet"].get("schema") != "infernal_search_sheet"
             or type(parsed["input_identity"]) is not dict):
         raise ContractError(code)
     queries = parsed["input_identity"].get("queries")

@@ -9,7 +9,7 @@
   "x-semantic-validation": [
     "All object fields listed in required are mandatory. Nullable fields are represented by JSON null; omitted and null are not interchangeable.",
     "Only JSON finite numbers are permitted. Coordinates require 0 <= start < end <= 2**63-1. Endpoints and supplied threshold denominators are integers; booleans do not satisfy integer fields.",
-    "source.kind bed_artifact iff RegionSetSpec.format bed_outer_span_v1; coordinate_rows_artifact iff coordinate_rows_v1. Every parsed set source_file must equal its request source.file and parsed_byte_count may not exceed size_bytes.",
+    "source.kind bed_artifact iff RegionSetSpec.format bed_outer_span; coordinate_rows_artifact iff coordinate_rows. Every parsed set source_file must equal its request source.file and parsed_byte_count may not exceed size_bytes.",
     "Set keys are unique; request comparisons are exactly all unordered input-position pairs i<j in increasing (i,j) order, with unique comparison_key and zero-based ordinal. a_set_key and b_set_key are never inferred from output column positions.",
     "Parsed sets have exactly the request set keys in request order. Each valid occurrence key/native token/data ordinal is unique within its set; data_ordinal counts all data rows, including invalid rows. Native tokens are globally unique in a request.",
     "canonical_order is a permutation of valid occurrence keys in bytewise chromosome,start,end,data_ordinal order. Coordinate/full-record groups partition every valid occurrence exactly once and match the declared grouping fields.",
@@ -28,7 +28,7 @@
     "Complete parsed sets require parsed_byte_count == source_file.size_bytes and no invalid rows. Unavailable sets have null input_data_row_count, zero parsed bytes and empty tables. For partial sets, input_data_row_count is nonnull only if the full input was read and data rows counted; otherwise null. Valid rows and located failures remain available.",
     "NativePairReceipt is supplied-data metadata, not an authority token. native_result_extent complete requires complete input sets, complete retained stdout bytes, no malformed/rejected/duplicate pair rows, and either closed_successful_native_attempt or supplied_full_output_declaration with explicit nonempty completeness_source_refs. The supplied-output route may have null identity/software/returncode/timestamps/writer_closed; it does not claim this workflow executed the tool. A live result host separately validates original selection, job, manifest, attempt, closure, receipt and replay before claiming live completion.",
     "For derivation bedtools_intersect and completeness_basis closed_successful_native_attempt: outcome succeeded, returncode 0 and writer_closed true are required. Supplied_native_output with supplied_full_output_declaration has outcome unknown unless actual outcome evidence is supplied; complete byte capture alone never establishes complete scientific output. Validated-empty-input requires complete empty input and has no native returncode/timestamps/software/stdout/stderr; complete analytic pair table is empty.",
-    "NativeFileIdentity is exactly packet419 shape with format, not media_type. Input BED files use format bed_outer_span_v1; coordinate arrays use coordinate_rows_v1; canonical BED4 uses bed4_occurrence_v1; pair stdout uses bedtools_intersect_wo_bed4_v1; stderr uses native_stderr_text_v1; saved sheets use genomic_region_overlap_sheet_v1. No name or resource label overrides actual format validation.",
+    "NativeFileIdentity is exactly packet419 shape with format, not media_type. Input BED files use format bed_outer_span; coordinate arrays use coordinate_rows; canonical BED4 uses bed4_occurrence; pair stdout uses bedtools_intersect_wo_bed4; stderr uses native_stderr_text; saved sheets use genomic_region_overlap_sheet. No name or resource label overrides actual format validation.",
     "OverlapCaptureRecord belongs only to result-host integration. native_manifest.files and captures have equal length; capture[i].declared equals native_manifest.files[i].declaration; unique file_key and role identify exactly one canonical_a, canonical_b, overlap_stdout, overlap_stderr declaration for executed pairs. Scientific stdout/stderr and canonical identities come from the same-role captures, not independently sorted lists. Verified rows match declaration hash/size/format exactly; mismatch keeps observed bytes and cannot establish complete native results.",
     "Packet419 capture rules apply exactly: present declaration has hash/size; absent has both null. verified has observed identity, null failure and exact identity match; declared_absent has null observed/failure; digest_mismatch has observed identity and capture_file_digest_mismatch; unavailable has null observed and capture_file_unavailable. Shared helper only captures bytes. Overlap host owns original job, sealed manifest, writer-closure receipt and immutable selected-action capture receipt; replay reads retained files through retained_native_file and never recaptures producer paths.",
     "Selector measurement_fields is a unique nonempty list from the fixed family-specific enum. Every projected row's measurements key set is exactly that list; an unavailable requested measurement is present with its defined null/missing representation and a located failure, never silently omitted or replaced. No unrequested measurement/intermediate is projected.",
@@ -268,8 +268,8 @@
         },
         "format": {
           "enum": [
-            "bed_outer_span_v1",
-            "coordinate_rows_v1"
+            "bed_outer_span",
+            "coordinate_rows"
           ]
         }
       },
@@ -314,7 +314,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "genomic_overlap_request_v1"
+          "const": "genomic_overlap_request"
         },
         "operation": {
           "const": "analyze_genomic_region_overlap"
@@ -757,7 +757,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "genomic_overlap_parsed_set_v1"
+          "const": "genomic_overlap_parsed_set"
         },
         "set_key": {
           "type": "string",
@@ -1038,7 +1038,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "genomic_overlap_native_pair_receipt_v1"
+          "const": "genomic_overlap_native_pair_receipt"
         },
         "comparison_key": {
           "type": "string",
@@ -1331,10 +1331,10 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "genomic_overlap_parsed_pairs_v1"
+          "const": "genomic_overlap_parsed_pairs"
         },
         "format": {
-          "const": "bedtools_intersect_wo_bed4_v1"
+          "const": "bedtools_intersect_wo_bed4"
         },
         "comparison_key": {
           "type": "string",
@@ -1390,7 +1390,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "genomic_region_overlap_sheet_v1"
+          "const": "genomic_region_overlap_sheet"
         },
         "request": {
           "$ref": "#/$defs/Request"
@@ -1455,7 +1455,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "genomic_overlap_calculation_parameters_v1"
+          "const": "genomic_overlap_calculation_parameters"
         },
         "minimum_overlap_bp": {
           "type": "integer",
@@ -2352,7 +2352,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "genomic_region_overlap_components_v1"
+          "const": "genomic_region_overlap_components"
         },
         "source_sheet_sha256": {
           "type": "string",
@@ -2394,7 +2394,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "genomic_region_overlap_graded_sheet_v1"
+          "const": "genomic_region_overlap_graded_sheet"
         },
         "sheet": {
           "$ref": "#/$defs/Sheet"
@@ -2596,7 +2596,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "genomic_overlap_result_selector_v1"
+          "const": "genomic_overlap_result_selector"
         },
         "mode": {
           "enum": [
@@ -2671,7 +2671,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "genomic_overlap_projection_v1"
+          "const": "genomic_overlap_projection"
         },
         "source_sheet_sha256": {
           "type": "string",
@@ -2927,7 +2927,7 @@
       "properties": {
         "version": {
           "enum": [
-            "genomic_overlap_capture_record_v1"
+            "genomic_overlap_capture_record"
           ]
         },
         "comparison_key": {
@@ -3456,7 +3456,7 @@
       "properties": {
         "version": {
           "enum": [
-            "genomic_overlap_native_manifest_v1"
+            "genomic_overlap_native_manifest"
           ]
         },
         "comparison_key": {
@@ -3601,7 +3601,7 @@
       "items": {
         "$ref": "#/$defs/JsonValue"
       },
-      "description": "Original coordinate_rows_v1 record. Extra JSON values are retained. start < end is semantic validation; booleans are not integers. Name/raw_strand are derived only when field 4/6 respectively is a string; otherwise null and original fields still retained."
+      "description": "Original coordinate_rows record. Extra JSON values are retained. start < end is semantic validation; booleans are not integers. Name/raw_strand are derived only when field 4/6 respectively is a string; otherwise null and original fields still retained."
     },
     "CoordinateRowsData": {
       "type": "array",

@@ -50,7 +50,7 @@ about how well its quote supports it: 'direct' (the quote itself states the valu
 default it to 'direct'; the default is only for forms built by tests that do not go through the extraction (the extraction always passes the model's answer).
 """
 
-VERSION = 'a105_coupling_atp_product_record_v1'
+VERSION = 'a105_coupling_atp_product_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'coupling_atp_product'
 QUANTITIES = ('productive_fraction', 'productive_fraction_spread', 'stoichiometric_ratio', 'stoichiometric_ratio_spread', 'nucleotides_per_product',

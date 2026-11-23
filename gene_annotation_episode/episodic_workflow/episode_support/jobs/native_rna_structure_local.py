@@ -42,7 +42,7 @@ def prepare_local_rna_structure(state, operation_key: str, *, root: Path, policy
     if state.assignment.get("resource_kind") != "local":
         raise ValueError("rna_original_attempt_mismatch")
     handle = native.NativeJobHandle(root / "native.json")
-    plan = validate_rna_structure_run_plan({"version": "native_rna_structure_run_plan_v1", "identity": {
+    plan = validate_rna_structure_run_plan({"version": "native_rna_structure_run_plan", "identity": {
         "run_id": state.run_id, "episode_id": state.episode_id, "resource_id": state.assignment.get("resource_id"),
         "execution_id": str(handle.path), "attempt_id": digest(operation_key), "operation_key": operation_key,
         "requested_job_sha256": digest(request)}, "requested_job": request,

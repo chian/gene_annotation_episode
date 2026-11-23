@@ -38,7 +38,7 @@ source, rather than pass its later worker output to this function.
         raise ValueError("capture_incomplete")
     original = validate_protein_structure_bundle(bundle, plan=capture["original_plan"])
     bundle_file = validate_file_identity(capture["bundle_file"])
-    if (bundle_file["format"] != "native_protein_structure_bundle_v1"
+    if (bundle_file["format"] != "native_protein_structure_bundle"
             or bundle_file["sha256"] != digest(original)
             or bundle_file["byte_length"] != len(canonical(original).encode("utf-8"))):
         raise ValueError("input_digest_mismatch")
@@ -57,7 +57,7 @@ source, rather than pass its later worker output to this function.
     return {"provider": "episode.execution_result",
         "accession": "native_protein_structure_" + digest(original["identity"]),
         "uri": None, "artifact_ref": bundle_file["artifact_ref"], "text_ref": None,
-        "request_ref": request_ref, "version": "native_protein_structure_bundle_v1",
+        "request_ref": request_ref, "version": "native_protein_structure_bundle",
         "retrieved_at": original["finished_at"],
         "auxiliary_artifact_refs": list(dict.fromkeys(references))}
 
@@ -174,8 +174,8 @@ def publish_structure_sequence_reference(store, *, source_ref: SourceRef,
     sequence = validate_structure_sequence(sequence)
     sequence_file = validate_file_identity(sequence_file)
     residue_map_file = validate_file_identity(residue_map_file)
-    if (sequence_file["format"] != "ascii_protein_sequence_v1"
-            or residue_map_file["format"] != "protein_structure_sequence_v1"):
+    if (sequence_file["format"] != "ascii_protein_sequence"
+            or residue_map_file["format"] != "protein_structure_sequence"):
         raise ValueError("unsupported_format")
     if not sequence["sequence_available"] or not sequence["alignment_sequence"]:
         raise ValueError("sequence_artifact_mismatch")
@@ -191,7 +191,7 @@ def publish_structure_sequence_reference(store, *, source_ref: SourceRef,
     with store.transaction():
         source = _ordinary_record(store, source_ref, "source")
         if (source["provider"] != "episode.execution_result"
-                or source["version"] != "native_protein_structure_bundle_v1"):
+                or source["version"] != "native_protein_structure_bundle"):
             raise ValueError("original_commission_mismatch")
         if any(file["artifact_ref"] not in source.get("auxiliary_artifact_refs", [])
                 for file in (sequence_file, residue_map_file)):
@@ -224,7 +224,7 @@ def publish_protein_structure_action_result(registry, work, *, authority):
         public_ref = registry.store.artifact(canonical(values), media_type="application/json")
         retained_work = deepcopy(checked)
         retained_work["scientific"] = None
-        capsule = dict(version="protein_structure_saved_action_publication_v1", work=retained_work)
+        capsule = dict(version="protein_structure_saved_action_publication", work=retained_work)
         request_ref = registry.store.artifact(canonical(capsule), media_type="application/json")
         payload = saved_protein_action_source_payload(registry.store, capsule=capsule,
             public_ref=public_ref, request_ref=request_ref)
@@ -232,8 +232,8 @@ def publish_protein_structure_action_result(registry, work, *, authority):
         registry._written.append(source_ref)
         return saved_protein_action_result(values, source_ref=source_ref), [source_ref]
     from gene_annotation_episode.episodic_workflow.episode_support.forms.protein_structure.structural_homology_evidence.protein_structure_contracts import (
-        issue, validate_saved_sheet_descriptor_v2,
-        validate_structure_sequence_descriptor_v2,
+        issue, validate_saved_sheet_descriptor,
+        validate_structure_sequence_descriptor,
     )
     from gene_annotation_episode.episodic_workflow.episode_support.readers.protein_structure.structural_homology_evidence.protein_structure_result_views import project_protein_structure_results
     from gene_annotation_episode.episodic_workflow.episode_support.records.protein_structure_action_records import (
@@ -245,7 +245,7 @@ def publish_protein_structure_action_result(registry, work, *, authority):
     if checked["bundle"] is None or checked["capture"] is None:
         raise ValueError("capture_incomplete")
     store = registry.store
-    capsule = {"version": "protein_structure_action_publication_v1", **{
+    capsule = {"version": "protein_structure_action_publication", **{
         name: deepcopy(checked[name]) for name in (
             "invocation", "tool_name", "arguments", "scope", "binding", "plan",
             "execution", "capture", "worker", "qualified_files")}}
@@ -258,7 +258,7 @@ def publish_protein_structure_action_result(registry, work, *, authority):
     scientific, files = checked["scientific"], checked["qualified_files"]
     selection = checked["arguments"]["selection"]
     operation = checked["arguments"]["request"]["operation"]
-    custody = {"version": "protein_structure_action_custody_v1", "source_ref": source_ref}
+    custody = {"version": "protein_structure_custody", "source_ref": source_ref}
     sequences, saved_sheets, issues = [], [], deepcopy(checked["issues"])
     if selection["sequence_allowed_uses"]:
         if (scientific is not None and scientific["kind"] == "extraction"
@@ -268,8 +268,8 @@ def publish_protein_structure_action_result(registry, work, *, authority):
             reference_ref = publish_structure_sequence_reference(store, source_ref=source_ref,
                 sequence=sequence, sequence_file=files["sequence_file"], residue_map_file=files["residue_map_file"])
             registry._written.append(reference_ref)
-            descriptor = validate_structure_sequence_descriptor_v2({
-                "version": "structure_sequence_descriptor_v2", "custody": custody,
+            descriptor = validate_structure_sequence_descriptor({
+                "version": "structure_sequence_descriptor", "custody": custody,
                 "reference_ref": reference_ref, "sequence_file": files["sequence_file"],
                 "residue_map_file": files["residue_map_file"], "structure_file": sequence["selection"]["file_identity"],
                 "selection": sequence["selection"], "sequence_length": sequence["sequence_length"],
@@ -283,7 +283,7 @@ def publish_protein_structure_action_result(registry, work, *, authority):
     if selection["return_saved_sheet"]:
         if (scientific is not None and scientific["kind"] == "comparison"
                 and files["sheet_file"] is not None and files["original_components_file"] is not None):
-            descriptor = validate_saved_sheet_descriptor_v2({"version": "protein_structure_saved_sheet_v2",
+            descriptor = validate_saved_sheet_descriptor({"version": "protein_structure_saved_sheet",
                 "custody": custody, "sheet_file": files["sheet_file"],
                 "original_components_file": files["original_components_file"],
                 "operation": "compare_protein_structures", "original_mode": scientific["sheet"]["scientific_mode"],
@@ -309,16 +309,16 @@ def publish_protein_structure_action_result(registry, work, *, authority):
             continue
         table_file = None
         if selected["delivery_kind"] == "artifact":
-            data = canonical({"version": "protein_structure_projection_table_v1", "rows": rows["rows"]}).encode("utf-8")
+            data = canonical({"version": "protein_structure_projection_table", "rows": rows["rows"]}).encode("utf-8")
             sha256 = hashlib.sha256(data).hexdigest()
             table_ref = store.artifact(data, media_type="application/json")
             table_file = {"artifact_ref": table_ref, "sha256": sha256, "byte_length": len(data),
-                "format": "protein_structure_projection_table_v1"}
+                "format": "protein_structure_projection_table"}
             retained_protein_structure_file(store, table_file)
             references.append(table_ref)
         selected_views.append(action_view_from_projection_rows(rows, source_ref=source_ref,
             operation=operation, table_file=table_file))
-    result = validate_protein_structure_tool_result({"version": "protein_structure_tool_result_v1",
+    result = validate_protein_structure_tool_result({"version": "protein_structure_tool_result",
         "source_ref": source_ref, "operation": operation, "views": selected_views,
         "sequences": sequences, "saved_sheets": saved_sheets, "issues": issues})
     references = list(dict.fromkeys(references))
@@ -338,17 +338,17 @@ def saved_protein_action_values(work):
     rows = []
     for selection in work["arguments"]["projections"]:
         if work["scientific"] is None:
-            outcome = dict(version="protein_structure_action_unavailable_v1", issues=deepcopy(work["issues"]) or [
+            outcome = dict(version="protein_structure_action_unavailable", issues=deepcopy(work["issues"]) or [
                 issue("selected_field_unavailable", stage="projection", field="projection_fields")])
         else:
             try:
                 outcome, = project_protein_structure_results(work["scientific"], selection=[selection])
             except ValueError as error:
                 code = str(error) if str(error) in get_args(IssueCode) else "invalid_schema"
-                outcome = dict(version="protein_structure_action_unavailable_v1", issues=[
+                outcome = dict(version="protein_structure_action_unavailable", issues=[
                     issue(code, stage="projection", field="projection_fields")])
         rows.append(dict(selection=deepcopy(selection), outcome=outcome))
-    return dict(version="protein_structure_saved_action_values_v1", operation="compare",
+    return dict(version="protein_structure_saved_action_values", operation="compare",
         projections=rows, issues=deepcopy(work["issues"]))
 
 
@@ -374,7 +374,7 @@ def saved_protein_action_source_payload(store, *, capsule, public_ref, request_r
 
 def saved_protein_action_result(values, *, source_ref):
     from gene_annotation_episode.episodic_workflow.episode_support.records.protein_structure_action_records import validate_protein_structure_tool_result
-    return validate_protein_structure_tool_result(dict(version="protein_structure_tool_result_v1",
-        source_ref=source_ref, operation="compare", views=[dict(version="protein_structure_action_view_v1",
+    return validate_protein_structure_tool_result(dict(version="protein_structure_tool_result",
+        source_ref=source_ref, operation="compare", views=[dict(version="protein_structure_action_view",
             source_ref=source_ref, operation="compare", **deepcopy(row)) for row in values["projections"]],
         sequences=[], saved_sheets=[], issues=deepcopy(values["issues"])))

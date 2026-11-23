@@ -9,7 +9,7 @@ from jsonschema import Draft202012Validator
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence import literature_gel_inputs as inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence import literature_gel_calculations as calc
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_experimental_contracts import ExperimentalContractError
-from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.tests.test_literature_gel_inputs import make_case, select_v2
+from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.tests.test_literature_gel_inputs import make_case, select
 
 def populated(mutator=None):
     selected, read, sources, _, comparison = make_case()
@@ -184,10 +184,10 @@ def test_absent_comparison_role_is_not_selected_by_best_number():
     with pytest.raises(ExperimentalContractError, match='selected_gel_lane_required'):
         calc.populate_gel_components(extraction, comparison)
 
-def test_v2_mean_median_explicit_alternatives_keep_method_dependencies_and_partial_raws():
+def test_mean_median_explicit_alternatives_keep_method_dependencies_and_partial_raws():
 
     def mutate(selected, sources, _comparison):
-        select_v2(selected, 'mean')
+        select(selected, 'mean')
         pixels_mutation(sources, selected, {(0, 4): 255, (1, 4): 255, (2, 4): 225})
         selected['roi_assignments'][0]['lanes'][1]['background'] = [0, 4, 3, 5]
         median = deepcopy(selected['roi_assignments'][0])
@@ -199,7 +199,7 @@ def test_v2_mean_median_explicit_alternatives_keep_method_dependencies_and_parti
         partial['lanes'][1]['background'] = None
         selected['roi_assignments'].extend([median, partial])
     _selected, extraction, comparison, sheet = populated(mutate)
-    assert sheet['version'] == calc.VERSION_V2
+    assert sheet['version'] == calc.VERSION
     mean, median, partial = sheet['assignments']
     assert exact(mean['lanes'][1]['cells']['shifted_display_darkness']) == 70
     assert exact(median['lanes'][1]['cells']['shifted_display_darkness']) == 80

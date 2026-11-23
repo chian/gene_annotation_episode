@@ -16,10 +16,10 @@ from .macs2_peak_components import native_peak_counts, project_native_peak_windo
 
 
 TOOL = 'result.macs2.peaks'
-VERSION = 'ordinary_macs2_peak_result_v1'
-PACKET_VERSION = 'ordinary_macs2_peak_packet_v1'
-STORED_VERSION = 'ordinary_macs2_peak_stored_v1'
-CONTROL_VERSION = 'ordinary_macs2_peak_publication_v1'
+VERSION = 'ordinary_macs2_peak_result'
+PACKET_VERSION = 'ordinary_macs2_peak_packet'
+STORED_VERSION = 'ordinary_macs2_peak_stored'
+CONTROL_VERSION = 'ordinary_macs2_peak_publication'
 FACT_SOURCE = 'macs2_peak_outcomes'
 _SOURCE = {'type': 'string', 'pattern': '^source_[0-9a-f]{24,64}$',
     'format': 'reference', 'x-reference-namespace': 'source'}

@@ -24,7 +24,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.readers.similarit
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.sequence_homology_evidence.native_blast_standard_database_contracts import IDENTITY_SCHEMA
 
 
-CALCULATION_SCHEMA = views.PREFIX + "calculations_v2"
+CALCULATION_SCHEMA = views.PREFIX + "calculations"
 _SHEET_FIELDS = {"schema", "collection", "prepared_inputs", "search_bindings", "sequence", "pssm",
                  "metadata_parse_results", "metadata_binding_results", "issues"}
 _CALC_FIELDS = {"schema", "sequence_model", "sequence", "pssm", "search_facts", "native_search_statistics",
@@ -77,10 +77,10 @@ def _failure(code="calculation_failed", *, stage="calculation", key=None, pointe
 
 def _sheet_set(value):
     value = views._copy(value)
-    if type(value) is not dict or set(value) != _SHEET_FIELDS or value["schema"] != views.PREFIX + "sheet_set_v1":
+    if type(value) is not dict or set(value) != _SHEET_FIELDS or value["schema"] != views.PREFIX + "sheet_set":
         raise ValueError(views.PREFIX + "sheet_set_invalid")
     collection = value["collection"]
-    if collection.get("schema") != "blast_report_collection_v1" or collection["invocation"]["execution_program"] not in views.PROGRAMS:
+    if collection.get("schema") != "blast_report_collection" or collection["invocation"]["execution_program"] not in views.PROGRAMS:
         raise ValueError(views.PREFIX + "collection_invalid")
     if collection["invocation"] != value["prepared_inputs"]["invocation"]:
         raise ValueError(views.PREFIX + "invocation_conflict")
@@ -263,7 +263,7 @@ def _calculate(sheet_set, *, sequence_model, diagnostics=None):
                 _retain_correspondence=True)
             companion = result.pop("correspondence")
             for instance in companion["instances"]:
-                instance["legacy_pointer"] = f"/sequence/{index}/components" + instance["legacy_pointer"]
+                instance["source_pointer"] = f"/sequence/{index}/components" + instance["source_pointer"]
                 out["correspondence"]["instances"].append(instance)
         except (ValueError, TypeError, KeyError, IndexError, ArithmeticError) as error:
             result = None
@@ -305,7 +305,7 @@ def _calculate(sheet_set, *, sequence_model, diagnostics=None):
         component, common_sheet, common_components = alignment_component_artifacts(native, program=geometry,
             query_length=search["normalized"]["query"]["length"],
             reference_length=length, coordinate_convention="blast_json2" if search["normalized"]["format"] == "json2" else "directional")
-        out["correspondence"]["instances"].append({"legacy_pointer": f"/native_hsp_components/{len(out['native_hsp_components'])}/component",
+        out["correspondence"]["instances"].append({"source_pointer": f"/native_hsp_components/{len(out['native_hsp_components'])}/component",
             "axis_basis": "reported", "sheet": common_sheet, "components": common_components})
         out["native_hsp_components"].append(dict(row_key=key, component=component,
             status="unavailable" if native is None and state != "incompatible" else "incompatible" if geometry is None else "available"))
@@ -332,16 +332,16 @@ def validate_standard_blast_correspondence(calculations, *, admission=False):
         if database is not None:
             expected.update((f"/sequence/{si}/components/components/database_sheet/hits/{hi}", "qualified")
                 for hi in range(len(database["hits"])))
-    if {(item["legacy_pointer"], item["axis_basis"]) for item in companion["instances"]} != expected:
+    if {(item["source_pointer"], item["axis_basis"]) for item in companion["instances"]} != expected:
         raise ValueError(views.PREFIX + "correspondence_population_conflict")
     for instance in companion["instances"]:
-        legacy = _at(calculations, instance["legacy_pointer"])
-        database = (_at(calculations, instance["legacy_pointer"].rsplit("/hits/", 1)[0])
+        legacy = _at(calculations, instance["source_pointer"])
+        database = (_at(calculations, instance["source_pointer"].rsplit("/hits/", 1)[0])
             if instance["axis_basis"] == "qualified" else None)
         program = database["normalized_result"]["search"]["program"] if database is not None else None
         validate_blast_correspondence_instance(legacy, instance, program=program)
         if instance["axis_basis"] == "qualified":
-            sequence_pointer = instance["legacy_pointer"].split("/components/components/database_sheet/")[0]
+            sequence_pointer = instance["source_pointer"].split("/components/components/database_sheet/")[0]
             result = _at(calculations, sequence_pointer + "/components/components")
             rowkey = next(row["row_key"] for row in result["row_keys"]["hits"] if row["row_key"]["hit_ordinal"] == legacy["hit_index"])
             selected = next(row for row in result["selected_query_coverage"] if row["row_key"] == rowkey)
@@ -418,8 +418,8 @@ class _Builder:
             cell["component_pointer"] = pointer
             if not any(r["artifact_role"] == role and (r["pointer"] == pointer or pointer.startswith(r["pointer"] + "/")) for r in component_refs):
                 component_refs.append(dict(artifact_role=role, pointer=pointer))
-        row = dict(schema=views.PREFIX + "numeric_row_v1", family=family,
-            record_key=views.PREFIX + "row_" + views._hash(dict(version=views.PREFIX + "row_identity_v1", attempt=self.attempt, family=family, identity=identity)),
+        row = dict(schema=views.PREFIX + "numeric_row", family=family,
+            record_key=views.PREFIX + "row_" + views._hash(dict(version=views.PREFIX + "row_identity", attempt=self.attempt, family=family, identity=identity)),
             calculation_id=self.calculation_id, identity=deepcopy(identity), program=self.program, context=context,
             component_refs=component_refs, native_status=status, measurements=cells, booleans=flags)
         views._validate_row(row, self.calculation_id)

@@ -20,8 +20,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.readers.partner_p
 
 PUBLISHED = TableDeclaration(name="ensembl_published_outcomes",
     columns=("source_ref", "operation_key", "operation_ref", "arguments", "outcome"), key=("source_ref",))
-SELECTION_VERSION = "ensembl_discovery_selection_v1"
-FAILURE_WITNESS_VERSION = "ensembl_acquisition_failure_witness_v1"
+SELECTION_VERSION = "ensembl_discovery_selection"
+FAILURE_WITNESS_VERSION = "ensembl_acquisition_failure_witness"
 
 
 def _require(condition, code="ensembl_discovery_custody_conflict"):

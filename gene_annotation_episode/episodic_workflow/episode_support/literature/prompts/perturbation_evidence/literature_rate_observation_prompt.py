@@ -87,7 +87,7 @@ def is_grid_row(value):
 def grid_task_relevant(state):
     assignment=state.get('literature_assignment',{})
     if isinstance(assignment,Mapping) and assignment.get('requested_rate_grid_components'):return True
-    if state.get('literature_rate_grid_work',{}).get('version')=='literature_reported_curve_task_v1':return True
+    if state.get('literature_rate_grid_work',{}).get('version')=='literature_reported_curve_task':return True
     form=state.get('requested_form',{})
     if isinstance(form,Mapping) and any(isinstance(v,Mapping) and v.get('x-source')=='literature_rate_grid_cells'
             for v in form.get('properties',{}).values()):return True
@@ -100,9 +100,9 @@ def grid_state_view(state,lookup_results=()):
     """Detached presentation marker; original assignments/contracts are untouched."""
     from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.literature_numerical_return_presentation import reported_curve_lookup
     if any(reported_curve_lookup(r) for r in lookup_results) or any(is_grid_row(r) for r in rows_from_values(lookup_results)):
-        state={**state,'literature_rate_grid_work':{'version':'literature_reported_curve_task_v1'}}
+        state={**state,'literature_rate_grid_work':{'version':'literature_reported_curve_task'}}
     if any(isinstance(r,Mapping) and r.get('status')=='completed'
-            and r.get('result',{}).get('information_kind')=='operation_contract_information_v1'
+            and r.get('result',{}).get('information_kind')=='operation_contract_information'
             and r['result'].get('operation')=='literature.rate.observations.populate' for r in lookup_results):
         state={**state,'literature_rate_grid_operation_lookup':True}
     return state

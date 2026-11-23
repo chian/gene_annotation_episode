@@ -163,7 +163,7 @@ class PublicClients:
             raise ValueError('explicit_observed_response_byte_limit_required')
         script = _skill_script(self.skill_root, skill, filename)
         observer_policy = (None if max_bytes is None else {
-            'version': 'bounded_skill_http_entity_capture_v1',
+            'version': 'bounded_skill_http_entity_capture',
             'adapter_module': __name__,
             'response_byte_limit': max_bytes, 'byte_basis': 'requests_decoded_entity_bytes',
             'stream': True, 'automatic_redirects': False, 'redirect_preparation': False})
@@ -629,10 +629,10 @@ finally:
                           {"db": "taxonomy", "id": taxon_id, "retmode": "xml"}, "application/xml")
 
 def parse_uniprot(content: bytes) -> list[dict[str, Any]]:
-    """Legacy keys from the shared native parser; original request is unknown."""
-    from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_and_context_sources.perturbation_evidence.uniprot_native import legacy_uniprot_records, parse_uniprot_native
+    """Protein record keys from the shared native parser; original request is unknown."""
+    from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_and_context_sources.perturbation_evidence.uniprot_native import uniprot_source_records, parse_uniprot_native
     parsed = parse_uniprot_native(content, request=None, response_headers=None)
-    return legacy_uniprot_records(parsed, content)
+    return uniprot_source_records(parsed, content)
 
 
 def parse_genbank(content: bytes) -> list[dict[str, Any]]:
@@ -844,7 +844,7 @@ def article_sections(content: bytes) -> list[dict[str, Any]]:
 
 
 def uniprot_pagination(snapshot: SourceSnapshot) -> dict[str, Any]:
-    """Compatibility fields from the same native/header interpretation."""
+    """Pagination fields from the same native/header interpretation."""
     from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_and_context_sources.perturbation_evidence.uniprot_native import parse_uniprot_native
     request = None
     if "query" in snapshot.request:

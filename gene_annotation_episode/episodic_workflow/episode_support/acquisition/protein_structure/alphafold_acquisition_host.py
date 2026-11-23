@@ -19,8 +19,8 @@ PUBLISHED = TableDeclaration(name='alphafold_published_outcomes',
     key=('tool', 'operation_ref'))
 PREDICTION_TOOL = 'public.alphafold.prediction'
 FILE_TOOL = 'public.alphafold.file'
-SELECTION_VERSION = 'alphafold_file_selection_v1'
-FILE_EVIDENCE_VERSION = 'alphafold_file_receipt_evidence_v1'
+SELECTION_VERSION = 'alphafold_file_selection'
+FILE_EVIDENCE_VERSION = 'alphafold_file_receipt_evidence'
 
 
 def _require(condition, code='alphafold_file_custody_conflict'):
@@ -251,7 +251,7 @@ def _file_receipt_from_controls(arguments, association, *, source_ref, file, uri
             or transport['request'].get('url') != association['advertised_url']):
         return af.failed_alphafold_receipt('alphafold_request_conflict', source_ref=source_ref)
     response, issues = af._response_metadata(transport, file['byte_length'], arguments['max_bytes'])
-    result = af.validate_alphafold_file_result(dict(version='alphafold_file_result_v1',
+    result = af.validate_alphafold_file_result(dict(version='alphafold_file_result',
         source_ref=source_ref, file=file, requested=arguments, response=response,
         association=association, observed_identity=dict(native_model_id=None, state='not_parsed'), issues=issues))
     return af.alphafold_file_receipt(result)

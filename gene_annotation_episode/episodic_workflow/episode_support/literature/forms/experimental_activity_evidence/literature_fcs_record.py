@@ -84,7 +84,7 @@ the converter (the sheet side) turns it into a degree.
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence import literature_spr_record
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import SUPPORTS
 
-VERSION = 'a105_fcs_record_v1'
+VERSION = 'a105_fcs_record'
 EXPERIMENT_TYPE = 'fcs'
 QUANTITIES = ('kd', 'kd_spread', 'labelled_concentration', 'free_diffusion_time', 'free_diffusion_time_spread', 'bound_diffusion_time', 'free_diffusion_coefficient', 'bound_diffusion_coefficient', 'fraction_bound_maximum', 'particle_number', 'detection_volume', 'structure_parameter', 'mass_ratio', 'brightness', 'laser_power', 'measurement_time', 'measurement_repeat_count', 'titration_point_count', 'incubation_time', 'temperature', 'replicate_count')
 PREPARATION_KEYS = ('titrant_preparation_ref', 'fixed_partner_preparation_ref', 'dataset_ref')

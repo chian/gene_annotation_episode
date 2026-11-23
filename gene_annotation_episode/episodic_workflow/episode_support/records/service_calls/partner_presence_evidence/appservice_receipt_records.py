@@ -18,7 +18,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.partner_p
 from gene_annotation_episode.episodic_workflow.episode_support.forms.partner_presence_evidence.execution_contracts import digest
 
 RECEIPT_PROVIDER = 'episode.bvbrc_appservice_receipt'
-VERSION = 'bvbrc_appservice_retained_receipt_v1'
+VERSION = 'bvbrc_appservice_retained_receipt'
 
 
 def _common(contract, value):

@@ -105,7 +105,7 @@ def _require(condition, path):
 
 
 def _layout_uncertain(projection, row):
-    if projection["format"] != "genome_comparison_tsv_v1":
+    if projection["format"] != "genome_comparison_tsv":
         return False
     ordinal = row.get("reference_row_ordinal", row.get("row_ordinal"))
     ref = projection["reference_rows"][ordinal]
@@ -442,7 +442,7 @@ def build_native_sheet(native_results: list[dict], *, primary_source_ref: str,
                  "legacy_subject_endpoint_difference", "legacy_zero_fallback_possible",
                  "native_category_not_orthology_probability", "reported_rows_not_input_population"):
         diagnostics.append(_diagnostic(code))
-    sheet = {"version": "bvbrc_proteome_native_sheet_proposal_v1", "scientific_mode": "proteome_comparison",
+    sheet = {"version": "bvbrc_proteome_native_sheet_proposal", "scientific_mode": "proteome_comparison",
              "primary_source_ref": primary_source_ref, "native_results": deepcopy(native_results),
              "input_index": deepcopy(input_index), "inventories": deepcopy(inventories),
              "feature_snapshots": deepcopy(feature_snapshots), "genome_snapshots": deepcopy(genome_snapshots),

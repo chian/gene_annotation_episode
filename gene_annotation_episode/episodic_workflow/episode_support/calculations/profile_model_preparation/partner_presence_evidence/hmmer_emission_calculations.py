@@ -24,7 +24,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.calculations.prof
 from gene_annotation_episode.episodic_workflow.episode_support.readers.profile_model_preparation.hmmer_emission_data import SCHEMA as SHEET_SCHEMA, MODES, _name
 
 
-SCHEMA = "hmmer_emission_components_v1"
+SCHEMA = "hmmer_emission_components"
 STATES = frozenset({"present", "missing", "incomplete", "incompatible", "nonfinite", "failed"})
 ISSUE_CODES = frozenset({"sheet_invalid", "parameters_invalid", "occurrence_invalid",
     "record_invalid", "association_invalid", "alphabet_incompatible", "model_invalid",
@@ -181,7 +181,7 @@ class _Calculator:
         model_occurrences = [o for o in occurrences if o.get("direction") == "input" and o.get("role") == "models"]
         self.models_valid = (len(model_occurrences) == 1 and model_occurrences[0] == model_occurrence
             and model_occurrence.get("occurrence_id") not in self.invalid_occurrences
-            and extraction.get("schema") == "hmmer_model_extraction_v1"
+            and extraction.get("schema") == "hmmer_model_extraction"
             and not any(i.get("code") == "model_extraction_mismatch" for i in self.sheet["issues"]))
         for ordinal, model in enumerate(self.models):
             loc = model.get("locator", {})

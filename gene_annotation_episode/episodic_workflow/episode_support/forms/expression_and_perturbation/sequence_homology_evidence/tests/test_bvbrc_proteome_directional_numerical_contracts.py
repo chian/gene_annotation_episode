@@ -177,7 +177,7 @@ def test_graph_does_not_depend_on_alphabet_or_ratio_precision():
 def test_complete_original_native_scoring_sheet_validates_with_all_occurrences(name):
     sheet = native_sheet(name)
     components = computed(sheet)
-    saved = {'version':'bvbrc_proteome_directional_scoring_sheet_v1','observed':sheet,'calculated':components}
+    saved = {'version':'bvbrc_proteome_directional_scoring_sheet','observed':sheet,'calculated':components}
     assert validate_directional_numerical('DirectionalScoringSheet',saved) == saved
     assert components['reports'][0]['displayed_query_count']['value'] == len(sheet['reports'][0]['query_rows'])
     if name == '2221':

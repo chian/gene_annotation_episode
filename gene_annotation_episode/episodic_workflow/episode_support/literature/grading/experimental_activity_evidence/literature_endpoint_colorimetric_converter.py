@@ -120,7 +120,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_endpoint_conversion_direction import select_endpoint_effect
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import SUPPORTS, apply_support
 
-VERSION = 'a105_endpoint_colorimetric_converted_v1'
+VERSION = 'a105_endpoint_colorimetric_converted'
 CRITERIA_MAP = {'background_alternatives': ('spontaneous_reaction_control', 'enzyme_borne_signal'),
                 'calibration_applicability': ('standard_curve_in_buffer', 'standard_curve_range', 'standard_curve_points'),
                 'matrix_interference': ('reagent_interference_checked',), 'attribution_supported': ('enzyme_dependence',), 'product_identity': ('product_identity',),

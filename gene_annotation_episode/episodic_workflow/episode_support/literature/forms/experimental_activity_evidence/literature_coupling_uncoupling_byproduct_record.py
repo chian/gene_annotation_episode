@@ -41,7 +41,7 @@ about how well its quote supports it: 'direct' (the quote itself states the valu
 it to 'direct'; the default is only for forms built by tests that do not go through the extraction (the extraction always passes the model's answer).
 """
 
-VERSION = 'a105_coupling_uncoupling_byproduct_record_v1'
+VERSION = 'a105_coupling_uncoupling_byproduct_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'coupling_uncoupling_byproduct'
 QUANTITIES = ('productive_fraction', 'productive_fraction_spread', 'uncoupled_fraction', 'uncoupled_fraction_spread', 'byproduct_per_cofactor',

@@ -10,7 +10,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.readers.sequence_
 
 
 def operation(program="dustmasker", format="interval", mode="mask"):
-    return {"version": "sequence_masking_operation_v1", "program": program, "mode": mode,
+    return {"version": "sequence_masking_operation", "program": program, "mode": mode,
         "engine_version": None, "input_format": "fasta", "output_format": format,
         "masking_style": "not_applicable" if mode == "create_counts" else "interval" if format == "interval" else "soft",
         "parse_seqids": False, "requested_parameters": {k: None for k in PARAMETERS[(program, mode)]}}

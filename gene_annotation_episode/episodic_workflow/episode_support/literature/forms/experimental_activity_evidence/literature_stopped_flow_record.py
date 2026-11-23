@@ -51,7 +51,7 @@ converter does. The constructors take ``support`` and default it to 'direct'; th
 through the extraction (the extraction always passes the model's answer).
 """
 
-VERSION = 'a105_stopped_flow_record_v1'
+VERSION = 'a105_stopped_flow_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'stopped_flow'
 QUANTITIES = ('catalytic_efficiency', 'catalytic_efficiency_spread', 'steady_state_turnover', 'steady_state_turnover_spread', 'single_turnover_rate', 'single_turnover_rate_spread',

@@ -14,7 +14,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.calcul
     COMPONENTS, populate_stoichiometric_balance_components)
 
 PROVIDER = 'literature.a105.stoichiometric_balance_population'
-VERSION = 'literature_stoichiometric_balance_record_v1'
+VERSION = 'literature_stoichiometric_balance_record'
 NAMESPACE = 'literature_stoichiometric_balance_cells'
 REQUESTED = 'requested_stoichiometric_balance_components'
 

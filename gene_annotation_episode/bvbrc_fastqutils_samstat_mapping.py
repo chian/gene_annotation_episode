@@ -77,7 +77,7 @@ def calculate_samstat_report_mapping(sheet: dict, *, job: dict, parameters_sha25
     """CalculationBinding -> exactly two ordinary, inspectable Components."""
     validate_sheet(sheet)
     job = validate_contract('CalculationBinding', job)
-    if (job['method'] != 'samstat_report_mapping_v1' or type(parameters_sha256) is not str
+    if (job['method'] != 'samstat_report_mapping' or type(parameters_sha256) is not str
             or not re.fullmatch('[a-f0-9]{64}', parameters_sha256)
             or job['quality_thresholds'] or any(job[k] is not None for k in
                 ('comparison_kind', 'read_key_rule', 'lineage_ref', 'lineage_basis'))):

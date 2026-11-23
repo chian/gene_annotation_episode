@@ -12,7 +12,7 @@ def table():
     def row(ligand, expression, index):
         return {'subject': 'GeneX', 'state': 'apo', 'experiment': 'competition', 'ligand': ligand,
                 'expression': expression, 'locator': {'row_index': index, 'column': 'IC50'}}
-    return json.dumps({'version': 'binding_parameter_table_v1', 'table_id': 'table 1', 'parameter_kind': 'ic50',
+    return json.dumps({'version': 'binding_parameter_table', 'table_id': 'table 1', 'parameter_kind': 'ic50',
                        'unit': 'nM', 'uncertainty_basis': 'fit_to_averaged_curve', 'minimum_experiment_count': 3,
                        'rows': [row('ligand A', '40 ± 4', 0), row('ligand B', '120', 1)]})
 

@@ -397,7 +397,7 @@ def validate_genome_alignment_inputs(value):
     _shape(value, ('schema_version', 'original_task', 'genome_occurrences', 'invocation', 'files',
         'member_bindings', 'contig_bindings', 'feature_bindings', 'original_maps',
         'xmfa_source_inputs', 'genome_census_state', 'requirements', 'diagnostics'))
-    _require(value['schema_version'] == 'bvbrc_genome_alignment_inputs_v1')
+    _require(value['schema_version'] == 'bvbrc_genome_alignment_inputs')
     genome_ids = _task(value['original_task'])
     requirements = _reports(value)
     for field in ('genome_occurrences', 'files', 'member_bindings', 'contig_bindings',
@@ -450,7 +450,7 @@ def validate_genome_alignment_associations(value):
     """Validate exact artifact/member/interval associations without guessing joins."""
     _shape(value, ('schema_version', 'original_task', 'artifacts', 'native_member_joins',
                    'bbcols_interval_joins', 'duplicate_representations', 'requirements', 'diagnostics'))
-    _require(value['schema_version'] == 'bvbrc_genome_alignment_associations_v1')
+    _require(value['schema_version'] == 'bvbrc_genome_alignment_associations')
     _task(value['original_task'])
     requirements = _reports(value)
     for key in ('artifacts', 'native_member_joins', 'bbcols_interval_joins', 'duplicate_representations'):

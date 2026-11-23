@@ -28,7 +28,7 @@ def prose():
     return {'representation_id': 'p1', 'kind': 'jats_percent', 'selection': {'source_ref': TEXT, 'section_id': 's1', 'paragraph_index': 0, 'expected_subject': 'SyntheticProtein', 'variant': 'V', 'reference_literal': 'WT levels'}, 'comparison_relation': {'value': 'supported', 'witnesses': [image('0.60')]}, 'physical_measurement': unknown(), 'reference_measurement': unknown()}
 
 def request(rows=None):
-    return {'version': 'relative_signal_source_selection_v2', 'source_ref': SOURCE, 'comparison': {field: unknown() for field in FIELDS}, 'representations': [visual()] if rows is None else rows}
+    return {'version': 'relative_signal_source_selection', 'source_ref': SOURCE, 'comparison': {field: unknown() for field in FIELDS}, 'representations': [visual()] if rows is None else rows}
 
 def view_callback(*, view=VIEW, fmt='PNG', frame=0, rgb=False):
     im = Image.new('L', (200, 100), 255)
@@ -49,7 +49,7 @@ def view_callback(*, view=VIEW, fmt='PNG', frame=0, rgb=False):
         selected.save(output, format='PNG')
         display = output.getvalue()
         display_mode = selected.mode
-    m = {'id': view, 'record_type': 'image_view', 'origin': 'tool', 'representation': 'selected_native_image_frame_v1', 'source_ref': 'source_' + ('e' if view == VIEW else 'f') * 24, 'input_source_ref': SOURCE, 'original_artifact_ref': 'artifact_' + hashlib.sha256(original).hexdigest()[:24], 'image_artifact_ref': 'artifact_' + hashlib.sha256(display).hexdigest()[:24], 'native_format': fmt, 'native_initial_mode': initial, 'selected_mode': selected_mode, 'display_mode': display_mode, 'frame': frame, 'frame_count': count, 'width': 200, 'height': 100, 'colour_conversion': 'rgb' if rgb else 'preserve', 'software': 'Pillow', 'software_version': PILLOW_VERSION, 'geometric_transform': 'identity', 'contrast_transform': 'identity', 'orientation': 'stored_pixel_axis_no_exif_rotation'}
+    m = {'id': view, 'record_type': 'image_view', 'origin': 'tool', 'representation': 'selected_native_image_frame', 'source_ref': 'source_' + ('e' if view == VIEW else 'f') * 24, 'input_source_ref': SOURCE, 'original_artifact_ref': 'artifact_' + hashlib.sha256(original).hexdigest()[:24], 'image_artifact_ref': 'artifact_' + hashlib.sha256(display).hexdigest()[:24], 'native_format': fmt, 'native_initial_mode': initial, 'selected_mode': selected_mode, 'display_mode': display_mode, 'frame': frame, 'frame_count': count, 'width': 200, 'height': 100, 'colour_conversion': 'rgb' if rgb else 'preserve', 'software': 'Pillow', 'software_version': PILLOW_VERSION, 'geometric_transform': 'identity', 'contrast_transform': 'identity', 'orientation': 'stored_pixel_axis_no_exif_rotation'}
     return {'metadata': m, 'original_bytes': original, 'display_bytes': display, 'own_action_receipt': {'run_id': 'synthetic_run', 'episode_id': 'synthetic_episode', 'decision_index': 0, 'operation_ref': 'operation_' + 'a' * 24, 'result_sha256': 'a' * 64, 'view_ref': view}}
 
 def callbacks(*, xml=None, views=None, text=b'\xce\xbc exact words'):
@@ -194,8 +194,8 @@ def test_nomination_identity_includes_regions_even_with_equal_literals():
     readings = out['representations'][0]['readings']
     assert [r['ratio'] for r in readings] == [0.6, 0.6]
     assert readings[0]['source_reading_key'] != readings[1]['source_reading_key']
-    from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence.literature_ratio_source_calculations import populate_relative_signal_v2
-    sheet = populate_relative_signal_v2(out)
+    from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence.literature_ratio_source_calculations import populate_relative_signal_from_source
+    sheet = populate_relative_signal_from_source(out)
     assert sheet['cells']['reported_ratio']['value'] is None
     assert not sheet['selected_roster_resolved'] and (not sheet['point_candidate_set_complete'])
     row['selection']['candidates'][1] = deepcopy(row['selection']['candidates'][0])

@@ -114,7 +114,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_reaction_coupling_direction import select_coupling_effect
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_coupling_oxygen_product_converted_v1'
+VERSION = 'a105_coupling_oxygen_product_converted'
 CRITERIA_MAP = {'calibration_applicability': ('electrode_calibration', 'product_calibration'), 'background_alternatives': ('oxygen_drift', 'no_enzyme_oxygen_control'),
                 'attribution_supported': ('enzyme_dependence',), 'reporter_specificity': ('substrate_independent_oxygen', 'peroxide_accounting'), 'product_identity': ('product_identity',),
                 'stoichiometry': ('stoichiometry',), 'matched_windows': ('same_vessel', 'window_overlap'), 'assertion_relevance': ('native_reaction',), 'condition_scope': ('purified_enzyme',),

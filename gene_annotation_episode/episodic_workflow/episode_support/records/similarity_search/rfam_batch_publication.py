@@ -142,8 +142,8 @@ def _optional_metadata(tools, reference, scope):
 def _metadata_diagnostic(parsed, failure):
     if failure is None:
         return parsed
-    shared = parsed["version"] == "rfam_batch_parse_result_v2"
-    if parsed["version"] == "rfam_batch_tblout_parse_result_v1" or shared and parsed["representation"] == "tblout":
+    shared = parsed["version"] == "rfam_batch_parse_result"
+    if parsed["version"] == "rfam_batch_tblout_parse_result" or shared and parsed["representation"] == "tblout":
         parsed["issues"].append({"code": "rfam_batch_model_metadata_invalid", "severity": "error",
             "field": "model_metadata_ref" if failure["field"] == "model_metadata_ref" else "supplied_model_metadata",
             "native_query_name": None, "source_line": None})
@@ -183,7 +183,7 @@ def _pointer(value, pointer):
 
 
 def _unavailable(code, *, format="unrecognized", status="unsupported"):
-    return {"version": "rfam_batch_parse_result_v1", "status": status,
+    return {"version": "rfam_batch_unavailable_parse_result", "status": status,
         "format": format, "sheet": None, "issues": [make_issue(code)]}
 
 
@@ -196,7 +196,7 @@ def _json_parse(snapshot, identity, capture, metadata):
     # document identity conflicts. Resolve each exact validated row pointer.
     native = json.loads(snapshot.content)
     alignments = []
-    shared = initial["version"] == "rfam_batch_parse_result_v2"
+    shared = initial["version"] == "rfam_batch_parse_result"
     for row in initial["sheet"]["hits"]:
         details = row["source_details"] if shared else row
         strand = row["strand"] if shared else row["native"]["strand"]
@@ -214,7 +214,7 @@ def _json_parse(snapshot, identity, capture, metadata):
             native_end=row["sequence_to"] if shared else row["native"]["end"], native_strand=strand))
     return populate_rfam_batch_json_sheet(snapshot.content,
         input_identity=identity, capture=capture, model_metadata=metadata,
-        alignment_components={"version": "rfam_alignment_components_bundle_v1",
+        alignment_components={"version": "rfam_alignment_components_bundle",
             "artifact_ref": capture["artifact_ref"], "source_sha256": capture["source_sha256"],
             "rows": alignments})
 
@@ -247,7 +247,7 @@ def _report_projection_issue(issue, sheet=None):
             or any(issue[key] is not None and not is_text(issue[key]) for key in ("field", "native_query_name"))
             or issue["source_line"] is not None and not is_int(issue["source_line"], minimum=1)):
         raise ContractError(code)
-    shared = sheet is not None and sheet.get("schema") == "infernal_search_sheet_v2"
+    shared = sheet is not None and sheet.get("schema") == "infernal_search_sheet"
     hits = []
     for hit in [] if sheet is None else sheet["hits"]:
         details = hit["source_details"] if shared else hit
@@ -288,7 +288,7 @@ def publish_rfam_batch_result(service, *, request, selector, snapshot, scope,
     if evidence_kind not in {"native_response", "official_documentation_example", "synthetic_fixture"}:
         raise ContractError("rfam_capture_invalid")
     batch = request["mode"] == "sequence_batch"
-    report = selector["version"] == "rfam_batch_result_selector_v3"
+    report = selector["version"] == "rfam_batch_report_result_selector"
     arguments = {"request": request, "selector": selector, "handle": prepared["native_handle"],
         "submission": _snapshot_identity(submission_snapshot), "response": _snapshot_identity(snapshot)}
 
@@ -298,7 +298,7 @@ def publish_rfam_batch_result(service, *, request, selector, snapshot, scope,
             parent_source_refs=[original["id"]])
         metadata, metadata_source, metadata_failure = _optional_metadata(
             tools, selector["model_metadata_ref"], scope)
-        identity = {"version": "rfam_batch_file_input_v1" if batch else "rfam_batch_input_identity_v1",
+        identity = {"version": "rfam_batch_file_input" if batch else "rfam_batch_input_identity",
             **deepcopy(snapshot.request["input_operand"]),
             "expected_job_id": prepared["native_handle"]["job_id"],
             "submission_source_ref": original["id"]}
@@ -406,14 +406,13 @@ def publish_rfam_batch_result(service, *, request, selector, snapshot, scope,
             "artifact_ref": source["artifact_ref"], "format": parsed["format"],
             "sheet_ref": sheet_ref, "calculation_ref": calculation_ref,
             "projection": projection, "projection_errors": errors}
-        manifest = {"version": "rfam_batch_retained_grading_v1", "request": request,
-            "selector": selector, **result, "input_identity": identity, "parse_ref": parse_ref}
-        if parsed["version"] == "rfam_batch_parse_result_v2":
-            manifest.update(version="rfam_batch_retained_grading_v2", parse_digest=rfam_digest(parsed),
-                sheet_schema=None if sheet is None else sheet["schema"],
-                sheet_digest=None if sheet is None else rfam_digest(sheet),
-                calculation_schema=None if calculation is None else calculation["schema"],
-                calculation_digest=None if calculation is None else rfam_digest(calculation))
+        manifest = {"version": "rfam_batch_retained_grading", "request": request,
+            "selector": selector, **result, "input_identity": identity, "parse_ref": parse_ref,
+            "parse_digest": rfam_digest(parsed),
+            "sheet_schema": None if sheet is None else sheet["schema"],
+            "sheet_digest": None if sheet is None else rfam_digest(sheet),
+            "calculation_schema": None if calculation is None else calculation["schema"],
+            "calculation_digest": None if calculation is None else rfam_digest(calculation)}
         parents = [original["id"], source["id"]]
         if metadata_source is not None:
             parents.append(metadata_source)

@@ -19,7 +19,7 @@ def result():
     source = {"content": {"source_ref": "fixture", "artifact_field": "artifact_ref", "artifact_ref": path.name,
                           "sha256": hashlib.sha256(data).hexdigest(), "byte_count": len(data)},
               "body_complete": True, "object_complete": "yes"}
-    return parse_genome_comparison_directional_report(data, source=source, declared_format="ncbi_blastall_blastp_pairwise_text_v1", report_key="saved-report")
+    return parse_genome_comparison_directional_report(data, source=source, declared_format="ncbi_blastall_blastp_pairwise_text", report_key="saved-report")
 
 
 def test_schema_is_closed_data_and_source_contract_is_exact():
@@ -79,7 +79,7 @@ def test_contradictory_source_preserved_but_removing_issue_is_invalid():
     source = {"content": {"source_ref": "constructed-contradiction", "artifact_field": "artifact_ref", "artifact_ref": "constructed-bytes",
                           "sha256": hashlib.sha256(data).hexdigest(), "byte_count": len(data)},
               "body_complete": True, "object_complete": "yes"}
-    result = parse_genome_comparison_directional_report(data, source=source, declared_format="ncbi_blastall_blastp_pairwise_text_v1", report_key="inconsistent-observation")
+    result = parse_genome_comparison_directional_report(data, source=source, declared_format="ncbi_blastall_blastp_pairwise_text", report_key="inconsistent-observation")
     target = result["queries"][1]["subjects"][0]["hsps"][0]
     assert target["identity_count"]["value"] == 415 and target["identity_count"]["state"] == "present"
     assert result["parse_state"] == "partial"
@@ -97,7 +97,7 @@ def test_all_six_geometry_issues_are_required_at_saved_boundary():
     source = {"content": {"source_ref": "constructed-geometry", "artifact_field": "artifact_ref", "artifact_ref": "constructed-bytes",
                           "sha256": hashlib.sha256(data).hexdigest(), "byte_count": len(data)},
               "body_complete": True, "object_complete": "yes"}
-    result = parse_genome_comparison_directional_report(data, source=source, declared_format="ncbi_blastall_blastp_pairwise_text_v1", report_key="geometry")
+    result = parse_genome_comparison_directional_report(data, source=source, declared_format="ncbi_blastall_blastp_pairwise_text", report_key="geometry")
     target = result["queries"][1]["subjects"][0]["hsps"][0]
     issues = target["issues"] + [i for b in target["traceback_blocks"] for i in b["issues"]]
     expected = {"count_out_of_bounds", "alignment_denominator_mismatch", "coordinate_symbol_count_mismatch", "coordinate_out_of_bounds", "nonprotein_coordinate_order", "traceback_width_mismatch"}

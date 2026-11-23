@@ -16,10 +16,10 @@ from jsonschema import Draft202012Validator
 ROLES = ('signal1', 'background1', 'signal2', 'background2')
 CATEGORIES = ('condition1', 'condition2', 'common')
 KINDS = ('summary', 'native_peak_rows', 'native_differential_rows', 'interval_components', 'derived_regions')
-SHEET_FORMAT = 'atac_differential_native_sheet_v1'
-TABLE_FORMAT = 'atac_bedgraph_rows_jsonl_v1'
-PLAN_VERSION = 'atac_differential_worker_plan_v1'
-RESULT_VERSION = 'atac_differential_worker_result_v1'
+SHEET_FORMAT = 'atac_differential_native_sheet'
+TABLE_FORMAT = 'atac_bedgraph_rows_jsonl'
+PLAN_VERSION = 'atac_differential_worker_plan'
+RESULT_VERSION = 'atac_differential_worker_result'
 ISSUE_CODES = (
     'artifact_missing', 'captured_bytes_partial', 'identity_mismatch', 'identity_unverified',
     'producer_failed', 'writer_not_closed', 'unsupported_format', 'unsupported_mode',
@@ -190,23 +190,23 @@ def _definitions():
         parsed_sha256=nullable(SHA), parsed_byte_count=INT, physical_line_count=INT, data_row_count=nullable(INT),
         readable_data_row_count=INT, malformed_data_row_count=INT, headers=arr(ref('HeaderRecord')),
         invalid_records=arr(ref('InvalidRecord')), issues=arr(ref('AtacIssue')))
-    d['ParsedAtacTrack'] = obj(**envelope, version={'const': 'atac_bedgraph_parsed_v1'},
+    d['ParsedAtacTrack'] = obj(**envelope, version={'const': 'atac_bedgraph_parsed'},
         rows={'anyOf': [arr(ref('BedGraphRow')), ref('AtacRetainedTrackTable')]}, binding=ref('AtacTrackBinding'),
         coordinate_convention={'const': 'zero_based_half_open'}, numeric_storage={'const': 'native_decimal_lexeme_plus_binary64_parse'},
         native_writer_precision=enum('fixed_5_decimal_places', 'supplied_lexical', 'unknown'), row_order={'const': 'native_file_order'},
         ordered_row_index=nullable(arr(INT)), chromosome_extents=arr(ref('TrackChromosomeExtent')), overlap_groups=arr(arr(INT)),
         geometry_inspection=enum('complete', 'partial', 'unknown'), unlocated_invalid_row_count=INT)
-    d['ParsedMacs2PeaksXls'] = obj(**envelope, version={'const': 'macs2_peaks_xls_parsed_v1'}, rows=arr(ref('XlsRow')),
+    d['ParsedMacs2PeaksXls'] = obj(**envelope, version={'const': 'macs2_peaks_xls_parsed'}, rows=arr(ref('XlsRow')),
         callpeak_run_key=ID, reported_metadata=obj(**metadata), reported_numbers=obj(**{k: ref('ReportedNumber') for k in number_fields}),
         coordinate_convention={'const': 'one_based_inclusive'}, peak_geometry=arr(ref('PeakGeometry')))
-    for name, version, row in (('ParsedMacs2NarrowPeak', 'macs2_narrowpeak_parsed_v1', 'NarrowPeakRow'),
-                             ('ParsedMacs2Summits', 'macs2_summits_parsed_v1', 'SummitRow')):
+    for name, version, row in (('ParsedMacs2NarrowPeak', 'macs2_narrowpeak_parsed', 'NarrowPeakRow'),
+                             ('ParsedMacs2Summits', 'macs2_summits_parsed', 'SummitRow')):
         d[name] = obj(**envelope, version={'const': version}, rows=arr(ref(row)), callpeak_run_key=ID,
             coordinate_convention={'const': 'zero_based_half_open'}, score_basis=enum('minus_log10_qvalue', 'minus_log10_pvalue', 'unknown'))
-    d['ParsedMacs2Bdgdiff'] = obj(**envelope, version={'const': 'macs2_bdgdiff_parsed_v1'}, rows=arr(ref('BdgdiffRow')),
+    d['ParsedMacs2Bdgdiff'] = obj(**envelope, version={'const': 'macs2_bdgdiff_parsed'}, rows=arr(ref('BdgdiffRow')),
         comparison_key=ID, category=enum(*CATEGORIES), coordinate_convention={'const': 'zero_based_half_open_as_reported'},
         coordinate_qualification=COORDINATE_QUALIFICATION, score_precision=enum('native_float32_then_6_significant_decimal_digits', 'unknown'))
-    d['ParsedAtacBamReference'] = obj(**envelope, version={'const': 'atac_bam_reference_parsed_v1'}, rows=arr(ref('AtacBamReferenceRow')),
+    d['ParsedAtacBamReference'] = obj(**envelope, version={'const': 'atac_bam_reference_parsed'}, rows=arr(ref('AtacBamReferenceRow')),
         callpeak_run_key=ID, input_ordinal=INT, input_artifact_ref=ID)
     d['DepthCount'] = obj(condition_id=ID, sample_ids=arr(ID), callpeak_run_key=nullable(ID), count=nullable(INT), count_lexeme=nullable(TEXT),
         count_unit={'const': 'postfilter_single_end_tags'}, count_population={'const': 'macs2_loaded_treatment_tags_after_duplicate_filtering'},
@@ -233,7 +233,7 @@ def _definitions():
         minimum_length_bp={'type': 'integer', 'minimum': 1}, maximum_gap_bp=INT)
     d['Window'] = obj(offset=INT, limit={'type': 'integer', 'minimum': 1})
     d['SavedSheetBundle'] = obj(sheet=ref('NativeFileIdentity'), tables=arr(obj(track_key=ID, file=ref('NativeFileIdentity'))))
-    d['ResultSelector'] = obj(version={'const': 'atac_differential_result_selector_v1'}, mode=enum('native_result', 'saved_sheet_recalculation'),
+    d['ResultSelector'] = obj(version={'const': 'atac_differential_result_selector'}, mode=enum('native_result', 'saved_sheet_recalculation'),
         comparison_key=ID, intervals=arr(ref('Interval')), parameters=ref('Parameters'),
         projection=obj(kind=enum(*KINDS), row_window=nullable(ref('Window')), run_keys=arr(ID, uniqueItems=True), categories=arr(enum(*CATEGORIES), uniqueItems=True)),
         saved_sheet_bundle=nullable(ref('SavedSheetBundle')))
@@ -277,7 +277,7 @@ def _definitions():
     d['NativePeakRow'] = {'oneOf': [obj(callpeak_run_key=ID, representation={'const': kind}, source=ref('AtacArtifact'),
         row=ref(row), geometry=ref('PeakGeometry') if kind == 'xls' else NULL, peak_link=nullable(ref('PeakLink')))
         for kind, row in (('xls', 'XlsRow'), ('narrowpeak', 'NarrowPeakRow'), ('summit', 'SummitRow'))]}
-    d['NativePeakComponents'] = obj(version={'const': 'macs2_peak_components_v1'},
+    d['NativePeakComponents'] = obj(version={'const': 'macs2_peak_components'},
         reference=ref('AtacReference'), callpeak_bindings=arr(ref('AtacCallpeakBinding')),
         peaks_xls=arr(ref('ParsedMacs2PeaksXls')), narrowpeaks=arr(ref('ParsedMacs2NarrowPeak')),
         summits=arr(ref('ParsedMacs2Summits')), peak_links=arr(ref('PeakLink')),
@@ -287,7 +287,7 @@ def _definitions():
         row_extent=EXTENT, rows=arr(ref('NativePeakRow')))
     d['NativeDifferentialRow'] = obj(category=enum(*CATEGORIES), source=ref('AtacArtifact'), row=ref('BdgdiffRow'), coordinate_qualification=COORDINATE_QUALIFICATION)
     d['Failure'] = _native_definitions(d, 'Failure')
-    projection = dict(version={'const': 'atac_differential_projection_v1'}, comparison_key=ID, reference_id=ID,
+    projection = dict(version={'const': 'atac_differential_projection'}, comparison_key=ID, reference_id=ID,
         condition_ids=arr(ID, minItems=2, maxItems=2), selected_intervals=arr(ref('Interval')), parameters=ref('Parameters'),
         total_rows=nullable(INT), row_extent=EXTENT, qualifications=arr(ref('AtacIssue')), failures=arr(ref('Failure')))
     d['RequestedProjection'] = {'oneOf': [obj(**projection, kind={'const': kind}, row_window=NULL if kind == 'summary' else ref('Window'),
@@ -296,17 +296,17 @@ def _definitions():
                          ('interval_components', 'Component'), ('derived_regions', 'Region'))]}
     d['Projection'] = ref('RequestedProjection')
     d['StreamState'] = obj(track_key=ID, extent=enum('complete', 'partial', 'missing', 'failed'), exhausted=BOOL)
-    d['Calculations'] = obj(version={'const': 'atac_differential_calculations_v1'}, comparison_key=ID, reference_id=ID,
+    d['Calculations'] = obj(version={'const': 'atac_differential_calculations'}, comparison_key=ID, reference_id=ID,
         condition_ids=arr(ID, minItems=2, maxItems=2), selected_intervals=arr(ref('Interval')), parameters=ref('Parameters'),
         depth_operands=ref('DepthOperands'), eligibility=ref('Eligibility'), issues=arr(ref('AtacIssue')), tables=arr(ref('CalculatedTable')),
         summary=ref('Summary'), stream_states=arr(ref('StreamState')), failures=arr(ref('Failure')), uncertainty=obj(kind={'const': 'not_estimated'}, value=NULL))
-    d['Diagnostics'] = obj(version={'const': 'atac_differential_diagnostics_v1'}, mode=enum('native_result', 'saved_sheet_recalculation'),
+    d['Diagnostics'] = obj(version={'const': 'atac_differential_diagnostics'}, mode=enum('native_result', 'saved_sheet_recalculation'),
         issues=arr(ref('AtacIssue')), failures=arr(ref('Failure')), stream_states=arr(ref('StreamState')))
     d['WorkerOutput'] = obj(role=enum('sheet', 'track_table', 'partitions', 'components', 'regions', 'calculations', 'projection', 'diagnostics'),
         table_key=nullable(ID), declaration=ref('NativeFileDeclaration'))
     d['WorkerResult'] = obj(version={'const': RESULT_VERSION}, mode=enum('native_result', 'saved_sheet_recalculation'),
         parameters=ref('Parameters'), state=enum('produced', 'partial', 'unavailable'), outputs=arr(ref('WorkerOutput')), failures=arr(ref('Failure')))
-    d['WorkerCapture'] = obj(version={'const': 'atac_differential_worker_capture_v1'}, plan_file=ref('NativeFileIdentity'),
+    d['WorkerCapture'] = obj(version={'const': 'atac_differential_worker_capture'}, plan_file=ref('NativeFileIdentity'),
         execution_receipt_file=ref('NativeFileIdentity'), worker_result_file=nullable(ref('NativeFileIdentity')), result=nullable(ref('WorkerResult')),
         outputs=arr(obj(role=d['WorkerOutput']['properties']['role'], table_key=nullable(ID), capture=ref('NativeFileCapture'))), failures=arr(ref('Failure')))
     retained = obj(file=ref('NativeFileIdentity'), path=ID)
@@ -411,7 +411,7 @@ def validate_atac_result_record(kind: str, value: object) -> dict:
     elif kind == 'CalculatedTable':
         _identity(value['file'])
         require(value['role'] == value['table_key'], 'atac_calculated_table_role_conflict')
-        expected = {'partitions': 'atac_interval_partitions_jsonl_v1', 'components': 'atac_interval_components_jsonl_v1', 'regions': 'atac_differential_regions_jsonl_v1'}
+        expected = {'partitions': 'atac_interval_partitions_jsonl', 'components': 'atac_interval_components_jsonl', 'regions': 'atac_differential_regions_jsonl'}
         require(value['file']['format'] == expected[value['role']], 'atac_calculated_table_format_conflict')
     return deepcopy(value)
 

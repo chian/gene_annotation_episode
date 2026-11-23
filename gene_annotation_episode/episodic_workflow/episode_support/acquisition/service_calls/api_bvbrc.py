@@ -84,7 +84,7 @@ def _embedded_schema(definition: dict) -> dict:
 
 
 def _data_request(request) -> bool:
-    return isinstance(request, dict) and request.get("version") == "bvbrc_data_request_v2"
+    return isinstance(request, dict) and request.get("version") == "bvbrc_data_request"
 
 
 def _validated_request(request: dict) -> dict:

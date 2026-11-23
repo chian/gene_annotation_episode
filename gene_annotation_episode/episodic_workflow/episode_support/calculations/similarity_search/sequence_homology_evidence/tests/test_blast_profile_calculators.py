@@ -39,7 +39,7 @@ def test_synthetic_50_model_positions_and_translated_150_query_units(program, re
     result = calculate(inputs)
     assert result["status"] == "complete", result["issues"]
     assert inputs == original
-    assert result["schema"] == "blast_profile_components_v1"
+    assert result["schema"] == "blast_profile_components"
     assert set(result) == {"schema", "search_key", "status", "hsps", "models", "function_components", "dependence", "taxonomy", "issues"}
     hsp, model = result["hsps"][0], result["models"][0]
     assert hsp["geometry_program"] == ("blastx" if program == "rpstblastn" else "blastp")

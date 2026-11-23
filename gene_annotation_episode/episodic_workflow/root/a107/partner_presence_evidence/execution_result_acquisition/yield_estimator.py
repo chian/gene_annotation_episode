@@ -14,7 +14,7 @@
   families (``unplaced:<family>.credit_view``) and none reaches this file.
 
 The old settings are the episode's ``settings``; the old cutoff is the controller's cost. The old exact-zero forecast
-when no uncredited requested bytes remain (``finite_result_selector_exhaustion_v1``) and the endpoint-proof forecast
+when no uncredited requested bytes remain (``finite_result_selector_exhaustion``) and the endpoint-proof forecast
 are not controller inputs and are not carried: nothing but the controller stops the Episode. The old
 ``private_yield_binding`` switch (``execution_private_yield_binding_not_enabled``) is the existence of this file."""
 from yield_control import AccumulationYieldController, BoundedQualityYieldController

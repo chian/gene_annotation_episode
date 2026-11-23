@@ -65,7 +65,7 @@ def standard_blast_database_tool_contracts(bindings: list[dict], *, resource_kin
         db["manifest_file"] = {"enum": deepcopy(binding["database_manifests"])}
         instructions = (
             "Search the supplied query input against the explicitly selected prepared sequence database. "
-            "Supply native_blast_standard_database_job_v1 with actual input paths and byte identities, selected software, "
+            "Supply native_blast_standard_database_job with actual input paths and byte identities, selected software, "
             "the complete prepared database manifest and inventory, exact options and three required output selections. "
             "A candidate annotation or publicly searchable query name is not required. Preserve every FASTA record and its "
             "original ordinal, including repeated identifiers. " + _MEANINGS[program] + " "
@@ -91,7 +91,7 @@ def standard_blast_database_tool_contracts(bindings: list[dict], *, resource_kin
             "Monitoring uses existing resource status and selected complete-offset stdout/stderr observations. Native "
             "subprocess elapsed seconds remain separate from queue wait, wrapper duration and turnaround; liveness "
             "alone is not productive scientific progress. "
-            "Results acquisition authenticates the original attempt and native_blast_standard_database_bundle_v1, "
+            "Results acquisition authenticates the original attempt and native_blast_standard_database_bundle, "
             "retains all original artifacts, then uses separate native readers and metadata extractors to populate the "
             "standard sequence-database numerical fields. Separate calculators consume the saved sheets and explicit "
             "parameters without executing or reacquiring the search. Explicit function assignments, full-sequence "

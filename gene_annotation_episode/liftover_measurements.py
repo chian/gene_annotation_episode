@@ -15,7 +15,7 @@ import traceback
 from . import liftover_contracts as core
 
 
-RESULT_VERSION = "ordinary_liftover_result_v1"
+RESULT_VERSION = "ordinary_liftover_result"
 
 
 def _result(request, *, software_version, state, native=None, failure=None):

@@ -28,8 +28,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.readers.source_in
 TOOL = sra.TOOL
 PUBLISHED = TableDeclaration(name="sra_file_published_outcomes",
     columns=("operation_key", "operation_ref", "arguments", "scope", "outcome"), key=("operation_key",))
-PREPARED_VERSION = "ncbi_sra_file_prepared_v1"
-EVIDENCE_VERSION = "ncbi_sra_file_receipt_evidence_v1"
+PREPARED_VERSION = "ncbi_sra_file_prepared"
+EVIDENCE_VERSION = "ncbi_sra_file_receipt_evidence"
 
 
 def _require(condition, code):

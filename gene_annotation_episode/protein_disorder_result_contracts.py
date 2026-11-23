@@ -18,10 +18,10 @@ from .domain import canonical
 
 
 TOOL = "predict_protein_disorder_regions"
-SELECTION_VERSION = "protein_disorder_selection_v1"
-PACKET_VERSION = "ordinary_protein_disorder_values_v1"
-VALUES_VERSION = "protein_disorder_selected_values_v1"
-SOURCE_VERSION = "ordinary_protein_disorder_result_v1"
+SELECTION_VERSION = "protein_disorder_selection"
+PACKET_VERSION = "ordinary_protein_disorder_values"
+VALUES_VERSION = "protein_disorder_selected_values"
+SOURCE_VERSION = "ordinary_protein_disorder_result"
 FACT_SOURCE = "protein_disorder_outcomes"
 SHEET_VERSION = core.SHEET_SCHEMA
 COMPONENTS_VERSION = core.COMPONENTS_SCHEMA

@@ -42,7 +42,7 @@ What this method does not ask (kept in the record for the reviewer, no criterion
 the run mode, the analysis model, the detection, the spread of the KD and its kind, and the statement that only this method was used.
 """
 
-VERSION = 'a105_auc_criteria_v1'
+VERSION = 'a105_auc_criteria'
 
 # ---- Threshold constants -------------------------------------------------
 PERCENT_PER_FRACTION = 100.0  # FIXED_BY_DEFINITION: percent per unit fraction (the shift and the mass deviation are recorded in percent).

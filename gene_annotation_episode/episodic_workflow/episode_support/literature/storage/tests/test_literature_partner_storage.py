@@ -49,8 +49,8 @@ def fixture(path, *, page=False, mode="matched"):
     records["literal"] = source(store, text, parents=[root], text=True)
     quote = "Synthetic condition and measurement interpretations."
     records["interpretation"] = source(store, quote, parents=[root])
-    document = {"version": "literature_partner_selection_v1", "inputs": {
-        "version": "literature_partner_inputs_v1", "arms": {
+    document = {"version": "literature_partner_selection", "inputs": {
+        "version": "literature_partner_inputs", "arms": {
             role: arm(role, value) for role, value in (("reference", 100), ("omitted", 20), ("addback", 90))}}}
     arms = document["inputs"]["arms"]
     if mode == "censored":
@@ -100,7 +100,7 @@ def test_selected_sheet_has_eight_actual_components_and_nine_anchored_bindings(t
         reference = outcome["result"]["sheet_ref"]
         saved = repo.read(reference)
         assert store.get(reference)["provider"] == PROVIDER
-        assert saved["version"] == "literature_partner_record_v1"
+        assert saved["version"] == "literature_partner_record"
         assert saved["extraction"]["recipe"] == document
         assert saved["direct_input_source_refs"] == [records[key]["id"] for key in
             ("root", "recipe", "literal", "interpretation")]
@@ -367,7 +367,7 @@ def test_exact_subset_admission_and_forwarding_no_extra_observations(tmp_path):
 
 
 @pytest.mark.parametrize("field,value", [("value", 999), ("lower", -1), ("upper", 1000),
-    ("unit", "per_min"), ("origin", "reported"), ("formula_code", "native_partner_omitted_v1"),
+    ("unit", "per_min"), ("origin", "reported"), ("formula_code", "native_partner_omitted"),
     ("subject_ref", None), ("partner_ref", None), ("experiment_ref", None), ("endpoint_ref", None),
     ("normalization_ref", None), ("reference_condition_ref", None), ("omitted_condition_ref", None),
     ("addback_condition_ref", None), ("function_ref", None), ("source_kind", "retained_extraction")])

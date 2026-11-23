@@ -37,7 +37,7 @@ _ROLES = ("report_sources", "query_bindings", "search_bindings", "sequence_metad
 
 
 def _roles(sheet):
-    return _ROLES + (("target_contexts",) if sheet["schema"] in ("blast_iteration_sheet_v2", "blast_iteration_sheet_v3") else ())
+    return _ROLES + (("target_contexts",) if sheet["schema"] in ("blast_iteration_sheet_target_context", "blast_iteration_sheet_population") else ())
 
 
 def _issue(code, key=None, *, pointer=None, hit=None, hsp=None, **details):
@@ -397,7 +397,7 @@ def _search(sheet, index, associations, model):
         selected[role], indices[role], states[role] = _association(sheet, associations, role, key, issues)
     target_context = sheet["target_context"]
     target_qualification = None
-    if sheet["schema"] in ("blast_iteration_sheet_v2", "blast_iteration_sheet_v3"):
+    if sheet["schema"] in ("blast_iteration_sheet_target_context", "blast_iteration_sheet_population"):
         row = selected["target_contexts"]
         target_context = row["target_context"] if row else None
         target_status = states["target_contexts"]
@@ -823,7 +823,7 @@ def _comparison(sheet, pair, index, by_key):
 
 
 def _definitions():
-    return dict(version="blast_iteration_components_v1",
+    return dict(version="blast_iteration_components",
         coordinates="Native labels are not biological rounds. Native endpoints are unchanged; supplied intervals are zero-based half-open. Full query, selected span and profile/master axes remain distinct.",
         count_populations=["JSON reported_hit_count counts all raw hit records; reported_hsp_count sums raw HSP-list lengths only when every hit has a list; observed_hsp_count sums present lists, including malformed entries.",
             "Table reported_hsp_count and observed_hsp_count count original data rows. reported_hit_count uses the collector's original grouping only with every row assignable. Empty undeclared table6 is unknown.",
@@ -832,9 +832,9 @@ def _definitions():
         membership_population="Supplied checkpoint native member identifiers: raw=len(members); unique=distinct(namespace,value,version); duplicate=raw-unique; included=unique only for complete source-qualified consistent associations. No query subtraction, sequence-digest inference or native decoder is supplied.",
         comparison_population="Only explicitly paired complete retained returned target sets under the supplied identity basis: added=L\\E, removed=E\\L, retained=E intersection L; counts are cardinalities. Reporting limits remain attached. These are not complete database populations or independent evidence.",
         convergence_meaning="Explicit source-associated native boolean observations only. Missing is unknown; conflicts are incompatible. Query scope is never attached to a guessed final search. No episode continuation/completion meaning.",
-        child_component_definitions=["blast_sequence_database.blast_sequence_database_result_components_v1 embeds unchanged database_sheet, function_weights, coordinate_context, selected_query_coverage and row_keys.",
-            "blast_profile_calculators.blast_profile_components_v1 embeds unchanged per-HSP/model/coverage/threshold/function/dependence/taxonomy fields.",
-            "blast_pssm_calculators.blast_pssm_components_v1 embeds all matrices, diagnostics, statistics, master maps, statuses and definitions unchanged."],
+        child_component_definitions=["blast_sequence_database.blast_sequence_database_result_components embeds unchanged database_sheet, function_weights, coordinate_context, selected_query_coverage and row_keys.",
+            "blast_profile_calculators.blast_profile_components embeds unchanged per-HSP/model/coverage/threshold/function/dependence/taxonomy fields.",
+            "blast_pssm_calculators.blast_pssm_components embeds all matrices, diagnostics, statistics, master maps, statuses and definitions unchanged."],
         missingness="Measured zero, missing_input, not_measured, incompatible_input, invalid_native_row and partial_output are distinct. Native readable scalar cells do not authenticate custody or biological publication.",
         uncertainty="No new uncertainty model. Counts and set cardinalities have no external denominator; native statistical quantities and any supplied uncertainty remain in the child results and original records.",
         no_cross_round_combination="No sum, mean, product, final-round selection, drift score or inferred convergence across rounds or checkpoints.",
@@ -870,7 +870,7 @@ def calculate_blast_iteration_components(sheet, *, sequence_model=None) -> dict:
         status = "complete"
     version = sheet["schema"].replace("_sheet_", "_components_")
     definitions = _definitions()
-    if version in ("blast_iteration_components_v2", "blast_iteration_components_v3"):
+    if version in ("blast_iteration_components_target_context", "blast_iteration_components_population"):
         definitions.update(version=version,
             target_context="Exact per-search supplied target context. Duplicate or conflicting associations do not select a context. Qualification concerns association availability; the nested calculator validates the target's scientific fields.")
     return dict(schema=version, status=status, searches=searches, pssms=pssms,

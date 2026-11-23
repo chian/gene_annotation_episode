@@ -95,13 +95,13 @@ def fixture(program="blastp", *, query=None, kind="sequence", doc=None, options=
         operation_key="synthetic-selection", assignment_sha256="1" * 64, requested_job_sha256=sha(encoded(request)), execution_id=None)
     identity["attempt_id"] = sha(encoded(identity["operation_key"]))
     identity["submission_token"] = sha(encoded({k: identity[k] for k in ("run_id", "episode_id", "assignment_sha256", "operation_key")}))
-    plan = dict(version="native_blast_standard_database_run_plan_v1", identity=identity,
+    plan = dict(version="native_blast_standard_database_run_plan", identity=identity,
         requested_job=request, attempt_directory="/synthetic/attempt", input_paths={r["input_key"]: "/synthetic/attempt/input/" + r["input_key"] for r in job["inputs"]},
         database_paths={"target": db["native_paths"]}, output_directory="/synthetic/attempt/output",
         resource_environment={})
     final_identity = {**identity, "execution_id": "synthetic-pbs-id"}
     at = "2026-10-26T00:00:00+00:00"
-    bundle = dict(version="native_blast_standard_database_bundle_v1", identity=final_identity, plan=plan,
+    bundle = dict(version="native_blast_standard_database_bundle", identity=final_identity, plan=plan,
         requested_job=request, program=program, mode="database", software=dict(selected=job["software"],
             observed_sha256=job["software"]["sha256"], version_source=None),
         realized_argv=n.compile_standard_blast_database_argv(job, input_paths=plan["input_paths"],
@@ -171,12 +171,12 @@ def received(inputs, key, raw, format="json"):
 
 
 def query_payload():
-    return dict(schema="native_blast_database_query_metadata_v1", documents=[], sequence_records=[],
+    return dict(schema="native_blast_database_query_metadata", documents=[], sequence_records=[],
         effective_msa_masters=[], master_subjects=[], search_bindings=[], target_contexts=[])
 
 
 def sequence_payload():
-    return dict(schema="native_blast_database_sequence_metadata_v1", documents=[], searches=[])
+    return dict(schema="native_blast_database_sequence_metadata", documents=[], searches=[])
 
 
 def add_metadata(inputs, payload, consumer, key="metadata"):
@@ -806,7 +806,7 @@ def record_metadata(inputs, *, ordinals=(0, 1), raw=None, **kwargs):
     payload = numerical_metadata(inputs, format="fasta", census=False, **kwargs)
     assignments = received(inputs, "record-assignments", encoded(payload))
     payload["documents"].append(assignments)
-    payload["schema"] = "native_blast_database_sequence_metadata_v2"
+    payload["schema"] = "native_blast_database_sequence_located_metadata"
     unit = payload["searches"][0]
     for i, ordinal in enumerate(ordinals):
         locator = dict(kind="fasta_record", record_ordinal=ordinal)
@@ -827,7 +827,7 @@ def record_metadata(inputs, *, ordinals=(0, 1), raw=None, **kwargs):
 
 
 @pytest.mark.parametrize("same_content,assigned", [(False, True), (True, True), (False, False)])
-def test_record_v2_full_sequence_grouping_and_absent_function_assignment(same_content, assigned):
+def test_located_full_sequence_grouping_and_absent_function_assignment(same_content, assigned):
     inputs = fixture()
     sequences = ("ACDEFGHIKL", "ACDEFGHIKL" if same_content else "ACDEPQRSTV")
     payload = record_metadata(inputs, sequences=sequences,
@@ -846,7 +846,7 @@ def test_record_v2_full_sequence_grouping_and_absent_function_assignment(same_co
 
 
 @pytest.mark.parametrize("ordinal,detail", [(1, "fasta_record_invalid"), (3, "fasta_record_ordinal_unavailable"), (2, None)])
-def test_record_v2_sparse_original_slots_keep_siblings(ordinal, detail):
+def test_located_sparse_original_slots_keep_siblings(ordinal, detail):
     inputs = fixture()
     payload = record_metadata(inputs, ordinals=(0, ordinal), raw=b">s0\nACDEFGHIKL\n>bad\n>s1\nACDEPQRSTV\n")
     add_metadata(inputs, payload, "sequence_database")
@@ -870,7 +870,7 @@ def test_record_v2_sparse_original_slots_keep_siblings(ordinal, detail):
     ("metadata_cross_record", "blast_description_binding_sequence_record_mismatch"),
     ("description_cross_record", "blast_description_binding_metadata_provenance_mismatch"),
 ])
-def test_record_v2_wrong_relations_keep_unaffected_native_measurements(change, detail):
+def test_located_wrong_relations_keep_unaffected_native_measurements(change, detail):
     inputs = fixture()
     payload = record_metadata(inputs)
     unit = payload["searches"][0]
@@ -906,7 +906,7 @@ def test_record_v2_wrong_relations_keep_unaffected_native_measurements(change, d
 @pytest.mark.parametrize("field", ["record_locator", "metadata_record_locator"])
 @pytest.mark.parametrize("locator", [True, {"kind": "fasta_record", "record_ordinal": True}, {"kind": "fasta_record", "record_ordinal": -1},
     {"kind": "fasta_record", "record_ordinal": 0, "extra": 1}, {"kind": "other", "record_ordinal": 0}])
-def test_record_v2_closed_locator_shapes_do_not_widen_wire(field, locator):
+def test_located_closed_locator_shapes_do_not_widen_wire(field, locator):
     inputs = fixture()
     payload = record_metadata(inputs)
     unit = payload["searches"][0]
@@ -919,7 +919,7 @@ def test_record_v2_closed_locator_shapes_do_not_widen_wire(field, locator):
 
 
 @pytest.mark.parametrize("field", ["reference_metadata", "description_bindings", "sequence_identity_bindings"])
-def test_record_v2_conflicting_pointer_rejects_only_bad_descriptor(field):
+def test_located_conflicting_pointer_rejects_only_bad_descriptor(field):
     inputs = fixture()
     bad = record_metadata(inputs)
     row = bad["searches"][0][field][0]
@@ -935,7 +935,7 @@ def test_record_v2_conflicting_pointer_rejects_only_bad_descriptor(field):
     assert calculate(sheets)["components"]["function_weights"]["unadjusted_probabilities"] == {"F": 1}
 
 
-def test_record_v2_same_address_conflicting_sequence_claims_reject_all_affected():
+def test_located_same_address_conflicting_sequence_claims_reject_all_affected():
     inputs = fixture()
     payload = record_metadata(inputs)
     unit = payload["searches"][0]
@@ -947,23 +947,23 @@ def test_record_v2_same_address_conflicting_sequence_claims_reject_all_affected(
     assert any(r.get("detail_code") == "full_sequence_source_identity_conflict" for r in sheets["issues"])
 
 
-def test_record_v2_mixed_json_v1_descriptors_keep_original_shapes_and_offsets():
+def test_located_mixed_json_descriptors_keep_original_shapes_and_offsets():
     inputs = fixture()
     first = numerical_metadata(inputs, key="json-first", sequences=("ACDEFGHIKL",), indices=(0,), description_ordinals=(0,), census=False)
     second = record_metadata(inputs, sequences=("ACDEPQRSTV",), indices=(1,), description_ordinals=(0,), ordinals=(0,))
     second["searches"][0]["reference_metadata"][0]["functions"][0]["function"] = "G"
-    add_metadata(inputs, first, "sequence_database", "json-v1")
-    add_metadata(inputs, second, "sequence_database", "fasta-v2")
+    add_metadata(inputs, first, "sequence_database", "json-first")
+    add_metadata(inputs, second, "sequence_database", "fasta-second")
     sheets = run(inputs)
     scientific = sheets["sequence"][0]["sheet"]
-    assert scientific["schema"] == "blast_sequence_database_result_sheet_v2"
+    assert scientific["schema"] == "blast_sequence_database_result_sheet_record_locator"
     assert "record_locator" not in scientific["reference_metadata"][0]
     assert scientific["reference_metadata"][1]["record_locator"] == dict(kind="fasta_record", record_ordinal=0)
     assert [r["binding"]["metadata_index"] for r in scientific["description_bindings"]] == [0, 1]
     assert calculate(sheets)["components"]["function_weights"]["unadjusted_probabilities"] == {"F": .8, "G": .2}
 
 
-def test_record_v2_saved_recalculation_forbids_parsers_and_preserves_sheet(monkeypatch):
+def test_located_saved_recalculation_forbids_parsers_and_preserves_sheet(monkeypatch):
     from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.sequence_homology_evidence import native_blast_database_metadata as native
     from gene_annotation_episode.episodic_workflow.episode_support.records.similarity_search.sequence_homology_evidence import blast_fasta_record_identity as fasta
     from gene_annotation_episode.episodic_workflow.episode_support.calculations.similarity_search.native_blast_standard_database_calculators import calculate_standard_blast_database_sheets
@@ -982,7 +982,7 @@ def test_record_v2_saved_recalculation_forbids_parsers_and_preserves_sheet(monke
     assert calc["sequence"][0]["components"]["components"]["function_weights"]["unadjusted_probabilities"] == {"F": 2 / 3, "G": 1 / 3}
     assert encoded(sheets) == original
     wrong = deepcopy(sheets)
-    wrong["sequence"][0]["sheet"]["schema"] = "blast_sequence_database_result_sheet_v1"
+    wrong["sequence"][0]["sheet"]["schema"] = "blast_sequence_database_result_sheet"
     with pytest.raises(ValueError, match="blast_sequence_database_inner_binding_fields_invalid"):
         m.validate_standard_blast_database_sheet_set(wrong)
 
@@ -994,7 +994,7 @@ def test_record_v2_saved_recalculation_forbids_parsers_and_preserves_sheet(monke
     lambda p: p["sequence_proofs"][0].update(symbols="ACDEPQRSTV"),
     lambda p: p["metadata"][0]["normalized"]["searches"][0]["reference_metadata"][0]["record_locator"].update(record_ordinal=1),
 ])
-def test_record_v2_saved_original_proof_and_locator_tampering_rejected(change):
+def test_located_saved_original_proof_and_locator_tampering_rejected(change):
     inputs = fixture()
     add_metadata(inputs, record_metadata(inputs), "sequence_database")
     prepared = run(inputs)["prepared_inputs"]
@@ -1002,10 +1002,10 @@ def test_record_v2_saved_original_proof_and_locator_tampering_rejected(change):
     with pytest.raises(ValueError): m.validate_standard_blast_database_prepared_inputs(prepared)
 
 
-def test_record_v2_json_null_locators_keep_literal_pointer_semantics():
+def test_located_json_null_locators_keep_literal_pointer_semantics():
     inputs = fixture()
     payload = numerical_metadata(inputs)
-    payload["schema"] = "native_blast_database_sequence_metadata_v2"
+    payload["schema"] = "native_blast_database_sequence_located_metadata"
     for unit in payload["searches"]:
         for row in unit["reference_metadata"]: row["record_locator"] = None
         for row in unit["description_bindings"]: row["binding"]["metadata_record_locator"] = None
@@ -1018,7 +1018,7 @@ def test_record_v2_json_null_locators_keep_literal_pointer_semantics():
     assert [r["binding"]["binding"]["pointer"] for r in sheets["prepared_inputs"]["sequence_proofs"]] == ["/0", "/1"]
 
 
-def test_record_v2_same_metadata_record_conflict_and_unproved_native_data():
+def test_located_same_metadata_record_conflict_and_unproved_native_data():
     inputs = fixture()
     payload = record_metadata(inputs)
     unit = payload["searches"][0]
@@ -1035,7 +1035,7 @@ def test_record_v2_same_metadata_record_conflict_and_unproved_native_data():
 
 
 @pytest.mark.parametrize("alter", ["file_digest", "file_size", "declared_source", "bytes"])
-def test_record_v2_file_receipt_failures_never_repair_by_header(alter):
+def test_located_file_receipt_failures_never_repair_by_header(alter):
     inputs = fixture()
     payload = record_metadata(inputs)
     artifact = payload["documents"][0]["artifact"]

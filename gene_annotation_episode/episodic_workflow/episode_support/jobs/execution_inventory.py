@@ -20,9 +20,9 @@ import tempfile
 from jsonschema import Draft202012Validator
 
 
-CATALOG_VERSION = "execution_inventory_catalog_v1"
-MIRROR_VERSION = "execution_inventory_mirror_v1"
-SNAPSHOT_VERSION = "execution_inventory_snapshot_v1"
+CATALOG_VERSION = "execution_inventory_catalog"
+MIRROR_VERSION = "execution_inventory_mirror"
+SNAPSHOT_VERSION = "execution_inventory_snapshot"
 COMPONENT_KINDS = ("environment", "software", "database", "index", "prepared_operation")
 
 

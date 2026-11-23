@@ -1,5 +1,5 @@
 """Credit: the old operational credit (``ExecutionEpisodeCredit._live_project_credit``, ``credit_kind`` 'operational',
-binding ``execution_received_records_credit_v1``): ``handoff_unit`` for each distinct resource whose original request
+binding ``execution_received_records_credit``): ``handoff_unit`` for each distinct resource whose original request
 got a usable handoff in this Episode and had none when it began (``new_acquired_record_count`` was always 0 for a
 launch, so ``acquired_record_unit`` never entered the A106 credit and is not carried). The formula is kept; nothing
 bounds, clamps or rescales it.

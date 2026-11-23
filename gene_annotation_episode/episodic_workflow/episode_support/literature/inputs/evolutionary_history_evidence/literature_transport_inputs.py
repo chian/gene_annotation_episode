@@ -21,7 +21,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.evolutionary_history_evidence.literature_transport_calculations import PRIMITIVE_ORDER
 
 
-VERSION = "a105_transport_inputs_v1"
+VERSION = "a105_transport_inputs"
 CONTEXT_FIELDS = ("molecule", "analyte", "preparation", "experimental_system", "endpoint", "curve")
 _LITERAL_ROLES = PRIMITIVE_ORDER[:2]
 _OBSERVATION_MODELS = ("michaelis_menten", "unknown")
@@ -115,7 +115,7 @@ def _covariance(reference, observations, sources):
         _fail("complete_covariance_owners_required", "covariance_source_ref")
     value = _json_covariance(sources.source(reference, "original")["content"])
     _keys(value, _COVARIANCE_FIELDS, "covariance_source")
-    if value["version"] != "a105_transport_covariance_v1":
+    if value["version"] != "a105_transport_covariance":
         _fail("covariance_version_mismatch", "covariance_source.version")
     if value["primitive_order"] != list(PRIMITIVE_ORDER):
         _fail("covariance_primitive_order_mismatch", "covariance_source.primitive_order")

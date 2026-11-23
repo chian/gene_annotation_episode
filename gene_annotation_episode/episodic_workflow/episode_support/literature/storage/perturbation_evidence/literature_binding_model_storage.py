@@ -18,7 +18,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.storag
 
 
 PROVIDER = "literature.experimental.binding_model"
-FORMULA_CODES = {name: "binding_model_" + name + "_v1" for name in COMPONENTS}
+FORMULA_CODES = {name: "binding_model_" + name for name in COMPONENTS}
 FORMULA_MEANINGS = {FORMULA_CODES[name]: FORMULAS[name] for name in COMPONENTS}
 
 
@@ -43,7 +43,7 @@ def _model_metadata(sheet):
 class LiteratureBindingModelRepository(LiteratureBindingRepository):
     provider = PROVIDER
     components = COMPONENTS
-    record_version = "literature_binding_model_record_v2"
+    record_version = "literature_binding_model_record"
     readable_record_versions = (record_version,)
     received_table = "literature_binding_model_received"
 

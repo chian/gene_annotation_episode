@@ -1,4 +1,4 @@
-"""What the parent gives: the search assignment ``search_assignment_v1`` (the records that give the assigned question
+"""What the parent gives: the search assignment ``search_assignment`` (the records that give the assigned question
 its context and the ONE query to run, ``search_query_ref``: the reference of the record of the strategy that holds the
 query its model wrote), the one commissioned literature task (``verified_source_leads``), the proposed annotation, the
 Store scope of the commission and the records passed in custody. This is the only place the assignment is read.
@@ -15,7 +15,7 @@ import math
 from method_loop import DeclaredField, Field, RecordForm
 
 ASSIGNMENT_FORM = RecordForm({
-    'version': DeclaredField('text', 'The search assignment version', 'search_assignment_v1'),
+    'version': DeclaredField('text', 'The search assignment version', 'search_assignment'),
     'question_context_refs': Field('record_refs', 'Records giving the assigned question its context'),
     'search_query_ref': Field('text', 'The record of the strategy that holds the one query to run'),
     'literature_task': Field('record', 'The commissioned literature task: its kind (verified_source_leads), '

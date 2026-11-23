@@ -1,6 +1,6 @@
 {
   "purpose": "Proposed implementation interfaces, not installed production schemas or completion evidence",
-  "version": "bvbrc_data_contract_shapes_2026_10_24_v1",
+  "version": "bvbrc_data_contract_shapes_2026_10_24",
   "field_registry": {
     "genome": {
       "unique_key": "genome_id",
@@ -6939,7 +6939,7 @@
   },
   "export_map": {
     "bvbrc_data_fields.py": {
-      "FIELD_CONTRACT_VERSION": "bvbrc_data_fields_2026_10_24_v1",
+      "FIELD_CONTRACT_VERSION": "bvbrc_data_fields_2026_10_24",
       "COLLECTIONS": "tuple(field_registry keys in document order)",
       "FIELD_REGISTRY": "field_registry",
       "SELECTABLE_FIELDS": "collection -> tuple(selectable_fields)",
@@ -7015,7 +7015,7 @@
     "bvbrc_data_query.py": {
       "DATA_QUERY_SCHEMA": "DataQuery",
       "PREPARED_DATA_QUERY_SCHEMA": "PreparedQuery",
-      "COMPILER_VERSION": "bvbrc_solr_compiler_v1"
+      "COMPILER_VERSION": "bvbrc_solr_compiler"
     },
     "bvbrc_data_readers.py": {
       "DATA_SHEET_SCHEMA": "DataSheet",
@@ -8710,7 +8710,7 @@
         "type": "object",
         "properties": {
           "version": {
-            "const": "bvbrc_data_request_v2"
+            "const": "bvbrc_data_request"
           },
           "collection": {
             "type": "string",
@@ -8988,7 +8988,7 @@
         "type": "object",
         "properties": {
           "version": {
-            "const": "bvbrc_data_effective_query_v2"
+            "const": "bvbrc_data_effective_query"
           },
           "collection": {
             "type": "string",
@@ -9277,7 +9277,7 @@
         "type": "object",
         "properties": {
           "version": {
-            "const": "bvbrc_data_population_v1"
+            "const": "bvbrc_data_population"
           },
           "base_url": {
             "type": "string"
@@ -9319,10 +9319,10 @@
             "const": "public_unauthenticated"
           },
           "compiler_version": {
-            "const": "bvbrc_solr_compiler_v1"
+            "const": "bvbrc_solr_compiler"
           },
           "field_contract_version": {
-            "const": "bvbrc_data_fields_2026_10_24_v1"
+            "const": "bvbrc_data_fields_2026_10_24"
           },
           "population_key": {
             "type": "string",
@@ -9380,7 +9380,7 @@
         "type": "object",
         "properties": {
           "version": {
-            "const": "bvbrc_data_prepared_v2"
+            "const": "bvbrc_data_prepared"
           },
           "service": {
             "const": "bvbrc_data"
@@ -10073,7 +10073,7 @@
             "additionalProperties": false
           },
           "request_profile": {
-            "const": "solr_query_solr_json_v1"
+            "const": "solr_query_solr_json"
           },
           "native_request": {
             "type": "object",
@@ -10940,7 +10940,7 @@
         "type": "object",
         "properties": {
           "version": {
-            "const": "bvbrc_collection_rows_v1"
+            "const": "bvbrc_collection_rows"
           },
           "collection": {
             "type": "string",
@@ -11699,7 +11699,7 @@
         "type": "object",
         "properties": {
           "version": {
-            "const": "bvbrc_data_sheet_v1"
+            "const": "bvbrc_data_sheet"
           },
           "collection": {
             "type": "string",
@@ -11758,8 +11758,8 @@
               "native_profile": {
                 "type": "string",
                 "enum": [
-                  "json_array_with_headers_v1",
-                  "solr_json_envelope_v1"
+                  "json_array_with_headers",
+                  "solr_json_envelope"
                 ]
               },
               "prepared_sha256": {
@@ -11767,7 +11767,7 @@
                 "pattern": "^[0-9a-f]{64}$"
               },
               "field_contract_version": {
-                "const": "bvbrc_data_fields_2026_10_24_v1"
+                "const": "bvbrc_data_fields_2026_10_24"
               }
             },
             "required": [
@@ -12093,7 +12093,7 @@
         "type": "object",
         "properties": {
           "version": {
-            "const": "bvbrc_data_parse_result_v1"
+            "const": "bvbrc_data_parse_result"
           },
           "status": {
             "type": "string",
@@ -12137,7 +12137,7 @@
         "type": "object",
         "properties": {
           "version": {
-            "const": "bvbrc_data_page_components_v1"
+            "const": "bvbrc_data_page_components"
           },
           "native_row_count": {
             "type": "integer",
@@ -12270,7 +12270,7 @@
         "type": "object",
         "properties": {
           "version": {
-            "const": "bvbrc_data_facet_components_v1"
+            "const": "bvbrc_data_facet_components"
           },
           "denominator_policy": {
             "const": "same_response_exact_document_count"
@@ -12872,7 +12872,7 @@
         "type": "object",
         "properties": {
           "version": {
-            "const": "bvbrc_feature_sequence_sheet_v1"
+            "const": "bvbrc_feature_sequence_sheet"
           },
           "selection": {
             "type": "object",
@@ -12996,7 +12996,7 @@
         "type": "object",
         "properties": {
           "version": {
-            "const": "bvbrc_feature_sequence_components_v1"
+            "const": "bvbrc_feature_sequence_components"
           },
           "selected_feature_count": {
             "type": "integer",
@@ -13474,7 +13474,7 @@
         "type": "object",
         "properties": {
           "version": {
-            "const": "bvbrc_molecular_sheet_v1"
+            "const": "bvbrc_molecular_sheet"
           },
           "selected_result_ids": {
             "type": "array",
@@ -14288,7 +14288,7 @@
         "type": "object",
         "properties": {
           "version": {
-            "const": "bvbrc_data_result_selector_v2"
+            "const": "bvbrc_data_result_selector"
           },
           "page": {
             "anyOf": [
@@ -14460,7 +14460,7 @@
         "type": "object",
         "properties": {
           "version": {
-            "const": "bvbrc_data_publication_inputs_v1"
+            "const": "bvbrc_data_publication_inputs"
           },
           "prepared": {
             "$ref": "#/$defs/PreparedQuery"
@@ -14510,7 +14510,7 @@
         "type": "object",
         "properties": {
           "version": {
-            "const": "bvbrc_data_grading_v1"
+            "const": "bvbrc_data_grading"
           },
           "prepared": {
             "$ref": "#/$defs/PreparedQuery"
@@ -14603,7 +14603,7 @@
         "type": "object",
         "properties": {
           "version": {
-            "const": "bvbrc_data_qualified_result_v1"
+            "const": "bvbrc_data_qualified_result"
           },
           "service": {
             "const": "bvbrc_data"
@@ -14867,7 +14867,7 @@
         "type": "object",
         "properties": {
           "version": {
-            "const": "bvbrc_received_values_v1"
+            "const": "bvbrc_received_values"
           },
           "admission_key": {
             "type": "string"

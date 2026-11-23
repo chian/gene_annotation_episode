@@ -177,7 +177,7 @@ class PublicClients:
             raise ValueError('explicit_observed_response_byte_limit_required')
         script = _skill_script(self.skill_root, skill, filename)
         observer_policy = (None if max_bytes is None else {
-            'version': 'bounded_skill_http_entity_capture_v1',
+            'version': 'bounded_skill_http_entity_capture',
             'adapter_module': __name__,
             'response_byte_limit': max_bytes, 'byte_basis': 'requests_decoded_entity_bytes',
             'stream': True, 'automatic_redirects': False, 'redirect_preparation': False})

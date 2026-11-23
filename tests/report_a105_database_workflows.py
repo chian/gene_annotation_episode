@@ -53,7 +53,7 @@ def inspect_case(run, *, review_scope=False):
         if outcome.get('status') in ('failed', 'invalid'):
             failures.append({**last_action, 'action': action, 'feedback': outcome.get('feedback'),
                              'errors': outcome.get('errors')})
-        if native.get('version') == 'experimental_database_source_v1':
+        if native.get('version') == 'experimental_database_source':
             providers.append({**last_action, 'arguments': action['arguments'], 'receipt': native})
         if name == 'literature.assay_grading.populate' and native.get('sheet_ref'):
             selections[native['sheet_ref']] = action['arguments']

@@ -115,7 +115,7 @@ def _observe_progress(ctx, arguments):
         'BLOCKED-ON-JOB-SERVICE: job_access; wanted call: ctx.services[\'job_access\'].observe_progress('
         'arguments[\'target_handle\'], arguments[\'requested_fields\'], '
         'permitted_committed_record_types=arguments[\'permitted_committed_record_types\'], '
-        'key=ctx.operation_key), returning the progress_snapshot_v1 of the observation, with the original '
+        'key=ctx.operation_key), returning the progress_snapshot of the observation, with the original '
         'identity of an unchanged observation (the old ProgressProvider.observe)' + native)
 
 

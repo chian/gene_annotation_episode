@@ -1,11 +1,11 @@
-"""What the commissioner gives: the old ``execution_launch_assignment_v1`` (carried from ``from_parent.py``,
+"""What the commissioner gives: the old ``execution_launch_assignment`` (carried from ``from_parent.py``,
 ``LaunchAssignment.assignment_schema``, ``_launch``, ``_validate_request``, ``_constraints`` and ``_permitted``), and
 the values the old episode obtained from its runner and configuration. This file is the only place the assignment
 is read.
 
 Old assignment properties, under the same names: ``version``, ``requests`` (resource_id -> one concrete request: a
-``practical_assignment_v1`` for a local or HPC resource, an ``api_execution_assignment_v1`` or an
-``api_service_assignment_v1`` for an API resource; at least one), ``immutable_input_versions``, ``constraints``
+``practical_assignment`` for a local or HPC resource, an ``api_execution_assignment`` or an
+``api_service_assignment`` for an API resource; at least one), ``immutable_input_versions``, ``constraints``
 (``allowed_resource_ids``, ``allowed_kinds``, ``resource_id``, ``kind``) and ``launch_instructions`` (a selection of
 the launch-instruction library; the old schema allowed null: omitted here).
 
@@ -33,8 +33,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.instructions.laun
 from gene_annotation_episode.episodic_workflow.episode_support.records.gene_context_evidence.practical_execution_records import (
     ASSIGNMENT_VERSION, validate_assignment)
 
-LAUNCH_VERSION = 'execution_launch_assignment_v1'
-API_VERSIONS = ('api_execution_assignment_v1', 'api_service_assignment_v1')
+LAUNCH_VERSION = 'execution_launch_assignment'
+API_VERSIONS = ('api_execution_assignment', 'api_service_assignment')
 
 ASSIGNMENT_FORM = RecordForm({
     'version': DeclaredField('text', 'The assignment version', LAUNCH_VERSION),

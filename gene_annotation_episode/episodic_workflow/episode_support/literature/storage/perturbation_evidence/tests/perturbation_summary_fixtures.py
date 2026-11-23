@@ -29,7 +29,7 @@ def fixture(ctx,*,paired=False,graph=False):
     args=arguments();args.update(source_ref=root['id'],data_source_ref=retained['id'])
     for witness in args['interpretation_witnesses']:witness['source_ref']=root['id']
     args['literals']['molecule']={**args['interpretation_witnesses'][0]}
-    assignment={'version':'literature_assignment_v1','question_context_refs':[],'source_refs':refs,
+    assignment={'version':'literature_assignment','question_context_refs':[],'source_refs':refs,
         'requested_perturbation_summary_components':REQUESTED}
     context=LiteratureContext(ctx.run_id,ctx.episode_id,'literature',(('literature','fixture'),),
         store.validate_scope({'subject_refs': store.problem()['subject_refs']}),assignment,{},tuple(refs))

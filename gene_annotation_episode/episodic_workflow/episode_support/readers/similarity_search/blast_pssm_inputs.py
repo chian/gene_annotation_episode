@@ -284,7 +284,7 @@ def _check_query(node, ordinal, path, issues):
 def read_blast_pssm(contents: bytes, *, format: str, artifact_key: str, source_ref: str) -> dict:
     """Retain supplied scoremat text; populate native measurements, without defaults."""
     identity, text, issues = _input(contents, format, artifact_key, source_ref)
-    sheet = {"schema": "blast_pssm_sheet_v1", "artifact_key": artifact_key, "source_ref": source_ref,
+    sheet = {"schema": "blast_pssm_sheet", "artifact_key": artifact_key, "source_ref": source_ref,
              "format": format, "input_identity": identity, "status": "unavailable",
              "native_text": text, "pssms": [], "issues": issues}
     if format != "scoremat_asn_text":
@@ -392,7 +392,7 @@ The ignore flag is retained; it does not remove the master or emulate weighting.
     if type(ignore_master_for_profile) is not bool:
         raise ValueError("blast_msa_boolean_ignore_flag_required")
     identity, text, issues = _input(contents, format, artifact_key, source_ref)
-    sheet = {"schema": "blast_msa_master_sheet_v1", "artifact_key": artifact_key,
+    sheet = {"schema": "blast_msa_master_sheet", "artifact_key": artifact_key,
              "source_ref": source_ref, "format": format, "input_identity": identity,
              "status": "unavailable", "native_text": text, "records": [],
              "master_record_ordinal": master_record_ordinal,

@@ -1,5 +1,5 @@
 """What the parent gives: one practical assignment for one configured HPC resource (the old
-``practical_assignment_v1`` of ``execution_job_submission``'s launch request).
+``practical_assignment`` of ``execution_job_submission``'s launch request).
 
 This is the only place the assignment is read. ``read_from_parent`` admits it as the old ``prepare_assignment``
 did (the practical assignment contract, the resource kind) and returns the parent input: the assignment, the
@@ -13,7 +13,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.biochemic
     assess_validations, validate_assignment)
 
 ASSIGNMENT_FORM = RecordForm({
-    'version': Field('text', 'The assignment contract version (practical_assignment_v1)'),
+    'version': Field('text', 'The assignment contract version (practical_assignment)'),
     'assignment_id': Field('text', 'The identity of this assignment'),
     'resource_kind': Field('text', 'The kind of resource the job runs on (hpc)'),
     'workspace': Field('text', 'The absolute workspace on the resource every command stays inside'),

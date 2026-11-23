@@ -11,10 +11,10 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.partner_p
 
 
 PROVIDER = 'native.a103.measurement'
-KINDS = {'a103_locus_binding_v1':'locus_binding', 'a103_neighborhood_v1':'organization',
-    'a103_recurrence_v1':'recurrence', 'a103_fusion_v1':'fusion',
-    'a103_cooccurrence_v1':'cooccurrence', 'a103_channel_v1':'native_channel',
-    'a103_contrast_v1':'functional_contrast', 'a103_detection_v1':'component_detection'}
+KINDS = {'a103_locus_binding':'locus_binding', 'a103_neighborhood':'organization',
+    'a103_recurrence':'recurrence', 'a103_fusion':'fusion',
+    'a103_cooccurrence':'cooccurrence', 'a103_channel':'native_channel',
+    'a103_contrast':'functional_contrast', 'a103_detection':'component_detection'}
 
 
 PUBLICATIONS = TableDeclaration(name='a103_publications',
@@ -34,7 +34,7 @@ def native_grade(body):
              body['native_value'] if kind=='native_channel' else None)
     require(value is None or type(value) in {int,float} and 0<=value<=1,
             'a103_native_index_outside_unit_interval')
-    return {'schema':'a103_native_sheet_v1', 'version':VERSION, 'profile':PROFILE,
+    return {'schema':'a103_native_sheet', 'version':VERSION, 'profile':PROFILE,
         'kind':kind,'producer_operation':body['producer_operation'],'target_ref':body['target_ref'],
         'raw_value':value,'native_measurement_sha256':digest(body),
         'target_attribution':'requires_its_measurement_specific_attachment',
@@ -79,7 +79,7 @@ def received_measurement(store, reference):
 def binding_body(store, reference, known):
     require(reference in known, 'a103_locus_binding_not_received')
     result = received_measurement(store,reference)
-    require(result is not None and result['body']['schema']=='a103_locus_binding_v1',
+    require(result is not None and result['body']['schema']=='a103_locus_binding',
             'a103_actual_locus_binding_required')
     rows = store.table(BINDINGS).select({'source_ref':reference})
     require(rows,'a103_private_locus_payload_unavailable')

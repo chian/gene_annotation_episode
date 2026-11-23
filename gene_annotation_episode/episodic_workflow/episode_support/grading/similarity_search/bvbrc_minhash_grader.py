@@ -22,8 +22,8 @@ from scipy.special import expit, logsumexp
 from scipy.stats import binom
 
 
-SHEET_SCHEMA = "bvbrc_minhash_sheet_v1"
-COMPONENTS_SCHEMA = "bvbrc_minhash_components_v1"
+SHEET_SCHEMA = "bvbrc_minhash_sheet"
+COMPONENTS_SCHEMA = "bvbrc_minhash_components"
 METHODS = {
     "genome": "Minhash.compute_genome_distance_for_genome2",
     "fasta": "Minhash.compute_genome_distance_for_fasta2",

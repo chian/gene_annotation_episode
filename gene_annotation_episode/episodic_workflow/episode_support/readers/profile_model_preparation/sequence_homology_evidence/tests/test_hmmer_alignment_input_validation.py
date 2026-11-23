@@ -99,7 +99,7 @@ def _domain_probe(letter, count, *, fmt, scanner=False):
     counts = [0] * 26
     counts[ord(letter) - 65] = count
     classified = classify_easel_alphabet_counts(counts)
-    probe = {"version": "hmmer_native_alignment_alphabet_probe_v1", "format": fmt,
+    probe = {"version": "hmmer_native_alignment_alphabet_probe", "format": fmt,
              "state": classified["status"], "alphabet": classified["alphabet"], "counts_az": counts,
              "counted_letters": count, "scan_end_byte": count, "checkpoints": [],
              "stopped_at": "checkpoint", "diagnostics": []}

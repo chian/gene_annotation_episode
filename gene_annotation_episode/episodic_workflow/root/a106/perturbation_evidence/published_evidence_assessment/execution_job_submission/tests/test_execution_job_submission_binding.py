@@ -64,9 +64,9 @@ def test_no_module_imports_another_episode_folder():
 def test_the_assignment_is_read_once_and_the_return_declares_credit_and_finding():
     from_parent = importlib.import_module(MODULE + '.messages.read_from_parent')
     final = importlib.import_module(MODULE + '.messages.final_to_parent')
-    request = {'version': 'api_service_assignment_v1', 'resource_id': 'bvbrc', 'service': 'bvbrc_appservice',
+    request = {'version': 'api_service_assignment', 'resource_id': 'bvbrc', 'service': 'bvbrc_appservice',
                'request': {'application': 'RNASeq'}, 'endpoint': 'usable_handoff', 'constraints': {}}
-    assignment = {'version': 'execution_launch_assignment_v1', 'requests': {'bvbrc': request},
+    assignment = {'version': 'execution_launch_assignment', 'requests': {'bvbrc': request},
                   'immutable_input_versions': [], 'constraints': {}, 'scope': {}, 'input_refs': ['sub_1'],
                   'handoff_unit': 2.0}
     admitted = from_parent.ASSIGNMENT_FORM.admit(assignment, 'assignment')
@@ -80,7 +80,7 @@ def test_the_assignment_is_read_once_and_the_return_declares_credit_and_finding(
 
 def test_the_commission_selects_a_selectable_field_of_the_child():
     to_child = importlib.import_module(MODULE + '.messages.msg_to_child')
-    request = {'version': 'api_service_assignment_v1', 'resource_id': 'bvbrc', 'service': 'bvbrc_appservice',
+    request = {'version': 'api_service_assignment', 'resource_id': 'bvbrc', 'service': 'bvbrc_appservice',
                'request': {'application': 'RNASeq'}, 'endpoint': 'usable_handoff', 'constraints': {}}
     summary = {'requests': {'bvbrc': request}, 'launch_instructions': None, 'handoff_unit': 2.0,
                'input_refs': ['sub_1']}

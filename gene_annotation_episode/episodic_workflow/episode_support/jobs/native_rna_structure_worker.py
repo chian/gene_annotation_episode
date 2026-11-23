@@ -66,7 +66,7 @@ def _software(rna=None):
 
 def _check_software(selected, *, rna=None, native=False):
     observed = _software(rna)
-    _diagnostic({"schema": "rna_software_observation_v1", "software": observed,
+    _diagnostic({"schema": "rna_software_observation", "software": observed,
         "engine_version": getattr(rna, "__version__", None) if rna is not None else None})
     if selected is not None:
         selected = validate_rna_structure_software(selected)
@@ -100,7 +100,7 @@ def _model(rna, selected, parameter_input, directory, parameter_path):
         raise _NativeFailure("rna_invalid_parameter_schema", "/model/parameters")
     # The documented RNA loader resets geometric defaults. It MUST run first.
     loaded = rna.params_load(str(parameter_input)) if use_file else rna.params_load_RNA_Turner2004()
-    _diagnostic({"schema": "rna_parameter_operation_v1", "operation": "load", "return_repr": repr(loaded)})
+    _diagnostic({"schema": "rna_parameter_operation", "operation": "load", "return_repr": repr(loaded)})
     if type(loaded) is not int or loaded == 0:
         raise _NativeFailure("rna_parameter_load_failed", "/model/parameter_load_return")
     md = rna.md()
@@ -133,15 +133,15 @@ def _model(rna, selected, parameter_input, directory, parameter_path):
         if not scalar and type(value) in (list, tuple):
             # ModelSpec's snapshot uses scalar values. Preserve native arrays
             # separately as diagnostics, without pretending they were scalar.
-            _diagnostic({"schema": "rna_model_array_observation_v1", "name": name, "value": value})
+            _diagnostic({"schema": "rna_model_array_observation", "name": name, "value": value})
     parameter_path.parent.mkdir(parents=True, exist_ok=True)
     if parameter_path.exists():
         raise _NativeFailure("rna_output_path_conflict", "/model/parameter_artifact")
     saved = rna.params_save(str(parameter_path))
-    _diagnostic({"schema": "rna_parameter_operation_v1", "operation": "save", "return_repr": repr(saved)})
+    _diagnostic({"schema": "rna_parameter_operation", "operation": "save", "return_repr": repr(saved)})
     if type(saved) is not int or saved == 0 or not parameter_path.is_file():
         raise _NativeFailure("rna_parameter_load_failed", "/model/parameter_save_return")
-    snapshot = {"schema": "vienna_rna_effective_model_v1", "model_key": "pending", "selected": selected,
+    snapshot = {"schema": "vienna_rna_effective_model", "model_key": "pending", "selected": selected,
         "engine": "ViennaRNA", "engine_version": rna.__version__, "effective_settings": effective,
         "other_observed_settings": others, "parameter_artifact": {
             "relative_path": str(parameter_path.relative_to(directory)), "sha256": _checksum(parameter_path),
@@ -151,7 +151,7 @@ def _model(rna, selected, parameter_input, directory, parameter_path):
 
 
 def _empty(mode, record_key):
-    return {"schema": "rna_native_record_v1", "operation": OPERATIONS[mode], "mode": mode,
+    return {"schema": "rna_native_record", "operation": OPERATIONS[mode], "mode": mode,
         "record_key": record_key, "input": None, "analysis_sequence": None, "structure": None,
         "topology": None, "native_mfe": unavailable_energy(), "native_evaluation": unavailable_energy(),
         "native_uncertainty": native_uncertainty(), "model": None, "status": "failed", "issues": []}
@@ -223,7 +223,7 @@ def _produce(request, *, mode, record_key, model, parameter_input, output_direct
                     returned_structure = None
                     energy = fc.eval_structure(record["structure"]["energy_dot_bracket"])
                 # The actual return is written BEFORE interpreting its value.
-                _diagnostic({"schema": "rna_raw_native_return_v1", "record_key": record_key,
+                _diagnostic({"schema": "rna_raw_native_return", "record_key": record_key,
                     "call": "fold_compound." + method, "structure_value": returned_structure,
                     "energy_repr": repr(energy)})
                 if mode == "mfe_prediction":

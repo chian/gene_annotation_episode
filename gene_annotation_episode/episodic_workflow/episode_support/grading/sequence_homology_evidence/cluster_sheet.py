@@ -1,4 +1,4 @@
-"""The grading of a clustering of an all-vs-all set (``cluster_sheet_v1``), and the graph the clustering reads.
+"""The grading of a clustering of an all-vs-all set (``cluster_sheet``), and the graph the clustering reads.
 
 THE SCORE. The pairwise matrix holds BLAST BIT SCORES (the best alignment of each ordered pair, the existing
 ``blast_all_vs_all_graph.build_edges``). A bit score is the raw alignment score put on a common scale by the scoring
@@ -27,7 +27,7 @@ group is the SHARE of the group's sequences that are in the target's cluster, in
 tests of the head (a database search's value is the subscore of a hit's alignments, 0 to 1, about 0.8 to 1 for a typical
 strong result), and about 1 for a strong typical result (every sequence of the candidate groups with the target) and 0
 when none does. Nothing here reads a file or runs a program."""
-SCHEMA = 'cluster_sheet_v1'
+SCHEMA = 'cluster_sheet'
 METHOD = 'mcl'
 INFLATIONS = (1.4, 2.0, 4.0)
 CONTRASTS = ('none', 'rescale', 'percentile_25', 'percentile_50', 'percentile_75', 'percentile_90')

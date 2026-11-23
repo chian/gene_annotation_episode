@@ -360,7 +360,7 @@ def parse_rfam_alignment_display(
             or any(_rna(c) not in _RNA for c in query_sequence)):
         raise ContractError("rfam_sequence_invalid")
     pointer = identity["hit_key"][len(identity["artifact_ref"]):] + "/alignment"
-    result = dict(version="rfam_alignment_components_v1", artifact_ref=identity["artifact_ref"],
+    result = dict(version="rfam_alignment_components", artifact_ref=identity["artifact_ref"],
                   hit_key=identity["hit_key"], hit_identity=identity, query_strand=native_strand,
                   status="complete", raw_alignment_ref={"artifact_ref": identity["artifact_ref"], "json_pointer": pointer},
                   display_model_from=None, display_model_to=None, display_query_from=None, display_query_to=None,

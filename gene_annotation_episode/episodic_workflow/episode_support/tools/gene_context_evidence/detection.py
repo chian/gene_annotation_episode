@@ -90,7 +90,7 @@ def detect(request, *, verified_cds=None):
                        for h in hit.hsps]})
     present = any(h['native_included'] for h in hits)
     if not present and not complete:present=None
-    return {'schema':'a103_detection_v1','producer_operation':'context.detection_inventory',
+    return {'schema':'a103_detection','producer_operation':'context.detection_inventory',
         'component_ref':request['component_ref'],'genome_key':'records:'+digest(sorted(set(canonical_records))),
         'present':present,'scope':'examined_annotated_CDS_in_explicit_acquired_records',
         'absence_meaning':'no_included_native_hit_in_covered_CDS_inventory; not_absence_from_unexamined_genome_or_replicons',

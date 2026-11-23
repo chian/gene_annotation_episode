@@ -25,7 +25,7 @@ def setup(store, ctx, *, kind='catalytic_efficiency', unit='uM^-1min^-1', n='8',
     args = bind(args)
     if change:
         change(args)
-    context = LiteratureContext(ctx.run_id, ctx.episode_id, 'literature', (('literature', 'case'),), store.validate_scope({'subject_refs': store.problem()['subject_refs']}), {'version': 'literature_assignment_v1', 'question_context_refs': [], 'source_refs': [source]}, {}, (source,))
+    context = LiteratureContext(ctx.run_id, ctx.episode_id, 'literature', (('literature', 'case'),), store.validate_scope({'subject_refs': store.problem()['subject_refs']}), {'version': 'literature_assignment', 'question_context_refs': [], 'source_refs': [source]}, {}, (source,))
     return (store, context, args)
 
 @pytest.mark.parametrize('target', ['number_relation', 'number_approximation', 'row_approximation', 'source_qualification', 'canonical_censor', 'populated_reason', 'missing_unavailable_reason', 'raw_value', 'wrong_partial_reason'])

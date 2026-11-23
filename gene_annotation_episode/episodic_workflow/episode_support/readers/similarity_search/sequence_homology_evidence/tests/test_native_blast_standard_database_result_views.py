@@ -10,7 +10,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.readers.similarit
 
 
 def selector(name="hsp", *, rows=None, metrics=None, booleans=None):
-    return dict(version=v.PREFIX + "selector_v1", acquisition="complete_bound_bundle", metadata_inputs=[], retained_sources=[],
+    return dict(version=v.PREFIX + "selector", acquisition="complete_bound_bundle", metadata_inputs=[], retained_sources=[],
         projections=[dict(family=name, rows=rows or dict(offset=0, limit=10), metrics=metrics or ["native_score_bits"], booleans=booleans or [])])
 
 
@@ -38,7 +38,7 @@ def test_R6_selector_rejects_unbounded_or_ineligible_requests(change):
     value = selector()
     p = value["projections"][0]
     if change == "empty": value["projections"] = []
-    if change == "old_tag": value["version"] = "native_blast_database_selector_v1"
+    if change == "old_tag": value["version"] = "native_blast_database_selector"
     if change == "model": value["sequence_model"] = None
     if change == "unknown_family": p["family"] = "iteration_summary"
     if change == "unknown_metric": p["metrics"] = ["confidence"]
@@ -46,7 +46,7 @@ def test_R6_selector_rejects_unbounded_or_ineligible_requests(change):
     if change == "float_offset": p["rows"]["offset"] = 0.0
     if change == "mixed_rows": p["rows"]["record_keys"] = ["one"]
     if change == "empty_selection": p["metrics"] = []
-    if change == "unregistered_metadata": value["metadata_inputs"] = [dict(input_key="m", consumer="query_identity", schema_id="native_blast_database_sequence_metadata_v1", artifact_ref="a", sha256="b" * 64, size_bytes=1)]
+    if change == "unregistered_metadata": value["metadata_inputs"] = [dict(input_key="m", consumer="query_identity", schema_id="native_blast_database_sequence_metadata", artifact_ref="a", sha256="b" * 64, size_bytes=1)]
     if change == "duplicate_source": value["retained_sources"] = [dict(source_ref="s", artifact_ref="a", sha256="b" * 64, size_bytes=1)] * 2
     with pytest.raises(ValueError): v.validate_standard_blast_database_selector(value, program="blastp")
 

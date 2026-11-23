@@ -33,7 +33,7 @@ def internal_summary(view):
         'windows_total': len(parent['spans']),
         'page': page, 'task': task, 'proposed_annotation_ref': parent['proposed_annotation_ref'],
         'scope': parent['scope'], 'received_record_refs': parent['received_record_refs'],
-        'literature_assignment': {'version': 'reading_assignment_v1', 'page': page,
+        'literature_assignment': {'version': 'reading_assignment', 'page': page,
                                   'selection': {'spans': parent['spans']}, 'literature_task': task,
                                   'proposed_annotation_ref': parent['proposed_annotation_ref']},
         'sheet_refs': sheets, 'lead_source_refs': [page['source_ref']] if sheets else [],

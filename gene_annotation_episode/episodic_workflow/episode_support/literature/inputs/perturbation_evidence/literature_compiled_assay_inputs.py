@@ -13,9 +13,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.perturbat
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.perturbation_evidence.literature_assay_inputs import ASSAY_LITERAL_FIELDS, ARRANGEMENTS, ENDPOINTS, SOURCE_KINDS, PRIMITIVE_ORDER, _Sources, _interpretation, _keys, _nullable, _numeric, _witness_schema, assay_arguments_schema
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.perturbation_evidence.literature_experimental_contracts import ExperimentalContractError
 
-VERSION = 'a105_compiled_assay_inputs_v1'
-VERSION_V2 = 'a105_compiled_assay_inputs_v2'
-POPULATION_V2 = 'a105_compiled_assay_population_v2'
+VERSION = 'a105_compiled_assay_inputs'
+POPULATION = 'a105_compiled_assay_population'
 ROLES = PRIMITIVE_ORDER
 UNITS = dict(q='uM/min', g='uM/min', k='dimensionless', E='uM', u='uM/min', v='uM/min')
 NS_ASSAY = 'literature_assay_cells'
@@ -66,31 +65,26 @@ def selector_schema(role=None):
         'component': {'enum': list(names)}}) for ns, names in allowed.items()]}
 
 
-def compiled_assay_population_schema(version=1):
+def compiled_assay_population_schema():
     props = assay_arguments_schema()['properties']
     schema = obj({'source_ref': deepcopy(REF), 'source_kind': {'enum': list(SOURCE_KINDS)},
         'assay': deepcopy(props['assay']),
         'operands': obj({role: _nullable(selector_schema(role)) for role in ROLES}),
         'relationships': obj({role: interpretation_schema((*LINKS[role], *LINK_LIMITS)) for role in ROLES}),
         'correction_stages': obj({name: interpretation_schema(STAGE_VALUES) for name in STAGES}),
-        'covariance_source_ref': _nullable(deepcopy(REF)),
         'distinct_residual_variance': deepcopy(props['distinct_residual_variance']),
         'residual_relationship': interpretation_schema(RESIDUAL_LINKS),
         'variance_status': {'enum': ['known', 'estimated', 'unknown']},
         'observation_model': {'enum': ['none', 'known_normal_nonnegative_presence']},
         'model_witnesses': {'type': 'array', 'items': _witness_schema()}})
-    if version == 2:
-        del schema['properties']['covariance_source_ref']
-        schema['properties'].update(population_version={'const': POPULATION_V2},
+    schema['properties'].update(population_version={'const': POPULATION},
             covariance_source_refs={'type': 'array', 'items': deepcopy(REF), 'uniqueItems': True})
-        schema['required'] = list(schema['properties'])
-    elif version != 1:
-        raise ValueError('unsupported_compiled_assay_population_version')
+    schema['required'] = list(schema['properties'])
     return schema
 
 
 def compiled_assay_operation_schema():
-    return {'anyOf': [compiled_assay_population_schema(), compiled_assay_population_schema(2)]}
+    return {'anyOf': [compiled_assay_population_schema()]}
 
 
 def source_schema(namespace):
@@ -249,44 +243,7 @@ def _quantity(selector, row, role, *, read_record):
         'component_key': selector_key, 'quantity_key': quantity_key, **deps}
 
 
-def _covariance(reference, operands, sources):
-    if reference is None:
-        return None
-    raw = sources.source(reference, 'original')
-    def pairs(items):
-        result = {}
-        for key, value in items:
-            if key in result:
-                _fail('duplicate_json_key', 'covariance_source_ref')
-            result[key] = value
-        return result
-    try:
-        data = json.loads(raw['content'].decode('utf8'), object_pairs_hook=pairs,
-            parse_float=lambda token: _numeric(token, 'covariance'),
-            parse_constant=lambda _token: _fail('finite_number_required', 'covariance'))
-    except (UnicodeDecodeError, json.JSONDecodeError) as error:
-        raise ExperimentalContractError('covariance_json_required', 'covariance_source_ref') from error
-    _keys(data, ('version', 'primitive_order', 'operand_keys', 'primitive_units', 'dependency_keys',
-                 'covariance', 'origin', 'basis'), 'covariance')
-    if data['version'] != 'a105_compiled_assay_covariance_v1' or data['primitive_order'] != list(ROLES):
-        _fail('compiled_covariance_order_or_version_mismatch', 'covariance')
-    if any(operands[role] is None for role in ROLES):
-        _fail('complete_covariance_owners_required', 'covariance')
-    if data['operand_keys'] != [operands[role]['quantity_key'] for role in ROLES]:
-        _fail('compiled_covariance_owner_mismatch', 'covariance.operand_keys')
-    if (data['primitive_units'] != [operands[role]['unit'] for role in ROLES]
-            or any(operands[role]['unit'] != UNITS[role] for role in ROLES)):
-        _fail('compiled_covariance_unit_mismatch', 'covariance.primitive_units')
-    dependencies = [list(dict.fromkeys((*operands[role]['canonical_physical_keys'],
-                                       *operands[role]['recorded_dependency_keys']))) for role in ROLES]
-    if data['dependency_keys'] != dependencies:
-        _fail('compiled_covariance_dependency_mismatch', 'covariance.dependency_keys')
-    if data['basis'] != 'joint_covariance_of_canonical_compilation_operands' or data['origin'] not in ('reported', 'derived', 'synthetic'):
-        _fail('compiled_covariance_basis_mismatch', 'covariance')
-    return {'source_ref': reference, 'artifact_ref': raw['artifact_ref'], 'data': data}
-
-
-def _covariance_v2(references, operands, relationships, sources):
+def _covariance_blocks(references, operands, relationships, sources):
     """Read actual joint blocks; marginal blocks never imply missing cross terms."""
     import numpy as np
     from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.perturbation_evidence.literature_compiled_assay_calculations import _role_reason
@@ -310,7 +267,7 @@ def _covariance_v2(references, operands, relationships, sources):
         _keys(data, ('version', 'primitive_order', 'operand_keys', 'primitive_units', 'dependency_keys',
                      'covariance', 'origin', 'basis', 'variance_status'), 'covariance')
         order = data['primitive_order']
-        if (data['version'] != 'a105_compiled_assay_covariance_v2' or not isinstance(order, list)
+        if (data['version'] != 'a105_compiled_assay_covariance' or not isinstance(order, list)
                 or not order or any(type(role) is not str or role not in ROLES for role in order)
                 or len(set(order)) != len(order)):
             _fail('compiled_covariance_order_or_version_mismatch', 'covariance')
@@ -387,8 +344,7 @@ def _covariance_v2(references, operands, relationships, sources):
 def read_compiled_assay_inputs(arguments, *, read_source, read_component, read_record):
     """Read scientific context and exact authorized numerical component rows."""
     args = deepcopy(arguments)
-    v2 = args.get('population_version') == POPULATION_V2
-    validate_schema(args, compiled_assay_population_schema(2 if v2 else 1))
+    validate_schema(args, compiled_assay_population_schema())
     sources = _Sources(read_source); original = sources.source(args['source_ref'], 'original')
     assay = {}
     for name in ASSAY_LITERAL_FIELDS:
@@ -424,25 +380,24 @@ def read_compiled_assay_inputs(arguments, *, read_source, read_component, read_r
     witnesses = [sources.witness(w, 'model_witnesses') for w in args['model_witnesses']]
     if (args['variance_status'] != 'unknown' or args['observation_model'] != 'none') and not witnesses:
         _fail('model_witness_required', 'model_witnesses')
-    covariance = None if v2 else _covariance(args['covariance_source_ref'], operands, sources)
-    blocks = _covariance_v2(args['covariance_source_refs'], operands, relationships, sources) if v2 else None
-    return {'version': VERSION_V2 if v2 else VERSION, 'source_ref': args['source_ref'], 'artifact_ref': original['artifact_ref'],
+    blocks = _covariance_blocks(args['covariance_source_refs'], operands, relationships, sources)
+    return {'version': VERSION, 'source_ref': args['source_ref'], 'artifact_ref': original['artifact_ref'],
         'source_kind': args['source_kind'], 'assay': assay, 'operands': operands,
-        'relationships': relationships, 'correction_stages': stages, 'covariance_source': covariance,
+        'relationships': relationships, 'correction_stages': stages,
         'distinct_residual_observation': residual, 'residual_relationship': residual_link,
         'variance_status': args['variance_status'], 'observation_model': args['observation_model'],
         'model_witnesses': witnesses, 'source_refs': list(sources.references),
-        **({'covariance_sources': blocks} if v2 else {})}
+        'covariance_sources': blocks}
 
 
-__all__ = ['VERSION', 'VERSION_V2', 'POPULATION_V2', 'ROLES', 'UNITS', 'ALLOWLIST', 'LINKS', 'LINK_LIMITS', 'STAGES', 'STAGE_VALUES',
+__all__ = ['VERSION', 'POPULATION', 'ROLES', 'UNITS', 'ALLOWLIST', 'LINKS', 'LINK_LIMITS', 'STAGES', 'STAGE_VALUES',
     'compiled_assay_population_schema', 'compiled_assay_operation_schema', 'selector_schema', 'source_schema', 'read_compiled_assay_inputs']
 
 # Prospective common-assessment branch. Deliberately not added to the selected
 # operation catalog here: storage, typed delivery and rendering have other owners.
-COMMON_REQUEST = 'a105_common_assessment_request_v1'
-COMMON_POPULATION = 'a105_common_assessment_population_v1'
-COMMON_INPUTS = 'a105_common_assessment_inputs_v1'
+COMMON_REQUEST = 'a105_common_assessment_request'
+COMMON_POPULATION = 'a105_common_assessment_population'
+COMMON_INPUTS = 'a105_common_assessment_inputs'
 COMMON_ARMS = ('reference', 'test')
 COMMON_BASE_ROLES = ('product', 'reporter', 'kcat', 'Km', 'Kd', 'free_substrate',
                      'background', 'recovery', 'active_fraction', 'nuisance_response')
@@ -864,7 +819,7 @@ def _common_covariance(reference, sources, estimates):
         raise ExperimentalContractError('common_covariance_json_required','covariance') from error
     _keys(data,('version','roles','owner_keys','units','dependency_keys','covariance','basis','variance_status','origin'),'common.covariance')
     roles=data['roles']
-    if data['version']!='a105_common_assessment_covariance_v1' or not isinstance(roles,list) or not roles or len(set(roles))!=len(roles) or any(r not in COMMON_ROLES or estimates[r] is None or estimates[r]['status']!='point' for r in roles):
+    if data['version']!='a105_common_assessment_covariance' or not isinstance(roles,list) or not roles or len(set(roles))!=len(roles) or any(r not in COMMON_ROLES or estimates[r] is None or estimates[r]['status']!='point' for r in roles):
         _fail('common_covariance_eligible_roles_required','covariance')
     owners=[estimates[r]['owner_key'] for r in roles];units=[estimates[r]['unit'] for r in roles];deps=[estimates[r]['dependency_keys'] for r in roles]
     if data['owner_keys']!=owners or data['units']!=units or data['dependency_keys']!=deps:

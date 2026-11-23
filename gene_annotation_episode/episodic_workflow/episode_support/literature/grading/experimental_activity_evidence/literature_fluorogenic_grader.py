@@ -28,7 +28,7 @@ concentration_count, concentration_low_over_km, concentration_high_over_km, inne
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_fluorogenic_criteria import FLUOROGENIC_CRITERIA
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_fluorogenic_grade_v1'
+VERSION = 'a105_fluorogenic_grade'
 CRITERIA = tuple(criterion['id'] for criterion in FLUOROGENIC_CRITERIA)
 ACTIVITY = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact activity_detected_above_control
 NM_PER_UNIT = {'pM': 1.0e-3, 'nM': 1.0, 'uM': 1.0e3, 'mM': 1.0e6}   # FIXED_BY_DEFINITION: exact concentration unit factors to nM (the record also allows enzyme concentrations in pM)

@@ -19,7 +19,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_
 
 
 CONTRACT = {
-    "id": "GenomeComparison_inspected_source_v1",
+    "id": "GenomeComparison_inspected_source",
     "application_tree": "5c365e1dca2b3a8c311d7d352e862ff1442eefc9",
     "application_sha256": "4267b35bdd5ad858b833fa2b84eb794c91e95b7f5abc0628b90ec4d6a0a33c14",
     "dependency_tree": "18196fe0df123702457e4af2e0b1e0707d5f5281",
@@ -35,7 +35,7 @@ def source(raw, name, *, complete=True):
 
 def fasta(key, raw, *, complete=True):
     result = inputs.read_protein_fasta(raw, source=source(raw, "synthetic-" + key, complete=complete),
-                                     declared_format="protein_fasta_utf8_v1", inventory_key=key)
+                                     declared_format="protein_fasta_utf8", inventory_key=key)
     assert result["value"] is not None
     return result["value"]
 
@@ -51,7 +51,7 @@ def native_result(rows=None):
     raw = json.dumps({"genome_names": {"ref_genome": "same label", "comp_genome_2": "same label"},
                       "feature_matches": rows}).encode()
     result = native_parser.parse_genome_comparison(raw, source=source(raw, "synthetic-native"),
-                        declared_format="genome_comparison_json_v1", source_contract=deepcopy(CONTRACT))
+                        declared_format="genome_comparison_json", source_contract=deepcopy(CONTRACT))
     assert result["value"] is not None
     return result
 
@@ -306,7 +306,7 @@ def test_unknown_table_width_excludes_positional_identity_but_preserves_valid_ne
     second = ["c", "1", "4", "r2", "", "", "", "", "", "", "", "", "uni (->)", "s", "1", "3", "s2", "", "", "", "0", ".5"]
     raw = ("\n".join("\t".join(row) for row in (names, header, first, second)) + "\n").encode()
     value = native_parser.parse_genome_comparison(raw, source=source(raw, "synthetic-native"),
-                declared_format="genome_comparison_tsv_v1", source_contract=CONTRACT)["value"]
+                declared_format="genome_comparison_tsv", source_contract=CONTRACT)["value"]
     assert value is not None
     data["native"] = value
     for link in data["native_links"]:
@@ -339,9 +339,9 @@ def metadata(kind, rows, key):
     raw = json.dumps(rows).encode()
     population = {"origin": "later_database_snapshot", "query_source": None, "selected_fields": [], "offset": None,
                   "requested_limit": None, "reported_total_count": None, "population_complete": "unknown", "completeness_evidence": []}
-    readers = {"feature": (inputs.read_feature_metadata, "bvbrc_genome_feature_json_array_v1"),
-               "genome": (inputs.read_genome_metadata, "bvbrc_genome_json_array_v1"),
-               "sequence": (inputs.read_feature_sequences, "bvbrc_feature_sequence_json_array_v1")}
+    readers = {"feature": (inputs.read_feature_metadata, "bvbrc_genome_feature_json_array"),
+               "genome": (inputs.read_genome_metadata, "bvbrc_genome_json_array"),
+               "sequence": (inputs.read_feature_sequences, "bvbrc_feature_sequence_json_array")}
     reader, fmt = readers[kind]
     kwargs = {"coordinate_convention": {"value": "unknown", "source_fields": []}} if kind == "feature" else {}
     result = reader(raw, source=source(raw, "synthetic-" + key), declared_format=fmt,
@@ -437,7 +437,7 @@ def test_actual_source_identity_conflict_is_global_and_distinct_from_rejected_ra
     # These are separately well-formed saved inputs, but they claim the same
     # source identity for different byte objects. No join can repair that.
     data["inventories"][1] = inputs.read_protein_fasta(b">s1\nACDE\n", source=source(b">s1\nACDE\n", "synthetic-ref"),
-                declared_format="protein_fasta_utf8_v1", inventory_key="subject")["value"]
+                declared_format="protein_fasta_utf8", inventory_key="subject")["value"]
     result = build(data)
     assert result["status"] == "invalid"
     assert codes(result) == {"supplied_contract_invalid"}

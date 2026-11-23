@@ -8,7 +8,7 @@ from copy import deepcopy
 from fractions import Fraction
 import math
 
-VERSION = "reported_rate_domain_v1"
+VERSION = "reported_rate_domain"
 NAMESPACE = "literature_rate_source_domain_cells"
 DERIVED = ("rate_difference", "retained_fraction", "fractional_decrease")
 INF = math.inf
@@ -208,7 +208,7 @@ def rate_source_domain_cells_schema():
         "lower": {"type": ["number", "null"]}, "upper": {"type": ["number", "null"]},
         "lower_inclusive": {"type": "boolean"}, "upper_inclusive": {"type": "boolean"},
         "projection": {"type": "string", "enum": ["exact", "outward", "none"]},
-        "basis": {"type": "string", "enum": ["reported_point", "reported_censoring", "reported_operand_algebra", "stored_numerical_point", "legacy_stored_cell"]},
+        "basis": {"type": "string", "enum": ["reported_point", "reported_censoring", "reported_operand_algebra", "stored_numerical_point", "stored_cell"]},
         "conditioning": {"type": "string", "enum": ["reported_endpoint_normalization_unit_relations", "stored_source_cell"]},
         "failure": {"type": ["string", "null"], "enum": [*UNAVAILABLE_REASONS, *NATIVE_REASONS, None]}})
     schema["items"]["required"] = list(properties)

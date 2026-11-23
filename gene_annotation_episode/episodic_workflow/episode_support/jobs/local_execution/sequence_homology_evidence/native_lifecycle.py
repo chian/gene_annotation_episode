@@ -25,7 +25,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.jobs.local_execut
 from gene_annotation_episode.local_resources import LocalResources
 
 
-VERSION = 'durable_systemd_native_job_v2'
+VERSION = 'durable_systemd_native_job'
 
 
 def _control(arguments):

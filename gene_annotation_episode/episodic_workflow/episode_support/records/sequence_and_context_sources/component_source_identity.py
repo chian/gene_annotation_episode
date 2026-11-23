@@ -14,7 +14,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.partner_p
 from gene_annotation_episode.episodic_workflow.episode_support.readers.sequence_and_context_sources.component_sequence_attribution import protein_sequence, RESOLVED_AMINO_ACIDS
 
 
-VERSION = 'source_role_sequence_identity_v1'
+VERSION = 'source_role_sequence_identity'
 TOOL = 'partner.source_identity_evidence'
 
 

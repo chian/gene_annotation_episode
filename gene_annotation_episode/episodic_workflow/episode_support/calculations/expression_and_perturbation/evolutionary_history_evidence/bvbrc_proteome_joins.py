@@ -211,7 +211,7 @@ def _operands(native, inventories, bindings, ids, tracks_by_id, links, problems)
             identifier = row['patric_id']
             binding = by_track.get(selector['track_key'])
             refrow = native['reference_rows'][selector['reference_row_ordinal']]
-            uncertain = native['format'] == 'genome_comparison_tsv_v1' and any((d['code'] == 'native_table_width_invalid' for r in (refrow, row) for d in r['diagnostics']))
+            uncertain = native['format'] == 'genome_comparison_tsv' and any((d['code'] == 'native_table_width_invalid' for r in (refrow, row) for d in r['diagnostics']))
             if not requested_rows:
                 failed('not_supplied', 'row_join_missing')
             elif uncertain or identifier['presence'] != 'value':
@@ -353,7 +353,7 @@ def build_native_joins(native: dict, *, input_index: dict | None, inventories: l
     bindings, tracks_by_id = _track_bindings(input_index, inventory_map, execution_links, problems, ids)
     references, subjects = _operands(native, inventory_map, bindings, ids, tracks_by_id, native_links, problems)
     metadata = _metadata(inventory_map, features, genomes, sequences, ids, metadata_links, problems)
-    value = {'version': 'bvbrc_proteome_joins_proposal_v1', 'primary_source_ref': native['source']['content']['source_ref'], 'execution_links': execution_links, 'requested_native_links': native_links, 'requested_metadata_links': metadata_links, 'track_bindings': bindings, 'reference_joins': references, 'subject_joins': subjects, 'metadata_joins': metadata, 'sequence_groups': _sequence_groups(inventory_map), 'diagnostics': problems.diagnostics}
+    value = {'version': 'bvbrc_proteome_joins_proposal', 'primary_source_ref': native['source']['content']['source_ref'], 'execution_links': execution_links, 'requested_native_links': native_links, 'requested_metadata_links': metadata_links, 'track_bindings': bindings, 'reference_joins': references, 'subject_joins': subjects, 'metadata_joins': metadata, 'sequence_groups': _sequence_groups(inventory_map), 'diagnostics': problems.diagnostics}
     result = {'status': 'partial' if problems.diagnostics or problems.requirements else 'ok', 'value': value, 'requirements': problems.requirements, 'diagnostics': problems.diagnostics}
     return validate_proteome_sheet_data('NativeJoinsResult', result)
 __all__ = ['build_native_joins']

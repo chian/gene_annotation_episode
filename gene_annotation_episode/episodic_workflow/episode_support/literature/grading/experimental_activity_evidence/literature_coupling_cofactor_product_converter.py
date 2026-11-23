@@ -122,7 +122,7 @@ import math
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_assay_grading import INPUT_VERSION, ROLES, grade_assay
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_coupling_cofactor_product_converted_v1'
+VERSION = 'a105_coupling_cofactor_product_converted'
 CRITERIA_MAP = {'measurement_identity': ('same_enzyme_preparation',),
                 'calibration_applicability': ('product_calibrated', 'extinction_coefficient_stated', 'absorbance_range', 'calibration_recovery'),
                 'background_alternatives': ('spontaneous_oxidation_control', 'background_subtracted'), 'attribution_supported': ('inactive_enzyme_control',),

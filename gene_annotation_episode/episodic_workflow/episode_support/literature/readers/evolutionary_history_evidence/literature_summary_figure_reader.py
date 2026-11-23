@@ -14,7 +14,7 @@ import math
 from gene_annotation_episode.episodic_workflow.episode_support.records.evolutionary_history_evidence.domain import ContractError
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.evolutionary_history_evidence.literature_figure_measurements import read_bar_ordinate
 
-VERSION = "literature_summary_figure_v1"
+VERSION = "literature_summary_figure"
 BOUND_KIND = "conditional_digitization_not_confidence_interval"
 UNITS = ("events_per_100000_cells", "fraction", "CFU_per_mL", "minutes", "per_min",
          "molecules_per_cell", "normalized_signal", "mg_per_mL")

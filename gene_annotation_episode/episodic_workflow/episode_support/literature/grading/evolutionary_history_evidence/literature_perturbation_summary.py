@@ -18,8 +18,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.evolutionary_history_evidence.literature_perturbation_calculations import COMPONENTS as POINT_COMPONENTS, populate_source_restoration, _endpoint_reason
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.evolutionary_history_evidence.literature_summary_figure_reader import read_summary_figure
 
-DATA_VERSION = "a106_source_measurements_v2"
-VERSION = "a106_source_summary_restoration_v2"
+DATA_VERSION = "a106_source_summary_measurements"
+VERSION = "a106_source_summary_restoration"
 ROLES = ("W", "K", "R", "A_reference", "A_restored", "B_pert", "B_rest")
 SUMMARY_KINDS = ("arithmetic_mean", "geometric_mean", "median", "single_observation", "unknown")
 SCALES = ("endpoint", "log10_endpoint", "ln_endpoint", "unknown")
@@ -157,7 +157,7 @@ def _raw_summary(raw, field):
 
 
 def _entry(entry, field, sources, unit):
-    # Omission preserves historical v2 inputs/payloads exactly. A supplied basis
+    # Omission preserves saved inputs/payloads exactly. A supplied basis
     # qualifies selected meanings; it neither validates source truth nor changes
     # numerical eligibility or calculation.
     has_basis = isinstance(entry, dict) and "interpretation_basis" in entry
@@ -318,7 +318,7 @@ def _entry(entry, field, sources, unit):
 
 
 def read_summary_measurements(data, *, sources, reference, artifact_ref, status, key_function):
-    """Read the exact retained v2 JSON plus any explicitly selected image bytes."""
+    """Read the exact retained JSON plus any explicitly selected image bytes."""
     _keys(data, DATA_FIELDS, "data_source")
     if data["version"] != DATA_VERSION or data["uncertainty_basis"] != "per_measurement":
         _fail("unsupported_perturbation_summary_version", "data_source.version")
@@ -460,13 +460,13 @@ def populate_summary_restoration(extraction, *, origin):
     inputs = {name: extraction[name] for name in ("values", "measurement_keys", "endpoint_unit", "exposure_unit",
         "design", "measurement_status", "same_endpoint_scope", "amount_role", "orientation")}
     inputs["origin"] = origin
-    legacy = populate_source_restoration(inputs)
+    direct_sheet = populate_source_restoration(inputs)
     summary = extraction["summary_data"]
     statistics = {role: _mean_statistics(summary["measurements"][role]) for role in ROLES}
     covariance, kinds, covariance_status = _covariances(summary, statistics)
     cells = {name: {**deepcopy(cell), "statistic_method": "point_component", "variance_status": "unknown",
                    "lower": None, "upper": None, "bound_kind": "none", "lower_error_cap":None,"upper_error_cap":None,
-                   "error_cap_scale":"unknown","spread_reading":"not_applicable"} for name, cell in legacy["cells"].items()}
+                   "error_cap_scale":"unknown","spread_reading":"not_applicable"} for name, cell in direct_sheet["cells"].items()}
     descriptors = {}
     for role in ROLES:
         entry, stat = summary["measurements"][role], statistics[role]
@@ -525,7 +525,7 @@ def populate_summary_restoration(extraction, *, origin):
             cells[role+"_"+suffix]["variance_scope"] = stat["variance_scope"]
     rk_reason = _endpoint_reason(inputs, ("R","K"), restoration=True)
     rk_value = Fraction(inputs["values"]["R"])-Fraction(inputs["values"]["K"]) if rk_reason is None else None
-    for prefix, a, b, prerequisite in (("perturbation", "W", "K", legacy["cells"]["perturbation_difference"]),
+    for prefix, a, b, prerequisite in (("perturbation", "W", "K", direct_sheet["cells"]["perturbation_difference"]),
                                      ("restoration", "R", "K", {"value":rk_value,"unavailable_reason":rk_reason})):
         va, vb, cov = covariance[a,a], covariance[b,b], covariance[a,b]
         valid = prerequisite["value"] is not None

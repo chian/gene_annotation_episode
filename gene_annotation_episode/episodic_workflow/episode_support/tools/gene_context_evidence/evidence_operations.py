@@ -244,7 +244,7 @@ class A103ToolRegistry(ToolRegistry):
                 for row in args['rows']:
                     self._received(row['neighborhood_ref'],known)
                     measured = received_measurement(self.store,row['neighborhood_ref'])
-                    require(measured is not None and measured['body']['schema']=='a103_neighborhood_v1','a103_actual_neighborhood_required')
+                    require(measured is not None and measured['body']['schema']=='a103_neighborhood','a103_actual_neighborhood_required')
                     anchor = binding_body(self.store,measured['body']['binding_ref'],known)
                     require(row['left_feature_index']==anchor['locus']['source_feature_index'],'a103_context_left_must_be_bound_focal_locus')
                     selected = {**row,'neighborhood':measured['body']}
@@ -254,7 +254,7 @@ class A103ToolRegistry(ToolRegistry):
                         if detection_ref is not None:
                             self._received(detection_ref,known)
                             proof = received_measurement(self.store,detection_ref)
-                            require(proof is not None and proof['body']['schema']=='a103_detection_v1'
+                            require(proof is not None and proof['body']['schema']=='a103_detection'
                                 and proof['body'].get('neighborhood_ref')==row['neighborhood_ref']
                                 and proof['body']['component_ref']==args['partner_reference_ref'],
                                 'a103_absence_specific_query_or_neighborhood_conflict')
@@ -294,7 +294,7 @@ class A103ToolRegistry(ToolRegistry):
                 if args.get('neighborhood_ref'):
                     self._received(args['neighborhood_ref'],known)
                     neighborhood = received_measurement(self.store,args['neighborhood_ref'])
-                    require(neighborhood is not None and neighborhood['body']['schema']=='a103_neighborhood_v1'
+                    require(neighborhood is not None and neighborhood['body']['schema']=='a103_neighborhood'
                         and neighborhood['body']['binding_ref'] in args['binding_refs'],
                         'a103_detection_actual_neighborhood_scope_required')
                     neighborhood = neighborhood['body']
@@ -314,7 +314,7 @@ class A103ToolRegistry(ToolRegistry):
                     for field,component in (('left_detection_ref',args['left_reference_ref']),('right_detection_ref',args['right_reference_ref'])):
                         self._received(row[field],known)
                         detection = received_measurement(self.store,row[field])
-                        require(detection is not None and detection['body']['schema']=='a103_detection_v1', 'a103_actual_detection_inventory_required')
+                        require(detection is not None and detection['body']['schema']=='a103_detection', 'a103_actual_detection_inventory_required')
                         proof = detection['body']
                         require(proof['genome_key']==row['genome_key'] and proof['component_ref']==component,'a103_detection_operand_conflict')
                         states.append(proof['present'])
@@ -338,7 +338,7 @@ class A103ToolRegistry(ToolRegistry):
                 require(all(r in grades and grades[r]['target_ref']==target for r in selected),'a103_contrast_requires_received_qualified_context')
                 support = max((grades[r]['score'] or 0 for r in args['supporting_source_refs']),default=0.)
                 oppose = max((grades[r]['score'] or 0 for r in args['opposing_source_refs']),default=0.)
-                body = {'schema':'a103_contrast_v1','producer_operation':name,'target_ref':target,'target_regions':regions,
+                body = {'schema':'a103_contrast','producer_operation':name,'target_ref':target,'target_regions':regions,
                     **{k:deepcopy(v) for k,v in args.items() if k!='target_ref'},
                     'supporting_context':support,'opposing_context':oppose,'contrast':max(0.,support-oppose),
                     'controller_credit':None,'interpretation':'explicit_functional_contrast; no_new_independent_context_measurement'}

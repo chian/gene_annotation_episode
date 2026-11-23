@@ -12,7 +12,7 @@ import math
 import re
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import REF, identity, obj
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_experimental_contracts import ExperimentalContractError
-VERSION = 'a105_assay_inputs_v1'
+VERSION = 'a105_assay_inputs'
 PRIMITIVE_ORDER = ('q', 'g', 'k', 'E', 'u', 'v')
 ASSAY_LITERAL_FIELDS = ('molecule', 'organism', 'genotype', 'construct', 'preparation', 'condition', 'intended_variable', 'experimental_system', 'expression_host', 'measured_entity', 'asserted_input', 'asserted_output')
 ENDPOINTS = ('oxygen_consumption', 'product_formation', 'substrate_depletion', 'ligand_binding', 'transport_flux', 'growth', 'abundance', 'other_measured_endpoint', 'unknown', 'conflicting')
@@ -255,7 +255,7 @@ def _covariance(reference, observations, sources):
     raw = sources.source(reference, 'original')
     value = _json_source(raw['content'], 'covariance_source_ref')
     _keys(value, _COVARIANCE_FIELDS, 'covariance_source')
-    if value['version'] != 'a105_primitive_covariance_v1':
+    if value['version'] != 'a105_primitive_covariance':
         _fail('covariance_version_mismatch', 'covariance_source.version')
     if value['primitive_order'] != list(PRIMITIVE_ORDER):
         _fail('covariance_primitive_order_mismatch', 'covariance_source.primitive_order')

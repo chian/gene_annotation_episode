@@ -62,7 +62,7 @@ _ROW_SCHEMA = _object({
 ADDGENE_SEQUENCE_PAGE_SCHEMA = {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     **_object({
-        "version": {"const": "addgene_sequence_page_v1"},
+        "version": {"const": "addgene_sequence_page"},
         "source_ref": {"type": "string", "minLength": 1},
         "requested_id": {"type": "string", "pattern": r"^[0-9]+$"},
         "response_complete": {"type": "boolean"},
@@ -304,7 +304,7 @@ def read_addgene_sequences(content: bytes, *, source_ref: str, requested_id: str
         raise ValueError("addgene_sequence_requested_id_required")
     if type(response_complete) is not bool:
         raise ValueError("addgene_sequence_response_complete_required")
-    page = {"version": "addgene_sequence_page_v1", "source_ref": source_ref,
+    page = {"version": "addgene_sequence_page", "source_ref": source_ref,
             "requested_id": requested_id, "response_complete": response_complete,
             "parse_status": "partial", "authentication_required": False,
             "records": [], "issues": []}

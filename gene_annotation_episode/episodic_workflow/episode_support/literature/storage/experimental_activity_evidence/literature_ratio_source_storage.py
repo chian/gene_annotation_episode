@@ -15,7 +15,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.experimen
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_rate_storage import LiteratureRateRepository
 PROVIDER = 'literature.experimental.relative_signal_source'
-VERSION = 'literature_relative_signal_source_record_v3'
+VERSION = 'literature_relative_signal_source_record'
 COMPONENTS = ('reported_ratio', 'difference_from_reference', 'log_reported_ratio', 'calibrated_amount_ratio', 'amount_adjusted_effect', 'source_profile_log_ratio', 'source_signed_index')
 MEANINGS = ('subject', 'variant', 'reference', 'organism', 'genotype', 'construct_variant', 'construct_reference', 'preparation_variant', 'preparation_reference', 'experiment', 'condition', 'endpoint', 'normalization')
 FLAGS = ('selected_roster_resolved', 'point_candidate_set_complete', 'known_source_conflict')
@@ -126,7 +126,7 @@ class LiteratureRatioSourceRepository(LiteratureRateRepository):
         original = self._record(view['input_source_ref'], 'source')
         self._artifact_metadata(original['artifact_ref'])
         self._artifact_metadata(display['artifact_ref'])
-        if view['origin'] != 'tool' or display['origin'] != 'tool' or display['provider'] != 'image.view' or (view['representation'] != 'selected_native_image_frame_v1') or (original['artifact_ref'] != view['original_artifact_ref']) or (display['artifact_ref'] != view['image_artifact_ref']) or (display.get('text_ref') is not None) or (display.get('parent_source_refs') != [original['id']]) or (display.get('version') != view['software_version']):
+        if view['origin'] != 'tool' or display['origin'] != 'tool' or display['provider'] != 'image.view' or (view['representation'] != 'selected_native_image_frame') or (original['artifact_ref'] != view['original_artifact_ref']) or (display['artifact_ref'] != view['image_artifact_ref']) or (display.get('text_ref') is not None) or (display.get('parent_source_refs') != [original['id']]) or (display.get('version') != view['software_version']):
             raise ContractError('relative_signal_native_view_mismatch')
         return (view, display)
 
@@ -235,7 +235,7 @@ class LiteratureRatioSourceRepository(LiteratureRateRepository):
             view, _ = self._view_records(view_ref)
             return {'metadata': view, 'original_bytes': self._bytes(view['original_artifact_ref']), 'display_bytes': self._bytes(view['image_artifact_ref']), 'own_action_receipt': receipts[view_ref]}
         extraction = read_relative_signal_source_inputs(args, read_source=read_source, read_view=read_view, evidence_origin=self.evidence_origin)
-        sheet = calculations.populate_relative_signal_v2(extraction)
+        sheet = calculations.populate_relative_signal_from_source(extraction)
         root = self._source(context, args['source_ref'])
         with self.store.transaction():
             created = []
@@ -248,7 +248,7 @@ class LiteratureRatioSourceRepository(LiteratureRateRepository):
                     created.append(row['id'])
                 return row['id']
             bindings, measurements = self._bindings(extraction, root['id'], publish)
-            calculation = {'version': 'relative_signal_calculation_v2', 'input_extraction_sha256': _sha(extraction), 'sheet': sheet}
+            calculation = {'version': 'relative_signal_calculation', 'input_extraction_sha256': _sha(extraction), 'sheet': sheet}
             calculation_ref = self.store.artifact(canonical(calculation), 'application/json')
             payload = {'version': VERSION, 'input_source_ref': root['id'], 'input_artifact_ref': root['artifact_ref'], 'direct_input_source_refs': direct, 'input_source_refs': closure, 'input_view_refs': views, 'selection': args, 'extraction': extraction, 'sheet': sheet, 'calculation_artifact_ref': calculation_ref, 'experimental_bindings': bindings, 'measurement_bindings': measurements}
             artifact = self.store.artifact(canonical(payload), 'application/json')
@@ -295,7 +295,7 @@ class LiteratureRatioSourceRepository(LiteratureRateRepository):
             if item['state'] == 'available' and (item['metadata'] != actual or 'artifact_' + item['original_sha256'] != actual['original_artifact_ref'] or ('artifact_' + item['display_sha256'] != actual['image_artifact_ref'])):
                 raise ContractError('relative_signal_saved_view_identity_mismatch')
         calculation = self._json(payload['calculation_artifact_ref'])
-        if set(calculation) != {'version', 'input_extraction_sha256', 'sheet'} or calculation['version'] != 'relative_signal_calculation_v2' or calculation['input_extraction_sha256'] != _sha(payload['extraction']) or (calculation['sheet'] != payload['sheet']):
+        if set(calculation) != {'version', 'input_extraction_sha256', 'sheet'} or calculation['version'] != 'relative_signal_calculation' or calculation['input_extraction_sha256'] != _sha(payload['extraction']) or (calculation['sheet'] != payload['sheet']):
             raise ContractError('relative_signal_saved_calculation_mismatch')
         bindings, measurements = self._bindings(payload['extraction'], payload['input_source_ref'])
         expected_refs = _unique([sheet_ref, *self._entity_refs(bindings), *(row[key] for row in measurements for key in ('input_measurement_ref', 'reference_measurement_ref') if row[key])])

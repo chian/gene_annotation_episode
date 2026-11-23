@@ -17,7 +17,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.reader
 from gene_annotation_episode.episodic_workflow.episode_support.records.sample_context_evidence.domain import (
     canonical)
 
-VERSION = 'literature_sheet_credit_v1'
+VERSION = 'literature_sheet_credit'
 
 
 def credit_binding(task_key, task):

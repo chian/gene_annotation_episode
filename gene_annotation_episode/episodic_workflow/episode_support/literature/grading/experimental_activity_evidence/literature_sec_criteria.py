@@ -47,7 +47,7 @@ molar mass of the larger component alone, the flow rate, the temperature, the in
 the spread of the KD and its kind, and the statement that only this method was used.
 """
 
-VERSION = 'a105_sec_criteria_v1'
+VERSION = 'a105_sec_criteria'
 
 # ---- Threshold constants -------------------------------------------------
 PERCENT_PER_FRACTION = 100.0  # FIXED_BY_DEFINITION: percent per unit fraction (the mass deviation is recorded in percent).

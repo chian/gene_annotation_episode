@@ -1,9 +1,7 @@
 """Evidence-axis definitions and closed judgment contracts.
 
 Native numbers are host facts. An episode judges only the declared criteria and
-cites actual witnesses. Validation keeps historical draft records readable; it
-does not authorize their numeric recipes. The evaluator separately withdraws
-rejected categorical routes. These contracts do not choose annotation-wide
+cites actual witnesses. The evaluator withdraws rejected categorical routes. These contracts do not choose annotation-wide
 aggregation, applicability weights, model calls, actions or stopping rules.
 """
 from __future__ import annotations
@@ -17,7 +15,7 @@ from method_loop.jsonvalue import canonical
 from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.domain import METRIC_NAMES, OBSERVATION_KINDS
 
 
-VERSION = 'evidence_axis_entry_v1'
+VERSION = 'evidence_axis_entry'
 SLOT = 'evidence_axis'
 TEXT = {'type': 'string', 'pattern': r'\S'}
 CODE = {'type': 'string', 'pattern': r'^[a-z][a-z0-9_]*$'}
@@ -80,7 +78,7 @@ _QUALITATIVE = obj({
 })
 _CHAIN_FIELDS = ('source_subject', 'source_property', 'correspondence',
                  'target_hypothesis', 'limitations')
-SCORING_VERSION = 'evidence_axis_scoring_v1'
+SCORING_VERSION = 'evidence_axis_scoring'
 _SCORING_ROUTE = obj({
     'route_id': CODE,
     'operation': {'enum': ['identity', 'neg_log10', 'ratio', 'grade', 'ordinal']},
@@ -175,11 +173,7 @@ def scoring_rubric_schema():
 
 
 def validate_scoring_rubric(value, *, metrics, criteria, grades):
-    """Validate retained draft structure, including withdrawn historical rules.
-
-    Readability is separate from execution: accepting an old ordinal/grade
-    descriptor here does not authorize converting its categories into numbers.
-    """
+    """Validate the structure of a scoring rubric."""
     import math
     if not Draft202012Validator(_SCORING).is_valid(value):
         raise ValueError('evidence_axis_scoring_rubric_invalid')

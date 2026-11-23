@@ -24,7 +24,7 @@ returns     every case the criterion can return, as (status, reason_code, when).
             as 'never' cannot occur for this criterion.
 """
 
-VERSION = 'a105_coupled_enzyme_criteria_v1'
+VERSION = 'a105_coupled_enzyme_criteria'
 
 UM_PER_MIN_PER_UNIT = {'uM/min': 1.0, 'mM/min': 1000.0, 'nM/min': 0.001, 'U/mL': 1000.0, 'mU/mL': 1.0}   # FIXED_BY_DEFINITION: exact unit conversions to uM/min.
 SECONDS_PER_UNIT = {'s': 1.0, 'min': 60.0}   # FIXED_BY_DEFINITION: a minute is 60 seconds.

@@ -34,7 +34,7 @@ FINDING_FORM = RecordForm({
                     'episode or returned by its own-kind children', items=SHEET_FORM),
     'targets': Field('list', 'One entry per target of the scope: the attributed dimensions of the credit view',
                      items=TARGET_FORM),
-    'contribution_count': Field('integer', 'V7: received native measurements that contribute to the credit'),
+    'contribution_count': Field('integer', 'F7: received native measurements that contribute to the credit'),
     **{name: Field('integer', 'Measurements of evidence type ' + kind) for kind, name in TYPE_COUNTS.items()},
 })
 RETURN_FORM = RecordForm({

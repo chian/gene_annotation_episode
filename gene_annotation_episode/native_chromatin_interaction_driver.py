@@ -301,7 +301,7 @@ def run_chromatin_interaction_driver(plan):
             else:
                 extraction = unavailable_extraction(request, code="input_unavailable" if source is None else "native_dependency_unavailable", populations=[population])
             extractions.append(extraction)
-            seal = {"version": "chromatin_interaction_population_seal_v1", "identity": plan["identity"],
+            seal = {"version": "chromatin_interaction_population_seal", "identity": plan["identity"],
                 "request_sha256": digest(request), "native": {"metadata": extraction["native_metadata"], "chromosomes": extraction["chromosomes"]},
                 "population": extraction["populations"][0], "tables": [{"draft": draft,
                     "declaration": declaration(selected[draft["role"]], directory)} for draft in extraction["table_drafts"]],
@@ -328,7 +328,7 @@ def run_chromatin_interaction_driver(plan):
     with _writing(confined_file(directory, specs["stderr"]["relative_path"])) as stream:
         for problem in problems:
             stream.write(canonical(problem) + b"\n")
-    result = validate_chromatin_bundle({"version": "chromatin_interaction_native_bundle_v1", "identity": plan["identity"],
+    result = validate_chromatin_bundle({"version": "chromatin_interaction_native_bundle", "identity": plan["identity"],
         "request": request, "software": job["software"], "extraction": extraction, "elements": elements, "metadata": metadata,
         "population_seals": seals, "outputs": [{"specification": spec, "declaration": declaration(spec, directory)}
             for spec in plan["outputs"] if spec["role"] != "bundle"], "failures": problems}, plan=plan)

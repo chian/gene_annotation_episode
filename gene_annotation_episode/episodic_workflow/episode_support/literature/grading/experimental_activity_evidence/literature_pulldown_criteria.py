@@ -42,7 +42,7 @@ What this method does not ask (kept in the record for the reviewer, no criterion
 incubation, the detection method, the way the bait is captured, the source of the prey, the nuclease named and the crosslinker.
 """
 
-VERSION = 'a105_pulldown_criteria_v1'
+VERSION = 'a105_pulldown_criteria'
 
 # ---- Threshold constants -------------------------------------------------
 MM_PER_UNIT = {'mM': 1.0, 'M': 1000.0}  # FIXED_BY_DEFINITION: millimolar per concentration unit.

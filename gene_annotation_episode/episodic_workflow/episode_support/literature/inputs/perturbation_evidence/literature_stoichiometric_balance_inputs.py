@@ -10,7 +10,7 @@ import sqlite3
 from gene_annotation_episode.episodic_workflow.episode_support.records.perturbation_evidence.domain import ContractError, obj, validate_schema
 from gene_annotation_episode.episodic_workflow.episode_support.tools.documents.perturbation_evidence.spreadsheet_tools import Workbook
 
-VERSION = 'a105_stoichiometric_balance_xlsx_selection_v1'
+VERSION = 'a105_stoichiometric_balance_xlsx_selection'
 MEANS = {'g2_initial': 'B52', 'g2': 'B', 'g3': 'D', 'g4': 'F',
          'g5': 'H', 'g6': 'J', 'pi': 'N'}
 SDS = {'g2_sd': 'C', 'g3_sd': 'E', 'g4_sd': 'G', 'g5_sd': 'I',
@@ -152,7 +152,7 @@ def read_stoichiometric_balance_inputs(selection, workbook_bytes):
     duplicates = _cell(meta_rows[16], 'A16', numeric=False)
     if not isinstance(method, str) or 'colorimetric assay' not in method or duplicates != 'Each reaction was carried out in duplicates.':
         raise ContractError('stoichiometric_balance_method_context_missing')
-    return {'version': 'a105_stoichiometric_balance_extraction_v1',
+    return {'version': 'a105_stoichiometric_balance_extraction',
         'source_ref': selection['source_ref'], 'workbook_sha256': digest,
         'sheet_name': 'Data', 'sheet_key': sheets['Data']['sheet_key'],
         'metadata_sheet_key': sheets['Metadata']['sheet_key'], 'panel': 'D',

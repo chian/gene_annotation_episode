@@ -23,8 +23,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.biochemic
     validate_validations)
 
 
-INTENT_VERSION = 'practical_action_intent_v1'
-MANIFEST_VERSION = 'practical_state_v1'
+INTENT_VERSION = 'practical_action_intent'
+MANIFEST_VERSION = 'practical_state'
 INTENT_FIELDS = {'version', 'run_id', 'episode_id', 'assignment_sha256', 'operation_key',
     'tool_name', 'arguments', 'context_before', 'ordinal', 'started_at'}
 

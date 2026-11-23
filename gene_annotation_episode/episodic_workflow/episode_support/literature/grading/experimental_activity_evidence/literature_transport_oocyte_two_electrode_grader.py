@@ -30,7 +30,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_binding_reader import _SCALES
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_transport_oocyte_two_electrode_grade_v1'
+VERSION = 'a105_transport_oocyte_two_electrode_grade'
 CRITERIA = tuple(criterion['id'] for criterion in TRANSPORT_OOCYTE_TWO_ELECTRODE_CRITERIA)
 TRANSPORT = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact transport_detected_above_control
 

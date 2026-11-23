@@ -6,7 +6,7 @@ separate contracts.
 """
 from __future__ import annotations
 from gene_annotation_episode.episodic_workflow.episode_support.records.sample_context_evidence.construction_records import _exact, _option_id, _plain, _text
-VERSION = 'evidence_axis_instruction_v1'
+VERSION = 'evidence_axis_instruction'
 _FIELDS = 'entry_version id slot name description investigation_instructions evidence'
 _SOURCE_FIELDS = 'case_group case_id source_url source_locator observation limit'
 

@@ -12,7 +12,7 @@ def _identity(domain):
     return {key: domain[key] for key in ('key', 'source_key', 'sample_key')}
 
 def validate_selected_software(software, *, methods, profiles):
-    """Require only the extra closure imported by this selected v2 path."""
+    """Require only the extra closure imported by this selected path."""
     required = {'native_fluorescence_prepared_contracts.py'}
     if methods or profiles:
         required.add('native_fluorescence_prepared_driver.py')

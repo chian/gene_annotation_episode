@@ -14,7 +14,7 @@ SHEET = {'from_step': 0, 'path': ['result', 'sheet_ref']}
 
 
 def selection(world_source, data):
-    return {'version': 'a105_parent_depletion_xlsx_selection_v1', 'source_ref': world_source,
+    return {'version': 'a105_parent_depletion_xlsx_selection', 'source_ref': world_source,
             'expected_sha256': sha256(data).hexdigest(), 'sheet_name': 'Data', 'compound': 'ParentX',
             'submix': 'Mix1', 'time_hours': 24}
 

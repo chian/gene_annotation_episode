@@ -128,7 +128,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_row_contract import SECONDS_PER_MINUTE
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_endpoint_optical_plateau_converted_v1'
+VERSION = 'a105_endpoint_optical_plateau_converted'
 CRITERIA_MAP = {'measurement_identity': ('readout_stated',), 'calibration_applicability': ('calibration_basis', 'calibration_agreement', 'signal_linear_range'),
                 'matrix_interference': ('inner_filter_check',), 'background_alternatives': ('baseline_control', 'baseline_level'), 'attribution_supported': ('enzyme_dependence',),
                 'endpoint_alignment': ('plateau_reached', 'control_same_window'), 'conversion_denominator': ('initial_substrate_determined', 'conversion_within_full_scale'),

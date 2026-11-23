@@ -167,7 +167,7 @@ def validate_genome_alignment_data(value: dict) -> dict:
     c._finite(value)
     c._shape(value, ('schema_version', 'analysis_id', 'original_task', 'document_slots', 'inputs',
         'associations', 'parsed_artifacts', 'slot_resolutions', 'requirements', 'diagnostics'))
-    c._require(value['schema_version'] == 'bvbrc_genome_alignment_data_v1'); c._text(value['analysis_id'])
+    c._require(value['schema_version'] == 'bvbrc_genome_alignment_data'); c._text(value['analysis_id'])
     validate_contract('OriginalTask', value['original_task'])
     original = value['original_task']
     c._require(original['required_application_id'] == original['native_application_id'] == 'GenomeAlignment', 'original_task_conflict')
@@ -197,7 +197,7 @@ def build_genome_alignment_data(*, analysis_id: str, original_task: dict,
     requirements: tuple[dict, ...], diagnostics: tuple[dict, ...]) -> dict:
     for arg in (document_slots, parsed_artifacts, slot_resolutions, requirements, diagnostics):
         c._require(type(arg) is tuple, 'argument_invalid')
-    value = {'schema_version': 'bvbrc_genome_alignment_data_v1', 'analysis_id': analysis_id,
+    value = {'schema_version': 'bvbrc_genome_alignment_data', 'analysis_id': analysis_id,
         'original_task': deepcopy(original_task), 'document_slots': deepcopy(list(document_slots)),
         'inputs': deepcopy(inputs), 'associations': deepcopy(associations),
         'parsed_artifacts': deepcopy(list(parsed_artifacts)), 'slot_resolutions': deepcopy(list(slot_resolutions)),
@@ -222,7 +222,7 @@ def build_genome_alignment_data(*, analysis_id: str, original_task: dict,
 def build_genome_alignment_sheet(*, data: dict, components: dict) -> dict:
     data = validate_genome_alignment_data(data)
     components = c.validate_genome_alignment_components(components, data=data)
-    return {'schema_version': 'bvbrc_genome_alignment_sheet_v2', 'analysis_id': data['analysis_id'],
+    return {'schema_version': 'bvbrc_genome_alignment_sheet', 'analysis_id': data['analysis_id'],
         'data': data, 'components': components, 'requirements': deepcopy(components['requirements']),
         'diagnostics': deepcopy(components['diagnostics'])}
 
@@ -230,7 +230,7 @@ def build_genome_alignment_sheet(*, data: dict, components: dict) -> dict:
 def validate_genome_alignment_sheet(value: dict) -> dict:
     c._finite(value)
     c._shape(value, ('schema_version', 'analysis_id', 'data', 'components', 'requirements', 'diagnostics'))
-    c._require(value['schema_version'] == 'bvbrc_genome_alignment_sheet_v2')
+    c._require(value['schema_version'] == 'bvbrc_genome_alignment_sheet')
     data = validate_genome_alignment_data(value['data'])
     c._require(value['analysis_id'] == data['analysis_id'], 'analysis_id_conflict')
     components = c.validate_genome_alignment_components(value['components'], data=data)

@@ -25,8 +25,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.evolution
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.evolutionary_history_evidence.literature_assay_inputs import _Sources
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.evolutionary_history_evidence.literature_experimental_contracts import ExperimentalContractError
 
-INPUT_VERSION = 'a105_endpoint_signal_selection_v1'
-EXTRACTION_VERSION = 'a105_endpoint_signal_inputs_v1'
+INPUT_VERSION = 'a105_endpoint_signal_selection'
+EXTRACTION_VERSION = 'a105_endpoint_signal_inputs'
 POINT_ORDER = ('initial', 'baseline_at_addition', 'late')
 CONTEXT_FIELDS = ('subject','organism','genotype','construct','preparation','partners',
     'experiment','condition','endpoint','normalization','intended_variable',
@@ -89,7 +89,7 @@ def _exact_schema():
         'denominator':{'type':'string','pattern':'^[1-9][0-9]*$'}})
 def _error_schema(): return obj({'code':deepcopy(_TEXT),'field':deepcopy(_TEXT)})
 def covariance_source_schema():
-    return obj({'version':_const('a105_endpoint_signal_covariance_v1'),'basis':_enum(_BASES),
+    return obj({'version':_const('a105_endpoint_signal_covariance'),'basis':_enum(_BASES),
         'primitive_order':_const(list(POINT_ORDER)),
         'primitive_owners':_array(_TEXT,minItems=3,maxItems=3),
         'primitive_units':_const(['native_ordinate_pixel']*3),

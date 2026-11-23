@@ -56,8 +56,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.perturbation_evidence.literature_binding_interaction_calculations import INPUT_VERSION as CALC_INPUT_VERSION, ROLES, ID_FIELDS, CONTEXT_FIELDS, RELATIONS, validate_binding_interaction_inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.perturbation_evidence.literature_experimental_contracts import ExperimentalContractError
 
-VERSION = "binding_interaction_source_inputs_v1"
-OUTPUT_VERSION = "binding_interaction_source_extraction_v1"
+VERSION = "binding_interaction_source_inputs"
+OUTPUT_VERSION = "binding_interaction_source_extraction"
 KINDS = ("ic50", "reported_hill_kd", "unknown", "conflicting")
 STATES = ("exact", "ambiguous", "unreadable", "conflicting")
 STATISTICS = ("sd", "sem", "confidence_interval", "unspecified", "unreported", "unknown", "conflicting")

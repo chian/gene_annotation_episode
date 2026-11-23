@@ -1,5 +1,5 @@
 """What the commissioning parent (the job submission) supplies: one assigned API job, an
-``api_service_assignment_v1`` (resource_id, service, request, endpoint, constraints, launch_instructions). Each
+``api_service_assignment`` (resource_id, service, request, endpoint, constraints, launch_instructions). Each
 property of the old assignment schema is a field under its old name. Two fields are new: ``completion_target``
 (the credit a verified handoff earns, which the completion controller needs from the commission) and
 ``input_refs`` (the records the service operations read, passed in custody).
@@ -13,7 +13,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.perturbatio
     validate_api_assignment)
 
 ASSIGNMENT_FORM = RecordForm({
-    'version': Field('text', 'api_service_assignment_v1'),
+    'version': Field('text', 'api_service_assignment'),
     'resource_id': Field('text', 'The bound API resource the work runs on'),
     'service': Field('text', 'The API service'),
     'request': Field('record', 'The exact service request'),
@@ -25,11 +25,11 @@ ASSIGNMENT_FORM = RecordForm({
                         required=False),
 })
 
-OLD_PROPERTIES = ('version', 'resource_id', 'service', 'request', 'endpoint', 'constraints', 'launch_instructions')
+ASSIGNMENT_PROPERTIES = ('version', 'resource_id', 'service', 'request', 'endpoint', 'constraints', 'launch_instructions')
 
 
 def read_from_parent(assignment, message):
-    original = {name: assignment[name] for name in OLD_PROPERTIES if name in assignment}
+    original = {name: assignment[name] for name in ASSIGNMENT_PROPERTIES if name in assignment}
     validate_api_assignment(original)
     return {**original, 'completion_target': assignment['completion_target'],
             'input_refs': assignment.get('input_refs', []), 'message': message}

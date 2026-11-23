@@ -40,7 +40,7 @@ SHEET_MEANING = ('the significant positions are columns of the analysed alignmen
                  'earlier report, times the site weight')
 MINIMUM_GROUP_SIZE = 2
 MINIMUM_GROUPS = 2
-SCHEMA = 'metacats_sheet_v1'
+SCHEMA = 'metacats_sheet'
 _COUNT = re.compile(r'(\d+) ([^\s,]+)')   # a cell is '6 A, 1 P, 3 V': the comma is not part of the residue
 
 

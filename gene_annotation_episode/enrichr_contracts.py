@@ -16,14 +16,14 @@ import math
 import re
 
 
-REQUEST_VERSION = "enrichr_request_v1"
-SELECTOR_VERSION = "enrichr_selector_v1"
-SHEET_VERSION = "enrichr_response_sheet_v1"
-COMPONENTS_VERSION = "enrichr_components_v1"
+REQUEST_VERSION = "enrichr_request"
+SELECTOR_VERSION = "enrichr_selector"
+SHEET_VERSION = "enrichr_response_sheet"
+COMPONENTS_VERSION = "enrichr_components"
 TABLE_SOURCE = "execution_enrichr_tables"
 ROW_SOURCE = "execution_enrichr_rows"
-PROTOCOLS = ("standard_enrichr_v1", "speedrichr_v1")
-PROFILES = ("documented_odds_v1", "gget_z_label_v1", "uninterpreted")
+PROTOCOLS = ("standard_enrichr", "speedrichr")
+PROFILES = ("documented_odds", "gget_z_label", "uninterpreted")
 FIELD_POSITIONS = {"rank": 0, "term": 1, "p_value": 2, "statistic_3": 3,
     "combined_score": 4, "overlap": 5, "adjusted_p_value": 6,
     "old_p_value": 7, "old_adjusted_p_value": 8}
@@ -131,7 +131,7 @@ def validate_enrichr_request(value):
     _require((background["policy"] == "service_native" and background["genes"] is None)
         or (background["policy"] == "supplied" and type(background["genes"]) is list and len(background["genes"]) > 0
             and all(_entry(item) for item in background["genes"])), "enrichr_background_invalid")
-    _require(background["policy"] != "supplied" or value["protocol_profile"] == "speedrichr_v1",
+    _require(background["policy"] != "supplied" or value["protocol_profile"] == "speedrichr",
         "enrichr_background_protocol_conflict")
     return value
 
@@ -255,19 +255,19 @@ def _overlap(values, pointer):
 
 
 def _interpret_slot(profile, width, atom):
-    declared = {"documented_odds_v1": "odds_ratio", "gget_z_label_v1": "z_score",
+    declared = {"documented_odds": "odds_ratio", "gget_z_label": "z_score",
         "uninterpreted": None}[profile]
     result = {"profile": profile, "declared_meaning": declared, "meaning": "unknown",
-        "claimed_client_label": "z_score" if profile == "gget_z_label_v1" else None,
-        "basis": "documentation" if profile == "documented_odds_v1" else
-            "client_label" if profile == "gget_z_label_v1" else "uninterpreted",
+        "claimed_client_label": "z_score" if profile == "gget_z_label" else None,
+        "basis": "documentation" if profile == "documented_odds" else
+            "client_label" if profile == "gget_z_label" else "uninterpreted",
         "server_version_verified": False, "qualification_codes": []}
     if profile == "uninterpreted":
         result["qualification_codes"].append("statistic_uninterpreted")
         return result
     if width != 9:
         result["qualification_codes"].append("profile_width_conflict")
-    if profile == "gget_z_label_v1":
+    if profile == "gget_z_label":
         result["qualification_codes"].append("interface_definition_conflict")
         return result
     negative = (atom is not None and atom["kind"] == "number"
@@ -446,7 +446,7 @@ def project_enrichr_return(components, *, source_ref):
     _require(_same(value, expected), "enrichr_components_consistency_conflict")
     sheet, window = value["sheet"], value["window"]
     request, response, table = sheet["request"], sheet["response"], sheet["table"]
-    summary = {"version": "enrichr_table_return_v1", "source_ref": source_ref,
+    summary = {"version": "enrichr_table_return", "source_ref": source_ref,
         "library": request["library"], "protocol_profile": request["protocol_profile"],
         "species_context": request["species_context"], "identifier_policy": request["identifier_policy"],
         "background_policy": request["background"]["policy"],
@@ -455,7 +455,7 @@ def project_enrichr_return(components, *, source_ref):
         "table_state": table["state"], "captured_returned_row_count": table["returned_row_count"],
         "window": deepcopy(window), "population": deepcopy(sheet["population"]),
         "qualification_codes": deepcopy(sheet["qualification_codes"])}
-    return {TABLE_SOURCE: [summary], ROW_SOURCE: [{"version": "enrichr_row_return_v1",
+    return {TABLE_SOURCE: [summary], ROW_SOURCE: [{"version": "enrichr_row_return",
         "source_ref": source_ref, **deepcopy(row)} for row in value["rows"]]}
 
 
@@ -497,7 +497,7 @@ def enrichr_fact_sources():
         "selected_row_count": nullable_integer, "selected_ordinals": {"type": "array", "items": integer},
         "has_more_captured_rows": boolean, "next_offset": nullable_integer,
         "all_captured_rows_selected": boolean})
-    table = _obj({"version": {"type": "string", "const": "enrichr_table_return_v1"},
+    table = _obj({"version": {"type": "string", "const": "enrichr_table_return"},
         "source_ref": source, "library": text, "protocol_profile": _enum(PROTOCOLS),
         "species_context": nullable_text, "identifier_policy": {"type": "string", "const": "literal_no_mapping"},
         "background_policy": _enum(("service_native", "supplied")), "native_statistic_profile": _enum(PROFILES),
@@ -506,7 +506,7 @@ def enrichr_fact_sources():
         "table_state": _enum(("unavailable", "invalid", "missing", "null", "rows", "empty")),
         "captured_returned_row_count": nullable_integer, "window": window, "population": population,
         "qualification_codes": codes})
-    row = _obj({"version": {"type": "string", "const": "enrichr_row_return_v1"}, "source_ref": source,
+    row = _obj({"version": {"type": "string", "const": "enrichr_row_return"}, "source_ref": source,
         "ordinal": integer, "pointer": text, "native_kind": _enum(kinds[1:]), "native_width": nullable_integer,
         "native_row_value": atom, "native_cells": {"type": "array", "items": atom}, "term": literal, "overlap": overlap,
         "statistics": _obj({name: metric for name in FIELD_POSITIONS if name not in ("term", "overlap")}),

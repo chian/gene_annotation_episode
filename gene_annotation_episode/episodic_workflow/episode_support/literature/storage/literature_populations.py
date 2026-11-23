@@ -90,7 +90,7 @@ TOOLS = MappingProxyType({
     'literature.binding.interaction.model.populate': 'binding_interaction_model',
     'literature.ratio.populate': 'ratio',
     'literature.ratio.source.populate': 'ratio_source',
-    'literature.controlled_response.source_v3.populate': 'controlled_response',
+    'literature.controlled_response.source.populate': 'controlled_response',
     'literature.gel.populate': 'gel',
     'literature.binding.populate': 'binding',
     'literature.binding.model.populate': 'binding_model',
@@ -195,17 +195,17 @@ class LiteraturePopulations:
     def tool_repository(self, tool_name, arguments):
         """The repository a population tool writes (two tools select a version-specific sheet)."""
         if tool_name == 'literature.figure.populate' and arguments.get('version') == \
-                'literature_figure_endpoint_signal_population_v1':
+                'literature_figure_endpoint_signal_population':
             return self.repository('endpoint_signal')
         if tool_name == 'literature.kinetic.populate' and arguments.get('version') == \
-                'literature_kinetic_summary_precision_population_v1':
+                'literature_kinetic_summary_precision_population':
             return self.repository('summary_precision')
         return self.repository(TOOLS[tool_name])
 
     @staticmethod
     def populate(context, tool_name, repository, arguments, operation_key):
-        if tool_name == 'literature.controlled_response.source_v3.populate':
-            return repository.populate_v3(context, arguments, operation_key)
+        if tool_name == 'literature.controlled_response.source.populate':
+            return repository.populate(context, arguments, operation_key)
         if tool_name == 'literature.rate.source.populate':
             return repository.populate_native(context, arguments, operation_key)
         return repository.populate(context, arguments, operation_key)
@@ -261,10 +261,8 @@ class LiteraturePopulations:
                                     lambda: repo('ion_discrimination'))],
             'channel': [(namespace('literature_channel_storage'), lambda: repo('channel'))],
             'compiled_assay': [(namespace('literature_compiled_assay_storage'), lambda: repo('compiled_assay')),
-                               (namespace('literature_compiled_assay_storage', 'NAMESPACE_V2'),
-                                lambda: repo('compiled_assay').v2_projection()),
-                               (namespace('literature_compiled_assay_storage', 'NAMESPACE_V3'),
-                                lambda: repo('compiled_assay').v3_projection())],
+                               (namespace('literature_compiled_assay_storage', 'COMMON_NAMESPACE'),
+                                lambda: repo('compiled_assay').common_projection())],
             'product_partition': [(namespace('literature_product_partition_storage'),
                                    lambda: repo('product_partition'))],
             'completion_time': [(namespace('literature_completion_time_storage'), lambda: repo('completion_time'))],

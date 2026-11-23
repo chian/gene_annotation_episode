@@ -48,7 +48,7 @@ def fact(answer, refs=(), support='direct'):
     return {**literature_spr_record.fact(answer, refs), 'support': None if answer == 'unknown' else support}
 
 
-VERSION = 'a105_dsf_record_v1'
+VERSION = 'a105_dsf_record'
 EXPERIMENT_TYPE = 'dsf'
 QUANTITIES = ('kd', 'kd_spread', 'tm_apo', 'tm_ligand', 'delta_tm', 'tm_spread', 'tagg_apo', 'tagg_ligand', 'protein_concentration', 'ligand_concentration_lowest', 'ligand_concentration_highest', 'ligand_concentration_count', 'shift_ligand_concentration', 'heating_rate', 'replicate_count')
 SIGNED_QUANTITIES = ('delta_tm',)     # the only quantity that may be zero or negative: every other stated number is above 0

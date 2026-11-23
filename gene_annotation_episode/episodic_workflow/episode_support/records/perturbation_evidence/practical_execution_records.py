@@ -4,7 +4,7 @@ import hashlib
 import json
 import re
 
-COMPLETION_VERSION = 'practical_completion_v1'
+COMPLETION_VERSION = 'practical_completion'
 COMPLETION_FIELDS = {'version', 'run_id', 'episode_id', 'assignment_sha256',
     'endpoint', 'operation_key', 'receipt_sha256', 'validation_keys'}
 _TEXT_SCHEMA = {'type': 'string', 'minLength': 1}

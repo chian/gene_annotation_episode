@@ -11,7 +11,7 @@ import sqlite3
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import obj, validate_schema
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.episodic_workflow.episode_support.tools.documents.experimental_activity_evidence.spreadsheet_tools import Workbook
-VERSION = 'a105_parent_depletion_xlsx_selection_v1'
+VERSION = 'a105_parent_depletion_xlsx_selection'
 HEADERS = {'A': 'Time', 'B': 'Bio', 'C': 'Stdev1', 'D': 'Ab', 'E': 'Stdev2', 'F': 'inactive_enzyme', 'G': 'Stdev3', 'I': 'Compound', 'J': 'Submix', 'K': 'Difference_dead_enzyme', 'L': 'Difference_abio'}
 VALUES = {'active': 'B', 'active_sd': 'C', 'abiotic': 'D', 'abiotic_sd': 'E', 'inactive': 'F', 'inactive_sd': 'G', 'reported_active_minus_inactive': 'K', 'reported_active_minus_abiotic': 'L'}
 
@@ -69,5 +69,5 @@ def read_parent_depletion_inputs(selection, workbook_bytes):
     row, cells = matches[0]
     index = row['row_number']
     values = {role: _number(cells.get(column + str(index)), column + str(index), allow_formula_cache=role.startswith('reported_active_minus_')) for role, column in VALUES.items()}
-    return {'version': 'a105_parent_depletion_extraction_v1', 'source_ref': selection['source_ref'], 'workbook_sha256': digest, 'sheet_name': selection['sheet_name'], 'sheet_key': result['sheet']['sheet_key'], 'worksheet_part': result['sheet']['worksheet_part'], 'row_number': index, 'compound': selection['compound'], 'submix': selection['submix'], 'time_hours': selection['time_hours'], 'values': values, 'normalization_status': 'source_relative_removal_denominator_raw_values_unavailable', 'repetition_basis': 'unknown', 'active_control_covariance': 'unknown', 'equal_mutant_protein_amount': 'unknown', 'product_identity_for_studied_enzyme': 'unknown'}
+    return {'version': 'a105_parent_depletion_extraction', 'source_ref': selection['source_ref'], 'workbook_sha256': digest, 'sheet_name': selection['sheet_name'], 'sheet_key': result['sheet']['sheet_key'], 'worksheet_part': result['sheet']['worksheet_part'], 'row_number': index, 'compound': selection['compound'], 'submix': selection['submix'], 'time_hours': selection['time_hours'], 'values': values, 'normalization_status': 'source_relative_removal_denominator_raw_values_unavailable', 'repetition_basis': 'unknown', 'active_control_covariance': 'unknown', 'equal_mutant_protein_amount': 'unknown', 'product_identity_for_studied_enzyme': 'unknown'}
 __all__ = ['VERSION', 'VALUES', 'parent_depletion_population_schema', 'read_parent_depletion_inputs']

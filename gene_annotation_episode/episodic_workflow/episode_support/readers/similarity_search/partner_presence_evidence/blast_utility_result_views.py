@@ -34,12 +34,12 @@ INTEGRITY_FIELDS = ("observed_checked_count", "observed_population_count",
                    "observed_sampled_oids", "realized_seed", "diagnostics")
 PREPARATION_FIELDS = ("identity", "software", "argv", "native_paths", "dependencies",
                       "inventory_complete", "detail", "compatibility")
-PREPARATION_V2_FIELDS = (*PREPARATION_FIELDS, "kind", "database_bindings", "materializations")
-RESULT_VERSIONS = ("blast_sequence_extraction_v1", "blast_database_inspection_v1",
-    "blast_database_integrity_v1", "blast_database_artifact_set_v1",
-    "blast_database_inspection_v2", "blast_database_artifact_set_v2")
-PREPARED_DATABASE_VERSION = "native_blast_standard_prepared_database_manifest_v1"
-PREPARED_DATABASE_VERSIONS = (PREPARED_DATABASE_VERSION, "native_blast_prepared_database_manifest_v1")
+PREPARATION_EXTENDED_FIELDS = (*PREPARATION_FIELDS, "kind", "database_bindings", "materializations")
+RESULT_VERSIONS = ("blast_sequence_extraction", "blast_database_inspection",
+    "blast_database_integrity", "blast_database_artifact_set",
+    "blast_prepared_database_inspection", "blast_prepared_database_artifact_set")
+PREPARED_DATABASE_VERSION = "native_blast_standard_prepared_database_manifest"
+PREPARED_DATABASE_VERSIONS = (PREPARED_DATABASE_VERSION, "native_blast_prepared_database_manifest")
 _STR = {"type": "string", "minLength": 1}
 _UINT = {"type": "integer", "minimum": 0}
 _BOOL = {"type": "boolean"}
@@ -76,20 +76,20 @@ _SLOT_SCHEMA = _object({key: SCHEMAS["ArtifactOccurrence"]["properties"][key]
                         for key in ("direction", "role", "ordinal")})
 _SLOT_SCHEMA["properties"]["ordinal"] = {**_nullable(_UINT), "description":
     "Select one original ordinal, or null explicitly for all occurrences of this direction and role."}
-NATIVE_BLAST_UTILITY_RESULT_SELECTOR_V1_SCHEMA = _object({
-    "version": {"const": PREFIX + "result_selector_v1"},
+NATIVE_BLAST_UTILITY_RESULT_SELECTOR_STANDARD_SCHEMA = _object({
+    "version": {"const": PREFIX + "result_selector"},
     "sequences": _nullable(_object({"selector_ordinals": _array(_UINT, unique=True),
         "sequence_fields": _array(_enum(SEQUENCE_FIELDS), unique=True)})),
     "database_fields": _array(_enum(DATABASE_FIELDS), unique=True),
     "integrity": _nullable(_object({"fields": _array(_enum(INTEGRITY_FIELDS), unique=True)})),
-    "preparation": _nullable(_object({"fields": _array(_enum(PREPARATION_V2_FIELDS), unique=True)})),
+    "preparation": _nullable(_object({"fields": _array(_enum(PREPARATION_EXTENDED_FIELDS), unique=True)})),
     "prepared_database": _BOOL, "include_checks": _BOOL,
     "artifacts": _array(_SLOT_SCHEMA, unique=True),
     "saved_data": _array(_enum(("result", "prepared_database")), unique=True),
 })
-NATIVE_BLAST_UTILITY_RESULT_SELECTOR_V2_SCHEMA = _object({
-    **NATIVE_BLAST_UTILITY_RESULT_SELECTOR_V1_SCHEMA["properties"],
-    "version": {"const": PREFIX + "result_selector_v2"},
+NATIVE_BLAST_UTILITY_RESULT_SELECTOR_VDB_SCHEMA = _object({
+    **NATIVE_BLAST_UTILITY_RESULT_SELECTOR_STANDARD_SCHEMA["properties"],
+    "version": {"const": PREFIX + "result_selector"},
     "sequences": _nullable(_object({
         "selection": {"anyOf": [
             _object({"kind": {"const": "selector_ordinals"}, "values": _array(_UINT, unique=True)}),
@@ -101,15 +101,15 @@ NATIVE_BLAST_UTILITY_RESULT_SELECTOR_V2_SCHEMA = _object({
     "vdb_context": _BOOL,
 })
 NATIVE_BLAST_UTILITY_RESULT_SELECTOR_SCHEMA = {"anyOf": [
-    deepcopy(NATIVE_BLAST_UTILITY_RESULT_SELECTOR_V1_SCHEMA),
-    deepcopy(NATIVE_BLAST_UTILITY_RESULT_SELECTOR_V2_SCHEMA)]}
+    deepcopy(NATIVE_BLAST_UTILITY_RESULT_SELECTOR_STANDARD_SCHEMA),
+    deepcopy(NATIVE_BLAST_UTILITY_RESULT_SELECTOR_VDB_SCHEMA)]}
 STATUS_SCHEMA = _object({"source_ref": _SOURCE,
     "state": _enum(("complete", "partial", "failed", "unavailable")),
     "native_state": SCHEMAS["NativeOutcome"]["properties"]["state"],
     "writer_closed": _BOOL, "inventory_complete": _BOOL,
     "result_completeness": _nullable(_enum(("complete_selection", "partial_selection",
                                             "complete", "partial", "unknown")))})
-_EXTRACTION_ROW = blast_utility_schema_for_version("blast_sequence_extraction_v1")["properties"]["records"]["items"]["properties"]
+_EXTRACTION_ROW = blast_utility_schema_for_version("blast_sequence_extraction")["properties"]["records"]["items"]["properties"]
 _SEQUENCE_KEYS = tuple(key for key in _EXTRACTION_ROW if key not in {
     "record_key", "matched_selector_ordinals", *SEQUENCE_FIELDS, "checks", "failures"})
 SEQUENCE_SCHEMA = _object({"source_ref": _SOURCE, "database_key": _STR,
@@ -117,22 +117,22 @@ SEQUENCE_SCHEMA = _object({"source_ref": _SOURCE, "database_key": _STR,
     "selector_ordinals": _array(_UINT, unique=True, minItems=1),
     **{key: _EXTRACTION_ROW[key] for key in _SEQUENCE_KEYS},
     "sequences": _object({key: _EXTRACTION_ROW[key] for key in SEQUENCE_FIELDS}, required=[])})
-_INSPECTION_V2 = blast_utility_schema_for_version("blast_database_inspection_v2")["properties"]
+_PREPARED_INSPECTION = blast_utility_schema_for_version("blast_prepared_database_inspection")["properties"]
 DATABASE_FIELD_SCHEMA = {"anyOf": [
     *[_with_source(branch, database_key=_STR) for branch in SCHEMAS["NativeField"]["anyOf"]],
-    *[_with_source(branch, subject=_INSPECTION_V2["subject"]) for branch in SCHEMAS["NativeField"]["anyOf"]]]}
-_INTEGRITY = blast_utility_schema_for_version("blast_database_integrity_v1")["properties"]
+    *[_with_source(branch, subject=_PREPARED_INSPECTION["subject"]) for branch in SCHEMAS["NativeField"]["anyOf"]]]}
+_INTEGRITY = blast_utility_schema_for_version("blast_database_integrity")["properties"]
 INTEGRITY_SCHEMA = _object({"source_ref": _SOURCE, "database_key": _STR,
     "scope": _INTEGRITY["scope"],
     "fields": _object({key: _INTEGRITY[key] for key in INTEGRITY_FIELDS}, required=[])})
-_PREPARATION = blast_utility_schema_for_version("blast_database_artifact_set_v1")["properties"]
-_PREPARATION_V2 = blast_utility_schema_for_version("blast_database_artifact_set_v2")["anyOf"]
+_PREPARATION = blast_utility_schema_for_version("blast_database_artifact_set")["properties"]
+_PREPARED_ARTIFACT_SET = blast_utility_schema_for_version("blast_prepared_database_artifact_set")["anyOf"]
 PREPARATION_SCHEMA = {"anyOf": [
     _object({"source_ref": _SOURCE, "database_key": _STR,
         "fields": _object({key: _PREPARATION[key] for key in PREPARATION_FIELDS}, required=[])}),
     *[_object({"source_ref": _SOURCE, "database_key": _STR,
-        "fields": _object({key: branch["properties"][key] for key in PREPARATION_V2_FIELDS}, required=[])})
-      for branch in _PREPARATION_V2]]}
+        "fields": _object({key: branch["properties"][key] for key in PREPARATION_EXTENDED_FIELDS}, required=[])})
+      for branch in _PREPARED_ARTIFACT_SET]]}
 PREPARED_DATABASE_SCHEMA = _with_source(SCHEMAS["PreparedDatabaseProjection"], database_key=_STR)
 CHECK_SCHEMA = _with_source(SCHEMAS["ValidationObservation"])
 FAILURE_SCHEMA = _with_source(SCHEMAS["UtilityFailure"])
@@ -160,16 +160,16 @@ _FACT_SCHEMAS = {"status": STATUS_SCHEMA, "sequences": SEQUENCE_SCHEMA,
     "artifacts": ARTIFACT_SCHEMA, "saved_data": SAVED_DATA_SCHEMA}
 PROJECTION_FIELDS = (*_FACT_SCHEMAS, "record_refs")
 _LEGACY_FACT_SCHEMAS = deepcopy(_FACT_SCHEMAS)
-PROJECTION_V2_FIELDS = (*PROJECTION_FIELDS, "paths", "path_sections", "vdb_context")
-_VDB_EXTRACTION = blast_utility_schema_for_version("blast_sequence_extraction_v2")["properties"]
+VDB_PROJECTION_FIELDS = (*PROJECTION_FIELDS, "paths", "path_sections", "vdb_context")
+_VDB_EXTRACTION = blast_utility_schema_for_version("blast_vdb_sequence_extraction")["properties"]
 _VDB_ROW = _VDB_EXTRACTION["records"]["items"]["properties"]
-_VDB_INSPECTION = blast_utility_schema_for_version("blast_database_inspection_v3")["properties"]
+_VDB_INSPECTION = blast_utility_schema_for_version("blast_vdb_database_inspection")["properties"]
 _QUALIFICATION = _object({"pointer": {"type": "string", "pattern": r"^(?:/(?:[^~/]|~[01])*)*$"},
     "reason": _enum(("not_supplied", "not_applicable", "native_not_reported", "native_row_invalid",
         "sequence_symbol_invalid", "sequence_length_conflict", "supplied_binding_conflict", "member_unresolved"))})
 _QUALIFICATIONS = _array(_QUALIFICATION, unique=True)
 _SAMPLE_LINK = SCHEMAS["VDBUtilityContext"]["properties"]["sample_links"]["items"]
-SEQUENCE_V2_SCHEMA = _object({"version": {"const": PREFIX + "sequence_fact_v2"},
+VDB_SEQUENCE_SCHEMA = _object({"version": {"const": PREFIX + "vdb_sequence_fact"},
     "source_ref": _SOURCE, "database_key": _STR, "record_key": _RECORD, "occurrence_id": _OCCURRENCE,
     "native_row_ordinal": _UINT, "line_number": _VDB_ROW["line_number"],
     "selector_ordinals": _array(_UINT, unique=True), "scope": _VDB_EXTRACTION["scope"],
@@ -197,15 +197,15 @@ _VDB_MISSING_REQUESTS = {**{key: value for key, value in _MISSING_REQUESTS.items
     "native_row": {"ordinal": _UINT}, "native_enumeration": {}, "path_row": {"ordinal": _UINT},
     "path_population": {"kind": _enum(VDB_PATH_KINDS)}, "path_section": {"kind": _enum(VDB_PATH_KINDS)},
     "vdb_context": {}}
-MISSING_V2_SCHEMA = _object({"version": {"const": PREFIX + "missing_fact_v2"}, "source_ref": _SOURCE,
+VDB_MISSING_SCHEMA = _object({"version": {"const": PREFIX + "vdb_missing_fact"}, "source_ref": _SOURCE,
     "request": {"anyOf": [_object({"type": {"const": kind}, **fields}) for kind, fields in _VDB_MISSING_REQUESTS.items()]},
     "reason": MISSING_SCHEMA["properties"]["reason"]})
 _VDB_SAVED_DATA_SCHEMA = _object({**SAVED_DATA_SCHEMA["properties"],
     "kind": {"const": "result"},
-    "schema": _enum(("blast_sequence_extraction_v2", "blast_database_inspection_v3"))})
+    "schema": _enum(("blast_vdb_sequence_extraction", "blast_vdb_database_inspection"))})
 _FACT_SCHEMAS = {**_FACT_SCHEMAS,
-    "sequences": {"anyOf": [deepcopy(SEQUENCE_SCHEMA), deepcopy(SEQUENCE_V2_SCHEMA)]},
-    "missing": {"anyOf": [deepcopy(MISSING_SCHEMA), deepcopy(MISSING_V2_SCHEMA)]},
+    "sequences": {"anyOf": [deepcopy(SEQUENCE_SCHEMA), deepcopy(VDB_SEQUENCE_SCHEMA)]},
+    "missing": {"anyOf": [deepcopy(MISSING_SCHEMA), deepcopy(VDB_MISSING_SCHEMA)]},
     "saved_data": {"anyOf": [deepcopy(SAVED_DATA_SCHEMA), _VDB_SAVED_DATA_SCHEMA]},
     "paths": PATH_SCHEMA, "path_sections": PATH_SECTION_SCHEMA, "vdb_context": VDB_CONTEXT_SCHEMA}
 
@@ -277,13 +277,18 @@ def _occurrences(values):
     return result
 
 
+def _is_vdb_selector(selector):
+    """The VDB selector shape is the one carrying the VDB context request."""
+    return "vdb_context" in selector
+
+
 def validate_blast_utility_result_selector(selector: dict, *, operation: dict) -> dict:
     """Validate an explicit selection against the original selected utility."""
     operation = validate_blast_utility_operation(operation)
     selector = _validated(selector, NATIVE_BLAST_UTILITY_RESULT_SELECTOR_SCHEMA)
-    if selector["version"] == PREFIX + "result_selector_v2":
+    if _is_vdb_selector(selector):
         return _validate_vdb_selector(selector, operation)
-    _require(operation["version"] != "blast_utility_operation_v3", "selector_operation_version_conflict")
+    _require(operation["version"] != "blast_vdb_utility_operation", "selector_operation_version_conflict")
     pair = operation["program"], operation["mode"]
     version = blast_utility_result_version_for_operation(operation)
     kind = blast_utility_record_name_for_version(version)
@@ -298,7 +303,7 @@ def validate_blast_utility_result_selector(selector: dict, *, operation: dict) -
     _require(kind == "DatabaseArtifactSet" or (selector["preparation"] is None
         and not selector["prepared_database"] and "prepared_database" not in selector["saved_data"]),
         "preparation_selection_not_applicable")
-    if selector["preparation"] is not None and version != "blast_database_artifact_set_v2":
+    if selector["preparation"] is not None and version != "blast_prepared_database_artifact_set":
         _require(set(selector["preparation"]["fields"]) <= set(PREPARATION_FIELDS),
                  "preparation_fields_not_applicable")
     database_inputs = {"database_file", "database_metadata", "database_manifest", "preparation_receipt",
@@ -312,7 +317,7 @@ def validate_blast_utility_result_selector(selector: dict, *, operation: dict) -
         outputs.add("extracted_sequences")
     elif pair in {("blastdbcmd", "info"), ("blastdbcmd", "metadata")}:
         outputs.add("database_metadata")
-    elif operation["version"] == "blast_utility_operation_v2":
+    elif operation["version"] == "blast_preparation_operation":
         inputs, added_outputs = _preparation_artifact_roles(operation, database_inputs)
         outputs |= added_outputs | {"preparation_receipt"}
     _require(all(row["role"] in (inputs if row["direction"] == "input" else outputs)
@@ -323,11 +328,11 @@ def validate_blast_utility_result_selector(selector: dict, *, operation: dict) -
 def blast_utility_projection_fields(selector: dict) -> tuple[str, ...]:
     """Dispatch closed selector versions without enriching a legacy result."""
     selector = _validated(selector, NATIVE_BLAST_UTILITY_RESULT_SELECTOR_SCHEMA)
-    return PROJECTION_V2_FIELDS if selector["version"] == PREFIX + "result_selector_v2" else PROJECTION_FIELDS
+    return VDB_PROJECTION_FIELDS if _is_vdb_selector(selector) else PROJECTION_FIELDS
 
 
 def _validate_vdb_selector(selector, operation):
-    _require(operation["version"] == "blast_utility_operation_v3", "selector_operation_version_conflict")
+    _require(operation["version"] == "blast_vdb_utility_operation", "selector_operation_version_conflict")
     mode, parameters = operation["mode"], operation["parameters"]
     selected = selector["sequences"]
     if selected is not None:
@@ -434,7 +439,7 @@ def validate_blast_utility_fact_values(source: str, values: list) -> list:
         elif name == "sequences":
             _require(row["record_key"] == row["occurrence_id"] + "#/records/" + str(row["native_row_ordinal"]),
                      "sequence_record_identity_conflict")
-            if row.get("version") == PREFIX + "sequence_fact_v2":
+            if row.get("version") == PREFIX + "vdb_sequence_fact":
                 _validate_vdb_sequence_fact(row)
             else:
                 _require(row["association"] in {"exact", "explicit"}, "sequence_association_unresolved")
@@ -464,7 +469,7 @@ def validate_blast_utility_fact_values(source: str, values: list) -> list:
 
 
 def _requested(selector):
-    if selector["version"] == PREFIX + "result_selector_v2":
+    if _is_vdb_selector(selector):
         return _vdb_requested(selector)
     result = []
     if selector["sequences"] is not None:
@@ -507,7 +512,7 @@ def _state(projection, outcome):
 
 
 def _inspection_subject(operation, known, failures=()):
-    """Bind a v2 subject to the original selection, without granting its bytes."""
+    """Bind a VDB subject to the original selection, without granting its bytes."""
     if (operation["program"], operation["mode"]) == ("blastdb_aliastool", "inspect_seqid_list"):
         key = operation["parameters"]["input_occurrence_id"]
         row = known.get(key)
@@ -531,7 +536,7 @@ def validate_blast_utility_projection(projection: dict, *, source_ref: str, oper
     operation = validate_blast_utility_operation(operation)
     outcome = core("NativeOutcome", native_outcome)
     selector = validate_blast_utility_result_selector(selector, operation=operation)
-    if selector["version"] == PREFIX + "result_selector_v2":
+    if _is_vdb_selector(selector):
         return _validate_vdb_projection(projection, source_ref=source_ref, operation=operation,
             native_outcome=outcome, selector=selector, occurrences=occurrences, context=context)
     result_version = blast_utility_result_version_for_operation(operation)
@@ -576,12 +581,12 @@ def validate_blast_utility_projection(projection: dict, *, source_ref: str, oper
             and row["requested_range"] == operation["parameters"]["range"], "projection_sequence_context_conflict")
         occurrence = known[row["occurrence_id"]]
         _require(occurrence["direction"] == "output" and occurrence["role"] in {"stdout", "extracted_sequences"}
-            and occurrence["native_format"] == "blastdbcmd_tabular_v1", "projection_sequence_occurrence_conflict")
+            and occurrence["native_format"] == "blastdbcmd_tabular", "projection_sequence_occurrence_conflict")
         seen.add(row["record_key"]); chosen.update(row["selector_ordinals"])
     for row in projection["database_fields"]:
         _require(row["field_name"] in selector["database_fields"] and row["occurrence_id"] in known_ids,
                  "projection_database_field_selection_conflict")
-        if result_version == "blast_database_inspection_v2":
+        if result_version == "blast_prepared_database_inspection":
             _require(row.get("subject") == _inspection_subject(operation, known, projection["failures"]),
                      "projection_inspection_subject_conflict")
             occurrence = known[row["occurrence_id"]]
@@ -598,7 +603,7 @@ def validate_blast_utility_projection(projection: dict, *, source_ref: str, oper
             and set(rows[0]["fields"]) == set(selector[name]["fields"])), "projection_" + name + "_selection_conflict")
     _require(len(projection["prepared_database"]) <= 1 and
         (not projection["prepared_database"] or selector["prepared_database"]), "projection_prepared_selection_conflict")
-    if result_kind in {"DatabaseIntegrity", "DatabaseInspection"} and result_version != "blast_database_inspection_v2":
+    if result_kind in {"DatabaseIntegrity", "DatabaseInspection"} and result_version != "blast_prepared_database_inspection":
         _require(all(row["database_key"] == operation["database_key"] for name in ("database_fields", "integrity")
                      for row in projection[name]), "projection_database_key_conflict")
     _require(not projection["checks"] or selector["include_checks"], "projection_unrequested_checks")
@@ -644,7 +649,7 @@ def _result_context(result, operation, outcome, occurrences, failures):
     known = {row["occurrence_id"]: row for row in occurrences}
     if blast_utility_record_name_for_version(result["version"]) == "DatabaseArtifactSet":
         rows = result["inputs"] + result["outputs"]
-    elif result["version"] == "blast_database_inspection_v2":
+    elif result["version"] == "blast_prepared_database_inspection":
         _require(result["subject"] == _inspection_subject(operation, known, [*result["failures"], *failures]),
                  "result_inspection_subject_conflict")
         for binding in result["database_bindings"]:
@@ -654,7 +659,7 @@ def _result_context(result, operation, outcome, occurrences, failures):
         binding = result["database_binding"]
         _require(set(binding["occurrence_ids"]) <= known.keys(), "result_database_occurrence_conflict")
         rows = ([result["stdout_occurrence"], result["stderr_occurrence"]]
-                if result["version"] == "blast_database_integrity_v1" else [result["output_occurrence"]])
+                if result["version"] == "blast_database_integrity" else [result["output_occurrence"]])
     _require(all(known.get(row["occurrence_id"]) == row for row in rows), "result_occurrence_context_conflict")
     return result
 
@@ -668,7 +673,7 @@ def _prepared_context(value, result, occurrences):
     manifest = value["manifest"]
     if manifest is None:
         return value
-    if result["version"] == "blast_database_artifact_set_v2":
+    if result["version"] == "blast_prepared_database_artifact_set":
         from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.partner_presence_evidence.blast_database_preparation import project_prepared_blast_database
         preparation = manifest["preparation"]
         expected = project_prepared_blast_database(result,
@@ -731,7 +736,7 @@ def project_blast_utility_result(*, source_ref: str, operation: dict, native_out
     operation = validate_blast_utility_operation(operation)
     outcome = core("NativeOutcome", native_outcome)
     selector = validate_blast_utility_result_selector(selector, operation=operation)
-    if selector["version"] == PREFIX + "result_selector_v2":
+    if _is_vdb_selector(selector):
         return _project_vdb_result(source_ref=source_ref, operation=operation, native_outcome=outcome,
             result=result, prepared_database=prepared_database, occurrences=occurrences, selector=selector,
             failures=failures, saved_data=saved_data, context=context)
@@ -771,7 +776,7 @@ def project_blast_utility_result(*, source_ref: str, operation: dict, native_out
                 missing("sequence_selector", "result_unavailable" if result is None else "selection_unavailable", ordinal=ordinal)
     fields = [] if result is None else result.get("native_fields", result.get("native_metadata", []))
     field_subject = ({"subject": deepcopy(result["subject"])}
-        if result is not None and result["version"] == "blast_database_inspection_v2" else {"database_key": database_key})
+        if result is not None and result["version"] == "blast_prepared_database_inspection" else {"database_key": database_key})
     projection["database_fields"] = [{"source_ref": source_ref, **field_subject, **deepcopy(row)}
         for row in fields if row["field_name"] in selector["database_fields"]]
     for name in selector["database_fields"]:
@@ -1103,7 +1108,7 @@ def _validate_vdb_projection(projection, *, source_ref, operation, native_outcom
     selected = selector["sequences"]
     seen = []
     for row in projection["sequences"]:
-        _require(row.get("version") == PREFIX + "sequence_fact_v2" and selected is not None,
+        _require(row.get("version") == PREFIX + "vdb_sequence_fact" and selected is not None,
                  "projection_sequence_selection_conflict")
         selection, original = selected["selection"], operation["parameters"]["selection"]
         _require(row["database_key"] == database_key and row["occurrence_id"] == oid,
@@ -1216,7 +1221,7 @@ def _validate_vdb_projection(projection, *, source_ref, operation, native_outcom
                 "projection_failure_record_conflict")
     requests, missing = _vdb_requested(selector), []
     for row in projection["missing"]:
-        _require(row.get("version") == PREFIX + "missing_fact_v2" and row["request"] in requests
+        _require(row.get("version") == PREFIX + "vdb_missing_fact" and row["request"] in requests
                  and row["request"] not in missing, "projection_missing_request_conflict")
         missing.append(row["request"])
     for request in requests:
@@ -1306,7 +1311,7 @@ def _project_vdb_result(*, source_ref, operation, native_outcome, result, prepar
             if "native_reported_length" in fields and fields["native_reported_length"] is None:
                 _require(any(f["code"] == "native_row_invalid" and f["record_key"] == row["record_key"]
                              and f["stage"] == "parse" for f in row["failures"]), "sequence_native_length_qualification_required")
-            fact = {"version": PREFIX + "sequence_fact_v2", "source_ref": source_ref, "database_key": database_key,
+            fact = {"version": PREFIX + "vdb_sequence_fact", "source_ref": source_ref, "database_key": database_key,
                 "occurrence_id": result["output_occurrence"]["occurrence_id"], "selector_ordinals": ordinals,
                 **{key: deepcopy(row[key]) for key in ("record_key", "native_row_ordinal", "line_number", "association", "completeness")},
                 "scope": deepcopy(result["scope"]), "fields": fields,
@@ -1381,7 +1386,7 @@ def _project_vdb_result(*, source_ref, operation, native_outcome, result, prepar
             if sections.get(request["kind"], {}).get("presence", "not_reported") == "not_reported":
                 reason = "field_unavailable"
         if reason is not None:
-            projection["missing"].append({"version": PREFIX + "missing_fact_v2", "source_ref": source_ref,
+            projection["missing"].append({"version": PREFIX + "vdb_missing_fact", "source_ref": source_ref,
                 "request": deepcopy(request), "reason": reason})
     projection["record_refs"] = list(dict.fromkeys([source_ref,
         *[row["artifact_ref"] for row in projection["artifacts"]], *[row["artifact_ref"] for row in projection["saved_data"]]]))
@@ -1390,9 +1395,9 @@ def _project_vdb_result(*, source_ref, operation, native_outcome, result, prepar
         native_outcome=native_outcome, selector=selector, occurrences=occurrences, context=context)
 
 
-__all__ = ["NATIVE_BLAST_UTILITY_RESULT_SELECTOR_SCHEMA", "NATIVE_BLAST_UTILITY_RESULT_SELECTOR_V1_SCHEMA",
-    "NATIVE_BLAST_UTILITY_RESULT_SELECTOR_V2_SCHEMA", "FACT_SOURCES", "PROJECTION_FIELDS", "PROJECTION_V2_FIELDS",
-    "VDB_RECORD_FIELDS", "VDB_DATABASE_FIELDS", "VDB_PATH_KINDS", "SEQUENCE_V2_SCHEMA", "MISSING_V2_SCHEMA",
+__all__ = ["NATIVE_BLAST_UTILITY_RESULT_SELECTOR_SCHEMA", "NATIVE_BLAST_UTILITY_RESULT_SELECTOR_STANDARD_SCHEMA",
+    "NATIVE_BLAST_UTILITY_RESULT_SELECTOR_VDB_SCHEMA", "FACT_SOURCES", "PROJECTION_FIELDS", "VDB_PROJECTION_FIELDS",
+    "VDB_RECORD_FIELDS", "VDB_DATABASE_FIELDS", "VDB_PATH_KINDS", "VDB_SEQUENCE_SCHEMA", "VDB_MISSING_SCHEMA",
     "PATH_SCHEMA", "PATH_SECTION_SCHEMA", "VDB_CONTEXT_SCHEMA", "blast_utility_projection_fields",
     "IDENTIFIER_NAMESPACES", "STATUS_SCHEMA", "SEQUENCE_SCHEMA", "DATABASE_FIELD_SCHEMA",
     "INTEGRITY_SCHEMA", "PREPARATION_SCHEMA", "PREPARED_DATABASE_SCHEMA", "CHECK_SCHEMA",

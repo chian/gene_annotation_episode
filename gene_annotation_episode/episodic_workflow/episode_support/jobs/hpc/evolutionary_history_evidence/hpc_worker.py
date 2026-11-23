@@ -24,7 +24,7 @@ import time
 from urllib.request import Request, urlopen
 
 
-VERSION = 'a104_native_phylogeny_work_v1'
+VERSION = 'a104_native_phylogeny_work'
 MUSCLE_URL = 'https://github.com/rcedgar/muscle/releases/download/v5.3/muscle-linux-x86.v5.3'
 IQTREE_URL = 'https://github.com/iqtree/iqtree2/releases/download/v2.4.0/iqtree-2.4.0-Linux-intel.tar.gz'
 IQTREE_MEMBER = 'iqtree-2.4.0-Linux-intel/bin/iqtree2'

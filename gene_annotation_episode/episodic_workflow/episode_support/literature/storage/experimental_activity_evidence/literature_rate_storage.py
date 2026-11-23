@@ -18,7 +18,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
 PROVIDER = 'literature.a105.rate_population'
 COMPONENTS = ('reference_rate', 'test_rate', 'rate_difference', 'retained_fraction', 'fractional_decrease', 'reference_mean_se', 'test_mean_se', 'difference_se', 'signed_profile_log_ratio', 'source_signed_index')
 UNAVAILABLE_REASONS = ('nonfinite_calculation', 'missing_reference_arm', 'missing_test_arm', 'conflicting_source_identity', 'ambiguous_reference_arm', 'ambiguous_test_arm', 'source_measurement_unavailable', 'censored_measurement', 'conflicting_measurement', 'mean_uncertainty_unreported', 'observation_model_unspecified', 'measurement_count_unreported', 'insufficient_measurement_count', 'positive_sd_required', 'zero_reference_rate', 'dependence_unknown', 'profile_requires_sample_sd', 'numerical_model_range')
-NATIVE_RECORD_VERSION = 'literature_rate_population_record_v2'
+NATIVE_RECORD_VERSION = 'literature_native_rate_population_record'
 
 
 def operations_ledger(name):
@@ -37,7 +37,7 @@ class LiteratureRateRepository:
     """Use one application's existing Store and explicit run/episode identities."""
     provider = PROVIDER
     components = COMPONENTS
-    record_version = 'literature_rate_population_record_v1'
+    record_version = 'literature_rate_population_record'
     operations = OPERATIONS
     received = RECEIVED
     binding_fields = ('assayed_subject_ref', 'experiment_ref', 'reference_condition_ref', 'test_condition_ref', 'endpoint_ref', 'normalization_ref')
@@ -45,7 +45,7 @@ class LiteratureRateRepository:
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
         from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_sheet_updates import publication
-        for name in ('populate', 'populate_native', 'populate_v3'):
+        for name in ('populate', 'populate_native'):
             if name in cls.__dict__:
                 setattr(cls, name, publication(cls.__dict__[name]))
 
@@ -113,7 +113,7 @@ class LiteratureRateRepository:
             raise ContractError('literature_utf8_table_required') from error
         extraction = read_rate_table({'source_ref': source_ref, 'artifact_ref': artifact, 'text': text, 'representation': args['table_kind'], 'delimiter': args['delimiter']}, expected_subject=args['subject'], expected_experiment=args['experiment'])
         sheet = populate_rate_contrast(extraction, **{key: args[key] for key in ('reference_arm', 'test_arm', 'reference_condition', 'test_condition', 'dependence', 'observation_model')})
-        payload = {'version': 'literature_rate_population_record_v1', 'input_source_ref': source_ref, 'input_artifact_ref': artifact, 'sheet': sheet}
+        payload = {'version': 'literature_rate_population_record', 'input_source_ref': source_ref, 'input_artifact_ref': artifact, 'sheet': sheet}
         with self.store.transaction():
             newly_created = []
 
@@ -257,7 +257,7 @@ class LiteratureRateRepository:
     def read(self, sheet_ref):
         """Read original saved cells without scientific source IO or fitting.
 
-        The rate writer can reopen its v1/v2 payloads. Return views separately
+        The rate writer can reopen its payloads. Return views separately
         enforce their exact projection version; subclass providers keep their
         original independent version contracts.
         """
@@ -470,7 +470,7 @@ class LiteratureRateRepository:
             sheet = self.store.get(outcome['result']['sheet_ref'])
             if sheet.get('provider') == PROVIDER:
                 versions.add(sheet.get('version'))
-        supported = {'literature_rate_population_record_v1', NATIVE_RECORD_VERSION}
+        supported = {'literature_rate_population_record', NATIVE_RECORD_VERSION}
         if self.record_version not in versions and versions & supported:
             raise ContractError('literature_rate_projection_version_mismatch')
 
@@ -609,12 +609,12 @@ class LiteratureRateSourceDomainProjection(LiteratureRateSourceProjection):
                 if q is not None and row['bound'] != 'none':
                     q = Fraction(q)
                     interval = {'lt': (-float('inf'), False, q, False), 'le': (-float('inf'), False, q, True), 'gt': (q, False, float('inf'), False), 'ge': (q, True, float('inf'), False)}[row['bound']]
-                domain = _project(interval, basis='legacy_stored_cell', conditioning='stored_source_cell', failure=row['unavailable_reason'] if interval is None else None)
+                domain = _project(interval, basis='stored_cell', conditioning='stored_source_cell', failure=row['unavailable_reason'] if interval is None else None)
             row['reported_domain'] = deepcopy(domain)
         return rows
 
 def rate_source_cells_schema():
-    """Closed native return contract, distinct from the unchanged v1 projection."""
+    """Closed native return contract, distinct from the unchanged projection."""
     schema = rate_cells_schema()
     properties = schema['items']['properties']
     properties['unavailable_reason']['enum'] = [*UNAVAILABLE_REASONS, *NATIVE_REASONS, None]

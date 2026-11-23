@@ -206,7 +206,7 @@ def extraction_state(view, spans):
     last = extracted[-1] if extracted else None
     return {
         'page': page, 'item': item, 'task': parent['task'], 'task_key': parent['task_key'],
-        'literature_assignment': {'version': 'reading_assignment_v1', 'page': page, 'selection': {'spans': spans},
+        'literature_assignment': {'version': 'reading_assignment', 'page': page, 'selection': {'spans': spans},
                                   'literature_task': parent['task'],
                                   'proposed_annotation_ref': parent['proposed_annotation_ref']},
         'input_list': [[window['offset'], window['offset'] + window['limit']] for window in remaining],

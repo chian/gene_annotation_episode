@@ -5,7 +5,7 @@ The old ``prepare_request`` validated the child scope, expanded the report contr
 child binding required, checked the initial report against the interpretation schema, checked the role against the
 allowed children, materialized the launch instructions and let the child binding's ``prepare_assignment`` build the
 child's assignment from the model's page assignment. Here the child declares what it returns and this commission
-selects the fact sources it wants (the old fact-source names); the assignment is the child's ``page_assignment_v1``:
+selects the fact sources it wants (the old fact-source names); the assignment is the child's ``page_assignment``:
 the one paper (``source_ref``) with its representation and that representation's artifact, which code filled from the
 source record when the page was built (``messages/internal_summary.py``, ``page_of``), the records that give the
 question its context, no earlier delivery (the paper was just obtained), the one task with its credit unit, the proposed
@@ -24,7 +24,7 @@ def msg_to_child(slot, arguments, summary):
     page = arguments['page']
     context = summary['search']['question_context_refs']
     received = [*page['custody'], *context, summary['proposed_annotation_ref']]
-    assignment = {'version': 'page_assignment_v1', 'source_ref': page['source_ref'],
+    assignment = {'version': 'page_assignment', 'source_ref': page['source_ref'],
                   'representation': page['representation'], 'artifact_ref': page['artifact_ref'],
                   'question_context_refs': context, 'prior_delivery_refs': page['prior_delivery_refs'],
                   'literature_task': summary['task'], 'proposed_annotation_ref': summary['proposed_annotation_ref'],

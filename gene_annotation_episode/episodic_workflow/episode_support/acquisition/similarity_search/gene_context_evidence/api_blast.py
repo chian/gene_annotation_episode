@@ -48,7 +48,7 @@ def blast_wait_forecast(handle, observed_at, state):
                         60. * (elapsed / 120.) ** exponent)
     else:
         remaining = None
-    return {'method': 'blast_unresolved_elapsed_provisional_v1',
+    return {'method': 'blast_unresolved_elapsed_provisional',
             'elapsed_since_submission_seconds': elapsed,
             'estimated_remaining_seconds': remaining}
 

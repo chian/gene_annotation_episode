@@ -311,7 +311,7 @@ def extract_fastqutils_metadata(original_task: dict, *, analysis_id: str,
         if population is not None:
             populations.append(population)
             measurements.append(cell)
-    result = dict(schema_version="fastqutils_metadata_v2", analysis_id=analysis_id, task_ref=task,
+    result = dict(schema_version="fastqutils_metadata", analysis_id=analysis_id, task_ref=task,
         original_task=original, libraries=libraries, stages=stages, associations=associations,
         populations=populations, measurements=measurements, supplied_metadata=selected,
         native_lineage=[deepcopy(edge) for doc in docs.values() for edge in doc["native_lineage"]],

@@ -99,7 +99,7 @@ def preflight_masking_input_fasta(content: bytes, *, molecule: str) -> dict:
     """Validate bytes before artifact capture, without invented custody identities."""
     records, failures = _input_observations(content, molecule, "complete")
     failures += [failure for record in records for failure in record["failures"]]
-    return {"version": "sequence_masking_preflight_v1", "valid": bool(records) and not failures,
+    return {"version": "sequence_masking_preflight", "valid": bool(records) and not failures,
             "record_count": len(records), "failures": failures}
 
 
@@ -133,7 +133,7 @@ def parse_masking_input_fasta(content: bytes, *, occurrence: dict, molecule: str
     checks.append(_check("input_fasta_syntax", "fail" if file_failures else "pass",
                          reason="malformed_or_empty_input" if file_failures else None))
     return validate_sequence_masking_record("InputParse", {
-        "version": "sequence_masking_input_v1", "occurrence": occurrence, "records": records,
+        "version": "sequence_masking_input", "occurrence": occurrence, "records": records,
         "checks": checks, "failures": failures})
 
 
@@ -268,7 +268,7 @@ def parse_sequence_masking_output(content: bytes, *, format: str, occurrence: di
     checks.append(_check("mask_association_provenance", "pass" if native_order else "unknown",
                          reason=None if native_order else "explicit_or_unresolved_association"))
     return validate_sequence_masking_record("ParsedMaskOutput", {
-        "version": "sequence_masking_parsed_output_v1", "format": format, "occurrence": occurrence,
+        "version": "sequence_masking_parsed_output", "format": format, "occurrence": occurrence,
         "custody": custody, "records": records, "unassigned_records": unassigned,
         "checks": checks, "failures": failures})
 
@@ -299,6 +299,6 @@ def populate_sequence_masking_sheet(*, operation: dict, inputs: list[dict], pars
                          "fail" if native_outcome["state"] == "failed" else "unknown",
                          reason=None if native_outcome["state"] == "succeeded" else "native_" + native_outcome["state"]))
     return validate_sequence_masking_record("SequenceMaskingSheet", {
-        "version": "sequence_masking_sheet_v1", "operation": operation, "inputs": inputs,
+        "version": "sequence_masking_sheet", "operation": operation, "inputs": inputs,
         "parsed_output": parsed_output, "statistics": statistics, "native_outcome": native_outcome,
         "checks": checks, "failures": failures})

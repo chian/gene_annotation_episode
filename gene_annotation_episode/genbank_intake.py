@@ -15,7 +15,7 @@ from Bio.SeqFeature import CompoundLocation, Position, Reference, SimpleLocation
 
 from .domain import ContractError, parse_sequences
 
-REPRESENTATION = "native_genbank_assertions_jsonl_v1"
+REPRESENTATION = "native_genbank_assertions_jsonl"
 
 
 def native_position(value):

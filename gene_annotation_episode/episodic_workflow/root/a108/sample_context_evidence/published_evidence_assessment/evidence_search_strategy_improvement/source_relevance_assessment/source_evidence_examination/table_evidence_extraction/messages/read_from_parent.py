@@ -1,4 +1,4 @@
-"""What the parent gives: the reading assignment ``reading_assignment_v1`` (the page of one source and the one table
+"""What the parent gives: the reading assignment ``reading_assignment`` (the page of one source and the one table
 region of it to extract: a window of the page's representation that holds the table), the commissioned A108 literature task
 (``verified_source_leads``, the only task accepted), the proposed annotation, the A108 grading components whose cells the
 parent will ask for, the Store scope of the commission and the records passed in custody. This is the only place the
@@ -14,7 +14,7 @@ REPRESENTATIONS = ('text', 'original', 'stdout', 'stderr')
 REQUESTED_GRADING = 'requested_a108_grading_components'
 
 PAGE_FORM = RecordForm({
-    'version': DeclaredField('text', 'The page assignment version', 'page_assignment_v1'),
+    'version': DeclaredField('text', 'The page assignment version', 'page_assignment'),
     'source_ref': Field('text', 'The source being read'),
     'representation': ChoiceField('text', 'The representation of the source that is read', REPRESENTATIONS),
     'artifact_ref': Field('text', "The source's artifact for that representation"),
@@ -28,7 +28,7 @@ SELECTION_FORM = RecordForm({
     'limit': Field('integer', 'Bytes of the window (1 or more)'),
 })
 ASSIGNMENT_FORM = RecordForm({
-    'version': DeclaredField('text', 'The reading assignment version', 'reading_assignment_v1'),
+    'version': DeclaredField('text', 'The reading assignment version', 'reading_assignment'),
     'page': Field('record', 'The source being read', form=PAGE_FORM),
     'selection': Field('record', 'The table region of that source to extract', form=SELECTION_FORM),
     'literature_task': Field('record', 'The commissioned A108 literature task: kind verified_source_leads, '

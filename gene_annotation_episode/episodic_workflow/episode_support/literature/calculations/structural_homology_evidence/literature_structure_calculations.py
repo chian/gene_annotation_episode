@@ -14,7 +14,7 @@ import math
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.literature_contract_error import ExperimentalContractError
 
 
-VERSION = "a111_source_geometry_v1"
+VERSION = "a111_source_geometry"
 COMPONENTS = (
     "local_fit_index", "geometry_support_fraction", "geometry_opposition_fraction",
     "source_geometry_positive", "source_geometry_opposing", "source_geometry_signed",
@@ -167,7 +167,7 @@ def _cell(name, bounds, reason):
         "upper": _bound(high, lower=False), "unit": "dimensionless",
         "status": "unavailable" if value is None else "populated",
         "origin": "proposed", "unavailable_reason": reason,
-        "conditional_on": list(conditions), "formula_code": f"structure_{name}_v1",
+        "conditional_on": list(conditions), "formula_code": f"structure_{name}",
     }
 
 

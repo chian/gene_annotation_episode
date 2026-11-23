@@ -7,7 +7,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.literature_storage import A108SheetRepository
 from gene_annotation_episode.episodic_workflow.episode_support.findings.sample_context_evidence.scientific_findings import FindingIdentity
 PROVIDER = 'literature.a108.context_grading'
-VERSION = 'literature_a108_context_grading_record_v1'
+VERSION = 'literature_a108_context_grading_record'
 NAMESPACE = 'literature_a108_grading_cells'
 REQUESTED = 'requested_a108_grading_components'
 OPERATIONS = TableDeclaration(name='literature_a108_grading_operations', columns=('sheet_ref',), key=('sheet_ref',), record_refs=('sheet_ref',))

@@ -25,8 +25,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.similarit
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.tool_grading_artifacts import retain_tool_grading
 
 
-_PREPARED_VERSION = "native_blast_prepared_grading_v2"
-_SCHEMA_VERSION = "native_blast_retained_grading_v2"
+_PREPARED_VERSION = "native_blast_prepared_grading"
+_SCHEMA_VERSION = "native_blast_retained_grading"
 _ARTIFACT_FIELDS = ("bundle_artifact_ref", "source_grading_artifact_ref", "grading_artifact_ref",
                     "sheet_artifact_ref", "scores_artifact_ref", "selected_rows_artifact_ref")
 
@@ -48,7 +48,7 @@ def _original_bundle(store, bundle, bundle_artifact_ref, policy):
     # manifest/request/compiler relationships without touching original paths.
     try:
         root = Path(bundle["environment"]["TMPDIR"]).parent
-        plan = {"version": "native_blast_run_plan_v1", "identity": bundle["identity"],
+        plan = {"version": "native_blast_run_plan", "identity": bundle["identity"],
             "requested_job": bundle["requested_job"], "attempt_directory": str(root),
             "policy": policy.to_dict()}
         validate_original_bundle(bundle, plan)
@@ -163,7 +163,7 @@ def _prepare_native_blast_grading(scratch, store, *, bundle, bundle_artifact_ref
         return prepared
     directory.mkdir(parents=True)
     write_json(directory / "intent.json", {"request_sha256": fingerprint})
-    plan = {"version": "native_blast_grading_plan_v2", "bundle": bundle,
+    plan = {"version": "native_blast_grading_plan", "bundle": bundle,
         "artifacts": paths, "directory": str(directory), "selector": selector,
         "binding_snapshots": _binding_snapshots(store, bundle), "failures": failures}
     write_json(directory / "plan.json", plan)
@@ -192,9 +192,9 @@ def _prepare_native_blast_grading(scratch, store, *, bundle, bundle_artifact_ref
     manifest = {}
     try:
         manifest = json.loads((directory / "worker-result.json").read_text())
-        if (manifest.get("version") != "native_blast_worker_result_v2"
-                or manifest.get("sheet_schema") != "native_blast_sheet_collection_v2"
-                or manifest.get("scores_schema") != "native_blast_scores_collection_v2"):
+        if (manifest.get("version") != "native_blast_worker_result"
+                or manifest.get("sheet_schema") != "native_blast_sheet_collection"
+                or manifest.get("scores_schema") != "native_blast_scores_collection"):
             raise ValueError("native_blast_new_worker_manifest_required")
         validate_native_blast_correspondence_collections(
             json.loads((directory / "sheet.json").read_text()),
@@ -227,7 +227,7 @@ def _prepare_native_blast_grading(scratch, store, *, bundle, bundle_artifact_ref
         native_artifact_ref=bundle_artifact_ref, grading=stable)
     selected = {**stable, "source_grading_artifact_ref": prepared["source_grading_artifact_ref"],
         "selected_rows_artifact_ref": prepared["selected_rows_artifact_ref"],
-        "selected_rows_schema": "native_blast_selected_row_v1", "selector": selector,
+        "selected_rows_schema": "native_blast_selected_row", "selector": selector,
         "failures": failures, "numerical_complete": prepared["numerical_complete"],
         "diagnostic_artifacts": retained, "worker_receipt": receipt}
     prepared["grading_artifact_ref"] = retain_tool_grading(store, provider="episode.execution_result",
@@ -242,7 +242,7 @@ def _qualified_grading(store, source_ref, bundle, prepared, selector):
         raise ContractError("native_blast_prepared_grading_required")
     source = store.get(source_ref)
     if (source.get("record_type") != "source" or source.get("provider") != "episode.execution_result"
-            or source.get("origin") != "tool" or source.get("version") != "native_blast_bundle_v1"
+            or source.get("origin") != "tool" or source.get("version") != "native_blast_bundle"
             or source.get("artifact_ref") != prepared["bundle_artifact_ref"]
             or prepared["source_grading_artifact_ref"] not in source.get("auxiliary_artifact_refs", [])
             or source.get("accession") != "native_blast_" + native_blast_digest(bundle["identity"])
@@ -254,7 +254,7 @@ def _qualified_grading(store, source_ref, bundle, prepared, selector):
     original = _read_json(store, prepared["source_grading_artifact_ref"])
     for envelope in (selected, original):
         if (set(envelope) != {"schema", "provider", "native_artifact_ref", "grading"}
-                or envelope["schema"] != "tool_grading_artifact_v1"
+                or envelope["schema"] != "tool_grading_artifact"
                 or envelope["provider"] != source["provider"] or envelope["native_artifact_ref"] != source["artifact_ref"]):
             raise ContractError("native_blast_grading_source_custody_mismatch")
     grading, stable = selected["grading"], original["grading"]
@@ -310,7 +310,7 @@ def _frozen_rows(store, grading, selector, bundle):
             if chosen:
                 values, unavailable = projected_measurements(row, requested["metrics"])
                 rows.append(row)
-                expected.append({"version": "native_blast_selected_row_v1", "family": row["family"],
+                expected.append({"version": "native_blast_selected_row", "family": row["family"],
                     "record_key": row["record_key"], "native_ordinal": ordinal,
                     "measurements": values, "unavailable": unavailable})
             ordinal += 1
@@ -420,7 +420,7 @@ def _publication(store, *, source_ref, bundle, prepared, scope, selector, publis
                             "start": row["intervals"][axis][0], "end": row["intervals"][axis][1],
                             "unit": row["coordinate_units"][axis], "model_unit": row["coordinate_units"]["alignment"]}
                             for axis, operand_ref in (("query", subject), ("reference", ref))],
-                        "native_blast_pairwise": {"version": "native_blast_pairwise_observation_v1",
+                        "native_blast_pairwise": {"version": "native_blast_pairwise_observation",
                             "program": bundle["program"], "record_key": row["record_key"],
                             "search_key": row["search_key"], "hit_ordinal": row["hit_ordinal"], "hsp_ordinal": row["hsp_ordinal"],
                             "bundle_artifact_ref": prepared["bundle_artifact_ref"]}}

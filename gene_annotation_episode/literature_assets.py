@@ -9,7 +9,7 @@ from xml.etree import ElementTree
 from .acquisition import AcquisitionError, SourceSnapshot
 from .domain import ContractError
 
-VERSION = "pmc_cloud_advertised_assets_v1"
+VERSION = "pmc_cloud_advertised_assets"
 BASE_URL = "https://pmc-oa-opendata.s3.amazonaws.com/"
 BUCKET = "pmc-oa-opendata"
 PMCID = re.compile(r"^PMC[0-9]+$")

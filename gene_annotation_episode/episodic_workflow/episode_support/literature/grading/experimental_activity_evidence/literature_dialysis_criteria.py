@@ -47,7 +47,7 @@ model but is not itself judged), the membrane cutoff, the device, the detection 
 free and the total ligand concentration of a single reading, and the statement that only this method was used.
 """
 
-VERSION = 'a105_dialysis_criteria_v1'
+VERSION = 'a105_dialysis_criteria'
 
 # ---- Threshold constants -------------------------------------------------
 PERCENT_FULL = 100.0  # FIXED_BY_DEFINITION: percent in the whole (percent bound = 100 minus percent unbound; a fraction times 100 is a percent).

@@ -134,7 +134,7 @@ def _job(store, directory, program, sequences, executable_directory):
         inputs[name] = artifact
     executable = (Path(executable_directory) / program).resolve()
     requested = requested_job_from_pairwise({
-        'version': 'blast_pairwise_job_v1', 'program': program,
+        'version': 'blast_pairwise_job', 'program': program,
         'software': {'executable': str(executable), 'sha256': hashlib.sha256(executable.read_bytes()).hexdigest(),
                      'engine_version': None},
         'environment': {}, 'operands': operands,

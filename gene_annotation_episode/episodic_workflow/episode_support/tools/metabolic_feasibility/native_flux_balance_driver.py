@@ -120,19 +120,18 @@ def _replay(plan, paths):
     manifest = read_json(paths["manifest"])
     require(manifest.get("sealed") is True and manifest.get("attempt") == plan["identity"], "fba_original_attempt_mismatch")
     require(manifest.get("software_sha256") == digest(plan["requested_job"]["native_flux_balance"]["software"]), "fba_original_attempt_mismatch")
-    if plan["version"] == "flux_balance_run_plan_v2":
-        observation = read_json(confined_file(plan["attempt_directory"], ENVIRONMENT_FILENAME))
-        expected = plan["environment_binding"]["realized_environment"]
-        require(type(observation) is dict and set(observation) == {
-            "version", "plan_sha256", "expected_environment", "observed_environment"}
-            and observation["version"] == "flux_balance_environment_observation_v1"
-            and observation["plan_sha256"] == digest(plan) and observation["expected_environment"] == expected,
-            "fba_environment_observation_mismatch")
-        require(read_json(confined_file(plan["attempt_directory"], STARTED_FILENAME)).get(
-            "environment_observation_sha256") == digest(observation), "fba_environment_observation_mismatch")
-        actual = observation["observed_environment"]
-        require(type(actual) is dict and set(actual) == set(expected)
-            and all(v is None or type(v) is str for v in actual.values()), "fba_environment_observation_mismatch")
+    observation = read_json(confined_file(plan["attempt_directory"], ENVIRONMENT_FILENAME))
+    expected = plan["environment_binding"]["realized_environment"]
+    require(type(observation) is dict and set(observation) == {
+        "version", "plan_sha256", "expected_environment", "observed_environment"}
+        and observation["version"] == "flux_balance_environment_observation"
+        and observation["plan_sha256"] == digest(plan) and observation["expected_environment"] == expected,
+        "fba_environment_observation_mismatch")
+    require(read_json(confined_file(plan["attempt_directory"], STARTED_FILENAME)).get(
+        "environment_observation_sha256") == digest(observation), "fba_environment_observation_mismatch")
+    actual = observation["observed_environment"]
+    require(type(actual) is dict and set(actual) == set(expected)
+        and all(v is None or type(v) is str for v in actual.values()), "fba_environment_observation_mismatch")
     declarations = {r["role"]: r for r in plan["outputs"] if r["role"] != "manifest"}
     require(set(r["role"] for r in manifest["files"]) == set(declarations), "fba_output_role_mismatch")
     for row in manifest["files"]:
@@ -164,22 +163,20 @@ def run_flux_balance_native(plan):
         lifecycle_directory=str(Path(owner["execution_id"]).parent))
     observed_environment = {k: os.environ.get(k) for k in expected_environment}
     start_record = {"plan_sha256": digest(plan), "started_at": _now()}
-    if plan["version"] == "flux_balance_run_plan_v2":
-        observation = {
-            "version": "flux_balance_environment_observation_v1", "plan_sha256": digest(plan),
-            "expected_environment": expected_environment, "observed_environment": observed_environment}
-        start_record["environment_observation_sha256"] = digest(observation)
+    observation = {
+        "version": "flux_balance_environment_observation", "plan_sha256": digest(plan),
+        "expected_environment": expected_environment, "observed_environment": observed_environment}
+    start_record["environment_observation_sha256"] = digest(observation)
     immutable_json(started, start_record)
-    if plan["version"] == "flux_balance_run_plan_v2":
-        immutable_json(confined_file(attempt, ENVIRONMENT_FILENAME), observation)
+    immutable_json(confined_file(attempt, ENVIRONMENT_FILENAME), observation)
     statuses = {role: "absent" for role in paths}
     diagnostics = {"warnings": [], "logging": [], "exceptions": [], "stage": "selection"}
     problems, distributions, model, solution, solution_payload = [], [], None, None, None
-    model_payload = {"version": "cobra_model_capture_v1", "loaded_original": None, "effective": None,
+    model_payload = {"version": "cobra_model_capture", "loaded_original": None, "effective": None,
         "input_profile": job["model_input"]["format"], "loader": {"name": "read_sbml_model" if job["model_input"]["format"] == "sbml" else "load_json_model",
             "cobra_version": "0.32.1", "number_type": "float64", "id_replacement": "cobra_F_REPLACE" if job["model_input"]["format"] == "sbml" else "none"},
         "source_to_loaded_ids": [], "source_feature_audit": [], "source_audit": None, "issues": []}
-    problem_payload = {"version": "cobra_glpk_problem_capture_v1", "loaded_original": None, "effective": None,
+    problem_payload = {"version": "cobra_glpk_problem_capture", "loaded_original": None, "effective": None,
                        "configuration_before_solve": None, "issues": []}
     application = capture._request_application(job)
     calls, events, problem_sha, outcome, context = 0, [], None, "not_executed", None
@@ -195,10 +192,9 @@ def run_flux_balance_native(plan):
             return False
     with _diagnostic_capture(diagnostics) as log:
         try:
-            require(write("selected_request", {"version": "flux_balance_selected_request_v1", "attempt": owner,
+            require(write("selected_request", {"version": "flux_balance_selected_request", "attempt": owner,
                 "requested_job": plan["requested_job"]}), "artifact_missing")
-            require(observed_environment == expected_environment if plan["version"] == "flux_balance_run_plan_v2"
-                    else all(os.environ.get(k) == v for k, v in expected_environment.items()), "fba_runtime_environment_mismatch")
+            require(observed_environment == expected_environment, "fba_runtime_environment_mismatch")
             for leaf in ("tmp", "cache", "cache/pip"):
                 directory(attempt / leaf, create=True)
             distributions = _verify_software(job["software"])
@@ -292,7 +288,7 @@ def run_flux_balance_native(plan):
             identity = {k: pin[k] for k in ("sha256", "size_bytes")}
         files.append({**declaration, "state": statuses[role], "identity": identity})
     configuration = solution_payload["configuration_after_solve"] if solution_payload else problem_payload["configuration_before_solve"]
-    manifest = {"version": "flux_balance_native_manifest_v1", "sealed": True, "attempt": owner,
+    manifest = {"version": "flux_balance_native_manifest", "sealed": True, "attempt": owner,
         "software_sha256": digest(job["software"]), "model_identity": {k: job["model_input"]["file"][k] for k in ("sha256", "size_bytes")},
         "actual_distributions": distributions, "actual_solver": _solver_record(solution_payload, configuration),
         "effective_problem_sha256": problem_sha,

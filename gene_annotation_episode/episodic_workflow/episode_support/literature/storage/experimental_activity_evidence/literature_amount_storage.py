@@ -9,7 +9,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence.literature_amount_calculations import COMPONENTS, REASONS, populate_amount_components
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_rate_storage import LiteratureRateRepository
 PROVIDER = 'literature.a105.amount_population'
-VERSION = 'literature_amount_population_record_v1'
+VERSION = 'literature_amount_population_record'
 RETURN_UNITS = {'(mg/ml)^2': 'mg2/ml2', '(uM)^2': 'uM2'}
 CONDITIONS = ('source_role_and_pair_interpretations', 'linear_covariance_propagation', 'first_order_covariance_propagation', 'same_stock_rate_with_total_mass_denominator_required_before_application')
 _QUANTITY_REF_FIELDS = ('subject_ref', 'construct_ref', 'preparation_ref', 'stock_ref', 'method_ref', 'reported_basis_ref', 'condition_ref', 'measurement_ref', 'physical_observation_ref', 'reported_uncertainty_ref')

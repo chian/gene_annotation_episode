@@ -2,7 +2,7 @@
 request message).
 
 Old assignment: one concrete API request for one configured resource (``resource_id`` required, the service's
-request form, here an AppService request ``bvbrc_appservice_request_v1``). The old code re-read the parent launch's own
+request form, here an AppService request ``bvbrc_appservice_request``). The old code re-read the parent launch's own
 assignment (``immutable_input_versions``, ``launch_instructions``): in the final form the parent copies what this
 episode reads into the assignment (``msg_to_child``), so each is a field here. Fields the old code did not have are
 listed in the carry-over record as new fields: ``scope``, ``input_refs``, ``completion_target``. The executor's

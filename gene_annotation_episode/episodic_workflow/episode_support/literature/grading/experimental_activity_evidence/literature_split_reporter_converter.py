@@ -128,7 +128,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_assay_grading import INPUT_VERSION, ROLES, grade_assay
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import SUPPORTS, apply_support
 
-VERSION = 'a105_split_reporter_converted_v1'
+VERSION = 'a105_split_reporter_converted'
 CRITERIA_MAP = {'binding_controls': ('fragment_alone_control', 'unrelated_pair_control', 'binding_mutant_control', 'positive_control'), 'binding_regime': ('fusion_orientations', 'saturable_titration', 'titration_series', 'titration_range', 'reversible_reporter'), 'binding_parameter_definition': ('interaction_observed', 'signal_to_background', 'negative_control_ratio'), 'calibration_applicability': ('expression_verified', 'background_correction'), 'sampling_basis': ('replicates',)}
 SIGNAL_TO_BACKGROUND_FULL_AGREEMENT = 10.0  # EXPERT_REVIEW: smallest signal over background taken as a clear signal; a split luciferase (NanoBiT) typically gives tens to thousands of fold over the background, a split fluorescent protein a few fold to ten.
 SIGNAL_TO_BACKGROUND_ZERO_AGREEMENT = 2.0  # EXPERT_REVIEW: signal over background at or below which the signal cannot be told from the variation of the background (a twofold change is about the noise of a transfected-cell assay): conflicting; the degree falls linearly in log fold in between (a fold is multiplicative; range review).

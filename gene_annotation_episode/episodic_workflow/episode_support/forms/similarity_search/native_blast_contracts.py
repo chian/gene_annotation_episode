@@ -28,7 +28,7 @@ def _object(properties):
 
 
 NATIVE_BLAST_JOB_SCHEMA = _object({
-    "version": {"const": "native_blast_job_v1"}, "program": {"enum": list(PROGRAMS)},
+    "version": {"const": "native_blast_job"}, "program": {"enum": list(PROGRAMS)},
     "mode": {"const": "pairwise"},
     "software": _object({"executable": _ABS, "sha256": _SHA, "engine_version": _NULL_STR}),
     "environment": {"type": "object", "additionalProperties": {"type": "string"}},

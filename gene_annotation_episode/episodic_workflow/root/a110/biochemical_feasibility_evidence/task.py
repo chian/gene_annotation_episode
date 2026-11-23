@@ -52,7 +52,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.tool_knowle
 
 # ---------------------------------------------------------------------------- the A110 axis guidance
 # (the old ScientificGoal.instructions prefixed the text of the old component_axis_workflow module, which is not placed; the text is carried from the earlier port's copy)
-VERSION = 'component_axis_investigation_v1'
+VERSION = 'component_axis_investigation'
 NAMES = {'A110': 'Biochemical feasibility and chemical/resource accounting'}
 TASKS = {
     'A110': ('reaction_identity', 'stoichiometric_accounting', 'electron_accounting',
@@ -349,7 +349,7 @@ TOOLS = {'process_entry': process_entry, 'received_evidence': received_evidence,
 
 # ------------------------------------------------------------------------- what the model may select
 
-_THOUGHT_REF = obj({'version': {'const': 'biochemical_feasibility_evidence_option_ref_v1'},
+_THOUGHT_REF = obj({'version': {'const': 'biochemical_feasibility_evidence_option_ref'},
                     'library_id': {'type': 'string', 'pattern': '^[a-f0-9]{64}$'},
                     'slot': {'const': 'thought_pattern'},
                     'option_id': {'type': 'string', 'pattern': '^P[0-9]+$'},

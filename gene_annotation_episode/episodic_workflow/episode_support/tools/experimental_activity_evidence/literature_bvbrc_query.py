@@ -8,7 +8,7 @@ What differs from A101's copy, for resolving a subject a paper names:
 - an ``eq``/``in`` filter is allowed on a case-insensitive text field (``string_ci``: ``gene``, ``product``,
   ``genome_name``, ``taxon_name``), as a whole-value phrase match; A101's version refuses these fields;
 - the field registry holds only the collections and fields this arm reads (taken from A101's frozen registry,
-  contract ``bvbrc_data_fields_2026_10_24_v1``): ``genome_feature``, ``genome``, ``taxonomy``, ``feature_sequence``.
+  contract ``bvbrc_data_fields_2026_10_24``): ``genome_feature``, ``genome``, ``taxonomy``, ``feature_sequence``.
 """
 from __future__ import annotations
 
@@ -26,8 +26,8 @@ from gene_annotation_episode.domain import ContractError as _ContractError
 
 __all__ = ("FIELD_CONTRACT_VERSION", "COMPILER_VERSION", "FIELD_REGISTRY", "validate_data_query", "encode_native_query")
 
-COMPILER_VERSION = "bvbrc_solr_compiler_v1"
-FIELD_CONTRACT_VERSION = 'bvbrc_data_fields_2026_10_24_v1'
+COMPILER_VERSION = "bvbrc_solr_compiler"
+FIELD_CONTRACT_VERSION = 'bvbrc_data_fields_2026_10_24'
 
 # (name, solr_type, multi_valued, exact_filter, range_filter, existence_filter, sort, facet); every field here is stored.
 _COLLECTION_ROWS = {
@@ -107,7 +107,7 @@ _SCHEMA_DEFS = {
                      'required': ['field', 'offset', 'limit', 'min_count', 'sort', 'include_missing'],
                      'additionalProperties': False},
     'DataQuery': {'type': 'object',
-                  'properties': {'version': {'const': 'bvbrc_data_request_v2'}, 'collection': {'type': 'string'},
+                  'properties': {'version': {'const': 'bvbrc_data_request'}, 'collection': {'type': 'string'},
                                  'mode': {'type': 'string', 'enum': ['page', 'count', 'facet']},
                                  'filters': {'type': 'array', 'items': {'$ref': '#/$defs/Predicate'}},
                                  'fields': {'type': 'array', 'items': {'$ref': '#/$defs/Field'}, 'minItems': 1, 'uniqueItems': True},
@@ -328,7 +328,7 @@ def encode_native_query(request: dict, *, base_url: str, page_selector: dict | N
     field_selection = {"requested_fields": _deepcopy(original.get("fields")), "defaulted_fields": [], "custody_added_fields": []}
     sort_selection = {"requested_sort": _deepcopy(original.get("sort")), "defaulted_sort": [], "tie_breaker_added": None}
     effective = {
-        "version": "bvbrc_data_effective_query_v2",
+        "version": "bvbrc_data_effective_query",
         "collection": original["collection"], "mode": original["mode"],
         "filters": _deepcopy(original["filters"]), "fields": [], "sort": [],
         "offset": 0, "limit": 0, "facet": _deepcopy(original.get("facet")),
@@ -357,7 +357,7 @@ def encode_native_query(request: dict, *, base_url: str, page_selector: dict | N
             effective.update(selector)
 
     population = {
-        "version": "bvbrc_data_population_v1", "base_url": endpoint,
+        "version": "bvbrc_data_population", "base_url": endpoint,
         "collection": original["collection"], "filters": _deepcopy(original["filters"]),
         "visibility": "public_unauthenticated", "compiler_version": COMPILER_VERSION,
         "field_contract_version": FIELD_CONTRACT_VERSION,
@@ -389,11 +389,11 @@ def encode_native_query(request: dict, *, base_url: str, page_selector: dict | N
         raise _ContractError("bvbrc_data_request_schema_invalid") from error
 
     return {
-        "version": "bvbrc_data_prepared_v2", "service": "bvbrc_data",
+        "version": "bvbrc_data_prepared", "service": "bvbrc_data",
         "original_request": original, "page_selector": selector,
         "effective_request": effective, "query_population": population,
         "field_selection": field_selection, "sort_selection": sort_selection,
-        "request_profile": "solr_query_solr_json_v1",
+        "request_profile": "solr_query_solr_json",
         "native_request": {
             "method": "GET", "url": url,
             "headers": [{"name": name, "value": value} for name, value in _HEADERS],

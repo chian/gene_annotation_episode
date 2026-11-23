@@ -13,7 +13,7 @@ from jsonschema import Draft202012Validator
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.native_blast_contracts import (
     PROGRAMS, RESERVED_ENVIRONMENT, _absolute, _options, _relative, finite_json_copy)
 
-VERSION = 'blast_pairwise_job_v1'
+VERSION = 'blast_pairwise_job'
 _STR = {'type': 'string', 'minLength': 1, 'pattern': '^[^\\u0000]+$'}
 _NULL_STR = {'anyOf': [_STR, {'type': 'null'}]}
 _SHA = {'type': 'string', 'pattern': '^[0-9a-fA-F]{64}$'}

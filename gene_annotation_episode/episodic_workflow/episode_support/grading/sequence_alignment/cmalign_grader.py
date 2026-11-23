@@ -1,4 +1,4 @@
-"""Deterministic numerical components from saved cmalign_sheet_v1 data.
+"""Deterministic numerical components from saved cmalign_sheet data.
 
 This module never parses retained native text. Counts/bounds are extracted by
 cmalign_inputs; this calculator validates their relationships, selects explicit
@@ -239,7 +239,7 @@ def calculate_cmalign_scores(sheet: dict, *, parameters: dict | None = None) -> 
         raise ValueError("cmalign_unknown_parameters:"+",".join(sorted(set(options)-{"population"})))
     if type(options["population"]) is not str or options["population"] not in {"all", "newly_aligned", "inherited"}:
         raise ValueError("cmalign_population_invalid")
-    if (type(sheet) is not dict or sheet.get("schema") != "cmalign_sheet_v1" or
+    if (type(sheet) is not dict or sheet.get("schema") != "cmalign_sheet" or
             type(sheet.get("operation")) is not dict or sheet["operation"].get("program") != "cmalign" or
             sheet.get("status") not in ("available", "partial", "missing", "invalid") or
             any(type(sheet.get(k)) is not list for k in ("sequences", "columns", "pairs", "alignments", "issues"))):
@@ -275,7 +275,7 @@ def calculate_cmalign_scores(sheet: dict, *, parameters: dict | None = None) -> 
         ("observed_two_nucleotide_pairs", "canonical_pairs", "noncanonical_pairs", "unambiguous_pair_denominator")}
     pair_totals["canonical_pair_fraction"] = _ratio(pair_totals["canonical_pairs"], pair_totals["unambiguous_pair_denominator"])
     pair_totals["excluded"] = {k: sum(p["excluded"][k] for p in pairs) for k in ("gap", "missing", "ambiguous", "nonresidue", "unavailable")}
-    result = {"schema": "cmalign_scores_v1", "operation": deepcopy(sheet["operation"]),
+    result = {"schema": "cmalign_scores", "operation": deepcopy(sheet["operation"]),
         "alignment_kind": sheet.get("alignment_kind"), "parameters": options,
         "sequences": rows, "columns": columns, "pairs": pairs,
         "summary": {"population": options["population"], "sequence_count": len(rows), "selected_sequence_count": len(chosen),

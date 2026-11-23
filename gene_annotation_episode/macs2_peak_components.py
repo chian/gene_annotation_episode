@@ -166,11 +166,11 @@ def build_macs2_peak_components(*, reference, callpeak_bindings, peaks_xls,
     for binding in bindings:
         validate_atac_callpeak_binding(binding)
     require(len({row['run_key'] for row in bindings}) == len(bindings), 'duplicate_atac_callpeak_run_key')
-    for reports, version in ((peaks_xls, 'macs2_peaks_xls_parsed_v1'),
-            (narrowpeaks, 'macs2_narrowpeak_parsed_v1'), (summits, 'macs2_summits_parsed_v1')):
+    for reports, version in ((peaks_xls, 'macs2_peaks_xls_parsed'),
+            (narrowpeaks, 'macs2_narrowpeak_parsed'), (summits, 'macs2_summits_parsed')):
         for report in reports:
             validate_atac_parsed_table(report, version=version)
-    components = dict(version='macs2_peak_components_v1', reference=deepcopy(reference),
+    components = dict(version='macs2_peak_components', reference=deepcopy(reference),
         callpeak_bindings=bindings,
         peaks_xls=_complete_peak_roles(peaks_xls, bindings, 'peaks_xls', parse_profile=parse_profile),
         narrowpeaks=_complete_peak_roles(narrowpeaks, bindings, 'narrowpeak', parse_profile=parse_profile),

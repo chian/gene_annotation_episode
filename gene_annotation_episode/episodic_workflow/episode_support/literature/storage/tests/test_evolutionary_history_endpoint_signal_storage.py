@@ -4,7 +4,7 @@ runner."""
 import json
 from pathlib import Path
 
-from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.evolutionary_history_evidence.literature_endpoint_signal_storage import POPULATION, REQUESTED, ENDPOINT_SIGNAL_REQUEST_SCHEMA_V1
+from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.evolutionary_history_evidence.literature_endpoint_signal_storage import POPULATION, REQUESTED, ENDPOINT_SIGNAL_REQUEST_SCHEMA
 
 from .evolutionary_history_world import call, read, run, world  # noqa: F401
 
@@ -43,7 +43,7 @@ def test_an_endpoint_signal_sheet_is_saved_read_back_and_its_cells_projected(wor
     requested = selection['requested_cells']
     arguments = {'version': POPULATION, 'selection': selection,
                  'return_context': {name: [] for name in
-                                    ENDPOINT_SIGNAL_REQUEST_SCHEMA_V1['properties']['return_context']['properties']}}
+                                    ENDPOINT_SIGNAL_REQUEST_SCHEMA['properties']['return_context']['properties']}}
     populate = call(REPOSITORY, 'populate', arguments, scope=world['scope'], assignment={REQUESTED: requested})
     populate['arguments']['role'] = 'reader'
     populated, held, saved, cells = run(world, 'endpoint', [populate,

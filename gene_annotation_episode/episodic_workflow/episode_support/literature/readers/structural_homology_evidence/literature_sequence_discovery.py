@@ -120,7 +120,7 @@ def publish_identity(registry, arguments, scope, snapshot):
         if match:
             next_cursor = parse_qs(urlsplit(match.group(1)).query).get('cursor', [None])[0]
     total = headers.get('x-total-results')
-    return {'version': 'literature_sequence_identity_v1', 'subject_ref': arguments['subject_ref'],
+    return {'version': 'literature_sequence_identity', 'subject_ref': arguments['subject_ref'],
         'source_ref': source['id'], 'query': snapshot.request['query'],
         'query_sequence_sha256': hashlib.sha256(sequence.encode()).hexdigest(),
         'query_length': len(sequence), 'matches': matches, 'rejected_records': rejected,
@@ -162,7 +162,7 @@ def references(registry, arguments, scope, permitted_inputs):
             'reported_scope': row.get('referencePositions'),
             'reported_source': row.get('referenceComments')})
     end = start + len(result)
-    return {'version': 'literature_sequence_references_v1',
+    return {'version': 'literature_sequence_references',
         'subject_ref': arguments['subject_ref'], 'source_ref': arguments['source_ref'],
         'artifact_ref': artifact['id'], 'record': _summary(record, index),
         'references': result, 'total_references': len(rows),

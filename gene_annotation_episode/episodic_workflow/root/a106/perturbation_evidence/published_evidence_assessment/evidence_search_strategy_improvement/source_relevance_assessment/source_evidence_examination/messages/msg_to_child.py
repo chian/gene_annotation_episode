@@ -7,7 +7,7 @@
 
 The model selects only unconsumed candidates (the selection schema of ``task.py`` names no other), and a candidate handed
 to a leaf is consumed (``internal_summary.consumed_candidates``). The leaf's assignment is its own
-``reading_assignment_v1``: the page of this paper, the window, the commissioned task, the proposed annotation, the scope
+``reading_assignment``: the page of this paper, the window, the commissioned task, the proposed annotation, the scope
 and every record this episode names for the child. Nothing is checked here: a commission the child does not admit fails.
 
 No text passes: the objective of each leaf is fixed by its slot and the message is empty (controlled messaging)."""
@@ -39,7 +39,7 @@ def selection_of(slot, arguments, summary):
 
 
 def msg_to_child(slot, arguments, summary):
-    assignment = {'version': 'reading_assignment_v1', 'page': summary['page'],
+    assignment = {'version': 'reading_assignment', 'page': summary['page'],
                   'selection': selection_of(slot, arguments, summary), 'literature_task': summary['task'],
                   'proposed_annotation_ref': summary['proposed_annotation_ref'], 'scope': summary['scope'],
                   'received_record_refs': list(summary['received_record_refs'])}

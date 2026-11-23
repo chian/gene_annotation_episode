@@ -30,7 +30,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.readers.profile_m
 from gene_annotation_episode.episodic_workflow.episode_support.readers.profile_model_preparation.sequence_homology_evidence.hmmer_alignment_input_phylip import decode_native_phylip_alignment
 from gene_annotation_episode.episodic_workflow.episode_support.readers.profile_model_preparation.sequence_homology_evidence.hmmer_alignment_input_validation import input_decoding_local_valid, input_decoding_valid, native_alignment_batch_valid
 
-SCHEMA = "hmmer_alignment_preparation_sheet_v1"
+SCHEMA = "hmmer_alignment_preparation_sheet"
 MODES = {"hmmbuild": frozenset({"build_alignment", "build_single_sequence_matrix"}),
          "alimask": frozenset({"mask_alignment", "mask_model", "model_to_alignment", "alignment_to_model"})}
 RANGE_FLAGS = {"mask_alignment": "--alirange", "mask_model": "--modelrange",
@@ -90,7 +90,7 @@ def alimask_map_context_shape(context):
     digest = lambda value: type(value) is str and re.fullmatch(r"[0-9a-f]{64}", value) is not None
     integer = lambda value: type(value) is int and 0 <= value <= 2147483647
     if (type(context) is not dict or set(context) != MAP_CONTEXT_FIELDS
-            or context["version"] != "hmmer_alignment_map_context_v1"
+            or context["version"] != "hmmer_alignment_map_context"
             or type(context["source_occurrence_id"]) is not str or not context["source_occurrence_id"]
             or not digest(context["source_sha256"])
             or type(context["binding"]) is not str or context["binding"] not in {"retained_executable_profile", "unavailable"}
@@ -425,7 +425,7 @@ def read_hmmer_alignment_input(content: bytes, *, declared_format: str, occurren
     if explicit_alphabet is not None and (type(explicit_alphabet) is not str or explicit_alphabet not in _ALPHABET_FLAGS):
         raise ValueError("hmmer_alignment_alphabet_invalid")
     problems = _binding_issues(content, occurrence)
-    result = {"version": "hmmer_alignment_input_result_v1", "input_decoding": None,
+    result = {"version": "hmmer_alignment_input_result", "input_decoding": None,
         "records": [], "population": _population(occurrence, declared_format), "issues": problems}
     if any(problem["code"] in {"occurrence_size_mismatch", "occurrence_digest_mismatch"} for problem in problems):
         # Existing structural Stockholm data can still qualify a binding failure;
@@ -447,8 +447,8 @@ def read_hmmer_alignment_input(content: bytes, *, declared_format: str, occurren
             fmt=declared_format, occurrence=occurrence, alphabet=alphabet, engine_version=engine_version)
         result.update(records=records, population=population)
         problems.extend(extra)
-    context = {"version": "hmmer_alignment_input_decoding_v1",
-        "reader_profile": "infernal_1_1_5_easel_alignment_input_v1",
+    context = {"version": "hmmer_alignment_input_decoding",
+        "reader_profile": "infernal_1_1_5_easel_alignment_input",
         "source_occurrence_id": occurrence["occurrence_id"], "source_sha256": occurrence["sha256"].lower(),
         "format": declared_format, "alphabet_basis": "explicit_flag" if probe is None else "native_source_inference",
         "explicit_alphabet": explicit_alphabet, "effective_alphabet": alphabet, "alphabet_probe": probe,
@@ -483,10 +483,10 @@ def read_hmmer_alignment_output(content: bytes, *, declared_format: str, occurre
     problems = _binding_issues(content, occurrence)
     bound = not any(problem["code"] in {"occurrence_size_mismatch", "occurrence_digest_mismatch"} for problem in problems)
     alphabet = source_decoding["effective_alphabet"] if source_decoding is not None and bound else None
-    context = ({"version": "hmmer_alignment_source_alphabet_v1",
+    context = ({"version": "hmmer_alignment_source_alphabet",
         "source_occurrence_id": source_decoding["source_occurrence_id"], "source_sha256": source_decoding["source_sha256"],
         "alphabet": alphabet, "alphabet_basis": source_decoding["alphabet_basis"]} if alphabet is not None else None)
-    result = {"version": "hmmer_alignment_output_result_v1", "source_alphabet": context,
+    result = {"version": "hmmer_alignment_output_result", "source_alphabet": context,
         "records": [], "population": _population(occurrence, declared_format), "issues": problems}
     if alphabet is None and declared_format not in {"stockholm", "pfam"}:
         problems.append(issue("alignment_decoding_unavailable", occurrence_id=occurrence["occurrence_id"],
@@ -507,7 +507,7 @@ def read_hmmer_alignment_output(content: bytes, *, declared_format: str, occurre
 
 
 def effective_hmmer_alignment_alphabet(alignment: dict, *, settings: dict) -> dict:
-    """Consume saved input facts, preserving explicit-only legacy absence."""
+    """Consume saved input facts, preserving explicit-only absence."""
     invalid = {"state": "incompatible", "alphabet": None, "basis": None, "issue_code": "input_decoding_invalid"}
     if type(settings) is not dict or type(alignment) is not dict or "source_alphabet" in alignment:
         return invalid

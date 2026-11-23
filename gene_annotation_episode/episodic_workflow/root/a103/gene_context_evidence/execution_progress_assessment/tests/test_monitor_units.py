@@ -392,7 +392,7 @@ def test_a_dependency_the_commissioner_passes_is_offered_and_its_commission_pass
     message = Monitor.msg_to_child('monitor', {'dependency_handle': dependency}, summary)
     assert message.selection == () and message.message == {}
     assert read_from_parent.ASSIGNMENT_FORM.admit(message.assignment, 'assignment') == {
-        'version': 'monitor_assignment_v2', 'handoff_refs': [dependency_ref], 'known_progress_refs': [],
+        'version': 'monitor_assignment', 'handoff_refs': [dependency_ref], 'known_progress_refs': [],
         'dependency_handoff_refs': [], 'requested_fields': list(read_from_parent.FIELD_OPTIONS),
         'information_unit': 1.0}
     with pytest.raises(KeyError):                             # a job the commissioner did not pass as a dependency
@@ -414,7 +414,7 @@ def test_the_head_offers_the_monitor_for_a_job_it_holds_and_its_commission_names
     assert MONITOR_SLOT in request.output_schema['properties']['operation']['enum']
     task_text = request.context['task']
     assert 'Outstanding jobs (each is named by its handoff_ref)' in task_text
-    assert handoff_ref in task_text and handle in task_text and 'monitor_assignment_v1' not in task_text
+    assert handoff_ref in task_text and handle in task_text
     assert violations(admitted_by_provider(request, tmp_path / 'provider')[1]) == []
     summary = Head.internal_summary(linked.view)
     assert [(job['job'], job['handoff_ref']) for job in summary['outstanding_jobs']] == [(handle, handoff_ref)]
@@ -429,7 +429,7 @@ def test_the_head_offers_the_monitor_for_a_job_it_holds_and_its_commission_names
     message = Head.msg_to_child(MONITOR_SLOT, call, summary)
     assert message.message == {} and message.selection == ('job_returncode',)
     assert read_from_parent.ASSIGNMENT_FORM.admit(message.assignment, 'assignment') == {
-        'version': 'monitor_assignment_v2', 'handoff_refs': [handoff_ref], 'known_progress_refs': [],
+        'version': 'monitor_assignment', 'handoff_refs': [handoff_ref], 'known_progress_refs': [],
         'dependency_handoff_refs': [], 'requested_fields': ['execution_status'], 'information_unit': 1.0}
     # Without an outstanding job the monitor is not offered.
     assert MONITOR_SLOT not in head_task.offered_children({**summary, 'outstanding_jobs': []})

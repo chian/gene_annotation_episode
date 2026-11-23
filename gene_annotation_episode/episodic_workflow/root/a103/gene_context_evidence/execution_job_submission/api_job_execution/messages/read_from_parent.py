@@ -1,7 +1,7 @@
 """What the commissioning parent (the job submission) gives (carried from ``from_parent.py``).
 
-Old assignment properties, each a field under its old name: ``version`` (``api_execution_assignment_v1`` or
-``api_service_assignment_v1``), ``resource_id``, ``service``, ``endpoint``, ``constraints``, ``launch_instructions``
+Old assignment properties, each a field under its old name: ``version`` (``api_execution_assignment`` or
+``api_service_assignment``), ``resource_id``, ``service``, ``endpoint``, ``constraints``, ``launch_instructions``
 and, per version, ``subject_ref``, ``algorithm``, ``database``, ``parameters``, ``page_size`` (the first version) or
 ``request`` (the second). The old ``prepare_assignment`` validated the request (``validate_api_assignment``, in the
 library) and, against the parent's own launch assignment, the BLAST selection, masking and utility inputs, the
@@ -17,7 +17,7 @@ from method_loop import ChoiceField, Field, RecordForm
 from gene_annotation_episode.episodic_workflow.episode_support.forms.gene_context_evidence.execution_contracts import (
     validate_api_assignment)
 
-VERSIONS = ('api_execution_assignment_v1', 'api_service_assignment_v1')
+VERSIONS = ('api_execution_assignment', 'api_service_assignment')
 
 ASSIGNMENT_FORM = RecordForm({
     'version': ChoiceField('text', 'The assignment version; the service-job version permits waiting', VERSIONS),
@@ -26,12 +26,12 @@ ASSIGNMENT_FORM = RecordForm({
     'endpoint': Field('text', 'The requested endpoint: usable_handoff'),
     'constraints': Field('record', 'The parent constraints, kept fixed'),
     'launch_instructions': Field('record', 'The selected launch instruction sections', required=False),
-    'subject_ref': Field('text', 'The subject record of an api_execution_assignment_v1', required=False),
-    'algorithm': Field('text', 'The search algorithm of an api_execution_assignment_v1', required=False),
-    'database': Field('text', 'The search database of an api_execution_assignment_v1', required=False),
-    'parameters': Field('record', 'The service parameters of an api_execution_assignment_v1', required=False),
-    'page_size': Field('integer', 'The result page size of an api_execution_assignment_v1', required=False),
-    'request': Field('record', 'The exact service request of an api_service_assignment_v1', required=False),
+    'subject_ref': Field('text', 'The subject record of an api_execution_assignment', required=False),
+    'algorithm': Field('text', 'The search algorithm of an api_execution_assignment', required=False),
+    'database': Field('text', 'The search database of an api_execution_assignment', required=False),
+    'parameters': Field('record', 'The service parameters of an api_execution_assignment', required=False),
+    'page_size': Field('integer', 'The result page size of an api_execution_assignment', required=False),
+    'request': Field('record', 'The exact service request of an api_service_assignment', required=False),
     'immutable_input_versions': Field('record', 'The input versions that stay fixed while the work runs'),
     'scientific_question': Field('text', "The parent's scientific question", required=False),
     'selected_tool_info': Field('list', "The parent's selected tool information (name, resources, description, "
@@ -41,14 +41,14 @@ ASSIGNMENT_FORM = RecordForm({
     'completion_target': Field('number', 'The credit one verified original handoff earns'),
 })
 
-OLD_PROPERTIES = ('version', 'resource_id', 'service', 'endpoint', 'constraints', 'launch_instructions',
+ASSIGNMENT_PROPERTIES = ('version', 'resource_id', 'service', 'endpoint', 'constraints', 'launch_instructions',
                   'subject_ref', 'algorithm', 'database', 'parameters', 'page_size', 'request')
 
 
 def read_from_parent(assignment, message):
     """The parent input: the old assignment properties that were given, the fields the child read from its parent,
     the new fields and the commission's message."""
-    original = {name: assignment[name] for name in OLD_PROPERTIES if name in assignment}
+    original = {name: assignment[name] for name in ASSIGNMENT_PROPERTIES if name in assignment}
     validate_api_assignment(original)
     return {**original, 'immutable_input_versions': assignment['immutable_input_versions'],
             'scientific_question': assignment.get('scientific_question'),

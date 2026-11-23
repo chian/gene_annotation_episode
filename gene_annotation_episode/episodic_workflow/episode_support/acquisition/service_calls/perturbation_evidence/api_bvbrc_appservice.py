@@ -30,7 +30,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.perturbat
 
 
 SERVICE = "bvbrc_appservice"
-EXECUTION_CONTRACT = "bvbrc_appservice_execution_v1"
+EXECUTION_CONTRACT = "bvbrc_appservice_execution"
 _UUID = re.compile(r"[a-fA-F0-9]{8}(?:-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}\Z")
 _NATIVE_STATES = {"queued": "submitted", "pending": "submitted", "running": "running",
                   "in-progress": "running", "completed": "completed", "failed": "failed",
@@ -201,7 +201,7 @@ class BVBRCAppServiceService:
 
         def effect(effect_kind, slot, payload, predecessors=()):
             effects.append(validate_contract("EffectDescriptor", {
-                "version": "selected_api_effects_v1", "original_job_owner": bindings["original_job_owner"],
+                "version": "selected_api_effects", "original_job_owner": bindings["original_job_owner"],
                 "resource_id": bindings["resource_id"], "kind": effect_kind,
                 "slot": {"kind": effect_kind, **slot}, "payload_sha256": _digest(payload),
                 "predecessor_evidence_refs": list(dict.fromkeys(predecessors))}))
@@ -371,7 +371,7 @@ class BVBRCAppServiceService:
         if local_failure is not None:
             kind, effects = "local_prepare", []
         return validate_contract("PreparedOperation", {
-            "version": "bvbrc_appservice_prepared_operation_v1", "execution_contract": EXECUTION_CONTRACT,
+            "version": "bvbrc_appservice_prepared_operation", "execution_contract": EXECUTION_CONTRACT,
             "operation": name, "purpose": purpose, "request_sha256": _digest(request),
             "arguments_sha256": _digest(arguments), "bound_inputs": bindings,
             "mutates_remote": bool(effects), "effects": effects, "native_kind": kind,

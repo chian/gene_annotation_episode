@@ -82,7 +82,7 @@ def add_covariance(args, sources, reader, matrix=None, status="known"):
     if matrix is None:
         matrix = [[1e-8, 5e-9, 0, 0], [5e-9, 1e-8, 0, 0],
                   [0, 0, 10000, 0], [0, 0, 0, .01]]
-    data = {"version": "a105_optical_covariance_v1", "primitive_order": list(PRIMITIVE_ORDER),
+    data = {"version": "a105_optical_covariance", "primitive_order": list(PRIMITIVE_ORDER),
         "primitive_measurement_keys": [r["measurement_key"] for r in owners],
         "primitive_physical_observation_keys": [r["physical_observation_key"] for r in owners],
         "primitive_owner_keys": [r["owner_key"] for r in owners],

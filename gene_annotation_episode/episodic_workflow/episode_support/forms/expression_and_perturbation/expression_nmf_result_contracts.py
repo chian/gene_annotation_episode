@@ -71,7 +71,7 @@ FILTER_FIELDS = {
     'sample_contributions': ('raw_coefficient', 'component_contribution', 'contribution_fraction'),
     'residual_cells': ('raw_value', 'fit_value', 'reconstructed_value', 'signed_residual'),
 }
-EXPRESSION_NMF_RESULT_SELECTOR_SCHEMA = obj(version={'const': 'expression_nmf_result_selector_v1'},
+EXPRESSION_NMF_RESULT_SELECTOR_SCHEMA = obj(version={'const': 'expression_nmf_result_selector'},
     mode={'enum': ['native_result', 'saved_sheet_recalculation']}, projection=deepcopy(SELECTOR_SCHEMA),
     saved_sheet_file=nullable(SAVED_FILE_SCHEMA))
 
@@ -148,7 +148,7 @@ def projection_schema():
     }
     selector = deepcopy(SELECTOR_SCHEMA)
     selector['properties']['filter']['anyOf'][1]['properties']['field'] = {'enum': sorted({f for v in FILTER_FIELDS.values() for f in v})}
-    return {'oneOf': [obj(schema={'const': 'expression_nmf_result_view_v1'}, view={'const': view},
+    return {'oneOf': [obj(schema={'const': 'expression_nmf_result_view'}, view={'const': view},
         selector=selector, status={'enum': ['calculated', 'unavailable']},
         native_outcome={'enum': ['complete', 'qualified', 'partial', 'failed', 'rejected_input', None]},
         total_available_rows=COUNT, selected_row_count=COUNT, filtered_row_count=COUNT, row_offset=COUNT,
@@ -184,7 +184,7 @@ def validate_expression_nmf_native_capture(value, *, original_plan):
     plan = validate_expression_nmf_run_plan(original_plan)
     require(type(value) is dict and set(value) == {'version', 'original_plan_sha256', 'files',
         'source_action_receipt_ref', 'writer_closure_receipt_ref', 'driver_started', 'failures'}, 'invalid_nmf_native_capture')
-    require(value['version'] == 'expression_nmf_native_capture_v1' and value['original_plan_sha256'] == digest(plan)
+    require(value['version'] == 'expression_nmf_native_capture' and value['original_plan_sha256'] == digest(plan)
         and value['driver_started'] in (True, False, None), 'invalid_nmf_native_capture')
     require(type(value['files']) is list and [r.get('role') for r in value['files']] == list(ARTIFACT_NAMES), 'invalid_nmf_capture_roles')
     for row in value['files']:

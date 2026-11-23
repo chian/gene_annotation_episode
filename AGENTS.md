@@ -99,6 +99,21 @@ library functions. The old shared root (files directly under `root/`,
 `root/library`, `root/scientific_process` and the duplicate top-level trees at
 that commit) is never restored and never read as a guide.
 
+# No version names; one version of everything
+
+Nothing in this code is named after a version: no `_v2` on an identifier, string
+constant, schema or record-kind name, `version` field value, function, file, folder or
+fixture; no `legacy_`, `old_`, `previous_` or `deprecated_` copies kept beside the live
+one. Code is versioned only by git commits. In a given episode folder there is exactly
+one version of every file and every function, so nothing can be confused with an older
+shape. An old version is dead: delete it at once (see the next section) and let the
+survivor take the plain name. Names of outside tools, databases and file formats keep
+the outside world's own version (a BLAST+ release, an Rfam release, NCBI database
+format 5): that is a fact about the outside, not our versioning. Fix a violation by
+reading the code, deciding per name which version is live, and applying that decision
+everywhere the name is used; never by a blind pattern rename. A new name that follows
+an existing wrong pattern spreads it: follow this rule, not the pattern.
+
 # Removing unwanted code
 
 When something is no longer wanted, delete it directly. Not wanting it is the

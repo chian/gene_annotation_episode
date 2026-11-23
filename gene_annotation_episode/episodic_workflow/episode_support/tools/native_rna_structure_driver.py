@@ -86,14 +86,14 @@ def _stage(operand, *, index, directory, policy, stderr):
         # A rejected candidate is NOT published as the original scientific
         # input. Its complete bytes remain lossless diagnostics, never parser
         # operands. Each base64 chunk is independently decodable and ordered.
-        header = {"schema": "rna_rejected_input_v1", "role": operand["role"],
+        header = {"schema": "rna_rejected_input", "role": operand["role"],
             "expected": {key: operand[key] for key in ("sha256", "size_bytes")},
             "observed": actual, "encoding": "base64_chunks_in_byte_order"}
         stderr.write((canonical(header) + "\n").encode())
         with temporary.open("rb") as source:
             offset = 0
             while block := source.read(48 * 1024):
-                stderr.write((canonical({"schema": "rna_rejected_input_chunk_v1", "role": operand["role"],
+                stderr.write((canonical({"schema": "rna_rejected_input_chunk", "role": operand["role"],
                     "offset": offset, "bytes_base64": base64.b64encode(block).decode("ascii")}) + "\n").encode())
                 offset += len(block)
         stderr.flush()
@@ -147,7 +147,7 @@ def run_rna_structure_driver(plan: dict) -> dict:
     compiled = compile_rna_structure_job(job, input_paths={row["role"]: str(directory / INPUT_NAMES[row["role"]])
         for row in job["operands"]}, output_directory=str(directory))
     environment = realized_environment(job, str(directory))
-    bundle = {"version": "native_rna_structure_bundle_v1", "identity": plan["identity"],
+    bundle = {"version": "native_rna_structure_bundle", "identity": plan["identity"],
         "requested_job": plan["requested_job"], **{key: job[key] for key in ("program", "operation", "mode", "record_key", "software")},
         "realized_argv": compiled["argv"], "environment": environment, "files": _manifest_rows(job),
         "returncode": None, "native_status": "failed", "failures": [], "started_at": now,

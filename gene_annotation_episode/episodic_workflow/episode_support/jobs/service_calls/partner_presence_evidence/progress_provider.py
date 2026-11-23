@@ -28,7 +28,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.partner_pre
 from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence.domain import ContractError, REF, RECORD_SCHEMAS, obj, validate_schema
 from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence.progress_records import RESOURCE_STATUS_SCHEMA, validate_resource_status
 
-PROGRESS_VERSION = 'progress_snapshot_v1'
+PROGRESS_VERSION = 'progress_snapshot'
 FIELDS = ('execution_status', 'measurements', 'log_windows', 'committed_record_refs', 'dependencies',
           'result_available')
 _STATES = ('pending', 'executing', 'returned', 'admitted')
@@ -174,7 +174,7 @@ class ProgressProvider:
         """Publish actual committed exposed information for a target; the same information again is the same
         publication."""
         scope = self._target_scope(target_handle)
-        payload = {'version': 'progress_exposure_v1', 'target_handle': target_handle,
+        payload = {'version': 'progress_exposure', 'target_handle': target_handle,
                    'committed_record_refs': _unique(committed_record_refs), 'dependencies': plain(dependencies),
                    'measurements': plain(measurements), 'log_windows': plain(log_windows),
                    'provenance_refs': _unique(provenance_refs)}

@@ -44,7 +44,7 @@ def _completion(assignment, initial_validations, receipts):
 
 
 def _selected_execution_task(parent_input):
-    """The old ``selected_execution_task_v1`` of the decision context: present only when the parent supplied the
+    """The old ``selected_execution_task`` of the decision context: present only when the parent supplied the
     scientific task and the request names exactly one supported native job. The resource information of the
     request is added by ``decide`` (it comes from the settings)."""
     task = parent_input.get('scientific_task')
@@ -63,7 +63,7 @@ def _selected_execution_task(parent_input):
     if name in {'native_hmmer', 'native_hmmer_preparation'}:
         # old: native_profile_presentation.native_profile_scientific_job_view(job), in no place now
         raise NotImplementedError('unplaced:native_profile_scientific_job_view')
-    return deepcopy({'version': 'selected_execution_task_v1', 'scientific_question': task['scientific_question'],
+    return deepcopy({'version': 'selected_execution_task', 'scientific_question': task['scientific_question'],
                      'selected_tool_info': task['selected_tool_info'],
                      'requests': [{'resource_id': assignment['resource_id'], 'resource_kind': 'local',
                                    'endpoint': assignment['endpoint'], 'constraints': assignment['constraints'],

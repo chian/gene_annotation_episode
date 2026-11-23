@@ -255,7 +255,7 @@ def open_chromatin_contact_tables(descriptors, *, streams):
                 elif descriptor['role'] == 'cell_states':
                     _ordered(array, ('bin1_id', 'bin2_id'))
             populations[descriptor['population_key']][descriptor['role']] = array
-        yield {'version': 'chromatin_contact_arrays_v1', 'populations': MappingProxyType({
+        yield {'version': 'chromatin_contact_arrays', 'populations': MappingProxyType({
             key: MappingProxyType(value) for key, value in populations.items()})}
     finally:
         # No supplied stream is closed, including on validation failure.

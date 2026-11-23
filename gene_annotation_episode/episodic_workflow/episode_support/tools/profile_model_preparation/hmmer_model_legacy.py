@@ -58,7 +58,7 @@ class _LegacyReader:
             "calibration": [], "composition": None,
             "initial": {"insert": None, "transitions": None}, "positions": [],
             "terminated": terminated, "issues": [],
-            "representation": {"schema": "hmmer_model_representation_v1",
+            "representation": {"schema": "hmmer_model_representation",
                 "encoding": "hmmer2_ascii_millibit_log_odds", "topology": "hmmer2_configured",
                 "byte_order": None, "binary_layout": None,
                 "header_semantics": "original_ascii_headers", "native_fields": [],

@@ -125,7 +125,7 @@ _DRIVER = _obj(python_executable=_TEXT, python_version=_ID, module_root=_TEXT,
 _MACS = _obj(python_executable=_TEXT, python_sha256=_SHA, python_version=_ID, macs2_script=_TEXT,
     macs2_sha256=_SHA, macs2_version={"const": "2.2.9.1"}, import_roots=_arr(_TEXT, minItems=1), files=_arr(_PIN, minItems=1))
 _SOFTWARE = _obj(driver_runtime=_DRIVER, macs2_runtime=_MACS)
-_REQUEST = _obj(version={"const": "atac_differential_request_v1"}, operation={"const": OPERATION}, mode={"const": MODE},
+_REQUEST = _obj(version={"const": "atac_differential_request"}, operation={"const": OPERATION}, mode={"const": MODE},
     comparison_key=_ID, reference=_REFERENCE, samples=_arr(_SAMPLE, minItems=1, maxItems=2),
     conditions=_arr(_CONDITION, minItems=2, maxItems=2), inputs=_arr(_INPUT, minItems=2, maxItems=2),
     callpeak=_obj(genome_size_argument=_TEXT, qvalue_cutoff={"type": "number", "exclusiveMinimum": 0, "maximum": 1},
@@ -141,20 +141,20 @@ _IDENTITY = _obj(run_id=_ID, episode_id=_ID, resource_id=_ID, execution_id=_TEXT
     operation_key=_TEXT, requested_job_sha256=_SHA, assignment_sha256=_SHA)
 _SPEC = _obj(file_key=_ID, step_key=_null(_enum(*STEP_KEYS)), role=_ID, relative_path=_TEXT, format=_ID)
 _OUTPUT = _obj(specification=_SPEC, declaration=_DECL)
-_PLAN = _obj(version={"const": "atac_differential_run_plan_v1"}, identity=_IDENTITY, requested_job=_REQUESTED,
+_PLAN = _obj(version={"const": "atac_differential_run_plan"}, identity=_IDENTITY, requested_job=_REQUESTED,
     attempt_directory=_TEXT, policy={"const": POLICY}, outputs=_arr(_SPEC))
-_HEADER = _obj(version={"const": "atac_bam_header_extraction_v1"}, input_key=_ID, callpeak_run_key=_ID,
+_HEADER = _obj(version={"const": "atac_bam_header_extraction"}, input_key=_ID, callpeak_run_key=_ID,
     input_ordinal=_INT, input_file=_FILE, header=_DECL, producer_outcome=_enum("succeeded", "failed", "not_run", "unknown"),
     supplied_extent=_enum("complete", "partial", "unknown"), failures=_arr(_FAILURE))
-_SEAL = _obj(version={"const": "atac_native_command_seal_v1"}, identity=_IDENTITY, step_key=_enum(*STEP_KEYS),
+_SEAL = _obj(version={"const": "atac_native_command_seal"}, identity=_IDENTITY, step_key=_enum(*STEP_KEYS),
     producer_ref=_ID, argv=_arr(_TEXT), environment=_ENV, inputs=_arr(_obj(file_key=_ID, role=_ID, file=_FILE)),
     started_at=_null(_TEXT), finished_at=_null(_TEXT), returncode=_null({"type": "integer"}),
     outcome=_enum("succeeded", "failed", "not_run"), outputs=_arr(_OUTPUT), failures=_arr(_FAILURE))
-_BUNDLE = _obj(version={"const": "atac_differential_native_bundle_v1"}, identity=_IDENTITY, request=_REQUEST,
+_BUNDLE = _obj(version={"const": "atac_differential_native_bundle"}, identity=_IDENTITY, request=_REQUEST,
     software=_SOFTWARE, input_inspections=_arr(_HEADER, minItems=2, maxItems=2),
     steps=_arr(_SEAL, minItems=3, maxItems=3), depth_selection=_null(_DEPTH), outputs=_arr(_OUTPUT), failures=_arr(_FAILURE))
 _RETAINED = _obj(file=_FILE, path=_TEXT)
-_CAPTURE = _obj(version={"const": "atac_native_capture_v1"}, bundle=_null(_RETAINED),
+_CAPTURE = _obj(version={"const": "atac_native_capture"}, bundle=_null(_RETAINED),
     files=_arr(_obj(specification=_SPEC, declared=_null(_DECL), retained=_null(_RETAINED),
         outcome=_enum("verified", "declared_absent", "unavailable", "digest_mismatch", "unsealed"),
         producer_outcome=_enum("succeeded", "failed", "not_run", "unknown"), supplied_extent=_enum("complete", "partial", "unknown"))),
@@ -349,7 +349,7 @@ def atac_output_files(request):
             relative_path=request["output_prefix"] + "/" + suffix, format=format))
     for i in (1, 2):
         add(f"input{i}", None, f"input{i}", f"inputs/c{i}.bam", "bam")
-    add("request_metadata", None, "request_metadata", "metadata/request.json", "atac_differential_request_v1")
+    add("request_metadata", None, "request_metadata", "metadata/request.json", "atac_differential_request")
     for i in (1, 2):
         add(f"header{i}", None, f"header{i}", f"metadata/c{i}.header.sam", "sam_header_text")
     for i in (1, 2):
@@ -360,17 +360,17 @@ def atac_output_files(request):
             ("signal", f"c{i}_treat_pileup.bdg", "bedgraph4"),
             ("background", f"c{i}_control_lambda.bdg", "bedgraph4"),
             ("stdout", "stdout.log", "native_stdout"), ("stderr", "stderr.log", "native_stderr"),
-            ("seal", "seal.json", "atac_native_command_seal_v1")):
+            ("seal", "seal.json", "atac_native_command_seal")):
             add(step + "." + role, step, role, f"callpeak/c{i}/" + suffix, fmt)
-    add("depth_selection", None, "depth_selection", "metadata/depth-selection.json", "atac_native_depth_selection_v1")
+    add("depth_selection", None, "depth_selection", "metadata/depth-selection.json", "atac_native_depth_selection")
     for role in ("condition1", "condition2", "common"):
         add("bdgdiff." + role, "bdgdiff", role, "bdgdiff/" + role + ".bed", "macs2_bdgdiff_bed5")
     for role, suffix, fmt in (("stdout", "stdout.log", "native_stdout"), ("stderr", "stderr.log", "native_stderr"),
-        ("seal", "seal.json", "atac_native_command_seal_v1")):
+        ("seal", "seal.json", "atac_native_command_seal")):
         add("bdgdiff." + role, "bdgdiff", role, "bdgdiff/" + suffix, fmt)
     add("stdout", None, "stdout", "stdout.log", "native_stdout")
     add("stderr", None, "stderr", "stderr.log", "native_stderr")
-    add("bundle", None, "bundle", "bundle.json", "atac_differential_native_bundle_v1")
+    add("bundle", None, "bundle", "bundle.json", "atac_differential_native_bundle")
     return rows
 
 

@@ -3,7 +3,7 @@ and, in custody, the records the job's inputs are read from. The only place an a
 from method_loop import ChoiceField, DeclaredField, Field, RecordForm
 
 ASSIGNMENT_FORM = RecordForm({
-    'version': DeclaredField('text', 'The practical assignment contract version', 'practical_assignment_v1'),
+    'version': DeclaredField('text', 'The practical assignment contract version', 'practical_assignment'),
     'assignment_id': Field('text', 'Identity of the assignment'),
     'resource_kind': DeclaredField('text', 'The resource kind this episode executes on: an HPC resource', 'hpc'),
     'workspace': Field('text', 'Absolute path the commands are confined to on the resource'),

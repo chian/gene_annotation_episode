@@ -4,7 +4,7 @@
 
 Each decision the model selects one of: ``service_operation`` (one operation of the API service's catalog),
 ``capabilities`` (the caller-bound resource configuration and recorded inventory), ``wait`` (only for a service job
-that continues remotely: assignment version ``api_service_assignment_v1``, the old ``permitted_common_actions``),
+that continues remotely: assignment version ``api_service_assignment``, the old ``permitted_common_actions``),
 and, when the settings name the libraries, ``launch_instructions`` and ``tool_knowledge`` lookups. This episode has
 no ``reason`` action and no child. A selection that fails admission is rejected and creates no unit. The task offers
 a unit at every decision and never ends the Episode: the yield controller does. The old goal text replaced the
@@ -51,7 +51,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.unit_outcom
 
 CHILD_SLOTS = {}
 SERVICES = ('job_access',)
-WAIT_VERSION = 'api_service_assignment_v1'
+WAIT_VERSION = 'api_service_assignment'
 RESOURCE_KEYS = ('workspace', 'policy', 'account', 'python_executable', 'service', 'base_url')
 ASSIGNMENT_KEYS = ('version', 'resource_id', 'service', 'endpoint', 'constraints', 'launch_instructions',
                    'subject_ref', 'algorithm', 'database', 'parameters', 'page_size', 'request')
@@ -136,7 +136,7 @@ def selected_execution_task(summary, resource):
     """Old ``_with_selected_execution_task``: the parent's scientific task, shown only for an ``ebi_hmmer`` request."""
     if summary['service'] != 'ebi_hmmer' or summary['scientific_question'] is None:
         return None
-    return {'version': 'selected_execution_task_v1', 'scientific_question': summary['scientific_question'],
+    return {'version': 'selected_execution_task', 'scientific_question': summary['scientific_question'],
             'selected_tool_info': summary['selected_tool_info'],
             'requests': [{'resource_id': summary['resource_id'], 'resource_kind': 'api',
                           'endpoint': copy.deepcopy(summary.get('endpoint')),
@@ -148,7 +148,7 @@ def selected_execution_task(summary, resource):
 # -- instructions, offered actions, the output schema ---------------------------------------------------------------
 
 def wait_permitted(summary):
-    """Old ``permitted_common_actions``: ``tool`` always; ``wait`` only for ``api_service_assignment_v1``."""
+    """Old ``permitted_common_actions``: ``tool`` always; ``wait`` only for ``api_service_assignment``."""
     return summary['version'] == WAIT_VERSION
 
 

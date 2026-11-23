@@ -6,18 +6,18 @@ through ``BVBRCAppServiceService.publish``; this module is that service's ``publ
 
 - re-reads and authenticates the original task from the handoff receipt (``ResultInputs.original_task``) and
   every ``AcquisitionReceipt`` the ``PublicationInputs`` name (the prior ones and the current one);
-- builds the ``bvbrc_appservice_artifact_bundle_v1`` bundle of those acquisitions (``build_artifact_bundle``).
+- builds the ``bvbrc_appservice_artifact_bundle`` bundle of those acquisitions (``build_artifact_bundle``).
   The request carries no query rows, so this publication binds none (``query_bindings`` is empty); an adapter
   that requires them reports them missing (``bvbrc_appservice_bundle_values.build_artifact_bundle``);
 - when the selector selects a scientific adapter, runs that installed adapter once over the bundle, the
   verified bytes of every content it names and the supplied evidence values, and retains its sheet and
   components as Store ``source`` records (``ContentBinding`` each);
 - publishes one ``source`` record of provider ``bvbrc_appservice.publication`` and version
-  ``bvbrc_appservice_acquired_bundle_v1``: its artifact is the canonical bundle, its text the canonical
+  ``bvbrc_appservice_acquired_bundle``: its artifact is the canonical bundle, its text the canonical
   publication envelope (the run and episode, operation key, scope, the original handoff and selector, the
   ``PublicationInputs``, the current acquisition's origin and the ``AdapterResult``).
 
-``read_publication`` reads such a record back into the ``bvbrc_appservice_acquired_bundle_v1`` body its
+``read_publication`` reads such a record back into the ``bvbrc_appservice_acquired_bundle`` body its
 readers project (``source_ref``/``reference``: the record; ``publication``: the bundle's ``ContentBinding``,
 ``result_record_refs``, ``adapter_result`` and ``origin``; ``publication_inputs``; ``assignment``;
 ``record_refs``; ``bundle``) and ``read_adapter_contents`` the saved sheet and components it binds. Nothing
@@ -137,7 +137,7 @@ def _canonical_json(store, artifact_ref, code):
 
 
 def read_publication(store, reference):
-    """The ``bvbrc_appservice_acquired_bundle_v1`` body of one publication record on the shared Store."""
+    """The ``bvbrc_appservice_acquired_bundle`` body of one publication record on the shared Store."""
     record = store.get(reference)
     _require(record.get('record_type') == 'source' and record.get('provider') == PUBLICATION_PROVIDER
              and record.get('version') == RESULT_VERSION and record.get('text_ref') is not None,

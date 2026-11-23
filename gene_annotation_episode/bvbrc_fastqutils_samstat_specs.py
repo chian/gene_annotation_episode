@@ -874,7 +874,7 @@ SAMSTAT_METRICS = {'samstat_alignment_bin_count': {'metric': 'samstat_alignment_
                                                    'samstat_2_2_3/src/plot/plot.c',
                                                    'samstat_2_2_3/src/plot/plot_interval.c',
                                                    'samstat_2_2_3/src/plot/plot_group.c'],
-                               'qualifications': ['Do not send these means to quality_phred_v1, which requires a '
+                               'qualifications': ['Do not send these means to quality_phred, which requires a '
                                                   'histogram and actual quality population.',
                                                   'Do not combine position SEMs into a whole-file uncertainty '
                                                   'without covariance/sample sizes.',
@@ -927,7 +927,7 @@ SAMSTAT_METRICS = {'samstat_alignment_bin_count': {'metric': 'samstat_alignment_
                                                   'samstat_2_2_3/src/plot/plot.c',
                                                   'samstat_2_2_3/src/plot/plot_interval.c',
                                                   'samstat_2_2_3/src/plot/plot_group.c'],
-                              'qualifications': ['Do not send these means to quality_phred_v1, which requires a '
+                              'qualifications': ['Do not send these means to quality_phred, which requires a '
                                                  'histogram and actual quality population.',
                                                  'Do not combine position SEMs into a whole-file uncertainty '
                                                  'without covariance/sample sizes.',
@@ -2524,7 +2524,7 @@ SAMSTAT_METRICS = {'samstat_alignment_bin_count': {'metric': 'samstat_alignment_
                                                     'input_format_name/stat_report'}}
 
 SAMSTAT_COMPONENTS = {'samstat_report_mapped_record_fraction': {'metric': 'samstat_report_mapped_record_fraction',
-                                           'method': 'samstat_report_mapping_v1',
+                                           'method': 'samstat_report_mapping',
                                            'formula': '(T-U)/T',
                                            'input_fields': ['selected same-document/version disjoint '
                                                             'samstat_report_records populations',
@@ -2553,7 +2553,7 @@ SAMSTAT_COMPONENTS = {'samstat_report_mapped_record_fraction': {'metric': 'samst
                                            'source_contract': '207 PARSER_CALCULATOR_PORTS_002.md section6; '
                                                               'calculator separately implemented'},
  'samstat_report_ge30_record_fraction': {'metric': 'samstat_report_ge30_record_fraction',
-                                         'method': 'samstat_report_mapping_v1',
+                                         'method': 'samstat_report_mapping',
                                          'formula': '(H)/T',
                                          'input_fields': ['selected same-document/version disjoint '
                                                           'samstat_report_records populations',

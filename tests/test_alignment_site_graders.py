@@ -277,7 +277,7 @@ def test_split_codon_order_reverse_and_repeated_segments_are_preserved():
         "status": "available", "intervals": [segment(3, 4), segment(8, 10)], "reason": None}
     reverse = translation_mapping(path, start=0, end=12, strand="-", protein_length=4)
     assert map_operand_interval(operand(4), reverse, [2, 3])["intervals"] == [segment(8, 10, "-"), segment(3, 4, "-")]
-    repeated = {"version": "oriented_source_subject_path_v2", "units_per_symbol": 1,
+    repeated = {"version": "oriented_source_subject_path", "units_per_symbol": 1,
         "symbol_length": 4, "path": [segment(10, 12), segment(10, 12)]}
     assert map_operand_interval(operand(4, "nt"), repeated, [0, 4])["intervals"] == repeated["path"]
 

@@ -36,7 +36,7 @@ def fixture(store, ctx, *, model=True, variance='known', censoring='none', expre
         raw_parents.append(image['id'])
         for index, row in enumerate(rows):
             row['locator'] = {'original_source_ref': image['id'], 'original_artifact_ref': image['artifact_ref'], 'image_region': [5 * index, 0, 5 * index + 5, 5]}
-    table = {'version': 'binding_parameter_table_v1', 'table_id': 'SyntheticTable', 'parameter_kind': 'ic50', 'unit': 'nM', 'uncertainty_basis': 'fit_to_averaged_curve', 'minimum_experiment_count': 2, 'rows': rows}
+    table = {'version': 'binding_parameter_table', 'table_id': 'SyntheticTable', 'parameter_kind': 'ic50', 'unit': 'nM', 'uncertainty_basis': 'fit_to_averaged_curve', 'minimum_experiment_count': 2, 'rows': rows}
     original = source(store, canonical(table), parents=raw_parents)
     native_context = LiteratureContext(ctx.run_id, ctx.episode_id, 'literature_table', (('literature_table', 'fixture'),), store.validate_scope({'subject_refs': store.problem()['subject_refs']}), {}, {}, (original['id'], *raw_inputs))
     native_args = {'source_ref': original['id'], 'representation': 'retained_visual_transcription' if visual else 'synthetic_fixture', 'subject': 'SyntheticProtein', 'state': 'apo', 'experiment': 'synthetic-binding', 'reference_ligand': 'reference', 'test_ligand': 'test', 'parameter_kind': 'ic50', 'design': 'unknown', 'protein_arrangement': 'unknown', 'interpretation_witnesses': []}
@@ -51,7 +51,7 @@ def fixture(store, ctx, *, model=True, variance='known', censoring='none', expre
         parent = source(store, 'Synthetic covariance declaration.', parents=[root['id']])
         witness_source = source(store, 'Known joint natural-log covariance for the selected estimates.', parents=[root['id']])
         keys = binding_model_operand_keys(binding['sheet'])
-        declaration = {'version': 'known_normal_log_binding_v1', 'parameter_kind': 'ic50', 'measurement_order': ['reference', 'test'], 'measurement_keys': [keys['reference'], keys['test']], 'log_covariance': [[0.04, 0.01], [0.01, 0.09]], 'variance_status': variance, 'censoring_model': censoring, 'log_basis': 'natural_log_nM', 'origin': 'synthetic'}
+        declaration = {'version': 'known_normal_log_binding', 'parameter_kind': 'ic50', 'measurement_order': ['reference', 'test'], 'measurement_keys': [keys['reference'], keys['test']], 'log_covariance': [[0.04, 0.01], [0.01, 0.09]], 'variance_status': variance, 'censoring_model': censoring, 'log_basis': 'natural_log_nM', 'origin': 'synthetic'}
         model_source = source(store, canonical(declaration), parents=[parent['id']])
         quote = 'Known joint natural-log covariance for the selected estimates.'
         witness = {'source_ref': witness_source['id'], 'representation': 'original', 'start': 0, 'end': len(quote.encode()), 'quote': quote}

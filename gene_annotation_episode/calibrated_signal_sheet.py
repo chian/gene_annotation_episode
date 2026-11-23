@@ -11,7 +11,7 @@ from .molecular_sequence_input_contracts import (NAMESPACES, molecular_sequence_
     validate_molecular_sequence_received_input)
 
 
-INPUT_READ_VERSION = "calibrated_signal_input_read_v1"
+INPUT_READ_VERSION = "calibrated_signal_input_read"
 _ROLES = ("samples", "species", "calibrations", "association")
 _STATES = ("present", "empty", "missing", "invalid", "unavailable")
 _FAILURES = ("input_unavailable", "decode_failed", "document_tag_conflict", "document_shape_invalid",

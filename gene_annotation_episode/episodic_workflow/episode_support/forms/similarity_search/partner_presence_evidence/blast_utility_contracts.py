@@ -52,7 +52,7 @@ _OCCURRENCE = _object({
                   "database_list profile_list profile_input materialized_list alias_file index_file profile_file statistics"),
     "ordinal": _INT, "artifact_ref": _STR, "sha256": _SHA,
     "size_bytes": _INT,
-    "native_format": _enum("fasta blastdbcmd_tabular_v1 blastdb_info_text "
+    "native_format": _enum("fasta blastdbcmd_tabular blastdb_info_text "
         "blastdb_metadata_json blastdbcheck_text blastdb_binary json text "
         "maskinfo_xml maskinfo_asn1_text unknown gi_list_binary seqid_list_binary "
         "blast_alias_text blast_seqid_list_info_text blast_index_binary blast_index_map_text "
@@ -121,7 +121,7 @@ _PARAMETERS = {
         "max_file_size": _nullable(_TEXT)}),
     ("blastdbcmd", "extract_sequences"): _object({
         "selectors": _array(_object({"ordinal": _INT, "value": _STR}), minItems=1),
-        "output_format": {"const": "blastdbcmd_tabular_v1"},
+        "output_format": {"const": "blastdbcmd_tabular"},
         "range": _nullable(_RANGE), "strand": _enum("plus minus"),
         "get_dups": _BOOL, "target_only": _BOOL}),
     ("blastdbcmd", "info"): _object({"exact_length": _BOOL}),
@@ -132,7 +132,7 @@ _PARAMETERS = {
         "legacy_file_checks": _BOOL, "require_taxids": _BOOL, "cdd_delta": _BOOL}),
 }
 _OPERATION = {"anyOf": [_object({
-    "version": {"const": "blast_utility_operation_v1"},
+    "version": {"const": "blast_utility_operation"},
     "program": {"const": program}, "mode": {"const": mode},
     "input_occurrence_ids": _unique(_STR), "database_key": _nullable(_STR),
     "molecule": _enum("dna protein"), "parameters": parameters,
@@ -153,15 +153,15 @@ _EXTRACTION_RECORD = _object({
                                           "strand": _enum("plus minus")})),
     "completeness": _enum("complete partial unknown"), **_DIAGNOSTICS,
 })
-_EXTRACTION = _object({"version": {"const": "blast_sequence_extraction_v1"},
+_EXTRACTION = _object({"version": {"const": "blast_sequence_extraction"},
     **_RESULT_BASE, "output_occurrence": _OCCURRENCE,
     "records": _array(_EXTRACTION_RECORD), "missing_selector_ordinals": _unique(_INT),
     "unexpected_record_keys": _unique(_STR),
     "population_completeness": _enum("complete_selection partial_selection unknown")})
-_INSPECTION = _object({"version": {"const": "blast_database_inspection_v1"},
+_INSPECTION = _object({"version": {"const": "blast_database_inspection"},
     **_RESULT_BASE, "output_occurrence": _OCCURRENCE, "native_fields": _array(_FIELD),
     "completeness": _enum("complete partial unknown")})
-_INTEGRITY = _object({"version": {"const": "blast_database_integrity_v1"},
+_INTEGRITY = _object({"version": {"const": "blast_database_integrity"},
     **_RESULT_BASE, "stdout_occurrence": _OCCURRENCE, "stderr_occurrence": _OCCURRENCE,
     "scope": _enum("all_sequences selected_sample unknown"),
     "observed_checked_count": _nullable(_INT), "observed_population_count": _nullable(_INT),
@@ -169,7 +169,7 @@ _INTEGRITY = _object({"version": {"const": "blast_database_integrity_v1"},
     "diagnostics": _array(_object({"occurrence_id": _STR, "line_number": _POSITIVE,
         "category": _enum("check_pass check_failure execution_failure unknown"),
         "native_oid": _nullable(_INT)}))})
-_ARTIFACT_SET = _object({"version": {"const": "blast_database_artifact_set_v1"},
+_ARTIFACT_SET = _object({"version": {"const": "blast_database_artifact_set"},
     "kind": {"const": "sequence_database"}, "operation": _OPERATION,
     "original_outcome": _OUTCOME, "database_key": _STR, "identity": DATABASE_IDENTITY_SCHEMA,
     "software": _object({"name": _TEXT, "version": _nullable(_TEXT),
@@ -297,10 +297,10 @@ def _range(value):
 
 
 def _operation(value):
-    if value["version"] == "blast_utility_operation_v3":
+    if value["version"] == "blast_vdb_utility_operation":
         from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.partner_presence_evidence.blast_vdb_utility_contracts import validate_vdb_utility_operation
         return validate_vdb_utility_operation(value)
-    if value["version"] == "blast_utility_operation_v2":
+    if value["version"] == "blast_preparation_operation":
         from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.partner_presence_evidence.blast_preparation_contracts import validate_preparation_operation
         return validate_preparation_operation(value)
     p, mode = value["parameters"], value["mode"]
@@ -377,13 +377,13 @@ def _result_context(value, *, program, modes, outputs):
 
 
 def _extraction(value):
-    if value["version"] == "blast_sequence_extraction_v2":
+    if value["version"] == "blast_vdb_sequence_extraction":
         from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.partner_presence_evidence.blast_vdb_utility_contracts import validate_vdb_sequence_extraction
         return validate_vdb_sequence_extraction(value)
     out, op = value["output_occurrence"], value["operation"]
     known, subjects = _result_context(value, program="blastdbcmd", modes={"extract_sequences"}, outputs=[out])
     _require(out["role"] in {"extracted_sequences", "stdout"} and
-             out["native_format"] == "blastdbcmd_tabular_v1", "extraction_output")
+             out["native_format"] == "blastdbcmd_tabular", "extraction_output")
     selectors = op["parameters"]["selectors"]
     ordinals = set(range(len(selectors)))
     subjects.update(s["value"] for s in selectors)
@@ -488,10 +488,10 @@ def _metadata_relationships(value, rows):
 
 
 def _inspection(value):
-    if value["version"] == "blast_database_inspection_v3":
+    if value["version"] == "blast_vdb_database_inspection":
         from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.partner_presence_evidence.blast_vdb_utility_contracts import validate_vdb_database_inspection
         return validate_vdb_database_inspection(value)
-    if value["version"] == "blast_database_inspection_v2":
+    if value["version"] == "blast_prepared_database_inspection":
         from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.partner_presence_evidence.blast_preparation_contracts import validate_preparation_inspection
         return validate_preparation_inspection(value)
     out = value["output_occurrence"]
@@ -544,7 +544,7 @@ def _integrity(value):
 
 
 def _artifact_set(value):
-    if value["version"] == "blast_database_artifact_set_v2":
+    if value["version"] == "blast_prepared_database_artifact_set":
         from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.partner_presence_evidence.blast_preparation_population import _validate_preparation_record
         return _validate_preparation_record(value)
     op, outcome = value["operation"], value["original_outcome"]
@@ -599,7 +599,7 @@ def _projection(value):
         _failure(failure)
     if value["manifest"] is not None:
         # Public wrapper preserves the established standard-manifest validator.
-        if value["manifest"]["version"] == "native_blast_standard_prepared_database_manifest_v1":
+        if value["manifest"]["version"] == "native_blast_standard_prepared_database_manifest":
             from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.partner_presence_evidence.native_blast_standard_database_contracts import validate_standard_prepared_blast_database_manifest
             validate_standard_prepared_blast_database_manifest(value["manifest"])
         else:
@@ -622,19 +622,19 @@ _VALIDATORS = {"ArtifactOccurrence": _occurrence, "NativeOutcome": _outcome,
     "VDBUtilityContext": validate_vdb_context_relationships,
     "VDBMember": validate_vdb_member_relationships}
 _VERSION_SCHEMAS = {
-    "blast_utility_operation_v1": ("Operation", _OPERATION),
-    "blast_utility_operation_v2": ("Operation", _NEW_SCHEMAS["Operation"]),
-    "blast_sequence_extraction_v1": ("SequenceExtraction", _EXTRACTION),
-    "blast_database_inspection_v1": ("DatabaseInspection", _INSPECTION),
-    "blast_database_inspection_v2": ("DatabaseInspection", _NEW_SCHEMAS["DatabaseInspection"]),
-    "blast_database_integrity_v1": ("DatabaseIntegrity", _INTEGRITY),
-    "blast_database_artifact_set_v1": ("DatabaseArtifactSet", _ARTIFACT_SET),
-    "blast_database_artifact_set_v2": ("DatabaseArtifactSet", _NEW_SCHEMAS["DatabaseArtifactSet"]),
-    "blast_preparation_document_v1": ("PreparationDocument", _NEW_SCHEMAS["PreparationDocument"]),
-    "blast_utility_operation_v3": ("Operation", _VDB_SCHEMAS["Operation"]),
-    "blast_sequence_extraction_v2": ("SequenceExtraction", _VDB_SCHEMAS["SequenceExtraction"]),
-    "blast_database_inspection_v3": ("DatabaseInspection", _VDB_SCHEMAS["DatabaseInspection"]),
-    "blast_vdb_utility_context_v1": ("VDBUtilityContext", _VDB_SCHEMAS["VDBUtilityContext"]),
+    "blast_utility_operation": ("Operation", _OPERATION),
+    "blast_preparation_operation": ("Operation", _NEW_SCHEMAS["Operation"]),
+    "blast_sequence_extraction": ("SequenceExtraction", _EXTRACTION),
+    "blast_database_inspection": ("DatabaseInspection", _INSPECTION),
+    "blast_prepared_database_inspection": ("DatabaseInspection", _NEW_SCHEMAS["DatabaseInspection"]),
+    "blast_database_integrity": ("DatabaseIntegrity", _INTEGRITY),
+    "blast_database_artifact_set": ("DatabaseArtifactSet", _ARTIFACT_SET),
+    "blast_prepared_database_artifact_set": ("DatabaseArtifactSet", _NEW_SCHEMAS["DatabaseArtifactSet"]),
+    "blast_preparation_document": ("PreparationDocument", _NEW_SCHEMAS["PreparationDocument"]),
+    "blast_vdb_utility_operation": ("Operation", _VDB_SCHEMAS["Operation"]),
+    "blast_vdb_sequence_extraction": ("SequenceExtraction", _VDB_SCHEMAS["SequenceExtraction"]),
+    "blast_vdb_database_inspection": ("DatabaseInspection", _VDB_SCHEMAS["DatabaseInspection"]),
+    "blast_vdb_utility_context": ("VDBUtilityContext", _VDB_SCHEMAS["VDBUtilityContext"]),
 }
 _RESULT_VERSIONS = {version for version, (name, _) in _VERSION_SCHEMAS.items()
                     if name in {"SequenceExtraction", "DatabaseInspection", "DatabaseIntegrity", "DatabaseArtifactSet"}}
@@ -655,19 +655,19 @@ def blast_utility_result_version_for_operation(operation: dict) -> str:
     """The common exact operation/result version registry, without mode aliases."""
     operation = validate_blast_utility_operation(operation)
     pair = operation["program"], operation["mode"]
-    if operation["version"] == "blast_utility_operation_v3":
-        return ("blast_sequence_extraction_v2" if pair == ("blast_vdb_cmd", "extract_sequences")
-                else "blast_database_inspection_v3")
-    legacy = {("makeblastdb", "create_sequence_database"): "blast_database_artifact_set_v1",
-        ("blastdbcmd", "extract_sequences"): "blast_sequence_extraction_v1",
-        ("blastdbcmd", "info"): "blast_database_inspection_v1",
-        ("blastdbcmd", "metadata"): "blast_database_inspection_v1",
-        ("blastdbcheck", "integrity"): "blast_database_integrity_v1"}
+    if operation["version"] == "blast_vdb_utility_operation":
+        return ("blast_vdb_sequence_extraction" if pair == ("blast_vdb_cmd", "extract_sequences")
+                else "blast_vdb_database_inspection")
+    legacy = {("makeblastdb", "create_sequence_database"): "blast_database_artifact_set",
+        ("blastdbcmd", "extract_sequences"): "blast_sequence_extraction",
+        ("blastdbcmd", "info"): "blast_database_inspection",
+        ("blastdbcmd", "metadata"): "blast_database_inspection",
+        ("blastdbcheck", "integrity"): "blast_database_integrity"}
     if pair in legacy:
         return legacy[pair]
     if pair in {("blastdb_aliastool", "inspect_seqid_list"), ("makembindex", "show_filters")}:
-        return "blast_database_inspection_v2"
-    return "blast_database_artifact_set_v2"
+        return "blast_prepared_database_inspection"
+    return "blast_prepared_database_artifact_set"
 
 
 def validate_blast_utility_record(kind: str, value: dict) -> dict:

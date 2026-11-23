@@ -99,7 +99,7 @@ def _uniprot_candidates(store, snapshot, rows):
 
 
 def _bvbrc_rows(collection, filters, fields, limit=BVBRC_FEATURE_ROWS):
-    request = {'version': 'bvbrc_data_request_v2', 'collection': collection, 'mode': 'page',
+    request = {'version': 'bvbrc_data_request', 'collection': collection, 'mode': 'page',
                'filters': filters, 'fields': fields, 'limit': limit, 'offset': 0}
     snapshot = _bvbrc_client().query_prepared(encode_native_query(request, base_url=DEFAULT_BASE_URL))
     return snapshot, json.loads(snapshot.content)['response']['docs']
@@ -130,7 +130,7 @@ def _bvbrc_query(filters, genome_ids=None):
 
 def _bvbrc_sequences(md5s):
     client = _bvbrc_client()
-    request = {'version': 'bvbrc_data_request_v2', 'collection': 'feature_sequence', 'mode': 'page',
+    request = {'version': 'bvbrc_data_request', 'collection': 'feature_sequence', 'mode': 'page',
                'filters': [{'field': 'md5', 'operator': 'in', 'value': md5s}],
                'fields': ['md5', 'sequence_type', 'sequence'], 'limit': max(len(md5s) * 4, 25), 'offset': 0}
     snapshot = client.query_prepared(encode_native_query(request, base_url=DEFAULT_BASE_URL))

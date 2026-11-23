@@ -77,7 +77,7 @@ _ATTRIBUTES = _array(_ATTRIBUTE)
 _LOCATION = _object(dict(experiment_package_ordinal_0based=_INDEX, run_ordinal_0based=_INDEX,
     file_ordinal_0based=_INDEX, url_selection=_URL_SELECTION))
 _CLAIMS = _object(dict(size_token=_nullable(_TEXT), size_bytes=_nullable(_INDEX), md5_token=_nullable(_TEXT)))
-_SELECTION = _object(dict(version=dict(const="ncbi_sra_file_selection_v1"), advertisement_file=_FILE,
+_SELECTION = _object(dict(version=dict(const="ncbi_sra_file_selection"), advertisement_file=_FILE,
     locator_kind=dict(const="direct_element_ordinals"), location=_LOCATION,
     run_attributes=_ATTRIBUTES, file_attributes=_ATTRIBUTES,
     alternative_attributes=_nullable(_ATTRIBUTES), selected_url=_TEXT, claims=_CLAIMS))
@@ -94,7 +94,7 @@ _CHECKS = _object(dict(request=dict(enum=["matched", "conflicting"]),
     native_size=dict(enum=["absent", "not_verified", "verified", "conflicting"]),
     native_md5=dict(enum=["absent", "not_verified", "verified", "conflicting"]),
     archive_identity=dict(const="not_parsed")))
-_VALUE = {**_object(dict(version=dict(const="ncbi_sra_file_value_v1"), requested=_ARGUMENTS,
+_VALUE = {**_object(dict(version=dict(const="ncbi_sra_file_value"), requested=_ARGUMENTS,
     selection=_SELECTION, observed=_OBSERVED, raw_file=_RAW_FILE, checks=_CHECKS,
     failure_code=dict(enum=[None, *SRA_FILE_FAILURE_CODES]))), "$defs": dict(Json=_JSON)}
 _STRICT = validators.extend(Draft202012Validator,
@@ -245,7 +245,7 @@ def resolve_sra_file_selection(raw_xml, *, arguments):
     attributes = _attributes(native["attributes"])
     url = attributes.get("url") if alternative is None else _attributes(alternative).get("url")
     _require(type(url) is str and bool(url), "sra_file_selection_unavailable")
-    return validate_sra_file_selection(dict(version="ncbi_sra_file_selection_v1",
+    return validate_sra_file_selection(dict(version="ncbi_sra_file_selection",
         advertisement_file=file, locator_kind="direct_element_ordinals",
         location={name: arguments[name] for name in _LOCATION["properties"]},
         run_attributes=run["attributes"], file_attributes=native["attributes"],
@@ -385,7 +385,7 @@ def sra_file_value(snapshot, *, arguments, selection, artifact_ref):
         md5=hashlib.md5(snapshot.content, usedforsecurity=False).hexdigest())
     _validated(observed, {**_OBSERVED, "$defs": dict(Json=_JSON)}, "sra_file_value_invalid")
     checks, failure = _verification(arguments, selection, observed, file)
-    return validate_sra_file_value(dict(version="ncbi_sra_file_value_v1", requested=arguments,
+    return validate_sra_file_value(dict(version="ncbi_sra_file_value", requested=arguments,
         selection=selection, observed=observed, raw_file=file, checks=checks, failure_code=failure))
 
 

@@ -117,7 +117,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_transport_response_direction import select_transport_effect
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_transport_cell_tracer_uptake_converted_v1'
+VERSION = 'a105_transport_cell_tracer_uptake_converted'
 CRITERIA_MAP = {'background_alternatives': ('background_controls',), 'attribution_supported': ('expression_confirmed',), 'calibration_applicability': ('specific_activity_stated',),
                 'assertion_relevance': ('native_substrate',), 'membrane_system': ('cell_integrity',), 'transport_endpoint': ('initial_rate_regime',),
                 'transport_driving_force': ('energy_dependence',), 'transport_specificity': ('competitor_control', 'label_identity'), 'transport_response_model': ('substrate_range',),

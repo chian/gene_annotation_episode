@@ -16,9 +16,9 @@ from pathlib import PurePosixPath
 COORDINATE_SYSTEM = "zero_based_sequence_indices_and_half_open_intervals"
 MODES = ("mfe_prediction", "supplied_features")
 OPERATIONS = dict(zip(MODES, ("predict_rna_secondary_structure", "analyze_rna_secondary_structure_features")))
-INPUT_SCHEMAS = dict(zip(MODES, ("rna_prediction_input_v1", "rna_feature_input_v1")))
-SHEET_SCHEMAS = dict(zip(MODES, ("rna_mfe_prediction_sheet_v1", "rna_supplied_structure_feature_sheet_v1")))
-NATIVE_FORMATS = ("rna_native_record_json_v1", "biomni_rna_structure_text_v0")
+INPUT_SCHEMAS = dict(zip(MODES, ("rna_prediction_input", "rna_feature_input")))
+SHEET_SCHEMAS = dict(zip(MODES, ("rna_mfe_prediction_sheet", "rna_supplied_structure_feature_sheet")))
+NATIVE_FORMATS = ("rna_native_record_json", "biomni_rna_structure_text")
 RNA_SYMBOLS = "ACGURYSWKMBDHVN"
 PAIR_TYPES = tuple(a + b for a in "ACGU" for b in "ACGU")
 CELL_STATES = frozenset(("present", "not_requested", "not_produced", "missing_input",
@@ -353,7 +353,7 @@ def analyze_rna_input_sequence(value: dict, *, mode: str) -> tuple[dict | None, 
 def validate_rna_parameters(value: dict) -> dict:
     code = "rna_invalid_parameter_schema"
     _object(value, ("schema", "topology", "pair_composition", "energy"), code)
-    _require(value["schema"] == "rna_calculation_parameters_v1", code)
+    _require(value["schema"] == "rna_calculation_parameters", code)
     _object(value["topology"], ("long_stem_min_pairs", "include_exterior_in_loop_size_statistics"), code)
     _require(type(value["topology"]["long_stem_min_pairs"]) is int and value["topology"]["long_stem_min_pairs"] >= 1, code)
     _require(value["topology"]["include_exterior_in_loop_size_statistics"] is False, code)
@@ -397,7 +397,7 @@ def validate_rna_model_spec_shape(value: dict) -> dict:
     """Check selected model shape only; no parameter file or native API is opened."""
     code = "rna_invalid_parameter_schema"
     _object(value, ("schema", *_MODEL_FIELDS, "hard_constraints", "soft_constraints", "parameters"), code)
-    _require(value["schema"] == "vienna_rna_model_spec_v1", code)
+    _require(value["schema"] == "vienna_rna_model_spec", code)
     _model_settings(value)
     _require(value["hard_constraints"] is None and value["soft_constraints"] is None, code)
     _object(value["parameters"], ("kind", "operand_role"), code)
@@ -412,7 +412,7 @@ def validate_rna_effective_model_shape(value: dict) -> dict:
     code = "rna_invalid_parameter_schema"
     _object(value, ("schema", "model_key", "selected", "engine", "engine_version", "effective_settings",
         "other_observed_settings", "parameter_artifact", "parameter_load_return", "parameter_save_return"), code)
-    _require(value["schema"] == "vienna_rna_effective_model_v1" and _id(value["model_key"]), code)
+    _require(value["schema"] == "vienna_rna_effective_model" and _id(value["model_key"]), code)
     _require(value["engine"] == "ViennaRNA" and _id(value["engine_version"]), code)
     validate_rna_model_spec_shape(value["selected"])
     _object(value["effective_settings"], _MODEL_FIELDS, code)
@@ -589,7 +589,7 @@ def validate_rna_native_record(value: dict, *, expected_mode: str) -> dict:
     _require(expected_mode in MODES)
     _object(value, ("schema", "operation", "mode", "record_key", "input", "analysis_sequence", "structure", "topology",
         "native_mfe", "native_evaluation", "native_uncertainty", "model", "status", "issues"))
-    _require(value["schema"] == "rna_native_record_v1" and value["mode"] == expected_mode and
+    _require(value["schema"] == "rna_native_record" and value["mode"] == expected_mode and
         value["operation"] == OPERATIONS[expected_mode])
     _require(_id(value["record_key"]) and value["status"] in ("complete", "partial", "failed"))
     _issues(value["issues"], value["record_key"])
@@ -628,7 +628,7 @@ def validate_rna_native_record(value: dict, *, expected_mode: str) -> dict:
 def validate_rna_native_parse(value: dict) -> dict:
     """Validate a reader result supplied to a populator, including absent bytes."""
     _object(value, ("schema", "format", "expected_mode", "raw_sha256", "raw_byte_count", "status", "record", "issues"))
-    _require(value["schema"] == "rna_native_parse_v1" and value["format"] in NATIVE_FORMATS and value["expected_mode"] in MODES)
+    _require(value["schema"] == "rna_native_parse" and value["format"] in NATIVE_FORMATS and value["expected_mode"] in MODES)
     _require(value["status"] in ("valid", "partial", "invalid"))
     _issues(value["issues"])
     if value["raw_sha256"] is None or value["raw_byte_count"] is None:

@@ -1,6 +1,6 @@
 """Supplied, authenticated BLAST population records; no acquisition or scoring.
 
-The v3 wire extension preserves source assertions rather than deriving equality
+The population wire extension preserves source assertions rather than deriving equality
 from a database path/name.  Source records are extracted once from authenticated
 JSON bytes by preparation.  Saved validation compares those frozen records and
 original declarations without re-running extraction, native parsing or grading.
@@ -14,7 +14,7 @@ import math
 import re
 
 
-SEQUENCE_POPULATION_METADATA_SCHEMA = "native_blast_database_sequence_metadata_v3"
+SEQUENCE_POPULATION_METADATA_SCHEMA = "native_blast_database_sequence_population_metadata"
 _PREFIX = "blast_database_population_"
 _RECORD_FIELDS = {"source_ref", "artifact_ref", "sha256", "size_bytes", "pointer", "value"}
 
@@ -76,9 +76,9 @@ def _records(value):
 
 
 def native_blast_database_sequence_population_metadata_schema() -> dict:
-    """The exact v2 record-locator fields plus required per-search assertions."""
-    from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.gene_context_evidence.native_blast_database_metadata import _SEQUENCE_SCHEMA_V2, _TOKEN, _PROV, _object, _array
-    schema = deepcopy(_SEQUENCE_SCHEMA_V2)
+    """The exact located record-locator fields plus required per-search assertions."""
+    from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.gene_context_evidence.native_blast_database_metadata import _SEQUENCE_LOCATED_SCHEMA, _TOKEN, _PROV, _object, _array
+    schema = deepcopy(_SEQUENCE_LOCATED_SCHEMA)
     schema["properties"]["schema"] = {"enum": [SEQUENCE_POPULATION_METADATA_SCHEMA]}
     unit = schema["properties"]["searches"]["items"]
     association = _object(association_key=_TOKEN, database_key=_TOKEN,
@@ -128,7 +128,7 @@ def _retain_document_records(payload, documents):
 
 
 def _retain_preparation_records(validation, *, metadata_entries, bundle, catalog, manifest_documents):
-    """Add original metadata, bundle and captured manifest facts to a v3 envelope.
+    """Add original metadata, bundle and captured manifest facts to a population envelope.
 
     The caller has authenticated these objects and bytes. Bundle length is an
     explicit original capture fact; it is never reconstructed by serialization.
@@ -163,7 +163,7 @@ def _job(prepared):
 
 def _bundle(prepared, records):
     key, _ = _job(prepared)
-    version = key + "_bundle_v1"
+    version = key + "_bundle"
     rows = [r for r in records if r["pointer"] == "" and type(r["value"]) is dict
             and r["value"].get("version") == version
             and r["value"].get("requested_job") == prepared["invocation"]["request"]]
@@ -372,7 +372,7 @@ def _validate_population_documents(prepared, records):
 
 
 def _population_search_units(search, prepared, records):
-    """Find original selected v3 units even if another field could not lower."""
+    """Find original selected population units even if another field could not lower."""
     bundle = _bundle(prepared, records)
     report_keys = {} if bundle is None else {r["output_key"]: r["artifact_keys"]
         for r in bundle["value"]["output_manifest"]}
@@ -429,7 +429,7 @@ def _row_details(row, profile):
     if assertion is not None:
         value = assertion["value"]
         fields = {"schema", "relation", "native_database_operand", "database_manifest_sha256", "population_identity", "census_artifact"}
-        if (type(value) is not dict or set(value) != fields or value.get("schema") != "blast_database_population_assertion_v1"
+        if (type(value) is not dict or set(value) != fields or value.get("schema") != "blast_database_population_assertion"
                 or value.get("relation") != "same_population"):
             details.append(("source_record_invalid", True))
         else:
@@ -471,7 +471,7 @@ def extract_native_blast_database_population_associations(*, search, prepared_in
     records = _checked_records(prepared, source_records)
     associations, issues = [], []
     for validation, pointer, declaration, owner, declared, documents in _declarations(search, prepared, records):
-        row = dict(schema="blast_database_population_association_input_v1", association_key=declaration["association_key"],
+        row = dict(schema="blast_database_population_association_input", association_key=declaration["association_key"],
             search_key=deepcopy(search["search_key"]), database_key=declaration["database_key"], metadata_source=owner,
             selected_database=_selected(prepared, records, declaration["database_key"]))
         for name in ("assertion", "census"):
@@ -483,9 +483,9 @@ def extract_native_blast_database_population_associations(*, search, prepared_in
         for detail, incompatible in _row_details(row, database_profile):
             issues.append(_issue(validation, pointer, search, _PREFIX + detail, incompatible=incompatible))
     from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.blast_database_population_associations import validate_blast_database_population_context
-    validate_blast_database_population_context(dict(schema="blast_database_population_context_v1",
+    validate_blast_database_population_context(dict(schema="blast_database_population_context",
         search_key=search["search_key"], associations=associations))
-    return dict(schema="native_blast_database_population_associations_v1", associations=associations, issues=issues)
+    return dict(schema="native_blast_database_population_associations", associations=associations, issues=issues)
 
 
 def validate_native_blast_database_population_associations(association_inputs, *, search, prepared_inputs, source_records,
@@ -504,7 +504,7 @@ def validate_native_blast_database_population_associations(association_inputs, *
     unique_profiles = {_token(p): p for p in profiles}
     if database_profile != (next(iter(unique_profiles.values())) if len(unique_profiles) == 1 else None):
         _fail("saved_relation_conflict")
-    context = validate_blast_database_population_context(dict(schema="blast_database_population_context_v1",
+    context = validate_blast_database_population_context(dict(schema="blast_database_population_context",
         search_key=search["search_key"], associations=association_inputs))
     rows = context["associations"]
     declarations = list(_declarations(search, prepared, records))

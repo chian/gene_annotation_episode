@@ -31,17 +31,17 @@ ROOT = 'gene_annotation_episode.episodic_workflow.root'
 BINDING = 'evolutionary_history_evidence/execution_job_submission'
 WORKSPACE = '/lus/flare/projects/BioReason-Aurora-Test/chian/runs'
 
-API_REQUEST = {'version': 'api_execution_assignment_v1', 'resource_id': 'ebi', 'service': 'ebi_hmmer',
+API_REQUEST = {'version': 'api_execution_assignment', 'resource_id': 'ebi', 'service': 'ebi_hmmer',
                'subject_ref': 'input_1', 'algorithm': 'phmmer', 'database': 'swissprot', 'parameters': {},
                'page_size': 50, 'endpoint': 'usable_handoff', 'constraints': {}}
 HPC_REQUEST = {
-    'version': 'practical_assignment_v1', 'assignment_id': 'job_1', 'resource_id': 'aurora', 'resource_kind': 'hpc',
+    'version': 'practical_assignment', 'assignment_id': 'job_1', 'resource_id': 'aurora', 'resource_kind': 'hpc',
     'workspace': WORKSPACE, 'endpoint': 'usable_handoff',
     'requested_job': {'argv': ['run_search', '--query', 'q'], 'environment': {'A': 'b'}},
     'progress_requirements': [{'key': 'handoff', 'credit': 3.0, 'predicate': {'kind': 'requested_job_handoff'}}],
     'completion_keys': ['handoff'], 'initial_context': {'revision': 0, 'cwd': WORKSPACE, 'environment': {}},
     'inventory_snapshot': {}, 'constraints': {}}
-ASSIGNMENT = {'version': 'execution_launch_assignment_v1', 'requests': {'ebi': API_REQUEST, 'aurora': HPC_REQUEST},
+ASSIGNMENT = {'version': 'execution_launch_assignment', 'requests': {'ebi': API_REQUEST, 'aurora': HPC_REQUEST},
               'immutable_input_versions': [], 'constraints': {}, 'record_refs': ['input_1'], 'handoff_unit': 2.0,
               'acquired_record_unit': 0.5}
 CLASSES = 'api_ebi_hmmer_phmmer_swissprot_handoff+practical_hpc_handoff'
@@ -114,7 +114,7 @@ def test_read_from_parent_admits_the_launch_assignment_and_derives_what_may_be_c
     with pytest.raises(ValueError, match='invalid_execution_resource_constraints'):
         parent_input(constraints={'allowed_kinds': 'hpc'})
     with pytest.raises(NotImplementedError, match='unplaced:a104_homology_execution'):
-        parent_input(requests={'ncbi': {**API_REQUEST, 'resource_id': 'ncbi', 'version': 'blast_graded_v1'}})
+        parent_input(requests={'ncbi': {**API_REQUEST, 'resource_id': 'ncbi', 'version': 'blast_graded'}})
 
 
 def test_credit_is_the_handoff_unit_for_each_new_resource_with_a_usable_handoff_and_is_not_bounded():
@@ -165,7 +165,7 @@ def test_each_slot_commissions_the_chosen_request_and_selects_the_return_fields_
 
 
 def test_the_launch_instructions_the_commissioner_pinned_reach_a_request_that_has_none():
-    pinned = {'version': 'launch_instruction_selection_v1', 'sections': []}
+    pinned = {'version': 'launch_instruction_selection', 'sections': []}
     value = summary()
     value['assignment'] = {**value['assignment'], 'launch_instructions': pinned}
     assert EPISODE.msg_to_child('launch_hpc', {'resource_id': 'aurora'}, value).assignment[
@@ -231,7 +231,7 @@ def test_the_answer_is_one_defined_action_and_code_makes_the_commission_or_the_l
 
 def test_the_sections_a_lookup_read_are_added_to_the_instructions_the_commissioner_pinned():
     pin = {'entry_id': 'e', 'section_id': 's', 'sha256': 'a' * 64}
-    read = {'version': 'launch_instruction_selection_v1', 'library_id': 'launch_instructions_' + 'b' * 64,
+    read = {'version': 'launch_instruction_selection', 'library_id': 'launch_instructions_' + 'b' * 64,
             'sections': [pin]}
     value = summary(pinned_launch_instructions=read)
     assert EPISODE.msg_to_child('launch_hpc', {'resource_id': 'aurora'}, value).assignment == {

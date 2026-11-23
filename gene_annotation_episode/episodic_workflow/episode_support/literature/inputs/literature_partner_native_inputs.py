@@ -11,7 +11,7 @@ null for an explicitly selected common-unit source association. ParsedNumber is 
 {selector:{witness:<enriched>,number_start,number_end},raw_number,value,relation};
 Plain ParsedUnit is exactly {witness:<enriched>,raw_unit,canonical_unit,multiplier}.
 Source-defined units additionally retain the source-backed ``definition``.
-Plain-only inputs keep extraction_v2; a defined rate/spread unit uses v3.
+Plain-only inputs keep the native extraction; a defined rate/spread unit uses the defined-unit extraction.
 Every enriched witness is {source_ref,representation,start,end,quote,artifact_ref}.
 These closed structures support saved-only validation without rereading bytes.
 """
@@ -23,9 +23,9 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.literature_partner_calculations import COMPONENTS, populate_partner_components
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.partner_presence_evidence.literature_partner_source_fields import number_selector_schema, read_source_number, read_source_rate_unit, convert_source_number
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.partner_presence_evidence.literature_partner_defined_units import defined_rate_unit_schema, parsed_defined_rate_unit_schema, read_defined_rate_unit, convert_defined_source_number, validate_defined_spread_unit
-VERSION = 'literature_partner_inputs_extraction_v2'
-DEFINED_VERSION = 'literature_partner_inputs_extraction_v3'
-DATA_VERSION = 'literature_partner_selection_v1'
+VERSION = 'literature_partner_native_extraction'
+DEFINED_VERSION = 'literature_partner_defined_unit_extraction'
+DATA_VERSION = 'literature_partner_selection'
 LITERAL_FIELDS = ('subject', 'partner', 'experiment', 'endpoint', 'normalization', 'reference_condition', 'omitted_condition', 'addback_condition', 'function')
 ROLES = ('reference', 'omitted', 'addback')
 IDENTITY_FIELDS = ('subject', 'partner', 'endpoint', 'normalization')
@@ -205,7 +205,7 @@ def read_partner_native_inputs(arguments, *, read_source):
         _fail('synthetic_origin_required', 'arms')
     if not interpretations and any((arm is not None and arm['conditions']['coverage'] == 'complete' for arm in arms.values())):
         _fail('interpretation_witness_required', 'interpretation_witnesses')
-    inputs = {'version': 'literature_partner_inputs_v1', 'arms': arms}
+    inputs = {'version': 'literature_partner_inputs', 'arms': arms}
     calculation = populate_partner_components(inputs)
     defined = any((arm is not None and arm['rate'] is not None and ('definition' in arm['rate']['unit'] or (arm['rate']['spread']['unit'] is not None and 'definition' in arm['rate']['spread']['unit'])) for arm in evidence.values()))
     return {'version': DEFINED_VERSION if defined else VERSION, 'arguments': deepcopy(arguments), 'sources': list(sources.references), 'literals': literals, 'interpretations': interpretations, 'recipe': {'version': DATA_VERSION, 'inputs': inputs}, 'calculation': calculation, 'cells': deepcopy(calculation['cells']), 'native_evidence': evidence}

@@ -22,7 +22,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.instructions.sche
 from gene_annotation_episode.episodic_workflow.episode_support.forms.schema_support import _schema_nodes
 
 
-VERSION = 'literature_numerical_contracts_v1'
+VERSION = 'literature_numerical_contracts'
 SAVED_MEMBER = 'literature_numerical_contracts'
 _NAME = re.compile(r'[A-Za-z_][A-Za-z0-9_.:+/\-]*\Z')
 _TYPES = frozenset(('null', 'object', 'array', 'number', 'integer', 'boolean', 'string'))
@@ -64,8 +64,7 @@ _SCHEMAS = {
     'literature_stoichiometric_balance_cells':('gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_stoichiometric_balance_storage','stoichiometric_balance_cells_schema'),
     'literature_channel_cells': ('gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_channel_storage', 'channel_cells_schema'),
     'literature_compiled_assay_cells': ('gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_compiled_assay_storage', 'compiled_assay_cells_schema'),
-    'literature_compiled_assay_v2_cells': ('gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_compiled_assay_storage', 'compiled_assay_v2_cells_schema'),
-    'literature_compiled_assay_v3_cells': ('gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_compiled_assay_storage', 'compiled_assay_v3_cells_schema'),
+    'literature_common_assessment_cells': ('gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_compiled_assay_storage', 'common_assessment_cells_schema'),
     'literature_ion_discrimination_cells': ('gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_ion_discrimination_storage', 'ion_discrimination_cells_schema'),
     'literature_controlled_response_component_cells': ('gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_controlled_response_storage', 'controlled_response_cells_schema'),
     'literature_gel_component_cells': ('gene_annotation_episode.episodic_workflow.episode_support.literature.forms.perturbation_evidence.literature_gel_native_contracts', 'gel_cells_schema'),
@@ -114,9 +113,8 @@ RETURN_MEANINGS = {
     'literature_parent_depletion_cells':'Original XLSX finite parent-removal arm fractions, reported per-arm SDs, and two dependent active-control differences with source cell identities. Missing raw denominator, joint uncertainty, mutant amount and product formation remain explicit.',
     'literature_stoichiometric_balance_cells':'Original XLSX Figure 2D G2–G6 and Pi concentrations, source SDs, conditional molecule and glucosyl-equivalent balances, descriptive dependent ratios and inferred remainders. Calibration eligibility is checked; validity multiplier, solid-product measurement, ratio uncertainty, target transfer and annotation credit remain absent.',
     'literature_channel_cells': 'Source electrical measurements and conditional comparisons with actual molecular arrangement, current/voltage/conductance meanings, reversal applicability, measurement dependencies and uncertainty qualifications.',
-    'literature_compiled_assay_cells': 'Within-assay source numerical sections with actual subject, endpoint, correction stages, amount normalization, controls, shared measurement dependencies, covariance and applicability qualifications.',
-    'literature_compiled_assay_v2_cells': 'Versioned within-assay numerical sections with estimand-scoped joint covariance, physical operand account_context and signed first-order propagation. Operand-propagated uncertainty stays separate from total corrected-activity uncertainty and additional residual variability.',
-    'literature_compiled_assay_v3_cells': 'Common source-assessment numerical components for the actual functional assertion and comparison, retaining measured endpoints, model applicability, native versus conditional results, scientific relationships, uncertainty account_context and distinct source/implementation limitations. Effect isolation, endpoint relevance and comparability remain distinct; dependent transforms are not independent verification.',
+    'literature_compiled_assay_cells': 'Within-assay numerical sections with estimand-scoped joint covariance, physical operand account_context and signed first-order propagation. Operand-propagated uncertainty stays separate from total corrected-activity uncertainty and additional residual variability.',
+    'literature_common_assessment_cells': 'Common source-assessment numerical components for the actual functional assertion and comparison, retaining measured endpoints, model applicability, native versus conditional results, scientific relationships, uncertainty account_context and distinct source/implementation limitations. Effect isolation, endpoint relevance and comparability remain distinct; dependent transforms are not independent verification.',
     'literature_ion_discrimination_cells': 'Source ion-discrimination comparisons with actual biological, ion and construct meanings, source scope, distinct reported/estimator/nominal/conditional physical domains, dependencies and uncertainty qualifications.',
     'literature_controlled_response_component_cells': 'Requested controlled-response comparisons with actual alternative meanings, source origins, controls, covariance scope, uncertainty and partial support. Conditional graph-reading domains remain distinct from sampling uncertainty.',
     'literature_gel_component_cells': 'Requested gel display measurements and comparisons with actual experiment/lane meanings, coherent ROI alternatives, methods, dependence and available-only sensitivity. Preserve the distinction between display darkness and calibrated molecular occupancy.',

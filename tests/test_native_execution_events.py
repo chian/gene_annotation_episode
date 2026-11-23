@@ -29,20 +29,20 @@ STAMP = "2026-10-21T16:00:00+00:00"
 def registration(*, unit="fixture-native.service", **changes):
     identity = {"kind": "systemd_user_service", "unit": unit,
                 "request_sha256": "a" * 64}
-    return {"version": "native_event_registration_v1", "handle": native_target_handle(identity),
+    return {"version": "native_event_registration", "handle": native_target_handle(identity),
         "run_id": "native-event-fixture", "owner_episode_id": "episode:actual-submitter",
         "job_ref": "homology_job_fixture", "registry_ref": "execution_registry_fixture",
         "resource_id": "resource:fixture-local", "native_identity": identity, **changes}
 
 
 def receipt_and_publication(target, *, status="0"):
-    receipt = {"version": "native_service_exit_receipt_v1", "native_identity": target["native_identity"],
+    receipt = {"version": "native_service_exit_receipt", "native_identity": target["native_identity"],
         "SERVICE_RESULT": "success", "EXIT_CODE": "exited", "EXIT_STATUS": status,
         "ended": {"at": STAMP, "monotonic_ns": 123456, "boot_id": "fixture-boot"}}
     # These are original file bytes, deliberately different from canonical JSON.
     raw = (json.dumps(receipt, indent=2) + "\n").encode("utf-8")
     digest = hashlib.sha256(raw).hexdigest()
-    publication = {"version": "native_event_publication_v1", "event": "state_changed",
+    publication = {"version": "native_event_publication", "event": "state_changed",
         "cause": "service_exit_receipt_committed", "record_ref": "native_event_record_" + digest[:24],
         "receipt_sha256": digest, "occurred_at": receipt["ended"]["at"]}
     return raw, publication
@@ -54,7 +54,7 @@ def publish(store, target, *, status="0"):
 
 
 def condition(target, *, after_cursor=0, reconsider_at=None, event="state_changed"):
-    return {"version": "event_condition_v1", "events": [{"handle": target["handle"], "event": event,
+    return {"version": "event_condition", "events": [{"handle": target["handle"], "event": event,
             "after_cursor": after_cursor}], "reconsider_at": reconsider_at}
 
 
@@ -80,7 +80,7 @@ def test_pure_records_are_exact_detached_and_handle_uses_only_reserved_identity(
     assert native_target_handle(dict(reversed(list(identity.items())))) == target["handle"]
     assert native_target_handle({**identity, "request_sha256": "b" * 64}) != target["handle"]
     descriptor = native_target_descriptor(target)
-    assert descriptor == {"version": "native_event_target_v1", "handle": target["handle"],
+    assert descriptor == {"version": "native_event_target", "handle": target["handle"],
         "job_ref": target["job_ref"], "registry_ref": target["registry_ref"],
         "resource_id": target["resource_id"], "event": "state_changed",
         "cause": "service_exit_receipt_committed"}

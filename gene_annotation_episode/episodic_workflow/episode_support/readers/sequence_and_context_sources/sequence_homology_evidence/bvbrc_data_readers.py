@@ -1,6 +1,6 @@
 """Pure, source-preserving readers for retained BV-BRC Data responses.
 
-The public reader verifies the persisted v2 request and actual transport before
+The public reader verifies the persisted request and actual transport before
 decoding.
 Complete raw bytes remain the source of unselected fields and invalid objects.
 There is no acquisition, retry, pagination, Store access or scientific score.
@@ -275,7 +275,7 @@ def _transport_facts(snapshot):
 
 
 def _failed(snapshot, failures):
-    return validate("ParseResult", {"version": "bvbrc_data_parse_result_v1", "status": "failed",
+    return validate("ParseResult", {"version": "bvbrc_data_parse_result", "status": "failed",
                     "sheet": None, "failures": failures, "retained_native_sha256": snapshot.sha256})
 
 
@@ -314,7 +314,7 @@ def _prepared(prepared):
             offset, limit = selector["offset"], selector["limit"]
     elif selector is not None:
         raise ValueError("bvbrc_response_request_mismatch")
-    expected_effective = dict(version="bvbrc_data_effective_query_v2", collection=collection, mode=mode,
+    expected_effective = dict(version="bvbrc_data_effective_query", collection=collection, mode=mode,
                               filters=original["filters"], fields=fields, sort=sort,
                               offset=offset, limit=limit, facet=original.get("facet"))
     if (_canonical(effective) != _canonical(expected_effective)
@@ -380,7 +380,7 @@ def _request_matches(snapshot, prepared):
 
 
 def parse_data_snapshot(snapshot: SourceSnapshot, *, prepared: dict) -> dict:
-    """Verify exact persisted v2 request/transport and populate a closed sheet.
+    """Verify exact persisted request/transport and populate a closed sheet.
 
     Invalid native output returns structured failures, with valid independent
     fields retained where possible. Invalid Python inputs are not coerced.
@@ -432,7 +432,7 @@ def _decode_native_payload(snapshot, *, prepared):
         payload = _decode_json(snapshot.content)
     except (ValueError, UnicodeError, RecursionError):
         return _failed(snapshot, issues + [_issue("bvbrc_invalid_json_response", "format")])
-    profile = "solr_json_envelope_v1"
+    profile = "solr_json_envelope"
     if (type(payload) is not dict or type(payload.get("response")) is not dict
             or type(payload["response"].get("docs")) is not list):
         code = "bvbrc_native_error" if type(payload) is dict and "error" in payload else "bvbrc_expected_solr_response"
@@ -598,7 +598,7 @@ def _decode_native_payload(snapshot, *, prepared):
             facet["all_categories_complete"] = False
     failures = [issue for issue in issues if issue["code"] != _WARNING]
     status = "partial" if failures else "complete"
-    sheet = {"version": "bvbrc_data_sheet_v1", "collection": collection, "mode": mode,
+    sheet = {"version": "bvbrc_data_sheet", "collection": collection, "mode": mode,
              "custody": {"native_sha256": snapshot.sha256, "retrieved_at": snapshot.retrieved_at,
                          "requested_url": snapshot.url,
                          "effective_url": snapshot.transport.get("effective_url", snapshot.url),
@@ -615,7 +615,7 @@ def _decode_native_payload(snapshot, *, prepared):
                                "requested_fields_valid": valid_count == len(docs), "status": status},
              "population": population, "selected_fields": fields, "page": page,
              "count": count, "rows": rows, "facets": facets, "issues": issues}
-    return validate("ParseResult", {"version": "bvbrc_data_parse_result_v1", "status": status,
+    return validate("ParseResult", {"version": "bvbrc_data_parse_result", "status": status,
                     "sheet": sheet, "failures": failures, "retained_native_sha256": snapshot.sha256})
 
 
@@ -703,7 +703,7 @@ def _validated_sheet(value):
         key = digest + "/row/" + str(index)
         if row["row_index"] != index or row["row_key"] != key:
             raise ValueError("bvbrc_invalid_row_identity")
-        expected_path = ("/response/docs/" if sheet["custody"]["native_profile"] == "solr_json_envelope_v1" else "/") + str(index)
+        expected_path = ("/response/docs/" if sheet["custody"]["native_profile"] == "solr_json_envelope" else "/") + str(index)
         if row["native_path"] != expected_path:
             raise ValueError("bvbrc_invalid_row_identity")
         if [cell["field"] for cell in row["cells"]] != selected:
@@ -839,7 +839,7 @@ def extract_collection_rows(page_sheet: dict, *, fields: tuple[str, ...]) -> dic
         row["numerical_cells"] = [_numeric_cell(cell, registry["fields"][cell["field"]])
             for cell in row["cells"] if registry["fields"][cell["field"]]["numeric_projection"]]
         rows.append(row)
-    return validate("CollectionRowsExtraction", {"version": "bvbrc_collection_rows_v1",
+    return validate("CollectionRowsExtraction", {"version": "bvbrc_collection_rows",
         "collection": sheet["collection"], "native_sha256": sheet["custody"]["native_sha256"],
         "requested_fields": list(fields), "rows": rows, "issues": sheet["issues"]})
 

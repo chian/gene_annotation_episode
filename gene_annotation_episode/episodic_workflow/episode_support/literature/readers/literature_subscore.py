@@ -6,7 +6,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.perturbat
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.perturbation_evidence.literature_assay_inputs import _witness_schema
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.literature_intervention_storage import intervention_cells_schema
 
-VERSION = "a106_experimental_subscore_v1"
+VERSION = "a106_experimental_subscore"
 NAMESPACE = "literature_a106_subscore_cells"
 REQUESTED = "requested_a106_subscore_components"
 COMPONENTS = ("experimental_subscore",)

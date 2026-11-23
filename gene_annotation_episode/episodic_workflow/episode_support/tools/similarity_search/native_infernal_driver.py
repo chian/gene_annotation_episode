@@ -116,7 +116,7 @@ def _validate_identity(identity, request):
 def _validate_plan(value):
     plan = finite_json_copy(value)
     if (type(plan) is not dict or set(plan) != {"version", "identity", "requested_job",
-            "attempt_directory", "policy"} or plan["version"] != "native_infernal_run_plan_v1"):
+            "attempt_directory", "policy"} or plan["version"] != "native_infernal_run_plan"):
         raise ValueError("native_infernal_run_plan_required")
     request = validate_native_infernal_requested_job(plan["requested_job"])
     _validate_identity(plan["identity"], request)
@@ -264,7 +264,7 @@ def validate_native_infernal_bundle_files(bundle, directory) -> dict:
     """
     bundle = finite_json_copy(bundle)
     if (type(bundle) is not dict or set(bundle) != _BUNDLE_FIELDS
-            or bundle["version"] != "native_infernal_bundle_v1"):
+            or bundle["version"] != "native_infernal_bundle"):
         raise ValueError("native_infernal_bundle_required")
     request = validate_native_infernal_requested_job(bundle["requested_job"])
     _validate_identity(bundle["identity"], request)
@@ -390,7 +390,7 @@ def run_native_infernal(plan) -> dict:
             raise ValueError("native_infernal_sealed_manifest_identity_conflict")
         return validate_native_infernal_bundle_files(saved, root)
     _atomic_new(owner, plan)
-    bundle = {"version": "native_infernal_bundle_v1", "identity": plan["identity"],
+    bundle = {"version": "native_infernal_bundle", "identity": plan["identity"],
         "requested_job": request, "program": job["program"], "table_format": job["table_format"],
         "software": {"executable": job["software"]["executable"], "expected_sha256": job["software"]["sha256"],
             "actual_sha256": None, "declared_engine_version": job["software"]["engine_version"]},

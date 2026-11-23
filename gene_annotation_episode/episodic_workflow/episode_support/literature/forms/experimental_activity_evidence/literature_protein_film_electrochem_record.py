@@ -50,7 +50,7 @@ converter does. The constructors take ``support`` and default it to 'direct'; th
 through the extraction (the extraction always passes the model's answer).
 """
 
-VERSION = 'a105_protein_film_electrochem_record_v1'
+VERSION = 'a105_protein_film_electrochem_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'protein_film_electrochem'
 QUANTITIES = ('catalytic_efficiency', 'catalytic_efficiency_spread', 'turnover', 'turnover_spread', 'rate_over_control', 'rate_over_control_spread',

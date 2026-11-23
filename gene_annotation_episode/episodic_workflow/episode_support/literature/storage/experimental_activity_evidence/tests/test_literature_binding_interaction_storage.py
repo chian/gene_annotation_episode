@@ -24,7 +24,7 @@ def setup(store, ctx, change=None, expressions=('5', '40', '2', '4'), unit='nM',
             return [bind(v) for v in value]
         return value
     args = bind(args)
-    context = LiteratureContext(ctx.run_id, ctx.episode_id, 'literature', (('literature', 'case'),), store.validate_scope({'subject_refs': store.problem()['subject_refs']}), {'version': 'literature_assignment_v1', 'question_context_refs': [], 'source_refs': list(refs.values())}, {}, tuple(refs.values()))
+    context = LiteratureContext(ctx.run_id, ctx.episode_id, 'literature', (('literature', 'case'),), store.validate_scope({'subject_refs': store.problem()['subject_refs']}), {'version': 'literature_assignment', 'question_context_refs': [], 'source_refs': list(refs.values())}, {}, tuple(refs.values()))
     return (store, context, args)
 
 

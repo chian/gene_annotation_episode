@@ -75,11 +75,11 @@ def lookup_task_kind(outcome):
     result = outcome.get('result') if isinstance(outcome, Mapping) else None
     if not isinstance(result, Mapping) or outcome.get('status') != 'completed':
         return None
-    if result.get('information_kind') == 'return_contract_information_v1':
+    if result.get('information_kind') == 'return_contract_information':
         source = result.get('source')
         if source in MEANINGS:
             return source
-    if result.get('information_kind') == 'operation_contract_information_v1':
+    if result.get('information_kind') == 'operation_contract_information':
         return {'literature.concentration_window.populate': 'literature_concentration_window_cells',
             'literature.measurement_comparison.populate': 'literature_measurement_comparison_cells',
             'literature.figure.populate': 'literature_endpoint_signal_cells',
@@ -99,7 +99,7 @@ def requested_return_text(result):
     The same explicit fact reference preserves the original requested type.
     """
     source = result.get('source')
-    if (result.get('information_kind') != 'return_contract_information_v1' or source not in MEANINGS
+    if (result.get('information_kind') != 'return_contract_information' or source not in MEANINGS
             or not is_registered_schema(result.get('report_schema'), source=source)):
         return None
     return MEANINGS[source] + '\n\n' + _declaration_text(source)
@@ -108,18 +108,18 @@ def requested_return_text(result):
 def common_assessment_lookup(outcome):
     result = outcome.get('result') if isinstance(outcome, Mapping) else None
     return bool(isinstance(result, Mapping) and outcome.get('status') == 'completed' and (
-        result.get('information_kind') == 'return_contract_information_v1'
-        and result.get('source') == 'literature_compiled_assay_v3_cells'
-        or result.get('information_kind') == 'operation_contract_information_v1'
+        result.get('information_kind') == 'return_contract_information'
+        and result.get('source') == 'literature_common_assessment_cells'
+        or result.get('information_kind') == 'operation_contract_information'
         and result.get('operation') == 'literature.assay.components.populate'))
 
 
 def reported_curve_lookup(outcome):
     result = outcome.get('result') if isinstance(outcome, Mapping) else None
     return bool(isinstance(result, Mapping) and outcome.get('status') == 'completed' and (
-        result.get('information_kind') == 'return_contract_information_v1'
+        result.get('information_kind') == 'return_contract_information'
         and result.get('source') == 'literature_rate_grid_cells'
-        or result.get('information_kind') == 'operation_contract_information_v1'
+        or result.get('information_kind') == 'operation_contract_information'
         and result.get('operation') == 'literature.rate.observations.populate'))
 
 

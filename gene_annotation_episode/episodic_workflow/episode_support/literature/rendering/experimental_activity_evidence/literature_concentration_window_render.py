@@ -4,7 +4,7 @@ from copy import deepcopy
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_concentration_window_storage import SCOPE, OPERATION, POPULATION
 
 def is_row(value):
-    return isinstance(value, Mapping) and value.get('row_version') == 'concentration_window_return_v1' and (value.get('evaluation_scope') == SCOPE)
+    return isinstance(value, Mapping) and value.get('row_version') == 'concentration_window_return' and (value.get('evaluation_scope') == SCOPE)
 
 def rows_from_values(value):
     if is_row(value):

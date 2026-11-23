@@ -19,7 +19,7 @@ from pathlib import Path
 import subprocess
 import sys
 
-RECEIPT_VERSION = 'detached_job_receipt_v1'
+RECEIPT_VERSION = 'detached_job_receipt'
 
 
 def utc_now():
@@ -59,7 +59,7 @@ def main(arguments):
                                    'request_sha256': native['request_sha256']})
     digest = hashlib.sha256(receipt).hexdigest()
     NativeEventLedger(ledger_directory).publish_native_event(target, {
-        'version': 'native_event_publication_v1', 'event': 'state_changed',
+        'version': 'native_event_publication', 'event': 'state_changed',
         'cause': 'service_exit_receipt_committed', 'record_ref': 'native_event_record_' + digest[:24],
         'receipt_sha256': digest, 'occurred_at': ended}, receipt_bytes=receipt)
     raise SystemExit(returncode if 0 <= returncode < 256 else 1)

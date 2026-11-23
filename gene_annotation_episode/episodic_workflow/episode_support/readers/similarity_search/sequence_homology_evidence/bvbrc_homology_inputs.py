@@ -20,7 +20,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
 from gene_annotation_episode.episodic_workflow.episode_support.grading.similarity_search.sequence_homology_evidence.blast_pairwise_grader import _axis_geometry, alignment_components
 
 
-SCHEMA = "bvbrc_homology_parse_v1"
+SCHEMA = "bvbrc_homology_parse"
 FIELDS = ["qseqid", "sseqid", "pident", "length", "mismatch", "gapopen",
           "qstart", "qend", "sstart", "send", "evalue", "bitscore", "qlen", "slen"]
 FORMATS = {"blast_json15_raw": "blast_json15", "homology_processed_json": "homology_processed_json",
@@ -94,7 +94,7 @@ def _json(content):
 
 
 def _binding(binding):
-    if not isinstance(binding, dict) or binding.get("schema") != "bvbrc_homology_artifact_bundle_v1":
+    if not isinstance(binding, dict) or binding.get("schema") != "bvbrc_homology_artifact_bundle":
         raise ValueError("homology_artifact_bundle_required")
     if not isinstance(binding.get("scientific_mode"), str) or binding["scientific_mode"] not in MODES:
         raise ValueError("homology_scientific_mode_invalid")

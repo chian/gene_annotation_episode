@@ -1,4 +1,4 @@
-"""The A107 scoring sheet (``component_axis_scoring_sheet_v1``), restored from ``root/a107/component_axis_reports.py`` at
+"""The A107 scoring sheet (``component_axis_scoring_sheet``), restored from ``root/a107/component_axis_reports.py`` at
 ``60889621e`` (``current_scoring_sheets``, ``dependence``, ``native_dependence``, ``cross_dependence``, ``PATHS``) onto
 what an Episode now holds: the controlled features of the literature partner sheets its children returned (with the
 sheets' references), the native component records and the per-use tool qualification records it holds.
@@ -10,7 +10,7 @@ independent confirmation. Nothing here writes: it is read through the reader of 
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.partner_presence_evidence.literature_partner_findings import (
     agreement)
 
-SCORING_SHEET_VERSION = 'component_axis_scoring_sheet_v1'
+SCORING_SHEET_VERSION = 'component_axis_scoring_sheet'
 # Owner's grading decision (row 11): the A107 sheet keeps five evidence paths apart.
 PATHS = {'A107': ('requirement', 'presence', 'expression', 'coexpression', 'interaction')}
 

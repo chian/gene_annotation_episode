@@ -16,7 +16,7 @@ from .alignment_correspondence import interval_union_length
 from .minimap2_grading_inputs import build_minimap2_placement_sheet, require_finite_json
 
 
-SHEET_SCHEMA = "reference_site_comparison_sheet_v1"
+SHEET_SCHEMA = "reference_site_comparison_sheet"
 RELATIONSHIP_COUNTS = {
     "identical": "identical_positions", "substituted": "substituted_positions",
     "query_gap": "query_gap_positions", "reference_skip": "reference_skip_positions",

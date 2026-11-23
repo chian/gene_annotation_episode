@@ -18,8 +18,8 @@ from .sequence_composition_grader import build_sequence_composition_sheet, calcu
 from .sequence_mapping import validate_mapping, map_interval
 
 
-SHEET_SCHEMA = "protein_disorder_sheet_v1"
-COMPONENTS_SCHEMA = "protein_disorder_components_v1"
+SHEET_SCHEMA = "protein_disorder_sheet"
+COMPONENTS_SCHEMA = "protein_disorder_components"
 _HEADER = ["Position", "Amino_Acid", "Disorder_Score", "Is_Disordered"]
 _NO_DATA = "No valid prediction data was returned from the server."
 _ASCII = frozenset("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")

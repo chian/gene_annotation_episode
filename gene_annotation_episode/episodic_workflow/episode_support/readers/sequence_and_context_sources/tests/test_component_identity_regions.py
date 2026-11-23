@@ -114,7 +114,7 @@ def test_real_region_expression_keeps_whole_feature_quantities(real_sequence, re
     native = calculate(document, {"condition_key": "c1", "left_feature_id": "left",
         "right_feature_id": "right", "sample_ids": ["s1", "s2", "s3", "s4"]})
     expression = publish(store, RESULT_PROVIDER, {"axis": "A107",
-        "scientific_profile": "a107_expression_components_v2", "scope": store.validate_scope({'subject_refs': store.problem()['subject_refs']}),
+        "scientific_profile": "a107_expression_components", "scope": store.validate_scope({'subject_refs': store.problem()['subject_refs']}),
         "operation": "partner.request_expression_hpc", "native_components": native})
     result, _ = _expression(store, {"target_ref": target, "actual_ref": target,
         "component_ref": target, "expression_ref": expression, "feature_side": "left",
@@ -137,7 +137,7 @@ def test_correct_self_coordinates_do_not_override_a_different_measured_sequence(
         native = calculate(document, {"condition_key": "c1", "left_feature_id": "left",
             "right_feature_id": "right", "sample_ids": ["s1", "s2", "s3", "s4"]})
         expression = publish(store, RESULT_PROVIDER, {"axis": "A107",
-            "scientific_profile": "a107_expression_components_v2", "scope": store.validate_scope({'subject_refs': store.problem()['subject_refs']}),
+            "scientific_profile": "a107_expression_components", "scope": store.validate_scope({'subject_refs': store.problem()['subject_refs']}),
             "operation": "partner.request_expression_hpc", "native_components": native})
         result, _ = _expression(store, {"target_ref": target, "actual_ref": target,
             "component_ref": target, "expression_ref": expression, "feature_side": "left",

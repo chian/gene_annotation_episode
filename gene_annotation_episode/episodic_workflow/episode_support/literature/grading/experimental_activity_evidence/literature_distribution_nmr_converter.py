@@ -117,7 +117,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_product_distribution_direction import select_product_distribution_effect
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_distribution_nmr_converted_v1'
+VERSION = 'a105_distribution_nmr_converted'
 CRITERIA_MAP = {'species_identity': ('shares_from_resolved_signals', 'species_assigned_with_standards'), 'response_factors': ('relaxation_delay',),
                 'common_denominator': ('denominator_and_coverage',), 'background_alternatives': ('no_enzyme_spectrum',), 'attribution_supported': ('inactive_enzyme_spectrum',),
                 'calibration_applicability': ('minor_signal_to_noise',), 'equilibrium_state': ('stable_composition',), 'sampling_basis': ('replicates',),

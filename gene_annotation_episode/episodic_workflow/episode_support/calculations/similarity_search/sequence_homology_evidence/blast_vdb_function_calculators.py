@@ -1,4 +1,4 @@
-"""Pure, explicit VDB function kernels over a validated saved v2 sheet.
+"""Pure, explicit VDB function kernels over a validated saved record-locator sheet.
 
 The accepted 338 contract defines these model-conditional weights.  Target
 identity, HSP attribution and source qualification are supplied by the separate
@@ -74,7 +74,7 @@ def validate_blast_vdb_function_model(model: dict) -> dict:
     """Return a detached unchanged explicit model; candidates are checked later."""
     result = _copy(model)
     _closed(result, "version temperature_bits grouping_model unknown_source_dependency function_priors census_selection")
-    if (result["version"] != "vdb_function_kernel_v1"
+    if (result["version"] != "vdb_function_kernel"
             or not _number(result["temperature_bits"], positive=True)
             or type(result["grouping_model"]) is not str or result["grouping_model"] not in _GROUPINGS
             or type(result["unknown_source_dependency"]) is not str
@@ -175,7 +175,7 @@ def _missing(unit, reason, *, incompatible=False):
 
 
 def _measure(value, unit, reason=None, *, incompatible=False):
-    # Measure is the unchanged 309 type. Detailed v2 relation codes belong in
+    # Measure is the unchanged 309 type. Detailed record-locator relation codes belong in
     # KernelNumber.reason_code and Issue, not its closed MissingReason enum.
     missing_reason = "incompatible_input" if incompatible else "partial_output" if reason == "census_partial" else "missing_input"
     return dict(value=value, unit=unit, status="available" if value is not None else "incompatible" if incompatible else "unavailable",
@@ -309,7 +309,7 @@ def _census_result(sheet, census, model):
             normalization = detail.get("normalization")
             if entity and (normalization == entity["target_identity"]["representation"] or detail.get("coding_proof_conflict")):
                 invalid_target.add(entity_key)
-            if normalization == "full_member_nt_v1" or detail.get("parent_identity_conflict"):
+            if normalization == "full_member_nt" or detail.get("parent_identity_conflict"):
                 invalid_parent.add(entity_key)
         if detail.get("conflicting_identity_proofs"):
             invalid_target.add(entity_key); invalid_parent.add(entity_key)
@@ -317,7 +317,7 @@ def _census_result(sheet, census, model):
     for entity in entities:
         if entity["entity_key"] in invalid_target:
             entity["target_identity"] = None
-    parent_verified = {p["entity_key"] for p in census["identity_proofs"] if p["normalization"] == "full_member_nt_v1"} - invalid_parent
+    parent_verified = {p["entity_key"] for p in census["identity_proofs"] if p["normalization"] == "full_member_nt"} - invalid_parent
     unresolved = {i["details"]["dependency_key"] for i in issues if "dependency_key" in i["details"]}
     def sources(entity, sample):
         key = entity["entity_key"]
@@ -699,7 +699,7 @@ def _stratum(sheet, model, scope, namespace, partition, groups, assigned, labels
 
 
 def calculate_blast_vdb_function_components(sheet: dict, *, model: dict) -> dict:
-    """Calculate the selected model from an actual validated, saved v2 sheet."""
+    """Calculate the selected model from an actual validated, saved record-locator sheet."""
     sheet = _inputs.validate_blast_vdb_function_sheet(sheet)
     model = validate_blast_vdb_function_model(model)
     censuses = {c["census_key"]: c for c in sheet["census_records"]}
@@ -743,7 +743,7 @@ def calculate_blast_vdb_function_components(sheet: dict, *, model: dict) -> dict
         assumptions.append("complete_matching_census")
     issues = _unique([*sheet["issues"], *[i for s in strata for i in s["issues"]],
                       *[i for c, _, _ in census_values.values() for i in c["issues"]]])
-    return dict(schema="blast_vdb_function_components_v2", search_key=_deepcopy(sheet["base_sheet"]["search"]["search_key"]),
+    return dict(schema="blast_vdb_function_components", search_key=_deepcopy(sheet["base_sheet"]["search"]["search_key"]),
         status=status, model=model, calibrated_annotation_probability=False, strata=strata,
         assignment_results=_deepcopy([r for r in sheet["link_results"] if r["record_kind"] == "assignment"]),
         dependency_measurements=dict(target_units=partition["units"], edges=partition["edges"], sample_groups=partition["samples"],

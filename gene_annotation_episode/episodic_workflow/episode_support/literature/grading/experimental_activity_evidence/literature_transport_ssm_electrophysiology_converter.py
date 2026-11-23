@@ -106,7 +106,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_transport_response_direction import select_transport_effect
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_transport_ssm_electrophysiology_converted_v1'
+VERSION = 'a105_transport_ssm_electrophysiology_converted'
 CRITERIA_MAP = {'background_alternatives': ('empty_liposome_control', 'buffer_artefact'), 'membrane_system': ('empty_liposome_control', 'sensor_quality'),
                 'attribution_supported': ('inactive_protein_control',), 'assertion_relevance': ('electrogenic_stated', 'native_substrate'),
                 'calibration_applicability': ('reference_normalization', 'time_resolution'), 'transport_endpoint': ('endpoint_stated',),

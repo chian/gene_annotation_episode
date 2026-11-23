@@ -145,6 +145,6 @@ def investigation_finding(reader, scope, finding_unit, known_assessment_refs):
 
 def finding_progress_credit(reader, scope, finding_unit, known_assessment_refs):
     """The episode's credit: one ``finding_unit`` per distinct retained finding it knows (the retained-finding
-    projection, ``known_retained_scientific_findings_v1``)."""
+    projection, ``known_retained_scientific_findings``)."""
     return project_finding_progress(reader, scope, FindingProgressPolicy(finding_unit),
                                     known_assessment_refs=known_assessment_refs)['credit']

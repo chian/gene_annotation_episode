@@ -18,9 +18,9 @@ import re
 from gene_annotation_episode.episodic_workflow.episode_support.instructions.launch_instructions import (SELECTION_SCHEMA as LAUNCH_INSTRUCTION_SELECTION_SCHEMA,
     validate_selection)
 
-ASSIGNMENT_VERSION = 'practical_assignment_v1'
-RECEIPT_VERSION = 'practical_action_receipt_v1'
-COMPLETION_VERSION = 'practical_completion_v1'
+ASSIGNMENT_VERSION = 'practical_assignment'
+RECEIPT_VERSION = 'practical_action_receipt'
+COMPLETION_VERSION = 'practical_completion'
 JOB_TOOLS = frozenset({'exec_command', 'practical.job.start', 'practical.job.status', 'practical.job.collect'})
 PREDICATE_FIELDS = {
     'context_cwd': {'kind', 'path'},
@@ -55,8 +55,8 @@ GENERIC_REQUESTED_JOB_SCHEMA = _schema_object({'argv': _ARGV_SCHEMA, 'environmen
 from gene_annotation_episode.episodic_workflow.episode_support.forms.flux_balance_contracts import flux_balance_schema
 REQUESTED_JOB_SCHEMA = {'anyOf': [GENERIC_REQUESTED_JOB_SCHEMA, flux_balance_schema('FBARequestedJob')]}
 _FBA_EXECUTION_SELECTION_SCHEMA = _schema_object({
-    'version': {'const': 'flux_balance_execution_selection_v1'},
-    'environment_realization': {'const': 'operation_scoped_tmp_and_cache_v1'}})
+    'version': {'const': 'flux_balance_execution_selection'},
+    'environment_realization': {'const': 'operation_scoped_tmp_and_cache'}})
 _PREDICATE_OPERANDS = {
     'context_cwd': {'path': _PATH_SCHEMA},
     'context_environment': {'name': {'type': 'string', 'pattern': '^[A-Za-z_][A-Za-z0-9_]*$'},
@@ -236,8 +236,8 @@ def validate_assignment(value):
     job = _object(value['requested_job'], code='invalid_practical_job')
     if 'native_flux_balance_execution' in value:
         if ('native_flux_balance' not in job or value['native_flux_balance_execution'] != {
-                'version': 'flux_balance_execution_selection_v1',
-                'environment_realization': 'operation_scoped_tmp_and_cache_v1'}):
+                'version': 'flux_balance_execution_selection',
+                'environment_realization': 'operation_scoped_tmp_and_cache'}):
             raise ValueError('fba_environment_selection_invalid')
     if 'native_flux_balance' in job:
         from gene_annotation_episode.episodic_workflow.episode_support.forms.native_flux_balance_contracts import validate_flux_balance_requested_job

@@ -445,7 +445,7 @@ def parse_nhmmer_artifacts(*, program, artifacts, artifact_refs, engine_version)
         _ref(value)
     operation = {"program": program, "format": "hmmer3_nucleotide_native", "engine_version": engine_version,
         "alphabet": None, "mode": "profile_to_sequence_database" if program == "nhmmer" else "sequence_to_profile_database"}
-    result = {"schema": "nhmmer_native_v1", "operation": operation, "artifacts": {}, "table_rows": [],
+    result = {"schema": "nhmmer_native", "operation": operation, "artifacts": {}, "table_rows": [],
               "stdout_loci": [], "queries": [], "headers": [], "native_settings": [],
               "observed_engine_versions": [], "issues": []}
     for role, text in artifacts.items():
@@ -587,7 +587,7 @@ def build_nhmmer_sheet(native, *, inputs):
     if type(native) is not dict or type(inputs) is not dict:
         raise ValueError("nhmmer_invalid_sheet_input_type")
     native, inputs = finite_json(native, name="native"), finite_json(inputs, name="inputs")
-    if native.get("schema") != "nhmmer_native_v1":
+    if native.get("schema") != "nhmmer_native":
         raise ValueError("nhmmer_invalid_native_schema")
     program = native.get("operation", {}).get("program")
     _program(program)
@@ -745,7 +745,7 @@ def build_nhmmer_sheet(native, *, inputs):
     operation["alphabet"] = next(iter(alphabets)) if len(alphabets) == 1 else None
     if program == "nhmmer" and operation["query_construction_mode"] is None:
         global_issues.append(_issue("nhmmer_query_construction_mode_unavailable"))
-    return {"schema": "nhmmer_sheet_v1", "operation": operation, "inputs": inputs, "native": native,
+    return {"schema": "nhmmer_sheet", "operation": operation, "inputs": inputs, "native": native,
         "loci": loci, "queries": deepcopy(valid_queries), "native_settings": deepcopy(native.get("native_settings", [])), "completeness": {
             "native_artifacts": native_complete, "acquisition": deepcopy(acquisition),
             "status": "missing" if not native_complete else "partial" if not all(native_complete.values())

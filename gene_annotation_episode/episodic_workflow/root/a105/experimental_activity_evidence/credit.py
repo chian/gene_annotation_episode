@@ -1,7 +1,7 @@
 """Credit: the A105 head's finding progress on its own unbounded scale.
 
 Carried from the old ``credit.py`` (``original_task_projector``: ``ScientificFindingProgress(FindingProgressPolicy(
-credit_unit))`` for the declared ``evidence_axis_task_v1`` / ``whole_axis_findings`` task). The projector's formula
+credit_unit))`` for the declared ``evidence_axis_task`` / ``whole_axis_findings`` task). The projector's formula
 is the library's own and is unchanged: ``finding_unit`` times the number of distinct retained, current,
 target-eligible typed findings among the assessments this Episode holds; revision, activity and repeated reading
 earn nothing and annotation support stays separate.

@@ -15,7 +15,7 @@ import operator
 from gene_annotation_episode.episodic_workflow.episode_support.readers.profile_model_preparation.hmmer_simulation_data import SCHEMA as SHEET_SCHEMA, SUMMARY_UNITS, recorded_tail_masses
 
 
-SCHEMA = "hmmer_simulation_components_v1"
+SCHEMA = "hmmer_simulation_components"
 COMPONENT_STATES = frozenset({"present", "missing", "incomplete", "incompatible", "nonfinite", "failed"})
 ISSUE_CODES = frozenset({"sheet_invalid", "parameters_invalid", "parameter_invalid", "tail_schedule_missing",
     "tail_schedule_invalid", "score_vector_missing", "score_vector_incomplete", "score_vector_invalid",

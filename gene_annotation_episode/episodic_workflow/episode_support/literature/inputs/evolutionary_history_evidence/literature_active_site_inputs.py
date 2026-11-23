@@ -14,7 +14,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.evolutionary_history_evidence.literature_experimental_contracts import ExperimentalContractError
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.evolutionary_history_evidence.literature_product_partition_inputs import _number as _fraction_number
 
-VERSION = "a105_active_site_inputs_v1"
+VERSION = "a105_active_site_inputs"
 ROLES = ("protein_mass_concentration", "assumed_molecular_weight", "active_site_concentration", "reported_active_fraction")
 SOURCE_KINDS = ("primary_source", "retained_extraction", "synthetic_fixture")
 LITERAL_FIELDS = ("subject", "organism", "construct", "preparation", "assay", "condition", "endpoint", "measurement_identity")
@@ -30,7 +30,7 @@ INTERPRETATIONS = {
     "site_stoichiometry": ("one_site_per_monomer", "other", "unknown", "conflicting"),
     "normalization_stage": ("none", "total_monomer", "active_sites", "unknown", "conflicting"),
 }
-DEPENDENCY = "source_scalar_field_parser_completed_allocation_addition_v1"
+DEPENDENCY = "source_scalar_field_parser_completed_allocation_addition"
 
 
 def _fail(code, field):

@@ -171,7 +171,7 @@ def reference_schema(kind):
 def fact_schemas(*, binding_codes=None, binding_input_kinds=None):
     """Return detached schemas with the provider's explicit finite code sets."""
     if binding_codes is None or binding_input_kinds is None:
-        from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.sequence_homology_evidence.bvbrc_proteome_bundle_contracts import BINDING_CODES, BINDING_INPUT_KINDS
+        from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.sequence_homology_evidence.bvbrc_proteome_native_bundle_contracts import BINDING_CODES, BINDING_INPUT_KINDS
         binding_codes = BINDING_CODES if binding_codes is None else binding_codes
         binding_input_kinds = BINDING_INPUT_KINDS.values() if binding_input_kinds is None else binding_input_kinds
     codes = sorted(set(P_REASONS) | set(_SHEET_DEFS["Diagnostic"]["properties"]["code"]["enum"]) | set(binding_codes))

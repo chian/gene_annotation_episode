@@ -9,8 +9,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.calcul
 PROVIDER = 'literature.a105.gel'
 OPERATION = 'literature.gel.populate'
 FACT_SOURCE = 'literature_gel_component_cells'
-VERSION = 'literature_gel_record_v1'
-FACT_VERSION = 'literature_gel_component_fact_v1'
+VERSION = 'literature_gel_record'
+FACT_VERSION = 'literature_gel_component_fact'
 RAW_COMPONENTS = ('pixel_count', 'sum_gray', 'sum_darkness', 'minimum_gray', 'maximum_gray', 'zero_gray_count')
 CORRECTED_COMPONENT = 'background_corrected_band_darkness'
 LANE_COMPONENTS = ('shifted_display_darkness', 'free_display_darkness', 'selected_total_display_darkness', 'shifted_display_fraction', 'off_band_display_fraction', 'display_black_pixel_fraction', 'display_total_ratio_to_protein_lane')
@@ -41,7 +41,7 @@ def record_reference(namespace='reference'):
     return {'type': 'string', 'format': 'reference', 'x-reference-namespace': namespace}
 
 def gel_population_schema():
-    return obj({'selection': {'anyOf': [inputs.gel_arguments_schema(), inputs.gel_arguments_schema(version=inputs.VERSION_V2)]}, 'comparison': calculations.gel_comparison_schema()})
+    return obj({'selection': inputs.gel_arguments_schema(), 'comparison': calculations.gel_comparison_schema()})
 
 def validate_population_arguments(arguments):
     value = plain(arguments)
@@ -68,15 +68,13 @@ def gel_cells_schema():
     diagnostics += ['protein_competitor_' + name + '_mismatch' for name in ('subject', 'construct', 'endpoint')]
     diagnostics += [role + '_role_does_not_establish_requested_experimental_meaning' for role in ('baseline', 'protein', 'competitor')]
     D = {'Rational': rational, 'Meaning': meaning, 'Lane': obj({'lane_id': text, 'observation_id': text, **{name: ref('Meaning') for name in LANE_MEANINGS}}), 'Interpretation': obj({'status': enum('unknown', 'conflicting', 'descriptive_only'), 'reasons': arr(enum(*diagnostics)), 'comparability_outside_intended_change': {'const': 'not_established_by_display_arithmetic'}, 'effect_isolation': {'const': 'not_established_by_display_arithmetic'}}), 'Dependence': obj({'same_image': {'const': True}, 'baseline_reused_in_factorized_form': {'type': 'boolean'}, 'direct_baseline_coefficient': {'const': 0}, 'independence_established': {'const': False}, 'factorization_equal_to_direct': nullable({'type': 'boolean'})}), 'SourceDependency': obj({'source_ref': record_reference('source'), 'artifact_ref': text, 'image_byte_sha256': {'type': 'string', 'pattern': '^[0-9a-f]{64}$'}, 'lane_id': text, 'signal_region': box, 'background_region': box}), 'Sensitivity': obj({'kind': {'const': 'explicit_available_roi_assignment_range_not_sampling_interval'}, 'status': enum('complete', 'partial', 'no_available_values'), 'bounds_unavailable_assignments': {'const': False}, 'included_assignment_ids': arr(text), 'unavailable_assignment_ids': arr(text), 'sampling_confidence_level': {'type': 'null'}})}
-    v2 = cp(D['SourceDependency'])
-    v2['properties']['background_method'] = enum('mean', 'median')
-    v2['required'].append('background_method')
-    D['SourceDependency'] = {'oneOf': [D['SourceDependency'], v2]}
+    D['SourceDependency']['properties']['background_method'] = enum('mean', 'median')
+    D['SourceDependency']['required'].append('background_method')
     D['Dependency'] = obj({'assignment_id': text, 'source_dependency': ref('SourceDependency')})
     D['Cell'] = obj({'value': {'type': ['number', 'null']}, 'exact': nullable(ref('Rational')), 'lower': nullable(ref('Rational')), 'upper': nullable(ref('Rational')), 'unit': enum('display_fraction', 'display_darkness_sum', 'pixel_count', 'gray_level', 'gray_level_sum'), 'formula': enum(*formulas), 'status': enum('measured', 'calculated', 'unavailable', 'available_range'), 'unavailable_reason': nullable(enum(*reasons)), 'projection_reason': nullable(enum('numerical_projection_range')), 'qualifications': arr(enum(*qualifiers)), 'sampling_standard_uncertainty': {'type': 'null'}, 'confidence_interval': {'type': 'null'}, 'sensitivity': nullable(ref('Sensitivity'))})
     D['Science'] = obj({'global': obj({name: ref('Meaning') for name in inputs.CONTEXT_FIELDS}), 'lanes': arr(ref('Lane')), 'comparison_roles': nullable(obj({role: nullable(text) for role in ('baseline', 'protein', 'competitor')})), 'interpretation': nullable(ref('Interpretation')), 'interpretation_basis': {'const': 'investigating_episode_nominations'}, 'intensity_meaning': {'const': 'selected_display_darkness_255_minus_gray'}, 'sampling_uncertainty': obj({'status': {'const': 'not_supplied'}, 'value': {'type': 'null'}}), 'detector_response_calibration': obj({'status': {'const': 'not_supplied'}, 'value': {'type': 'null'}}), 'unimplemented_quantities': arr(enum('calibrated_molecular_occupancy', 'binding_observation_likelihood')), 'independent_preparation_count': {'type': 'null'}})
     D['NumericLocation'] = {'oneOf': [obj({'kind': {'const': 'image_region'}, 'source_ref': record_reference('source'), 'region': box}), obj({'kind': {'const': 'utf8_span'}, 'source_ref': record_reference('source'), 'start': {'type': 'integer', 'minimum': 0}, 'end': {'type': 'integer', 'minimum': 1}}), obj({'kind': {'const': 'unresolved'}, 'source_ref': record_reference('source')})]}
-    D['Method'] = obj({'assignment_id': text, 'lane_id': text, 'background_method': enum('mean', 'median'), 'method_basis': enum('v1_mean_definition', 'explicit_v2_nomination')})
+    D['Method'] = obj({'assignment_id': text, 'lane_id': text, 'background_method': enum('mean', 'median')})
     row = obj({'version': {'const': FACT_VERSION}, 'sheet_ref': record_reference('source'), 'component_key': text, 'view': enum(*VIEWS), 'component': enum(*COMPONENTS), 'assignment_id': nullable(text), 'lane_id': nullable(text), 'region_kind': nullable(enum('background', 'whole_lane', 'band')), 'band_id': nullable(text), 'band_role': nullable(enum('shifted', 'free', 'other')), 'cell': ref('Cell'), 'scientific_context': ref('Science'), 'numerical_dependencies': arr(ref('Dependency')), 'dependence': arr(obj({'assignment_id': text, 'source_dependence': ref('Dependence')})), 'roi_methods': arr(ref('Method')), 'origin': enum('graph_derived', 'synthetic'), 'numeric_locations': arr(ref('NumericLocation'))})
     return {'$schema': 'https://json-schema.org/draft/2020-12/schema', 'type': 'array', 'items': row, '$defs': D, 'x-source': FACT_SOURCE}
 __all__ = ['PROVIDER', 'OPERATION', 'FACT_SOURCE', 'VERSION', 'FACT_VERSION', 'COMPONENTS', 'VIEWS', 'RAW_COMPONENTS', 'CORRECTED_COMPONENT', 'LANE_COMPONENTS', 'COMPARISON_COMPONENTS', 'LANE_MEANINGS', 'REQUEST_COMPONENTS', 'REQUEST_VIEWS', 'REQUEST_KEYS', 'gel_population_schema', 'gel_cells_schema', 'validate_population_arguments']

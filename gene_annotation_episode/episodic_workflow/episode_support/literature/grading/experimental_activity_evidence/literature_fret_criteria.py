@@ -55,7 +55,7 @@ counterpart here is the direct versus competition comparison), and the
 adsorption to plates (not part of the FRET form).
 """
 
-VERSION = 'a105_fret_criteria_v1'
+VERSION = 'a105_fret_criteria'
 
 # ---- Threshold constants -------------------------------------------------
 NM_PER_UNIT = {'pM': 0.001, 'nM': 1.0, 'uM': 1000.0, 'mM': 1000000.0}  # FIXED_BY_DEFINITION: nanomolar per concentration unit.

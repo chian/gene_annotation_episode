@@ -133,7 +133,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_endpoint_gas_evolution_criteria import NMOL_PER_UNIT, PERCENT_PER_FRACTION
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_endpoint_gas_evolution_converted_v1'
+VERSION = 'a105_endpoint_gas_evolution_converted'
 CRITERIA_MAP = {'measurement_identity': ('vessel_volumes',), 'calibration_applicability': ('calibration_gas', 'calibration_range', 'detection_margin'),
                 'matrix_interference': ('dissolved_gas',), 'background_alternatives': ('spontaneous_gas_control', 'zero_time_gas', 'leak_control', 'signal_over_control'),
                 'attribution_supported': ('enzyme_dependence',), 'product_identity': ('gas_identity',), 'endpoint_alignment': ('time_point_stated', 'same_time_for_compared_arms'),

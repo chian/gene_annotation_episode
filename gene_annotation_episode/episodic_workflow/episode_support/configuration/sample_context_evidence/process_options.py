@@ -16,8 +16,8 @@ from method_loop.jsonvalue import canonical
 from gene_annotation_episode.episodic_workflow.episode_support.records.sample_context_evidence.construction_records import OPTION_REF_VERSION, SLOTS, _exact, _option_id, _plain, _sha256, _text, scientific_digest, validate_option_ref
 from gene_annotation_episode.episodic_workflow.episode_support.forms.sample_context_evidence.evidence_axis_contracts import VERSION as EVIDENCE_AXIS_VERSION, validate_evidence_axis_entry
 from gene_annotation_episode.episodic_workflow.episode_support.instructions.sample_context_evidence.evidence_axis_instructions import VERSION as INSTRUCTION_VERSION, instruction_view, validate_instruction_entry
-SOURCE_FORMAT = 'research_three_slot_options_v1'
-SNAPSHOT_VERSION = 'sample_context_evidence_library_snapshot_v2'
+SOURCE_FORMAT = 'research_three_slot_options'
+SNAPSHOT_VERSION = 'sample_context_evidence_library_snapshot'
 _SOURCE_FIELDS = 'case_group case_id source_url source_locator observation limit'
 _INDEX_FIELDS = 'id slot name description detail_path source_evidence_ids'
 _SAVED_FIELDS = 'option_id slot name description entry_path entry_sha256 entry_file_sha256 sources_path sources_sha256 sources_file_sha256 source_count source_evidence_ids'
@@ -25,7 +25,7 @@ _SAVED_FIELDS = 'option_id slot name description entry_path entry_sha256 entry_f
 def evidence_axis_instruction_view(entry):
     """Present existing measurement guidance, never the draft scoring sheet.
 
-    The retained v1 record has no separately reviewed investigation prompt.
+    The retained record has no separately reviewed investigation prompt.
     This limited view preserves its scientific measurement guidance as text;
     it does not promote criteria, grading levels or reader metadata to TASK
     instructions. Internal resolve() continues to return the exact raw record.

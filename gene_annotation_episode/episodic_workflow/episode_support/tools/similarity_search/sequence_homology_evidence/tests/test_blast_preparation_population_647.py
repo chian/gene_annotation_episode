@@ -245,7 +245,7 @@ def test_inspection_subjects_remain_file_or_database_and_empty_filters_are_not_z
     from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.sequence_homology_evidence.blast_utility_contracts import validate_blast_utility_record
     stream = occurrence("stdout", "stdout", b"\n", direction="output", path="/attempt/stdout")
     _, binding = database()
-    filters = {"version": "blast_database_inspection_v2", "operation": operation("show_filters"),
+    filters = {"version": "blast_prepared_database_inspection", "operation": operation("show_filters"),
         "original_outcome": outcome(), "subject": {"kind": "database", "database_key": "db"},
         "database_bindings": [binding], "output_occurrence": stream, "native_fields": [], "completeness": "complete",
         "checks": [], "failures": []}

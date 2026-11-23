@@ -14,8 +14,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.readers.phylogeny
 from gene_annotation_episode.episodic_workflow.episode_support.calculations.phylogeny.phylogeny_calculators import compare_unrooted_relationships
 
 
-VERSION = 'a104_native_evolutionary_measurement_v1'
-PROFILE = 'a104_bounded_phylogenetic_progress_v1'
+VERSION = 'a104_native_evolutionary_measurement'
+PROFILE = 'a104_bounded_phylogenetic_progress'
 # Bootstrap percent and bootstrap fraction are one statistic (s=k/n is a unit-scale representation of one tree
 # support statistic; it is not extra evidence beyond the percent route). A model-conditioned clade posterior is its
 # own kind: it does not assign a probability to the annotation and it is not averaged with bootstrap support.
@@ -44,7 +44,7 @@ def target_member(binding, target):
 
 
 def target_regions(member, target):
-    # Original v1 protein-input commissions used exact local original-input
+    # Original protein-input commissions used exact local original-input
     # intervals. Later requests also carry explicit lifted feature/product maps.
     return [region for part in member['parts'] for region in
             part.get('target_regions', part['regions'] if part['subject_ref'] == target else [])]
@@ -145,7 +145,7 @@ def placement(store, reference, analysis_name, split_index, known):
         key=canonical)
     configuration_digest = digest(configuration)
     panel = sorted([part for row in binding['members'] for part in inference_parts(row)], key=canonical)
-    return {**_base(body, reference, 'a104_placement_v1', 'phylogeny.measure_placement', regions),
+    return {**_base(body, reference, 'a104_placement', 'phylogeny.measure_placement', regions),
         'analysis': analysis_name, 'target_tip': target_tip, 'split_index': split_index,
         'target_side_tip_ids': sorted(side), 'clade_members': deepcopy(clade), 'native_split': native_split,
         'reference_panel_members': deepcopy(binding['members']),
@@ -225,7 +225,7 @@ def history_comparison(store, reference, family_name, organismal_name, tip_ids, 
     organism_reliability = reliability(organismal, {organism_members[taxon]['tip_id'] for taxon in taxa})
     value = min(gene_reliability, organism_reliability) if total and gene_reliability is not None \
         and organism_reliability is not None else None
-    return {**_base(body, reference, 'a104_history_comparison_v1', 'phylogeny.compare_histories', regions),
+    return {**_base(body, reference, 'a104_history_comparison', 'phylogeny.compare_histories', regions),
         'family_analysis': family_name, 'organismal_analysis': organismal_name,
         'selected_tip_ids': list(tip_ids), 'taxon_join': [{'gene_tip': row['tip_id'], 'taxon_id': row['taxon_id'],
             'organismal_tip': organism_members[row['taxon_id']]['tip_id']} for row in selected],
@@ -247,7 +247,7 @@ def _placement(store, reference, known):
     from gene_annotation_episode.episodic_workflow.episode_support.grading.evolutionary_history_evidence.native_publications import received_measurement
     require(reference in known, 'a104_native_placement_not_received')
     value = received_measurement(store, reference)
-    require(value is not None and value['body']['schema'] == 'a104_placement_v1', 'a104_measured_placement_required')
+    require(value is not None and value['body']['schema'] == 'a104_placement', 'a104_measured_placement_required')
     return value['body']
 
 
@@ -257,7 +257,7 @@ def clade_composition(store, reference, known):
                        if member['tip_id'] != placement['target_tip'] for part in member['parts']})
     body = {key: deepcopy(placement[key]) for key in ('version', 'target_ref', 'target_regions',
         'native_phylogeny_ref', 'native_request_ref', 'hpc_result_ref', 'pbs_job_id', 'result_sha256')}
-    return {**body, 'schema': 'a104_clade_composition_v1', 'producer_operation': 'phylogeny.clade_functions',
+    return {**body, 'schema': 'a104_clade_composition', 'producer_operation': 'phylogeny.clade_functions',
         'native_placement_ref': reference, 'clade_members': deepcopy(placement['clade_members']),
         'reference_correspondences': [row for row in placement['reference_correspondences'] if row['reference_ref'] in subjects],
         'required_reference_parts': {part['subject_ref']: {'regions': part['regions'], 'full_length': part['full_length']}
@@ -306,7 +306,7 @@ def compare_placements(store, references, known):
     value = min(row['raw_value'] for row in placements)*stability if stability is not None else None
     body = {key: deepcopy(first[key]) for key in ('version', 'target_ref', 'target_regions',
         'native_phylogeny_ref', 'native_request_ref', 'hpc_result_ref', 'pbs_job_id', 'result_sha256')}
-    return {**body, 'schema': 'a104_robustness_v1', 'producer_operation': 'phylogeny.compare_placements',
+    return {**body, 'schema': 'a104_robustness', 'producer_operation': 'phylogeny.compare_placements',
         'placement_refs': sorted(references), 'analysis_identities': sorted(identities),
         'common_reference_members': sorted(common), 'union_reference_members': sorted(union),
         'stability_numerator': len(common), 'stability_denominator': len(union), 'stability_fraction': stability,
@@ -318,8 +318,8 @@ def compare_placements(store, references, known):
 
 
 def recompute_measurement(store, body):
-    if body['schema'] == 'a104_clade_composition_v1':
+    if body['schema'] == 'a104_clade_composition':
         return clade_composition(store, body['native_placement_ref'], {body['native_placement_ref']})
-    if body['schema'] == 'a104_robustness_v1':
+    if body['schema'] == 'a104_robustness':
         return compare_placements(store, body['placement_refs'], set(body['placement_refs']))
     raise ValueError('a104_interpretation_metric_not_bound')

@@ -1,6 +1,6 @@
 """The return. Always returned: the Episode's credit (the system hands it in ``completion``) and the finding (the state
 of the handoff whose results are acquired). A parent selects the facts it wants: ``execution_handoff`` and
-``execution_handoffs`` (a handoff is an ``execution_handoff_v1`` record; ``execution_handoff`` is a list of zero or
+``execution_handoffs`` (a handoff is an ``execution_handoff`` record; ``execution_handoff`` is a list of zero or
 one handoff, one when exactly one physical execution is known), ``adapter_facts`` (the assigned adapter's own
 declared fact sources, by the adapter's names) and ``interpretation`` (the report value the model recorded with the
 ``report`` tool). The facts come only from the assigned adapter, the one the handoff names."""

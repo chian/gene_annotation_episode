@@ -445,7 +445,7 @@ def read_fasta_records(data: bytes, *, artifact: dict,
     if not rows:
         diagnostics.append(_diagnostic("phylogeny_empty_input", "/rows", artifact=artifact))
     errors = any(d["severity"] == "error" for d in diagnostics)
-    value = {"version": "native_fasta_record_observations_v1", "artifact": deepcopy(artifact),
+    value = {"version": "native_fasta_record_observations", "artifact": deepcopy(artifact),
         "encoding": encoding, "id_rule": id_rule, "observed_record_count": len(rows),
         "completeness": "partial" if errors else "complete", "rows": rows}
     return _result(value, diagnostics, usable=bool(rows))

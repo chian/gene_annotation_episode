@@ -1,8 +1,8 @@
 {
-  "version": "bvbrc_planning_examples_v1",
+  "version": "bvbrc_planning_examples",
   "interpretation": "Native numerical values are copied from retained responses; prepared v2 records, sheets, source refs, admission flags and report forms are expected fixtures only. No production parser or episode produced them.",
   "feature_sequence_expected_sheet": {
-    "version": "bvbrc_feature_sequence_sheet_v1",
+    "version": "bvbrc_feature_sequence_sheet",
     "selection": {
       "feature_ids": [
         "PATRIC.511145.12.NC_000913.CDS.822959.823720.rev",
@@ -398,7 +398,7 @@
     "issues": []
   },
   "feature_sequence_expected_components": {
-    "version": "bvbrc_feature_sequence_components_v1",
+    "version": "bvbrc_feature_sequence_components",
     "selected_feature_count": 2,
     "retained_feature_row_count": 2,
     "native_sequence_record_count": 2,
@@ -411,7 +411,7 @@
     "length_agreement_count": 4
   },
   "genome_page_expected_extraction": {
-    "version": "bvbrc_collection_rows_v1",
+    "version": "bvbrc_collection_rows",
     "collection": "genome",
     "native_sha256": "fce9196e9faf145393a2b96c28d145815d59285735002c4b7f4fda33b22b5660",
     "requested_fields": [
@@ -564,7 +564,7 @@
     "issues": []
   },
   "facet_expected_sheet": {
-    "version": "bvbrc_data_sheet_v1",
+    "version": "bvbrc_data_sheet",
     "collection": "genome_feature",
     "mode": "facet",
     "custody": {
@@ -573,9 +573,9 @@
       "requested_url": "https://www.bv-brc.org/api/genome_feature/?q=feature_id%3A%28%22PATRIC.511145.12.NC_000913.CDS.822959.823720.rev%22%20OR%20%22RefSeq.511145.12.NC_000913.CDS.822959.823720.rev%22%29&rows=0&start=0&facet=true&facet.field=annotation&facet.limit=2&facet.offset=0&facet.mincount=1&facet.missing=true&facet.sort=index",
       "effective_url": "https://www.bv-brc.org/api/genome_feature/?q=feature_id%3A%28%22PATRIC.511145.12.NC_000913.CDS.822959.823720.rev%22%20OR%20%22RefSeq.511145.12.NC_000913.CDS.822959.823720.rev%22%29&rows=0&start=0&facet=true&facet.field=annotation&facet.limit=2&facet.offset=0&facet.mincount=1&facet.missing=true&facet.sort=index",
       "media_type": "application/solr+json; charset=utf-8",
-      "native_profile": "solr_json_envelope_v1",
+      "native_profile": "solr_json_envelope",
       "prepared_sha256": "9365c9063aa6a4389fe016aea139bcdaecaff22a254591af03f4f09e96d69666",
-      "field_contract_version": "bvbrc_data_fields_2026_10_24_v1"
+      "field_contract_version": "bvbrc_data_fields_2026_10_24"
     },
     "transport": {
       "http_status": 200,
@@ -778,7 +778,7 @@
     "issues": []
   },
   "facet_expected_components": {
-    "version": "bvbrc_data_facet_components_v1",
+    "version": "bvbrc_data_facet_components",
     "denominator_policy": "same_response_exact_document_count",
     "population_key": "4d28de0336888d77b345a45cf8163da4885aaec3d2d0265c6f59be91324e3266",
     "fractions": [
@@ -806,7 +806,7 @@
     ]
   },
   "qualified_result_fixture": {
-    "version": "bvbrc_data_qualified_result_v1",
+    "version": "bvbrc_data_qualified_result",
     "service": "bvbrc_data",
     "binding": {
       "source_ref": "source_fixture_facet",
@@ -831,12 +831,12 @@
       "possession_basis": "admitted_return"
     },
     "grading": {
-      "version": "bvbrc_data_grading_v1",
+      "version": "bvbrc_data_grading",
       "prepared": {
-        "version": "bvbrc_data_prepared_v2",
+        "version": "bvbrc_data_prepared",
         "service": "bvbrc_data",
         "original_request": {
-          "version": "bvbrc_data_request_v2",
+          "version": "bvbrc_data_request",
           "collection": "genome_feature",
           "mode": "facet",
           "filters": [
@@ -860,7 +860,7 @@
         },
         "page_selector": null,
         "effective_request": {
-          "version": "bvbrc_data_effective_query_v2",
+          "version": "bvbrc_data_effective_query",
           "collection": "genome_feature",
           "mode": "facet",
           "filters": [
@@ -887,7 +887,7 @@
           }
         },
         "query_population": {
-          "version": "bvbrc_data_population_v1",
+          "version": "bvbrc_data_population",
           "base_url": "https://www.bv-brc.org/api",
           "collection": "genome_feature",
           "filters": [
@@ -901,8 +901,8 @@
             }
           ],
           "visibility": "public_unauthenticated",
-          "compiler_version": "bvbrc_solr_compiler_v1",
-          "field_contract_version": "bvbrc_data_fields_2026_10_24_v1",
+          "compiler_version": "bvbrc_solr_compiler",
+          "field_contract_version": "bvbrc_data_fields_2026_10_24",
           "population_key": "4d28de0336888d77b345a45cf8163da4885aaec3d2d0265c6f59be91324e3266"
         },
         "field_selection": {
@@ -915,7 +915,7 @@
           "defaulted_sort": [],
           "tie_breaker_added": null
         },
-        "request_profile": "solr_query_solr_json_v1",
+        "request_profile": "solr_query_solr_json",
         "native_request": {
           "method": "GET",
           "url": "https://www.bv-brc.org/api/genome_feature/?q=feature_id%3A%28%22PATRIC.511145.12.NC_000913.CDS.822959.823720.rev%22%20OR%20%22RefSeq.511145.12.NC_000913.CDS.822959.823720.rev%22%29&rows=0&start=0&facet=true&facet.field=annotation&facet.limit=2&facet.offset=0&facet.mincount=1&facet.missing=true&facet.sort=index",
@@ -979,7 +979,7 @@
         }
       },
       "selector": {
-        "version": "bvbrc_data_result_selector_v2",
+        "version": "bvbrc_data_result_selector",
         "page": null,
         "projection": {
           "family": "query_metadata"
@@ -988,10 +988,10 @@
         "supplied_metadata": []
       },
       "parse_result": {
-        "version": "bvbrc_data_parse_result_v1",
+        "version": "bvbrc_data_parse_result",
         "status": "complete",
         "sheet": {
-          "version": "bvbrc_data_sheet_v1",
+          "version": "bvbrc_data_sheet",
           "collection": "genome_feature",
           "mode": "facet",
           "custody": {
@@ -1000,9 +1000,9 @@
             "requested_url": "https://www.bv-brc.org/api/genome_feature/?q=feature_id%3A%28%22PATRIC.511145.12.NC_000913.CDS.822959.823720.rev%22%20OR%20%22RefSeq.511145.12.NC_000913.CDS.822959.823720.rev%22%29&rows=0&start=0&facet=true&facet.field=annotation&facet.limit=2&facet.offset=0&facet.mincount=1&facet.missing=true&facet.sort=index",
             "effective_url": "https://www.bv-brc.org/api/genome_feature/?q=feature_id%3A%28%22PATRIC.511145.12.NC_000913.CDS.822959.823720.rev%22%20OR%20%22RefSeq.511145.12.NC_000913.CDS.822959.823720.rev%22%29&rows=0&start=0&facet=true&facet.field=annotation&facet.limit=2&facet.offset=0&facet.mincount=1&facet.missing=true&facet.sort=index",
             "media_type": "application/solr+json; charset=utf-8",
-            "native_profile": "solr_json_envelope_v1",
+            "native_profile": "solr_json_envelope",
             "prepared_sha256": "9365c9063aa6a4389fe016aea139bcdaecaff22a254591af03f4f09e96d69666",
-            "field_contract_version": "bvbrc_data_fields_2026_10_24_v1"
+            "field_contract_version": "bvbrc_data_fields_2026_10_24"
           },
           "transport": {
             "http_status": 200,
@@ -1208,7 +1208,7 @@
         "retained_native_sha256": "dc1103ce8b6e1f45ac28a6b9a3d1ba0895f79d63b1c2c6aa31dce2e4d1175571"
       },
       "page_components": {
-        "version": "bvbrc_data_page_components_v1",
+        "version": "bvbrc_data_page_components",
         "native_row_count": 0,
         "valid_row_count": 0,
         "invalid_row_count": 0,
@@ -1216,7 +1216,7 @@
         "population_exactness": "exact"
       },
       "facet_components": {
-        "version": "bvbrc_data_facet_components_v1",
+        "version": "bvbrc_data_facet_components",
         "denominator_policy": "same_response_exact_document_count",
         "population_key": "4d28de0336888d77b345a45cf8163da4885aaec3d2d0265c6f59be91324e3266",
         "fractions": [
@@ -1252,7 +1252,7 @@
     "input_results": []
   },
   "molecular_expected_sheet": {
-    "version": "bvbrc_molecular_sheet_v1",
+    "version": "bvbrc_molecular_sheet",
     "selected_result_ids": [
       "00000125-8a72-4eea-aad0-d58d4fdb772c",
       "00000317-5d60-4e06-9c35-c42e53fd5ae3"
@@ -3350,7 +3350,7 @@
     }
   },
   "receiver_materialization_fixture": {
-    "version": "bvbrc_received_values_v1",
+    "version": "bvbrc_received_values",
     "admission_key": "fixture_admission",
     "form_field": "expression",
     "fact_source": "execution_bvbrc_expression_rows",

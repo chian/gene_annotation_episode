@@ -10,7 +10,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.structural_
 def publish_and_read(ctx, provider):
     """A native sheet the Episode publishes with its row of permitted use, then read back for credit."""
     store = ctx.store
-    body = {'schema': 'a102_probe_sheet_v1', 'target_ref': 'input_probe', 'features': [1, 2, 3]}
+    body = {'schema': 'a102_probe_sheet', 'target_ref': 'input_probe', 'features': [1, 2, 3]}
     artifact = store.artifact(json.dumps(body, sort_keys=True), 'application/json')
     source = store.put('source', {'provider': provider, 'accession': None, 'uri': None, 'artifact_ref': artifact,
                                   'text_ref': artifact, 'request_ref': None, 'version': VERSION, 'retrieved_at': None},

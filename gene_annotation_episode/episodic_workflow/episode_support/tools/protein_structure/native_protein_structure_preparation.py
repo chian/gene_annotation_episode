@@ -53,7 +53,7 @@ class ProteinWorkerFailure(TypedDict):
 
 
 class ProteinWorkerExecution(TypedDict):
-    version: Literal["protein_structure_worker_execution_v1"]
+    version: Literal["protein_structure_worker_execution"]
     outcome: Literal["returned", "failed"]
     returncode: int | None
     metadata: dict | None
@@ -64,7 +64,7 @@ class ProteinWorkerExecution(TypedDict):
 
 
 class PreparedProteinWorker(TypedDict):
-    version: Literal["protein_structure_prepared_worker_v1"]
+    version: Literal["protein_structure_prepared_worker"]
     plan_artifact_ref: ArtifactRef
     execution_receipt_artifact_ref: ArtifactRef
     worker_result_artifact_ref: ArtifactRef | None
@@ -392,7 +392,7 @@ def _qualify(store, diagnostics, execution, plan):
 def _validate_execution(store, execution, plan):
     _closed(execution, ProteinWorkerExecution.__annotations__)
     _json(execution)
-    _require(execution["version"] == "protein_structure_worker_execution_v1")
+    _require(execution["version"] == "protein_structure_worker_execution")
     _require(execution["outcome"] in ("returned", "failed"))
     if execution["outcome"] == "returned":
         _require(type(execution["returncode"]) is int and type(execution["metadata"]) is dict
@@ -430,7 +430,7 @@ def validate_prepared_protein_structure_worker(
     plan = validate_protein_structure_result_worker_plan(plan)
     _closed(prepared, PreparedProteinWorker.__annotations__)
     _json(prepared)
-    _require(prepared["version"] == "protein_structure_prepared_worker_v1")
+    _require(prepared["version"] == "protein_structure_prepared_worker")
     stored_plan = validate_protein_structure_result_worker_plan(_stored_json(store, prepared["plan_artifact_ref"]))
     _require(same(stored_plan, plan), "original_commission_mismatch")
     _inputs(store, stored_plan)
@@ -482,7 +482,7 @@ def _run(directory_fd, intent, policy, *, cancel_event):
             _live_handle(directory_fd, intent)
             native_lifecycle.resume_start(handle, cancel_event=cancel_event)
         result = native_lifecycle.wait_job(handle, cancel_event=cancel_event)
-        execution = {"version": "protein_structure_worker_execution_v1", "outcome": "returned",
+        execution = {"version": "protein_structure_worker_execution", "outcome": "returned",
             "returncode": result.returncode, "metadata": deepcopy(result.metadata), "failure": None}
     except AcquisitionError as error:
         if error.code in _UNFINISHED:
@@ -492,7 +492,7 @@ def _run(directory_fd, intent, policy, *, cancel_event):
             # of a terminal failure. Preserve the original handle for recovery.
             if not native_lifecycle.status(handle)["terminal"]:
                 raise
-        execution = {"version": "protein_structure_worker_execution_v1", "outcome": "failed",
+        execution = {"version": "protein_structure_worker_execution", "outcome": "failed",
             "returncode": None, "metadata": None, "failure": {"code": error.code, "phase": error.phase,
                 "diagnostic": deepcopy(error.diagnostic), "operational": deepcopy(error.operational)}}
     except (KeyboardInterrupt, asyncio.CancelledError):
@@ -527,7 +527,7 @@ def _finish(store, directory_fd, plan, intent, execution):
             diagnostics.append({"filename": filename, "artifact_ref": ref})
     result, qualification_issues = _qualify(store, {row["filename"]: row["artifact_ref"] for row in diagnostics}, execution, plan)
     issues.extend(qualification_issues)
-    prepared = {"version": "protein_structure_prepared_worker_v1",
+    prepared = {"version": "protein_structure_prepared_worker",
         "plan_artifact_ref": store.artifact(canonical(plan), "application/json"),
         "execution_receipt_artifact_ref": store.artifact(canonical(execution), "application/json"),
         "worker_result_artifact_ref": (next(row["artifact_ref"] for row in diagnostics if row["filename"] == "worker-result.json")

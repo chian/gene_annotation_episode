@@ -9,7 +9,7 @@ from __future__ import annotations
 from Bio.Seq import Seq
 
 
-VERSION = "explicit_sequence_view_v1"
+VERSION = "explicit_sequence_view"
 NUCLEOTIDE_SYMBOLS = frozenset("ACGTURYSWKMBDHVN")
 
 

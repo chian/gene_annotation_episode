@@ -16,9 +16,9 @@ store (``store``: ``ctx.store`` of the populating tool unit, or ``records`` for 
 * ``literature_reaction_received``, ``literature_reaction_semantic_received``, the delivery bindings and every read
   of ``runtime_*`` are deleted: that is custody and old-runner machinery;
 * the saved cells are rows of ``CELLS`` (``SheetCustody.publish_cells``); a sheet's two views (R9) are its cell
-  rows: ``literature_reaction_cells`` for a ``literature_reaction_record_v2`` sheet and
+  rows: ``literature_reaction_cells`` for a ``literature_reaction_record`` sheet and
   ``literature_reaction_semantic_cells`` (the same cells with their source-bound meanings, the comparison reduction
-  and the nominal limiting resources) for a ``literature_reaction_record_v3`` sheet;
+  and the nominal limiting resources) for a ``literature_reaction_semantic_record`` sheet;
 * the A110 ``literature_sheet_updates`` policy was ``None`` (no automatic main sheet, no dependent sheets), so a
   sheet's revision family is its provider and arguments and the latest sheet of a family is its current one
   (work table ``CURRENT``); an ``experiment_assessment`` revision must name the current head of its experiment and
@@ -55,7 +55,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.storag
 from gene_annotation_episode.episodic_workflow.episode_support.records.biochemical_feasibility_evidence.domain import (
     ContractError, canonical, identity, source_location_inputs, validate_schema)
 
-RECORD_VERSION = 'literature_reaction_record_v2'
+RECORD_VERSION = 'literature_reaction_record'
 OPERATIONS = TableDeclaration(name='biochemical_feasibility_literature_reaction_operations', columns=('sheet_ref',),
                               key=('sheet_ref',), record_refs=('sheet_ref',))
 CELLS = TableDeclaration(name='biochemical_feasibility_literature_reaction_cells',
@@ -349,8 +349,8 @@ class LiteratureReactionRepository(SheetCustody):
 
     def project_cells(self, sheet_refs, components=None):
         """The selected cells of saved sheets in the view the sheet supports (R9): the numerical cells of a
-        ``literature_reaction_record_v2`` sheet (``literature_reaction_cells``), or the numerical cells with their
-        source-bound meanings of a ``literature_reaction_record_v3`` sheet (``literature_reaction_semantic_cells``).
+        ``literature_reaction_record`` sheet (``literature_reaction_cells``), or the numerical cells with their
+        source-bound meanings of a ``literature_reaction_semantic_record`` sheet (``literature_reaction_semantic_cells``).
         The cell formulas stay in the sheet; each row names its fixed formula code."""
         components = self.components if components is None else components
         if (not isinstance(components, (list, tuple))

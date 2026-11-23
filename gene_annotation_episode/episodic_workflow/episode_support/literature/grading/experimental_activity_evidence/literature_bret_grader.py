@@ -36,7 +36,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     BRET_CRITERIA, NM_PER_UNIT, RATIO_PER_SIGNAL_UNIT)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_bret_grade_v1'
+VERSION = 'a105_bret_grade'
 CRITERIA = tuple(criterion['id'] for criterion in BRET_CRITERIA)
 INTERACTION = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact interaction_detected
 CONSTANTS = ('kd', 'ki')                                  # the order in which the binding constant of a record is taken

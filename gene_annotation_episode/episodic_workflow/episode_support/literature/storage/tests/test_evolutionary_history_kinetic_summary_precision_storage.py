@@ -5,7 +5,7 @@ from copy import deepcopy
 import json
 from pathlib import Path
 
-from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.evolutionary_history_evidence.literature_kinetic_summary_precision_storage import COMPONENTS, POPULATION, REQUESTED, SUMMARY_PRECISION_REQUEST_SCHEMA_V1
+from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.evolutionary_history_evidence.literature_kinetic_summary_precision_storage import COMPONENTS, POPULATION, REQUESTED, SUMMARY_PRECISION_REQUEST_SCHEMA
 
 from .evolutionary_history_world import call, read, run, source, world  # noqa: F401
 
@@ -33,7 +33,7 @@ def test_a_summary_precision_sheet_is_saved_read_back_and_its_cells_projected(wo
     requested = list(COMPONENTS)[:3]
     arguments = {'version': POPULATION, 'selection': bound(deepcopy(packet['selection']), reference),
                  'requested_cells': requested,
-                 'return_context': {name: [] for name in SUMMARY_PRECISION_REQUEST_SCHEMA_V1['properties']['return_context']['properties']}}
+                 'return_context': {name: [] for name in SUMMARY_PRECISION_REQUEST_SCHEMA['properties']['return_context']['properties']}}
     populate = call(REPOSITORY, 'populate', arguments, scope=world['scope'], assignment={REQUESTED: requested})
     populate['arguments']['role'] = 'reader'
     populated, held, saved, cells = run(world, 'summary_precision', [populate,

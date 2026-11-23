@@ -26,7 +26,7 @@ returns     every case the criterion can return, as (status, reason_code, when).
             as 'never' cannot occur for this criterion.
 """
 
-VERSION = 'a105_coupling_uncoupling_byproduct_criteria_v1'
+VERSION = 'a105_coupling_uncoupling_byproduct_criteria'
 PERCENT_PER_FRACTION = 100.0  # FIXED_BY_DEFINITION: a percent is a hundredth.
 
 _fact_returns = (

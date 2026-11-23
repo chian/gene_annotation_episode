@@ -41,7 +41,7 @@ CONDITIONS = ('source_role_assignments', 'first_order_covariance_propagation',
 class LiteratureAssayRepository(LiteratureRateRepository):
     provider = PROVIDER
     components = COMPONENTS
-    record_version = 'literature_assay_population_record_v2'
+    record_version = 'literature_assay_population_record'
     readable_record_versions = (record_version,)
     received_table = 'literature_assay_received'
     binding_fields = tuple(BINDINGS)

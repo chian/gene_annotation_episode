@@ -15,7 +15,7 @@ import math
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.evolutionary_history_evidence.literature_experimental_contracts import ExperimentalContractError
 
 
-VERSION = "a106_source_restoration_v1"
+VERSION = "a106_source_restoration"
 PRIMITIVE_ORDER = ("W", "K", "R", "A_reference", "A_restored", "B_pert", "B_rest")
 COMPONENTS = (
     "reference_endpoint", "perturbed_endpoint", "restored_endpoint",

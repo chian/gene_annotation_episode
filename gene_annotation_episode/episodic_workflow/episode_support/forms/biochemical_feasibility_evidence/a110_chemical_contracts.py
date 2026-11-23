@@ -1,5 +1,5 @@
 """A110 declared chemical panel formats, separate from expression evidence."""
-VERSION = 'a110_chemical_accounting_v2'
+VERSION = 'a110_chemical_accounting'
 
 from gene_annotation_episode.episodic_workflow.episode_support.forms.biochemical_feasibility_evidence.component_axis_native_contracts import obj, text, nullable, array, identities
 
@@ -25,7 +25,7 @@ def source_schema():
     pool = obj({'id': text(), 'members': array(obj({'species_id': text(),
         'carrier_units': text(), 'source_locator': text()}), minimum=1),
         'members_complete': {'type': 'boolean'}, 'source_locator': text()})
-    return obj({'version': {'const': 'a110_chemical_panel_v1'},
+    return obj({'version': {'const': 'a110_chemical_panel'},
         'dataset_id': nullable(text()), 'origin': {'enum': ['reported', 'retained_extraction', 'synthetic']},
         'species': array(species, minimum=1), 'reactions': array(reaction, minimum=1),
         'pathway': array(obj({'reaction_id': text(), 'multiplier': text(), 'source_locator': text()})),

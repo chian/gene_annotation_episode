@@ -21,8 +21,8 @@ from .domain import canonical
 
 
 TOOL = "public.ucsc.request"
-VERSION = "ucsc_acquisition_result_v1"
-VALUE_VERSION = "ucsc_acquisition_value_v1"
+VERSION = "ucsc_acquisition_result"
+VALUE_VERSION = "ucsc_acquisition_value"
 ORIGIN = "https://api.genome.ucsc.edu"
 MAX_RESPONSE_BYTES = 8 * 1024 * 1024
 MAX_ITEMS_OUTPUT = 1_000_000
@@ -979,10 +979,10 @@ def ucsc_receipt(value, *, source_ref):
 
 
 def _failure_witness(snapshot, failure_code):
-    schema = _object({"version": {"const": "ucsc_acquisition_failure_witness_v1"},
+    schema = _object({"version": {"const": "ucsc_acquisition_failure_witness"},
         "observed_snapshot_service": {"type": "string"}, "observed_snapshot_url": {"type": "string"},
         "failure_code": {"enum": list(UCSC_FAILURE_CODES)}})
-    return _validated(dict(version="ucsc_acquisition_failure_witness_v1",
+    return _validated(dict(version="ucsc_acquisition_failure_witness",
         observed_snapshot_service=snapshot.service, observed_snapshot_url=snapshot.url,
         failure_code=failure_code), schema)
 

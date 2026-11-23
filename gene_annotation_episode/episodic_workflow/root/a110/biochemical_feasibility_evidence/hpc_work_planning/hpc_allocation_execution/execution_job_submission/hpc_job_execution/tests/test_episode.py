@@ -70,7 +70,7 @@ def test_the_return_form_declares_credit_and_finding_and_the_old_fact_sources_as
 
 
 def _assignment(**changes):
-    value = {'version': 'practical_assignment_v1', 'assignment_id': 'a1', 'resource_id': 'aurora',
+    value = {'version': 'practical_assignment', 'assignment_id': 'a1', 'resource_id': 'aurora',
              'resource_kind': 'hpc', 'workspace': '/work/space', 'endpoint': 'usable_handoff',
              'requested_job': {'argv': ['/bin/true'], 'environment': {}},
              'progress_requirements': [
@@ -117,7 +117,7 @@ def _receipt(assignment, *, cwd):
     after = {**before, 'cwd': cwd, 'revision': before['revision'] + 1}
     outcome = {'facts': {}}
     return validate_receipt({
-        'version': 'practical_action_receipt_v1', 'run_id': 'run', 'episode_id': 'ep',
+        'version': 'practical_action_receipt', 'run_id': 'run', 'episode_id': 'ep',
         'assignment_sha256': digest(assignment),
         'operation_key': 'op_1', 'tool_name': 'exec_command', 'arguments': {'cmd': 'cd run', 'workdir': cwd,
                                                                             'env': {}},

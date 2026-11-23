@@ -170,7 +170,7 @@ def _cell(value, field, unit, population, ids, *, prefix='xmfa_', fraction=False
     except ValueError as error:
         raise ValueError('xmfa_calculation_cell_invalid') from error
     require(value['unit'] == unit and value['population_id'] == population
-            and value['method_id'] == prefix + field + '_v1'
+            and value['method_id'] == prefix + field
             and value['origin'] == 'calculated' and value['uncertainty'] is None,
             'calculation_cell_meaning_conflict')
     require(set(value['requirement_ids']) <= ids, 'calculation_requirement_unknown')
@@ -310,7 +310,7 @@ PAIR_COUNTS = ('identical_canonical', 'substitutions', 'a_only_gap', 'b_only_gap
 def validate_xmfa_alignment_components(value: dict) -> dict:
     ids = _envelope(value, ('schema_version', 'document_id', 'status', 'selection', 'parameters',
                            'blocks', 'requirements', 'diagnostics'))
-    require(value['schema_version'] == 'mauve_xmfa_alignment_components_v1', 'calculation_version_invalid')
+    require(value['schema_version'] == 'mauve_xmfa_alignment_components', 'calculation_version_invalid')
     selection = validate_xmfa_selection(value['selection'])
     require(selection['document_id'] == value['document_id'], 'selection_document_conflict')
     p, members = selection['population_id'], selection['member_numbers']
@@ -433,7 +433,7 @@ def validate_xmfa_alignment_components(value: dict) -> dict:
 def validate_xmfa_coverage_components(value: dict) -> dict:
     ids = _envelope(value, ('schema_version', 'document_id', 'status', 'selection', 'parameters',
                            'members', 'requirements', 'diagnostics'))
-    require(value['schema_version'] == 'mauve_xmfa_coverage_components_v1', 'calculation_version_invalid')
+    require(value['schema_version'] == 'mauve_xmfa_coverage_components', 'calculation_version_invalid')
     selection = validate_xmfa_selection(value['selection'])
     require(selection['document_id'] == value['document_id'], 'selection_document_conflict')
     shape(value['parameters'], ('basis',))
@@ -521,7 +521,7 @@ def _cell_structure(value, field, unit, population, ids, *, prefix='xmfa_', frac
     except ValueError as error:
         raise ValueError('xmfa_calculation_cell_invalid') from error
     require(value['unit'] == unit and value['population_id'] == population
-            and value['method_id'] == prefix + field + '_v1'
+            and value['method_id'] == prefix + field
             and value['origin'] == 'calculated' and value['uncertainty'] is None,
             'calculation_cell_meaning_conflict')
     require(set(value['requirement_ids']) <= ids, 'calculation_requirement_unknown')
@@ -553,7 +553,7 @@ def validate_xmfa_alignment_component_structure(value: dict) -> dict:
     """Validate saved site/pair structure; producer validation owns the arithmetic."""
     ids = _envelope(value, ('schema_version', 'document_id', 'status', 'selection', 'parameters',
                            'blocks', 'requirements', 'diagnostics'))
-    require(value['schema_version'] == 'mauve_xmfa_alignment_components_v1', 'calculation_version_invalid')
+    require(value['schema_version'] == 'mauve_xmfa_alignment_components', 'calculation_version_invalid')
     selection = validate_xmfa_selection(value['selection'])
     require(selection['document_id'] == value['document_id'], 'selection_document_conflict')
     p, members = selection['population_id'], selection['member_numbers']
@@ -668,7 +668,7 @@ def validate_xmfa_coverage_component_structure(value: dict) -> dict:
     """Validate saved coverage relationships without reconstructing scientific totals."""
     ids = _envelope(value, ('schema_version', 'document_id', 'status', 'selection', 'parameters',
                            'members', 'requirements', 'diagnostics'))
-    require(value['schema_version'] == 'mauve_xmfa_coverage_components_v1', 'calculation_version_invalid')
+    require(value['schema_version'] == 'mauve_xmfa_coverage_components', 'calculation_version_invalid')
     selection = validate_xmfa_selection(value['selection'])
     require(selection['document_id'] == value['document_id'], 'selection_document_conflict')
     shape(value['parameters'], ('basis',))

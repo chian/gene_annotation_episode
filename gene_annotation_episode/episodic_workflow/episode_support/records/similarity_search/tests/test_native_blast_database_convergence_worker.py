@@ -38,7 +38,7 @@ def request_from_packet(tmp_path, **options):
     bundle = packet["bundle"]
     raw = (directory / "bundle.json").read_bytes()
     digest = hashlib.sha256(raw).hexdigest()
-    request = dict(version="native_blast_database_result_worker_request_v1", calculation_id="0" * 64,
+    request = dict(version="native_blast_database_result_worker_request", calculation_id="0" * 64,
         bundle=bundle, bundle_artifact_ref="artifact_" + digest,
         bundle_capture=dict(path=str(directory / "bundle.json"), sha256=digest, size_bytes=len(raw)),
         authenticated_attempt=packet["attempt_identity"],
@@ -99,7 +99,7 @@ def test_multiple_queries_never_call_extractor_and_omit_artifact(tmp_path, monke
     assert convergence(request) == []
 
 
-def test_v2_recalculation_copies_exact_extraction_without_interpretation(tmp_path, monkeypatch):
+def test_recalculation_copies_exact_extraction_without_interpretation(tmp_path, monkeypatch):
     request = request_from_packet(tmp_path, raw=report(suffix=MARKER + b"\n" + MARKER + b"\n"))
     first = run_request(tmp_path, request)
     assert first["status"] != "failed", load(request, "diagnostics.json")
@@ -137,7 +137,7 @@ def test_reuse_changed_native_artifact_fails_without_reinterpreting(tmp_path, mo
         elif mutation == "wrong_filename":
             entry["relative_path"] = "collection.json"
         else:
-            entry["schema"] = "blast_report_collection_v1"
+            entry["schema"] = "blast_report_collection"
         (copied / "worker-manifest.json").write_bytes(worker._json_bytes(altered))
     new = reuse_request(changed, first)
     no_interpretation(monkeypatch)

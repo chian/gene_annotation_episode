@@ -167,7 +167,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_assay_grading import INPUT_VERSION, ROLES, grade_assay
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_alphascreen_converted_v1'
+VERSION = 'a105_alphascreen_converted'
 STATEMENTS = {'detected': 'interaction_detected', 'not_detected': 'interaction_not_detected', None: 'interaction_not_stated'}
 BINDING_CONSTANTS = ('kd', 'ki')
 CRITERIA_MAP = {'binding_controls': ('specificity_control', 'capture_artifacts', 'avidity', 'interference_counter_screen', 'light_protection'), 'binding_regime': ('partner_depletion', 'hook_effect', 'concentration_series', 'equilibrium', 'direct_vs_competition'), 'binding_parameter_definition': ('fit_model',), 'calibration_applicability': ('signal_window', 'assay_quality', 'detector_range'), 'sampling_basis': ('replicates',)}

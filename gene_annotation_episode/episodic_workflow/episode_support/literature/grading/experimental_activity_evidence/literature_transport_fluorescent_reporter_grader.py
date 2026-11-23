@@ -31,7 +31,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_binding_reader import _SCALES
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_transport_fluorescent_reporter_grade_v1'
+VERSION = 'a105_transport_fluorescent_reporter_grade'
 CRITERIA = tuple(criterion['id'] for criterion in TRANSPORT_FLUORESCENT_REPORTER_CRITERIA)
 TRANSPORT = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact transport_detected_above_control
 

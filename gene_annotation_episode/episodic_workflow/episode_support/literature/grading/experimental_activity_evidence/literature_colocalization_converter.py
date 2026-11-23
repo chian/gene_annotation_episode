@@ -81,7 +81,7 @@ from math import log, sqrt
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_assay_grading import INPUT_VERSION, ROLES, grade_assay
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import SUPPORTS, apply_support
 
-VERSION = 'a105_colocalization_converted_v1'
+VERSION = 'a105_colocalization_converted'
 CRITERIA_MAP = {'binding_controls': ('specificity_control',), 'binding_regime': ('directness',), 'binding_parameter_definition': ('colocalization_observed', 'colocalization_readout'), 'calibration_applicability': ('expression_validity',), 'sampling_basis': ('objects_counted', 'replicates')}
 ENRICHMENT_FULL_AGREEMENT = 3.0  # EXPERT_REVIEW, confirmed by the owner 2026-11-22: smallest enrichment (signal at the partner's site over the signal elsewhere) taken as a clear recruitment; a focus or a droplet that stands out about threefold is visible by eye. From memory, not verified.
 ENRICHMENT_ZERO_AGREEMENT = 1.0  # EXPERT_REVIEW, confirmed by the owner 2026-11-22: enrichment at or below which the site is no brighter than its surroundings (a ratio of 1 is no enrichment): no recruitment; in between the degree rises linearly in the LOG of the ratio (a quotient of two intensities, whose error is multiplicative; the same scale as the PLA fold).

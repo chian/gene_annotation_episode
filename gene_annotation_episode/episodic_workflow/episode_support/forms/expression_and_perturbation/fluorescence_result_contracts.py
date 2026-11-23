@@ -10,12 +10,12 @@ import re
 from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation import fluorescence_event_contracts as core
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.fluorescence_execution_common import canonical, closed, require, same, unique, validate_failure
 from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.native_fluorescence_contracts import validate_fluorescence_job, validate_fluorescence_native_capture, validate_fluorescence_run_plan
-SELECTOR_VERSION = 'fluorescence_result_selector_v1'
-PLAN_VERSION = 'fluorescence_worker_plan_v1'
-RESULT_VERSION = 'fluorescence_worker_result_v1'
-CONTEXT_SCHEMA = 'fluorescence_event_context_view_v1'
+SELECTOR_VERSION = 'fluorescence_result_selector'
+PLAN_VERSION = 'fluorescence_worker_plan'
+RESULT_VERSION = 'fluorescence_worker_result'
+CONTEXT_SCHEMA = 'fluorescence_event_context_view'
 CONTEXT_FIELDS = ('sources', 'samples', 'channels', 'domains', 'populations', 'gates', 'control_pairs', 'native_reports')
-OUTPUTS = (('sheet', 'sheet.json', core.SHEET_SCHEMA), ('calculations', 'calculations.json', core.COMPONENTS_SCHEMA), ('projection', 'projection.json', core.VIEW_SCHEMA), ('context', 'context.json', CONTEXT_SCHEMA), ('diagnostics', 'diagnostics.json', 'fluorescence_execution_failures_v1'))
+OUTPUTS = (('sheet', 'sheet.json', core.SHEET_SCHEMA), ('calculations', 'calculations.json', core.COMPONENTS_SCHEMA), ('projection', 'projection.json', core.VIEW_SCHEMA), ('context', 'context.json', CONTEXT_SCHEMA), ('diagnostics', 'diagnostics.json', 'fluorescence_execution_failures'))
 MODES = ('native_result', 'saved_sheet_recalculation')
 
 def validate_file(value, *, saved=False):

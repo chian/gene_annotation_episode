@@ -1,8 +1,4 @@
-"""Synthetic prospective input semantics and authentic pre-change v1 custody.
-
-The retained v1 stores were produced by real selected writers before the change;
-tests never relabel a prospective result as historical output.
-"""
+"""Synthetic prospective input semantics for missing transport and binding inputs."""
 import pytest
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import ContractError, obj, validate_schema
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence import literature_transport_calculations as transport
@@ -44,7 +40,7 @@ def test_distinct_missing_transport_inputs(field, key, reason, component):
 
 
 @pytest.mark.parametrize('kind', ['transport', 'binding'])
-def test_new_selected_writer_publishes_v2_and_new_typed_missing_labels(tmp_path, kind):
+def test_selected_writer_publishes_typed_missing_labels(tmp_path, kind):
     if kind == 'transport':
         store, context, args, _ = transport_fixture(tmp_path, km=False)
         cls, schema = (LiteratureTransportRepository, transport_response_cells_schema)
@@ -53,18 +49,17 @@ def test_new_selected_writer_publishes_v2_and_new_typed_missing_labels(tmp_path,
         cls, schema = (LiteratureBindingModelRepository, binding_model_cells_schema)
     with store:
         repo = cls(store, context.run_id)
-        outcome = repo.populate(context, args, 'new-v2-selected')
+        outcome = repo.populate(context, args, 'selected')
         ref = outcome['result']['sheet_ref']
         saved = repo.read(ref)
         assert saved['version'] == repo.record_version
-        assert saved['version'].endswith('_v2')
         rows = repo.project_cells([ref], permitted_record_refs=[ref])
         validate_schema(rows, schema())
         missing = [row for row in rows if row['unavailable_reason']]
         assert missing and all((row['unavailable_reason'].endswith('_not_supplied') for row in missing))
         if kind == 'binding':
             assert all((row['model_kind'] == 'not_supplied' for row in rows))
-        assert repo.populate(context, args, 'new-v2-selected') == outcome
+        assert repo.populate(context, args, 'selected') == outcome
         assert not store.list('observation')
 
 

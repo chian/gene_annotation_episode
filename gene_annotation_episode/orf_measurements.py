@@ -15,9 +15,9 @@ from .sequence_mapping import map_interval, reverse_path, slice_path, validate_m
 from .sequence_translation_grader import inspect_frozen_codon, inspect_frozen_genetic_code
 
 
-NATIVE_SCHEMA = "biomni_orf_native_record_v1"
-SHEET_SCHEMA = "orf_measurement_sheet_v1"
-COMPONENT_SCHEMA = "orf_measurement_components_v1"
+NATIVE_SCHEMA = "biomni_orf_native_record"
+SHEET_SCHEMA = "orf_measurement_sheet"
+COMPONENT_SCHEMA = "orf_measurement_components"
 _FIELDS = ("sequence", "aa_sequence", "start", "end", "strand", "frame")
 _DNA = frozenset("ACGTRYSWKMBDHVN")
 _STOPS = frozenset(("TAA", "TAG", "TGA"))

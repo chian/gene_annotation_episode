@@ -28,8 +28,8 @@ import json
 import re
 
 
-NATIVE_SCHEMA = "hmmalign_native_v1"
-SHEET_SCHEMA = "hmmalign_sheet_v1"
+NATIVE_SCHEMA = "hmmalign_native"
+SHEET_SCHEMA = "hmmalign_sheet"
 _GAPS = "-._"
 _SEQUENCE = re.compile(r"[A-Za-z.*_~\-]+")
 _ALPHABETS = {"amino": "ACDEFGHIKLMNPQRSTVWY-BJZOUX*~",

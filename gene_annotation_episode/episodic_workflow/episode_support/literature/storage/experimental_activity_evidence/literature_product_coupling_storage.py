@@ -18,12 +18,12 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.storag
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_product_coupling_inputs import CONTEXT_FIELDS, QUANTITY_MEANINGS, RELATIONSHIPS, NU_STATUSES, ORIGINS, product_coupling_population_schema, product_coupling_extraction_schema, read_product_coupling_inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence.literature_product_coupling_calculations import COMPONENTS, FORMULAS, QUALIFICATIONS, product_coupling_cell_schema, product_coupling_sheet_schema, populate_product_coupling
 PROVIDER = 'literature.a105.product_coupling'
-VERSION = 'literature_product_coupling_record_v1'
+VERSION = 'literature_product_coupling_record'
 NAMESPACE = 'literature_product_coupling_cells'
 REQUESTED = 'requested_product_coupling_components'
 VIEW = 'product_coupling_components'
 SCOPE = 'source_product_coupling'
-PROJECTION_VERSION = 'product_coupling_projection_v2'
+PROJECTION_VERSION = 'product_coupling_projection'
 MODEL_COMPONENTS = frozenset(('productive_fraction', 'calculated_coupling_percent', 'displayed_coupling_difference_pp', 'productive_fraction_variance', 'productive_fraction_standard_uncertainty'))
 UNCERTAINTY_COMPONENTS = frozenset(('product_per_cofactor_variance', 'productive_fraction_variance', 'productive_fraction_standard_uncertainty'))
 
@@ -62,7 +62,7 @@ _SETTING = '(?:pH\\s*' + _SETTING_NUMBER + '|(?:at\\s*|temperature\\s*)?' + _SET
 _CONDITION = re.compile('\\s*' + _SETTING + '(?:\\s*(?:at|and|,|;)\\s*' + _SETTING + ')*\\s*[.]?\\s*', re.I)
 _STATISTICAL_PREFIX = re.compile('\\b(?:SD|SEM|SE|mean|CV|variance|uncertainty|CI|activity|rate|turnover|coupling)\\b', re.I)
 
-def _meaning_v1(witness, locations, *, unit=False, condition=False):
+def _meaning(witness, locations, *, unit=False, condition=False):
     """Exact markerless saved-display policy from the immutable218pin001."""
     if witness is None:
         return None
@@ -137,7 +137,7 @@ def _meaning(witness, locations, *, unit=False, condition=False):
 
 def _projection_policy(saved):
     if 'projection_version' not in saved:
-        return _meaning_v1
+        return _meaning
     if saved['projection_version'] != PROJECTION_VERSION:
         raise ContractError('product_coupling_saved_projection_version_unsupported')
     return _meaning

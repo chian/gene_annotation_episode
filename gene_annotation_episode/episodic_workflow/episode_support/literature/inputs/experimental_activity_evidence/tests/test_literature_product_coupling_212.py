@@ -68,7 +68,7 @@ class Source:
 
     def covariance(self, args, matrix=((0.05, 0.05), (0.05, 0.1)), **changes):
         data = read_product_coupling_inputs(args, read_source=self.read)
-        record = {'version': 'a105_product_coupling_covariance_v1', 'order': ['product', 'cofactor'], 'measurement_keys': [data['quantities'][r]['number']['measurement_key'] for r in ('product', 'cofactor')], 'units': ['per_min', 'per_min'], 'basis': 'joint_covariance_of_selected_rate_estimates', 'variance_status': 'estimated', 'origin': 'synthetic', 'covariance': [list(row) for row in matrix]}
+        record = {'version': 'a105_product_coupling_covariance', 'order': ['product', 'cofactor'], 'measurement_keys': [data['quantities'][r]['number']['measurement_key'] for r in ('product', 'cofactor')], 'units': ['per_min', 'per_min'], 'basis': 'joint_covariance_of_selected_rate_estimates', 'variance_status': 'estimated', 'origin': 'synthetic', 'covariance': [list(row) for row in matrix]}
         record.update(changes)
         content = json.dumps(record).encode()
         reference = identity('source', {'covariance': record})

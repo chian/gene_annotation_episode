@@ -17,7 +17,7 @@ def obj(properties, required=None):
 TEXT = {'type': 'string', 'minLength': 1}
 SHA256 = {'type': 'string', 'pattern': '^[0-9a-f]{64}$'}
 TARGET_SCHEMA = obj({
-    'version': {'type': 'string', 'const': 'execution_target_v1'},
+    'version': {'type': 'string', 'const': 'execution_target'},
     'handle': TEXT, 'run_id': TEXT, 'resource_id': TEXT,
     'resource_kind': {'type': 'string', 'enum': ['local', 'hpc']},
     'execution_id': TEXT, 'request_sha256': SHA256, 'origin_episode_id': TEXT,

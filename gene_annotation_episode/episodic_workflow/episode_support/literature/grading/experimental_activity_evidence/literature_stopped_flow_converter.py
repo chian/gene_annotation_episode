@@ -142,7 +142,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_row_contract import SECONDS_PER_MINUTE
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_stopped_flow_converted_v1'
+VERSION = 'a105_stopped_flow_converted'
 CRITERIA_MAP = {'background_alternatives': ('spontaneous_reaction_control', 'enzyme_only_signal'), 'attribution_supported': ('phase_assignment', 'product_identity'),
                 'rate_regime': ('dead_time_coverage', 'enzyme_excess'), 'kinetic_model': ('substrate_range',), 'normalization_basis': ('active_enzyme_amount', 'burst_amplitude'),
                 'sampling_basis': ('shots_averaged', 'replicates'), 'assertion_relevance': ('native_reaction',), 'condition_scope': ('purified_enzyme',)}

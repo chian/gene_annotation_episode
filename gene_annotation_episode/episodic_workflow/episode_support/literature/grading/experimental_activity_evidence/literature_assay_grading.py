@@ -10,8 +10,8 @@ from scipy.special import log_ndtr
 from scipy.stats import t as student_t
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import obj, validate_schema
 from gene_annotation_episode.domain import ContractError
-INPUT_VERSION = 'a105_assay_grading_inputs_v1'
-VERSION = 'a105_assay_grading_sheet_v1'
+INPUT_VERSION = 'a105_assay_grading_inputs'
+VERSION = 'a105_assay_grading_sheet'
 EVALUATION_SCOPE = 'assay_type_experimental_evidence'
 ASSAY_TYPES = ('activity_rate', 'endpoint_conversion', 'product_distribution', 'reaction_coupling', 'ligand_binding', 'transport_response')
 ASSAY_TYPE_LABELS = {'activity_rate': 'Enzyme activity and rate comparisons', 'endpoint_conversion': 'Reaction progress and endpoint conversion', 'product_distribution': 'Product distribution and equilibrium', 'reaction_coupling': 'Reaction coupling and stoichiometric balance', 'ligand_binding': 'Ligand binding and binding discrimination', 'transport_response': 'Transport and substrate-response comparisons'}

@@ -27,7 +27,7 @@ CHILDREN = {'launch_api': 'gene_context_evidence/resource_work_submission/api_re
 SELECTION = {'resource_id': 'ncbi_blast', 'kind': 'api',
              'allocation': {'cpu': 1, 'memory_bytes': None, 'scratch_bytes': None},
              'capability_binding_ref': 'binding_1'}
-ASSIGNMENT = {'version': 'resource_launch_assignment_v1', 'job_request': {'search': 'blastp'},
+ASSIGNMENT = {'version': 'resource_launch_assignment', 'job_request': {'search': 'blastp'},
               'immutable_input_versions': [{'reference': 'inp_1', 'version': None, 'content_sha256': None}],
               'constraints': {}, 'software_knowledge_refs': [], 'resource_knowledge_refs': [],
               'scope': {'subject_refs': ['inp_1']}, 'scope_refs': ['inp_1'], 'input_refs': ['inp_1'],

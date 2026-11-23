@@ -17,8 +17,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.jobs.evolutionary
 from gene_annotation_episode.episodic_workflow.episode_support.forms.sequence_masking.evolutionary_history_evidence.sequence_masking_contracts import sequence_masking_molecule, validate_sequence_masking_record as core
 from gene_annotation_episode.episodic_workflow.episode_support.readers.sequence_masking.evolutionary_history_evidence.sequence_masking_result_views import failure, unique_failures
 PREFIX = 'native_blast_masking_'
-PLAN_VERSION = PREFIX + 'result_worker_plan_v1'
-MANIFEST_VERSION = PREFIX + 'result_worker_manifest_v1'
+PLAN_VERSION = PREFIX + 'result_worker_plan'
+MANIFEST_VERSION = PREFIX + 'result_worker_manifest'
 OUTPUT_FILES = {'sheet': 'sheet.json', 'calculations': 'calculations.json', 'statistics': 'statistics.json', 'projection': 'projection.json', 'recalculations': 'recalculations.json'}
 
 def _error(code):

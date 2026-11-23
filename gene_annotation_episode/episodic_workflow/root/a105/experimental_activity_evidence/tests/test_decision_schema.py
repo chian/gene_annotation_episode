@@ -82,9 +82,9 @@ def real_literature_answer(proposed, scope):
         'arguments': {
             'assignment': {
                 'literature_task': {'credit_unit': 1.0, 'evidence_axis': 'A105', 'kind': 'verified_source_leads',
-                                    'version': 'literature_local_task_v1', 'yield_settings': None},
+                                    'version': 'literature_local_task', 'yield_settings': None},
                 'proposed_annotation_ref': proposed, 'question_context_refs': [proposed],
-                'version': 'literature_assignment_v1'},
+                'version': 'literature_assignment'},
             'objective': 'Investigate whether experiments directly establish binding between the supplied Caulobacter '
                          'PopZ and ParB proteins. Verify the assayed constructs against the supplied sequences, '
                          'distinguish direct binding from localization or genetic effects, and grade each applicable '

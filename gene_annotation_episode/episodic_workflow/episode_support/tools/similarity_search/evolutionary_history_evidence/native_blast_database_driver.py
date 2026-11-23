@@ -516,7 +516,7 @@ def run_native_blast_database_plan(plan_path):
     # cannot replace this record or interpret an unsealed owner as permission.
     _atomic_new(owner, plan)
     q = job["query"]
-    bundle = {"version": "native_blast_database_bundle_v1", "identity": envelope["identity"], "plan": plan,
+    bundle = {"version": "native_blast_database_bundle", "identity": envelope["identity"], "plan": plan,
         "requested_job": plan["requested_job"], "program": job["program"], "mode": "database",
         "software": {"selected": job["software"], "observed_sha256": None, "version_source": None},
         "realized_argv": compiled["argv"], "environment": contracts._effective_environment(plan),

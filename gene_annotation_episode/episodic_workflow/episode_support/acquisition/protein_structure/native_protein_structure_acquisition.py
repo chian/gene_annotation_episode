@@ -35,7 +35,7 @@ class CapturedManifestFile(TypedDict):
 
 
 class ProteinStructureCapture(TypedDict):
-    version: Literal["native_protein_structure_capture_v1"]
+    version: Literal["native_protein_structure_capture"]
     original_plan: NativeProteinRunPlan | None
     bundle_file: FileIdentity | None
     bundle_validated: bool
@@ -44,8 +44,8 @@ class ProteinStructureCapture(TypedDict):
     capture_complete: bool
 
 
-VERSION = "native_protein_structure_capture_v1"
-BUNDLE_FORMAT = "native_protein_structure_bundle_v1"
+VERSION = "native_protein_structure_capture"
+BUNDLE_FORMAT = "native_protein_structure_bundle"
 _CAPTURE_FIELDS = set(ProteinStructureCapture.__annotations__)
 _ROW_FIELDS = set(CapturedManifestFile.__annotations__)
 _ISSUE_CODES = frozenset(get_args(IssueCode))

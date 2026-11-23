@@ -1,5 +1,5 @@
-"""The investigation finding of retained A101 HMMER search gradings (``hmmer_search_sheet_v1`` with its
-``hmmer_search_scores_v1``): controlled features that code reads from the saved grading artifacts, each with its
+"""The investigation finding of retained A101 HMMER search gradings (``hmmer_search_sheet`` with its
+``hmmer_search_scores``): controlled features that code reads from the saved grading artifacts, each with its
 validator (``INVESTIGATION_FINDING_FEATURES_a101.md`` sections 1 and 6.3).
 
 One entry per hit (reference sequence): the gradings of one hit are its domains (a native phmmer grading holds one
@@ -123,7 +123,7 @@ def hit_features(entries):
 
 
 def saved_hit_features(reader, grading_refs):
-    """The features of each hit among the retained gradings this Episode holds (``tool_grading_artifact_v1``),
+    """The features of each hit among the retained gradings this Episode holds (``tool_grading_artifact``),
     one entry per hit in the order the hits first appear; failed gradings carry no sheet and are left out."""
     by_hit = {}
     for ref in grading_refs:

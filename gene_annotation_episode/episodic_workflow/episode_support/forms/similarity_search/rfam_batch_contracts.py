@@ -1,4 +1,4 @@
-"""Rfam source contracts, requested aliases and closed historical v1 shapes.
+"""Rfam source contracts, requested aliases and closed saved shapes.
 
 New numerical sheets and definitions belong to infernal_search_contracts and
 infernal_search_grader. Native observations retain their original meanings.
@@ -96,7 +96,7 @@ RFAM_METRIC_UNITS = {
     "native_model_to_1i": "model_position_1i", "native_model_span_positions": "model_positions",
     "native_model_span_fraction": "fraction"}
 RFAM_CALCULATION_PARAMETERS = {
-    "version": "rfam_batch_parameters_v1", "hit_population": "all_reported",
+    "version": "rfam_batch_parameters", "hit_population": "all_reported",
     "strand_policy": "separate", "duplicate_policy": "retain_rows_union_coordinates",
     "consensus_comparison": "canonical_nt_tu_equivalent"}
 PARAMETERS = RFAM_CALCULATION_PARAMETERS
@@ -211,7 +211,7 @@ class RfamCommonParseResult(TypedDict):
 
     The older RfamParseResult/RfamBatchSheet shapes remain historical contracts.
     """
-    version: Literal["rfam_batch_parse_result_v2"]
+    version: Literal["rfam_batch_parse_result"]
     representation: Literal["json", "tblout", "out"]
     status: Literal["complete", "partial", "rejected", "unsupported"]
     format: str
@@ -325,7 +325,7 @@ def validate_rfam_input_identity(value):
     code = "rfam_input_identity_invalid"
     value = finite_json_copy(value, code=code)
     closed_object(value, RfamBatchInputIdentity.__annotations__, code=code)
-    if value["version"] != "rfam_batch_input_identity_v1":
+    if value["version"] != "rfam_batch_input_identity":
         raise ContractError(code)
     for key in ("query_occurrence_key", "subject_ref", "original_input_ref", "submission_source_ref"):
         if not is_text(value[key]):
@@ -379,7 +379,7 @@ def validate_rfam_alignment_result(value):
     value = finite_json_copy(value, code=code)
     closed_object(value, RFAM_ALIGNMENT_RESULT_FIELDS, code=code)
     identity = validate_rfam_hit_identity(value["hit_identity"])
-    if (value["version"] != "rfam_alignment_components_v1"
+    if (value["version"] != "rfam_alignment_components"
             or value["status"] not in ("complete", "partial", "unsupported", "invalid")
             or value["query_strand"] not in ("+", "-")
             or value["artifact_ref"] != identity["artifact_ref"] or value["hit_key"] != identity["hit_key"]):
@@ -480,20 +480,20 @@ RFAM_TABLE_PROJECTION_SCHEMA = {"oneOf": [
     _object({"family": {"const": family}, "rows": _ROWS,
         "metrics": {"type": "array", "minItems": 1, "uniqueItems": True, "items": {"enum": list(metrics)}}})
     for family, metrics in {"hit": RFAM_TABLE_HIT_METRICS, "query_strand": RFAM_QUERY_STRAND_METRICS}.items()]}
-RFAM_SINGLE_REQUEST_SCHEMA = _object({"version": {"const": "rfam_batch_request_v1"},
+RFAM_SINGLE_REQUEST_SCHEMA = _object({"version": {"const": "rfam_batch_single_sequence_request"},
     "mode": {"const": "single_sequence"}, "subject_ref": _TEXT})
-RFAM_FILE_REQUEST_SCHEMA = _object({"version": {"const": "rfam_batch_request_v2"},
+RFAM_FILE_REQUEST_SCHEMA = _object({"version": {"const": "rfam_batch_sequence_batch_request"},
     "mode": {"const": "sequence_batch"},
     "subject_refs": {"type": "array", "minItems": 1, "items": _TEXT}})
 RFAM_BATCH_REQUEST_SCHEMA = {"oneOf": [RFAM_SINGLE_REQUEST_SCHEMA, RFAM_FILE_REQUEST_SCHEMA]}
 RFAM_RESULT_SELECTOR_SCHEMA = _object({
-    "version": {"const": "rfam_batch_result_selector_v2"},
+    "version": {"const": "rfam_batch_result_selector"},
     "representation": {"enum": ["json", "tblout", "out"]},
     "model_metadata_ref": {"type": ["string", "null"], "minLength": 1},
     "projection": {"anyOf": [RFAM_PROJECTION_SCHEMA, RFAM_TABLE_PROJECTION_SCHEMA, {"type": "null"}]}})
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.rfam_batch_report_contracts import RFAM_REPORT_PROJECTION_SCHEMA
 RFAM_REPORT_RESULT_SELECTOR_SCHEMA = _object({
-    "version": {"const": "rfam_batch_result_selector_v3"},
+    "version": {"const": "rfam_batch_report_result_selector"},
     "representation": {"const": "out"},
     "model_metadata_ref": {"type": "null"},
     "projection": {"anyOf": [RFAM_REPORT_PROJECTION_SCHEMA, {"type": "null"}]}})
@@ -529,17 +529,17 @@ def validate_rfam_result_selector(value):
         validate_schema(value, RFAM_BATCH_RESULT_SELECTOR_SCHEMA)
     except (ContractError, TypeError) as error:
         raise ContractError("rfam_projection_invalid") from error
-    if value["version"] == "rfam_batch_result_selector_v3":
+    if value["version"] == "rfam_batch_report_result_selector":
         if value["projection"] is not None:
             from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.rfam_batch_report_contracts import validate_rfam_report_projection
             validate_rfam_report_projection(value["projection"])
         return value
     if value["projection"] is not None:
-        validator = (validate_rfam_table_projection if value["version"] == "rfam_batch_result_selector_v2"
+        validator = (validate_rfam_table_projection if value["version"] == "rfam_batch_result_selector"
                      and value["representation"] == "tblout" else validate_rfam_projection)
         validator(value["projection"])
     numeric_format = value["representation"] == "json" or (
-        value["version"] == "rfam_batch_result_selector_v2" and value["representation"] == "tblout")
+        value["version"] == "rfam_batch_result_selector" and value["representation"] == "tblout")
     if not numeric_format and (value["projection"] is not None or value["model_metadata_ref"] is not None):
         raise ContractError("rfam_text_format_unverified")
     return value

@@ -72,12 +72,12 @@ ARTICLE, TEXT, ARTICLE_PARENT = ('source_222222222222222222222222', 'artifact_22
                                  'source_333333333333333333333333')
 CONTEXT, HYPOTHESIS, SUBJECT = ('context_111111111111111111111111', 'hypothesis_111111111111111111111111',
                                 'input_111111111111111111111111')
-LEADS_TASK = {'version': 'literature_local_task_v1', 'evidence_axis': 'A108', 'credit_unit': 2,
+LEADS_TASK = {'version': 'literature_local_task', 'evidence_axis': 'A108', 'credit_unit': 2,
               'kind': 'verified_source_leads'}
 
 
 def assignment(task=None):
-    return {'version': 'search_assignment_v1', 'question_context_refs': [CONTEXT], 'search_query_ref': SEARCH,
+    return {'version': 'search_assignment', 'question_context_refs': [CONTEXT], 'search_query_ref': SEARCH,
             'literature_task': task or LEADS_TASK, 'proposed_annotation_ref': HYPOTHESIS,
             'scope': {'subject_refs': [SUBJECT]}, 'received_record_refs': [SEARCH, HYPOTHESIS]}
 
@@ -103,7 +103,7 @@ def test_the_yield_controller_is_accumulation():
 
 def summary_of(**fields):
     value = parent_input()
-    summary = {'literature_assignment': {'version': 'search_assignment_v1',
+    summary = {'literature_assignment': {'version': 'search_assignment',
                                          'question_context_refs': value['question_context_refs'],
                                          'search_query_ref': SEARCH, 'literature_task': value['task'],
                                          'proposed_annotation_ref': HYPOTHESIS},
@@ -179,7 +179,7 @@ def test_the_commission_is_the_page_of_one_paper_with_a_fixed_objective():
     held = {'task': dict(LEADS_TASK), 'finding': {'grading_sheets': []}, 'returned_lead_source_refs': ['source_1'],
             'child_reports': [{'credit': 5.0}]}
     assert credit_module.credit(held, None) == 0   # a child's credit and its leads earn nothing; only a held sheet does
-    assert message.assignment['version'] == 'page_assignment_v1'
+    assert message.assignment['version'] == 'page_assignment'
     assert message.assignment['literature_task'] == LEADS_TASK
     assert message.assignment['received_record_refs'] == [
         ARTICLE, 'artifact_111111111111111111111111', TEXT, ARTICLE_PARENT, 'artifact_333333333333333333333333',

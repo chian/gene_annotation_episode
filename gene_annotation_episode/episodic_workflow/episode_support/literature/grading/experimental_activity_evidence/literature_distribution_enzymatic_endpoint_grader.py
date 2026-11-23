@@ -29,7 +29,7 @@ absorbance_max, absorbance_refs, cross_reactivity_percent, cross_reactivity_refs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_distribution_enzymatic_endpoint_criteria import DISTRIBUTION_ENZYMATIC_ENDPOINT_CRITERIA
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_distribution_enzymatic_endpoint_grade_v1'
+VERSION = 'a105_distribution_enzymatic_endpoint_grade'
 CRITERIA = tuple(criterion['id'] for criterion in DISTRIBUTION_ENZYMATIC_ENDPOINT_CRITERIA)
 INTERACTION = {'yes': 'detected', 'no': 'not_detected'}   # the stated yes/no result of the fact claimed_product_detected
 PERCENT_PER_UNIT = {'fraction': 100.0, 'percent': 1.0}   # FIXED_BY_DEFINITION: a fraction is a hundred percent.

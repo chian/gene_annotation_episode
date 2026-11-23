@@ -12,7 +12,7 @@ and weigh nothing. The grader holds no threshold.
 The sheet is controlled data: numbers, booleans, chemical component ids and the schema and provider names."""
 import math
 
-SCHEMA = 'a102_partner_cofolding_sheet_v1'
+SCHEMA = 'a102_partner_cofolding_sheet'
 PROVIDER = 'partner_cofolding'
 SAMPLE_KEYS = {'aggregate_score', 'ptm', 'iptm', 'per_chain_pair_iptm', 'has_inter_chain_clashes', 'chain_chain_clashes'}
 

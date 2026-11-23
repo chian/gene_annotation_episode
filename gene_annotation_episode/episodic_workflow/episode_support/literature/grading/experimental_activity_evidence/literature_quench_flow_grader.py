@@ -32,7 +32,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_binding_reader import _SCALES
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_quench_flow_grade_v1'
+VERSION = 'a105_quench_flow_grade'
 CRITERIA = tuple(criterion['id'] for criterion in QUENCH_FLOW_CRITERIA)
 ACTIVITY = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact product_formed_above_control
 

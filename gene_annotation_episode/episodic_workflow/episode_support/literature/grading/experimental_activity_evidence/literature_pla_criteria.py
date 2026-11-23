@@ -40,7 +40,7 @@ Spread: the stated SD or SEM of the puncta per cell of the test and of the contr
 What this method does not ask (kept in the record for the reviewer, no criterion judges them): the amplification time, the cell system, the fixation and the quantification software.
 """
 
-VERSION = 'a105_pla_criteria_v1'
+VERSION = 'a105_pla_criteria'
 
 # ---- Threshold constants -------------------------------------------------
 PERCENT_PER_FRACTION = 100.0  # FIXED_BY_DEFINITION: percent per unit fraction (the reduction after a knockdown is recorded in percent).

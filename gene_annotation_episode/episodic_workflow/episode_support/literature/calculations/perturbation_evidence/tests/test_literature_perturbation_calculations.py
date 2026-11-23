@@ -31,7 +31,7 @@ def test_exact_interface_and_synthetic_point_example():
     saved = deepcopy(inputs)
     result = populate_source_restoration(inputs)
     assert set(result) == {"version", "inputs", "primitive_order", "cells"}
-    assert result["version"] == VERSION == "a106_source_restoration_v1"
+    assert result["version"] == VERSION == "a106_source_restoration"
     assert result["primitive_order"] == list(PRIMITIVE_ORDER)
     assert tuple(result["cells"]) == COMPONENTS
     expected = (100., 20., 90., 80., 2/3, .875, .875, .9, .9, .9, .9, .4725)

@@ -48,10 +48,10 @@ def alignment(store,target,query,reference,*,bits=50.,subset=None,reference_star
         'term_refs':[],'context_refs':[]},origin='tool')['id']
     start,end=subset or (0,len(query))
     key='engineering-domain'
-    grading={'sheet':{'schema':'hmmer_search_sheet_v1','operation':{'program':'phmmer'},
+    grading={'sheet':{'schema':'hmmer_search_sheet','operation':{'program':'phmmer'},
         'domains':[{'record_key':key,'target_name':'engineering-'+reference,
             'alignment':{'model':query[start:end],'aseq':reference[reference_start+start:reference_start+end]}}]},
-        'scores':{'schema':'hmmer_search_scores_v1','domains':[{'record_key':key,
+        'scores':{'schema':'hmmer_search_scores','domains':[{'record_key':key,
             'intervals':{'model':[start,end],'sequence':[reference_start+start,reference_start+end]},'paired_positions':end-start,
             'sequence_length':len(reference),'model_length':len(query),'native_domain_score_bits':bits,
             'native_independent_evalue':1e-10,'sequence_identity_fraction':sum(a==b for a,b in zip(query[start:end],reference[reference_start+start:reference_start+end]))/(end-start)}]}}
@@ -123,7 +123,7 @@ def test_direct_target_geometry_does_not_depend_on_sequence_axis(case):
     added,needs=refresh(store,known,{'subject_refs':[target]});known.update(added)
     result=A102StructuralCredit()(store,{'subject_refs':[target]},known_record_refs=known)
     assert needs and result['credit']==pytest.approx(1/(1+(.1/2)**2))
-    assert any(r['policy']=='direct_native_geometry_v1' and r['state']=='direct' for r in result['tool_attachments'])
+    assert any(r['policy']=='direct_native_geometry' and r['state']=='direct' for r in result['tool_attachments'])
 
 
 def trait(key,kind,positions,definition,**changes):
@@ -428,7 +428,7 @@ def test_model_binding_and_reported_metric_have_their_own_non_native_policies(ca
     store,registry,target,y,z,native,known=case
     x,_=binding(registry,'MDEAKG',target=target)
     paper=registry._source('engineering.reported_source',{'meaning':'A reported value fixture, not a newly executed target comparison.'})
-    reported=registry._derived('reported_comparison',{'schema':'a102_reported_comparison_v1','target_ref':target,
+    reported=registry._derived('reported_comparison',{'schema':'a102_reported_comparison','target_ref':target,
         'source_refs':[paper],'description':'Engineering reported structural metric.',
         'matched_extent':'Six residues of the reference models.','metric_name':'RMSD','metric_value':1.2,
         'metric_unit':'angstrom','transfer_limits':'Reference subjects still need binding.','native_B':None})

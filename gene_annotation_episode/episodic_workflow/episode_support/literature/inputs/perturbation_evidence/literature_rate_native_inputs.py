@@ -18,7 +18,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.perturbation_evidence.literature_partner_defined_units import defined_rate_unit_schema, _definition_scale, _definition_selection, _DEFINITION_KEYS, _source_witness, _finite_float
 
 
-VERSION = "a105_rate_extraction_v2"
+VERSION = "a105_rate_native_extraction"
 SOURCE_KINDS = ("primary_source", "retained_extraction", "synthetic_fixture")
 ROLES = ("reference", "test")
 MEANINGS = ("subject", "construct", "preparation", "experiment", "label",

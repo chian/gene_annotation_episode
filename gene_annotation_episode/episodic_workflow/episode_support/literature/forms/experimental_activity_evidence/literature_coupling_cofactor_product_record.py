@@ -58,7 +58,7 @@ does not judge it; the converter does. The constructors take ``support`` and def
 the extraction (the extraction always passes the model's answer).
 """
 
-VERSION = 'a105_coupling_cofactor_product_record_v1'
+VERSION = 'a105_coupling_cofactor_product_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'coupling_cofactor_product'
 QUANTITIES = ('productive_fraction', 'productive_fraction_spread', 'stoichiometric_ratio', 'stoichiometric_ratio_spread', 'cofactor_per_product', 'stoichiometric_coefficient',

@@ -75,7 +75,7 @@ def test_the_assignment_form_has_one_field_per_old_schema_property():
 def test_a_remote_resource_assignment_is_not_admitted():
     from_parent = importlib.import_module(MODULE + '.messages.read_from_parent')
     with pytest.raises(FormError):
-        from_parent.ASSIGNMENT_FORM.admit({'version': 'practical_assignment_v1', 'resource_kind': 'hpc'},
+        from_parent.ASSIGNMENT_FORM.admit({'version': 'practical_assignment', 'resource_kind': 'hpc'},
                                           'assignment')
 
 

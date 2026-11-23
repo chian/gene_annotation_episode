@@ -1,6 +1,6 @@
 """Native-byte fixtures plus clearly synthetic transport and fault cases.
 
-V2 transport fixtures are synthetic bindings around either unchanged native
+Transport fixtures are synthetic bindings around either unchanged native
 bytes or explicitly synthetic bodies.
 """
 from copy import deepcopy
@@ -21,7 +21,7 @@ BASE = "https://www.bv-brc.org/api"
 
 
 def prepared(collection="genome", fields=None, mode="page", **kwargs):
-    request = dict(version="bvbrc_data_request_v2", collection=collection, mode=mode, filters=[])
+    request = dict(version="bvbrc_data_request", collection=collection, mode=mode, filters=[])
     if fields is not None:
         request["fields"] = fields
     request.update(kwargs)
@@ -29,7 +29,7 @@ def prepared(collection="genome", fields=None, mode="page", **kwargs):
 
 
 def snapshot(binding, body, *, headers=(), **transport):
-    """A synthetic transport fixture, not evidence of a live v2 invocation."""
+    """A synthetic transport fixture, not evidence of a live invocation."""
     native = binding["native_request"]
     transport = {"status": 200, "body_complete": True, "automatic_redirects": False,
                  "effective_url": native["url"], "request": deepcopy(native),
@@ -152,7 +152,7 @@ def test_malformed_json_and_non_json_numbers_fail_without_invented_rows(body):
 
 @pytest.mark.parametrize("field,value", [("service", "other"), ("url", "https://wrong.invalid"),
     ("media_type", "application/json"), ("request", {})])
-def test_actual_v2_identity_and_profile_are_required(field, value):
+def test_actual_identity_and_profile_are_required(field, value):
     binding = prepared()
     source = snapshot(binding, envelope([]))
     source = replace(source, **{field: value})

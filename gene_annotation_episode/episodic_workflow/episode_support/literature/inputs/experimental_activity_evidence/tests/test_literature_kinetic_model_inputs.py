@@ -22,7 +22,7 @@ def setup_model(path, *, status='known', n='20', d='10', change=None):
         return {'artifact_ref': ref, 'content': store.get_artifact(ref)}
     inputs = read_kinetic_inputs(args, read_source=read)['calculation_inputs']
     keys = kinetic_operand_keys(inputs)
-    wire = {'version': 'a105_kinetic_log_model_v1', 'measurement_order': ['numerator', 'denominator'], 'measurement_keys': [keys[role] for role in ('numerator', 'denominator')], 'covariance': [[0.04, 0.01], [0.01, 0.09]], 'variance_status': status, 'observation_model': 'known_normal_log_parameters', 'log_basis': 'natural_log_canonical_parameter', 'origin': 'synthetic'}
+    wire = {'version': 'a105_kinetic_log_model', 'measurement_order': ['numerator', 'denominator'], 'measurement_keys': [keys[role] for role in ('numerator', 'denominator')], 'covariance': [[0.04, 0.01], [0.01, 0.09]], 'variance_status': status, 'observation_model': 'known_normal_log_parameters', 'log_basis': 'natural_log_canonical_parameter', 'origin': 'synthetic'}
 
     def source(content, parents):
         artifact = store.artifact(content, 'application/json')

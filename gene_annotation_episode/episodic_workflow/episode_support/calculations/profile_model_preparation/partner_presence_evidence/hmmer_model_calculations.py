@@ -19,7 +19,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.readers.profile_m
 from gene_annotation_episode.episodic_workflow.episode_support.readers.profile_model_preparation.hmmer_model_source_cells import binary_probability_cell, hmmer2_probability_cell
 
 
-SCHEMA = "hmmer_model_components_v1"
+SCHEMA = "hmmer_model_components"
 COMPONENT_STATES = frozenset({"present", "missing", "incomplete", "incompatible", "nonfinite"})
 CHECK_STATES = frozenset({"pass", "fail", "unknown", "not_applicable"})
 ISSUE_CODES = frozenset({"extraction_invalid", "record_invalid", "parameter_invalid",
@@ -64,7 +64,7 @@ def _representation_encoding(record):
                 and re.fullmatch(r"HMMER3/[a-f]", record["format_tag"]) else None)
     rep = record["representation"]
     if (type(rep) is not dict or set(rep) != _REPRESENTATION_FIELDS
-            or rep["schema"] != "hmmer_model_representation_v1"
+            or rep["schema"] != "hmmer_model_representation"
             or type(rep["encoding"]) is not str
             or type(rep["native_fields"]) is not list):
         return None

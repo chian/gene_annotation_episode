@@ -82,7 +82,7 @@ def test_negative_parameters_keep_unaffected_statistics_and_original_request():
 def test_recalculation_rejects_wrong_saved_contract(change):
     result = worker.grade_hmmer_preparation(**dna_statistics())
     parameters = {}
-    if change == "schema": result["sheet"]["schema"] = "hmmer_emission_sheet_v1"
+    if change == "schema": result["sheet"]["schema"] = "hmmer_emission_sheet"
     elif change == "program": result["sheet"]["operation"].update(program="hmmemit", mode="consensus_simple")
     elif change == "extra_field": result["sheet"]["score_rules"] = {}
     elif change == "unknown_parameter": parameters["confidence"] = .5

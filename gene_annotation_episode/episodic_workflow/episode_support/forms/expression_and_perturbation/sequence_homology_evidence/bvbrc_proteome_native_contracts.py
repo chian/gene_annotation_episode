@@ -1,4 +1,4 @@
-"""Closed, data-only contracts for the legacy GenomeComparison projection.
+"""Closed, data-only contracts for the native GenomeComparison projection.
 
 Validation checks supplied values and their internal relationships, not artifact
 possession, API task custody, deployed producer identity, or scientific completion.
@@ -35,7 +35,7 @@ COUNT_FIELDS = frozenset({"gene", "aa_length"})
 DECIMAL_PATTERN = re.compile(r"[+-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+-]?[0-9]+)?\Z")
 COMPARISON_KEY = re.compile(r"comp_genome_([1-9][0-9]*)\Z")
 COMPARISON_FIELD = re.compile(r"(comp_genome_([1-9][0-9]*))_(.+)\Z")
-FORMATS = frozenset({"genome_comparison_json_v1", "genome_comparison_tsv_v1"})
+FORMATS = frozenset({"genome_comparison_json", "genome_comparison_tsv"})
 
 
 class NativeValidationError(ValueError):
@@ -162,7 +162,7 @@ def _check_source_field(field, binding, *, pointer=None, ordinal=None, name=None
 def _check_cell(cell, name, source_format, binding, *, pointer, ordinal, field_name):
     _check_source_field(cell["source_field"], binding, pointer=pointer, ordinal=ordinal, name=field_name)
     value, presence = cell["value"], cell["presence"]
-    if source_format.endswith("tsv_v1"):
+    if source_format.endswith("tsv"):
         _require(presence != "explicit_null", "table_null_conflict", pointer)
     if name not in NUMBER_FIELDS:
         _require((presence == "value" and type(value) is str and value != "") or
@@ -223,7 +223,7 @@ def validate_native_projection(value: dict) -> dict:
     refs = value["reference_rows"]
     _require(value["physical_record_count"] == len(refs), "record_count_conflict", "/physical_record_count")
     _require(len({row["reference_row_key"] for row in refs}) == len(refs), "duplicate_reference_key")
-    is_json = value["format"] == "genome_comparison_json_v1"
+    is_json = value["format"] == "genome_comparison_json"
     fields = value["table_field_order"]
     if is_json:
         _require(fields == [], "json_table_fields_conflict", "/table_field_order")

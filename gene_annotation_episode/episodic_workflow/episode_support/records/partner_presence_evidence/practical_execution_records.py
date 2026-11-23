@@ -18,9 +18,9 @@ import re
 from gene_annotation_episode.episodic_workflow.episode_support.instructions.launch_instructions import (SELECTION_SCHEMA as LAUNCH_INSTRUCTION_SELECTION_SCHEMA,
     validate_selection)
 
-ASSIGNMENT_VERSION = 'practical_assignment_v1'
-RECEIPT_VERSION = 'practical_action_receipt_v1'
-COMPLETION_VERSION = 'practical_completion_v1'
+ASSIGNMENT_VERSION = 'practical_assignment'
+RECEIPT_VERSION = 'practical_action_receipt'
+COMPLETION_VERSION = 'practical_completion'
 JOB_TOOLS = frozenset({'exec_command', 'practical.job.start', 'practical.job.status', 'practical.job.collect'})
 PREDICATE_FIELDS = {
     'context_cwd': {'kind', 'path'},
@@ -100,8 +100,8 @@ ASSIGNMENT_SCHEMA['required'].append('resource_id')
 ASSIGNMENT_SCHEMA['properties']['scientific_manifest'] = _schema_object({
     'path': _PATH_SCHEMA, 'sha256': _DIGEST_SCHEMA,
     'size_bytes': {'type': 'integer', 'minimum': 0},
-    'format': {'enum': ['native_blast_database_run_plan_v1',
-        'native_blast_standard_database_run_plan_v1']}})
+    'format': {'enum': ['native_blast_database_run_plan',
+        'native_blast_standard_database_run_plan']}})
 VALIDATION_SCHEMA = _schema_object({'key': _TEXT_SCHEMA, 'satisfied': {'type': 'boolean'},
     'predicate': PREDICATE_SCHEMA, 'evidence_refs': {'type': 'array', 'uniqueItems': True,
         'items': _TEXT_SCHEMA}, 'evidence': _schema_object({'source': {'enum': ['context', 'outcome']},
@@ -257,7 +257,7 @@ def validate_assignment(value):
         if (type(manifest['size_bytes']) is not int or manifest['size_bytes'] < 0
                 or value['resource_kind'] != 'hpc'
                 or not PurePosixPath(manifest['path']).is_relative_to(value['workspace'])
-                or not any(key in job and manifest['format'] == key + '_run_plan_v1'
+                or not any(key in job and manifest['format'] == key + '_run_plan'
                     for key in ('native_blast_database', 'native_blast_standard_database'))):
             raise ValueError('native_database_scientific_manifest_invalid')
     if 'native_blast_utility' in job:
@@ -425,7 +425,7 @@ def _validate_utility_validation(detail):
     record = _object(detail['native_blast_utility_validation'], {
         'version', 'bundle', 'bundle_sha256', 'files_validated', 'failure_code'},
         code='native_blast_utility_validation_invalid')
-    if (record['version'] != 'native_blast_utility_validation_v1'
+    if (record['version'] != 'native_blast_utility_validation'
             or type(record['files_validated']) is not bool
             or record['failure_code'] not in {None, 'sealed_bundle_unavailable',
                 'original_bundle_invalid', 'original_bundle_files_invalid'}):

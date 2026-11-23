@@ -114,7 +114,7 @@ def _stage(row, *, directory, policy, stderr):
     if observed != expected:
         # Reject the candidate as a scientific operand, but retain every original
         # byte in the complete stderr artifact for repair/audit.
-        stderr.write((canonical({"version": "protein_structure_rejected_input_v1", "input_id": row["input_id"],
+        stderr.write((canonical({"version": "protein_structure_rejected_input", "input_id": row["input_id"],
             "expected": expected, "observed": observed, "encoding": "base64_chunks_in_byte_order"}) + "\n").encode())
         with _regular(temporary) as source:
             offset = 0
@@ -166,7 +166,7 @@ def run_protein_structure_driver(plan: dict) -> dict:
         input_paths={r["input_id"]: str(directory / r["staged_relative_path"]) for r in job["inputs"]},
         output_directory=str(directory))
     environment = realized_environment(job, str(directory))
-    bundle = {"version": "native_protein_structure_bundle_v1", "identity": plan["identity"],
+    bundle = {"version": "native_protein_structure_bundle", "identity": plan["identity"],
         "requested_job": plan["requested_job"], "software": job["software"], "driver_argv": driver_argv(plan),
         "worker_argv": None, "realized_environment": environment,
         "files": [{**r, "state": "absent", "sha256": None, "byte_length": None} for r in manifest_files(job)],
@@ -182,7 +182,7 @@ def run_protein_structure_driver(plan: dict) -> dict:
                 original_bytes = stream.read()
             _require(same(_strict_json(original_path), plan), "original_commission_mismatch")
             immutable_bytes(confined_file(directory, RUN_PLAN_FILENAME), original_bytes)
-            worker_input = validate_protein_structure_worker_input({"version": "protein_structure_worker_input_v1",
+            worker_input = validate_protein_structure_worker_input({"version": "protein_structure_worker_input",
                 "request": job["request"], "software": job["software"], "files": [
                     {"input_id": r["input_id"], "role": r["role"], "file_identity": r["file_identity"],
                      "path": str(directory / r["staged_relative_path"])} for r in job["inputs"]]})

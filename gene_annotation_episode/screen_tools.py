@@ -21,7 +21,7 @@ from .domain import ContractError
 
 TOOL = "public.screen"
 ROOT = "https://screen.api.wenglab.org/graphql"
-REQUEST_VERSION = "screen_acquisition_request_v1"
+REQUEST_VERSION = "screen_acquisition_request"
 MAX_BYTES = 8 * 1024 ** 2
 FIELDS = ("accession", "chromosome", "start", "stop", "ccre_group",
     "atac_max_zscore", "ctcf_max_zscore", "dnase_max_zscore",

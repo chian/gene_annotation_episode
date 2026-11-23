@@ -13,7 +13,7 @@ import zlib
 from jsonschema import Draft202012Validator, ValidationError, validators
 
 
-VERSION = "geo_retained_soft_result_v1"
+VERSION = "geo_retained_soft_result"
 MAX_DECODED_BYTES = 8 * 1024 * 1024
 _SOURCE_RE = re.compile(r"source_[a-f0-9]{24,64}\Z")
 _ARTIFACT_RE = re.compile(r"artifact_[a-f0-9]{64}\Z")

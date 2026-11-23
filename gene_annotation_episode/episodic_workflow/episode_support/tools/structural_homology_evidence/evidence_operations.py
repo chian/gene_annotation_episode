@@ -496,7 +496,7 @@ class A102ToolRegistry(ToolRegistry):
                 require(bool(args['source_refs']),'a102_reported_comparison_sources_required')
                 for ref in args['source_refs']:self._received(ref,known)
                 for ref in args.get('measured_subject_refs',[]):self._received(ref,known)
-                result={'schema':'a102_reported_comparison_v1',**args,'native_B':None,
+                result={'schema':'a102_reported_comparison',**args,'native_B':None,
                     'status':'reported_subject_and_extent_only','interpretation':'not_freshly_executed_target_geometry'}
                 records=[self._derived('reported_comparison',result)]
             outcome={'status':'completed','record_refs':records,'changed_record_refs':[],
@@ -579,7 +579,7 @@ class A102ToolRegistry(ToolRegistry):
                 and atom['atom_name']==row[side+'_atom'] and atom['occupancy']!=0] for side,binding in zip(('left','right'),bindings,strict=True)]
             distance=math.dist(atoms[0][0]['xyz_A'],atoms[1][0]['xyz_A']) if all(len(x)==1 for x in atoms) else None
             rows.append({**row,'distance_A':distance,'kernel':1/(1+max(0,distance-row['maximum_distance_A'])**2) if distance is not None else None})
-        result={'schema':'a102_interface_constraint_v1','target_ref':next((t for t in args['target_refs'] if t in scope['subject_refs']),None),
+        result={'schema':'a102_interface_constraint','target_ref':next((t for t in args['target_refs'] if t in scope['subject_refs']),None),
             **args,'contacts':rows,'raw_score':math.fsum(r['kernel'] for r in rows)/len(rows) if all(r['kernel'] is not None for r in rows) else None,
             'assembly_context':'same_coordinate_model_biological_assembly_and_partner_presence_unestablished'}
         source=self._derived('interface_geometry',result)

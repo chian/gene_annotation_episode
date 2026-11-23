@@ -58,7 +58,7 @@ def prepare_selected_local_protein_structure(assignment, operation_key: str, *,
     root = _directory(root)
     _allocation(assignment, policy.to_dict())
     handle = native.NativeJobHandle(root / "native.json")
-    plan = validate_protein_structure_run_plan({"version": "native_protein_structure_run_plan_v1", "identity": {
+    plan = validate_protein_structure_run_plan({"version": "native_protein_structure_run_plan", "identity": {
         "run_id": run_id, "episode_id": episode_id, "resource_id": assignment.get("resource_id"),
         "execution_id": str(handle.path), "attempt_id": digest(operation_key), "operation_key": operation_key,
         "requested_job_sha256": digest(request)}, "requested_job": request,

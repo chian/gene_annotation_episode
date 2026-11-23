@@ -31,8 +31,7 @@ INFERENCE_COMPONENTS = {
             "literature_ratio_cells", "literature_ratio_source_cells",
             "literature_controlled_response_component_cells")},
     **{namespace: {"source_profile_log_ratio", "source_presence_index"}
-        for namespace in ("literature_assay_cells", "literature_compiled_assay_cells",
-            "literature_compiled_assay_v2_cells")},
+        for namespace in ("literature_assay_cells", "literature_compiled_assay_cells")},
     "literature_rate_cells": {"signed_profile_log_ratio", "source_signed_index"},
     "literature_binding_interaction_model_cells": {"signed_profile_log_ratio", "signed_index"},
 }

@@ -20,7 +20,7 @@ F, G = "SYNTHETIC_FUNCTION_ALPHA", "SYNTHETIC_FUNCTION_BETA"
 
 
 def supplied():
-    return {"schema": "bvbrc_homology_metadata_bindings_v1", "description_links": [], "records": [],
+    return {"schema": "bvbrc_homology_metadata_bindings", "description_links": [], "records": [],
         "bindings": [], "sequence_identity_bindings": [], "target_context_by_query": [], "database_profile": None}
 
 
@@ -132,7 +132,7 @@ def test_all_five_programs_and_both_scientific_modes_reuse_shared_geometry(progr
     _, sheet = metadata_and_sheet(parsed, artifacts, contents)
     db = sheet["queries"][0]["blast_sheet"]
     if mode == "pairwise_correspondence":
-        assert db["schema"] == "blast_pairwise_sheet_v1"
+        assert db["schema"] == "blast_pairwise_sheet"
         measured = db["union"]["fractions"]
         assert db["input"]["search"]["database"] == "SYNTHETIC_DATABASE_PATH"
         assert db["input"]["native"]["document"]["BlastOutput2"][0]["report"]["search_target"]["db"] == "SYNTHETIC_DATABASE_PATH"

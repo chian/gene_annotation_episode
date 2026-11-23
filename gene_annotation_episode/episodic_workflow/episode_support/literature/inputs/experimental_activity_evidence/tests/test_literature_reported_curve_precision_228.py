@@ -50,7 +50,7 @@ def select(scope, component, **kw):
     return {'scope': scope, 'component': component, **kw}
 
 def run(data, selectors, model='unweighted_positive_km_mm'):
-    return populate_reported_curve_precision(data, {'version': 'a105_reported_curve_precision_request_v1', 'fit_model': model, 'requested_components': selectors})
+    return populate_reported_curve_precision(data, {'version': 'a105_reported_curve_precision_request', 'fit_model': model, 'requested_components': selectors})
 
 def values(sheet):
     return [r['conditional_value'] if r['status'] == 'conditional_scenario' else r['value'] for r in sheet['cells']]

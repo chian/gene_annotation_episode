@@ -91,7 +91,7 @@ def validate_xmfa_original_map(value):
 
 def validate_xmfa_source_inputs(value):
     shape(value, {'schema_version','invocation','files','original_maps'})
-    require(value['schema_version']=='mauve_xmfa_source_inputs_v1', 'source_version_invalid')
+    require(value['schema_version']=='mauve_xmfa_source_inputs', 'source_version_invalid')
     invocation=value['invocation']
     shape(invocation, {'mode','ordered_file_ids','evidence'})
     require(invocation['mode'] in MODES, 'invocation_mode_invalid')
@@ -144,7 +144,7 @@ def validate_xmfa_source_bindings(value):
     shape(value, {'schema_version','document_id','status','invocation_mode',
         'member_registry_completeness','members','source_checks','original_maps',
         'requirements','diagnostics'})
-    require(value['schema_version']=='mauve_xmfa_source_bindings_v1', 'source_version_invalid')
+    require(value['schema_version']=='mauve_xmfa_source_bindings', 'source_version_invalid')
     text(value['document_id'])
     require(value['status'] in ('ok','partial','invalid') and value['invocation_mode'] in MODES,
             'source_status_invalid')

@@ -2,7 +2,7 @@
 ``_live_project_credit``; credit kind ``operational``). ``acquired_record_unit`` times the share of the requested
 selector's byte positions that this episode's own acquisitions newly received (the union of the windows of its
 completed outcomes, so a position read twice counts once, regardless of read boundaries), averaged over the
-requested paths. Binding ``execution_received_selector_coverage_credit_v2``, qualification
+requested paths. Binding ``execution_received_selector_coverage_credit``, qualification
 ``original_selector_byte_position_union_current_filesystem_version_unverified``.
 
 Carried unchanged otherwise: the old ``handoff_unit * new_handoff_count`` term is always zero (``handoff_count =
@@ -46,7 +46,7 @@ def selector_progress(requested, results):
 
 def credit_binding(summary):
     """The old ``operational_credit_binding`` of the credit view (what the model was shown as ``credit_binding``)."""
-    return {'version': 'execution_received_selector_coverage_credit_v2',
+    return {'version': 'execution_received_selector_coverage_credit',
             'acquired_record_unit': summary['acquired_record_unit'],
             'qualification': 'original_selector_byte_position_union_current_filesystem_version_unverified'}
 

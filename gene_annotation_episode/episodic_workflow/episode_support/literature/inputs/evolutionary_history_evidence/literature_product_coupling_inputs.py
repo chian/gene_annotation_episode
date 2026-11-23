@@ -25,7 +25,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.
     _unit_contexts, _PRINTED_RATE_UNIT, _RATE_UNIT_START, _unit_continuation,
 )
 
-VERSION = 'a105_product_coupling_inputs_v1'
+VERSION = 'a105_product_coupling_inputs'
 SOURCE_KINDS = ('primary_source', 'retained_extraction', 'synthetic_fixture')
 ORIGINS = dict(primary_source='reported', retained_extraction='derived', synthetic_fixture='synthetic')
 ROLES = ('product', 'cofactor', 'reported_coupling')
@@ -250,7 +250,7 @@ def _covariance(reference, quantities, sources):
             parse_constant=bad_constant, object_pairs_hook=pairs)
     except (UnicodeDecodeError, ValueError):
         result['unavailable_reason'] = 'covariance_json_invalid'; return result
-    if not isinstance(raw, dict) or set(raw) != set(_COV_FIELDS) or raw['version'] != 'a105_product_coupling_covariance_v1' or raw['order'] != ['product','cofactor']:
+    if not isinstance(raw, dict) or set(raw) != set(_COV_FIELDS) or raw['version'] != 'a105_product_coupling_covariance' or raw['order'] != ['product','cofactor']:
         result['unavailable_reason'] = 'covariance_contract_mismatch'; return result
     if raw['origin'] not in ('reported','derived','synthetic') or raw['variance_status'] not in ('known','estimated','unknown'):
         result['unavailable_reason'] = 'covariance_contract_mismatch'; return result

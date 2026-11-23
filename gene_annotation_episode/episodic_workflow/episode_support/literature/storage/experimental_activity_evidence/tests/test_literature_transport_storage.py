@@ -65,7 +65,7 @@ def fixture(store, ctx, *, km=True, covariance=False, page=False):
             key = 'transport_quantity_' + hashlib.sha256(json.dumps(anchor, sort_keys=True, separators=(',', ':'), ensure_ascii=False, allow_nan=False).encode()).hexdigest()
             return {'sheet_ref': ref, 'input_source_ref': extracted['source']['source_ref'], 'value': extracted['value'], 'unit': 'uM', 'origin': 'synthetic', 'reported_uncertainty_kind': 'unspecified', 'measurement_key': key, **{field: records['quantity']['experimental_bindings'][field] for field in ('reported_subject_ref', 'analyte_ref')}}
         extraction = read_transport_inputs(args, read_source=read_source, read_quantity=read_quantity)
-        declaration = {'version': 'a105_transport_covariance_v1', 'primitive_order': ['substrate_test', 'substrate_reference', 'km'], 'primitive_measurement_keys': [extraction['measurement_keys'][name] for name in ('substrate_test', 'substrate_reference', 'km')], 'primitive_units': ['uM'] * 3, 'covariance': [[1, 0.1, 0], [0.1, 4, 0], [0, 0, 0.25]], 'origin': 'synthetic'}
+        declaration = {'version': 'a105_transport_covariance', 'primitive_order': ['substrate_test', 'substrate_reference', 'km'], 'primitive_measurement_keys': [extraction['measurement_keys'][name] for name in ('substrate_test', 'substrate_reference', 'km')], 'primitive_units': ['uM'] * 3, 'covariance': [[1, 0.1, 0], [0.1, 4, 0], [0, 0, 0.25]], 'origin': 'synthetic'}
         cov = source(store, canonical(declaration), parents=[root['id']])
         args.update(covariance_source_ref=cov['id'], variance_status='known')
         context = replace(context, received_record_refs=(*context.received_record_refs, cov['id']))
@@ -195,7 +195,7 @@ def test_operation_identity_request_schema_and_new_record_accounting(store, ctx)
         repo.populate(context, {**args, 'km': 16.5}, 'illegal-numeric-input')
     assert first['result']['cells'] == second['result']['cells']
 
-@pytest.mark.parametrize('field,value', [('value', 999), ('formula_code', 'transport_apparent_km_v1'), ('reported_subject_ref', None), ('reported_km_uncertainty_kind', 'unreported'), ('variance_status', 'estimated'), ('conditional_on', []), ('test_curve_ref', None)])
+@pytest.mark.parametrize('field,value', [('value', 999), ('formula_code', 'transport_apparent_km'), ('reported_subject_ref', None), ('reported_km_uncertainty_kind', 'unreported'), ('variance_status', 'estimated'), ('conditional_on', []), ('test_curve_ref', None)])
 @in_unit
 def test_forged_typed_values_are_rejected(store, ctx, field, value):
     store, context, args, _ = fixture(store, ctx)

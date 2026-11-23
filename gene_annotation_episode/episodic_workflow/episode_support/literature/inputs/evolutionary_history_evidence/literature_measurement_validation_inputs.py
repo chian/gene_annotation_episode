@@ -20,7 +20,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.
     number_selector_schema,
 )
 
-VERSION = 'a105_measurement_validation_inputs_v1'
+VERSION = 'a105_measurement_validation_inputs'
 NAMESPACE = 'literature_calibration_recovery_cells'
 SOURCE_KINDS = ('primary_source', 'retained_extraction', 'synthetic_fixture')
 ORIGINS = {'primary_source': 'reported', 'retained_extraction': 'derived', 'synthetic_fixture': 'synthetic'}

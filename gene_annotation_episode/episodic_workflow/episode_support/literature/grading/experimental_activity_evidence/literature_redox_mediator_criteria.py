@@ -21,7 +21,7 @@ returns     every case the criterion can return, as (status, reason_code, when).
             as 'never' cannot occur for this criterion.
 """
 
-VERSION = 'a105_redox_mediator_criteria_v1'
+VERSION = 'a105_redox_mediator_criteria'
 
 _fact_returns = (
     ('supported', 'facts_answered_yes', 'the fact is yes'),

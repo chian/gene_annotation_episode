@@ -28,7 +28,7 @@ def _module(name):
 
 
 def _assignment(selector):
-    return {'version': 'execution_results_assignment_v1', 'handoff_ref': ['rec_handoff'], 'selector': selector,
+    return {'version': 'execution_results_assignment', 'handoff_ref': ['rec_handoff'], 'selector': selector,
             'resource_kind': 'hpc', 'acquired_record_unit': 2.0}
 
 
@@ -111,11 +111,11 @@ def test_read_from_parent_reads_the_requested_windows_and_refuses_typed_selector
     module = _module('messages.read_from_parent')
     parent = module.read_from_parent(_assignment({'paths': ['/a', '/b'], 'offset': 5}), {})
     assert parent['windows'] == [{'path': '/a', 'start': 5, 'length': None}, {'path': '/b', 'start': 5, 'length': None}]
-    assert parent['assignment'] == {'version': 'execution_results_assignment_v1', 'handoff_ref': 'rec_handoff',
+    assert parent['assignment'] == {'version': 'execution_results_assignment', 'handoff_ref': 'rec_handoff',
                                     'selector': {'paths': ['/a', '/b'], 'offset': 5}}
     assert set(parent) == {'assignment', 'windows', 'resource_kind', 'acquired_record_unit'}
     with pytest.raises(NotImplementedError, match='no carried home'):
-        module.read_from_parent(_assignment({'version': 'local_file_source_selector_v1'}), {})
+        module.read_from_parent(_assignment({'version': 'local_file_source_selector'}), {})
     with pytest.raises(ValueError, match='results_original_selector_has_no_requested_bytes'):
         module.read_from_parent(_assignment({'offset': 3}), {})
     with pytest.raises(ValueError, match='execution_results_selector_conflict'):

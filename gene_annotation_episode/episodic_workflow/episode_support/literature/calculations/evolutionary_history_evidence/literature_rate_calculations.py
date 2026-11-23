@@ -19,7 +19,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.
 )
 
 
-VERSION = "a105_rate_contrast_sheet_v1"
+VERSION = "a105_rate_contrast_sheet"
 _BASE_UNITS = {"amount_rate": "umol/min", "concentration_rate": "uM/min",
                "turnover_rate": "per_min", "specific_amount_rate": "umol/min/mg"}
 
@@ -220,7 +220,7 @@ def populate_rate_contrast(extraction, *, reference_arm, test_arm,
     be retained without that model, but is not converted back into sample SD.
     """
     extracted = validate_rate_extraction(extraction)
-    native = extracted["version"] == "a105_rate_extraction_v2"
+    native = extracted["version"] == "a105_rate_native_extraction"
     if native_bound_version is not None:
         from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.evolutionary_history_evidence.literature_rate_domains import VERSION as DOMAIN_VERSION
         if not native or native_bound_version != DOMAIN_VERSION:

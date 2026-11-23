@@ -47,7 +47,7 @@ def fact(answer, refs=(), support='direct'):
     return {**literature_spr_record.fact(answer, refs), 'support': None if answer == 'unknown' else support}
 
 
-VERSION = 'a105_proximity_record_v1'
+VERSION = 'a105_proximity_record'
 EXPERIMENT_TYPE = 'proximity'
 QUANTITIES = ('enrichment_fold', 'enrichment_fdr', 'bait_expression_ratio', 'labeling_time', 'biotin_concentration', 'peroxide_concentration', 'replicate_count')
 PREPARATION_KEYS = ('bait_preparation_ref', 'candidate_preparation_ref', 'dataset_ref')

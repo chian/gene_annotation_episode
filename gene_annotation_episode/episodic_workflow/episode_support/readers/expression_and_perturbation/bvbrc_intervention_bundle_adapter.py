@@ -14,8 +14,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.expression_
     calculate_intervention_components, validate_intervention_components,
 )
 
-SHEET_VERSION = "bvbrc_intervention_observations_v1"
-COMPONENTS_VERSION = "bvbrc_intervention_retained_components_v1"
+SHEET_VERSION = "bvbrc_intervention_observations"
+COMPONENTS_VERSION = "bvbrc_intervention_retained_components"
 APPLICATION_ADAPTERS = {"TnSeq": "bvbrc_tnseq", "RNASeq": "bvbrc_rnaseq"}
 _FORMATS = {name: {"tsv", "txt", "text"} for name in REPRESENTATIONS}
 

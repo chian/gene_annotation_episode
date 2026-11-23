@@ -89,7 +89,7 @@ def test_the_real_runner_reaches_the_next_decision_and_fails_where_the_job_servi
     store = Store(tmp_path / 'store')
     journal = RunJournal(tmp_path / 'journal.sqlite3')
     try:
-        assignment = {'version': 'monitor_assignment_v1', 'target_handle': 'target', 'requested_fields': ['execution_status'],
+        assignment = {'version': 'monitor_assignment', 'target_handle': 'target', 'requested_fields': ['execution_status'],
                       'known_progress_refs': [], 'permitted_committed_record_types': [], 'information_unit': 1.0}
         collaborators = {'store': store, 'model_provider': ModelProvider(load_config(), tmp_path / 'model_calls', tmp_path),
                          'continuation': {cls.binding_path: {'cost': 0.5, 'parameters': {'uncertainty_alpha': 0.1}}},

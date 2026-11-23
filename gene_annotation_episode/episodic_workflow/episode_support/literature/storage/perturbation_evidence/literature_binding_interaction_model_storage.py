@@ -21,9 +21,9 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.storag
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.perturbation_evidence.literature_binding_interaction_model_inputs import read_binding_interaction_model
 
 PROVIDER = "literature.a105.binding_interaction_model_population"
-VERSION = "literature_binding_interaction_model_population_record_v1"
+VERSION = "literature_binding_interaction_model_population_record"
 COMPONENTS = MODEL_COMPONENTS
-FORMULA_CODES = {name: "binding_interaction_model_" + name + "_v1" for name in COMPONENTS}
+FORMULA_CODES = {name: "binding_interaction_model_" + name for name in COMPONENTS}
 FORMULA_MEANINGS = {FORMULA_CODES[name]: FORMULAS[name] for name in COMPONENTS}
 VIEW = "binding_interaction_log_model_components"
 REASONS = (*CALCULATION_REASONS, "observation_model_missing", "covariance_status_unknown",

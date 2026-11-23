@@ -11,16 +11,14 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.service_cal
 from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.evolutionary_history_evidence.bvbrc_proteome_sheet_contracts import validate_proteome_sheet_data
 from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.evolutionary_history_evidence.bvbrc_proteome_data_contracts import proteome_data_schema
 from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.evolutionary_history_evidence.bvbrc_proteome_native_contracts import native_schema
-requested_form_schema = c.requested_form_schema
-validate_requested_form = c.validate_requested_form
 _SHEET = '/sheet/native_sheet_result/value'
 
 def _provider_contracts():
-    from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.evolutionary_history_evidence import bvbrc_proteome_bundle_contracts
-    return bvbrc_proteome_bundle_contracts
+    from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.evolutionary_history_evidence import bvbrc_proteome_native_bundle_contracts
+    return bvbrc_proteome_native_bundle_contracts
 
 def _error(code, path=''):
-    raise _provider_contracts().ProteomeBundleError('proteome_' + code, path)
+    raise _provider_contracts().ProteomeNativeBundleError('proteome_' + code, path)
 
 def _equal(left, right):
     return c.canonical(left) == c.canonical(right)
@@ -73,53 +71,6 @@ def _reports(value, schema, path):
             for i, child in enumerate(item):
                 yield from walk(child, node['items'], pointer + '/' + str(i))
     yield from walk(value, schema, path)
-
-def _validate_inputs(sheet, components, parameters, form, requirements, diagnostics):
-    contracts = _provider_contracts()
-    parameters = contracts.validate_parameters(parameters)
-    try:
-        form = validate_requested_form(form)
-    except c.ProteomeFactError as error:
-        raise contracts.ProteomeBundleError('proteome_projection_requested_form_invalid', error.path) from error
-    if type(requirements) is not tuple or type(diagnostics) is not tuple:
-        _error('saved_projection_conflict')
-    codes = set(contracts.BINDING_CODES) | set(c.P_REASONS) | set(c._SHEET_DEFS['Diagnostic']['properties']['code']['enum'])
-    for row in requirements:
-        validate_contract('AcquisitionRequirement', row)
-        if row['reason_code'] not in codes:
-            _error('saved_projection_conflict', '/missing_requirements')
-    ids = {}
-    for row in requirements:
-        if row['requirement_id'] in ids and (not _equal(ids[row['requirement_id']], row)):
-            _error('saved_projection_conflict', '/missing_requirements')
-        ids[row['requirement_id']] = row
-    for row in diagnostics:
-        validate_contract('Diagnostic', row)
-        if row['code'] not in codes:
-            _error('saved_projection_conflict', '/diagnostics')
-    if sheet is None:
-        if components is not None:
-            _error('saved_sheet_invalid', '/sheet')
-        return (None, None, parameters, form)
-    sheet = contracts.validate_provider_sheet(sheet)
-    if not _equal(sheet['parameters'], parameters) or not _equal(sheet['requested_form'], form):
-        _error('saved_identity_conflict', '/sheet')
-    if sheet['analysis_id'] != parameters['analysis_id']:
-        _error('saved_identity_conflict', '/sheet/analysis_id')
-    if components is not None:
-        try:
-            components = validate_proteome_sheet_data('NativeComponentsResult', components)
-        except ValueError as error:
-            raise contracts.ProteomeBundleError('proteome_saved_components_invalid', getattr(error, 'path', '')) from error
-        values = components['value']
-        if values is not None:
-            native = sheet['native_sheet_result']
-            if native is None or native['value'] is None:
-                _error('saved_sheet_invalid', '/sheet/native_sheet_result')
-            expected = hashlib.sha256(c.canonical(native['value']).encode()).hexdigest()
-            if values['sheet_sha256'] != expected or not _equal(values['parameters'], parameters['calculation_parameters']):
-                _error('saved_identity_conflict', '/components/value')
-    return (sheet, components, parameters, form)
 
 class _Projection:
 
@@ -202,7 +153,7 @@ class _Projection:
 
     def field_failure(self, field, selector, reason):
         role = 'proteome_requested_projection'
-        payload = dict(version='bvbrc_proteome_requirement_v1', analysis_id=self.aid, reason_code='proteome_' + reason, role=role, field=field, selection=deepcopy(selector), source_refs=[], pure_requirement=None)
+        payload = dict(version='bvbrc_proteome_requirement', analysis_id=self.aid, reason_code='proteome_' + reason, role=role, field=field, selection=deepcopy(selector), source_refs=[], pure_requirement=None)
         requirement = dict(requirement_id='proteome_requirement_' + hashlib.sha256(c.canonical(payload).encode()).hexdigest(), kind='scientific_metadata', role=role, source_refs=[], reason_code=payload['reason_code'])
         diagnostic = dict(code=payload['reason_code'], phase='publication', path='/facts/' + _token(field), severity='qualification', evidence_refs=[])
         self.root['missing_requirements'] = _unique([*self.root['missing_requirements'], requirement])
@@ -373,25 +324,3 @@ class _Projection:
         c._validate(self.form, facts, 'saved_facts_invalid')
         return dict(status='ok' if all((row['availability'] == 'available' for row in facts.values())) else 'partial', facts=facts, missing_requirements=deepcopy(self.root['missing_requirements']), diagnostics=deepcopy(self.root['diagnostics']))
 
-def project_requested_facts(sheet: dict | None, components: dict | None, *, missing_requirements: tuple[dict, ...], diagnostics: tuple[dict, ...], requested_form: dict, parameters: dict) -> dict:
-    sheet, components, parameters, form = _validate_inputs(sheet, components, parameters, requested_form, missing_requirements, diagnostics)
-    if sheet is None:
-        return dict(status='invalid', facts={}, missing_requirements=_unique(missing_requirements), diagnostics=_unique(diagnostics))
-    return _Projection(sheet, components, parameters, form, missing_requirements, diagnostics).build()
-
-def validate_saved_projection(sheet: dict | None, components: dict | None, *, facts: dict, status: str, missing_requirements: tuple[dict, ...], diagnostics: tuple[dict, ...], requested_form: dict, parameters: dict, original_task: dict, bundle_sha256: str, bundle: dict | None=None) -> dict:
-    result = project_requested_facts(sheet, components, missing_requirements=missing_requirements, diagnostics=diagnostics, requested_form=requested_form, parameters=parameters)
-    if sheet is not None:
-        _provider_contracts().validate_bundle_binding(sheet, bundle)
-    elif any(('requirement_id' in choice for choice in parameters['native_documents'])):
-        if bundle is None:
-            _error('saved_identity_conflict', '/bundle')
-        actual = validate_contract('ArtifactBundle', bundle)
-        if not _equal(actual['original_task'], original_task) or _provider_contracts().digest(actual) != bundle_sha256:
-            _error('saved_identity_conflict', '/bundle')
-    if sheet is not None and (not _equal(sheet['original_task'], original_task) or sheet['bundle_sha256'] != bundle_sha256):
-        _error('saved_identity_conflict', '/sheet')
-    if not _equal(result, dict(status=status, facts=facts, missing_requirements=list(missing_requirements), diagnostics=list(diagnostics))):
-        _error('saved_projection_conflict')
-    return deepcopy(result)
-__all__ = ['requested_form_schema', 'validate_requested_form', 'project_requested_facts', 'validate_saved_projection']

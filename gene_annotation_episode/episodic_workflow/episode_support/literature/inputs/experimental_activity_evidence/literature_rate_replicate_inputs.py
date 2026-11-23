@@ -13,7 +13,7 @@ import json
 import re
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_experimental_contracts import ExperimentalContractError, ORIGINS, RATE_UNIT_ALIASES, REPRESENTATIONS, SAMPLING_BASES
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_rate_reader import _measurement
-VERSION = 'a105_rate_replicates_v1'
+VERSION = 'a105_rate_replicates'
 HEADERS = ('subject', 'experiment', 'arm', 'condition', 'endpoint', 'normalization', 'sampling_unit', 'sampling_basis', 'observation_id', 'value', 'unit', 'origin')
 GROUP_FIELDS = ('arm', 'condition', 'endpoint', 'normalization')
 

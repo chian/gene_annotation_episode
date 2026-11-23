@@ -52,7 +52,7 @@ ALPHAFOLD_FILE_ARGUMENTS_SCHEMA = _object(dict(metadata_source_ref=deepcopy(_SOU
     url_pointer=deepcopy(_POINTER), file_format={"enum": list(FILE_FORMATS)},
     max_bytes={"type": "integer", "minimum": 1}))
 ALPHAFOLD_FILE_ASSOCIATION_SCHEMA = _object(dict(
-    version={"const": "alphafold_advertised_file_association_v1"},
+    version={"const": "alphafold_advertised_file_association"},
     metadata_source_ref=deepcopy(_SOURCE), metadata_artifact_ref=deepcopy(_ARTIFACT),
     url_pointer=deepcopy(_POINTER), advertised_url={"type": "string"},
     file_format={"enum": list(FILE_FORMATS)}))
@@ -69,12 +69,12 @@ _ISSUES = dict(type="array", uniqueItems=True, items=_object(dict(
 _FILE = _object(dict(artifact_ref=deepcopy(_ARTIFACT), sha256={"type": "string", "pattern": "^[a-f0-9]{64}$"},
     byte_length=deepcopy(_COUNT), format={"enum": list(FILE_FORMATS)}))
 ALPHAFOLD_PREDICTION_RESULT_SCHEMA = _owned({"$defs": {"NativeJSON": _JSON}, **_object(dict(
-    version={"const": "alphafold_prediction_result_v1"}, source_ref=deepcopy(_SOURCE),
+    version={"const": "alphafold_prediction_result"}, source_ref=deepcopy(_SOURCE),
     raw_artifact_ref=deepcopy(_ARTIFACT), requested=deepcopy(ALPHAFOLD_PREDICTION_ARGUMENTS_SCHEMA),
     response=deepcopy(_RESPONSE), parse_state={"enum": ["object", "array", "scalar", "native_null", "decode_failed"]},
     native_json={"$ref": "#/$defs/NativeJSON"}, issues=deepcopy(_ISSUES)))})
 ALPHAFOLD_PREDICTION_VALUE_SCHEMA = _owned({"$defs": {"NativeJSON": _JSON}, **_object(dict(
-    version={"const": "alphafold_prediction_value_v1"}, raw_artifact_ref=deepcopy(_ARTIFACT),
+    version={"const": "alphafold_prediction_value"}, raw_artifact_ref=deepcopy(_ARTIFACT),
     requested=deepcopy(ALPHAFOLD_PREDICTION_ARGUMENTS_SCHEMA), response=deepcopy(_RESPONSE),
     parse_state={"enum": ["object", "array", "scalar", "native_null", "decode_failed"]},
     native_json={"$ref": "#/$defs/NativeJSON"}, issues=deepcopy(_ISSUES)))})
@@ -86,7 +86,7 @@ ALPHAFOLD_FAILURE_CODES = (
     "alphafold_file_metadata_not_received", "alphafold_file_selection_conflict",
     "alphafold_saved_outcome_conflict",
 )
-ALPHAFOLD_FILE_RESULT_SCHEMA = _object(dict(version={"const": "alphafold_file_result_v1"},
+ALPHAFOLD_FILE_RESULT_SCHEMA = _object(dict(version={"const": "alphafold_file_result"},
     source_ref=deepcopy(_SOURCE), file=deepcopy(_FILE), requested=deepcopy(ALPHAFOLD_FILE_ARGUMENTS_SCHEMA),
     response=deepcopy(_RESPONSE), association=deepcopy(ALPHAFOLD_FILE_ASSOCIATION_SCHEMA),
     observed_identity=_object(dict(native_model_id={"type": "null"}, state={"const": "not_parsed"})),
@@ -227,7 +227,7 @@ def resolve_alphafold_file_selection(metadata_raw, *, arguments):
     except (UnicodeError, TypeError, OverflowError, RecursionError) as error:
         raise ValueError("alphafold_metadata_invalid") from error
     url = alphafold_advertised_file_url(native, arguments=arguments)
-    association = validate_alphafold_file_association(dict(version="alphafold_advertised_file_association_v1",
+    association = validate_alphafold_file_association(dict(version="alphafold_advertised_file_association",
         metadata_source_ref=arguments["metadata_source_ref"],
         metadata_artifact_ref="artifact_" + hashlib.sha256(metadata_raw).hexdigest(),
         url_pointer=arguments["url_pointer"], advertised_url=url, file_format=arguments["file_format"]), arguments=arguments)
@@ -313,7 +313,7 @@ def alphafold_prediction_value(snapshot, *, arguments, artifact_ref):
     else:
         state = ("object" if type(native) is dict else "array" if type(native) is list else
             "native_null" if native is None else "scalar")
-    return validate_alphafold_prediction_value(dict(version="alphafold_prediction_value_v1",
+    return validate_alphafold_prediction_value(dict(version="alphafold_prediction_value",
         raw_artifact_ref=artifact_ref, requested=arguments, response=response,
         parse_state=state, native_json=native, issues=issues))
 
@@ -321,7 +321,7 @@ def alphafold_prediction_value(snapshot, *, arguments, artifact_ref):
 def alphafold_prediction_result_from_value(value, *, source_ref):
     value = validate_alphafold_prediction_value(value)
     return validate_alphafold_prediction_result({**value,
-        "version": "alphafold_prediction_result_v1", "source_ref": source_ref})
+        "version": "alphafold_prediction_result", "source_ref": source_ref})
 
 
 def alphafold_file_result(snapshot, *, arguments, association, source_ref, artifact_ref):
@@ -332,7 +332,7 @@ def alphafold_file_result(snapshot, *, arguments, association, source_ref, artif
     file = dict(artifact_ref=artifact_ref, sha256=hashlib.sha256(snapshot.content).hexdigest(),
         byte_length=len(snapshot.content), format=arguments["file_format"])
     validate_file_identity(file)
-    return validate_alphafold_file_result(dict(version="alphafold_file_result_v1", source_ref=source_ref,
+    return validate_alphafold_file_result(dict(version="alphafold_file_result", source_ref=source_ref,
         file=file, requested=arguments, response=response, association=association,
         observed_identity=dict(native_model_id=None, state="not_parsed"), issues=issues))
 

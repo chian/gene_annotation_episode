@@ -30,7 +30,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     CM_PER_UNIT, ENDPOINT_OPTICAL_PLATEAU_CRITERIA, FRACTION_PER_UNIT, M_PER_UNIT, PER_M_CM_PER_UNIT)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_endpoint_optical_plateau_grade_v1'
+VERSION = 'a105_endpoint_optical_plateau_grade'
 CRITERIA = tuple(criterion['id'] for criterion in ENDPOINT_OPTICAL_PLATEAU_CRITERIA)
 CONVERSION = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact conversion_detected_above_control
 ABSORBANCE_UNIT = 'AU'

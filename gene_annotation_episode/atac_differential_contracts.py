@@ -191,7 +191,7 @@ class TrackChromosomeExtent(TypedDict):
 class AtacRetainedTrackTable(TypedDict):
     storage: Literal['retained_table']
     artifact_ref: str
-    format: Literal['atac_bedgraph_rows_jsonl_v1']
+    format: Literal['atac_bedgraph_rows_jsonl']
     columns: list[str]
     row_count: int
     sha256: str
@@ -240,7 +240,7 @@ class AtacBamReferenceRow(TypedDict):
 
 
 class ParsedAtacBamReference(ParsedEnvelope):
-    version: Literal['atac_bam_reference_parsed_v1']
+    version: Literal['atac_bam_reference_parsed']
     callpeak_run_key: str
     input_ordinal: int
     input_artifact_ref: str
@@ -366,7 +366,7 @@ class AtacDeclaredDepthSelection(TypedDict):
 AtacBedGraphEvent: TypeAlias = dict
 ParsedTrackEnvelopeWithoutRows: TypeAlias = dict
 class AtacNativeSheet(TypedDict):
-    version: Literal['atac_differential_native_sheet_v1']
+    version: Literal['atac_differential_native_sheet']
     tool_row: Literal['B-L125-analyze_atac_seq_differential_accessibility']
     reference: AtacReference
     samples: list[AtacSample]
@@ -612,7 +612,7 @@ def validate_bedgraph_row(row):
 def validate_atac_retained_track_table(value):
     code = 'invalid_atac_retained_track_table'
     _keys(value, AtacRetainedTrackTable.__annotations__, code)
-    if value['storage'] != 'retained_table' or value['format'] != 'atac_bedgraph_rows_jsonl_v1':
+    if value['storage'] != 'retained_table' or value['format'] != 'atac_bedgraph_rows_jsonl':
         raise ValueError(code)
     if value['columns'] != list(BEDGRAPH_COLUMNS):
         raise ValueError(code)
@@ -712,12 +712,12 @@ def validate_atac_parsed_table(value, *, version=None):
     A retained table's bytes are verified by its separate exhausted reader.
     """
     code = 'invalid_atac_parsed_table'
-    versions = {'atac_bedgraph_parsed_v1': ParsedAtacTrack,
-                'macs2_peaks_xls_parsed_v1': ParsedMacs2PeaksXls,
-                'macs2_narrowpeak_parsed_v1': ParsedMacs2NarrowPeak,
-                'macs2_summits_parsed_v1': ParsedMacs2Summits,
-                'macs2_bdgdiff_parsed_v1': ParsedMacs2Bdgdiff,
-                'atac_bam_reference_parsed_v1': ParsedAtacBamReference}
+    versions = {'atac_bedgraph_parsed': ParsedAtacTrack,
+                'macs2_peaks_xls_parsed': ParsedMacs2PeaksXls,
+                'macs2_narrowpeak_parsed': ParsedMacs2NarrowPeak,
+                'macs2_summits_parsed': ParsedMacs2Summits,
+                'macs2_bdgdiff_parsed': ParsedMacs2Bdgdiff,
+                'atac_bam_reference_parsed': ParsedAtacBamReference}
     if not isinstance(value, dict) or value.get('version') not in versions or version is not None and value.get('version') != version:
         raise ValueError(code)
     _keys(value, versions[value['version']].__annotations__, code)
@@ -741,7 +741,7 @@ def validate_atac_parsed_table(value, *, version=None):
         _keys(header, HeaderRecord.__annotations__, code)
         validate_atac_locator(header['locator'])
         kinds = ('comment', 'track', 'browser', 'blank', 'column_header')
-        if value['version'] == 'atac_bam_reference_parsed_v1':
+        if value['version'] == 'atac_bam_reference_parsed':
             kinds += ('sam_header',)
         _enum(header['kind'], kinds, code)
         if header['text'] is not None and type(header['text']) is not str:
@@ -756,7 +756,7 @@ def validate_atac_parsed_table(value, *, version=None):
         _strings(row['reason_codes'], code)
         invalid_ordinals.append(row['row_ordinal'])
     if isinstance(value['rows'], dict):
-        if value['version'] != 'atac_bedgraph_parsed_v1':
+        if value['version'] != 'atac_bedgraph_parsed':
             raise ValueError(code)
         validate_atac_retained_track_table(value['rows'])
         readable = value['rows']['row_count']
@@ -765,10 +765,10 @@ def validate_atac_parsed_table(value, *, version=None):
         readable = len(value['rows'])
         ordinals = []
         for row in value['rows']:
-            if value['version'] == 'atac_bedgraph_parsed_v1':
+            if value['version'] == 'atac_bedgraph_parsed':
                 validate_bedgraph_row(row)
                 ordinals.append(row[0])
-            elif value['version'] == 'atac_bam_reference_parsed_v1':
+            elif value['version'] == 'atac_bam_reference_parsed':
                 validate_atac_bam_reference_row(row)
                 ordinals.append(row['row_ordinal'])
             else:
@@ -796,22 +796,22 @@ def validate_atac_parsed_table(value, *, version=None):
         raise ValueError(code)
     if state['output_extent'] == 'complete' and (state['availability'] != 'present'
             or state['byte_extent'] != 'complete' or state['identity'] != 'verified' or state['format'] != 'compatible'
-            or value['version'] != 'atac_bedgraph_parsed_v1' and artifact['producer_run_ref'] is None
+            or value['version'] != 'atac_bedgraph_parsed' and artifact['producer_run_ref'] is None
             or artifact['producer_run_ref'] is not None and (artifact['producer_outcome'] != 'succeeded' or artifact['writer_closed'] is not True)):
         raise ValueError(code)
-    if value['version'] == 'atac_bedgraph_parsed_v1':
+    if value['version'] == 'atac_bedgraph_parsed':
         validate_atac_track_binding(value['binding'], missing=state['availability'] == 'missing')
         _int(value['unlocated_invalid_row_count'], code)
         if value['unlocated_invalid_row_count'] > inspected:
             raise ValueError(code)
         _enum(value['geometry_inspection'], ('complete', 'partial', 'unknown'), code)
-    elif value['version'] == 'atac_bam_reference_parsed_v1':
+    elif value['version'] == 'atac_bam_reference_parsed':
         _str(value['callpeak_run_key'], code)
         _int(value['input_ordinal'], code)
         _str(value['input_artifact_ref'], code)
         if value['binding_key'] != value['callpeak_run_key'] + ':input:' + str(value['input_ordinal']):
             raise ValueError(code)
-    elif value['version'] == 'macs2_peaks_xls_parsed_v1':
+    elif value['version'] == 'macs2_peaks_xls_parsed':
         _keys(value['reported_metadata'], Macs2ReportedMetadata.__annotations__, code)
         _keys(value['reported_numbers'], REPORTED_NUMBER_FIELDS, code)
         for number in value['reported_numbers'].values():
@@ -821,5 +821,5 @@ def validate_atac_parsed_table(value, *, version=None):
             _enum(number['state'], ('present', 'missing', 'invalid', 'conflicting', 'not_measured'), code)
             for locator in number['locations']:
                 validate_atac_locator(locator)
-    elif value['version'] == 'macs2_bdgdiff_parsed_v1':
+    elif value['version'] == 'macs2_bdgdiff_parsed':
         _enum(value['category'], ('condition1', 'condition2', 'common'), code)

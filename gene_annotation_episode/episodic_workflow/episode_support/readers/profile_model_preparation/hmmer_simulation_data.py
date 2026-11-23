@@ -14,7 +14,7 @@ import re
 import struct
 
 
-SCHEMA = "hmmer_simulation_sheet_v1"
+SCHEMA = "hmmer_simulation_sheet"
 OCCURRENCE_FIELDS = frozenset({"occurrence_id", "direction", "role", "ordinal",
                              "artifact_ref", "sha256", "size_bytes", "completeness"})
 ROW_FIELDS = {
@@ -233,7 +233,7 @@ def populate_hmmsim_sheet(*, operation, inputs, outputs, model_extraction, nativ
         o, content = payload["occurrence"], payload["content"]
         extraction = extraction_list[ordinal] if ordinal < len(extraction_list) else None
         if (not isinstance(extraction, dict) or set(extraction) != {"schema", "occurrence", "format", "records", "population", "issues"}
-                or extraction.get("schema") != "hmmer_model_extraction_v1" or
+                or extraction.get("schema") != "hmmer_model_extraction" or
                 not isinstance(extraction.get("records"), list)):
             issues.append(_issue("model_extraction_invalid", occurrence_id=o["occurrence_id"]))
             continue

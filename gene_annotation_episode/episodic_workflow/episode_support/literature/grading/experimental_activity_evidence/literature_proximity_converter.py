@@ -90,7 +90,7 @@ import math
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_assay_grading import INPUT_VERSION, ROLES, grade_assay
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import SUPPORTS, apply_support
 
-VERSION = 'a105_proximity_converted_v1'
+VERSION = 'a105_proximity_converted'
 CRITERIA_MAP = {'binding_controls': ('ligase_only_control', 'unlabeled_control', 'unrelated_bait_control'), 'binding_regime': ('expression_level', 'localization'), 'binding_parameter_definition': ('proximity_observed', 'enrichment_magnitude', 'enrichment_significance', 'orthogonal_validation'), 'calibration_applicability': ('biotinylation_dependence', 'streptavidin_capture'), 'sampling_basis': ('replicates',)}
 FOLD_FULL_AGREEMENT = 4.0  # EXPERT_REVIEW: smallest fold enrichment of the candidate over the control that the sheet takes as a clear proximity; a fourfold enrichment (log2 fold change of 2) is a common cut-off of proximity proteomics for a confident hit, the usual lower cut-off being twofold.
 FOLD_ZERO_AGREEMENT = 1.0  # EXPERT_REVIEW: fold at or below which the candidate is not enriched over the control (an equal or lower abundance): conflicting; in between the degree rises linearly in the log of the fold (MS intensities and counts have multiplicative error and the cut-offs are stated as log2 fold: twofold, the usual lower cut-off, is half credit).

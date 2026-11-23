@@ -55,8 +55,8 @@ def controlled_job(tmp_path, variant="entry", database_source="db", metadata=Tru
     if variant == "entry_batch":
         inputs.append({**identity(root / "entries.txt", b"controlled_read\r\n"),
                        "input_key": "selected-entries", "role": "entry_batch", "format": "text"})
-    fmt = "blast_vdb_cmd_table_v1" if mode == "extract_sequences" else "blast_vdb_info_text_v1" if mode == "info" else "blast_vdb_paths_text_v1"
-    operation = {"version": "blast_utility_operation_v3", "program": "blast_vdb_cmd", "mode": mode,
+    fmt = "blast_vdb_cmd_table" if mode == "extract_sequences" else "blast_vdb_info_text" if mode == "info" else "blast_vdb_paths_text"
+    operation = {"version": "blast_vdb_utility_operation", "program": "blast_vdb_cmd", "mode": mode,
         "input_occurrence_ids": [r["input_key"] for r in inputs], "database_key": "controlled-vdb", "molecule": "dna",
         "parameters": {"database_selection": {"source": database_source, "inputs": [database],
             "list_occurrence_id": "selected-dbs" if database_source == "dbs_file" else None},
@@ -80,7 +80,7 @@ def controlled_job(tmp_path, variant="entry", database_source="db", metadata=Tru
     provenance = {"source_ref": "controlled_parent_declaration", "pointer": ""}
     db_identity = {"namespace": "controlled", "value": "prepared-set", "version": None,
         "release": None, "scope": None, "preparation_type": "unknown", "source": provenance}
-    manifest = {"version": "native_blast_prepared_database_manifest_v1", "database_key": operation["database_key"],
+    manifest = {"version": "native_blast_prepared_database_manifest", "database_key": operation["database_key"],
         "kind": "vdb", "identity": db_identity, "native_paths": [data["path"]],
         "files": [{k: v for k, v in data.items() if k != "artifact_ref"}],
         "preparation": {"method": "other_recorded", "preparation_type": "vdb",
@@ -102,7 +102,7 @@ def controlled_job(tmp_path, variant="entry", database_source="db", metadata=Tru
         context_request["declared_dependencies"] = [{"role": "database", "ordinal": 0, "database_key": operation["database_key"],
             "native_path_index": 0, "native_reference": data["path"], "source": "vdblist_file",
             "list_ref": {"kind": "input", "input_key": "selected-dbs"}, "list_entry_ordinal": 0, "declaration": {"kind": "request"}}]
-    return {"version": contracts.JOB_VERSION_V3, "operation": operation,
+    return {"version": contracts.VDB_JOB_VERSION, "operation": operation,
         "software": {"executable": helper["path"], "sha256": helper["sha256"], "engine_version": "controlled-only"},
         "environment": {"NCBI_VDB_CONFIG": offline["path"], "BLAST_USAGE_REPORT": "false",
             "NCBI_USAGE_REPORT_ENABLED": "false", "DO_NOT_TRACK": "1", "LC_ALL": "C"},
@@ -112,7 +112,7 @@ def controlled_job(tmp_path, variant="entry", database_source="db", metadata=Tru
             for role in ("stdout", "stderr")], "vdb_context_request": context_request,
         "offline_execution": {"version": execution.VERSION, "launcher": {k: v for k, v in launcher.items() if k != "artifact_ref"},
             "runtime_files": [{k: v for k, v in helper.items() if k != "artifact_ref"}], "runtime_aliases": [],
-            "system_interface_profile": "blast_vdb_bwrap_local_v1"}}
+            "system_interface_profile": "blast_vdb_bwrap_local"}}
 
 
 def _controlled_offline_receipt(job, plan, argv, returncode):
@@ -181,7 +181,7 @@ def original_worker_plan(store, capture, directory):
         return {"path": str(store.path / "artifacts" / row["sha256"][:2] / row["sha256"]),
                 "sha256": row["sha256"], "size_bytes": row["size"]}
     context = _scientific_native_blast_utility_result_worker.qualified_utility_context(capture)
-    return {"version": _scientific_native_blast_utility_result_worker.PLAN_VERSION_V2, "task": "parse_original", "directory": str(directory),
+    return {"version": _scientific_native_blast_utility_result_worker.VDB_PLAN_VERSION, "task": "parse_original", "directory": str(directory),
         "capture": capture, "context": context, "bundle_file": file(capture["bundle_artifact_ref"]),
         "files": [{"occurrence_id": row["occurrence_id"], **file(row["artifact_ref"])} for row in context["occurrences"]]}
 

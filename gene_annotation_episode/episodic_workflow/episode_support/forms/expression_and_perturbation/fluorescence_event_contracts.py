@@ -8,9 +8,9 @@ import json
 import math
 import re
 import unicodedata
-SHEET_SCHEMA = 'fluorescence_event_population_sheet_v1'
-COMPONENTS_SCHEMA = 'fluorescence_event_components_v1'
-VIEW_SCHEMA = 'fluorescence_event_result_view_v1'
+SHEET_SCHEMA = 'fluorescence_event_population_sheet'
+COMPONENTS_SCHEMA = 'fluorescence_event_components'
+VIEW_SCHEMA = 'fluorescence_event_result_view'
 _ERROR_CODES = frozenset('\ninvalid_source invalid_sample invalid_channel invalid_domain invalid_event\ninvalid_population invalid_gate invalid_control invalid_native_report\ninvalid_parse_result invalid_sheet invalid_parameters invalid_components\ninvalid_selection\n'.split())
 _ISSUE_CODES = frozenset('\nsource_unavailable retained_artifact_mismatch native_format_mismatch\ndecoder_unavailable truncated_source invalid_event_row invalid_numeric_token\nchannel_missing ambiguous_channel measurement_domain_unavailable\nmeasurement_domain_mismatch gate_parameter_invalid unknown_parent_membership\nunknown_gate_membership empty_parent_population empty_evaluable_population\nincomplete_population control_missing control_pair_incompatible\nnative_count_conflict native_population_unknown derived_numeric_overflow\ncalculation_sheet_mismatch calculation_parameters_mismatch\nnative_report_uninterpretable input_encoding_invalid\n'.split())
 _STAGES = frozenset('input parse domain gate calculation projection'.split())

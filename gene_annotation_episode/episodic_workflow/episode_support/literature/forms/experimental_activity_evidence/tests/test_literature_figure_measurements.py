@@ -40,7 +40,7 @@ def test_native_pixels_axis_direction_dimensions_hash_and_detached_selection():
     data, recipe = (image_bytes(), selection())
     result = read_bar_ordinate(data, recipe)
     assert set(result) == {'version', 'image_sha256', 'image_size', 'selection', 'qualifying_runs', 'pixel_edge', 'cell'}
-    assert result['version'] == 'literature_bar_ordinate_v1'
+    assert result['version'] == 'literature_bar_ordinate'
     assert result['image_sha256'] == hashlib.sha256(data).hexdigest()
     assert result['image_size'] == {'width': 12, 'height': 12}
     assert result['selection'] == recipe
@@ -217,7 +217,7 @@ def test_unrepresentable_pixel_tolerance_and_ordinate_bounds():
 def test_signed_comparison_exact_difference_and_outer_domain():
     first, second = (cell(65, 60, 70), cell(75, 70, 80))
     before = deepcopy((first, second))
-    assert compare_ordinate_cells(first, second) == {'version': 'literature_ordinate_difference_v1', 'cell': cell(-10.0, -20.0, 0.0, origin='derived')}
+    assert compare_ordinate_cells(first, second) == {'version': 'literature_ordinate_difference', 'cell': cell(-10.0, -20.0, 0.0, origin='derived')}
     assert compare_ordinate_cells(second, first)['cell'] == cell(10.0, 0.0, 20.0, origin='derived')
     assert (first, second) == before
     result = compare_ordinate_cells(cell(0.1, 0.1, 0.1), cell(0.3, 0.3, 0.3))['cell']

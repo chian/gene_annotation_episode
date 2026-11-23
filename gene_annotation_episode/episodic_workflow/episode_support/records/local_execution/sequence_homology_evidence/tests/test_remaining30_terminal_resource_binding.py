@@ -6,7 +6,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.local_exe
 PROFILES=('native_blast_database','native_blast_standard_database')
 
 def configuration(key):
-    return {'workspace':'/controlled/workspace',key:{'version':key+'_resource_v1',
+    return {'workspace':'/controlled/workspace',key:{'version':key+'_resource',
         'producer':{'module_root':'/controlled/package'},
         'environment':{'CONTROLLED_METADATA':'retained'},'bindings':[]}}
 

@@ -19,8 +19,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.records import na
 
 
 OPERATION = "protein_conservation_native"
-REQUEST_VERSION = "muscle_alignment_native_request_v1"
-MANIFEST_VERSION = "muscle_alignment_native_manifest_v1"
+REQUEST_VERSION = "muscle_alignment_native_request"
+MANIFEST_VERSION = "muscle_alignment_native_manifest"
 NATIVE_DIRECTORY_NAME = "muscle-alignment-native"
 PERMUTATIONS = ("none", "abc", "acb", "bca")
 NATIVE_UNSIGNED_MAX = 4294967295

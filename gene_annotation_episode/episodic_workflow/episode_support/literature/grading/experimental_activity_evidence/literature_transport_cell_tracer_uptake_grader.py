@@ -31,7 +31,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_binding_reader import _SCALES
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_transport_cell_tracer_uptake_grade_v1'
+VERSION = 'a105_transport_cell_tracer_uptake_grade'
 CRITERIA = tuple(criterion['id'] for criterion in TRANSPORT_CELL_TRACER_UPTAKE_CRITERIA)
 TRANSPORT = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact uptake_detected_above_control
 SECONDS_PER_UNIT = {'s': 1.0, 'min': SECONDS_PER_MINUTE}   # FIXED_BY_DEFINITION: the unit of the uptake interval to seconds

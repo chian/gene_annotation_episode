@@ -38,7 +38,7 @@ def synthetic_facet_fact(**changes):
 def synthetic_materialization(source, rows):
     # This tests schema shape only; host custody and projection consistency
     # remain the responsibilities of the D5/D6 consumers.
-    return {"version": "bvbrc_received_values_v1", "admission_key": "fixture:admission",
+    return {"version": "bvbrc_received_values", "admission_key": "fixture:admission",
             "form_field": "facts", "fact_source": source, "facts": rows,
             "cells": [], "unavailable": []}
 

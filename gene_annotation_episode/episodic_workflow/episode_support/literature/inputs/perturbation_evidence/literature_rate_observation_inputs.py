@@ -14,7 +14,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.perturbat
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.perturbation_evidence.literature_experimental_contracts import ExperimentalContractError
 from gene_annotation_episode.episodic_workflow.episode_support.tools.documents.perturbation_evidence.spreadsheet_tools import Workbook, _tag
 
-VERSION = 'a105_reported_rate_observations_v1'
+VERSION = 'a105_reported_rate_observations'
 SOURCE_KINDS = ('primary_source', 'retained_extraction', 'synthetic_fixture')
 TEXT = {'type': 'string', 'minLength': 1}
 CELL = {'type': 'string', 'pattern': '^[A-Z]+[1-9][0-9]*$'}
@@ -175,8 +175,8 @@ def read_rate_observations(content, arguments, *, artifact_ref):
         'meanings':meanings,'entries':entries,'grouping':'unknown','physical_conversion':'unknown'}
 
 
-# Explicit grid version.
-GRID_INPUT_VERSION = 'a105_reported_rate_grid_v1'
+# Reported-rate grid section.
+GRID_INPUT_VERSION = 'a105_reported_rate_grid'
 GRID_SOURCE_STATUSES = ('observed', 'missing', 'not_detected', 'censored', 'unsupported_cell')
 GRID_ENTRY_REASONS = (*ENTRY_REASONS, 'source_error_cell')
 

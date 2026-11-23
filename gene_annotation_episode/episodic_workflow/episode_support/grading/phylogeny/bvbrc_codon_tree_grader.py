@@ -38,7 +38,7 @@ def calculate_codon_tree(sheet: dict, parameters: dict) -> dict:
     """
     saved = validate_codon_tree_sheet(sheet)
     c.shape(parameters, _PARAMETERS, "codon_provider_calculation_parameters_invalid")
-    c.require(parameters["version"] == "codon_tree_components_v1", "codon_provider_calculation_version_invalid")
+    c.require(parameters["version"] == "codon_tree_components", "codon_provider_calculation_version_invalid")
     c.strings(parameters["literal_statistic_population_ids"])
     c.sequence(parameters["family_population_requests"], stored=True)
     c.text(parameters["worst_sequence_population_id"], nullable=True)
@@ -74,7 +74,7 @@ def calculate_codon_tree(sheet: dict, parameters: dict) -> dict:
     for row in common["diagnostics"]:
         if row not in diagnostics:
             diagnostics.append(deepcopy(row))
-    return {"schema_version": "bvbrc_codon_tree_components_v1", "parameters": deepcopy(parameters),
+    return {"schema_version": "bvbrc_codon_tree_components", "parameters": deepcopy(parameters),
             **{key: common[key] for key in common if key not in {"missing_requirements", "diagnostics"}},
             "literal_statistics": literal, "family_populations": family, "worst_sequence_ratios": worst,
             "missing_requirements": requirements, "diagnostics": diagnostics}

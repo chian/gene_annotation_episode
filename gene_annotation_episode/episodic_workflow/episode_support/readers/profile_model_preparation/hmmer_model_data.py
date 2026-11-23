@@ -19,7 +19,7 @@ import math
 import re
 
 
-SCHEMA = "hmmer_model_extraction_v1"
+SCHEMA = "hmmer_model_extraction"
 FORMATS = frozenset({"hmmer3_ascii", "hmmer2_ascii", "hmmer_binary"})
 OCCURRENCE_FIELDS = frozenset({"occurrence_id", "direction", "role", "ordinal",
                              "artifact_ref", "sha256", "size_bytes", "completeness"})

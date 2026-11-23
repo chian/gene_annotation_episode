@@ -1,5 +1,5 @@
 """What the commissioning parent supplies: the original handoff (named in custody) and the selector of the results
-to acquire, an ``execution_results_assignment_v1``. Each property of the old assignment schema
+to acquire, an ``execution_results_assignment``. Each property of the old assignment schema
 (``RESULTS_SCHEMA``: version, handoff_ref, selector) is a field under its old name.
 
 New fields (listed in the carry-over record): ``service``. The old continuation read the service through the
@@ -17,7 +17,7 @@ commission or old-runner restoration and are not carried: a selector the service
 service is asked. ``initial_references`` is the handoff (``parent_input['handoff_ref']``)."""
 from method_loop import DeclaredField, Field, RecordForm
 
-RESULTS_VERSION = 'execution_results_assignment_v1'
+RESULTS_VERSION = 'execution_results_assignment'
 
 ASSIGNMENT_FORM = RecordForm({
     'version': DeclaredField('text', 'The assignment version', RESULTS_VERSION),

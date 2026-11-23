@@ -1,4 +1,4 @@
-"""What the parent gives: the strategy assignment ``strategy_assignment_v1`` (the records that give the assigned
+"""What the parent gives: the strategy assignment ``strategy_assignment`` (the records that give the assigned
 question its context; no search and no paper is handed in, this episode writes its own queries), the commissioned
 literature task (the one kind, ``verified_source_leads``), the proposed annotation, the persisted sheet states, the
 articles already examined, the Store scope of the commission and the records passed in custody. This is the only place
@@ -16,10 +16,10 @@ from method_loop import DeclaredField, Field, RecordForm
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import (
     ContractError, obj, validate_schema)
 
-VERSION = 'literature_local_task_v1'
+VERSION = 'literature_local_task'
 
 ASSIGNMENT_FORM = RecordForm({
-    'version': DeclaredField('text', 'The strategy assignment version', 'strategy_assignment_v1'),
+    'version': DeclaredField('text', 'The strategy assignment version', 'strategy_assignment'),
     'question_context_refs': Field('record_refs', 'Records giving the assigned question its context'),
     'literature_task': Field('record', 'The commissioned literature task: its kind (verified_source_leads), '
                              'evidence_axis A105 and credit_unit'),

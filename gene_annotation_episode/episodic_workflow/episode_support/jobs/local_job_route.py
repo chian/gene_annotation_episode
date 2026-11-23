@@ -118,7 +118,7 @@ class LocalJobRoute:
                         'request_sha256': body['request_sha256']}
             target = native_target_handle(identity)
             self._ledger.register_native_target({
-                'version': 'native_event_registration_v1', 'handle': target, 'run_id': owner['run_id'],
+                'version': 'native_event_registration', 'handle': target, 'run_id': owner['run_id'],
                 'owner_episode_id': owner['episode_id'], 'job_ref': handle, 'registry_ref': 'job_ledger:' + handle,
                 'resource_id': self.resource_id, 'native_identity': identity})
             native.start_prepared(job_handle)

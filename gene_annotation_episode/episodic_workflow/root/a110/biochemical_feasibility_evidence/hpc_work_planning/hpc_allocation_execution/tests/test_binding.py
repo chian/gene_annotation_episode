@@ -121,7 +121,7 @@ def test_the_monitor_commission_names_the_monitor_fields_and_selects_the_declare
     message = TO_CHILD.msg_to_child('monitor', {
         'target_handle': 'handle', 'requested_fields': ['execution_status'], 'known_progress_refs': [],
         'permitted_committed_record_types': [], 'information_unit': 1.0}, {'scope': {}, 'input_refs': []})
-    assert message.assignment['version'] == 'monitor_assignment_v1'
+    assert message.assignment['version'] == 'monitor_assignment'
     assert set(message.assignment) == {'version', 'target_handle', 'requested_fields', 'known_progress_refs',
                                        'permitted_committed_record_types', 'information_unit'}
     assert message.selection == TASK.MONITOR_SELECTION
@@ -140,7 +140,7 @@ def test_the_results_commission_names_the_results_fields_and_selects_nothing():
 def test_the_launch_commission_is_built_from_the_plan():
     request = {'resource_id': 'r', 'resource_kind': 'hpc'}
     plan = {'plan_ref': 'plan_1', 'plan_id': 'p', 'manifest': {}, 'supplied_input_artifact_ref': 'artifact_plan',
-            'launch_assignment': {'version': 'execution_launch_assignment_v1', 'requests': {'r': request},
+            'launch_assignment': {'version': 'execution_launch_assignment', 'requests': {'r': request},
                                   'immutable_input_versions': [], 'constraints': {}}}
     summary = {'ledger_view': {'plans': [plan], 'commission': {'resource_id': 'r', 'objective': 'o',
                                                               'obligations': {}}, 'coordinator_workspace': '/w'},

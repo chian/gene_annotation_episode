@@ -173,7 +173,7 @@ def calculate_minimap2_placement_scores(sheet: dict) -> dict:
                 if kind == "paired" else counts["paired_positions"]+counts[gaps]
                 if counts["paired_positions"] is not None and counts[gaps] is not None else None)
             denominators[field] = sheet["metadata"][role]["length"]
-    result = {"schema": "minimap2_placement_scores_v1", "status": sheet["status"],
+    result = {"schema": "minimap2_placement_scores", "status": sheet["status"],
         "preset": sheet["preset"], "native_version": sheet["native_version"],
         "query_length": facts["query_length"], "reference_length": facts["reference_length"], **spans, **counts,
         "native_matching_bases": facts["matching_bases"], "native_block_length": facts["block_length"],
@@ -357,7 +357,7 @@ def calculate_minimap2_query_scores(sheets, *, query_metadata: dict, output_comp
                "reported_placements_from_complete_output_not_independent_evidence"
                if output_complete is True and invalid == missing == 0 else
                "reported_placements_from_partial_or_unknown_output_no_absence_inference")
-    result = {"schema": "minimap2_query_scores_v1", "query_metadata": deepcopy(query_metadata),
+    result = {"schema": "minimap2_query_scores", "query_metadata": deepcopy(query_metadata),
         "query_name": query_metadata["name"], "query_length": qlength, "output_complete": output_complete,
         "result_meaning": meaning, "received_sheet_count": received, "reported_placement_count": valid,
         "invalid_sheet_count": invalid, "missing_sheet_count": missing,

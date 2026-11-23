@@ -9,7 +9,7 @@ and can reach no other job (the old exposed direct dependencies; custody is what
 ``requested_fields`` is what the monitor may observe of the job; ``information_unit`` the credit of one newly
 informative check.
 
-Not carried from the old ``monitor_assignment_v1``: ``target_handle`` (the handoff row names the job) and
+Not carried from the old ``monitor_assignment``: ``target_handle`` (the handoff row names the job) and
 ``permitted_committed_record_types`` (a job's results are records only after the result-acquisition child fetched
 them; a monitor returns none). This is the only place the assignment is read."""
 from method_loop import DeclaredField, Field, RecordForm, SubsetField
@@ -19,7 +19,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_progress
 FIELD_OPTIONS = (*FIELDS, 'log_windows')
 
 ASSIGNMENT_FORM = RecordForm({
-    'version': DeclaredField('text', 'The version of this assignment form', 'monitor_assignment_v2'),
+    'version': DeclaredField('text', 'The version of this assignment form', 'monitor_assignment'),
     'handoff_refs': Field('record_refs', 'The handoff row of the job to assess: exactly one job ledger row, '
                                          'passed in custody'),
     'known_progress_refs': Field('record_refs', 'The check rows of that job the commissioner already holds'),

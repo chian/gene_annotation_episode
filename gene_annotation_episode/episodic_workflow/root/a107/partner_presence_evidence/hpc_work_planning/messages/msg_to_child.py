@@ -100,7 +100,7 @@ def msg_to_child(slot, arguments, summary):
         return ChildMessage(
             objective='Report the state of execution target ' + arguments['target_handle'],
             message={'initial_report': INITIAL_REPORT},
-            assignment={'version': 'monitor_assignment_v1', 'target_handle': arguments['target_handle'],
+            assignment={'version': 'monitor_assignment', 'target_handle': arguments['target_handle'],
                         'requested_fields': list(arguments['requested_fields']),
                         'known_progress_refs': list(arguments.get('known_progress_refs', [])),
                         'permitted_committed_record_types': list(arguments['permitted_committed_record_types']),
@@ -112,7 +112,7 @@ def msg_to_child(slot, arguments, summary):
         plan = next(item for item in view['plans'] if item['plan_ref'] == launched['plan_ref'])
         kind = next(iter(plan['launch_assignment']['requests'].values()))['resource_kind']
         earlier = [report for report in summary['acquisitions'] if report['handoff_ref'] == handoff_ref]
-        assignment = {'version': 'execution_results_assignment_v1', 'handoff_ref': [handoff_ref],
+        assignment = {'version': 'execution_results_assignment', 'handoff_ref': [handoff_ref],
                       'selector': arguments['selector'], 'resource_kind': kind,
                       'workspace': plan['manifest']['workspace'],
                       'acquired_record_unit': arguments['acquired_record_unit'],

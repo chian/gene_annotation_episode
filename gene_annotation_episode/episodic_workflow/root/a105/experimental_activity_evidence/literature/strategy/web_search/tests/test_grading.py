@@ -97,7 +97,7 @@ def test_the_units_run_in_the_order_the_code_decides_and_the_page_commission_is_
                 'feedback': None}
 
     async def assess_results(jev, *, goal, results):
-        return {'version': 'model_planned_from_jev_evidence_v5', 'assessments': [
+        return {'version': 'model_planned_from_jev_evidence', 'assessments': [
             {**item, 'relevance_probability': 0.5, 'window_probabilities': [0.5], 'text_source': 'description',
              'text_tokens': 10, 'attempts': 1} for item in results]}
     monkeypatch.setattr(task, 'run_operation', run_operation)

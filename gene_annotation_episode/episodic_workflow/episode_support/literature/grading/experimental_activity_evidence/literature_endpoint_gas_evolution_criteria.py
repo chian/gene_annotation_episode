@@ -21,7 +21,7 @@ returns     every case the criterion can return, as (status, reason_code, when).
             as 'never' cannot occur for this criterion.
 """
 
-VERSION = 'a105_endpoint_gas_evolution_criteria_v1'
+VERSION = 'a105_endpoint_gas_evolution_criteria'
 NMOL_PER_UNIT = {'nmol': 1.0, 'umol': 1.0e3, 'mmol': 1.0e6}   # FIXED_BY_DEFINITION: the gas amounts are turned into nmol before they are compared with each other.
 PERCENT_PER_FRACTION = 100.0   # FIXED_BY_DEFINITION: a percent is a hundredth.
 

@@ -4,12 +4,12 @@ Each executed operation of the Episode's one API job (completed, failed, invalid
 submission recorded ``issued_outcome_unknown``) is published as a ``source`` record of provider
 ``episode.api_job_receipt``, as local and HPC job execution publish ``episode.practical_receipt`` records:
 
-- artifact: the ``api_job_receipt_information_v1`` body: ``run_id``, ``episode_id``, ``resource_id``,
+- artifact: the ``api_job_receipt_information`` body: ``run_id``, ``episode_id``, ``resource_id``,
   ``service``, ``request_sha256`` (the admitted service request), ``assignment_sha256`` (the commissioned
   assignment), ``scope`` (the Store-admitted scope) and ``receipt`` (``position``, ``operation``, ``status``,
   the decoded ``event``, ``response_refs`` naming the retained ``api_job_execution.<operation>`` responses,
   ``feedback`` and ``finished_at``);
-- request artifact: the ``api_job_receipt_assignment_v1`` snapshot of the commissioned ``assignment``, the
+- request artifact: the ``api_job_receipt_assignment`` snapshot of the commissioned ``assignment``, the
   ``resource_id``, ``service`` and admitted ``request``.
 
 ``library/job_provider.JobProvider`` builds an API job target from these records.
@@ -23,8 +23,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.structura
 from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.practical_execution_records import digest
 
 RECEIPT_PROVIDER = 'episode.api_job_receipt'
-RECEIPT_VERSION = 'api_job_receipt_information_v1'
-ASSIGNMENT_VERSION = 'api_job_receipt_assignment_v1'
+RECEIPT_VERSION = 'api_job_receipt_information'
+ASSIGNMENT_VERSION = 'api_job_receipt_assignment'
 
 
 class ApiJobReceipts:

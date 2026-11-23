@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 import pytest
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_experimental_contracts import ExperimentalContractError
-from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence.literature_ratio_source_calculations import populate_relative_signal_v2
+from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence.literature_ratio_source_calculations import populate_relative_signal_from_source
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_ratio_source_inputs import validate_relative_signal_source_extraction
 from gene_annotation_episode.episodic_workflow.episode_support.literature.validation.experimental_activity_evidence.literature_ratio_source_validation import validate_relative_signal_saved
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.tests.test_literature_ratio_source_inputs import extract, request, visual, image, prose, VIEW, VIEW2, TEXT
@@ -12,7 +12,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
 def saved(rows=None):
     selection = request([visual()] if rows is None else rows)
     extraction, _ = extract(selection)
-    sheet = populate_relative_signal_v2(extraction)
+    sheet = populate_relative_signal_from_source(extraction)
     ref = 'source_' + '1' * 24
     outcome = {'status': 'completed', 'operation_ref': 'operation_' + '2' * 24, 'record_refs': [ref], 'changed_record_refs': [ref], 'feedback': None, 'result': {'sheet_ref': ref, 'cells': deepcopy(sheet['cells']), **{k: sheet[k] for k in ('selected_roster_resolved', 'point_candidate_set_complete', 'known_source_conflict')}}}
     return (selection, extraction, sheet, outcome)
@@ -26,7 +26,7 @@ def test_saved_whole_api_source_free_and_detached(monkeypatch):
 
     def forbidden(*a, **kw):
         raise AssertionError('saved validation called forbidden source/reader/calculator/decoder')
-    for module, name in ((inputs, 'read_relative_signal_source_inputs'), (inputs, '_view_bytes'), (inputs, '_jats_expression'), (inputs, '_jats_matches'), (calculations, 'populate_relative_signal_v2'), (calculations, '_component_facts'), (Image, 'open')):
+    for module, name in ((inputs, 'read_relative_signal_source_inputs'), (inputs, '_view_bytes'), (inputs, '_jats_expression'), (inputs, '_jats_matches'), (calculations, 'populate_relative_signal_from_source'), (calculations, '_component_facts'), (Image, 'open')):
         monkeypatch.setattr(module, name, forbidden)
     validate_relative_signal_saved(selected, extraction, sheet, outcome)
     assert (selected, extraction, sheet, outcome) == before
@@ -104,7 +104,7 @@ def test_generic_html_text_span_saved_forgery_and_actual_jats_unchanged(monkeypa
     actual_jats = extraction['representations'][0]['readings'][0]['numerator']['locator']
     assert actual_jats['kind'] == 'jats' and actual_jats['section_id'] == 's1'
     assert actual_jats['paragraph_index'] == 0 and actual_jats['paragraph_text'].startswith('SyntheticProtein')
-    sheet = populate_relative_signal_v2(extraction)
+    sheet = populate_relative_signal_from_source(extraction)
     _, _, _, outcome = saved()
     outcome['result'].update(cells=deepcopy(sheet['cells']))
     for field in ('selected_roster_resolved', 'point_candidate_set_complete', 'known_source_conflict'):
@@ -131,7 +131,7 @@ def test_canonical_multi_source_multi_view_saved_without_callbacks_or_decoders(m
     from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.tests.test_literature_ratio_source_inputs import multi_dependency_fixture
     selected, read_source, read_view, calls, data = multi_dependency_fixture()
     extraction = inputs.read_relative_signal_source_inputs(selected, read_source=read_source, read_view=read_view, evidence_origin='synthetic_fixture')
-    sheet = calculations.populate_relative_signal_v2(extraction)
+    sheet = calculations.populate_relative_signal_from_source(extraction)
     assert sheet['cells']['reported_ratio']['value'] == 0.6
     assert sheet['independent_preparation_count'] is None
     _, _, _, outcome = saved()
@@ -144,7 +144,7 @@ def test_canonical_multi_source_multi_view_saved_without_callbacks_or_decoders(m
 
     def forbidden(*a, **kw):
         raise AssertionError('canonical saved read reacquired source or recalculated')
-    for module, name in ((inputs, 'read_relative_signal_source_inputs'), (inputs, '_available_call'), (inputs, '_view_bytes'), (inputs, '_jats_expression'), (inputs, '_jats_matches'), (calculations, 'populate_relative_signal_v2'), (calculations, '_component_facts'), (Image, 'open')):
+    for module, name in ((inputs, 'read_relative_signal_source_inputs'), (inputs, '_available_call'), (inputs, '_view_bytes'), (inputs, '_jats_expression'), (inputs, '_jats_matches'), (calculations, 'populate_relative_signal_from_source'), (calculations, '_component_facts'), (Image, 'open')):
         monkeypatch.setattr(module, name, forbidden)
     validate_relative_signal_saved(canonical['selection'], canonical['extraction'], canonical['sheet'], canonical['outcome'])
     assert canonical == before and calls == previous_calls

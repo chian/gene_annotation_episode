@@ -16,7 +16,7 @@ from ..episode import BiochemicalFeasibilityEvidence as HEAD
 from ..goal import BINDING_PATH
 
 SHA = 'a' * 64
-OPTION = {'version': 'biochemical_feasibility_evidence_option_ref_v1', 'library_id': SHA, 'entry_sha256': SHA}
+OPTION = {'version': 'biochemical_feasibility_evidence_option_ref', 'library_id': SHA, 'entry_sha256': SHA}
 TASK = 'A110:received_scientific_finding_progress'
 
 
@@ -31,11 +31,11 @@ def world(tmp_path):
                                         'value': {'type': 'term_ref', 'ref': reaction}, 'context_refs': []},
                          origin='caller')['id']
     held = [*held, reaction, proposed]
-    selection = {'version': 'selection_v1', 'evidence_axis': {**OPTION, 'slot': 'evidence_axis', 'option_id': 'A110'},
+    selection = {'version': 'selection', 'evidence_axis': {**OPTION, 'slot': 'evidence_axis', 'option_id': 'A110'},
                  'thought_pattern': {**OPTION, 'slot': 'thought_pattern', 'option_id': 'P1'},
                  'child_tool_info': [{'name': 'source.read', 'resources': 'local'}]}
     assignment = {'selection': selection, 'proposed_annotation_ref': [proposed], 'evidence_refs': held,
-                  'constraints': {}, 'context': {'evidence_task': {'version': 'evidence_axis_task_v1',
+                  'constraints': {}, 'context': {'evidence_task': {'version': 'evidence_axis_task',
                                                                    'kind': 'whole_axis_findings',
                                                                    'evidence_axis': 'A110', 'credit_unit': 1}},
                   'scope': scope, 'received_record_refs': held}

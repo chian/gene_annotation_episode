@@ -5,7 +5,7 @@ import math
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.evolutionary_history_evidence.literature_completion_time_inputs import ROLES, validate_completion_time_extraction
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.evolutionary_history_evidence.literature_rate_domains import _divide, _encode, _project, INF
 
-VERSION = "a105_completion_time_components_v1"
+VERSION = "a105_completion_time_components"
 COMPONENTS = ("numerator_time", "denominator_time", "completion_time_ratio", "inverse_completion_time_ratio")
 REASONS = ("source_measurement_unavailable", "source_time_unit_unreported", "unsupported_source_time_unit",
     "source_time_unit_conflicting", "nonpositive_physical_time", "endpoint_relation_unknown", "endpoint_relation_conflicting", "different_endpoints",

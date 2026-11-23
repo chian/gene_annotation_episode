@@ -37,7 +37,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     NM_PER_UNIT, SPLIT_REPORTER_CRITERIA)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_split_reporter_grade_v1'
+VERSION = 'a105_split_reporter_grade'
 CRITERIA = tuple(criterion['id'] for criterion in SPLIT_REPORTER_CRITERIA)
 INTERACTION = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact interaction_detected
 NO_KD = 'no_apparent_kd_reported'

@@ -26,7 +26,7 @@ class FindingProgressPolicy:
             raise ValueError('explicit_positive_finding_unit_required')
 
     def as_record(self):
-        return {'version': 'known_retained_scientific_findings_v1',
+        return {'version': 'known_retained_scientific_findings',
             'finding_unit': self.finding_unit, 'identity_version': IDENTITY_VERSION,
             'finding_validity_version': VALIDITY_VERSION,
             'eligible_information': 'distinct_current_retained_typed_target_findings',

@@ -21,19 +21,19 @@ Environment: TypeAlias = dict[str, str]
 Operation: TypeAlias = Literal['inspect', 'extract_sequence', 'compare']
 
 class InspectRequest(TypedDict):
-    version: Literal['protein_structure_inspect_request_v1']
+    version: Literal['protein_structure_inspect_request']
     operation: Literal['inspect']
     structure_file: FileIdentity
     inventory: InventorySelection
 
 class ExtractRequest(TypedDict):
-    version: Literal['protein_structure_extract_request_v1']
+    version: Literal['protein_structure_extract_request']
     operation: Literal['extract_sequence']
     selection: StructureSelection
     supplied_metadata_files: list[FileIdentity]
 
 class CompareRequest(TypedDict):
-    version: Literal['protein_structure_compare_request_v1']
+    version: Literal['protein_structure_compare_request']
     operation: Literal['compare']
     fixed_selection: StructureSelection
     moving_selection: StructureSelection
@@ -53,8 +53,8 @@ class Software(TypedDict):
     implementation_files: list[ImplementationFile]
     numpy_version: str
     biopython_version: str
-    implementation: Literal['gene_annotation_episode_corrected_protein_structure_v1']
-    algorithm: Literal['unweighted_proper_rigid_ca_svd_v1']
+    implementation: Literal['gene_annotation_episode_corrected_protein_structure']
+    algorithm: Literal['unweighted_proper_rigid_ca_svd']
 
 class InputFile(TypedDict):
     input_id: str
@@ -66,10 +66,10 @@ class InputFile(TypedDict):
 class OutputFile(TypedDict):
     role: Literal['native_result', 'sequence', 'residue_map', 'stdout', 'stderr']
     relative_path: str
-    format: Literal['protein_structure_native_v1', 'protein_structure_inventory_native_v1', 'protein_structure_sequence_native_v1', 'ascii_protein_sequence_v1', 'protein_structure_sequence_v1', 'text']
+    format: Literal['protein_structure_native', 'protein_structure_inventory_native', 'protein_structure_sequence_native', 'ascii_protein_sequence', 'protein_structure_sequence', 'text']
 
 class NativeProteinJob(TypedDict):
-    version: Literal['native_protein_structure_job_v1']
+    version: Literal['native_protein_structure_job']
     program: Literal['protein_structure_python']
     request: ScientificRequest
     software: Software
@@ -104,7 +104,7 @@ class ProteinPolicy(TypedDict):
     scratch_bytes: Literal[4294967296]
 
 class NativeProteinRunPlan(TypedDict):
-    version: Literal['native_protein_structure_run_plan_v1']
+    version: Literal['native_protein_structure_run_plan']
     identity: AttemptIdentity | TerminalAttemptIdentity
     requested_job: RequestedProteinJob
     attempt_directory: str
@@ -126,7 +126,7 @@ class MeasuredDuration(TypedDict):
     source: Literal['monotonic_clock', 'none']
 
 class NativeProteinBundle(TypedDict):
-    version: Literal['native_protein_structure_bundle_v1']
+    version: Literal['native_protein_structure_bundle']
     identity: AttemptIdentity | TerminalAttemptIdentity
     requested_job: RequestedProteinJob
     software: Software
@@ -153,7 +153,7 @@ ATTEMPT_DIRECTORY_NAME = 'protein-structure-attempt'
 BUNDLE_FILENAME = 'bundle.json'
 WORKER_INPUT_FILENAME = 'worker-input.json'
 POLICY = {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4294967296}
-NATIVE_FORMATS = {'inspect': 'protein_structure_inventory_native_v1', 'extract_sequence': 'protein_structure_sequence_native_v1', 'compare': 'protein_structure_native_v1'}
+NATIVE_FORMATS = {'inspect': 'protein_structure_inventory_native', 'extract_sequence': 'protein_structure_sequence_native', 'compare': 'protein_structure_native'}
 _TEXT = {'type': 'string', 'minLength': 1, 'pattern': '^[^\\u0000]+$'}
 _SHA = {'type': 'string', 'pattern': '^[a-f0-9]{64}$'}
 _NULL = {'type': 'null'}
@@ -169,32 +169,32 @@ def _array(item, **kwargs):
 def _nullable(item):
     return {'anyOf': [item, _NULL]}
 
-def _definitions(*, action_custody=False):
-    definitions = science.protein_structure_schema_definitions(action_custody=action_custody)
-    own = {'InspectRequest': obj({'version': {'const': 'protein_structure_inspect_request_v1'}, 'operation': {'const': 'inspect'}, 'structure_file': _ref('FileIdentity'), 'inventory': _ref('InventorySelection')}), 'ExtractRequest': obj({'version': {'const': 'protein_structure_extract_request_v1'}, 'operation': {'const': 'extract_sequence'}, 'selection': _ref('StructureSelection'), 'supplied_metadata_files': _array(_ref('FileIdentity'))}), 'CompareRequest': obj({'version': {'const': 'protein_structure_compare_request_v1'}, 'operation': {'const': 'compare'}, 'fixed_selection': _ref('StructureSelection'), 'moving_selection': _ref('StructureSelection'), 'correspondence': _ref('CorrespondenceInput'), 'parameters': _ref('CalculationParameters'), 'supplied_metadata_files': _array(_ref('FileIdentity'))}), 'Software': obj({'python_executable': _TEXT, 'python_version': _TEXT, 'driver_module': {'const': DRIVER_MODULE}, 'worker_module': {'const': WORKER_MODULE}, 'implementation_files': _array(obj({'module': _TEXT}), minItems=1), 'numpy_version': _TEXT, 'biopython_version': _TEXT, 'implementation': {'const': 'gene_annotation_episode_corrected_protein_structure_v1'}, 'algorithm': {'const': 'unweighted_proper_rigid_ca_svd_v1'}}), 'InputFile': obj({'input_id': _TEXT, 'role': _ref('InputRole'), 'file_identity': _ref('FileIdentity'), 'path': _TEXT, 'staged_relative_path': _TEXT}), 'OutputFile': obj({'role': {'enum': ['native_result', 'sequence', 'residue_map', 'stdout', 'stderr']}, 'relative_path': _TEXT, 'format': {'enum': [*NATIVE_FORMATS.values(), 'ascii_protein_sequence_v1', 'protein_structure_sequence_v1', 'text']}}), 'AttemptIdentity': obj({**{name: _TEXT for name in ('run_id', 'episode_id', 'resource_id', 'execution_id', 'operation_key')}, 'attempt_id': _SHA, 'requested_job_sha256': _SHA}), 'WorkerFile': obj({'input_id': _TEXT, 'role': _ref('InputRole'), 'file_identity': _ref('FileIdentity'), 'path': _TEXT}), 'ManifestFile': obj({'kind': {'enum': ['input', 'control', 'output']}, 'role': _ref('ManifestRole'), 'input_id': _nullable(_TEXT), 'format': _TEXT, 'relative_path': _TEXT, 'state': {'enum': ['present', 'absent']}, 'sha256': _nullable(_SHA), 'byte_length': _nullable(_COUNT)})}
+def _definitions():
+    definitions = science.protein_structure_schema_definitions()
+    own = {'InspectRequest': obj({'version': {'const': 'protein_structure_inspect_request'}, 'operation': {'const': 'inspect'}, 'structure_file': _ref('FileIdentity'), 'inventory': _ref('InventorySelection')}), 'ExtractRequest': obj({'version': {'const': 'protein_structure_extract_request'}, 'operation': {'const': 'extract_sequence'}, 'selection': _ref('StructureSelection'), 'supplied_metadata_files': _array(_ref('FileIdentity'))}), 'CompareRequest': obj({'version': {'const': 'protein_structure_compare_request'}, 'operation': {'const': 'compare'}, 'fixed_selection': _ref('StructureSelection'), 'moving_selection': _ref('StructureSelection'), 'correspondence': _ref('CorrespondenceInput'), 'parameters': _ref('CalculationParameters'), 'supplied_metadata_files': _array(_ref('FileIdentity'))}), 'Software': obj({'python_executable': _TEXT, 'python_version': _TEXT, 'driver_module': {'const': DRIVER_MODULE}, 'worker_module': {'const': WORKER_MODULE}, 'implementation_files': _array(obj({'module': _TEXT}), minItems=1), 'numpy_version': _TEXT, 'biopython_version': _TEXT, 'implementation': {'const': 'gene_annotation_episode_corrected_protein_structure'}, 'algorithm': {'const': 'unweighted_proper_rigid_ca_svd'}}), 'InputFile': obj({'input_id': _TEXT, 'role': _ref('InputRole'), 'file_identity': _ref('FileIdentity'), 'path': _TEXT, 'staged_relative_path': _TEXT}), 'OutputFile': obj({'role': {'enum': ['native_result', 'sequence', 'residue_map', 'stdout', 'stderr']}, 'relative_path': _TEXT, 'format': {'enum': [*NATIVE_FORMATS.values(), 'ascii_protein_sequence', 'protein_structure_sequence', 'text']}}), 'AttemptIdentity': obj({**{name: _TEXT for name in ('run_id', 'episode_id', 'resource_id', 'execution_id', 'operation_key')}, 'attempt_id': _SHA, 'requested_job_sha256': _SHA}), 'WorkerFile': obj({'input_id': _TEXT, 'role': _ref('InputRole'), 'file_identity': _ref('FileIdentity'), 'path': _TEXT}), 'ManifestFile': obj({'kind': {'enum': ['input', 'control', 'output']}, 'role': _ref('ManifestRole'), 'input_id': _nullable(_TEXT), 'format': _TEXT, 'relative_path': _TEXT, 'state': {'enum': ['present', 'absent']}, 'sha256': _nullable(_SHA), 'byte_length': _nullable(_COUNT)})}
     # Saved native handles retain their original identity. Terminal commands
     # additionally bind the complete commissioned assignment.
     own['AttemptIdentity'] = {'oneOf': [own['AttemptIdentity'], obj({
         **own['AttemptIdentity']['properties'], 'assignment_sha256': _SHA})]}
     own['ScientificRequest'] = {'oneOf': [_ref(name) for name in ('InspectRequest', 'ExtractRequest', 'CompareRequest')]}
-    own['NativeProteinJob'] = obj({'version': {'const': 'native_protein_structure_job_v1'}, 'program': {'const': 'protein_structure_python'}, 'request': _ref('ScientificRequest'), 'software': _ref('Software'), 'inputs': _array(_ref('InputFile'), minItems=1), 'outputs': _array(_ref('OutputFile'), minItems=3), 'environment': _ENV})
+    own['NativeProteinJob'] = obj({'version': {'const': 'native_protein_structure_job'}, 'program': {'const': 'protein_structure_python'}, 'request': _ref('ScientificRequest'), 'software': _ref('Software'), 'inputs': _array(_ref('InputFile'), minItems=1), 'outputs': _array(_ref('OutputFile'), minItems=3), 'environment': _ENV})
     own['RequestedProteinJob'] = obj({'argv': _array(_TEXT, minItems=1), 'environment': _ENV, 'native_protein_structure': _ref('NativeProteinJob')})
     own['NativeProteinBinding'] = obj({'operation': {'enum': list(NATIVE_FORMATS)}, 'scientific_mode': _nullable(_ref('ScientificMode')), 'software': _ref('Software')})
-    own['NativeProteinRunPlan'] = obj({'version': {'const': 'native_protein_structure_run_plan_v1'}, 'identity': _ref('AttemptIdentity'), 'requested_job': _ref('RequestedProteinJob'), 'attempt_directory': _TEXT, 'policy': retained_policy_schema()})
-    own['WorkerInput'] = obj({'version': {'const': 'protein_structure_worker_input_v1'}, 'request': _ref('ScientificRequest'), 'software': _ref('Software'), 'files': _array(_ref('WorkerFile'), minItems=1)})
+    own['NativeProteinRunPlan'] = obj({'version': {'const': 'native_protein_structure_run_plan'}, 'identity': _ref('AttemptIdentity'), 'requested_job': _ref('RequestedProteinJob'), 'attempt_directory': _TEXT, 'policy': retained_policy_schema()})
+    own['WorkerInput'] = obj({'version': {'const': 'protein_structure_worker_input'}, 'request': _ref('ScientificRequest'), 'software': _ref('Software'), 'files': _array(_ref('WorkerFile'), minItems=1)})
     shared = {'producer': _ref('Software'), 'state': _ref('State'), 'issues': _array(_ref('StructuredIssue'))}
     own['InspectionNative'] = obj({**shared, 'version': {'const': NATIVE_FORMATS['inspect']}, 'request': _ref('InspectRequest'), 'parsed': _ref('ParsedStructure'), 'inventory': _ref('StructureInventory')})
     own['ExtractionNative'] = obj({**shared, 'version': {'const': NATIVE_FORMATS['extract_sequence']}, 'request': _ref('ExtractRequest'), 'parsed': _ref('ParsedStructure'), 'sequence': _ref('StructureSequence'), 'metadata': _ref('StructureMetadata')})
     own['ComparisonNative'] = obj({**shared, 'version': {'const': NATIVE_FORMATS['compare']}, 'request': _ref('CompareRequest'), 'sheet': _nullable(_ref('ProteinStructureSheet'))})
     own['NativeProteinResult'] = {'oneOf': [_ref(name) for name in ('InspectionNative', 'ExtractionNative', 'ComparisonNative')]}
-    own['NativeProteinBundle'] = obj({'version': {'const': 'native_protein_structure_bundle_v1'}, 'identity': _ref('AttemptIdentity'), 'requested_job': _ref('RequestedProteinJob'), 'software': _ref('Software'), 'driver_argv': _array(_TEXT, minItems=1), 'worker_argv': _nullable(_array(_TEXT, minItems=1)), 'realized_environment': _ENV, 'files': _array(_ref('ManifestFile')), 'returncode': _nullable({'type': 'integer'}), 'native_status': {'enum': ['complete', 'partial', 'failed']}, 'started_at': _TEXT, 'finished_at': _TEXT, 'measured_duration': obj({'seconds': _nullable({'type': 'number', 'minimum': 0}), 'kind': {'enum': ['worker_wall', 'driver_wall', 'unmeasured']}, 'source': {'enum': ['monotonic_clock', 'none']}}), 'failures': _array(_ref('StructuredIssue')), 'sealed': {'const': True}})
+    own['NativeProteinBundle'] = obj({'version': {'const': 'native_protein_structure_bundle'}, 'identity': _ref('AttemptIdentity'), 'requested_job': _ref('RequestedProteinJob'), 'software': _ref('Software'), 'driver_argv': _array(_TEXT, minItems=1), 'worker_argv': _nullable(_array(_TEXT, minItems=1)), 'realized_environment': _ENV, 'files': _array(_ref('ManifestFile')), 'returncode': _nullable({'type': 'integer'}), 'native_status': {'enum': ['complete', 'partial', 'failed']}, 'started_at': _TEXT, 'finished_at': _TEXT, 'measured_duration': obj({'seconds': _nullable({'type': 'number', 'minimum': 0}), 'kind': {'enum': ['worker_wall', 'driver_wall', 'unmeasured']}, 'source': {'enum': ['monotonic_clock', 'none']}}), 'failures': _array(_ref('StructuredIssue')), 'sealed': {'const': True}})
     if set(own) & set(definitions):
         raise RuntimeError('protein_structure_definition_owner_conflict')
     return {**definitions, **own}
 
-def protein_structure_execution_schema(type_name: str, *, bindings=None, action_custody=False) -> dict:
+def protein_structure_execution_schema(type_name: str, *, bindings=None) -> dict:
     """A self-contained local schema resource, safe inside larger alternatives."""
-    definitions = _definitions(action_custody=action_custody)
+    definitions = _definitions()
     _require(type_name in definitions)
     root = _ref(type_name)
     if bindings is not None:
@@ -218,14 +218,14 @@ def _require(condition, code='invalid_schema'):
         raise ValueError(code)
 
 @lru_cache(maxsize=None)
-def _execution_validator(type_name, action_custody=False):
+def _execution_validator(type_name):
     """Reuse fixed schema construction, never a payload's validation result.
 
     Only successful, known type names enter this finite cache. Binding-specific
     schemas are still built from each caller's current supplied bindings.
     The cached schema is private; public documents are detached copies.
     """
-    document = protein_structure_execution_schema(type_name, action_custody=action_custody)
+    document = protein_structure_execution_schema(type_name)
     registry = Registry().with_resource(document['$id'], Resource.from_contents(document)).crawl()
     return _STRICT(document, registry=registry)
 
@@ -245,7 +245,7 @@ def _checked(value, type_name):
         elif type(v) is float:
             _require(math.isfinite(v))
     plain(value)
-    _require(_execution_validator(type_name, science._contains_action_custody(value)).is_valid(value))
+    _require(_execution_validator(type_name).is_valid(value))
     return deepcopy(value)
 
 def _path(value, *, absolute):
@@ -280,7 +280,7 @@ def validate_protein_structure_request(value: ScientificRequest) -> ScientificRe
     _unique(metadata)
     for f in metadata:
         science.validate_file_identity(f)
-        _require(f['format'] == 'protein_structure_metadata_v1', 'unsupported_format')
+        _require(f['format'] == 'protein_structure_metadata', 'unsupported_format')
     selections = [('single', value['selection'])] if value['operation'] == 'extract_sequence' else [(side, value[side + '_selection']) for side in ('fixed', 'moving')]
     for role, selection in selections:
         science.validate_structure_selection(selection)
@@ -343,7 +343,7 @@ def output_files(operation: Operation) -> list[OutputFile]:
     _require(operation in NATIVE_FORMATS)
     rows = [{'role': 'native_result', 'relative_path': 'result.json', 'format': NATIVE_FORMATS[operation]}, {'role': 'stdout', 'relative_path': 'stdout.log', 'format': 'text'}, {'role': 'stderr', 'relative_path': 'stderr.log', 'format': 'text'}]
     if operation == 'extract_sequence':
-        rows += [{'role': 'sequence', 'relative_path': 'sequence.txt', 'format': 'ascii_protein_sequence_v1'}, {'role': 'residue_map', 'relative_path': 'residue-map.json', 'format': 'protein_structure_sequence_v1'}]
+        rows += [{'role': 'sequence', 'relative_path': 'sequence.txt', 'format': 'ascii_protein_sequence'}, {'role': 'residue_map', 'relative_path': 'residue-map.json', 'format': 'protein_structure_sequence'}]
     return rows
 
 def _environment(value):
@@ -431,7 +431,7 @@ def validate_protein_structure_run_plan(value: NativeProteinRunPlan) -> NativePr
 
 def manifest_files(job: NativeProteinJob) -> list[dict]:
     rows = [{'kind': 'input', 'role': r['role'], 'input_id': r['input_id'], 'format': r['file_identity']['format'], 'relative_path': r['staged_relative_path']} for r in job['inputs']]
-    rows += [{'kind': 'control', 'role': 'run_plan', 'input_id': None, 'format': 'native_protein_structure_run_plan_v1', 'relative_path': RUN_PLAN_FILENAME}, {'kind': 'control', 'role': 'worker_input', 'input_id': None, 'format': 'protein_structure_worker_input_v1', 'relative_path': WORKER_INPUT_FILENAME}]
+    rows += [{'kind': 'control', 'role': 'run_plan', 'input_id': None, 'format': 'native_protein_structure_run_plan', 'relative_path': RUN_PLAN_FILENAME}, {'kind': 'control', 'role': 'worker_input', 'input_id': None, 'format': 'protein_structure_worker_input', 'relative_path': WORKER_INPUT_FILENAME}]
     rows += [{'kind': 'output', 'input_id': None, **r} for r in job['outputs']]
     return rows
 

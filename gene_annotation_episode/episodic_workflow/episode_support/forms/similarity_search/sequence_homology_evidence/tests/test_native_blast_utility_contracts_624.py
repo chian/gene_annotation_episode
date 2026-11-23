@@ -23,7 +23,7 @@ def native_case(name='build_dna_v5'):
 
 def build_job(name='build_dna_v5'):
     a,receipt=native_case(name)
-    return {'version':'native_blast_utility_job_v1','operation':a['operation'],
+    return {'version':'native_blast_standard_utility_job','operation':a['operation'],
         'software':{'executable':a['argv'][0],'sha256':a['software']['executable_sha256'],'engine_version':None},
         'environment':{'BLAST_USAGE_REPORT':'false','NCBI_DONT_USE_NCBIRC':'1'},
         'inputs':[{'input_key':r['occurrence_id'],'role':r['role'],'path':r['native_path'],
@@ -46,7 +46,7 @@ def inspect_job(mode='extract_sequences',name='build_dna_v5'):
     op=operation(mode,molecule=a['operation']['molecule'])
     op['database_key']=manifest['database_key']
     program=op['program']
-    job={'version':'native_blast_utility_job_v1','operation':op,
+    job={'version':'native_blast_standard_utility_job','operation':op,
         'software':{'executable':'/configured/'+program,'sha256':'b'*64,'engine_version':None},
         'environment':{},'inputs':[], 'databases':[{
             'database_key':manifest['database_key'],'kind':manifest['kind'],'identity':manifest['identity'],
@@ -54,7 +54,7 @@ def inspect_job(mode='extract_sequences',name='build_dna_v5'):
             'manifest_file':{'path':'/retained/manifest.json','sha256':hashlib.sha256(raw).hexdigest(),
                              'size_bytes':len(raw),'artifact_ref':None}}],
         'outputs':[{'role':'stdout','path_kind':'file','relative_path':'stdout.txt',
-            'format':{'extract_sequences':'blastdbcmd_tabular_v1','info':'blastdb_info_text',
+            'format':{'extract_sequences':'blastdbcmd_tabular','info':'blastdb_info_text',
                       'metadata':'blastdb_metadata_json','integrity':'blastdbcheck_text'}[mode]},
             {'role':'stderr','path_kind':'file','relative_path':'stderr.txt','format':'text'}]}
     return job

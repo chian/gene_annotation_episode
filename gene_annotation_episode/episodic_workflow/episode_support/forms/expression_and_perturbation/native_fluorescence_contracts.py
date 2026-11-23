@@ -15,7 +15,7 @@ OPERATIONS = ('perform_facs_cell_sorting', 'analyze_cytokine_production_in_cd4_t
 MODE = 'supplied_event_population'
 PARSERS = ('csv', 'table_snapshot', 'fcs_encoded')
 PREPARATION_METHODS = ('fcs_scale_flowio_1_4_0', 'spill_compensate_flowutils_1_2_2')
-REPORT_PROFILES = ('biomni_facs_log_548_v1', 'biomni_cytokine_log_548_v1', 'biomni_cytokine_csv_548_v1')
+REPORT_PROFILES = ('biomni_facs_log_548', 'biomni_cytokine_log_548', 'biomni_cytokine_csv_548')
 RUN_PLAN_FILENAME = 'fluorescence-plan.json'
 ATTEMPT_DIRECTORY_NAME = 'fluorescence-attempt'
 DRIVER_MODULE = 'gene_annotation_episode.native_fluorescence_driver'
@@ -53,14 +53,14 @@ BOUND_SCHEMA = nullable(obj({'value': {'type': 'number'}, 'inclusive': {'type': 
 GATE_SCHEMA = obj({'key': TEXT, 'sample_key': TEXT, 'parent': obj({'kind': {'enum': ['population', 'gate']}, 'key': TEXT}), 'kind': {'enum': ['threshold', 'pass_all']}, 'domain_key': nullable(TEXT), 'channel_key': nullable(TEXT), 'lower': BOUND_SCHEMA, 'upper': BOUND_SCHEMA})
 CONTROL_SCHEMA = obj({'key': TEXT, 'target_gate_key': TEXT, 'control_gate_key': TEXT, 'denominator': {'enum': ['parent', 'evaluable']}, 'comparison_basis': BASIS_SCHEMA})
 PARAMETERS_SCHEMA = obj({'fraction_requests': array(obj({'gate_key': TEXT, 'denominator': {'enum': ['parent', 'evaluable']}})), 'intensity_requests': array(obj({'gate_key': TEXT, 'domain_key': TEXT, 'channel_key': TEXT})), 'control_requests': array(obj({'control_key': TEXT, 'include_legacy_clipping': {'type': 'boolean'}})), 'native_comparison_requests': {'type': 'array', 'maxItems': 0}})
-SOFTWARE_SCHEMA = obj({'version': {'const': 'fluorescence_software_v1'}, 'python': PIN_SCHEMA, 'python_version': TEXT, 'python_home': TEXT, 'module_root': TEXT, 'implementation_files': array(PIN_SCHEMA, minItems=1), 'dependency_roots': array(TEXT, uniqueItems=True), 'distributions': array(obj({'name': TEXT, 'version': TEXT, 'requires': array(LABEL)})), 'runtime_files': array(PIN_SCHEMA, minItems=1)})
-JOB_SCHEMA = obj({'version': {'const': 'native_fluorescence_job_v1'}, 'operation': {'enum': list(OPERATIONS)}, 'mode': {'const': MODE}, 'inputs': array(EVENT_INPUT_SCHEMA, minItems=1), 'support_inputs': array(obj({'file': FILE_SCHEMA, 'path': TEXT})), 'definitions': obj({'populations': array(POPULATION_SCHEMA), 'gates': array(GATE_SCHEMA), 'control_pairs': array(CONTROL_SCHEMA), 'native_reports': {'type': 'array', 'maxItems': 0}}), 'parameters': PARAMETERS_SCHEMA, 'software': SOFTWARE_SCHEMA, 'output_prefix': TEXT})
+SOFTWARE_SCHEMA = obj({'version': {'const': 'fluorescence_software'}, 'python': PIN_SCHEMA, 'python_version': TEXT, 'python_home': TEXT, 'module_root': TEXT, 'implementation_files': array(PIN_SCHEMA, minItems=1), 'dependency_roots': array(TEXT, uniqueItems=True), 'distributions': array(obj({'name': TEXT, 'version': TEXT, 'requires': array(LABEL)})), 'runtime_files': array(PIN_SCHEMA, minItems=1)})
+JOB_SCHEMA = obj({'version': {'const': 'native_fluorescence_job'}, 'operation': {'enum': list(OPERATIONS)}, 'mode': {'const': MODE}, 'inputs': array(EVENT_INPUT_SCHEMA, minItems=1), 'support_inputs': array(obj({'file': FILE_SCHEMA, 'path': TEXT})), 'definitions': obj({'populations': array(POPULATION_SCHEMA), 'gates': array(GATE_SCHEMA), 'control_pairs': array(CONTROL_SCHEMA), 'native_reports': {'type': 'array', 'maxItems': 0}}), 'parameters': PARAMETERS_SCHEMA, 'software': SOFTWARE_SCHEMA, 'output_prefix': TEXT})
 OUTPUT_CHANNEL_SCHEMA = obj({k: deepcopy(v) for k, v in CHANNEL_SCHEMA['properties'].items()
     if k != 'measurement_origin'})
-SCALING_RECIPE_SCHEMA = obj({'version': {'const': 'fluorescence_preparation_recipe_v1'},
+SCALING_RECIPE_SCHEMA = obj({'version': {'const': 'fluorescence_preparation_recipe'},
     'method': {'const': PREPARATION_METHODS[0]},
-    'parameters': obj({'metadata_policy': {'const': 'strict_present_fcs_metadata_v1'}})})
-COMPENSATION_RECIPE_SCHEMA = obj({'version': {'const': 'fluorescence_preparation_recipe_v1'},
+    'parameters': obj({'metadata_policy': {'const': 'strict_present_fcs_metadata'}})})
+COMPENSATION_RECIPE_SCHEMA = obj({'version': {'const': 'fluorescence_preparation_recipe'},
     'method': {'const': PREPARATION_METHODS[1]}, 'parameters': obj({'matrix_file': FILE_SCHEMA,
         'dataset_position': COUNT, 'keyword': {'enum': ['spill', 'spillover']},
         'input_domain_basis': BASIS_SCHEMA, 'axes': array(obj({'native_label': TEXT,
@@ -91,11 +91,9 @@ REPORT_INPUT_SCHEMA = {'anyOf': [obj({'file': FILE_SCHEMA, 'path': TEXT, 'source
     'profile': {'const': profile}, 'fields': array(obj({'key': TEXT, 'locator': locator,
         'component_request': nullable(REPORT_CELL_REQUEST_SCHEMA)})), 'association_file': nullable(FILE_SCHEMA)})
     for profile, locator in zip(REPORT_PROFILES, _REPORT_LOCATORS)]}
-JOB_V2_SCHEMA = deepcopy(JOB_SCHEMA)
-JOB_V2_SCHEMA['properties'].update(version={'const': 'native_fluorescence_job_v2'},
-    preparations=array(PREPARATION_REQUEST_SCHEMA), report_inputs=array(REPORT_INPUT_SCHEMA))
-JOB_V2_SCHEMA['required'] = list(JOB_V2_SCHEMA['properties'])
-JOB_V2_SCHEMA['properties']['parameters']['properties']['native_comparison_requests'] = array(TEXT, uniqueItems=True)
+JOB_SCHEMA['properties'].update(preparations=array(PREPARATION_REQUEST_SCHEMA), report_inputs=array(REPORT_INPUT_SCHEMA))
+JOB_SCHEMA['required'] = list(JOB_SCHEMA['properties'])
+JOB_SCHEMA['properties']['parameters']['properties']['native_comparison_requests'] = array(TEXT, uniqueItems=True)
 
 def path_value(value, *, absolute):
     require(type(value) is str and bool(value) and (not any((c in value for c in '\x00\r\n\\'))), 'invalid_fluorescence_path')
@@ -118,7 +116,7 @@ def _pin(value):
 
 def validate_fluorescence_software(value):
     closed(value, SOFTWARE_SCHEMA['properties'])
-    require(value['version'] == 'fluorescence_software_v1', 'invalid_fluorescence_software')
+    require(value['version'] == 'fluorescence_software', 'invalid_fluorescence_software')
     _key(value['python_version'])
     for name in ('python_home', 'module_root'):
         path_value(value[name], absolute=True)
@@ -189,9 +187,8 @@ def _definitions(job):
             require(channel['key'] not in channels, 'fluorescence_duplicate_input_channel')
             channels[channel['key']] = {k: v for k, v in channel.items() if k != 'measurement_origin'}
             channels[channel['key']]['domain_key'] = domain['key']
-    if job['version'] == 'native_fluorescence_job_v2':
-        from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.native_fluorescence_prepared_contracts import add_preparation_declarations
-        add_preparation_declarations(job, sources=sources, samples=samples, domains=domains, channels=channels)
+    from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.native_fluorescence_prepared_contracts import add_preparation_declarations
+    add_preparation_declarations(job, sources=sources, samples=samples, domains=domains, channels=channels)
     populations = core._collection(definitions['populations'], core._population, 'invalid_population')
     gates = core._collection(definitions['gates'], core._gate, 'invalid_gate')
     controls = core._collection(definitions['control_pairs'], core._control, 'invalid_control')
@@ -229,14 +226,11 @@ def _definitions(job):
     for rows in parameters.values():
         core._list(rows, 'invalid_parameters')
         core._unique([core.canonical(row) for row in rows], 'invalid_parameters')
-    if job['version'] == 'native_fluorescence_job_v1':
-        require(parameters['native_comparison_requests'] == [], 'fluorescence_native_report_import_unimplemented')
-    else:
-        from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.native_fluorescence_prepared_contracts import validate_report_declarations
-        report_keys = validate_report_declarations(job)
-        for key in parameters['native_comparison_requests']:
-            _key(key)
-            require(key in report_keys, 'fluorescence_parameter_report_missing')
+    from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.native_fluorescence_prepared_contracts import validate_report_declarations
+    report_keys = validate_report_declarations(job)
+    for key in parameters['native_comparison_requests']:
+        _key(key)
+        require(key in report_keys, 'fluorescence_parameter_report_missing')
     for row in parameters['fraction_requests']:
         core._keys(row, 'gate_key denominator', 'invalid_parameters')
         core._key(row['gate_key'], 'invalid_parameters')
@@ -264,39 +258,35 @@ def _required_support(job):
         if domain['comparison_basis'] is not None:
             files.append(domain['comparison_basis']['evidence_file'])
     files.extend((row['comparison_basis']['evidence_file'] for row in job['definitions']['control_pairs']))
-    if job['version'] == 'native_fluorescence_job_v2':
-        for request in job['preparations']:
-            files.append(request['recipe_file'])
-            output = request['output']
-            files.extend((c['analyte']['file'] for c in output['channels'] if c['analyte'] is not None))
-            if output['comparison_basis'] is not None:
-                files.append(output['comparison_basis']['evidence_file'])
-            if request['recipe']['method'] == PREPARATION_METHODS[1]:
-                params = request['recipe']['parameters']
-                files.extend((params['matrix_file'], params['input_domain_basis']['evidence_file']))
-        files.extend((row['association_file'] for row in job['report_inputs'] if row['association_file'] is not None))
+    for request in job['preparations']:
+        files.append(request['recipe_file'])
+        output = request['output']
+        files.extend((c['analyte']['file'] for c in output['channels'] if c['analyte'] is not None))
+        if output['comparison_basis'] is not None:
+            files.append(output['comparison_basis']['evidence_file'])
+        if request['recipe']['method'] == PREPARATION_METHODS[1]:
+            params = request['recipe']['parameters']
+            files.extend((params['matrix_file'], params['input_domain_basis']['evidence_file']))
+    files.extend((row['association_file'] for row in job['report_inputs'] if row['association_file'] is not None))
     events = {canonical(row['source']['file']) for row in job['inputs']}
-    events.update((canonical(row['file']) for row in job.get('report_inputs', [])))
+    events.update((canonical(row['file']) for row in job['report_inputs']))
     return unique([file for file in files if canonical(file) not in events])
 
 def validate_fluorescence_job(value):
-    v2 = type(value) is dict and value.get('version') == 'native_fluorescence_job_v2'
-    closed(value, (JOB_V2_SCHEMA if v2 else JOB_SCHEMA)['properties'])
-    require(value['version'] in ('native_fluorescence_job_v1', 'native_fluorescence_job_v2') and value['operation'] in OPERATIONS and (value['mode'] == MODE), 'invalid_fluorescence_job')
+    closed(value, JOB_SCHEMA['properties'])
+    require(value['version'] == 'native_fluorescence_job' and value['operation'] in OPERATIONS and (value['mode'] == MODE), 'invalid_fluorescence_job')
     validate_fluorescence_software(value['software'])
     _list(value['inputs'])
     _list(value['support_inputs'])
     require(bool(value['inputs']), 'fluorescence_inputs_required')
     for row in value['inputs']:
         _input(row)
-    if v2:
-        _list(value['preparations'])
-        _list(value['report_inputs'])
+    _list(value['preparations'])
+    _list(value['report_inputs'])
     _parser_software(value['software'], [r['parser'] for r in value['inputs']])
     _definitions(value)
-    if v2:
-        from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.native_fluorescence_prepared_contracts import validate_selected_software
-        validate_selected_software(value['software'], methods=[r['recipe']['method'] for r in value['preparations']], profiles=[r['profile'] for r in value['report_inputs']])
+    from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.native_fluorescence_prepared_contracts import validate_selected_software
+    validate_selected_software(value['software'], methods=[r['recipe']['method'] for r in value['preparations']], profiles=[r['profile'] for r in value['report_inputs']])
     for row in value['support_inputs']:
         closed(row, 'file path')
         core._file(row['file'], 'invalid_source')
@@ -332,18 +322,16 @@ def validate_fluorescence_requested_job(value):
 def fluorescence_output_files(job):
     job = validate_fluorescence_job(job)
     prefix = job['output_prefix']
-    outputs = [*({'role': f'event_input:{i}', 'relative_path': f'{prefix}/inputs/{i}.bin', 'format': r['source']['file']['format']} for i, r in enumerate(job['inputs'])), *({'role': f'support_input:{i}', 'relative_path': f'{prefix}/support/{i}.bin', 'format': r['file']['format']} for i, r in enumerate(job['support_inputs'])), *({'role': f'event_batch:{i}', 'relative_path': f'{prefix}/parsed/{i}.json', 'format': 'fluorescence_parsed_batch_v1'} for i in range(len(job['inputs'])))]
-    if job['version'] == 'native_fluorescence_job_v2':
-        outputs.extend(({'role': f'report_input:{i}', 'relative_path': f'{prefix}/reports/{i}.bin', 'format': r['file']['format']} for i, r in enumerate(job['report_inputs'])))
-        for i in range(len(job['preparations'])):
-            outputs.extend(({'role': f'{role}:{i}', 'relative_path': f'{prefix}/prepared/{i}/{name}', 'format': format_} for role, name, format_ in (('preparation_parameters', 'parameters.json', 'fluorescence_resolved_preparation_v1'), ('prepared_data', 'events.json', 'fluorescence_prepared_event_data_v1'), ('prepared_batch', 'batch.json', 'fluorescence_prepared_batch_v1'))))
-        outputs.extend(({'role': f'report_batch:{i}', 'relative_path': f'{prefix}/reports/{i}.json', 'format': 'fluorescence_report_batch_v1'} for i in range(len(job['report_inputs']))))
-    version = 'fluorescence_native_manifest_v2' if job['version'] == 'native_fluorescence_job_v2' else 'fluorescence_native_manifest_v1'
-    return [*outputs, {'role': 'manifest', 'relative_path': f'{prefix}/native-manifest.json', 'format': version}]
+    outputs = [*({'role': f'event_input:{i}', 'relative_path': f'{prefix}/inputs/{i}.bin', 'format': r['source']['file']['format']} for i, r in enumerate(job['inputs'])), *({'role': f'support_input:{i}', 'relative_path': f'{prefix}/support/{i}.bin', 'format': r['file']['format']} for i, r in enumerate(job['support_inputs'])), *({'role': f'event_batch:{i}', 'relative_path': f'{prefix}/parsed/{i}.json', 'format': 'fluorescence_parsed_batch'} for i in range(len(job['inputs'])))]
+    outputs.extend(({'role': f'report_input:{i}', 'relative_path': f'{prefix}/reports/{i}.bin', 'format': r['file']['format']} for i, r in enumerate(job['report_inputs'])))
+    for i in range(len(job['preparations'])):
+        outputs.extend(({'role': f'{role}:{i}', 'relative_path': f'{prefix}/prepared/{i}/{name}', 'format': format_} for role, name, format_ in (('preparation_parameters', 'parameters.json', 'fluorescence_resolved_preparation'), ('prepared_data', 'events.json', 'fluorescence_prepared_event_data'), ('prepared_batch', 'batch.json', 'fluorescence_prepared_batch'))))
+    outputs.extend(({'role': f'report_batch:{i}', 'relative_path': f'{prefix}/reports/{i}.json', 'format': 'fluorescence_report_batch'} for i in range(len(job['report_inputs']))))
+    return [*outputs, {'role': 'manifest', 'relative_path': f'{prefix}/native-manifest.json', 'format': 'fluorescence_native_manifest'}]
 
 def validate_fluorescence_run_plan(value):
     closed(value, 'version identity requested_job attempt_directory policy outputs')
-    require(value['version'] == 'fluorescence_run_plan_v1', 'invalid_fluorescence_run_plan')
+    require(value['version'] == 'fluorescence_run_plan', 'invalid_fluorescence_run_plan')
     request = validate_fluorescence_requested_job(value['requested_job'])
     owner = value['identity']
     closed(owner, 'run_id episode_id resource_id execution_id attempt_id operation_key requested_job_sha256 assignment_sha256')
@@ -354,8 +342,7 @@ def validate_fluorescence_run_plan(value):
     execution = path_value(owner['execution_id'], absolute=True)
     attempt = path_value(value['attempt_directory'], absolute=True)
     from gene_annotation_episode.episodic_workflow.episode_support.findings.evolutionary_history_evidence.terminal_scientific_evidence import terminal_plan_identity
-    legacy = execution.name == 'native.json' and attempt == execution.parent / ATTEMPT_DIRECTORY_NAME and (execution.parent.name == owner['attempt_id']) and (execution.parent.parent.name == digest({'run': owner['run_id'], 'episode': owner['episode_id']})) and (execution.parent.parent.parent.name == '.episode-operations')
-    require((legacy or terminal_plan_identity(owner, attempt_directory=str(attempt))) and owner['attempt_id'] == digest(owner['operation_key']) and (owner['requested_job_sha256'] == digest(request)), 'fluorescence_original_attempt_mismatch')
+    require(terminal_plan_identity(owner, attempt_directory=str(attempt)) and owner['attempt_id'] == digest(owner['operation_key']) and (owner['requested_job_sha256'] == digest(request)), 'fluorescence_original_attempt_mismatch')
     require(retained_policy_matches(value['policy']), 'fluorescence_original_allocation_mismatch')
     require(same(value['outputs'], fluorescence_output_files(request['native_fluorescence'])), 'fluorescence_output_role_mismatch')
     job = request['native_fluorescence']
@@ -381,7 +368,7 @@ def _failures(rows, job):
 def validate_fluorescence_native_capture(value, *, original_plan):
     plan = validate_fluorescence_run_plan(original_plan)
     closed(value, 'version original_plan_sha256 files source_action_receipt_ref writer_closure_receipt_ref driver_started failures')
-    require(value['version'] == 'fluorescence_native_capture_v1' and value['original_plan_sha256'] == digest(plan), 'fluorescence_native_capture_mismatch')
+    require(value['version'] == 'fluorescence_native_capture' and value['original_plan_sha256'] == digest(plan), 'fluorescence_native_capture_mismatch')
     require(value['driver_started'] is None or type(value['driver_started']) is bool, 'fluorescence_native_capture_mismatch')
     for name in ('source_action_receipt_ref', 'writer_closure_receipt_ref'):
         require(type(value[name]) is str and re.fullmatch('artifact_[0-9a-f]{64}', value[name]) is not None, 'fluorescence_native_capture_authority_required')
@@ -401,6 +388,6 @@ def validate_fluorescence_native_capture(value, *, original_plan):
     _failures(value['failures'], plan['requested_job']['native_fluorescence'])
     return deepcopy(value)
 ENV_SCHEMA = {'type': 'object', 'propertyNames': {'pattern': '^[A-Za-z_][A-Za-z0-9_]*$'}, 'additionalProperties': {'type': 'string', 'pattern': '^[^\\u0000]*$'}}
-NATIVE_FLUORESCENCE_REQUESTED_JOB_SCHEMA = obj({'argv': array(TEXT, minItems=1), 'environment': ENV_SCHEMA, 'native_fluorescence': {'anyOf': [JOB_SCHEMA, JOB_V2_SCHEMA]}})
+NATIVE_FLUORESCENCE_REQUESTED_JOB_SCHEMA = obj({'argv': array(TEXT, minItems=1), 'environment': ENV_SCHEMA, 'native_fluorescence': {'anyOf': [JOB_SCHEMA]}})
 OWNER_FILENAME = '.native-fluorescence-owner.json'
 STARTED_FILENAME = '.native-fluorescence-started.json'

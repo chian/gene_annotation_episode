@@ -8,7 +8,7 @@ import math
 import re
 
 
-VERSION = 'phmmer_printed_alignment_measurements_v1'
+VERSION = 'phmmer_printed_alignment_measurements'
 _QUERY = re.compile(r'^Query:\s*(\S+)\s+\[L=(\d+)\]')
 _DOMAIN = re.compile(r'^\s*== domain (\d+)\s')
 _RESIDUES = re.compile(r'^\s*(\S+)\s+(\d+|-)\s+([A-Za-z.*-]+)\s+(\d+|-)\s*$')

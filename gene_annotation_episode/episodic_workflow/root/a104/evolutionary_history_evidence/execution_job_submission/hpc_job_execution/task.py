@@ -23,8 +23,8 @@ CHILD_SLOTS = {}
 TOOL = 'exec_command'
 MODEL_ROLE = 'REASONING'
 RECEIPT_PROVIDER = 'episode.practical_receipt'
-RECEIPT_VERSION_INFORMATION = 'practical_receipt_information_v1'
-RECEIPT_ASSIGNMENT_VERSION = 'practical_receipt_assignment_v1'
+RECEIPT_VERSION_INFORMATION = 'practical_receipt_information'
+RECEIPT_ASSIGNMENT_VERSION = 'practical_receipt_assignment'
 
 INSTRUCTIONS = (
     "You are the execution agent for the actual job and resource assigned below. Use exec_command to write and "

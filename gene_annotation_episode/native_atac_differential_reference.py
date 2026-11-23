@@ -101,7 +101,7 @@ def extract_atac_bam_header(*, input_path: Path, input_file: dict, input_key: st
             raise
         failures.append(failure("resource_limit", "reference", step_key=callpeak_run_key, binding_key=input_key,
             artifact_ref=input_file["artifact_ref"], requirement="resource_allocation"))
-    return validate_atac_record("HeaderExtraction", dict(version="atac_bam_header_extraction_v1",
+    return validate_atac_record("HeaderExtraction", dict(version="atac_bam_header_extraction",
         input_key=input_key, callpeak_run_key=callpeak_run_key, input_ordinal=input_ordinal,
         input_file=input_file, header=declaration(spec, root), producer_outcome=outcome,
         supplied_extent=extent if text_written else "unknown", failures=failures))

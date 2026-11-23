@@ -43,7 +43,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_row_contract import SUPPORT_WEAKEST_ORDER
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_coupling_cofactor_product_grade_v1'
+VERSION = 'a105_coupling_cofactor_product_grade'
 CRITERIA = tuple(criterion['id'] for criterion in COUPLING_COFACTOR_PRODUCT_CRITERIA)
 COUPLING = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact coupled_product_detected
 PERCENT_PER_FRACTION = 100.0   # FIXED_BY_DEFINITION: a percent is a hundredth.

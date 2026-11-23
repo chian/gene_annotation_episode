@@ -21,7 +21,7 @@ returns     every case the criterion can return, as (status, reason_code, when).
             as 'never' cannot occur for this criterion.
 """
 
-VERSION = 'a105_coupling_atp_product_criteria_v1'
+VERSION = 'a105_coupling_atp_product_criteria'
 
 # FIXED_BY_DEFINITION: each rate unit of the record's vocabulary -> (the kind of rate, the exact factor to the kind's own base unit). Only rates of the
 # same kind are compared (the basal rate over the total rate). Base units: amount_per_min umol/min; amount_per_min_per_mg umol/min/mg;

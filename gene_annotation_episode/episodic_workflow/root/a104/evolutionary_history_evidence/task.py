@@ -200,7 +200,7 @@ GRADING_SECTION = (
 
 
 def _ref_schema(slot, prefix):
-    return obj({'version': {'const': 'evolutionary_history_evidence_option_ref_v1'}, 'library_id': _SHA256,
+    return obj({'version': {'const': 'evolutionary_history_evidence_option_ref'}, 'library_id': _SHA256,
                 'slot': {'const': slot}, 'option_id': {'type': 'string', 'pattern': '^' + prefix + '[0-9]+$'},
                 'entry_sha256': _SHA256})
 
@@ -352,7 +352,7 @@ def _held(store, reference, known):
 def _measured(store, reference, scope, known):
     _held(store, reference, known)
     measured = received_measurement(store, reference)
-    require(measured is not None and measured['body']['schema'] == 'a104_placement_v1',
+    require(measured is not None and measured['body']['schema'] == 'a104_placement',
             'a104_measured_placement_required')
     require(measured['body']['target_ref'] in scope['subject_refs'], 'a104_native_scope_conflict')
     return measured

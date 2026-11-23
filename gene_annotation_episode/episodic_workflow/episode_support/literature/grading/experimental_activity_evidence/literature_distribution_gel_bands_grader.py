@@ -29,7 +29,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     DISTRIBUTION_GEL_BANDS_CRITERIA, FRACTION_PER_UNIT)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_distribution_gel_bands_grade_v1'
+VERSION = 'a105_distribution_gel_bands_grade'
 CRITERIA = tuple(criterion['id'] for criterion in DISTRIBUTION_GEL_BANDS_CRITERIA)
 PRODUCT = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact claimed_product_detected
 

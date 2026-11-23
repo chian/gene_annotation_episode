@@ -98,7 +98,7 @@ def test_the_assignment_form_has_one_field_per_schema_property():
 
 def test_a_remote_resource_assignment_is_not_admitted():
     with pytest.raises(FormError):
-        LocalJobExecution.assignment_form.admit({'version': 'practical_assignment_v1', 'resource_kind': 'hpc'},
+        LocalJobExecution.assignment_form.admit({'version': 'practical_assignment', 'resource_kind': 'hpc'},
                                                 'assignment')
 
 

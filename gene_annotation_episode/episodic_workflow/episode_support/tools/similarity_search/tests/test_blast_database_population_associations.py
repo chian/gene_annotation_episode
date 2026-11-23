@@ -27,11 +27,11 @@ def population_inputs(*, key=None, operand=OPERAND, identity=None, profile=None)
     profile = deepcopy(profile or dict(database="curated-proteins", release="release1", scope="searched_database",
         count_unit="unique_sequences", total_count=110, function_counts={"F": 100, "G": 10}, source="census"))
     census = retained({k: v for k, v in profile.items() if k != "source"}, profile["source"])
-    assertion = retained(dict(schema="blast_database_population_assertion_v1", relation="same_population",
+    assertion = retained(dict(schema="blast_database_population_assertion", relation="same_population",
         native_database_operand=operand, database_manifest_sha256="1" * 64,
         population_identity={k: v for k, v in identity.items() if k != "source"},
         census_artifact={k: census[k] for k in ("sha256", "size_bytes", "pointer")}), "assertion")
-    row = dict(schema="blast_database_population_association_input_v1", association_key="synthetic-association",
+    row = dict(schema="blast_database_population_association_input", association_key="synthetic-association",
         search_key=deepcopy(key), database_key="db", metadata_source=dict(source_ref="metadata", pointer="/searches/0"),
         assertion_source={k: assertion[k] for k in ("source_ref", "pointer")},
         census_source={k: census[k] for k in ("source_ref", "pointer")},
@@ -39,12 +39,12 @@ def population_inputs(*, key=None, operand=OPERAND, identity=None, profile=None)
             manifest_sha256="1" * 64, manifest_size_bytes=123,
             invocation_source=dict(source_ref="invocation", pointer="/argv"), manifest_source=identity["source"]),
         assertion_record=assertion, census_record=census)
-    normalized = dict(schema="blast_normalized_result_v1", mode="database", resource="hpc", format="json2",
+    normalized = dict(schema="blast_normalized_result", mode="database", resource="hpc", format="json2",
         search=dict(database=operand, request={"database": operand}),
         source_locator=dict(artifact_ref="native-report", source_ref="source:native-report", report_index=key["report_index"],
             pointer=key["search_pointer"], search_key=deepcopy(key), member_ordinal=key["member_ordinal"], member_sha256=None),
         native=dict(sha256="2" * 64, archive_member=None))
-    return dict(context=dict(schema="blast_database_population_context_v1", search_key=key, associations=[row]),
+    return dict(context=dict(schema="blast_database_population_context", search_key=key, associations=[row]),
         normalized_result=normalized, database_identity=deepcopy(identity), database_profile=profile)
 
 
@@ -59,7 +59,7 @@ def test_closed_context_detached_unchanged_and_qualification_is_not_a_score():
     assert detached == args["context"] and detached is not args["context"]
     out = qualify(**args)
     assert args == before
-    assert out == dict(schema="blast_database_population_relation_v1", search_key=args["context"]["search_key"],
+    assert out == dict(schema="blast_database_population_relation", search_key=args["context"]["search_key"],
         status="available", association_results=[dict(metadata_source=args["context"]["associations"][0]["metadata_source"],
             association_key="synthetic-association", status="available", reason_codes=[])], reason_codes=[])
 
@@ -117,7 +117,7 @@ def test_missing_selected_fact_stays_unavailable_even_beside_valid_sibling(field
 
 
 @pytest.mark.parametrize("value", [None, [], {}, {"relation": "same_population"},
-    {"schema": "blast_database_population_assertion_v1", "available": True}])
+    {"schema": "blast_database_population_assertion", "available": True}])
 def test_malformed_original_assertion_is_retained_and_incompatible(value):
     args = population_inputs()
     args["context"]["associations"][0]["assertion_record"]["value"] = value

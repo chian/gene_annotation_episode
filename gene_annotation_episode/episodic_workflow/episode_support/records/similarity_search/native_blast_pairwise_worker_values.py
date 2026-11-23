@@ -80,7 +80,7 @@ def _hsp_values(component, common=None, *, archived_values=None):
     if common is None:
         if archived_values is None:
             raise ValueError("native_blast_common_hsp_components_required")
-        # Explicit v1 read only: the archived result is already a frozen fact.
+        # Explicit read only: the archived result is already a frozen fact.
         # Legacy component envelopes did not contain this calculated cell.
         counts, scores = component["counts"], component["native_scores"]
         values = {name: scores[source] for name, source in (("native_score_bits", "bit_score"),
@@ -166,7 +166,7 @@ def _row(bundle, search, family, records, values, *, hit=None, hsp=None,
                 if (name.startswith("query_") and "query" not in records or
                     name.startswith("reference_") and "reference" not in records)
                 else "incompatible_input" if native_status == "partial" else "not_measured")
-    return {"version": "native_blast_complete_row_v1", "family": family,
+    return {"version": "native_blast_complete_row", "family": family,
         "record_key": key, "search_key": search["search_key"], "hit_ordinal": hit, "hsp_ordinal": hsp,
         "program": bundle["program"], "coordinate_units": dict(zip(("query", "reference", "alignment"), units)),
         "native_status": native_status, "invalid": invalid,
@@ -177,9 +177,9 @@ def _row(bundle, search, family, records, values, *, hit=None, hsp=None,
 def validate_native_blast_correspondence_collections(sheet, scores, *, admission=False):
     """Authenticate the explicit new collection companion without frozen regrading."""
     if (set(sheet) != {"schema", "collection", "searches", "publication_inputs", "correspondence"}
-            or sheet["schema"] != "native_blast_sheet_collection_v2"
+            or sheet["schema"] != "native_blast_sheet_collection"
             or set(scores) != {"schema", "searches", "rows", "metric_definitions", "correspondence", "fallback_hsp_components"}
-            or scores["schema"] != "native_blast_scores_collection_v2"
+            or scores["schema"] != "native_blast_scores_collection"
             or not _same(sheet["correspondence"], scores["correspondence"])):
         raise ValueError("native_blast_correspondence_collections_required")
     companion = validate_correspondence_artifacts(scores["correspondence"], admission=admission)
@@ -189,9 +189,9 @@ def validate_native_blast_correspondence_collections(sheet, scores, *, admission
             expected["/searches/" + str(index) + "/scores/components"] = entry["scores"]["components"]
     for index, entry in enumerate(scores["fallback_hsp_components"]):
         expected["/fallback_hsp_components/" + str(index) + "/component"] = entry["component"]
-    if {instance["legacy_pointer"] for instance in companion["instances"]} != set(expected):
+    if {instance["source_pointer"] for instance in companion["instances"]} != set(expected):
         raise ValueError("native_blast_correspondence_instances_conflict")
     for instance in companion["instances"]:
         if instance["axis_basis"] != "qualified":
             raise ValueError("native_blast_correspondence_axis_conflict")
-        validate_blast_correspondence_instance(expected[instance["legacy_pointer"]], instance)
+        validate_blast_correspondence_instance(expected[instance["source_pointer"]], instance)

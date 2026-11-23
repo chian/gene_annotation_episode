@@ -50,7 +50,7 @@ unstated choice carry None. The grader does not judge it; the converter does. Th
 only for forms built by tests that do not go through the extraction (the extraction always passes the model's answer).
 """
 
-VERSION = 'a105_endpoint_colorimetric_record_v1'
+VERSION = 'a105_endpoint_colorimetric_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'endpoint_colorimetric'
 QUANTITIES = ('conversion', 'conversion_spread', 'control_conversion', 'net_conversion', 'net_conversion_spread',

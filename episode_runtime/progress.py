@@ -1,4 +1,4 @@
-"""Per-unit progress-time receipts and per-decision clock points for one Episode (``episode_progress_time_v1``).
+"""Per-unit progress-time receipts and per-decision clock points for one Episode (``episode_progress_time``).
 
 The runner gives every Episode a ``ProgressClock`` through its ``BoundEpisode``.
 The Episode's origin point is captured once when the Episode is first built and

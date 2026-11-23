@@ -22,7 +22,7 @@ returns     every case the criterion can return, as (status, reason_code, when).
             as 'never' cannot occur for this criterion.
 """
 
-VERSION = 'a105_endpoint_enzymatic_assay_criteria_v1'
+VERSION = 'a105_endpoint_enzymatic_assay_criteria'
 
 UM_PER_UNIT = {'nM': 1.0e-3, 'uM': 1.0, 'mM': 1.0e3}      # FIXED_BY_DEFINITION: a concentration unit in micromolar.
 NMOL_PER_UNIT = {'pmol': 1.0e-3, 'nmol': 1.0, 'umol': 1.0e3}      # FIXED_BY_DEFINITION: an amount unit in nanomoles.

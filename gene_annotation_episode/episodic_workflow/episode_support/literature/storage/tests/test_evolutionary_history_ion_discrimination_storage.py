@@ -29,7 +29,7 @@ def selection(reference):
     quantity = {'number': {'witness': witness(reference, '12.5'), 'number_start': 0, 'number_end': 4}, 'unit': None,
                 **{name: unknown() for name in DEFINITIONS['SourceQuantity']['properties']
                    if name not in ('number', 'unit')}}
-    return {'version': 'a105_ion_discrimination_selection_v1', 'source_ref': reference,
+    return {'version': 'a105_ion_discrimination_selection', 'source_ref': reference,
             'source_kind': 'synthetic_fixture', 'context': context,
             'relationships': {name: unknown() for name in DEFINITIONS['Relationships']['properties']},
             'nonintended_differences': [], 'route': 'reported_ratio', 'reported_ratio': quantity}

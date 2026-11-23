@@ -67,7 +67,7 @@ def test_no_module_imports_another_episode_folder():
 def test_the_assignment_admits_the_old_assignment_and_the_return_declares_credit_and_finding():
     from_parent = importlib.import_module(MODULE + '.messages.read_from_parent')
     final = importlib.import_module(MODULE + '.messages.final_to_parent')
-    assignment = {'version': 'execution_results_assignment_v1', 'handoff_ref': ['row_1'],
+    assignment = {'version': 'execution_results_assignment', 'handoff_ref': ['row_1'],
                   'selector': {'version': '1'}, 'service': 'bvbrc_appservice'}
     admitted = from_parent.ASSIGNMENT_FORM.admit(assignment, 'assignment')
     parent_input = from_parent.read_from_parent(admitted, {'purpose': 'x'})

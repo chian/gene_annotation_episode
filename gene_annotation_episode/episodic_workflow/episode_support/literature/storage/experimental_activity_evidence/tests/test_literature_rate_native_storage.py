@@ -29,7 +29,7 @@ def setup_native_store(store, ctx, *, defined=False, approximate=False, referenc
             return [bind(child) for child in value]
         return value
     args = bind(args)
-    assignment = {'version': 'literature_assignment_v1', 'question_context_refs': [], 'source_refs': [source['id']]}
+    assignment = {'version': 'literature_assignment', 'question_context_refs': [], 'source_refs': [source['id']]}
     context = LiteratureContext(ctx.run_id, ctx.episode_id, 'literature', (('literature', 'native-case'),), store.validate_scope({'subject_refs': store.problem()['subject_refs']}), assignment, {}, (source['id'],))
     return (store, context, args)
 

@@ -11,7 +11,7 @@ import re
 
 from method_loop.jsonvalue import canonical, content_digest
 
-OPTION_REF_VERSION = 'experimental_activity_evidence_option_ref_v1'
+OPTION_REF_VERSION = 'experimental_activity_evidence_option_ref'
 SLOTS = ('evidence_axis', 'thought_pattern')
 _PREFIXES = {'evidence_axis': 'A', 'thought_pattern': 'P'}
 _SHA256 = re.compile(r'[0-9a-f]{64}\Z')

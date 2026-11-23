@@ -24,7 +24,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.calcul
 from gene_annotation_episode.episodic_workflow.episode_support.literature.validation.evolutionary_history_evidence.literature_kinetic_validation import validate_saved_kinetic, witnesses
 
 PROVIDER = "literature.a105.kinetic_population"
-VERSION = "literature_kinetic_population_record_v3"
+VERSION = "literature_kinetic_population_record"
 COMPONENTS = ALL_COMPONENTS[:5]
 FORMULA_CODES = {name: "kinetic_" + name for name in COMPONENTS}
 UNIT_CODES = {"uM^-1min^-1": "uM_inverse_min_inverse"}

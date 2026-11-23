@@ -19,7 +19,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.protein_str
     AtomIdentity, CalculationParameters, CoordinateSetSelection, CorrespondenceRow, DeclaredResidueIdentity,
     FileIdentity, MatrixCell, MetadataValueRow, NativeMetricDefinition, NativeQaRow,
     NumberCell, NumericalParameters, PairSelector, PositionKey, ProteinStructureComponents,
-    ProteinStructureSheet, Qualification, Reason, ResidueIdentity, ResultCustody, Role,
+    ProteinStructureSheet, Qualification, Reason, ResidueIdentity, ProteinStructureCustody, Role,
     SavedSheetDescriptor, ScientificMode, SequenceResidueMapRow, Side, State,
     StructureInventory, StructureMetadata, StructureSelection, StructureSequence,
     StructureSequenceDescriptor, StructuredIssue, UnmappedPosition, VectorCell,
@@ -92,7 +92,7 @@ class ProjectionSelection(TypedDict):
     delivery_kind: Literal["values", "artifact"]
 
 class ProteinResultSelector(TypedDict):
-    version: Literal["protein_structure_result_selector_v1"]
+    version: Literal["protein_structure_result_selector"]
     acquisition: Literal["complete_bound_bundle", "retained_sheet_only"]
     saved_sheet: SavedSheetDescriptor | None
     parameters: CalculationParameters | None
@@ -198,7 +198,7 @@ class ProjectionRow(TypedDict):
     issues: list[StructuredIssue]
     qualifications: list[Qualification]
 class ProjectionRows(TypedDict):
-    version: Literal["protein_structure_projection_rows_v1"]
+    version: Literal["protein_structure_projection_rows"]
     projection_id: NonemptyText
     family: ProjectionFamily
     selection: ProjectionSelection
@@ -213,7 +213,7 @@ class ProjectionRows(TypedDict):
     issues: list[StructuredIssue]
     qualifications: list[Qualification]
 class ProjectionTable(TypedDict):
-    version: Literal["protein_structure_projection_table_v1"]
+    version: Literal["protein_structure_projection_table"]
     rows: list[ProjectionRow]
 class ProjectionCalculation(TypedDict):
     calculation_id: NonemptyText
@@ -228,11 +228,11 @@ class ArtifactDelivery(TypedDict):
     row_count: Count
     allowed_use: Literal["read_exact_selected_table"]
 class ProjectionResult(TypedDict):
-    version: Literal["protein_structure_projection_v1"]
+    version: Literal["protein_structure_projection"]
     projection_id: NonemptyText
     family: ProjectionFamily
     selection: ProjectionSelection
-    custody: ResultCustody
+    custody: ProteinStructureCustody
     calculation: ProjectionCalculation | None
     coordinate_set: CoordinateSetSelection | None
     requested_count: Count
@@ -244,8 +244,8 @@ class ProjectionResult(TypedDict):
     issues: list[StructuredIssue]
     qualifications: list[Qualification]
 class ProteinFailureReturn(TypedDict):
-    version: Literal["protein_structure_failure_return_v1"]
-    custody: ResultCustody | None
+    version: Literal["protein_structure_failure_return"]
+    custody: ProteinStructureCustody | None
     projection_id: NonemptyText | None
     issue: StructuredIssue
 class FactSourceDefinition(TypedDict):
@@ -358,8 +358,8 @@ def _field_schema(name):
         return {"type": "boolean"}
     return _ref(name)
 
-def _make_definitions(*, action_custody=False):
-    shared = a.protein_structure_schema_definitions(action_custody=action_custody)
+def _make_definitions():
+    shared = a.protein_structure_schema_definitions()
     d = {}
     d["ProjectionWindow"] = _obj(offset_0based=_COUNT, limit={"type": "integer", "minimum": 1})
     d["ProjectionFamily"] = {"enum": list(_FIELD_REGISTRY)}
@@ -413,9 +413,9 @@ def _make_definitions(*, action_custody=False):
             d[rname] = _obj(row_key=_NAME, identity={"oneOf": [identities[k] for k in identity_kinds[kind]]}, values=_array({"oneOf": fields}), issues=_array(_ref("StructuredIssue")), qualifications=_array(_ref("Qualification"), unique=True))
             base = dict(projection_id=_NAME, family={"const": family}, selection=_ref(sname), coordinate_set=_ref("CoordinateSetSelection") if family == "structure_coordinates" else _NULL, requested_count=_COUNT, matched_count=_COUNT, returned_count=_COUNT, omitted_count=_COUNT, state=_ref("State"), issues=_array(_ref("StructuredIssue")), qualifications=_array(_ref("Qualification"), unique=True))
             row_type = "DRows_" + suffix
-            d[row_type] = _obj(version={"const": "protein_structure_projection_rows_v1"}, **base, calculation_id=_nullable(_NAME), rows=_array(_ref(rname)))
+            d[row_type] = _obj(version={"const": "protein_structure_projection_rows"}, **base, calculation_id=_nullable(_NAME), rows=_array(_ref(rname)))
             result_type = "DResult_" + suffix
-            d[result_type] = _obj(version={"const": "protein_structure_projection_v1"}, **base, custody=_ref("ResultCustody"), calculation=_nullable(_ref("ProjectionCalculation")), delivery={"oneOf": [
+            d[result_type] = _obj(version={"const": "protein_structure_projection"}, **base, custody=_ref("ProteinStructureCustody"), calculation=_nullable(_ref("ProjectionCalculation")), delivery={"oneOf": [
                 _obj(kind={"const": "values"}, rows=_array(_ref(rname))), _ref("ArtifactDelivery")]})
             selections.append(_ref(sname)); row_types.append(_ref(rname)); envelopes.append(_ref(row_type)); results.append(_ref(result_type))
     d["ProjectionSelection"] = {"oneOf": selections}
@@ -424,11 +424,11 @@ def _make_definitions(*, action_custody=False):
     d["FieldValue"] = {"anyOf": [_field_schema(n) for n in sorted({v for ms in _FIELD_REGISTRY.values() for fs in ms.values() for v in fs.values()})]}
     d["ProjectionRows"] = {"oneOf": envelopes}
     d["ProjectionResult"] = {"oneOf": results}
-    d["ProjectionTable"] = _obj(version={"const": "protein_structure_projection_table_v1"}, rows=_array(_ref("ProjectionRow")))
+    d["ProjectionTable"] = _obj(version={"const": "protein_structure_projection_table"}, rows=_array(_ref("ProjectionRow")))
     d["ProjectionCalculation"] = _obj(calculation_id=_NAME, input_numerical_sha256={"type": "string", "pattern": "^[a-f0-9]{64}$"}, components_file=_ref("FileIdentity"))
     d["ArtifactDelivery"] = _obj(kind={"const": "artifact"}, table_file=_ref("FileIdentity"), row_count=_COUNT, allowed_use={"const": "read_exact_selected_table"})
-    d["ProteinFailureReturn"] = _obj(version={"const": "protein_structure_failure_return_v1"}, custody=_nullable(_ref("ResultCustody")), projection_id=_nullable(_NAME), issue=_ref("StructuredIssue"))
-    d["ProteinResultSelector"] = _obj(version={"const": "protein_structure_result_selector_v1"}, acquisition={"enum": ["complete_bound_bundle", "retained_sheet_only"]}, saved_sheet=_nullable(_ref("SavedSheetDescriptor")), parameters=_nullable(_ref("CalculationParameters")), projections=_array(_ref("ProjectionSelection")), return_saved_sheet={"type": "boolean"}, sequence_allowed_uses=_array({"enum": ["sequence_align", "structure_correspondence"]}, unique=True))
+    d["ProteinFailureReturn"] = _obj(version={"const": "protein_structure_failure_return"}, custody=_nullable(_ref("ProteinStructureCustody")), projection_id=_nullable(_NAME), issue=_ref("StructuredIssue"))
+    d["ProteinResultSelector"] = _obj(version={"const": "protein_structure_result_selector"}, acquisition={"enum": ["complete_bound_bundle", "retained_sheet_only"]}, saved_sheet=_nullable(_ref("SavedSheetDescriptor")), parameters=_nullable(_ref("CalculationParameters")), projections=_array(_ref("ProjectionSelection")), return_saved_sheet={"type": "boolean"}, sequence_allowed_uses=_array({"enum": ["sequence_align", "structure_correspondence"]}, unique=True))
     d["ProjectionInput"] = {"oneOf": [_obj(kind={"const": "comparison"}, sheet=_ref("ProteinStructureSheet"), components=_ref("ProteinStructureComponents")), _obj(kind={"const": "inspection"}, inventory=_ref("StructureInventory")), _obj(kind={"const": "extraction"}, sequence=_ref("StructureSequence"), metadata=_ref("StructureMetadata"), descriptor=_nullable(_ref("StructureSequenceDescriptor")))]}
     if shared.keys() & d.keys():
         raise RuntimeError("Protein return definitions must not replace shared types")
@@ -439,18 +439,18 @@ _STRICT_VALIDATOR = validators.extend(Draft202012Validator, type_checker=Draft20
     .redefine("integer", lambda _, v: type(v) is int)
     .redefine("number", lambda _, v: type(v) in (int, float) and math.isfinite(v)))
 
-def _schema(name, *, array=False, action_custody=False):
-    definitions = _make_definitions(action_custody=True) if action_custody else deepcopy(_DEFINITIONS)
+def _schema(name, *, array=False):
+    definitions = deepcopy(_DEFINITIONS)
     schema = {"$schema": "https://json-schema.org/draft/2020-12/schema", "$defs": definitions,
         **(_array(_ref(name)) if array else _ref(name))}
     schema["$id"] = "urn:gene-annotation:protein-structure:schema:" + digest(schema)
     return schema
 
-def protein_structure_projection_schema(name, *, array=False, action_custody=False):
-    """Export one owned projection resource, optionally with action descriptors."""
-    if name not in _DEFINITIONS or type(array) is not bool or type(action_custody) is not bool:
+def protein_structure_projection_schema(name, *, array=False):
+    """Export one owned projection resource."""
+    if name not in _DEFINITIONS or type(array) is not bool:
         raise ValueError("invalid_schema")
-    return _schema(name, array=array, action_custody=action_custody)
+    return _schema(name, array=array)
 
 _VALIDATORS = {name: _STRICT_VALIDATOR(_schema(name)) for name in ("ProjectionSelection", "ProjectionRows", "ProjectionResult", "ProteinFailureReturn", "ProjectionInput")}
 
@@ -486,8 +486,7 @@ def _json(value):
 def _shape(name, value):
     _json(value)
     try:
-        validator = (_STRICT_VALIDATOR(_schema(name, action_custody=True))
-            if a._contains_action_custody(value) else _VALIDATORS[name])
+        validator = _VALIDATORS[name]
         valid = validator.is_valid(value)
     except (TypeError, KeyError, RecursionError, OverflowError) as error:
         raise ValueError("invalid_schema") from error
@@ -507,13 +506,6 @@ def _unique(values):
     if len({canonical(v) for v in values}) != len(values):
         raise ValueError("duplicate_selection")
 
-def _custody(value):
-    if value is not None:
-        identity = {"run_id": value["run_id"], "episode_id": value["result_episode_id"], "operation_key": value["result_operation_key"]}
-        if value["result_receipt_key"] != "protein_structure_result_receipt:" + digest(identity):
-            raise ValueError("conflicting_identity")
-        # This checks structure only. It deliberately does not read a receipt.
-
 def _shared_relations(value):
     """Check embedded selected data without a private A validation hook.
 
@@ -529,11 +521,9 @@ def _shared_relations(value):
         return
     version = value.get("version")
     complete = {
-        "structure_sequence_descriptor_v1": a.validate_structure_sequence_descriptor,
-        "protein_structure_saved_sheet_v1": a.validate_saved_sheet_descriptor,
-        "structure_sequence_descriptor_v2": a.validate_structure_sequence_descriptor_v2,
-        "protein_structure_saved_sheet_v2": a.validate_saved_sheet_descriptor_v2,
-        "protein_structure_calculation_parameters_v1": a.validate_calculation_parameters,
+        "structure_sequence_descriptor": a.validate_structure_sequence_descriptor,
+        "protein_structure_saved_sheet": a.validate_saved_sheet_descriptor,
+        "protein_structure_calculation_parameters": a.validate_calculation_parameters,
     }.get(version)
     if complete is not None:
         complete(value)
@@ -548,8 +538,6 @@ def _shared_relations(value):
     elif keys == set(FileIdentity.__annotations__):
         a.validate_file_identity(value)
         return
-    elif keys == set(ResultCustody.__annotations__):
-        _custody(value)
     elif keys == set(StructureSelection.__annotations__):
         a.validate_structure_selection(value)
         return
@@ -724,10 +712,10 @@ def validate_protein_structure_projection_result(value: ProjectionResult) -> Pro
     if delivery["kind"] != value["selection"]["delivery_kind"]:
         raise ValueError("conflicting_identity")
     _envelope(value, delivery["rows"] if delivery["kind"] == "values" else None)
-    if value["calculation"] is not None and value["calculation"]["components_file"]["format"] != "protein_structure_components_v1":
+    if value["calculation"] is not None and value["calculation"]["components_file"]["format"] != "protein_structure_components":
         raise ValueError("unsupported_format")
     if delivery["kind"] == "artifact":
-        if delivery["table_file"]["format"] != "protein_structure_projection_table_v1":
+        if delivery["table_file"]["format"] != "protein_structure_projection_table":
             raise ValueError("unsupported_format")
         if delivery["row_count"] != value["returned_count"]:
             raise ValueError("conflicting_identity")
@@ -1108,7 +1096,7 @@ def project_protein_structure_results(result: ProjectionInput, *, selection: lis
             issues = deepcopy(coordinate["issues"])
             if coordinate["state"] != "complete":
                 state = "invalid" if "invalid" in (state, coordinate["state"]) else coordinate["state"]
-        value = {"version": "protein_structure_projection_rows_v1", "projection_id": s["projection_id"], "family": family,
+        value = {"version": "protein_structure_projection_rows", "projection_id": s["projection_id"], "family": family,
             "selection": s, "calculation_id": result["components"]["calculation_id"] if comparison else None,
             "coordinate_set": None if coordinate is None else coordinate["selection"],
             "requested_count": len(pairs), "matched_count": sum(matched for _, matched in pairs), "returned_count": len(rows),

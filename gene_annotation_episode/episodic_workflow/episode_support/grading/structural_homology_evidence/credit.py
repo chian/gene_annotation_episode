@@ -155,7 +155,7 @@ class A102StructuralCredit:
                 value={k:v for k,v in row.items() if k!='mapped_geometry'}
                 if 'sequence_link' in value:value['sequence_link']={k:v for k,v in value['sequence_link'].items() if k!='pairs'}
                 return value
-            transferred=[row for row in attachments if row['policy']=='reference_fold_native_map_and_local_distance_v1'
+            transferred=[row for row in attachments if row['policy']=='reference_fold_native_map_and_local_distance'
                 and row['state']!='excluded' and (evidence_regions is None or any(a <= item[0] < b
                     for item in row.get('mapped_geometry', ()) for a,b in evidence_regions[row['source_ref']]))]
             groups={}
@@ -533,7 +533,7 @@ class A102InterfaceContactCredit:
                 body = publication[0]['body']
                 require(json.loads(store.get_artifact(source['artifact_ref'])) == body,
                     'a102_interface_contact_source_conflict')
-                if (body.get('schema') != 'a102_interface_constraint_v1'
+                if (body.get('schema') != 'a102_interface_constraint'
                         or body.get('target_ref') != item['target_ref']):
                     continue
                 for contact in body['contacts']:

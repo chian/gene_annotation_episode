@@ -652,7 +652,7 @@ class _BlockDecoder:
                     for annotation in row["column_annotations"].values():
                         annotation["valid"] = False
         return {
-            "version": "hmmer_native_alignment_decoding_v1",
+            "version": "hmmer_native_alignment_decoding",
             "format": self.format,
             "alphabet": self.alphabet,
             "records": records,

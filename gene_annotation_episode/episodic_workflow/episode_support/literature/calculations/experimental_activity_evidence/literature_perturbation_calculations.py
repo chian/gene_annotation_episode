@@ -11,7 +11,7 @@ from copy import deepcopy
 from fractions import Fraction
 import math
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_experimental_contracts import ExperimentalContractError
-VERSION = 'a106_source_restoration_v1'
+VERSION = 'a106_source_restoration'
 PRIMITIVE_ORDER = ('W', 'K', 'R', 'A_reference', 'A_restored', 'B_pert', 'B_rest')
 COMPONENTS = ('reference_endpoint', 'perturbed_endpoint', 'restored_endpoint', 'perturbation_difference', 'symmetric_effect', 'restoration_fraction_raw', 'restoration_agreement', 'amount_comparability', 'perturbation_isolation', 'restoration_isolation', 'effect_isolation', 'reference_restoration_index', 'reference_index_lower', 'reference_index_upper')
 _ENDPOINT_ROLES = ('W', 'K', 'R', 'B_pert', 'B_rest')

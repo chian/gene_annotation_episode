@@ -38,7 +38,7 @@ concentration of the titrated partner divided by the apparent KD. Orientation pa
 What this method does not ask (kept in the record for the reviewer, no criterion judges them): the reporter system, the assay system, the readout mode, the spread of the KD and its kind, and the statement that only this method was used.
 """
 
-VERSION = 'a105_split_reporter_criteria_v1'
+VERSION = 'a105_split_reporter_criteria'
 
 # ---- Threshold constants -------------------------------------------------
 NM_PER_UNIT = {'pM': 0.001, 'nM': 1.0, 'uM': 1000.0, 'mM': 1000000.0}  # FIXED_BY_DEFINITION: nanomolar per concentration unit.

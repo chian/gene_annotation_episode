@@ -33,7 +33,7 @@ def _record(occurrence, ordinal, start, order):
         "checksum": None, "flags": {}, "cutoffs": {}, "calibration": [], "composition": None,
         "initial": {"insert": None, "transitions": None}, "positions": [],
         "terminated": False, "issues": [], "representation": {
-            "schema": "hmmer_model_representation_v1", "encoding": ENCODING,
+            "schema": "hmmer_model_representation", "encoding": ENCODING,
             "topology": "hmmer2_configured", "byte_order": order,
             "binary_layout": "i32_u32_ieee754_binary32", "header_semantics": "binary_field_projection",
             "native_fields": [], "legacy": {"null_emissions": None, "special_transitions": None,

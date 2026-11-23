@@ -4,14 +4,14 @@ Each response an AppService operation receives (and the partial response an ``Ac
 retained as one ``source`` record of provider ``bvbrc_appservice.<operation>``:
 
 - ``artifact_ref`` holds the received response bytes unchanged;
-- ``request_ref`` holds the native-source record (version ``bvbrc_appservice_native_source_v1``), the canonical
+- ``request_ref`` holds the native-source record (version ``bvbrc_appservice_native_source``), the canonical
   UTF-8 JSON ``{'version', 'origin', 'snapshot', 'prepared'}``: ``origin`` is the operation's ``ReceiptOrigin``,
   ``prepared`` the ``PreparedOperation`` that was issued (its native operands carry the exact JSON-RPC call), and
   ``snapshot`` the service, URL, native request, retrieval time, media type, transport facts and the
   ``content_ref`` of the retained response bytes.
 
 A submission's native-source record is what the proteome bundle reader
-(``bvbrc_proteome_bundle_resolution._submitted_record``) checks against the original task of its handoff before the
+(``bvbrc_proteome_native_bundle_resolution._submitted_record``) checks against the original task of its handoff before the
 submitted parameters are used. This module makes no request and no scientific calculation.
 """
 from __future__ import annotations
@@ -19,7 +19,7 @@ from __future__ import annotations
 import json
 
 NATIVE_PROVIDER = 'bvbrc_appservice'
-NATIVE_VERSION = 'bvbrc_appservice_native_source_v1'
+NATIVE_VERSION = 'bvbrc_appservice_native_source'
 OPERATION_PREFIX = 'api.bvbrc_appservice.'
 
 

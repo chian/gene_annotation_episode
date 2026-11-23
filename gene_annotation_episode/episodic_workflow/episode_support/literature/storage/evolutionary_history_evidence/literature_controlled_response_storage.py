@@ -21,14 +21,14 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.evolutionar
 from gene_annotation_episode.episodic_workflow.episode_support.records.evolutionary_history_evidence.domain import ContractError, canonical, identity
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.evolutionary_history_evidence.literature_ratio_source_storage import LiteratureRatioSourceRepository
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.evolutionary_history_evidence import literature_controlled_response_inputs as shared
-from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.evolutionary_history_evidence import literature_controlled_response_v3_inputs as source
-from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.evolutionary_history_evidence import literature_controlled_response_v3_population as population
+from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.evolutionary_history_evidence import literature_controlled_response_source_inputs as source
+from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.evolutionary_history_evidence import literature_controlled_response_population as population
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.evolutionary_history_evidence import literature_controlled_response_calculations as arithmetic
 
 
 PROVIDER = 'literature.a105.controlled_response'
-VERSION = 'literature_controlled_response_record_v3'
-FACT_VERSION = 'literature_controlled_response_component_fact_v3'
+VERSION = 'literature_controlled_response_record'
+FACT_VERSION = 'literature_controlled_response_component_fact'
 COMPONENTS = (*arithmetic.COMPONENTS, 'local_difference', 'local_variance', 'local_standard_uncertainty')
 VIEWS = ('native_raw', 'local_difference', 'local_variance', 'local_standard_uncertainty', 'final', 'conditional')
 _PAYLOAD_FIELDS = {'version','selection','extraction','population','component_roster','semantic_bindings','scope_witness_bindings',
@@ -55,17 +55,17 @@ def _check(value, schema, code):
 
 
 def controlled_response_population_schema():
-    return source.controlled_response_v3_arguments_schema()
+    return source.controlled_response_arguments_schema()
 
 
 def controlled_response_cells_schema():
-    return cp(source._schemas()['NATIVE_RETURN_SCHEMA_V3_007'])
+    return cp(source._schemas()['NATIVE_RETURN_SCHEMA'])
 
 
 def implementation_descriptor(*,evidence_origin='reported_source'):
     if evidence_origin not in ('reported_source','synthetic_fixture'):
         raise ContractError('controlled_native_evidence_profile_invalid')
-    return {'version':'controlled_response_native_implementation_v1','provider':PROVIDER,'record_version':VERSION,
+    return {'version':'controlled_response_native_implementation','provider':PROVIDER,'record_version':VERSION,
             'evidence_origin':evidence_origin,
             'native_schema_sha256':_sha(controlled_response_cells_schema())}
 
@@ -452,8 +452,8 @@ class LiteratureControlledResponseRepository(LiteratureRatioSourceRepository):
             result[reference]=row
         return result
 
-    def populate_v3(self,context,arguments,operation_key):
-        args=source.validate_controlled_response_v3_selection(plain(arguments))
+    def populate(self,context,arguments,operation_key):
+        args=source.validate_controlled_response_selection(plain(arguments))
         self._profile_selection(args)
         pairs,direct,closure=self._sources(context,args)
         descriptor=self.descriptor()
@@ -469,8 +469,8 @@ class LiteratureControlledResponseRepository(LiteratureRatioSourceRepository):
             if artifact is None:raise FileNotFoundError(errno.ENOENT,'selected representation unavailable')
             data=self._bytes(artifact)
             return {'artifact_ref':artifact,'content':data}
-        extraction=source.read_controlled_response_v3_inputs(args,read_source=read_source)
-        populated=population.populate_controlled_response_v3(extraction)
+        extraction=source.read_controlled_response_inputs(args,read_source=read_source)
+        populated=population.populate_controlled_response(extraction)
         with self.store.transaction():
             created=[]
             def publish(kind,value):
@@ -502,9 +502,6 @@ class LiteratureControlledResponseRepository(LiteratureRatioSourceRepository):
                 'component_keys':payload['component_roster'],'cells':rows,'payload_sha256':_sha(payload)},'feedback':None}
 
         return cp(outcome)
-
-    def populate(self,context,arguments,operation_key):
-        return self.populate_v3(context,arguments,operation_key)
 
     def read(self,sheet_ref):
         record=self._record(sheet_ref,'source')
@@ -538,8 +535,8 @@ class LiteratureControlledResponseRepository(LiteratureRatioSourceRepository):
                 or payload['direct_input_source_refs']!=direct or payload['input_source_refs']!=closure
                 or [(a['source_ref'],a['representation']) for a in payload['source_associations']]!=pairs):
             raise ContractError('controlled_native_original_source_closure_mismatch')
-        source.validate_controlled_response_v3_extraction(payload['selection'],payload['extraction'])
-        _check(payload['population'],source._schemas()['POPULATION_SCHEMA_V3_007'],'controlled_native_population_schema_invalid')
+        source.validate_controlled_response_extraction(payload['selection'],payload['extraction'])
+        _check(payload['population'],source._schemas()['POPULATION_SCHEMA'],'controlled_native_population_schema_invalid')
         bindings=self._bindings(payload['extraction'])
         if canonical(bindings)!=canonical(payload['semantic_bindings']):raise ContractError('controlled_native_semantic_binding_mismatch')
         scope_bindings=self._scope_bindings(payload['extraction'])

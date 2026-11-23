@@ -72,7 +72,7 @@ REPORT_TEXT = ('\nThe report action records your interpretation for the parent a
                'your work and earns nothing. The parent receives the recorded execution handoffs as the host '
                'recorded them, never as you wrote them.')
 CONDITION_SCHEMA = obj({
-    'version': {'type': 'string', 'const': 'event_condition_v1'},
+    'version': {'type': 'string', 'const': 'event_condition'},
     'events': {'type': 'array', 'items': obj({'handle': {'type': 'string', 'minLength': 1},
                                               'event': {'type': 'string', 'minLength': 1},
                                               'after_cursor': {'type': 'integer', 'minimum': 0}})},

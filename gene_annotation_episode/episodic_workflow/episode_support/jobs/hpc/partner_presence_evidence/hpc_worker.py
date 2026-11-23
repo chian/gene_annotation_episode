@@ -10,7 +10,7 @@ import time
 import zlib
 
 
-VERSION = 'a103_shared_hpc_native_v1'
+VERSION = 'a103_shared_hpc_native'
 
 
 def canonical(value):

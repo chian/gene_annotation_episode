@@ -1,4 +1,4 @@
-"""What the parent gives: the launch assignment (the old ``execution_launch_assignment_v1``, one field per property
+"""What the parent gives: the launch assignment (the old ``execution_launch_assignment``, one field per property
 of the old assignment schema, under the same names), and the records the job inputs name.
 
 This is the only place the assignment is read. The old ``_launch`` check of the assignment itself (every request
@@ -20,15 +20,15 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.evolutionar
 from gene_annotation_episode.episodic_workflow.episode_support.records.evolutionary_history_evidence.practical_execution_records import (
     validate_assignment)
 
-LAUNCH_VERSION = 'execution_launch_assignment_v1'
+LAUNCH_VERSION = 'execution_launch_assignment'
 # The old ROLE_KINDS: the launch child that owns each resource kind.
 KIND_SLOTS = {'api': 'launch_api', 'local': 'launch_local', 'hpc': 'launch_hpc'}
 
 ASSIGNMENT_FORM = RecordForm({
     'version': DeclaredField('text', 'The assignment version', LAUNCH_VERSION),
     'requests': Field('record', 'The concrete execution requests by resource id, at least one: each is the closed '
-                                'request of that resource (practical_assignment_v1, api_execution_assignment_v1 or '
-                                'api_service_assignment_v1)'),
+                                'request of that resource (practical_assignment, api_execution_assignment or '
+                                'api_service_assignment)'),
     'immutable_input_versions': Field('list', 'The input versions the job is pinned to: reference, version and '
                                               'content digest'),
     'constraints': Field('record', "The commissioner's resource constraints: allowed_resource_ids, allowed_kinds, "
@@ -61,7 +61,7 @@ def _request(resource_id, request):
     """The old ``_validate_request`` without the configured resource: the request is closed and names its resource."""
     if not isinstance(request, dict):
         raise ValueError('invalid_execution_launch_assignment')
-    if request.get('version') == 'practical_assignment_v1':
+    if request.get('version') == 'practical_assignment':
         request = validate_assignment(request)
     else:
         request = validate_api_assignment(request)
@@ -71,13 +71,13 @@ def _request(resource_id, request):
 
 
 def _kind(request):
-    return 'api' if request['version'] != 'practical_assignment_v1' else request['resource_kind']
+    return 'api' if request['version'] != 'practical_assignment' else request['resource_kind']
 
 
 def _yield_class(request):
     """Classify the original execution request without generated IDs (old ``_request_yield_class``)."""
     version = request['version']
-    if version != 'practical_assignment_v1':
+    if version != 'practical_assignment':
         parts = ['api', request.get('service', 'unknown')]
         for field in ('algorithm', 'database'):
             if field in request:

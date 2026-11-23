@@ -29,7 +29,7 @@ import gene_annotation_episode.episodic_workflow.episode_support.jobs.profile_mo
 def grading_for(sheet):
     formats = {item["occurrence_id"]: (sheet["operation"]["settings"]["--informat"]
         if item["direction"] == "input" else "stockholm") for item in sheet["artifact_occurrences"]}
-    grading = {"version": "native_hmmer_preparation_grading_v1", "operation": deepcopy(sheet["operation"]),
+    grading = {"version": "native_hmmer_preparation_grading", "operation": deepcopy(sheet["operation"]),
         "formats": formats, "metadata": {}, "native_abi": None, "requested_parameters": {},
         "sheet": sheet, "calculations": worker.recalculate_hmmer_preparation(sheet, parameters={})}
     occurrences = [{**item, "format": formats[item["occurrence_id"]],
@@ -38,7 +38,7 @@ def grading_for(sheet):
 
 
 def selection(*quantities):
-    return {"version": "native_hmmer_preparation_result_selector_v1", "acquisition": "complete_bound_bundle",
+    return {"version": "native_hmmer_preparation_result_selector", "acquisition": "complete_bound_bundle",
         "projection": {"collection": "calculations", "rows": {"offset": 0, "limit": 1},
                        "quantities": list(quantities), "checks": []}, "artifacts": []}
 

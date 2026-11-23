@@ -84,7 +84,7 @@ def unavailable(unit, key, reason):
 def fact(answer, refs=(), support='direct'):
     return {**literature_spr_record.fact(answer, refs), 'support': None if answer == 'unknown' else support}
 
-VERSION = 'a105_trp_record_v1'
+VERSION = 'a105_trp_record'
 EXPERIMENT_TYPE = 'trp_quenching'
 QUANTITIES = ('kd', 'kd_spread', 'ksv', 'protein_concentration', 'excitation_wavelength', 'emission_wavelength', 'emission_shift', 'fluorescence_change', 'ligand_absorbance', 'added_volume_fraction', 'titration_point_count', 'concentration_lowest', 'concentration_highest', 'incubation_time', 'temperature', 'replicate_count')
 PREPARATION_KEYS = ('titrant_preparation_ref', 'fixed_partner_preparation_ref', 'dataset_ref')

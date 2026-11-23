@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.readers.profile_m
 from gene_annotation_episode.episodic_workflow.episode_support.calculations.profile_model_preparation.sequence_homology_evidence.hmmer_model_calculations import _identity_valid, _representation_encoding, _hmmer2, validate_hmmer_probability_cell, validate_hmmer_probability_vector
 
 
-SCHEMA = "hmmer_artifact_components_v1"
+SCHEMA = "hmmer_artifact_components"
 COMPONENT_STATES = frozenset({"present", "missing", "incomplete", "incompatible", "nonfinite", "failed"})
 CHECK_STATES = frozenset({"pass", "fail", "unknown", "not_applicable"})
 ISSUE_CODES = DATA_ISSUE_CODES | frozenset({"sheet_invalid", "saved_reference_invalid", "parameter_invalid",
@@ -505,7 +505,7 @@ def _validate_sheet(sheet):
     records = {"input": [], "output": []}
     for e in sheet["model_extractions"]:
         if (not isinstance(e, dict) or set(e) != {"schema", "occurrence", "format", "records", "population", "issues"}
-                or e["schema"] != "hmmer_model_extraction_v1" or not _occurrence_valid(e["occurrence"])
+                or e["schema"] != "hmmer_model_extraction" or not _occurrence_valid(e["occurrence"])
                 or not isinstance(e["records"], list) or not isinstance(e["population"], dict)):
             return "saved_reference_invalid"
         oid = e["occurrence"]["occurrence_id"]

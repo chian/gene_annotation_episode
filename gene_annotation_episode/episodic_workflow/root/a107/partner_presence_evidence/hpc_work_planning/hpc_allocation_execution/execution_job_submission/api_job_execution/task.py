@@ -5,7 +5,7 @@ Carried from the old ``task.py``, ``task_decision.py``, ``task_instructions.py``
 (``permitted_common_actions``). One unit is one tool call: the first is the lookup of the bound resource's
 capabilities (``api_capabilities``, offered by the task itself); after it the model selects one operation each
 turn. The task always offers a unit and never ends the Episode: only the yield controller does. The episode has no
-child. The wait of the old ``permitted_common_actions`` (only for a remote service job, ``api_service_assignment_v1``)
+child. The wait of the old ``permitted_common_actions`` (only for a remote service job, ``api_service_assignment``)
 is the ``wait_for_service_job`` tool. This file is a private copy: it imports nothing from another episode.
 
 BLOCKED-ON-JOB-SERVICE: the ``job_access`` service. The old ``APIServiceExecution`` (``api_execution``) is not in
@@ -27,11 +27,11 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.progress_
 from gene_annotation_episode.episodic_workflow.episode_support.tools.tool_knowledge import (
     INSTRUCTIONS as KNOWLEDGE_INSTRUCTIONS, ToolKnowledge, catalog as knowledge_catalog)
 
-from .messages.read_from_parent import OLD_PROPERTIES
+from .messages.read_from_parent import ASSIGNMENT_PROPERTIES
 
 CHILD_SLOTS = {}
 SERVICES = ('job_access',)
-SERVICE_JOB = 'api_service_assignment_v1'
+SERVICE_JOB = 'api_service_assignment'
 TRANSPORT_ERROR = 'api_job_execution_argument_transport_unsupported'
 
 INSTRUCTIONS = (
@@ -82,7 +82,7 @@ ARGUMENTS = {
 
 
 def _assignment(summary):
-    return {name: summary[name] for name in OLD_PROPERTIES if name in summary}
+    return {name: summary[name] for name in ASSIGNMENT_PROPERTIES if name in summary}
 
 
 def _outcome(reply, ctx):

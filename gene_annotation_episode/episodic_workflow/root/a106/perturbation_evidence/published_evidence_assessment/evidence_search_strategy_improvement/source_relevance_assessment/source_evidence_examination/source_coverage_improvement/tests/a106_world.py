@@ -53,13 +53,13 @@ def held_world(directory, task_kind='verified_source_leads', windows=2):
                                          'value': {'type': 'term_ref', 'ref': term}, 'context_refs': []},
                           origin='reasoning')['id']
     held = [*scope['subject_refs'], source, artifact, subject, term, assertion]
-    page = {'version': 'page_assignment_v1', 'source_ref': source, 'representation': 'original',
+    page = {'version': 'page_assignment', 'source_ref': source, 'representation': 'original',
             'artifact_ref': artifact, 'question_context_refs': [subject, assertion], 'prior_delivery_refs': []}
-    task = {'version': 'literature_local_task_v1', 'evidence_axis': 'A106', 'kind': task_kind, 'credit_unit': 1.0}
+    task = {'version': 'literature_local_task', 'evidence_axis': 'A106', 'kind': task_kind, 'credit_unit': 1.0}
     spans = [{'source_ref': source, 'representation': 'original', 'offset': 0, 'limit': len(TEXT)},
              {'source_ref': source, 'representation': 'original', 'offset': len(TEXT) + 1,
               'limit': len(SECOND) - 1}][:windows]
-    assignment = {'version': 'reading_assignment_v1', 'page': page, 'selection': {'spans': spans},
+    assignment = {'version': 'reading_assignment', 'page': page, 'selection': {'spans': spans},
                   'literature_task': task, 'proposed_annotation_ref': assertion, 'scope': scope,
                   'received_record_refs': held}
     entry = {'assignment': assignment, 'message': {'objective': 'extract the perturbation experiment'},

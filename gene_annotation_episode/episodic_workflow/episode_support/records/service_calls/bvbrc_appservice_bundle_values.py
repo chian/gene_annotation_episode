@@ -241,7 +241,7 @@ def build_acquisition_value(prepared, event, snapshot, *, common_receipt,
         failure = None if not errors else {"code": errors[0]["code"], "phase": errors[0]["phase"],
             "affected_refs": [binding["source_ref"]], "affected_pointers": list(dict.fromkeys(row["path"] for row in errors)),
             "effect_outcome": None, "valid_record_refs": [binding["source_ref"]], "requirements": []}
-        value = {"version": "bvbrc_appservice_acquisition_v1", "origin": common["origin"],
+        value = {"version": "bvbrc_appservice_acquisition", "origin": common["origin"],
             "original_handoff_ref": inputs["original_handoff_ref"], "selector_sha256": digest(inputs["selector"]),
             "snapshot": binding, "capability_selection": args["capability"], "object_selection": args["object"],
             "artifact": artifact, "requirement_ids": args["requirement_ids"], "publication_inputs_sha256": digest(inputs),
@@ -393,7 +393,7 @@ def build_artifact_bundle(publication_inputs, *, original_task, acquisitions,
         status = "invalid"
     else:
         status = "partial"
-    bundle = {"version": "bvbrc_appservice_artifact_bundle_v1", "original_task": task,
+    bundle = {"version": "bvbrc_appservice_artifact_bundle", "original_task": task,
         "artifacts": artifacts, "input_bindings": input_bindings, "query_bindings": query_bindings,
         "supplied_scientific_metadata": inputs["supplied_evidence"], "acquisition_receipt_refs": refs,
         "requested_selector_sha256": digest(inputs["selector"]), "status": status,

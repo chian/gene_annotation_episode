@@ -41,7 +41,7 @@ not judge it; the converter does. The constructors take ``support`` and default 
 extraction (the extraction always passes the model's answer).
 """
 
-VERSION = 'a105_distribution_chiral_record_v1'
+VERSION = 'a105_distribution_chiral_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'distribution_chiral'
 QUANTITIES = ('enantiomeric_excess', 'enantiomeric_excess_spread', 'enantiomer_ratio', 'enantiomer_ratio_spread', 'diastereomer_ratio', 'diastereomer_ratio_spread',

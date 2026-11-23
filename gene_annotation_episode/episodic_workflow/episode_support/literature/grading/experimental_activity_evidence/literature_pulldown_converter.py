@@ -119,7 +119,7 @@ import math
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_assay_grading import INPUT_VERSION, ROLES, grade_assay
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_pulldown_converted_v1'
+VERSION = 'a105_pulldown_converted'
 CRITERIA_MAP = {'binding_controls': ('negative_control', 'positive_control', 'bait_minus_control', 'input_lane', 'reciprocal', 'competition', 'nuclease', 'specificity'), 'binding_regime': ('wash_stringency', 'wash_count', 'incubation'), 'binding_species': ('expression_level', 'direct_interaction'), 'binding_parameter_definition': ('prey_in_eluate', 'enrichment'), 'calibration_applicability': ('quantification',), 'sampling_basis': ('replicates',)}
 MIN_WASH_NACL_MM = 150.0  # EXPERT_REVIEW: lowest sodium chloride (mM) of the wash buffer that still removes weakly and electrostatically stuck proteins, for full agreement (physiological salt; washes with less keep sticky preys, and usual pull-down washes use 150 to 500 mM).
 WASH_NACL_ZERO_AGREEMENT_MM = 50.0  # EXPERT_REVIEW: sodium chloride (mM) at or below which the sheet gives the wash no credit for removing electrostatic binders (degree 0, not conflicting: a low-salt wash is a weaker design, and the negative control washed the same way shows stickiness); a third of physiological salt or less keeps them; in between the degree rises linearly in the square root of the salt (Debye screening grows as sqrt of the ionic strength).

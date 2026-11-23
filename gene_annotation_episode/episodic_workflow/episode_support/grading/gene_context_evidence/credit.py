@@ -155,7 +155,7 @@ class A103ContextCredit:
                     'raw_neighborhood','cds','coding_locus','selected_loci'}}
                 if measured['grade']['kind']=='functional_contrast':
                     qualified = next((r for r in attachments if r['measurement_ref']==ref
-                        and r['policy']=='functional_contrast_matched_native_context_and_bounds_v1'),None)
+                        and r['policy']=='functional_contrast_matched_native_context_and_bounds'),None)
                     if qualified is not None:
                         preview.update(qualified_panel=qualified['qualified_panel'],
                             attribution_source_ref=qualified['source_ref'],qualification_state=qualified['state'])

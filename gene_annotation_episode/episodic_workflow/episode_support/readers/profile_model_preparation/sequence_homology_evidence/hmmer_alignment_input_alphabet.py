@@ -170,7 +170,7 @@ def infer_hmmer_alignment_alphabet(content: bytes, *, declared_format: str) -> d
         raise ValueError("hmmer_alignment_format_invalid")
 
     probe = {
-        "version": "hmmer_native_alignment_alphabet_probe_v1",
+        "version": "hmmer_native_alignment_alphabet_probe",
         "format": declared_format,
         "state": "undetermined",
         "alphabet": None,

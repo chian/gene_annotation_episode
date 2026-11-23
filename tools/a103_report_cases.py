@@ -26,7 +26,7 @@ def case_summary(result_path):
     for directory in chain:
         for path in sorted(directory.rglob('*handle*.json')):
             body=json.loads(path.read_text())
-            if body.get('version')!='durable_systemd_native_job_v2':continue
+            if body.get('version')!='durable_systemd_native_job':continue
             receipt=Path(body['paths']['result'])
             outcome=json.loads(receipt.read_text()) if receipt.exists() else None
             if (outcome is None and body['stage'] in {'prepared','submitting'}

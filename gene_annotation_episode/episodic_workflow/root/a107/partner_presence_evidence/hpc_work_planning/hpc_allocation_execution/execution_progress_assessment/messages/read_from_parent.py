@@ -1,4 +1,4 @@
-"""What the commissioner gives: the monitor assignment (old ``monitor_assignment_v1``, from ``from_parent.py``
+"""What the commissioner gives: the monitor assignment (old ``monitor_assignment``, from ``from_parent.py``
 ``MonitorAssignment.assignment_schema``): the target, the fields the monitor may observe, the progress observations
 the commissioner already has and the record types whose committed records it may return. The information unit of
 the monitor's credit is a new field: the old binding took it from its configuration.
@@ -17,7 +17,7 @@ FIELD_OPTIONS = ('execution_status', 'measurements', 'log_windows', 'committed_r
                  'result_available')
 
 ASSIGNMENT_FORM = RecordForm({
-    'version': DeclaredField('text', 'The version of this assignment form', 'monitor_assignment_v1'),
+    'version': DeclaredField('text', 'The version of this assignment form', 'monitor_assignment'),
     'target_handle': Field('text', 'The execution handle to assess'),
     'requested_fields': SubsetField('text', 'The exposed fields the monitor may observe; it never observes more',
                                     FIELD_OPTIONS),

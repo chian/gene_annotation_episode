@@ -206,7 +206,7 @@ _METADATA_BINDING = _object(binding_key=_TOKEN,
 
 
 def _payload(consumer, **fields):
-    schema_id = "native_blast_database_" + consumer + "_metadata_v1"
+    schema_id = "native_blast_database_" + consumer + "_metadata"
     return _object(schema=_enum(schema_id), documents=_array(_DOCUMENT), **fields)
 
 
@@ -245,11 +245,11 @@ _SCHEMAS = {
         reference_metadata=_array(_VDB_RECORD), population_records=_array(_POPULATION),
         parsed_sources=_array(_PARSED_SOURCE), metadata_bindings=_array(_METADATA_BINDING))))}
 
-# VDB and the original sequence contract retain their exact v1 row shapes.
-_SEQUENCE_V2 = "native_blast_database_sequence_metadata_v2"
-_SEQUENCE_V3 = "native_blast_database_sequence_metadata_v3"
+# VDB and the original sequence contract retain their exact original row shapes.
+_SEQUENCE_LOCATED = "native_blast_database_sequence_located_metadata"
+_SEQUENCE_POPULATION_ID = "native_blast_database_sequence_population_metadata"
 _RECORD_LOCATOR = _nullable(_object(kind=_enum("fasta_record"), record_ordinal=_I0))
-_SEQUENCE_SCHEMA_V2 = _object(schema=_enum(_SEQUENCE_V2), documents=_array(_DOCUMENT),
+_SEQUENCE_LOCATED_SCHEMA = _object(schema=_enum(_SEQUENCE_LOCATED), documents=_array(_DOCUMENT),
     searches=_array(_object(search_key=_SEARCH,
         reference_metadata=_array(_object(**_SEQUENCE_RECORD["properties"], record_locator=_RECORD_LOCATOR)),
         description_bindings=_array(_object(search_key=_SEARCH,
@@ -260,14 +260,14 @@ _SEQUENCE_SCHEMA_V2 = _object(schema=_enum(_SEQUENCE_V2), documents=_array(_DOCU
 
 
 def _schema_for(consumer, schema_id):
-    if (consumer, schema_id) == ("sequence_database", _SEQUENCE_V3):
+    if (consumer, schema_id) == ("sequence_database", _SEQUENCE_POPULATION_ID):
         from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.gene_context_evidence.native_blast_database_population_metadata import native_blast_database_sequence_population_metadata_schema
         return native_blast_database_sequence_population_metadata_schema()
-    if (consumer, schema_id) == ("vdb_function", "native_blast_vdb_function_metadata_v1"):
+    if (consumer, schema_id) == ("vdb_function", "native_blast_vdb_function_metadata"):
         from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.gene_context_evidence.native_blast_vdb_function_metadata import native_blast_vdb_function_metadata_schema
         return native_blast_vdb_function_metadata_schema()
-    if (consumer, schema_id) == ("sequence_database", _SEQUENCE_V2):
-        return _SEQUENCE_SCHEMA_V2
+    if (consumer, schema_id) == ("sequence_database", _SEQUENCE_LOCATED):
+        return _SEQUENCE_LOCATED_SCHEMA
     schema = _SCHEMAS.get(consumer)
     if schema is None or schema["properties"]["schema"]["enum"] != [schema_id]:
         raise _Invalid("", "metadata_tuple_unregistered", "schema_unsupported")
@@ -275,7 +275,7 @@ def _schema_for(consumer, schema_id):
 
 
 def metadata_schema_registry():
-    """Return the original five tuples, followed by explicit sequence v2."""
+    """Return the original five tuples, followed by the explicit located sequence tuple."""
     module = __name__
     rows = [dict(consumer=consumer, schema_id=schema["properties"]["schema"]["enum"][0],
         validator_module=module, validator_function="_validate_" + validator + "_metadata",
@@ -287,8 +287,8 @@ def metadata_schema_registry():
             ("iteration", "iteration", "gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.gene_context_evidence.blast_iteration_inputs", "populate_blast_iteration_sheet"),
             ("vdb", "vdb", "gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.blast_vdb_inputs", "populate_blast_vdb_sheet"))
         for schema in [_SCHEMAS[consumer]]]
-    return rows + [dict(rows[1], schema_id=_SEQUENCE_V2), dict(rows[1], schema_id=_SEQUENCE_V3), dict(consumer="vdb_function",
-        schema_id="native_blast_vdb_function_metadata_v1",
+    return rows + [dict(rows[1], schema_id=_SEQUENCE_LOCATED), dict(rows[1], schema_id=_SEQUENCE_POPULATION_ID), dict(consumer="vdb_function",
+        schema_id="native_blast_vdb_function_metadata",
         validator_module="gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.gene_context_evidence.native_blast_vdb_function_metadata",
         validator_function="validate_native_blast_vdb_function_metadata_payload",
         populator_module="gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.gene_context_evidence.native_blast_vdb_function_metadata",
@@ -434,7 +434,7 @@ def _schema_branch(schema, value):
 
 
 def _record_address_status(document, pointer, locator, *, contents, cache):
-    """Qualify a v2 address from supplied bytes; preserve original header slots."""
+    """Qualify a located address from supplied bytes; preserve original header slots."""
     blast_record_identity(source_ref=document["source_ref"], pointer=pointer, record_locator=locator)
     if (document["format"] == "fasta") != (locator is not None):
         return "incompatible", ["record_locator_format_conflict"], None
@@ -728,14 +728,14 @@ def validate_native_blast_database_metadata_payload(payload, *, descriptor, docu
     The caller authenticates descriptor bytes; prepare additionally checks their
     exact decoded equality. The catalog carries only already authenticated bytes.
     """
-    if (descriptor["consumer"], descriptor["schema_id"]) == ("vdb_function", "native_blast_vdb_function_metadata_v1"):
+    if (descriptor["consumer"], descriptor["schema_id"]) == ("vdb_function", "native_blast_vdb_function_metadata"):
         from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.gene_context_evidence.native_blast_vdb_function_metadata import validate_native_blast_vdb_function_metadata_payload
         return validate_native_blast_vdb_function_metadata_payload(payload, descriptor=descriptor,
             document_catalog=document_catalog, job=job)
     value = _copy(payload)
     result = {k: descriptor[k] for k in ("consumer", "schema_id", "input_key", "artifact_ref", "sha256")}
     result.update(status="valid", payload=value, normalized=None, normalization_map=[], issues=[])
-    if descriptor["schema_id"] == _SEQUENCE_V3:
+    if descriptor["schema_id"] == _SEQUENCE_POPULATION_ID:
         result["population_source_records"] = []
     registry = {(r["consumer"], r["schema_id"]): r for r in metadata_schema_registry()}
     entry = registry.get((descriptor["consumer"], descriptor["schema_id"]))
@@ -751,7 +751,7 @@ def validate_native_blast_database_metadata_payload(payload, *, descriptor, docu
             raise _Invalid("/schema", "closed_payload_shape_invalid")
         globals()[entry["validator_function"]](value)
         result["normalized"] = _lower_payload(value, descriptor, document_catalog, job, result["issues"], result["normalization_map"])
-        if descriptor["schema_id"] == _SEQUENCE_V3:
+        if descriptor["schema_id"] == _SEQUENCE_POPULATION_ID:
             from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.gene_context_evidence.native_blast_database_population_metadata import _retain_document_records
             result["population_source_records"] = _retain_document_records(value, document_catalog["documents"])
     except _Invalid as error:
@@ -892,7 +892,7 @@ def _options(job):
 
 def _input_issue_descriptor(job):
     return dict(input_key=job["query"]["input_key"], consumer="query_identity",
-                schema_id="native_blast_database_query_metadata_v1")
+                schema_id="native_blast_database_query_metadata")
 
 
 def _valid_payloads(prepared, consumer):
@@ -955,10 +955,10 @@ def _record_locator_qualification(prepared, validation, issue, *, status, detail
 
 
 def _check_parser_location(document, pointer, parses, files):
-    expected_schema = {"scoremat_asn_text": "blast_pssm_sheet_v1", "clustal": "blast_msa_master_sheet_v1"}.get(
-        document["format"], "blast_vdb_metadata_parse_v1")
+    expected_schema = {"scoremat_asn_text": "blast_pssm_sheet", "clustal": "blast_msa_master_sheet"}.get(
+        document["format"], "blast_vdb_metadata_parse")
     candidates = [p for p in parses if p.get("format") == document["format"] and p.get("source_ref") == document["source_ref"]
-        and (expected_schema == "blast_vdb_metadata_parse_v1" or p.get("artifact_key") == document["artifact_key"])]
+        and (expected_schema == "blast_vdb_metadata_parse" or p.get("artifact_key") == document["artifact_key"])]
     candidates = list({_token(p): p for p in candidates}.values())
     if not candidates:
         return "unavailable", "parser_source_parse_unavailable"
@@ -1067,7 +1067,7 @@ def prepare_native_blast_database_inputs(*, job, bundle, artifact_catalog, metad
     files = _Catalog(artifact_catalog, bundle)
     options = _options(job)
     selected = job["query"]["msa_master_record_ordinal"]
-    prepared = dict(schema="native_blast_database_prepared_inputs_v1", invocation=dict(
+    prepared = dict(schema="native_blast_database_prepared_inputs", invocation=dict(
         execution_program=job["program"], scientific_mode="database", resource_kind="hpc",
         query_kind=job["query"]["kind"], reference_kind=("profile" if job["program"] in {"rpsblast", "rpstblastn"}
             else "vdb_mixed" if job["program"].endswith("_vdb") else "sequence"),
@@ -1140,7 +1140,7 @@ def prepare_native_blast_database_inputs(*, job, bundle, artifact_catalog, metad
             validation = {k: descriptor[k] for k in ("consumer", "schema_id", "input_key", "artifact_ref", "sha256")}
             validation.update(status="invalid", payload=_copy(payload), normalized=None, normalization_map=[],
                 issues=[_issue(descriptor, error.code, error.pointer, error.detail)])
-            if descriptor["schema_id"] == _SEQUENCE_V3:
+            if descriptor["schema_id"] == _SEQUENCE_POPULATION_ID:
                 validation["population_source_records"] = []
         prepared["metadata"].append(validation)
         prepared["issues"].extend(validation["issues"])
@@ -1357,7 +1357,7 @@ def _qualified_addresses(value, schema, pointer=""):
 
 def _proof_bindings(unit, validation, pointer, *, search, prepared, files, result, fasta_cache):
     documents = {d["document_key"]: d for d in validation["normalized"]["documents"]}
-    record_version = validation["schema_id"] in {_SEQUENCE_V2, _SEQUENCE_V3}
+    record_version = validation["schema_id"] in {_SEQUENCE_LOCATED, _SEQUENCE_POPULATION_ID}
     accepted = []
     for index, proof in enumerate(unit["sequence_proofs"]):
         if proof["binding_index"] >= len(unit["sequence_identity_bindings"]):
@@ -1526,7 +1526,7 @@ def _sequence_units(search, prepared, files, result, fasta_cache):
             if unit["search_key"] != search["search_key"]:
                 continue
             row = {k: deepcopy(v) for k, v in unit.items() if k not in {"sequence_proofs", "database_population_associations"}}
-            if validation["schema_id"] in {_SEQUENCE_V2, _SEQUENCE_V3}:
+            if validation["schema_id"] in {_SEQUENCE_LOCATED, _SEQUENCE_POPULATION_ID}:
                 record_claims.extend((validation, f"/searches/{index}/sequence_identity_bindings/{bi}", link)
                     for bi, link in enumerate(unit["sequence_identity_bindings"]))
                 row["description_bindings"] = [deepcopy(link) for bi, link in enumerate(unit["description_bindings"])
@@ -1761,11 +1761,11 @@ def populate_native_blast_database_sheets(collection, *, prepared_inputs, artifa
             if state["status"] == "available" and any(entry[k] != captures[state["artifact_key"]][k]
                     for k in captures[state["artifact_key"]] if k != "content_assessment"):
                 raise ValueError("native_blast_database_convergence_binding_invalid", "/selected/" + name + "/catalog")
-    result = dict(schema="native_blast_database_sheet_set_v1", collection=_copy(collection), prepared_inputs=prepared,
+    result = dict(schema="native_blast_database_sheet_set", collection=_copy(collection), prepared_inputs=prepared,
         derived_search_bindings=[], sequence=[], profile=[], vdb=[], pssm=deepcopy(prepared["pssm_sheets"]),
         msa=deepcopy(prepared["msa_sheets"]), iteration=None, metadata_parse_results=[], metadata_binding_results=[], issues=deepcopy(prepared["issues"]))
     if native_convergence is not None:
-        result.update(schema="native_blast_database_sheet_set_v2", native_convergence=native_convergence)
+        result.update(schema="native_blast_database_sheet_set_with_native_convergence", native_convergence=native_convergence)
     program = prepared["invocation"]["execution_program"]
     report_sources, query_bindings, search_bindings, targets = [], [], [], []
     sequence_metadata, profile_metadata, fasta_cache = [], [], {}
@@ -1856,7 +1856,7 @@ def populate_native_blast_database_sheets(collection, *, prepared_inputs, artifa
                     iteration_data[field].append(value)
         if native_convergence is not None and native_convergence["extraction"] is not None:
             iteration_data["convergence_records"].extend(deepcopy(native_convergence["extraction"]["convergence_records"]))
-        # Keep orphan context rows in v2 so its qualifier reports their exact scope.
+        # Keep orphan context rows in located metadata so its qualifier reports their exact scope.
         for validation in query_payloads:
             search_bindings.extend(deepcopy(r) for r in validation["normalized"]["search_bindings"] if _token(r["search_key"]) not in known_keys)
             for row in validation["normalized"]["target_contexts"]:

@@ -33,7 +33,7 @@ time; it does not make a fresh GET or invent execution-duration measurements.
 
 ## Select a collection and typed query
 
-The request has version `bvbrc_data_request_v2`, one explicit `collection`,
+The request has version `bvbrc_data_request`, one explicit `collection`,
 `mode` (`page`, `count` or `facet`), and an array of `filters` combined with AND.
 The 22 supported collection names are:
 
@@ -86,16 +86,16 @@ count and facet request zero document rows; a count of two with zero returned
 documents is a valid count result. Changing filters, collection, mode or a facet
 window requires another explicitly assigned query.
 
-The prepared profile is `solr_query_solr_json_v1`: one GET with
+The prepared profile is `solr_query_solr_json`: one GET with
 `Content-Type: application/solrquery+x-www-form-urlencoded` and
-`Accept: application/solr+json`. The parser expects a `solr_json_envelope_v1`
+`Accept: application/solr+json`. The parser expects a `solr_json_envelope`
 response. A JSON row array or a `.json` suffix does not establish that profile.
 The actual prepared request is persisted; recovery and publication use it
 without recompiling historical work with today's compiler.
 
 ## Freeze the requested result projection and explicit inputs
 
-The results selector is a closed `bvbrc_data_result_selector_v2` record with
+The results selector is a closed `bvbrc_data_result_selector` record with
 all five keys: `version`, `page`, `projection`, `inputs`, `supplied_metadata`.
 For page mode, `page` is null to retain the original page, or exactly
 `{offset, limit}`. Count/facet require null. An unchanged effective native page

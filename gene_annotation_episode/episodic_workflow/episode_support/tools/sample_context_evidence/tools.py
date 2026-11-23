@@ -313,7 +313,7 @@ class ToolRegistry:
         declaration until _save also preserves truthful partial-publication
         counts when a later native row fails.
         """
-        batch = {"representation": "native_publications_v1", "published_rows_total": 0,
+        batch = {"representation": "native_publications", "published_rows_total": 0,
                  "failure_rows_total": 0 if failures else None, "observation_query": None}
         self._publication_batch.set(batch)
         return batch

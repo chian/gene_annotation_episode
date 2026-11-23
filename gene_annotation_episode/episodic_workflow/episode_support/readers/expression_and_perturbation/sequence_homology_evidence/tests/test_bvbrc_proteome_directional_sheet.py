@@ -16,8 +16,8 @@ FILES = {
     '2202': ('biopython_text_2202L_blastp_001.txt','c0f5e5d3541500aef1ac93957fe35fbd4481f5788314e3e12ed1ea5f9d16510a'),
     '2221': ('biopython_text_2221L_blastp_001.txt','e8bcff01bf827d936c36f00e4bbb73f2b5b1dd99b4d37af4cb9a6b0de44e25f8'),
 }
-PARAMETERS = {'version':'bvbrc_proteome_directional_parameters_v1',
-    'formula_version':'displayed_blastp_correspondence_v1', 'amino_acid_alphabet':'standard20',
+PARAMETERS = {'version':'bvbrc_proteome_directional_parameters',
+    'formula_version':'displayed_blastp_correspondence', 'amino_acid_alphabet':'standard20',
     'ratio_decimal_places':18, 'rounding':'half_even'}
 
 
@@ -33,7 +33,7 @@ def parse_bytes(data, *, name='synthetic', body_complete=True, object_complete='
         'artifact_ref':name + '-retained', 'sha256':hashlib.sha256(data).hexdigest(), 'byte_count':len(data)},
         'body_complete':body_complete,'object_complete':object_complete}
     return parse_genome_comparison_directional_report(data, source=source,
-        declared_format='ncbi_blastall_blastp_pairwise_text_v1', report_key=name)
+        declared_format='ncbi_blastall_blastp_pairwise_text', report_key=name)
 
 
 def native_sheet(name='2221'):

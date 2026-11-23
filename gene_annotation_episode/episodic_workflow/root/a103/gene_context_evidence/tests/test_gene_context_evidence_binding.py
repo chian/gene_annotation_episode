@@ -162,7 +162,7 @@ def test_msg_to_child_selects_the_old_required_return_sources_and_inherits_the_p
         'child_values': {'information_unit': 1.0}}, {**summary, 'outstanding_jobs': [job]})
     assert monitor.selection == ('job_returncode',) and monitor.message == {}
     assert monitor.assignment == {
-        'version': 'monitor_assignment_v2', 'handoff_refs': [job['handoff_ref']],
+        'version': 'monitor_assignment', 'handoff_refs': [job['handoff_ref']],
         'known_progress_refs': [job['record_refs'][1]], 'dependency_handoff_refs': [],
         'requested_fields': ['execution_status'], 'information_unit': 1.0}
     child = importlib.import_module(PACKAGE + '.execution_progress_assessment.episode').ExecutionProgressAssessment

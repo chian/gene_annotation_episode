@@ -26,8 +26,8 @@ RECEIVED = received_ledger('literature_assay_received')
 class LiteratureAssayRepository(LiteratureRateRepository):
     provider = PROVIDER
     components = COMPONENTS
-    record_version = 'literature_assay_population_record_v2'
-    readable_record_versions = ('literature_assay_population_record_v1', record_version)
+    record_version = 'literature_assay_population_record'
+    readable_record_versions = (record_version,)
     operations = OPERATIONS
     received = RECEIVED
     binding_fields = tuple(BINDINGS)

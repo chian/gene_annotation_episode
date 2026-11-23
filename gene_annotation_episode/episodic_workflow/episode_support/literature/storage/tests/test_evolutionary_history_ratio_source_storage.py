@@ -21,7 +21,7 @@ def selection(reference):
                                'reference_literal': 'WT levels'},
                  'comparison_relation': {'value': 'unknown', 'witnesses': []},
                  'physical_measurement': unknown(), 'reference_measurement': unknown()}
-    return {'version': 'relative_signal_source_selection_v2', 'source_ref': reference,
+    return {'version': 'relative_signal_source_selection', 'source_ref': reference,
             'comparison': {field: unknown() for field in FIELDS}, 'representations': [paragraph]}
 
 

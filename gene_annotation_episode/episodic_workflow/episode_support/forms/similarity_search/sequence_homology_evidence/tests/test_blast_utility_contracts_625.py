@@ -41,7 +41,7 @@ def operation(mode="extract_sequences", *, molecule="dna", **parameters):
             "mask_occurrence_ids": []}),
         "extract_sequences": ("blastdbcmd", {
             "selectors": [{"ordinal": 0, "value": "ALPHA"}],
-            "output_format": "blastdbcmd_tabular_v1", "range": None, "strand": "plus",
+            "output_format": "blastdbcmd_tabular", "range": None, "strand": "plus",
             "get_dups": False, "target_only": False}),
         "info": ("blastdbcmd", {"exact_length": True}),
         "metadata": ("blastdbcmd", {}),
@@ -50,7 +50,7 @@ def operation(mode="extract_sequences", *, molecule="dna", **parameters):
             "require_taxids": False, "cdd_delta": False}),
     }
     program, selected = variants[mode]
-    return {"version": "blast_utility_operation_v1", "program": program, "mode": mode,
+    return {"version": "blast_utility_operation", "program": program, "mode": mode,
         "input_occurrence_ids": ["source"] if program == "makeblastdb" else [],
         "database_key": None if program == "makeblastdb" else "tiny",
         "molecule": molecule, "parameters": {**selected, **parameters}}
@@ -71,9 +71,9 @@ def field(**updates):
 
 
 def extraction():
-    return {"version": "blast_sequence_extraction_v1", "operation": operation(),
+    return {"version": "blast_sequence_extraction", "operation": operation(),
         "database_binding": binding(), "original_outcome": outcome(),
-        "output_occurrence": occurrence(fmt="blastdbcmd_tabular_v1", data=b"7\tALPHA\tALPHA.1\t4\tacgt\n"),
+        "output_occurrence": occurrence(fmt="blastdbcmd_tabular", data=b"7\tALPHA\tALPHA.1\t4\tacgt\n"),
         "records": [{"record_key": "out#/records/2", "native_row_ordinal": 2, "line_number": 4,
             "matched_selector_ordinals": [0], "association": "exact", "native_oid": 7,
             "native_identifier": "ALPHA", "native_accession": "ALPHA.1", "native_reported_length": 4,
@@ -86,14 +86,14 @@ def extraction():
 
 
 def inspection():
-    return {"version": "blast_database_inspection_v1", "operation": operation("info"),
+    return {"version": "blast_database_inspection", "operation": operation("info"),
         "database_binding": binding(), "output_occurrence": occurrence(fmt="blastdb_info_text"),
         "original_outcome": outcome(), "native_fields": [field()], "completeness": "complete",
         "checks": [observation()], "failures": []}
 
 
 def integrity():
-    return {"version": "blast_database_integrity_v1", "operation": operation("integrity"),
+    return {"version": "blast_database_integrity", "operation": operation("integrity"),
         "database_binding": binding(), "stdout_occurrence": occurrence(fmt="blastdbcheck_text"),
         "stderr_occurrence": occurrence("err", role="stderr"), "original_outcome": outcome(),
         "scope": "unknown", "observed_checked_count": None, "observed_population_count": None,
@@ -105,7 +105,7 @@ def artifact_set(version=5):
     op = operation("create_sequence_database", database_format_version=version)
     outputs = [occurrence("tiny." + ext, role="database_file", fmt="blastdb_binary", data=ext.encode())
                for ext in ("nhr", "nin", "nsq", "ndb", "not", "ntf", "nto")]
-    return {"version": "blast_database_artifact_set_v1", "kind": "sequence_database",
+    return {"version": "blast_database_artifact_set", "kind": "sequence_database",
         "operation": op, "original_outcome": outcome(), "database_key": "tiny",
         "identity": {"namespace": "fixture", "value": "tiny", "version": None, "release": None,
             "scope": None, "preparation_type": "sequence_database",
@@ -123,7 +123,7 @@ def artifact_set(version=5):
 def prepared_manifest():
     artifacts = artifact_set()
     receipt = {"path": "/retained/receipt.json", "sha256": "a" * 64, "size_bytes": 2, "artifact_ref": None}
-    return {"version": "native_blast_standard_prepared_database_manifest_v1", "database_key": "tiny",
+    return {"version": "native_blast_standard_prepared_database_manifest", "database_key": "tiny",
         "kind": "blast_nucleotide_sequence", "identity": artifacts["identity"],
         "native_paths": artifacts["native_paths"],
         "files": [{"path": r["native_path"], "sha256": r["sha256"], "size_bytes": r["size_bytes"]}
@@ -606,9 +606,9 @@ def test_unavailable_projection_requires_typed_reason_and_no_manifest():
 
 
 @pytest.mark.parametrize("value,code", [({}, "unknown_result_version"),
-    ({"version": "blast_utility_operation_v1"}, "unknown_result_version"),
-    ({"version": "blast_database_inspection_v2"}, "schema_invalid"),
-    ({"version": "blast_database_inspection_v999"}, "unknown_result_version"),
+    ({"version": "blast_utility_operation"}, "unknown_result_version"),
+    ({"version": "blast_prepared_database_inspection"}, "schema_invalid"),
+    ({"version": "blast_database_inspection_unrecognized"}, "unknown_result_version"),
     ({"version": []}, "unknown_result_version"), ([], "unknown_result_version")])
 def test_result_dispatch_only_admits_exact_result_versions(value, code):
     with pytest.raises(ContractError, match="^blast_utility_" + code + "$"):

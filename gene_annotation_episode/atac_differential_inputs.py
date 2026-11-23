@@ -192,7 +192,7 @@ def _seal(result, stats, *, read_failed=False):
                                             requirement='complete_artifact'))
     elif mismatch:
         state['byte_extent'] = 'unknown'
-    supplied_track = result['version'] in ('atac_bedgraph_parsed_v1', 'atac_bedgraph_stream_summary_v1') and artifact['producer_run_ref'] is None
+    supplied_track = result['version'] in ('atac_bedgraph_parsed', 'atac_bedgraph_stream_summary') and artifact['producer_run_ref'] is None
     complete_source = (state['byte_extent'] == 'complete' and state['identity'] == 'verified'
                        and not read_failed and (supplied_track or
                        artifact['producer_run_ref'] is not None and artifact['producer_outcome'] == 'succeeded'
@@ -256,7 +256,7 @@ def iter_atac_bedgraph_records(chunks: Iterable[bytes], *, artifact: AtacArtifac
     and explicitly make geometry inspection partial; they are never secretly sorted.
     """
     validate_atac_track_binding(binding)
-    result = _start(artifact, binding['track_key'], 'atac_bedgraph_stream_summary_v1', 'bedgraph4')
+    result = _start(artifact, binding['track_key'], 'atac_bedgraph_stream_summary', 'bedgraph4')
     _track_fields(result, binding)
     if binding['source_artifact_ref'] != artifact['artifact_ref']:
         result['issues'].append(_native_issue('metadata_conflict', artifact, binding['track_key'],
@@ -410,7 +410,7 @@ def parse_atac_bedgraph(content: bytes | BinaryIO | None, *, artifact: AtacArtif
                        binding: AtacTrackBinding) -> ParsedAtacTrack:
     validate_atac_track_binding(binding, missing=content is None)
     if content is None:
-        result = _start(artifact, binding['track_key'], 'atac_bedgraph_parsed_v1', 'bedgraph4', missing=True)
+        result = _start(artifact, binding['track_key'], 'atac_bedgraph_parsed', 'bedgraph4', missing=True)
         _track_fields(result, binding)
         return result
     arrays = dict(headers=[], rows=[], invalid_records=[], issues=[])
@@ -426,7 +426,7 @@ def parse_atac_bedgraph(content: bytes | BinaryIO | None, *, artifact: AtacArtif
         result = error.partial_summary
         arrays['issues'].extend(result['issues'])
         arrays['issues'].append(error.issue)
-    result.update(arrays, version='atac_bedgraph_parsed_v1')
+    result.update(arrays, version='atac_bedgraph_parsed')
     _inspect_track_rows(result)
     return result
 
@@ -554,10 +554,10 @@ def _parse_table(content, artifact, binding, kind, category=None, *, parse_profi
         validate_atac_callpeak_binding(binding)
         key = binding['run_key']
     version, fmt, columns = {
-        'xls': ('macs2_peaks_xls_parsed_v1', 'macs2_peaks_xls_narrow', 10),
-        'narrowpeak': ('macs2_narrowpeak_parsed_v1', 'macs2_narrowpeak10', 10),
-        'summits': ('macs2_summits_parsed_v1', 'macs2_summits_bed5', 5),
-        'bdgdiff': ('macs2_bdgdiff_parsed_v1', 'macs2_bdgdiff_bed5', 5),
+        'xls': ('macs2_peaks_xls_parsed', 'macs2_peaks_xls_narrow', 10),
+        'narrowpeak': ('macs2_narrowpeak_parsed', 'macs2_narrowpeak10', 10),
+        'summits': ('macs2_summits_parsed', 'macs2_summits_bed5', 5),
+        'bdgdiff': ('macs2_bdgdiff_parsed', 'macs2_bdgdiff_bed5', 5),
     }[kind]
     result = _start(artifact, key, version, fmt, missing=content is None)
     expected_ref = binding['artifact_roles'][category if differential else 'peaks_xls' if xls else kind]

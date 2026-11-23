@@ -113,7 +113,7 @@ own cutoff. Unknown scores or forecasts are not measured zeros. Coordinate
 unresolved transfer dependencies through the existing shared-information tools.
 Each child task must declare the credit calculation used for its own stopping decision.
 For an A105, A106 or A108 whole-axis investigation, include context.evidence_task
-with version evidence_axis_task_v1, kind whole_axis_findings, its evidence_axis,
+with version evidence_axis_task, kind whole_axis_findings, its evidence_axis,
 and the credit_unit from that task's configured credit_definition. Its task key is
 <axis>:whole_axis_findings. Do not copy another axis's unit or cutoff, or commission
 a separate episode merely to calculate A106/A108 scores.

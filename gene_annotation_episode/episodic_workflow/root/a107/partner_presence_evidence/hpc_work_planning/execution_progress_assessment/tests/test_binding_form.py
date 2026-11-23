@@ -68,7 +68,7 @@ def test_return_form_declares_credit_and_finding_required_and_facts_selectable()
 
 def test_assignment_form_admits_the_monitor_assignment_and_refuses_more_fields_than_offered():
     form = importlib.import_module(PACKAGE + '.messages.read_from_parent').ASSIGNMENT_FORM
-    assignment = {'version': 'monitor_assignment_v1', 'target_handle': 'job_1',
+    assignment = {'version': 'monitor_assignment', 'target_handle': 'job_1',
                   'requested_fields': ['execution_status'], 'known_progress_refs': [],
                   'permitted_committed_record_types': [], 'information_unit': 1.0}
     assert form.admit(assignment, 'assignment')['target_handle'] == 'job_1'

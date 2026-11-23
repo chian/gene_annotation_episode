@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence.literature_channel_calculations import VERSION as SHEET_VERSION, PRIMITIVE_ORDER, QUANTITIES, CURRENT_KINDS, ARRANGEMENT_RELATIONS, COMPONENTS, UNITS, MEANINGS, SECTIONS, populate_channel_components
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_rate_storage import LiteratureRateRepository
 PROVIDER = 'literature.a105.channel'
-VERSION = 'literature_channel_record_v1'
+VERSION = 'literature_channel_record'
 NAMESPACE = 'literature_channel_cells'
 REQUESTED = 'requested_channel_components'
 VIEW = 'channel_components'

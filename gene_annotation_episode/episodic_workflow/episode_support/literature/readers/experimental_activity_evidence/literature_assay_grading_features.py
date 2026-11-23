@@ -1,4 +1,4 @@
-"""The investigation finding of a saved A105 assay grading sheet (``a105_assay_grading_sheet_v1``): controlled features
+"""The investigation finding of a saved A105 assay grading sheet (``a105_assay_grading_sheet``): controlled features
 that code reads from the saved grading record, each with its validator (``INVESTIGATION_FINDING_FEATURES_a105.md``
 sections 2.7, 3.3 and 4, the "core" fields; adopted by the owner on 19 November 2026).
 

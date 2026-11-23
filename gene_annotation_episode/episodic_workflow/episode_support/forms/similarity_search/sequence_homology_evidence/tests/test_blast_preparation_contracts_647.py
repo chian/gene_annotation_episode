@@ -40,7 +40,7 @@ def operation(mode, **updates):
         else ["sequence"] if mode == "create_megablast_index" else ["list", "profile"] if mode == "create_profile_database" else [])
     key = "db" if mode in {"create_subset_alias", "aggregate_volumes", "show_filters"} else None
     molecule = "unknown" if mode in {"convert_gi_list", "convert_seqid_list", "inspect_seqid_list"} else "protein" if mode == "create_profile_database" else "dna"
-    value = {"version": "blast_utility_operation_v2", "program": program, "mode": mode,
+    value = {"version": "blast_preparation_operation", "program": program, "mode": mode,
         "input_occurrence_ids": ids, "database_key": key, "molecule": molecule, "parameters": parameters[mode]}
     value.update(updates)
     return value
@@ -54,7 +54,7 @@ MODES = ["convert_gi_list", "convert_seqid_list", "inspect_seqid_list", "create_
 def test_all_nine_operations_and_exact_result_registry(mode):
     value = operation(mode)
     assert validate_blast_utility_operation(value) == value
-    expected = "blast_database_inspection_v2" if mode in {"inspect_seqid_list", "show_filters"} else "blast_database_artifact_set_v2"
+    expected = "blast_prepared_database_inspection" if mode in {"inspect_seqid_list", "show_filters"} else "blast_prepared_database_artifact_set"
     assert blast_utility_result_version_for_operation(value) == expected
     assert blast_utility_record_name_for_version(expected) in {"DatabaseInspection", "DatabaseArtifactSet"}
     copy = blast_utility_schema_for_version(expected)
@@ -109,7 +109,7 @@ def test_parameter_observations_require_location_and_do_not_accept_requested_def
 def test_document_is_closed_copied_and_alias_length_is_not_exact_extracted_length():
     field = {"field_name": "database_residue_count", "value": 13, "unit": "symbols", "value_basis": "native_reported",
         "native_lexeme": "13", "occurrence_id": "alias", "line_number": 4, "json_pointer": None, "missing_reason": None}
-    doc = {"version": "blast_preparation_document_v1", "kind": "alias", "occurrence_id": "alias",
+    doc = {"version": "blast_preparation_document", "kind": "alias", "occurrence_id": "alias",
         "native_fields": [field], "rows": [{"row_ordinal": 0, "line_number": 4, "native_key": "LENGTH",
             "value_lexeme": "13", "tokens": []}], "checks": [], "failures": []}
     assert validate_blast_preparation_document(doc) == doc

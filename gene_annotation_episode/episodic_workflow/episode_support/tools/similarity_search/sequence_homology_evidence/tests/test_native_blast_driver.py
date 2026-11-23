@@ -23,7 +23,7 @@ def plan_for(tmp_path,program='blastp'):
         path=tmp_path/(row['role']+'.fa');path.write_text('>'+row['role']+'\nACGTACGT\n')
         row.update(path=str(path),size_bytes=path.stat().st_size,sha256=hashlib.sha256(path.read_bytes()).hexdigest())
     request=requested_job_from_native(job)
-    return {'version':'native_blast_run_plan_v1','identity':{'run_id':'synthetic','episode_id':'resource-child','resource_id':'local',
+    return {'version':'native_blast_run_plan','identity':{'run_id':'synthetic','episode_id':'resource-child','resource_id':'local',
         'execution_id':'original','attempt_id':'one','operation_key':'selected-start','requested_job_sha256':native_blast_digest(request)},
         'requested_job':request,'attempt_directory':str(tmp_path/'attempt'),
         'policy':{'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4 * 1024 ** 3}}

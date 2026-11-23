@@ -57,13 +57,13 @@ class NativeEventBinding:
                 object.__setattr__(self, key, _text(value))
 
     def as_record(self):
-        return {'version': 'native_event_binding_v1', 'execution_directory': str(self.execution_directory),
+        return {'version': 'native_event_binding', 'execution_directory': str(self.execution_directory),
             **{key: getattr(self, key) for key in ('run_id', 'owner_episode_id', 'job_ref', 'registry_ref', 'resource_id')}}
 
     @classmethod
     def from_record(cls, value):
         fields = {'version', 'execution_directory', 'run_id', 'owner_episode_id', 'job_ref', 'registry_ref', 'resource_id'}
-        if type(value) is not dict or set(value) != fields or value['version'] != 'native_event_binding_v1':
+        if type(value) is not dict or set(value) != fields or value['version'] != 'native_event_binding':
             raise ValueError('invalid_native_event_binding')
         if type(value['execution_directory']) is not str:
             raise ValueError('invalid_native_event_binding')
@@ -82,7 +82,7 @@ class NativeEventProvider:
         object.__setattr__(self, 'resource_id', _text(resource_id))
 
     def as_record(self):
-        return {'version': 'native_event_provider_v1', 'execution_directory': str(self.execution_directory),
+        return {'version': 'native_event_provider', 'execution_directory': str(self.execution_directory),
                 'run_id': self.run_id, 'resource_id': self.resource_id}
 
     def for_job(self, *, owner_episode_id, job_ref, registry_ref, original_binding=None):
@@ -122,7 +122,7 @@ def _handle(handle_path):
 
 
 def _registration(binding, identity):
-    return validate_native_registration({'version': 'native_event_registration_v1',
+    return validate_native_registration({'version': 'native_event_registration',
         'handle': native_target_handle(identity), **{key: getattr(binding, key) for key in
             ('run_id', 'owner_episode_id', 'job_ref', 'registry_ref', 'resource_id')},
         'native_identity': identity})
@@ -138,7 +138,7 @@ def ensure_native_event_target(handle_path):
 
 def _validate_receipt(value, identity):
     if (type(value) is not dict or set(value) != {'version', 'native_identity', 'SERVICE_RESULT',
-            'EXIT_CODE', 'EXIT_STATUS', 'ended'} or value['version'] != 'native_service_exit_receipt_v1'
+            'EXIT_CODE', 'EXIT_STATUS', 'ended'} or value['version'] != 'native_service_exit_receipt'
             or value['native_identity'] != identity):
         raise ValueError('native_event_receipt_invalid')
     for key in ('SERVICE_RESULT', 'EXIT_CODE', 'EXIT_STATUS'):
@@ -166,7 +166,7 @@ def commit_service_exit_receipt(handle_path, status_path, *, service_exit, event
         if status_path.exists():
             _validate_receipt(json.loads(status_path.read_bytes()), identity)
             return
-        value = {'version': 'native_service_exit_receipt_v1', 'native_identity': identity,
+        value = {'version': 'native_service_exit_receipt', 'native_identity': identity,
                  **service_exit, 'ended': event_time()}
         _validate_receipt(value, identity)
         atomic_json(status_path, value)
@@ -195,7 +195,7 @@ def publish_native_events(handle_path):
                 raw = receipt_path.read_bytes()
                 receipt = _validate_receipt(json.loads(raw), identity)
                 sha = hashlib.sha256(raw).hexdigest()
-                publication = {'version': 'native_event_publication_v1', 'event': 'state_changed',
+                publication = {'version': 'native_event_publication', 'event': 'state_changed',
                     'cause': 'service_exit_receipt_committed', 'record_ref': 'native_event_record_'+sha[:24],
                     'receipt_sha256': sha, 'occurred_at': receipt['ended']['at']}
                 event = store.publish_native_event(target, publication, receipt_bytes=raw)

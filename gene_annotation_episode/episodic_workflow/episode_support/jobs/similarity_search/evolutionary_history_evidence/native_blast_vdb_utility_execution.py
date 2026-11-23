@@ -18,8 +18,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.evolution
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.native_blast_contracts import finite_json_copy
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.native_blast_database_contracts import _absolute
 
-VERSION = "native_blast_vdb_offline_execution_v1"
-RECEIPT_VERSION = "native_blast_vdb_offline_receipt_v1"
+VERSION = "native_blast_vdb_offline_execution"
+RECEIPT_VERSION = "native_blast_vdb_offline_receipt"
 OFFLINE_FAILURE_CODES = frozenset({"offline_launcher_unavailable", "offline_runtime_identity_mismatch",
     "offline_setup_failed", "offline_status_unavailable", "offline_configuration_conflict", "offline_child_exec_failed"})
 _FILE = {"type": "object", "properties": {"path": {"type": "string", "minLength": 1},
@@ -30,7 +30,7 @@ OFFLINE_EXECUTION_SCHEMA = {"type": "object", "properties": {
     "runtime_aliases": {"type": "array", "items": {"type": "object", "properties": {
         "path": {"type": "string", "minLength": 1}, "target_path": {"type": "string", "minLength": 1}},
         "required": ["path", "target_path"], "additionalProperties": False}},
-    "system_interface_profile": {"const": "blast_vdb_bwrap_local_v1"}},
+    "system_interface_profile": {"const": "blast_vdb_bwrap_local"}},
     "required": ["version", "launcher", "runtime_files", "runtime_aliases", "system_interface_profile"],
     "additionalProperties": False}
 OFFLINE_ENVIRONMENT_SCHEMA = {"type": "object", "properties": {

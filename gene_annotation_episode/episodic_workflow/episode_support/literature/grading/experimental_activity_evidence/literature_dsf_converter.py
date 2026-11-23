@@ -127,7 +127,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_assay_grading import INPUT_VERSION, ROLES, grade_assay
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_dsf_converted_v1'
+VERSION = 'a105_dsf_converted'
 CRITERIA_MAP = {'binding_controls': ('protein_alone_control', 'ligand_alone_control'), 'binding_regime': ('dose_dependence', 'concentration_series', 'concentration_range'), 'binding_parameter_definition': ('shift_observed', 'shift_size', 'shift_over_spread'), 'calibration_applicability': ('curve_quality', 'heating_rate'), 'sampling_basis': ('replicates',)}
 SHIFT_FULL_AGREEMENT_C = 2.0  # EXPERT_REVIEW: smallest rise of the Tm (degrees Celsius) that the sheet takes as a clear stabilisation; thermal shift screens commonly call a hit a shift of 2 degrees or more.
 SHIFT_ZERO_AGREEMENT_C = 0.5  # EXPERT_REVIEW: rise of the Tm (degrees Celsius) at or below which the shift cannot be told from the typical reproducibility of the Tm (a few tenths of a degree): no credit (degree 0), but not opposition, because the paper's own spread (shift_over_spread) is what can show it inside the scatter; no shift or a fall of the Tm (a destabilisation, which is not a stabilisation by binding) is conflicting; between this and SHIFT_FULL_AGREEMENT_C the degree rises linearly (the shift grows as ln(1 + [L]/KD), so equal steps are equal fold steps).

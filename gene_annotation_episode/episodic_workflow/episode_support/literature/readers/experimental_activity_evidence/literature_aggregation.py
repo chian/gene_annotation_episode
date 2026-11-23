@@ -9,7 +9,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.experimen
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_assay_grading import COMPONENTS as GRADE_COMPONENTS
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_assay_grading_storage import assay_grading_cells_schema
-VERSION = 'a105_across_experiment_aggregation_v1'
+VERSION = 'a105_across_experiment_aggregation'
 SCOPE = 'a105_across_experiment_aggregation'
 COMPONENTS = ('reliability', 'validity', 'relevance', 'attribution', 'overall')
 # Owner (A105_AGGREGATION_TASK): "Use these exact across-experiment rules: reliability SUM; validity SUM; relevance

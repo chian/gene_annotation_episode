@@ -9,7 +9,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.acquisition.profi
 )
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.native_infernal_driver import _encoded
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.partner_presence_evidence.native_blast_utility_contracts import (
-    ATTEMPT_NAME, BUNDLE_NAME, BUNDLE_VERSION, DATABASE_ROLES, OUTPUT_ROLES, OWNER_NAME, PLAN_NAME, JOB_VERSION_V2, JOB_VERSION_V3,
+    ATTEMPT_NAME, BUNDLE_NAME, BUNDLE_VERSION, DATABASE_ROLES, OUTPUT_ROLES, OWNER_NAME, PLAN_NAME, PREPARATION_JOB_VERSION, VDB_JOB_VERSION,
     _error, _producer_path, database_file_selections, finite_json_copy, measurement_pair,
     native_blast_digest, staged_relative, validate_native_blast_utility_bundle,
     validate_native_blast_utility_plan,
@@ -17,18 +17,18 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.similarity_search.partner_presence_evidence.native_blast_utility_local import local_blast_utility_plan, _policy
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.partner_presence_evidence.practical_execution_state import _immutable, _read
 
-VERSION = "native_blast_utility_captured_bundle_v1"
+VERSION = "native_blast_utility_captured_bundle"
 PROVIDER = "episode.execution_result"
 CAPTURE_FAILURE_CODES = frozenset({"sealed_bundle_unavailable", "original_bundle_invalid", "original_owner_invalid",
     "original_file_unavailable", "original_file_identity_mismatch", "input_not_original", "unsealed_file"})
 _CAPTURE_FIELDS = {"version", "source_ref", "plan", "original_bundle", "bundle_artifact_ref", "bundle_validated", "artifacts", "failures"}
 _ROW_FIELDS = {"direction", "input_key", "database_key", "role", "ordinal", "original_path", "artifact_ref", "sha256", "size_bytes", "format", "completeness"}
 _ASSOCIATION_FIELDS = {"direction", "input_key", "database_key", "role", "ordinal", "original_path"}
-_FORMATS = {"fasta", "text", "maskinfo_xml", "maskinfo_asn1_text", "blastdbcmd_tabular_v1", "blastdb_info_text",
+_FORMATS = {"fasta", "text", "maskinfo_xml", "maskinfo_asn1_text", "blastdbcmd_tabular", "blastdb_info_text",
             "blastdb_metadata_json", "blastdbcheck_text", "blastdb_binary", "json", "unknown",
             "gi_list_binary", "seqid_list_binary", "blast_alias_text", "blast_seqid_list_info_text",
             "blast_index_binary", "blast_index_map_text", "blast_profile_aux_text", "pssm_asn1_text", "pssm_asn1_binary"}
-_VDB_FORMATS = {"blast_vdb_cmd_table_v1", "blast_vdb_info_text_v1", "blast_vdb_paths_text_v1"}
+_VDB_FORMATS = {"blast_vdb_cmd_table", "blast_vdb_info_text", "blast_vdb_paths_text"}
 
 
 def is_native_blast_utility_target(target):
@@ -86,7 +86,7 @@ def _selected_files(plan, bundle):
         original = bundle is not None and pair == measurement_pair(row, "before_") == measurement_pair(row, "expected_")
         fmt = ("blastdb_metadata_json" if path.suffix in {".njs", ".pjs"} else "blastdb_binary") if row["role"] == "database_file" else (
             "json" if row["role"] in {"manifest", "metadata_manifest", "input_manifest"} else "unknown")
-        if job["version"] == JOB_VERSION_V3:
+        if job["version"] == VDB_JOB_VERSION:
             from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.partner_presence_evidence.native_blast_vdb_utility_context import vdb_utility_database_operands
             db = next(d for d in vdb_utility_database_operands(job) if d["database_key"] == row["database_key"])
             if db["kind"] == "vdb" and row["role"] == "database_file":
@@ -97,7 +97,7 @@ def _selected_files(plan, bundle):
             "role": row["role"], "ordinal": ordinal, "original_path": str(path), "format": fmt,
             "completeness": "complete" if original else "unknown", "size_bytes": pair[0], "sha256": pair[1],
             "original": original, "read_root": str(path.parent), "read_relative": path.name})
-    if job["version"] == JOB_VERSION_V2:
+    if job["version"] == PREPARATION_JOB_VERSION:
         result.extend(_materialized_files(plan, bundle, result))
     return result
 
@@ -196,8 +196,8 @@ def validate_native_blast_utility_capture(value):
             or type(capture["failures"]) is not list):
         _error("capture_shape_invalid")
     validate_native_blast_utility_plan(capture["plan"])
-    preparation = capture["plan"]["requested_job"]["native_blast_utility"]["version"] == JOB_VERSION_V2
-    vdb = capture["plan"]["requested_job"]["native_blast_utility"]["version"] == JOB_VERSION_V3
+    preparation = capture["plan"]["requested_job"]["native_blast_utility"]["version"] == PREPARATION_JOB_VERSION
+    vdb = capture["plan"]["requested_job"]["native_blast_utility"]["version"] == VDB_JOB_VERSION
     for key in ("source_ref", "bundle_artifact_ref"):
         if capture[key] is not None and (type(capture[key]) is not str or not capture[key]):
             _error("capture_reference_invalid")
@@ -289,7 +289,7 @@ def _validate_saved(store, capture):
         source = store.require(capture["source_ref"], {"source"})
         if {k: v for k, v in source.items() if k not in {"id", "origin", "record_type"}} != _source_payload(capture):
             _error("capture_source_association_conflict")
-    if bundle is not None and capture["plan"]["requested_job"]["native_blast_utility"]["version"] == JOB_VERSION_V2:
+    if bundle is not None and capture["plan"]["requested_job"]["native_blast_utility"]["version"] == PREPARATION_JOB_VERSION:
         _validate_saved_realizations(store, capture)
     return capture
 

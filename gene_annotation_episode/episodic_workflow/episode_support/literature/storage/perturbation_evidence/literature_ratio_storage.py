@@ -40,7 +40,7 @@ def ratio_population_schema():
 class LiteratureRatioRepository(LiteratureRateRepository):
     provider=PROVIDER
     components=COMPONENTS
-    record_version='literature_relative_signal_record_v1'
+    record_version='literature_relative_signal_record'
     received_table='literature_ratio_received'
     binding_fields=tuple(BINDINGS)
 
@@ -119,7 +119,7 @@ class LiteratureRatioRepository(LiteratureRateRepository):
             except (ValueError,UnicodeDecodeError) as error:
                 raise ContractError('retained_visual_json_required') from error
             if (not isinstance(record,dict) or set(record)!= {'version','subject','variant','reference','observations'}
-                    or record['version']!='relative_visual_signal_v1'
+                    or record['version']!='relative_visual_signal'
                     or (record['subject'],record['variant'],record['reference'])!=(args['subject'],args['variant'],args['reference_literal'])
                     or not isinstance(record['observations'],list) or not record['observations']):
                 raise ContractError('retained_visual_comparison_mismatch')

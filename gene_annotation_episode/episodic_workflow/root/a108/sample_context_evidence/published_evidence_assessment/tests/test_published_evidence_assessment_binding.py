@@ -68,12 +68,12 @@ def test_no_module_imports_another_episode_folder():
 
 CONTEXT = 'context_111111111111111111111111'
 HYPOTHESIS, SUBJECT = 'hypothesis_111111111111111111111111', 'input_111111111111111111111111'
-LEADS_TASK = {'version': 'literature_local_task_v1', 'evidence_axis': 'A108', 'credit_unit': 2,
+LEADS_TASK = {'version': 'literature_local_task', 'evidence_axis': 'A108', 'credit_unit': 2,
               'kind': 'verified_source_leads'}
 
 
 def assignment(task=None):
-    return {'version': 'literature_assignment_v1', 'question_context_refs': [CONTEXT],
+    return {'version': 'literature_assignment', 'question_context_refs': [CONTEXT],
             'literature_task': task or LEADS_TASK,
             'proposed_annotation_ref': HYPOTHESIS, 'scope': {'subject_refs': [SUBJECT]},
             'received_record_refs': [HYPOTHESIS]}
@@ -106,7 +106,7 @@ def test_the_yield_controller_is_accumulation():
 
 def summary_of():
     value = parent_input()
-    return {'literature_assignment': {'version': 'literature_assignment_v1',
+    return {'literature_assignment': {'version': 'literature_assignment',
                                       'question_context_refs': value['question_context_refs'],
                                       'literature_task': value['task'], 'proposed_annotation_ref': HYPOTHESIS},
             'task': value['task'], 'proposed_annotation_ref': HYPOTHESIS, 'scope': value['scope'],
@@ -119,7 +119,7 @@ def test_the_commission_names_the_records_and_the_fields_it_wants():
     message = to_child.msg_to_child('evidence_search_strategy_improvement', {'objective': 'o'}, summary_of())
     assert isinstance(message, ChildMessage) and message.objective == 'o'
     assert message.selection == ('literature_source_lead_dispositions',)
-    assert message.assignment['version'] == 'strategy_assignment_v1'
+    assert message.assignment['version'] == 'strategy_assignment'
     assert 'prior_search_refs' not in message.assignment and 'source_refs' not in message.assignment
     assert message.assignment['received_record_refs'] == [CONTEXT, HYPOTHESIS, SUBJECT]
     child_form.ASSIGNMENT_FORM.admit(message.assignment, 'assignment')

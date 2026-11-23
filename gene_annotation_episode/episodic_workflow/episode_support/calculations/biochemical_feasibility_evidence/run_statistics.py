@@ -18,7 +18,7 @@ import re
 import sqlite3
 
 
-VERSION = "execution_statistics_v1"
+VERSION = "execution_statistics"
 EXECUTION_PHASE_BACKENDS = {'reference_acquisition': 'https',
     'pairwise_sequence_alignment': 'local', 'spreadsheet_selection': 'local'}
 
@@ -276,7 +276,7 @@ class RunHistory:
             value = {"version": VERSION, "class_ref": scope.ref, "execution_class": asdict(scope),
                      "history_through_sequence": sequence, "current_condition": condition,
                      "statistics": [dict(zip(keys, row)) for row in rows],
-                     "expectation_method": "empirical_complete_duration_mean_by_condition_and_outcome_v1"}
+                     "expectation_method": "empirical_complete_duration_mean_by_condition_and_outcome"}
             ref = _ref("execution_expectation", value)
             self.db.execute("INSERT OR IGNORE INTO expectation_snapshots VALUES(?,?)", (ref, _json(value)))
             return ref

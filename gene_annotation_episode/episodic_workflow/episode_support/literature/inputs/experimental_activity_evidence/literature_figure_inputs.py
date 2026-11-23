@@ -12,8 +12,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.experimen
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_assay_inputs import SOURCE_KINDS, _Sources, _fail, _keys, _nullable, _numeric, _text, _witness_schema
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_experimental_contracts import ExperimentalContractError
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_figure_measurements import BOUND_KIND, compare_ordinate_cells, read_bar_ordinate
-VERSION = 'a105_figure_inputs_v1'
-DATA_VERSION = 'literature_figure_selection_v1'
+VERSION = 'a105_figure_inputs'
+DATA_VERSION = 'literature_figure_selection'
 LITERAL_FIELDS = ('first_subject', 'first_partner', 'second_subject', 'second_partner', 'experiment', 'endpoint', 'first_condition', 'second_condition', 'normalization', 'function')
 COMPONENTS = ('first_ordinate', 'second_ordinate', 'ordinate_difference')
 REASONS = ('no_bar_pixels', 'ambiguous_bar_runs', 'truncated_mean_edge', 'numerical_model_range', 'missing_ordinate', 'second_ordinate_unreported', 'ordinate_unit_mismatch')

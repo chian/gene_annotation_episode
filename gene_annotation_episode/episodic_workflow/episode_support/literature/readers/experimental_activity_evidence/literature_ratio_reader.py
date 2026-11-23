@@ -10,7 +10,7 @@ import re
 import xml.etree.ElementTree as ET
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_experimental_contracts import ExperimentalContractError
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_prose_reader import _check_declarations, _direct_paragraph_text, _finite, _tag, _text
-VERSION = 'relative_signal_extraction_v1'
+VERSION = 'relative_signal_extraction'
 _NUMBER = '[+−-]?(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:[eE][+−-]?\\d+)?'
 _PERCENT = re.compile(f'(?<![\\w.,+−-])(?P<number>{_NUMBER})\\s*%\\s*\\((?P<label>[^()]*)\\)')
 _LIMIT_PREFIX = re.compile('(?:<=|>=|[<>≤≥~≈±–—−-]|\\b(?:(?:less|greater|more|fewer)\\s+than|at\\s+most|at\\s+least|up\\s+to|below|above|approximately|about|circa|roughly|around|between|from|not(?:\\s+at)?))\\s*$', re.IGNORECASE)

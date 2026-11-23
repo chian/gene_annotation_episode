@@ -12,7 +12,7 @@ from math import isqrt
 from scipy.stats import t as student_t
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence.literature_kinetic_calculations import _finite, _sqrt
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_kinetic_summary_precision_inputs import _schema, _check, _fraction, _rational, _validate_input_relationships
-VERSION = 'a105_kinetic_summary_precision_sheet_v1'
+VERSION = 'a105_kinetic_summary_precision_sheet'
 EVALUATION_SCOPE = 'source_kinetic_summary_precision'
 COMPONENTS = tuple(_schema('sheet')['properties']['source_cells']['properties'])
 FORMULA_CODES = {name: 'summary_precision_' + name for name in COMPONENTS}

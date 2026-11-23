@@ -154,7 +154,7 @@ def build_plan(commission, candidate, configuration, owner, ordinal):
         if isinstance(value, dict):
             return {key: expand(item) for key, item in value.items()}
         return value
-    manifest = {'version': 'hpc_allocation_manifest_v1', 'plan_id': plan_id,
+    manifest = {'version': 'hpc_allocation_manifest', 'plan_id': plan_id,
         'workspace': workspace, 'wall_seconds': candidate['wall_seconds'],
         'result_limit_bytes': commission['limits']['result_limit_bytes'], 'units': expand(candidate['units'])}
     manifest_sha = digest(manifest)
@@ -174,7 +174,7 @@ def build_plan(commission, candidate, configuration, owner, ordinal):
     pbs_resources = [f"select={candidate['nodes']}",
                      f'walltime={wall//3600:02d}:{wall//60%60:02d}:{wall%60:02d}',
                      *configuration.get('scheduler', {}).get('required_resources', [])]
-    request = {'version': 'practical_assignment_v1', 'assignment_id': plan_id, 'resource_kind': 'hpc',
+    request = {'version': 'practical_assignment', 'assignment_id': plan_id, 'resource_kind': 'hpc',
         'resource_id': commission['resource_id'], 'workspace': workspace, 'endpoint': 'usable_handoff',
         'requested_job': {'argv': [configuration['python_executable'], '-B', workspace+'/runner.py',
                                   workspace+'/manifest.json', manifest_sha], 'environment': {}},
@@ -184,7 +184,7 @@ def build_plan(commission, candidate, configuration, owner, ordinal):
     return {'plan_id': plan_id, 'candidate_id': candidate['id'], 'manifest': manifest,
         'manifest_sha256': manifest_sha, 'supplied_files': files,
         'preparation': expand(candidate.get('preparation', '')), 'practical_assignment': request,
-        'launch_assignment': {'version': 'execution_launch_assignment_v1',
+        'launch_assignment': {'version': 'execution_launch_assignment',
             'requests': {commission['resource_id']: request},
             'immutable_input_versions': [],
             'constraints': {'allowed_resource_ids': [commission['resource_id']], 'allowed_kinds': ['hpc']}},

@@ -27,9 +27,9 @@ def own_files():
 
 
 def assignment():
-    task = {'version': 'literature_local_task_v1', 'kind': 'verified_source_leads', 'evidence_axis': 'A105',
+    task = {'version': 'literature_local_task', 'kind': 'verified_source_leads', 'evidence_axis': 'A105',
             'credit_unit': 1.0}
-    return {'version': 'literature_assignment_v1', 'question_context_refs': ['ctx_1'],
+    return {'version': 'literature_assignment', 'question_context_refs': ['ctx_1'],
             'literature_task': task, 'proposed_annotation_ref': 'hyp_1',
             'scope': {'subject_refs': ['sub_1']}, 'received_record_refs': ['art_1', 'ctx_1']}
 
@@ -154,6 +154,6 @@ def test_the_strategy_commission_is_handed_no_search_and_no_source():
     assert message.objective == 'o'
     assert set(message.assignment) == {'version', 'question_context_refs', 'literature_task', 'proposed_annotation_ref',
                                        'sheet_state_refs', 'examined_article_refs', 'scope', 'received_record_refs'}
-    assert message.assignment['version'] == 'strategy_assignment_v1'
+    assert message.assignment['version'] == 'strategy_assignment'
     assert set(message.selection) == {'sheet_state_refs', 'examined_article_refs',
                                       'literature_source_lead_dispositions'}

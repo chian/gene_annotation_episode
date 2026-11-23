@@ -53,7 +53,7 @@ def selection(raw):
                                 'unit': None, 'unit_relationship': interpreted('unknown'), 'confidence_level': None,
                                 'count': None, 'repetition_basis': interpreted('unspecified'),
                                 'estimate_basis': interpreted('unknown')}}
-    return {'version': 'a105_kinetic_source_selection_v1', 'source_ref': PLACEHOLDER, 'source_kind': 'synthetic_fixture',
+    return {'version': 'a105_kinetic_source_selection', 'source_ref': PLACEHOLDER, 'source_kind': 'synthetic_fixture',
             'numerator': operand(f'numerator 8 {UNIT}', '8', 0), 'denominator': operand(f'denominator 2 {UNIT}', '2', 1),
             'comparison': {name: interpreted(value) for name, value in {
                 'subject_relationship': 'same_molecule_and_construct', 'parameter_definition_relationship': 'same',

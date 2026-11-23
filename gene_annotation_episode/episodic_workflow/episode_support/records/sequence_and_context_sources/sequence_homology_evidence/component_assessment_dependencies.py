@@ -1,6 +1,6 @@
 """A101 received assessment identities, revisions and sequence extents."""
 
-VERSION = 'received_component_assessment_dependencies_v1'
+VERSION = 'received_component_assessment_dependencies'
 
 def assessment_dependencies(store, reference, known, *, anchor=None):
     known = set(known)

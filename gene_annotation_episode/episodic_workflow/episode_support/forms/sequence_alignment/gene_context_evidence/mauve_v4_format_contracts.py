@@ -191,7 +191,7 @@ def validate_mauve_v4_document(document: dict) -> dict:
     """Validate a saved document without decoding its original artifact again."""
     shape(document, ('schema_version', 'document_id', 'artifact', 'encoding', 'metadata',
                      'intervals', 'unparsed', 'completeness'))
-    require(document['schema_version'] == 'mauve_v4_document_v1')
+    require(document['schema_version'] == 'mauve_v4_document')
     artifact(document['artifact']); owner = document['artifact']; encoding = document['encoding']
     require(type(encoding) is str and encoding in ('ascii', 'utf-8'), 'encoding_unsupported')
     require(document['document_id'] == document_id('mauve_v4', artifact=owner,

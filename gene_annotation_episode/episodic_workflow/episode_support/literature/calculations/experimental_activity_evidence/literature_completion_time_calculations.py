@@ -3,7 +3,7 @@ from fractions import Fraction
 import math
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_completion_time_inputs import ROLES, validate_completion_time_extraction
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_rate_domains import _divide, _encode, _project, INF
-VERSION = 'a105_completion_time_components_v1'
+VERSION = 'a105_completion_time_components'
 COMPONENTS = ('numerator_time', 'denominator_time', 'completion_time_ratio', 'inverse_completion_time_ratio')
 REASONS = ('source_measurement_unavailable', 'source_time_unit_unreported', 'unsupported_source_time_unit', 'source_time_unit_conflicting', 'nonpositive_physical_time', 'endpoint_relation_unknown', 'endpoint_relation_conflicting', 'different_endpoints', 'preparation_relation_unknown', 'preparation_relation_conflicting', 'pair_relationship_unknown', 'pair_relationship_conflicting', 'source_meaning_unavailable', 'qualification_unknown', 'qualification_conflicting', 'reused_source_observation', 'numerical_model_range')
 CONDITIONS = ('strictly_positive_physical_completion_time', 'source_endpoint_and_pair_interpretations', 'reported_operand_cartesian_enclosure', 'preparation_protocol_comparison_only')

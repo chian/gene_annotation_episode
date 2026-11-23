@@ -37,7 +37,7 @@ def encode_failures(requirements: list[dict], diagnostics: list[dict]) -> dict:
 
 def encode_saved_components(calculations: dict | None, *, projection_failure_context: dict,
     native_requirements: list[dict], native_diagnostics: list[dict]) -> dict:
-    return validate_contract("SavedComponents", dict(version="fastqutils_saved_components_v2",
+    return validate_contract("SavedComponents", dict(version="fastqutils_saved_components",
         calculations=calculations, projection_failure_context=projection_failure_context,
         native_requirements=native_requirements, native_diagnostics=native_diagnostics))
 

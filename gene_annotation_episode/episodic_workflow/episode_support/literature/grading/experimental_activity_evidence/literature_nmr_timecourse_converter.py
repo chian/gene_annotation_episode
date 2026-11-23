@@ -146,7 +146,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_row_contract import SECONDS_PER_MINUTE
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_nmr_timecourse_converted_v1'
+VERSION = 'a105_nmr_timecourse_converted'
 CRITERIA_MAP = {'background_alternatives': ('spontaneous_reaction_control', 'pre_reaction_spectrum'), 'attribution_supported': ('enzyme_dependence', 'product_assignment'),
                 'calibration_applicability': ('quantitation_reference', 'signal_to_noise', 'relaxation'),
                 'rate_regime': ('initial_rate_regime', 'progress_curve_points', 'enzyme_substrate_ratio'),

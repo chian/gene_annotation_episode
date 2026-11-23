@@ -33,7 +33,7 @@ ASSIGNMENT_FORM = RecordForm({
 
 def _request_yield_class(request):
     """Classify the original execution request without generated identities (old ``_request_yield_class``, the
-    ``practical_assignment_v1`` branch: this episode is commissioned only with that assignment)."""
+    ``practical_assignment`` branch: this episode is commissioned only with that assignment)."""
     requested = request['requested_job']
     native = sorted(key for key in requested if key.startswith('native_'))
     parts = ['practical', request['resource_kind']]

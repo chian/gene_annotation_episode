@@ -17,7 +17,7 @@ MODEL_SETTINGS = {**SETTINGS, 'cost': 0.1}
 
 
 def held_world(directory):
-    """The Store, the entry input of the episode at ``literature_assignment_v1`` and the records the model would name."""
+    """The Store, the entry input of the episode at ``literature_assignment`` and the records the model would name."""
     store = Store(directory / 'store')
     store.create_problem(raw_sequence='ATGGCT', molecule='dna')
     target = store.problem()['subject_refs'][0]
@@ -33,10 +33,10 @@ def held_world(directory):
     proposed = store.put('hypothesis', {'subject_refs': [target], 'predicate': 'catalyzes',
                                         'value': {'type': 'term_ref', 'ref': reaction}, 'context_refs': []},
                          origin='reasoning')['id']
-    task = {'version': 'literature_local_task_v1', 'kind': 'verified_source_leads', 'evidence_axis': 'A105',
+    task = {'version': 'literature_local_task', 'kind': 'verified_source_leads', 'evidence_axis': 'A105',
             'credit_unit': 1.0}
     held = [target, context, artifact, reaction, proposed]
-    assignment = {'version': 'literature_assignment_v1', 'question_context_refs': [context],
+    assignment = {'version': 'literature_assignment', 'question_context_refs': [context],
                   'literature_task': task, 'proposed_annotation_ref': proposed, 'scope': scope,
                   'received_record_refs': held}
     names = {'store': store, 'target': target, 'context': context, 'reaction': reaction, 'proposed': proposed,

@@ -8,9 +8,9 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.expressio
 from gene_annotation_episode.episodic_workflow.episode_support.tools.expression_and_perturbation.intervention_analysis_native import REPRESENTATIONS
 
 
-PARAMETERS_VERSION = "bvbrc_intervention_parameters_v1"
-SELECTION_VERSION = "bvbrc_intervention_selection_v1"
-VALUE_VERSION = "bvbrc_intervention_selected_field_v1"
+PARAMETERS_VERSION = "bvbrc_intervention_parameters"
+SELECTION_VERSION = "bvbrc_intervention_selection"
+VALUE_VERSION = "bvbrc_intervention_selected_field"
 APPLICATIONS = ("TnSeq", "RNASeq")
 KINDS = ("native_document", "records", "components")
 

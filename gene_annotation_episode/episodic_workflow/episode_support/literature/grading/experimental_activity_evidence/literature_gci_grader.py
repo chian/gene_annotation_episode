@@ -42,7 +42,7 @@ import math
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_gci_criteria import GCI_CRITERIA, NM_PER_M, NM_PER_UNIT, PG_MM2_PER_RU, PG_MM2_PER_UNIT, S_PER_UNIT
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_gci_grade_v1'
+VERSION = 'a105_gci_grade'
 CRITERIA = tuple(criterion['id'] for criterion in GCI_CRITERIA)
 INTERACTION = {'yes': 'detected', 'no': 'not_detected'}   # the stated yes/no result of the fact binding_detected
 

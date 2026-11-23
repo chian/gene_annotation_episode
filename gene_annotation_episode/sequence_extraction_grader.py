@@ -13,11 +13,11 @@ import math
 from .sequence_mapping import map_interval, reverse_path, slice_path, validate_mapping
 
 
-SHEET_SCHEMA = "sequence_extraction_sheet_v1"
-SCORES_SCHEMA = "sequence_extraction_scores_v1"
-NATIVE_VERSION = "explicit_sequence_view_v1"
+SHEET_SCHEMA = "sequence_extraction_sheet"
+SCORES_SCHEMA = "sequence_extraction_scores"
+NATIVE_VERSION = "explicit_sequence_view"
 _REQUEST_KEYS = {"molecule", "segments", "orientation"}
-# Fixed semantics of explicit_sequence_view_v1, independent of installed Bio at
+# Fixed semantics of explicit_sequence_view, independent of installed Bio at
 # recalculation. The helper accepts both T and U and preserves ASCII case.
 _DNA = dict(zip("ACGTURYSWKMBDHVN", "TGCAAYRSWMKVHDBN"))
 _RNA = {**_DNA, "A": "U"}
@@ -325,7 +325,7 @@ def _definitions():
     result.update({
         "coordinate_system": "zero_based_half_open; request_ordinal is zero based",
         "segment_intervals": "expected_output_interval is requested output placement; actual_output_interval is its intersection with the retained output string (possibly empty)",
-        "processing_model": "as_is preserves every symbol; reverse_complement uses frozen explicit_sequence_view_v1 DNA/RNA complements with case preservation; U and T complement to A; the model does not establish input identity",
+        "processing_model": "as_is preserves every symbol; reverse_complement uses frozen explicit_sequence_view DNA/RNA complements with case preservation; U and T complement to A; the model does not establish input identity",
         "source_coverage": {"inputs": ["requested_source_path", "verified_output_source_path"],
             "calculation": "group by exact (subject_ref,unit); union intervals for distinct_source_position_count; sum lengths for source_position_occurrence_count; subtract distinct from occurrences for repeated_source_position_count",
             "unit": "each group's original nt, aa or symbol; never pooled across identities or units",

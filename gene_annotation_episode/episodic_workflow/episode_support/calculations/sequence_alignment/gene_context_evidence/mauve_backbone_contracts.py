@@ -18,8 +18,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.sequence_al
 from gene_annotation_episode.episodic_workflow.episode_support.calculations.sequence_alignment.gene_context_evidence.xmfa_calculation_contracts import (union_intervals, interval_length,
     multiplicity_bases, complement_intervals)
 
-BACKBONE_DIALECT = 'libmems_signed_coordinate_pairs_v1'
-BBCOLS_DIALECT = 'libmems_interval_columns_members_v1'
+BACKBONE_DIALECT = 'libmems_signed_coordinate_pairs'
+BBCOLS_DIALECT = 'libmems_interval_columns_members'
 SIDECAR_NAMESPACE = 'mauve_sidecar_member_0based'
 COMPLETENESS = ('complete', 'partial', 'unknown')
 MEMBER_STATES = ('present', 'absent_zero', 'missing', 'incompatible')
@@ -238,7 +238,7 @@ def _document_base(value, family, dialect, extra):
     c = _Check(family, 'header_malformed')
     c.shape(value, ('schema_version', 'document_id', 'artifact', 'dialect', 'encoding',
                     'rows', 'unparsed', 'completeness', *extra))
-    c.ok(value['schema_version'] == 'mauve_' + family + '_document_v1')
+    c.ok(value['schema_version'] == 'mauve_' + family + '_document')
     try:
         _artifact(value['artifact'])
     except (ValueError, TypeError) as error:
@@ -369,7 +369,7 @@ def _selection(selection, family):
     option = 'denominator' if family == 'backbone' else 'calculate_bound_block_fraction'
     c.shape(selection, ('schema_version', 'document_id', 'population_id', 'members', 'row_indices',
                        'minimum_selected_multiplicity', option, 'population_scope', 'evidence'))
-    c.ok(selection['schema_version'] == 'mauve_' + family + '_selection_v1')
+    c.ok(selection['schema_version'] == 'mauve_' + family + '_selection')
     c.text(selection['document_id']); c.text(selection['population_id'])
     members = c.members(selection['members']); c.indices(selection['row_indices'])
     c.integer(selection['minimum_selected_multiplicity'], minimum=1)
@@ -417,7 +417,7 @@ def _cell(c, cell, selection, field, unit, *, expected=None, check_value=False,
         raise ValueError(c.prefix + c.code) from error
     c.ok(cell['unit'] == unit and cell['origin'] == origin
         and cell['population_id'] == selection['population_id']
-        and cell['method_id'] == c.prefix + field + '_v1'
+        and cell['method_id'] == c.prefix + field
         and cell['uncertainty'] is None)
     c.ok(all(e in cell['evidence'] for e in selection['evidence']))
     if fraction:
@@ -451,7 +451,7 @@ def _component_base(value, family, fields):
     c = _Check(family)
     c.shape(value, ('schema_version', 'document_id', 'status', 'selection', 'rows',
                     'requirements', 'diagnostics', *fields))
-    c.ok(value['schema_version'] == 'mauve_' + family + '_components_v1')
+    c.ok(value['schema_version'] == 'mauve_' + family + '_components')
     selection = _selection(value['selection'], family)
     c.ok(value['document_id'] == selection['document_id'], 'selection_document_conflict')
     c.ok(value['status'] in ('ok', 'partial', 'invalid'))
@@ -641,7 +641,7 @@ def _cell_structure(c, cell, selection, field, unit, *, origin='calculated', fra
         raise ValueError(c.prefix + c.code) from error
     c.ok(cell['unit'] == unit and cell['origin'] == origin
         and cell['population_id'] == selection['population_id']
-        and cell['method_id'] == c.prefix + field + '_v1'
+        and cell['method_id'] == c.prefix + field
         and cell['uncertainty'] is None)
     c.ok(all(e in cell['evidence'] for e in selection['evidence']))
     if fraction:

@@ -30,7 +30,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.profile_mod
 )
 
 
-VERSION = "native_hmmer_preparation_grading_v1"
+VERSION = "native_hmmer_preparation_grading"
 GRADING_FIELDS = frozenset({"version", "operation", "formats", "metadata", "native_abi",
                             "requested_parameters", "sheet", "calculations"})
 _ABI_FIELDS = frozenset({"byte_order", "float_format", "bytes_per_float", "uint8_bytes",
@@ -40,35 +40,35 @@ _ARTIFACT_PROGRAMS = frozenset({"hmmconvert", "hmmfetch", "hmmpress"})
 _ALIGNMENT_PROGRAMS = frozenset({"hmmbuild", "alimask"})
 _FM_PROGRAMS = frozenset({"makehmmerdb", "hmmerfm-exactmatch"})
 _SCHEMAS = {
-    **dict.fromkeys(_ARTIFACT_PROGRAMS, "hmmer_artifact_sheet_v1"),
-    **dict.fromkeys(_ALIGNMENT_PROGRAMS, "hmmer_alignment_preparation_sheet_v1"),
-    **dict.fromkeys(_FM_PROGRAMS, "hmmer_fm_sheet_v1"),
-    "hmmemit": "hmmer_emission_sheet_v1", "hmmsim": "hmmer_simulation_sheet_v1",
-    "hmmstat": "hmmer_statistics_sheet_v1",
+    **dict.fromkeys(_ARTIFACT_PROGRAMS, "hmmer_artifact_sheet"),
+    **dict.fromkeys(_ALIGNMENT_PROGRAMS, "hmmer_alignment_preparation_sheet"),
+    **dict.fromkeys(_FM_PROGRAMS, "hmmer_fm_sheet"),
+    "hmmemit": "hmmer_emission_sheet", "hmmsim": "hmmer_simulation_sheet",
+    "hmmstat": "hmmer_statistics_sheet",
 }
 _COMMON_SHEET_FIELDS = frozenset({"schema", "operation", "artifact_occurrences",
                                   "native_rows", "associations", "issues"})
 _SHEET_FIELDS = {
-    "hmmer_artifact_sheet_v1": _COMMON_SHEET_FIELDS | {
+    "hmmer_artifact_sheet": _COMMON_SHEET_FIELDS | {
         "model_extractions", "input_records", "output_records", "artifact_bindings"},
-    "hmmer_alignment_preparation_sheet_v1": _COMMON_SHEET_FIELDS | {
+    "hmmer_alignment_preparation_sheet": _COMMON_SHEET_FIELDS | {
         "input_records", "output_records", "model_extraction"},
-    "hmmer_emission_sheet_v1": _COMMON_SHEET_FIELDS | {"model_extraction", "output_records"},
-    "hmmer_simulation_sheet_v1": _COMMON_SHEET_FIELDS | {"input_records", "native_abi"},
-    "hmmer_statistics_sheet_v1": _COMMON_SHEET_FIELDS | {"model_extraction", "summary"},
-    "hmmer_fm_sheet_v1": _COMMON_SHEET_FIELDS | {
+    "hmmer_emission_sheet": _COMMON_SHEET_FIELDS | {"model_extraction", "output_records"},
+    "hmmer_simulation_sheet": _COMMON_SHEET_FIELDS | {"input_records", "native_abi"},
+    "hmmer_statistics_sheet": _COMMON_SHEET_FIELDS | {"model_extraction", "summary"},
+    "hmmer_fm_sheet": _COMMON_SHEET_FIELDS | {
         "producer_contract", "source_binding", "database", "input_records"},
 }
 _PARAMETER_FIELDS = {
-    "hmmer_artifact_sheet_v1": {"probability_tolerance", "expected_revision"},
-    "hmmer_alignment_preparation_sheet_v1": {
+    "hmmer_artifact_sheet": {"probability_tolerance", "expected_revision"},
+    "hmmer_alignment_preparation_sheet": {
         "background", "probability_tolerance", "summary_rounding_tolerance"},
-    "hmmer_emission_sheet_v1": {"consensus_thresholds", "probability_rounding_tolerance"},
-    "hmmer_simulation_sheet_v1": {"fixed_lambda", "fit_tolerance", "solver_iteration_limit",
+    "hmmer_emission_sheet": {"consensus_thresholds", "probability_rounding_tolerance"},
+    "hmmer_simulation_sheet": {"fixed_lambda", "fit_tolerance", "solver_iteration_limit",
         "rounding_tolerance", "tail_masses", "filter_criterion"},
-    "hmmer_statistics_sheet_v1": {
+    "hmmer_statistics_sheet": {
         "background", "length_probability", "probability_tolerance", "summary_rounding_tolerance"},
-    "hmmer_fm_sheet_v1": {"alphabet_normalization", "coordinate_policy", "exhaustive_literal_check"},
+    "hmmer_fm_sheet": {"alphabet_normalization", "coordinate_policy", "exhaustive_literal_check"},
 }
 
 
@@ -269,15 +269,15 @@ def recalculate_hmmer_preparation(sheet, *, parameters):
         _error("sheet_schema_operation_mismatch", "sheet")
     selected = _parameters(parameters, schema)
     try:
-        if schema == "hmmer_artifact_sheet_v1":
+        if schema == "hmmer_artifact_sheet":
             result = artifact_calculations.calculate_hmmer_artifact_components(saved, parameters=selected)
-        elif schema == "hmmer_alignment_preparation_sheet_v1":
+        elif schema == "hmmer_alignment_preparation_sheet":
             result = alignment_calculations.calculate_hmmer_alignment_preparation_components(saved, parameters=selected)
-        elif schema == "hmmer_emission_sheet_v1":
+        elif schema == "hmmer_emission_sheet":
             result = emission_calculations.calculate_hmmemit_components(saved, parameters=selected)
-        elif schema == "hmmer_simulation_sheet_v1":
+        elif schema == "hmmer_simulation_sheet":
             result = simulation_calculations.calculate_hmmsim_components(saved, parameters=selected)
-        elif schema == "hmmer_statistics_sheet_v1":
+        elif schema == "hmmer_statistics_sheet":
             result = statistics_calculations.calculate_hmmstat_components(saved, **selected)
         else:
             result = fm_calculations.calculate_hmmer_fm_components(saved, parameters=selected)

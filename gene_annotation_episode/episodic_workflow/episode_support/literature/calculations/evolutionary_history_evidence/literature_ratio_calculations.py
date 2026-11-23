@@ -13,7 +13,7 @@ import math
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.evolutionary_history_evidence.literature_experimental_contracts import ExperimentalContractError
 
 
-VERSION = "relative_signal_sheet_v1"
+VERSION = "relative_signal_observation_sheet"
 COMPONENTS = ("reported_ratio", "difference_from_reference", "log_reported_ratio",
               "calibrated_amount_ratio", "amount_adjusted_effect",
               "source_profile_log_ratio", "source_signed_index")

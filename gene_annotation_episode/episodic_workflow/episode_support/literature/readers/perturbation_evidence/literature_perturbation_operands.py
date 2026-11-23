@@ -12,7 +12,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_perturbation_storage import LiteraturePerturbationRepository, PROVIDER, BINDINGS
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_perturbation_summary_storage import LiteraturePerturbationSummaryProjection
 
-VERSION = "perturbation_operand_return_v1"
+VERSION = "perturbation_operand_return"
 NAMESPACE = "literature_perturbation_operand_cells"
 REQUESTED = "requested_perturbation_operand_components"
 ENDPOINTS = {"reference_endpoint": "W", "perturbed_endpoint": "K", "restored_endpoint": "R"}
@@ -126,7 +126,7 @@ class LiteraturePerturbationOperandProjection(LiteraturePerturbationSummaryProje
                 raise ContractError("literature_sheet_not_received")
             saved = self.read(ref)
             reader = self._original()
-            if saved["version"] == "literature_perturbation_record_v2":
+            if saved["version"] == "literature_perturbation_record":
                 reader = reader.summary_projection()
             # Point-only sheets have no variance cells. Their absence does not
             # license a fabricated variance or conversion of a restoration index.

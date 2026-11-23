@@ -130,7 +130,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_transport_response_direction import select_transport_effect
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_transport_medium_analysis_converted_v1'
+VERSION = 'a105_transport_medium_analysis_converted'
 CRITERIA_MAP = {'background_alternatives': ('cell_free_control', 'zero_time_sample'), 'attribution_supported': ('control_strain', 'expression_confirmed'),
                 'calibration_applicability': ('calibration_in_medium',), 'matrix_interference': ('internal_standard',),
                 'transport_endpoint': ('initial_rate_regime', 'time_points', 'separation_timing'),

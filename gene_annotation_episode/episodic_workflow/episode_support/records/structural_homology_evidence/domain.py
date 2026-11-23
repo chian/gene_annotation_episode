@@ -243,7 +243,7 @@ CONTEXT_MASK = obj({"subject_refs": {"type": "array", "items": REF},
     "read_selection_refs": {"type": "array", "items": REF},
     "segments": {**FOOTPRINT, "minItems": 1}}, required=["subject_refs"])
 CONTEXT_MASK["description"] = "Fixed original material position set for a nonmolecular context interpretation. Frozen read selections of the same library union; segments restrict actual selected members. This is not a sequence mapping. {subject_refs: []} explicitly withdraws allocation; Episode scopes remain nonempty."
-SEQUENCE_MAPPING = obj({"version": {"const": "oriented_source_subject_path_v2"},
+SEQUENCE_MAPPING = obj({"version": {"const": "oriented_source_subject_path"},
     "units_per_symbol": {"enum": [1, 3]}, "symbol_length": {"type": "integer", "minimum": 1},
     "path": {"type": "array", "minItems": 1, "items": obj({"subject_ref": REF,
         "start": {"type": "integer", "minimum": 0}, "end": {"type": "integer", "minimum": 1},
@@ -301,18 +301,18 @@ RECORD_SCHEMAS = {
             **{key: {"type": "integer", "minimum": 1} for key in ["query_from", "query_to", "hit_from", "hit_to"]},
             **{key: {"enum": ["Plus", "Minus"]} for key in ["query_strand", "hit_strand"]},
             **{key: {"type": "integer"} for key in ["query_frame", "hit_frame"]},
-            "shared_projection": obj({"version": {"const": "blast_shared_hsp_projection_v1"},
+            "shared_projection": obj({"version": {"const": "blast_shared_hsp_projection"},
                 "grading_artifact_ref": REF, "native_artifact_ref": REF,
                 "hit_row": {"type": "integer", "minimum": 0},
                 "hsp_row": {"type": "integer", "minimum": 0}})},
             required=["program", "report_ordinal", "hit_ordinal", "hsp_ordinal", "query_from", "query_to", "hit_from", "hit_to",
                 "query_coordinate_unit", "hit_coordinate_unit", "alignment_unit"]),
         "native_cmsearch": {**CMSEARCH_MATCH, "description": "Deterministic native Infernal fmt3 row. Model consensus positions are not physical reference residue coordinates. Only native adapter publications may supply this field."},
-        "native_hmmer": obj({"version": {"const": "native_hmmer_observation_v1"},
+        "native_hmmer": obj({"version": {"const": "native_hmmer_observation"},
             "program": {"enum": ["hmmscan", "hmmsearch", "jackhmmer", "nhmmer", "nhmmscan", "hmmalign"]},
             "family": {"enum": ["protein_domain", "nucleotide_locus", "alignment_sequence"]},
             "record_key": {"type": "string", "minLength": 1}, "bundle_artifact_ref": REF}),
-        "native_blast_pairwise": {**obj({"version": {"const": "native_blast_pairwise_observation_v1"},
+        "native_blast_pairwise": {**obj({"version": {"const": "native_blast_pairwise_observation"},
             "program": {"enum": ["blastn", "blastp", "blastx", "tblastn", "tblastx"]},
             "record_key": {"type": "string", "minLength": 1},
             "search_key": obj({"artifact_key": {"type": "string", "minLength": 1},
@@ -322,7 +322,7 @@ RECORD_SCHEMAS = {
             "hit_ordinal": {"type": "integer", "minimum": 0},
             "hsp_ordinal": {"type": "integer", "minimum": 0}, "bundle_artifact_ref": REF}),
             "description": "Host-authored original native paired BLAST HSP identity; not an NCBI service marker or a union observation."},
-        "native_blast_standard_database": obj({"version": {"const": "native_blast_standard_database_observation_v1"},
+        "native_blast_standard_database": obj({"version": {"const": "native_blast_standard_database_observation"},
             "program": {"enum": ["blastn", "blastp", "blastx", "tblastn", "tblastx"]},
             "record_key": {"type": "string", "minLength": 1},
             "search_key": obj({"artifact_key": {"type": "string", "minLength": 1},
@@ -333,7 +333,7 @@ RECORD_SCHEMAS = {
             "hsp_ordinal": {"type": "integer", "minimum": 0}, "bundle_artifact_ref": REF,
             "query_axis_kind": {"enum": ["sequence", "pssm_master"]},
             "reference_axis_kind": {"enum": ["sequence"]}}),
-        "native_blast_database": obj({"version": {"const": "native_blast_database_observation_v1"},
+        "native_blast_database": obj({"version": {"const": "native_blast_database_observation"},
             "program": {"enum": ["psiblast", "deltablast", "rpsblast", "rpstblastn", "blastn_vdb", "tblastn_vdb"]},
             "record_key": {"type": "string", "minLength": 1},
             "search_key": obj({"artifact_key": {"type": "string", "minLength": 1},
@@ -344,7 +344,7 @@ RECORD_SCHEMAS = {
             "hsp_ordinal": {"type": "integer", "minimum": 0}, "bundle_artifact_ref": REF,
             "query_axis_kind": {"enum": ["sequence", "msa_master", "pssm_master"]},
             "reference_axis_kind": {"enum": ["sequence", "profile_model", "vdb_member"]}}),
-        "native_infernal": obj({"version": {"const": "native_infernal_observation_v1"},
+        "native_infernal": obj({"version": {"const": "native_infernal_observation"},
             "program": {"enum": ["cmsearch", "cmscan", "cmalign"]},
             "family": {"enum": ["search_hit", "search_sequence", "alignment_sequence"]},
             "record_key": {"type": "string", "minLength": 1}, "bundle_artifact_ref": REF}),
@@ -407,12 +407,12 @@ NATIVE_EXECUTION_OPERATIONS = {'align_pair': 'pairwise_sequence_alignment',
     'xlsx_sheets': 'spreadsheet_selection', 'xlsx_rows': 'spreadsheet_selection',
     'phmmer_search': 'protein_homology_search'}
 RECORD_SCHEMAS.update({
-    "native_execution": obj({"representation": {"const": "native_execution_receipt_v2"},
+    "native_execution": obj({"representation": {"const": "native_execution_receipt"},
         'operation': {'enum': list(NATIVE_EXECUTION_OPERATIONS)},
         "measurement_artifact_ref": REF,
         "operands": {'type': 'array', 'uniqueItems': True, 'items': obj({
             'role': {'enum': ['query', 'reference', 'input_source']}, 'subject_ref': REF})}}),
-    "image_view": obj({"representation": {"const": "selected_native_image_frame_v1"},
+    "image_view": obj({"representation": {"const": "selected_native_image_frame"},
         "source_ref": REF, "input_source_ref": REF, "original_artifact_ref": REF,
         "image_artifact_ref": REF, "native_format": IDENTIFIER,
         "native_initial_mode": IDENTIFIER, "selected_mode": IDENTIFIER,
@@ -454,7 +454,7 @@ RECORD_SCHEMAS['source']['properties']['publication_identifiers'] = {
 RECORD_SCHEMAS["parse_attempt"]["properties"]["native_source_ref"] = {
     **REF, "description": "Optional tool-owned native GenBank JSONL assertion projection. Coordinates in that source describe normalized projection bytes, distinct from original GenBank bytes and current scientific annotations."}
 RECORD_SCHEMAS["collection"]["properties"]["storage_representation"] = {
-    "const": "packed_member_components_v1", "description": "Host physical storage of exact read-member component bytes. This is not a biological sequence target or coordinate system."}
+    "const": "packed_member_components", "description": "Host physical storage of exact read-member component bytes. This is not a biological sequence target or coordinate system."}
 for _native_stream in ("stdout_ref", "stderr_ref"):
     RECORD_SCHEMAS["source"]["properties"][_native_stream] = {
         **REF, "description": "Optional host-recorded exact native output stream artifact. This is provenance, not a biological observation or model-authored text."}
@@ -466,7 +466,7 @@ RECORD_SCHEMAS["source"]["properties"]["query_selection_ref"] = {
     **REF, "description": "Optional exact immutable original-read search selection. A library container named in a search-result custody observation does not mean all its members were searched."}
 RECORD_SCHEMAS["reference"]["properties"].update({"member_ref": REF})
 RECORD_SCHEMAS["read_selection"] = obj({"library_ref": REF,
-    "binding_version": {"const": "fixed_original_read_position_measure_v1"},
+    "binding_version": {"const": "fixed_original_read_position_measure"},
     "member_count": {"type": "integer", "minimum": 1},
     "position_mass": {"type": "integer", "minimum": 1},
     "membership_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}})

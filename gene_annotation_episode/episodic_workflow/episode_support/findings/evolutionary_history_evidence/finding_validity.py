@@ -11,7 +11,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.evolution
 from gene_annotation_episode.episodic_workflow.episode_support.findings.evolutionary_history_evidence.scientific_findings import finding_target_roots
 
 
-VALIDITY_VERSION = 'owned_current_finding_replacement_closure_v1'
+VALIDITY_VERSION = 'owned_current_finding_replacement_closure'
 
 
 def target_eligible(store, assessment, scope):

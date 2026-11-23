@@ -20,7 +20,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.findings.perturba
 from gene_annotation_episode.episodic_workflow.episode_support.records.perturbation_evidence.domain import (
     canonical)
 
-VERSION = 'literature_local_task_v1'
+VERSION = 'literature_local_task'
 
 
 def credit_binding(task_key, task):

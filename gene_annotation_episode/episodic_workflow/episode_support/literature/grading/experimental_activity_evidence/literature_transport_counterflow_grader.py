@@ -29,7 +29,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     TRANSPORT_COUNTERFLOW_CRITERIA)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_transport_counterflow_grade_v1'
+VERSION = 'a105_transport_counterflow_grade'
 CRITERIA = tuple(criterion['id'] for criterion in TRANSPORT_COUNTERFLOW_CRITERIA)
 TRANSPORT = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact transport_detected_above_control
 NM_PER_UNIT = {'nM': 1.0, 'uM': 1.0e3, 'mM': 1.0e6, 'M': 1.0e9}   # FIXED_BY_DEFINITION: the unit of a concentration to nM

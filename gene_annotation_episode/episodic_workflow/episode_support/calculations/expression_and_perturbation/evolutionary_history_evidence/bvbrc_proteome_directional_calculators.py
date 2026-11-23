@@ -416,7 +416,7 @@ def calculate_directional_components(sheet: dict, *, parameters: dict) -> dict:
             record[field] = _cell(sum((q[field]['value'] for q in queries)), unit, inputs)
         reports.append(record)
         diagnostics.extend(record['diagnostics'])
-    components = {'version': 'bvbrc_proteome_directional_components_v1', 'formula_version': 'displayed_blastp_correspondence_v1', 'sheet_sha256': canonical_sheet_sha256(observed), 'parameters': options, 'reports': reports, 'diagnostics': _unique(diagnostics), 'correspondence_used_inputs': ['native_counts', 'traceback_symbols', 'traceback_coordinates', 'reported_lengths', 'amino_acid_alphabet'], 'correspondence_unused_retained_inputs': ['database_expectations', 'native_alignment_scores', 'native_positives', 'native_midlines', 'description_scores', 'database_statistics', 'method_text']}
+    components = {'version': 'bvbrc_proteome_directional_components', 'formula_version': 'displayed_blastp_correspondence', 'sheet_sha256': canonical_sheet_sha256(observed), 'parameters': options, 'reports': reports, 'diagnostics': _unique(diagnostics), 'correspondence_used_inputs': ['native_counts', 'traceback_symbols', 'traceback_coordinates', 'reported_lengths', 'amino_acid_alphabet'], 'correspondence_unused_retained_inputs': ['database_expectations', 'native_alignment_scores', 'native_positives', 'native_midlines', 'description_scores', 'database_statistics', 'method_text']}
     validated = validate_directional_numerical('DirectionalComponents', components, sheet=observed)
     partial_codes = {i['code'] for i in diagnostics} - {'printed_zero_expectation', 'no_execution_or_occurrence_evidence'}
     state = 'partial' if partial_codes else 'available'

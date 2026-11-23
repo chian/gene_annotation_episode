@@ -44,7 +44,7 @@ def test_exact_table_preserves_all_rows_text_locations_and_duplicate_ids():
            b"zero\tzero\t0\t\r\n")
     result = read(raw)
     assert set(result) == {"schema", "source_ref", "source_version", "input_identity", "native_text", "rows", "issues"}
-    assert result["schema"] == "blast_vdb_sequence_table_v1"
+    assert result["schema"] == "blast_vdb_sequence_table"
     assert result["source_ref"] == "synthetic:lexical655" and result["source_version"] == "synthetic-v1"
     assert result["input_identity"] == {"sha256": hashlib.sha256(raw).hexdigest(), "size_bytes": len(raw)}
     assert result["native_text"] == raw.decode() and result["issues"] == []
@@ -127,7 +127,7 @@ def test_splitlines_locations_include_blank_rows_for_other_decoded_separators():
 
 def test_invalid_utf8_retains_original_byte_identity_and_existing_located_issue():
     raw = b"id\tacc\t4\tACGU\n\xff"
-    assert read(raw) == dict(schema="blast_vdb_sequence_table_v1", source_ref="synthetic:lexical655",
+    assert read(raw) == dict(schema="blast_vdb_sequence_table", source_ref="synthetic:lexical655",
         source_version="synthetic-v1", input_identity={"sha256": hashlib.sha256(raw).hexdigest(), "size_bytes": len(raw)},
         native_text=None, rows=[], issues=[{"code": "blast_vdb_format_unsupported", "search_key": None,
             "hit_ordinal": None, "hsp_ordinal": None, "source_pointer": None, "details": {"encoding": "utf-8"}}])

@@ -28,9 +28,9 @@ def own_files():
 
 
 def assignment():
-    task = {'version': 'literature_local_task_v1', 'kind': 'verified_source_leads', 'evidence_axis': 'A105',
+    task = {'version': 'literature_local_task', 'kind': 'verified_source_leads', 'evidence_axis': 'A105',
             'credit_unit': 1.0}
-    return {'version': 'strategy_assignment_v1', 'question_context_refs': ['ctx_1'],
+    return {'version': 'strategy_assignment', 'question_context_refs': ['ctx_1'],
             'literature_task': task, 'proposed_annotation_ref': 'hyp_1',
             'scope': {'subject_refs': ['sub_1']}, 'received_record_refs': ['art_1', 'ctx_1']}
 

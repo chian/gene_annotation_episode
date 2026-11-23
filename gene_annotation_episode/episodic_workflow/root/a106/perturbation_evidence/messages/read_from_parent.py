@@ -28,12 +28,12 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.perturbat
     validate_revision_origin, validate_selection)
 
 AXIS = 'A106'
-TASK_VERSION = 'evidence_axis_task_v1'
+TASK_VERSION = 'evidence_axis_task'
 TASK_KIND = 'whole_axis_findings'
 REFERENCE = re.compile(r'^[a-z][a-z_]*_[a-f0-9]{24,64}$')      # the old ``_REFERENCE`` pattern
 
 ASSIGNMENT_FORM = RecordForm({
-    'selection': Field('record', 'The selected process: version perturbation_evidence_selection_v3, the evidence_axis '
+    'selection': Field('record', 'The selected process: version perturbation_evidence_selection, the evidence_axis '
                                  'option reference (A106), the thought_pattern option reference and child_tool_info, '
                                  'the selected tools with their resolved description and instructions'),
     'proposed_annotation_ref': Field('text', 'The proposed annotation this task evaluates; a child inherits it and '
@@ -41,7 +41,7 @@ ASSIGNMENT_FORM = RecordForm({
     'evidence_refs': Field('record_refs', 'The records of evidence already known for the question, passed in custody'),
     'constraints': Field('record', "The commissioner's constraints"),
     'context': Field('record', 'The commissioner context: evidence_task, the declared whole-axis finding task '
-                               '(version evidence_axis_task_v1, kind whole_axis_findings, evidence_axis A106 and the '
+                               '(version evidence_axis_task, kind whole_axis_findings, evidence_axis A106 and the '
                                'positive credit_unit of one retained finding)'),
     'revision_origin': Field('record', 'Set when this episode is an alternative approach prepared by process.revise '
                                        'of its parent: the parent invocation and the preparation operation',

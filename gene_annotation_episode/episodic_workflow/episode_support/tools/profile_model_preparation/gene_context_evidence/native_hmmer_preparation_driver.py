@@ -30,8 +30,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.profile_mod
 )
 
 
-PLAN_VERSION = "native_hmmer_preparation_run_plan_v1"
-BUNDLE_VERSION = "native_hmmer_preparation_bundle_v1"
+PLAN_VERSION = "native_hmmer_preparation_run_plan"
+BUNDLE_VERSION = "native_hmmer_preparation_bundle"
 OWNER_NAME = ".native-hmmer-preparation-owner.json"
 BUNDLE_NAME = "bundle.json"
 INPUT_DIRECTORY = "inputs"

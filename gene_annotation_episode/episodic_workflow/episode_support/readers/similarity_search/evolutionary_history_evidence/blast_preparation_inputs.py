@@ -50,7 +50,7 @@ def _problem(document, code, line=None, *, stage="parse"):
 def _context(contents, occurrence, kind):
     occurrence = validate_blast_utility_record("ArtifactOccurrence", occurrence)
     check = _check_bytes(contents, occurrence)
-    document = {"version": "blast_preparation_document_v1", "kind": kind,
+    document = {"version": "blast_preparation_document", "kind": kind,
                 "occurrence_id": occurrence["occurrence_id"], "native_fields": [],
                 "rows": [], "checks": [check], "failures": []}
     if kind == "profile_aux":

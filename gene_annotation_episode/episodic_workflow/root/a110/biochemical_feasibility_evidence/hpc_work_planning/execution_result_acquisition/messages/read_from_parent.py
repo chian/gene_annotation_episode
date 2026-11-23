@@ -1,4 +1,4 @@
-"""What the commissioner gives: the results assignment (``execution_results_assignment_v1``): the handoff of the
+"""What the commissioner gives: the results assignment (``execution_results_assignment``): the handoff of the
 launched job and the selector of what to acquire from it.
 
 This is the only place the assignment is read. ``handoff_ref`` is a ``record_refs`` field holding exactly one
@@ -11,7 +11,7 @@ service's name of each path is computed, where the row is read (``messages/inter
 (``yield_estimator.py``); ``acquired_record_unit`` is the credit of acquiring the whole requested selector. A
 wrong commission fails with its error.
 
-A typed selector (``local_file_source_selector_v1``, ``flux_balance_result_selector_v1``) selected the old local
+A typed selector (``local_file_source_selector``, ``flux_balance_result_selector``) selected the old local
 file source and flux balance result adapters (``LocalFileSourceResults``, ``NativeFluxBalanceResults``): no carried
 home exists for either, so a typed selector raises here, at the reading of the commission."""
 import math
@@ -20,7 +20,7 @@ from jsonschema import Draft202012Validator
 
 from method_loop import ChoiceField, DeclaredField, Field, RecordForm
 
-RESULTS_VERSION = 'execution_results_assignment_v1'
+RESULTS_VERSION = 'execution_results_assignment'
 _TEXT = {'type': 'string', 'minLength': 1}
 _OFFSET = {'type': 'integer', 'minimum': 0}
 _LIMIT = {'type': 'integer', 'minimum': 1}

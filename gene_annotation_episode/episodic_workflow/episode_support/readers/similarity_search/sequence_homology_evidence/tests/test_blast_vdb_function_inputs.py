@@ -10,7 +10,7 @@ import subprocess
 import pytest
 
 from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.sequence_homology_evidence import blast_vdb_function_inputs as module
-from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search import blast_vdb_inputs as v1
+from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search import blast_vdb_inputs as vdb_inputs
 from gene_annotation_episode.episodic_workflow.episode_support.calculations.similarity_search.sequence_homology_evidence import blast_vdb_calculators as base
 from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.tests.test_blast_vdb_inputs import collect, inputs, hsp, identity, provenance, entity, metadata, sequence, GBSEQ, binding
 from gene_annotation_episode.episodic_workflow.episode_support.calculations.similarity_search.sequence_homology_evidence.tests.test_blast_vdb_calculators import feature, table_values
@@ -74,7 +74,7 @@ def feature_case(*, query_gap=False):
 
 
 def populate(values, assignments=(), dependencies=(), censuses=()):
-    return module.populate_blast_vdb_function_sheet(v1.populate_blast_vdb_sheet(**values),
+    return module.populate_blast_vdb_function_sheet(vdb_inputs.populate_blast_vdb_sheet(**values),
         supplied_assignments=list(assignments), dependency_records=list(dependencies), census_records=list(censuses))
 
 
@@ -101,12 +101,12 @@ def census_for(sheet, scope="whole_sequence", *, extra=True):
             function_assignment_sources=[source], origin_sample_keys=deepcopy(row["origin_sample_keys"]),
             sample_relation_status=row["sample_relation_status"], source=source))
         parent = sequences[row["parent_sequence_identity"]["sha256"]]
-        proofs.append(dict(entity_key=row["entity_key"], sequence_source=source, linkage_source=source, normalization="full_member_nt_v1", symbols=parent))
+        proofs.append(dict(entity_key=row["entity_key"], sequence_source=source, linkage_source=source, normalization="full_member_nt", symbols=parent))
         if scope == "feature":
             feature_binding = next(f for f in base_sheet["feature_bindings"] if f["feature_identifier"] == row["address"]["feature_identifier"])
             from Bio.Seq import Seq
             fragment = "".join(parent[a:b] if feature_binding["strand"] == 1 else str(Seq(parent[a:b]).reverse_complement()) for a, b in feature_binding["segments"])
-            proofs.append(dict(entity_key=row["entity_key"], sequence_source=source, linkage_source=source, normalization="oriented_feature_nt_v1", symbols=fragment))
+            proofs.append(dict(entity_key=row["entity_key"], sequence_source=source, linkage_source=source, normalization="oriented_feature_nt", symbols=fragment))
         for a in own:
             bindings.append(dict(assignment_key=a["assignment_key"], census_entity_key=row["entity_key"], annotation_snapshot_sha256=digest, source=source))
     if extra and scope == "whole_sequence":
@@ -116,7 +116,7 @@ def census_for(sheet, scope="whole_sequence", *, extra=True):
             row["target_identity"].update(sha256=seq["sha256"], length=seq["length"])
             row["parent_sequence_identity"] = {k: seq[k] for k in ("molecule", "sha256", "length")}
             entities.append(row)
-            proofs.append(dict(entity_key=row["entity_key"], sequence_source=source, linkage_source=source, normalization="full_member_nt_v1", symbols=symbols))
+            proofs.append(dict(entity_key=row["entity_key"], sequence_source=source, linkage_source=source, normalization="full_member_nt", symbols=symbols))
     datasets = [dict(dataset_key=d["dataset_key"], identifier=deepcopy(d["identifier"]), snapshot=deepcopy(d["snapshot"]),
         selected_input=deepcopy(d["selected_input"]), sra_mode=d["search_context"]["sra_mode"], include_filtered_reads=d["search_context"]["include_filtered_reads"]) for d in base_sheet["dataset_records"]]
     return dict(census_key="census-1", assignment_scope=scope, function_namespace="fixture_function", scope="searched_population", datasets=datasets,
@@ -276,7 +276,7 @@ def test_feature_census_requires_separate_full_parent_and_oriented_target_proofs
     sheet = populate(values, censuses=[census])
     assert sheet["link_results"][-1]["status"] == "available"
     assert len(census["identity_proofs"]) == 6
-    census["identity_proofs"] = [p for p in census["identity_proofs"] if p["normalization"] == "oriented_feature_nt_v1"]
+    census["identity_proofs"] = [p for p in census["identity_proofs"] if p["normalization"] == "oriented_feature_nt"]
     sheet = populate(values, censuses=[census])
     assert sheet["link_results"][-1]["reason_code"] == "blast_vdb_function_census_membership_unverified"
 
@@ -319,7 +319,7 @@ def test_saved_validation_never_calls_native_parser_base_calculator_or_populatio
     def forbidden(*args, **kwargs):
         raise AssertionError("saved validation invoked forbidden operation")
     for name in ("populate_blast_vdb_sheet", "parse_ncbi_sra_runinfo", "parse_blast_vdb_member_sequences", "parse_ncbi_gbseq_vdb_metadata", "bind_blast_vdb_metadata", "_recheck_metadata", "_reparse"):
-        monkeypatch.setattr(v1, name, forbidden)
+        monkeypatch.setattr(vdb_inputs, name, forbidden)
     monkeypatch.setattr(base, "calculate_blast_vdb_components", forbidden)
     monkeypatch.setattr(module, "populate_blast_vdb_function_sheet", forbidden)
     monkeypatch.setattr(module, "extract_blast_vdb_feature_function_assignments", forbidden)
@@ -368,16 +368,16 @@ def test_nonfinite_or_non_json_inputs_raise_closed_structural_error(value):
 
 def test_feature_extractor_retains_native_and_explicit_origin_without_title_inference():
     values = feature_case()
-    extraction = module.extract_blast_vdb_feature_function_assignments(v1.populate_blast_vdb_sheet(**values))
+    extraction = module.extract_blast_vdb_feature_function_assignments(vdb_inputs.populate_blast_vdb_sheet(**values))
     assert all(a["scope_origin"] == "supplied_explicit_scope" for a in extraction["records"])
     assert [a["function_ordinal"] for a in extraction["records"]] == [0, 0]
     assert all(a["assignment_scope"] == "feature" for a in extraction["records"])
     values, assignments = whole_case()
-    assert module.extract_blast_vdb_feature_function_assignments(v1.populate_blast_vdb_sheet(**values))["records"] == []
+    assert module.extract_blast_vdb_feature_function_assignments(vdb_inputs.populate_blast_vdb_sheet(**values))["records"] == []
 
 
 def test_native_gbseq_feature_assignment_is_extracted_from_exact_bound_record():
-    parsed = v1.parse_ncbi_gbseq_vdb_metadata(GBSEQ, source_ref="synthetic:gbseq", source_version=None)
+    parsed = vdb_inputs.parse_ncbi_gbseq_vdb_metadata(GBSEQ, source_ref="synthetic:gbseq", source_version=None)
     member_record, _, feature_record = parsed["records"]
     identifier = member_record["source_entity"]["member_identifier"]
     values = inputs(collect(program="tblastn_vdb", query="MAK", hits=[dict(len=18, description=[dict(id="NC_X.1", accession="NC_X.1")],
@@ -387,7 +387,7 @@ def test_native_gbseq_feature_assignment_is_extracted_from_exact_bound_record():
     feature_id = feature_record["source_entity"]["feature_identifier"]
     links = [binding(member_record, "member0", entity("member", dataset="D0", member=identifier), member=0),
              binding(feature_record, "feature:native", entity("feature", dataset="D0", member=identifier, feature=feature_id), parent="member0")]
-    bound = v1.bind_blast_vdb_metadata([parsed], dataset_records=values["dataset_records"], member_bindings=values["member_bindings"],
+    bound = vdb_inputs.bind_blast_vdb_metadata([parsed], dataset_records=values["dataset_records"], member_bindings=values["member_bindings"],
         query_binding=values["query_binding"], bindings=links)
     values["reference_metadata"] = bound["reference_metadata"]
     values["feature_bindings"] = [dict(search_key=deepcopy(values["search"]["search_key"]), hit_ordinal=0, member_binding_index=0,
@@ -409,9 +409,9 @@ def test_complete_frozen_fixtures_validate_without_base_recalculation(filename, 
     def forbidden(*args, **kwargs):
         raise AssertionError("frozen validation must consume saved values")
     monkeypatch.setattr(base, "calculate_blast_vdb_components", forbidden)
-    monkeypatch.setattr(v1, "populate_blast_vdb_sheet", forbidden)
-    monkeypatch.setattr(v1, "_reparse", forbidden)
-    monkeypatch.setattr(v1, "_recheck_metadata", forbidden)
+    monkeypatch.setattr(vdb_inputs, "populate_blast_vdb_sheet", forbidden)
+    monkeypatch.setattr(vdb_inputs, "_reparse", forbidden)
+    monkeypatch.setattr(vdb_inputs, "_recheck_metadata", forbidden)
     monkeypatch.setattr(module, "populate_blast_vdb_function_sheet", forbidden)
     monkeypatch.setattr(module, "extract_blast_vdb_feature_function_assignments", forbidden)
     original = json.dumps(frozen, sort_keys=True, separators=(",", ":"), allow_nan=False)
@@ -601,7 +601,7 @@ def test_current_shared_span_shape_validates_frozen_without_native_or_base_work(
 
     for name in ("populate_blast_vdb_sheet", "_reparse", "_recheck_metadata",
             "parse_ncbi_sra_runinfo", "parse_blast_vdb_member_sequences", "parse_ncbi_gbseq_vdb_metadata"):
-        monkeypatch.setattr(v1, name, forbidden)
+        monkeypatch.setattr(vdb_inputs, name, forbidden)
     for name in ("_axis_geometry", "_axis_positions", "_read_alignment_components", "alignment_component_artifacts",
             "alignment_components", "blast_hsp_column_correspondence"):
         monkeypatch.setattr(paired, name, forbidden)

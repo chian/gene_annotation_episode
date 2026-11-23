@@ -56,8 +56,8 @@ def _expectation(cell):
     number = c.exact_decimal(cell['value'])
     return 'invalid' if number['sign'] else 'printed_zero_precision_unknown' if number['digits'] == [0] else 'positive_reported_decimal'
 
-class _LegacyProjection(_Projection):
-    """Read the unchanged v1 projection with references into the v2 envelope."""
+class _NativeProjection(_Projection):
+    """Read the native projection with references into the directional envelope."""
 
     def __init__(self, *args, global_root, **kwargs):
         self.global_root = global_root
@@ -65,7 +65,7 @@ class _LegacyProjection(_Projection):
 
     def ref(self, kind, pointer):
         if pointer == '/components' or pointer.startswith('/components/'):
-            pointer = '/components/legacy' + pointer[len('/components'):]
+            pointer = '/components/native' + pointer[len('/components'):]
         for name in ('missing_requirements', 'diagnostics'):
             prefix = '/' + name + '/'
             if pointer.startswith(prefix):
@@ -350,7 +350,7 @@ class _DirectionalProjection:
 
     def field_failure(self, field, selector, reason):
         code = 'proteome_directional_' + reason
-        payload = dict(version='bvbrc_proteome_directional_requirement_v2', analysis_id=self.aid, reason_code=code, role='proteome_requested_projection', field=field, selection=deepcopy(selector), source_refs=[])
+        payload = dict(version='bvbrc_proteome_directional_requirement', analysis_id=self.aid, reason_code=code, role='proteome_requested_projection', field=field, selection=deepcopy(selector), source_refs=[])
         requirement = dict(requirement_id='proteome_requirement_' + hashlib.sha256(old.canonical(payload).encode()).hexdigest(), kind='scientific_metadata', role='proteome_requested_projection', source_refs=[], reason_code=code)
         diagnostic = dict(code=code, phase='publication', path='/facts/' + _token(field), severity='qualification', evidence_refs=[])
         self.generated_requirements.append(requirement)
@@ -397,14 +397,14 @@ class _DirectionalProjection:
             facts[field] = fact
         for name, generated, code_key in (('missing_requirements', self.generated_requirements, 'reason_code'), ('diagnostics', self.generated_diagnostics, 'code')):
             _require(all((row[code_key] not in _REQUEST_CODES or row in generated for row in self.root[name])), '/' + name)
-        legacy_selectors = {field: selector for field, selector in selectors.items() if selector['kind'] not in c.FAMILIES and selector['kind'] != 'request_status'}
-        if legacy_selectors:
+        native_selectors = {field: selector for field, selector in selectors.items() if selector['kind'] not in c.FAMILIES and selector['kind'] != 'request_status'}
+        if native_selectors:
             requirements = tuple((row for row in self.root['missing_requirements'] if not row['reason_code'].startswith('proteome_directional_')))
             diagnostics = tuple((row for row in self.root['diagnostics'] if not row['code'].startswith('proteome_directional_')))
-            legacy_result = _LegacyProjection(self.sheet, None if self.components is None else self.components['legacy'], self.parameters, old.requested_form_schema(legacy_selectors), requirements, diagnostics, global_root=self.root).build()
-            facts.update(legacy_result['facts'])
+            native_result = _NativeProjection(self.sheet, None if self.components is None else self.components['native'], self.parameters, old.requested_form_schema(native_selectors), requirements, diagnostics, global_root=self.root).build()
+            facts.update(native_result['facts'])
             for name in ('missing_requirements', 'diagnostics'):
-                self.root[name] = _unique([*self.root[name], *legacy_result[name]])
+                self.root[name] = _unique([*self.root[name], *native_result[name]])
         for field, fact in facts.items():
             if 'context' not in fact:
                 continue
@@ -428,10 +428,10 @@ class _DirectionalProjection:
         old._validate(self.form, facts, 'saved_facts_invalid')
         return dict(status='ok' if all((row['availability'] == 'available' for row in facts.values())) else 'partial', facts={field: facts[field] for field in selectors}, missing_requirements=deepcopy(self.root['missing_requirements']), diagnostics=deepcopy(self.root['diagnostics']))
 
-def project_requested_facts_v2(sheet: dict | None, components: dict | None, *, missing_requirements: tuple[dict, ...], diagnostics: tuple[dict, ...], requested_form: dict, parameters: dict) -> dict:
-    from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.evolutionary_history_evidence.bvbrc_proteome_bundle_v2_contracts import validate_parameters_v2
-    parameters = validate_parameters_v2(parameters)
-    form = c.validate_requested_form_v2(requested_form)
+def project_requested_facts(sheet: dict | None, components: dict | None, *, missing_requirements: tuple[dict, ...], diagnostics: tuple[dict, ...], requested_form: dict, parameters: dict) -> dict:
+    from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.evolutionary_history_evidence.bvbrc_proteome_bundle_contracts import validate_parameters
+    parameters = validate_parameters(parameters)
+    form = c.validate_requested_form(requested_form)
     _require(type(missing_requirements) is tuple and type(diagnostics) is tuple)
     for row in missing_requirements:
         validate_contract('AcquisitionRequirement', row)
@@ -443,11 +443,11 @@ def project_requested_facts_v2(sheet: dict | None, components: dict | None, *, m
     _require(_same(sheet['parameters'], parameters) and _same(sheet['requested_form'], form) and (sheet['analysis_id'] == parameters['analysis_id']), '/sheet')
     return _DirectionalProjection(sheet, components, parameters, form, missing_requirements, diagnostics).build()
 
-def validate_saved_projection_v2(sheet: dict | None, components: dict | None, *, facts: dict, status: str, missing_requirements: tuple[dict, ...], diagnostics: tuple[dict, ...], requested_form: dict, parameters: dict, original_task: dict, bundle_sha256: str, bundle: dict | None=None) -> dict:
-    from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.evolutionary_history_evidence.bvbrc_proteome_bundle_v2_contracts import validate_saved_provider_v2
+def validate_saved_projection(sheet: dict | None, components: dict | None, *, facts: dict, status: str, missing_requirements: tuple[dict, ...], diagnostics: tuple[dict, ...], requested_form: dict, parameters: dict, original_task: dict, bundle_sha256: str, bundle: dict | None=None) -> dict:
+    from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.evolutionary_history_evidence.bvbrc_proteome_bundle_contracts import validate_saved_provider
     _require(bundle is not None, '/bundle')
-    sheet, components = validate_saved_provider_v2(sheet, components, parameters=parameters, requested_form=requested_form, original_task=original_task, bundle_sha256=bundle_sha256, bundle=bundle)
-    result = project_requested_facts_v2(sheet, components, missing_requirements=missing_requirements, diagnostics=diagnostics, requested_form=requested_form, parameters=parameters)
+    sheet, components = validate_saved_provider(sheet, components, parameters=parameters, requested_form=requested_form, original_task=original_task, bundle_sha256=bundle_sha256, bundle=bundle)
+    result = project_requested_facts(sheet, components, missing_requirements=missing_requirements, diagnostics=diagnostics, requested_form=requested_form, parameters=parameters)
     _require(_same(result, dict(status=status, facts=facts, missing_requirements=list(missing_requirements), diagnostics=list(diagnostics))))
     return deepcopy(result)
-__all__ = ['project_requested_facts_v2', 'validate_saved_projection_v2']
+__all__ = ['project_requested_facts', 'validate_saved_projection']

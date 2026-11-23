@@ -39,7 +39,7 @@ def yield_table(controller_state, *, forecast_unit):
         raise ValueError('yield_table_forecast_unit_required')
     if isinstance(controller_state, ForecastYieldState):
         # The forecast of each offered action is added to the decision by the system (``action_forecasts``).
-        return {'version': 'episode_forecast_table_v1', 'epoch': controller_state.epoch,
+        return {'version': 'episode_forecast_table', 'epoch': controller_state.epoch,
                 'initial_credit': controller_state.initial_credit, 'current_credit': controller_state.current_credit,
                 'marginal_credits': list(controller_state.history), 'completed_units': len(controller_state.history),
                 'stop_requested': controller_state.stop, 'parameters': controller_state.parameters.as_record(),
@@ -48,7 +48,7 @@ def yield_table(controller_state, *, forecast_unit):
         raise TypeError('yield_table_requires_a_yield_control_state:' + type(controller_state).__name__)
     record = controller_state.as_record()
     decision = record['decision']
-    return {'version': 'episode_yield_table_v1', 'epoch': record['epoch'],
+    return {'version': 'episode_yield_table', 'epoch': record['epoch'],
             'initial_credit': record['initial_credit'], 'current_credit': record['current_credit'],
             'marginal_credits': list(record['scores']), 'completed_units': len(record['scores']),
             'expected_next_gain': decision['projected_gain'], 'continuation_cost': decision['continuation_cost'],

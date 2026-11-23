@@ -296,7 +296,7 @@ def build_chromatin_sheet(*, request, contacts, elements, metadata, tables, tabl
     tables = [validate_chromatin_record('TableDescriptor', row) for row in tables]
     if [{key: value for key, value in row.items() if key != 'file'} for row in tables] != contacts['table_drafts']:
         raise ChromatinValidationError('table_extraction_mismatch')
-    if table_views['version'] != 'chromatin_contact_arrays_v1' or list(table_views['populations']) != [p['population_key'] for p in request['populations']]:
+    if table_views['version'] != 'chromatin_contact_arrays' or list(table_views['populations']) != [p['population_key'] for p in request['populations']]:
         raise ChromatinValidationError('array_population_mismatch')
     populations = deepcopy(contacts['populations'])
     for ordinal, population in enumerate(populations):
@@ -305,7 +305,7 @@ def build_chromatin_sheet(*, request, contacts, elements, metadata, tables, tabl
         relation = next(row['relation'] for row in metadata['reference_relations'] if row['population_key'] == population['population_key'])
         anchors, pairs = _anchors_and_pairs(request, population, ordinal, elements, relation, arrays, contacts['native_metadata'])
         population.update(element_anchor_rows=anchors, pair_rows=pairs)
-    sheet = {'version': 'chromatin_interaction_sheet_v1', 'request': request,
+    sheet = {'version': 'chromatin_interaction_sheet', 'request': request,
              'native': {'metadata': deepcopy(contacts['native_metadata']), 'chromosomes': deepcopy(contacts['chromosomes'])},
              'references': {'assertions': metadata['reference_assertions'], 'relations': metadata['reference_relations']},
              'samples': {key: metadata[key] for key in ('samples', 'contact_sample_links', 'dependence_groups', 'supplied_uncertainty')},
@@ -318,7 +318,7 @@ def build_chromatin_sheet(*, request, contacts, elements, metadata, tables, tabl
 
 def validate_chromatin_sheet_arrays(sheet, table_views):
     """Check saved assertions against actual arrays, including anchor/cell joins."""
-    if table_views['version'] != 'chromatin_contact_arrays_v1' or list(table_views['populations']) != [p['population_key'] for p in sheet['populations']]:
+    if table_views['version'] != 'chromatin_contact_arrays' or list(table_views['populations']) != [p['population_key'] for p in sheet['populations']]:
         raise ChromatinValidationError('array_population_mismatch')
     extraction = {'format': sheet['request']['contact']['format'],
         'format_version': None if sheet['native']['metadata'] is None else sheet['native']['metadata']['format_version'],

@@ -24,8 +24,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.instructions.expe
     instruction_view, validate_instruction_entry)
 
 
-SOURCE_FORMAT = "research_three_slot_options_v1"
-SNAPSHOT_VERSION = "experimental_activity_evidence_library_snapshot_v2"
+SOURCE_FORMAT = "research_three_slot_options"
+SNAPSHOT_VERSION = "experimental_activity_evidence_library_snapshot"
 _SOURCE_FIELDS = "case_group case_id source_url source_locator observation limit"
 _INDEX_FIELDS = "id slot name description detail_path source_evidence_ids"
 _SAVED_FIELDS = ("option_id slot name description entry_path entry_sha256 "
@@ -36,7 +36,7 @@ _SAVED_FIELDS = ("option_id slot name description entry_path entry_sha256 "
 def evidence_axis_instruction_view(entry):
     """Present existing measurement guidance, never the draft scoring sheet.
 
-    The retained v1 record has no separately reviewed investigation prompt.
+    The retained record has no separately reviewed investigation prompt.
     This limited view preserves its scientific measurement guidance as text;
     it does not promote criteria, grading levels or reader metadata to TASK
     instructions. Internal resolve() continues to return the exact raw record.
@@ -535,7 +535,7 @@ class ExperimentalActivityEvidenceLibrary:
 
 
 # The version a commissioner writes on the selection it sends the A105 head (the head's SELECTION form takes any text).
-SELECTION_VERSION = "experimental_activity_evidence_selection_v1"
+SELECTION_VERSION = "experimental_activity_evidence_selection"
 
 
 def freeze_selection(store, *, source, settings, axis, tools):

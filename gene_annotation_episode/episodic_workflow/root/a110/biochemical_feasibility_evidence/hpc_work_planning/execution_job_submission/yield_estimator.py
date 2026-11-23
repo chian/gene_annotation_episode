@@ -5,7 +5,7 @@ without a received usable handoff at the start, times the handoff unit (``_launc
 maps it to the bounded quality controller with that maximum. The profile (cost and parameters) is the old
 ``task_yield_profiles['launch:<sorted request classes joined by +>']``, now from the episode's settings.
 
-The old exact-zero estimator for "nothing remaining" (``launch_original_request_exhaustion_v1``) is not carried:
+The old exact-zero estimator for "nothing remaining" (``launch_original_request_exhaustion``) is not carried:
 only the controller stops an Episode, and a maximum of zero is the controller's own ``ValueError``."""
 from yield_control import BoundedQualityYieldController
 

@@ -47,7 +47,7 @@ unstated choice carry None. The grader does not judge it; the converter does. Th
 only for forms built by tests that do not go through the extraction (the extraction always passes the model's answer).
 """
 
-VERSION = 'a105_transport_counterflow_record_v1'
+VERSION = 'a105_transport_counterflow_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'transport_counterflow'
 QUANTITIES = ('fold_over_control', 'fold_over_control_spread', 'overshoot_ratio', 'overshoot_ratio_spread', 'normalized_rate', 'normalized_rate_spread', 'km', 'km_spread',

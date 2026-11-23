@@ -18,9 +18,9 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.storag
 
 PROVIDER = "literature.experimental.figure"
 FORMULA_CODES = {
-    "first_ordinate": "native_first_bar_linear_v1",
-    "second_ordinate": "native_second_bar_linear_v1",
-    "ordinate_difference": "native_first_minus_second_v1",
+    "first_ordinate": "native_first_bar_linear",
+    "second_ordinate": "native_second_bar_linear",
+    "ordinate_difference": "native_first_minus_second",
 }
 BINDINGS = {
     "first_subject_ref": ("first_subject", "reference"),
@@ -131,7 +131,7 @@ def _condition_refs(extraction):
 class LiteratureFigureRepository(LiteratureRateRepository):
     provider = PROVIDER
     components = COMPONENTS
-    record_version = "literature_figure_record_v1"
+    record_version = "literature_figure_record"
     received_table = "literature_figure_received"
     binding_fields = tuple(BINDINGS)
 
@@ -265,12 +265,12 @@ class LiteratureFigureRepository(LiteratureRateRepository):
         require(set(saved) == {"version", "input_source_ref", "input_artifact_ref", "input_source_refs",
             "direct_input_source_refs", "data_source_ref", "extraction", "experimental_bindings", "sheet"})
         require(source["version"] == self.record_version and source["text_ref"] == source["artifact_ref"])
-        require(extraction["version"] == "a105_figure_inputs_v1" and extraction["arguments"] == args)
+        require(extraction["version"] == "a105_figure_inputs" and extraction["arguments"] == args)
         require(set(extraction) == {"version", "arguments", "sources", "literals", "interpretations",
             "recipe", "measurements", "cells"})
         recipe = extraction["recipe"]
         require(set(recipe) == {"version", "first", "second", "design"})
-        require(recipe["version"] == "literature_figure_selection_v1")
+        require(recipe["version"] == "literature_figure_selection")
         validate_schema(recipe["design"], _design_schema())
         require((recipe["second"] is None) == (recipe["design"]["second_repeat"] is None))
         for repeat in (recipe["design"]["first_repeat"], recipe["design"]["second_repeat"]):
@@ -324,7 +324,7 @@ class LiteratureFigureRepository(LiteratureRateRepository):
             require(selected["image_origin"] in ("published", "synthetic") and selected["axis_scale"] == "linear")
             require(set(measurement) == {"version", "image_sha256", "image_size", "selection",
                 "qualifying_runs", "pixel_edge", "cell"})
-            require(measurement["version"] == "literature_bar_ordinate_v1")
+            require(measurement["version"] == "literature_bar_ordinate")
             require(measurement["selection"] == selected["selection"])
             require("artifact_" + measurement["image_sha256"] == self.store.get(selected["image_source_ref"])["artifact_ref"])
             require(measurement["cell"] == extraction["cells"][side + "_ordinate"])

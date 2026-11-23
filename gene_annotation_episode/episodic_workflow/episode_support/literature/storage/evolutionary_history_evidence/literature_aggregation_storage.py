@@ -13,7 +13,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.storag
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.evolutionary_history_evidence.literature_rate_storage import LiteratureRateRepository
 
 PROVIDER = 'literature.a105.aggregation'
-VERSION = 'literature_a105_aggregation_record_v1'
+VERSION = 'literature_a105_aggregation_record'
 NAMESPACE = 'literature_a105_aggregation_cells'
 REQUESTED = 'requested_a105_aggregation_components'
 OPERATION_DESCRIPTION = (

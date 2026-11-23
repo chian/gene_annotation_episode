@@ -10,7 +10,7 @@ the child's selectable return fields (README 3b C4). The recursion's assignment 
 selection the model copied from ``process_revise`` (with its ``revision_origin`` when it is an alternative approach),
 the evidence references the model names, and the proposed annotation, the constraints and the context (with the
 evidence task) which the old ``prepare_assignment`` inherited from the parent (``child_proposed_annotation_differs_from_original_task``);
-the literature assignment is the old ``literature_assignment_v1`` (the question context, the sources, the commissioned
+the literature assignment is the old ``literature_assignment`` (the question context, the sources, the commissioned
 task, the proposed annotation and the requested grading and aggregation components). The child scope is the model's
 (within the parent scope: the Store admits it); ``received_record_refs`` names every record the child reads and
 ``evidence_refs`` and the lists do not name (decision T5): the proposed annotation, the hypothesis and subjects it
@@ -64,7 +64,7 @@ def msg_to_child(slot, arguments, summary):
         selection = tuple(dict.fromkeys([COMMITTED, *arguments['return_fields']]))
     elif slot == 'published_evidence_assessment':
         given = arguments['assignment']
-        assignment = {'version': 'literature_assignment_v1',
+        assignment = {'version': 'literature_assignment',
                       'question_context_refs': given['question_context_refs'],
                       'literature_task': given['literature_task'],
                       'proposed_annotation_ref': summary['proposed_annotation_ref'],

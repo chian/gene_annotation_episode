@@ -20,7 +20,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.calculations.expr
 
 
 def parameters(**changes):
-    return {"version": "bvbrc_proteome_native_parameters_proposal_v1", "track_keys": ["comp_genome_2"],
+    return {"version": "bvbrc_proteome_native_parameters_proposal", "track_keys": ["comp_genome_2"],
             "minimum_identity_fraction": .6, "minimum_subject_endpoint_difference_fraction": .7,
             "allowed_hit_categories": None, **changes}
 

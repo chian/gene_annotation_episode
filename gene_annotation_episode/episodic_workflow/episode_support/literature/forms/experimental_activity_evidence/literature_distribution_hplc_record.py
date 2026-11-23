@@ -48,7 +48,7 @@ default it to 'direct'; the default is only for forms built by tests that do not
 answer).
 """
 
-VERSION = 'a105_distribution_hplc_record_v1'
+VERSION = 'a105_distribution_hplc_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'distribution_hplc'
 QUANTITIES = ('product_fraction', 'product_fraction_spread', 'product_fraction_ratio', 'product_fraction_ratio_spread', 'equilibrium_fraction', 'equilibrium_fraction_spread',

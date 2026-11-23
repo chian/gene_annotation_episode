@@ -1,5 +1,5 @@
 """The A103 investigation finding: controlled features that code reads from the A103 attachment sheets
-(``a103_tool_attachment_v1``, written by ``records.gene_context_evidence.attachments.refresh``) and from the A103
+(``a103_tool_attachment``, written by ``records.gene_context_evidence.attachments.refresh``) and from the A103
 credit projection (``A103ContextCredit``), with the references of the sheets. Numbers, counts, booleans, values of
 fixed vocabularies and record references only; no model text (``INVESTIGATION_FINDING_FEATURES_a103.md``, the common
 features and section A9).
@@ -21,12 +21,12 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.gene_cont
 # Attachment policy -> evidence type (code maps the sheet's policy; the model never chooses it). The locus binding
 # policy is an operand of the others, not an evidence type.
 EVIDENCE_TYPES = {
-    'recurrence_specific_loci_components_and_sampling_v1': 'conserved_neighborhood',
-    'fusion_each_required_region_and_actual_coding_product_v1': 'gene_fusion',
-    'enumerated_panel_actual_detections_and_declared_null_v1': 'phylogenetic_cooccurrence',
-    'native_channel_exact_endpoints_and_specific_distance_v1': 'context_channel_association',
-    'functional_contrast_matched_native_context_and_bounds_v1': 'context_contrast',
-    'actual_neighborhood_and_specific_target_locus_v1': 'single_locus_organization',
+    'recurrence_specific_loci_components_and_sampling': 'conserved_neighborhood',
+    'fusion_each_required_region_and_actual_coding_product': 'gene_fusion',
+    'enumerated_panel_actual_detections_and_declared_null': 'phylogenetic_cooccurrence',
+    'native_channel_exact_endpoints_and_specific_distance': 'context_channel_association',
+    'functional_contrast_matched_native_context_and_bounds': 'context_contrast',
+    'actual_neighborhood_and_specific_target_locus': 'single_locus_organization',
 }
 EVIDENCE_TYPE_VALUES = tuple(EVIDENCE_TYPES.values())
 ATTACHMENT_STATES = ('evaluated', 'partial', 'unresolved')

@@ -11,8 +11,8 @@ from fractions import Fraction
 from itertools import product
 import math
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.literature_contract_error import ExperimentalContractError
-VERSION = 'literature_partner_components_v1'
-INPUT_VERSION = 'literature_partner_inputs_v1'
+VERSION = 'literature_partner_components'
+INPUT_VERSION = 'literature_partner_inputs'
 COMPONENTS = ('reference_rate', 'omitted_rate', 'addback_rate', 'partner_loss', 'partner_loss_fraction', 'addback_gain', 'addback_fraction', 'restored_reference_fraction')
 _ROLES = ('reference', 'omitted', 'addback')
 _UNITS = ('pmol/min/mg', 'nmol/min/mg', 'umol/min/mg', 'per_min', 'per_s', 'uM/min', 'nM/min', 'unreported')

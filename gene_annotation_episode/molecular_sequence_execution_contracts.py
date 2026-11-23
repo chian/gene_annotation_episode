@@ -14,10 +14,10 @@ from .execution_contracts import canonical, digest
 from . import molecular_sequence_driver as private
 
 
-PAYLOAD_VERSION = "molecular_sequence_selected_payload_v1"
-PLAN_VERSION = "molecular_sequence_selected_plan_v1"
-BUNDLE_VERSION = "molecular_sequence_attempt_bundle_v1"
-SOFTWARE_VERSION = "molecular_sequence_adapter_software_v1"
+PAYLOAD_VERSION = "molecular_sequence_selected_payload"
+PLAN_VERSION = "molecular_sequence_selected_plan"
+BUNDLE_VERSION = "molecular_sequence_attempt_bundle"
+SOFTWARE_VERSION = "molecular_sequence_adapter_software"
 ADAPTER_MODULE = "gene_annotation_episode.molecular_sequence_execution_driver"
 PLAN_FILENAME = "molecular-sequence-plan.json"
 ATTEMPT_DIRECTORY = "molecular-sequence-attempt"
@@ -114,10 +114,9 @@ def _selection(value):
     require(operation == value["operation"] and request["mode"] == value["mode"], field="/selection/driver_request")
     if value["mode"] == "native":
         version = request["selection"]["version"]
-        allowed = (("molecular_sequence_request_v3",) if operation == "analyze_protease_kinetics" else
-            ("molecular_sequence_request_v2",) if operation in OPERATIONS[2:4] else
-            ("molecular_sequence_request_v1", "molecular_sequence_request_v2"))
-        require(version in allowed, field="/selection/driver_request/selection/version")
+        allowed = ("molecular_sequence_protease_request" if operation == "analyze_protease_kinetics" else
+            "molecular_sequence_request")
+        require(version == allowed, field="/selection/driver_request/selection/version")
 
 
 def selected_payload_sha256(*, selection, software, policy, selected_environment):

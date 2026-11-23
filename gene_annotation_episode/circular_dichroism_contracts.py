@@ -14,10 +14,10 @@ from . import circular_dichroism_measurements as core
 
 
 CD_TOOL = "analyze_circular_dichroism_spectra"
-REQUEST_VERSION = "circular_dichroism_request_v1"
-RESULT_VERSION = "ordinary_cd_result_v1"
-RETURN_VERSION = "circular_dichroism_summary_v1"
-VIEW_VERSION = "circular_dichroism_view_v1"
+REQUEST_VERSION = "circular_dichroism_request"
+RESULT_VERSION = "ordinary_cd_result"
+RETURN_VERSION = "circular_dichroism_summary"
+VIEW_VERSION = "circular_dichroism_view"
 FACT_SOURCE = "circular_dichroism_summaries"
 _SOURCE = re.compile(r"source_[0-9a-f]{24}\Z")
 _ARTIFACT = re.compile(r"artifact_[0-9a-f]{64}\Z")

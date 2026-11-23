@@ -11,7 +11,7 @@ import math
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import canonical
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_experimental_contracts import ExperimentalContractError
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_binding_interaction_inputs import VERSION as INPUT_VERSION, OUTPUT_VERSION, ROLES, ID_FIELDS, CONTEXT_FIELDS, MEASUREMENT_STATUSES, SCALAR_STATUSES, UNCERTAINTY_REASONS, ROLE_UNAVAILABLE_REASONS, CALCULATION_INPUT_STATUSES
-VERSION = 'binding_interaction_saved_validation_v1'
+VERSION = 'binding_interaction_saved_validation'
 RAW_COMPONENTS = ('parameter_rr', 'parameter_rt', 'parameter_tr', 'parameter_tt')
 COMPONENTS = (*RAW_COMPONENTS, 'reference_subject_ratio', 'test_subject_ratio', 'interaction_ratio', 'log_interaction')
 MODEL_COMPONENTS = ('log_interaction_variance', 'log_interaction_standard_uncertainty', 'signed_profile_log_ratio', 'signed_index')
@@ -324,12 +324,12 @@ def validate_saved_binding_interaction(selection, extraction, calculation, cells
             _same(inputs['parameter_kind'], extraction['parameter_kind']['value'], 'kind')
             _same(calculation['inputs'], inputs, 'calculation.inputs')
             _same(calculation['model'], None, 'calculation.model')
-            _same(inputs['version'], 'binding_interaction_inputs_v1', 'inputs.version')
+            _same(inputs['version'], 'binding_interaction_inputs', 'inputs.version')
             _same(inputs['unit'], 'nM', 'inputs.unit')
             _same(inputs['comparison_scope'], selection['comparison_scope'], 'comparison_scope')
             _same(inputs['relationships'], {name: {'status': v['value'] if v['status'] == 'interpreted' else 'unknown', 'sources': [_locator(w) for w in v['witnesses'] if _locator(w) is not None]} for name, v in extraction['relationships'].items()}, 'relationships')
             _keys(calculation, ('version', 'parameter_kind', 'unit', 'inputs', 'operand_keys', 'physical_fit_ids', 'model', 'cells', 'qualifications'), 'calculation')
-            _same(calculation['version'], 'binding_interaction_sheet_v1', 'calculation.version')
+            _same(calculation['version'], 'binding_interaction_sheet', 'calculation.version')
             _same(calculation['parameter_kind'], inputs['parameter_kind'], 'calculation.kind')
             _same(calculation['unit'], 'nM', 'calculation.unit')
             _same(calculation['operand_keys'], {role: None if operand is None else _digest({'parameter_kind': inputs['parameter_kind'], 'unit': 'nM', 'operand': operand}) for role, operand in inputs['operands'].items()}, 'operand_keys')

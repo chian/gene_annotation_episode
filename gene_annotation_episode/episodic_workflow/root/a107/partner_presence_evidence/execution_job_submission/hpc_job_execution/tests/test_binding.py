@@ -27,7 +27,7 @@ RESOURCE = {'kind': 'pbs_ssh', 'workspace': WORKSPACE, 'ssh_argv': ['ssh', 'alcf
             'python_executable': '/usr/bin/python3', 'account': 'BioReason-Aurora-Test',
             'scheduler': {'kind': 'pbs'}}
 ASSIGNMENT = {
-    'version': 'practical_assignment_v1', 'assignment_id': 'job_1', 'resource_id': 'aurora', 'resource_kind': 'hpc',
+    'version': 'practical_assignment', 'assignment_id': 'job_1', 'resource_id': 'aurora', 'resource_kind': 'hpc',
     'workspace': WORKSPACE, 'endpoint': 'usable_handoff',
     'requested_job': {'argv': ['run_search', '--query', 'q'], 'environment': {'A': 'b'}},
     'progress_requirements': [

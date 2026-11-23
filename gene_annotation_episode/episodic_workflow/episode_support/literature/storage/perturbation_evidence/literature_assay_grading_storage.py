@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.prompt
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_rate_storage import LiteratureRateRepository
 
 PROVIDER = 'literature.a105.assay_grading'
-VERSION = 'literature_assay_grading_record_v2'
+VERSION = 'literature_assay_grading_record'
 NAMESPACE = 'literature_assay_grading_cells'
 REQUESTED = 'requested_assay_grading_components'
 SCOPE = 'assay_type_experimental_evidence'

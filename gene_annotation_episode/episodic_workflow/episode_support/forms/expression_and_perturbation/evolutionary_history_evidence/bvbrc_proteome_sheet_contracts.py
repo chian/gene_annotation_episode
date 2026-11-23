@@ -152,7 +152,7 @@ def _selector(selector, primary, associations, path):
     return row
 
 def _layout_uncertain(primary, row):
-    if primary['format'] != 'genome_comparison_tsv_v1':
+    if primary['format'] != 'genome_comparison_tsv':
         return False
     ref = primary['reference_rows'][row.get('reference_row_ordinal', row.get('row_ordinal'))]
     return any((d['code'] == 'native_table_width_invalid' for r in (row, ref) for d in r['diagnostics']))

@@ -12,7 +12,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_rate_native_inputs import _number, _field_contexts, _saved_number, _saved_witness
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_experimental_contracts import ExperimentalContractError
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_product_partition_inputs import _number as _fraction_number
-VERSION = 'a105_active_site_inputs_v1'
+VERSION = 'a105_active_site_inputs'
 ROLES = ('protein_mass_concentration', 'assumed_molecular_weight', 'active_site_concentration', 'reported_active_fraction')
 SOURCE_KINDS = ('primary_source', 'retained_extraction', 'synthetic_fixture')
 LITERAL_FIELDS = ('subject', 'organism', 'construct', 'preparation', 'assay', 'condition', 'endpoint', 'measurement_identity')
@@ -20,7 +20,7 @@ QUALIFICATIONS = ('reported_point', 'source_qualified_approximate', 'unknown', '
 SPREAD_KINDS = ('regression_sd', 'sd', 'sem', 'untyped', 'unreported', 'unknown', 'conflicting')
 SAMPLING = ('same_preparation_aliquots', 'independent_preparations', 'unknown', 'conflicting')
 INTERPRETATIONS = {'molecular_basis': ('per_monomer', 'per_dimer', 'unknown', 'conflicting'), 'amount_linkage': ('same_preparation_and_assay', 'different', 'unknown', 'conflicting'), 'active_estimate_meaning': ('titrated_active_sites', 'other', 'unknown', 'conflicting'), 'titrant_concentration_basis': ('nominal_reported', 'independently_standardized_active', 'unknown', 'conflicting'), 'titrant_to_site_stoichiometry': ('reported_one_to_one', 'other', 'unknown', 'conflicting'), 'site_stoichiometry': ('one_site_per_monomer', 'other', 'unknown', 'conflicting'), 'normalization_stage': ('none', 'total_monomer', 'active_sites', 'unknown', 'conflicting')}
-DEPENDENCY = 'source_scalar_field_parser_completed_allocation_addition_v1'
+DEPENDENCY = 'source_scalar_field_parser_completed_allocation_addition'
 
 def _fail(code, field):
     raise ExperimentalContractError(code, field)

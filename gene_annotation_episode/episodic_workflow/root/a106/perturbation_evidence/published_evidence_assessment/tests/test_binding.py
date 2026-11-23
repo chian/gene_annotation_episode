@@ -28,7 +28,7 @@ EMPTY = {'intervention_assessments': [], 'a106_subscores': []}
 CTX = 'record_' + 'd' * 24
 SRC = 'source_' + 'a' * 24
 TASK = {'kind': 'verified_source_leads', 'evidence_axis': 'A106', 'credit_unit': 1.0}
-ASSIGNMENT = {'version': 'literature_assignment_v1', 'question_context_refs': ['ctx_1'],
+ASSIGNMENT = {'version': 'literature_assignment', 'question_context_refs': ['ctx_1'],
               'literature_task': TASK, 'proposed_annotation_ref': 'hyp_1', 'scope': {'subject_refs': ['sub_1']},
               'received_record_refs': ['ctx_1', 'hyp_1']}
 
@@ -77,7 +77,7 @@ def test_the_commission_form_admits_a_literature_assignment_and_refuses_an_unkno
     form = EPISODE.assignment_form
     admitted = form.admit(ASSIGNMENT, 'test')
     parent_input = EPISODE.read_from_parent(admitted, {'objective': 'literature'})
-    assert parent_input['literature'] == {'version': 'literature_assignment_v1', 'question_context_refs': ['ctx_1']}
+    assert parent_input['literature'] == {'version': 'literature_assignment', 'question_context_refs': ['ctx_1']}
     assert parent_input['task_key'] == 'A106:verified_source_leads'
     assert set(form.record_refs(admitted)) == {'ctx_1', 'hyp_1'}
     with pytest.raises(FormError, match='unknown_field'):
@@ -144,7 +144,7 @@ def test_the_model_is_offered_the_reading_of_held_records_and_the_strategy_child
 
 def test_the_strategy_commission_is_admitted_by_the_form_of_the_child_and_selects_what_the_task_counts():
     task = importlib.import_module(PACKAGE + '.task')
-    child_task = {'version': 'literature_local_task_v1', 'evidence_axis': 'A106', 'kind': 'verified_source_leads'}
+    child_task = {'version': 'literature_local_task', 'evidence_axis': 'A106', 'kind': 'verified_source_leads'}
     arguments = {'question_context_refs': [CTX], 'literature_task': child_task}
     task.validate_selection({'selection': {'kind': 'child', 'slot': 'literature_strategy', 'arguments': arguments}},
                             task.selection_schema())
@@ -161,7 +161,7 @@ def test_the_strategy_commission_is_admitted_by_the_form_of_the_child_and_select
     admitted = read.ASSIGNMENT_FORM.admit(message.assignment, 'commission')
     assert set(read.ASSIGNMENT_FORM.record_refs(admitted)) == {CTX, 'hyp_1'}
     assert admitted['literature_task']['credit_unit'] == 1.0
-    assert read.read_from_parent(admitted, {})['strategy'] == {'version': 'strategy_assignment_v1',
+    assert read.read_from_parent(admitted, {})['strategy'] == {'version': 'strategy_assignment',
                                                                'question_context_refs': [CTX]}
     child_return = child_module('evidence_search_strategy_improvement', 'messages.final_to_parent').RETURN_FORM
     selected = child_return.select(message.selection)

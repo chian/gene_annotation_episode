@@ -18,7 +18,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search import blast_search as blast
 
 
-HMMER_IDENTITY_VERSION = "hmmer_single_fasta_sequence_v2"
+HMMER_IDENTITY_VERSION = "hmmer_single_fasta_sequence"
 
 
 def request_identity_feedback(request: dict) -> dict:

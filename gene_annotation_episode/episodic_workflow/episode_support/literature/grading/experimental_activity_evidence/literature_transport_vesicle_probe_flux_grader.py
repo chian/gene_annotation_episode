@@ -35,7 +35,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     TRANSPORT_VESICLE_PROBE_FLUX_CRITERIA)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_transport_vesicle_probe_flux_grade_v1'
+VERSION = 'a105_transport_vesicle_probe_flux_grade'
 CRITERIA = tuple(criterion['id'] for criterion in TRANSPORT_VESICLE_PROBE_FLUX_CRITERIA)
 TRANSPORT = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact transport_detected_above_control
 SECONDS_PER_UNIT = {'ms': 1.0e-3, 's': 1.0, 'min': SECONDS_PER_MINUTE}   # FIXED_BY_DEFINITION: a time unit of the record in seconds

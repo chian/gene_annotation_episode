@@ -1,4 +1,4 @@
-"""What the commissioner gives: the results assignment (old ``execution_results_assignment_v1``, the library
+"""What the commissioner gives: the results assignment (old ``execution_results_assignment``, the library
 ``RESULTS_SCHEMA`` that ``from_parent.py`` (``ResultsFromParent.assignment_schema``) extended): the original
 handoff of the launched attempt and the selector of what to acquire from it.
 
@@ -8,7 +8,7 @@ original Results commission (``saved_commission.py``, old-runner machinery), its
 reads the handoff, ``task.py``), ``initial_references`` (the handoff ref is the one record the assignment names)
 and ``required_return_sources`` (``final_to_parent.py`` declares ``execution_result_refs`` required).
 
-A typed selector (``local_file_source_selector_v1``, ``flux_balance_result_selector_v1``) selected the old local
+A typed selector (``local_file_source_selector``, ``flux_balance_result_selector``) selected the old local
 file source and flux balance result adapters (``LocalFileSourceResults``, ``NativeFluxBalanceResults``): no carried
 home exists for either, so a typed selector raises here, at the reading of the commission.
 
@@ -22,7 +22,7 @@ from jsonschema import Draft202012Validator
 
 from method_loop import DeclaredField, Field, RecordForm
 
-RESULTS_VERSION = 'execution_results_assignment_v1'
+RESULTS_VERSION = 'execution_results_assignment'
 _TEXT = {'type': 'string', 'minLength': 1}
 _OFFSET = {'type': 'integer', 'minimum': 0}
 _LIMIT = {'type': 'integer', 'minimum': 1}

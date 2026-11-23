@@ -45,7 +45,7 @@ class RetainedProteinInput(TypedDict):
 
 
 class NativeProteinResultWorkerPlan(TypedDict):
-    version: Literal["protein_structure_result_worker_plan_v1"]
+    version: Literal["protein_structure_result_worker_plan"]
     mode: Literal["original_native_result"]
     directory: str
     expected_request: ScientificRequest
@@ -54,7 +54,7 @@ class NativeProteinResultWorkerPlan(TypedDict):
 
 
 class SavedProteinResultWorkerPlan(TypedDict):
-    version: Literal["protein_structure_result_worker_plan_v1"]
+    version: Literal["protein_structure_result_worker_plan"]
     mode: Literal["saved_sheet_recalculation"]
     directory: str
     sheet: RetainedProteinInput
@@ -71,7 +71,7 @@ class ProteinWorkerOutput(TypedDict):
 
 
 class ProteinResultWorkerResult(TypedDict):
-    version: Literal["protein_structure_result_worker_result_v1"]
+    version: Literal["protein_structure_result_worker_result"]
     mode: Literal["original_native_result", "saved_sheet_recalculation"]
     operation: Literal["inspect", "extract_sequence", "compare"]
     native_result_file: ProteinWorkerOutput | None
@@ -81,10 +81,10 @@ class ProteinResultWorkerResult(TypedDict):
     issues: list[StructuredIssue]
 
 
-_PLAN_VERSION = "protein_structure_result_worker_plan_v1"
-_RESULT_VERSION = "protein_structure_result_worker_result_v1"
-_SHEET_FORMAT = "protein_structure_comparison_sheet_v1"
-_COMPONENTS_FORMAT = "protein_structure_components_v1"
+_PLAN_VERSION = "protein_structure_result_worker_plan"
+_RESULT_VERSION = "protein_structure_result_worker_result"
+_SHEET_FORMAT = "protein_structure_comparison_sheet"
+_COMPONENTS_FORMAT = "protein_structure_components"
 _OUTPUT_NAMES = {"native_result_file": "native-result.json",
                  "sheet_file": "sheet.json", "components_file": "components.json"}
 _RESULT_NAME = "worker-result.json"

@@ -152,7 +152,7 @@ def target_link(store, target, binding, known, *, alignment_ref=None):
 
 
 def _publish(store, measurement_ref, body, refs):
-    body = {'schema':'a103_tool_attachment_v1','version':VERSION,'profile':PROFILE,
+    body = {'schema':'a103_tool_attachment','version':VERSION,'profile':PROFILE,
         'measurement_ref':measurement_ref, **deepcopy(body), 'evidence_refs':sorted(set(refs))}
     with store.transaction():
         artifact = store.artifact(canonical(body),'application/json')
@@ -200,7 +200,7 @@ def _scoped_partner_detection(store, body, neighborhood_ref, known):
             continue
         result = received_measurement(store,ref)
         proof = result['body']
-        if (proof['schema']!='a103_detection_v1' or proof['target_ref']!=body['target_ref']
+        if (proof['schema']!='a103_detection' or proof['target_ref']!=body['target_ref']
                 or proof.get('neighborhood_ref')!=neighborhood_ref):
             continue
         actual,required=proof['component_ref'],body['partner_reference_ref']
@@ -293,7 +293,7 @@ def _recurrence(store, body, known):
         return math.fsum(math.fsum(math.fsum(unknown if v is None else v for v in values)/len(values)
             for values in genomes.values())/len(genomes) for genomes in groups.values())/len(groups) if groups else unknown
     lower,upper = bound(0.),bound(1.)
-    return {'policy':'recurrence_specific_loci_components_and_sampling_v1','level':'context_relationship',
+    return {'policy':'recurrence_specific_loci_components_and_sampling','level':'context_relationship',
         'state':'partial' if missing else 'evaluated','score':lower,'bounds':[lower,upper],
         'raw_value':body['group_balanced_fraction'],'rows':cells,'missing':sorted(set(missing)),
         'required_operands':required_operands,
@@ -327,7 +327,7 @@ def _fusion(store, body, known):
         regions.append({**region,'component_attribution':link,'target_positions':positions,'target_feature_ref':feature})
     factors = [target.get('factor'),*[r['component_attribution'].get('factor') for r in regions]]
     value = min(factors) if all(v is not None for v in factors) else None
-    return {'policy':'fusion_each_required_region_and_actual_coding_product_v1','level':'feature_trait',
+    return {'policy':'fusion_each_required_region_and_actual_coding_product','level':'feature_trait',
         'state':'evaluated' if value is not None else 'unresolved','score':value,
         'raw_value':body['observed_link_fraction'],'bounds':[value,value] if value is not None else [0.,1.],
         'target_link':target,'regions':regions,'missing':sorted(set(missing)),
@@ -356,7 +356,7 @@ def _contrast(store,body,known):
         max((r['score'] for r in opposing),default=0.)) if not missing else None
     refs = [*selected,*body['incompatibility_witness_refs'],body['function_ref'],
             *[grades[r]['source_ref'] for r in selected if r in grades]]
-    return {'policy':'functional_contrast_matched_native_context_and_bounds_v1','level':'functional_interpretation',
+    return {'policy':'functional_contrast_matched_native_context_and_bounds','level':'functional_interpretation',
         'score':None,'raw_value':None,'state':'unresolved' if missing else 'evaluated',
         'missing':missing,'qualified_panel':{'supporting_context_bounds':sb,'opposing_context_bounds':ob,
             'contrast':value,'contrast_bounds':interval,'comparison_state':'incomparable_or_unresolved' if missing else
@@ -389,7 +389,7 @@ def refresh(store, known, scope):
         if kind=='locus_binding':
             binding = binding_body(store,ref,known)
             link = target_link(store,body['target_ref'],binding,known)
-            out = {'policy':'actual_cds_to_target_entity_binding_v1','level':'entity','state':link['state'],
+            out = {'policy':'actual_cds_to_target_entity_binding','level':'entity','state':link['state'],
                 'score':None,'raw_value':None,'target_link':link,'missing':link['missing'],
                 'interpretation':'locus_binding_not_a_context_association'}
             refs.extend(_witnesses(link))
@@ -398,7 +398,7 @@ def refresh(store, known, scope):
                 continue
             binding = binding_body(store,body['binding_ref'],known)
             link = target_link(store,body['target_ref'],binding,known)
-            out = {'policy':'actual_neighborhood_and_specific_target_locus_v1','level':'context_relationship',
+            out = {'policy':'actual_neighborhood_and_specific_target_locus','level':'context_relationship',
                 'state':link['state'],'score':None,'raw_value':None,'target_link':link,'missing':link['missing'],
                 'interpretation':'measured_organization_requires_explicit_comparative_association_for_controller_credit'}
             refs.extend([body['binding_ref'],*_witnesses(link)])
@@ -412,7 +412,7 @@ def refresh(store, known, scope):
             target_correspondence = component_link(store,body['target_ref'],body['left_reference_ref'],known)
             factor = target_correspondence.get('factor')
             value = native['raw_value']*factor if native['raw_value'] is not None and factor is not None else None
-            out = {'policy':'enumerated_panel_actual_detections_and_declared_null_v1','level':'context_relationship',
+            out = {'policy':'enumerated_panel_actual_detections_and_declared_null','level':'context_relationship',
                 'state':'evaluated' if value is not None else 'unresolved',
                 'score':value,'raw_value':native['raw_value'],'target_link':target_correspondence,
                 'missing':sorted(set(target_correspondence['missing']) | (set() if native['raw_value'] is not None
@@ -430,7 +430,7 @@ def refresh(store, known, scope):
                 component_link(store,body['right_actual_ref'],body['right_reference_ref'],known)]
             factors = [l.get('factor') for l in links]
             factor = min(factors) if endpoints_bound and all(v is not None for v in factors) else None
-            out = {'policy':'native_channel_exact_endpoints_and_specific_distance_v1','level':'context_relationship',
+            out = {'policy':'native_channel_exact_endpoints_and_specific_distance','level':'context_relationship',
                 'state':'evaluated' if factor is not None else 'unresolved',
                 'score':native['raw_value']*factor if factor is not None else None,
                 'raw_value':native['raw_value'],'channel':body['channel'],'endpoint_links':links,

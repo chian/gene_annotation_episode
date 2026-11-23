@@ -90,7 +90,7 @@ def unavailable(unit, key, reason):
 def fact(answer, refs=(), support='direct'):
     return {**literature_spr_record.fact(answer, refs), 'support': None if answer == 'unknown' else support}
 
-VERSION = 'a105_mst_record_v1'
+VERSION = 'a105_mst_record'
 EXPERIMENT_TYPE = 'mst'
 QUANTITIES = ('kd', 'ki', 'ec50', 'kd_spread', 'ki_spread', 'labelled_concentration', 'fnorm_amplitude', 'fnorm_noise', 'signal_to_noise', 'led_power', 'ir_laser_power', 'fhot_time', 'titration_point_count', 'incubation_time', 'temperature', 'replicate_count')
 PREPARATION_KEYS = ('titrant_preparation_ref', 'fixed_partner_preparation_ref', 'dataset_ref')

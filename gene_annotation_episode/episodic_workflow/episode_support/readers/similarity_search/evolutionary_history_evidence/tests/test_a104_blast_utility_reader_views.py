@@ -6,13 +6,13 @@ from pathlib import Path
 import jsonschema
 import pytest
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.evolutionary_history_evidence.blast_utility_contracts import validate_blast_utility_result
-from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.evolutionary_history_evidence.blast_utility_result_views import FACT_SOURCES, IDENTIFIER_NAMESPACES, NATIVE_BLAST_UTILITY_RESULT_SELECTOR_SCHEMA, PREPARED_DATABASE_VERSION, PROJECTION_FIELDS, blast_utility_fact_sources, project_blast_utility_result, projection_identifiers, validate_blast_utility_fact_values, validate_blast_utility_projection, validate_blast_utility_result_selector, PROJECTION_V2_FIELDS, blast_utility_projection_fields
+from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.evolutionary_history_evidence.blast_utility_result_views import FACT_SOURCES, IDENTIFIER_NAMESPACES, NATIVE_BLAST_UTILITY_RESULT_SELECTOR_SCHEMA, PREPARED_DATABASE_VERSION, PROJECTION_FIELDS, blast_utility_fact_sources, project_blast_utility_result, projection_identifiers, validate_blast_utility_fact_values, validate_blast_utility_projection, validate_blast_utility_result_selector, VDB_PROJECTION_FIELDS, blast_utility_projection_fields
 from gene_annotation_episode.episodic_workflow.episode_support.records.evolutionary_history_evidence.domain import ContractError
 from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.evolutionary_history_evidence.tests.blast_utility_contract_fixtures import artifact_set, extraction, field, inspection, integrity, occurrence, operation, outcome, prepared_manifest
 SOURCE = 'source_original_utility'
 
 def selector(**changes):
-    return {'version': 'native_blast_utility_result_selector_v1', 'sequences': None, 'database_fields': [], 'integrity': None, 'preparation': None, 'prepared_database': False, 'include_checks': False, 'artifacts': [], 'saved_data': [], **changes}
+    return {'version': 'native_blast_utility_result_selector', 'sequences': None, 'database_fields': [], 'integrity': None, 'preparation': None, 'prepared_database': False, 'include_checks': False, 'artifacts': [], 'saved_data': [], **changes}
 
 def selected_sequences(*ordinals, fields=('normalized_sequence',)):
     return selector(sequences={'selector_ordinals': list(ordinals), 'sequence_fields': list(fields)})
@@ -20,11 +20,11 @@ def selected_sequences(*ordinals, fields=('normalized_sequence',)):
 def retained(result):
     """Assign synthetic Store identities and distinct original slots, without IO."""
     result = deepcopy(result)
-    if result['version'] == 'blast_database_artifact_set_v1':
+    if result['version'] == 'blast_database_artifact_set':
         rows = result['inputs'] + result['outputs']
     else:
         rows = [occurrence('db-file', direction='input', role='database_file', fmt='blastdb_binary')]
-        rows.extend([result['stdout_occurrence'], result['stderr_occurrence']] if result['version'] == 'blast_database_integrity_v1' else [result['output_occurrence']])
+        rows.extend([result['stdout_occurrence'], result['stderr_occurrence']] if result['version'] == 'blast_database_integrity' else [result['output_occurrence']])
     ordinals = {}
     for row in rows:
         slot = (row['direction'], row['role'])
@@ -57,10 +57,10 @@ def available_preparation(result):
 def test_public_schemas_are_closed_and_detached():
     jsonschema.Draft202012Validator.check_schema(NATIVE_BLAST_UTILITY_RESULT_SELECTOR_SCHEMA)
     assert set(PROJECTION_FIELDS) == {'status', 'sequences', 'database_fields', 'integrity', 'preparation', 'prepared_database', 'checks', 'failures', 'missing', 'artifacts', 'saved_data', 'record_refs'}
-    assert set(PROJECTION_V2_FIELDS) == {source.removeprefix('execution.blast_utility_') for source in FACT_SOURCES} | {'record_refs'}
-    assert set(PROJECTION_V2_FIELDS) - set(PROJECTION_FIELDS) == {'paths', 'path_sections', 'vdb_context'}
+    assert set(VDB_PROJECTION_FIELDS) == {source.removeprefix('execution.blast_utility_') for source in FACT_SOURCES} | {'record_refs'}
+    assert set(VDB_PROJECTION_FIELDS) - set(PROJECTION_FIELDS) == {'paths', 'path_sections', 'vdb_context'}
     assert blast_utility_projection_fields(selector()) == PROJECTION_FIELDS
-    assert blast_utility_projection_fields(selector(version='native_blast_utility_result_selector_v2', paths=None, vdb_context=False)) == PROJECTION_V2_FIELDS
+    assert blast_utility_projection_fields(selector(version='native_blast_utility_result_selector', paths=None, vdb_context=False)) == VDB_PROJECTION_FIELDS
     for source, descriptor in blast_utility_fact_sources().items():
         jsonschema.Draft202012Validator.check_schema(descriptor['report_schema'])
         assert descriptor['report_schema']['x-source'] == source

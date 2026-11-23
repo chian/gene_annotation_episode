@@ -113,7 +113,7 @@ def _selected_execution_task(summary, resources):
                          'endpoint': request['endpoint'], 'constraints': request['constraints'],
                          'job': request['requested_job']['native_flux_balance'],
                          'resource': resources.get(resource_id)})
-    return {'version': 'selected_execution_task_v1', 'scientific_question': task['scientific_question'],
+    return {'version': 'selected_execution_task', 'scientific_question': task['scientific_question'],
             'selected_tool_info': task['selected_tool_info'], 'requests': selected,
             'constraints': summary['assignment']['constraints']}
 

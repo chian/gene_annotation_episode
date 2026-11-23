@@ -13,7 +13,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.evolution
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.evolutionary_history_evidence.literature_experimental_contracts import ExperimentalContractError
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.evolutionary_history_evidence.literature_calibration_recovery_inputs import VERSION as INPUT_VERSION, NUMBER_ROLES
 
-VERSION = "a105_calibration_recovery_components_v1"
+VERSION = "a105_calibration_recovery_components"
 COMPONENTS = ("nominal", "measured", "signed_difference", "recovery", "relative_bias",
               "percent_bias", "inverse_recovery", "reported_measured_spread", "measured_sd",
               "measured_cv", "reported_recovery", "displayed_minus_reported_recovery",

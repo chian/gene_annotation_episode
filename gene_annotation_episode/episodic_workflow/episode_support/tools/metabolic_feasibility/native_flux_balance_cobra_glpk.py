@@ -95,7 +95,7 @@ def _xml_name(value):
 
 
 def _source_audit(raw, profile):
-    audit = {"version": "cobra_fba_source_audit_v1", "input_profile": profile,
+    audit = {"version": "cobra_fba_source_audit", "input_profile": profile,
              "original_model": location("original_model", ""), "xml_elements": None, "issues": []}
     if profile == "cobra_json":
         return audit, decode_json(raw)
@@ -417,7 +417,7 @@ def capture_cobra_glpk_model(model, *, phase, source_audit):
             "native_cobra_json": native_json, "native_sbml_export": None, "medium": medium, "medium_state": medium_state,
             "medium_basis": "cobra_exchange_heuristic", "population": {"compartments": len(compartments), "genes": len(model.genes),
                 "metabolites": len(model.metabolites), "reactions": len(model.reactions), "groups": len(model.groups), "completeness": "complete"},
-            "native_capture_evidence": {"version": "cobra_model_native_evidence_v1", "load_configuration": ctx.get("load_configuration"),
+            "native_capture_evidence": {"version": "cobra_model_native_evidence", "load_configuration": ctx.get("load_configuration"),
                 "loaded_metadata": metadata, "warnings": deepcopy(ctx.get("diagnostics", {}).get("warnings", [])),
                 "loader_diagnostics": deepcopy(ctx.get("loader_diagnostics", [])), "capture_failures": failures}}
 
@@ -613,10 +613,10 @@ def capture_cobra_glpk_problem(model, *, phase):
         representation = "partial"
     elif not linear or any(row["expression_kind"] != "linear" for row in constraints):
         representation = "unsupported"
-    return {"version": "cobra_glpk_problem_snapshot_v1", "phase": phase, "variable_count": cols, "constraint_count": rows,
+    return {"version": "cobra_glpk_problem_snapshot", "phase": phase, "variable_count": cols, "constraint_count": rows,
         "variables": variables, "constraints": constraints, "objective": objective, "reaction_variables": joins,
         "representation": representation, "native_optlang_json": native_json, **text, "issues": problems,
-        "native_capture_evidence": {"version": "cobra_glpk_problem_evidence_v1", "native_variables": raw_vars, "native_rows": raw_rows,
+        "native_capture_evidence": {"version": "cobra_glpk_problem_evidence", "native_variables": raw_vars, "native_rows": raw_rows,
             "reaction_flux_expressions": expressions, "configuration": {"integer_controls": _controls(solver.configuration._iocp, failures, "integer_controls")},
             "capture_failures": failures}}
 
@@ -760,7 +760,7 @@ def _request_application(job):
             "requested_lower": deepcopy(row["lower"]) | {"source": location("selected_request", f"{prefix}/constraints/{i}/lower")},
             "requested_upper": deepcopy(row["upper"]) | {"source": location("selected_request", f"{prefix}/constraints/{i}/upper")},
             "effective_reaction_position": None, "application": "not_attempted", "issue_code": None})
-    return {"version": "cobra_fba_request_application_v1", "selected_request": location("selected_request", "/requested_job"),
+    return {"version": "cobra_fba_request_application", "selected_request": location("selected_request", "/requested_job"),
         "constraint_changes": changes, "objective_request": deepcopy(job["objective"]), "objective_application": "not_attempted",
         "objective_requested_source": location("selected_request", prefix + "/objective"), "objective_effective_source": None,
         "solver_option_applications": [{"name": key, "application": "not_requested" if job["solver_options"][key] is None else "not_attempted",
@@ -943,7 +943,7 @@ def capture_cobra_glpk_solution(model, solution, *, optimize_call_count, native_
             "reduced_cost": candidate(values["reduced_costs"], f"/reaction_values/{i}/reduced_cost/value")})
     config = _safe_get(lambda: capture_cobra_glpk_configuration(model, role="solution", pointer="/configuration_after_solve"), failures, "configuration_after_solve")
     controls = _safe_get(lambda: _controls(model.solver.configuration._iocp, failures, "integer_controls_after_solve"), failures, "integer_controls_after_solve")
-    return {"version": "cobra_glpk_solution_capture_v1", "model_optimize_call_count": optimize_call_count,
+    return {"version": "cobra_glpk_solution_capture", "model_optimize_call_count": optimize_call_count,
         "native_passes": [deepcopy(event["typed"]) for event in native_passes],
         "solution_object_state": "returned" if solution is not None else "not_returned" if optimize_call_count else "not_executed",
         "optlang_status": _safe_get(lambda: model.solver.status, failures, "optlang.status"),
@@ -955,7 +955,7 @@ def capture_cobra_glpk_solution(model, solution, *, optimize_call_count, native_
         "native_cobra_objective": candidate(returned["objective"] if returned else None, "/native_cobra_objective/value"),
         "variable_values": variables, "constraint_values": constraints, "reaction_values": reactions,
         "configuration_after_solve": config, "diagnostics_pointer": "/native_capture_evidence/diagnostics", "issues": problems,
-        "native_capture_evidence": {"version": "cobra_glpk_solution_evidence_v1", "native_passes": [deepcopy(e["evidence"]) for e in native_passes],
+        "native_capture_evidence": {"version": "cobra_glpk_solution_evidence", "native_passes": [deepcopy(e["evidence"]) for e in native_passes],
             "configuration_after_solve": {"integer_controls": controls}, "raw_getters": raw, "cobra_return": returned,
             "diagnostics": {"warnings": deepcopy(diagnostics["warnings"]), "logging": deepcopy(diagnostics["logging"]),
                             "exceptions": deepcopy(diagnostics["exceptions"]) + failures}}}

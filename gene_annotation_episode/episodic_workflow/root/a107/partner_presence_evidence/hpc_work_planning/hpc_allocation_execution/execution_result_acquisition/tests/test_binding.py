@@ -113,7 +113,7 @@ def test_read_from_parent_turns_the_selector_into_requested_windows_and_result_n
     with pytest.raises(ValueError, match='execution_results_paths_required'):
         read(_assignment({'offset': 3}), {})
     with pytest.raises(ValueError):                                   # a typed selector is not a plain file selector
-        read(_assignment({'version': 'bvbrc_minhash_result_selector_v2'}), {})
+        read(_assignment({'version': 'bvbrc_minhash_result_selector'}), {})
     with pytest.raises(ValueError):                                   # exactly one handoff row
         read({**_assignment({'path': path}), 'handoff_ref': ['source_a', 'source_b']}, {})
 

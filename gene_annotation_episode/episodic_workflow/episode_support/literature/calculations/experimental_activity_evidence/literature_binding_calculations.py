@@ -11,7 +11,7 @@ from copy import deepcopy
 import json
 import math
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_experimental_contracts import ExperimentalContractError
-VERSION = 'binding_parameter_sheet_v1'
+VERSION = 'binding_parameter_sheet'
 COMPONENTS = ('reference_parameter', 'test_parameter', 'reference_reported_spread', 'test_reported_spread', 'reference_relative_spread', 'test_relative_spread', 'native_parameter_ratio', 'log_native_parameter_ratio', 'source_profile_log_ratio', 'source_signed_index')
 FORMULAS = {'reference_parameter': 'reference_row.value', 'test_parameter': 'test_row.value', 'reference_reported_spread': 'reference_row.reported_spread', 'test_reported_spread': 'test_row.reported_spread', 'reference_relative_spread': 'reference_reported_spread/abs(reference_parameter)', 'test_relative_spread': 'test_reported_spread/abs(test_parameter)', 'native_parameter_ratio': 'test_parameter/reference_parameter', 'log_native_parameter_ratio': 'ln(test_parameter)-ln(reference_parameter)', 'source_profile_log_ratio': 'applicable_joint_binding_observation_model', 'source_signed_index': 'tanh(source_profile_log_ratio/2)'}
 REASONS = ('missing_reference_arm', 'missing_test_arm', 'conflicting_source_identity', 'ambiguous_reference_arm', 'ambiguous_test_arm', 'source_measurement_unavailable', 'reported_spread_requires_point_operand', 'reported_spread_unavailable', 'nonfinite_calculation', 'calculation_underflow', 'two_censored_operands_unsupported', 'comparison_context_mismatch', 'binding_observation_model_unimplemented')
@@ -89,7 +89,7 @@ def _physical_identity(row):
 
 def _validate(extraction):
     _keys(extraction, _EXTRACTION_KEYS, 'extraction')
-    if extraction['version'] != 'binding_parameter_extraction_v1':
+    if extraction['version'] != 'binding_parameter_extraction':
         _fail('unsupported_extraction_version', 'version')
     if extraction['parameter_kind'] not in ('ic50', 'reported_hill_kd'):
         _fail('unsupported_parameter_kind', 'parameter_kind')

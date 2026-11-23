@@ -102,7 +102,7 @@ def project_biopython_scores(sheet, common):
         "alignment_identity": counts["alignment_columns"],
         "query_paired_coverage": lengths["query"], "reference_paired_coverage": lengths["reference"],
         "query_aligned_coverage": lengths["query"], "reference_aligned_coverage": lengths["reference"]}
-    return {"schema": "biopython_pairwise_scores_v1", "status": sheet["status"], **counts,
+    return {"schema": "biopython_pairwise_scores", "status": sheet["status"], **counts,
         **{field: common["fractions"][field] for field in denominators},
         "native_score": sheet["native_score"], "denominators": denominators,
         "definitions": _definitions(sheet["molecule"]), "issues": deepcopy(sheet["issues"])}
@@ -114,7 +114,7 @@ def validate_biopython_correspondence(grading, instance):
     expected = _common_sheet(counts=sheet["measured_column_counts"], lengths=sheet["lengths"],
         geometry=sheet["geometry"], correspondence=sheet["residue_correspondence"],
         alignment_state=sheet["alignment_state"], molecule=sheet["molecule"])
-    if (instance["legacy_pointer"] != "" or instance["axis_basis"] != "direct"
+    if (instance["source_pointer"] != "" or instance["axis_basis"] != "direct"
             or not _same(expected, instance["sheet"])
             or not _same(project_biopython_scores(grading["sheet"], instance["components"]["rows"][0]), grading["scores"])):
         raise ValueError("biopython_saved_correspondence_conflict")

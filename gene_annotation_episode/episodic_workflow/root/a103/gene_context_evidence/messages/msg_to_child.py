@@ -14,7 +14,7 @@ does not declare, a record this episode does not hold or a field the child's for
 
 The monitor (``_monitor``) is commissioned on one outstanding job this episode holds, with controlled values only: the
 model names the job by its held handoff record and chooses what the monitor may observe and which measurements return;
-this file passes the job's rows in custody (``monitor_assignment_v2``), with a fixed objective and an empty message.
+this file passes the job's rows in custody (``monitor_assignment``), with a fixed objective and an empty message.
 The monitor always returns its credit, finding and check rows.
 
 The recursive head takes this episode's own selection when the model writes "own" for it (the "or your own" of the
@@ -28,7 +28,7 @@ from episode_runtime import ChildMessage
 SLOTS = ('gene_context_evidence', 'execution_job_submission',
          'execution_progress_assessment', 'execution_result_acquisition', 'hpc_work_planning',
          'resource_work_submission', 'resource_result_acquisition')
-MONITOR_VERSION = 'monitor_assignment_v2'
+MONITOR_VERSION = 'monitor_assignment'
 MONITOR_OBJECTIVE = 'Assess the progress of one outstanding job.'
 
 

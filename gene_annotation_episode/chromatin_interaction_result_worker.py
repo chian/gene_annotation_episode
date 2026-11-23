@@ -23,12 +23,12 @@ from .native_chromatin_interaction_driver import (
     stream_identity, file_identity, decode_json, merge_extractions,
 )
 
-PLAN_VERSION = "chromatin_interaction_result_worker_plan_v1"
-RESULT_VERSION = "chromatin_interaction_result_worker_result_v1"
-OUTPUTS = (("sheet", "sheet.json", "chromatin_interaction_sheet_v1"),
-    ("components", "components.json", "chromatin_interaction_components_v1"),
-    ("projection", "projection.json", "chromatin_interaction_projection_v1"),
-    ("diagnostics", "diagnostics.json", "chromatin_interaction_result_diagnostics_v1"))
+PLAN_VERSION = "chromatin_interaction_result_worker_plan"
+RESULT_VERSION = "chromatin_interaction_result_worker_result"
+OUTPUTS = (("sheet", "sheet.json", "chromatin_interaction_sheet"),
+    ("components", "components.json", "chromatin_interaction_components"),
+    ("projection", "projection.json", "chromatin_interaction_projection"),
+    ("diagnostics", "diagnostics.json", "chromatin_interaction_result_diagnostics"))
 
 
 def validate_chromatin_result_worker_plan(value):
@@ -44,7 +44,7 @@ def validate_chromatin_result_worker_plan(value):
         require(selector["saved_sheet_bundle"] is None)
         require([r["specification"] for r in value["files"]] == original["outputs"][:-1])
         if value["bundle"] is not None:
-            require(value["driver_state"] == "sealed_bundle" and value["bundle"]["file"]["format"] == "chromatin_interaction_native_bundle_v1")
+            require(value["driver_state"] == "sealed_bundle" and value["bundle"]["file"]["format"] == "chromatin_interaction_native_bundle")
             retained.append(value["bundle"])
         for row in value["files"]:
             spec, capture = row["specification"], row["capture"]
@@ -64,7 +64,7 @@ def validate_chromatin_result_worker_plan(value):
             require(value["bundle"] is None and all(r["retained"] is None and r["capture"] is None for r in value["files"]))
     else:
         bundle = value["sheet_bundle"]
-        require(bundle["sheet"]["file"]["format"] == "chromatin_interaction_sheet_v1")
+        require(bundle["sheet"]["file"]["format"] == "chromatin_interaction_sheet")
         require(selector["saved_sheet_bundle"] == {"sheet": bundle["sheet"]["file"], "tables": [r["file"] for r in bundle["tables"]]})
         retained = [bundle["sheet"], *bundle["tables"]]
     paths = {}
@@ -276,7 +276,7 @@ def run_chromatin_result_worker(plan):
     plan = validate_chromatin_result_worker_plan(plan)
     directory = _directory(plan["directory"])
     directory.mkdir(parents=True, exist_ok=True)
-    diagnostics = {"version": "chromatin_interaction_result_diagnostics_v1", "mode": plan["mode"],
+    diagnostics = {"version": "chromatin_interaction_result_diagnostics", "mode": plan["mode"],
         "populations": [], "failures": deepcopy(plan.get("failures", []))}
     values, sheet, attachments, source_sha = {}, None, [], None
     with ExitStack() as stack:
@@ -341,7 +341,7 @@ def run_chromatin_result_worker(plan):
                         field_path="/outputs/" + descriptor["table_key"]))
                     retained = None
             table_outputs.append({"role": "table", "table_key": descriptor["table_key"], "declaration": {
-                "relative_path": relative, "format": "chromatin_contact_tables_v1:" + descriptor["role"],
+                "relative_path": relative, "format": "chromatin_contact_tables:" + descriptor["role"],
                 "state": "present" if retained is not None else "absent",
                 **(file_identity(target) if retained is not None else {"sha256": None, "size_bytes": None})}})
         diagnostics["failures"] = unique_failures(diagnostics["failures"], *(r["failures"] for r in diagnostics["populations"]))

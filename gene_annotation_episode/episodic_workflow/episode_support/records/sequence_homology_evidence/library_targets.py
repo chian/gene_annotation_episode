@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_homology_evidence.domain import ContractError
 
-VERSION = "fixed_original_read_position_measure_v1"
+VERSION = "fixed_original_read_position_measure"
 
 
 def is_library(row):

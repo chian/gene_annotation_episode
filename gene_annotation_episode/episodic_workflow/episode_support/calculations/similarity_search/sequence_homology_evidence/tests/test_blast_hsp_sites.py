@@ -284,7 +284,7 @@ def test_lengths_unknown_are_not_zero_and_valid_local_coordinates_survive():
 
 
 def mapping(path, length=4, scale=3):
-    return {"version": "oriented_source_subject_path_v2", "units_per_symbol": scale,
+    return {"version": "oriented_source_subject_path", "units_per_symbol": scale,
             "symbol_length": length, "path": path}
 
 

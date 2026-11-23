@@ -639,15 +639,15 @@ def fasta_inputs(program="blastp"):
 
 
 @pytest.mark.parametrize("program", ["blastn", "blastp", "blastx", "tblastn", "tblastx", "psiblast", "deltablast"])
-def test_v2_all_sequence_modes_preserve_geometry_reference_units_and_kernel(program):
+def test_record_locator_all_sequence_modes_preserve_geometry_reference_units_and_kernel(program):
     arguments = fasta_inputs(program)
     sheet = populate(**arguments)
     out = calculate(sheet)
-    assert sheet["schema"] == "blast_sequence_database_result_sheet_v2"
-    assert out["schema"] == "blast_sequence_database_result_components_v1"
+    assert sheet["schema"] == "blast_sequence_database_result_sheet_record_locator"
+    assert out["schema"] == "blast_sequence_database_result_components"
     assert out["status"] == "complete"
     database = out["components"]["database_sheet"]
-    assert database["schema"] == "blast_database_sheet_v2" and database["association_mode"] == "explicit_bindings_v2"
+    assert database["schema"] == "blast_database_sheet_record_locator" and database["association_mode"] == "explicit_bindings_record_locator"
     assert database["coverage"]["matched_metadata_row_count"] == 2
     for hit in database["hits"]:
         assert hit["hsp_components"][0]["geometry_available"]
@@ -675,7 +675,7 @@ def test_translated_reference_traceback_never_supplies_nt_full_identity(program)
     assert out["components"]["database_sheet"]["hits"][0]["measurements"]["maximum_bit_score"] == 20
 
 
-def test_v2_mixed_original_rows_keep_partial_metadata_and_original_positions():
+def test_record_locator_mixed_original_rows_keep_partial_metadata_and_original_positions():
     arguments = fasta_inputs()
     for field in ("reference_metadata", "description_bindings", "sequence_identity_bindings"):
         arguments[field][0] = inputs(arguments["search"])[field][0]
@@ -689,39 +689,39 @@ def test_v2_mixed_original_rows_keep_partial_metadata_and_original_positions():
     assert out["components"]["function_weights"]["unadjusted_probabilities"] == {"F":.8, "G":.2}
 
 
-def test_explicit_null_locator_opts_in_without_rewriting_v1_rows():
+def test_explicit_null_locator_opts_in_without_rewriting_plain_rows():
     arguments = inputs()
     arguments["reference_metadata"][0]["record_locator"] = None
     sheet = populate(**arguments)
-    assert sheet["schema"] == "blast_sequence_database_result_sheet_v2"
+    assert sheet["schema"] == "blast_sequence_database_result_sheet_record_locator"
     assert "metadata_record_locator" not in sheet["description_bindings"][0]["binding"]
     assert calculate(sheet)["components"]["function_weights"]["unadjusted_probabilities"] == {"F":.8, "G":.2}
 
 
 @pytest.mark.parametrize("field", ["reference_metadata", "description_bindings", "sequence_identity_bindings"])
-def test_saved_v1_rejects_new_association_fields_instead_of_upgrading(field):
+def test_saved_plain_rejects_new_association_fields_instead_of_upgrading(field):
     sheet = populate(**inputs())
     row = sheet[field][0] if field == "reference_metadata" else sheet[field][0]["binding"]
     row["metadata_record_locator" if field == "description_bindings" else "record_locator"] = None
-    with pytest.raises(ValueError, match="record_locator_requires_v2_sheet|inner_binding_fields_invalid"):
+    with pytest.raises(ValueError, match="record_locator_requires_record_locator_sheet|inner_binding_fields_invalid"):
         calculate(sheet)
 
 
-def test_declared_saved_v2_is_not_downgraded_after_filtering_or_missing_extended_rows():
+def test_declared_saved_record_locator_is_not_downgraded_after_filtering_or_missing_extended_rows():
     sheet = populate(**inputs())
-    sheet["schema"] = "blast_sequence_database_result_sheet_v2"
+    sheet["schema"] = "blast_sequence_database_result_sheet_record_locator"
     out = calculate(sheet)
-    assert out["components"]["database_sheet"]["schema"] == "blast_database_sheet_v2"
+    assert out["components"]["database_sheet"]["schema"] == "blast_database_sheet_record_locator"
     arguments = inputs()
     arguments["sequence_identity_bindings"][0]["binding"].update(record_locator=None, molecule="nt")
     filtered = calculate(populate(**arguments))
-    assert filtered["components"]["database_sheet"]["schema"] == "blast_database_sheet_v2"
+    assert filtered["components"]["database_sheet"]["schema"] == "blast_database_sheet_record_locator"
 
 
 @pytest.mark.parametrize("field", ["reference_metadata", "description_bindings", "sequence_identity_bindings"])
 @pytest.mark.parametrize("locator", [{}, {"kind":"fasta_record", "record_ordinal":True},
     {"kind":"fasta_record", "record_ordinal":-1}, {"kind":"fasta_record", "record_ordinal":0, "extra":None}])
-def test_v2_locators_are_closed_at_all_declared_locations(field, locator):
+def test_record_locator_locators_are_closed_at_all_declared_locations(field, locator):
     arguments = fasta_inputs()
     row = arguments[field][0] if field == "reference_metadata" else arguments[field][0]["binding"]
     row["metadata_record_locator" if field == "description_bindings" else "record_locator"] = locator
@@ -731,7 +731,7 @@ def test_v2_locators_are_closed_at_all_declared_locations(field, locator):
 
 @pytest.mark.parametrize("field,pointer", [("reference_metadata","native_pointer"),
     ("description_bindings","metadata_pointer"), ("sequence_identity_bindings","pointer")])
-def test_v2_fasta_records_cannot_use_json_pointers(field, pointer):
+def test_record_locator_fasta_records_cannot_use_json_pointers(field, pointer):
     arguments = fasta_inputs()
     row = arguments[field][0] if field == "reference_metadata" else arguments[field][0]["binding"]
     row[pointer] = "/records/0"
@@ -740,7 +740,7 @@ def test_v2_fasta_records_cannot_use_json_pointers(field, pointer):
 
 
 @pytest.mark.parametrize("field", ["description_bindings", "sequence_identity_bindings"])
-def test_v2_binding_extensions_remain_exact_shapes_and_exact_duplicates_fail(field):
+def test_record_locator_binding_extensions_remain_exact_shapes_and_exact_duplicates_fail(field):
     arguments = fasta_inputs()
     arguments[field][0]["binding"]["unexpected"] = None
     with pytest.raises(ValueError, match="^blast_sequence_database_inner_binding_fields_invalid$"):
@@ -751,7 +751,7 @@ def test_v2_binding_extensions_remain_exact_shapes_and_exact_duplicates_fail(fie
         populate(**arguments)
 
 
-def test_v2_wrong_cross_record_description_is_local_with_original_native_measurements():
+def test_record_locator_wrong_cross_record_description_is_local_with_original_native_measurements():
     arguments = fasta_inputs()
     # Keep the second hit valid while making only the first metadata locator
     # disagree with its explicit description binding.
@@ -763,7 +763,7 @@ def test_v2_wrong_cross_record_description_is_local_with_original_native_measure
     assert out["components"]["selected_query_coverage"][0]["value"] == .5
 
 
-def test_v2_population_and_parameter_recalculation_are_pure_and_do_not_reprove_fasta(monkeypatch):
+def test_record_locator_population_and_parameter_recalculation_are_pure_and_do_not_reprove_fasta(monkeypatch):
     arguments = fasta_inputs()
     saved = json.loads(json.dumps(populate(**arguments)))
     before = deepcopy(saved)
@@ -787,7 +787,7 @@ def test_native_payload_locator_text_never_dispatches_a_sheet_version():
     arguments = inputs()
     arguments["reference_metadata"][0]["native_record"] = {"record_locator":False}
     arguments["reference_metadata"][0]["functions"][0]["evidence"] = [{"record_locator":False}]
-    assert populate(**arguments)["schema"] == "blast_sequence_database_result_sheet_v1"
+    assert populate(**arguments)["schema"] == "blast_sequence_database_result_sheet"
 
 
 @pytest.mark.parametrize("returncode,producer,execution_state,producer_state,success", [

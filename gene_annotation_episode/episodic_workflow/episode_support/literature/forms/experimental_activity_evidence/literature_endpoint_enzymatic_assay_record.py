@@ -45,7 +45,7 @@ converter does. The constructors take ``support`` and default it to 'direct'; th
 through the extraction (the extraction always passes the model's answer).
 """
 
-VERSION = 'a105_endpoint_enzymatic_assay_record_v1'
+VERSION = 'a105_endpoint_enzymatic_assay_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'endpoint_enzymatic_assay'
 QUANTITIES = ('conversion_percent', 'conversion_percent_spread', 'net_conversion_percent', 'net_conversion_percent_spread', 'product_amount', 'product_amount_spread',

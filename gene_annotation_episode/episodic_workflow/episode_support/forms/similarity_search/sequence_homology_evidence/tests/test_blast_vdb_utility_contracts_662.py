@@ -24,7 +24,7 @@ def operation(variant="entry", database_source="db"):
         "batch_occurrence_id": "batch" if variant == "entry_batch" else None}
         if variant in {"entry", "entry_batch"} else {"kind": variant} if extract else None)
     ids = (["db-list"] if database_source == "dbs_file" else []) + (["batch"] if variant == "entry_batch" else [])
-    return {"version": "blast_utility_operation_v3", "program": "blast_vdb_cmd",
+    return {"version": "blast_vdb_utility_operation", "program": "blast_vdb_cmd",
         "mode": "extract_sequences" if extract else variant, "input_occurrence_ids": ids,
         "database_key": "selected", "molecule": "dna", "parameters": {
             "database_selection": {"source": database_source, "inputs": [
@@ -32,7 +32,7 @@ def operation(variant="entry", database_source="db"):
                  "binding_native_path": "/fixture/source.vdb", "list_entry_ordinal": i if database_source == "dbs_file" else None}
                 for i in range(2)], "list_occurrence_id": "db-list" if database_source == "dbs_file" else None},
             "line_length": 80, "selection": selection, "include_filtered_reads": False,
-            "output_format": "blast_vdb_cmd_table_v1" if extract else "blast_vdb_info_text_v1" if variant == "info" else "blast_vdb_paths_text_v1"}}
+            "output_format": "blast_vdb_cmd_table" if extract else "blast_vdb_info_text" if variant == "info" else "blast_vdb_paths_text"}}
 
 
 def binding(key="selected", kind="vdb", path="/fixture/source.vdb"):
@@ -55,7 +55,7 @@ def identity(value="member"):
 def context(op):
     p = op["parameters"]
     selection = p["selection"]
-    return {"version": "blast_vdb_utility_context_v1", "source_inputs": [
+    return {"version": "blast_vdb_utility_context", "source_inputs": [
         {"ordinal": row["ordinal"], "selected_input": {"kind": row["kind"], "value": row["value"]},
          "binding_native_path": row["binding_native_path"], "dataset_key": "dataset", "dataset_type": "csra",
          "snapshot": {"release": None, "snapshot_id": None, "manifest_sha256": None},
@@ -92,11 +92,11 @@ def result(variant="entry", database_source="db"):
             "normalized_sequence": "ACGT", "returned_symbol_count": 4, "molecule": "dna",
             "requested_range": None, "effective_range": None, "completeness": "complete",
             "checks": [], "failures": [], "vdb_member": None}
-        return {**common, "version": "blast_sequence_extraction_v2", "records": [row],
+        return {**common, "version": "blast_vdb_sequence_extraction", "records": [row],
             "missing_selector_ordinals": [], "unexpected_record_keys": [],
             "population_completeness": "complete_selection",
             "scope": {"kind": "selected_entries" if selected else variant}}
-    return {**common, "version": "blast_database_inspection_v3", "native_fields": [],
+    return {**common, "version": "blast_vdb_database_inspection", "native_fields": [],
         "path_sections": [], "path_records": [], "completeness": "complete"}
 
 
@@ -134,7 +134,7 @@ def test_exact_variants_versions_order_and_detached_results(variant, database_so
 
 
 @pytest.mark.parametrize("edit", [
-    lambda v: v.update(program="blastdbcmd"), lambda v: v.update(version="blast_utility_operation_v2"),
+    lambda v: v.update(program="blastdbcmd"), lambda v: v.update(version="blast_preparation_operation"),
     lambda v: v.update(molecule="protein"), lambda v: v["parameters"].update(ref=True),
     lambda v: v["parameters"].update(line_length=True), lambda v: v["parameters"].update(line_length=0),
     lambda v: v["parameters"].update(output_format="fasta"),
@@ -366,7 +366,7 @@ def test_saved_results_revalidate_without_io_and_only_exact_result_programs_disp
     monkeypatch.setattr(subprocess, "Popen", forbidden)
     monkeypatch.setattr(Path, "read_bytes", forbidden)
     assert validate_vdb_sequence_extraction(value) == value
-    for version in ("blast_sequence_extraction_v1", "blast_database_inspection_v2", "blast_database_inspection_v3"):
+    for version in ("blast_sequence_extraction", "blast_prepared_database_inspection", "blast_vdb_database_inspection"):
         bad = deepcopy(value); bad["version"] = version
         with pytest.raises(ContractError): validate_blast_utility_result(bad)
 

@@ -54,13 +54,13 @@ def setup_store(store, ctx, *, full=True):
         observations = parsed['primitive_observations']
         order = ['q', 'g', 'k', 'E', 'u', 'v']
         diagonal = [0.04, 0.0225, 0.0025, 10000, 0.01, 0.01]
-        covariance = {'version': 'a105_primitive_covariance_v1', 'primitive_order': order, 'primitive_measurement_keys': [observations[key]['measurement_key'] for key in order], 'primitive_units': [observations[key]['raw_unit'] for key in order], 'covariance': [[diagonal[i] if i == j else 0.0 for j in range(6)] for i in range(6)], 'origin': 'synthetic'}
+        covariance = {'version': 'a105_primitive_covariance', 'primitive_order': order, 'primitive_measurement_keys': [observations[key]['measurement_key'] for key in order], 'primitive_units': [observations[key]['raw_unit'] for key in order], 'covariance': [[diagonal[i] if i == j else 0.0 for j in range(6)] for i in range(6)], 'origin': 'synthetic'}
         cov = source(canonical(covariance), 'synthetic_assay_covariance')
         args['covariance_source_ref'] = cov
         references.append(cov)
     else:
         args['primitives']['g'] = None
-    assignment = {'version': 'literature_assignment_v1', 'question_context_refs': [], 'source_refs': references, 'requested_assay_components': COMPONENTS}
+    assignment = {'version': 'literature_assignment', 'question_context_refs': [], 'source_refs': references, 'requested_assay_components': COMPONENTS}
     context = LiteratureContext(ctx.run_id, ctx.episode_id, 'literature', (('literature', 'case'),), store.validate_scope({'subject_refs': store.problem()['subject_refs']}), assignment, {}, references)
     return (store, context, args)
 

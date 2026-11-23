@@ -11,8 +11,8 @@ from fractions import Fraction
 import math
 import numpy as np
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_experimental_contracts import ExperimentalContractError
-OPERANDS_VERSION = 'a105_nadh_optical_rate_operands_v1'
-VERSION = 'a105_nadh_optical_rate_cells_v1'
+OPERANDS_VERSION = 'a105_nadh_optical_rate_operands'
+VERSION = 'a105_nadh_optical_rate_cells'
 PRIMITIVE_ORDER = ('sample_slope', 'blank_slope', 'epsilon', 'path_length')
 _UNITS = ('absorbance/min', 'absorbance/min', 'mM^-1cm^-1', 'cm')
 _ENUMS = {'covariance_status': ('known', 'estimated', 'unknown'), 'relation': ('applicable_extinction_relation', 'not_applicable', 'unknown', 'conflicting'), 'blank_role': ('matched_no_reaction_background', 'condition_reference', 'component_omission', 'unknown', 'conflicting'), 'same_endpoint': ('same', 'different', 'unknown'), 'matched_window': ('same', 'different', 'unknown'), 'rate_window': ('source_supported_rate_interval', 'interval_mean_only', 'static_only', 'unknown')}

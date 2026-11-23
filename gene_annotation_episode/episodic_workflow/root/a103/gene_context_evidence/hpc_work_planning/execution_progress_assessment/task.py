@@ -104,7 +104,7 @@ def _observe_progress(ctx, arguments):
         'arguments[\'target_handle\'], arguments[\'requested_fields\'], '
         'permitted_committed_record_types=arguments[\'permitted_committed_record_types\'], '
         'key=ctx.operation_key, **({\'native_operation\': arguments[\'native_operation\']} if \'native_operation\' '
-        'in arguments else {})), returning the progress_snapshot_v1 of the observation, with the original '
+        'in arguments else {})), returning the progress_snapshot of the observation, with the original '
         'identity of an unchanged observation (the old ProgressProvider.observe)')
 
 

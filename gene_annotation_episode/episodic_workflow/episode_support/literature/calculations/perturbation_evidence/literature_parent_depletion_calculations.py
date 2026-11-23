@@ -45,7 +45,7 @@ def populate_parent_depletion_components(extraction):
             'source_cell_addresses':[values[role]['address'] for role in roles],
             'reported_sd_of_difference':None,'standard_error_of_difference':None,
             'difference_uncertainty_status':'joint_replication_and_covariance_unknown'}
-    return {'version':'a105_parent_depletion_sheet_v1','axis':'A105',
+    return {'version':'a105_parent_depletion_sheet','axis':'A105',
         'evaluation_scope':'finite_parent_compound_removal','cells':cells,
         'reported_difference_check_tolerance':str(CHECK_TOLERANCE),
         'active_minus_inactive_reported_discrepancy':str(calculated['active_minus_inactive']-dec('reported_active_minus_inactive')),

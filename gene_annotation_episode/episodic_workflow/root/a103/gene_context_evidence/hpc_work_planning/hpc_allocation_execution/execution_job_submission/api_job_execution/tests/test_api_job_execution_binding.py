@@ -62,10 +62,10 @@ def test_no_module_imports_another_episode_folder():
 def test_the_assignment_admits_both_old_assignment_versions_and_the_return_declares_credit_and_finding():
     from_parent = importlib.import_module(MODULE + '.messages.read_from_parent')
     final = importlib.import_module(MODULE + '.messages.final_to_parent')
-    service_job = {'version': 'api_service_assignment_v1', 'resource_id': 'blast', 'service': 'ncbi_blast',
+    service_job = {'version': 'api_service_assignment', 'resource_id': 'blast', 'service': 'ncbi_blast',
                    'request': {'program': 'blastp'}, 'endpoint': 'usable_handoff', 'constraints': {},
                    'completion_target': 1.0}
-    hmmer = {'version': 'api_execution_assignment_v1', 'resource_id': 'hmmer', 'service': 'ebi_hmmer',
+    hmmer = {'version': 'api_execution_assignment', 'resource_id': 'hmmer', 'service': 'ebi_hmmer',
              'subject_ref': 'sub_1', 'algorithm': 'phmmer', 'database': 'pdb', 'parameters': {}, 'page_size': 10,
              'endpoint': 'usable_handoff', 'constraints': {}, 'completion_target': 1.0, 'input_refs': ['sub_1']}
     for assignment in (service_job, hmmer):

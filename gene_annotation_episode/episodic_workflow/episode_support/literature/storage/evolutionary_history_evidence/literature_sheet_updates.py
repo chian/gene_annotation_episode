@@ -19,7 +19,7 @@ from episode_runtime import TableDeclaration
 from gene_annotation_episode.episodic_workflow.episode_support.forms.evolutionary_history_evidence.communication import plain
 from gene_annotation_episode.episodic_workflow.episode_support.records.evolutionary_history_evidence.domain import ContractError, canonical, identity
 
-VERSION = 'literature_sheet_dependencies_v1'
+VERSION = 'literature_sheet_dependencies'
 DEPENDENCIES = TableDeclaration(
     name='literature_sheet_dependencies',
     columns=('sheet_ref', 'family', 'provider', 'adapter', 'method', 'arguments', 'assignment',

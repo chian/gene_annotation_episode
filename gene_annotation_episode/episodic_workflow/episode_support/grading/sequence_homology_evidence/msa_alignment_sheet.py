@@ -1,4 +1,4 @@
-"""The grading of a multiple sequence alignment of the target with reference sequences (``msa_alignment_sheet_v1``).
+"""The grading of a multiple sequence alignment of the target with reference sequences (``msa_alignment_sheet``).
 
 The aligned FASTA is read by the existing ``phylogeny_formats.parse_aligned_fasta`` (first whitespace token is the row's
 name). Each row, with its gaps removed, must be the sequence that was given for it (``alignment_row_differs_from_input``
@@ -23,7 +23,7 @@ import hashlib
 from gene_annotation_episode.episodic_workflow.episode_support.readers.phylogeny.phylogeny_formats import (
     parse_aligned_fasta)
 
-SCHEMA = 'msa_alignment_sheet_v1'
+SCHEMA = 'msa_alignment_sheet'
 # the owner accepted: at least 80% of the group's sequences share the residue, and the group has at least 3 sequences
 MINIMUM_SHARE = 0.8
 MINIMUM_GROUP_SIZE = 3

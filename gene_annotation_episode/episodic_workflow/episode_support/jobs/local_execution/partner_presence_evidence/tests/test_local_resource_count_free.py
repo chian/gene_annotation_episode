@@ -47,7 +47,7 @@ def test_ordinary_constructor_retains_empty_database_initialization(tmp_path):
     with closing(sqlite3.connect(directory / 'capacity.sqlite3')):
         pass
     owner = resources_module.LocalResources(directory)
-    assert owner.as_record()['version'] == 'shared_local_resources_v3'
+    assert owner.as_record()['version'] == 'shared_local_resources'
     assert set(owner.as_record()['limits']) == {'memory_bytes', 'scratch_bytes'}
 
 

@@ -29,7 +29,7 @@ signal_to_noise_minor, signal_to_noise_refs, replicate_count, replicate_independ
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_distribution_nmr_criteria import DISTRIBUTION_NMR_CRITERIA
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_distribution_nmr_grade_v1'
+VERSION = 'a105_distribution_nmr_grade'
 CRITERIA = tuple(criterion['id'] for criterion in DISTRIBUTION_NMR_CRITERIA)
 INTERACTION = {'yes': 'detected', 'no': 'not_detected'}   # the stated yes/no result of the fact claimed_product_detected
 SECONDS_PER_UNIT = {'s': 1.0, 'ms': 1.0e-3}   # FIXED_BY_DEFINITION: a millisecond is a thousandth of a second.

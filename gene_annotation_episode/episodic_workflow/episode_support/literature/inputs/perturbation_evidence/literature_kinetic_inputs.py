@@ -19,8 +19,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.perturbation_evidence.literature_rate_native_inputs import _number, _field_contexts, _PHYSICAL_UNIT, _APPROX, _UPPER, _LOWER
 
 
-VERSION = "a105_kinetic_source_extraction_v3"
-SELECTION_VERSION = "a105_kinetic_source_selection_v1"
+VERSION = "a105_kinetic_source_extraction"
+SELECTION_VERSION = "a105_kinetic_source_selection"
 SOURCE_KINDS = ("primary_source", "synthetic_fixture")
 PARAMETER_UNITS = {"Km": "uM", "kcat": "per_min", "catalytic_efficiency": "uM^-1min^-1"}
 SUBJECT_FIELDS = ("organism", "genotype", "molecule", "construct")
@@ -570,7 +570,7 @@ def read_kinetic_inputs(selection, *, read_source):
     sources.source(selection["source_ref"], "original")
     comparison = {name: _interpret(value, sources, "comparison." + name) for name, value in selection["comparison"].items()}
     source_origin = "synthetic" if selection["source_kind"] == "synthetic_fixture" else "reported"
-    inputs = {"version": "a105_kinetic_contrast_inputs_v1", **{name: row["value"] for name, row in comparison.items()}}
+    inputs = {"version": "a105_kinetic_contrast_inputs", **{name: row["value"] for name, row in comparison.items()}}
     operands, reasons = {}, {}
     for role in ("numerator", "denominator"):
         operands[role], inputs[role], reasons[role] = _operand(selection[role], sources, source_origin)

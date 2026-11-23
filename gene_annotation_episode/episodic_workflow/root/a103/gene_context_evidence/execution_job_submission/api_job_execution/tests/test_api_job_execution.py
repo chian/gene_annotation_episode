@@ -17,7 +17,7 @@ TEN_FILES = {'__init__.py', 'goal.py', 'task.py', 'credit.py', 'yield_estimator.
              'messages/__init__.py', 'messages/read_from_parent.py', 'messages/internal_summary.py',
              'messages/final_to_parent.py'}
 ROOT_PACKAGE = 'gene_annotation_episode.episodic_workflow.root'
-ASSIGNMENT = {'version': 'api_service_assignment_v1', 'resource_id': 'ncbi_blast', 'service': 'ncbi_blast',
+ASSIGNMENT = {'version': 'api_service_assignment', 'resource_id': 'ncbi_blast', 'service': 'ncbi_blast',
               'endpoint': 'usable_handoff', 'constraints': {}, 'request': {'program': 'blastp'},
               'immutable_input_versions': {}, 'scope': {'subject_refs': []}, 'input_refs': [],
               'completion_target': 2.0}
@@ -62,7 +62,7 @@ def test_the_assignment_form_admits_one_assignment_and_refuses_a_missing_field(e
     with pytest.raises(FormError):
         form.admit({name: value for name, value in ASSIGNMENT.items() if name != 'completion_target'}, 'assignment')
     with pytest.raises(FormError):
-        form.admit({**ASSIGNMENT, 'version': 'practical_assignment_v1'}, 'assignment')
+        form.admit({**ASSIGNMENT, 'version': 'practical_assignment'}, 'assignment')
 
 
 def test_read_from_parent_keeps_the_old_properties_and_the_new_fields(episode_module):
@@ -102,7 +102,7 @@ def test_final_to_parent_returns_the_recorded_facts_and_the_systems_credit(episo
 def test_the_controller_is_completion_toward_the_commissioned_target(episode_module):
     cls = episode_module.ApiJobExecution
     hmmer = {name: value for name, value in ASSIGNMENT.items() if name != 'request'}
-    hmmer.update(version='api_execution_assignment_v1', resource_id='ebi_hmmer', service='ebi_hmmer',
+    hmmer.update(version='api_execution_assignment', resource_id='ebi_hmmer', service='ebi_hmmer',
                  subject_ref='subject_a', algorithm='phmmer', database='pdb', parameters={}, page_size=10)
     parent_input = cls.read_from_parent(hmmer, {})
     settings = {'task_yield_profiles': {'launch_api:api_ebi_hmmer_phmmer_pdb_handoff':

@@ -40,7 +40,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     DIALYSIS_CRITERIA, H_PER_UNIT, MM_PER_SALT_UNIT, NM_PER_UNIT, PERCENT_FULL)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_dialysis_grade_v1'
+VERSION = 'a105_dialysis_grade'
 CRITERIA = tuple(criterion['id'] for criterion in DIALYSIS_CRITERIA)
 INTERACTION = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact binding_detected
 CONSTANTS = ('kd', 'ki')                                  # the order in which the binding constant of a record is taken

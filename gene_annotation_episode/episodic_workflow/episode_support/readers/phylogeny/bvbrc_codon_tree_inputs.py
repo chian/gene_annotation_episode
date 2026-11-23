@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.phylogeny.b
 
 __all__ = ["extract_codon_tree_sheet", "validate_codon_tree_sheet"]
 
-_HEADER = {"schema_version": "bvbrc_codon_tree_sheet_v1", "tool": "C-L193-CodonTree",
+_HEADER = {"schema_version": "bvbrc_codon_tree_sheet", "tool": "C-L193-CodonTree",
            "mode": "core_genome_codon_protein"}
 _FAMILY_KEYS = {"family_id", "namespace", "matrix", "matrix_completeness", "memberships", "inclusion",
                 "native_statistic_observation_ids", "final_block_indices"}

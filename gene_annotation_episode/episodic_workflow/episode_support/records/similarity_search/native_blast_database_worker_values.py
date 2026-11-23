@@ -23,11 +23,11 @@ _SHEET_KEYS = {"schema", "collection", "prepared_inputs", "derived_search_bindin
 
 _CALC_KEYS = {"schema", "sequence_model", "iteration", "profile", "vdb", "pssm", "search_facts", "native_hsp_components", "issues"}
 
-_FUNCTION_REQUEST = "native_blast_database_result_worker_request_vdb_function_v1"
+_FUNCTION_REQUEST = "native_blast_database_result_worker_request_vdb_function"
 
-_FUNCTION_SHEETS = "native_blast_database_sheet_set_vdb_function_v1"
+_FUNCTION_SHEETS = "native_blast_database_sheet_set_vdb_function"
 
-_FUNCTION_CALCULATIONS = "native_blast_database_calculations_vdb_function_v1"
+_FUNCTION_CALCULATIONS = "native_blast_database_calculations_vdb_function"
 
 _REASON_MAP = {None: "missing_input", "missing_input": "missing_input", "not_measured": "not_measured",
     "incompatible_input": "incompatible_input", "invalid_native_row": "invalid_native_row", "partial_output": "partial_output",
@@ -150,14 +150,14 @@ def native_blast_database_input_identity(request):
     """Identity of selected captured inputs; no path lookup or interpretation."""
     request = _views._copy(request)
     try:
-        value = dict(version="native_blast_database_input_identity_v1",
+        value = dict(version="native_blast_database_input_identity",
             bundle=dict(artifact_ref=request["bundle_artifact_ref"], **{k: request["bundle_capture"][k] for k in ("sha256", "size_bytes")}),
             authenticated_attempt=request["authenticated_attempt"],
             artifacts=[{k: r[k] for k in ("artifact_key", "artifact_ref", "sha256", "size_bytes")} for r in request["artifacts"]],
             metadata_descriptors=request["metadata_descriptors"],
             retained_sources=[{k: r[k] for k in ("source_ref", "artifact_ref", "sha256", "size_bytes")} for r in request["retained_sources"]],
             subject_snapshots=[{k: r[k] for k in _SNAPSHOT_ID} for r in request["subject_snapshots"]])
-        _shape(value, _views._object(dict(version={"const": "native_blast_database_input_identity_v1"}, bundle=_views._object(_FILE_ID),
+        _shape(value, _views._object(dict(version={"const": "native_blast_database_input_identity"}, bundle=_views._object(_FILE_ID),
             authenticated_attempt=_ATTEMPT, artifacts=_views._array(_views._object(dict(artifact_key=_views._TOKEN, **_FILE_ID))),
             metadata_descriptors=_views._array(_descriptor(request.get("version") == _FUNCTION_REQUEST)), retained_sources=_views._array(_views._object(dict(source_ref=_views._REF, **_FILE_ID))),
             subject_snapshots=_views._array(_views._object(_SNAPSHOT_ID)))))
@@ -170,16 +170,16 @@ def native_blast_database_calculation_identity(*, input_identity, sequence_model
     """Separate input interpretation from the selected numerical generation."""
     _shape(input_identity, _views._SHA)
     model = _model(sequence_model)
-    interpretation = _hash(dict(version="native_blast_database_interpretation_identity_v1",
+    interpretation = _hash(dict(version="native_blast_database_interpretation_identity",
         input_identity=input_identity))
     if vdb_function_model is not None:
         from gene_annotation_episode.episodic_workflow.episode_support.calculations.similarity_search.sequence_homology_evidence.blast_vdb_function_calculators import validate_blast_vdb_function_model
         function_model = validate_blast_vdb_function_model(vdb_function_model)
         return dict(input_interpretation_id=interpretation, calculation_id=_hash(dict(
-            version="native_blast_vdb_function_calculation_identity_v1", input_interpretation_id=interpretation,
-            base_calculation_contract=dict(schema="native_blast_database_calculations_v1", sequence_model=model),
+            version="native_blast_vdb_function_calculation_identity", input_interpretation_id=interpretation,
+            base_calculation_contract=dict(schema="native_blast_database_calculations", sequence_model=model),
             model=function_model)))
-    return dict(input_interpretation_id=interpretation, calculation_id=_hash(dict(version="native_blast_database_calculation_identity_v1",
+    return dict(input_interpretation_id=interpretation, calculation_id=_hash(dict(version="native_blast_database_calculation_identity",
         input_interpretation_id=interpretation, sequence_model=model)))
 
 def _search_binding_rows(sheet_set):
@@ -238,7 +238,7 @@ def _source_statuses(collection):
 def populate_native_blast_database_search_facts(collection, *, source_statuses, search_bindings):
     """Count original native containers; no scoring, I/O or private 311 call."""
     collection, source_statuses, search_bindings = map(_views._copy, (collection, source_statuses, search_bindings))
-    if collection.get("schema") != "blast_report_collection_v1":
+    if collection.get("schema") != "blast_report_collection":
         raise ValueError("native_blast_database_collection_required")
     keys = [canonical(s["search_key"]) for s in collection["searches"]]
     if (len(keys) != len(set(keys)) or type(source_statuses) is not list or len(source_statuses) != len(keys)
@@ -334,7 +334,7 @@ def _sheet_binding(sheet_set):
     if type(sheet_set) is not dict:
         raise ValueError("native_blast_database_sheet_set_invalid")
     _population_sheet_binding(sheet_set)
-    if sheet_set.get("schema") == "native_blast_database_sheet_set_v1" and set(sheet_set) == _SHEET_KEYS:
+    if sheet_set.get("schema") == "native_blast_database_sheet_set" and set(sheet_set) == _SHEET_KEYS:
         return None
     if sheet_set.get("schema") == _FUNCTION_SHEETS:
         if (set(sheet_set) != _SHEET_KEYS | {"vdb_function"}
@@ -352,7 +352,7 @@ def _sheet_binding(sheet_set):
             validate_blast_vdb_function_sheet(row["sheet"])
             seen.add(key)
         return None
-    if (sheet_set.get("schema") != "native_blast_database_sheet_set_v2"
+    if (sheet_set.get("schema") != "native_blast_database_sheet_set_with_native_convergence"
             or set(sheet_set) != _SHEET_KEYS | {"native_convergence"}
             or sheet_set["collection"]["invocation"]["execution_program"] not in ("psiblast", "deltablast")):
         raise ValueError("native_blast_database_sheet_set_invalid")
@@ -369,12 +369,12 @@ def _sheet_binding(sheet_set):
     return binding
 
 def _population_sheet_binding(sheet_set):
-    """Validate the saved v3 handoff using the metadata owner's validator."""
+    """Validate the saved handoff using the metadata owner's validator."""
     from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.sequence_homology_evidence.native_blast_database_population_metadata import SEQUENCE_POPULATION_METADATA_SCHEMA, validate_native_blast_database_population_associations, _population_search_units
     prepared = sheet_set.get("prepared_inputs", {})
     validations = [v for v in prepared.get("metadata", []) if v.get("schema_id") == SEQUENCE_POPULATION_METADATA_SCHEMA]
     sequence_rows = sheet_set.get("sequence", [])
-    selected = [r for r in sequence_rows if r["sheet"].get("schema") == "blast_sequence_database_result_sheet_v3"]
+    selected = [r for r in sequence_rows if r["sheet"].get("schema") == "blast_sequence_database_result_sheet_population"]
     if not validations and not selected:
         return
     records = [r for v in validations for r in v["population_source_records"]]
@@ -388,7 +388,7 @@ def _population_sheet_binding(sheet_set):
         if len(searches) != 1:
             raise ValueError("blast_database_population_saved_relation_conflict")
         has_population = any(_population_search_units(searches[0], prepared, records))
-        if has_population != (scientific.get("schema") == "blast_sequence_database_result_sheet_v3"):
+        if has_population != (scientific.get("schema") == "blast_sequence_database_result_sheet_population"):
             raise ValueError("blast_database_population_saved_relation_conflict")
         if not has_population:
             continue
@@ -410,7 +410,7 @@ def _population_sheet_binding(sheet_set):
         and any(_population_search_units(s, prepared, records))]
     if (sorted(map(canonical, actual)) != sorted(map(canonical, expected))
             or sorted(map(canonical, original)) != sorted(map(canonical, expected))
-            or bool(expected) != (iteration["schema"] == "blast_iteration_sheet_v3")):
+            or bool(expected) != (iteration["schema"] == "blast_iteration_sheet_population")):
         raise ValueError("blast_database_population_saved_relation_conflict")
 
 def calculate_native_blast_database_sheets(sheet_set, *, sequence_model, vdb_function_model=None, saved_calculations=None):
@@ -445,7 +445,7 @@ def calculate_native_blast_database_sheets(sheet_set, *, sequence_model, vdb_fun
             else:
                 out["vdb_function"].append(dict(search_key=deepcopy(row["search_key"]), components=component))
         return out
-    out = dict(schema="native_blast_database_calculations_v1", sequence_model=model, iteration=None,
+    out = dict(schema="native_blast_database_calculations", sequence_model=model, iteration=None,
         profile=[], vdb=[], pssm=[], search_facts=[], native_hsp_components=[], issues=[])
     if program in ("psiblast", "deltablast"):
         if sheet_set["iteration"] is None:
@@ -570,8 +570,8 @@ class _Rows:
             cell["component_pointer"] = pointer
             if not any(ref["artifact_role"] == role and (ref["pointer"] == pointer or pointer.startswith(ref["pointer"] + "/")) for ref in component_refs):
                 component_refs.append(dict(artifact_role=role, pointer=pointer))
-        row = dict(schema="native_blast_database_numeric_row_v1", family=family,
-            record_key=identity("native_blast_database_row", dict(version="native_blast_database_row_identity_v1", attempt=self.attempt, family=family, identity=row_identity)),
+        row = dict(schema="native_blast_database_numeric_row", family=family,
+            record_key=identity("native_blast_database_row", dict(version="native_blast_database_row_identity", attempt=self.attempt, family=family, identity=row_identity)),
             calculation_id=self.calculation_id, identity=deepcopy(row_identity), program=self.program, context=context,
             component_refs=component_refs,
             native_status=status, measurements=cells, booleans=boolean_cells)
@@ -709,7 +709,7 @@ def _sequence_quality_source(database, association):
         blast_record_identity(**source, record_locator=locator)
         binding = association.get("description_binding")
         index = association.get("binding_index")
-        if (database["schema"] not in ("blast_database_sheet_v2", "blast_database_sheet_v3") or type(index) is not int or index < 0
+        if (database["schema"] not in ("blast_database_sheet_record_locator", "blast_database_sheet_population") or type(index) is not int or index < 0
                 or index >= len(database.get("description_bindings", [])) or type(binding) is not dict
                 or database["description_bindings"][index] != binding
                 or any(binding.get(k) != association.get(k) for k in ("report_index", "hit_index", "description_index", "metadata_index"))
@@ -982,8 +982,8 @@ def _vdb_function_rows(builder, component, base):
         for cell in [*cells, *booleans]:
             # Exact pointers must resolve, including null-valued cells.
             _at(builder.calculations, cell["component_pointer"])
-        builder.rows.append(dict(schema="native_blast_vdb_function_numeric_row_v1", family=family,
-            record_key=identity("native_blast_database_row", dict(version="native_blast_database_row_identity_v1",
+        builder.rows.append(dict(schema="native_blast_vdb_function_numeric_row", family=family,
+            record_key=identity("native_blast_database_row", dict(version="native_blast_database_row_identity",
                 attempt=builder.attempt, family=family, identity=ident)), calculation_id=builder.calculation_id,
             identity=deepcopy(ident), program=builder.program, context=builder.context(key),
             component_refs=refs or [dict(artifact_role="calculations", pointer=base)], native_status=status,
@@ -1045,7 +1045,7 @@ def build_native_blast_database_rows(*, bundle_identity, calculation_id, sheet_s
     _sheet_binding(sheet_set)
     function_mode = sheet_set["schema"] == _FUNCTION_SHEETS
     if (set(calculations) != _CALC_KEYS | ({"vdb_function_model", "vdb_function"} if function_mode else set())
-            or calculations["schema"] != (_FUNCTION_CALCULATIONS if function_mode else "native_blast_database_calculations_v1")):
+            or calculations["schema"] != (_FUNCTION_CALCULATIONS if function_mode else "native_blast_database_calculations")):
         raise ValueError("native_blast_database_row_inputs_invalid")
     builder = _Rows(bundle_identity, calculation_id, sheet_set, calculations)
     _search_rows(builder); _hsp_rows(builder)

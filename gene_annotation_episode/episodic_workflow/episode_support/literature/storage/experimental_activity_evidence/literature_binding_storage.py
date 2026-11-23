@@ -22,7 +22,7 @@ ARRANGEMENTS = ('single_preparation', 'separate_preparations', 'protein_mixture'
 REPRESENTATIONS = ('retained_visual_transcription', 'primary_table', 'synthetic_fixture')
 BINDINGS = ('subject_ref', 'state_ref', 'experiment_ref', 'reference_ligand_ref', 'test_ligand_ref')
 COMPARISON_FIELDS = ('subject', 'state', 'experiment', 'reference_ligand', 'test_ligand', 'parameter_kind', 'design', 'protein_arrangement')
-FORMULA_CODES = {name: 'binding_' + name + '_v1' for name in COMPONENTS}
+FORMULA_CODES = {name: 'binding_' + name for name in COMPONENTS}
 FORMULA_MEANINGS = {FORMULA_CODES[name]: FORMULAS[name] for name in COMPONENTS}
 
 def binding_population_schema():
@@ -36,7 +36,7 @@ RECEIVED = received_ledger('literature_binding_received')
 class LiteratureBindingRepository(LiteratureRateRepository):
     provider = PROVIDER
     components = COMPONENTS
-    record_version = 'literature_binding_parameter_record_v1'
+    record_version = 'literature_binding_parameter_record'
     operations = OPERATIONS
     received = RECEIVED
     binding_fields = BINDINGS

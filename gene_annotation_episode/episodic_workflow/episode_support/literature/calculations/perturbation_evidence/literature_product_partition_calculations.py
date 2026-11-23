@@ -3,7 +3,7 @@ from fractions import Fraction
 import math
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.perturbation_evidence.literature_product_partition_inputs import validate_product_partition_extraction
 
-VERSION = "a105_product_partition_components_v1"
+VERSION = "a105_product_partition_components"
 COMPONENTS = ("partition_a_fraction", "partition_b_fraction", "selected_fraction_sum",
               "selected_closure_deviation", "partition_a_over_b")
 REASONS = ("source_measurement_unavailable", "source_fraction_unit_unreported",

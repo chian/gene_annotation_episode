@@ -18,8 +18,8 @@ PREFIX = "native_blast_masking_"
 QUANTITIES = ("input_length", "native_interval_count", "merged_interval_count",
               "masked_positions", "unmasked_positions", "changed_positions", "masked_fraction")
 STATISTICS_FIELDS = ("format_version", "algorithm_version", "unit_length", "thresholds", "percentiles")
-SAVED_SCHEMAS = {"sheet": "sequence_masking_sheet_v1", "calculations": "sequence_masking_components_v1",
-                 "parsed_statistics": "windowmasker_statistics_v1"}
+SAVED_SCHEMAS = {"sheet": "sequence_masking_sheet", "calculations": "sequence_masking_components",
+                 "parsed_statistics": "windowmasker_statistics"}
 IDENTIFIER_NAMESPACES = tuple(PREFIX + name for name in ("record", "occurrence", "statistics"))
 _STR = {"type": "string", "minLength": 1}
 _NULL_STR = {"type": ["string", "null"], "minLength": 1}
@@ -85,7 +85,7 @@ SAVED_DATA_SCHEMA = _object({"source_ref": _SOURCE, "kind": {"enum": list(SAVED_
 _SLOT_SCHEMA = _object({"direction": {"enum": ["input", "output"]},
     "role": ARTIFACT_SCHEMA["properties"]["role"], "ordinal": {"type": "integer", "const": 0}})
 NATIVE_BLAST_MASKING_RESULT_SELECTOR_SCHEMA = _object({
-    "version": {"const": PREFIX + "result_selector_v1"}, "mode": {"enum": ["native_result", "saved_recalculation"]},
+    "version": {"const": PREFIX + "result_selector"}, "mode": {"enum": ["native_result", "saved_recalculation"]},
     "records": {"oneOf": [_object({"mode": {"const": "all"}}), _object({"mode": {"const": "selected"},
         "entries": _array(_object({"operand_role": {"const": "sequences"},
             "operand_ordinal": {"type": "integer", "const": 0}, "record_ordinal": _UINT}), unique=True)})]},

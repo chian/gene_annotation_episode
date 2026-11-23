@@ -107,7 +107,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_product_distribution_direction import select_product_distribution_effect
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_distribution_radio_tlc_converted_v1'
+VERSION = 'a105_distribution_radio_tlc_converted'
 CRITERIA_MAP = {'species_identity': ('species_assigned_with_standards',),
                 'common_denominator': ('label_retained_by_all_products', 'shares_of_one_lane_total', 'lane_recovery_stated'),
                 'response_factors': ('equal_label_per_molecule', 'detection_efficiency_matched'),

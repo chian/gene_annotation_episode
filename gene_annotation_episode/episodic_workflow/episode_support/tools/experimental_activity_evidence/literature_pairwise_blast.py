@@ -39,7 +39,7 @@ PROGRAM_MOLECULES = {'blastp': (('protein',), ('protein',)), 'blastn': (NUCLEOTI
                      'blastx': (NUCLEOTIDE, ('protein',)), 'tblastn': (('protein',), NUCLEOTIDE),
                      'tblastx': (NUCLEOTIDE, NUCLEOTIDE)}
 
-VERSION = 'blast_pairwise_job_v1'
+VERSION = 'blast_pairwise_job'
 _STR = {'type': 'string', 'minLength': 1, 'pattern': '^[^\\u0000]+$'}
 _NULL_STR = {'anyOf': [_STR, {'type': 'null'}]}
 _SHA = {'type': 'string', 'pattern': '^[0-9a-fA-F]{64}$'}

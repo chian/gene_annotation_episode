@@ -38,10 +38,10 @@ def metadata(name, supplied):
 
 
 def snapshot(name, row, convention="unknown"):
-    formats = {"FeatureSnapshot": "bvbrc_genome_feature_json_array_v1",
-               "GenomeSnapshot": "bvbrc_genome_json_array_v1",
-               "FeatureSequenceSnapshot": "bvbrc_feature_sequence_json_array_v1"}
-    value = {"version": "bvbrc_proteome_metadata_proposal_v1", "snapshot_key": "supplied-metadata",
+    formats = {"FeatureSnapshot": "bvbrc_genome_feature_json_array",
+               "GenomeSnapshot": "bvbrc_genome_json_array",
+               "FeatureSequenceSnapshot": "bvbrc_feature_sequence_json_array"}
+    value = {"version": "bvbrc_proteome_metadata_proposal", "snapshot_key": "supplied-metadata",
              "format": formats[name], "source": {"content": {"source_ref": "supplied-test",
                  "artifact_field": "artifact_ref", "artifact_ref": "synthetic-artifact",
                  "sha256": field("")["sha256"], "byte_count": 24},
@@ -61,7 +61,7 @@ def input_index():
     contract = {key: definition["const"] for key, definition in schema.items() if "const" in definition}
     contract.update(deployment_match="unobserved", deployment_evidence=[])
     parent = field("/submitted")
-    value = {"version": "bvbrc_proteome_input_index_proposal_v1",
+    value = {"version": "bvbrc_proteome_input_index_proposal",
              "parameter_source": {"kind": "submitted", "source_field": parent},
              "reference_original_index": 3, "inputs": [], "source_contract": contract,
              "run_parameter_snapshots": [], "diagnostics": []}

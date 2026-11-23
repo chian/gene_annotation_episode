@@ -17,7 +17,7 @@ import json
 import math
 
 
-_SCHEMA = "prodigal_sheet_v1"
+_SCHEMA = "prodigal_sheet"
 _COMPONENTS = ("interval", "strand", "code", "partial_begin", "partial_end",
                "protein_sequence", "native_confidence", "native_score")
 _PROTEIN_SYMBOLS = frozenset("ACDEFGHIKLMNPQRSTVWYBXZJUO*")
@@ -251,7 +251,7 @@ def calculate_prodigal_scores(sheet: dict) -> dict:
     component_counts = {name: {state: sum(row["component_status"][name] == state for row in rows)
                               for state in ("valid", "missing", "invalid")} for name in _COMPONENTS}
     return {
-        "schema": "prodigal_scores_v1", "status": sheet["status"],
+        "schema": "prodigal_scores", "status": sheet["status"],
         "mode": sheet["mode"], "translation_code": sheet["translation_code"],
         "candidates": rows,
         "summary": {

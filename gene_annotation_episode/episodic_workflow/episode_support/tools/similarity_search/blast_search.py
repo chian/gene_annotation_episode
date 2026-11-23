@@ -7,8 +7,8 @@ import math
 import re
 import zipfile
 
-VERSION = "native_blast_single_query_v1"
-HSP_PROJECTION_VERSION = "blast_shared_hsp_projection_v1"
+VERSION = "native_blast_single_query"
+HSP_PROJECTION_VERSION = "blast_shared_hsp_projection"
 PROGRAM_UNITS = {"blastn": ("nt", "nt", "nt"), "blastp": ("aa", "aa", "aa"),
     "blastx": ("nt", "aa", "aa"), "tblastn": ("aa", "nt", "aa"), "tblastx": ("nt", "nt", "aa")}
 
@@ -139,7 +139,7 @@ def shared_hsp_component(grading, *, hit_ordinal, hsp_ordinal, address=None):
     ordinals. Equal scores/aliases cannot join independent native records.
     """
     sheet = grading.get("sheet") if isinstance(grading, dict) else None
-    if not isinstance(sheet, dict) or sheet.get("schema") != "blast_database_sheet_v1":
+    if not isinstance(sheet, dict) or sheet.get("schema") != "blast_database_sheet":
         raise ValueError("blast_shared_grading_unavailable")
     matches = []
     for hit_row, hit in enumerate(sheet["hits"]):

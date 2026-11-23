@@ -26,7 +26,7 @@ import gene_annotation_episode.episodic_workflow.episode_support.jobs.similarity
 
 
 def result_selector(**changes):
-    return {"version": "native_blast_utility_result_selector_v2", "sequences": None,
+    return {"version": "native_blast_utility_result_selector", "sequences": None,
         "database_fields": [], "integrity": None, "preparation": None,
         "prepared_database": False, "include_checks": False, "artifacts": [],
         "saved_data": [], "paths": None, "vdb_context": False, **changes}
@@ -94,7 +94,7 @@ def test_unqualified_database_list_is_missing_without_suppressing_available_stdo
         receipt, _, _ = selected_failure(store, capture, tmp_path / "failure", selector=chosen)
         projection = receipt["projection"]
         assert [r["role"] for r in projection["artifacts"]] == ["stdout"]
-        assert projection["missing"] == [{"version": "native_blast_utility_missing_fact_v2",
+        assert projection["missing"] == [{"version": "native_blast_utility_missing_fact",
             "source_ref": capture["source_ref"], "request": {"type": "artifact", "slot": chosen["artifacts"][0]},
             "reason": "artifact_unavailable"}]
         assert capture == original

@@ -2,7 +2,7 @@
 from copy import deepcopy
 import math
 
-VERSION = 'signed_root_axis_scalar_mappings_v1'
+VERSION = 'signed_root_axis_scalar_mappings'
 
 def _number(value, *, minimum=None, maximum=None):
     if (type(value) not in (int, float) or not math.isfinite(value)

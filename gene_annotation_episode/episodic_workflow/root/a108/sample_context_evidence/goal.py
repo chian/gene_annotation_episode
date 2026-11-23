@@ -2,7 +2,7 @@
 parent-selected evidence axis A108, thought pattern and selected tools. Carried from the old ``goal.py``
 (``ScientificGoal.instructions``) at 97308b94c.
 
-``GOAL`` is the old text for an axis entry that is an instruction entry (``evidence_axis_instruction_v1``), which
+``GOAL`` is the old text for an axis entry that is an instruction entry (``evidence_axis_instruction``), which
 replaced the default instructions completely. The old text said the head could also "wait for selected pending work"
 and named ``process.revise``; the wait action does not exist (README 3b) and the tool is ``process_revise`` here. The
 other old text (an axis entry that is an evidence-axis entry, appended to the default instructions) is

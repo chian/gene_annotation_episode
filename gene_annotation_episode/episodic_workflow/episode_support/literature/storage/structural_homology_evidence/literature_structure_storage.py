@@ -43,8 +43,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.structura
 
 PROVIDER = "literature.experimental.structure"
 SOURCE_NAME = "literature_structure_cells"
-RECORD_VERSION = "literature_structure_record_v1"
-FORMULA_CODES = {name: "structure_" + name + "_v1" for name in COMPONENTS}
+RECORD_VERSION = "literature_structure_record"
+FORMULA_CODES = {name: "structure_" + name for name in COMPONENTS}
 BINDINGS = {
     "assayed_subject_ref": ("molecule", "reference"),
     "construct_ref": ("construct", "reference"),

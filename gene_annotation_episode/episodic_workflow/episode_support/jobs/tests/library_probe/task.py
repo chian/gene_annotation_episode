@@ -75,7 +75,7 @@ def publish_practical_job(arguments, ctx):
     scope = {'subject_refs': arguments['subject_refs']}
     sha = digest(assignment)
     snapshot = ctx.store.artifact(json.dumps({
-        'version': 'practical_receipt_assignment_v1', 'run_id': ctx.run_id, 'episode_id': ctx.episode_id,
+        'version': 'practical_receipt_assignment', 'run_id': ctx.run_id, 'episode_id': ctx.episode_id,
         'scope': scope, 'assignment': assignment}), 'application/json')
     refs = []
     for index, state in enumerate(arguments['states']):
@@ -86,7 +86,7 @@ def publish_practical_job(arguments, ctx):
                                    {'path': 'answer.txt', 'available': state == 'completed',
                                     'size_bytes': 12 if state == 'completed' else None}]}}}
         artifact = ctx.store.artifact(json.dumps({
-            'version': 'practical_receipt_information_v1', 'run_id': ctx.run_id, 'episode_id': ctx.episode_id,
+            'version': 'practical_receipt_information', 'run_id': ctx.run_id, 'episode_id': ctx.episode_id,
             'assignment_sha256': sha, 'scope': scope, 'receipt': receipt}), 'application/json')
         refs.append(ctx.store.put('source', {
             'provider': 'episode.practical_receipt', 'accession': 'receipt-%d' % index, 'uri': None,

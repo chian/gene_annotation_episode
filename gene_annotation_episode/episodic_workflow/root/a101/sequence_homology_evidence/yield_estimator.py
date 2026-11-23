@@ -17,14 +17,14 @@ what ``read_from_parent`` produced (the task key), never the assignment; the dec
 (``settings['yield_bindings']``).
 
 The definition each action's learned shares are on (``forecast_definitions``: per action type, the digest of the credit
-definition record and that action's own ceiling version, ``credit.CEILING_VERSIONS``) is handed to the controller, and
+definition record and that action's own ceiling name, ``credit.CEILINGS``) is handed to the controller, and
 the estimate ledger's shares of an action are only the rows recorded under that action's definition; its measured
 seconds are every row of the action, whatever the definition. Changing one action's ceiling therefore discards only that
 action's shares."""
 from gene_annotation_episode.episodic_workflow.episode_support.configuration.yield_declarations import (
     checked_yield_declaration, forecast_definitions, open_yield_controller)
 
-from .credit import CEILING_VERSIONS, A101DifferentialCredit
+from .credit import CEILINGS, A101DifferentialCredit
 
 
 def yield_controller(initial_credit, settings, parent_input):
@@ -34,4 +34,4 @@ def yield_controller(initial_credit, settings, parent_input):
                                             yield_method=projector.yield_method, code_prefix='scientific')
     return open_yield_controller(declaration['kind'], epoch='sequence_homology_evidence', initial_credit=initial_credit,
                                  parameters=declaration['parameters'],
-                                 definition=forecast_definitions(projector.as_record(), CEILING_VERSIONS))
+                                 definition=forecast_definitions(projector.as_record(), CEILINGS))

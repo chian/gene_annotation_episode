@@ -180,7 +180,7 @@ def build_protein_structure_sheet(*, fixed: ParsedStructure, moving: ParsedStruc
     corr, source = validate_correspondence(correspondence), validate_correspondence_input(correspondence_input)
     parameters = validate_calculation_parameters(native_request)
     baseline = None if native_baseline is None else validate_protein_structure_components(native_baseline)
-    sheet = {"version": "protein_structure_comparison_sheet_v1", "operation": "compare_protein_structures",
+    sheet = {"version": "protein_structure_comparison_sheet", "operation": "compare_protein_structures",
         "scientific_mode": parameters["mode"],
         "input_identities": {"fixed": deepcopy(structures["fixed"]["file_identity"]),
             "moving": deepcopy(structures["moving"]["file_identity"]), "correspondence": source,
@@ -212,7 +212,7 @@ def parse_native_protein_comparison(native: ComparisonNative, *,
     )
     request = validate_protein_structure_request(expected_request)
     result = validate_native_protein_structure_result(native)
-    if request["operation"] != "compare" or result["version"] != "protein_structure_native_v1":
+    if request["operation"] != "compare" or result["version"] != "protein_structure_native":
         raise ValueError("unsupported_format")
     if not same(request, result["request"]):
         raise ValueError("original_commission_mismatch")

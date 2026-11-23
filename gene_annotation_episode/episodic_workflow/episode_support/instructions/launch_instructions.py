@@ -14,8 +14,8 @@ from jsonschema import Draft202012Validator
 from gene_annotation_episode.episodic_workflow.episode_support.tools.tool_knowledge import ToolKnowledge
 
 
-VERSION = 'launch_instruction_library_v1'
-SELECTION_VERSION = 'launch_instruction_selection_v1'
+VERSION = 'launch_instruction_library'
+SELECTION_VERSION = 'launch_instruction_selection'
 # Launch libraries: the A102/A110 shared library here, each other axis's in launch/<axis role>/.
 LIBRARY_ROOT = Path(__file__).with_name('launch')
 INSTRUCTIONS = (

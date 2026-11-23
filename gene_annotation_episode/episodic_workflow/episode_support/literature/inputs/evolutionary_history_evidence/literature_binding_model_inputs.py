@@ -14,7 +14,7 @@ import math
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.evolutionary_history_evidence.literature_experimental_contracts import ExperimentalContractError
 
 
-MODEL_VERSION = "known_normal_log_binding_v1"
+MODEL_VERSION = "known_normal_log_binding"
 _KINDS = ("ic50", "reported_hill_kd")
 _ORDER = ("reference", "test")
 _FIELDS = ("version", "parameter_kind", "measurement_order", "measurement_keys",

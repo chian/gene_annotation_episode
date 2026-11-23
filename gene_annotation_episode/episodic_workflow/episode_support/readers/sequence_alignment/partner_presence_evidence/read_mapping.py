@@ -24,7 +24,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.acquisition.partn
 from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence.domain import ContractError, canonical
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.local_execution.partner_presence_evidence.local_jobs import LocalJobPolicy, check_scratch_budget, run_local_job_async
 
-VERSION = "minimap2_paf_source_placements_v1"
+VERSION = "minimap2_paf_source_placements"
 PRESETS = ["map-ont", "map-pb", "map-hifi", "lr:hq", "map-iclr", "sr"]
 PARAMETERS = {"kmer": "-k", "window": "-w", "max_secondary": "-N", "seed": "--seed"}
 # Pinned minimap2 2.31: sketch.c requires w<256 and k<=28; exposed
@@ -260,7 +260,7 @@ async def run_mapping(directory, *, configuration, preset, parameters=None, inpu
         status = (error.operational or {}).get("service_exit", {})
         exit_kind, exit_status = status.get("EXIT_CODE"), status.get("EXIT_STATUS")
         if "native_returncode" in (error.operational or {}):
-            # The v2 runner records wrapper and native outcomes separately. A
+            # The runner records wrapper and native outcomes separately. A
             # killed wrapper does not establish the native child's exit code.
             rc = error.operational["native_returncode"]
         elif exit_kind == "exited" and str(exit_status).isdigit():

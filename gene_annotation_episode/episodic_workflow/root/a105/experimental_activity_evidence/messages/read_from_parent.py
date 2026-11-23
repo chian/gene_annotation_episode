@@ -21,9 +21,9 @@ request identity digests (``validate_context``, ``validate_execution_context``).
 from method_loop import DeclaredField, Field, RecordForm
 
 AXIS = 'A105'
-TASK_VERSION = 'evidence_axis_task_v1'
-OPTION_REF_VERSION = 'experimental_activity_evidence_option_ref_v1'
-REVISION_ORIGIN_VERSION = 'experimental_activity_evidence_revision_origin_v1'
+TASK_VERSION = 'evidence_axis_task'
+OPTION_REF_VERSION = 'experimental_activity_evidence_option_ref'
+REVISION_ORIGIN_VERSION = 'experimental_activity_evidence_revision_origin'
 
 OPTION_REF_FORM = RecordForm({
     'version': DeclaredField('text', 'The option reference version', OPTION_REF_VERSION),

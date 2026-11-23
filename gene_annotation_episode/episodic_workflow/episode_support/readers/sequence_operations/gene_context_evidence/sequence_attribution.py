@@ -63,9 +63,9 @@ def sequence_link(store, target, reference_sequence, known, *, alignment_ref=Non
             if record.get('native_blast') and record['native_blast'].get('shared_projection',{}).get('grading_artifact_ref')!=entry['artifact_ref']:
                 continue
             schema = (entry['grading'].get('sheet') or {}).get('schema', '')
-            if schema != 'hmmer_search_sheet_v1' and not schema.startswith('blast_') and schema!='biopython_pairwise_sheet_v1':
+            if schema != 'hmmer_search_sheet' and not schema.startswith('blast_') and schema!='biopython_pairwise_sheet':
                 continue
-            if schema=='biopython_pairwise_sheet_v1':
+            if schema=='biopython_pairwise_sheet':
                 sheet=entry['grading']['sheet']
                 if sheet['molecule']!='protein' or sheet['status']!='complete':continue
                 native=sheet['native_result']

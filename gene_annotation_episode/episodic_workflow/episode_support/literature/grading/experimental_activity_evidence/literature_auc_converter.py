@@ -118,7 +118,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_assay_grading import INPUT_VERSION, ROLES, grade_assay
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_auc_converted_v1'
+VERSION = 'a105_auc_converted'
 CRITERIA_MAP = {'binding_controls': ('components_alone', 'component_homogeneity', 'non_binding_control'), 'binding_regime': ('concentration_series', 'concentration_range', 'reversibility', 'equilibrium_reached', 'multiple_speeds'), 'binding_parameter_definition': ('complex_observed', 'sedimentation_shift', 'mass', 'stoichiometry'), 'calibration_applicability': ('fit_quality', 'buffer_correction'), 'sampling_basis': ('replicates',)}
 SHIFT_FULL_AGREEMENT_PERCENT = 10.0  # EXPERT_REVIEW: smallest increase (percent) of the s of the complex over the s of the larger component alone that the sheet takes as a clear complex peak; binding of a partner a fifth of the mass of the larger component raises s by about 10 percent, and the s of one species is reproducible to 1 to 2 percent.
 SHIFT_ZERO_AGREEMENT_PERCENT = 2.0  # EXPERT_REVIEW: increase (percent) at or below which the s of the complex cannot be told from the larger component alone (the reproducibility of s); a smaller or negative shift is conflicting.

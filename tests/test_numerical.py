@@ -99,7 +99,7 @@ def test_accumulation_contract_takes_a_control_and_items_and_no_cost():
     assert not hasattr(controller, "cost") and not hasattr(controller, "settings")
     with pytest.raises(TypeError):
         AccumulationYieldController("epoch-a", 0, .04, YieldParameters())
-    for control in (.04, YieldParameters(), AccumulationControl("adaptive_marginal_credit_threshold_v2",
+    for control in (.04, YieldParameters(), AccumulationControl("adaptive_marginal_credit_threshold",
                                                                 0.0, 0.0, 8, 8, 4, .05)):
         with pytest.raises(ValueError, match="ADAPTIVE_CONTROL_or_FIXED_CONTROL"):
             AccumulationYieldController("epoch-a", 0, control)
@@ -142,7 +142,7 @@ def test_accumulation_has_no_verdict_before_eight_units_and_stops_after_four_fla
     assert [step.stop for step in fixed].index(True) == 12
     assert [step.stop for step in adaptive].index(True) == 10
     assert all(step.decision.as_record()["continuation_cost"] == .06 for step in fixed)
-    assert adaptive[-1].decision.threshold_update.version == "adaptive_marginal_credit_threshold_v2"
+    assert adaptive[-1].decision.threshold_update.version == "adaptive_marginal_credit_threshold"
     assert adaptive[-1].decision.gamma == adaptive[-1].decision.threshold_update.gamma.value > 0
 
 
@@ -223,7 +223,7 @@ def test_accumulation_state_is_a_yield_table():
     assert table["completed_units"] == 9 and table["current_credit"] == 10
     assert table["expected_next_gain"]["status_code"] == STATUS_NORMAL
     assert table["continuation_cost"] == controller.state().decision.gamma
-    assert table["parameters"]["threshold"] == "adaptive_marginal_credit_threshold_v2"
+    assert table["parameters"]["threshold"] == "adaptive_marginal_credit_threshold"
     json.loads(json.dumps(table))
 
 

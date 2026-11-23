@@ -33,10 +33,10 @@ from gene_annotation_episode.episodic_workflow.episode_support.jobs.profile_mode
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.partner_presence_evidence.practical_execution_state import _immutable, canonical
 
 
-VERSION = "native_hmmer_preparation_capture_v1"
+VERSION = "native_hmmer_preparation_capture"
 PROVIDER = "episode.execution_result"
 _PREFIX = "native_hmmer_preparation_"
-_BUNDLE_VERSION = _PREFIX + "bundle_v1"
+_BUNDLE_VERSION = _PREFIX + "bundle"
 _BUNDLE_FIELDS = {"version", "identity", "requested_job", "program", "mode", "operation",
     "software", "realized_argv", "environment", "inputs", "working_copies", "returncode",
     "artifacts", "failures", "started_at", "finished_at", "native_abi"}
@@ -106,7 +106,7 @@ def _plan(value):
     """Pure plan qualification; the producer plan validator also reads paths."""
     plan = finite_json_copy(value)
     if (type(plan) is not dict or set(plan) != {"version", "identity", "requested_job",
-            "attempt_directory", "policy"} or plan["version"] != _PREFIX + "run_plan_v1"):
+            "attempt_directory", "policy"} or plan["version"] != _PREFIX + "run_plan"):
         _error("run_plan_required")
     request = validate_native_hmmer_preparation_requested_job(plan["requested_job"])
     identity = plan["identity"]

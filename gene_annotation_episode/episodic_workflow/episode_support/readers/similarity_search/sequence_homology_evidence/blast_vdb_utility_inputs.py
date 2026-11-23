@@ -96,7 +96,7 @@ def parse_blast_vdb_diagnostics(contents: bytes, *, occurrence: dict, outcome: d
             failures.append(_failure("native", "selection_incomplete", oid, line_number=number))
         if category == "unknown" or prefix:
             failures.append(_failure("parse", "native_diagnostic_unrecognized", oid, line_number=number))
-    return {"version": "blast_vdb_utility_diagnostics_v1", "occurrence": occurrence,
+    return {"version": "blast_vdb_utility_diagnostics", "occurrence": occurrence,
         "original_outcome": outcome,
         "input_identity": {k: occurrence[k] for k in ("sha256", "size_bytes")},
         "native_bytes_hex": contents.hex(), "native_text": text,
@@ -120,7 +120,7 @@ def _saved_diagnostics(value, outcome):
 def _saved_table(value, occurrence):
     keys = {"schema", "source_ref", "source_version", "input_identity", "native_text", "rows", "issues"}
     _require(type(value) is dict and set(value) == keys and
-             value["schema"] == "blast_vdb_sequence_table_v1", "vdb_sequence_table_invalid")
+             value["schema"] == "blast_vdb_sequence_table", "vdb_sequence_table_invalid")
     _require(value["source_ref"] == occurrence["artifact_ref"] and
              value["source_version"] == occurrence["native_format"] and
              value["input_identity"] == {k: occurrence[k] for k in ("sha256", "size_bytes")},
@@ -275,7 +275,7 @@ def normalize_blast_vdb_extraction(parsed: dict, *, occurrence: dict, operation:
         "native_row_invalid" if syntax_error else None))
     checks.append(_check("selection", "pass" if complete else "unknown", [database_binding["database_key"]],
         "selected_record_match", [oid, stderr["occurrence_id"]], None if complete else "selection_incomplete"))
-    return validate_vdb_sequence_extraction({"version": "blast_sequence_extraction_v2", "operation": operation,
+    return validate_vdb_sequence_extraction({"version": "blast_vdb_sequence_extraction", "operation": operation,
         "database_binding": database_binding, "original_outcome": outcome, "output_occurrence": occurrence,
         "stderr_occurrence": stderr, "operation_input_occurrences": inputs, "vdb_context": context,
         "scope": {"kind": "selected_entries" if entries else selection["kind"]}, "records": records,
@@ -501,7 +501,7 @@ def parse_blast_vdb_inspection(contents: bytes, *, occurrence: dict, operation: 
         _complete_capture(o, outcome) for o in (occurrence, stderr))
     usable = any(f["value"] is not None for f in fields) or bool(paths) or any(
         s["header_line_number"] is not None for s in sections)
-    return validate_vdb_database_inspection({"version": "blast_database_inspection_v3", "operation": operation,
+    return validate_vdb_database_inspection({"version": "blast_vdb_database_inspection", "operation": operation,
         "database_binding": database_binding, "original_outcome": outcome, "output_occurrence": occurrence,
         "stderr_occurrence": stderr, "operation_input_occurrences": inputs, "vdb_context": context,
         "native_fields": fields, "path_sections": sections, "path_records": paths,

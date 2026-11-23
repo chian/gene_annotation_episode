@@ -5,7 +5,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.perturbatio
 from gene_annotation_episode.episodic_workflow.episode_support.records.perturbation_evidence.domain import canonical
 from gene_annotation_episode.episodic_workflow.episode_support.literature.rendering.literature_binding_interaction_render import overlaps_numbers
 
-FACT_VERSION = 'literature_controlled_response_component_fact_v3'
+FACT_VERSION = 'literature_controlled_response_component_fact'
 
 
 def is_row(row):

@@ -3,7 +3,7 @@ import math
 from yield_control import AccumulationYieldController, CompletionYieldController, YieldParameters
 from gene_annotation_episode.episodic_workflow.episode_support.forms.evolutionary_history_evidence.communication import plain
 from gene_annotation_episode.episodic_workflow.episode_support.records.evolutionary_history_evidence.domain import ContractError, REF, obj, validate_schema
-VERSION = 'literature_local_task_v1'
+VERSION = 'literature_local_task'
 SCREENING = 'literature_screening_answers'
 LEADS = 'literature_source_lead_dispositions'
 YIELD_TASKS = frozenset((f'{axis}:{task}' for axis in ('A105', 'A106', 'A108') for task in ('verified_source_leads', 'source_answer:assessment', 'source_answer:screening'))) | frozenset(('A105:source_answer:measurement', 'A105:experiments', 'A105:assembly'))

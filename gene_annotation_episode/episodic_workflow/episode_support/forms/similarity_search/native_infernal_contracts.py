@@ -97,7 +97,7 @@ _INPUT_ROLES = ['models', 'sequences', 'clanin', 'glist', 'mapali'] + [
 _OUTPUT_ROLES = ['stdout', 'stderr', 'tblout', 'stockholm', 'scores', 'inserts',
                  'local_ends', 'traceback', 'included_msa']
 NATIVE_INFERNAL_JOB_SCHEMA = _object({
-    'version': {'const': 'native_infernal_job_v1'}, 'program': {'enum': list(PROGRAMS)},
+    'version': {'const': 'native_infernal_job'}, 'program': {'enum': list(PROGRAMS)},
     'software': _object({'executable': _TEXT, 'sha256': _SHA, 'engine_version': _NULL_TEXT}),
     'environment': {'type': 'object', 'additionalProperties': {'type': 'string'}},
     'operands': _array(_object({'role': {'enum': _INPUT_ROLES}, 'path': _TEXT,

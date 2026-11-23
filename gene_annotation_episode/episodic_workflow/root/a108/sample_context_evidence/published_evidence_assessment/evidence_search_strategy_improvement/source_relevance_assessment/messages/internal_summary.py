@@ -31,7 +31,7 @@ from ..goal import BINDING_PATH, GOAL, RESULT, UNIT
 from .read_from_parent import REQUESTED_AGGREGATION, REQUESTED_GRADING
 
 OUTCOME_PAGE_SIZE = 8        # the old configuration outcome_page_size
-SEARCH_ASSIGNMENT = 'search_assignment_v1'
+SEARCH_ASSIGNMENT = 'search_assignment'
 CUSTODY_KEYS = ('version', 'artifact_ref', 'text_ref', 'stdout_ref', 'stderr_ref', 'parent_source_refs')
 HISTORY_MEANING = ('Own outcome metadata only. The provider search, Jev\'s measurement and each hit picked are shown '
                    'in the candidate view and hit_fetches.')

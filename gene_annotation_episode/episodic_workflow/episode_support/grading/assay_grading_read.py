@@ -1,6 +1,6 @@
 """Read and authenticate received A105 grading sheets for A104 correspondence.
 
-The frozen schemas are the original A105 v1/v2 contracts. The saved request is the one the A104 literature
+The frozen schemas are the original A105 contracts. The saved request is the one the A104 literature
 storage writes (operation key, arguments, scope, requested components; the old run identity is custody now). This
 reader performs
 no A105 population or grading and writes no repository state.
@@ -50,7 +50,7 @@ def _rows(saved, sheet_ref, components):
 
 class A104AssayGradingReader:
     provider = 'literature.a105.assay_grading'
-    record_version = 'literature_assay_grading_record_v2'
+    record_version = 'literature_assay_grading_record'
     rows = staticmethod(_rows)
 
     def __init__(self, store):

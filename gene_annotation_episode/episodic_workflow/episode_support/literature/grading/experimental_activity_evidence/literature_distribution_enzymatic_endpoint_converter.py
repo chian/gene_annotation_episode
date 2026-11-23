@@ -118,7 +118,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_product_distribution_direction import select_product_distribution_effect
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_distribution_enzymatic_endpoint_converted_v1'
+VERSION = 'a105_distribution_enzymatic_endpoint_converted'
 CRITERIA_MAP = {'species_identity': ('analysis_enzyme_specificity',), 'response_factors': ('standard_curve_per_species',), 'common_denominator': ('denominator_and_coverage', 'closure'),
                 'calibration_applicability': ('analysis_run_to_completion', 'signals_inside_standard_curve', 'reporter_absorbance_range'),
                 'matrix_interference': ('cross_reactivity', 'first_enzyme_quenched'), 'background_alternatives': ('reagent_blank', 'no_enzyme_sample', 'products_stable_until_analysis'),

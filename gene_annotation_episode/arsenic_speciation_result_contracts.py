@@ -22,10 +22,10 @@ from .molecular_sequence_result_contracts import (
 
 
 TOOL = SUPPLIED_OPERATION
-PACKET_VERSION = "ordinary_arsenic_speciation_values_v1"
-SOURCE_VERSION = "ordinary_arsenic_speciation_result_v1"
-VALUES_VERSION = "arsenic_speciation_selected_values_v1"
-INPUT_VIEW_VERSION = "ordinary_arsenic_speciation_input_view_v1"
+PACKET_VERSION = "ordinary_arsenic_speciation_values"
+SOURCE_VERSION = "ordinary_arsenic_speciation_result"
+VALUES_VERSION = "arsenic_speciation_selected_values"
+INPUT_VIEW_VERSION = "ordinary_arsenic_speciation_input_view"
 FACT_SOURCE = "arsenic_speciation_outcomes"
 CALCULATOR_ID = "calibrated_signal_calculations.calculate_calibrated_signal_components"
 FILE_ROLES = ("sheet", "components")
@@ -283,7 +283,7 @@ def ordinary_arsenic_packet(*, arguments, input_state, role_states, components,
     _require(type(failures) is list, "failures_invalid")
     for issue in failures:
         validated = validate_supplied_failure(issue)
-        issues.append(supplied_failure_view(validated) if validated["version"] == "molecular_sequence_supplied_failure_v1" else validated)
+        issues.append(supplied_failure_view(validated) if validated["version"] == "molecular_sequence_supplied_failure" else validated)
     return validate_ordinary_arsenic_packet(dict(version=PACKET_VERSION, selection=selected,
         context=dict(input_state=input_state, role_states=role_states, calculation=calculation,
             qualifications=deepcopy(QUALIFICATIONS)), values=public, file_states=file_states, failures=issues))
@@ -309,7 +309,7 @@ def validate_ordinary_arsenic_packet(value):
             "values_retention_conflict")
         _validate_values(value["values"], selected)
     for issue in value["failures"]:
-        _require(issue["version"] == "molecular_sequence_supplied_failure_v2", "public_failure_required")
+        _require(issue["version"] == "molecular_sequence_supplied_failure_view", "public_failure_required")
         validate_supplied_failure(issue)
     return value
 

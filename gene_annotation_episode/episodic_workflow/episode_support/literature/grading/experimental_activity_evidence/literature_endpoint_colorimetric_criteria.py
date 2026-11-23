@@ -21,7 +21,7 @@ returns     every case the criterion can return, as (status, reason_code, when).
             as 'never' cannot occur for this criterion.
 """
 
-VERSION = 'a105_endpoint_colorimetric_criteria_v1'
+VERSION = 'a105_endpoint_colorimetric_criteria'
 NM_PER_UNIT = {'nM': 1.0, 'uM': 1.0e3, 'mM': 1.0e6}   # FIXED_BY_DEFINITION: the factor of each concentration unit to nM
 PMOL_PER_UNIT = {'pmol': 1.0, 'nmol': 1.0e3, 'umol': 1.0e6}   # FIXED_BY_DEFINITION: the factor of each amount unit to pmol
 

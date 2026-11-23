@@ -56,7 +56,7 @@ SEARCH_KEY_SCHEMA = _object({
                        "x-reference-namespace": "native_blast_search_pointer"},
 })
 NATIVE_BLAST_RESULT_SELECTOR_SCHEMA = _object({
-    "version": {"const": "native_blast_result_selector_v1"},
+    "version": {"const": "native_blast_result_selector"},
     "acquisition": {"const": "complete_bound_bundle"},
     "projection": {"oneOf": [_object({
         "family": {"const": family}, "rows": _ROWS,

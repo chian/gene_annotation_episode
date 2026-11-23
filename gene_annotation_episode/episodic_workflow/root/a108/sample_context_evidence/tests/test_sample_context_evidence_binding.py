@@ -75,13 +75,13 @@ def ref(kind, digit):
 
 LIBRARY = 'a' * 64
 SHA = 'b' * 64
-AXIS = {'version': 'sample_context_evidence_option_ref_v1', 'library_id': LIBRARY, 'slot': 'evidence_axis',
+AXIS = {'version': 'sample_context_evidence_option_ref', 'library_id': LIBRARY, 'slot': 'evidence_axis',
         'option_id': 'A108', 'entry_sha256': SHA}
-THOUGHT = {'version': 'sample_context_evidence_option_ref_v1', 'library_id': LIBRARY, 'slot': 'thought_pattern',
+THOUGHT = {'version': 'sample_context_evidence_option_ref', 'library_id': LIBRARY, 'slot': 'thought_pattern',
            'option_id': 'P01', 'entry_sha256': SHA}
-SELECTORS = {'version': 'sample_context_evidence_selection_v3', 'evidence_axis': AXIS, 'thought_pattern': THOUGHT,
+SELECTORS = {'version': 'sample_context_evidence_selection', 'evidence_axis': AXIS, 'thought_pattern': THOUGHT,
              'child_tool_info': [{'name': 'source.locate', 'resources': 'local'}]}
-TASK = {'version': 'evidence_axis_task_v1', 'kind': 'whole_axis_findings', 'evidence_axis': 'A108', 'credit_unit': 2}
+TASK = {'version': 'evidence_axis_task', 'kind': 'whole_axis_findings', 'evidence_axis': 'A108', 'credit_unit': 2}
 SUBJECT, HYPOTHESIS = ref('input', '1'), ref('hypothesis', '1')
 SCOPE = {'subject_refs': [SUBJECT]}
 
@@ -145,7 +145,7 @@ def test_the_literature_commission_is_admitted_by_the_child_form():
     child_form = importlib.import_module(CHILD_MODULE + '.messages.read_from_parent')
     child_return = importlib.import_module(CHILD_MODULE + '.messages.final_to_parent')
     source = ref('source', '3')
-    task = {'version': 'literature_local_task_v1', 'evidence_axis': 'A108', 'credit_unit': 2,
+    task = {'version': 'literature_local_task', 'evidence_axis': 'A108', 'credit_unit': 2,
             'kind': 'verified_source_leads'}
     message = to_child.msg_to_child('published_evidence_assessment', {
         'objective': 'o', 'purpose': 'p', 'scope': SCOPE, 'assignment': {
@@ -173,7 +173,7 @@ def test_the_offered_action_schema_is_a_valid_strict_output_schema(tmp_path):
     task = importlib.import_module(MODULE + '.task')
     with Store(tmp_path / 'state') as store:
         summary = {**summary_of(), 'reasoning_schema': store.reasoning_schema(), 'process': {
-            'evidence_axis_entry_version': 'evidence_axis_instruction_v1',
+            'evidence_axis_entry_version': 'evidence_axis_instruction',
             'child_tool_info': [{'name': 'source.locate', 'resources': 'local', 'description': 'd',
                                  'instructions': 'i'}]}}
     names = task.offered(summary, {})

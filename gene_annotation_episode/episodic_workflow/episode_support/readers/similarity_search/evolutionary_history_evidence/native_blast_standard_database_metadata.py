@@ -30,7 +30,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.similarit
 from gene_annotation_episode.episodic_workflow.episode_support.records.evolutionary_history_evidence.domain import parse_sequences
 from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.evolutionary_history_evidence.native_blast_database_metadata import (
     metadata_schema_registry, validate_native_blast_database_metadata_payload,
-    _schema_for, _SEQUENCE_V2, _SEQUENCE_V3, _record_address_status, _record_relation_failed,
+    _schema_for, _SEQUENCE_LOCATED, _SEQUENCE_POPULATION_ID, _record_address_status, _record_relation_failed,
 )
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.evolutionary_history_evidence.native_blast_standard_database_contracts import (
     requested_job_from_standard_blast_database, standard_blast_database_program_spec,
@@ -39,12 +39,12 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_
 )
 
 
-PREPARED_INPUTS_SCHEMA = "native_blast_standard_database_prepared_inputs_v1"
-SHEET_SET_SCHEMA = "native_blast_standard_database_sheet_set_v1"
+PREPARED_INPUTS_SCHEMA = "native_blast_standard_database_prepared_inputs"
+SHEET_SET_SCHEMA = "native_blast_standard_database_sheet_set"
 _PREFIX = "native_blast_standard_database_"
-_TUPLES = {("query_identity", "native_blast_database_query_metadata_v1"),
-           ("sequence_database", "native_blast_database_sequence_metadata_v1"),
-           ("sequence_database", _SEQUENCE_V2), ("sequence_database", _SEQUENCE_V3)}
+_TUPLES = {("query_identity", "native_blast_database_query_metadata"),
+           ("sequence_database", "native_blast_database_sequence_metadata"),
+           ("sequence_database", _SEQUENCE_LOCATED), ("sequence_database", _SEQUENCE_POPULATION_ID)}
 _PREPARED = {"schema", "invocation", "query_records", "pssm_sheets", "metadata",
              "resolved_documents", "source_relations", "sequence_proofs", "issues"}
 _SHEETS = {"schema", "collection", "prepared_inputs", "search_bindings", "sequence",
@@ -188,7 +188,7 @@ def _validate_descriptor(value):
 
 def _query_descriptor(job):
     return dict(input_key=job["query"]["input_key"], consumer="query_identity",
-                schema_id="native_blast_database_query_metadata_v1")
+                schema_id="native_blast_database_query_metadata")
 
 
 class _Supplied:
@@ -330,7 +330,7 @@ def _prepare_metadata(prepared, *, files, job, bundle, payloads):
         descriptor, payload = deepcopy(raw["descriptor"]), deepcopy(raw["payload"])
         result = {k: descriptor[k] for k in ("consumer", "schema_id", "input_key", "artifact_ref", "sha256")}
         result.update(status="invalid", payload=payload, normalized=None, normalization_map=[], issues=[], descriptor=descriptor)
-        if descriptor["schema_id"] == _SEQUENCE_V3:
+        if descriptor["schema_id"] == _SEQUENCE_POPULATION_ID:
             result["population_source_records"] = []
         docs, early = [], []
         try:
@@ -566,7 +566,7 @@ def _prepare_queries(prepared, *, files, job, snapshots, subject_contents):
 def _prepare_proofs(prepared, files):
     fasta_records = {}
     for validation in _valid(prepared, "sequence_database"):
-        record_version = validation["schema_id"] in {_SEQUENCE_V2, _SEQUENCE_V3}
+        record_version = validation["schema_id"] in {_SEQUENCE_LOCATED, _SEQUENCE_POPULATION_ID}
         docs = {d["document_key"]: d for d in validation["normalized"]["documents"]}
         for ui, unit in enumerate(validation["normalized"]["searches"]):
             for pi, proof in enumerate(unit["sequence_proofs"]):
@@ -701,7 +701,7 @@ def prepare_standard_blast_database_inputs(*, job: dict, bundle: dict, attempt_i
                  manifest_artifact_key=capture["manifest_artifact_key"]), pointers=pointers)
     from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.evolutionary_history_evidence.native_blast_database_population_metadata import _retain_preparation_records
     manifests = []
-    for database in job["databases"] if any(v["schema_id"] == _SEQUENCE_V3 for v in prepared["metadata"]) else []:
+    for database in job["databases"] if any(v["schema_id"] == _SEQUENCE_POPULATION_ID for v in prepared["metadata"]) else []:
         try:
             manifests.append(_resolve(dict(document_key="manifest", artifact=dict(kind="database_manifest",
                 database_key=database["database_key"]), format="json"), files=files, job=job, bundle=bundle))
@@ -911,7 +911,7 @@ def qualify_standard_blast_sequence_metadata(search: dict, *, prepared_inputs: d
             if unit["search_key"] != key:
                 continue
             pointer = _original(validation, f"/searches/{ui}")
-            if validation["schema_id"] in {_SEQUENCE_V2, _SEQUENCE_V3}:
+            if validation["schema_id"] in {_SEQUENCE_LOCATED, _SEQUENCE_POPULATION_ID}:
                 record_claims.extend(unit["sequence_identity_bindings"])
             result["input_pointers"].extend(_metadata_pointers(prepared, validation, pointer))
             offset = len(result["reference_metadata"])
@@ -928,7 +928,7 @@ def qualify_standard_blast_sequence_metadata(search: dict, *, prepared_inputs: d
                     result["issues"].append(_issue("metadata_relation_unresolved", pointer + f"/description_bindings/{bi}",
                         descriptor=validation, search_key=key, detail="original_metadata_index_unresolved"))
                     continue
-                if validation["schema_id"] in {_SEQUENCE_V2, _SEQUENCE_V3} and (
+                if validation["schema_id"] in {_SEQUENCE_LOCATED, _SEQUENCE_POPULATION_ID} and (
                         _record_relation_failed(validation, f"/searches/{ui}/description_bindings/{bi}/binding") or
                         _record_relation_failed(validation, f"/searches/{ui}/reference_metadata/{row['binding']['metadata_index']}")):
                     continue
@@ -986,7 +986,7 @@ def qualify_standard_blast_sequence_metadata(search: dict, *, prepared_inputs: d
 def populate_standard_blast_database_sheets(collection: dict, *, prepared_inputs: dict) -> dict:
     """One public 303 sequence sheet per original search, even without metadata."""
     prepared, collection = _copy(prepared_inputs), _copy(collection)
-    if collection.get("schema") != "blast_report_collection_v1" or collection.get("invocation") != prepared["invocation"]:
+    if collection.get("schema") != "blast_report_collection" or collection.get("invocation") != prepared["invocation"]:
         _fail("collection_invocation_conflict")
     keys = [_token(s["search_key"]) for s in collection["searches"]]
     if len(set(keys)) != len(keys):
@@ -1219,7 +1219,7 @@ def validate_standard_blast_sequence_metadata_result(value: dict) -> dict:
     _keys(value, _SEQUENCE | ({"database_population_associations"} if "database_population_associations" in value else set()), "sequence_metadata_result_fields_invalid")
     if "database_population_associations" in value:
         from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.blast_database_population_associations import validate_blast_database_population_context
-        validate_blast_database_population_context(dict(schema="blast_database_population_context_v1",
+        validate_blast_database_population_context(dict(schema="blast_database_population_context",
             search_key=value["search_key"], associations=value["database_population_associations"]))
     _validate_search_key(value["search_key"])
     _validate_pointers(value["input_pointers"])
@@ -1267,14 +1267,14 @@ def _validate_saved_metadata(prepared, files):
     reports = [r for r in files.entries.values() if r["role"] == "primary_report"]
     for row in prepared["metadata"]:
         _keys(row, {"consumer", "schema_id", "input_key", "artifact_ref", "sha256", "status", "payload", "normalized",
-                    "normalization_map", "issues", "descriptor"} | ({"population_source_records"} if row["schema_id"] == _SEQUENCE_V3 else set()), "metadata_result_fields_invalid")
+                    "normalization_map", "issues", "descriptor"} | ({"population_source_records"} if row["schema_id"] == _SEQUENCE_POPULATION_ID else set()), "metadata_result_fields_invalid")
         _validate_descriptor(row["descriptor"])
         if (any(row[k] != row["descriptor"][k] for k in (*_OWNER, "artifact_ref", "sha256"))
                 or row["status"] not in {"valid", "invalid", "unsupported"}
                 or type(row["normalization_map"]) is not list):
             _fail("metadata_result_identity_invalid")
         _validate_issues(row["issues"])
-        if row["schema_id"] == _SEQUENCE_V3:
+        if row["schema_id"] == _SEQUENCE_POPULATION_ID:
             from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.evolutionary_history_evidence.native_blast_database_population_metadata import _records
             _records(row["population_source_records"])
         if row["status"] != "valid":
@@ -1325,9 +1325,9 @@ def _validate_saved_metadata(prepared, files):
             for i, item in enumerate(normalized[field]):
                 original = _at(payload, addresses[f"/{field}/{i}"])
                 if not _check_lowered(original, item, documents=docs, reports=reports, job=job, field=field,
-                        population_sources={d["document_key"]: d for d in payload["documents"]} if row["schema_id"] == _SEQUENCE_V3 else None):
+                        population_sources={d["document_key"]: d for d in payload["documents"]} if row["schema_id"] == _SEQUENCE_POPULATION_ID else None):
                     _fail("metadata_original_slot_conflict")
-        if row["schema_id"] == _SEQUENCE_V3:
+        if row["schema_id"] == _SEQUENCE_POPULATION_ID:
             from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.evolutionary_history_evidence.native_blast_database_population_metadata import _validate_retained_records
             _validate_retained_records(row)
             for record in row["population_source_records"]:
@@ -1349,7 +1349,7 @@ def _validate_pssm_sources(prepared):
               "pssm_sheet_fields_invalid")
         source = _one([r for r in prepared["resolved_documents"] if r["kind"] == "captured"
             and r["catalog"]["artifact_key"] == sheet["artifact_key"] and r["status"] == "available"], "pssm_source_unavailable")
-        if (sheet["schema"] != "blast_pssm_sheet_v1" or sheet["format"] != "scoremat_asn_text"
+        if (sheet["schema"] != "blast_pssm_sheet" or sheet["format"] != "scoremat_asn_text"
                 or sheet["status"] not in {"unavailable", "incompatible", "partial", "complete"}
                 or type(sheet["pssms"]) is not list or type(sheet["issues"]) is not list
                 or sheet["source_ref"] != source["catalog"]["source_ref"]
@@ -1406,7 +1406,7 @@ def _validate_saved_proofs(prepared):
         doc = _one([d for d in validation["normalized"]["documents"] if d["document_key"] == proof["document_key"]], "proof_document_unavailable")
         if row["document"] != doc or doc["source_ref"] != binding["source_ref"]:
             _fail("proof_document_identity_conflict")
-        if validation["schema_id"] in {_SEQUENCE_V2, _SEQUENCE_V3}:
+        if validation["schema_id"] in {_SEQUENCE_LOCATED, _SEQUENCE_POPULATION_ID}:
             locator = binding["record_locator"]
             if ((doc["format"] == "fasta") != (locator is not None)
                     or proof["representation"] == "fasta_record" and (
@@ -1468,7 +1468,7 @@ def _validate_saved_sequence_relations(search, binding_result, metadata, prepare
                 _fail("saved_reference_metadata_original_conflict")
         for bi, link in enumerate(unit["description_bindings"]):
             if link["binding"]["metadata_index"] < len(unit["reference_metadata"]) and not (
-                    validation["schema_id"] in {_SEQUENCE_V2, _SEQUENCE_V3} and (
+                    validation["schema_id"] in {_SEQUENCE_LOCATED, _SEQUENCE_POPULATION_ID} and (
                         _record_relation_failed(validation, f"/searches/{ui}/description_bindings/{bi}/binding") or
                         _record_relation_failed(validation, f"/searches/{ui}/reference_metadata/{link['binding']['metadata_index']}"))):
                 allowed_descriptions.append((link, offset))
@@ -1487,11 +1487,11 @@ def _validate_saved_sequence_relations(search, binding_result, metadata, prepare
     if metadata["database_profile"] != (profiles[0] if len(profiles) == 1 else None):
         _fail("saved_population_original_relation_conflict")
     from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.evolutionary_history_evidence.native_blast_database_population_metadata import _population_search_units
-    v3 = any(_population_search_units(search, prepared,
+    population = any(_population_search_units(search, prepared,
         [r for v in prepared["metadata"] for r in v.get("population_source_records", [])]))
-    if ("database_population_associations" in metadata) != v3:
+    if ("database_population_associations" in metadata) != population:
         _fail("saved_population_original_relation_conflict")
-    if v3:
+    if population:
         from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.evolutionary_history_evidence.native_blast_database_population_metadata import validate_native_blast_database_population_associations
         validate_native_blast_database_population_associations(metadata["database_population_associations"], search=search,
             prepared_inputs=prepared, source_records=[r for v in prepared["metadata"] for r in v.get("population_source_records", [])],
@@ -1538,7 +1538,7 @@ def validate_standard_blast_database_prepared_inputs(value: dict) -> dict:
         if relation["kind"] == "pssm_master":
             master = relation["value"]
             _keys(master, {"schema", "artifact_key", "source_ref", "input_identity", "records", "issues"}, "master_metadata_fields_invalid")
-            if master["schema"] != "blast_pssm_master_metadata_v1":
+            if master["schema"] != "blast_pssm_master_metadata":
                 _fail("master_metadata_schema_invalid")
             for record in master["records"]:
                 _keys(record, {"pssm_key", "record_ordinal", "master", "issues"}, "master_record_fields_invalid")
@@ -1659,7 +1659,7 @@ def validate_standard_blast_database_sheet_set(value: dict) -> dict:
     if value["collection"]["invocation"] != prepared["invocation"] or value["pssm"] != prepared["pssm_sheets"]:
         _fail("sheet_set_input_conflict")
     _keys(value["collection"], {"schema", "invocation", "artifacts", "searches", "issues"}, "collection_fields_invalid")
-    if value["collection"]["schema"] != "blast_report_collection_v1" or value["metadata_parse_results"] != prepared["metadata"]:
+    if value["collection"]["schema"] != "blast_report_collection" or value["metadata_parse_results"] != prepared["metadata"]:
         _fail("sheet_set_collection_metadata_conflict")
     _validate_issues(value["issues"])
     searches = value["collection"]["searches"]
@@ -1678,8 +1678,8 @@ def validate_standard_blast_database_sheet_set(value: dict) -> dict:
         sheet = row["sheet"]
         _keys(sheet, {"schema", "search", "report_source", "search_binding", "query_binding", "reference_metadata",
             "description_bindings", "sequence_identity_bindings", "target_context", "database_profile"}
-            | ({"database_population_associations"} if sheet["schema"] == "blast_sequence_database_result_sheet_v3" else set()), "sequence_sheet_fields_invalid")
-        if sheet["schema"] not in {"blast_sequence_database_result_sheet_v1", "blast_sequence_database_result_sheet_v2", "blast_sequence_database_result_sheet_v3"}:
+            | ({"database_population_associations"} if sheet["schema"] == "blast_sequence_database_result_sheet_population" else set()), "sequence_sheet_fields_invalid")
+        if sheet["schema"] not in {"blast_sequence_database_result_sheet", "blast_sequence_database_result_sheet_record_locator", "blast_sequence_database_result_sheet_population"}:
             _fail("sequence_sheet_schema_invalid")
         # The saved declared version is authoritative; never redispatch by fields.
         from gene_annotation_episode.episodic_workflow.episode_support.calculations.similarity_search.evolutionary_history_evidence.blast_sequence_database import _validate as validate_sequence_sheet
@@ -1687,7 +1687,7 @@ def validate_standard_blast_database_sheet_set(value: dict) -> dict:
         report = _report(search, prepared)["catalog"]
         expected_source = dict(artifact_key=search["search_key"]["artifact_key"], artifact_ref=report["artifact_ref"],
                                member_ordinal=None, member_sha256=None)
-        if sheet["schema"] == "blast_sequence_database_result_sheet_v3":
+        if sheet["schema"] == "blast_sequence_database_result_sheet_population":
             expected_source["source_ref"] = report["source_ref"]
         if sheet["report_source"] != expected_source or sheet["query_binding"] != _query_binding(search, prepared):
             _fail("sequence_sheet_original_source_conflict")

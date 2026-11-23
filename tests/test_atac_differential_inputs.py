@@ -64,7 +64,7 @@ def parse_track(data, **changes):
 
 def table_bytes(rows, *, order='native_file_order'):
     raw = b''.join((json.dumps(list(row), allow_nan=False, separators=(',', ':')) + '\n').encode() for row in rows)
-    manifest = dict(storage='retained_table', artifact_ref='numeric.jsonl', format='atac_bedgraph_rows_jsonl_v1',
+    manifest = dict(storage='retained_table', artifact_ref='numeric.jsonl', format='atac_bedgraph_rows_jsonl',
                     columns=list(BEDGRAPH_COLUMNS), row_count=len(rows), sha256=hashlib.sha256(raw).hexdigest(),
                     byte_count=len(raw), order=order, source_artifact_ref='input.bdg')
     return raw, manifest

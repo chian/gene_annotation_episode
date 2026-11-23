@@ -101,12 +101,12 @@ def run_population(name, store, arguments, operation_key, *, scope, page_source_
         return LiteratureA105AggregationRepository(store).populate(
             scope, materialized, operation_key, requested.get('requested_a105_aggregation_components', ()))
     module, repository_name = REPOSITORIES[name]
-    if name == 'literature.figure.populate' and materialized.get('version') == 'literature_figure_endpoint_signal_population_v1':
+    if name == 'literature.figure.populate' and materialized.get('version') == 'literature_figure_endpoint_signal_population':
         module, repository_name = _STORAGE + 'literature_endpoint_signal_storage', 'LiteratureEndpointSignalRepository'
-    if name == 'literature.kinetic.populate' and materialized.get('version') == 'literature_kinetic_summary_precision_population_v1':
+    if name == 'literature.kinetic.populate' and materialized.get('version') == 'literature_kinetic_summary_precision_population':
         module, repository_name = (_STORAGE + 'literature_kinetic_summary_precision_storage',
                                    'LiteratureKineticSummaryPrecisionRepository')
-    method = {'literature.controlled_response.source_v3.populate': 'populate_v3',
+    method = {'literature.controlled_response.source.populate': 'populate',
               'literature.rate.source.populate': 'populate_native'}.get(name, 'populate')
     repository = _reader(store, run_id, module, repository_name)
     context = _context(run_id, episode_id, binding_path, scope, {**assignment, **requested}, store)

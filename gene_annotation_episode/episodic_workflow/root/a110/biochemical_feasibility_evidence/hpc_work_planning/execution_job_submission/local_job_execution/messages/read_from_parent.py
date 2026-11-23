@@ -1,4 +1,4 @@
-"""What the parent gives: the practical assignment for the local resource (the old ``practical_assignment_v1``, one
+"""What the parent gives: the practical assignment for the local resource (the old ``practical_assignment``, one
 field per property of the old assignment schema, under the same names), and the records the job's inputs name.
 
 This is the only place the assignment is read. The old ``prepare_assignment`` check of the assignment itself
@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.biochemic
     validate_assignment)
 
 ASSIGNMENT_FORM = RecordForm({
-    'version': DeclaredField('text', 'The assignment version', 'practical_assignment_v1'),
+    'version': DeclaredField('text', 'The assignment version', 'practical_assignment'),
     'assignment_id': Field('text', 'The identity of this assignment'),
     'resource_id': Field('text', 'The assigned local resource'),
     'resource_kind': DeclaredField('text', 'The resource kind: local', 'local'),

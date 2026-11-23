@@ -14,9 +14,9 @@ import math
 from pathlib import PurePosixPath
 import re
 from gene_annotation_episode.episodic_workflow.episode_support.instructions.launch_instructions import SELECTION_SCHEMA as LAUNCH_INSTRUCTION_SELECTION_SCHEMA, validate_selection
-ASSIGNMENT_VERSION = 'practical_assignment_v1'
-RECEIPT_VERSION = 'practical_action_receipt_v1'
-COMPLETION_VERSION = 'practical_completion_v1'
+ASSIGNMENT_VERSION = 'practical_assignment'
+RECEIPT_VERSION = 'practical_action_receipt'
+COMPLETION_VERSION = 'practical_completion'
 JOB_TOOLS = frozenset({'exec_command', 'practical.job.start', 'practical.job.status', 'practical.job.collect'})
 PREDICATE_FIELDS = {'context_cwd': {'kind', 'path'}, 'context_environment': {'kind', 'name', 'value'}, 'path_exists': {'kind', 'path', 'object_type'}, 'file_sha256': {'kind', 'path', 'sha256'}, 'command_exit': {'kind', 'argv', 'returncode'}, 'requested_job_handoff': {'kind'}, 'requested_job_outputs': {'kind', 'output_paths'}}
 COMPLETION_FIELDS = {'version', 'run_id', 'episode_id', 'assignment_sha256', 'endpoint', 'operation_key', 'receipt_sha256', 'validation_keys'}
@@ -48,7 +48,7 @@ ASSIGNMENT_SCHEMA = _schema_object({'version': {'const': ASSIGNMENT_VERSION}, 'a
 ASSIGNMENT_SCHEMA['properties']['launch_instructions'] = deepcopy(LAUNCH_INSTRUCTION_SELECTION_SCHEMA)
 ASSIGNMENT_SCHEMA['properties']['resource_id'] = deepcopy(_TEXT_SCHEMA)
 ASSIGNMENT_SCHEMA['required'].append('resource_id')
-ASSIGNMENT_SCHEMA['properties']['scientific_manifest'] = _schema_object({'path': _PATH_SCHEMA, 'sha256': _DIGEST_SCHEMA, 'size_bytes': {'type': 'integer', 'minimum': 0}, 'format': {'enum': ['native_blast_database_run_plan_v1', 'native_blast_standard_database_run_plan_v1']}})
+ASSIGNMENT_SCHEMA['properties']['scientific_manifest'] = _schema_object({'path': _PATH_SCHEMA, 'sha256': _DIGEST_SCHEMA, 'size_bytes': {'type': 'integer', 'minimum': 0}, 'format': {'enum': ['native_blast_database_run_plan', 'native_blast_standard_database_run_plan']}})
 VALIDATION_SCHEMA = _schema_object({'key': _TEXT_SCHEMA, 'satisfied': {'type': 'boolean'}, 'predicate': PREDICATE_SCHEMA, 'evidence_refs': {'type': 'array', 'uniqueItems': True, 'items': _TEXT_SCHEMA}, 'evidence': _schema_object({'source': {'enum': ['context', 'outcome']}, 'value': {}}), 'checked_at': {'type': 'string', 'format': 'date-time'}})
 RECEIPT_SCHEMA = _schema_object({'version': {'const': RECEIPT_VERSION}, 'run_id': _TEXT_SCHEMA, 'episode_id': _TEXT_SCHEMA, 'assignment_sha256': _DIGEST_SCHEMA, 'operation_key': _TEXT_SCHEMA, 'tool_name': _TEXT_SCHEMA, 'arguments': {'type': 'object'}, 'context_before': CONTEXT_SCHEMA, 'context_after': CONTEXT_SCHEMA, 'outcome': {'type': 'object'}, 'validations': {'type': 'array', 'items': VALIDATION_SCHEMA}, 'started_at': {'type': 'string', 'format': 'date-time'}, 'finished_at': {'type': 'string', 'format': 'date-time'}})
 COMPLETION_PROOF_SCHEMA = _schema_object({'version': {'const': COMPLETION_VERSION}, 'run_id': _TEXT_SCHEMA, 'episode_id': _TEXT_SCHEMA, 'assignment_sha256': _DIGEST_SCHEMA, 'endpoint': {'enum': ['usable_handoff', 'completed_job_outputs']}, 'operation_key': _TEXT_SCHEMA, 'receipt_sha256': _DIGEST_SCHEMA, 'validation_keys': {'type': 'array', 'minItems': 1, 'uniqueItems': True, 'items': _TEXT_SCHEMA}})
@@ -165,7 +165,7 @@ def validate_assignment(value):
         manifest = _object(value['scientific_manifest'], {'path', 'sha256', 'size_bytes', 'format'})
         _path(manifest['path'])
         _sha(manifest['sha256'])
-        if type(manifest['size_bytes']) is not int or manifest['size_bytes'] < 0 or value['resource_kind'] != 'hpc' or (not PurePosixPath(manifest['path']).is_relative_to(value['workspace'])) or (not any((key in job and manifest['format'] == key + '_run_plan_v1' for key in ('native_blast_database', 'native_blast_standard_database')))):
+        if type(manifest['size_bytes']) is not int or manifest['size_bytes'] < 0 or value['resource_kind'] != 'hpc' or (not PurePosixPath(manifest['path']).is_relative_to(value['workspace'])) or (not any((key in job and manifest['format'] == key + '_run_plan' for key in ('native_blast_database', 'native_blast_standard_database')))):
             raise ValueError('native_database_scientific_manifest_invalid')
     if 'native_blast_utility' in job:
         from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.evolutionary_history_evidence.native_blast_utility_contracts import validate_native_blast_utility_requested_job
@@ -309,7 +309,7 @@ def _validate_utility_validation(detail):
     if detail.get('attempt_id') != owner['attempt_id'] or detail.get('attempt_operation_key') != owner['operation_key']:
         raise ValueError('native_blast_utility_validation_attempt_conflict')
     record = _object(detail['native_blast_utility_validation'], {'version', 'bundle', 'bundle_sha256', 'files_validated', 'failure_code'}, code='native_blast_utility_validation_invalid')
-    if record['version'] != 'native_blast_utility_validation_v1' or type(record['files_validated']) is not bool or record['failure_code'] not in {None, 'sealed_bundle_unavailable', 'original_bundle_invalid', 'original_bundle_files_invalid'}:
+    if record['version'] != 'native_blast_utility_validation' or type(record['files_validated']) is not bool or record['failure_code'] not in {None, 'sealed_bundle_unavailable', 'original_bundle_invalid', 'original_bundle_files_invalid'}:
         raise ValueError('native_blast_utility_validation_invalid')
     if record['bundle'] is None:
         if record['bundle_sha256'] is not None or record['files_validated'] or record['failure_code'] not in {'sealed_bundle_unavailable', 'original_bundle_invalid'}:

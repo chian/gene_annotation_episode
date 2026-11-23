@@ -230,8 +230,8 @@ class _ProjectionBuilder:
         has_errors = any((item['severity'] == 'error' for item in self.diagnostics))
         if has_errors:
             self.requirements.append(_requirement('projection_incomplete', 'complete_artifact_bytes', fields=[root_field]))
-        completeness = 'complete_document' if complete else 'partial_or_unknown_artifact' if self.format == 'genome_comparison_json_v1' else 'complete_prefix_only'
-        value = {'version': 'bvbrc_proteome_native_projection_v1', 'scientific_mode': 'proteome_comparison', 'format': self.format, 'source': self.source, 'source_contract': self.contract, 'tracks': list(self.tracks.values()), 'reference_rows': self.rows, 'associations': self.associations, 'physical_record_count': len(self.rows), 'table_field_order': self.table_fields, 'projection_completeness': completeness, 'unsupported_field_paths': self.unsupported}
+        completeness = 'complete_document' if complete else 'partial_or_unknown_artifact' if self.format == 'genome_comparison_json' else 'complete_prefix_only'
+        value = {'version': 'bvbrc_proteome_native_projection', 'scientific_mode': 'proteome_comparison', 'format': self.format, 'source': self.source, 'source_contract': self.contract, 'tracks': list(self.tracks.values()), 'reference_rows': self.rows, 'associations': self.associations, 'physical_record_count': len(self.rows), 'table_field_order': self.table_fields, 'projection_completeness': completeness, 'unsupported_field_paths': self.unsupported}
         value = validate_native_projection(value)
         result = {'status': 'partial' if has_errors or not complete else 'ok', 'value': value, 'requirements': self.requirements, 'diagnostics': self.diagnostics}
         _validate_shape('NativeProjectionResult', result)
@@ -363,12 +363,12 @@ def parse_genome_comparison(content: bytes, *, source: dict, declared_format: st
         return _invalid('native_schema_incompatible', '/source_contract/deployment_match', binding=binding, required_input='native_producer_version')
     decode_content = content
     complete = source['body_complete'] and source['object_complete'] == 'yes'
-    if declared_format == 'genome_comparison_tsv_v1' and (not complete):
+    if declared_format == 'genome_comparison_tsv' and (not complete):
         decode_content = content[:content.rfind(b'\n') + 1]
     try:
         text = decode_content.decode('utf-8', errors='strict')
     except UnicodeDecodeError:
         return _invalid('native_encoding_invalid', binding=binding)
     builder = _ProjectionBuilder(source, declared_format, source_contract)
-    return _parse_json(text, builder) if declared_format == 'genome_comparison_json_v1' else _parse_tsv(text, builder)
+    return _parse_json(text, builder) if declared_format == 'genome_comparison_json' else _parse_tsv(text, builder)
 __all__ = ['parse_genome_comparison', 'native_schema', 'validate_native_projection']

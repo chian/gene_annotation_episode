@@ -29,7 +29,7 @@ UNAVAILABLE_REASONS = ("nonfinite_calculation", "missing_reference_arm", "missin
     "mean_uncertainty_unreported", "observation_model_unspecified", "measurement_count_unreported",
     "insufficient_measurement_count", "positive_sd_required", "zero_reference_rate",
     "dependence_unknown", "profile_requires_sample_sd", "numerical_model_range")
-NATIVE_RECORD_VERSION = "literature_rate_population_record_v2"
+NATIVE_RECORD_VERSION = "literature_native_rate_population_record"
 
 # What this Episode was admitted to read of another Episode's sheets: the cells of one return, per view.
 RECEIVED_CELLS = TableDeclaration(name="literature_received_cells",
@@ -41,7 +41,7 @@ class LiteratureRateRepository:
 
     provider = PROVIDER
     components = COMPONENTS
-    record_version = "literature_rate_population_record_v1"
+    record_version = "literature_rate_population_record"
     received_table = "literature_rate_received"
     binding_fields = ("assayed_subject_ref", "experiment_ref", "reference_condition_ref",
                       "test_condition_ref", "endpoint_ref", "normalization_ref")
@@ -52,7 +52,7 @@ class LiteratureRateRepository:
         # interface.  A dependent update is part of its original publication,
         # not another model-selected operation or a new credit event.
         from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_sheet_updates import publication
-        for name in ('populate', 'populate_native', 'populate_v3'):
+        for name in ('populate', 'populate_native'):
             if name in cls.__dict__:
                 setattr(cls, name, publication(cls.__dict__[name]))
 
@@ -104,7 +104,7 @@ class LiteratureRateRepository:
         sheet = populate_rate_contrast(extraction, **{key: args[key] for key in (
             "reference_arm", "test_arm", "reference_condition", "test_condition",
             "dependence", "observation_model")})
-        payload = {"version": "literature_rate_population_record_v1",
+        payload = {"version": "literature_rate_population_record",
                    "input_source_ref": source_ref, "input_artifact_ref": artifact, "sheet": sheet}
         with self.store.transaction():
             newly_created = []
@@ -287,7 +287,7 @@ class LiteratureRateRepository:
     def read(self, sheet_ref):
         """Read original saved cells without scientific source IO or fitting.
 
-        The rate writer can reopen its v1/v2 payloads. Return views separately
+        The rate writer can reopen its payloads. Return views separately
         enforce their exact projection version; subclass providers keep their
         original independent version contracts.
         """
@@ -513,7 +513,7 @@ class LiteratureRateRepository:
         if context.run_id != self.run_id:
             raise ContractError("literature_run_mismatch")
         versions = {self.store.get(reference).get("version") for reference in self.produced_sheet_refs(context)}
-        supported = {"literature_rate_population_record_v1", NATIVE_RECORD_VERSION}
+        supported = {"literature_rate_population_record", NATIVE_RECORD_VERSION}
         if self.record_version not in versions and versions & supported:
             raise ContractError("literature_rate_projection_version_mismatch")
 
@@ -571,7 +571,7 @@ class LiteratureRateRepository:
         for reference in dict.fromkeys(sheet_refs):
             if reference not in context.received_record_refs:
                 raise ContractError("literature_sheet_not_received")
-            # Empty projection still validates exact v1/v2 view and saved sheet.
+            # Empty projection still validates exact view and saved sheet.
             self.project_cells([reference], permitted_record_refs=context.received_record_refs, components=[])
             if self._sheet_owner(reference) == context.episode_id:
                 result.extend(self.project_cells([reference], permitted_record_refs=context.received_record_refs,
@@ -686,14 +686,14 @@ class LiteratureRateSourceDomainProjection(LiteratureRateSourceProjection):
                     q = Fraction(q)
                     interval = {"lt": (-float("inf"), False, q, False), "le": (-float("inf"), False, q, True),
                         "gt": (q, False, float("inf"), False), "ge": (q, True, float("inf"), False)}[row["bound"]]
-                domain = _project(interval, basis="legacy_stored_cell", conditioning="stored_source_cell",
+                domain = _project(interval, basis="stored_cell", conditioning="stored_source_cell",
                     failure=row["unavailable_reason"] if interval is None else None)
             row["reported_domain"] = deepcopy(domain)
         return rows
 
 
 def rate_source_cells_schema():
-    """Closed native return contract, distinct from the unchanged v1 projection."""
+    """Closed native return contract, distinct from the unchanged projection."""
     schema = rate_cells_schema()
     properties = schema["items"]["properties"]
     properties["unavailable_reason"]["enum"] = [*UNAVAILABLE_REASONS, *NATIVE_REASONS, None]

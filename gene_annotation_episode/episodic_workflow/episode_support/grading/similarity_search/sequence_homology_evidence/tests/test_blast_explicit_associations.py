@@ -41,7 +41,7 @@ def synthetic_inputs():
             "metadata_identifier": {"namespace": "patric_id", "value": metadata[-1]["accession"]},
             "metadata_source_ref": "synthetic-metadata", "metadata_pointer": f"/records/{index}",
             "linkage_source_ref": "synthetic-record-links", "linkage_pointer": f"/links/{index}"})
-    return {"result": {"schema": "blast_normalized_result_v1", "mode": "database", "resource": "api",
+    return {"result": {"schema": "blast_normalized_result", "mode": "database", "resource": "api",
         "format": "json2", "source_locator": report,
         "query": {"id": "synthetic-query", "title": None, "length": 10},
         "search": {"program": "blastp", "database": "synthetic-db", "request": {},
@@ -436,14 +436,14 @@ def fasta_arguments(*, duplicate_content=False, duplicate_text=False):
     return arguments
 
 
-def test_v2_original_records_keep_explicit_function_provenance_and_numerical_oracles():
+def test_original_records_keep_explicit_function_provenance_and_numerical_oracles():
     arguments = fasta_arguments()
     arguments["database_profile"] = dict(database="synthetic-db", release=None, scope="searched_database",
         source="explicit-census-json", count_unit="unique_sequences", total_count=1000, function_counts={"F":100, "G":10})
     before = deepcopy(arguments)
     sheet = build_database_sheet(**arguments)
     assert arguments == before
-    assert sheet["schema"] == "blast_database_sheet_v2" and sheet["association_mode"] == "explicit_bindings_v2"
+    assert sheet["schema"] == "blast_database_sheet_record_locator" and sheet["association_mode"] == "explicit_bindings_record_locator"
     assert sheet["coverage"]["matched_metadata_row_count"] == 2
     assert len(sheet["sequence_groups"]) == 2
     for index, hit in enumerate(sheet["hits"]):
@@ -452,14 +452,14 @@ def test_v2_original_records_keep_explicit_function_provenance_and_numerical_ora
         assert hit["associations"][0]["functions"][0]["source"] == "separately-supplied-assignment-json"
         assert hit["measurements"]["query_paired_coverage"] == .5
     scored = calculate_database_probabilities(sheet)
-    assert scored["schema"] == "blast_database_probabilities_v1"
+    assert scored["schema"] == "blast_database_probabilities"
     assert scored["function_masses"] == {"F":1, "G":.25}
     assert scored["unadjusted_probabilities"] == {"F":.8, "G":.2}
     assert scored["representation_adjusted_probabilities"] == {"F":pytest.approx(2/7), "G":pytest.approx(5/7)}
     assert calculate_database_probabilities(sheet, model={"temperature_bits":2})["unadjusted_probabilities"] == {"F":2/3, "G":1/3}
 
 
-def test_v2_no_functions_are_created_from_original_record_identity():
+def test_no_functions_are_created_from_original_record_identity():
     arguments = fasta_arguments()
     for row in arguments["reference_metadata"]:
         row["functions"] = []
@@ -470,7 +470,7 @@ def test_v2_no_functions_are_created_from_original_record_identity():
     assert [g["maximum_bit_score"] for g in sheet["sequence_groups"]] == [20, 18]
 
 
-def test_v2_distinct_original_ordinals_with_same_content_contribute_one_maximum_split_mass():
+def test_distinct_original_ordinals_with_same_content_contribute_one_maximum_split_mass():
     arguments = fasta_arguments(duplicate_content=True)
     sheet = build_database_sheet(**arguments)
     group, = sheet["sequence_groups"]
@@ -482,14 +482,14 @@ def test_v2_distinct_original_ordinals_with_same_content_contribute_one_maximum_
     assert calculate_database_probabilities(repeated) == calculate_database_probabilities(sheet)
 
 
-def test_v2_same_text_at_distinct_original_ordinals_does_not_group_different_symbols():
+def test_same_text_at_distinct_original_ordinals_does_not_group_different_symbols():
     sheet = build_database_sheet(**fasta_arguments(duplicate_text=True))
     assert sheet["coverage"]["matched_metadata_row_count"] == 2
     assert len(sheet["sequence_groups"]) == 2
     assert calculate_database_probabilities(sheet)["unadjusted_probabilities"] == {"F":.8, "G":.2}
 
 
-def test_v2_same_original_record_can_keep_multiple_native_hits_and_explicit_functions():
+def test_same_original_record_can_keep_multiple_native_hits_and_explicit_functions():
     arguments = fasta_arguments(duplicate_content=True, duplicate_text=True)
     for field in ("reference_metadata", "description_bindings", "sequence_identity_bindings"):
         key = "metadata_record_locator" if field == "description_bindings" else "record_locator"
@@ -500,7 +500,7 @@ def test_v2_same_original_record_can_keep_multiple_native_hits_and_explicit_func
     assert calculate_database_probabilities(sheet)["function_masses"] == {"F":.5, "G":.5}
 
 
-def test_v2_file_only_v1_record_and_explicit_ordinal_are_not_inferred_equal_addresses():
+def test_file_only_record_and_explicit_ordinal_are_not_inferred_equal_addresses():
     arguments = fasta_arguments()
     arguments["reference_metadata"][0].pop("record_locator")
     arguments["description_bindings"][0].pop("metadata_record_locator")
@@ -513,7 +513,7 @@ def test_v2_file_only_v1_record_and_explicit_ordinal_are_not_inferred_equal_addr
     assert len(sheet["sequence_groups"]) == 2
 
 
-def test_v2_sequence_source_key_rejects_contradictory_same_record():
+def test_sequence_source_key_rejects_contradictory_same_record():
     arguments = fasta_arguments()
     arguments["sequence_identity_bindings"][1]["record_locator"] = {"kind":"fasta_record", "record_ordinal":0}
     sheet = build_database_sheet(**arguments)
@@ -524,7 +524,7 @@ def test_v2_sequence_source_key_rejects_contradictory_same_record():
 
 
 @pytest.mark.parametrize("change", [{"accession":"different"}, {"taxid":620}])
-def test_v2_metadata_source_key_rejects_contradiction_only_at_that_record(change):
+def test_metadata_source_key_rejects_contradiction_only_at_that_record(change):
     arguments = fasta_arguments()
     contradictory = deepcopy(arguments["reference_metadata"][0])
     contradictory.update(change)
@@ -535,7 +535,7 @@ def test_v2_metadata_source_key_rejects_contradiction_only_at_that_record(change
     assert calculate_database_probabilities(sheet)["unadjusted_probabilities"] == {"G":1.0}
 
 
-def test_v2_metadata_binding_locator_equality_and_same_hit_sequence_crosscheck():
+def test_metadata_binding_locator_equality_and_same_hit_sequence_crosscheck():
     arguments = fasta_arguments(duplicate_text=True)
     arguments["description_bindings"][0]["metadata_record_locator"]["record_ordinal"] = 1
     mismatch = build_database_sheet(**arguments)
@@ -548,13 +548,13 @@ def test_v2_metadata_binding_locator_equality_and_same_hit_sequence_crosscheck()
     assert calculate_database_probabilities(cross)["unadjusted_probabilities"] == {"G":1.0}
 
 
-def test_v2_separate_json_assignment_record_does_not_need_the_fasta_address():
+def test_separate_json_assignment_record_does_not_need_the_fasta_address():
     arguments = fasta_arguments()
     original = synthetic_inputs()
     arguments["reference_metadata"] = original["reference_metadata"]
     arguments["description_bindings"] = original["description_bindings"]
     sheet = build_database_sheet(**arguments)
-    assert sheet["schema"] == "blast_database_sheet_v2"
+    assert sheet["schema"] == "blast_database_sheet_record_locator"
     assert sheet["coverage"]["matched_metadata_row_count"] == 2
     assert calculate_database_probabilities(sheet)["unadjusted_probabilities"] == {"F":.8, "G":.2}
     assert "record_locator" not in sheet["reference_metadata"][0]
@@ -566,7 +566,7 @@ def test_null_and_absent_locators_use_the_same_existing_pointer_key():
     arguments["sequence_identity_bindings"][0]["record_locator"] = None
     arguments["sequence_identity_bindings"][1]["pointer"] = arguments["sequence_identity_bindings"][0]["pointer"]
     sheet = build_database_sheet(**arguments)
-    assert sheet["schema"] == "blast_database_sheet_v2"
+    assert sheet["schema"] == "blast_database_sheet_record_locator"
     assert "blast_sequence_binding_source_identity_conflict" in codes(sheet)
 
 
@@ -579,25 +579,25 @@ def test_implicit_matcher_cannot_consume_a_new_locator_even_when_null():
         build_database_sheet(**arguments)
 
 
-def test_saved_generic_v1_never_auto_upgrades_and_v2_mode_is_explicit():
+def test_sheet_schema_must_agree_with_association_mode():
     sheet = build_database_sheet(**fasta_arguments())
-    sheet["schema"] = "blast_database_sheet_v1"
-    sheet["association_mode"] = "explicit_bindings_v1"
-    with pytest.raises(ValueError, match="^blast_record_locator_requires_v2_sheet$"):
+    sheet["schema"] = "blast_database_sheet"
+    sheet["association_mode"] = "explicit_bindings"
+    with pytest.raises(ValueError, match="^blast_record_locator_requires_record_locator_sheet$"):
         calculate_database_probabilities(sheet)
-    sheet["schema"] = "blast_database_sheet_v2"
+    sheet["schema"] = "blast_database_sheet_record_locator"
     with pytest.raises(ValueError, match="^blast_database_association_mode_invalid$"):
         calculate_database_probabilities(sheet)
-    sheet["schema"] = "blast_database_sheet_v3"
+    sheet["schema"] = "blast_database_sheet_population"
     with pytest.raises(ValueError, match="^blast_database_sheet_required$"):
         calculate_database_probabilities(sheet)
 
 
-def test_locator_words_inside_evidence_and_native_record_do_not_select_v2():
+def test_locator_words_inside_evidence_and_native_record_do_not_select():
     arguments = synthetic_inputs()
     arguments["reference_metadata"][0]["native_record"] = {"record_locator":{"not":"a locator"}}
     arguments["reference_metadata"][0]["functions"][0]["evidence"] = [{"metadata_record_locator":True}]
-    assert build_database_sheet(**arguments)["schema"] == "blast_database_sheet_v1"
+    assert build_database_sheet(**arguments)["schema"] == "blast_database_sheet"
 
 
 def test_saved_recalculation_changes_only_parameters_and_derived_weights(tmp_path, monkeypatch):

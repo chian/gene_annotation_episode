@@ -87,7 +87,7 @@ def selected_job(tmp_path, pair, variant):
             db = databases[ordinal]
             if name == 'vdb':
                 manifest = db['manifest']
-                manifest['version'] = 'native_blast_prepared_database_manifest_v1'
+                manifest['version'] = 'native_blast_prepared_database_manifest'
                 manifest['kind'] = db['kind'] = 'vdb'
                 manifest['identity']['preparation_type'] = 'unknown'
                 manifest['preparation']['preparation_type'] = 'vdb'
@@ -210,7 +210,7 @@ def test_exact_software_molecule_and_pair_are_required(tmp_path, changed):
 
 @pytest.mark.parametrize('mode', ['convert_seqid_list', 'create_subset_alias', 'aggregate_databases',
                                  'aggregate_volumes', 'create_profile_database'])
-def test_explicit_empty_v2_title_stays_in_descriptor_and_selected_request(tmp_path, mode):
+def test_explicit_empty_title_stays_in_descriptor_and_selected_request(tmp_path, mode):
     pair = next(p for p in PREPARATION_MODES if p[1] == mode); variant = VARIANTS[mode][0]
     job = selected_job(tmp_path, pair, variant); job['operation']['parameters']['title'] = ''
     row = binding(pair, variant)

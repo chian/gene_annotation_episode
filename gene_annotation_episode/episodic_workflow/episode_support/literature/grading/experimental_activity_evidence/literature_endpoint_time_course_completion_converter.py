@@ -103,7 +103,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_row_contract import SUPPORT_WEAKEST_ORDER
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_endpoint_time_course_completion_converted_v1'
+VERSION = 'a105_endpoint_time_course_completion_converted'
 CRITERIA_MAP = {'measurement_identity': ('completion_criterion',), 'endpoint_alignment': ('matched_endpoint', 'samples_stopped', 'sampling_resolution'),
                 'background_alternatives': ('spontaneous_course_control',), 'attribution_supported': ('enzyme_dependence', 'contaminating_activity'),
                 'product_identity': ('product_identity', 'mass_balance'), 'conversion_denominator': ('initial_substrate',),

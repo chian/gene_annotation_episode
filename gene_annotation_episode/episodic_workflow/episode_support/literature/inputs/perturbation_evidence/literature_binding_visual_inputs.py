@@ -19,8 +19,8 @@ from PIL import Image, __version__ as PILLOW_VERSION
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.perturbation_evidence.literature_binding_reader import _measurement, _SCALES
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.perturbation_evidence.literature_experimental_contracts import ExperimentalContractError
 
-VERSION = "binding_visual_inputs_v1"
-OUTPUT_VERSION = "binding_visual_extraction_v1"
+VERSION = "binding_visual_inputs"
+OUTPUT_VERSION = "binding_visual_extraction"
 STATES = ("exact", "ambiguous", "unreadable", "conflicting")
 BASES = ("fit_to_averaged_curve", "between_independent_fitted_parameters", "unknown")
 KINDS = ("ic50", "reported_hill_kd")
@@ -517,7 +517,7 @@ def read_binding_visual_inputs(arguments, *, read_source):
         reasons.append("no_representable_cells")
     table = None
     if included and supported_unit and not qualification_errors and not shared_errors:
-        table = {"version": "binding_parameter_table_v1", "table_id": arguments["table_id"],
+        table = {"version": "binding_parameter_table", "table_id": arguments["table_id"],
                  "parameter_kind": parameter["value"], "unit": raw_unit,
                  "uncertainty_basis": basis["value"],
                  "minimum_experiment_count": count["value"] if count is not None else None,

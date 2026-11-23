@@ -137,11 +137,11 @@ def test_the_monitor_and_results_commissions_name_the_child_fields_and_select_de
     monitor = TO_CHILD.msg_to_child('monitor', {
         'target_handle': 'handle', 'requested_fields': ['execution_status'], 'known_progress_refs': [],
         'permitted_committed_record_types': [], 'information_unit': 1.0}, summary)
-    assert monitor.assignment['version'] == 'monitor_assignment_v1'
+    assert monitor.assignment['version'] == 'monitor_assignment'
     assert monitor.selection == TASK.MONITOR_SELECTION
     results = TO_CHILD.msg_to_child('results', {'plan_ref': 'plan_1', 'selector': {'paths': ['a']},
                                                 'acquired_record_unit': 2.0}, summary)
-    assert results.assignment == {'version': 'execution_results_assignment_v1', 'handoff_ref': ['row_1'],
+    assert results.assignment == {'version': 'execution_results_assignment', 'handoff_ref': ['row_1'],
                                   'selector': {'paths': ['a']}, 'resource_kind': 'hpc', 'workspace': '/w',
                                   'acquired_record_unit': 2.0}
     assert results.selection == TASK.RESULTS_SELECTION == ()
@@ -157,13 +157,13 @@ def test_the_monitor_and_results_commissions_name_the_child_fields_and_select_de
 
 def test_the_launch_commission_is_built_from_the_frozen_plan():
     plan = {'plan_ref': 'plan_1', 'plan_id': 'p', 'manifest': {}, 'supplied_input_file': '/x',
-            'launch_assignment': {'version': 'execution_launch_assignment_v1', 'requests': {'r': {'k': 1}},
+            'launch_assignment': {'version': 'execution_launch_assignment', 'requests': {'r': {'k': 1}},
                                   'immutable_input_versions': [], 'constraints': {'allowed_kinds': ['hpc']}}}
     summary = {'ledger_view': {'plans': [plan], 'commission': {'resource_id': 'r', 'objective': 'o',
                                                               'obligations': {}}, 'coordinator_workspace': '/w'},
                'launches': [], 'scope': {'subject_refs': []}, 'input_refs': ['a'], 'message': {}}
     message = TO_CHILD.msg_to_child('launch', {'plan_ref': 'plan_1', 'handoff_unit': 1.0}, summary)
-    assert message.assignment == {'version': 'execution_launch_assignment_v1', 'requests': {'r': {'k': 1}},
+    assert message.assignment == {'version': 'execution_launch_assignment', 'requests': {'r': {'k': 1}},
                                   'immutable_input_versions': [], 'constraints': {'allowed_kinds': ['hpc']},
                                   'input_refs': ['a'], 'handoff_unit': 1.0, 'already_handed_off_resource_ids': []}
     assert message.message['hpc_execution_job']['plan_id'] == 'p'

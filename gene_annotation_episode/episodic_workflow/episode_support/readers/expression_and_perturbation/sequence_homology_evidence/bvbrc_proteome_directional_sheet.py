@@ -31,7 +31,7 @@ def build_directional_sheet(directional_results: list[dict]) -> dict:
                 raise DirectionalNumericalContractError('invalid_input_contract',
                     f'/directional_results/{index}' + error.path) from None
         diagnostics = _sheet_diagnostics(results)
-        sheet = {'version': 'bvbrc_proteome_directional_sheet_v1',
+        sheet = {'version': 'bvbrc_proteome_directional_sheet',
                  'reader_results': results, 'reports': _observations(results),
                  'diagnostics': diagnostics}
         answer = {'state': 'partial' if diagnostics else 'available', 'sheet': sheet,

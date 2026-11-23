@@ -174,7 +174,7 @@ async def progress_wait(arguments, ctx):
     """Wait for the job's end event after the cursor last seen, or for the reconsideration time. The receipt of
     the event comes into custody."""
     outcome = await ctx.services['native_events'].wait(ctx, {
-        'version': 'event_condition_v1', 'reconsider_at': arguments['reconsider_at'],
+        'version': 'event_condition', 'reconsider_at': arguments['reconsider_at'],
         'events': [{'handle': arguments['event_target'], 'event': 'state_changed',
                     'after_cursor': arguments['after_cursor']}]})
     if outcome['status'] != 'completed':

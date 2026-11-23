@@ -98,7 +98,7 @@ def endpoint_example():
     article = (DEPLETION_CASE / 'PMC11741061.xml').read_bytes()
     assert sha256(article).hexdigest() == DEPLETION_ARTICLE_PIN
     source_ref = 'source_' + DEPLETION_PIN
-    selected = {'version': 'a105_parent_depletion_xlsx_selection_v1', 'source_ref': source_ref, 'expected_sha256': DEPLETION_PIN, 'sheet_name': 'summary', 'compound': 'Capecitabine', 'submix': 'Sub7', 'time_hours': 24}
+    selected = {'version': 'a105_parent_depletion_xlsx_selection', 'source_ref': source_ref, 'expected_sha256': DEPLETION_PIN, 'sheet_name': 'summary', 'compound': 'Capecitabine', 'submix': 'Sub7', 'time_hours': 24}
     extracted = read_parent_depletion_inputs(selected, raw)
     native = populate_parent_depletion_components(extracted)
     assert extracted['row_number'] == 5

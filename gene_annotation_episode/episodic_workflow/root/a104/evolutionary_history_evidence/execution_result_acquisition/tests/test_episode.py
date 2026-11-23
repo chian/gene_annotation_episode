@@ -74,7 +74,7 @@ def test_the_return_form_declares_credit_and_finding_and_only_controlled_selecta
 
 
 def _target(**changes):
-    value = {'version': 'execution_target_v1', 'handle': 'handoff_1', 'run_id': 'run', 'resource_id': 'local',
+    value = {'version': 'execution_target', 'handle': 'handoff_1', 'run_id': 'run', 'resource_id': 'local',
              'resource_kind': 'local', 'execution_id': 'exec_1', 'request_sha256': '0' * 64,
              'origin_episode_id': 'episode_1',
              'assignment': {'resource_id': 'local', 'resource_kind': 'local', 'workspace': '/work/space',
@@ -86,7 +86,7 @@ def _target(**changes):
 
 
 def _assignment(**changes):
-    value = {'version': 'execution_results_assignment_v1', 'handoff_ref': 'handoff_1',
+    value = {'version': 'execution_results_assignment', 'handoff_ref': 'handoff_1',
              'selector': {'paths': ['/work/space/out.txt'], 'path': '/work/space/logs/log.txt', 'offset': 10,
                           'limit': 90},
              'target': _target(), 'acquired_record_unit': 2.0}
@@ -125,8 +125,8 @@ def test_a_wrong_commission_fails():
 
 def test_the_families_that_are_in_no_place_now_raise_where_their_old_class_was_called():
     with pytest.raises(NotImplementedError, match='unplaced:LocalFileSourceResults.selector'):
-        read_from_parent(_admitted(selector={'version': 'local_file_source_selector_v1', 'files': []}), {})
-    api = _target(resource_kind='api', assignment={'version': 'api_service_assignment_v1', 'service': 'ncbi_blast'})
+        read_from_parent(_admitted(selector={'version': 'local_file_source_selector', 'files': []}), {})
+    api = _target(resource_kind='api', assignment={'version': 'api_service_assignment', 'service': 'ncbi_blast'})
     with pytest.raises(NotImplementedError, match='unplaced:api_execution.validate_result_selector'):
         read_from_parent(_admitted(target=api, selector={'version': 'x'}), {})
     typed = {**_target()['assignment'], 'requested_job': {'native_hmmer': {'program': 'phmmer'}}}

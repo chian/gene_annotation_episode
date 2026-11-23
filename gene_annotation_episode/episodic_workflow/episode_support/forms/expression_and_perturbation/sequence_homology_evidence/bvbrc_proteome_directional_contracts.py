@@ -16,7 +16,7 @@ from jsonschema import Draft202012Validator, validators
 from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.sequence_homology_evidence.bvbrc_proteome_native_contracts import native_schema
 
 
-FORMAT = "ncbi_blastall_blastp_pairwise_text_v1"
+FORMAT = "ncbi_blastall_blastp_pairwise_text"
 RELEASES = frozenset({"2.0.11", "2.2.2", "2.2.21"})
 _INTEGER = re.compile(r"(?:[0-9]+|[0-9]{1,3}(?:,[0-9]{3})+)\Z")
 _DECIMAL = re.compile(

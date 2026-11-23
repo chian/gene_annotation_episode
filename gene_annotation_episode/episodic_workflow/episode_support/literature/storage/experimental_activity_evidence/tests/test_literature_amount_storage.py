@@ -24,7 +24,7 @@ def setup(store, ctx, *, text=TEXT, arguments=None):
             return [replace_source(child) for child in value]
         return source if value == SOURCE else value
     args = replace_source(args)
-    context = LiteratureContext(ctx.run_id, ctx.episode_id, 'literature', (('literature', 'case'),), store.validate_scope({'subject_refs': store.problem()['subject_refs']}), {'version': 'literature_assignment_v1', 'question_context_refs': [], 'source_refs': [source]}, {}, [source])
+    context = LiteratureContext(ctx.run_id, ctx.episode_id, 'literature', (('literature', 'case'),), store.validate_scope({'subject_refs': store.problem()['subject_refs']}), {'version': 'literature_assignment', 'question_context_refs': [], 'source_refs': [source]}, {}, [source])
     return (context, args)
 
 

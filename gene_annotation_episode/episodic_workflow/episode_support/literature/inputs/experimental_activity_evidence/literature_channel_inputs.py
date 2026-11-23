@@ -17,7 +17,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence.literature_channel_calculations import ARRANGEMENT_RELATIONS, CURRENT_KINDS, PRIMITIVE_ORDER, QUANTITIES
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_experimental_contracts import ExperimentalContractError
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_partner_source_fields import _ALL_TAGS, _STRUCTURAL_TAG, _TABLE_BOUNDARY, _table_contexts, _unit_contexts, _unit_continuation, number_selector_schema, read_source_number
-VERSION = 'a105_channel_inputs_v1'
+VERSION = 'a105_channel_inputs'
 SOURCE_KINDS = ('primary_source', 'retained_extraction', 'graph_extraction', 'synthetic_fixture')
 LITERAL_FIELDS = ('organism', 'genotype', 'molecule', 'construct', 'preparation', 'experimental_system', 'membrane', 'ionic_conditions', 'voltage_convention', 'current_baseline', 'conducting_unit', 'endpoint', 'intended_variable')
 ARRANGEMENT_KINDS = ('single_preparation', 'replacement', 'coexistence', 'unknown', 'conflicting')
@@ -174,7 +174,7 @@ def _covariance(reference, measurements, sources):
     except (UnicodeDecodeError, json.JSONDecodeError) as error:
         raise ExperimentalContractError('covariance_json_required', 'covariance_source_ref') from error
     _keys(value, _COVARIANCE_FIELDS, 'covariance_source')
-    if value['version'] != 'a105_channel_covariance_v1':
+    if value['version'] != 'a105_channel_covariance':
         _fail('covariance_version_mismatch', 'covariance_source.version')
     if value['primitive_order'] != list(PRIMITIVE_ORDER):
         _fail('covariance_primitive_order_mismatch', 'covariance_source.primitive_order')

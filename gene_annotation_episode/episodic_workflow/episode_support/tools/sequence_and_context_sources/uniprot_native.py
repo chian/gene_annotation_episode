@@ -318,7 +318,7 @@ def _cross_references(row, pointer, reader, evidence):
     return {"state": state, "items": items}
 
 
-def _legacy_publication(row, pointer, reader):
+def _source_fields(row, pointer, reader):
     description_pointer = _ptr(pointer, "proteinDescription")
     _, description = reader.container(row, "proteinDescription", dict, description_pointer, "metadata")
     candidates = []
@@ -623,16 +623,16 @@ def parse_uniprot_native(content: bytes, *, request: dict | None,
         evidence = _evidence(raw, pointer, record_reader)
         features = _features(raw, pointer, record_reader, identity, sequence, evidence)
         cross_references = _cross_references(raw, pointer, record_reader, evidence)
-        legacy = _legacy_publication(raw, pointer, record_reader)
+        source_fields = _source_fields(raw, pointer, record_reader)
         records.append({"identity": identity, "metadata": metadata, "sequence": sequence,
                         "taxon": taxon, "features": features, "evidence": evidence,
                         "cross_references": cross_references, "issues": record_reader.issues,
-                        "legacy_publication": legacy})
+                        "source_fields": source_fields})
         all_issues.extend(record_reader.issues)
     page["publishable_record_count"] = len(records)
     page["projection_state"] = _projection_state(all_issues)
     page["whole_query_complete"] = _whole_query_complete(page)
-    result = {"version": "uniprot_native_page_v1", "content_sha256": hashlib.sha256(content).hexdigest(),
+    result = {"version": "uniprot_native_page", "content_sha256": hashlib.sha256(content).hexdigest(),
               "page": page, "records": records, "issues": all_issues}
     validate_uniprot_projection(result)
     return result
@@ -826,18 +826,18 @@ def _validate_record(record, page):
                 _field_pointer(prop[field], _ptr(prop["pointer"], field))
         _require(xref["evidence_pointers"] == [e["pointer"] for e in evidence if e["owner_pointer"] == xp],
                  "xref_evidence_conflict")
-    legacy = record["legacy_publication"]
-    _require(legacy["source_name"] is None or legacy["source_name_pointer"] is not None,
-             "legacy_name_pointer_missing")
-    _require(len(legacy["source_ec_numbers"]) == len(legacy["source_ec_number_pointers"]),
-             "legacy_ec_pointer_count_conflict")
+    source_fields = record["source_fields"]
+    _require(source_fields["source_name"] is None or source_fields["source_name_pointer"] is not None,
+             "source_fields_name_pointer_missing")
+    _require(len(source_fields["source_ec_numbers"]) == len(source_fields["source_ec_number_pointers"]),
+             "source_fields_ec_pointer_count_conflict")
     prefix = re.escape(pointer + "/proteinDescription/") + r"(?:recommendedName|submissionNames/[0-9]+)"
-    if legacy["source_name_pointer"] is not None:
-        _require(re.fullmatch(prefix + r"/fullName/value", legacy["source_name_pointer"]) is not None,
-                 "legacy_name_pointer_conflict")
-    for ec_pointer in legacy["source_ec_number_pointers"]:
+    if source_fields["source_name_pointer"] is not None:
+        _require(re.fullmatch(prefix + r"/fullName/value", source_fields["source_name_pointer"]) is not None,
+                 "source_fields_name_pointer_conflict")
+    for ec_pointer in source_fields["source_ec_number_pointers"]:
         _require(re.fullmatch(prefix + r"/ecNumbers/[0-9]+/value", ec_pointer) is not None,
-                 "legacy_ec_pointer_conflict")
+                 "source_fields_ec_pointer_conflict")
     for issue in record["issues"]:
         _require(issue["record_ordinal"] == ordinal and issue["effect"] in {"field_partial", "qualification"},
                  "record_issue_conflict")
@@ -848,7 +848,7 @@ def validate_uniprot_projection(parsed: dict) -> None:
 
     Native bytes remain a separate operand: this validator cannot authenticate a
     response or prove a projection's values against bytes that it was not given.
-    The legacy compatibility helper additionally checks the retained digest.
+    The source_fields compatibility helper additionally checks the retained digest.
     """
     error = next(_PAGE_VALIDATOR.iter_errors(parsed), None)
     if error is not None:
@@ -915,8 +915,8 @@ def _resolve_native(body, pointer):
     return value
 
 
-def legacy_uniprot_records(parsed: dict, content: bytes) -> list[dict]:
-    """Project old parser keys using the single native parser's decisions.
+def uniprot_source_records(parsed: dict, content: bytes) -> list[dict]:
+    """Project flat source records using the single native parser's decisions.
 
     Raw sections are copied verbatim from matching retained bytes. This helper
     does not independently reinterpret accession, sequence, names or EC values.
@@ -930,15 +930,15 @@ def legacy_uniprot_records(parsed: dict, content: bytes) -> list[dict]:
     records = []
     for record in parsed["records"]:
         raw = _resolve_native(body, record["identity"]["record_pointer"])
-        legacy = record["legacy_publication"]
+        source_fields = record["source_fields"]
         records.append({"accession": record["identity"]["primary_accession"],
             "entry_type": record["metadata"]["entry_type"]["value"],
             "sequence": record["sequence"]["value"]["value"],
             "taxon_id": record["taxon"]["taxon_id"]["value"],
             "organism": record["taxon"]["scientific_name"]["value"],
-            "source_name": legacy["source_name"], "source_ec_numbers": list(legacy["source_ec_numbers"]),
+            "source_name": source_fields["source_name"], "source_ec_numbers": list(source_fields["source_ec_numbers"]),
             "source_features": raw.get("features", []), "source_comments": raw.get("comments", []),
             "source_references": raw.get("references", []),
             "source_cross_references": raw.get("uniProtKBCrossReferences", []),
-            "entry_audit": raw.get("entryAudit", {}), "interpretation": legacy["interpretation"]})
+            "entry_audit": raw.get("entryAudit", {}), "interpretation": source_fields["interpretation"]})
     return records

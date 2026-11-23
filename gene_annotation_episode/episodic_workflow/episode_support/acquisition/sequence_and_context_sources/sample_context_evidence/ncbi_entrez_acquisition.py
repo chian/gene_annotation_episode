@@ -18,7 +18,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.readers.local_exe
 
 
 TOOL = "public.ncbi.entrez"
-VERSION = "ncbi_molecular_entrez_result_v1"
+VERSION = "ncbi_molecular_entrez_result"
 BASE_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
 MAX_BYTES = 8 * 1024 * 1024
 MAX_IDS = 100

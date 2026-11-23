@@ -12,7 +12,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.experimen
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_experimental_contracts import ExperimentalContractError
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_ion_discrimination_inputs import VERSION as INPUT_VERSION, ROLES, ion_discrimination_sheet_schema, validate_ion_discrimination_extraction, canonical_activity_owner
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_ion_discrimination_numbers import fraction, rational
-VERSION = 'a105_ion_discrimination_sheet_v1'
+VERSION = 'a105_ion_discrimination_sheet'
 FORMULAS = {'preferred_activity': 'selected_preferred_activity_or_limit', 'alternative_activity': 'selected_alternative_activity_or_limit', 'activity_ratio': 'preferred_activity/alternative_activity', 'log_activity_ratio': 'ln(activity_ratio)', 'activity_ratio_variance': 'J_R*C*J_R_transpose', 'activity_ratio_standard_uncertainty': 'sqrt(activity_ratio_variance)', 'log_activity_ratio_variance': 'J_log*C*J_log_transpose', 'log_activity_ratio_standard_uncertainty': 'sqrt(log_activity_ratio_variance)', 'reported_selectivity': 'selected_original_reported_selectivity', 'nominal_threshold_ratio': 'preferred_threshold/alternative_threshold'}
 COMPONENTS = tuple(FORMULAS)
 MEANINGS = {'preferred_activity': 'native_selected_activity_or_limit', 'alternative_activity': 'native_selected_activity_or_limit', 'activity_ratio': 'ion_specific_rate_ratio', 'log_activity_ratio': 'log_ion_specific_rate_ratio', 'activity_ratio_variance': 'first_order_ratio_variance', 'activity_ratio_standard_uncertainty': 'first_order_ratio_standard_uncertainty', 'log_activity_ratio_variance': 'first_order_log_ratio_variance', 'log_activity_ratio_standard_uncertainty': 'first_order_log_ratio_standard_uncertainty', 'reported_selectivity': 'source_reported_selectivity_limit', 'nominal_threshold_ratio': 'nominal_reported_threshold_division'}
@@ -144,7 +144,7 @@ def _compiled(e, cells):
         row = ops[role]['row']
         v = row['value']
         why = None
-        if row['status'] != 'populated' or v is None or row['formula_code'] != 'corrected_activity_compiled_v1' or (row['formula'] not in ('(q-g)*v/(k*E*u)', 'source_already_corrected_amount_normalized_value')):
+        if row['status'] != 'populated' or v is None or row['formula_code'] != 'corrected_activity_compiled' or (row['formula'] not in ('(q-g)*v/(k*E*u)', 'source_already_corrected_amount_normalized_value')):
             why = 'selected_activity_unavailable'
         elif row['unit'] != 'per_min':
             why = 'different_physical_quantities'

@@ -21,7 +21,7 @@ returns     every case the criterion can return, as (status, reason_code, when).
 No criterion rests on a plain choice field (spread_kind, rate_basis): a choice holds no span in the merged record.
 """
 
-VERSION = 'a105_transport_cell_tracer_uptake_criteria_v1'
+VERSION = 'a105_transport_cell_tracer_uptake_criteria'
 
 _fact_returns = (
     ('supported', 'facts_answered_yes', 'the fact is yes'),

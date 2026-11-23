@@ -128,7 +128,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_transport_response_direction import select_transport_effect
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_transport_oocyte_two_electrode_converted_v1'
+VERSION = 'a105_transport_oocyte_two_electrode_converted'
 CRITERIA_MAP = {'background_alternatives': ('uninjected_control', 'background_current'), 'membrane_system': ('uninjected_control', 'leak_subtracted'),
                 'attribution_supported': ('inactive_mutant_control', 'expression_confirmed'), 'transport_endpoint': ('same_oocyte_baseline',),
                 'transport_driving_force': ('clamp_conditions',), 'transport_specificity': ('non_substrate_control', 'ion_dependence'),

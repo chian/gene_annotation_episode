@@ -20,9 +20,9 @@ DRIVER_MODULE = 'gene_annotation_episode.episodic_workflow.episode_support.tools
 POLICY = {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4294967296}
 ARTIFACT_NAMES = {'original_input': 'original-input.bin', 'input_data': 'input.json',
     'prepared_data': 'prepared.json', 'factors': 'factors.json', 'manifest': 'fit-manifest.json'}
-ARTIFACT_FORMATS = {'original_input': 'expression_delimited_bytes_v1', 'input_data': 'expression_nmf_input_v1',
-    'prepared_data': 'expression_nmf_prepared_v1', 'factors': 'expression_nmf_factors_v1',
-    'manifest': 'expression_nmf_native_manifest_v1'}
+ARTIFACT_FORMATS = {'original_input': 'expression_delimited_bytes', 'input_data': 'expression_nmf_input',
+    'prepared_data': 'expression_nmf_prepared', 'factors': 'expression_nmf_factors',
+    'manifest': 'expression_nmf_native_manifest'}
 
 
 def obj(properties, required=None):
@@ -39,7 +39,7 @@ PARAMETERS_SCHEMA = obj({'rank': {'type': 'integer', 'minimum': 1},
     'random_state': {'type': 'integer', 'minimum': 0, 'maximum': 2**32-1},
     'normalization': {'enum': ['none', 'column_sum_1000']}, 'tol': {'type': 'number', 'minimum': 0},
     'max_iter': {'type': 'integer', 'minimum': 1}})
-SOFTWARE_SCHEMA = obj({'version': {'const': 'expression_nmf_software_v1'}, 'python': FILE_SCHEMA,
+SOFTWARE_SCHEMA = obj({'version': {'const': 'expression_nmf_software'}, 'python': FILE_SCHEMA,
     'python_version': TEXT, 'python_home': TEXT, 'module_root': TEXT,
     'implementation_files': {'type': 'array', 'minItems': 1, 'items': FILE_SCHEMA},
     'dependency_roots': {'type': 'array', 'minItems': 1, 'items': TEXT, 'uniqueItems': True},
@@ -49,7 +49,7 @@ SOFTWARE_SCHEMA = obj({'version': {'const': 'expression_nmf_software_v1'}, 'pyth
 INPUT_SPEC_SCHEMA = obj({'path': TEXT, 'sha256': SHA, 'size_bytes': COUNT,
     'artifact_ref': {'anyOf': [TEXT, NULL]}, 'delimiter': {'enum': [',', '\t']},
     'metadata': METADATA_SCHEMA})
-JOB_SCHEMA = obj({'version': {'const': 'native_expression_nmf_job_v1'}, 'operation': {'const': OPERATION},
+JOB_SCHEMA = obj({'version': {'const': 'native_expression_nmf_job'}, 'operation': {'const': OPERATION},
     'mode': {'const': MODE}, 'input': INPUT_SPEC_SCHEMA, 'parameters': PARAMETERS_SCHEMA,
     'software': SOFTWARE_SCHEMA, 'output_prefix': TEXT})
 ENV_SCHEMA = {'type': 'object', 'propertyNames': {'pattern': '^[A-Za-z_][A-Za-z0-9_]*$'},
@@ -156,7 +156,7 @@ def expression_nmf_output_files(job):
 def validate_expression_nmf_run_plan(value):
     require(type(value) is dict and set(value) == {'version', 'identity', 'requested_job', 'attempt_directory', 'policy', 'outputs'},
         'invalid_nmf_run_plan')
-    require(value['version'] == 'expression_nmf_run_plan_v1', 'invalid_nmf_run_plan')
+    require(value['version'] == 'expression_nmf_run_plan', 'invalid_nmf_run_plan')
     request = validate_expression_nmf_requested_job(value['requested_job'])
     binding = value['identity']
     require(type(binding) is dict and set(binding) == {'run_id', 'episode_id', 'resource_id', 'execution_id',
@@ -166,12 +166,7 @@ def validate_expression_nmf_run_plan(value):
     attempt = path_value(value['attempt_directory'], absolute=True)
     from gene_annotation_episode.episodic_workflow.episode_support.findings.partner_presence_evidence.terminal_scientific_evidence import terminal_plan_identity
     current = terminal_plan_identity(binding, attempt_directory=str(attempt))
-    legacy = (execution.name == 'native.json'
-        and binding['attempt_id'] == digest(binding['operation_key']) and binding['requested_job_sha256'] == digest(request)
-        and execution.parent.name == binding['attempt_id'] and execution.parent.parent.name == digest({
-            'run': binding['run_id'], 'episode': binding['episode_id']})
-        and execution.parent.parent.parent.name == '.episode-operations')
-    require((current or legacy) and attempt == execution.parent / ATTEMPT_DIRECTORY_NAME
+    require(current and attempt == execution.parent / ATTEMPT_DIRECTORY_NAME
         and binding['attempt_id'] == digest(binding['operation_key']) and binding['requested_job_sha256'] == digest(request),
         'nmf_original_attempt_mismatch')
     require(canonical(value['policy']) == canonical(POLICY), 'nmf_original_allocation_mismatch')

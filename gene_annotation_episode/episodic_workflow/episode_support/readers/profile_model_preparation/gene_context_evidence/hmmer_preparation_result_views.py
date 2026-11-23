@@ -522,7 +522,7 @@ _PROJECTION = _object({"collection": {"type": "string", "enum": list(_COLLECTION
     "quantities": {"type": "array", "uniqueItems": True, "items": {"type": "string", "enum": _ALL_PATHS}},
     "checks": {"type": "array", "uniqueItems": True, "items": {"type": "string", "enum": _ALL_CHECKS}}})
 NATIVE_HMMER_PREPARATION_RESULT_SELECTOR_SCHEMA = _object({
-    "version": {"const": "native_hmmer_preparation_result_selector_v1"},
+    "version": {"const": "native_hmmer_preparation_result_selector"},
     "acquisition": {"const": "complete_bound_bundle"}, "projection": {"oneOf": [_PROJECTION, {"type": "null"}]},
     "artifacts": {"type": "array", "uniqueItems": True, "items": _SELECTION}})
 NATIVE_HMMER_PREPARATION_RESULT_SELECTOR_SCHEMA["anyOf"] = [
@@ -602,7 +602,7 @@ def validate_preparation_result_selector(value, *, program, mode):
     catalog = preparation_projection_catalog(program, mode)
     _finite_json(value)
     _fields(value, {"version", "acquisition", "projection", "artifacts"}, "selector_fields_invalid")
-    if value["version"] != "native_hmmer_preparation_result_selector_v1" or value["acquisition"] != "complete_bound_bundle":
+    if value["version"] != "native_hmmer_preparation_result_selector" or value["acquisition"] != "complete_bound_bundle":
         _error("selector_version_or_acquisition_invalid")
     if type(value["artifacts"]) is not list:
         _error("artifact_selections_list_required")
@@ -676,7 +676,7 @@ class _Saved:
     def __init__(self, grading, occurrences):
         _finite_json(grading)
         _fields(grading, {"version", "operation", "formats", "metadata", "native_abi", "requested_parameters", "sheet", "calculations"}, "grading_fields_invalid")
-        if grading["version"] != "native_hmmer_preparation_grading_v1":
+        if grading["version"] != "native_hmmer_preparation_grading":
             _error("grading_version_invalid")
         operation = grading["operation"]
         _fields(operation, {"program", "mode", "engine_version", "settings"}, "operation_fields_invalid")
@@ -724,7 +724,7 @@ class _Saved:
                 self._map_context()
             return
         _fields(self.sheet, {"schema", "operation", "artifact_occurrences", "issues"} | _SHEET_EXTRA[self.family], "sheet_fields_invalid")
-        if self.sheet["schema"] != "hmmer_" + self.family + "_sheet_v1" or self.sheet["operation"] != operation:
+        if self.sheet["schema"] != "hmmer_" + self.family + "_sheet" or self.sheet["operation"] != operation:
             _error("sheet_schema_or_operation_mismatch")
         metadata = grading["metadata"]
         for name in ({"artifact_bindings"} if self.family == "artifact" else {"producer_contract", "source_binding"} if self.family == "fm" else set()):
@@ -736,7 +736,7 @@ class _Saved:
                 _error("sheet_native_abi_mismatch")
         calcfields = {"schema", "operation", "parameters", "rows", "checks", "issues"} | ({"model_components"} if self.family == "statistics" else set())
         _fields(self.calculations, calcfields, "calculation_fields_invalid")
-        if self.calculations["schema"] != "hmmer_" + self.family + "_components_v1" or self.calculations["operation"] != operation:
+        if self.calculations["schema"] != "hmmer_" + self.family + "_components" or self.calculations["operation"] != operation:
             _error("calculation_schema_or_operation_mismatch")
         if type(self.calculations["parameters"]) is not dict or any(type(x) is not list for x in (self.sheet["issues"], self.calculations["issues"], self.calculations["checks"])):
             _error("grading_lists_invalid")
@@ -933,7 +933,7 @@ class _Saved:
         for extraction in extractions:
             _fields(extraction, {"schema", "occurrence", "format", "records", "population", "issues"}, "model_extraction_fields_invalid")
             oid = extraction["occurrence"].get("occurrence_id")
-            if extraction["schema"] != "hmmer_model_extraction_v1" or oid not in self.occurrences or extraction["occurrence"] != {key: self.occurrences[oid][key] for key in _M1_FIELDS} or extraction["format"] != self.occurrences[oid]["format"]:
+            if extraction["schema"] != "hmmer_model_extraction" or oid not in self.occurrences or extraction["occurrence"] != {key: self.occurrences[oid][key] for key in _M1_FIELDS} or extraction["format"] != self.occurrences[oid]["format"]:
                 _error("model_extraction_occurrence_mismatch")
             if type(extraction["records"]) is not list:
                 _error("model_records_invalid")
@@ -956,7 +956,7 @@ class _Saved:
         if self.family == "fm" and self.sheet["database"] is not None:
             database = self.sheet["database"]
             oid = database.get("occurrence", {}).get("occurrence_id")
-            if database.get("schema") != "hmmer_fm_extraction_v1" or oid not in self.occurrences or database["occurrence"] != {key: self.occurrences[oid][key] for key in _M1_FIELDS}:
+            if database.get("schema") != "hmmer_fm_extraction" or oid not in self.occurrences or database["occurrence"] != {key: self.occurrences[oid][key] for key in _M1_FIELDS}:
                 _error("database_occurrence_mismatch")
             for collection, kind in (("segments", "segment"), ("ambiguity_ranges", "ambiguity"), ("blocks", "block")):
                 if type(database.get(collection)) is not list:

@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.storag
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_measurement_validation_inputs import VERSION as INPUT_VERSION, CONTEXT_FIELDS, RELATIONSHIPS, FORMULA_RELATIONS, measurement_validation_population_schema, measurement_validation_extraction_schema, read_measurement_validation_inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence.literature_measurement_validation_calculations import (COMPONENTS, FORMULAS, QUALIFICATIONS, measurement_validation_cell_schema, measurement_validation_sheet_schema, populate_measurement_validation)
 PROVIDER = 'literature.a105.measurement_validation'
-VERSION = 'literature_measurement_validation_record_v1'
+VERSION = 'literature_measurement_validation_record'
 NAMESPACE = 'literature_measurement_validation_cells'
 REQUESTED = 'requested_measurement_validation_components'
 VIEW = 'measurement_validation_components'

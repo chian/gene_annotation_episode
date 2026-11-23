@@ -45,7 +45,7 @@ about how well its quote supports it: 'direct' (the quote itself states the valu
 it to 'direct'; the default is only for forms built by tests that do not go through the extraction (the extraction always passes the model's answer).
 """
 
-VERSION = 'a105_distribution_optical_equilibrium_record_v1'
+VERSION = 'a105_distribution_optical_equilibrium_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'distribution_optical_equilibrium'
 QUANTITIES = ('equilibrium_fraction', 'equilibrium_fraction_spread', 'equilibrium_ratio', 'equilibrium_ratio_spread',

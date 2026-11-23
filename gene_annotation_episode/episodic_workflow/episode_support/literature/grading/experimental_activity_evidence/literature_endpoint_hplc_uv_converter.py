@@ -140,7 +140,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_endpoint_conversion_direction import select_endpoint_effect
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import SUPPORTS, apply_support
 
-VERSION = 'a105_endpoint_hplc_uv_converted_v1'
+VERSION = 'a105_endpoint_hplc_uv_converted'
 CRITERIA_MAP = {'measurement_identity': ('estimate_defined',), 'calibration_applicability': ('standard_curve_range', 'standard_curve_points', 'detection_limit_share'),
                 'matrix_interference': ('matrix_matched_calibration',), 'background_alternatives': ('spontaneous_reaction_control', 'zero_time_sample'),
                 'attribution_supported': ('enzyme_dependence', 'signal_over_control'), 'endpoint_alignment': ('endpoint_time_stated', 'reaction_stopped'),

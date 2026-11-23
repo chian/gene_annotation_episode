@@ -26,7 +26,7 @@ returns     every case the criterion can return, as (status, reason_code, when).
             as 'never' cannot occur for this criterion.
 """
 
-VERSION = 'a105_endpoint_nmr_criteria_v1'
+VERSION = 'a105_endpoint_nmr_criteria'
 
 PERCENT_PER_FRACTION = 100.0                              # FIXED_BY_DEFINITION: a percent is a hundredth.
 SECONDS_PER_UNIT = {'ms': 0.001, 's': 1.0}                # FIXED_BY_DEFINITION: the unit spellings of a relaxation time.

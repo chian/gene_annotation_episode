@@ -25,7 +25,7 @@ import uuid
 from .acquisition_types import AcquisitionError
 
 
-VERSION = 'shared_local_resources_v3'
+VERSION = 'shared_local_resources'
 DIRECTORY_ENV = 'GENE_EPISODE_LOCAL_RESOURCE_DIRECTORY'
 _LIVE = {'active', 'activating', 'deactivating', 'reloading'}
 _RESOURCE_FIELDS = {'memory_bytes', 'scratch_bytes'}

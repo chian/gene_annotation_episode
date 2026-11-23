@@ -84,7 +84,7 @@ KNOWLEDGE_TOOLS = ('knowledge.search', 'knowledge.entry', 'knowledge.read')
 THOUGHT_FIELDS = ('id', 'name', 'description', 'use_when', 'live_alternatives', 'decision_guidance',
                   'outcome_contingencies', 'boundary')
 PROPOSAL_ERRORS = (ContractError, CustodyError, ValueError, KeyError, TypeError)
-REVISION_ARGUMENTS = obj({'thought_pattern': obj({'version': {'const': 'partner_presence_evidence_option_ref_v1'},
+REVISION_ARGUMENTS = obj({'thought_pattern': obj({'version': {'const': 'partner_presence_evidence_option_ref'},
                                                   'library_id': {'type': 'string', 'pattern': '^[a-f0-9]{64}$'},
                                                   'slot': {'const': 'thought_pattern'},
                                                   'option_id': {'type': 'string', 'pattern': '^P[0-9]+$'},

@@ -13,8 +13,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_
 from gene_annotation_episode.episodic_workflow.episode_support.readers.expression_and_perturbation.sequence_homology_evidence.tests.test_bvbrc_proteome_directional import native, parse
 
 
-PARAMETERS = {'version': 'bvbrc_proteome_directional_parameters_v1',
-    'formula_version': 'displayed_blastp_correspondence_v1',
+PARAMETERS = {'version': 'bvbrc_proteome_directional_parameters',
+    'formula_version': 'displayed_blastp_correspondence',
     'amino_acid_alphabet': 'standard20', 'ratio_decimal_places': 18, 'rounding': 'half_even'}
 
 

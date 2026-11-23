@@ -45,7 +45,7 @@ def validate_restriction_worker_request(value):
     """Closed, detached, finite validation; no paths are read here."""
     try:
         restriction_canonical(value)
-        _require(type(value) is dict and value.get("version") == "restriction_worker_request_v1",
+        _require(type(value) is dict and value.get("version") == "restriction_worker_request",
                  "request_invalid")
         mode = value.get("mode")
         _require(mode in ("native", "saved") and set(value) ==
@@ -69,7 +69,7 @@ def validate_restriction_worker_manifest(value):
     try:
         restriction_canonical(value)
         _require(type(value) is dict and set(value) == _MANIFEST_FIELDS
-            and value["version"] == "restriction_worker_manifest_v1"
+            and value["version"] == "restriction_worker_manifest"
             and value["mode"] in ("native", "saved")
             and type(value["request_sha256"]) is str
             and re.fullmatch(r"[0-9a-f]{64}", value["request_sha256"]) is not None
@@ -221,7 +221,7 @@ def run_restriction_worker(request, *, output_directory):
     """Execute the selected finite mode once and retain independent complete outputs."""
     request = validate_restriction_worker_request(request)
     output = _Output(output_directory)
-    manifest = {"version": "restriction_worker_manifest_v1", "mode": request["mode"],
+    manifest = {"version": "restriction_worker_manifest", "mode": request["mode"],
         "request_sha256": restriction_digest(request), "status": "failed",
         "native_file": None, "catalog_file": None, "mapping_file": None,
         "native_state": "not_started", "reader_state": "not_started", "failure": None}
@@ -254,7 +254,7 @@ def run_restriction_worker(request, *, output_directory):
         else:
             try:
                 raw, native = _saved_file(request["native_file"], missing_code="saved_native_unavailable")
-                if type(native) is not dict or native.get("version") != "restriction_mapping_native_v1":
+                if type(native) is not dict or native.get("version") != "restriction_mapping_native":
                     raise _SavedError("native_record_invalid", ValueError("native_record_invalid"))
                 manifest["native_state"] = (native.get("batch_state") if native.get("batch_state")
                     in ("not_started", "returned", "failed") else "unavailable")

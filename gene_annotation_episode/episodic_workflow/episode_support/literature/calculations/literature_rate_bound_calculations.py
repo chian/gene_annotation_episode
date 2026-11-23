@@ -14,7 +14,7 @@ import json
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_experimental_contracts import ExperimentalContractError, RATE_UNITS, validate_rate_extraction
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence.literature_rate_calculations import _select, _identity, _BASE_UNITS
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_rate_reader import read_rate_table, _VALUE
-VERSION = 'a105_rate_constraint_cells_v1'
+VERSION = 'a105_rate_constraint_cells'
 
 def _domain(row, data):
     if row is None or row['status'] not in ('observed', 'censored'):
@@ -109,17 +109,17 @@ def _cell(domain, unit, formula, rows, *, reason=None):
     return {'value': numeric[0] if point and reason is None else None, 'lower': numeric[0], 'upper': numeric[1], 'lower_closed': bool(domain and domain[0] is not None and domain[2]), 'upper_closed': bool(domain and domain[1] is not None and domain[3]), 'exact_lower': _exact(domain[0]) if domain else None, 'exact_upper': _exact(domain[1]) if domain else None, 'status': 'unavailable' if reason or domain is None else 'point' if point else 'unbounded' if domain[0] is None and domain[1] is None else 'bounded', 'unavailable_reason': reason, 'unit': unit, 'formula': formula, 'origin': 'derived', 'approximate': any((row['approximate'] for row in rows)), 'float_bound_projection': 'outward_when_rounded; exact rational endpoints retained', 'bound_kind': 'reported_constraint_image_outer_bound', 'input_rows': [_identity(row) for row in rows], 'input_origins': list(dict.fromkeys((row['origin'] for row in rows)))}
 
 def populate_rate_table_bounds(extraction, *, reference_arm, test_arm, reference_condition, test_condition):
-    """Populate signed differences and normalized contrasts from v1 table rows.
+    """Populate signed differences and normalized contrasts from table rows.
 
     Domains are marginal reported constraints. Their rectangular image is an
     outer bound if additional dependence exists; no independence is assumed.
     A denominator admitting zero returns an explicit unavailable ratio because
     one interval cannot generally represent its image. Point and individual
     limit cells remain available. Approximation qualifiers remain qualifiers.
-    Native-span v2 population remains a separate unimplemented binding here.
+    Native-span population remains a separate unimplemented binding here.
     """
-    if not isinstance(extraction, dict) or extraction.get('version') != 'a105_rate_extraction_v1':
-        raise ExperimentalContractError('table_v1_extraction_required', 'extraction')
+    if not isinstance(extraction, dict) or extraction.get('version') != 'a105_rate_table_extraction':
+        raise ExperimentalContractError('table_extraction_required', 'extraction')
     data = validate_rate_extraction(extraction)
     for name, value in (('reference_arm', reference_arm), ('test_arm', test_arm), ('reference_condition', reference_condition), ('test_condition', test_condition)):
         if not isinstance(value, str) or not value.strip():

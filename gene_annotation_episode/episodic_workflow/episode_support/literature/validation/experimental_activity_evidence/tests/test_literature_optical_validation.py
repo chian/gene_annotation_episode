@@ -31,7 +31,7 @@ def test_detached_copies_and_frozen_version():
     validated = validate_optical_extraction(extraction)
     selected = validate_optical_selection(args, extraction)
     assert validated == before and selected == args
-    assert VERSION == 'a105_optical_saved_validation_v1'
+    assert VERSION == 'a105_optical_saved_validation'
     validated['signals']['sample']['number']['selector']['witness']['quote'] = 'changed'
     selected['signals']['sample']['qualification']['witnesses'].clear()
     assert extraction == before and args['signals']['sample']['qualification']['witnesses']

@@ -21,7 +21,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.evolution
 def _historical_cause(body, explanation):
     if explanation is not None:
         return {**explanation['cell'], 'explanation_ref': explanation['source_ref']}
-    return body['historical_cause'] if body['schema'] == 'a104_history_comparison_v1' else 'unassessed'
+    return body['historical_cause'] if body['schema'] == 'a104_history_comparison' else 'unassessed'
 
 
 def _qualify(store, measured, *, known, explanation=None, captured=()):
@@ -39,7 +39,7 @@ def _qualify(store, measured, *, known, explanation=None, captured=()):
     dependencies = {measured['source_ref']}
     if explanation is not None:
         dependencies.add(explanation['source_ref'])
-    if body['schema'] == 'a104_clade_composition_v1':
+    if body['schema'] == 'a104_clade_composition':
         from gene_annotation_episode.episodic_workflow.episode_support.grading.evolutionary_history_evidence.characterization import (
             received_links, clade_sheet, exact_reference_correspondence)
         links = received_links(store, known)
@@ -64,12 +64,12 @@ def _qualify(store, measured, *, known, explanation=None, captured=()):
                               for subject in characterization['characterized_subject_refs']) / \
             len(body['characterization_subject_refs']) if body['characterization_subject_refs'] else 0.
         characterization['reference_transfer_factor'] = measured_factor
-        characterization['transfer_policy'] = 'exact_native_MSA_identity_and_matched_extent_per_characterized_reference_v1'
+        characterization['transfer_policy'] = 'exact_native_MSA_identity_and_matched_extent_per_characterized_reference'
         characterization['regional_assay_links_required'] = sorted(set(body['characterization_subject_refs'])-eligible)
         value = value*measured_factor if value is not None else None
-    result = {'schema': 'a104_per_use_attribution_v1', 'version': VERSION, 'profile': PROFILE,
+    result = {'schema': 'a104_per_use_attribution', 'version': VERSION, 'profile': PROFILE,
         'measurement_ref': measured['source_ref'], 'target_ref': body['target_ref'],
-        'target_regions': regions, 'policy': body['producer_operation']+'_original_native_operands_v1',
+        'target_regions': regions, 'policy': body['producer_operation']+'_original_native_operands',
         'score': value, 'raw_value': measured['grade']['raw_value'],
         # Uncharacterized members widen the bounds and are recorded as a missing A105 link.
         'bounds': [value, measured['grade']['raw_value'] if characterization and missing else value]

@@ -11,7 +11,7 @@ from yield_control import CompletionYieldController
 
 def _request_yield_class(request):
     """Classify the original execution request without generated IDs (old
-    ``ExecutionEpisodeYield._request_yield_class``, for the ``practical_assignment_v1`` this episode admits)."""
+    ``ExecutionEpisodeYield._request_yield_class``, for the ``practical_assignment`` this episode admits)."""
     requested = request['requested_job']
     native = sorted(key for key in requested if key.startswith('native_'))
     parts = ['practical', request['resource_kind']]

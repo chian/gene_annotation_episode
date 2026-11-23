@@ -24,7 +24,7 @@ def msg_to_child(slot, arguments, summary):
                   + handle + ' of ' + summary['target_handle'] + '; no descendant traversal, fanout, cadence or '
                   'depth is prescribed.',
         message={'launch_instructions': summary['launch_instructions']},
-        assignment={'version': 'monitor_assignment_v1', 'target_handle': handle,
+        assignment={'version': 'monitor_assignment', 'target_handle': handle,
                     'requested_fields': list(summary['requested_fields']), 'known_progress_refs': [],
                     'permitted_committed_record_types': list(wanted),
                     'information_unit': summary['information_unit']},

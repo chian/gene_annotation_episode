@@ -40,7 +40,7 @@ of the partner over the signal elsewhere (a partition coefficient).
 What this method does not ask (kept in the record for the reviewer, no criterion judges it): the imaging mode.
 """
 
-VERSION = 'a105_colocalization_criteria_v1'
+VERSION = 'a105_colocalization_criteria'
 
 # ---- Threshold constants -------------------------------------------------
 # None: every number is judged on the sheet side (literature_colocalization_converter.py).

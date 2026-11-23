@@ -174,15 +174,15 @@ class RfamBatchService:
             "bit scores, E-values, GC and coordinates with unavailable fields distinguished from zero. Return "
             "only the requested typed projection. For a batch, JSON lacks query attribution; the native "
             "cmscan table preserves names joined to the original submitted occurrences. Choosing a table "
-            "requires an explicit result assignment. A v3 batch-report selection extracts the report's "
+            "requires an explicit result assignment. A batch-report selection extracts the report's "
             "native measurements and sequence correspondence, preserving its model name separately from an "
-            "unreported RF accession. Older report selections remain artifact-only. Full model length is "
+            "unreported RF accession. Full model length is "
             "not inferred from alignment endpoints.")]
 
     def result_catalog(self, request, selector):
         self.validate_request(request, None)
         selected = validate_rfam_result_selector(selector)
-        if selected["version"] == "rfam_batch_result_selector_v3" and request["mode"] != "sequence_batch":
+        if selected["version"] == "rfam_batch_report_result_selector" and request["mode"] != "sequence_batch":
             raise ValueError("rfam_report_batch_request_required")
         return self.result_capabilities()
 

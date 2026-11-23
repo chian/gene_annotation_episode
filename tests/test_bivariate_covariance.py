@@ -1,8 +1,8 @@
 """Kernel arithmetic and frozen protease parity; no new fit or native work.
 
 Constructed matrices are numerical engineering controls. The opt-in retained
-case compares current-v2 output with the byte-pinned pre-extraction source;
-the original native239 v1 artifact remains a separate immutable observation.
+case compares current output with the byte-pinned pre-extraction source;
+the original native239 artifact remains a separate immutable observation.
 """
 from copy import deepcopy
 from fractions import Fraction

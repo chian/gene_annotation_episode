@@ -19,7 +19,7 @@ def record(spread_kind=None, **values):
     """A BRET record stating every fact as yes and every quantity of STATED (overridden by ``values``; None makes it unavailable)."""
     stated = {**STATED, **values}
     quantities = {name: unavailable(UNITS[name][0], name, 'not_stated_in_passage') if stated[name] is None else point(stated[name], UNITS[name][0] if name not in ('kd', 'kd_spread', 'ki', 'ki_spread', 'tracer_concentration', 'tracer_kd') else 'nM', name, ['span_' + name]) for name in QUANTITIES}
-    return {'version': 'a105_bret_record_v1', 'experiment_type': 'bret', 'experiment_ref': 'exp_bret_1', 'source_ref': 'src_bret_1', 'assertion_ref': 'assert_bret_1',
+    return {'version': 'a105_bret_record', 'experiment_type': 'bret', 'experiment_ref': 'exp_bret_1', 'source_ref': 'src_bret_1', 'assertion_ref': 'assert_bret_1',
             'preparations': {'component_a_preparation_ref': 'prep_a', 'component_b_preparation_ref': 'prep_b', 'dataset_ref': 'dataset_bret_1'}, 'quantities': quantities,
             'bret_format': 'saturation_titration', 'donor': 'rluc', 'acceptor': 'fluorescent_protein', 'expression': 'transient_transfection', 'spread_kind': spread_kind,
             'facts': {name: fact('yes', ['span_' + name]) for name in FACTS},

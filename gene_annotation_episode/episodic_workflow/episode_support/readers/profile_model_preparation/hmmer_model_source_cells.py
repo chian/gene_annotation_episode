@@ -24,7 +24,7 @@ def hmmer2_evd_calibration(tokens, values, *, line=None):
     receives a bit score and passes it with this pair to histogram.c
     ExtremeValueP, whose exponent is -lambda*(score-mu). Thus location is in
     bits and inverse-scale in inverse bits; no MSV/Viterbi/Forward calibration is implied.
-    Original legacy EVD rows remain separately retained, including defects.
+    Original HMMER2 EVD rows remain separately retained, including defects.
     """
     if (type(tokens) is not list or type(values) is not list or len(tokens) != 2
             or len(values) != 2 or any(type(token) is not str for token in tokens)

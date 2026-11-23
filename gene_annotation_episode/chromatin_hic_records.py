@@ -55,7 +55,7 @@ def hic_record_definitions():
             "kind": {"enum": ["chromosome", "all_by_all"]},
         }),
         "HicHeader": _object({
-            "version": {"const": "hic_native_header_v1"},
+            "version": {"const": "hic_native_header"},
             "bin_id_space": {"const": "chromosome_local"},
             "source_version": {"type": "integer", "const": 9}, "byte_order": {"const": "little"},
             "header_range": _ref("HicByteRange"),
@@ -100,7 +100,7 @@ def hic_record_definitions():
             "extra_terminal_values": _nullable(_UINT), "outcome": _EXTENT,
         }),
         "HicPopulationRead": _object({
-            "version": {"const": "hic_population_read_v1"},
+            "version": {"const": "hic_population_read"},
             "source_sha256": _HASH,
             "scan_scope": {"const": "all_indexed_blocks_selected_cis_zoom"},
             "matrix_key": _TEXT,

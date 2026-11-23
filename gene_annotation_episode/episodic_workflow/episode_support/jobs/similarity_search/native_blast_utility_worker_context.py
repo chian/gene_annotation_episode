@@ -16,13 +16,13 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_
 
 PREFIX = "native_blast_utility_"
 
-PLAN_VERSION = PREFIX + "result_worker_plan_v1"
+PLAN_VERSION = PREFIX + "result_worker_plan"
 
-MANIFEST_VERSION = PREFIX + "result_worker_manifest_v1"
+MANIFEST_VERSION = PREFIX + "result_worker_manifest"
 
-PLAN_VERSION_V2 = PREFIX + "result_worker_plan_v2"
+VDB_PLAN_VERSION = PREFIX + "vdb_result_worker_plan"
 
-MANIFEST_VERSION_V2 = PREFIX + "result_worker_manifest_v2"
+VDB_MANIFEST_VERSION = PREFIX + "vdb_result_worker_manifest"
 
 OUTPUT_FILES = {"result": "result.json", "prepared_database": "prepared-projection.json",
                 "prepared_manifest": "prepared-manifest.json", "projection": "projection.json"}
@@ -57,10 +57,10 @@ def diagnostic(error):
 def _occurrence_id(capture, row):
     if row["direction"] == "input":
         return row["input_key"]
-    if capture["original_bundle"]["operation"]["version"] == "blast_utility_operation_v3":
+    if capture["original_bundle"]["operation"]["version"] == "blast_vdb_utility_operation":
         from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.native_blast_vdb_utility_context import vdb_utility_occurrence_id
         return vdb_utility_occurrence_id(capture, row)
-    if capture["original_bundle"]["operation"]["version"] == "blast_utility_operation_v2":
+    if capture["original_bundle"]["operation"]["version"] == "blast_preparation_operation":
         return PREFIX + "occurrence_" + native_blast_digest({
             "identity": capture["original_bundle"]["identity"],
             **{key: row.get(key) for key in
@@ -82,8 +82,8 @@ def _qualified_utility_context(capture: dict, *, observations_only: bool) -> dic
     if not capture["bundle_validated"] or capture["source_ref"] is None:
         _error("validated_capture_source_required")
     bundle, plan = capture["original_bundle"], capture["plan"]
-    new_preparation = bundle["operation"]["version"] == "blast_utility_operation_v2"
-    vdb = bundle["operation"]["version"] == "blast_utility_operation_v3"
+    new_preparation = bundle["operation"]["version"] == "blast_preparation_operation"
+    vdb = bundle["operation"]["version"] == "blast_vdb_utility_operation"
     job = plan["requested_job"]["native_blast_utility"]
     def qualified_role(row):
         if vdb:
@@ -245,9 +245,9 @@ def _qualified_utility_context(capture: dict, *, observations_only: bool) -> dic
 def validate_context(value):
     context = finite_json_copy(value)
     new_preparation = (type(context) is dict and type(context.get("operation")) is dict
-                       and context["operation"].get("version") == "blast_utility_operation_v2")
+                       and context["operation"].get("version") == "blast_preparation_operation")
     vdb = (type(context) is dict and type(context.get("operation")) is dict
-           and context["operation"].get("version") == "blast_utility_operation_v3")
+           and context["operation"].get("version") == "blast_vdb_utility_operation")
     fields = VDB_CONTEXT_FIELDS if vdb else PREPARATION_CONTEXT_FIELDS if new_preparation else CONTEXT_FIELDS
     if type(context) is not dict or set(context) != fields or type(context["occurrences"]) is not list:
         _error("worker_context_invalid")
@@ -305,15 +305,15 @@ def validate_worker_plan(value):
     common = {"version", "task", "directory", "context", "files"}
     variants = {"parse_original": {"capture", "bundle_file"},
         "project_saved": {"source_ref", "selector", "saved_data"}}
-    vdb = type(plan) is dict and plan.get("version") == PLAN_VERSION_V2
+    vdb = type(plan) is dict and plan.get("version") == VDB_PLAN_VERSION
     if vdb:
         variants["project_saved"] |= {"context_authentication"}
-    if (type(plan) is not dict or plan.get("version") not in {PLAN_VERSION, PLAN_VERSION_V2} or plan.get("task") not in variants
+    if (type(plan) is not dict or plan.get("version") not in {PLAN_VERSION, VDB_PLAN_VERSION} or plan.get("task") not in variants
             or set(plan) != common | variants[plan["task"]] or type(plan["directory"]) is not str
             or not PurePosixPath(plan["directory"]).is_absolute()):
         _error("worker_plan_invalid")
     context = validate_context(plan["context"])
-    if vdb != (context["operation"]["version"] == "blast_utility_operation_v3"):
+    if vdb != (context["operation"]["version"] == "blast_vdb_utility_operation"):
         _error("worker_plan_version_conflict")
     if plan["task"] == "parse_original":
         if context != qualified_utility_context(plan["capture"]):
@@ -355,10 +355,10 @@ def validate_worker_plan(value):
 
 def _can_read_result(context):
     op, rows = context["operation"], context["occurrences"]
-    if op["version"] == "blast_utility_operation_v3":
+    if op["version"] == "blast_vdb_utility_operation":
         return {"stdout", "stderr"} <= {r["role"] for r in rows if r["direction"] == "output"}
-    if op["version"] == "blast_utility_operation_v2":
-        return (blast_utility_result_version_for_operation(op) == "blast_database_artifact_set_v2"
+    if op["version"] == "blast_preparation_operation":
+        return (blast_utility_result_version_for_operation(op) == "blast_prepared_database_artifact_set"
                 or any(r["direction"] == "output" and r["role"] == "stdout" for r in rows))
     if op["mode"] == "create_sequence_database":
         return set(op["input_occurrence_ids"]) <= {r["occurrence_id"] for r in rows if r["direction"] == "input"}
@@ -367,16 +367,16 @@ def _can_read_result(context):
 
 def validate_worker_manifest(manifest: dict, plan: dict) -> dict:
     plan, manifest = validate_worker_plan(plan), finite_json_copy(manifest)
-    vdb = plan["version"] == PLAN_VERSION_V2
+    vdb = plan["version"] == VDB_PLAN_VERSION
     fields = {"version", "task", "plan_sha256", "completed", "outputs", "failures"} | ({"context_authentication"} if vdb else set())
     if (type(manifest) is not dict or set(manifest) != fields
-            or manifest["version"] != (MANIFEST_VERSION_V2 if vdb else MANIFEST_VERSION) or manifest["task"] != plan["task"]
+            or manifest["version"] != (VDB_MANIFEST_VERSION if vdb else MANIFEST_VERSION) or manifest["task"] != plan["task"]
             or manifest["plan_sha256"] != native_blast_digest(plan) or type(manifest["completed"]) is not bool
             or type(manifest["outputs"]) is not dict or unique_failures(manifest["failures"]) != manifest["failures"]):
         _error("worker_manifest_invalid")
     outputs = set(manifest["outputs"])
     builder = blast_utility_result_version_for_operation(plan["context"]["operation"]) in {
-        "blast_database_artifact_set_v1", "blast_database_artifact_set_v2"}
+        "blast_database_artifact_set", "blast_prepared_database_artifact_set"}
     allowed = {"projection"} if plan["task"] == "project_saved" else {"result", "prepared_database", "prepared_manifest"} if builder else {"result"}
     required = ({"projection"} if plan["task"] == "project_saved" else
                 {"result", "prepared_database"} if builder else {"result"}) if plan["task"] == "project_saved" or _can_read_result(plan["context"]) else set()

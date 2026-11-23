@@ -21,7 +21,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.readers.sequence_
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.sequence_masking.native_blast_masking_worker_context import MANIFEST_VERSION, OUTPUT_FILES, PREFIX, _error, diagnostic, exception_code, expected_outputs, qualified_masking_context, validate_worker_manifest
 
 
-PLAN_VERSION = PREFIX + "result_worker_plan_v1"
+PLAN_VERSION = PREFIX + "result_worker_plan"
 
 
 

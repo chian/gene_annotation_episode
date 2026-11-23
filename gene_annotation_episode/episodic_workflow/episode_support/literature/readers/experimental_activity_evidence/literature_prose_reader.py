@@ -10,7 +10,7 @@ import math
 import re
 import xml.etree.ElementTree as ET
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_experimental_contracts import ExperimentalContractError
-VERSION = 'a105_jats_quantity_v1'
+VERSION = 'a105_jats_quantity'
 _NUMBER = '[+−-]?(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:[eE][+−-]?\\d+)?'
 _SPREAD = f'(?:\\s*(?:\\+\\s*/\\s*[−-]|±)\\s*(?P<spread>{_NUMBER}))?'
 _ACTIVITY_UNIT = '(?:[µμu]mol|nmol)\\s*(?:/\\s*min\\s*/\\s*mg|min\\s*(?:[−-]1|⁻¹)\\s*mg\\s*(?:[−-]1|⁻¹))'

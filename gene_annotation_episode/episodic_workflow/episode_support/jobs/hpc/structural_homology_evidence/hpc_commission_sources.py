@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.jobs.hpc.hpc_queu
 
 
 PROVIDER = 'host.hpc.commission'
-VERSION = 'hpc_received_commission_v1'
+VERSION = 'hpc_received_commission'
 COMMISSION_SOURCES = TableDeclaration(name='hpc_commission_sources', columns=('source_ref', 'body'), key=('source_ref',),
                                       record_refs=('source_ref',))
 

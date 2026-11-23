@@ -15,8 +15,8 @@ import re
 from gene_annotation_episode.episodic_workflow.episode_support.readers.profile_model_preparation.hmmer_model_data import OCCURRENCE_FIELDS, extract_hmmer_models
 
 
-SCHEMA = "hmmer_statistics_sheet_v1"
-EXTRACTION_SCHEMA = "hmmer_statistics_summary_v1"
+SCHEMA = "hmmer_statistics_sheet"
+EXTRACTION_SCHEMA = "hmmer_statistics_summary"
 FIELDS = ("idx", "name", "accession", "nseq", "eff_nseq", "M", "relent", "info", "p_relE", "compKL")
 NUMERIC_FIELDS = frozenset(FIELDS) - {"name", "accession"}
 ISSUE_CODES = frozenset({"operation_invalid", "payload_invalid", "occurrence_invalid",

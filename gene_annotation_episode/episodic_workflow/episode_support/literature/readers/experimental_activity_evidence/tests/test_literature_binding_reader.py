@@ -11,7 +11,7 @@ def row(expression='8 ± 1', *, ligand='self', **changes):
 _DEFAULT_ROWS = object()
 
 def source(rows=_DEFAULT_ROWS, *, representation='synthetic_fixture', **changes):
-    table = {'version': 'binding_parameter_table_v1', 'table_id': 'T-fixture', 'parameter_kind': 'ic50', 'unit': 'nM', 'uncertainty_basis': 'fit_to_averaged_curve', 'minimum_experiment_count': 2, 'rows': [row(), row('>80', ligand='alternate')] if rows is _DEFAULT_ROWS else rows, **changes}
+    table = {'version': 'binding_parameter_table', 'table_id': 'T-fixture', 'parameter_kind': 'ic50', 'unit': 'nM', 'uncertainty_basis': 'fit_to_averaged_curve', 'minimum_experiment_count': 2, 'rows': [row(), row('>80', ligand='alternate')] if rows is _DEFAULT_ROWS else rows, **changes}
     return {'source_ref': 'source:fixture', 'artifact_ref': 'artifact:fixture', 'representation': representation, 'text': json.dumps(table, ensure_ascii=False)}
 
 def read(value=None, **changes):
@@ -22,7 +22,7 @@ def test_exact_normalized_contract_preserves_literal_and_uncertainty_without_inf
     value = source()
     before = deepcopy(value)
     result = read(value)
-    assert result == {'version': 'binding_parameter_extraction_v1', 'parameter_kind': 'ic50', 'unit': 'nM', 'uncertainty_basis': 'fit_to_averaged_curve', 'minimum_experiment_count': 2, 'reference_rows': [{'value': 8.0, 'relation': 'eq', 'reported_spread': 1.0, 'origin': 'synthetic', 'subject': 'ProteinFixture', 'state': 'apo', 'experiment': 'competition-fixture', 'ligand': 'self', 'source': {'source_ref': 'source:fixture', 'artifact_ref': 'artifact:fixture', 'representation': 'synthetic_fixture', 'table_id': 'T-fixture', 'row_index': 0, 'locator': {'row_index': 4, 'column': 'parameter'}, 'expression': '8 ± 1'}}], 'test_rows': [{'value': 80.0, 'relation': 'gt', 'reported_spread': None, 'origin': 'synthetic', 'subject': 'ProteinFixture', 'state': 'apo', 'experiment': 'competition-fixture', 'ligand': 'alternate', 'source': {'source_ref': 'source:fixture', 'artifact_ref': 'artifact:fixture', 'representation': 'synthetic_fixture', 'table_id': 'T-fixture', 'row_index': 1, 'locator': {'row_index': 4, 'column': 'parameter'}, 'expression': '>80'}}]}
+    assert result == {'version': 'binding_parameter_extraction', 'parameter_kind': 'ic50', 'unit': 'nM', 'uncertainty_basis': 'fit_to_averaged_curve', 'minimum_experiment_count': 2, 'reference_rows': [{'value': 8.0, 'relation': 'eq', 'reported_spread': 1.0, 'origin': 'synthetic', 'subject': 'ProteinFixture', 'state': 'apo', 'experiment': 'competition-fixture', 'ligand': 'self', 'source': {'source_ref': 'source:fixture', 'artifact_ref': 'artifact:fixture', 'representation': 'synthetic_fixture', 'table_id': 'T-fixture', 'row_index': 0, 'locator': {'row_index': 4, 'column': 'parameter'}, 'expression': '8 ± 1'}}], 'test_rows': [{'value': 80.0, 'relation': 'gt', 'reported_spread': None, 'origin': 'synthetic', 'subject': 'ProteinFixture', 'state': 'apo', 'experiment': 'competition-fixture', 'ligand': 'alternate', 'source': {'source_ref': 'source:fixture', 'artifact_ref': 'artifact:fixture', 'representation': 'synthetic_fixture', 'table_id': 'T-fixture', 'row_index': 1, 'locator': {'row_index': 4, 'column': 'parameter'}, 'expression': '>80'}}]}
     assert result == json.loads(json.dumps(result))
     result['reference_rows'][0]['source']['locator']['column'] = 'changed'
     assert value == before
@@ -127,7 +127,7 @@ def test_visual_lineage_fields_are_required_and_closed(changes):
     with pytest.raises(ExperimentalContractError):
         read(source([row(locator={**visual_locator(), **changes})], representation='retained_visual_transcription'))
 
-@pytest.mark.parametrize('changes', [{'version': 'v2'}, {'table_id': ''}, {'parameter_kind': 'kd'}, {'unit': 'M'}, {'unit': []}, {'uncertainty_basis': 'sd'}, {'minimum_experiment_count': True}, {'minimum_experiment_count': 0}, {'minimum_experiment_count': 2.0}, {'minimum_experiment_count': -1}, {'rows': {}}, {'rows': None}, {'extra': 1}])
+@pytest.mark.parametrize('changes', [{'version': 'unrecognized_version'}, {'table_id': ''}, {'parameter_kind': 'kd'}, {'unit': 'M'}, {'unit': []}, {'uncertainty_basis': 'sd'}, {'minimum_experiment_count': True}, {'minimum_experiment_count': 0}, {'minimum_experiment_count': 2.0}, {'minimum_experiment_count': -1}, {'rows': {}}, {'rows': None}, {'extra': 1}])
 def test_table_contract_rejects_unsupported_metadata(changes):
     with pytest.raises(ExperimentalContractError):
         read(source(**changes))
@@ -151,7 +151,7 @@ def test_source_metadata_is_closed_and_typed(mutation):
     with pytest.raises(ExperimentalContractError):
         read(value)
 
-@pytest.mark.parametrize('text', ['{', '[]', 'null', 'true', '{} trailing', '{"version":"binding_parameter_table_v1","version":"binding_parameter_table_v1"}', '{"x":NaN}', '{"x":Infinity}', '{"x":-Infinity}', '{"rows":[{"expression":"8","expression":"9"}]}'])
+@pytest.mark.parametrize('text', ['{', '[]', 'null', 'true', '{} trailing', '{"version":"binding_parameter_table","version":"binding_parameter_table"}', '{"x":NaN}', '{"x":Infinity}', '{"x":-Infinity}', '{"rows":[{"expression":"8","expression":"9"}]}'])
 def test_json_is_strict_including_nested_duplicate_keys_and_nonfinite_constants(text):
     value = source()
     value['text'] = text

@@ -497,7 +497,7 @@ def _operation(program, fmt, version):
 
 
 def _empty(operation):
-    return {"schema": "hmmer_search_native_v1", "operation": operation, "hits": [], "domains": [],
+    return {"schema": "hmmer_search_native", "operation": operation, "hits": [], "domains": [],
             "queries": [], "iterations": [], "statistics": [], "annotations": [], "issues": [], "artifacts": {}, "checkpoints": []}
 
 
@@ -680,11 +680,11 @@ def _alignment_quantities(row, program):
 
 def build_hmmer_search_sheet(native, *, inputs):
     """Join explicit operands and extract measurements; calculators remain separate."""
-    if type(native) is not dict or native.get("schema") != "hmmer_search_native_v1":
+    if type(native) is not dict or native.get("schema") != "hmmer_search_native":
         raise ValueError("hmmer_invalid_native_schema")
     if type(inputs) is not dict: raise ValueError("hmmer_inputs_must_be_object")
     finite_json(native); finite_json(inputs)
-    out = deepcopy(native); out["schema"] = "hmmer_search_sheet_v1"; out["inputs"] = deepcopy(inputs)
+    out = deepcopy(native); out["schema"] = "hmmer_search_sheet"; out["inputs"] = deepcopy(inputs)
     program = out["operation"]["program"]; _program(program)
     out.setdefault("issues", [])
     for collection in ("queries", "hits", "domains", "iterations"):

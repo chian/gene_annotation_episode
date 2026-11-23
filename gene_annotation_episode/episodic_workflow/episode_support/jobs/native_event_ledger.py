@@ -80,7 +80,7 @@ def validate_native_registration(value):
     value = _copy(value)
     _exact(value, "version handle run_id owner_episode_id job_ref registry_ref resource_id native_identity",
            "native event registration")
-    if value["version"] != "native_event_registration_v1":
+    if value["version"] != "native_event_registration":
         raise ValueError("unsupported native event registration")
     for name in ("handle", "run_id", "owner_episode_id", "job_ref", "registry_ref", "resource_id"):
         _text(value[name], name)
@@ -92,7 +92,7 @@ def validate_native_registration(value):
 def native_target_descriptor(registration):
     """Expose a native event reference without private execution identities."""
     registration = validate_native_registration(registration)
-    return {"version": "native_event_target_v1",
+    return {"version": "native_event_target",
         **{name: registration[name] for name in ("handle", "job_ref", "registry_ref", "resource_id")},
         "event": "state_changed", "cause": "service_exit_receipt_committed"}
 
@@ -101,7 +101,7 @@ def validate_native_publication(value):
     """Copy publication provenance without implying native writer closure."""
     value = _copy(value)
     _exact(value, "version event cause record_ref receipt_sha256 occurred_at", "native event publication")
-    if (value["version"] != "native_event_publication_v1" or value["event"] != "state_changed"
+    if (value["version"] != "native_event_publication" or value["event"] != "state_changed"
             or value["cause"] != "service_exit_receipt_committed"):
         raise ValueError("unsupported native event publication")
     _digest(value["receipt_sha256"], "native receipt digest")
@@ -314,7 +314,7 @@ class NativeEventLedger:
     async def wait_events(self, condition):
         condition = _copy(condition)
         _exact(condition, "version events reconsider_at", "event condition")
-        if condition["version"] != "event_condition_v1" or not isinstance(condition["events"], list):
+        if condition["version"] != "event_condition" or not isinstance(condition["events"], list):
             raise ValueError("unsupported event condition")
         for item in condition["events"]:
             _exact(item, "handle event after_cursor", "selected event")
@@ -332,11 +332,11 @@ class NativeEventLedger:
             while True:
                 events = self._matching_events(condition)
                 if events:
-                    return {"version": "event_wake_v1", "reason": events[0]["event"],
+                    return {"version": "event_wake", "reason": events[0]["event"],
                         "observed_at": utc_now(), "events": events,
                         "reconsider_at": condition["reconsider_at"]}
                 if deadline is not None and datetime.now(timezone.utc) >= deadline:
-                    return {"version": "event_wake_v1", "reason": "reconsideration",
+                    return {"version": "event_wake", "reason": "reconsideration",
                         "observed_at": utc_now(), "events": [], "reconsider_at": condition["reconsider_at"]}
                 await notification.wait(deadline)
 

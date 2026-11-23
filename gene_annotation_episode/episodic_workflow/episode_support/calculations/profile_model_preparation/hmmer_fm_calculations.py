@@ -522,7 +522,7 @@ def _exact_components(sheet, parameters, result, context):
 def calculate_hmmer_fm_components(sheet, *, parameters=None):
     """Recalculate from a saved F1 sheet and explicit validation parameters."""
     supplied = {} if parameters is None else deepcopy(parameters)
-    result = {"schema":"hmmer_fm_components_v1","operation":deepcopy(sheet.get("operation")),
+    result = {"schema":"hmmer_fm_components","operation":deepcopy(sheet.get("operation")),
               "parameters":supplied,"rows":[],"checks":[],"issues":[]}
     if (not isinstance(supplied,dict) or set(supplied)-set(DEFAULT_PARAMETERS)
             or supplied.get("alphabet_normalization","none") not in ("none","rna_to_dna")
@@ -532,7 +532,7 @@ def calculate_hmmer_fm_components(sheet, *, parameters=None):
         return result
     resolved = {**DEFAULT_PARAMETERS,**supplied}
     result["parameters"] = resolved
-    if sheet.get("schema") != "hmmer_fm_sheet_v1" or any(i["code"] == "invalid_operation" for i in sheet["issues"]):
+    if sheet.get("schema") != "hmmer_fm_sheet" or any(i["code"] == "invalid_operation" for i in sheet["issues"]):
         result["issues"].append(issue("invalid_operation",stage="calculate"))
         return result
     result["issues"].extend(deepcopy(sheet["issues"]))

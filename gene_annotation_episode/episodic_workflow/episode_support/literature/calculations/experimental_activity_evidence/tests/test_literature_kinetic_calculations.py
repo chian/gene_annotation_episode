@@ -171,7 +171,7 @@ def test_identity_relabelling_cannot_manufacture_pair(identity, conflict):
 def test_exact_estimate_key_matches_contract_and_does_not_replace_physical_owner():
     source = inputs()
     keys = kinetic_operand_keys(source)
-    expected = {'version': 'kinetic_estimate_identity_v1', 'operand': source['numerator']}
+    expected = {'version': 'kinetic_estimate_identity', 'operand': source['numerator']}
     encoded = json.dumps(expected, sort_keys=True, ensure_ascii=False, allow_nan=False, separators=(',', ':')).encode()
     assert keys['numerator'] == 'kinetic_estimate_' + hashlib.sha256(encoded).hexdigest()
     old_model = model(source)

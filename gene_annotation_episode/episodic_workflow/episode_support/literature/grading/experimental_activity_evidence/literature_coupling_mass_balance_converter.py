@@ -113,7 +113,7 @@ import math
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_assay_grading import INPUT_VERSION, ROLES, grade_assay
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_coupling_mass_balance_converted_v1'
+VERSION = 'a105_coupling_mass_balance_converted'
 CRITERIA_MAP = {'product_identity': ('product_identity',), 'calibration_applicability': ('species_calibration', 'method_recovery', 'minor_species_detectability'),
                 'matrix_interference': ('volatile_loss',), 'background_alternatives': ('blank_controls',), 'attribution_supported': ('product_coverage', 'inactive_enzyme'),
                 'stoichiometry': ('reaction_equation', 'closure_bound'), 'matched_windows': ('matched_windows',), 'sampling_basis': ('replicates',),

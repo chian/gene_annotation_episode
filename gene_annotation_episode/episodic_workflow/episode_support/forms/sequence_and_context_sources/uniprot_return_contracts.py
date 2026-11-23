@@ -15,7 +15,7 @@ from jsonschema import Draft202012Validator, ValidationError, validators
 
 
 SOURCE = "uniprot_selected_returns"
-_SELECTION_VERSION = "uniprot_return_selection_v1"
+_SELECTION_VERSION = "uniprot_return_selection"
 
 # The frozen Contract002 definitions are internal data, never model context.
 _DEFINITIONS = {'Pointer': {'type': 'string', 'pattern': '^(?:/(?:[^~/]|~0|~1)*)*$'},
@@ -360,7 +360,7 @@ _DEFINITIONS = {'Pointer': {'type': 'string', 'pattern': '^(?:/(?:[^~/]|~0|~1)*)
                    'required': ['publication', 'page_fields', 'records', 'grant_source'],
                    'additionalProperties': False},
  'Selection': {'type': 'object',
-               'properties': {'version': {'type': 'string', 'const': 'uniprot_return_selection_v1'},
+               'properties': {'version': {'type': 'string', 'const': 'uniprot_return_selection'},
                               'pages': {'type': 'array',
                                         'items': {'$ref': '#/$defs/PageSelection'}}},
                'required': ['version', 'pages'],
@@ -651,10 +651,10 @@ _DEFINITIONS = {'Pointer': {'type': 'string', 'pattern': '^(?:/(?:[^~/]|~0|~1)*)
                                             'total_results_invalid',
                                             'release_conflict',
                                             'native_request_unverified',
-                                            'uniprot_legacy_label_unrepresentable',
-                                            'uniprot_legacy_term_unrepresentable',
-                                            'uniprot_legacy_reference_unrepresentable',
-                                            'uniprot_legacy_source_version_omitted']},
+                                            'uniprot_projection_label_unrepresentable',
+                                            'uniprot_projection_term_unrepresentable',
+                                            'uniprot_projection_reference_unrepresentable',
+                                            'uniprot_projection_source_version_omitted']},
                           'record_ordinal': {'anyOf': [{'type': 'integer', 'minimum': 0},
                                                        {'type': 'null'}]},
                           'pointer': {'$ref': '#/$defs/Pointer'},
@@ -669,8 +669,8 @@ _DEFINITIONS = {'Pointer': {'type': 'string', 'pattern': '^(?:/(?:[^~/]|~0|~1)*)
                                              'evidence',
                                              'cross_references',
                                              'pagination',
-                                             'legacy_publication',
-                                             'legacy_source']},
+                                             'source_fields',
+                                             'projection_source']},
                           'effect': {'type': 'string',
                                      'enum': ['page_unusable',
                                               'record_unpublishable',
@@ -1042,7 +1042,7 @@ _DEFINITIONS = {'Pointer': {'type': 'string', 'pattern': '^(?:/(?:[^~/]|~0|~1)*)
                     'additionalProperties': False}}
 
 _RETURN_ROOT = {'type': 'object',
- 'properties': {'version': {'type': 'string', 'const': 'uniprot_selected_returns_v1'},
+ 'properties': {'version': {'type': 'string', 'const': 'uniprot_selected_returns'},
                 'pages': {'type': 'array', 'items': {'$ref': '#/$defs/PageReply'}},
                 'failures': {'type': 'array', 'items': {'$ref': '#/$defs/Failure'}}},
  'required': ['version', 'pages', 'failures'],

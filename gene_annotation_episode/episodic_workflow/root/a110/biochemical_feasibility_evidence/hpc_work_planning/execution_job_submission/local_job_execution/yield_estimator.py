@@ -8,7 +8,7 @@ from yield_control import CompletionYieldController
 
 def _request_yield_class(request):
     """Classify the original execution request without generated IDs (the old classifier; the assignment version of
-    this episode is always ``practical_assignment_v1``: the old compact branch named ``compact_<version>`` cannot
+    this episode is always ``practical_assignment``: the old compact branch named ``compact_<version>`` cannot
     occur because the compact flux-balance assignment is not carried, see the blocked file)."""
     requested = request['requested_job']
     native = sorted(key for key in requested if key.startswith('native_'))

@@ -225,7 +225,7 @@ def scientific_command_proof(assignment, arguments, outcome):
         _require(actual['sha256'] == original['sha256']
             and ('size_bytes' not in original and 'size' not in original
                 or actual['size_bytes'] == original.get('size_bytes', original.get('size'))))
-    return {'version': 'terminal_scientific_command_proof_v1',
+    return {'version': 'terminal_scientific_command_proof',
         'profile': profile[0], 'original_plan': deepcopy(plan),
         'plan_snapshot': deepcopy(before[str(path)]),
         'execution_command': deepcopy(executed), 'command': deepcopy(command),
@@ -303,7 +303,7 @@ def terminal_local_job_matches(assignment, outcome):
         job = outcome['facts']['requested_job']
         profile = _profile(assignment['requested_job'])
         _require(profile is not None and proof['profile'] == profile[0]
-            and proof['version'] == 'terminal_scientific_command_proof_v1'
+            and proof['version'] == 'terminal_scientific_command_proof'
             and proof['command'] == command and proof['execution_command'] == executed)
         plan = profile[1](proof['original_plan'])
         _require(plan['requested_job'] == assignment['requested_job']
@@ -356,7 +356,7 @@ def read_terminal_handoff(store, run_id, target, scope):
     _require(plan['identity']['run_id'] == run_id
         and plan['identity']['episode_id'] == body['episode_id']
         and plan['identity']['resource_id'] == assignment['resource_id'])
-    expected = {'version': 'execution_target_v1', 'handle': target['handle'],
+    expected = {'version': 'execution_target', 'handle': target['handle'],
         'run_id': run_id, 'resource_id': assignment['resource_id'], 'resource_kind': 'local',
         'execution_id': receipt['outcome']['facts']['requested_job']['execution_id'],
         'request_sha256': digest(assignment['requested_job']),
@@ -377,7 +377,7 @@ def validate_terminal_handoff(proof, intent, store, run_id):
 
 def captured_terminal_file(store, snapshot, format):
     """Retain the original executed file bytes, never a later live-path version."""
-    from gene_annotation_episode.episodic_workflow.episode_support.records.documents.structural_homology_evidence.materials import artifact_file
+    from gene_annotation_episode.materials import artifact_file
     reference = artifact_file(store, verified_snapshot_path(snapshot))
     _require(reference == 'artifact_' + snapshot['sha256'])
     return terminal_file_identity(snapshot, format)
@@ -412,7 +412,7 @@ def terminal_native_snapshot(receipts, action, observation):
         marker = json.loads(snapshot_bytes(marker_snapshot))
         _require(_marker_valid(plan, marker))
         marker_file = captured_terminal_file(store, marker_snapshot, 'native_started_marker')
-    value = {'version': 'terminal_native_snapshot_v1', 'original_plan': deepcopy(plan),
+    value = {'version': 'terminal_native_snapshot', 'original_plan': deepcopy(plan),
         'command_proof': deepcopy(proof),
         'plan_file': captured_terminal_file(store, proof['plan_snapshot'], plan['version']),
         'started_marker': marker, 'started_marker_file': marker_file,
@@ -424,7 +424,7 @@ def terminal_native_snapshot(receipts, action, observation):
 def validate_terminal_native(value, intent, observation, store, run_id):
     _require(set(value) == {'version', 'original_plan', 'command_proof', 'plan_file',
         'started_marker', 'started_marker_file', 'driver_started'}
-        and value['version'] == 'terminal_native_snapshot_v1')
+        and value['version'] == 'terminal_native_snapshot')
     handoff = read_terminal_handoff(store, run_id, intent['target'], intent['scope'])
     proof = handoff['start_receipt']['outcome']['native_outcome']['scientific_command_proof']
     _require(value['command_proof'] == proof and value['original_plan'] == proof['original_plan']

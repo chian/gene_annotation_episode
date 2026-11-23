@@ -172,7 +172,7 @@ def test_a_name_with_a_non_bacterial_organism_or_no_organism_is_not_sent_to_bvbr
 
 def test_the_copy_of_the_query_layer_allows_phrase_filters_on_text_fields_and_builds_the_native_request():
     from gene_annotation_episode.episodic_workflow.episode_support.tools.experimental_activity_evidence import literature_bvbrc_query as query
-    request = {'version': 'bvbrc_data_request_v2', 'collection': 'genome_feature', 'mode': 'page', 'limit': 5,
+    request = {'version': 'bvbrc_data_request', 'collection': 'genome_feature', 'mode': 'page', 'limit': 5,
                'filters': [{'field': 'gene', 'operator': 'eq', 'value': 'recA'},
                            {'field': 'genome_id', 'operator': 'in', 'value': ['83333.1']}], 'fields': ['patric_id']}
     prepared = query.encode_native_query(request, base_url='https://www.bv-brc.org/api')

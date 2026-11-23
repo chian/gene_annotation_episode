@@ -15,8 +15,8 @@ import re
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.partner_presence_evidence.literature_assay_inputs import _fail, _finite, _keys, _text
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.partner_presence_evidence.literature_partner_source_fields import _ALL_TAGS, _contexts, _unit_continuation, read_source_number
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.biochemical_feasibility_evidence.literature_reaction_meanings import DATA_VERSION as NORMALIZED_VERSION
-VERSION = 'a110_source_reaction_selection_v1'
-TRACE_VERSION = 'a110_native_report_operands_v1'
+VERSION = 'a110_source_reaction_selection'
+TRACE_VERSION = 'a110_native_report_operands'
 RATIO_BASES = ('reported_molar_ratio', 'source_supported_molar_ratio', 'calibrated_molar_ratio', 'signal_ratio', 'unresolved')
 UNCERTAINTY_KINDS = ('sample_sd', 'sem', 'unspecified', 'unreported')
 COUNT_BASES = ('independent_experiment', 'biological_preparation', 'technical_repeat', 'unknown')
@@ -174,7 +174,7 @@ def _parameter(selection, sources, path):
     return (value, {'value': value, 'basis': selection['basis'], 'number': None, 'evidence': evidence})
 
 def read_native_reaction_selection(selection, *, sources, origin='reported'):
-    """Return normalized v2 operands plus an exact private native-source trace.
+    """Return normalized operands plus an exact private native-source trace.
 
     The caller owns scope/received-source authorization through ``sources``.
     Any newly discovered selector is read through that same callback before its

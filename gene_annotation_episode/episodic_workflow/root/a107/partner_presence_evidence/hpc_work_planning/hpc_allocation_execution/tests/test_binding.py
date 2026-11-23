@@ -32,8 +32,8 @@ ASSIGNMENT = {'owner_episode_id': 'episode_owner', 'ledger': 'hpc_ledger_1', 'le
               'commission_id': 'c1', 'scope': {'subject_refs': []}, 'input_refs': []}
 PLAN = {'plan_ref': 'plan_1', 'plan_id': 'p1', 'candidate_id': 'cand', 'handed_off': False, 'closed': False,
         'manifest': {'workspace': '/ws/hpc/p1'}, 'launch_input_ref': 'artifact_plan',
-        'launch_assignment': {'version': 'execution_launch_assignment_v1',
-                              'requests': {'aurora': {'version': 'practical_assignment_v1', 'resource_kind': 'hpc',
+        'launch_assignment': {'version': 'execution_launch_assignment',
+                              'requests': {'aurora': {'version': 'practical_assignment', 'resource_kind': 'hpc',
                                                       'resource_id': 'aurora'}},
                               'immutable_input_versions': [],
                               'constraints': {'allowed_resource_ids': ['aurora'], 'allowed_kinds': ['hpc']}}}
@@ -165,7 +165,7 @@ def test_the_monitor_and_results_commissions_name_the_child_fields_and_select_de
     monitor = TO_CHILD.msg_to_child('monitor', {
         'target_handle': 'handle', 'requested_fields': ['execution_status'],
         'permitted_committed_record_types': [], 'information_unit': 1.0}, summary)
-    assert monitor.assignment['version'] == 'monitor_assignment_v1'
+    assert monitor.assignment['version'] == 'monitor_assignment'
     assert monitor.assignment['known_progress_refs'] == []
     assert monitor.selection == TASK.MONITOR_SELECTION
     results = TO_CHILD.msg_to_child('results', {'handoff_ref': 'source_h', 'selector': {'paths': ['a']},

@@ -17,7 +17,7 @@ from .alignment_correspondence import (
     _ratio as _fraction,
 )
 
-SHEET_SCHEMA = "biopython_pairwise_sheet_v1"
+SHEET_SCHEMA = "biopython_pairwise_sheet"
 _COUNT_FIELDS = (
     "alignment_columns", "paired_positions", "identical_positions",
     "substituted_positions", "query_gap_columns", "reference_gap_columns",
@@ -230,7 +230,7 @@ def build_biopython_pairwise_sheet(native: dict, *, molecule: str) -> dict:
     null validated components. ``aligned=False`` is an explicit zero result;
     missing traceback for ``aligned=True`` supplies no zero measurements.
 
-    ``biopython_pairwise_native_v2`` deliberately omits derived convenience
+    ``biopython_pairwise_native`` deliberately omits derived convenience
     measurements. Markerless legacy results retain their original required
     reported-field checks; any supplied reported values still retain conflicts.
     Both formats populate this same sheet and use the same calculator.
@@ -245,7 +245,7 @@ def build_biopython_pairwise_sheet(native: dict, *, molecule: str) -> dict:
     if type(native.get("mode")) is not str or native["mode"] not in {"local", "global"}:
         raise ValueError("biopython_pairwise_mode_required")
     native_format = native.get("native_format")
-    if native_format is not None and native_format != "biopython_pairwise_native_v2":
+    if native_format is not None and native_format != "biopython_pairwise_native":
         raise ValueError("biopython_pairwise_native_format_unknown")
     issues = []
     aligned = native["aligned"]
@@ -432,7 +432,7 @@ def project_biopython_scores(sheet, common):
         "alignment_identity": counts["alignment_columns"],
         "query_paired_coverage": lengths["query"], "reference_paired_coverage": lengths["reference"],
         "query_aligned_coverage": lengths["query"], "reference_aligned_coverage": lengths["reference"]}
-    return {"schema": "biopython_pairwise_scores_v1", "status": sheet["status"], **counts,
+    return {"schema": "biopython_pairwise_scores", "status": sheet["status"], **counts,
         **{field: common["fractions"][field] for field in denominators},
         "native_score": sheet["native_score"], "denominators": denominators,
         "definitions": _definitions(sheet["molecule"]), "issues": deepcopy(sheet["issues"])}
@@ -467,7 +467,7 @@ def grade_biopython_pairwise(native: dict, *, molecule: str,
     result = {"sheet": sheet, "scores": scores}
     if _retain_correspondence:
         result["correspondence"] = {"version": ARTIFACT_SCHEMA,
-            "instances": [{"legacy_pointer": "", "axis_basis": "direct", "sheet": common,
+            "instances": [{"source_pointer": "", "axis_basis": "direct", "sheet": common,
                 "components": calculated}]}
     return result
 
@@ -476,7 +476,7 @@ def validate_biopython_correspondence(grading, instance):
     """Compare retained facts/projections without regrading a frozen source."""
     from .alignment_correspondence import _same
     expected = correspondence_sheet_from_biopython(grading["sheet"], validate=False)
-    if (instance["legacy_pointer"] != "" or instance["axis_basis"] != "direct"
+    if (instance["source_pointer"] != "" or instance["axis_basis"] != "direct"
             or not _same(expected, instance["sheet"])
             or not _same(project_biopython_scores(grading["sheet"], instance["components"]["rows"][0]), grading["scores"])):
         raise ValueError("biopython_saved_correspondence_conflict")

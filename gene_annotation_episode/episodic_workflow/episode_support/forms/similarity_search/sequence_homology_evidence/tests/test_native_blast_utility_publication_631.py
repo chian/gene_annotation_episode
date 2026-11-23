@@ -38,7 +38,7 @@ EXTRACT = b"0\tlcl|ALPHA\tALPHA\t8\tACGTACGT\n"
 
 
 def selector(**kwargs):
-    return {"version": "native_blast_utility_result_selector_v1", "sequences": None,
+    return {"version": "native_blast_utility_result_selector", "sequences": None,
         "database_fields": [], "integrity": None, "preparation": None,
         "prepared_database": False, "include_checks": False, "artifacts": [], "saved_data": [], **kwargs}
 

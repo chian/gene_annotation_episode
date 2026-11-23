@@ -387,7 +387,7 @@ def _declaration(spec, paths):
 
 def _manifest(plan, comparison, sets):
     index = {row["set_key"]: row for row in sets}
-    return {"version": "genomic_overlap_native_manifest_v1", "comparison_key": comparison["comparison_key"],
+    return {"version": "genomic_overlap_native_manifest", "comparison_key": comparison["comparison_key"],
         "identity": _identity(plan), "a_set_key": comparison["a_set_key"], "b_set_key": comparison["b_set_key"],
         "input_fingerprints": [index[comparison[side + "_set_key"]]["measured_fingerprint"] for side in ("a", "b")],
         "derivation": "not_executed_invalid_input", "outcome": "not_executed", "software": None,
@@ -526,7 +526,7 @@ def run_genomic_overlap_driver(plan: dict) -> dict:
     paths["stderr"].chmod(0o444)
     successes = sum(row["disposition"] in {"native_succeeded", "analytic_empty"} for row in pairs)
     complete = successes == len(pairs) and all(row["parse_extent"] == "complete" for row in sets)
-    bundle = {"version": "genomic_overlap_native_batch_v1", "identity": _identity(plan),
+    bundle = {"version": "genomic_overlap_native_batch", "identity": _identity(plan),
         "plan_sha256": digest(plan), "requested_job_sha256": plan["identity"]["requested_job_sha256"],
         "policy": plan["policy"], "driver_argv": genomic_overlap_driver_argv(plan),
         "realized_environment": environment, "requested_set_keys": [row["set_key"] for row in sets],

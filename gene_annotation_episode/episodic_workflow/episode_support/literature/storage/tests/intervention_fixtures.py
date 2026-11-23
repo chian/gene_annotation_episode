@@ -101,7 +101,7 @@ def grading_fixture(store, assay_type='endpoint_conversion'):
         }}
     refs = [source, support, assertion]
     context = LiteratureContext('grading322', 'child', 'literature', (('literature', 'child'),),
-        store.validate_scope({'subject_refs': store.problem()['subject_refs']}), {'version': 'literature_assignment_v1', 'question_context_refs': [support, assertion],
+        store.validate_scope({'subject_refs': store.problem()['subject_refs']}), {'version': 'literature_assignment', 'question_context_refs': [support, assertion],
             'source_refs': [source], REQUESTED: list(COMPONENTS)}, {}, refs)
     return context, args, artifact
 DESEQ = (b"Gene_Name\tbaseMean\tlog2FoldChange\tlfcSE\tstat\tpvalue\tpadj\n"

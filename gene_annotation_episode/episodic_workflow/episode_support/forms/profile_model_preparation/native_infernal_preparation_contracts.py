@@ -2,7 +2,7 @@
 
 Mutable calibration and adjacent index files get owned working copies. This
 module describes those copies; it executes neither them nor the selected native
-program. The existing scientific Infernal v1 contract is deliberately separate.
+program. The existing scientific Infernal contract is deliberately separate.
 """
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.profile_mod
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.native_infernal_contracts import finite_json_copy, native_infernal_digest
 
 
-JOB_VERSION = "native_infernal_preparation_job_v1"
+JOB_VERSION = "native_infernal_preparation_job"
 _MODEL_FORMATS = {"infernal_cm_ascii", "infernal_cm_legacy_ascii", "infernal_cm_binary"}
 _ALIGNMENT_FORMATS = {"stockholm", "pfam", "afa", "a2m", "clustal", "phylip"}
 _FORMAT_ARG = {"stockholm": "Stockholm", "pfam": "Pfam", "afa": "AFA",

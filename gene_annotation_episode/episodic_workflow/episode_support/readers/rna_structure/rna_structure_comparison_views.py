@@ -19,7 +19,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.rna_structu
     validate_rna_comparison_selector, validate_rna_comparison_sheet,
 )
 
-PROJECTION_VERSION = "rna_comparison_projection_v1"
+PROJECTION_VERSION = "rna_comparison_projection"
 PROJECTION_SOURCE = "execution_rna_structure_comparison_projections"
 IDENTIFIER_NAMESPACES = ("rna_comparison_receipt", "rna_comparison_calculation")
 SITE_POPULATION_FIELDS = (

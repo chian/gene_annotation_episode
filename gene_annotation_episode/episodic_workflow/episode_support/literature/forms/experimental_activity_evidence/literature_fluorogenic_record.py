@@ -43,7 +43,7 @@ carry None. The grader does not judge it; the converter does. The constructors t
 tests that do not go through the extraction (the extraction always passes the model's answer).
 """
 
-VERSION = 'a105_fluorogenic_record_v1'
+VERSION = 'a105_fluorogenic_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'fluorogenic'
 QUANTITIES = ('catalytic_efficiency', 'catalytic_efficiency_spread', 'turnover', 'turnover_spread', 'specific_activity', 'specific_activity_spread',

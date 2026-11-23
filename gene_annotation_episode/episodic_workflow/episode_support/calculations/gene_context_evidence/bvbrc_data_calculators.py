@@ -38,7 +38,7 @@ def calculate_page_counts(sheet: dict) -> dict:
         raise ValueError("bvbrc_inconsistent_population_fields")
     valid = sum(row["status"] == "valid" for row in sheet["rows"])
     return validate("PageComponents", {
-        "version": "bvbrc_data_page_components_v1", "native_row_count": len(sheet["rows"]),
+        "version": "bvbrc_data_page_components", "native_row_count": len(sheet["rows"]),
         "valid_row_count": valid, "invalid_row_count": len(sheet["rows"]) - valid,
         "reported_population_count": population["reported_total"],
         "population_exactness": population["exactness"],
@@ -74,7 +74,7 @@ def _denominator_reason(sheet, facet):
         return "unknown_denominator"
     if (count["exactness"] != "exact" or population["native_num_found_exact"] is not True
             or population["native_location"] != "/response/numFound"
-            or sheet["custody"]["native_profile"] != "solr_json_envelope_v1"):
+            or sheet["custody"]["native_profile"] != "solr_json_envelope"):
         return "inexact_population"
     if count["reported_value"] == 0:
         return "empty_population"
@@ -115,7 +115,7 @@ def calculate_facet_fractions(sheet: dict, *, denominator_policy: str) -> dict:
             fractions.append({"bucket_key": bucket["bucket_key"], "numerator": numerator,
                               "denominator": denominator, "fraction": fraction, "reason": unavailable})
     return validate("FacetComponents", {
-        "version": "bvbrc_data_facet_components_v1", "denominator_policy": denominator_policy,
+        "version": "bvbrc_data_facet_components", "denominator_policy": denominator_policy,
         "population_key": sheet["population"]["population_key"], "fractions": fractions,
     })
 
@@ -181,7 +181,7 @@ def calculate_feature_sequence_counts(join_sheet: dict) -> dict:
     if represented != {(feature, kind) for feature in selected["feature_ids"] for kind in allowed_kinds}:
         raise ValueError("bvbrc_missing_selected_feature_relation")
     return validate("FeatureSequenceComponents", {
-        "version": "bvbrc_feature_sequence_components_v1",
+        "version": "bvbrc_feature_sequence_components",
         "selected_feature_count": len(selected["feature_ids"]),
         "retained_feature_row_count": len(feature_rows),
         "native_sequence_record_count": sum(page["retained_row_count"] for key, page in pages.items()

@@ -8,7 +8,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.acquisition.profi
     _capture_file, _decode, _directory, _read_record, _retained,
 )
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.local_execution.sequence_homology_evidence.native_worker_files import _encoded
-from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.sequence_homology_evidence.native_blast_utility_contracts import ATTEMPT_NAME, BUNDLE_NAME, BUNDLE_VERSION, DATABASE_ROLES, OUTPUT_ROLES, OWNER_NAME, PLAN_NAME, JOB_VERSION_V2, JOB_VERSION_V3, _error, _producer_path, database_file_selections, finite_json_copy, measurement_pair, native_blast_digest, staged_relative, validate_native_blast_utility_bundle, validate_native_blast_utility_plan
+from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.sequence_homology_evidence.native_blast_utility_contracts import ATTEMPT_NAME, BUNDLE_NAME, BUNDLE_VERSION, DATABASE_ROLES, OUTPUT_ROLES, OWNER_NAME, PLAN_NAME, PREPARATION_JOB_VERSION, VDB_JOB_VERSION, _error, _producer_path, database_file_selections, finite_json_copy, measurement_pair, native_blast_digest, staged_relative, validate_native_blast_utility_bundle, validate_native_blast_utility_plan
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.similarity_search.sequence_homology_evidence.native_blast_utility_local import local_blast_utility_plan, _policy
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.sequence_homology_evidence.practical_execution_state import _immutable, _read
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.native_blast_utility_capture_contracts import VERSION, _ASSOCIATION_FIELDS, _ROW_FIELDS, _key, _selected_files, validate_native_blast_utility_capture
@@ -127,7 +127,7 @@ def _validate_saved(store, capture):
         source = store.require(capture["source_ref"], {"source"})
         if {k: v for k, v in source.items() if k not in {"id", "origin", "record_type"}} != _source_payload(capture):
             _error("capture_source_association_conflict")
-    if bundle is not None and capture["plan"]["requested_job"]["native_blast_utility"]["version"] == JOB_VERSION_V2:
+    if bundle is not None and capture["plan"]["requested_job"]["native_blast_utility"]["version"] == PREPARATION_JOB_VERSION:
         _validate_saved_realizations(store, capture)
     return capture
 

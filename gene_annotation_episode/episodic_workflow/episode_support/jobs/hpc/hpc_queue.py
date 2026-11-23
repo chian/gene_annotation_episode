@@ -101,7 +101,7 @@ def snapshot(jobs, queues, activity=None, *, captured_at=None, max_status_age=18
             'max_run': row.get('max_run'), 'max_queued': row.get('max_queued'),
             'max_run_res': row.get('max_run_res'),
             'defaults': row.get('resources_default', {})}
-    return {'version': 'hpc_queue_snapshot_v1', 'captured_at': captured_at,
+    return {'version': 'hpc_queue_snapshot', 'captured_at': captured_at,
         'jobs_sample_at': number(jobs.get('timestamp')), 'queues_sample_at': number(queues.get('timestamp')),
         'status_sample_at': status_time, 'status_age_seconds': status_age,
         'status_scores_usable': fresh, 'jobs': rows, 'queues': normalized_queues,

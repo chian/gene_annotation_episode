@@ -176,7 +176,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_trp_converted_v1'
+VERSION = 'a105_trp_converted'
 STATEMENTS = {'detected': 'interaction_detected', 'not_detected': 'interaction_not_detected', None: 'interaction_not_stated'}
 CRITERIA_MAP = {'binding_controls': ('inner_filter', 'dilution', 'buffer_blank', 'ligand_fluorescence', 'specificity_control', 'photobleaching', 'quenching_mechanism'), 'binding_regime': ('saturation', 'concentration_series', 'protein_concentration', 'equilibrium'), 'binding_parameter_definition': ('fit_model', 'excitation_selectivity'), 'calibration_applicability': ('signal_amplitude',), 'sampling_basis': ('replicates',)}
 MIN_FLUORESCENCE_CHANGE_PERCENT = 5.0  # EXPERT_REVIEW: smallest change of the protein's fluorescence (percent) between the free protein and the saturated complex; the reading noise of a steady-state fluorimeter, pipetting and photobleaching together are a few percent, so a smaller change cannot be told from them; the full-agreement limit.

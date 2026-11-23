@@ -39,14 +39,14 @@ def identifier(namespace):
     return {**TEXT, "format": "identifier", "x-reference-namespace": namespace}
 
 
-PARAMETERS_SCHEMA = obj({"schema": {"const": "rna_calculation_parameters_v1"},
+PARAMETERS_SCHEMA = obj({"schema": {"const": "rna_calculation_parameters"},
     "topology": obj({"long_stem_min_pairs": {"type": "integer", "minimum": 1},
         "include_exterior_in_loop_size_statistics": {"const": False}}),
     "pair_composition": obj({"accepted_ordered_pair_types": {"type": "array", "uniqueItems": True,
         "items": {"enum": [a+b for a in "ACGU" for b in "ACGU"]}},
         "denominator": {"const": "unambiguous_pairs"}}),
     "energy": obj({"normalization": {"enum": ["none", "per_nt"]}})})
-SAVED_INPUT_SCHEMA = obj({"schema": {"const": "rna_structure_saved_sheet_input_v1"},
+SAVED_INPUT_SCHEMA = obj({"schema": {"const": "rna_structure_saved_sheet_input"},
     "result_receipt_key": identifier(IDENTIFIER_NAMESPACES[2]),
     "handoff_ref": reference("execution_handoff"), "source_ref": reference("execution_result"),
     "bundle_artifact_ref": reference("artifact"), "sheet_artifact_ref": reference("artifact"),
@@ -58,9 +58,9 @@ PROJECTION_SCHEMA = {"oneOf": [obj({"family": {"const": family}, "rows": ROWS_SC
     "metrics": {"type": "array", "uniqueItems": True, "minItems": 0 if family == "failure" else 1,
         **({"maxItems": 0} if family == "failure" else {}), "items": {"enum": list(metrics)}
         if metrics else {"type": "string"}}}) for family, metrics in FAMILY_METRICS.items()]}
-RESULT_SELECTOR_SCHEMA = {"oneOf": [obj({"version": {"const": "native_rna_structure_result_selector_v1"},
+RESULT_SELECTOR_SCHEMA = {"oneOf": [obj({"version": {"const": "native_rna_structure_result_selector"},
     "acquisition": {"const": "complete_bound_bundle"}, "projection": PROJECTION_SCHEMA}),
-    obj({"version": {"const": "native_rna_structure_saved_sheet_selector_v1"},
+    obj({"version": {"const": "native_rna_structure_saved_sheet_selector"},
         "acquisition": {"const": "retained_sheet_only"}, "saved_input": SAVED_INPUT_SCHEMA,
         "parameters": PARAMETERS_SCHEMA, "projection": PROJECTION_SCHEMA})]}
 ISSUE_SCHEMA = obj({"stage": {"enum": ["input", "native", "capture", "parse", "calculate", "binding", "selection"]},
@@ -253,7 +253,7 @@ def project_rna_prepublication(sheet, components, *, selector, components_sha256
                         field=f"/selector/projection/rows/record_keys/{index}", index=index))
         elif population is None:
             selection_issues.append(issue("rna_requested_row_missing", stage="selection", record_key=key, field="/selector/projection/rows"))
-    return {"schema": "rna_structure_prepublication_v1", "record_key": key, "operation": sheet["operation"], "mode": sheet["mode"],
+    return {"schema": "rna_structure_prepublication", "record_key": key, "operation": sheet["operation"], "mode": sheet["mode"],
         "selector": selector, "sheet_schema": sheet["schema"], "components_sha256": components_sha256,
         "parameters": deepcopy(components["parameters"]), "population_count": population, "rows": rows,
         "failures": merge_issues(failures, selection_issues), "requested_cells_accounted_for": family != "failure"}, selection_issues
@@ -277,7 +277,7 @@ def prepare_rna_structure_failure_selection(*, failures, selector, record_key):
                     field=f"/selector/projection/rows/record_keys/{i}", index=i))
     else:
         selected = list(range(n))[choice["offset"]:choice["offset"] + choice["limit"]]
-    return {"failures": failures, "selection": {"version": "rna_structure_failure_selection_v1", "population_count": n,
+    return {"failures": failures, "selection": {"version": "rna_structure_failure_selection", "population_count": n,
         "selected_ordinals": selected, "supplemental_issue_ordinals": list(range(n, len(failures))),
         "requested_rows_accounted_for": True}}
 

@@ -29,8 +29,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.jobs.local_execut
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.local_execution.sequence_homology_evidence.native_lifecycle import NativeJobHandle, collect, prepare_job, resume_start, start_prepared, status
 
 
-VERSION = 'single_query_phmmer_jobs_v2'
-CONFIGURATION_VERSION = 'single_query_phmmer_jobs_v3'
+VERSION = 'single_query_phmmer_jobs'
+CONFIGURATION_VERSION = 'single_query_phmmer_job_configuration'
 SEARCH_MODES = {'native_defaults': (), 'maximum_sensitivity': ('--max',)}
 OUTPUTS = {'native_text': 'native.stdout', 'native_stderr': 'native.stderr',
            'hit_table': 'hits.tbl', 'domain_table': 'domains.tbl'}
@@ -46,9 +46,9 @@ def _reference(namespace):
 
 HANDOFF_SCHEMA = _object({'job_ref': _reference('homology_job'), 'registry_ref': _reference('execution_registry'),
     'backend': {'type': 'string', 'enum': [VERSION]},
-    'status_interface': {'type': 'string', 'enum': ['homology.status.v1']},
-    'progress_interface': {'type': 'string', 'enum': ['homology.progress.v1']},
-    'results_interface': {'type': 'string', 'enum': ['homology.results.v1']}})
+    'status_interface': {'type': 'string', 'enum': ['homology.status']},
+    'progress_interface': {'type': 'string', 'enum': ['homology.progress']},
+    'results_interface': {'type': 'string', 'enum': ['homology.results']}})
 STATUS_SCHEMA = _object({'job_ref': _reference('homology_job'), 'registry_ref': _reference('execution_registry'),
     'state': {'type': 'string', 'enum': ['not_submitted', 'prepared', 'submission_unconfirmed', 'starting', 'running', 'returned', 'execution_unknown']},
     'outcome': {'type': 'string', 'enum': ['pending', 'succeeded', 'failed', 'unknown']},
@@ -489,8 +489,8 @@ class HomologyJobs:
         if self._handle(job_ref).read()['stage'] == 'prepared':
             raise ValueError('job_submission_handoff_unresolved')
         return {'job_ref': job_ref, 'registry_ref': self.config['registry_ref'], 'backend': VERSION,
-            'status_interface': 'homology.status.v1', 'progress_interface': 'homology.progress.v1',
-            'results_interface': 'homology.results.v1'}
+            'status_interface': 'homology.status', 'progress_interface': 'homology.progress',
+            'results_interface': 'homology.results'}
 
     def receive(self, handoff):
         validate_form(handoff, HANDOFF_SCHEMA, self.resolve)

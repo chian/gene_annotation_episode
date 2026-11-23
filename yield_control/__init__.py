@@ -40,10 +40,10 @@ from typing import Mapping, Sequence
 # The version of the per-unit progress-time receipt every estimator reads (``estimation_context["progress_time"]``).
 # The runner (``episode_runtime.progress``) writes receipts of this version; it is defined here, with its reader, so
 # this package imports nothing from the runner.
-PROGRESS_TIME_VERSION = "episode_progress_time_v1"
+PROGRESS_TIME_VERSION = "episode_progress_time"
 
 
-ESTIMATOR_VERSION = "real_time_signed_credit_mark_yield_v2"
+ESTIMATOR_VERSION = "real_time_signed_credit_mark_yield"
 SOURCE_REVISION = "60a167f9eeda0c9ea2ca294724174948947baf3f"
 DEFAULT_ALPHA = 0.05
 
@@ -608,7 +608,7 @@ def estimate_score_yield(scores: Sequence[Real], parameters=None, *, contexts=No
     loss = estimate_nonnegative_yield(losses, component_parameters, contexts=contexts, evaluation_time=evaluation_time)
     diagnostics = {"completed_acquisition_turns": len(history), "history_used": len(history),
                    "fitting_scope": "full_history", "initialization": "cold_template_prior",
-                   "signed_model": "paired_gain_loss_marks_same_real_time_v2",
+                   "signed_model": "paired_gain_loss_marks_same_real_time",
                    "negative_action_count": sum(value < 0 for value in history),
                    "gain_component": gain.as_record(), "loss_component": loss.as_record(),
                    "interval_method": "bonferroni_allocated_model_band_subtraction",
@@ -665,7 +665,7 @@ def estimate_bounded_credit_yield(scores: Sequence[Real], parameters=None, *, co
         diagnostics={**base.diagnostics, 'declared_credit_minimum': 0., 'declared_credit_maximum': maximum,
                      'current_credit': current, 'remaining_positive_credit': headroom,
                      'forecast_constraint': 'declared_credit_range_after_same_action_history'},
-        estimator_binding={'kind': 'bounded_quality_credit_yield_v1', 'base_estimator': ESTIMATOR_VERSION,
+        estimator_binding={'kind': 'bounded_quality_credit_yield', 'base_estimator': ESTIMATOR_VERSION,
                            'declared_credit_minimum': 0., 'declared_credit_maximum': maximum,
                            'forecast': 'next_marginal_credit_limited_by_current_headroom',
                            'uncertainty': 'base_working_model_uncalibrated'})
@@ -727,7 +727,7 @@ class CompletionYieldEstimator:
             'completion_target': self.target,
             'remaining_deliverable_credit': self.target - current,
             'forecast_quantity': 'observed_yield_limited_by_remaining_distance_to_target'},
-            estimator_binding={'kind': 'target_completion_yield_v1',
+            estimator_binding={'kind': 'target_completion_yield',
                 'completion_target': self.target,
                 'before_target': 'observed_action_yield_limited_by_remaining_distance',
                 'at_target': 'exact_zero_remaining_credit'})
@@ -873,11 +873,11 @@ def _completed(value):
 # physical exhaustion of a page's or a search's list).
 # ============================================================================
 
-ACCUMULATION_ESTIMATOR_VERSION = "preferential_incidence_estimator_v2"
-ACCUMULATION_CONTROLLER_VERSION = "preferential_discovery_controller_v7"
-VOLUME_CREDIT_VERSION = "relaxed_geometric_hypervolume_v5"
-ADAPTIVE_THRESHOLD_VERSION = "adaptive_marginal_credit_threshold_v2"
-FIXED_THRESHOLD_VERSION = "fixed_marginal_credit_threshold_v1"
+ACCUMULATION_ESTIMATOR_VERSION = "preferential_incidence_estimator"
+ACCUMULATION_CONTROLLER_VERSION = "preferential_discovery_controller"
+VOLUME_CREDIT_VERSION = "relaxed_geometric_hypervolume"
+ADAPTIVE_THRESHOLD_VERSION = "adaptive_marginal_credit_threshold"
+FIXED_THRESHOLD_VERSION = "fixed_marginal_credit_threshold"
 DEFAULT_EFFICIENCY_FRACTION = 0.1
 VOLUME_RELAXATION_FACTOR = 2.0
 MIN_DISCOVERABLE_COUNT = 1.0
@@ -1666,7 +1666,7 @@ class CompletionYieldController:
 #   budget. An unknown forecast is not refused.
 # ============================================================================
 
-FORECAST_VERSION = "forecast_yield_v1"
+FORECAST_VERSION = "forecast_yield"
 UNBOUNDED_TEXT = "unbounded"
 FRACTION_TOLERANCE = 1e-9
 

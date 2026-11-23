@@ -24,7 +24,7 @@ ROOT = Path(__file__).resolve().parents[7]
 STDOUT_SHA = "3be1e1b841530c2818893eb9a396ca8dcd5257203b4778bdda93719fdc47110c"
 
 
-def occurrence(raw, oid="stdout", role="stdout", fmt="blast_vdb_cmd_table_v1", direction="output"):
+def occurrence(raw, oid="stdout", role="stdout", fmt="blast_vdb_cmd_table", direction="output"):
     digest = hashlib.sha256(raw).hexdigest()
     return dict(occurrence_id=oid, direction=direction, role=role, ordinal=0,
         artifact_ref="artifact_" + digest, sha256=digest, size_bytes=len(raw),
@@ -40,11 +40,11 @@ def identity(value):
 
 
 def supplied(raw=b"A\ta\t4\tacgt\n", *, selectors=("A",), kind="entries", mode="extract_sequences", stderr=b""):
-    fmt = ("blast_vdb_cmd_table_v1" if mode == "extract_sequences" else
-           "blast_vdb_info_text_v1" if mode == "info" else "blast_vdb_paths_text_v1")
+    fmt = ("blast_vdb_cmd_table" if mode == "extract_sequences" else
+           "blast_vdb_info_text" if mode == "info" else "blast_vdb_paths_text")
     selection = (dict(kind="entries", source="entry", selectors=[dict(ordinal=n, value=v) for n, v in enumerate(selectors)],
                       batch_occurrence_id=None) if kind == "entries" else {"kind": kind}) if mode == "extract_sequences" else None
-    operation = dict(version="blast_utility_operation_v3", program="blast_vdb_cmd", mode=mode,
+    operation = dict(version="blast_vdb_utility_operation", program="blast_vdb_cmd", mode=mode,
         input_occurrence_ids=["db-file", "db-manifest"], database_key="controlled-vdb", molecule="dna",
         parameters=dict(database_selection=dict(source="db", inputs=[dict(ordinal=0, kind="path",
             value="/supplied/tiny.vdb", binding_native_path="/supplied/tiny.vdb", list_entry_ordinal=None)],
@@ -54,7 +54,7 @@ def supplied(raw=b"A\ta\t4\tacgt\n", *, selectors=("A",), kind="entries", mode="
         identity=dict(namespace="controlled", value="tiny", version=None, release=None),
         source_ref="controlled-request663", native_paths=["/supplied/tiny.vdb"],
         occurrence_ids=["db-file", "db-manifest"], inventory_complete=True)
-    context = dict(version="blast_vdb_utility_context_v1", source_inputs=[dict(ordinal=0,
+    context = dict(version="blast_vdb_utility_context", source_inputs=[dict(ordinal=0,
         selected_input=dict(kind="path", value="/supplied/tiny.vdb"), binding_native_path="/supplied/tiny.vdb",
         dataset_key=None, dataset_type="csra" if kind == "all_references" else "unknown",
         snapshot=dict(release=None, snapshot_id=None, manifest_sha256=None), run_identifiers=[], source=provenance())],
@@ -101,13 +101,13 @@ def test_declared_dna_numerical_agreement_with_classic(symbols, reported):
     result = parse_blast_vdb_extraction(raw, **supplied(raw))
     classic_raw = b"0\t" + raw
     classic_args = supplied(raw)
-    classic_args["operation"] = dict(version="blast_utility_operation_v1", program="blastdbcmd", mode="extract_sequences",
+    classic_args["operation"] = dict(version="blast_utility_operation", program="blastdbcmd", mode="extract_sequences",
         input_occurrence_ids=["db-file", "db-manifest"], database_key="controlled-vdb", molecule="dna",
-        parameters=dict(selectors=[dict(ordinal=0, value="A")], output_format="blastdbcmd_tabular_v1",
+        parameters=dict(selectors=[dict(ordinal=0, value="A")], output_format="blastdbcmd_tabular",
             range=None, strand="plus", get_dups=False, target_only=False))
     classic_args["database_binding"]["kind"] = "blast_nucleotide_sequence"
     classic = parse_blastdbcmd_sequences(classic_raw,
-        occurrence=occurrence(classic_raw, fmt="blastdbcmd_tabular_v1"),
+        occurrence=occurrence(classic_raw, fmt="blastdbcmd_tabular"),
         **{k: classic_args[k] for k in ("operation", "database_binding", "outcome")})
     row, original = result["records"][0], classic["records"][0]
     assert row["normalized_sequence"] == original["normalized_sequence"]

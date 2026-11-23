@@ -43,7 +43,7 @@ def _monitor(arguments, summary):
     job = {item['handoff_ref']: item for item in summary['outstanding_jobs']}[arguments['handoff_ref']]
     return ChildMessage(
         objective='Assess the progress of job ' + job['job'] + '.', message={},
-        assignment={'version': 'monitor_assignment_v2', 'handoff_refs': [job['handoff_ref']],
+        assignment={'version': 'monitor_assignment', 'handoff_refs': [job['handoff_ref']],
                     'known_progress_refs': job['record_refs'][1:], 'dependency_handoff_refs': [],
                     'requested_fields': list(arguments['requested_fields']),
                     'information_unit': arguments['information_unit']},

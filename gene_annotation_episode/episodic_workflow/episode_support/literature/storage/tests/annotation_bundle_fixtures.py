@@ -29,7 +29,7 @@ def arguments(*, data=None, raw=None):
             "observed_range": None, "total_size": len(raw), "object_complete": "yes"},
         "declared_format": {"format": "gto", "version": None, "mode": None,
             "producer_source_ref": None, "transformation_evidence": []}, "requirement_ids": ["native-genome"]}
-    bundle = {"version": "bvbrc_appservice_artifact_bundle_v1", "original_task": task,
+    bundle = {"version": "bvbrc_appservice_artifact_bundle", "original_task": task,
         "artifacts": [artifact], "input_bindings": [], "query_bindings": [],
         "supplied_scientific_metadata": [], "supplied_contents": [],
         "acquisition_receipt_refs": [source], "requested_selector_sha256": "f" * 64,

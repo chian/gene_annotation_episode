@@ -24,7 +24,7 @@ _PHYLIP = frozenset({"phylip", "phylips"})
 _ALPHABETS = frozenset({"amino", "DNA", "RNA"})
 _INT_MAX = 2147483647
 _INT64_MAX = 9223372036854775807
-_PROFILE = "infernal_1_1_5_easel_alignment_input_v1"
+_PROFILE = "infernal_1_1_5_easel_alignment_input"
 _CONTEXT = frozenset({"version", "reader_profile", "source_occurrence_id", "source_sha256",
     "format", "alphabet_basis", "explicit_alphabet", "effective_alphabet", "alphabet_probe",
     "reader_state", "first_record_end_byte", "file_end_state"})
@@ -154,7 +154,7 @@ def alphabet_probe_valid(probe: dict, *, declared_format: str,
                          source_size_bytes: int | None = None) -> bool:
     """Validate scanner history with the single retained Easel classifier."""
     if (declared_format not in _FORMATS or not _object(probe, _PROBE)
-            or probe["version"] != "hmmer_native_alignment_alphabet_probe_v1"
+            or probe["version"] != "hmmer_native_alignment_alphabet_probe"
             or probe["format"] != declared_format
             or source_size_bytes is not None and not _integer(source_size_bytes)
             or not _histogram(probe["counts_az"]) or not _integer(probe["counted_letters"])
@@ -258,7 +258,7 @@ def alphabet_probe_valid(probe: dict, *, declared_format: str,
 
 def _envelope(value, *, size=None):
     if (not _object(value, _BATCH - {"records"})
-            or value["version"] != "hmmer_native_alignment_decoding_v1"
+            or value["version"] != "hmmer_native_alignment_decoding"
             or value["format"] not in _NATIVE_FORMATS or value["alphabet"] not in _ALPHABETS
             or value["end_state"] not in {"eof", "parse_error", "source_semantics_unestablished"}
             or not _integer(value["next_byte_offset"]) or type(value["diagnostics"]) is not list
@@ -665,7 +665,7 @@ def _reader_state(records, end_state):
 def input_decoding_local_valid(value: dict, *, alignment: dict | None, settings: dict) -> bool:
     """Check represented local facts; do not synthesize source identity/size."""
     if (not _object(value, _CONTEXT) or type(settings) is not dict
-            or value["version"] != "hmmer_alignment_input_decoding_v1" or value["reader_profile"] != _PROFILE
+            or value["version"] != "hmmer_alignment_input_decoding" or value["reader_profile"] != _PROFILE
             or not _text(value["source_occurrence_id"]) or not _hex(value["source_sha256"], digest=True)
             or value["format"] not in _FORMATS
             or value["alphabet_basis"] not in {"explicit_flag", "native_source_inference"}
@@ -759,7 +759,7 @@ def input_decoding_valid(value: dict, *, source_occurrence: dict,
 
 
 def _source_alphabet(value, context):
-    return (_object(value, _SOURCE) and value["version"] == "hmmer_alignment_source_alphabet_v1"
+    return (_object(value, _SOURCE) and value["version"] == "hmmer_alignment_source_alphabet"
             and context is not None and context["effective_alphabet"] in _ALPHABETS
             and value["source_occurrence_id"] == context["source_occurrence_id"]
             and value["source_sha256"] == context["source_sha256"]
@@ -805,7 +805,7 @@ def _population_complete(sheet, occurrence, fmt, records, *, reader_complete):
 
 @_boolean
 def saved_alignment_decoding_valid(sheet: dict, *, formats: dict[str, str] | None = None) -> bool:
-    """Validate optional new facts after ordinary B1 admission; legacy stays absent."""
+    """Validate optional new facts after ordinary B1 admission; absent facts stay absent."""
     if type(sheet) is not dict or any(type(sheet.get(k)) is not list for k in (
             "artifact_occurrences", "input_records", "output_records", "native_rows", "associations", "issues")):
         return False

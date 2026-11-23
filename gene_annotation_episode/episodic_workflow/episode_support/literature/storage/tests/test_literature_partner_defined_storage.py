@@ -54,14 +54,14 @@ def snapshot(store):
             for name in names}
 
 
-def test_defined_population_projects_exact_v3_cells_through_the_unchanged_typed_form(tmp_path):
+def test_defined_population_projects_exact_common_assessment_cells_through_the_unchanged_typed_form(tmp_path):
     store, context, args, records = fixture(tmp_path)
     with store:
         validate_schema(args, partner_source_population_schema())
         repo = LiteraturePartnerRepository(store, context.run_id)
         outcome = repo.populate(context, args, "defined")
         saved = repo.read(outcome["result"]["sheet_ref"])
-        assert saved["extraction"]["version"] == "literature_partner_inputs_extraction_v3"
+        assert saved["extraction"]["version"] == "literature_partner_defined_unit_extraction"
         assert saved["direct_input_source_refs"] == [records[key]["id"] for key in ("root", "data", "definition")]
         assert saved["input_source_refs"] == [*saved["direct_input_source_refs"], records["ancestor"]["id"]]
         native = saved["extraction"]["native_evidence"]["reference"]["rate"]
@@ -243,7 +243,7 @@ def test_original_payload_authority_rejects_consistently_changed_definition_meta
             elif mode == "multiplier":
                 rate["unit"]["multiplier"] = 2000000
             elif mode == "version":
-                changed["extraction"]["version"] = "literature_partner_inputs_extraction_v2"
+                changed["extraction"]["version"] = "literature_partner_native_extraction"
             elif mode == "raw_number":
                 rate["unit"]["definition"]["amount"]["raw_number"] = "2"
             elif mode == "canonical":
@@ -267,7 +267,7 @@ def test_saved_nested_relationship_validation_is_not_only_a_payload_digest_check
             selected, evidence, core = deepcopy((args, extraction["native_evidence"], extraction["recipe"]["inputs"]))
             chosen = selected["arms"]["reference"]["rate"]["unit"]["definition"]
             found = evidence["reference"]["rate"]["unit"]["definition"]
-            version = "literature_partner_inputs_extraction_v3"
+            version = "literature_partner_defined_unit_extraction"
             if mode == "endpoint_link":
                 chosen["endpoint"] = deepcopy(selected["arms"]["reference"]["subject"])
                 found["endpoint"] = deepcopy(evidence["reference"]["subject"])
@@ -288,12 +288,12 @@ def test_saved_nested_relationship_validation_is_not_only_a_payload_digest_check
                 for entry in (chosen["time_unit"], found["time_unit"]):
                     entry["quote"] = "hour"
             else:
-                version = "literature_partner_inputs_extraction_v2"
+                version = "literature_partner_native_extraction"
             with pytest.raises(ContractError):
                 repo._validate_native_saved(selected, evidence, core, version=version)
 
 
-def test_v2_validation_does_not_accept_a_defined_field_or_a_v3_label(tmp_path):
+def test_validation_does_not_accept_a_defined_field_or_a_common_assessment_label(tmp_path):
     store, context, args, _ = fixture(tmp_path, mean_unit="plain")
     with store:
         repo = LiteraturePartnerRepository(store, context.run_id)
@@ -301,10 +301,10 @@ def test_v2_validation_does_not_accept_a_defined_field_or_a_v3_label(tmp_path):
         extraction = repo.read(out["result"]["sheet_ref"])["extraction"]
         evidence, core = extraction["native_evidence"], extraction["recipe"]["inputs"]
         with pytest.raises(ContractError, match="sheet_source_mismatch"):
-            repo._validate_native_saved(args, evidence, core, version="literature_partner_inputs_extraction_v3")
+            repo._validate_native_saved(args, evidence, core, version="literature_partner_defined_unit_extraction")
         evidence["reference"]["rate"]["unit"]["definition"] = {}
         with pytest.raises(ContractError):
-            repo._validate_native_saved(args, evidence, core, version="literature_partner_inputs_extraction_v2")
+            repo._validate_native_saved(args, evidence, core, version="literature_partner_native_extraction")
 
 
 def test_defined_publication_interruption_rolls_back_bindings_and_selected_result(tmp_path, monkeypatch):

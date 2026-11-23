@@ -137,7 +137,7 @@ def _operation(value):
     conversion = type(value) is dict and value.get("program") == "convert2blastmask"
     _object(value, "version program mode engine_version input_format output_format masking_style parse_seqids requested_parameters" +
             (" input_mask_basis molecule" if conversion else ""))
-    _enum(value["version"], "sequence_masking_operation_v1")
+    _enum(value["version"], "sequence_masking_operation")
     _enum(value["program"], "dustmasker segmasker windowmasker convert2blastmask")
     _enum(value["mode"], "mask create_counts convert_mask")
     _string(value["engine_version"], nullable=True, nonempty=True)
@@ -221,7 +221,7 @@ def _input_record(value):
 
 def _input_parse(value):
     _object(value, "version occurrence records checks failures")
-    _enum(value["version"], "sequence_masking_input_v1")
+    _enum(value["version"], "sequence_masking_input")
     _occurrence(value["occurrence"])
     _list(value["records"], _input_record)
     _unique([r["record_key"] for r in value["records"]])
@@ -313,7 +313,7 @@ def _parsed(value):
     conversion = type(value) is dict and "native_maskinfo" in value
     _object(value, "version format occurrence custody records unassigned_records checks failures" +
             (" native_maskinfo known_zero_records" if conversion else ""))
-    _enum(value["version"], "sequence_masking_parsed_output_v1")
+    _enum(value["version"], "sequence_masking_parsed_output")
     _enum(value["format"], "interval maskinfo_xml maskinfo_asn1_text maskinfo_asn1_bin" if conversion else "interval fasta")
     _occurrence(value["occurrence"])
     _require(value["occurrence"]["role"] == "mask", "output_occurrence")
@@ -440,7 +440,7 @@ def _native_mask_record(value, occurrence=None):
 
 def _blast_maskinfo_parse(value):
     _object(value, "version occurrence native_format parse_state roots records unparsed_spans checks failures")
-    _enum(value["version"], "blast_maskinfo_parse_v1")
+    _enum(value["version"], "blast_maskinfo_parse")
     _occurrence(value["occurrence"])
     _require(value["occurrence"]["role"] == "mask", "native_parse_occurrence")
     _enum(value["native_format"], "maskinfo_xml maskinfo_asn1_text maskinfo_asn1_bin interval")
@@ -547,7 +547,7 @@ def _statistics_binding(value):
 
 def _statistics(value):
     _object(value, "version occurrence format reference_binding format_version algorithm_version unit_length metadata_lines unit_counts thresholds percentiles checks failures")
-    _enum(value["version"], "windowmasker_statistics_v1")
+    _enum(value["version"], "windowmasker_statistics")
     _occurrence(value["occurrence"])
     _require(value["occurrence"]["role"] == "statistics", "statistics_occurrence")
     _enum(value["format"], "ascii_statistics")
@@ -586,7 +586,7 @@ def _statistics(value):
 
 def _sheet(value):
     _object(value, "version operation inputs parsed_output statistics native_outcome checks failures")
-    _enum(value["version"], "sequence_masking_sheet_v1")
+    _enum(value["version"], "sequence_masking_sheet")
     _operation(value["operation"])
     _require(value["operation"]["mode"] in ("mask", "convert_mask"), "sheet_mode")
     conversion = value["operation"]["mode"] == "convert_mask"
@@ -680,7 +680,7 @@ def _record_components(value):
 
 def _components(value):
     _object(value, "version analysis records checks failures")
-    _enum(value["version"], "sequence_masking_components_v1")
+    _enum(value["version"], "sequence_masking_components")
     _enum(value["analysis"], "sequence_masking_preparation")
     _list(value["records"], _record_components)
     _unique([r["record_key"] for r in value["records"]])
@@ -723,7 +723,7 @@ def sequence_masking_operation_schema(*, program: str, mode: str) -> dict:
             field["pattern"] = r"^[^\u0000]*$"
         parameters[name] = field
     properties = {
-        "version": {"type": "string", "const": "sequence_masking_operation_v1"},
+        "version": {"type": "string", "const": "sequence_masking_operation"},
         "program": {"type": "string", "const": program},
         "mode": {"type": "string", "const": mode},
         "engine_version": {"type": ["string", "null"], "minLength": 1, "pattern": r"\S"},

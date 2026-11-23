@@ -233,7 +233,7 @@ def _population(stream, size, spec, normalization, selected, table_streams, head
         evidence['symmetry'] = 'native_hic_symmetric'
         result['raw_cell_population']['unique_unordered_cells'] = n * (n + 1) // 2
         complete_index = indexes['matrix_complete'] and not indexes['auxiliary_errors'] and matrix['complete']
-        evidence['hic'] = {'version': 'hic_population_read_v1', 'source_sha256': spec['file']['sha256'],
+        evidence['hic'] = {'version': 'hic_population_read', 'source_sha256': spec['file']['sha256'],
             'scan_scope': 'all_indexed_blocks_selected_cis_zoom', 'matrix_key': f'{ci}_{ci}',
             'matrix_index_range': indexes['matrix_range'], 'matrix_metadata_range': matrix['metadata_range'],
             'zoom_index_range': zoom['range'], 'chromosome1_index': ci, 'chromosome2_index': ci,

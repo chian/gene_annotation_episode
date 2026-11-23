@@ -26,7 +26,7 @@ def _evidence(*groups):
 def _cell(selection, field, unit, value=None, *, state='available', origin='calculated',
           numerator=None, denominator=None, evidence=(), requirement_ids=()):
     return numeric_cell(value, state=state, unit=unit, origin=origin,
-        population_id=selection['population_id'], method_id='mauve_v4_' + field + '_v1',
+        population_id=selection['population_id'], method_id='mauve_v4_' + field,
         numerator=numerator, denominator=denominator, evidence=_evidence(selection['evidence'], evidence),
         uncertainty=None, requirement_ids=list(dict.fromkeys(requirement_ids)))
 
@@ -257,7 +257,7 @@ def calculate_mauve_v4_segments(document: dict, *, selection: dict, inputs: dict
     selection, records = _selection(document, selection)
     if inputs is not None:
         inputs = validate_genome_alignment_inputs(inputs)
-    result = {'schema_version': 'mauve_v4_segment_components_v1', 'document_id': document['document_id'],
+    result = {'schema_version': 'mauve_v4_segment_components', 'document_id': document['document_id'],
         'status': 'ok', 'selection': selection, 'member_segments': [], 'pair_segments': [], 'coverage': [],
         'requirements': deepcopy(inputs['requirements']) if inputs is not None else [],
         'diagnostics': deepcopy(inputs['diagnostics']) if inputs is not None else []}

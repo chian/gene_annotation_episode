@@ -53,7 +53,7 @@ rate constants (an equilibrium titration has none), the donor and the acceptor o
 FRET and the polarization ends of FP.
 """
 
-VERSION = 'a105_mst_criteria_v1'
+VERSION = 'a105_mst_criteria'
 
 # ---- Threshold constants -------------------------------------------------
 NM_PER_UNIT = {'pM': 0.001, 'nM': 1.0, 'uM': 1000.0, 'mM': 1000000.0}  # FIXED_BY_DEFINITION: nanomolar per concentration unit.

@@ -145,7 +145,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_assay_grading import INPUT_VERSION, ROLES, grade_assay
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_bret_converted_v1'
+VERSION = 'a105_bret_converted'
 BINDING_CONSTANTS = ('kd', 'ki')
 CRITERIA_MAP = {'binding_controls': ('donor_only_control', 'acceptor_only_control', 'negative_control', 'orientation'), 'binding_regime': ('saturation_shown', 'titration_points', 'ratio_range', 'expression_matching', 'competition', 'tracer_regime'), 'binding_parameter_definition': ('interaction_observed', 'bret50_specificity', 'signal_over_control'), 'calibration_applicability': ('fit_quality', 'background_correction'), 'sampling_basis': ('replicates',), 'background_alternatives': ('bystander_test',)}
 BRET50_CONTROL_FULL_AGREEMENT = 3.0  # EXPERT_REVIEW: smallest quotient of the BRET50 of the negative control pair over that of the pair under test that the sheet takes as a clear separation of a specific interaction from random collision (the control needs three times the acceptor to reach half of its plateau).

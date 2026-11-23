@@ -435,5 +435,5 @@ def read_records(registry, arguments, scope, permitted_inputs):
     result = project(registry.store.get_artifact(artifact['id']), operation, selected, source['id'],
                      offset=arguments.get('offset', 0), limit=arguments.get('limit', 10),
                      contains=arguments.get('contains'), contains_all=arguments.get('contains_all'))
-    return {'version': 'experimental_database_records_v1', 'provider': operation.split('.')[1],
+    return {'version': 'experimental_database_records', 'provider': operation.split('.')[1],
             'source_ref': source['id'], 'artifact_ref': artifact['id'], **result}, []

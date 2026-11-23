@@ -53,7 +53,7 @@ def fact(answer, refs=(), support='direct'):
     return {**literature_spr_record.fact(answer, refs), 'support': None if answer == 'unknown' else support}
 
 
-VERSION = 'a105_y2h_record_v1'
+VERSION = 'a105_y2h_record'
 EXPERIMENT_TYPE = 'y2h'
 QUANTITIES = ('three_at_concentration', 'bait_alone_three_at_concentration', 'beta_galactosidase_interaction', 'beta_galactosidase_interaction_sd', 'beta_galactosidase_interaction_sem', 'beta_galactosidase_negative_control', 'beta_galactosidase_negative_control_sd', 'beta_galactosidase_negative_control_sem', 'beta_galactosidase_positive_control', 'growth_dilution_interaction', 'growth_dilution_negative_control', 'incubation_temperature', 'incubation_time', 'replicate_count')
 PREPARATION_KEYS = ('bait_preparation_ref', 'prey_preparation_ref', 'dataset_ref')

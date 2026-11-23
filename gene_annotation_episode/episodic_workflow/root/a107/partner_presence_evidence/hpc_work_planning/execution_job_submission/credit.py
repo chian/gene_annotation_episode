@@ -1,5 +1,5 @@
 """Credit: the old operational credit (``LaunchCredit._live_project_credit``, ``credit_kind`` 'operational', binding
-``execution_received_records_credit_v1``): ``handoff_unit`` for each distinct resource whose original request got a
+``execution_received_records_credit``): ``handoff_unit`` for each distinct resource whose original request got a
 usable handoff in this Episode and had none when it began, plus ``acquired_record_unit`` times the acquired
 fraction, which the old code fixed at ``0.0`` for a launch (a launch acquires no result; its ``mixed`` branch was
 dead). The formula is kept; nothing bounds, clamps or rescales it.

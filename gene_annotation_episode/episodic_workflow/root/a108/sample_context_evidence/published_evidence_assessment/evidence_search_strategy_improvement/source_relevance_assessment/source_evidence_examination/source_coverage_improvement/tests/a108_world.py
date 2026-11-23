@@ -84,7 +84,7 @@ def grading_arguments(world, relation='support'):
 
 def leads_task():
     """The one commissioned task of the leaves: the verified source leads."""
-    return {'version': 'literature_local_task_v1', 'evidence_axis': 'A108', 'kind': 'verified_source_leads',
+    return {'version': 'literature_local_task', 'evidence_axis': 'A108', 'kind': 'verified_source_leads',
             'credit_unit': 1.0}
 
 
@@ -96,13 +96,13 @@ def window(world, first=0, last=None):
 
 
 def reading_assignment(world, selection, requested=('evidence_amount',)):
-    """The ``reading_assignment_v1`` of a leaf: the paper as the page and the leaf's ``selection`` (a leaf's own
+    """The ``reading_assignment`` of a leaf: the paper as the page and the leaf's ``selection`` (a leaf's own
     shape: ``{'spans': [windows]}`` for the chunk and report leaves, one window for the table leaf)."""
     paper = world['paper']
-    page = {'version': 'page_assignment_v1', 'source_ref': paper['id'], 'representation': 'original',
+    page = {'version': 'page_assignment', 'source_ref': paper['id'], 'representation': 'original',
             'artifact_ref': paper['artifact_ref'], 'question_context_refs': [world['organism']['id']],
             'prior_delivery_refs': []}
-    assignment = {'version': 'reading_assignment_v1', 'page': page, 'selection': selection,
+    assignment = {'version': 'reading_assignment', 'page': page, 'selection': selection,
                   'literature_task': leads_task(), 'proposed_annotation_ref': world['claim']['id'],
                   'scope': world['scope'], 'received_record_refs': list(dict.fromkeys(world['held']))}
     if requested:

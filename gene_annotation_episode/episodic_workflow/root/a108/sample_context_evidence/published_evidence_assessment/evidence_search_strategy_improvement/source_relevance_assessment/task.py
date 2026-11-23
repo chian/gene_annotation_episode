@@ -14,7 +14,7 @@ and the measured outcomes of the prior page children). Jev is planning evidence,
 
 Carried from the old task.py, task_decision.py, task_instructions.py and source_contracts.py of ``literature_search``
 at 97308b94c (the old child role ``literature_page`` is the slot below), and from nano-graphrag's
-``web_search_binding`` (``SEARCH_PAGE_SELECTION_VERSION`` ``model_planned_from_jev_evidence_v5``). One unit is one
+``web_search_binding`` (``SEARCH_PAGE_SELECTION_VERSION`` ``model_planned_from_jev_evidence``). One unit is one
 search, one measurement, one fetch of a picked hit or one page commission. The task always offers a unit and never ends
 the Episode: only the yield controller does. A hit whose fetch failed is shown in ``context.hit_fetches`` with the
 provider status and is never opened. When no hit is left there is no unit to offer and ``decide`` raises: the stopping

@@ -9,7 +9,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_
 SCALE_METHOD = 'fcs_scale_flowio_1_4_0'
 COMPENSATE_METHOD = 'spill_compensate_flowutils_1_2_2'
 METHODS = {SCALE_METHOD, COMPENSATE_METHOD}
-POLICY = 'strict_present_fcs_metadata_v1'
+POLICY = 'strict_present_fcs_metadata'
 _CODE = 'invalid_parameters'
 
 def _need(condition):
@@ -45,7 +45,7 @@ def _request(value):
     core._file(value['recipe_file'], _CODE)
     recipe = value['recipe']
     _keys(recipe, 'version method parameters')
-    _need(recipe['version'] == 'fluorescence_preparation_recipe_v1')
+    _need(recipe['version'] == 'fluorescence_preparation_recipe')
     core._enum(recipe['method'], METHODS, _CODE)
     params = recipe['parameters']
     if recipe['method'] == SCALE_METHOD:

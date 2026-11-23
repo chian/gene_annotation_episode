@@ -9,7 +9,7 @@ from __future__ import annotations
 from copy import deepcopy
 
 
-VERSION = "oriented_source_subject_path_v2"
+VERSION = "oriented_source_subject_path"
 
 
 def path_length(path: list[dict]) -> int:

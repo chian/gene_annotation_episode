@@ -19,7 +19,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.acquisition.pertu
 from gene_annotation_episode.episodic_workflow.episode_support.records.perturbation_evidence.domain import ContractError
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.local_execution.perturbation_evidence.local_jobs import LocalJobPolicy, run_local_job
 
-VERSION = "selected_archive_poppler_v1"
+VERSION = "selected_archive_poppler"
 
 
 @dataclass(frozen=True)

@@ -41,7 +41,7 @@ def project_practical_credit(assignment, initial_validations, receipts):
         'requirements': [{'key': key, 'credit': requirements[key]['credit'],
             'satisfied': states[key], 'validation': deepcopy(latest.get(key))}
             for key in requirements],
-        'operational_credit_binding': {'version': 'practical_requirement_credit_v1',
+        'operational_credit_binding': {'version': 'practical_requirement_credit',
             'qualification': 'original_requirement_predicates_from_actual_selected_action_facts',
             'aggregation': 'sum_currently_satisfied_original_requirement_keys',
             'baseline': 'immutable_initial_validations',

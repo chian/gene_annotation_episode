@@ -23,7 +23,7 @@ completion_time_ratio_is_exact: whether each stated time or ratio is a value or 
 spread and its kind, the two choices completion_criterion and detection_method.
 """
 
-VERSION = 'a105_endpoint_time_course_completion_criteria_v1'
+VERSION = 'a105_endpoint_time_course_completion_criteria'
 MIN_PER_UNIT = {'s': 1 / 60, 'min': 1.0, 'h': 60.0}  # FIXED_BY_DEFINITION: minutes per time unit.
 LOADING_SCALE = {'nM': ('molar', 1.0), 'uM': ('molar', 1000.0), 'mg/mL': ('mass', 1.0)}  # FIXED_BY_DEFINITION: (kind, factor to nM or to mg/mL); two loadings are compared only within one kind.
 

@@ -59,7 +59,7 @@ PROTEIN_STRUCTURE_OPERATIONS = {name: operation for operation, name in _NAMES.it
 PROTEIN_STRUCTURE_TOOLS = tuple(PROTEIN_STRUCTURE_OPERATIONS)
 ProteinOperationUnpublished = StructureOperationUnpublished
 SAVED_MODES = ("read_stored", "recalculate", "select_projection")
-SAVED_WORK_VERSION = "ordinary_protein_structure_saved_work_v1"
+SAVED_WORK_VERSION = "ordinary_protein_structure_saved_work"
 
 
 class PreparedSavedProteinWork(TypedDict):
@@ -139,14 +139,14 @@ def normalize_protein_structure_configuration(resources, environments, policy):
         selected = declared[ordinal]
         bindings.append({"resource_id": resource_id, "binding_ordinal_0based": ordinal,
             **selected, "environment": entry["environment"], "workspace": resource["workspace"]})
-    return _copy({"version": "ordinary_protein_structure_configuration_v1",
+    return _copy({"version": "ordinary_protein_structure_configuration",
         "policy": selected_policy.to_dict(),
         "bindings": sorted(bindings, key=lambda row: (row["resource_id"], row["binding_ordinal_0based"]))})
 
 
 def _definitions_for(roots):
-    definitions = protein_structure_execution_schema("ScientificRequest", action_custody=True)["$defs"]
-    for name, value in protein_structure_projection_schema("ProjectionSelection", action_custody=True)["$defs"].items():
+    definitions = protein_structure_execution_schema("ScientificRequest")["$defs"]
+    for name, value in protein_structure_projection_schema("ProjectionSelection")["$defs"].items():
         _require(name not in definitions or same(definitions[name], value),
             "protein_structure_schema_definition_conflict")
         definitions[name] = value
@@ -195,7 +195,7 @@ def _saved_argument_schemas(choices=None):
         {"properties": {"delivery_kind": {"const": "values"}, "family": {"enum": [
             "comparison_summary", "transform", "site_measurements", "correspondence",
             "structure_coordinates", "native_uncertainty"]}}}]}}
-    common = dict(saved_sheet={"$ref": "#/$defs/SavedSheetDescriptorV2"}, projections=projections)
+    common = dict(saved_sheet={"$ref": "#/$defs/SavedSheetDescriptor"}, projections=projections)
     shapes = {
         "read_stored": dict(result_ref=reference),
         "recalculate": dict(resource_id={"type": "string"}, binding_ordinal_0based={"type": "integer", "minimum": 0},
@@ -206,7 +206,7 @@ def _saved_argument_schemas(choices=None):
     for mode, properties in shapes.items():
         properties = dict(mode={"const": mode}, **deepcopy(properties))
         schema = {"type": "object", "additionalProperties": False, "required": list(properties),
-            "properties": properties, "$defs": _definitions_for(("SavedSheetDescriptorV2", "CalculationParameters", "ProjectionSelection"))}
+            "properties": properties, "$defs": _definitions_for(("SavedSheetDescriptor", "CalculationParameters", "ProjectionSelection"))}
         if mode == "recalculate" and choices is not None:
             alternatives = []
             for row in choices:
@@ -226,7 +226,7 @@ def protein_structure_tool_catalog(configuration):
     if configuration is None:
         return {}
     configuration = _copy(configuration)
-    _require(configuration.get("version") == "ordinary_protein_structure_configuration_v1",
+    _require(configuration.get("version") == "ordinary_protein_structure_configuration",
         "protein_structure_configuration_invalid")
     result = {}
     request_types = {"inspect": "InspectRequest", "extract_sequence": "ExtractRequest", "compare": "CompareRequest"}
@@ -326,7 +326,7 @@ def _run_reserved(assignment, operation_key, *, run_id, episode_id, root, policy
         _validate_execution(saved, assignment=assignment, root=root, policy=policy)
         return saved
     handle = native.NativeJobHandle(root / "native.json")
-    execution = {"version": "ordinary_protein_structure_execution_v1", "outcome": "failed",
+    execution = {"version": "ordinary_protein_structure_execution", "outcome": "failed",
         "returncode": None, "metadata": None, "failure": None, "terminal": True, "quiescent": True}
     try:
         handle = prepare_selected_local_protein_structure(assignment, operation_key,
@@ -355,7 +355,7 @@ def _run_reserved(assignment, operation_key, *, run_id, episode_id, root, policy
 def _validate_execution(value, *, assignment, root, policy):
     from gene_annotation_episode.episodic_workflow.episode_support.jobs.local_execution.structural_homology_evidence.native_lifecycle import NativeJobHandle
     _require(type(value) is dict and set(value) == {"version", "outcome", "returncode", "metadata", "failure",
-        "terminal", "quiescent"} and value["version"] == "ordinary_protein_structure_execution_v1"
+        "terminal", "quiescent"} and value["version"] == "ordinary_protein_structure_execution"
         and value["terminal"] is True and value["quiescent"] is True, "protein_structure_execution_record_invalid")
     returned = value["outcome"] == "returned"
     _require(value["outcome"] in ("returned", "failed"), "protein_structure_execution_record_invalid")
@@ -511,7 +511,7 @@ async def prepare_protein_structure_work(registry, name, args, *, scope, operati
     request = validate_protein_structure_request(arguments["request"])
     selection = arguments["selection"]
     _require(type(selection["return_saved_sheet"]) is bool, "protein_structure_selection_invalid")
-    selector = validate_protein_structure_result_selector({"version": "protein_structure_result_selector_v1",
+    selector = validate_protein_structure_result_selector({"version": "protein_structure_result_selector",
         "acquisition": "complete_bound_bundle", "saved_sheet": None, "parameters": None,
         **selection}, request=request)
     resolved = resolve_protein_structure_operands(registry.store, context, request, returns=input_authority)
@@ -520,7 +520,7 @@ async def prepare_protein_structure_work(registry, name, args, *, scope, operati
     staging = _staging(binding["workspace"], invocation)
     inputs = [{**row, "path": _stage_retained(registry.store, row["file_identity"], staging)}
               for row in resolved["input_files"]]
-    job = {"version": "native_protein_structure_job_v1", "program": "protein_structure_python",
+    job = {"version": "native_protein_structure_job", "program": "protein_structure_python",
         "request": resolved["request"], "software": binding["software"], "inputs": inputs,
         "outputs": output_files(request["operation"]), "environment": binding["environment"]}
     requested_job = requested_job_from_protein_structure(job)
@@ -528,7 +528,7 @@ async def prepare_protein_structure_work(registry, name, args, *, scope, operati
         "requested_job": requested_job, "constraints": {"allocation": binding["policy"]}}
     root = _directory(_root(assignment, invocation))
     root.mkdir(parents=True, exist_ok=True)
-    binding_control = {"version": "ordinary_protein_structure_binding_v1",
+    binding_control = {"version": "ordinary_protein_structure_binding",
         "invocation": invocation, "tool_name": name, "arguments": arguments, "scope": scope,
         "binding_sha256": digest(binding), "requested_job_sha256": digest(requested_job), "selector": selector}
     policy = LocalJobPolicy(**binding["policy"])
@@ -536,7 +536,7 @@ async def prepare_protein_structure_work(registry, name, args, *, scope, operati
         run_id=context.run_id, episode_id=context.episode_id, root=root, policy=policy, binding_control=binding_control)
     execution = _retain_execution_controls(registry.store, root, execution)
     execution_issue = _execution_issue(execution)
-    work: PreparedProteinWork = {"version": "ordinary_protein_structure_work_v1", "tool_name": name,
+    work: PreparedProteinWork = {"version": "ordinary_protein_structure_work", "tool_name": name,
         "arguments": arguments, "scope": scope, "invocation": invocation, "binding": binding,
         "requested_job": requested_job, "selector": selector, "selected_references": resolved["selected_references"],
         "plan": None, "execution": execution, "capture": None, "bundle": None, "worker": None, "scientific": None,
@@ -563,7 +563,7 @@ async def prepare_protein_structure_work(registry, name, args, *, scope, operati
             work["issues"].extend(work["bundle"]["failures"])
         native_file = _captured(capture, "native_result")
         if native_file is not None:
-            worker_plan = {"version": "protein_structure_result_worker_plan_v1", "mode": "original_native_result",
+            worker_plan = {"version": "protein_structure_result_worker_plan", "mode": "original_native_result",
                 "directory": str(root / "result-worker"), "expected_request": request,
                 "expected_software": binding["software"],
                 "native_result": {"file_identity": native_file,
@@ -593,7 +593,7 @@ async def prepare_protein_structure_work(registry, name, args, *, scope, operati
 def _selected_work_contract(registry, work, authority):
     """Rebind a detached preparation to the actual current saved tool action."""
     _require(type(work) is dict and set(work) == set(PreparedProteinWork.__annotations__)
-        and work["version"] == "ordinary_protein_structure_work_v1", "protein_structure_work_invalid")
+        and work["version"] == "ordinary_protein_structure_work", "protein_structure_work_invalid")
     name, arguments, scope = work["tool_name"], _copy(work["arguments"]), _copy(work["scope"])
     _require(type(work["invocation"]) is dict, "protein_structure_selected_action_conflict")
     operation_key = work["invocation"].get("operation_key")
@@ -612,7 +612,7 @@ def _selected_work_contract(registry, work, authority):
     binding = {**deepcopy(rows[0]), "policy": deepcopy(configuration["policy"])}
     request = validate_protein_structure_request(arguments["request"])
     _require(type(arguments["selection"]["return_saved_sheet"]) is bool, "protein_structure_selection_invalid")
-    selector = validate_protein_structure_result_selector({"version": "protein_structure_result_selector_v1",
+    selector = validate_protein_structure_result_selector({"version": "protein_structure_result_selector",
         "acquisition": "complete_bound_bundle", "saved_sheet": None, "parameters": None,
         **arguments["selection"]}, request=request)
     # Reconstruct the host compilation from literal File identities. This does
@@ -622,7 +622,7 @@ def _selected_work_contract(registry, work, authority):
         "path": _stage_retained(registry.store, identity, _staging(binding["workspace"], invocation_key)),
         "staged_relative_path": "inputs/input_" + str(index)}
         for index, (role, identity) in enumerate(required_input_files(request))]
-    requested_job = requested_job_from_protein_structure({"version": "native_protein_structure_job_v1",
+    requested_job = requested_job_from_protein_structure({"version": "native_protein_structure_job",
         "program": "protein_structure_python", "request": request, "software": binding["software"],
         "inputs": inputs, "outputs": output_files(request["operation"]), "environment": binding["environment"]})
     references = [row["file_identity"]["artifact_ref"] for row in inputs]
@@ -646,13 +646,13 @@ def _selected_work_contract(registry, work, authority):
         "original_commission_mismatch")
     root = Path(binding["workspace"]) / ".episode-operations" / digest({
         "run": invocation["run_id"], "episode": invocation["episode_id"]}) / digest(operation_key)
-    plan = validate_protein_structure_run_plan({"version": "native_protein_structure_run_plan_v1", "identity": {
+    plan = validate_protein_structure_run_plan({"version": "native_protein_structure_run_plan", "identity": {
         "run_id": context.run_id, "episode_id": context.episode_id, "resource_id": binding["resource_id"],
         "execution_id": str(root / "native.json"), "attempt_id": digest(operation_key),
         "operation_key": operation_key, "requested_job_sha256": digest(requested_job)},
         "requested_job": requested_job, "attempt_directory": str(root / ATTEMPT_DIRECTORY_NAME),
         "policy": binding["policy"]})
-    control = {"version": "ordinary_protein_structure_binding_v1", "invocation": invocation, "tool_name": name,
+    control = {"version": "ordinary_protein_structure_binding", "invocation": invocation, "tool_name": name,
         "arguments": arguments, "scope": scope, "binding_sha256": digest(binding),
         "requested_job_sha256": digest(requested_job), "selector": selector}
     return _copy({"tool_name": name, "arguments": arguments, "scope": scope, "invocation": invocation,
@@ -676,7 +676,7 @@ def _validate_retained_protein_execution(store, execution, *, plan, control):
     _require(same(_stored_control_json(store, artifacts["ordinary-tool-binding.json"]), control)
         and same(_stored_control_json(store, artifacts["ordinary-execution.json"]),
             {key: execution[key] for key in fields}), "original_commission_mismatch")
-    _require(execution["version"] == "ordinary_protein_structure_execution_v1"
+    _require(execution["version"] == "ordinary_protein_structure_execution"
         and execution["terminal"] is True and execution["quiescent"] is True,
         "protein_structure_execution_record_invalid")
     returned = execution["outcome"] == "returned"
@@ -808,7 +808,7 @@ def validate_prepared_protein_structure_work(registry, work, *, authority) -> Pr
     execution, plan_available = _validate_retained_protein_execution(registry.store, work["execution"],
         plan=plan, control=control)
     _require(same(work["plan"], plan if plan_available else None), "original_commission_mismatch")
-    fresh: PreparedProteinWork = {"version": "ordinary_protein_structure_work_v1", **selected,
+    fresh: PreparedProteinWork = {"version": "ordinary_protein_structure_work", **selected,
         "plan": plan if plan_available else None, "execution": execution, "capture": None, "bundle": None,
         "worker": None, "scientific": None, "qualified_files": {name: None for name in
             ("native_file", "sequence_file", "residue_map_file", "sheet_file", "original_components_file", "components_file")},
@@ -837,7 +837,7 @@ def validate_prepared_protein_structure_work(registry, work, *, authority) -> Pr
         elif work["worker"] is None:
             fresh["issues"].append(issue("capture_incomplete", stage="capture", field="manifest", artifact_role="native_result"))
         else:
-            worker_plan = {"version": "protein_structure_result_worker_plan_v1", "mode": "original_native_result",
+            worker_plan = {"version": "protein_structure_result_worker_plan", "mode": "original_native_result",
                 "directory": str(Path(plan["identity"]["execution_id"]).parent / "result-worker"),
                 "expected_request": selected["arguments"]["request"], "expected_software": selected["binding"]["software"],
                 "native_result": {"file_identity": native_file,
@@ -885,7 +885,7 @@ def _saved_worker_plan(store, arguments, invocation, binding):
     descriptor = arguments["saved_sheet"]
     root = Path(binding["workspace"]) / ".episode-operations" / digest({
         "run": invocation["run_id"], "episode": invocation["episode_id"]}) / digest(invocation["operation_key"])
-    return {"version": "protein_structure_result_worker_plan_v1", "mode": "saved_sheet_recalculation",
+    return {"version": "protein_structure_result_worker_plan", "mode": "saved_sheet_recalculation",
         "directory": str(root / "result-worker"), "parameters": deepcopy(arguments["parameters"]),
         "sheet": {"file_identity": deepcopy(descriptor["sheet_file"]),
             "path": _stage_retained(store, descriptor["sheet_file"], _staging(binding["workspace"], invocation))},
@@ -898,8 +898,6 @@ def _authenticate_saved_parameters(store, context, parameters, authority, *, ind
     if transform is None or transform["origin"] != "received_fitted":
         return
     from gene_annotation_episode.episodic_workflow.episode_support.readers.protein_structure.protein_structure_operands import authenticate_received_structure_transform
-    _require(transform["received_from"]["saved_sheet"]["version"] != "protein_structure_saved_sheet_v1",
-        "protein_structure_saved_sheet_v1_unsupported")
     authenticate_received_structure_transform(store, context, transform, returns=authority,
         before_decision_index=index)
 
@@ -1026,7 +1024,7 @@ def validate_saved_protein_work(store, work, *, context, input_authority, prepar
 
 
 def _validate_saved_arguments(arguments):
-    from gene_annotation_episode.episodic_workflow.episode_support.forms.protein_structure.structural_homology_evidence.protein_structure_contracts import validate_calculation_parameters, validate_saved_sheet_descriptor_v2
+    from gene_annotation_episode.episodic_workflow.episode_support.forms.protein_structure.structural_homology_evidence.protein_structure_contracts import validate_calculation_parameters, validate_saved_sheet_descriptor
     from gene_annotation_episode.episodic_workflow.episode_support.readers.protein_structure.structural_homology_evidence.protein_structure_result_views import validate_protein_structure_projection_selection
     mode = arguments.get("mode")
     _require(mode in SAVED_MODES, "invalid_schema")
@@ -1036,7 +1034,7 @@ def _validate_saved_arguments(arguments):
             arguments["result_ref"]) is not None, "invalid_schema")
     if mode == "read_stored":
         return
-    validate_saved_sheet_descriptor_v2(arguments["saved_sheet"])
+    validate_saved_sheet_descriptor(arguments["saved_sheet"])
     if mode == "recalculate":
         _require(type(arguments["binding_ordinal_0based"]) is int, "protein_structure_binding_selection_invalid")
         validate_calculation_parameters(arguments["parameters"])

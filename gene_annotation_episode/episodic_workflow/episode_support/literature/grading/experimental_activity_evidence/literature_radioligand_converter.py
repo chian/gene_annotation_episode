@@ -166,7 +166,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_assay_grading import INPUT_VERSION, ROLES, grade_assay
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_radioligand_converted_v1'
+VERSION = 'a105_radioligand_converted'
 STATEMENTS = {'detected': 'interaction_detected', 'not_detected': 'interaction_not_detected', None: 'interaction_not_stated'}
 BINDING_CONSTANTS = ('kd', 'ki')
 CRITERIA_MAP = {'binding_controls': ('nonspecific_binding', 'nonspecific_excess', 'radioligand_quality', 'filter_binding'), 'binding_regime': ('equilibrium', 'radioligand_range', 'competition_radioligand_level', 'wash_dissociation'), 'binding_parameter_definition': ('fit_model', 'nonlinear_fit', 'hill_slope', 'cheng_prusoff'), 'calibration_applicability': ('ligand_depletion', 'nonspecific_fraction'), 'sampling_basis': ('replicates',)}

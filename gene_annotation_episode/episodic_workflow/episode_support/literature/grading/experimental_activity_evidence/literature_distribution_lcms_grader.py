@@ -33,7 +33,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_binding_reader import _SCALES
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_distribution_lcms_grade_v1'
+VERSION = 'a105_distribution_lcms_grade'
 CRITERIA = tuple(criterion['id'] for criterion in DISTRIBUTION_LCMS_CRITERIA)
 PRODUCT = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact claimed_product_detected
 RANGE_REASON = {'supported': 'signals_within_calibration_range_stated', 'unknown': 'calibration_range_not_stated', 'not_applicable': 'fact_not_applicable'}

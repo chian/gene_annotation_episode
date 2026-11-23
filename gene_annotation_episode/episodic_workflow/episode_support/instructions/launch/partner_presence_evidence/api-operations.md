@@ -1,7 +1,7 @@
 # Actual bound HMMER API operations
 
 The launch parent commissions `launch_api` with the exact
-`api_execution_assignment_v1`: resource ID, registered subject, service
+`api_execution_assignment`: resource ID, registered subject, service
 `ebi_hmmer`, algorithm `phmmer` or `hmmscan`, database, parameters, page size,
 constraints and any pinned instructions. These are assignment fields; each
 operation below takes empty arguments and uses the original assignment.

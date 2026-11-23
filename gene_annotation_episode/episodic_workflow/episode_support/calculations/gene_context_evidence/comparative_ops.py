@@ -19,7 +19,7 @@ from typing import Mapping
 from gene_annotation_episode.episodic_workflow.episode_support.readers.sequence_and_context_sources.gene_context_evidence.genbank_parser import parse_genbank
 
 
-VERSION = "source_feature_neighborhood_v1"
+VERSION = "source_feature_neighborhood"
 INTERPRETATION = "external_source_context_not_target_function_or_orthology"
 
 

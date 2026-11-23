@@ -48,7 +48,7 @@ def add_covariance(args, sources, reader, matrix=None, status='known'):
     owners = rows(extraction)
     if matrix is None:
         matrix = [[1e-08, 5e-09, 0, 0], [5e-09, 1e-08, 0, 0], [0, 0, 10000, 0], [0, 0, 0, 0.01]]
-    data = {'version': 'a105_optical_covariance_v1', 'primitive_order': list(PRIMITIVE_ORDER), 'primitive_measurement_keys': [r['measurement_key'] for r in owners], 'primitive_physical_observation_keys': [r['physical_observation_key'] for r in owners], 'primitive_owner_keys': [r['owner_key'] for r in owners], 'primitive_units': [r['unit']['raw_unit'] for r in owners], 'covariance': matrix, 'origin': 'synthetic', 'covariance_status': status}
+    data = {'version': 'a105_optical_covariance', 'primitive_order': list(PRIMITIVE_ORDER), 'primitive_measurement_keys': [r['measurement_key'] for r in owners], 'primitive_physical_observation_keys': [r['physical_observation_key'] for r in owners], 'primitive_owner_keys': [r['owner_key'] for r in owners], 'primitive_units': [r['unit']['raw_unit'] for r in owners], 'covariance': matrix, 'origin': 'synthetic', 'covariance_status': status}
     sources[COV_SOURCE] = {'artifact_ref': 'artifact_' + '2' * 24, 'content': json.dumps(data).encode()}
     args['covariance_source_ref'] = COV_SOURCE
     return data

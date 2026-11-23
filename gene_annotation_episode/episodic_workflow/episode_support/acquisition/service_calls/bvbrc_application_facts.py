@@ -23,7 +23,7 @@ def _same(left, right):
 from gene_annotation_episode.episodic_workflow.episode_support.forms.perturbation_evidence.execution_contracts import canonical, digest
 
 
-RESULT_VERSION = "bvbrc_appservice_acquired_bundle_v1"
+RESULT_VERSION = "bvbrc_appservice_acquired_bundle"
 FACT_SOURCE = "bvbrc_application_outcomes"
 FACT_SOURCES = (FACT_SOURCE,)
 IDENTIFIER_NAMESPACE = "bvbrc_application_field"

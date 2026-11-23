@@ -14,7 +14,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.perturbation_evidence.literature_rate_native_inputs import _number, _field_contexts, _saved_number, _saved_witness
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.perturbation_evidence.literature_experimental_contracts import ExperimentalContractError
 
-VERSION = "a105_completion_time_inputs_v1"
+VERSION = "a105_completion_time_inputs"
 ROLES = ("numerator", "denominator")
 SOURCE_KINDS = ("primary_source", "retained_extraction", "synthetic_fixture")
 LITERAL_FIELDS = ("subject", "construct", "preparation", "condition", "endpoint", "measurement_identity")
@@ -24,7 +24,7 @@ PAIR_RELATIONS = ("supported", "unknown", "conflicting")
 CHANGE_STATUSES = ("described", "partial", "unknown", "conflicting")
 COMPARISON_FIELDS = ("endpoint_relation", "preparation_relation", "pair_relationship", "other_changes_status")
 COMPARISON_VALUES = (RELATIONS, RELATIONS, PAIR_RELATIONS, CHANGE_STATUSES)
-DEPENDENCY = "source_scalar_field_parser_completed_allocation_addition_v1"
+DEPENDENCY = "source_scalar_field_parser_completed_allocation_addition"
 _UNIT_RE = re.compile(r"\s*(milliseconds?|microseconds?|nanoseconds?|minutes?|mins?|seconds?|secs?|hours?|days?|weeks?|ms|us|µs|μs|ns|[smhd])(?![A-Za-z_])", re.I)
 
 

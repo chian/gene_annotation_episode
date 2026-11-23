@@ -49,7 +49,7 @@ converter does. The constructors take ``support`` and default it to 'direct'; th
 through the extraction (the extraction always passes the model's answer).
 """
 
-VERSION = 'a105_endpoint_gel_band_record_v1'
+VERSION = 'a105_endpoint_gel_band_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'endpoint_gel_band'
 QUANTITIES = ('conversion_percent', 'conversion_spread', 'net_conversion_percent', 'net_conversion_spread', 'control_conversion', 'endpoint_time', 'replicate_count')

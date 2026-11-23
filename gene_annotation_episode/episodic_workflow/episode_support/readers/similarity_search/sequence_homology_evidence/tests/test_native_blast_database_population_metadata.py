@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.similarit
 from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.sequence_homology_evidence.tests import test_native_blast_standard_database_metadata as base
 
 
-VERSION = "native_blast_database_sequence_metadata_v3"
+VERSION = "native_blast_database_sequence_population_metadata"
 
 
 def original_bundle_size(inputs):
@@ -41,7 +41,7 @@ def v3_payload(inputs, *, fasta=False, **kwargs):
         census = dict(database=db["identity"]["value"], release=db["identity"]["release"], scope=db["identity"]["scope"],
             count_unit="unique_sequences", total_count=110, function_counts={"F": 100, "G": 10})
         cdoc = base.received(inputs, "population-census", base.encoded({"census": census}))
-        assertion = dict(schema="blast_database_population_assertion_v1", relation="same_population",
+        assertion = dict(schema="blast_database_population_assertion", relation="same_population",
             native_database_operand=" ".join(db["native_paths"]), database_manifest_sha256=db["manifest_file"]["sha256"],
             population_identity={k: deepcopy(v) for k, v in db["identity"].items() if k != "source"},
             census_artifact={**{k: cdoc["artifact"][k] for k in ("sha256", "size_bytes")}, "pointer": "/census"})
@@ -113,7 +113,7 @@ def test_population_source_assertion_preserves_native_and_semantic_values(tmp_pa
     inputs, payload = fixture()
     sheets = run(inputs, payload)
     scientific = sheets["sequence"][0]["sheet"]
-    assert scientific["schema"] == "blast_sequence_database_result_sheet_v3"
+    assert scientific["schema"] == "blast_sequence_database_result_sheet_population"
     association = scientific["database_population_associations"][0]
     assert association["selected_database"]["native_database_operand"] == "/selected/db/target"
     assert scientific["search"]["normalized"]["search"]["database"] == "/selected/db/target"
@@ -332,7 +332,7 @@ def test_explicit_empty_associations_do_not_bridge_native_path_and_population():
     inputs, payload = fixture()
     payload["searches"][0]["database_population_associations"] = []
     sheets = run(inputs, payload)
-    assert sheets["sequence"][0]["sheet"]["schema"] == "blast_sequence_database_result_sheet_v3"
+    assert sheets["sequence"][0]["sheet"]["schema"] == "blast_sequence_database_result_sheet_population"
     assert components(sheets)["function_weights"]["representation_adjusted_probabilities"] is None
 
 
@@ -439,7 +439,7 @@ def native_six_fixture(tmp_path, program="psiblast", kind="sequence", *, rounds=
     job, bundle, catalog, _ = native_base.fixture(tmp_path, program=program, kind=kind, query=query, report=doc)
     if kind == "msa": job["query"]["msa_master_record_ordinal"] = 0
     bundle["requested_job"] = native_contracts.requested_job_from_native_blast_database(job)
-    bundle["version"] = "native_blast_database_bundle_v1"
+    bundle["version"] = "native_blast_database_bundle"
     bundle["realized_argv"] = deepcopy(bundle["requested_job"]["argv"])
     inputs = dict(job=job, bundle=bundle, artifact_catalog=catalog, contents={}, metadata_payloads=[])
     metadata_doc = document(program, search)
@@ -475,7 +475,7 @@ def test_native_six_sequence_metadata_routes_original_associations(tmp_path, pro
     assert len(sheets["sequence"]) == (2 if rounds else 1)
     for entry in sheets["sequence"]:
         sheet = entry["sheet"]
-        assert sheet["schema"] == "blast_sequence_database_result_sheet_v3"
+        assert sheet["schema"] == "blast_sequence_database_result_sheet_population"
         assert sheet["database_population_associations"][0]["search_key"] == sheet["search"]["search_key"]
         result = calculate_blast_sequence_database_components(sheet)["components"]
         assert result["function_weights"]["representation_adjusted_probabilities"] == pytest.approx({"F": 2/7, "G": 5/7})

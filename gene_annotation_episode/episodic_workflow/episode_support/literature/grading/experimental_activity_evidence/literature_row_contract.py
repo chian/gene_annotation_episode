@@ -101,12 +101,12 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     SUPPORTS,
 )
 
-ROW_VERSION = 'a105_row_contract_v1'
-RESULT_VERSION = 'a105_converted_result_v1'
-ROW_SHEET_VERSION = 'a105_subscoring_row_v1'
-MAIN_SHEET_VERSION = 'a105_main_scoring_row_v1'
-AXIS_VERSION = 'a105_axis_output_v1'
-FEATURES_VERSION = 'a105_investigation_features_v1'
+ROW_VERSION = 'a105_row_contract'
+RESULT_VERSION = 'a105_converted_result'
+ROW_SHEET_VERSION = 'a105_subscoring_row'
+MAIN_SHEET_VERSION = 'a105_main_scoring_row'
+AXIS_VERSION = 'a105_axis_output'
+FEATURES_VERSION = 'a105_investigation_features'
 
 # ---------------------------------------------------------------------------------------------------------------
 # (2) Classes (sheet names) and the experiment types

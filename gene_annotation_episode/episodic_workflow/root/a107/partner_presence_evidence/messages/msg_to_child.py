@@ -166,14 +166,14 @@ def assignment_for(slot, arguments, summary):
             assignment['proposed_annotation_ref'] = [summary['proposed_annotation_ref']]
         return assignment
     if slot == 'launch':
-        return {'version': 'execution_launch_assignment_v1', 'requests': arguments['requests'],
+        return {'version': 'execution_launch_assignment', 'requests': arguments['requests'],
                 'immutable_input_versions': arguments['immutable_input_versions'],
                 'constraints': arguments['constraints'], 'handoff_unit': summary['handoff_unit'],
                 'acquired_record_unit': summary['acquired_record_unit'], 'scope': summary['scope'],
                 'scientific_task': scientific_task(summary),
                 **present(arguments, ('launch_instructions', 'record_refs', 'received_handoff_resources'))}
     if slot == 'results':
-        return {'version': 'execution_results_assignment_v1', 'handoff_ref': arguments['handoff_ref'],
+        return {'version': 'execution_results_assignment', 'handoff_ref': arguments['handoff_ref'],
                 'selector': arguments['selector'], 'target': arguments['target'],
                 'acquired_record_unit': summary['acquired_record_unit'],
                 **present(arguments, ('record_refs', 'initial_result_refs'))}
@@ -194,7 +194,7 @@ def monitor(arguments, summary):
     job = {item['handoff_ref']: item for item in summary['outstanding_jobs']}[arguments['handoff_ref']]
     return ChildMessage(
         objective='Assess the progress of job ' + job['job'] + '.', message={},
-        assignment={'version': 'monitor_assignment_v2', 'handoff_refs': [job['handoff_ref']],
+        assignment={'version': 'monitor_assignment', 'handoff_refs': [job['handoff_ref']],
                     'known_progress_refs': job['record_refs'][1:], 'dependency_handoff_refs': [],
                     'requested_fields': list(arguments['requested_fields']),
                     'information_unit': summary['information_unit']},

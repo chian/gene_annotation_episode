@@ -25,8 +25,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.jobs.sequence_hom
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.profile_model_preparation.native_hmmer_preparation_worker_context import PREFIX, effective_metadata, eligible_occurrences, failure, qualified_occurrences, unique_failures, validate_failures
 
 
-PLAN_VERSION = PREFIX + "result_worker_plan_v1"
-MANIFEST_VERSION = PREFIX + "result_worker_manifest_v1"
+PLAN_VERSION = PREFIX + "result_worker_plan"
+MANIFEST_VERSION = PREFIX + "result_worker_manifest"
 NUMERICAL_FILES = {"grading": "grading.json", "sheet": "sheet.json",
                    "calculations": "calculations.json"}
 

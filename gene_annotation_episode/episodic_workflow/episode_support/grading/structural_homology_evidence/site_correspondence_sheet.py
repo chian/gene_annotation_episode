@@ -3,7 +3,7 @@ proteins that a graded structure search found? The fold search cannot tell the m
 matching fold with the catalytic residues present supports the candidate; a matching fold that lacks the candidate's
 zinc-coordinating residues does not).
 
-INPUTS. One held graded structure search (its sheet ``a102_structure_search_sheet_v1``: the hits with accession, product, B and
+INPUTS. One held graded structure search (its sheet ``a102_structure_search_sheet``: the hits with accession, product, B and
 the control flag; its parsed result: the aligned pairs and the hits' C-alpha coordinates; each hit's own sequence ``tSeq``;
 the model's C-alpha by target position and the target's sequence as the server read it) and the site rows of the hits'
 accessions of ONE site source (``annotated``: UniProt active-site, binding-site and site features; ``catalytic``: M-CSA
@@ -59,7 +59,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.readers.protein_s
 from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.attachments import (
     CHEMICAL_ROLES)
 
-SCHEMA = 'a102_site_correspondence_sheet_v1'
+SCHEMA = 'a102_site_correspondence_sheet'
 PROVIDER = 'site_correspondence'
 SITE_SOURCES = ('annotated', 'catalytic')
 FEATURE_SCALE_A = 1.0
@@ -190,7 +190,7 @@ def grade_hit(row, hit, hit_sequence, model_ca, query_sequence, features):
 
 def grade_site_correspondence(search_sheet, hits, hit_sequences, model_ca, query_sequence, sites, *, site_source,
                               search_source_ref):
-    """The sheet ``a102_site_correspondence_sheet_v1`` of one (search, site source).
+    """The sheet ``a102_site_correspondence_sheet`` of one (search, site source).
 
     ``search_sheet``: the retained sheet of the graded search; ``hits``: the parsed hits of its result (``parse_foldseek_result(
     ...)['hits']``, rank order); ``hit_sequences``: each hit's ``tSeq``, in the same order; ``model_ca``: ``{target position:

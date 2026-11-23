@@ -15,7 +15,7 @@ import json
 from gene_annotation_episode.episodic_workflow.episode_support.forms.sample_context_evidence.communication import plain
 from gene_annotation_episode.episodic_workflow.episode_support.records.sample_context_evidence.domain import ContractError, canonical, identity
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.sample_context_evidence import literature_sheet_policy
-VERSION = 'literature_sheet_dependencies_v1'
+VERSION = 'literature_sheet_dependencies'
 DEPENDENCIES = TableDeclaration(name="sample_context_literature_sheet_dependencies", columns=("sheet_ref", "family", "provider", "adapter", "method", "arguments", "assignment", "dependencies", "receipt"), key=("sheet_ref",), record_refs=("sheet_ref",))
 CURRENT = TableDeclaration(name="sample_context_literature_current_scoring_sheets", columns=("family", "sheet_ref", "status", "detail"), key=("family",), record_refs=("sheet_ref",))
 

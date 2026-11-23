@@ -17,13 +17,13 @@ from .execution_contracts import digest
 TOOL = "generate_gene_embeddings_with_ESM_models"
 FACT_SOURCE = "esm_gene_embedding_outcomes"
 MODEL = "esm2_t6_8M_UR50D"
-INPUT_VERSION = "esm_supplied_proteins_v1"
-REQUEST_VERSION = "esm_gene_embedding_request_v1"
-DOCUMENT_VERSION = "esm_gene_embeddings_v1"
-SELECTION_VERSION = "esm_gene_embedding_selection_v1"
-VALUE_VERSION = "esm_gene_embedding_values_v1"
-SOURCE_VERSION = "esm_gene_embedding_result_v1"
-WORKER_RESULT_VERSION = "esm_gene_embedding_worker_result_v1"
+INPUT_VERSION = "esm_supplied_proteins"
+REQUEST_VERSION = "esm_gene_embedding_request"
+DOCUMENT_VERSION = "esm_gene_embeddings"
+SELECTION_VERSION = "esm_gene_embedding_selection"
+VALUE_VERSION = "esm_gene_embedding_values"
+SOURCE_VERSION = "esm_gene_embedding_result"
+WORKER_RESULT_VERSION = "esm_gene_embedding_worker_result"
 PROTEIN_POOLING = "mean_model_tokens_excluding_bos_eos_padding"
 GENE_POOLING = "equal_mean_successful_isoform_occurrences"
 _SOURCE = r"^source_[0-9a-f]{24,64}$"
@@ -65,7 +65,7 @@ _GENE = _obj(dict(gene_id=_TEXT, isoforms=_array(_ASSIGNMENT)))
 _PARAMETERS = _obj(dict(layer=dict(const=6), batch_size=dict(type="integer", minimum=1),
     max_sequence_length=dict(type="integer", minimum=1), protein_pooling=dict(const=PROTEIN_POOLING),
     gene_pooling=dict(const=GENE_POOLING)))
-_DEPLOYMENT = _obj(dict(version=dict(const="esm_gene_embedding_deployment_v1"), model_name=dict(const=MODEL),
+_DEPLOYMENT = _obj(dict(version=dict(const="esm_gene_embedding_deployment"), model_name=dict(const=MODEL),
     layer_count=dict(const=6), embedding_dimension=dict(const=320), device=dict(const="cpu"), torch_threads=dict(const=1),
     checkpoint=_PIN, regression_checkpoint=_PIN, driver=driver_runtime_schema()))
 _GROUP_SELECTION = _obj(dict(row_ordinals=_nullable(_array(_INDEX, uniqueItems=True)),

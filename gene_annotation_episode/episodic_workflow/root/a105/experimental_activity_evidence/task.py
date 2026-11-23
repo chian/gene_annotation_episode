@@ -82,8 +82,8 @@ SERVICES = ()
 # in ``action``.
 TRANSPORT = {'open_records_as_text': True, 'argument_transport_error': 'a105_tool_argument_transport_unsupported'}
 
-REVISION_ORIGIN_VERSION = 'experimental_activity_evidence_revision_origin_v1'
-CHILD_SELECTION_VERSION = 'experimental_activity_evidence_child_selection_v1'
+REVISION_ORIGIN_VERSION = 'experimental_activity_evidence_revision_origin'
+CHILD_SELECTION_VERSION = 'experimental_activity_evidence_child_selection'
 
 # The tools of the A105 tool library (``A105ToolRegistry.catalog``) a commissioner can select for this head.
 REGISTRY_NAMES = ('state.query', 'source.read', 'source.locate', 'source.sequence.references',
@@ -123,12 +123,12 @@ TEXT = {'type': 'string', 'minLength': 1}
 SHA256 = {'type': 'string', 'pattern': '^[a-f0-9]{64}$'}
 
 # The old ``scientific_contracts`` option references, tool selectors and assignment, as the model writes them.
-OPTION_REF = obj({'version': {'const': 'experimental_activity_evidence_option_ref_v1'}, 'library_id': SHA256,
+OPTION_REF = obj({'version': {'const': 'experimental_activity_evidence_option_ref'}, 'library_id': SHA256,
                   'slot': {'enum': ['evidence_axis', 'thought_pattern']}, 'option_id': TEXT, 'entry_sha256': SHA256})
 TOOL_SELECTOR = obj({'name': TEXT, 'resources': {'enum': ['api', 'local', 'hpc']}})
 SELECTION = obj({'version': TEXT, 'evidence_axis': OPTION_REF, 'thought_pattern': OPTION_REF,
                  'child_tool_info': {'type': 'array', 'items': TOOL_SELECTOR, 'uniqueItems': True}})
-EVIDENCE_TASK = obj({'version': {'const': 'evidence_axis_task_v1'}, 'kind': {'const': 'whole_axis_findings'},
+EVIDENCE_TASK = obj({'version': {'const': 'evidence_axis_task'}, 'kind': {'const': 'whole_axis_findings'},
                      'evidence_axis': {'const': 'A105'},
                      'credit_unit': {'type': 'number', 'exclusiveMinimum': 0,
                                      'description': 'Use the finding unit of the explicitly configured credit '
@@ -157,14 +157,14 @@ def literature_task_schema():
     yield_settings = obj({'kind': {'enum': ['accumulation', 'remaining_commissioned_credit']},
                           'cutoff': {'type': 'number', 'minimum': 0},
                           'uncertainty_alpha': {'type': 'number', 'exclusiveMinimum': 0, 'exclusiveMaximum': 1}})
-    base = {'version': {'const': 'literature_local_task_v1'}, 'evidence_axis': {'const': 'A105'},
+    base = {'version': {'const': 'literature_local_task'}, 'evidence_axis': {'const': 'A105'},
             'credit_unit': {'type': 'number', 'exclusiveMinimum': 0}, 'yield_settings': yield_settings,
             'kind': {'const': 'verified_source_leads', 'description': VERIFIED_SOURCE_LEADS}}
     return obj(base, required=[key for key in base if key != 'yield_settings'])
 
 
 def literature_assignment_schema():
-    properties = {'version': {'const': 'literature_assignment_v1'}, 'question_context_refs': REFS,
+    properties = {'version': {'const': 'literature_assignment'}, 'question_context_refs': REFS,
                   'literature_task': literature_task_schema(), 'proposed_annotation_ref': REF}
     return obj(properties, required=['version', 'question_context_refs', 'literature_task',
                                      'proposed_annotation_ref'])

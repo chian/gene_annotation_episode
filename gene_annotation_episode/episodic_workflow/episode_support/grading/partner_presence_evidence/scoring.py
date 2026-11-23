@@ -22,8 +22,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.calculations.part
 from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence.domain import ContractError, canonical
 
 
-VERSION = 'a103_measured_gene_context_v1'
-PROFILE = 'a103_bounded_context_progress_v1'
+VERSION = 'a103_measured_gene_context'
+PROFILE = 'a103_bounded_context_progress'
 MAX_FILE_BYTES = 32 * 1024**2
 MAX_PANEL = 32
 MAX_COMPONENTS = 16
@@ -142,7 +142,7 @@ def _translation(record, feature, *, calculation_provenance=None):
         reason = 'partial_or_pseudogene_annotation'
     sequence = declared or calculated
     if calculation_provenance is not None:
-        calculation_provenance.update({'version':'a103_translation_calculation_v1',
+        calculation_provenance.update({'version':'a103_translation_calculation',
             'translation_call':translation_call, 'codon_start':offset+1,
             'nucleotide_selection':'feature_extract_in_part_order_after_codon_start_offset',
             'completed':calculated is not None, 'qualification':reason})
@@ -179,7 +179,7 @@ def bind_locus(request):
             'protein_ids':feature.qualifiers.get('protein_id',[]), 'translation':tr})
     projection = io.StringIO()
     SeqIO.write([record], projection, 'genbank')
-    binding = {'schema':'a103_locus_binding_v1', 'producer_operation':'context.bind_locus',
+    binding = {'schema':'a103_locus_binding', 'producer_operation':'context.bind_locus',
         'target_ref':request['target_ref'], 'file_source_ref':request['file_source_ref'],
         'sequence_source_ref':request.get('sequence_source_ref'),
         'source_file_sha256':hashlib.sha256(content.encode()).hexdigest(),
@@ -259,7 +259,7 @@ def neighborhood(binding, left_bp, right_bp):
         key = digest([row['segments'],row['strand'],row['qualifiers'].get('protein_id')])
         unique.setdefault(key,row)
     cds = sorted(unique.values(),key=lambda f:min(p[0] for p in f['segments']) if f['segments'] else math.inf)
-    result = {'schema':'a103_neighborhood_v1', 'producer_operation':'reference.neighborhood',
+    result = {'schema':'a103_neighborhood', 'producer_operation':'reference.neighborhood',
         'target_ref':binding['target_ref'], 'accession':binding['accession'],
         'source_file_sha256':binding['source_file_sha256'], 'organism':binding['organism'],
         'raw_neighborhood':raw, 'cds':cds, 'regulatory_features':[
@@ -348,7 +348,7 @@ def compare_neighborhoods(rows, definition):
     fraction = sum(r['relationship_holds'] for r in eligible)/len(eligible) if eligible else None
     balanced = (math.fsum(math.fsum(math.fsum(v)/len(v) for v in genomes.values())/len(genomes)
         for genomes in groups.values())/len(groups)) if groups else None
-    return {'schema':'a103_recurrence_v1','producer_operation':'context.compare_neighborhoods',
+    return {'schema':'a103_recurrence','producer_operation':'context.compare_neighborhoods',
         'definition':deepcopy(definition),'rows':measured,'supporting_loci':sum(r['relationship_holds'] for r in eligible),
         'evaluable_loci':len(eligible),'unknown_loci':len(rows)-len(eligible),
         'evaluable_genomes':len({r['genome_key'] for r in eligible}),
@@ -368,7 +368,7 @@ def fusion(binding, regions):
         require(0 <= start < end <= len(sequence), 'a103_fusion_region_invalid')
         require(all(end<=a or start>=b for a,b in spans), 'a103_fusion_regions_overlap')
         spans.append((start,end))
-    return {'schema':'a103_fusion_v1','producer_operation':'context.fusion',
+    return {'schema':'a103_fusion','producer_operation':'context.fusion',
         'regions':deepcopy(regions),'coding_locus':deepcopy(binding['locus']),
         'same_coding_product':True,'observed_link_fraction':1.,
         'interpretation':'observed_linkage_of_attributed_regions_in_one_coding_product; molecular_activity_unestablished'}
@@ -405,7 +405,7 @@ def cooccurrence(rows):
     # The raw test assumes independent rows. Correlated sampling stays visible
     # and cannot silently mint an independent-row significance contribution.
     independent = len(groups)==len(known)
-    return {'schema':'a103_cooccurrence_v1','producer_operation':'context.cooccurrence',
+    return {'schema':'a103_cooccurrence','producer_operation':'context.cooccurrence',
         'rows':deepcopy(rows),'contingency':{'both':a,'left_only':b,'right_only':c,'neither':d},
         'evaluable_genomes':len(known),'unknown_genomes':len(rows)-len(known),
         'risk_difference':effect,'p_value':p,'log10_significance':L,

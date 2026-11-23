@@ -149,7 +149,7 @@ def test_exact_registry_closed_shapes_pure_and_detached(tmp_path, monkeypatch, c
     bad = deepcopy(raw["payload"])
     bad["extra"] = 1
     assert m.validate_native_blast_database_metadata_payload(bad, descriptor=raw["descriptor"], document_catalog=docs, job=job)["status"] == "invalid"
-    other = dict(raw["descriptor"], schema_id="unknown_v1")
+    other = dict(raw["descriptor"], schema_id="unknown")
     unsupported = m.validate_native_blast_database_metadata_payload(bad, descriptor=other, document_catalog=dict(docs, descriptor=other), job=job)
     assert unsupported["status"] == "unsupported" and unsupported["payload"] == bad
     with pytest.raises(ValueError, match="finite_json"):
@@ -166,7 +166,7 @@ def test_actual_six_public_routes_without_calculation(tmp_path, monkeypatch, pro
     assert sheet_set["collection"]["searches"][0]["operand_binding"] == prep["invocation"]["operands"][0]
     assert [d["binding"]["stage"] for d in sheet_set["derived_search_bindings"]] == ([] if stage is None else [stage])
     if program in {"psiblast", "deltablast"}:
-        assert sheet_set["iteration"]["schema"] == "blast_iteration_sheet_v2"
+        assert sheet_set["iteration"]["schema"] == "blast_iteration_sheet_target_context"
         assert sheet_set["iteration"]["search_bindings"][0]["biological_round"] is None
     elif program in {"rpsblast", "rpstblastn"}:
         assert len(sheet_set["profile"]) == 1
@@ -849,7 +849,7 @@ def fasta_record_payload(tmp_path, catalog, *, ordinals=(0, 1), raw=b">s0\nACDEF
     assignments = source(tmp_path, catalog, "explicit-assignments", encoded(payload))
     fasta = source(tmp_path, catalog, "original-fasta", raw, "fasta")
     payload["documents"].extend([assignments, fasta])
-    payload["schema"] = "native_blast_database_sequence_metadata_v2"
+    payload["schema"] = "native_blast_database_sequence_located_metadata"
     unit = payload["searches"][0]
     for i, ordinal in enumerate(ordinals):
         locator = dict(kind="fasta_record", record_ordinal=ordinal)
@@ -863,14 +863,14 @@ def fasta_record_payload(tmp_path, catalog, *, ordinals=(0, 1), raw=b">s0\nACDEF
     return payload
 
 
-def record_wire(tmp_path, catalog, payload, key="record-v2"):
+def record_wire(tmp_path, catalog, payload, key="record-located"):
     raw = metadata(tmp_path, catalog, "sequence_database", payload, key)
     raw["descriptor"]["schema_id"] = payload["schema"]
     return raw
 
 
 @pytest.mark.parametrize("program", ["psiblast", "deltablast"])
-def test_record_v2_native_iteration_handoff_and_saved_recalculation(tmp_path, monkeypatch, program):
+def test_located_native_iteration_handoff_and_saved_recalculation(tmp_path, monkeypatch, program):
     from gene_annotation_episode.episodic_workflow.episode_support.records.similarity_search.native_blast_database_worker_values import calculate_native_blast_database_sheets
     from gene_annotation_episode.episodic_workflow.episode_support.records.similarity_search.sequence_homology_evidence import blast_fasta_record_identity
     job, bundle, catalog, _ = fixture(tmp_path, program)
@@ -885,7 +885,7 @@ def test_record_v2_native_iteration_handoff_and_saved_recalculation(tmp_path, mo
     sheets = populate(prepared(job, bundle, catalog, rows), catalog)
     assert sheets["prepared_inputs"]["metadata"][0]["status"] == "valid", sheets["issues"]
     scientific = sheets["sequence"][0]["sheet"]
-    assert scientific["schema"] == "blast_sequence_database_result_sheet_v2"
+    assert scientific["schema"] == "blast_sequence_database_result_sheet_record_locator"
     assert [r["binding"]["record_locator"]["record_ordinal"] for r in scientific["sequence_identity_bindings"]] == [0, 1]
     assert sheets["iteration"]["sequence_metadata"][0]["sequence_identity_bindings"] == scientific["sequence_identity_bindings"]
     original = encoded(sheets)
@@ -902,12 +902,12 @@ def test_record_v2_native_iteration_handoff_and_saved_recalculation(tmp_path, mo
     warmer = calculate_native_blast_database_sheets(sheets, sequence_model={"temperature_bits": 2})
     assert warmer["iteration"]["searches"][0]["sequence_components"]["components"]["function_weights"]["unadjusted_probabilities"] == {"F": 2 / 3, "G": 1 / 3}
     assert encoded(sheets) == original
-    (tmp_path / "native-v2-sheets.json").write_bytes(original)
-    (tmp_path / "native-v2-calculations.json").write_bytes(encoded(calc))
+    (tmp_path / "native-located-sheets.json").write_bytes(original)
+    (tmp_path / "native-located-calculations.json").write_bytes(encoded(calc))
 
 
 @pytest.mark.parametrize("ordinal,detail", [(1, "fasta_record_invalid"), (3, "fasta_record_ordinal_unavailable"), (2, None)])
-def test_record_v2_native_sparse_record_qualification_is_local(tmp_path, ordinal, detail):
+def test_located_native_sparse_record_qualification_is_local(tmp_path, ordinal, detail):
     job, bundle, catalog, _ = fixture(tmp_path)
     payload = fasta_record_payload(tmp_path, catalog, ordinals=(0, ordinal), raw=b">s0\nACDEFGHIKL\n>bad\n>s1\nACDEPQRSTV\n")
     raw = record_wire(tmp_path, catalog, payload)
@@ -920,7 +920,7 @@ def test_record_v2_native_sparse_record_qualification_is_local(tmp_path, ordinal
     if detail: assert any(r["detail_code"] == detail for r in sheets["issues"])
 
 
-def test_record_v2_native_proof_ordinal_and_same_record_conflict_are_distinct(tmp_path):
+def test_located_native_proof_ordinal_and_same_record_conflict_are_distinct(tmp_path):
     job, bundle, catalog, _ = fixture(tmp_path)
     payload = fasta_record_payload(tmp_path, catalog)
     payload["searches"][0]["sequence_proofs"][0]["record_ordinal"] = 1
@@ -932,30 +932,30 @@ def test_record_v2_native_proof_ordinal_and_same_record_conflict_are_distinct(tm
     changed["searches"][0]["sequence_proofs"][0]["record_ordinal"] = 0
     changed["searches"][0]["sequence_proofs"][1]["record_ordinal"] = 0
     changed["searches"][0]["sequence_identity_bindings"][1]["binding"]["record_locator"]["record_ordinal"] = 0
-    other = record_wire(tmp_path, catalog, changed, "conflicting-record-v2")
+    other = record_wire(tmp_path, catalog, changed, "conflicting-record-located")
     sheets = populate(prepared(job, bundle, catalog, [other]), catalog)
     assert not sheets["sequence"][0]["sheet"]["sequence_identity_bindings"]
     assert any(r["detail_code"] == "full_sequence_source_identity_conflict" for r in sheets["issues"])
 
 
-def test_record_v2_registry_dispatch_is_exact_and_leaves_vdb_v1_closed(tmp_path):
+def test_located_registry_dispatch_is_exact_and_leaves_vdb_closed(tmp_path):
     registry = m.metadata_schema_registry()
     assert [(r["consumer"], r["schema_id"]) for r in registry] == [
-        ("query_identity", "native_blast_database_query_metadata_v1"),
-        ("sequence_database", "native_blast_database_sequence_metadata_v1"),
-        ("profile", "native_blast_database_profile_metadata_v1"),
-        ("iteration", "native_blast_database_iteration_metadata_v1"),
-        ("vdb", "native_blast_database_vdb_metadata_v1"),
-        ("sequence_database", "native_blast_database_sequence_metadata_v2"),
-        ("sequence_database", "native_blast_database_sequence_metadata_v3"),
-        ("vdb_function", "native_blast_vdb_function_metadata_v1")]
+        ("query_identity", "native_blast_database_query_metadata"),
+        ("sequence_database", "native_blast_database_sequence_metadata"),
+        ("profile", "native_blast_database_profile_metadata"),
+        ("iteration", "native_blast_database_iteration_metadata"),
+        ("vdb", "native_blast_database_vdb_metadata"),
+        ("sequence_database", "native_blast_database_sequence_located_metadata"),
+        ("sequence_database", "native_blast_database_sequence_population_metadata"),
+        ("vdb_function", "native_blast_vdb_function_metadata")]
     job, bundle, catalog, _ = fixture(tmp_path)
     payload = fasta_record_payload(tmp_path, catalog)
-    payload["schema"] = "native_blast_database_sequence_metadata_v1"
+    payload["schema"] = "native_blast_database_sequence_metadata"
     rejected = record_wire(tmp_path, catalog, payload)
     assert prepared(job, bundle, catalog, [rejected])["metadata"][0]["status"] == "invalid"
-    payload["schema"] = "native_blast_database_sequence_metadata_v2"
+    payload["schema"] = "native_blast_database_sequence_located_metadata"
     wrong_descriptor = record_wire(tmp_path, catalog, payload, "mismatch")
-    wrong_descriptor["descriptor"]["schema_id"] = "native_blast_database_sequence_metadata_v1"
+    wrong_descriptor["descriptor"]["schema_id"] = "native_blast_database_sequence_metadata"
     assert prepared(job, bundle, catalog, [wrong_descriptor])["metadata"][0]["status"] == "invalid"
     assert "record_locator" not in m._SEQUENCE_BINDING["properties"]

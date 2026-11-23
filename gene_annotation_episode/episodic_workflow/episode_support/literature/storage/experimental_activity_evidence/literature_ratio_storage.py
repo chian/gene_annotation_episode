@@ -34,7 +34,7 @@ RECEIVED = received_ledger('literature_ratio_received')
 class LiteratureRatioRepository(LiteratureRateRepository):
     provider = PROVIDER
     components = COMPONENTS
-    record_version = 'literature_relative_signal_record_v1'
+    record_version = 'literature_relative_signal_record'
     operations = OPERATIONS
     received = RECEIVED
     binding_fields = tuple(BINDINGS)
@@ -119,7 +119,7 @@ class LiteratureRatioRepository(LiteratureRateRepository):
                 record = json.loads(self.store.get_artifact(visual['artifact_ref']), object_pairs_hook=pairs)
             except (ValueError, UnicodeDecodeError) as error:
                 raise ContractError('retained_visual_json_required') from error
-            if not isinstance(record, dict) or set(record) != {'version', 'subject', 'variant', 'reference', 'observations'} or record['version'] != 'relative_visual_signal_v1' or ((record['subject'], record['variant'], record['reference']) != (args['subject'], args['variant'], args['reference_literal'])) or (not isinstance(record['observations'], list)) or (not record['observations']):
+            if not isinstance(record, dict) or set(record) != {'version', 'subject', 'variant', 'reference', 'observations'} or record['version'] != 'relative_visual_signal' or ((record['subject'], record['variant'], record['reference']) != (args['subject'], args['variant'], args['reference_literal'])) or (not isinstance(record['observations'], list)) or (not record['observations']):
                 raise ContractError('retained_visual_comparison_mismatch')
             parents.append(ref)
             for row in record['observations']:

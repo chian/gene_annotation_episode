@@ -27,7 +27,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.experimen
     canonical, identity, obj, plain, validate_schema)
 
 PROVIDER = SCORING_PROVIDER
-VERSION = 'literature_a105_aggregation_record_v1'
+VERSION = 'literature_a105_aggregation_record'
 NAMESPACE = 'literature_a105_aggregation_cells'
 REQUESTED = 'requested_a105_aggregation_components'
 OPERATION_DESCRIPTION = 'Combine the retained experimental A105 components selected by the parent. Use one actual possessed numerical component per experiment and metric: reliability SUM, validity SUM, relevance MAX, attribution MAX, overall SUM. Preserve the selected native values, units and meanings, with no weighting, rescaling or orthogonality correction. Select one assessment of each experiment so duplicate reports or revisions do not become additional experiments. Keep missing values explicit and report available partial totals separately. The comparison reference is a parent declaration; no alternative hypothesis identity is inferred from the native prediction numbers. Return exactly the requested saved metrics. This is A105 evidence aggregation, not W05 annotation credit.'

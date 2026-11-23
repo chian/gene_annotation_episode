@@ -134,7 +134,7 @@ def _job(store, directory, query_ref, residues, manifest, executable_directory):
     operands.append({'role': QUERY_ROLE, 'path': str(directory / QUERY_FILE), 'format': 'fasta',
                      'sha256': hashlib.sha256(data).hexdigest(), 'size_bytes': len(data), 'artifact_ref': artifact})
     requested = requested_job_from_native({
-        'version': 'native_hmmer_job_v1', 'program': PROGRAM, 'mode': 'search',
+        'version': 'native_hmmer_job', 'program': PROGRAM, 'mode': 'search',
         'software': {'executable': str(executable), 'sha256': hashlib.sha256(executable.read_bytes()).hexdigest(),
                      'engine_version': None},
         'environment': {}, 'operands': operands,

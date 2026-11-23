@@ -1,4 +1,4 @@
-"""What the parent gives: the literature assignment ``literature_assignment_v1`` (the records that give the question its
+"""What the parent gives: the literature assignment ``literature_assignment`` (the records that give the question its
 context), the commissioned A108 literature task (the verified source leads, the one task kind), the proposed
 annotation, the A108 grading and aggregation components the parent wants returned, the Store scope of the commission
 and the records passed in custody. This is the only place the assignment is read. No source and no search is handed
@@ -27,10 +27,10 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.sample_co
 
 REQUESTED_GRADING = 'requested_a108_grading_components'
 REQUESTED_AGGREGATION = 'requested_a108_aggregation_components'
-VERSION = 'literature_local_task_v1'
+VERSION = 'literature_local_task'
 
 ASSIGNMENT_FORM = RecordForm({
-    'version': DeclaredField('text', 'The literature assignment version', 'literature_assignment_v1'),
+    'version': DeclaredField('text', 'The literature assignment version', 'literature_assignment'),
     'question_context_refs': Field('record_refs', 'Records giving the assigned question its context'),
     'literature_task': Field('record', 'The commissioned A108 literature task: version, evidence_axis A108, '
                              'credit_unit, and its kind verified_source_leads'),

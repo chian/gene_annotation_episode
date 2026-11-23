@@ -25,7 +25,7 @@ returns     every case the criterion can return, as (status, reason_code, when).
             as 'never' cannot occur for this criterion.
 """
 
-VERSION = 'a105_transport_medium_analysis_criteria_v1'
+VERSION = 'a105_transport_medium_analysis_criteria'
 SECONDS_PER_TIME_UNIT = {'s': 1.0, 'min': 60.0, 'h': 3600.0}   # FIXED_BY_DEFINITION: a minute is 60 s, an hour 3600 s.
 
 _fact_returns = (

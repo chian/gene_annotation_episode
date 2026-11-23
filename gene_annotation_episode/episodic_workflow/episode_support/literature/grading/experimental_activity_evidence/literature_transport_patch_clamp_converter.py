@@ -133,7 +133,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_transport_response_direction import select_transport_effect
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_transport_patch_clamp_converted_v1'
+VERSION = 'a105_transport_patch_clamp_converted'
 CRITERIA_MAP = {'background_alternatives': ('host_cell_control', 'substrate_free_control'), 'attribution_supported': ('inactive_mutant_control', 'blocker_control'),
                 'calibration_applicability': ('series_resistance_error', 'seal_and_leak'), 'assertion_relevance': ('native_substrate',),
                 'membrane_system': ('host_cell_control', 'seal_and_leak'), 'transport_endpoint': ('unitary_events_resolved', 'driving_force_correction'),

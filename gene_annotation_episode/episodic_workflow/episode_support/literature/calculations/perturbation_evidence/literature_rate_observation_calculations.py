@@ -5,7 +5,7 @@ from decimal import Decimal, localcontext
 from fractions import Fraction
 import math
 
-VERSION='a105_reported_rate_contrast_v1'
+VERSION='a105_reported_rate_contrast'
 GROUP_COMPONENTS=('rate','sample_sd','cv','observed_point_mean','observed_point_sd')
 COMPONENTS=('reference_rate','test_rate','rate_difference','retained_fraction','fractional_decrease',
     'reference_sample_sd','test_sample_sd','reference_cv','test_cv',
@@ -126,8 +126,8 @@ def populate_rate_observation_contrast(extraction,*,reference_group,test_group):
 
 
 # Versioned reported-curve grid section.
-GRID_SHEET_VERSION = 'a105_reported_curve_precision_v1'
-GRID_SOLVER_VERSION = 'dimensionless_profile_stationarity_log2_32_v1'
+GRID_SHEET_VERSION = 'a105_reported_curve_precision'
+GRID_SOLVER_VERSION = 'dimensionless_profile_stationarity_log2_32'
 GRID_REASONS = ('incomplete_selected_roster', 'no_point_observations', 'insufficient_entry_count',
     'nonpositive_mean', 'numerical_model_range', 'model_not_selected', 'concentration_unit_unknown',
     'positive_concentrations_required', 'insufficient_distinct_concentrations',
@@ -171,7 +171,7 @@ def reported_curve_precision_selector_schema():
 
 def reported_curve_precision_request_schema():
     from gene_annotation_episode.episodic_workflow.episode_support.records.perturbation_evidence.domain import obj
-    return obj({'version': {'const': 'a105_reported_curve_precision_request_v1'},
+    return obj({'version': {'const': 'a105_reported_curve_precision_request'},
         'fit_model': {'enum': ['none', 'unweighted_positive_km_mm']},
         'requested_components': {'type': 'array', 'uniqueItems': True,
                                  'items': reported_curve_precision_selector_schema()}})

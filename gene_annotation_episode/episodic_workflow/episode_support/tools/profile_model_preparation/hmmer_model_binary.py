@@ -42,7 +42,7 @@ def _record(occurrence, ordinal, start, revision, byte_order):
         "initial": {"insert": None, "transitions": None}, "positions": [],
         "terminated": False, "issues": [],
         "representation": {
-            "schema": "hmmer_model_representation_v1",
+            "schema": "hmmer_model_representation",
             "encoding": "hmmer3_binary_probability", "topology": "hmmer3_core",
             "byte_order": byte_order, "binary_layout": "i32_u32_ieee754_binary32",
             "header_semantics": "binary_field_projection", "native_fields": [],

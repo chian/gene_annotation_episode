@@ -29,7 +29,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     ENDPOINT_COLORIMETRIC_CRITERIA, NM_PER_UNIT, PMOL_PER_UNIT)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_endpoint_colorimetric_grade_v1'
+VERSION = 'a105_endpoint_colorimetric_grade'
 CRITERIA = tuple(criterion['id'] for criterion in ENDPOINT_COLORIMETRIC_CRITERIA)
 CONVERSION = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact conversion_detected_above_control
 

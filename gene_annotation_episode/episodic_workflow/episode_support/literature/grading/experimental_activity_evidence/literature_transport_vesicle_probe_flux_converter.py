@@ -120,7 +120,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_transport_response_direction import select_transport_effect
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_transport_vesicle_probe_flux_converted_v1'
+VERSION = 'a105_transport_vesicle_probe_flux_converted'
 CRITERIA_MAP = {'background_alternatives': ('protein_free_vesicle_control',), 'membrane_system': ('protein_free_vesicle_control', 'vesicle_integrity'),
                 'attribution_supported': ('release_over_control', 'protein_amount_in_vesicles'), 'calibration_applicability': ('probe_calibration',),
                 'transport_endpoint': ('detergent_reference', 'time_resolution'), 'transport_driving_force': ('ionophore_control', 'gradient_defined'),

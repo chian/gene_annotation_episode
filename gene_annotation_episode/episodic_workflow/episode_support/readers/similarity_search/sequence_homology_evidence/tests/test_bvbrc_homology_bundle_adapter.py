@@ -107,7 +107,7 @@ def c4_fixture(document=None, *, primary="raw", mode="database_identification", 
                      "representation": primary, "binding": q} for q in legacy["query_bindings"]],
         "database_binding": legacy["database_binding"], "subject_binding": legacy["subject_binding"], "metadata": supplied()}
     source = evidence(inputs)
-    bundle = {"version": "bvbrc_appservice_artifact_bundle_v1", "original_task": task,
+    bundle = {"version": "bvbrc_appservice_artifact_bundle", "original_task": task,
         "artifacts": c4_artifacts, "input_bindings": [input_binding], "query_bindings": [],
         "supplied_scientific_metadata": [source],
         "acquisition_receipt_refs": list(dict.fromkeys(a["transfer"]["receipt_ref"] for a in c4_artifacts)),
@@ -170,7 +170,7 @@ def test_five_programs_two_modes_three_explicit_representations(program, mode, r
     assert result["facts"]["aligned"] == (None if representation == "tabular" else 3)
     sheet = result["sheet"]["queries"][0]
     assert sheet["query_binding_status"] == "validated"
-    assert sheet["blast_sheet"]["schema"] == ("blast_database_sheet_v1" if mode == "database_identification" else "blast_pairwise_sheet_v1")
+    assert sheet["blast_sheet"]["schema"] == ("blast_database_sheet" if mode == "database_identification" else "blast_pairwise_sheet")
     assert (result["components"]["queries"][0]["pairwise_correspondence"] is not None) == (mode == "pairwise_correspondence")
     assert (result["components"]["queries"][0]["conditional_function_weights"] is not None) == (mode == "database_identification")
 

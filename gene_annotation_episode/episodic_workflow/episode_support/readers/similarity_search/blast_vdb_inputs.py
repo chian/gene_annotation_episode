@@ -412,7 +412,7 @@ def _unique(rows, field=None, code="duplicate_record_key"):
 
 def _validate_sheet(sheet):
     _keys(sheet, _SHEET, "sheet_fields_invalid")
-    if sheet["schema"] != "blast_vdb_search_sheet_v1":
+    if sheet["schema"] != "blast_vdb_search_sheet":
         _fail("sheet_fields_invalid")
     search = sheet["search"]
     _keys(search, "search_key program_context stage iteration normalized row_map operand_binding reporting native issues", "search_fields_invalid")
@@ -423,7 +423,7 @@ def _validate_sheet(sheet):
         _fail("mode_required")
     normalized = search["normalized"]
     _keys(normalized, "schema mode resource format query search hits native issues", "search_fields_invalid")
-    if normalized["schema"] != "blast_normalized_result_v1" or any(type(normalized[x]) is not dict for x in ("query", "search", "native")) or type(normalized["hits"]) is not list:
+    if normalized["schema"] != "blast_normalized_result" or any(type(normalized[x]) is not dict for x in ("query", "search", "native")) or type(normalized["hits"]) is not list:
         _fail("search_fields_invalid")
     _keys(normalized["query"], "id title length", "search_fields_invalid")
     _keys(normalized["search"], "program version database parameters statistics request hit_array_present reported_hit_count", "search_fields_invalid")
@@ -482,7 +482,7 @@ def populate_blast_vdb_sheet(search, *, report_source, query_binding, dataset_re
         member_bindings, sequence_identity_bindings, feature_bindings, reference_metadata,
         target_context=None, population_records=None) -> dict:
     """Retain the entire search and explicit inputs after closed-shape validation."""
-    sheet = _copy(dict(schema="blast_vdb_search_sheet_v1", search=search, report_source=report_source,
+    sheet = _copy(dict(schema="blast_vdb_search_sheet", search=search, report_source=report_source,
         query_binding=query_binding, dataset_records=dataset_records, member_bindings=member_bindings,
         sequence_identity_bindings=sequence_identity_bindings, feature_bindings=feature_bindings,
         reference_metadata=reference_metadata, target_context=target_context, population_records=population_records))
@@ -494,7 +494,7 @@ def _parsed_start(contents, source_ref, version, format_name, context=None):
     if type(contents) is not bytes:
         _fail()
     _str(source_ref); _nullable(version, _str)
-    result = dict(schema="blast_vdb_metadata_parse_v1", format=format_name, source_ref=source_ref,
+    result = dict(schema="blast_vdb_metadata_parse", format=format_name, source_ref=source_ref,
         input_identity={"sha256": hashlib.sha256(contents).hexdigest(), "size_bytes": len(contents)},
         native_text=None, parse_context=_copy(context), records=[], issues=[])
     try:
@@ -611,7 +611,7 @@ def read_blast_vdb_sequence_table(contents: bytes, *, source_ref: str,
     """
     _str(source_version)
     parsed = _parsed_start(contents, source_ref, source_version, "blast_vdb_cmd_table")
-    result = dict(schema="blast_vdb_sequence_table_v1", source_ref=source_ref,
+    result = dict(schema="blast_vdb_sequence_table", source_ref=source_ref,
         source_version=source_version, input_identity=parsed["input_identity"],
         native_text=parsed["native_text"], rows=[], issues=parsed["issues"])
     if result["native_text"] is None:
@@ -647,7 +647,7 @@ def parse_blast_vdb_member_sequences(contents: bytes, *, source_ref: str,
     """Read the exact four-column specific-entry output, never execute the helper."""
     _str(source_version); context = _copy(extraction_context); _extraction_context(context)
     table = read_blast_vdb_sequence_table(contents, source_ref=source_ref, source_version=source_version)
-    result = dict(schema="blast_vdb_metadata_parse_v1", format="blast_vdb_cmd_table", source_ref=source_ref,
+    result = dict(schema="blast_vdb_metadata_parse", format="blast_vdb_cmd_table", source_ref=source_ref,
         input_identity=table["input_identity"], native_text=table["native_text"],
         parse_context=_copy(context), records=[], issues=table["issues"])
     if result["native_text"] is None:
@@ -886,7 +886,7 @@ def bind_blast_vdb_metadata(parsed_results, *, dataset_records, member_bindings,
     records, qualified = {}, {}
     for result in parsed_results:
         _keys(result, "schema format source_ref input_identity native_text parse_context records issues")
-        if result["schema"] != "blast_vdb_metadata_parse_v1":
+        if result["schema"] != "blast_vdb_metadata_parse":
             _fail()
         _enum(result["format"], _FORMATS); _str(result["source_ref"])
         _keys(result["input_identity"], "sha256 size_bytes"); _digest(result["input_identity"]["sha256"]); _int(result["input_identity"]["size_bytes"])
@@ -1000,7 +1000,7 @@ def bind_blast_vdb_metadata(parsed_results, *, dataset_records, member_bindings,
     for row in bindings:
         process(row)
     used = {_token(bykey[k]["record_key"]) for k in bound}
-    return dict(schema="blast_vdb_bound_metadata_v1", reference_metadata=[bound[b["metadata_key"]] for b in bindings if b["metadata_key"] in bound],
+    return dict(schema="blast_vdb_bound_metadata", reference_metadata=[bound[b["metadata_key"]] for b in bindings if b["metadata_key"] in bound],
         binding_results=[outcomes[b["metadata_key"]] for b in bindings],
         unresolved_record_keys=[deepcopy(r["record_key"]) for k, r in records.items() if k not in used],
         issues=[deepcopy(i) for b in bindings for i in outcomes[b["metadata_key"]]["issues"]])

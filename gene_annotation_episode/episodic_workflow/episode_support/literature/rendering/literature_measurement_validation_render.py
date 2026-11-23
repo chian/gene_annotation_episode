@@ -31,7 +31,7 @@ def rows_from_reports(reports):
 def task_relevant(state):
     assignment = state.get('literature_assignment', {})
     return (isinstance(assignment, Mapping) and bool(assignment.get('requested_measurement_validation_components'))
-        or state.get('literature_measurement_validation_work', {}).get('version') == 'literature_measurement_validation_task_v1'
+        or state.get('literature_measurement_validation_work', {}).get('version') == 'literature_measurement_validation_task'
         or any(rows_from_values((state.get('last_local_outcome', {}), state.get('current_report_update', {}))))
         or any(rows_from_reports(state.get('child_reports', ()))))
 

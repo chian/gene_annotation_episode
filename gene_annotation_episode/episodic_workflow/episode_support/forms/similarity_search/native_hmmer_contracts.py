@@ -77,7 +77,7 @@ _INPUT_ROLES = sorted({"profile_database", "query_sequence", "query_profile", "q
 _OUTPUT_ROLES = ["stdout", "stderr", "tblout", "domtblout", "stockholm", "included_msa",
                  "checkpoint_hmm", "checkpoint_msa", "constructed_hmm"]
 NATIVE_HMMER_JOB_SCHEMA = _object({
-    "version": {"const": "native_hmmer_job_v1"}, "program": {"enum": list(PROGRAMS)},
+    "version": {"const": "native_hmmer_job"}, "program": {"enum": list(PROGRAMS)},
     "mode": {"enum": ["search", "sequence", "profile", "alignment", "align"]},
     "software": _object({"executable": _ABS, "sha256": _SHA, "engine_version": _NULL_STR}),
     "environment": {"type": "object", "additionalProperties": {"type": "string"}},

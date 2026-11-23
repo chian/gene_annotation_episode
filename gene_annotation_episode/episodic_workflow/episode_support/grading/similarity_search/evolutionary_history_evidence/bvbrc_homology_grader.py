@@ -17,7 +17,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
 from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.evolutionary_history_evidence.bvbrc_homology_inputs import _diagnostic, _digest, _index, _pointer, _positive, _text
 
 
-SCHEMA = "bvbrc_homology_sheet_v1"
+SCHEMA = "bvbrc_homology_sheet"
 
 
 def _pairwise_proof(parsed, query):
@@ -67,9 +67,9 @@ def _pairwise_proof(parsed, query):
 
 
 def build_homology_sheet(parsed: dict, *, metadata: dict) -> dict:
-    if not isinstance(parsed, dict) or parsed.get("schema") != "bvbrc_homology_parse_v1":
+    if not isinstance(parsed, dict) or parsed.get("schema") != "bvbrc_homology_parse":
         raise ValueError("homology_parse_required")
-    if not isinstance(metadata, dict) or metadata.get("schema") != "bvbrc_homology_metadata_bindings_v1":
+    if not isinstance(metadata, dict) or metadata.get("schema") != "bvbrc_homology_metadata_bindings":
         raise ValueError("homology_metadata_bindings_required")
     json.dumps(parsed, allow_nan=False)
     json.dumps(metadata, allow_nan=False)
@@ -159,7 +159,7 @@ def _quantity(value, *, source, operands, unit, denominator=None, meaning=None):
 def calculate_homology_alignment_supplements(sheet: dict) -> dict:
     if not isinstance(sheet, dict) or sheet.get("schema") != SCHEMA:
         raise ValueError("homology_sheet_required")
-    output = {"schema": "bvbrc_homology_alignment_supplements_v1", "queries": []}
+    output = {"schema": "bvbrc_homology_alignment_supplements", "queries": []}
     for query in sheet["queries"]:
         row = {"report_index": query["report_index"], "source_locator": deepcopy(query["source_locator"]),
             "hits": [], "native_tabular_measurements": deepcopy(query["native_tabular_measurements"]),
@@ -234,7 +234,7 @@ def calculate_homology_scores(sheet: dict, *, database_model: dict | None = None
         raise ValueError("homology_sheet_required")
     if sheet["scientific_mode"] == "pairwise_correspondence" and database_model is not None:
         raise ValueError("homology_database_model_unused_for_pairwise")
-    output = {"schema": "bvbrc_homology_scores_v1", "scientific_mode": sheet["scientific_mode"],
+    output = {"schema": "bvbrc_homology_scores", "scientific_mode": sheet["scientific_mode"],
               "queries": [], "alignment_supplements": calculate_homology_alignment_supplements(sheet)}
     for query in sheet["queries"]:
         row = {"report_index": query["report_index"], "source_locator": deepcopy(query["source_locator"]),

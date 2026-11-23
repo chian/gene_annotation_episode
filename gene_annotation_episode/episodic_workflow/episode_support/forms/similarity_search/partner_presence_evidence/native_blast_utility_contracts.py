@@ -24,17 +24,17 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_
 MODES = (("makeblastdb", "create_sequence_database"),
          ("blastdbcmd", "extract_sequences"), ("blastdbcmd", "info"),
          ("blastdbcmd", "metadata"), ("blastdbcheck", "integrity"))
-JOB_VERSION = "native_blast_utility_job_v1"
-JOB_VERSION_V2 = "native_blast_utility_job_v2"
-JOB_VERSION_V3 = "native_blast_utility_job_v3"
+JOB_VERSION = "native_blast_standard_utility_job"
+PREPARATION_JOB_VERSION = "native_blast_preparation_utility_job"
+VDB_JOB_VERSION = "native_blast_vdb_utility_job"
 VDB_MODES = tuple(("blast_vdb_cmd", mode) for mode in ("extract_sequences", "info", "paths", "paths_all"))
 PREPARATION_MODES = (("blastdb_aliastool", "convert_gi_list"),
     ("blastdb_aliastool", "convert_seqid_list"), ("blastdb_aliastool", "inspect_seqid_list"),
     ("blastdb_aliastool", "create_subset_alias"), ("blastdb_aliastool", "aggregate_databases"),
     ("blastdb_aliastool", "aggregate_volumes"), ("makembindex", "create_megablast_index"),
     ("makembindex", "show_filters"), ("makeprofiledb", "create_profile_database"))
-LEGACY_MODES = MODES
-MODES = LEGACY_MODES + PREPARATION_MODES + VDB_MODES
+STANDARD_MODES = MODES
+MODES = STANDARD_MODES + PREPARATION_MODES + VDB_MODES
 _RESERVED_ENV = frozenset({"TMPDIR", "TMP", "TEMP", "XDG_CACHE_HOME",
                           "PYTHONPATH", "PYTHONHOME", "PYTHONDONTWRITEBYTECODE"})
 _STR = {"type": "string", "minLength": 1, "pattern": r"^[^\x00\r\n]+$"}
@@ -54,21 +54,21 @@ INPUT_SCHEMA = _object({"input_key": _STR,
     "artifact_ref": {"anyOf": [_STR, {"type": "null"}]}})
 OUTPUT_SCHEMA = _object({"role": {"enum": ["stdout", "stderr", "database_family"]},
     "path_kind": {"enum": ["file", "prefix"]}, "relative_path": _STR,
-    "format": {"enum": ["text", "blastdb_family", "blastdbcmd_tabular_v1",
+    "format": {"enum": ["text", "blastdb_family", "blastdbcmd_tabular",
                           "blastdb_info_text", "blastdb_metadata_json", "blastdbcheck_text"]}})
 NATIVE_BLAST_UTILITY_JOB_SCHEMA = _object({"version": {"const": JOB_VERSION},
-    "operation": blast_utility_schema_for_version("blast_utility_operation_v1"), "software": SOFTWARE_SCHEMA, "environment": _ENV,
+    "operation": blast_utility_schema_for_version("blast_utility_operation"), "software": SOFTWARE_SCHEMA, "environment": _ENV,
     "inputs": {"type": "array", "items": INPUT_SCHEMA},
     "databases": {"type": "array", "maxItems": 1, "items": DATABASE_OPERAND_SCHEMA},
     "outputs": {"type": "array", "minItems": 2, "maxItems": 3, "items": OUTPUT_SCHEMA}})
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.partner_presence_evidence.blast_preparation_contracts import MATERIALIZATION_ENTRY_SCHEMA
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.native_blast_database_contracts import DATABASE_OPERAND_SCHEMA as ADDITIONAL_DATABASE_OPERAND_SCHEMA
-INPUT_SCHEMA_V2 = deepcopy(INPUT_SCHEMA)
-INPUT_SCHEMA_V2["properties"]["role"] = {"enum": ["sequence_input", "taxid_map", "identifier_list",
+PREPARATION_INPUT_SCHEMA = deepcopy(INPUT_SCHEMA)
+PREPARATION_INPUT_SCHEMA["properties"]["role"] = {"enum": ["sequence_input", "taxid_map", "identifier_list",
     "database_list", "profile_list", "profile_input"]}
-INPUT_SCHEMA_V2["properties"]["format"] = {"enum": ["fasta", "text", "gi_list_binary",
+PREPARATION_INPUT_SCHEMA["properties"]["format"] = {"enum": ["fasta", "text", "gi_list_binary",
     "seqid_list_binary", "pssm_asn1_text", "pssm_asn1_binary"]}
-OUTPUT_SCHEMA_V2 = _object({"output_key": _STR,
+PREPARATION_OUTPUT_SCHEMA = _object({"output_key": _STR,
     "role": {"enum": ["stdout", "stderr", "identifier_list", "database_family", "index_family", "statistics"]},
     "path_kind": {"enum": ["file", "prefix"]}, "relative_path": _STR,
     "format": {"enum": ["text", "blastdb_family", "blast_index_family", "gi_list_binary",
@@ -86,36 +86,36 @@ MATERIALIZATIONS_SCHEMA = _object({
     "list_files": {"type": "array", "items": _object({"input_key": _STR, "relative_path": _STR,
         "grammar": {"enum": ["blast_database_lines", "profile_whitespace_tokens"]},
         "entries": {"type": "array", "minItems": 1, "items": _ENTRY}})}})
-NATIVE_BLAST_UTILITY_JOB_V1_SCHEMA = NATIVE_BLAST_UTILITY_JOB_SCHEMA
-NATIVE_BLAST_UTILITY_JOB_V2_SCHEMA = _object({"version": {"const": JOB_VERSION_V2},
-    "operation": blast_utility_schema_for_version("blast_utility_operation_v2"), "software": SOFTWARE_SCHEMA, "environment": _ENV,
-    "inputs": {"type": "array", "items": INPUT_SCHEMA_V2},
+NATIVE_BLAST_STANDARD_UTILITY_JOB_SCHEMA = NATIVE_BLAST_UTILITY_JOB_SCHEMA
+NATIVE_BLAST_PREPARATION_UTILITY_JOB_SCHEMA = _object({"version": {"const": PREPARATION_JOB_VERSION},
+    "operation": blast_utility_schema_for_version("blast_preparation_operation"), "software": SOFTWARE_SCHEMA, "environment": _ENV,
+    "inputs": {"type": "array", "items": PREPARATION_INPUT_SCHEMA},
     "databases": {"type": "array", "items": {"anyOf": [DATABASE_OPERAND_SCHEMA, ADDITIONAL_DATABASE_OPERAND_SCHEMA]}},
-    "outputs": {"type": "array", "minItems": 2, "items": OUTPUT_SCHEMA_V2},
+    "outputs": {"type": "array", "minItems": 2, "items": PREPARATION_OUTPUT_SCHEMA},
     "materializations": MATERIALIZATIONS_SCHEMA})
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.partner_presence_evidence.native_blast_vdb_utility_context import vdb_utility_context_request_schema
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.similarity_search.partner_presence_evidence.native_blast_vdb_utility_execution import OFFLINE_ENVIRONMENT_SCHEMA, OFFLINE_EXECUTION_SCHEMA
-INPUT_SCHEMA_V3 = deepcopy(INPUT_SCHEMA)
-INPUT_SCHEMA_V3["properties"]["role"] = {"enum": ["entry_batch", "database_list"]}
-INPUT_SCHEMA_V3["properties"]["format"] = {"const": "text"}
-OUTPUT_SCHEMA_V3 = _object({"role": {"enum": ["stdout", "stderr"]}, "path_kind": {"const": "file"},
-    "relative_path": _STR, "format": {"enum": ["text", "blast_vdb_cmd_table_v1",
-        "blast_vdb_info_text_v1", "blast_vdb_paths_text_v1"]}})
-NATIVE_BLAST_UTILITY_JOB_V3_SCHEMA = _object({"version": {"const": JOB_VERSION_V3},
-    "operation": blast_utility_schema_for_version("blast_utility_operation_v3"),
+VDB_INPUT_SCHEMA = deepcopy(INPUT_SCHEMA)
+VDB_INPUT_SCHEMA["properties"]["role"] = {"enum": ["entry_batch", "database_list"]}
+VDB_INPUT_SCHEMA["properties"]["format"] = {"const": "text"}
+VDB_OUTPUT_SCHEMA = _object({"role": {"enum": ["stdout", "stderr"]}, "path_kind": {"const": "file"},
+    "relative_path": _STR, "format": {"enum": ["text", "blast_vdb_cmd_table",
+        "blast_vdb_info_text", "blast_vdb_paths_text"]}})
+NATIVE_BLAST_VDB_UTILITY_JOB_SCHEMA = _object({"version": {"const": VDB_JOB_VERSION},
+    "operation": blast_utility_schema_for_version("blast_vdb_utility_operation"),
     "software": SOFTWARE_SCHEMA, "environment": OFFLINE_ENVIRONMENT_SCHEMA,
-    "inputs": {"type": "array", "items": INPUT_SCHEMA_V3},
+    "inputs": {"type": "array", "items": VDB_INPUT_SCHEMA},
     "databases": {"type": "array", "minItems": 1, "maxItems": 1, "items": ADDITIONAL_DATABASE_OPERAND_SCHEMA},
-    "outputs": {"type": "array", "minItems": 2, "maxItems": 2, "items": OUTPUT_SCHEMA_V3},
+    "outputs": {"type": "array", "minItems": 2, "maxItems": 2, "items": VDB_OUTPUT_SCHEMA},
     "vdb_context_request": vdb_utility_context_request_schema(), "offline_execution": OFFLINE_EXECUTION_SCHEMA})
-NATIVE_BLAST_UTILITY_JOB_SCHEMA = {"anyOf": [NATIVE_BLAST_UTILITY_JOB_V1_SCHEMA,
-    NATIVE_BLAST_UTILITY_JOB_V2_SCHEMA, NATIVE_BLAST_UTILITY_JOB_V3_SCHEMA]}
+NATIVE_BLAST_UTILITY_JOB_SCHEMA = {"anyOf": [NATIVE_BLAST_STANDARD_UTILITY_JOB_SCHEMA,
+    NATIVE_BLAST_PREPARATION_UTILITY_JOB_SCHEMA, NATIVE_BLAST_VDB_UTILITY_JOB_SCHEMA]}
 NATIVE_BLAST_UTILITY_REQUESTED_JOB_SCHEMA = _object({
     "argv": {"type": "array", "minItems": 1,
              "items": {"type": "string", "pattern": r"^[^\x00\r\n]*$"}}, "environment": _ENV,
     "native_blast_utility": NATIVE_BLAST_UTILITY_JOB_SCHEMA})
-# A v2 title can be the explicitly selected empty string. Keep the public
-# object-shaped schema and the v1 nonempty-argument rule used by saved requests.
+# A title can be the explicitly selected empty string. Keep the public
+# object-shaped schema and the nonempty-argument rule used by saved requests.
 NATIVE_BLAST_UTILITY_REQUESTED_JOB_SCHEMA["allOf"] = [{
     "if": {"properties": {"native_blast_utility": {"properties": {"version": {"const": JOB_VERSION}}}}},
     "then": {"properties": {"argv": {"items": _STR}}}}]
@@ -139,9 +139,9 @@ def _path(value, *, absolute):
 
 
 def _output_format(operation):
-    if operation["version"] == "blast_utility_operation_v3":
+    if operation["version"] == "blast_vdb_utility_operation":
         return operation["parameters"]["output_format"]
-    return {"create_sequence_database": "text", "extract_sequences": "blastdbcmd_tabular_v1",
+    return {"create_sequence_database": "text", "extract_sequences": "blastdbcmd_tabular",
             "info": "blastdb_info_text", "metadata": "blastdb_metadata_json",
             "integrity": "blastdbcheck_text"}[operation["mode"]]
 
@@ -151,7 +151,7 @@ def _validate_vdb_job(job):
     from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.partner_presence_evidence.native_blast_vdb_utility_context import validate_vdb_utility_context_request
     from gene_annotation_episode.episodic_workflow.episode_support.jobs.similarity_search.partner_presence_evidence.native_blast_vdb_utility_execution import validate_vdb_offline_execution
     op = validate_blast_utility_operation(job["operation"])
-    if op["version"] != "blast_utility_operation_v3" or (op["program"], op["mode"]) not in VDB_MODES:
+    if op["version"] != "blast_vdb_utility_operation" or (op["program"], op["mode"]) not in VDB_MODES:
         _error("unsupported_program_mode")
     _path(job["software"]["executable"], absolute=True)
     db = validate_native_blast_database_operand(job["databases"][0])
@@ -239,13 +239,13 @@ def validate_native_blast_utility_job(value: dict) -> dict:
 def _validate_native_blast_utility_job(job: dict) -> dict:
     """Original schema and semantics for an already detached finite JSON value."""
     _schema(job, NATIVE_BLAST_UTILITY_JOB_SCHEMA)
-    if job["version"] == JOB_VERSION_V3:
+    if job["version"] == VDB_JOB_VERSION:
         return _validate_vdb_job(job)
-    if job["version"] == JOB_VERSION_V2:
+    if job["version"] == PREPARATION_JOB_VERSION:
         from gene_annotation_episode.episodic_workflow.episode_support.records.similarity_search.partner_presence_evidence.native_blast_utility_materializations import validate_preparation_job
         return validate_preparation_job(job)
     op = validate_blast_utility_operation(job["operation"])
-    if op["version"] != "blast_utility_operation_v1" or (op["program"], op["mode"]) not in LEGACY_MODES:
+    if op["version"] != "blast_utility_operation" or (op["program"], op["mode"]) not in STANDARD_MODES:
         _error("unsupported_program_mode")
     _path(job["software"]["executable"], absolute=True)
     for key, val in job["environment"].items():
@@ -328,10 +328,10 @@ def compile_native_blast_utility_job(job: dict, *, input_paths: dict,
                                      database_paths: dict, output_directory: str) -> list[str]:
     """Compile one selected command. Never look up an executable or database."""
     job = validate_native_blast_utility_job(job)
-    if job["version"] == JOB_VERSION_V3:
+    if job["version"] == VDB_JOB_VERSION:
         return _compile_vdb_job(job, input_paths=input_paths, database_paths=database_paths,
                                 output_directory=output_directory)
-    if job["version"] == JOB_VERSION_V2:
+    if job["version"] == PREPARATION_JOB_VERSION:
         from gene_annotation_episode.episodic_workflow.episode_support.records.similarity_search.partner_presence_evidence.native_blast_utility_materializations import compile_preparation_job
         return compile_preparation_job(job, input_paths=input_paths, database_paths=database_paths,
                                        output_directory=output_directory)
@@ -417,17 +417,17 @@ def validate_native_blast_utility_requested_job(value: dict) -> dict:
 def native_blast_utility_job_schema(*, program: str, mode: str) -> dict:
     if (program,mode) not in MODES: _error('unsupported_program_mode')
     vdb, preparation = (program, mode) in VDB_MODES, (program, mode) in PREPARATION_MODES
-    schema = deepcopy(NATIVE_BLAST_UTILITY_JOB_V3_SCHEMA if vdb else NATIVE_BLAST_UTILITY_JOB_V2_SCHEMA if preparation
-                      else NATIVE_BLAST_UTILITY_JOB_V1_SCHEMA)
-    version = 'blast_utility_operation_v3' if vdb else 'blast_utility_operation_v2' if preparation else 'blast_utility_operation_v1'
+    schema = deepcopy(NATIVE_BLAST_VDB_UTILITY_JOB_SCHEMA if vdb else NATIVE_BLAST_PREPARATION_UTILITY_JOB_SCHEMA if preparation
+                      else NATIVE_BLAST_STANDARD_UTILITY_JOB_SCHEMA)
+    version = 'blast_vdb_utility_operation' if vdb else 'blast_preparation_operation' if preparation else 'blast_utility_operation'
     schema['properties']['operation'] = {'allOf':[blast_utility_schema_for_version(version),
         {'properties':{'program':{'const':program},'mode':{'const':mode}}}]}
     return schema
 
 
 # Producer custody records. These do not add a utility parser or scoring policy.
-PLAN_VERSION = "native_blast_utility_run_plan_v1"
-BUNDLE_VERSION = "native_blast_utility_bundle_v1"
+PLAN_VERSION = "native_blast_utility_run_plan"
+BUNDLE_VERSION = "native_blast_utility_bundle"
 PLAN_NAME = "blast-utility-plan.json"
 ATTEMPT_NAME = "blast-utility-attempt"
 OWNER_NAME = ".native-blast-utility-owner.json"
@@ -466,11 +466,11 @@ def staged_relative(operand: dict) -> str:
 def native_environment(job: dict, directory) -> dict:
     root = PurePosixPath(directory)
     return {**job["environment"], **{key: str(root / "tmp") for key in ("TMPDIR", "TMP", "TEMP")},
-            "XDG_CACHE_HOME": str(root / "cache"), **({"PWD": str(root)} if job["version"] == JOB_VERSION_V3 else {})}
+            "XDG_CACHE_HOME": str(root / "cache"), **({"PWD": str(root)} if job["version"] == VDB_JOB_VERSION else {})}
 
 
 def utility_database_operands(job):
-    if job["version"] == JOB_VERSION_V3:
+    if job["version"] == VDB_JOB_VERSION:
         from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.partner_presence_evidence.native_blast_vdb_utility_context import vdb_utility_database_operands
         return vdb_utility_database_operands(job)
     return job["databases"]
@@ -561,7 +561,7 @@ def validate_native_blast_utility_plan(value: dict) -> dict:
     paths = [job["software"]["executable"], *[r["path"] for r in job["inputs"]],
         *[r["original_path"] for r in database_file_selections(job)],
         *[p for db in utility_database_operands(job) for p in db["native_paths"]]]
-    if job["version"] == JOB_VERSION_V3:
+    if job["version"] == VDB_JOB_VERSION:
         paths.extend(row["path"] for row in [job["offline_execution"]["launcher"], *job["offline_execution"]["runtime_files"]])
         paths.extend(row["path"] for row in job["offline_execution"]["runtime_aliases"])
         if policy != {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4 * 1024 ** 3}:
@@ -596,11 +596,11 @@ def _bundle_failures(bundle, job):
                 or row["stage"] != FAILURE_STAGES[row["code"]]):
             _error("bundle_failure_shape")
         code, key, db, relative = row["code"], row["input_key"], row["database_key"], row["relative_path"]
-        if code in OFFLINE_FAILURE_CODES and job["version"] != JOB_VERSION_V3:
-            _error("v3_failure_requires_v3_job")
-        if (job["version"] != JOB_VERSION_V2 and row["stage"] == "materializations" or
-                job["version"] not in {JOB_VERSION_V2, JOB_VERSION_V3} and code == "original_input_changed"):
-            _error("v2_failure_requires_v2_job")
+        if code in OFFLINE_FAILURE_CODES and job["version"] != VDB_JOB_VERSION:
+            _error("vdb_failure_requires_vdb_job")
+        if (job["version"] != PREPARATION_JOB_VERSION and row["stage"] == "materializations" or
+                job["version"] not in {PREPARATION_JOB_VERSION, VDB_JOB_VERSION} and code == "original_input_changed"):
+            _error("preparation_failure_requires_preparation_job")
         if relative is not None:
             _producer_path(relative, absolute=False)
         if row["stage"] == "materializations":
@@ -632,9 +632,9 @@ def validate_native_blast_utility_bundle(value: dict, original_plan: dict) -> di
         "started", "returncode", "writer_closed", "inventory_complete", "started_at", "finished_at",
         "inputs", "database_files", "artifacts", "failures"}
     job = plan["requested_job"]["native_blast_utility"]
-    if job["version"] == JOB_VERSION_V2:
+    if job["version"] == PREPARATION_JOB_VERSION:
         fields |= {"materializations", "output_completeness_basis"}
-    elif job["version"] == JOB_VERSION_V3:
+    elif job["version"] == VDB_JOB_VERSION:
         fields |= {"offline_execution", "output_completeness_basis"}
     if (type(bundle) is not dict or set(bundle) not in (fields, fields | {"output_completeness_basis"})
             or bundle["version"] != BUNDLE_VERSION
@@ -675,7 +675,7 @@ def validate_native_blast_utility_bundle(value: dict, original_plan: dict) -> di
             or bundle["writer_closed"] != (finished is not None)):
         _error("bundle_execution_conflict")
     _bundle_failures(bundle, job)
-    if job["version"] == JOB_VERSION_V3:
+    if job["version"] == VDB_JOB_VERSION:
         from gene_annotation_episode.episodic_workflow.episode_support.jobs.similarity_search.partner_presence_evidence.native_blast_vdb_utility_execution import validate_vdb_offline_receipt, vdb_offline_native_outcome
         receipt = validate_vdb_offline_receipt(bundle["offline_execution"], job=job, attempt_directory=str(root))
         if (bundle["started"], rc) != vdb_offline_native_outcome(receipt):
@@ -734,7 +734,7 @@ def validate_native_blast_utility_bundle(value: dict, original_plan: dict) -> di
             _error("bundle_database_unavailable_failure_required")
     if bundle["started"] and any(has("database_identity_mismatch", database_key=db["database_key"]) for db in utility_database_operands(job)):
         _error("bundle_database_preflight_conflict")
-    if job["version"] == JOB_VERSION_V2:
+    if job["version"] == PREPARATION_JOB_VERSION:
         from gene_annotation_episode.episodic_workflow.episode_support.records.similarity_search.partner_presence_evidence.native_blast_utility_materializations import validate_preparation_bundle_tail
         validate_preparation_bundle_tail(bundle, plan)
         return bundle
@@ -786,7 +786,7 @@ def validate_native_blast_utility_bundle(value: dict, original_plan: dict) -> di
 
 def realized_path_maps(job: dict, attempt_directory: str) -> dict:
     """The exact declared paths; no file reading or lexical realization."""
-    if job["version"] == JOB_VERSION_V2:
+    if job["version"] == PREPARATION_JOB_VERSION:
         from gene_annotation_episode.episodic_workflow.episode_support.records.similarity_search.partner_presence_evidence.native_blast_utility_materializations import preparation_path_maps
         return preparation_path_maps(job, attempt_directory)
     root = PurePosixPath(attempt_directory)

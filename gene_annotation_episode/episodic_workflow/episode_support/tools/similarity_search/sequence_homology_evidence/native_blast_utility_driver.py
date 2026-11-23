@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.jobs.local_execut
     _digest_file, _now, _read_json, _regular_reader, _scratch,
 )
 from gene_annotation_episode.episodic_workflow.episode_support.acquisition.profile_model_preparation.sequence_homology_evidence.native_hmmer_preparation_acquisition import _decode
-from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.sequence_homology_evidence.native_blast_utility_contracts import BUNDLE_NAME, BUNDLE_VERSION, JOB_VERSION_V2, JOB_VERSION_V3, OWNER_NAME, _error, realized_path_maps, compile_native_blast_utility_job, database_file_selections, measurement_pair, native_environment, native_blast_utility_output_completeness, producer_failure, staged_relative, validate_native_blast_utility_bundle, validate_native_blast_utility_plan, utility_database_operands
+from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.sequence_homology_evidence.native_blast_utility_contracts import BUNDLE_NAME, BUNDLE_VERSION, PREPARATION_JOB_VERSION, VDB_JOB_VERSION, OWNER_NAME, _error, realized_path_maps, compile_native_blast_utility_job, database_file_selections, measurement_pair, native_environment, native_blast_utility_output_completeness, producer_failure, staged_relative, validate_native_blast_utility_bundle, validate_native_blast_utility_plan, utility_database_operands
 
 
 def _failure(bundle, code, **association):
@@ -123,14 +123,14 @@ def _observe_databases(job, bundle, *, final):
             _failure(bundle, "database_identity_mismatch", database_key=key)
     for db in utility_database_operands(job):
         key = db["database_key"]
-        if db["kind"] == "vdb" and job["version"] != JOB_VERSION_V3:
+        if db["kind"] == "vdb" and job["version"] != VDB_JOB_VERSION:
             _failure(bundle, "database_unavailable", database_key=key)
             continue
         try:
             with _regular_reader(_original_file(db["manifest_file"]["path"])) as stream:
                 actual = _decode(stream.read())
-            matches = actual == db["manifest"] and _database_inventory_matches(db, vdb=job["version"] == JOB_VERSION_V3)
-            if matches and job["version"] == JOB_VERSION_V2:
+            matches = actual == db["manifest"] and _database_inventory_matches(db, vdb=job["version"] == VDB_JOB_VERSION)
+            if matches and job["version"] == PREPARATION_JOB_VERSION:
                 matches = _alias_closure_matches(db)
         except (OSError, ValueError):
             _failure(bundle, "database_unavailable", database_key=key)
@@ -150,7 +150,7 @@ def _stage_inputs(root, job, policy, bundle):
         association = {"input_key": row["input_key"], "relative_path": row["relative_path"]}
         destination = _confined_file(root, row["relative_path"])
         try:
-            source = _original_file(selected["path"]) if job["version"] in {JOB_VERSION_V2, JOB_VERSION_V3} else Path(selected["path"])
+            source = _original_file(selected["path"]) if job["version"] in {PREPARATION_JOB_VERSION, VDB_JOB_VERSION} else Path(selected["path"])
             with _regular_reader(source) as reader:
                 _scratch(root, policy, os.fstat(reader.fileno()).st_size)
                 with destination.open("xb") as writer:
@@ -197,7 +197,7 @@ def _capture_output(root, bundle, role, ordinal, relative, fmt, *, output_key=No
 
 
 def _collect_outputs(root, job, bundle):
-    if job["version"] == JOB_VERSION_V2:
+    if job["version"] == PREPARATION_JOB_VERSION:
         return _collect_preparation_outputs(root, job, bundle)
     bundle["inventory_complete"] = True
     for row in job["outputs"]:
@@ -238,12 +238,12 @@ def validate_native_blast_utility_bundle_files(bundle: dict, directory) -> dict:
     for row in bundle["database_files"]:
         if _measure_original(row["original_path"]) != measurement_pair(row, "final_"):
             _error("sealed_database_digest_mismatch")
-    if plan["requested_job"]["native_blast_utility"]["version"] == JOB_VERSION_V2:
+    if plan["requested_job"]["native_blast_utility"]["version"] == PREPARATION_JOB_VERSION:
         _validate_materialized_files(root, plan["requested_job"]["native_blast_utility"], bundle)
     for row in bundle["artifacts"]:
         if _measure(root, row["relative_path"]) != measurement_pair(row):
             _error("sealed_output_digest_mismatch")
-    if plan["requested_job"]["native_blast_utility"]["version"] == JOB_VERSION_V2:
+    if plan["requested_job"]["native_blast_utility"]["version"] == PREPARATION_JOB_VERSION:
         _validate_preparation_inventory(root, plan["requested_job"]["native_blast_utility"], bundle)
         return bundle
     family = next((row["relative_path"] for row in plan["requested_job"]["native_blast_utility"]["outputs"]
@@ -301,9 +301,9 @@ def run_native_blast_utility(plan: dict) -> dict:
         _failure(bundle, "software_unavailable")
     _stage_inputs(root, job, plan["policy"], bundle)
     _observe_databases(job, bundle, final=False)
-    if job["version"] == JOB_VERSION_V2:
+    if job["version"] == PREPARATION_JOB_VERSION:
         _stage_materializations(root, job, plan["policy"], bundle)
-    if job["version"] == JOB_VERSION_V3 and not bundle["failures"]:
+    if job["version"] == VDB_JOB_VERSION and not bundle["failures"]:
         from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.native_blast_vdb_utility_context import validate_vdb_selected_input_bytes
         try:
             contents = {}
@@ -320,7 +320,7 @@ def run_native_blast_utility(plan: dict) -> dict:
         try:
             _scratch(root, plan["policy"])
             with outputs["stdout"].open("xb") as stdout, outputs["stderr"].open("xb") as stderr:
-                if job["version"] == JOB_VERSION_V3:
+                if job["version"] == VDB_JOB_VERSION:
                     from gene_annotation_episode.episodic_workflow.episode_support.jobs.similarity_search.sequence_homology_evidence.native_blast_vdb_utility_execution import run_vdb_offline_once, vdb_offline_native_outcome
                     receipt = run_vdb_offline_once(job, attempt_directory=str(root), native_argv=argv, stdout=stdout, stderr=stderr)
                     bundle["offline_execution"] = receipt
@@ -337,7 +337,7 @@ def run_native_blast_utility(plan: dict) -> dict:
             _failure(bundle, "execution_scratch_limit")
         except OSError:
             _failure(bundle, "command_unavailable")
-    if job["version"] == JOB_VERSION_V3 and "offline_execution" not in bundle:
+    if job["version"] == VDB_JOB_VERSION and "offline_execution" not in bundle:
         from gene_annotation_episode.episodic_workflow.episode_support.jobs.similarity_search.sequence_homology_evidence.native_blast_vdb_utility_execution import observe_vdb_offline_unstarted
         receipt = observe_vdb_offline_unstarted(job, attempt_directory=str(root), native_argv=argv)
         # Preflight lexical failures belong to this same selected control receipt.
@@ -348,12 +348,12 @@ def run_native_blast_utility(plan: dict) -> dict:
                 bundle["failures"].append(row)
     bundle["writer_closed"] = True
     _final_inputs(root, bundle)
-    if job["version"] == JOB_VERSION_V3:
+    if job["version"] == VDB_JOB_VERSION:
         for row in bundle["inputs"]:
             if _measure_original(row["original_path"]) != measurement_pair(row, "expected_"):
                 _failure(bundle, "original_input_changed", input_key=row["input_key"], relative_path=row["relative_path"])
     _observe_databases(job, bundle, final=True)
-    if job["version"] == JOB_VERSION_V2:
+    if job["version"] == PREPARATION_JOB_VERSION:
         _final_materializations(root, job, bundle)
     _collect_outputs(root, job, bundle)
     bundle["finished_at"] = _now()

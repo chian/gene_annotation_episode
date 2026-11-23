@@ -5,7 +5,7 @@ from decimal import localcontext, Inexact, Rounded, ROUND_DOWN
 import pytest
 
 from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.sequence_homology_evidence import bvbrc_proteome_directional_fact_contracts as c
-from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.sequence_homology_evidence import bvbrc_proteome_fact_contracts as legacy
+from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.sequence_homology_evidence import bvbrc_proteome_fact_contracts as native_layer
 
 
 def all_selections():
@@ -33,11 +33,11 @@ def all_selections():
 @pytest.mark.parametrize('selection', list(all_selections().values()))
 def test_every_finite_variant_and_metric_is_canonical(selection):
     assert c.validate_directional_selector(selection) == selection
-    form = c.requested_form_schema_v2({'selected': selection})
-    assert c.validate_requested_form_v2(form) == form
+    form = c.requested_form_schema({'selected': selection})
+    assert c.validate_requested_form(form) == form
     loose = deepcopy(form)
     loose['properties']['selected']['additionalProperties'] = True
-    with pytest.raises(ValueError): c.validate_requested_form_v2(loose)
+    with pytest.raises(ValueError): c.validate_requested_form(loose)
 
 
 @pytest.mark.parametrize('extra', [{'report_ordinal': 0}, {'pointer': '/queries/1'}, {'subject_id': 'P0AAW1'},
@@ -74,7 +74,7 @@ def test_conversion_never_reinterprets_invalid_or_native_unparsed_text(text):
 def numerical_fact():
     context = dict(target=dict(document_id='synthetic', **{key: 0 if key in {
         'report_ordinal', 'query_ordinal', 'subject_ordinal', 'hsp_ordinal'} else None for key in c.ORDINALS}),
-        native_source_ref='synthetic_source', value_ref=legacy.encode_reference('field', 'synthetic', '/value'),
+        native_source_ref='synthetic_source', value_ref=native_layer.encode_reference('field', 'synthetic', '/value'),
         parameter_ref=None, operand_refs=[], report_parse_state='ok', body_complete=True, object_complete='yes',
         declaration_state='matching_version', operand_binding='unbound', supports=[], mapping_state=None,
         qualification_refs=[], requirement_refs=[])

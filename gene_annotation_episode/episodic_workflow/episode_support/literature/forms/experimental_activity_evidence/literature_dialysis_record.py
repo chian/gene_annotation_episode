@@ -62,7 +62,7 @@ def fact(answer, refs=(), support='direct'):
     return {**literature_spr_record.fact(answer, refs), 'support': None if answer == 'unknown' else support}
 
 
-VERSION = 'a105_dialysis_record_v1'
+VERSION = 'a105_dialysis_record'
 EXPERIMENT_TYPE = 'dialysis'
 QUANTITIES = ('kd', 'kd_spread', 'bmax', 'ki', 'ki_spread', 'percent_bound', 'percent_bound_spread', 'percent_unbound', 'fraction_bound', 'fraction_unbound', 'ligand_total_concentration', 'free_ligand_concentration', 'bound_ligand_concentration', 'protein_concentration', 'ligand_range_lowest', 'ligand_range_highest', 'titration_point_count', 'detection_lloq', 'membrane_cutoff', 'equilibration_time', 'run_temperature', 'buffer_ph', 'salt_concentration', 'protein_chamber_volume', 'buffer_chamber_volume', 'recovery', 'membrane_adsorption', 'volume_shift', 'technical_replicate_count', 'replicate_count')
 PREPARATION_KEYS = ('ligand_preparation_ref', 'protein_preparation_ref', 'dataset_ref')

@@ -15,12 +15,12 @@ from gene_annotation_episode.episodic_workflow.episode_support.readers.sequence_
     RESOLVED_AMINO_ACIDS, protein_sequence, protein_correspondence, received_sequence)
 
 
-VERSION = 'a107_received_qualification_v1'
+VERSION = 'a107_received_qualification'
 REQUEST_PROVIDER = 'host.a107.qualification_request'
 PROVIDER = 'host.a107.qualification'
 FACT_SOURCE = 'a107_qualification_records'
 EXECUTION_SOURCE = 'a107_genomic_execution_records'
-REQUIREMENT_EXPERIMENT_BINDING_VERSION = 'a107_requirement_experiment_binding_v1'
+REQUIREMENT_EXPERIMENT_BINDING_VERSION = 'a107_requirement_experiment_binding'
 
 
 def require(condition, code):
@@ -292,7 +292,7 @@ def _expression(store, args, known):
     original = read(store, args['expression_ref'], RESULT_PROVIDER)
     require(original is not None and original['axis'] == 'A107'
         and original['operation'] == 'partner.request_expression_hpc'
-        and original['scientific_profile'] == 'a107_expression_components_v2',
+        and original['scientific_profile'] == 'a107_expression_components',
         'a107_original_native_expression_result_required')
     native = original['native_components']
     feature = native['features'][args['feature_side']]
@@ -414,7 +414,7 @@ def _locus_protein_projection(store, args, known):
     """
     from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence.publication import received_measurement
     original = received_measurement(store, args['locus_binding_ref'])
-    require(original is not None and original['body']['schema'] == 'a103_locus_binding_v1',
+    require(original is not None and original['body']['schema'] == 'a103_locus_binding',
         'a107_original_received_locus_measurement_required')
     body = original['body']
     require({row['target_ref'] for row in store.coverage(args['target_ref'])} == {body['target_ref']},
@@ -442,13 +442,13 @@ def _expression_locus(store, args, known, *, projected_protein_ref=None):
     original = read(store, args['expression_ref'], RESULT_PROVIDER)
     require(original is not None and original['axis'] == 'A107' and original['operation'] == (
         'partner.request_expression_hpc') and original['scientific_profile'] ==
-            'a107_expression_components_v2',
+            'a107_expression_components',
         'a107_original_native_expression_result_required')
     native = original['native_components']
     feature = native['features'][args['feature_side']]
     require(feature is not None and feature['molecule'] == 'rna', 'a107_measured_gene_level_rna_feature_required')
     binding = received_measurement(store, args['locus_binding_ref'])
-    require(binding is not None and binding['body']['schema'] == 'a103_locus_binding_v1',
+    require(binding is not None and binding['body']['schema'] == 'a103_locus_binding',
         'a107_original_received_locus_measurement_required')
     body = binding['body']
     require(body['selection_status'] == 'selected', 'a107_unambiguous_native_locus_required')
@@ -513,7 +513,7 @@ def _genomic_context(store, args, proof, known):
             missing.append(reference)
             continue
         native = received_measurement(store, reference)
-        require(native is not None and native['body']['schema'] == 'a103_locus_binding_v1',
+        require(native is not None and native['body']['schema'] == 'a103_locus_binding',
             'a107_actual_genomic_locus_binding_required')
         binding = native['body']
         frame = binding['accession'], binding['source_file_sha256']
@@ -544,7 +544,7 @@ def _detection(store, args, known):
     reference_native = None
     custody = {'kind': 'original_A103_detection_publication', 'source_ref': args['detection_ref']}
     if original is not None:
-        require(original['body']['schema'] == 'a103_detection_v1',
+        require(original['body']['schema'] == 'a103_detection',
             'a107_actual_received_detection_inventory_required')
         proof = original['body']
     else:
@@ -557,7 +557,7 @@ def _detection(store, args, known):
             'a107_actual_received_detection_inventory_required')
         proof = native['native_components']['detection']
         reference_native = native['native_components']
-        require(proof['schema'] == 'a103_detection_v1', 'a107_original_detector_result_required')
+        require(proof['schema'] == 'a103_detection', 'a107_original_detector_result_required')
         custody = {'kind': 'authenticated_HPC_search_and_original_A103_detector',
             'source_ref': args['detection_ref'], 'hpc_result_ref': native['hpc_result_ref'],
             'pbs_job_id': native['pbs_job_id'], 'profile': PROFILE,

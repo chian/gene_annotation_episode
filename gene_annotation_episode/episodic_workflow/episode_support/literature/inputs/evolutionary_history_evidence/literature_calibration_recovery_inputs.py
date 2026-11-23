@@ -20,7 +20,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.
     number_selector_schema, read_source_number,
 )
 
-VERSION = "a105_calibration_recovery_inputs_v1"
+VERSION = "a105_calibration_recovery_inputs"
 SOURCE_KINDS = ("primary_source", "retained_extraction", "synthetic_fixture")
 LITERAL_FIELDS = ("experiment", "analyte", "matrix", "endpoint", "blank_treatment",
                   "expected_quantity_basis")

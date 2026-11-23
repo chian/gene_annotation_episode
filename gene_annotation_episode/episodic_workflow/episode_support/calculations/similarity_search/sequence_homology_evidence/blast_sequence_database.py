@@ -20,7 +20,7 @@ Numerical definitions (native statistical uncertainty is retained, not fitted):
 * database_sheet: native HSP scores/counts, string-derived paired/identical/gap
   counts, coverage unions, explicit function/taxon/source associations, actual
   sequence groups and population counts, using blast_database_grader meanings.
-* function_weights: unchanged conditional_reference_kernel_v1 and explicit
+* function_weights: unchanged conditional_reference_kernel and explicit
   retained-but-unused measurements; no source category becomes a confidence.
 
 Caller contract defects raise ValueError. Native conflicts/missing inputs use
@@ -44,10 +44,10 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
 from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_alignment.alignment_correspondence import ARTIFACT_SCHEMA, interval_length
 
 
-SHEET_SCHEMA = "blast_sequence_database_result_sheet_v1"
-SHEET_SCHEMA_V2 = "blast_sequence_database_result_sheet_v2"
-SHEET_SCHEMA_V3 = "blast_sequence_database_result_sheet_v3"
-COMPONENT_SCHEMA = "blast_sequence_database_result_components_v1"
+SHEET_SCHEMA = "blast_sequence_database_result_sheet"
+SHEET_SCHEMA_RECORD_LOCATOR = "blast_sequence_database_result_sheet_record_locator"
+SHEET_SCHEMA_POPULATION = "blast_sequence_database_result_sheet_population"
+COMPONENT_SCHEMA = "blast_sequence_database_result_components"
 _SHEET_FIELDS = {"schema", "search", "report_source", "search_binding", "query_binding",
     "reference_metadata", "description_bindings", "sequence_identity_bindings",
     "target_context", "database_profile"}
@@ -132,16 +132,16 @@ def _operand(value):
 
 def _validate(sheet):
     version = sheet.get("schema") if isinstance(sheet, dict) else None
-    fields = _SHEET_FIELDS | {"database_population_associations"} if version == SHEET_SCHEMA_V3 else _SHEET_FIELDS
+    fields = _SHEET_FIELDS | {"database_population_associations"} if version == SHEET_SCHEMA_POPULATION else _SHEET_FIELDS
     _keys(sheet, fields, "blast_sequence_database_sheet_fields_invalid")
-    if sheet["schema"] not in (SHEET_SCHEMA, SHEET_SCHEMA_V2, SHEET_SCHEMA_V3):
+    if sheet["schema"] not in (SHEET_SCHEMA, SHEET_SCHEMA_RECORD_LOCATOR, SHEET_SCHEMA_POPULATION):
         raise ValueError("blast_sequence_database_sheet_required")
-    association_version = 2 if sheet["schema"] in (SHEET_SCHEMA_V2, SHEET_SCHEMA_V3) else 1
+    association_version = 2 if sheet["schema"] in (SHEET_SCHEMA_RECORD_LOCATOR, SHEET_SCHEMA_POPULATION) else 1
     search = sheet["search"]
     _keys(search, _SEARCH_FIELDS, "blast_sequence_database_search_fields_invalid")
     _search_key(search["search_key"])
-    if version == SHEET_SCHEMA_V3:
-        validate_blast_database_population_context(dict(schema="blast_database_population_context_v1",
+    if version == SHEET_SCHEMA_POPULATION:
+        validate_blast_database_population_context(dict(schema="blast_database_population_context",
             search_key=search["search_key"], associations=sheet["database_population_associations"]))
     _keys(search["program_context"], _CONTEXT_FIELDS, "blast_sequence_database_program_context_fields_invalid")
     context = search["program_context"]
@@ -154,7 +154,7 @@ def _validate(sheet):
     normalized = search["normalized"]
     _keys(normalized, {"schema", "mode", "resource", "format", "query", "search", "hits", "native", "issues"},
           "blast_sequence_database_normalized_fields_invalid")
-    if (not isinstance(normalized, dict) or normalized.get("schema") != "blast_normalized_result_v1"
+    if (not isinstance(normalized, dict) or normalized.get("schema") != "blast_normalized_result"
             or not isinstance(normalized.get("query"), dict) or not isinstance(normalized.get("search"), dict)
             or not isinstance(normalized.get("hits"), list) or not isinstance(normalized.get("native"), dict)
             or not isinstance(search["native"], dict) or not isinstance(search["issues"], list)):
@@ -171,7 +171,7 @@ def _validate(sheet):
         _operand(search["operand_binding"])
     source = sheet["report_source"]
     source_fields = {"artifact_key", "artifact_ref", "member_ordinal", "member_sha256"}
-    if version == SHEET_SCHEMA_V3 and isinstance(source, dict) and "source_ref" in source:
+    if version == SHEET_SCHEMA_POPULATION and isinstance(source, dict) and "source_ref" in source:
         source_fields.add("source_ref")
     _keys(source, source_fields, "blast_sequence_database_report_source_fields_invalid")
     if (not _text(source["artifact_key"]) or not _text(source["artifact_ref"])
@@ -241,9 +241,9 @@ def populate_blast_sequence_database_sheet(search, *, report_source, search_bind
         return [row.get("binding") for row in rows if isinstance(row, dict)] if isinstance(rows, list) else []
     if _uses_record_locators(sheet["reference_metadata"], bindings(sheet["description_bindings"]),
                              bindings(sheet["sequence_identity_bindings"])):
-        sheet["schema"] = SHEET_SCHEMA_V2
+        sheet["schema"] = SHEET_SCHEMA_RECORD_LOCATOR
     if database_population_associations is not None:
-        sheet.update(schema=SHEET_SCHEMA_V3,
+        sheet.update(schema=SHEET_SCHEMA_POPULATION,
                      database_population_associations=_copy(database_population_associations))
     _validate(sheet)
     return sheet
@@ -646,7 +646,7 @@ def calculate_blast_sequence_database_components(sheet, *, model=None, _retain_c
         return output
     descriptions = _links(sheet, "description_bindings", issues)
     sequences = _links(sheet, "sequence_identity_bindings", issues)
-    association_version = 2 if sheet["schema"] in (SHEET_SCHEMA_V2, SHEET_SCHEMA_V3) else 1
+    association_version = 2 if sheet["schema"] in (SHEET_SCHEMA_RECORD_LOCATOR, SHEET_SCHEMA_POPULATION) else 1
     references, valid_sequences = _qualify_references(normalized, geometry, descriptions, sequences, issues, key,
                                                      association_version=association_version)
     components["coordinate_context"]["references"] = references
@@ -659,13 +659,13 @@ def calculate_blast_sequence_database_components(sheet, *, model=None, _retain_c
         target_context=sheet["target_context"], database_profile=sheet["database_profile"],
         description_bindings=descriptions, sequence_identity_bindings=valid_sequences,
         geometry_program=geometry, calculation_context={"reporting": search["reporting"], "database_identity": sheet["search_binding"]["database_identity"]},
-        database_population_context=dict(schema="blast_database_population_context_v1", search_key=key,
-            associations=sheet["database_population_associations"]) if sheet["schema"] == SHEET_SCHEMA_V3 else None,
+        database_population_context=dict(schema="blast_database_population_context", search_key=key,
+            associations=sheet["database_population_associations"]) if sheet["schema"] == SHEET_SCHEMA_POPULATION else None,
         association_version=association_version, _qualifications=qualifications,
         _correspondence_instances=instances, _qualification_diagnostics=qualification_diagnostics)
     common_by_hit = {hit["hit_index"]: instance["components"] for hit, instance in zip(database["hits"], instances)}
     for instance in instances:
-        instance["legacy_pointer"] = "/components/database_sheet" + instance["legacy_pointer"]
+        instance["source_pointer"] = "/components/database_sheet" + instance["source_pointer"]
     # Preserve the supplied inner bindings as well as qualification failures.
     database["sequence_identity_bindings"] = sequences
     selected = axis["selected_interval"]
@@ -705,4 +705,4 @@ def calculate_blast_sequence_database_components(sheet, *, model=None, _retain_c
 
 
 __all__ = ["populate_blast_sequence_database_sheet", "calculate_blast_sequence_database_components",
-           "SHEET_SCHEMA", "SHEET_SCHEMA_V2", "SHEET_SCHEMA_V3", "COMPONENT_SCHEMA"]
+           "SHEET_SCHEMA", "SHEET_SCHEMA_RECORD_LOCATOR", "SHEET_SCHEMA_POPULATION", "COMPONENT_SCHEMA"]

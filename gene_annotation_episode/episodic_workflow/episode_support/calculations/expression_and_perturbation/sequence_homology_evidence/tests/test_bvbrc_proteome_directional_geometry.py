@@ -368,7 +368,7 @@ def native_report(name):
         artifact_ref="fixture", sha256=hashlib.sha256(content).hexdigest(), byte_count=len(content)),
         body_complete=True, object_complete="yes")
     return parse_genome_comparison_directional_report(content, source=source,
-        declared_format="ncbi_blastall_blastp_pairwise_text_v1", report_key=name)
+        declared_format="ncbi_blastall_blastp_pairwise_text", report_key=name)
 
 
 def test_actual_subject127_gap_conflict_has_both_native_column_witnesses():

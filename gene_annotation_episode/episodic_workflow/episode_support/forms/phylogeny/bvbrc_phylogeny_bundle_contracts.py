@@ -14,8 +14,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.phylogeny.b
     validate_contract,
 )
 
-PARAMETERS_VERSION = "bvbrc_phylogeny_bundle_parameters_v1"
-SUPPLIED_VERSION = "bvbrc_phylogeny_supplied_inputs_v1"
+PARAMETERS_VERSION = "bvbrc_phylogeny_bundle_parameters"
+SUPPLIED_VERSION = "bvbrc_phylogeny_supplied_inputs"
 POPULATION_KEYS = ("alignments", "leaves", "composition", "taxonomy", "genomes", "families", "bootstraps", "native")
 BRANCH_UNITS = ("expected_substitutions_per_model_site", "joint_mixed_partition_model_site", "native_unknown")
 SUPPORT_METHODS = ("rapid_bootstrap", "rell_bootstrap", "phyml_abayes", "phyml_alrt_statistic", "phyml_chi2", "phyml_sh_like", "fasttree_sh_like", "native_unknown")
@@ -153,7 +153,7 @@ def _pairs(rows):
 def validate_calculation_parameters(value, *, provider, analysis_id):
     extra = ("literal_statistic_population_ids", "family_population_requests", "worst_sequence_population_id") if provider == "codon_tree" else ()
     shape(value, {"version", *COMMON_CALCULATION_FIELDS, *extra}, "phylogeny_calculation_plan_invalid")
-    require(value["version"] == provider + "_components_v1", "phylogeny_calculation_plan_invalid")
+    require(value["version"] == provider + "_components", "phylogeny_calculation_plan_invalid")
     for key in COMMON_CALCULATION_FIELDS:
         require(type(value[key]) is list)
     for key in ("original_coverage_population_ids", "composition_population_ids"):
@@ -391,7 +391,7 @@ def parameters_schema(*, provider):
         "organismal_node_index": index, "subject": subject, "evidence": evidence_array})
     replicate_pairs = array(_object({"reference_node_index": index, "replicate_node_index": index}))
     bootstrap_join = _object({"reference_tree_id": tree, "mappings": array(_object({"replicate_tree_id": tree, "pairs": replicate_pairs}))})
-    calculation = {"version": {"const": provider + "_components_v1"},
+    calculation = {"version": {"const": provider + "_components"},
         "alignment_requests": array(_object({"population_id": text, "alphabet": {"enum": ["dna", "rna", "protein", "unknown"]},
                                              "case_policy": {"enum": ["uppercase", "literal"]}, "pairs": pairs})),
         "tree_requests": array(_object({"population_id": text, "branch_unit": {"enum": list(BRANCH_UNITS)}, "pairs": pairs})),

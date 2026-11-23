@@ -2,7 +2,7 @@
 
 The episode is linked as the entry of a run with the public API, a real Store, RunJournal, the real ModelProvider
 and the services ``job_services`` builds (the real detached local route). The world holds a small valid
-``practical_assignment_v1`` for the local resource: a job that writes ``answer.txt``, and a handoff requirement
+``practical_assignment`` for the local resource: a job that writes ``answer.txt``, and a handoff requirement
 with a credit of 4. The model is asked for one defined action; code launches the job."""
 import asyncio
 import json

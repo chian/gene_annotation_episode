@@ -38,7 +38,7 @@ def setup_store(store, ctx, *, visual=False, rows=None, parent_extra=False):
             row['locator'] = {'original_source_ref': image['id'], 'original_artifact_ref': image['artifact_ref'], 'image_region': [index * 5, 0, index * 5 + 5, 5]}
     if parent_extra:
         parents.append(methods['id'])
-    table = {'version': 'binding_parameter_table_v1', 'table_id': 'FixtureTable', 'parameter_kind': 'ic50', 'unit': 'nM', 'uncertainty_basis': 'fit_to_averaged_curve', 'minimum_experiment_count': 2, 'rows': rows}
+    table = {'version': 'binding_parameter_table', 'table_id': 'FixtureTable', 'parameter_kind': 'ic50', 'unit': 'nM', 'uncertainty_basis': 'fit_to_averaged_curve', 'minimum_experiment_count': 2, 'rows': rows}
     original = source(store, canonical(table), parents=parents)
     inputs.insert(0, original['id'])
     context = LiteratureContext(ctx.run_id, ctx.episode_id, 'literature_table', (('literature_table', 'fixture'),), store.validate_scope({'subject_refs': store.problem()['subject_refs']}), {}, {}, tuple(inputs))
@@ -71,7 +71,7 @@ def test_returned_cell_authority_rejects_changes_in_any_meaning(store, ctx, chan
     repo = LiteratureBindingRepository(store, context.run_id)
     outcome = repo.populate(context, args, 'selected')
     cells = repo.project_cells([outcome['result']['sheet_ref']], permitted_record_refs=outcome['record_refs'], components=('native_parameter_ratio',))
-    replacement = {'value': 100, 'relation': 'eq', 'bound_kind': None, 'confidence_bound': 1, 'formula_code': 'binding_reference_parameter_v1', 'parameter_kind': 'reported_hill_kd', 'subject_ref': cells[0]['experiment_ref'], 'source_origins': ['reported']}
+    replacement = {'value': 100, 'relation': 'eq', 'bound_kind': None, 'confidence_bound': 1, 'formula_code': 'binding_reference_parameter', 'parameter_kind': 'reported_hill_kd', 'subject_ref': cells[0]['experiment_ref'], 'source_origins': ['reported']}
     cells[0][changed] = replacement[changed]
     with pytest.raises(ContractError, match='differs_from_saved'):
         repo.validate_returned_values(cells, permitted_record_refs=outcome['record_refs'])

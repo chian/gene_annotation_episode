@@ -1,9 +1,7 @@
 """Evidence-axis definitions and closed judgment contracts.
 
 Native numbers are host facts. An episode judges only the declared criteria and
-cites actual witnesses. Validation keeps historical draft records readable; it
-does not authorize their numeric recipes. The evaluator separately withdraws
-rejected categorical routes. These contracts do not choose annotation-wide
+cites actual witnesses. The evaluator withdraws rejected categorical routes. These contracts do not choose annotation-wide
 aggregation, applicability weights, model calls, actions or stopping rules.
 """
 from __future__ import annotations
@@ -12,7 +10,7 @@ import json
 from jsonschema import Draft202012Validator
 from method_loop.jsonvalue import canonical
 from gene_annotation_episode.episodic_workflow.episode_support.records.sample_context_evidence.domain import METRIC_NAMES, OBSERVATION_KINDS
-VERSION = 'evidence_axis_entry_v1'
+VERSION = 'evidence_axis_entry'
 SLOT = 'evidence_axis'
 TEXT = {'type': 'string', 'pattern': '\\S'}
 CODE = {'type': 'string', 'pattern': '^[a-z][a-z0-9_]*$'}
@@ -34,7 +32,7 @@ _TEST = {'anyOf': [{'type': 'null'}, obj({'operation': {'enum': ['all_metrics_av
 _CRITERION = obj({'criterion_id': CODE, 'question': TEXT, 'required_metric_ids': {**rows(CODE), 'uniqueItems': True}, 'required_evidence': {**rows(CODE, minimum=1), 'uniqueItems': True}, 'outcomes': obj({key: TEXT for key in ('met', 'not_met', 'unknown')}), 'deterministic_test': _TEST})
 _QUALITATIVE = obj({'criterion_id': CODE, 'kind': {'enum': ['hgt_environment_explanation', 'organism_function_plausibility', 'experimental_interpretation_without_numeric_measure']}, 'reason_no_native_metric': TEXT, 'ordered_levels': rows(obj({'code': CODE, 'meaning': TEXT}), minimum=2)})
 _CHAIN_FIELDS = ('source_subject', 'source_property', 'correspondence', 'target_hypothesis', 'limitations')
-SCORING_VERSION = 'evidence_axis_scoring_v1'
+SCORING_VERSION = 'evidence_axis_scoring'
 _SCORING_ROUTE = obj({'route_id': CODE, 'operation': {'enum': ['identity', 'neg_log10', 'ratio', 'grade', 'ordinal']}, 'metric_ids': {**rows(CODE), 'uniqueItems': True}, 'eligible_when': {**rows(CODE), 'uniqueItems': True}, 'score_unit': TEXT, 'direction': {'enum': ['higher', 'lower', 'not_ordered']}, 'polarity': {'enum': ['supporting', 'opposing', 'non_discriminating']}, 'interpretation': TEXT, 'grade_criterion': {'anyOf': [CODE, {'type': 'null'}]}, 'grade_scores': {'type': 'object', 'propertyNames': CODE, 'additionalProperties': {'type': 'number'}}, 'bands': rows(obj({'score': {'type': 'number'}, 'requires': {**rows(CODE), 'uniqueItems': True}}))})
 _SCORING = obj({'version': {'const': SCORING_VERSION}, 'status': {'const': 'proposed'}, 'routes': rows(_SCORING_ROUTE, minimum=1)})
 _ENTRY = obj({'entry_version': {'const': VERSION}, 'id': {'type': 'string', 'pattern': '^A[0-9]+$'}, 'slot': {'const': SLOT}, 'name': TEXT, 'description': TEXT, 'native_measurements': rows(_MEASUREMENT), 'judgment_criteria': rows(_CRITERION, minimum=1), 'qualitative_grading': rows(_QUALITATIVE), 'transfer_chain': obj({name: TEXT for name in _CHAIN_FIELDS}), 'evidence': rows(_SOURCE, minimum=1)})
@@ -90,11 +88,7 @@ def scoring_rubric_schema():
     return deepcopy(_SCORING)
 
 def validate_scoring_rubric(value, *, metrics, criteria, grades):
-    """Validate retained draft structure, including withdrawn historical rules.
-
-    Readability is separate from execution: accepting an old ordinal/grade
-    descriptor here does not authorize converting its categories into numbers.
-    """
+    """Validate the structure of a scoring rubric."""
     import math
     if not Draft202012Validator(_SCORING).is_valid(value):
         raise ValueError('evidence_axis_scoring_rubric_invalid')

@@ -69,7 +69,7 @@ def pairs(value, members):
 def validate_mauve_v4_selection(selection: dict) -> dict:
     f.shape(selection, ('schema_version', 'population_id', 'document_id', 'members', 'segments', 'pairs',
                         'case_policy', 'denominator', 'population_scope', 'evidence'), 'selection_invalid')
-    require(selection['schema_version'] == 'mauve_v4_selection_v1')
+    require(selection['schema_version'] == 'mauve_v4_selection')
     f.text(selection['population_id']); f.text(selection['document_id'])
     require(selection['case_policy'] in ('preserve', 'uppercase'))
     require(selection['denominator'] in ('none', 'native_declared_length', 'validated_staged_length'))
@@ -121,7 +121,7 @@ def _cell(value, field, unit, selection, ids, *, origin='calculated', fraction=F
         raise ValueError('mauve_v4_argument_invalid') from error
     require(value['unit'] == unit and value['origin'] == origin and value['uncertainty'] is None
             and value['population_id'] == selection['population_id']
-            and value['method_id'] == 'mauve_v4_' + field + '_v1')
+            and value['method_id'] == 'mauve_v4_' + field)
     _ids(value, ids)
     number = value['value']
     if fraction:
@@ -147,7 +147,7 @@ def validate_mauve_v4_components(value: dict) -> dict:
     """Check saved relationships without recomputing alignments or source joins."""
     f.shape(value, ('schema_version', 'document_id', 'status', 'selection', 'member_segments',
                     'pair_segments', 'coverage', 'requirements', 'diagnostics'))
-    require(value['schema_version'] == 'mauve_v4_segment_components_v1')
+    require(value['schema_version'] == 'mauve_v4_segment_components')
     selection = validate_mauve_v4_selection(value['selection'])
     require(value['document_id'] == selection['document_id'], 'selection_document_conflict')
     ids = reports(value)
@@ -297,7 +297,7 @@ def _cell_structure(value, field, unit, selection, ids, *, origin='calculated', 
         raise ValueError('mauve_v4_argument_invalid') from error
     require(value['unit'] == unit and value['origin'] == origin and value['uncertainty'] is None
             and value['population_id'] == selection['population_id']
-            and value['method_id'] == 'mauve_v4_' + field + '_v1')
+            and value['method_id'] == 'mauve_v4_' + field)
     _ids(value, ids)
     number = value['value']
     if fraction:
@@ -328,7 +328,7 @@ def validate_mauve_v4_component_structure(value: dict) -> dict:
     """
     f.shape(value, ('schema_version', 'document_id', 'status', 'selection', 'member_segments',
                     'pair_segments', 'coverage', 'requirements', 'diagnostics'))
-    require(value['schema_version'] == 'mauve_v4_segment_components_v1')
+    require(value['schema_version'] == 'mauve_v4_segment_components')
     selection = validate_mauve_v4_selection(value['selection'])
     require(value['document_id'] == selection['document_id'], 'selection_document_conflict')
     ids = reports(value)

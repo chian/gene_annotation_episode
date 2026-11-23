@@ -9,7 +9,7 @@ parent's assignment; service transport does not make that scientific choice.
 
 ## Assigned request and actual operations
 
-This resource uses service `ncbi_blast` in `api_service_assignment_v1`. Its
+This resource uses service `ncbi_blast` in `api_service_assignment`. Its
 closed request is `{subject_ref, program, database, hitlist_size?}`. Program is
 one of `blastn`, `blastp`, `blastx`, `tblastn`, `tblastx`; its required input
 molecule must match the registered operand. An omitted hit-list size resolves

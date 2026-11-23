@@ -57,7 +57,7 @@ ANSWER_INSTRUCTION = (' Answer with slot (the launch child that owns the resourc
 
 
 def _kind(request):
-    return 'api' if request['version'] != 'practical_assignment_v1' else request['resource_kind']
+    return 'api' if request['version'] != 'practical_assignment' else request['resource_kind']
 
 
 def _bound(summary, ctx):
@@ -141,7 +141,7 @@ def _selected_execution_task(summary, resources):
                          'endpoint': request.get('endpoint'), 'constraints': request.get('constraints', {}),
                          'job': request if entry['kind'] == 'api' else request['requested_job'],
                          'resource': resources.get(resource_id)})
-    return {'version': 'selected_execution_task_v1', 'scientific_question': task['scientific_question'],
+    return {'version': 'selected_execution_task', 'scientific_question': task['scientific_question'],
             'selected_tool_info': task['selected_tool_info'], 'requests': selected,
             'constraints': summary['assignment']['constraints']}
 

@@ -197,7 +197,7 @@ def _slots(document_slots):
 def validate_genome_alignment_calculation_plan(value: dict, *, document_slots: tuple[dict, ...]) -> dict:
     slots = _slots(document_slots); _finite(value)
     _shape(value, ('schema_version', 'requests'))
-    _require(value['schema_version'] == 'bvbrc_genome_alignment_calculation_plan_v1')
+    _require(value['schema_version'] == 'bvbrc_genome_alignment_calculation_plan')
     _array(value['requests']); seen = set()
     tails = {'mauve_v4_segments': ('selection', 'use_inputs'),
         'mauve_backbone': ('selection', 'use_inputs'),
@@ -414,7 +414,7 @@ def _snapshot(snapshot, data, documents):
     did = snapshot['document_id']
     _require(type(did) is str and did in documents, 'source_binding_conflict')
     document = documents[did]
-    _require(document['schema_version'] == 'mauve_xmfa_document_v1', 'source_binding_conflict')
+    _require(document['schema_version'] == 'mauve_xmfa_document', 'source_binding_conflict')
     _require(data['inputs'] is not None and data['inputs']['xmfa_source_inputs'] is not None, 'source_binding_conflict')
     source = data['inputs']['xmfa_source_inputs']
     binding = validate_xmfa_source_bindings(snapshot['bindings'])
@@ -481,7 +481,7 @@ def _bound_input(data, member):
     return next((m for m in data['inputs']['member_bindings'] if m['member'] == member and m['state'] == 'bound'), None)
 
 
-def _v4_links(document, value, call, data):
+def _segment_links(document, value, call, data):
     for row in value['member_segments']:
         ref = row['segment']; native = document['intervals'][ref['interval_index']]['segments'][ref['segment_index']]
         index = row['member']['index']
@@ -676,7 +676,7 @@ def validate_genome_alignment_components(value: dict, *, data: dict) -> dict:
     from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_alignment.gene_context_evidence.bvbrc_genome_alignment_sheet import validate_genome_alignment_data
     data = validate_genome_alignment_data(data); _finite(value)
     _shape(value, ('schema_version', 'analysis_id', 'calculation_plan', 'source_bindings', 'outcomes', 'requirements', 'diagnostics'))
-    _require(value['schema_version'] == 'bvbrc_genome_alignment_components_v2')
+    _require(value['schema_version'] == 'bvbrc_genome_alignment_components')
     _require(value['analysis_id'] == data['analysis_id'], 'analysis_id_conflict')
     plan = validate_genome_alignment_calculation_plan(value['calculation_plan'], document_slots=tuple(data['document_slots']))
     _, resolutions, documents = _indexes(data)
@@ -726,7 +726,7 @@ def validate_genome_alignment_components(value: dict, *, data: dict) -> dict:
                 if 'selection' in call:
                     _require(_same(native['selection'], call['selection']), 'component_identity_conflict')
                 if request['kind'] == 'mauve_v4_segments':
-                    _v4_links(document, native, call, data)
+                    _segment_links(document, native, call, data)
                 elif request['kind'] == 'mauve_backbone':
                     _backbone_links(document, native, call, data)
                 elif request['kind'] == 'mauve_bbcols':

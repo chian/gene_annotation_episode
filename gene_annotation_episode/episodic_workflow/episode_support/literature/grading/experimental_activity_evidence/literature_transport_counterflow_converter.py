@@ -121,7 +121,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_transport_response_direction import select_transport_effect
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_transport_counterflow_converted_v1'
+VERSION = 'a105_transport_counterflow_converted'
 CRITERIA_MAP = {'background_alternatives': ('non_preloaded_baseline',), 'attribution_supported': ('protein_free_control',), 'transport_specificity': ('non_substrate_preload', 'label_identity'),
                 'transport_driving_force': ('preload_verified', 'preload_over_label'), 'membrane_system': ('preload_retained',), 'transport_endpoint': ('uptake_endpoint',),
                 'transport_response_model': ('substrate_range',), 'assertion_relevance': ('native_substrate',), 'sampling_basis': ('replicates',)}

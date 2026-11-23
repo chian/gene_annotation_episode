@@ -8,8 +8,8 @@ from __future__ import annotations
 import json
 
 
-MARKER='__journal_metadata_artifact_v1__'
-ROOT_FLAG='__journal_metadata_interned_v1__'
+MARKER='__journal_metadata_artifact__'
+ROOT_FLAG='__journal_metadata_interned__'
 MEDIA_TYPE='application/vnd.gene-annotation.journal-metadata+json'
 FIELDS={'available_report_facts','contract_information'}
 THRESHOLD=32*1024

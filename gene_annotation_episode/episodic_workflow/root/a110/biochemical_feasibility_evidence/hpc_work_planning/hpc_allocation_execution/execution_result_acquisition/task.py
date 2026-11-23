@@ -48,7 +48,7 @@ CHILD_SLOTS = {}
 SERVICES = ('job_access',)
 
 RESULT_PROVIDER = 'episode.execution_result'
-RESULT_VERSION = 'execution_result_information_v2'
+RESULT_VERSION = 'execution_result_information'
 NATIVE_RESULT_ORIGIN = {'content_location': 'current_resource_filesystem', 'attempt_output_version': 'unverified',
                         'window_consistency': 'separate_reads_no_atomic_file_snapshot',
                         'completion_basis': 'requested_acquisition_and_observed_successful_attempt'}
@@ -81,7 +81,7 @@ def _outcome(result=None, *, references=(), artifacts=(), code=None):
 
 def _read_target(ctx, handoff_ref):
     raise NotImplementedError(
-        'BLOCKED-ON-JOB-SERVICE: the handoff job record (execution_target_v1, record kind not defined); wanted '
+        'BLOCKED-ON-JOB-SERVICE: the handoff job record (execution_target, record kind not defined); wanted '
         'call: ctx.store.get(handoff_ref) read as the execution target, validated by validate_target and matched '
         'to the commissioned assignment (old job_progress_provider.targets.read_target and _context_target), or '
         "ctx.services['job_access'].read_target(handoff_ref)")

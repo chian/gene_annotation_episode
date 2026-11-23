@@ -108,7 +108,7 @@ def build_yjeh(args):
         for accession in groups[name]:
             inputs.append({'tip_id': 'p_'+accession, 'parts': [accession],
                            'taxon_id': rows[accession]['record']['organism']['taxonId']})
-    output = {'version': 'a104_real_input_bundle_v1', 'case_id': 'yjeh', 'target_accession': 'P39277',
+    output = {'version': 'a104_real_input_bundle', 'case_id': 'yjeh', 'target_accession': 'P39277',
         'records': rows, 'analyses': [{'name': 'family', 'purpose': 'family', 'members': inputs},
             {'name': 'organismal', 'purpose': 'organismal_reference',
              'organismal_basis': {'kind': 'independent_ribosomal_marker_supermatrix', 'markers': list(MARKERS),

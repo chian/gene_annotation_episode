@@ -12,7 +12,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
 
 
 def job_for(program='blastp', fmt='json15'):
-    return {'version': 'native_blast_job_v1', 'program': program, 'mode': 'pairwise',
+    return {'version': 'native_blast_job', 'program': program, 'mode': 'pairwise',
         'software': {'executable': '/selected/bin/'+program, 'sha256': 'b'*64, 'engine_version': '2.17.0+'},
         'environment': {}, 'operands': [{'role': role, 'path': '/selected/'+role+'.fa', 'format':'fasta',
             'sha256': 'a'*64, 'size_bytes': 10, 'artifact_ref': None} for role in ('query_sequence','subject_sequence')],

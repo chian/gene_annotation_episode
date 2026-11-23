@@ -21,7 +21,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.calcul
 from gene_annotation_episode.episodic_workflow.episode_support.literature.validation.experimental_activity_evidence.literature_binding_interaction_validation import COMPONENTS, RAW_COMPONENTS, FORMULA_CODES, CALCULATION_REASONS, UNAVAILABLE_REASONS, native_cells, validate_saved_binding_interaction
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_experimental_contracts import ExperimentalContractError
 PROVIDER = 'literature.a105.binding_interaction_population'
-VERSION = 'literature_binding_interaction_population_record_v1'
+VERSION = 'literature_binding_interaction_population_record'
 EVALUATION_SCOPE = 'source_binding_discrimination_interaction'
 MODEL_INPUT_STATUS = 'not_supplied_by_native_operation'
 MODEL_CAPABILITY = 'unimplemented'

@@ -8,15 +8,15 @@ manifest, scientific acceptance, the supplied input file) rides in the message u
 ``hpc_execution_job``. The launch child returns ``execution_handoff_refs`` and ``execution_completed`` as required
 fields, so nothing is selected.
 ``monitor`` (``execution_progress_assessment``): the target, the exposed fields and the permitted record types the
-parent's model chose (old ``prepare_child_request`` = the ``monitor_assignment_v1`` the model wrote), with the
+parent's model chose (old ``prepare_child_request`` = the ``monitor_assignment`` the model wrote), with the
 information unit; the parent selects the facts its own forecast revision reads.
 ``results`` (``execution_result_acquisition``): the original handoff of the plan (named in custody), the selector the
 model chose, and the plan's workspace; the parent selects ``execution_completed``."""
 from episode_runtime import ChildMessage
 
-LAUNCH_VERSION = 'execution_launch_assignment_v1'
-MONITOR_VERSION = 'monitor_assignment_v1'
-RESULTS_VERSION = 'execution_results_assignment_v1'
+LAUNCH_VERSION = 'execution_launch_assignment'
+MONITOR_VERSION = 'monitor_assignment'
+RESULTS_VERSION = 'execution_results_assignment'
 JOB_INSTRUCTIONS = ('The supplied local input file contains the frozen scientific manifest and reference source '
                     'files. Use general terminal commands on the coordinator or assigned resource as needed; choose '
                     'your scripts, environment and transfer method. Do not transcribe supplied source code into a '

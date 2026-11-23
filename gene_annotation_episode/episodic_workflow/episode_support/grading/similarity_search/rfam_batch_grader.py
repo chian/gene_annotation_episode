@@ -1,4 +1,4 @@
-"""Common-calculator delegate and unchanged saved-v1 JSON validation helpers."""
+"""Common-calculator delegate and unchanged saved JSON validation helpers."""
 from __future__ import annotations
 
 from copy import deepcopy
@@ -24,7 +24,7 @@ def validate_rfam_sheet(sheet):
     code = "rfam_sheet_invalid"
     sheet = finite_json_copy(sheet, code=code)
     closed_object(sheet, RfamBatchSheet.__annotations__, code=code)
-    if sheet["schema_version"] != "rfam_batch_sheet_v1":
+    if sheet["schema_version"] != "rfam_batch_sheet":
         raise ContractError(code)
     identity, capture = validate_rfam_input_identity(sheet["input"]), validate_rfam_capture(sheet["source"])
     closed_object(sheet["job"], ("job_id", "opened", "started", "closed"), code=code)

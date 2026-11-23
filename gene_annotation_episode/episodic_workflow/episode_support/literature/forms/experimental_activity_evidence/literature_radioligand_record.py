@@ -89,7 +89,7 @@ the converter (the sheet side) turns it into a degree.
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence import literature_spr_record
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import SUPPORTS
 
-VERSION = 'a105_radioligand_record_v1'
+VERSION = 'a105_radioligand_record'
 EXPERIMENT_TYPE = 'radioligand'
 QUANTITIES = ('kd', 'bmax', 'ki', 'ic50', 'hill_slope', 'kd_spread', 'ki_spread', 'specific_activity', 'radioligand_concentration', 'radioligand_range_lowest', 'radioligand_range_highest', 'receptor_amount', 'percent_bound', 'nonspecific_fraction', 'nonspecific_ligand_concentration', 'nonspecific_ligand_kd', 'nonspecific_excess', 'incubation_time', 'dissociation_rate', 'temperature', 'titration_point_count', 'technical_replicate_count', 'replicate_count')
 PREPARATION_KEYS = ('radioligand_preparation_ref', 'receptor_preparation_ref', 'dataset_ref')

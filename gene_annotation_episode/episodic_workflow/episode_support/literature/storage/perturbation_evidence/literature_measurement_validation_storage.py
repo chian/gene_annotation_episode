@@ -17,7 +17,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.perturbation_evidence.literature_measurement_validation_calculations import COMPONENTS, PRECISION_COMPONENTS, ZPRIME_COMPONENTS, FORMULAS, QUALIFICATIONS, measurement_validation_cell_schema, measurement_validation_sheet_schema, populate_measurement_validation
 
 PROVIDER = 'literature.a105.measurement_validation'
-VERSION = 'literature_measurement_validation_record_v1'
+VERSION = 'literature_measurement_validation_record'
 NAMESPACE = 'literature_measurement_validation_cells'
 REQUESTED = 'requested_measurement_validation_components'
 VIEW = 'measurement_validation_components'

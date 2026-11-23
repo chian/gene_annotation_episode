@@ -15,7 +15,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.sequence_ma
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.sequence_masking.evolutionary_history_evidence.native_blast_masking_local import local_blast_masking_plan
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.evolutionary_history_evidence.practical_execution_state import _immutable
 
-VERSION = "native_blast_masking_capture_v1"
+VERSION = "native_blast_masking_capture"
 PROVIDER = "episode.execution_result"
 CAPTURE_FAILURE_CODES = frozenset({"sealed_bundle_unavailable", "original_bundle_invalid", "original_owner_invalid",
     "original_file_unavailable", "original_file_identity_mismatch", "input_not_original", "unsealed_file"})

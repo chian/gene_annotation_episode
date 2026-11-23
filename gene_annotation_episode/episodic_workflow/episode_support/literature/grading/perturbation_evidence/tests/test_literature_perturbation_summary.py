@@ -1,4 +1,4 @@
-"""Constructed v2 summaries; no paper, model service or live database reads."""
+"""Constructed summaries; no paper, model service or live database reads."""
 from copy import deepcopy
 from fractions import Fraction
 import io

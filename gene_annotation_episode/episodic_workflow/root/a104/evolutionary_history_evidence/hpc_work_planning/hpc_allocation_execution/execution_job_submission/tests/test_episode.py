@@ -74,7 +74,7 @@ def test_the_return_form_declares_credit_finding_and_the_job_identity_as_require
 
 
 def _practical(resource_id, kind):
-    return {'version': 'practical_assignment_v1', 'assignment_id': 'a-' + resource_id, 'resource_id': resource_id,
+    return {'version': 'practical_assignment', 'assignment_id': 'a-' + resource_id, 'resource_id': resource_id,
             'resource_kind': kind, 'workspace': '/work/space', 'endpoint': 'usable_handoff',
             'requested_job': {'argv': ['/bin/true'], 'environment': {}},
             'progress_requirements': [
@@ -85,13 +85,13 @@ def _practical(resource_id, kind):
 
 
 def _api(resource_id):
-    return {'version': 'api_execution_assignment_v1', 'resource_id': resource_id, 'service': 'ebi_hmmer',
+    return {'version': 'api_execution_assignment', 'resource_id': resource_id, 'service': 'ebi_hmmer',
             'subject_ref': 'subject_x', 'algorithm': 'phmmer', 'database': 'swissprot', 'parameters': {},
             'page_size': 10, 'endpoint': 'usable_handoff', 'constraints': {}}
 
 
 def _assignment(**changes):
-    value = {'version': 'execution_launch_assignment_v1',
+    value = {'version': 'execution_launch_assignment',
              'requests': {'hpc1': _practical('hpc1', 'hpc'), 'local1': _practical('local1', 'local'),
                           'api1': _api('api1')},
              'immutable_input_versions': [], 'constraints': {}, 'handoff_unit': 2.0, 'acquired_record_unit': 1.0,
@@ -118,7 +118,7 @@ def test_the_assignment_is_read_once_and_names_the_permitted_requests():
 
 def test_a_wrong_assignment_fails():
     with pytest.raises(FormError):
-        ASSIGNMENT_FORM.admit(_assignment(version='execution_launch_assignment_v0'), 'assignment')
+        ASSIGNMENT_FORM.admit(_assignment(version='rejected_assignment'), 'assignment')
     with pytest.raises(ValueError, match='execution_resource_identity_conflict'):
         _parent_input(requests={'other': _practical('hpc1', 'hpc')})
     with pytest.raises(ValueError, match='invalid_execution_launch_assignment'):

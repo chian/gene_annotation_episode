@@ -11,7 +11,7 @@ import zipfile
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import REF, identity, obj, validate_schema
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_experimental_contracts import ExperimentalContractError
 from gene_annotation_episode.episodic_workflow.episode_support.tools.documents.experimental_activity_evidence.spreadsheet_tools import Workbook, _tag
-VERSION = 'a105_reported_rate_observations_v1'
+VERSION = 'a105_reported_rate_observations'
 SOURCE_KINDS = ('primary_source', 'retained_extraction', 'synthetic_fixture')
 TEXT = {'type': 'string', 'minLength': 1}
 CELL = {'type': 'string', 'pattern': '^[A-Z]+[1-9][0-9]*$'}
@@ -164,7 +164,7 @@ def read_rate_observations(content, arguments, *, artifact_ref):
             meaning = entry_meaning(args, artifact_ref, group, selected)
             entries.append({'record_identity': identity('source_reported_entry', meaning), 'meaning': meaning, 'group': group_witness['value'], 'label': label['value'], 'status': status, 'unavailable_reason': reason, 'bound': bound, 'exact_value': None if exact is None else {'numerator': str(exact.numerator), 'denominator': str(exact.denominator)}, 'origin': origin, 'group_source': group_witness, 'label_source': label, 'value_source': value})
     return {'version': VERSION, 'source_kind': args['source_kind'], 'custody': custody, 'meanings': meanings, 'entries': entries, 'grouping': 'unknown', 'physical_conversion': 'unknown'}
-GRID_INPUT_VERSION = 'a105_reported_rate_grid_v1'
+GRID_INPUT_VERSION = 'a105_reported_rate_grid'
 GRID_SOURCE_STATUSES = ('observed', 'missing', 'not_detected', 'censored', 'unsupported_cell')
 GRID_ENTRY_REASONS = (*ENTRY_REASONS, 'source_error_cell')
 

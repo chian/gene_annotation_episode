@@ -8,10 +8,10 @@ from copy import deepcopy
 import json
 from pathlib import Path
 import re
-from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.evolutionary_history_evidence import bvbrc_proteome_fact_contracts as legacy
-obj, arr, enum, nullable = (legacy.obj, legacy.arr, legacy.enum, legacy.nullable)
-N, P = (legacy.UINT, {'type': 'integer', 'minimum': 1})
-TEXT = legacy.TEXT
+from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.evolutionary_history_evidence import bvbrc_proteome_fact_contracts as native_layer
+obj, arr, enum, nullable = (native_layer.obj, native_layer.arr, native_layer.enum, native_layer.nullable)
+N, P = (native_layer.UINT, {'type': 'integer', 'minimum': 1})
+TEXT = native_layer.TEXT
 _DEFS = json.loads(Path(__file__).parents[1].joinpath('bvbrc_proteome_directional_numerical_schemas.json').read_text(encoding='utf-8'))['$defs']
 
 def _expanded(value):
@@ -63,8 +63,8 @@ SELECTORS['directional_issues'] = {'oneOf': [_selector('directional_issues', sco
 SELECTORS['directional_requirements'] = _selector('directional_requirements', 'all')
 
 def validate_directional_selector(value: dict) -> dict:
-    legacy._validate({'oneOf': list(SELECTORS.values())}, value, 'directional_selector_invalid')
-    legacy.require(all((type(v) is not str or bool(v.strip()) for v in value.values())), 'directional_selector_invalid')
+    native_layer._validate({'oneOf': list(SELECTORS.values())}, value, 'directional_selector_invalid')
+    native_layer.require(all((type(v) is not str or bool(v.strip()) for v in value.values())), 'directional_selector_invalid')
     return deepcopy(value)
 
 def _reference(kind):
@@ -72,7 +72,7 @@ def _reference(kind):
         return TEXT
     if kind == 'source':
         return TEXT
-    return legacy.reference_schema(kind)
+    return native_layer.reference_schema(kind)
 EXACT_DECIMAL = obj(sign={'type': 'integer', 'minimum': 0, 'maximum': 1}, digits={'type': 'array', 'minItems': 1, 'items': {'type': 'integer', 'minimum': 0, 'maximum': 9}}, exponent={'type': 'integer'})
 EXACT_RATIO = obj(numerator=N, denominator=P, rendered_decimal=EXACT_DECIMAL)
 INTERVAL = obj(start=N, end=P)
@@ -90,7 +90,7 @@ def directional_fact_schemas() -> dict:
     native_units = enum('aa', 'alignment_column', 'bits', 'native_raw_score', 'expected_count', 'percent', 'native_expect_group_count', 'sequence_occurrence', 'native_reported_integer', 'native_reported_decimal')
 
     def numeric(metrics, **props):
-        return obj(availability=legacy.AVAILABILITY, quantity=enum(*dict.fromkeys(metrics)), context=context, **props)
+        return obj(availability=native_layer.AVAILABILITY, quantity=enum(*dict.fromkeys(metrics)), context=context, **props)
     out = {'directional_count': numeric(sum(COUNT_METRICS.values(), ()), cell=count), 'directional_fraction': numeric(sum(FRACTION_METRICS.values(), ()), cell=ratio, pair_population=nullable(population)), 'directional_coverage': numeric(sum(COVERAGE_METRICS.values(), ()), count=count, reported_length=ni, denominator_ref=nullable(_reference('source_field')), coverage=ratio, interval_count=N, intervals_ref=nullable(_reference('population'))), 'directional_native_integer': numeric(sum(INTEGER_METRICS.values(), ()), cell=ni, unit=native_units, statistic_kind=nullable(enum(*STATISTIC_KINDS))), 'directional_native_decimal': numeric(sum(DECIMAL_METRICS.values(), ()), cell=nd, unit=native_units, statistic_kind=nullable(enum(*STATISTIC_KINDS)), expectation_display=nullable(enum(*EXPECTATION_STATES)), expect_group_count=nullable(ni)), 'directional_state': numeric(tuple((m for v in STATE_METRICS.values() for m in v)), value_code=nullable(enum(*dict.fromkeys((code for v in STATE_METRICS.values() for codes in v.values() for code in codes)))), value_boolean=nullable({'type': 'boolean'})), 'directional_extremum': numeric(EXTREMA, state=nullable(enum('value', 'missing', 'invalid')), native_integer=nullable(ni), native_decimal=nullable(nd), selected_operand_ref=nullable(_reference('source_field')), tied_hsp_count=N, excluded_hsp_count=N, tied_hsps_ref=nullable(_reference('population')), excluded_hsps_ref=nullable(_reference('population')), reason_codes=arr(enum(*NUMERICAL_ISSUES)), expectation_display=nullable(enum(*EXPECTATION_STATES)), expect_group_count=nullable(ni))}
     column = _expanded(_DEFS['Column'])
     for key in ('query_symbol', 'subject_symbol'):
@@ -101,36 +101,36 @@ def directional_fact_schemas() -> dict:
     items = {'directional_intervals': INTERVAL, 'directional_columns': column, 'directional_edges': _expanded(_DEFS['PairEdge']), 'directional_conflicts': conflict, 'directional_support': obj(block_key=nullable(_expanded(_DEFS['BlockKey'])), hsp_key=nullable(_expanded(_DEFS['HspKey']))), 'directional_issues': obj(layer=enum('reader', 'numerical'), code=enum(*dict.fromkeys((*READER_ISSUES, *NUMERICAL_ISSUES))), issue_ref=_reference('qualification'), operand_refs=arr(_reference('source_field')), column_keys=arr(_expanded(_DEFS['ColumnKey'])), hsp_keys=arr(_expanded(_DEFS['HspKey'])))}
     collections = {'directional_intervals': tuple(dict.fromkeys(sum(COVERAGE_METRICS.values(), ()))), 'directional_columns': ('columns',), 'directional_edges': ('edges',), 'directional_conflicts': ('conflicts',), 'directional_support': ('strings_support', 'pair_geometry_support', *dict.fromkeys(sum(COVERAGE_METRICS.values(), ())), *EXTREMA), 'directional_issues': ('reader', 'numerical')}
     for kind, item in items.items():
-        out[kind] = obj(availability=legacy.AVAILABILITY, context=context, collection=enum(*collections[kind]), offset=N, limit=P, total_count=N, returned_count=N, next_offset=nullable(N), items=arr(item))
+        out[kind] = obj(availability=native_layer.AVAILABILITY, context=context, collection=enum(*collections[kind]), offset=N, limit=P, total_count=N, returned_count=N, next_offset=nullable(N), items=arr(item))
     out['directional_requirements'] = obj(availability={'const': 'available'}, requirements=arr(obj(requirement_ref=_reference('requirement'), code=enum(*BINDING_CODES), required_input=enum(*HOST_INPUT_KINDS), document_id=nullable(_reference('document')), field_ref=nullable(_reference('field')), native_source_refs=arr(_reference('source')))))
     return deepcopy(out)
 
-def requested_form_schema_v2(selections: dict) -> dict:
-    legacy.require(type(selections) is dict and all((type(n) is str and bool(n.strip()) for n in selections)), 'form_invalid')
-    checked = {name: validate_directional_selector(value) if type(value) is dict and value.get('kind') in SELECTORS else legacy.validate_selector(value) for name, value in selections.items()}
+def requested_form_schema(selections: dict) -> dict:
+    native_layer.require(type(selections) is dict and all((type(n) is str and bool(n.strip()) for n in selections)), 'form_invalid')
+    checked = {name: validate_directional_selector(value) if type(value) is dict and value.get('kind') in SELECTORS else native_layer.validate_selector(value) for name, value in selections.items()}
     for value in checked.values():
         if value['kind'] == 'request_status':
-            legacy.require(value['field'] in checked and checked[value['field']]['kind'] != 'request_status', 'status_target_invalid')
-    schemas = {**legacy.fact_schemas(), **directional_fact_schemas()}
+            native_layer.require(value['field'] in checked and checked[value['field']]['kind'] != 'request_status', 'status_target_invalid')
+    schemas = {**native_layer.fact_schemas(), **directional_fact_schemas()}
     return obj(**{name: {**schemas[value['kind']], 'x-bvbrc-proteome': value} for name, value in checked.items()})
 
-def validate_requested_form_v2(value: dict) -> dict:
-    legacy.require(type(value) is dict and set(value) == {'type', 'properties', 'required', 'additionalProperties'}, 'form_invalid')
+def validate_requested_form(value: dict) -> dict:
+    native_layer.require(type(value) is dict and set(value) == {'type', 'properties', 'required', 'additionalProperties'}, 'form_invalid')
     props, required = (value['properties'], value['required'])
-    legacy.require(type(props) is dict and type(required) is list and all((type(n) is str for n in required)), 'form_invalid')
-    legacy.require(len(required) == len(set(required)) and set(required) == set(props), 'form_required_conflict')
-    legacy.require(all((type(v) is dict and 'x-bvbrc-proteome' in v for v in props.values())), 'form_invalid')
-    expected = requested_form_schema_v2({name: node['x-bvbrc-proteome'] for name, node in props.items()})
+    native_layer.require(type(props) is dict and type(required) is list and all((type(n) is str for n in required)), 'form_invalid')
+    native_layer.require(len(required) == len(set(required)) and set(required) == set(props), 'form_required_conflict')
+    native_layer.require(all((type(v) is dict and 'x-bvbrc-proteome' in v for v in props.values())), 'form_invalid')
+    expected = requested_form_schema({name: node['x-bvbrc-proteome'] for name, node in props.items()})
     expected['required'] = list(required)
-    legacy._plain_json(value)
-    legacy.require(legacy.canonical(value) == legacy.canonical(expected), 'form_noncanonical')
+    native_layer._plain_json(value)
+    native_layer.require(native_layer.canonical(value) == native_layer.canonical(expected), 'form_noncanonical')
     return deepcopy(value)
 
 def exact_decimal(value: str) -> dict:
     """Convert an already normalized decimal lexeme, without Decimal or float."""
-    legacy.require(type(value) is str, 'directional_decimal_invalid')
+    native_layer.require(type(value) is str, 'directional_decimal_invalid')
     match = re.fullmatch('([+-]?)(?:(\\d+)(?:\\.(\\d*))?|\\.(\\d+))(?:[eE]([+-]?\\d+))?', value)
-    legacy.require(match is not None, 'directional_decimal_invalid')
+    native_layer.require(match is not None, 'directional_decimal_invalid')
     sign, whole, fraction, leading_fraction, exponent = match.groups()
     fraction = leading_fraction if whole is None else fraction or ''
     coefficient = ((whole or '') + fraction).lstrip('0')
@@ -148,8 +148,8 @@ def validate_directional_fact(kind: str, value: dict, *, selector: dict | None=N
     mandatory origin check in the return binder.
     """
     schemas = directional_fact_schemas()
-    legacy.require(kind in schemas, 'directional_fact_invalid')
-    legacy._validate(schemas[kind], value, 'directional_fact_invalid')
+    native_layer.require(kind in schemas, 'directional_fact_invalid')
+    native_layer._validate(schemas[kind], value, 'directional_fact_invalid')
 
     def check(node):
         if type(node) is list:
@@ -158,45 +158,45 @@ def validate_directional_fact(kind: str, value: dict, *, selector: dict | None=N
         elif type(node) is dict:
             if set(node) == {'sign', 'digits', 'exponent'}:
                 digits = node['digits']
-                legacy.require(digits == [0] and node['sign'] == 0 and (node['exponent'] == 0) or (digits[0] != 0 and digits[-1] != 0), 'directional_decimal_noncanonical')
+                native_layer.require(digits == [0] and node['sign'] == 0 and (node['exponent'] == 0) or (digits[0] != 0 and digits[-1] != 0), 'directional_decimal_noncanonical')
             if 'state' in node and 'value' in node:
-                legacy.require((node['state'] in {'value', 'present', 'position'}) == (node['value'] is not None), 'directional_cell_conflict')
+                native_layer.require((node['state'] in {'value', 'present', 'position'}) == (node['value'] is not None), 'directional_cell_conflict')
                 if node['state'] is None and 'reason_codes' in node:
-                    legacy.require(not node['reason_codes'], 'directional_cell_conflict')
+                    native_layer.require(not node['reason_codes'], 'directional_cell_conflict')
             if set(node) == {'start', 'end'}:
-                legacy.require(node['end'] > node['start'], 'directional_interval_invalid')
+                native_layer.require(node['end'] > node['start'], 'directional_interval_invalid')
             if set(node) == {'block_key', 'hsp_key'}:
-                legacy.require((node['block_key'] is None) != (node['hsp_key'] is None), 'directional_support_invalid')
+                native_layer.require((node['block_key'] is None) != (node['hsp_key'] is None), 'directional_support_invalid')
             if set(node) == {'numerator', 'denominator', 'rendered_decimal'}:
-                legacy.require(node['numerator'] <= node['denominator'] and node['rendered_decimal']['sign'] == 0, 'directional_ratio_conflict')
+                native_layer.require(node['numerator'] <= node['denominator'] and node['rendered_decimal']['sign'] == 0, 'directional_ratio_conflict')
             for key, item in node.items():
                 if type(item) is str and item.startswith('bvbrc_proteome_') and (':' in item):
-                    legacy.decode_reference(item)
+                    native_layer.decode_reference(item)
                 if key in {'query_symbol', 'subject_symbol'}:
-                    legacy.require(re.fullmatch('[A-Za-z*\\-]', item) is not None, 'directional_symbol_invalid')
+                    native_layer.require(re.fullmatch('[A-Za-z*\\-]', item) is not None, 'directional_symbol_invalid')
                 check(item)
     check(value)
     if 'items' in value:
         returned = min(value['limit'], max(0, value['total_count'] - value['offset']))
-        legacy.require(value['returned_count'] == len(value['items']) == returned, 'directional_page_conflict')
+        native_layer.require(value['returned_count'] == len(value['items']) == returned, 'directional_page_conflict')
         expected = value['offset'] + returned if value['offset'] + returned < value['total_count'] else None
-        legacy.require(value['next_offset'] == expected, 'directional_page_conflict')
+        native_layer.require(value['next_offset'] == expected, 'directional_page_conflict')
     if kind == 'directional_state':
         metric = value['quantity']
         if metric == 'body_complete':
-            legacy.require(value['value_code'] is None, 'directional_state_conflict')
+            native_layer.require(value['value_code'] is None, 'directional_state_conflict')
         else:
             codes = next((metrics[metric] for metrics in STATE_METRICS.values() if metric in metrics))
-            legacy.require(value['value_boolean'] is None and (value['value_code'] is None or value['value_code'] in codes), 'directional_state_conflict')
+            native_layer.require(value['value_boolean'] is None and (value['value_code'] is None or value['value_code'] in codes), 'directional_state_conflict')
     if 'context' in value:
         context, quantity = (value['context'], value.get('quantity'))
         target = context['target']
-        legacy.require(bool(target['document_id'].strip()), 'directional_target_conflict')
+        native_layer.require(bool(target['document_id'].strip()), 'directional_target_conflict')
         if kind in {'directional_count', 'directional_fraction', 'directional_native_integer', 'directional_native_decimal', 'directional_coverage'}:
             cell = value['coverage'] if kind == 'directional_coverage' else value['cell']
-            legacy.require((cell['state'] is None) == (context['value_ref'] is None), 'directional_cell_reference_conflict')
+            native_layer.require((cell['state'] is None) == (context['value_ref'] is None), 'directional_cell_reference_conflict')
             if cell['state'] is not None:
-                legacy.require(context['native_source_ref'] is not None and target['report_ordinal'] is not None, 'directional_cell_reference_conflict')
+                native_layer.require(context['native_source_ref'] is not None and target['report_ordinal'] is not None, 'directional_cell_reference_conflict')
             expected = {'value': 'available', 'present': 'available', 'invalid': 'invalid', 'conflict': 'incompatible'}.get(cell['state'], 'unavailable')
             if kind == 'directional_count':
                 if quantity in TRACE_COUNTS and target['hsp_ordinal'] is not None:
@@ -211,28 +211,28 @@ def validate_directional_fact(kind: str, value: dict, *, selector: dict | None=N
                     unit = 'pair_representation'
                 else:
                     unit = 'coordinate_pair'
-                legacy.require(cell['unit'] == unit, 'directional_unit_conflict')
+                native_layer.require(cell['unit'] == unit, 'directional_unit_conflict')
             if kind == 'directional_fraction':
                 pop = value['pair_population']
                 has_population = quantity in TRACE_FRACTIONS or quantity.startswith('compatible_unique_pair_')
-                legacy.require((pop is not None) == has_population, 'directional_population_conflict')
+                native_layer.require((pop is not None) == has_population, 'directional_population_conflict')
                 if pop is not None and all((number is not None for number in pop.values())):
-                    legacy.require(pop['total_pairs'] == pop['resolved_pairs'] + pop['unresolved_pairs'] + pop['stop_containing_pairs'], 'directional_population_conflict')
+                    native_layer.require(pop['total_pairs'] == pop['resolved_pairs'] + pop['unresolved_pairs'] + pop['stop_containing_pairs'], 'directional_population_conflict')
             if kind == 'directional_coverage' and cell['state'] == 'value':
-                legacy.require(value['count']['state'] == 'value' and value['reported_length']['state'] == 'present' and (cell['value']['numerator'] == value['count']['value']) and (cell['value']['denominator'] == value['reported_length']['value']), 'directional_ratio_conflict')
+                native_layer.require(value['count']['state'] == 'value' and value['reported_length']['state'] == 'present' and (cell['value']['numerator'] == value['count']['value']) and (cell['value']['denominator'] == value['reported_length']['value']), 'directional_ratio_conflict')
             if kind in {'directional_native_integer', 'directional_native_decimal'}:
                 units = {'length': 'aa', 'letter_count': 'aa', 'sequence_count': 'sequence_occurrence', 'bit_score': 'bits', 'bits': 'bits', 'expect': 'expected_count', 'evalue': 'expected_count', 'raw_score': 'native_raw_score', 'expect_group_count': 'native_expect_group_count'}
                 unit = units.get(quantity, 'percent' if quantity.endswith('printed_percent') else 'native_reported_integer' if quantity == 'integer_value' else 'native_reported_decimal' if target['statistic_ordinal'] is not None else 'alignment_column')
-                legacy.require(value['unit'] == unit, 'directional_unit_conflict')
-                legacy.require((value['statistic_kind'] is not None) == (target['statistic_ordinal'] is not None and context['value_ref'] is not None), 'directional_statistic_conflict')
+                native_layer.require(value['unit'] == unit, 'directional_unit_conflict')
+                native_layer.require((value['statistic_kind'] is not None) == (target['statistic_ordinal'] is not None and context['value_ref'] is not None), 'directional_statistic_conflict')
                 if kind == 'directional_native_decimal':
                     expectation = quantity in {'expect', 'evalue'}
                     if expectation and cell['state'] is not None:
                         display = cell['state'] if cell['state'] != 'present' else 'invalid' if cell['value']['sign'] else 'printed_zero_precision_unknown' if cell['value']['digits'] == [0] else 'positive_reported_decimal'
                     else:
                         display = None
-                    legacy.require(value['expectation_display'] == display, 'directional_expectation_conflict')
-                    legacy.require((value['expect_group_count'] is not None) == (quantity == 'expect' and target['hsp_ordinal'] is not None), 'directional_expectation_conflict')
+                    native_layer.require(value['expectation_display'] == display, 'directional_expectation_conflict')
+                    native_layer.require((value['expect_group_count'] is not None) == (quantity == 'expect' and target['hsp_ordinal'] is not None), 'directional_expectation_conflict')
         elif kind == 'directional_state':
             expected = 'available' if value['value_boolean'] is not None or value['value_code'] is not None else 'unavailable'
         elif kind == 'directional_extremum':
@@ -240,23 +240,23 @@ def validate_directional_fact(kind: str, value: dict, *, selector: dict | None=N
             raw = quantity == 'maximum_reported_hsp_raw_score'
             if value['state'] == 'value':
                 selected_cell = value['native_integer'] if raw else value['native_decimal']
-                legacy.require(selected_cell is not None and selected_cell['state'] == 'present' and (value['selected_operand_ref'] is not None) and (value['tied_hsp_count'] > 0), 'directional_extremum_conflict')
-            legacy.require(value['native_decimal'] is None if raw else value['native_integer'] is None, 'directional_extremum_conflict')
+                native_layer.require(selected_cell is not None and selected_cell['state'] == 'present' and (value['selected_operand_ref'] is not None) and (value['tied_hsp_count'] > 0), 'directional_extremum_conflict')
+            native_layer.require(value['native_decimal'] is None if raw else value['native_integer'] is None, 'directional_extremum_conflict')
         else:
             expected = 'unavailable' if context['value_ref'] is None else 'available'
         if context['declaration_state'] == 'conflicting_version':
             expected = 'incompatible'
-        legacy.require(value['availability'] == expected, 'directional_availability_conflict')
+        native_layer.require(value['availability'] == expected, 'directional_availability_conflict')
     if selector is not None:
         selected = validate_directional_selector(selector)
-        legacy.require(selected['kind'] == kind, 'directional_selector_conflict')
+        native_layer.require(selected['kind'] == kind, 'directional_selector_conflict')
         if 'metric' in selected and 'quantity' in value:
-            legacy.require(value['quantity'] == selected['metric'], 'directional_selector_conflict')
+            native_layer.require(value['quantity'] == selected['metric'], 'directional_selector_conflict')
         if 'context' in value:
             target = value['context']['target']
-            legacy.require(target['document_id'] == selected['document_id'] and all((target[k] == selected.get(k) for k in ORDINALS if k != 'report_ordinal')), 'directional_target_conflict')
+            native_layer.require(target['document_id'] == selected['document_id'] and all((target[k] == selected.get(k) for k in ORDINALS if k != 'report_ordinal')), 'directional_target_conflict')
     if kind == 'directional_requirements':
         refs = [row['requirement_ref'] for row in value['requirements']]
-        legacy.require(len(refs) == len(set(refs)), 'directional_requirement_conflict')
+        native_layer.require(len(refs) == len(set(refs)), 'directional_requirement_conflict')
     return deepcopy(value)
-__all__ = ['requested_form_schema_v2', 'validate_requested_form_v2', 'validate_directional_selector', 'directional_fact_schemas', 'validate_directional_fact', 'exact_decimal']
+__all__ = ['requested_form_schema', 'validate_requested_form', 'validate_directional_selector', 'directional_fact_schemas', 'validate_directional_fact', 'exact_decimal']

@@ -1,4 +1,4 @@
-"""Closed v2 summary return view over the one A106 operation/sheet store."""
+"""Closed summary return view over the one A106 operation/sheet store."""
 from __future__ import annotations
 from copy import deepcopy
 import hashlib
@@ -10,9 +10,9 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.storag
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_perturbation_inputs import ENDPOINT_UNITS, EXPOSURE_UNITS
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_perturbation_storage import LiteraturePerturbationRepository, _metadata, perturbation_cells_schema
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_perturbation_summary import COMPONENTS, ROLES, SUMMARY_KINDS, SCALES, SPREAD_KINDS, UNIT_KINDS, VARIANCE_STATUSES, VARIANCE_SCOPES, INTERPRETATION_BASIS_FIELDS, INTERPRETATION_BASES, covariance_descriptors
-RECORD_VERSION = 'literature_perturbation_record_v2'
+RECORD_VERSION = 'literature_perturbation_record'
 NAMESPACE = 'literature_perturbation_summary_cells'
-FORMULA_CODES = {name: 'perturbation_summary_' + name + '_v2' for name in COMPONENTS}
+FORMULA_CODES = {name: 'perturbation_summary_' + name for name in COMPONENTS}
 NEW_REASONS = ('summary_value_unreported', 'spread_value_unreported', 'count_unreported', 'raw_unit_variation_unavailable', 'mean_variance_unavailable', 'cross_arm_covariance_unknown', 'shared_contrast_covariance_unavailable', 'no_bar_pixels', 'ambiguous_bar_runs', 'truncated_mean_edge', 'pixel_tolerance_outside_image', 'truncated_error_cap', 'graph_spread_scale_unresolved', 'asymmetric_graph_error_readings', 'graph_spread_unavailable')
 METHODS = ('none', 'point_component', 'equal_unit_descriptive_mean', 'selected_reported_summary', 'reported_count', 'descriptive_sample_sd', 'raw_independent_unit_mean', 'reported_sem_squared', 'sd_squared_over_independent_n', 'mean_covariance_contrast', 'conditional_marginal_covariance_enclosure', 'shared_control_mean_covariance', *('reported_' + name for name in SPREAD_KINDS))
 BOUND_KINDS = ('none', 'conditional_digitization_not_confidence_interval', 'reported_confidence_interval', 'reported_detection_limit', 'covariance_enclosure_not_confidence_interval')
@@ -179,7 +179,7 @@ class LiteraturePerturbationSummaryProjection(LiteraturePerturbationRepository):
         request = json.loads(self.store.get_artifact(source['request_ref']))
         operation = self._operation(request['episode_id'], request['operation_key'])
         outcome = json.loads(operation['outcome'])
-        if saved.get('version') != RECORD_VERSION or source.get('version') != RECORD_VERSION or saved.get('data_source_ref') != request['arguments'].get('data_source_ref') or (saved.get('extraction', {}).get('version') != 'a106_perturbation_inputs_v2') or (saved.get('sheet', {}).get('version') != 'a106_source_summary_restoration_v2') or (saved['sheet']['cells'] != outcome.get('result', {}).get('cells')) or (self.store.get(saved['input_source_ref'])['artifact_ref'] != saved['input_artifact_ref']):
+        if saved.get('version') != RECORD_VERSION or source.get('version') != RECORD_VERSION or saved.get('data_source_ref') != request['arguments'].get('data_source_ref') or (saved.get('extraction', {}).get('version') != 'a106_perturbation_summary_inputs') or (saved.get('sheet', {}).get('version') != 'a106_source_summary_restoration') or (saved['sheet']['cells'] != outcome.get('result', {}).get('cells')) or (self.store.get(saved['input_source_ref'])['artifact_ref'] != saved['input_artifact_ref']):
             raise ContractError('literature_perturbation_summary_saved_mismatch')
         validate_covariance_meanings(saved, self.store)
         from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_perturbation_assessments import validate_saved_assessment

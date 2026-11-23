@@ -385,7 +385,7 @@ def _validate_inputs(sheet, tables, normalization, parameters, mode):
                               else 'InsulationParameters', parameters)
     _require(mode in sheet['request']['analysis_modes'], 'unselected_calculation_mode')
     _require(isinstance(tables, dict) and set(tables) == {'version', 'populations'}
-             and tables['version'] == 'chromatin_contact_arrays_v1', 'contact_arrays_required')
+             and tables['version'] == 'chromatin_contact_arrays', 'contact_arrays_required')
     keys = [p['population_key'] for p in sheet['populations']]
     _require(set(tables['populations']) == set(keys), 'array_population_join')
     for population in sheet['populations']:
@@ -664,7 +664,7 @@ def calculate_contact_enrichment(sheet: ContactSheet, *, tables: ContactTables,
         populations.append({'population_key': ctx.key, 'source_table_keys': _source_keys(sheet, ctx.key),
             'pairs': pairs, 'distance_expectations': distances, 'counts': counts,
             'qualifications': ctx.q(population_reason), 'failures': _unique_failures(failures)})
-    result = {'version': 'chromatin_contact_components_v1', 'source_sheet_sha256': chromatin_record_digest(sheet),
+    result = {'version': 'chromatin_contact_components', 'source_sheet_sha256': chromatin_record_digest(sheet),
               'table_identities': _table_identities(sheet), 'normalization': deepcopy(normalization),
               'mode': _CONTACT_MODE, 'parameters': deepcopy(parameters), 'populations': populations,
               'failures': deepcopy(sheet['failures'])}
@@ -806,7 +806,7 @@ def calculate_insulation_components(sheet: ContactSheet, *, tables: ContactTable
         populations.append({'population_key': ctx.key, 'source_table_keys': _source_keys(sheet, ctx.key),
             'windows': windows, 'statistics': statistics, 'domains': domains,
             'qualifications': ctx.q(population_reason, heuristic=True), 'failures': _unique_failures(failures)})
-    result = {'version': 'chromatin_insulation_components_v1', 'source_sheet_sha256': chromatin_record_digest(sheet),
+    result = {'version': 'chromatin_insulation_components', 'source_sheet_sha256': chromatin_record_digest(sheet),
               'table_identities': _table_identities(sheet), 'normalization': deepcopy(normalization),
               'mode': _INSULATION_MODE, 'parameters': deepcopy(parameters), 'populations': populations,
               'failures': deepcopy(sheet['failures'])}
@@ -825,7 +825,7 @@ def calculate_chromatin_components(sheet: ContactSheet, *, tables: ContactTables
                parameters=parameters['contact']) if parameters['contact'] is not None else None)
     insulation = (calculate_insulation_components(sheet, tables=tables, normalization=parameters['normalization'],
                   parameters=parameters['insulation']) if parameters['insulation'] is not None else None)
-    result = {'version': 'chromatin_interaction_components_v1', 'source_sheet_sha256': chromatin_record_digest(sheet),
+    result = {'version': 'chromatin_interaction_components', 'source_sheet_sha256': chromatin_record_digest(sheet),
               'table_identities': _table_identities(sheet), 'parameters': deepcopy(parameters),
               'contact': contact, 'insulation': insulation, 'failures': deepcopy(sheet['failures'])}
     validate_chromatin_record('ChromatinComponents', result)

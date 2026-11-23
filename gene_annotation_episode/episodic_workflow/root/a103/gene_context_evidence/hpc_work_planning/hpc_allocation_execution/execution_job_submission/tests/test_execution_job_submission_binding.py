@@ -68,7 +68,7 @@ def test_no_module_imports_another_episode_folder():
 
 
 def local_request(resource_id='local', **changes):
-    value = {'version': 'practical_assignment_v1', 'assignment_id': 'a_' + resource_id, 'resource_id': resource_id,
+    value = {'version': 'practical_assignment', 'assignment_id': 'a_' + resource_id, 'resource_id': resource_id,
              'resource_kind': 'local', 'workspace': '/work/space', 'endpoint': 'usable_handoff',
              'requested_job': {'argv': ['/bin/true'], 'environment': {}},
              'progress_requirements': [
@@ -81,12 +81,12 @@ def local_request(resource_id='local', **changes):
 
 
 def api_request(resource_id='blast'):
-    return {'version': 'api_service_assignment_v1', 'resource_id': resource_id, 'service': 'ncbi_blast',
+    return {'version': 'api_service_assignment', 'resource_id': resource_id, 'service': 'ncbi_blast',
             'request': {'program': 'blastp'}, 'endpoint': 'usable_handoff', 'constraints': {}}
 
 
 def assignment(**changes):
-    value = {'version': 'execution_launch_assignment_v1',
+    value = {'version': 'execution_launch_assignment',
              'requests': {'local': local_request('local'), 'blast': api_request('blast'),
                           'hpc': local_request('hpc', resource_kind='hpc')},
              'immutable_input_versions': [], 'constraints': {'allowed_resource_ids': ['local', 'blast', 'hpc']},
@@ -128,7 +128,7 @@ def test_a_wrong_commission_fails():
     with pytest.raises(ValueError, match='execution_resource_identity_conflict'):
         parent_input(requests={'local': local_request('other')})
     with pytest.raises(ValueError, match='execution_request_version_not_carried'):
-        parent_input(requests={'local': {**local_request('local'), 'version': 'unknown_v1'}})
+        parent_input(requests={'local': {**local_request('local'), 'version': 'unknown'}})
     with pytest.raises(ValueError, match='explicit_positive_operational_credit_units_required'):
         parent_input(handoff_unit=0.0)
 

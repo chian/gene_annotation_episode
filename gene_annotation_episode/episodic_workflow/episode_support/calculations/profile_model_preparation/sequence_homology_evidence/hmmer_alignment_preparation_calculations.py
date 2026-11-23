@@ -28,7 +28,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.calculations.prof
 from gene_annotation_episode.episodic_workflow.episode_support.calculations.profile_model_preparation.hmmer_alignment_pb_sampling import sample_easel_pb_rows
 from gene_annotation_episode.episodic_workflow.episode_support.readers.profile_model_preparation.sequence_homology_evidence.hmmer_alignment_input_validation import saved_alignment_decoding_valid
 
-SCHEMA = "hmmer_alignment_preparation_components_v1"
+SCHEMA = "hmmer_alignment_preparation_components"
 COMPONENT_STATES = frozenset({"present", "missing", "incomplete", "incompatible", "nonfinite", "failed"})
 CHECK_STATES = frozenset({"pass", "fail", "unknown", "not_applicable"})
 ISSUE_CODES = frozenset({"sheet_invalid", "parameter_invalid", "record_invalid", "association_invalid",
@@ -118,7 +118,7 @@ def resolve_alimask_map_context(*, operation, software, source_occurrence, reque
     actual = software["actual_sha256"]
     bound = (actual == software["expected_sha256"] == ALIMASK_PROFILE_EXECUTABLE_SHA256
              and software["declared_engine_version"] == operation["engine_version"])
-    context = {"version": "hmmer_alignment_map_context_v1",
+    context = {"version": "hmmer_alignment_map_context",
         "source_occurrence_id": source_occurrence["occurrence_id"], "source_sha256": source_occurrence["sha256"],
         "producer": {"program": "alimask", "engine_version": operation["engine_version"], "executable_sha256": actual},
         "profile": deepcopy(ALIMASK_PROFILE) if bound else None,
@@ -393,7 +393,7 @@ def _coordinate_correspondence(source, target, alphabet, result):
     if "input_decoding" in source:
         context = source["input_decoding"]
         if alphabet is None or target.get("source_alphabet") != {
-                "version": "hmmer_alignment_source_alphabet_v1",
+                "version": "hmmer_alignment_source_alphabet",
                 "source_occurrence_id": context["source_occurrence_id"],
                 "source_sha256": context["source_sha256"], "alphabet": alphabet,
                 "alphabet_basis": context["alphabet_basis"]}:

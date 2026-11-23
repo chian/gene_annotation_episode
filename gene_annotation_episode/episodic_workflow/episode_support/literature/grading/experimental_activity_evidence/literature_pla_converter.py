@@ -108,7 +108,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_pla_criteria import PERCENT_PER_FRACTION
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import SUPPORTS, apply_support
 
-VERSION = 'a105_pla_converted_v1'
+VERSION = 'a105_pla_converted'
 CRITERIA_MAP = {'binding_controls': ('single_antibody_control', 'no_primary_control', 'specificity_control', 'positive_control'), 'binding_regime': ('compartment',), 'binding_parameter_definition': ('proximity_observed', 'puncta_enrichment', 'antibody_species'), 'calibration_applicability': ('antibody_validation', 'blinded_quantification', 'statistical_test'), 'sampling_basis': ('cells_counted', 'replicates')}
 FOLD_FULL_AGREEMENT = 3.0  # EXPERT_REVIEW: smallest fold of the puncta per cell of the test over the negative control taken as a clear signal; the single-antibody and no-primary reactions give a low background of puncta, and a threefold excess is the usual minimum that papers call specific.
 FOLD_ZERO_AGREEMENT = 1.0  # EXPERT_REVIEW: fold at or below which the test cannot be told from the negative control (equal puncta per cell is no signal): conflicting; in between the degree rises linearly in the LOG of the fold (a quotient of two mean counts, whose error is multiplicative, so equal ratio steps count equally; the same scale as the pull-down enrichment).

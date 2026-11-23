@@ -47,7 +47,7 @@ grader does not judge it; the converter does. The constructors take ``support`` 
 through the extraction (the extraction always passes the model's answer).
 """
 
-VERSION = 'a105_distribution_lcms_record_v1'
+VERSION = 'a105_distribution_lcms_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'distribution_lcms'
 QUANTITIES = ('product_fraction', 'product_fraction_spread', 'product_fraction_ratio', 'product_fraction_ratio_spread', 'total_recovery', 'product_concentration',

@@ -445,7 +445,7 @@ class _FastaDecoder:
                 row["aligned_sequence"] = _finish_segments(self.content, row["segments"], self.alphabet)
         next_offset = self.record["byte_end"]
         return {
-            "version": "hmmer_native_alignment_decoding_v1",
+            "version": "hmmer_native_alignment_decoding",
             "format": self.format,
             "alphabet": self.alphabet,
             "records": [self.record],
@@ -522,7 +522,7 @@ class _FastaDecoder:
         if self.current is None:
             # EOF without an MSA is not an alignment occurrence.
             return {
-                "version": "hmmer_native_alignment_decoding_v1",
+                "version": "hmmer_native_alignment_decoding",
                 "format": self.format,
                 "alphabet": self.alphabet,
                 "records": [],

@@ -19,9 +19,9 @@ from gene_annotation_episode.episodic_workflow.episode_support.readers.source_di
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading import literature_experiment_assessments as assessments
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.partner_presence_evidence.literature_sheet_updates import publication
 PROVIDER = 'literature.experimental.partner'
-FORMULA_CODES = dict(zip(COMPONENTS, ('native_partner_reference_v1', 'native_partner_omitted_v1', 'native_partner_addback_v1', 'partner_reference_minus_omitted_v1', 'partner_loss_over_reference_v1', 'partner_addback_minus_omitted_v1', 'partner_gain_over_loss_v1', 'partner_gain_over_reference_v1')))
+FORMULA_CODES = dict(zip(COMPONENTS, ('native_partner_reference', 'native_partner_omitted', 'native_partner_addback', 'partner_reference_minus_omitted', 'partner_loss_over_reference', 'partner_addback_minus_omitted', 'partner_gain_over_loss', 'partner_gain_over_reference')))
 BINDINGS = {'subject_ref': ('subject', 'reference'), 'partner_ref': ('partner', 'reference'), 'experiment_ref': ('experiment', 'reference'), 'endpoint_ref': ('endpoint', 'term'), 'normalization_ref': ('normalization', 'term'), 'reference_condition_ref': ('reference_condition', 'context'), 'omitted_condition_ref': ('omitted_condition', 'context'), 'addback_condition_ref': ('addback_condition', 'context'), 'function_ref': ('function', 'term')}
-LITERAL_REFERENCE_ROLES_VERSION = 'partner_literal_reference_roles_v1'
+LITERAL_REFERENCE_ROLES_VERSION = 'partner_literal_reference_roles'
 LITERAL_REFERENCE_TYPES = {'subject': 'literature_result', 'partner': 'literature_result', 'experiment': 'assay'}
 NATIVE_UNITS = ('pmol/min/mg', 'nmol/min/mg', 'umol/min/mg', 'per_min', 'per_s', 'uM/min', 'nM/min')
 CHECK_REASONS = ('arm_unreported', 'nonpartner_conditions_differ', 'subject_unreported', 'subject_mismatch', 'partner_unreported', 'partner_mismatch', 'endpoint_unreported', 'endpoint_mismatch', 'normalization_unreported', 'normalization_mismatch', 'unit_unreported', 'unit_mismatch', 'partner_presence_not_established', 'condition_factor_scope_unresolved', 'conditions_incomplete', 'measurement_identity_unreported', 'role_measurement_not_distinct')
@@ -30,7 +30,7 @@ _ROLES = ('reference', 'omitted', 'addback')
 _FIXED_METADATA = {'evaluation_scope': 'reference_experimental_partner_components', 'target_correspondence': 'not_evaluated', 'partner_necessity': 'not_inferred', 'statistical_uncertainty': 'not_evaluated', 'measurement_corrections': 'not_applied'}
 _NATIVE_ARGUMENT_SCHEMA = _native_population_schema()
 _NATIVE_EVIDENCE_SCHEMA = _native_evidence_schema()
-_NATIVE_EVIDENCE_V2_SCHEMA = _native_evidence_schema(defined_units=False)
+_NATIVE_PLAIN_EVIDENCE_SCHEMA = _native_evidence_schema(defined_units=False)
 
 def partner_source_population_schema():
     """Closed native-selector operands; independent of source work at replay."""
@@ -46,8 +46,8 @@ def _native_version(args):
             continue
         for unit in (arm['rate']['unit'], arm['rate']['spread']['unit']):
             if isinstance(unit, dict) and unit.get('kind') == 'source_defined_rate_unit':
-                return 'literature_partner_inputs_extraction_v3'
-    return 'literature_partner_inputs_extraction_v2'
+                return 'literature_partner_defined_unit_extraction'
+    return 'literature_partner_native_extraction'
 
 def _spread_schema():
     return obj({'kind': {'type': 'string', 'enum': ['SD', 'SEM', 'CI', 'unspecified', 'unreported']}, 'magnitude': {'type': ['number', 'null'], 'minimum': 0}})
@@ -70,7 +70,7 @@ def _input_schema():
     nullable = {**text, 'type': ['string', 'null']}
     factor = obj({'factor': text, 'level': {'type': ['number', 'string', 'null']}, 'unit': text})
     arm = obj({**{name: deepcopy(nullable) for name in ('subject_ref', 'partner_ref', 'endpoint_ref', 'normalization_ref')}, 'partner_state': {'enum': ['present', 'absent', 'unreported']}, 'unit': {'enum': [*NATIVE_UNITS, 'unreported']}, 'conditions': obj({'coverage': {'enum': ['complete', 'partial', 'unreported']}, 'factors': {'type': 'array', 'items': factor}}), 'measurement': obj({'measurement_id': nullable, 'status': {'enum': ['observed', 'upper_bound', 'unreported']}, 'value': {'type': ['number', 'null'], 'minimum': 0}, 'origin': {'enum': ['reported', 'graph_derived', 'synthetic']}, 'spread': _spread_schema()})})
-    return obj({'version': {'const': 'literature_partner_inputs_v1'}, 'arms': obj({role: {**deepcopy(arm), 'type': ['object', 'null']} for role in _ROLES})})
+    return obj({'version': {'const': 'literature_partner_inputs'}, 'arms': obj({role: {**deepcopy(arm), 'type': ['object', 'null']} for role in _ROLES})})
 
 def _metadata(extraction, factor_bindings):
     arms = extraction['recipe']['inputs']['arms']
@@ -164,7 +164,7 @@ def _condition_role(literal, entry):
 
 def _condition_refs(extraction):
     return [identity('reference', {'origin': 'tool', 'record': _condition_role(literal, entry)}) for literal, kind in BINDINGS.values() if kind == 'context' and (entry := extraction['literals'][literal]) is not None]
-_NATIVE_BINDING_VERSION = 'partner_native_operand_bindings_v1'
+_NATIVE_BINDING_VERSION = 'partner_native_operand_bindings'
 _NATIVE_IDENTITY_FIELDS = ('subject', 'partner', 'endpoint', 'normalization')
 _COMPONENT_ROLES = {'reference_rate': ('reference',), 'omitted_rate': ('omitted',), 'addback_rate': ('addback',), 'partner_loss': ('reference', 'omitted'), 'partner_loss_fraction': ('reference', 'omitted'), 'addback_gain': ('addback', 'omitted'), 'addback_fraction': _ROLES, 'restored_reference_fraction': _ROLES}
 

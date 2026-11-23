@@ -244,7 +244,7 @@ def test_an_api_job_passed_as_a_dependency_is_offered_and_its_commission_passes_
         'submitted_at': request.context['dependencies'][0]['submitted_at'], 'latest_check': None}]
     message = Monitor.msg_to_child('monitor', {'dependency_handle': dependency}, summary_of(linked))
     assert read_from_parent.ASSIGNMENT_FORM.admit(message.assignment, 'assignment') == {
-        'version': 'monitor_assignment_v2', 'handoff_refs': [dependency_ref], 'known_progress_refs': [],
+        'version': 'monitor_assignment', 'handoff_refs': [dependency_ref], 'known_progress_refs': [],
         'dependency_handoff_refs': [], 'requested_fields': list(read_from_parent.FIELD_OPTIONS),
         'information_unit': 1.0}
 

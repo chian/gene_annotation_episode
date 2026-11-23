@@ -113,7 +113,7 @@ def test_source_defined_unit_populates_existing_cells_and_preserves_raw_relation
     assert (fix[0], fix[1]) == before
 
 
-def test_plain_only_input_retains_exact_v2_and_has_no_definition_fields():
+def test_plain_only_input_retains_plain_version_and_has_no_definition_fields():
     out = read(fixture(mean_unit="plain"))
     assert out["version"] == reader.VERSION
     assert out["sources"] == [ROOT, DATA]
@@ -140,7 +140,7 @@ def test_explicit_spread_unit_is_converted_independently(mean_unit, spread_unit,
     assert ("definition" in rate["spread"]["unit"]) == (spread_unit == "defined")
 
 
-def test_unselected_U_spread_is_rejected_even_for_otherwise_v2_input():
+def test_unselected_U_spread_is_rejected_even_for_otherwise_plain_input():
     fix = fixture(mean_unit="plain", spread_unit="defined")
     fix[0]["arms"]["reference"]["rate"]["spread"]["unit"] = None
     with pytest.raises(ExperimentalContractError, match="defined_unit_spread_definition_required"):
@@ -187,7 +187,7 @@ def test_wrong_defined_relationship_does_not_reach_core(mode, monkeypatch):
         read(fix)
 
 
-def test_broad_v3_schema_does_not_change_the_strict_v2_evidence_shape():
+def test_defined_unit_schema_does_not_change_the_plain_evidence_shape():
     out = read(fixture())
     with pytest.raises(ContractError):
         validate_schema(out["native_evidence"], reader.native_evidence_schema(defined_units=False))

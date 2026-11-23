@@ -89,14 +89,14 @@ def test_an_unknown_history_explanation_keeps_the_possible_levels_without_a_zero
 
 
 def test_a_native_sheet_grades_four_kinds_on_the_unit_interval_and_keeps_an_unevaluable_value_unknown():
-    body = {'schema': 'a104_robustness_v1', 'version': scoring.VERSION, 'producer_operation': 'phylogeny.x',
+    body = {'schema': 'a104_robustness', 'version': scoring.VERSION, 'producer_operation': 'phylogeny.x',
             'target_ref': 'input_x', 'raw_value': None}
     assert native_publications.native_grade(body)['raw_value'] is None
     assert native_publications.native_grade({**body, 'raw_value': 0.9})['kind'] == 'robustness'
     with pytest.raises(ValueError, match='a104_native_value_outside_unit_interval'):
         native_publications.native_grade({**body, 'raw_value': 92})
     with pytest.raises(ValueError, match='a104_native_metric_schema_not_bound'):
-        native_publications.native_grade({**body, 'schema': 'a104_posterior_v1'})
+        native_publications.native_grade({**body, 'schema': 'a104_posterior'})
     assert set(native_publications.KINDS.values()) == {'placement', 'history_comparison', 'clade_composition',
                                                       'robustness'}
 

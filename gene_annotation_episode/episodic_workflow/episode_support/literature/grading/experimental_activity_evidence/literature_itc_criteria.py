@@ -36,7 +36,7 @@ that says whether the titration curve has a measurable shape. dG: Gibbs
 free energy; dH enthalpy; dS entropy; dG = dH - T x dS.
 """
 
-VERSION = 'a105_itc_criteria_v1'
+VERSION = 'a105_itc_criteria'
 
 # ---- Constants -----------------------------------------------------------
 GAS_CONSTANT_J_PER_MOL_K = 8.314462618  # FIXED_BY_DEFINITION: R, used in dG = R T ln(KD / 1 M).

@@ -19,7 +19,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.jobs.perturbation
 
 
 PROVIDER = 'episode.bvbrc_appservice_receipt'
-VERSION = 'bvbrc_appservice_retained_receipt_v1'
+VERSION = 'bvbrc_appservice_retained_receipt'
 _CONTRACTS = {'CommonReceipt', 'CatalogReceipt', 'PreparationReceipt',
     'WorkspaceReceipt', 'UploadReceipt', 'TaskInfoReceipt', 'TaskObservation',
     'CapabilityReceipt', 'TaskHandoff', 'AcquisitionReceipt'}

@@ -29,7 +29,7 @@ titration_points, replicate_count, replicate_independent, detected, each with it
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_coupling_limiting_reagent_criteria import COUPLING_LIMITING_REAGENT_CRITERIA
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_coupling_limiting_reagent_grade_v1'
+VERSION = 'a105_coupling_limiting_reagent_grade'
 CRITERIA = tuple(criterion['id'] for criterion in COUPLING_LIMITING_REAGENT_CRITERIA)
 DETECTED = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact coupled_product_detected
 

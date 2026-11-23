@@ -14,8 +14,8 @@ from jsonschema import Draft202012Validator
 from .tool_knowledge import ToolKnowledge
 
 
-VERSION = 'launch_instruction_library_v1'
-SELECTION_VERSION = 'launch_instruction_selection_v1'
+VERSION = 'launch_instruction_library'
+SELECTION_VERSION = 'launch_instruction_selection'
 INSTRUCTIONS = (
     ' Launch software/resource instructions have their own run-frozen library: '
     'launch.instructions.search, launch.instructions.entry, launch.instructions.read '

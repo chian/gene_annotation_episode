@@ -11,7 +11,7 @@ from yield_control import CompletionYieldController
 def request_yield_class(request):
     """Classify the original execution request without generated IDs."""
     version = request.get('version')
-    if version in ('api_execution_assignment_v1', 'api_service_assignment_v1'):
+    if version in ('api_execution_assignment', 'api_service_assignment'):
         parts = ['api', request.get('service', 'unknown')]
         for field in ('algorithm', 'database'):
             if field in request:

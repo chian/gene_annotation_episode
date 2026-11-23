@@ -33,7 +33,7 @@ def coordinates(value="unknown"):
 
 
 def source_contract():
-    return {"id": "GenomeComparison_inspected_source_v1",
+    return {"id": "GenomeComparison_inspected_source",
             "application_tree": "5c365e1dca2b3a8c311d7d352e862ff1442eefc9",
             "application_sha256": "4267b35bdd5ad858b833fa2b84eb794c91e95b7f5abc0628b90ec4d6a0a33c14",
             "dependency_tree": "18196fe0df123702457e4af2e0b1e0707d5f5281",
@@ -70,13 +70,13 @@ def index(original=None, **kwargs):
 
 def fasta(raw, **kwargs):
     return read_protein_fasta(raw, source=kwargs.pop("source", source(raw)),
-        declared_format=kwargs.pop("declared_format", "protein_fasta_utf8_v1"),
+        declared_format=kwargs.pop("declared_format", "protein_fasta_utf8"),
         inventory_key=kwargs.pop("inventory_key", "synthetic-inventory"), **kwargs)
 
 
-_READERS = {"feature": (read_feature_metadata, "bvbrc_genome_feature_json_array_v1", "FeatureSnapshot"),
-            "genome": (read_genome_metadata, "bvbrc_genome_json_array_v1", "GenomeSnapshot"),
-            "sequence": (read_feature_sequences, "bvbrc_feature_sequence_json_array_v1", "FeatureSequenceSnapshot")}
+_READERS = {"feature": (read_feature_metadata, "bvbrc_genome_feature_json_array", "FeatureSnapshot"),
+            "genome": (read_genome_metadata, "bvbrc_genome_json_array", "GenomeSnapshot"),
+            "sequence": (read_feature_sequences, "bvbrc_feature_sequence_json_array", "FeatureSequenceSnapshot")}
 
 
 def metadata(data, kind="feature", **kwargs):

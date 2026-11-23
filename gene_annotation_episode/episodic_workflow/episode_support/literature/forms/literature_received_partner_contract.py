@@ -15,9 +15,9 @@ COMPONENTS = (
 SOURCE_KINDS = ("primary_source", "retained_extraction", "graph_extraction", "synthetic_fixture")
 
 FORMULA_CODES = dict(zip(COMPONENTS, (
-    "native_partner_reference_v1", "native_partner_omitted_v1", "native_partner_addback_v1",
-    "partner_reference_minus_omitted_v1", "partner_loss_over_reference_v1",
-    "partner_addback_minus_omitted_v1", "partner_gain_over_loss_v1", "partner_gain_over_reference_v1")))
+    "native_partner_reference", "native_partner_omitted", "native_partner_addback",
+    "partner_reference_minus_omitted", "partner_loss_over_reference",
+    "partner_addback_minus_omitted", "partner_gain_over_loss", "partner_gain_over_reference")))
 
 BINDINGS = {
     "subject_ref": ("subject", "reference"),

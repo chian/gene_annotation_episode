@@ -222,7 +222,7 @@ def parse_blast_database_inspection(content: bytes, *, occurrence: dict, operati
                          "native_document_invalid" if parse_failures else None))
     complete = not failures and outcome["state"] == "succeeded" and _complete_capture(occurrence, outcome)
     return validate_blast_utility_record("DatabaseInspection", {
-        "version": "blast_database_inspection_v1", "operation": operation,
+        "version": "blast_database_inspection", "operation": operation,
         "database_binding": database_binding, "output_occurrence": occurrence,
         "original_outcome": outcome, "native_fields": fields,
         "completeness": "complete" if complete else "partial" if fields else "unknown",
@@ -364,7 +364,7 @@ def parse_blastdbcheck_diagnostics(stdout: bytes, stderr: bytes, *,
     checks.append(_check("native_integrity", status, [key], method,
                          [o["occurrence_id"] for _, o in streams], reason))
     return validate_blast_utility_record("DatabaseIntegrity", {
-        "version": "blast_database_integrity_v1", "operation": operation,
+        "version": "blast_database_integrity", "operation": operation,
         "database_binding": database_binding, "stdout_occurrence": stdout_occurrence,
         "stderr_occurrence": stderr_occurrence, "original_outcome": outcome,
         "scope": scope, "observed_checked_count": checked,

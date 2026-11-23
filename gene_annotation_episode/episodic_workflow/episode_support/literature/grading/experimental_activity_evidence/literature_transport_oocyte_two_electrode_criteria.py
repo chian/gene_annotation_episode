@@ -28,7 +28,7 @@ returns     every case the criterion can return, as (status, reason_code, when).
             as 'never' cannot occur for this criterion.
 """
 
-VERSION = 'a105_transport_oocyte_two_electrode_criteria_v1'
+VERSION = 'a105_transport_oocyte_two_electrode_criteria'
 NA_PER_UNIT = {'nA': 1.0, 'uA': 1000.0}  # FIXED_BY_DEFINITION: a current in nA from its unit (1 uA is 1000 nA).
 
 _fact_returns = (

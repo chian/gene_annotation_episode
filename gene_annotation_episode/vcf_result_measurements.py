@@ -19,11 +19,11 @@ from .alignment_correspondence import _copy, _ratio
 from .domain import ContractError, validate_schema
 
 
-SHEET_VERSION = "vcf_result_sheet_v1"
-SELECTION_VERSION = "vcf_result_selection_v1"
-COMPONENTS_VERSION = "vcf_result_components_v1"
-VALUE_VERSION = "vcf_result_values_v1"
-RETURN_VERSION = "vcf_result_return_v1"
+SHEET_VERSION = "vcf_result_sheet"
+SELECTION_VERSION = "vcf_result_selection"
+COMPONENTS_VERSION = "vcf_result_components"
+VALUE_VERSION = "vcf_result_values"
+RETURN_VERSION = "vcf_result_return"
 _FIXED = ("chrom", "pos", "id", "ref", "alt", "qual", "filter", "info")
 _HEADER = ("#CHROM", "POS", "ID", "REF", "ALT", "QUAL", "FILTER", "INFO")
 _SHA = re.compile(r"[0-9a-f]{64}\Z")

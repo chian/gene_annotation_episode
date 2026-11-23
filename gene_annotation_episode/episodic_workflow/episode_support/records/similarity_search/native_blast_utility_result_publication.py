@@ -14,25 +14,25 @@ import sys
 
 from gene_annotation_episode.episodic_workflow.episode_support.acquisition.sequence_homology_evidence.acquisition import AcquisitionError
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.sequence_homology_evidence.blast_utility_contracts import blast_utility_result_version_for_operation, validate_blast_utility_result, validate_blast_utility_record as core
-from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.sequence_homology_evidence.blast_utility_result_views import PROJECTION_FIELDS, PROJECTION_V2_FIELDS, blast_utility_projection_fields, validate_blast_utility_projection, validate_blast_utility_result_selector
+from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.sequence_homology_evidence.blast_utility_result_views import PROJECTION_FIELDS, VDB_PROJECTION_FIELDS, blast_utility_projection_fields, validate_blast_utility_projection, validate_blast_utility_result_selector
 from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_homology_evidence.domain import ContractError, canonical
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.local_execution.sequence_homology_evidence.local_jobs import LocalJobPolicy, check_scratch_budget, run_local_job
 from gene_annotation_episode.episodic_workflow.episode_support.acquisition.similarity_search.sequence_homology_evidence.native_blast_utility_acquisition import _validate_saved
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.sequence_homology_evidence.native_blast_utility_contracts import finite_json_copy, native_blast_digest
-from gene_annotation_episode.episodic_workflow.episode_support.jobs.similarity_search.native_blast_utility_worker_context import OUTPUT_FILES, PLAN_VERSION, PLAN_VERSION_V2, diagnostic, failure, qualified_utility_context, unique_failures, validate_context, validate_worker_manifest, validate_worker_plan
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.similarity_search.native_blast_utility_worker_context import OUTPUT_FILES, PLAN_VERSION, VDB_PLAN_VERSION, diagnostic, failure, qualified_utility_context, unique_failures, validate_context, validate_worker_manifest, validate_worker_plan
 from gene_annotation_episode.episodic_workflow.episode_support.acquisition.profile_model_preparation.sequence_homology_evidence.native_hmmer_preparation_acquisition import _capture_file, _decode, _directory, _read_record, _retained
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.sequence_homology_evidence.practical_execution_state import _immutable
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.tool_grading_artifacts import retain_tool_grading
 
 
 PREFIX = "native_blast_utility_"
-PREPARED_VERSION = PREFIX + "prepared_v1"
-PUBLICATION_VERSION = PREFIX + "publication_v1"
-PUBLICATION_V2_VERSION = PREFIX + "publication_v2"
-RETAINED_VERSION = PREFIX + "retained_v1"
-PROJECTION_VERSION = PREFIX + "projection_artifact_v1"
-PROJECTION_V2_VERSION = PREFIX + "projection_artifact_v2"
-RECEIPT_VERSION = PREFIX + "worker_receipt_v1"
+PREPARED_VERSION = PREFIX + "prepared"
+PUBLICATION_VERSION = PREFIX + "publication"
+PUBLICATION_VDB_FUNCTION_VERSION = PREFIX + "publication_vdb_function"
+RETAINED_VERSION = PREFIX + "retained"
+PROJECTION_VERSION = PREFIX + "projection_artifact"
+PROJECTION_VDB_FUNCTION_VERSION = PREFIX + "projection_artifact_vdb_function"
+RECEIPT_VERSION = PREFIX + "worker_receipt"
 PAYLOAD_REFS = {"result": "result_artifact_ref", "prepared_database": "prepared_database_projection_artifact_ref",
                 "prepared_manifest": "prepared_database_manifest_artifact_ref"}
 _PREPARED_FIELDS = {"version", "source_ref", "bundle_artifact_ref", "source_grading_artifact_ref",
@@ -40,15 +40,15 @@ _PREPARED_FIELDS = {"version", "source_ref", "bundle_artifact_ref", "source_grad
 _STABLE_FIELDS = {"version", "capture", "payload_artifacts", "worker_receipt_artifact_ref",
                   *(_PREPARED_FIELDS - {"version", "source_grading_artifact_ref"})}
 _PUBLICATION_FIELDS = {"version", "source_ref", "prepared_sha256", "selector", "projection_artifact_ref", *PROJECTION_FIELDS}
-_PUBLICATION_V2_FIELDS = {"version", "source_ref", "prepared_sha256", "selector", "projection_artifact_ref", *PROJECTION_V2_FIELDS}
+_PUBLICATION_VDB_FUNCTION_FIELDS = {"version", "source_ref", "prepared_sha256", "selector", "projection_artifact_ref", *VDB_PROJECTION_FIELDS}
 
 
 def _vdb(operation):
-    return operation["version"] == "blast_utility_operation_v3"
+    return operation["version"] == "blast_vdb_utility_operation"
 
 
 def _worker_plan_version(operation):
-    return PLAN_VERSION_V2 if _vdb(operation) else PLAN_VERSION
+    return VDB_PLAN_VERSION if _vdb(operation) else PLAN_VERSION
 
 
 def _error(code):
@@ -115,7 +115,7 @@ def validate_utility_prepared(prepared):
         _error("prepared_failure_context_conflict")
     projection, manifest = prepared["prepared_database_projection_artifact_ref"], prepared["prepared_database_manifest_artifact_ref"]
     builder = blast_utility_result_version_for_operation(prepared["operation"]) in {
-        "blast_database_artifact_set_v1", "blast_database_artifact_set_v2"}
+        "blast_database_artifact_set", "blast_prepared_database_artifact_set"}
     if (projection is not None and (prepared["result_artifact_ref"] is None or not builder)
             or manifest is not None and projection is None):
         _error("prepared_database_payload_conflict")
@@ -125,7 +125,7 @@ def validate_utility_prepared(prepared):
 def _stable(store, prepared):
     envelope = _json(store, prepared["source_grading_artifact_ref"])
     _shape(envelope, {"schema", "provider", "native_artifact_ref", "grading"}, "retained_envelope_invalid")
-    if (envelope["schema"] != "tool_grading_artifact_v1" or envelope["provider"] != "episode.execution_result"
+    if (envelope["schema"] != "tool_grading_artifact" or envelope["provider"] != "episode.execution_result"
             or envelope["native_artifact_ref"] != prepared["bundle_artifact_ref"]):
         _error("retained_envelope_identity_conflict")
     stable = envelope["grading"]
@@ -353,7 +353,7 @@ def _saved_descriptors(store, prepared):
             payload = _json(store, prepared[key])
             schema = payload.get("version") if type(payload) is dict else None
             expected = ({blast_utility_result_version_for_operation(prepared["operation"])} if kind == "result" else {
-                "native_blast_standard_prepared_database_manifest_v1", "native_blast_prepared_database_manifest_v1"})
+                "native_blast_standard_prepared_database_manifest", "native_blast_prepared_database_manifest"})
             if schema not in expected:
                 _error("saved_payload_version_conflict")
             result.append({"source_ref": prepared["source_ref"], "kind": kind, **_descriptor(store, prepared[key]), "schema": schema})
@@ -390,10 +390,10 @@ def publish_selected_utility_result(store, *, source_ref, prepared, selector, di
     selected = validate_blast_utility_projection(_json(store, selected_ref), source_ref=source_ref,
         operation=prepared["operation"], native_outcome=prepared["native_outcome"], selector=selector, occurrences=prepared["occurrences"],
         **({"context": plan["context"]} if vdb else {}))
-    envelope = {"version": PROJECTION_V2_VERSION if vdb else PROJECTION_VERSION, "source_ref": source_ref, "prepared_sha256": native_blast_digest(prepared),
+    envelope = {"version": PROJECTION_VDB_FUNCTION_VERSION if vdb else PROJECTION_VERSION, "source_ref": source_ref, "prepared_sha256": native_blast_digest(prepared),
         "selector": selector, "projection": selected, "worker_receipt_artifact_ref": reference, "selected_projection_artifact_ref": selected_ref}
     projection_ref = store.artifact(canonical(envelope), "application/json")
-    publication = {"version": PUBLICATION_V2_VERSION if vdb else PUBLICATION_VERSION, "source_ref": source_ref, "prepared_sha256": native_blast_digest(prepared),
+    publication = {"version": PUBLICATION_VDB_FUNCTION_VERSION if vdb else PUBLICATION_VERSION, "source_ref": source_ref, "prepared_sha256": native_blast_digest(prepared),
         "selector": selector, "projection_artifact_ref": projection_ref, **selected}
     publication = validate_utility_publication(store, source_ref=source_ref, prepared=prepared, selector=selector, publication=publication)
     _immutable(directory / "publication.json", publication)
@@ -410,14 +410,14 @@ def validate_utility_publication(store, *, source_ref, prepared, selector, publi
     projection_fields = blast_utility_projection_fields(selector)
     context = _projection_context(prepared, stable)
     publication = finite_json_copy(publication)
-    _shape(publication, _PUBLICATION_V2_FIELDS if vdb else _PUBLICATION_FIELDS, "publication_fields_invalid")
-    if (publication["version"] != (PUBLICATION_V2_VERSION if vdb else PUBLICATION_VERSION) or publication["source_ref"] != source_ref
+    _shape(publication, _PUBLICATION_VDB_FUNCTION_FIELDS if vdb else _PUBLICATION_FIELDS, "publication_fields_invalid")
+    if (publication["version"] != (PUBLICATION_VDB_FUNCTION_VERSION if vdb else PUBLICATION_VERSION) or publication["source_ref"] != source_ref
             or publication["selector"] != selector or publication["prepared_sha256"] != native_blast_digest(prepared)):
         _error("publication_original_selection_conflict")
     envelope = _json(store, publication["projection_artifact_ref"])
     _shape(envelope, {"version", "source_ref", "prepared_sha256", "selector", "projection", "worker_receipt_artifact_ref",
                      "selected_projection_artifact_ref"}, "projection_envelope_invalid")
-    if envelope["version"] != (PROJECTION_V2_VERSION if vdb else PROJECTION_VERSION) or any(envelope[k] != publication[k] for k in ("source_ref", "prepared_sha256", "selector")):
+    if envelope["version"] != (PROJECTION_VDB_FUNCTION_VERSION if vdb else PROJECTION_VERSION) or any(envelope[k] != publication[k] for k in ("source_ref", "prepared_sha256", "selector")):
         _error("projection_envelope_identity_conflict")
     selected = validate_blast_utility_projection(envelope["projection"], source_ref=source_ref,
         operation=prepared["operation"], native_outcome=prepared["native_outcome"], selector=selector, occurrences=prepared["occurrences"],

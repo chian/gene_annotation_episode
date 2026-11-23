@@ -57,7 +57,7 @@ def job_fixture(directory, *, software=None, inputs=None):
         samples.append(dict(sample_id=f"sample{i}", input_artifact_refs=[file["artifact_ref"]], reference_id="reference",
             biospecimen_id=None, replicate_id=None, origin="synthetic_engineering_fixture"))
         conditions.append(dict(condition_id=f"condition{i}", label=None, sample_ids=[f"sample{i}"]))
-    request = dict(version="atac_differential_request_v1", operation=OPERATION, mode=MODE, comparison_key="comparison",
+    request = dict(version="atac_differential_request", operation=OPERATION, mode=MODE, comparison_key="comparison",
         reference=dict(reference_id="reference", assembly_accession_version=None, source_refs=[], aliases=[],
             contigs=[dict(chromosome="chrToy", length_bp=12000, sequence_accession_version=None, sequence_sha256=None, source_refs=[])]),
         samples=samples, conditions=conditions, inputs=occurrences,
@@ -82,7 +82,7 @@ def plan_fixture(directory, *, job=None):
     selected = requested(job, directory)
     operation, run, episode = "selected-start", "control-fixture", "local-child"
     root = directory / ".episode-operations" / digest({"run": run, "episode": episode}) / digest(operation)
-    return validate_atac_run_plan(dict(version="atac_differential_run_plan_v1", identity=dict(run_id=run, episode_id=episode,
+    return validate_atac_run_plan(dict(version="atac_differential_run_plan", identity=dict(run_id=run, episode_id=episode,
         resource_id="local", execution_id=str(root / "native.json"), attempt_id=digest(operation), operation_key=operation,
         requested_job_sha256=digest(selected), assignment_sha256=digest("control-fixture-not-episode-authority")),
         requested_job=selected, attempt_directory=str(root / ATTEMPT_DIRECTORY_NAME), policy=POLICY, outputs=atac_output_files(job["request"])))

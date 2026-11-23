@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.storag
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_calibration_recovery_inputs import VERSION as INPUT_VERSION, SOURCE_KINDS, LITERAL_FIELDS, CONTROL_KINDS, APPLICABILITIES, SPREAD_KINDS, NUMBER_ROLES, calibration_recovery_population_schema, calibration_recovery_extraction_schema
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence.literature_calibration_recovery_calculations import VERSION as SHEET_VERSION, COMPONENTS, FORMULAS, REASONS
 PROVIDER = 'literature.a105.calibration_recovery'
-VERSION = 'literature_calibration_recovery_record_v1'
+VERSION = 'literature_calibration_recovery_record'
 NAMESPACE = 'literature_calibration_recovery_cells'
 REQUESTED = 'requested_calibration_recovery_components'
 VIEW = 'calibration_recovery_components'

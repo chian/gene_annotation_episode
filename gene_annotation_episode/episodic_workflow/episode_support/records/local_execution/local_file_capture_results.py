@@ -17,7 +17,7 @@ ORIGIN = {'content_location': 'current_resource_filesystem',
     'read_consistency': 'pinned_regular_file_stream_not_atomic_snapshot',
     'writer_closure': 'not_established'}
 _FAILURE_SCHEMA = {**obj({'code': deepcopy(_TEXT)}), 'type': ['object', 'null']}
-OUTCOME_SCHEMA = obj({'version': {'type': 'string', 'const': 'execution_file_source_outcome_v1'},
+OUTCOME_SCHEMA = obj({'version': {'type': 'string', 'const': 'execution_file_source_outcome'},
     'operation': {'type': 'string', 'enum': ['execution.results.collect', 'execution.results.status']},
     'job': obj({'state': deepcopy(_TEXT), 'returncode': {'type': ['integer', 'null']},
         'failure_code': {'type': ['string', 'null']}}),

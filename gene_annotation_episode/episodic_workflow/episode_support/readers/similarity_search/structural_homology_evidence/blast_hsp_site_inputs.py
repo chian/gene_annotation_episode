@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_alignment.minimap2_grading_inputs import require_finite_json
 
 
-SHEET_SCHEMA = "blast_hsp_column_sheet_v1"
+SHEET_SCHEMA = "blast_hsp_column_sheet"
 COUNT_FIELDS = ("window_alignment_columns", "paired_columns", "identical_pairs",
                 "substituted_pairs", "query_gap_columns", "reference_gap_columns",
                 "query_paired_units", "reference_paired_units")

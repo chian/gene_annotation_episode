@@ -3,7 +3,7 @@
 from jsonschema import Draft202012Validator
 import pytest
 
-from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.sequence_homology_evidence import bvbrc_proteome_bundle_contracts as c
+from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.sequence_homology_evidence import bvbrc_proteome_native_bundle_contracts as c
 from gene_annotation_episode.episodic_workflow.episode_support.forms.service_calls.bvbrc_appservice_contracts import contract_schema
 from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.sequence_homology_evidence.bvbrc_proteome_data_contracts import proteome_data_schema
 from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.sequence_homology_evidence.bvbrc_proteome_native_contracts import native_schema
@@ -59,8 +59,8 @@ def test_exact_finite_codes_and_required_input_mapping():
             required_input = value.get("properties", {}).get("required_input", {})
             enums.update(required_input.get("enum", []))
     assert enums == set(c.PURE_REQUIRED_INPUT_KINDS)
-    error = c.ProteomeBundleError("proteome_parameters_invalid", "/field")
+    error = c.ProteomeNativeBundleError("proteome_parameters_invalid", "/field")
     assert error.code == str(error) == "proteome_parameters_invalid" and error.path == "/field"
     with pytest.raises(ValueError, match="unknown_proteome_bundle_failure_code"):
-        c.ProteomeBundleError("arbitrary error prose")
+        c.ProteomeNativeBundleError("arbitrary error prose")
 

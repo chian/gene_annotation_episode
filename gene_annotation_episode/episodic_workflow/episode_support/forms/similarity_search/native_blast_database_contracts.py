@@ -46,7 +46,7 @@ DATABASE_IDENTITY_SCHEMA = _object({"namespace": _STR, "value": _STR, "version":
     "preparation_type": {"enum": ["sequence_database", "rps", "delta", "unknown"]}, "source": PROVENANCE_SCHEMA})
 SOFTWARE_SCHEMA = _object({"executable": _ABS, "sha256": _SHA, "engine_version": _nullable(_STR)})
 PREPARED_DATABASE_SCHEMA = _object({
-    "version": {"const": "native_blast_prepared_database_manifest_v1"}, "database_key": _KEY,
+    "version": {"const": "native_blast_prepared_database_manifest"}, "database_key": _KEY,
     "kind": {"enum": ["blast_protein_sequence", "rps_profile", "delta_profile", "vdb"]},
     "identity": DATABASE_IDENTITY_SCHEMA, "native_paths": _array(_ABS, minItems=1, uniqueItems=True),
     "files": _array(_FILE, minItems=1),
@@ -73,7 +73,7 @@ MODEL_SCHEMA = {"type": "object", "properties": {
     "function_priors": _nullable({"type": "object", "additionalProperties": {"type": "number", "minimum": 0}})},
     "additionalProperties": False}
 NATIVE_BLAST_DATABASE_JOB_SCHEMA = _object({
-    "version": {"const": "native_blast_database_job_v1"}, "program": {"enum": list(PROGRAMS)},
+    "version": {"const": "native_blast_database_job"}, "program": {"enum": list(PROGRAMS)},
     "mode": {"const": "database"}, "software": SOFTWARE_SCHEMA, "environment": _ENV,
     "inputs": _array(_object({"input_key": _KEY,
         "role": {"enum": ["query_sequence", "query_msa", "query_pssm", "metadata"]},
@@ -92,7 +92,7 @@ NATIVE_BLAST_DATABASE_REQUESTED_JOB_SCHEMA = _object({"argv": _array(_STR, minIt
 IDENTITY_SCHEMA = _object({**{key: _STR for key in ("run_id", "episode_id", "resource_id", "operation_key")},
     **{key: _SHA for key in ("attempt_id", "assignment_sha256", "requested_job_sha256", "submission_token")},
     "execution_id": _nullable(_STR)})
-PLAN_SCHEMA = _object({"version": {"const": "native_blast_database_run_plan_v1"}, "identity": IDENTITY_SCHEMA,
+PLAN_SCHEMA = _object({"version": {"const": "native_blast_database_run_plan"}, "identity": IDENTITY_SCHEMA,
     "requested_job": NATIVE_BLAST_DATABASE_REQUESTED_JOB_SCHEMA, "attempt_directory": _ABS,
     "input_paths": {"type": "object", "additionalProperties": _ABS},
     "database_paths": {"type": "object", "additionalProperties": _array(_ABS, minItems=1)},
@@ -658,7 +658,7 @@ _ARTIFACT_SCHEMA = _object({"artifact_key": _KEY, "input_key": _nullable(_KEY), 
     "relative_path": _STR, "format": _STR, "fields": _array({"enum": sorted(TABULAR_FIELDS)}, uniqueItems=True),
     "delimiter": _nullable({"type": "string", "minLength": 1, "maxLength": 1}), "sha256": _SHA, "size_bytes": _INT,
     "content_assessment": {"const": "not_parsed"}})
-NATIVE_BLAST_DATABASE_BUNDLE_SCHEMA = _object({"version": {"const": "native_blast_database_bundle_v1"},
+NATIVE_BLAST_DATABASE_BUNDLE_SCHEMA = _object({"version": {"const": "native_blast_database_bundle"},
     "identity": IDENTITY_SCHEMA, "plan": PLAN_SCHEMA, "requested_job": NATIVE_BLAST_DATABASE_REQUESTED_JOB_SCHEMA,
     "program": {"enum": list(PROGRAMS)}, "mode": {"const": "database"},
     "software": _object({"selected": SOFTWARE_SCHEMA, "observed_sha256": _nullable(_SHA), "version_source": _nullable(PROVENANCE_SCHEMA)}),

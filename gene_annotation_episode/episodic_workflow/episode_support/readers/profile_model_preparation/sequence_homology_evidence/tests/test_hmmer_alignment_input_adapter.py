@@ -70,7 +70,7 @@ def forbidden(*args, **kwargs):
     (ORACLE / "afa_auto_dna.input", "afa", "DNA", 2, 12,
      "824a8ce36203927eafe75d6c6b8be163c47c07f3423f588d5f434bd0b89af645"),
 ])
-def test_v01_retained_native_operands_share_b1_enrichment_and_calculator(path, fmt, alphabet, count, width, digest):
+def test_retained_native_operands_share_b1_enrichment_and_calculator(path, fmt, alphabet, count, width, digest):
     content = path.read_bytes()
     assert hashlib.sha256(content).hexdigest() == digest
     parsed = read(content, fmt, alphabet)
@@ -116,7 +116,7 @@ def test_v01_retained_native_operands_share_b1_enrichment_and_calculator(path, f
     (b"", "afa"), (b" \t\r\n", "afa"), (b">a\nACGT\n", "afa"),
     (b"# STOCKHOLM 1.0\na AC\n//\n", "stockholm"),
 ])
-def test_v03_unknown_alphabet_never_runs_placeholder_reader(monkeypatch, content, fmt):
+def test_unknown_alphabet_never_runs_placeholder_reader(monkeypatch, content, fmt):
     monkeypatch.setattr(data, "_decoded_alignment_records", forbidden)
     result = read(content, fmt, None)
     assert result["records"] == [] and result["population"]["decoded_count"] is None
@@ -127,7 +127,7 @@ def test_v03_unknown_alphabet_never_runs_placeholder_reader(monkeypatch, content
     assert input_decoding_local_valid(result["input_decoding"], alignment=None, settings={"--informat": fmt})
 
 
-def test_v03_known_zero_and_a2m_null_geometry_are_distinct():
+def test_known_zero_and_a2m_null_geometry_are_distinct():
     empty = read((ORACLE / "afa_empty_file.input").read_bytes())
     assert empty["records"] == [] and empty["population"]["decoded_count"] == 0
     assert empty["population"]["complete"] and empty["input_decoding"]["reader_state"] == "complete"
@@ -143,7 +143,7 @@ def test_v03_known_zero_and_a2m_null_geometry_are_distinct():
 
 @pytest.mark.parametrize("field,value,code", [("sha256", "0" * 64, "occurrence_digest_mismatch"),
                                              ("size_bytes", 999, "occurrence_size_mismatch")])
-def test_v03_unbound_bytes_gain_no_authenticated_context(monkeypatch, field, value, code):
+def test_unbound_bytes_gain_no_authenticated_context(monkeypatch, field, value, code):
     content = (ORACLE / "afa_auto_dna.input").read_bytes()
     selected = occurrence(content)
     selected[field] = value
@@ -154,7 +154,7 @@ def test_v03_unbound_bytes_gain_no_authenticated_context(monkeypatch, field, val
     assert result["population"]["decoded_count"] is None and code in {i["code"] for i in result["issues"]}
 
 
-def test_v03_multiple_selected_alphabets_stop_before_probe_or_decoder(monkeypatch):
+def test_multiple_selected_alphabets_stop_before_probe_or_decoder(monkeypatch):
     monkeypatch.setattr(data, "infer_hmmer_alignment_alphabet", forbidden)
     monkeypatch.setattr(data, "_decoded_alignment_records", forbidden)
     result = data.populate_hmmer_alignment_preparation_sheet(operation={"program": "alimask",
@@ -163,7 +163,7 @@ def test_v03_multiple_selected_alphabets_stop_before_probe_or_decoder(monkeypatc
     assert [i["code"] for i in result["issues"]] == ["operation_invalid"]
 
 
-def test_v03_output_missing_handoff_and_malformed_present_handoff():
+def test_output_missing_handoff_and_malformed_present_handoff():
     content = b">a\nACGT\n"
     args = {"declared_format": "afa", "occurrence": occurrence(content, direction="output", role="masked_alignment"),
             "engine_version": "3.4"}
@@ -179,7 +179,7 @@ def test_v03_output_missing_handoff_and_malformed_present_handoff():
     assert "source_alphabet" not in structural["records"][0]
 
 
-def test_v05_aliases_empty_names_and_header_only_rows_preserve_positions():
+def test_aliases_empty_names_and_header_only_rows_preserve_positions():
     content = b"3 3\n          A?O\n          GCO\nwith spaceACT\n"
     result = read(content, "phylip")
     rows = result["records"][0]["rows"]
@@ -194,7 +194,7 @@ def test_v05_aliases_empty_names_and_header_only_rows_preserve_positions():
 
 
 @pytest.mark.parametrize("mutation", ["row_copy", "event_raw", "name_hex", "segment_span", "gap_source"])
-def test_v05_saved_operand_tampering_is_rejected(mutation):
+def test_saved_operand_tampering_is_rejected(mutation):
     content = (EMISSIONS / "a2m_insertions/emitted.out").read_bytes()
     result = sheet(content, "a2m", "RNA")
     assert saved_alignment_decoding_valid(result)
@@ -213,7 +213,7 @@ def test_v05_saved_operand_tampering_is_rejected(mutation):
     assert not saved_alignment_decoding_valid(result)
 
 
-def test_v05_selex_reset_overlap_and_native_ok_invalid_phylips_geometry():
+def test_selex_reset_overlap_and_native_ok_invalid_phylips_geometry():
     reset = read(b"a AC\n\nb GT\n", "selex")
     record = reset["records"][0]
     assert record["native_decoding"]["next_byte_offset"] < record["locator"]["byte_end"]
@@ -227,7 +227,7 @@ def test_v05_selex_reset_overlap_and_native_ok_invalid_phylips_geometry():
     assert result["input_decoding"]["reader_state"] == "invalid"
 
 
-def test_v06_valid_first_record_and_later_error_keep_independent_probe_extent():
+def test_valid_first_record_and_later_error_keep_independent_probe_extent():
     first = (EMISSIONS / "aligned_phylip/emitted.out").read_bytes()
     # An authored later-record error; retained first-record bytes are unchanged.
     content = first + b"broken\nabcdefghijACGUACGUACGU\n"
@@ -263,7 +263,7 @@ def _annotation_diagnostic_copy(tag, payload):
 
 @pytest.mark.parametrize("tag", ["RF", "MM", "CS", "SS", "SA"])
 @pytest.mark.parametrize("payload", [b"\x00", b"\xff", b"\xc3\xa9"])
-def test_v07_byte_qualified_annotations_keep_successful_sequence_geometry(tag, payload):
+def test_byte_qualified_annotations_keep_successful_sequence_geometry(tag, payload):
     content = _annotation_diagnostic_copy(tag, payload)
     result = read(content, "selex", "RNA")
     record = result["records"][0]
@@ -295,7 +295,7 @@ def test_v07_byte_qualified_annotations_keep_successful_sequence_geometry(tag, p
     assert reconstruct_alimask_model_map(record, settings={"--informat": "selex", "--rna": True, "--wnone": True})["state"] == "present"
 
 
-def test_v07_repeated_mm_keeps_effective_value_and_every_fragment():
+def test_repeated_mm_keeps_effective_value_and_every_fragment():
     result = read(b"#=MM x\x00x\n#=MM m..\na    ACG\n", "selex")
     record = result["records"][0]
     assert data.annotation(record, "MM") == "m.."

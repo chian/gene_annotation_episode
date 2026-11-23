@@ -1,5 +1,5 @@
 """The commission of the source relevance assessment child (the search). The parent states what the child takes in its
-own assignment: the search assignment ``search_assignment_v1``: ONE search, ``search_query_ref``, the reference of a
+own assignment: the search assignment ``search_assignment``: ONE search, ``search_query_ref``, the reference of a
 record this episode wrote (the query text itself never travels: the child reads the record through custody and runs
 the provider search for it), with the records that give the question its context, the commissioned literature task,
 the proposed annotation, the A108 components the parent wants returned, the scope and the records the child reads.
@@ -40,7 +40,7 @@ def msg_to_child(slot, arguments, summary):
     if slot != 'source_relevance_assessment':
         raise LookupError('no_such_child_slot:' + slot)
     assignment = summary['literature_assignment']
-    child = {'version': 'search_assignment_v1',
+    child = {'version': 'search_assignment',
              'question_context_refs': assignment['question_context_refs'],
              'search_query_ref': arguments['search_query_ref'],
              'literature_task': summary['task'], 'proposed_annotation_ref': summary['proposed_annotation_ref'],

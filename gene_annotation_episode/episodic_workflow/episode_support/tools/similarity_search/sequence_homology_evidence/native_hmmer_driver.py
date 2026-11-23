@@ -62,7 +62,7 @@ def _digest_file(path):
 def _validate_plan(value):
     plan = finite_json_copy(value)
     if (type(plan) is not dict or set(plan) != {"version", "identity", "requested_job", "attempt_directory", "policy"}
-            or plan["version"] != "native_hmmer_run_plan_v1"):
+            or plan["version"] != "native_hmmer_run_plan"):
         raise ValueError("native_hmmer_run_plan_required")
     identity = plan["identity"]
     keys = {"run_id", "episode_id", "resource_id", "execution_id", "attempt_id", "operation_key", "requested_job_sha256"}
@@ -244,11 +244,11 @@ def run_native_hmmer(plan) -> dict:
             raise ValueError("native_hmmer_unsealed_attempt_execution_uncertain")
         saved = _read_json(manifest_path)
         if (saved.get("identity") != plan["identity"] or saved.get("requested_job") != request
-                or saved.get("version") != "native_hmmer_bundle_v1"):
+                or saved.get("version") != "native_hmmer_bundle"):
             raise ValueError("native_hmmer_sealed_manifest_identity_conflict")
         return validate_native_hmmer_bundle_files(saved, root)
     _atomic_new(owner, plan)
-    bundle = {"version": "native_hmmer_bundle_v1", "identity": plan["identity"],
+    bundle = {"version": "native_hmmer_bundle", "identity": plan["identity"],
         "requested_job": request, "program": job["program"], "mode": job["mode"],
         "software": {"executable": job["software"]["executable"], "expected_sha256": job["software"]["sha256"],
                      "actual_sha256": None, "declared_engine_version": job["software"]["engine_version"]},

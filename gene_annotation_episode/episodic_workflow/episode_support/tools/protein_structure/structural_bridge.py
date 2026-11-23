@@ -18,7 +18,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.structura
 from gene_annotation_episode.episodic_workflow.episode_support.tools.protein_structure.structures import comparison_identity
 from gene_annotation_episode.episodic_workflow.episode_support.tools.protein_structure.structure_tables import STRUCTURE_BINDINGS
 
-VERSION = 'a102_received_saved_comparison_bridge_v2'
+VERSION = 'a102_received_saved_comparison_bridge'
 
 
 def publish_received_comparisons(store, context, *, input_authority, known_record_refs):

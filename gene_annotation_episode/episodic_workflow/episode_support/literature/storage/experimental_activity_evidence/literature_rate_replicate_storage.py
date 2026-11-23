@@ -17,7 +17,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence.literature_rate_replicate_calculations import populate_rate_replicate_contrast
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_rate_storage import LiteratureRateRepository
 PROVIDER = 'literature.a105.rate_replicate_population'
-VERSION = 'literature_rate_replicate_record_v1'
+VERSION = 'literature_rate_replicate_record'
 NAMESPACE = 'literature_rate_replicate_cells'
 REQUESTED = 'requested_rate_replicate_components'
 COMPONENTS = ('reference_rate', 'test_rate', 'rate_difference', 'retained_fraction', 'fractional_decrease', 'paired_sample_sd', 'difference_se', 'reference_sample_sd', 'test_sample_sd', 'reference_mean_se', 'test_mean_se')
@@ -69,11 +69,11 @@ def _group_schema(*, numeric):
 def _extraction_schema():
     table = obj({'source_ref': deepcopy(_TEXT), 'artifact_ref': deepcopy(_TEXT), 'text': deepcopy(_TEXT), 'representation': {'enum': list(REPRESENTATIONS)}, 'delimiter': {'enum': [',', '\t']}})
     row = obj({**_selection_schema()['properties'], 'sampling_unit': deepcopy(_TEXT), 'sampling_basis': {'enum': list(SAMPLING_BASES)}, 'observation_id': deepcopy(_TEXT), 'value': deepcopy(_NUMBER), 'raw_value': {'type': 'string'}, 'unit': {'enum': list(RATE_UNITS)}, 'status': {'enum': ['observed', 'not_detected', 'censored', 'unavailable']}, 'bound': {'enum': ['none', 'lt', 'le', 'gt', 'ge']}, 'approximate': {'type': 'boolean'}, 'origin': {'enum': list(ORIGINS)}, 'source': _source_row_schema()})
-    return obj({'version': {'const': 'a105_rate_replicates_v1'}, 'subject': deepcopy(_TEXT), 'experiment': deepcopy(_TEXT), 'table': table, 'rows': _array(row)})
+    return obj({'version': {'const': 'a105_rate_replicates'}, 'subject': deepcopy(_TEXT), 'experiment': deepcopy(_TEXT), 'table': table, 'rows': _array(row)})
 
 def _sheet_schema():
-    summary = obj({'version': {'const': 'a105_rate_replicate_summary_v1'}, 'axis': {'const': 'A105'}, 'scope': {'const': 'source_preparation_endpoint'}, 'subject': deepcopy(_TEXT), 'experiment': deepcopy(_TEXT), 'model': obj({'unit_model': {'enum': ['none', 'iid_units']}, 'sampling_basis_inferred': {'const': False}}), 'extraction': _extraction_schema(), 'groups': _array(_group_schema(numeric=True)), 'annotation_credit': {'type': 'null'}, 'assay_error_rate': {'type': 'null'}})
-    return obj({'version': {'const': 'a105_rate_replicate_contrast_v1'}, 'axis': {'const': 'A105'}, 'scope': {'const': 'source_preparation_endpoint'}, 'subject': deepcopy(_TEXT), 'experiment': deepcopy(_TEXT), 'reference': _selection_schema(), 'test': _selection_schema(), 'summary': summary, 'dependence': {'enum': ['unknown', 'independent', 'paired_units']}, 'pairing': obj({key: _array(_TEXT, unique=True) for key in ('shared_units', 'reference_only', 'test_only')}), 'cells': obj({name: _cell_schema(exact=name in ('rate_difference', 'retained_fraction', 'fractional_decrease')) for name in CONTRAST_COMPONENTS}), 'annotation_credit': {'type': 'null'}, 'assay_error_rate': {'type': 'null'}})
+    summary = obj({'version': {'const': 'a105_rate_replicate_summary'}, 'axis': {'const': 'A105'}, 'scope': {'const': 'source_preparation_endpoint'}, 'subject': deepcopy(_TEXT), 'experiment': deepcopy(_TEXT), 'model': obj({'unit_model': {'enum': ['none', 'iid_units']}, 'sampling_basis_inferred': {'const': False}}), 'extraction': _extraction_schema(), 'groups': _array(_group_schema(numeric=True)), 'annotation_credit': {'type': 'null'}, 'assay_error_rate': {'type': 'null'}})
+    return obj({'version': {'const': 'a105_rate_replicate_contrast'}, 'axis': {'const': 'A105'}, 'scope': {'const': 'source_preparation_endpoint'}, 'subject': deepcopy(_TEXT), 'experiment': deepcopy(_TEXT), 'reference': _selection_schema(), 'test': _selection_schema(), 'summary': summary, 'dependence': {'enum': ['unknown', 'independent', 'paired_units']}, 'pairing': obj({key: _array(_TEXT, unique=True) for key in ('shared_units', 'reference_only', 'test_only')}), 'cells': obj({name: _cell_schema(exact=name in ('rate_difference', 'retained_fraction', 'fractional_decrease')) for name in CONTRAST_COMPONENTS}), 'annotation_credit': {'type': 'null'}, 'assay_error_rate': {'type': 'null'}})
 
 def _selected_group(sheet, role):
     return next((group for group in sheet['summary']['groups'] if all((group[field] == sheet[role][field] for field in GROUP_FIELDS))), None)

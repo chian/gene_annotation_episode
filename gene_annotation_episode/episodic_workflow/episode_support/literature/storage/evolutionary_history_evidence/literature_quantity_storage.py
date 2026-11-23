@@ -21,7 +21,7 @@ REASONS = ("quantity_not_activity_rate", "reported_spread_unavailable", "zero_re
            "distinct_residual_variance_unreported", "invalid_propagated_variance",
            "positive_effect_variance_required", "known_variance_required",
            "observation_model_unspecified")
-# Keep saved v1 reasons admissible without rewriting their recorded meanings.
+# Keep saved reasons admissible without rewriting their recorded meanings.
 REASONS += ("correction_inputs_not_supplied", "primitive_covariance_not_supplied",
             "distinct_residual_variance_not_supplied")
 BINDINGS = {"reported_subject_ref": "reference", "experiment_ref": "reference",
@@ -32,8 +32,8 @@ BINDINGS = {"reported_subject_ref": "reference", "experiment_ref": "reference",
 class LiteratureQuantityRepository(LiteratureRateRepository):
     provider = PROVIDER
     components = COMPONENTS
-    record_version = "literature_source_quantity_record_v2"
-    readable_record_versions = ("literature_source_quantity_record_v1", record_version)
+    record_version = "literature_source_quantity_record"
+    readable_record_versions = (record_version,)
     binding_fields = tuple(BINDINGS)
 
     def populate(self, context, arguments, operation_key):

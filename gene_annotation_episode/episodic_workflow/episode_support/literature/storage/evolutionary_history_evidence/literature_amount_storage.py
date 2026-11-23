@@ -15,7 +15,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.storag
 
 
 PROVIDER = "literature.a105.amount_population"
-VERSION = "literature_amount_population_record_v1"
+VERSION = "literature_amount_population_record"
 RETURN_UNITS = {"(mg/ml)^2": "mg2/ml2", "(uM)^2": "uM2"}
 CONDITIONS = ("source_role_and_pair_interpretations", "linear_covariance_propagation",
     "first_order_covariance_propagation", "same_stock_rate_with_total_mass_denominator_required_before_application")

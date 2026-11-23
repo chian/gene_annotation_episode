@@ -66,9 +66,9 @@ def test_no_module_imports_another_episode_folder():
 
 
 def assignment():
-    return {'version': 'page_assignment_v1', 'source_ref': 'src_1', 'representation': 'original',
+    return {'version': 'page_assignment', 'source_ref': 'src_1', 'representation': 'original',
             'artifact_ref': 'art_1', 'question_context_refs': ['ctx_1'], 'prior_delivery_refs': ['dlv_1'],
-            'literature_task': {'version': 'literature_local_task_v1', 'evidence_axis': 'A108', 'credit_unit': 2,
+            'literature_task': {'version': 'literature_local_task', 'evidence_axis': 'A108', 'credit_unit': 2,
                                 'kind': 'verified_source_leads'},
             'proposed_annotation_ref': 'hypothesis_1', 'scope': {'subject_refs': ['sub_1']},
             'received_record_refs': ['src_1', 'art_1', 'hypothesis_1']}
@@ -113,13 +113,13 @@ def test_each_commission_names_the_page_the_selection_and_the_fields_it_wants():
         message = to_child.msg_to_child(slot, arguments[slot], summary)
         assert isinstance(message, ChildMessage) and message.objective == 'find_applicable_evidence'
         assert message.selection == ('literature_source_lead_dispositions',)
-        assert message.assignment['version'] == 'reading_assignment_v1'
+        assert message.assignment['version'] == 'reading_assignment'
         assert message.assignment['received_record_refs'] == ['src_1', 'art_1', 'hypothesis_1', 'ctx_1', 'dlv_1']
 
 
 def test_any_task_but_verified_source_leads_is_a_wrong_commission():
     from_parent = importlib.import_module(MODULE + '.messages.read_from_parent')
-    wrong = {**assignment(), 'literature_task': {'version': 'literature_local_task_v1', 'evidence_axis': 'A108',
+    wrong = {**assignment(), 'literature_task': {'version': 'literature_local_task', 'evidence_axis': 'A108',
                                                  'credit_unit': 2, 'kind': 'source_answer',
                                                  'answer_kind': 'assessment', 'source_refs': ['src_1']}}
     admitted = from_parent.ASSIGNMENT_FORM.admit(wrong, 'assignment')

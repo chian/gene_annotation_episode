@@ -18,8 +18,8 @@ from scipy.special import erfcx, log_ndtr
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.perturbation_evidence import literature_binding_calculations as native
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.perturbation_evidence.literature_experimental_contracts import ExperimentalContractError
 
-VERSION = "binding_model_sheet_v2"
-MODEL_VERSION = "known_normal_log_binding_v1"
+VERSION = "binding_model_sheet"
+MODEL_VERSION = "known_normal_log_binding"
 COMPONENTS = (
     "log_parameter_contrast", "log_contrast_noise_variance", "log_contrast_noise_sd",
     "source_profile_log_ratio", "source_signed_index",
@@ -59,7 +59,7 @@ def _validated_sheet(binding_sheet):
         _fail("unsupported_binding_sheet_version", "binding_sheet.version")
     extraction = {name: deepcopy(binding_sheet[name]) for name in native._EXTRACTION_KEYS
                   if name != "version"}
-    extraction["version"] = "binding_parameter_extraction_v1"
+    extraction["version"] = "binding_parameter_extraction"
     rebuilt = native.populate_binding_contrast(extraction)
     try:
         identical = native._serialized(rebuilt) == native._serialized(binding_sheet)

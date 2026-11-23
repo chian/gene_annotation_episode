@@ -24,7 +24,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.jobs.perturbation
 
 
 _LOCAL_PROVIDER = "episode.bvbrc_appservice_definition"
-_LOCAL_VERSION = "bvbrc_appservice_definition_extraction_v1"
+_LOCAL_VERSION = "bvbrc_appservice_definition_extraction"
 _UUID = re.compile(r"[a-fA-F0-9]{8}(?:-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}\Z")
 
 
@@ -116,7 +116,7 @@ class _Inputs:
             _require(producer.role == "launch_api", "original_task_mismatch")
         self.request = validate_request(assignment["request"])
         self.resource = assignment["resource_id"]
-        _require(assignment.get("version") == "api_service_assignment_v1"
+        _require(assignment.get("version") == "api_service_assignment"
                  and assignment.get("service") == "bvbrc_appservice", "original_task_mismatch")
         if self.handoff_ref is not None:
             self.task = self.handoff(handoff, producer)
@@ -694,7 +694,7 @@ class _Inputs:
         elif suffix == "download":
             obj = self.object(self.args["object"])
             resolved.update(original_task=self.task, object=obj, capability=self.download_capability(obj))
-        return validate_contract("BoundInputs", {"version": "bvbrc_appservice_bound_inputs_v1",
+        return validate_contract("BoundInputs", {"version": "bvbrc_appservice_bound_inputs",
             "original_job_owner": self.invocation, "request_sha256": digest(self.request),
             "selected_argument_sha256": digest(self.args), "definition": self.definition,
             "inputs": self.inputs, "objects": self.objects, "support_receipt_refs": list(dict.fromkeys(self.support)),

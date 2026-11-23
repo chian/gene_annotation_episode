@@ -5,7 +5,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.prompt
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_kinetic_summary_precision_storage import NAMESPACE, REQUESTED, VIEW, SCOPE, POPULATION
 
 def is_row(value):
-    return isinstance(value, Mapping) and value.get('row_version') == 'kinetic_summary_precision_return_v1' and (value.get('evaluation_scope') == SCOPE)
+    return isinstance(value, Mapping) and value.get('row_version') == 'kinetic_summary_precision_return' and (value.get('evaluation_scope') == SCOPE)
 
 def rows_from_values(value):
     if is_row(value):
@@ -39,7 +39,7 @@ def legacy_task_relevant(state):
 
 def lookup_relevant(value):
     result = value.get('result') if isinstance(value, Mapping) else None
-    return bool(list(rows_from_values(value))) or any_history(value) or (isinstance(result, Mapping) and (result.get('information_kind') == 'return_contract_information_v1' and result.get('source') == NAMESPACE or (result.get('information_kind') == 'operation_contract_information_v1' and result.get('operation') == 'literature.kinetic.populate')))
+    return bool(list(rows_from_values(value))) or any_history(value) or (isinstance(result, Mapping) and (result.get('information_kind') == 'return_contract_information' and result.get('source') == NAMESPACE or (result.get('information_kind') == 'operation_contract_information' and result.get('operation') == 'literature.kinetic.populate')))
 
 def any_history(value):
     if isinstance(value, Mapping):
@@ -115,7 +115,7 @@ def sanitize_private(value, bindings):
 def state_view(state, lookup_results=()):
     shown = sanitize_private(state, state.get('literature_summary_precision_receipt_bindings', {}))
     if any((lookup_relevant(v) for v in lookup_results)):
-        shown['literature_kinetic_summary_precision_work'] = {'version': 'literature_summary_precision_task_v1'}
-    if any((isinstance(v, Mapping) and isinstance(v.get('result'), Mapping) and (v['result'].get('information_kind') == 'operation_contract_information_v1') and (v['result'].get('operation') == 'literature.kinetic.populate') for v in lookup_results)):
+        shown['literature_kinetic_summary_precision_work'] = {'version': 'literature_summary_precision_task'}
+    if any((isinstance(v, Mapping) and isinstance(v.get('result'), Mapping) and (v['result'].get('information_kind') == 'operation_contract_information') and (v['result'].get('operation') == 'literature.kinetic.populate') for v in lookup_results)):
         shown['literature_kinetic_union_contract_work'] = True
     return shown

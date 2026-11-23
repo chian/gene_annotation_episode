@@ -129,7 +129,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_transport_response_direction import select_transport_effect
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_transport_planar_bilayer_converted_v1'
+VERSION = 'a105_transport_planar_bilayer_converted'
 CRITERIA_MAP = {'background_alternatives': ('protein_free_control',), 'membrane_system': ('bilayer_integrity', 'protein_free_control', 'purified_protein'),
                 'attribution_supported': ('protein_free_control', 'blocker_control'), 'calibration_applicability': ('signal_over_noise',),
                 'condition_scope': ('purified_protein',), 'transport_driving_force': ('solutions_stated', 'driving_force_correction'),

@@ -61,7 +61,7 @@ def populated():
 
 def covariance(fix, matrix=None):
     first = read(fix)
-    value = {'version': 'a105_transport_covariance_v1', 'primitive_order': list(PRIMITIVE_ORDER), 'primitive_measurement_keys': [first['measurement_keys'][r] for r in PRIMITIVE_ORDER], 'primitive_units': ['uM'] * 3, 'covariance': matrix if matrix is not None else [[1.0, 0.25, 0.0], [0.25, 4.0, 0.0], [0.0, 0.0, 9.0]], 'origin': 'synthetic'}
+    value = {'version': 'a105_transport_covariance', 'primitive_order': list(PRIMITIVE_ORDER), 'primitive_measurement_keys': [first['measurement_keys'][r] for r in PRIMITIVE_ORDER], 'primitive_units': ['uM'] * 3, 'covariance': matrix if matrix is not None else [[1.0, 0.25, 0.0], [0.25, 4.0, 0.0], [0.0, 0.0, 9.0]], 'origin': 'synthetic'}
     fix[1][COVARIANCE] = {'artifact_ref': 'artifact_' + '4' * 24, 'content': json.dumps(value).encode()}
     fix[0]['covariance_source_ref'] = COVARIANCE
     return value
@@ -74,7 +74,7 @@ def test_all_unknown_exact_contract_and_no_mutation_or_original_km_read():
     before = deepcopy(fix[:3])
     parsed = read(fix)
     assert set(parsed) == {'version', 'source_ref', 'source_kind', 'primitive_order', 'values', 'curve_keys', 'measurement_keys', 'primitive_observations', 'curve_contexts', 'covariance', 'covariance_origin', 'variance_status', 'observation_model', 'model_witnesses', 'source_refs', 'km_quantity'}
-    assert parsed['version'] == 'a105_transport_inputs_v1'
+    assert parsed['version'] == 'a105_transport_inputs'
     assert parsed['primitive_order'] == list(PRIMITIVE_ORDER)
     for field in ('values', 'curve_keys', 'measurement_keys', 'primitive_observations', 'curve_contexts'):
         assert parsed[field] == dict.fromkeys(PRIMITIVE_ORDER)

@@ -48,15 +48,15 @@ def _allocation(assignment, policy):
 
 def _input_control(receipt, file, *, owner):
     require(type(receipt) is dict and set(receipt) == {"version", "binding", "witness_records"}
-            and receipt["version"] == "flux_balance_input_binding_receipt_v1"
+            and receipt["version"] == "flux_balance_input_binding_receipt"
             and type(receipt["witness_records"]) is list, "fba_input_control_invalid")
     binding = receipt["binding"]
-    require(type(binding) is dict and binding.get("version") == "flux_balance_input_binding_v1"
+    require(type(binding) is dict and binding.get("version") == "flux_balance_input_binding"
             and all(binding.get(key) == owner[key] for key in ("run_id", "episode_id", "assignment_sha256")),
             "fba_input_control_owner_mismatch")
     file = validate_flux_balance_record("File", file)
     raw = canonical(receipt).encode("utf-8")
-    require(file["format"] == "flux_balance_input_binding_receipt_v1"
+    require(file["format"] == "flux_balance_input_binding_receipt"
             and file["sha256"] == hashlib.sha256(raw).hexdigest() and file["size_bytes"] == len(raw)
             and file["artifact_ref"] == "artifact_" + file["sha256"], "fba_input_control_identity_mismatch")
     return file, raw
@@ -64,7 +64,7 @@ def _input_control(receipt, file, *, owner):
 
 def _environment(plan):
     return (plan["environment_binding"]["realized_environment"]
-            if plan["version"] == "flux_balance_run_plan_v2" else plan["requested_job"]["environment"])
+            if "environment_binding" in plan else plan["requested_job"]["environment"])
 
 
 def _invoke(plan, file):
@@ -106,7 +106,7 @@ def _selected_local_controls(compiled_selection, operation_key, *, run_id, episo
     selection = compiled_selection.get("native_flux_balance_execution")
     environment = bind_flux_balance_environment(request, execution_id=str(handle.path),
         attempt_directory=str(root / ATTEMPT_DIRECTORY_NAME), selection=selection)
-    plan = {"version": "flux_balance_run_plan_v2" if selection is not None else "flux_balance_run_plan_v1",
+    plan = {"version": "flux_balance_run_plan",
             "identity": owner, "requested_job": request, "attempt_directory": str(root / ATTEMPT_DIRECTORY_NAME),
             "policy": policy.to_dict(), "outputs": flux_balance_output_files(request["native_flux_balance"])}
     if selection is not None:
@@ -193,8 +193,8 @@ def local_flux_balance_plan(assignment, execution_id):
             and owner["execution_id"] == execution_id and plan["requested_job"] == request
             and root == _root(assignment, owner), "fba_original_attempt_mismatch")
     selection = assignment.get("native_flux_balance_execution")
-    require((selection is None and plan["version"] == "flux_balance_run_plan_v1")
-            or (selection is not None and plan["version"] == "flux_balance_run_plan_v2"
+    require((selection is None and "environment_binding" not in plan)
+            or (selection is not None and "environment_binding" in plan
                 and plan["environment_binding"]["selection"] == selection), "fba_environment_selection_invalid")
     invoke = read_json(confined_file(root, "invoke.json"))
     require(type(invoke) is dict, "fba_original_control_conflict")
@@ -234,11 +234,11 @@ def local_flux_balance_plan(assignment, execution_id):
         if started.exists():
             value = read_json(started)
             keys = {"plan_sha256", "started_at"} | ({"environment_observation_sha256"}
-                if plan["version"] == "flux_balance_run_plan_v2" else set())
+                if "environment_binding" in plan else set())
             require(owner_file.exists() and type(value) is dict and set(value) == keys
                     and value["plan_sha256"] == digest(plan) and type(value["started_at"]) is str
                     and bool(value["started_at"]), "fba_original_attempt_mismatch")
-            if plan["version"] == "flux_balance_run_plan_v2":
+            if "environment_binding" in plan:
                 require(type(value["environment_observation_sha256"]) is str
                         and re.fullmatch(r"[0-9a-f]{64}", value["environment_observation_sha256"]) is not None,
                         "fba_original_attempt_mismatch")

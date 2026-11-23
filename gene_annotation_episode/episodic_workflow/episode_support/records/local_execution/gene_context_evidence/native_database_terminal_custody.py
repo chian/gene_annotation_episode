@@ -21,7 +21,7 @@ def validate_native_database_resource(configuration, key):
     """Validate one configured native BLAST database deployment and its software bindings."""
     value = configuration[key]
     _require(isinstance(value, dict) and set(value) == {'version', 'producer', 'environment', 'bindings'}
-        and value['version'] == key + '_resource_v1'
+        and value['version'] == key + '_resource'
         and isinstance(value['producer'], dict) and set(value['producer']) == {'module_root'}
         and isinstance(value['environment'], dict)
         and all(isinstance(k, str) and k and isinstance(v, str) and '\0' not in k + v

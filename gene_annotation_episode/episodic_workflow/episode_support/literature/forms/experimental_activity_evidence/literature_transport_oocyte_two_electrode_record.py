@@ -53,7 +53,7 @@ does not judge it; the converter does. The constructors take ``support`` and def
 the extraction (the extraction always passes the model's answer).
 """
 
-VERSION = 'a105_transport_oocyte_two_electrode_record_v1'
+VERSION = 'a105_transport_oocyte_two_electrode_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'transport_oocyte_two_electrode'
 QUANTITIES = ('km', 'km_spread', 'fold_over_control', 'fold_over_control_spread', 'current', 'control_current', 'substrate_concentration', 'oocyte_count', 'batch_count')

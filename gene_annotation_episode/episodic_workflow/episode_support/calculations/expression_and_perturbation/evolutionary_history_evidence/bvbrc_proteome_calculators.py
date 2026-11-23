@@ -18,7 +18,7 @@ _IDENTITY = 'native_first_hsp_alignment_identity_fraction'
 _ENDPOINT = 'native_subject_endpoint_difference_fraction'
 _MATERIALIZED = {'table_field_block', 'published_association'}
 _SCOPE_KEYS = ('track_key', 'reference_row_ordinal', 'association_key', 'protein_key', 'report_key', 'query_ordinal', 'hit_ordinal', 'hsp_ordinal')
-_LEGACY = ('legacy_first_hsp_only', 'legacy_rounded_fraction', 'legacy_subject_endpoint_difference', 'legacy_zero_fallback_possible', 'native_category_not_orthology_probability', 'postfilter_cannot_recover_filtered_associations', 'dependence_not_independence')
+_CAVEATS = ('native_category_not_orthology_probability', 'postfilter_cannot_recover_filtered_associations', 'dependence_not_independence')
 _JOIN_REASONS = {'not_supplied': 'row_join_missing', 'unmatched': 'row_join_missing', 'ambiguous': 'row_join_ambiguous', 'conflicting': 'row_join_conflict'}
 
 def _unique(items):
@@ -194,7 +194,7 @@ def _track_components(track, rows, association_components, primary, sheet, refer
     if reference_count['state'] != 'value':
         no_published_reasons.extend(['denominator_unavailable', *reference_count['reason_codes']])
     no_published = _cell(state='missing_input', reasons=no_published_reasons) if no_published_reasons else _cell(reference_count['value'] - counts['observed_bound_reference_count'], fields=reference_count['source_fields'])
-    qualifications = list(_LEGACY)
+    qualifications = list(_CAVEATS)
     qualifications.extend((code for count in (reference_count, track['input_record_count']) for code in count['reason_codes']))
     qualifications.extend(complete_reasons)
     qualifications.extend((_JOIN_REASONS[row['subject_join_state']] for row in published if row['subject_join_state'] != 'joined'))
@@ -246,7 +246,7 @@ def calculate_native_components(sheet: dict, *, parameters: dict) -> dict:
             requirements.append(_requirement('row_join_missing', 'occurrence_mapping', scope=scope))
     requirements = _unique(requirements)
     diagnostics = _unique(diagnostics)
-    components = {'version': 'bvbrc_proteome_native_components_proposal_v1', 'formula_version': 'native_descriptive_components_v1', 'sheet_sha256': hashlib.sha256(sheet_bytes).hexdigest(), 'parameters': options, 'associations': associations, 'tracks': calculated_tracks, 'used_component_families': ['legacy_identity', 'legacy_subject_endpoint_difference', 'native_category', 'explicit_occurrence_membership', 'full_sequence_identity'], 'retained_unused_component_families': ['feature_function_assignments', 'feature_taxonomy', 'feature_families', 'genomic_or_layout_coordinates', 'directional_hsps'], 'requirements': requirements, 'diagnostics': diagnostics}
+    components = {'version': 'bvbrc_proteome_native_components_proposal', 'formula_version': 'native_descriptive_components', 'sheet_sha256': hashlib.sha256(sheet_bytes).hexdigest(), 'parameters': options, 'associations': associations, 'tracks': calculated_tracks, 'used_component_families': ['legacy_identity', 'legacy_subject_endpoint_difference', 'native_category', 'explicit_occurrence_membership', 'full_sequence_identity'], 'retained_unused_component_families': ['feature_function_assignments', 'feature_taxonomy', 'feature_families', 'genomic_or_layout_coordinates', 'directional_hsps'], 'requirements': requirements, 'diagnostics': diagnostics}
     partial = bool(requirements or diagnostics or any((row['diagnostics'] for row in associations)))
     result = {'status': 'partial' if partial else 'ok', 'value': components, 'requirements': deepcopy(requirements), 'diagnostics': deepcopy(diagnostics)}
     return validate_proteome_sheet_data('NativeComponentsResult', result)

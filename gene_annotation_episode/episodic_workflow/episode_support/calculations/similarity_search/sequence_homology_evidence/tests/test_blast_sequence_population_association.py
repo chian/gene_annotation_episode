@@ -1,4 +1,4 @@
-"""Numerical v3 examples on deliberately synthetic native-format reports."""
+"""Numerical population examples on deliberately synthetic native-format reports."""
 from copy import deepcopy
 import builtins
 import hashlib
@@ -85,9 +85,9 @@ def test_seven_programs_and_qualified_query_axes_preserve_native_facts(program, 
     args = sequence_inputs(program, query_kind)
     before = deepcopy(args)
     sheet = sequence.populate_blast_sequence_database_sheet(**args)
-    assert sheet["schema"] == sequence.SHEET_SCHEMA_V3
+    assert sheet["schema"] == sequence.SHEET_SCHEMA_POPULATION
     database, weights = assert_numbers(sequence.calculate_blast_sequence_database_components(sheet))
-    assert database["schema"] == grader.SHEET_SCHEMA_V3 and database["association_mode"] == "explicit_bindings_v2"
+    assert database["schema"] == grader.SHEET_SCHEMA_POPULATION and database["association_mode"] == "explicit_bindings_record_locator"
     assert args == before and sheet["search"] == before["search"]
     assert database["normalized_result"]["search"]["database"] == OPERAND
     assert database["normalized_result"]["search"]["request"] == {"db": OPERAND}
@@ -214,7 +214,7 @@ def test_delta_domain_stage_never_uses_sequence_population_context():
     assert out["status"] == "incompatible" and out["components"]["database_sheet"] is None
 
 
-def test_v3_preserves_existing_record_locators_and_quality_measurements():
+def test_population_preserves_existing_record_locators_and_quality_measurements():
     args = sequence_inputs()
     for i, row in enumerate(args["reference_metadata"]):
         row.update(source="sequences", native_pointer="", record_locator=dict(kind="fasta_record", record_ordinal=i),
@@ -226,9 +226,9 @@ def test_v3_preserves_existing_record_locators_and_quality_measurements():
     args["database_population_associations"] = None
     args["report_source"].pop("source_ref")
     old_sheet = sequence.populate_blast_sequence_database_sheet(**args)
-    assert old_sheet["schema"] == sequence.SHEET_SCHEMA_V2
+    assert old_sheet["schema"] == sequence.SHEET_SCHEMA_RECORD_LOCATOR
     old = sequence.calculate_blast_sequence_database_components(old_sheet)["components"]["database_sheet"]
-    # Locator source identities are the additive v3 source fact; all existing
+    # Locator source identities are the additive population source fact; all existing
     # association values and quality measurements remain unchanged.
     def without_new_source(value):
         if isinstance(value, list):
@@ -307,7 +307,7 @@ def test_public_builder_requires_explicit_reference_and_calculation_context():
             grader.build_database_sheet(**other)
 
 
-def test_v3_report_source_identity_is_preserved_and_missing_identity_disables_adjustment():
+def test_population_report_source_identity_is_preserved_and_missing_identity_disables_adjustment():
     args = sequence_inputs()
     database, _ = assert_numbers(calculate(args))
     assert database["normalized_result"]["source_locator"]["source_ref"] == "source:original-report"

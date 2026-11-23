@@ -43,7 +43,7 @@ carry None. The grader does not judge it; the converter does. The constructors t
 tests that do not go through the extraction (the extraction always passes the model's answer).
 """
 
-VERSION = 'a105_endpoint_nmr_record_v1'
+VERSION = 'a105_endpoint_nmr_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'endpoint_nmr'
 QUANTITIES = ('conversion', 'conversion_spread', 'control_conversion', 'net_conversion', 'product_concentration', 'endpoint_time', 'acquisition_duration',

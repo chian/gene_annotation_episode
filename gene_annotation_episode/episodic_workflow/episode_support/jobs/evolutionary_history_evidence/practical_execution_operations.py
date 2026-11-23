@@ -121,7 +121,7 @@ class LocalPracticalOperations:
             if not any(native_blast_utility_binding_accepts_job(row, job)
                     for row in self.configuration.get('native_blast_utility', [])):
                 suffix = '_variant' if job['version'] in {
-                    'native_blast_utility_job_v2', 'native_blast_utility_job_v3'} else ''
+                    'native_blast_preparation_utility_job', 'native_blast_vdb_utility_job'} else ''
                 raise ValueError('native_blast_utility_program_mode_software_molecule' + suffix + '_not_bound')
             if assignment.get('resource_kind') != 'local':
                 raise ValueError('native_blast_utility_local_resource_required')
@@ -292,7 +292,7 @@ class LocalPracticalOperations:
         from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.evolutionary_history_evidence.native_blast_utility_contracts import validate_native_blast_utility_bundle
         from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.evolutionary_history_evidence.native_blast_utility_driver import validate_native_blast_utility_bundle_files
         from gene_annotation_episode.episodic_workflow.episode_support.records.local_execution.evolutionary_history_evidence.native_file_receipts import _confined_file, _read_json
-        record = {'version': 'native_blast_utility_validation_v1', 'bundle': None,
+        record = {'version': 'native_blast_utility_validation', 'bundle': None,
             'bundle_sha256': None, 'files_validated': False, 'failure_code': 'sealed_bundle_unavailable'}
         root = Path(plan['attempt_directory'])
         try:
@@ -335,7 +335,7 @@ class LocalPracticalOperations:
         for selected in cls._utility_output_rows(plan, validation['bundle']):
             role = selected['role']
             if role in {'database_file', 'database_metadata'} or (
-                    plan['requested_job']['native_blast_utility']['version'] == 'native_blast_utility_job_v2'
+                    plan['requested_job']['native_blast_utility']['version'] == 'native_blast_preparation_utility_job'
                     and role not in {'stdout', 'stderr', 'native_blast_utility_bundle'}):
                 role += ':' + selected['relative_path']
             try:

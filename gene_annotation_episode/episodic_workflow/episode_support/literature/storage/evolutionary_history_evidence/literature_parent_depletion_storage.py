@@ -15,7 +15,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.calcul
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.evolutionary_history_evidence.literature_rate_storage import LiteratureRateRepository
 
 PROVIDER='literature.a105.parent_depletion_population'
-VERSION='literature_parent_depletion_record_v1'
+VERSION='literature_parent_depletion_record'
 NAMESPACE='literature_parent_depletion_cells'
 REQUESTED='requested_parent_depletion_components'
 

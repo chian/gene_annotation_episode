@@ -7,7 +7,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.storag
 
 
 def is_row(value):
-    return isinstance(value, Mapping) and value.get('evaluation_scope') == SCOPE and value.get('row_version') == 'endpoint_signal_return_v1' and 'component' in value
+    return isinstance(value, Mapping) and value.get('evaluation_scope') == SCOPE and value.get('row_version') == 'endpoint_signal_return' and 'component' in value
 
 
 def rows_from_values(value):
@@ -27,7 +27,7 @@ def rows_from_reports(reports):
 
 def task_relevant(state):
     return (bool(state.get('literature_assignment', {}).get(REQUESTED))
-        or state.get('literature_endpoint_signal_work', {}).get('version') == 'literature_endpoint_signal_task_v1'
+        or state.get('literature_endpoint_signal_work', {}).get('version') == 'literature_endpoint_signal_task'
         or any(rows_from_values((state.get('last_local_outcome'), state.get('child_reports'), state.get('current_report_update'))))
         or any(node.get('x-source') == NAMESPACE for node in (state.get('requested_form') or {}).get('properties', {}).values()))
 
@@ -36,8 +36,8 @@ def lookup_relevant(outcome):
     result = outcome.get('result', {}) if isinstance(outcome, Mapping) else {}
     if not isinstance(result, Mapping):
         return bool(list(rows_from_values(outcome)))
-    return (bool(list(rows_from_values(outcome))) or result.get('information_kind') == 'return_contract_information_v1'
-        and result.get('source') == NAMESPACE or result.get('information_kind') == 'operation_contract_information_v1'
+    return (bool(list(rows_from_values(outcome))) or result.get('information_kind') == 'return_contract_information'
+        and result.get('source') == NAMESPACE or result.get('information_kind') == 'operation_contract_information'
         and result.get('operation') == 'literature.figure.populate')
 
 
@@ -45,7 +45,7 @@ def endpoint_history_record(record):
     selection = record.get('selection') if isinstance(record, Mapping) else None
     arguments = selection.get('arguments') if isinstance(selection, Mapping) else None
     return (isinstance(selection, Mapping) and selection.get('tool') == 'literature.figure.populate'
-        and isinstance(arguments, Mapping) and arguments.get('version') == 'literature_figure_endpoint_signal_population_v1')
+        and isinstance(arguments, Mapping) and arguments.get('version') == 'literature_figure_endpoint_signal_population')
 
 
 def hidden_records(rows, records, bindings=None):
@@ -111,9 +111,9 @@ def render_received(parts, rows, *, section, table):
 def state_view(state, lookup_results=()):
     shown = sanitize_private(state, state.get('literature_endpoint_receipt_bindings', {}))
     if any(lookup_relevant(row) for row in lookup_results):
-        shown['literature_endpoint_signal_work'] = {'version': 'literature_endpoint_signal_task_v1'}
+        shown['literature_endpoint_signal_work'] = {'version': 'literature_endpoint_signal_task'}
     if any(isinstance(row, Mapping) and isinstance(row.get('result'), Mapping)
-            and row['result'].get('information_kind') == 'operation_contract_information_v1'
+            and row['result'].get('information_kind') == 'operation_contract_information'
             and row['result'].get('operation') == 'literature.figure.populate' for row in lookup_results):
         shown['literature_legacy_figure_contract_work'] = True
     return shown

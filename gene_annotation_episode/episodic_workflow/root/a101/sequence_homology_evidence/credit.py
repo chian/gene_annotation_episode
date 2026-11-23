@@ -64,7 +64,7 @@ class A101DifferentialCredit:
     yield_method = 'forecast'
 
     def as_record(self):
-        return {'kind': 'a101_differential_credit', 'version': 'a101_differential_credit_v7', 'axis': 'A101',
+        return {'kind': 'a101_differential_credit', 'version': 'a101_differential_credit', 'axis': 'A101',
                 'measurement': 'subscore_of_one_references_alignments_over_the_scope_regions',
                 'subscore_version': VERSION,
                 'candidates': 'product_from_database_search_functions_profile_family_reference_sequence',
@@ -368,19 +368,14 @@ def outcome_pending(summary, records, position):
 
 # What ``ceiling`` (and the library's ``test_ceiling``, ``msa_test_ceiling``, ``metacats_test_ceiling`` and
 # ``cluster_test_ceiling`` it calls) means for each action type the head offers. The forecast controller learns each
-# action's share of its ceiling only from ledger rows recorded under the same credit definition and the same version of
-# that action's ceiling (``yield_estimator.py``), so change an action's version whenever its ceiling's derivation changes,
-# and only that action's. Every offered action has one; an action without one raises
-# (``forecast_definition_missing_for_action``). The differential of a test is ONE pair's (the top two of the listed candidates
-# it measures: credit definition v7), which changed the ceiling of every action whose test can have a differential: v2 of
-# ``bvbrc_blast``, ``hmmer_profile_scan``, ``bvbrc_msa`` and ``bvbrc_metacats`` (one pair's difference added to the entries, no sum
-# over pairs), v5 of ``all_vs_all`` (the cluster test's bound with the top two's weaker evidence and each entry's own, minus the
-# dataset best; v4 summed over pairs). ``pairwise_blast`` measures one candidate, so it has no pair and keeps v1, as do ``reason``
-# and ``execute_selected_tool``. The shares of the old versions were learned under the pair sum and are not mixed with the new.
-CEILING_VERSIONS = {'reason': 'a101_ceiling_v1', 'execute_selected_tool': 'a101_ceiling_v1',
-                    'pairwise_blast': 'a101_ceiling_v1', 'hmmer_profile_scan': 'a101_ceiling_v2',
-                    'bvbrc_blast': 'a101_ceiling_v2', 'bvbrc_msa': 'a101_ceiling_v2',
-                    'bvbrc_metacats': 'a101_ceiling_v2', 'all_vs_all': 'a101_ceiling_v5'}
+# action's share of its ceiling only from ledger rows recorded under the same credit definition and the same name of
+# that action's ceiling (``yield_estimator.py``). Every offered action has one; an action without one raises
+# (``forecast_definition_missing_for_action``). The differential of a test is ONE pair's (the top two of the listed
+# candidates it measures).
+CEILINGS = {'reason': 'a101_ceiling', 'execute_selected_tool': 'a101_ceiling',
+            'pairwise_blast': 'a101_ceiling', 'hmmer_profile_scan': 'a101_ceiling',
+            'bvbrc_blast': 'a101_ceiling', 'bvbrc_msa': 'a101_ceiling',
+            'bvbrc_metacats': 'a101_ceiling', 'all_vs_all': 'a101_ceiling'}
 
 
 def ceiling(summary, records, action_type, arguments, ctx):

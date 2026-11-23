@@ -13,7 +13,7 @@ import math
 from gene_annotation_episode.episodic_workflow.episode_support.records.perturbation_evidence.domain import identity, obj
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.perturbation_evidence.literature_endpoint_signal_inputs import ALL_COMPONENTS, POINT_ORDER, endpoint_signal_population_schema, endpoint_signal_extraction_schema, covariance_source_schema, validate_endpoint_signal_extraction, _exact_schema, _nullable, _array, _enum, _const, _TEXT, _exact, _fraction, _schema_check
 
-VERSION='a105_endpoint_signal_components_v1'
+VERSION='a105_endpoint_signal_components'
 COMPONENTS=ALL_COMPONENTS
 _BASE=COMPONENTS[:5]
 FORMULAS=dict(zip(COMPONENTS,('s*(a-t)','s*(a-b)','s*(b-t)','(a-b)/(a-t)',

@@ -33,21 +33,21 @@ def rows_from_reports(reports):
 
 def task_relevant(state):
     assignment = state.get('literature_assignment', {})
-    if isinstance(assignment, Mapping) and (assignment.get('requested_compiled_assay_components') or assignment.get('requested_compiled_assay_components_v2')):
+    if isinstance(assignment, Mapping) and (assignment.get('requested_compiled_assay_components')):
         return True
-    if state.get('literature_compiled_assay_work', {}).get('version') == 'literature_compiled_assay_task_v1':
+    if state.get('literature_compiled_assay_work', {}).get('version') == 'literature_compiled_assay_task':
         return True
     outcome = state.get('last_local_outcome') or {}
-    if isinstance(outcome, Mapping) and isinstance(outcome.get('result'), Mapping) and outcome['result'].get('view') == 'compiled_assay_components' and outcome['result'].get('record_version') != 'literature_compiled_assay_record_v3':
+    if isinstance(outcome, Mapping) and isinstance(outcome.get('result'), Mapping) and outcome['result'].get('view') == 'compiled_assay_components' and outcome['result'].get('record_version') != 'literature_common_assessment_record':
         return True
     return any(not is_common_row(row) for row in rows_from_reports(state.get('child_reports', ())))
 
 
 def common_task_relevant(state):
     assignment = state.get('literature_assignment', {})
-    if isinstance(assignment, Mapping) and assignment.get('requested_compiled_assay_components_v3'):
+    if isinstance(assignment, Mapping) and assignment.get('requested_common_assessment_components'):
         return True
-    if state.get('literature_common_assessment_work', {}).get('version') == 'literature_common_assessment_task_v1':
+    if state.get('literature_common_assessment_work', {}).get('version') == 'literature_common_assessment_task':
         return True
     return any(is_common_row(row) for row in rows_from_values((state.get('last_local_outcome', {}),
         state.get('child_reports', ()), state.get('current_report_update', {}))))

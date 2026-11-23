@@ -7,7 +7,7 @@ once to the overall amount; support, conflict and unresolved relations survive.
 from copy import deepcopy
 from gene_annotation_episode.episodic_workflow.episode_support.records.sample_context_evidence.domain import ContractError, canonical, obj, validate_schema
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_grading import COMPONENTS as COUNT_COMPONENTS, DOMAIN_BY_TYPE, DOMAINS, UNIT, count_sets, missing_inputs_schema, observation_sets_schema, reference_schema, references_schema, relation_metadata, relation_schema, sets_from_relations, strings_schema
-VERSION = 'a108_across_observation_aggregation_v1'
+VERSION = 'a108_across_observation_aggregation'
 SCOPE = 'a108_across_observation_aggregation'
 COMPONENTS = (*DOMAINS, 'overall')
 

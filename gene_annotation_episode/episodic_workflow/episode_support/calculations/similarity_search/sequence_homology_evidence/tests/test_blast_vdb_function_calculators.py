@@ -15,7 +15,6 @@ import pytest
 
 from gene_annotation_episode.episodic_workflow.episode_support.calculations.similarity_search.sequence_homology_evidence import blast_vdb_function_calculators as calculator
 from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.sequence_homology_evidence import blast_vdb_function_inputs as inputs_module
-from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search import blast_vdb_inputs as v1
 from gene_annotation_episode.episodic_workflow.episode_support.calculations.similarity_search.sequence_homology_evidence import blast_vdb_calculators as base
 from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.sequence_homology_evidence.tests.test_blast_vdb_function_inputs import (
     whole_case, translated_case, feature_case, populate, census_for, explicit,
@@ -29,7 +28,7 @@ FROZEN = Path(__file__).resolve().parents[7] / "gene_annotation_episode/episodic
 
 
 def model(*, temperature=1, grouping="target_duplicates_only", unknown="qualify_separate", priors=None, census=None, scope="whole_sequence", namespace="fixture_function"):
-    return dict(version="vdb_function_kernel_v1", temperature_bits=temperature, grouping_model=grouping,
+    return dict(version="vdb_function_kernel", temperature_bits=temperature, grouping_model=grouping,
         unknown_source_dependency=unknown, function_priors=priors,
         census_selection=[] if census is None else [dict(assignment_scope=scope, namespace=namespace, census_key=census)])
 
@@ -85,7 +84,7 @@ def add_census_entity(census, template, *, key, sample, symbols=None, label=None
     row["parent_sequence_identity"] = {k: seq[k] for k in ("molecule", "sha256", "length")}
     census["entities"].append(row)
     census["identity_proofs"].append(dict(entity_key=key, sequence_source=census["source"], linkage_source=census["source"],
-        normalization="full_member_nt_v1", symbols=symbols))
+        normalization="full_member_nt", symbols=symbols))
     census["enumeration"]["reported_total"] += 1
 
 
@@ -456,7 +455,7 @@ def test_missing_census_and_feature_parent_proof_do_not_fabricate_correction():
     values, assignments = whole_case(); stratum, f = rows(calculate(populate(values, assignments)))
     assert f["A"]["representation_adjusted_function_weight"]["reason_code"] == "blast_vdb_function_census_missing"
     values = translated_case(); census = census_for(populate(values), "feature", extra=False)
-    census["identity_proofs"] = [p for p in census["identity_proofs"] if p["normalization"] != "full_member_nt_v1"]
+    census["identity_proofs"] = [p for p in census["identity_proofs"] if p["normalization"] != "full_member_nt"]
     result = calculate(populate(values, censuses=[census]), grouping="known_source_blocks", census=census["census_key"], scope="feature")
     c = result["census_results"][0]
     assert not c["correction_available"]

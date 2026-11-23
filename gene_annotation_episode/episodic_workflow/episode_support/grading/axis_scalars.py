@@ -3,7 +3,7 @@ from copy import deepcopy
 import math
 
 
-VERSION = 'signed_root_axis_scalar_mappings_v1'
+VERSION = 'signed_root_axis_scalar_mappings'
 AXIS = 'A102'
 
 

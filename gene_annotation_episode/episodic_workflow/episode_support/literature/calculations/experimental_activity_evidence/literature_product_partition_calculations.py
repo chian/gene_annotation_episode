@@ -2,7 +2,7 @@
 from fractions import Fraction
 import math
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_product_partition_inputs import validate_product_partition_extraction
-VERSION = 'a105_product_partition_components_v1'
+VERSION = 'a105_product_partition_components'
 COMPONENTS = ('partition_a_fraction', 'partition_b_fraction', 'selected_fraction_sum', 'selected_closure_deviation', 'partition_a_over_b')
 REASONS = ('source_measurement_unavailable', 'source_fraction_unit_unreported', 'unsupported_source_fraction_unit', 'censored_measurement', 'basis_unknown', 'basis_conflicting', 'incompatible_fraction_bases', 'same_preparation_unknown', 'same_preparation_conflicting', 'same_endpoint_unknown', 'same_endpoint_conflicting', 'shared_denominator_unknown', 'shared_denominator_conflicting', 'reused_source_observation', 'zero_denominator_fraction', 'numerical_model_range', 'qualification_unknown', 'qualification_conflicting')
 CONDITIONS = ('source_reported_fraction_scale', 'same_selected_preparation_and_endpoint', 'shared_selected_denominator', 'dependent_transforms_not_independent_evidence')

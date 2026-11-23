@@ -21,7 +21,7 @@ returns     every case the criterion can return, as (status, reason_code, when).
             as 'never' cannot occur for this criterion.
 """
 
-VERSION = 'a105_endpoint_ms_quant_criteria_v1'
+VERSION = 'a105_endpoint_ms_quant_criteria'
 UM_PER_UNIT = {'nM': 1.0e-3, 'uM': 1.0, 'mM': 1.0e3}      # FIXED_BY_DEFINITION: a concentration unit in micromolar.
 FRACTION_PER_UNIT = {'percent': 0.01, 'fraction': 1.0}      # FIXED_BY_DEFINITION: a percent is a hundredth.
 

@@ -2,7 +2,7 @@
 
 Standard library only, on purpose: the job stages this file and its plan beside the input, so it runs the same on a
 local resource and on a cluster that has Python and the BLAST+ programs and none of this repository. It decides
-nothing. It reads the plan (``blast_preparation_job_v1``, written by ``compile_preparation``), checks the staged
+nothing. It reads the plan (``blast_preparation_job``, written by ``compile_preparation``), checks the staged
 input against the plan's digest, runs the plan's argv steps in order, and writes one receipt, ``receipt.json``,
 last and atomically. The receipt is facts: what each step ran and returned, every produced file with its size and
 digest (computed here, where the files are), the native database summary, and for a mask the masked residues
@@ -118,7 +118,7 @@ def main(argv):
             return 2
     except (OSError, KeyError, ValueError, TypeError):
         return 2
-    receipt = {'version': 'blast_preparation_receipt_v1', 'plan_sha256': sha256_of(argv[1]), 'steps': [],
+    receipt = {'version': 'blast_preparation_receipt', 'plan_sha256': sha256_of(argv[1]), 'steps': [],
                'files': [], 'info': None, 'mask': None, 'input_verified': True}
     failed = False
     for step in plan['steps']:

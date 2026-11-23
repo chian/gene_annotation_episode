@@ -14,7 +14,7 @@ RECEIPT = b'service exit receipt'
 def _registered(store):
     identity = {'kind': 'systemd_user_service', 'unit': 'job.service', 'request_sha256': 'a' * 64}
     handle = native_target_handle(identity)
-    store.register_native_target({'version': 'native_event_registration_v1', 'handle': handle, 'run_id': 'run',
+    store.register_native_target({'version': 'native_event_registration', 'handle': handle, 'run_id': 'run',
                                   'owner_episode_id': 'episode', 'job_ref': 'job:1', 'registry_ref': 'registry:1',
                                   'resource_id': 'local', 'native_identity': identity})
     return handle
@@ -23,13 +23,13 @@ def _registered(store):
 def _publish(store, handle):
     digest = hashlib.sha256(RECEIPT).hexdigest()
     return store.publish_native_event(handle, {
-        'version': 'native_event_publication_v1', 'event': 'state_changed', 'cause': 'service_exit_receipt_committed',
+        'version': 'native_event_publication', 'event': 'state_changed', 'cause': 'service_exit_receipt_committed',
         'record_ref': 'native_event_record_' + digest[:24], 'receipt_sha256': digest,
         'occurred_at': datetime.now(timezone.utc).isoformat()}, receipt_bytes=RECEIPT)
 
 
 def _condition(handle, event='state_changed', after_cursor=0, reconsider_at=None):
-    return {'version': 'event_condition_v1', 'reconsider_at': reconsider_at,
+    return {'version': 'event_condition', 'reconsider_at': reconsider_at,
             'events': [{'handle': handle, 'event': event, 'after_cursor': after_cursor}]}
 
 

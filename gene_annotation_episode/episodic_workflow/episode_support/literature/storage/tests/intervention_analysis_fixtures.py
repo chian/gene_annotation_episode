@@ -41,7 +41,7 @@ def publication(args, result):
         digest = hashlib.sha256(raw).hexdigest()
         return dict(source_ref="source_" + char * 24, artifact_field="artifact_ref", artifact_ref="artifact_" + digest,
             sha256=digest, byte_count=len(raw))
-    selector = dict(version="bvbrc_appservice_result_selector_v1", endpoint="requested_projection",
+    selector = dict(version="bvbrc_appservice_result_selector", endpoint="requested_projection",
         requirements=[dict(requirement_id="native-genome", role="caller_selected_gto", required=True,
             declared_format=deepcopy(args["bundle"]["artifacts"][0]["declared_format"]),
             producer_rule_evidence=None, exact_object=None)],

@@ -14,7 +14,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.evolutionary_history_evidence.literature_partner_source_fields import _NUMBER, _relation, _unit_continuation
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.evolutionary_history_evidence.literature_rate_native_inputs import _field_contexts, _APPROX, _UPPER, _LOWER, _saved_number, _saved_witness
 
-VERSION = "a105_product_partition_inputs_v1"
+VERSION = "a105_product_partition_inputs"
 ROLES = ("a", "b")
 SOURCE_KINDS = ("primary_source", "retained_extraction", "synthetic_fixture")
 MEANINGS = ("subject", "organism", "construct", "preparation", "compound", "endpoint",

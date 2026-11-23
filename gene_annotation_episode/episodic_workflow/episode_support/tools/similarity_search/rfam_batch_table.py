@@ -60,7 +60,7 @@ class RfamBatchFileQuery(TypedDict):
 
 
 class RfamBatchFileInputIdentity(TypedDict):
-    version: Literal["rfam_batch_file_input_v1"]
+    version: Literal["rfam_batch_file_input"]
     expected_job_id: str
     submission_source_ref: str
     submitted_file_sha256: str
@@ -107,7 +107,7 @@ class RfamBatchQueryPopulation(TypedDict):
 
 
 class RfamBatchTableParseResult(TypedDict):
-    version: Literal["rfam_batch_tblout_parse_result_v1"]
+    version: Literal["rfam_batch_tblout_parse_result"]
     status: Literal["complete", "partial", "rejected", "unsupported"]
     format: str
     capture: dict | None
@@ -223,7 +223,7 @@ def validate_rfam_batch_file_input(input_identity, *, submitted_content: bytes) 
     code = "rfam_batch_input_invalid"
     identity = _finite(input_identity, code)
     _closed(identity, RfamBatchFileInputIdentity.__annotations__, code)
-    if (identity["version"] != "rfam_batch_file_input_v1"
+    if (identity["version"] != "rfam_batch_file_input"
             or not _job(identity["expected_job_id"])
             or not _text(identity["submission_source_ref"])
             or not _sha256(identity["submitted_file_sha256"])

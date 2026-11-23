@@ -11,7 +11,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.similarit
 
 
 def project_rfam_batch_table_result(parsed, calculation, *, projection, artifact_bindings):
-    if isinstance(parsed, dict) and parsed.get("version") == "rfam_batch_parse_result_v2":
+    if isinstance(parsed, dict) and parsed.get("version") == "rfam_batch_parse_result":
         from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.rfam_batch_infernal import project_rfam_infernal_result
         if parsed.get("representation") != "tblout":
             raise ContractError("rfam_projection_reference_conflict")
@@ -83,7 +83,7 @@ def project_rfam_batch_table_result(parsed, calculation, *, projection, artifact
         result.append({"record_key": keys[index], "query_occurrence_key": row["query_occurrence_key"],
             "family_accession": row.get("family_accession"), "strand": row["strand"],
             "measured": measured, "unavailable": unavailable})
-    return {"version": "rfam_selected_projection_v1", "source_ref": bindings["source_ref"],
+    return {"version": "rfam_selected_projection", "source_ref": bindings["source_ref"],
         "sheet_ref": bindings["sheet_ref"], "calculation_ref": bindings["calculation_ref"],
         "family": family, "selection": deepcopy(projection), "available_row_count": len(rows),
         "selected_row_count": len(result), "more_rows": len(result) < len(rows),

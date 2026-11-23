@@ -43,7 +43,7 @@ spans          source_ref -> {'locator', 'quote'}: the quoted source span behind
 """
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_spr_record import SUPPORTS, fact, point, unavailable   # support: see literature_spr_record (every stated value carries 'support'; the constructors default it to 'direct' for forms built outside the extraction)
 
-VERSION = 'a105_bli_record_v1'
+VERSION = 'a105_bli_record'
 EXPERIMENT_TYPE = 'bli'
 QUANTITIES = ('kd', 'kd_steady_state', 'kon', 'koff', 'response_max', 'kd_spread', 'fit_r_squared', 'loading_level', 'dissociation_time', 'replicate_count', 'partner_mass', 'baseline_noise')
 PREPARATION_KEYS = ('analyte_preparation_ref', 'immobilized_preparation_ref', 'sensor_ref', 'dataset_ref')

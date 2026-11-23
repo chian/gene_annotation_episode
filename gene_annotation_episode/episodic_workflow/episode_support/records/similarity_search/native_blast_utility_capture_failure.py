@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.jobs.similarity_s
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.sequence_homology_evidence.practical_execution_state import _immutable
 
 
-VERSION = "native_blast_utility_capture_failure_publication_v1"
+VERSION = "native_blast_utility_capture_failure_publication"
 FILENAME = "capture-failure-publication.json"
 QUALIFICATION_FAILURE = "native_blast_utility_input_population_unavailable"
 
@@ -30,7 +30,7 @@ def _publication(store, *, capture, selector, operational_failures):
     capture = _validate_saved(store, capture)
     _require(capture["bundle_validated"] and capture["source_ref"] is not None,
         "validated_capture_source_required")
-    _require(capture["original_bundle"]["operation"]["version"] == "blast_utility_operation_v3",
+    _require(capture["original_bundle"]["operation"]["version"] == "blast_vdb_utility_operation",
         "vdb_operation_required")
     try:
         qualified_utility_context(capture)

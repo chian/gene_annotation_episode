@@ -29,7 +29,7 @@ from gene_annotation_episode.state import Store
 ROOT = Path(__file__).resolve().parents[7]
 FIXTURES = ROOT / "gene_annotation_episode/episodic_workflow/episode_support/forms/sequence_masking/sequence_homology_evidence/tests/fixtures/masking_native"
 POLICY = {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4 * 1024 ** 3}
-LEGACY_MODES = (("dustmasker", "mask"), ("segmasker", "mask"),
+STANDARD_MODES = (("dustmasker", "mask"), ("segmasker", "mask"),
                 ("windowmasker", "mask"), ("windowmasker", "create_counts"))
 
 
@@ -51,7 +51,7 @@ def job_for(tmp_path, program="dustmasker", mode="mask", *, actual=False, fmt=No
     params = {k: None for k in op_schema["properties"]["requested_parameters"]["properties"]}
     fmt = fmt or ("ascii_statistics" if mode == "create_counts" else "interval")
     style = style or ("not_applicable" if mode == "create_counts" else "interval" if fmt == "interval" else "soft")
-    operation = {"version": "sequence_masking_operation_v1", "program": program, "mode": mode,
+    operation = {"version": "sequence_masking_operation", "program": program, "mode": mode,
         "engine_version": "1.0.0; package blast 2.17.0" if actual else "synthetic", "input_format": "fasta",
         "output_format": fmt, "masking_style": style, "parse_seqids": False, "requested_parameters": params}
     filename = ("window_reference.fa" if mode == "create_counts" else "protein.fa" if program == "segmasker"
@@ -67,7 +67,7 @@ def job_for(tmp_path, program="dustmasker", mode="mask", *, actual=False, fmt=No
         operands.append({"role": "statistics", "ordinal": 0, "path": str(stats), "format": "ascii_statistics", **pin(stats), "artifact_ref": None})
         binding = {"kind": "supplied", "statistics_occurrence_id": "supplied:reference:statistics:0",
             "reference_occurrence_ids": [], "producer_source_ref": None, "producer_attempt_id": None, "provenance": "unknown"}
-    return {"version": "native_blast_masking_job_v1", "operation": operation,
+    return {"version": "native_blast_masking_job", "operation": operation,
         "software": {"executable": str(binary), "sha256": pin(binary)["sha256"], "engine_version": operation["engine_version"]},
         "environment": {"LC_ALL": "C"}, "operands": operands, "operand_bindings": [], "statistics_binding": binding,
         "outputs": [{"role": "statistics" if mode == "create_counts" else "mask", "format": fmt, "relative_path": "selected.out"},
@@ -102,13 +102,13 @@ def assignment(plan):
 
 def target_for(plan):
     identity = plan["identity"]
-    return {"version": "execution_target_v1", "handle": "source_original615", "run_id": identity["run_id"],
+    return {"version": "execution_target", "handle": "source_original615", "run_id": identity["run_id"],
         "origin_episode_id": identity["episode_id"], "resource_kind": "local", "resource_id": identity["resource_id"],
         "execution_id": identity["execution_id"], "request_sha256": identity["requested_job_sha256"],
         "assignment": assignment(plan), "scope": {}}
 
 
-@pytest.mark.parametrize("program,mode", LEGACY_MODES)
+@pytest.mark.parametrize("program,mode", STANDARD_MODES)
 def test_exact_single_command_shared_schema_and_null_omission(tmp_path, program, mode):
     job = job_for(tmp_path, program, mode)
     assert Draft202012Validator(NATIVE_BLAST_MASKING_JOB_SCHEMA).is_valid(job)

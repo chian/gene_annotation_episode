@@ -16,7 +16,7 @@ import math
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.perturbation_evidence.literature_experimental_contracts import ExperimentalContractError
 
 
-VERSION = "a105_transport_response_v2"
+VERSION = "a105_transport_response"
 PRIMITIVE_ORDER = ("substrate_test", "substrate_reference", "km")
 COMPONENTS = ("substrate_test", "substrate_reference", "apparent_km",
               "test_saturation", "reference_saturation", "condition_response",

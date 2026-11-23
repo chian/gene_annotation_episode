@@ -33,7 +33,7 @@ def _selection(document, selection):
 def _cell(selection, field, unit, value=None, *, state='available', prefix='xmfa_',
           numerator=None, denominator=None, evidence=(), requirement_ids=()):
     return numeric_cell(value, state=state, unit=unit, origin='calculated',
-        population_id=selection['population_id'], method_id=prefix + field + '_v1',
+        population_id=selection['population_id'], method_id=prefix + field,
         numerator=numerator, denominator=denominator, uncertainty=None,
         evidence=_evidence(selection['evidence'], evidence), requirement_ids=requirement_ids)
 
@@ -112,7 +112,7 @@ def xmfa_alignment_components(document: dict, *, selection: dict,
     c.require(type(selected_pairs) is tuple and all(type(pair) is tuple for pair in selected_pairs), 'pairs_tuple_required')
     pairs = [list(pair) for pair in selected_pairs]
     c._pairs(pairs, selection['member_numbers'])
-    result = {'schema_version': 'mauve_xmfa_alignment_components_v1', 'document_id': document['document_id'],
+    result = {'schema_version': 'mauve_xmfa_alignment_components', 'document_id': document['document_id'],
         'status': 'ok', 'selection': selection, 'parameters': {'case_policy': case_policy, 'selected_pairs': pairs},
         'blocks': [], 'requirements': [], 'diagnostics': []}
     if selection['completeness'] != 'complete' or not selection['block_columns'] and document['completeness'] == 'unknown':
@@ -318,7 +318,7 @@ def xmfa_interval_coverage(document: dict, *, selection: dict,
     document, bindings = _operands(document, bindings)
     selection = _selection(document, selection)
     c.require(type(basis) is str and basis in c.BASES, 'coverage_basis_invalid')
-    result = {'schema_version': 'mauve_xmfa_coverage_components_v1', 'document_id': document['document_id'],
+    result = {'schema_version': 'mauve_xmfa_coverage_components', 'document_id': document['document_id'],
         'status': 'ok', 'selection': selection, 'parameters': {'basis': basis}, 'members': [],
         'requirements': [], 'diagnostics': []}
     _binding_reports(result, bindings)

@@ -45,7 +45,7 @@ def qualified(native=None, *, mode="genome", source=SOURCE):
                               [request[key] for key in operands], request_id=identity("minhash_rpc", request))
     parsed = parse_minhash_result(native, mode=mode, request=rpc,
                                   provenance={"kind": "explicit_synthetic_publication"})
-    grading = {"schema": "bvbrc_minhash_grading_v1", "request": request, "rpc_request": rpc,
+    grading = {"schema": "bvbrc_minhash_grading", "request": request, "rpc_request": rpc,
                "selector": {}, "parse_status": parsed["status"], "sheet": parsed["sheet"],
                "components": calculate_minhash_components(parsed["sheet"]), "diagnostics": parsed["diagnostics"]}
     return {"source_ref": source, "grading": grading}

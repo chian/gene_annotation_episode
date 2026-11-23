@@ -26,7 +26,7 @@ def test_all_selected_presets_retain_separate_identity(preset):
     sheet = build(preset=preset)
     assert sheet["preset"] == preset
     assert sheet["native_version"] == "2.31-r1302"
-    assert sheet["schema"] == "minimap2_placement_sheet_v1"
+    assert sheet["schema"] == "minimap2_placement_sheet"
     assert sheet["native_result"]["native_line"] == paf().rstrip("\n")
 
 

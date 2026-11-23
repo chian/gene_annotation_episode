@@ -73,7 +73,7 @@ def test_final_to_parent_returns_credit_and_finding_and_the_selected_facts():
 
 
 def _assignment(**changes):
-    value = {'version': 'practical_assignment_v1', 'assignment_id': 'a1', 'resource_id': 'local',
+    value = {'version': 'practical_assignment', 'assignment_id': 'a1', 'resource_id': 'local',
              'resource_kind': 'local', 'workspace': '/work/space', 'endpoint': 'usable_handoff',
              'requested_job': {'argv': ['/bin/true'], 'environment': {}},
              'progress_requirements': [

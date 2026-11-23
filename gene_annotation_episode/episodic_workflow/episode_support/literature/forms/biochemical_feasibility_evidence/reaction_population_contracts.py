@@ -17,7 +17,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.calcul
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.biochemical_feasibility_evidence.literature_reaction_inputs import LITERAL_FIELDS, reaction_population_schema, read_reaction_inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.biochemical_feasibility_evidence.literature_reaction_meanings import INPUT_VERSION as MEANINGS_INPUT_VERSION, RECORD_VERSION as MEANINGS_RECORD_VERSION, NAMESPACE as MEANINGS_NAMESPACE, BASES, MODEL_FIELDS, RESOURCE_FIELDS, DEMAND_FIELDS, direct_references as meaning_direct_references, publish_meanings, semantic_metadata, binding_references
 PROVIDER = 'literature.experimental.reaction'
-FORMULA_CODES = {name: 'reaction_' + name + '_v1' for name in COMPONENTS}
+FORMULA_CODES = {name: 'reaction_' + name for name in COMPONENTS}
 BINDINGS = {'assayed_subject_ref': ('molecule', 'reference'), 'construct_ref': ('construct', 'reference'), 'experiment_ref': ('experiment', 'reference'), 'numerator_ref': ('numerator', 'term'), 'denominator_ref': ('denominator', 'term'), 'endpoint_ref': ('endpoint', 'term'), 'condition_ref': ('condition', 'context'), 'resource_context_ref': ('resource_context', 'context')}
 SOURCE_KINDS = ('primary_source', 'retained_extraction', 'graph_extraction', 'synthetic_fixture')
 LITERAL_REFERENCE_TYPES = {'molecule': 'literature_result', 'construct': 'construct', 'experiment': 'assay'}
@@ -42,7 +42,7 @@ def literal_reference_role(record):
 
 def reaction_return_view_requirements():
     """Static contract metadata; no source lookup or scientific interpretation."""
-    return {'required_sheet_versions': {'literature_reaction_cells': 'literature_reaction_record_v2', 'literature_reaction_semantic_cells': MEANINGS_RECORD_VERSION}, 'detail': "The numerical and semantic return views require different saved sheet versions. A legacy numerical sheet has no saved semantic bindings. Inspect the actual sheet's Source version and select its matching recorded-fact view. A valid numerical return may include an empty semantic companion; a lone empty wrong view is rejected. Redelivery changes the representation of existing saved facts and cannot create semantic bindings. Source-supported meanings require an a110_source_reaction_measurements_v2 dataset or an a110_source_reaction_selection_v1 calculation, rather than another population of the same a110_source_reaction_measurements_v1 dataset."}
+    return {'required_sheet_versions': {'literature_reaction_cells': 'literature_reaction_record', 'literature_reaction_semantic_cells': MEANINGS_RECORD_VERSION}, 'detail': "The numerical and semantic return views require different saved sheet versions. A legacy numerical sheet has no saved semantic bindings. Inspect the actual sheet's Source version and select its matching recorded-fact view. A valid numerical return may include an empty semantic companion; a lone empty wrong view is rejected. Redelivery changes the representation of existing saved facts and cannot create semantic bindings. Source-supported meanings require an a110_source_reaction_meaning_measurements dataset or an a110_source_reaction_selection calculation, rather than another population of the same a110_source_reaction_measurements dataset."}
 
 def _metadata(extraction, sheet):
     ratio = extraction['calculation_inputs']['ratio']

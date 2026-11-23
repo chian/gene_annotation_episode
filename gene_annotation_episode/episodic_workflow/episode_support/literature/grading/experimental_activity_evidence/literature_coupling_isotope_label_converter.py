@@ -116,7 +116,7 @@ import math
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_assay_grading import INPUT_VERSION, ROLES, grade_assay
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_coupling_isotope_label_converted_v1'
+VERSION = 'a105_coupling_isotope_label_converted'
 CRITERIA_MAP = {'attribution_supported': ('unlabelled_control', 'back_exchange_control', 'label_position'),
                 'background_alternatives': ('spontaneous_labelling_control', 'control_label_level'), 'product_identity': ('product_identity',),
                 'calibration_applicability': ('label_purity', 'natural_abundance_correction'), 'stoichiometry': ('label_stoichiometry',),

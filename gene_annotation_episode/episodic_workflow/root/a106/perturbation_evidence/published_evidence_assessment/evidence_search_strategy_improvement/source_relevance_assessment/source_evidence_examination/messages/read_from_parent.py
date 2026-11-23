@@ -1,4 +1,4 @@
-"""What the parent (the search) gives: the page assignment ``page_assignment_v1`` (the ONE paper the search's picked hit
+"""What the parent (the search) gives: the page assignment ``page_assignment`` (the ONE paper the search's picked hit
 named, in one of its representations, with its artifact), the commissioned literature task (``verified_source_leads``,
 the only task), the proposed annotation, the Store scope of the commission and the records passed in custody. This is
 the only place the assignment is read.
@@ -13,7 +13,7 @@ from method_loop import ChoiceField, DeclaredField, Field, RecordForm
 REPRESENTATIONS = ('text', 'original', 'stdout', 'stderr')
 
 ASSIGNMENT_FORM = RecordForm({
-    'version': DeclaredField('text', 'The page assignment version', 'page_assignment_v1'),
+    'version': DeclaredField('text', 'The page assignment version', 'page_assignment'),
     'source_ref': Field('text', 'The one paper to examine'),
     'representation': ChoiceField('text', 'The representation of the paper that is examined', REPRESENTATIONS),
     'artifact_ref': Field('text', "The paper's artifact for that representation"),

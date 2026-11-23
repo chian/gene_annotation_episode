@@ -54,7 +54,7 @@ def fact(answer, refs=(), support='direct'):
     return {**literature_spr_record.fact(answer, refs), 'support': None if answer == 'unknown' else support}
 
 
-VERSION = 'a105_auc_record_v1'
+VERSION = 'a105_auc_record'
 EXPERIMENT_TYPE = 'auc'
 QUANTITIES = ('kd', 'kd_spread', 'complex_sedimentation_coefficient', 'component_sedimentation_coefficient_larger', 'component_sedimentation_coefficient_smaller', 'frictional_ratio', 'complex_mass_measured', 'complex_mass_theoretical', 'component_mass_larger', 'component_mass_smaller', 'stoichiometry_ratio', 'loaded_concentration_lowest', 'loaded_concentration_highest', 'concentration_count', 'fit_rmsd', 'rotor_speed', 'run_temperature', 'replicate_count')
 PREPARATION_KEYS = ('component_a_preparation_ref', 'component_b_preparation_ref', 'dataset_ref')

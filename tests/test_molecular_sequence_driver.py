@@ -32,7 +32,7 @@ def write_json(path, value):
 
 def selected_request(selection=None, context=None, *, mode="native"):
     if selection is None:
-        selection = {"version": "molecular_sequence_request_v2", "operation": N_OPERATION,
+        selection = {"version": "molecular_sequence_request", "operation": N_OPERATION,
             "arguments": {"sequence": "NAT", "allow_overlap": False}, "deployment": {}}
     if context is None and mode == "native":
         context = {"input_ref": None, "input_mapping": None}

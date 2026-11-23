@@ -24,7 +24,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.perturbation_evidence.literature_kinetic_inputs import _count_reading, _interval, _confidence, _cardinal_count
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.perturbation_evidence.literature_binding_visual_inputs import _Inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.perturbation_evidence.literature_controlled_response_calculations import PRIMITIVE_ORDER
-COVARIANCE_VERSION = 'controlled_response_covariance_source_v1'
+COVARIANCE_VERSION = 'controlled_response_covariance_source'
 
 def obj(properties):
     return {'type': 'object', 'properties': properties, 'required': list(properties), 'additionalProperties': False}
@@ -67,7 +67,7 @@ defs['Relationships'] = obj({'condition1_target': ref('Meaning'), 'condition0_ta
 defs['CovarianceBinding'] = obj({'variable_index': OFFSET, 'label_witness': ref('NativeTextWitness'), 'owner_witness': ref('Witness'), 'correspondence': ref('Correspondence')})
 defs['AxisScale'] = obj({'status': enum(('known', 'unknown', 'conflicting')), 'kind': nullable(enum(('linear', 'logarithmic', 'nonlinear'))), 'basis': enum(('source_text_literal', 'image_episode_interpretation', 'unresolved')), 'witnesses': {'type': 'array', 'items': ref('Witness')}})
 defs['AxisScale']['allOf'] = [{'if': {'properties': {'status': {'const': 'known'}}}, 'then': {'properties': {'kind': enum(('linear', 'logarithmic', 'nonlinear')), 'basis': enum(('source_text_literal', 'image_episode_interpretation')), 'witnesses': {'minItems': 1}}}, 'else': {'properties': {'kind': {'type': 'null'}, 'basis': {'const': 'unresolved'}}}}]
-selection = obj({'version': {'const': 'controlled_response_source_selection_v3'}, 'source_ref': deepcopy(REF), 'images': array(ref('Image')), 'arms': obj({role: nullable(ref('Arm')) for role in ROLES}), 'relationships': ref('Relationships'), 'covariance': nullable(obj({'source_ref': deepcopy(REF), 'bindings': obj({role: nullable(ref('CovarianceBinding')) for role in ROLES})})), 'variance_status': interpretation(('known', 'estimated', 'unknown')), 'model_kind': interpretation(('none', 'known_joint_normal_source_means'))})
+selection = obj({'version': {'const': 'controlled_response_source_selection'}, 'source_ref': deepcopy(REF), 'images': array(ref('Image')), 'arms': obj({role: nullable(ref('Arm')) for role in ROLES}), 'relationships': ref('Relationships'), 'covariance': nullable(obj({'source_ref': deepcopy(REF), 'bindings': obj({role: nullable(ref('CovarianceBinding')) for role in ROLES})})), 'variance_status': interpretation(('known', 'estimated', 'unknown')), 'model_kind': interpretation(('none', 'known_joint_normal_source_means'))})
 selection['$defs'] = defs
 selection['$schema'] = 'https://json-schema.org/draft/2020-12/schema'
 _SELECTION_SCHEMA = selection
@@ -808,7 +808,7 @@ def _effective_model(requested, covariance, arms):
     return result
 
 def _calculation_inputs(arms, relationships, covariance, effective):
-    return {'version': 'controlled_response_owner_inputs_v2', 'arms': {role: deepcopy(arms[role]['calculation_operand']) if arms[role] else None for role in PRIMITIVE_ORDER}, 'relationships': _relationships_inputs(relationships), 'covariance': deepcopy(covariance['calculation_covariance']) if covariance and effective['variance_status'] != 'unknown' else None, 'variance_status': effective['variance_status'], 'model_kind': effective['model_kind']}
+    return {'version': 'controlled_response_owner_inputs', 'arms': {role: deepcopy(arms[role]['calculation_operand']) if arms[role] else None for role in PRIMITIVE_ORDER}, 'relationships': _relationships_inputs(relationships), 'covariance': deepcopy(covariance['calculation_covariance']) if covariance and effective['variance_status'] != 'unknown' else None, 'variance_status': effective['variance_status'], 'model_kind': effective['model_kind']}
 
 _RESULT_FIELDS = {'WitnessRecord': ('selection', 'artifact_ref', 'byte_sha256', 'canonical_locator', 'authentication', 'attribution', 'diagnostics'), 'ImageLocator': ('kind', 'original_source_ref', 'original_artifact_ref', 'original_byte_sha256', 'region'), 'InterpretationExtraction': ('selection', 'witnesses', 'effective_value', 'diagnostics'), 'MeaningExtraction': ('selection', 'witnesses', 'canonical_witness', 'canonical_correspondence', 'resolved_state', 'canonical_id', 'diagnostics'), 'NumberCandidate': ('selection', 'witness', 'raw_expression', 'native_value', 'relation', 'approximate', 'source_locator', 'status', 'diagnostics'), 'UnitRecord': ('selection', 'witness', 'raw_unit', 'canonical_unit', 'exact_scale', 'native_registry_unit', 'definition_witnesses', 'status', 'diagnostics')}
 def _saved_witness(record, selected, sources, field):
@@ -953,17 +953,17 @@ class SourceContext(_Context):
 
     def __init__(self, arguments, callback):
         self.arguments = deepcopy(arguments)
-        if arguments['version'] != 'controlled_response_source_selection_v3':
+        if arguments['version'] != 'controlled_response_source_selection':
             _fail('controlled_selection_schema_invalid', 'arguments')
         self.closed = False
         self._endpoints = {}
         self.visual = None
-        _initialize_v3_registries(self)
+        _initialize_registries(self)
         try:
             super().__init__(self.arguments, callback)
             _authenticate_request(self, self.arguments, 'arguments')
             self.relationships = _relationships(self, self.arguments['relationships'])
-            self._v3_relationships = _frozen_json(self.relationships)
+            self._frozen_relationships = _frozen_json(self.relationships)
             self.cache = MappingProxyType({key: value if isinstance(value, _Unavailable) else MappingProxyType(value) for key, value in self.cache.items()})
         except BaseException:
             self.close()
@@ -980,9 +980,9 @@ class SourceContext(_Context):
     def _active(self):
         if self.closed:
             _fail('source_context_closed', 'context')
-        if _frozen_json(self.arguments) != self._original_v3_request:
+        if _frozen_json(self.arguments) != self._original_request:
             _fail('source_context_nomination_mismatch', 'arguments')
-        if _frozen_json(self.relationships) != self._v3_relationships:
+        if _frozen_json(self.relationships) != self._frozen_relationships:
             _fail('source_context_science_mismatch', 'relationships')
 
     def close(self):
@@ -1031,8 +1031,8 @@ def _authenticate_request(context, value, field):
             _authenticate_request(context, item, f'{field}[{i}]')
 
 def open_controlled_response_sources(arguments, *, read_source):
-    from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.perturbation_evidence.literature_controlled_response_v3_inputs import validate_controlled_response_v3_selection
-    return SourceContext(validate_controlled_response_v3_selection(arguments), read_source)
+    from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.perturbation_evidence.literature_controlled_response_source_inputs import validate_controlled_response_selection
+    return SourceContext(validate_controlled_response_selection(arguments), read_source)
 
 def _owned(context, value, field):
     context._active()
@@ -1163,7 +1163,7 @@ def _project_owner_covariance(result, matrix, arms, relationships):
     if not _psd(finite_exact):
         return partial('covariance_projection_precision_invalid', 'precision_invalid', 'reader_capability')
     covariance = {'physical_observation_ids': [r['physical_observation_id'] for r in rows], 'units': [r['native_registry_unit'] for r in rows], 'matrix': finite}
-    trial = {'version': 'controlled_response_owner_inputs_v2', 'arms': {r: arms[r]['calculation_operand'] if arms[r] else None for r in PRIMITIVE_ORDER}, 'relationships': _relationships_inputs(relationships), 'covariance': covariance, 'variance_status': 'known', 'model_kind': 'none'}
+    trial = {'version': 'controlled_response_owner_inputs', 'arms': {r: arms[r]['calculation_operand'] if arms[r] else None for r in PRIMITIVE_ORDER}, 'relationships': _relationships_inputs(relationships), 'covariance': covariance, 'variance_status': 'known', 'model_kind': 'none'}
     try:
         validate_controlled_response_owner_inputs(trial)
     except ExperimentalContractError:
@@ -1212,9 +1212,9 @@ def _representations(arms):
 
 def finish_controlled_response_inputs(context, *, arms, companion_arms, covariance_scopes):
     context._active()
-    _validate_v3_finish_stages(context, arms, companion_arms, covariance_scopes)
-    from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.perturbation_evidence.literature_controlled_response_v3_inputs import _finish_v3
-    return _finish_v3(context, arms=arms, companion_arms=companion_arms, covariance_scopes=covariance_scopes)
+    _validate_finish_stages(context, arms, companion_arms, covariance_scopes)
+    from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.perturbation_evidence.literature_controlled_response_source_inputs import _finish
+    return _finish(context, arms=arms, companion_arms=companion_arms, covariance_scopes=covariance_scopes)
 
 class _SavedUnsupportedCovariance(Exception):
     pass
@@ -1365,9 +1365,9 @@ def _scope_key(scope):
 def _frozen_json(value):
     return json.dumps(value, sort_keys=True, ensure_ascii=True, allow_nan=False)
 
-def _initialize_v3_registries(context):
+def _initialize_registries(context):
     arguments = context.arguments
-    context._original_v3_request = _frozen_json(arguments)
+    context._original_request = _frozen_json(arguments)
     context._reading_registry = {}
     for role in PRIMITIVE_ORDER:
         context._reading_registry[role, None] = (_frozen_json(arguments['arms'][role]), 'arms.' + role, object())
@@ -1445,7 +1445,7 @@ def read_controlled_response_graph_measurement(context, reading_selector, *, end
     _measurement_entry(context, reading_selector, selected, endpoint)
     if selected is None or selected['kind'] != 'linear_bar':
         _fail('source_graph_measurement_required', 'selected')
-    from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.perturbation_evidence.literature_controlled_response_v3_inputs import _read_graph
+    from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.perturbation_evidence.literature_controlled_response_source_inputs import _read_graph
     return _mark_reading_stage(context, _read_graph(context, selected), reading_selector, kind='measurement', endpoint_science=context._endpoints[id(endpoint)][3])
 
 def _scope_entry(context, scope):
@@ -1590,7 +1590,7 @@ def bind_controlled_response_covariance_scope(context, scope_key, document, *, r
     context._document_records[id(result)] = (result, _scope_key(scope_key), _frozen_json(dict(result)))
     return result
 
-def _validate_v3_finish_stages(context, arms, companions, scopes):
+def _validate_finish_stages(context, arms, companions, scopes):
     _closed(arms, PRIMITIVE_ORDER, 'arms')
     for role in PRIMITIVE_ORDER:
         selector = {'role': role, 'reading_key': None}
@@ -1615,7 +1615,7 @@ def _validate_v3_finish_stages(context, arms, companions, scopes):
         if record is None or record[0] is not scope or record[1] != key or (record[2] != _frozen_json(dict(scope))):
             _fail('source_covariance_scope_roster_mismatch', 'covariance_scopes')
 
-class _SavedV3SourceContext:
+class _SavedSourceContext:
     """Retained witness algebra only. Never holds a provider or decoded frame."""
 
     def __init__(self, arguments, extraction):
@@ -1639,7 +1639,7 @@ class _SavedV3SourceContext:
                 for item in value:
                     walk(item)
         walk(extraction)
-        _initialize_v3_registries(self)
+        _initialize_registries(self)
         self.documents = {}
         rows = extraction['covariance_document_scopes']
         if [_scope_key(row['scope']) for row in rows] != list(self._scope_registry):
@@ -1661,7 +1661,7 @@ class _SavedV3SourceContext:
     def _active(self):
         if self.closed:
             _fail('source_context_closed', 'context')
-        if _frozen_json(self.arguments) != self._original_v3_request:
+        if _frozen_json(self.arguments) != self._original_request:
             _fail('source_context_nomination_mismatch', 'arguments')
 
     def witness(self, selected, field):
@@ -1704,8 +1704,8 @@ class _SavedV3SourceContext:
 
 def validate_controlled_response_saved_science(arguments, extraction, *, measurement_checks):
     """Rebuild all source science from retained facts, with no native readers."""
-    from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.perturbation_evidence import literature_controlled_response_v3_inputs as facade
-    selected = facade.validate_controlled_response_v3_selection(arguments)
+    from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.perturbation_evidence import literature_controlled_response_source_inputs as facade
+    selected = facade.validate_controlled_response_selection(arguments)
     try:
         Draft202012Validator(facade._extraction_schema()).validate(extraction)
         json.dumps(extraction, allow_nan=False)
@@ -1715,7 +1715,7 @@ def validate_controlled_response_saved_science(arguments, extraction, *, measure
         raise ExperimentalContractError('saved_extraction_schema_invalid', 'extraction') from error
     if extraction['selection'] != selected:
         _fail('saved_selection_mismatch', 'extraction')
-    expected_dependencies = {'reader_contract_version': 'controlled_response_source_extraction_v3', 'calculator_contract_version': 'controlled_response_owner_inputs_v2'}
+    expected_dependencies = {'reader_contract_version': 'controlled_response_source_extraction', 'calculator_contract_version': 'controlled_response_owner_inputs'}
     if extraction['implementation_dependencies'] != expected_dependencies:
         _fail('saved_dependency_contract_mismatch', 'implementation_dependencies')
     sources = facade._saved_roster(selected, extraction)
@@ -1732,7 +1732,7 @@ def validate_controlled_response_saved_science(arguments, extraction, *, measure
             for item in value:
                 check_witnesses(item)
     check_witnesses(extraction)
-    context = _SavedV3SourceContext(selected, extraction)
+    context = _SavedSourceContext(selected, extraction)
     try:
         arms, companions, readings = ({}, [], {})
         retained_companions = extraction['companion_extractions']

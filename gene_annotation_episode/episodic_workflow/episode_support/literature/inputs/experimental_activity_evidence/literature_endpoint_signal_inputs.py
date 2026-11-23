@@ -24,8 +24,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.experimen
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_assay_inputs import _Sources
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_experimental_contracts import ExperimentalContractError
-INPUT_VERSION = 'a105_endpoint_signal_selection_v1'
-EXTRACTION_VERSION = 'a105_endpoint_signal_inputs_v1'
+INPUT_VERSION = 'a105_endpoint_signal_selection'
+EXTRACTION_VERSION = 'a105_endpoint_signal_inputs'
 POINT_ORDER = ('initial', 'baseline_at_addition', 'late')
 CONTEXT_FIELDS = ('subject', 'organism', 'genotype', 'construct', 'preparation', 'partners', 'experiment', 'condition', 'endpoint', 'normalization', 'intended_variable', 'functional_assertion', 'correction_discussion', 'limitations', 'repetition', 'experimental_system', 'expression_host', 'sampling_window')
 RELATIONSHIPS = {'axis_scale': ('common_affine', 'nonlinear', 'unknown', 'conflicting'), 'ordinate_direction': ('increases_upward', 'increases_downward', 'unknown', 'conflicting'), 'measurement_stage': ('endpoint_amplitude', 'initial_rate', 'other', 'unknown', 'conflicting'), 'correction_stage': ('not_applied', 'already_applied', 'unknown', 'conflicting'), 'baseline_basis': ('source_displayed_extrapolation', 'matched_control', 'new_fit', 'unknown', 'conflicting'), 'baseline_applicability': ('supported', 'explicit_conditional_scenario', 'unsupported', 'unknown', 'conflicting'), 'fast_component_completion': ('supported', 'explicit_conditional_scenario', 'unsupported', 'unknown', 'conflicting'), 'additive_interpretation': ('nonnegative_additive', 'signed_decomposition', 'unknown', 'conflicting'), 'arrangement': ('single_preparation', 'replacement', 'coexistence', 'not_applicable', 'unknown', 'conflicting')}
@@ -75,7 +75,7 @@ def _error_schema():
     return obj({'code': deepcopy(_TEXT), 'field': deepcopy(_TEXT)})
 
 def covariance_source_schema():
-    return obj({'version': _const('a105_endpoint_signal_covariance_v1'), 'basis': _enum(_BASES), 'primitive_order': _const(list(POINT_ORDER)), 'primitive_owners': _array(_TEXT, minItems=3, maxItems=3), 'primitive_units': _const(['native_ordinate_pixel'] * 3), 'covariance': _array(_array({'type': 'number'}, minItems=3, maxItems=3), minItems=3, maxItems=3), 'variance_status': _enum(('known', 'estimated', 'unknown')), 'origin': _enum(('source_reported', 'source_derived', 'synthetic')), 'provenance_witnesses': _array(_witness_schema()), 'native_coordinate_basis_witnesses': _array(_witness_schema()), 'coordinate_units_status': _const('already_in_declared_native_coordinate_units')})
+    return obj({'version': _const('a105_endpoint_signal_covariance'), 'basis': _enum(_BASES), 'primitive_order': _const(list(POINT_ORDER)), 'primitive_owners': _array(_TEXT, minItems=3, maxItems=3), 'primitive_units': _const(['native_ordinate_pixel'] * 3), 'covariance': _array(_array({'type': 'number'}, minItems=3, maxItems=3), minItems=3, maxItems=3), 'variance_status': _enum(('known', 'estimated', 'unknown')), 'origin': _enum(('source_reported', 'source_derived', 'synthetic')), 'provenance_witnesses': _array(_witness_schema()), 'native_coordinate_basis_witnesses': _array(_witness_schema()), 'coordinate_units_status': _const('already_in_declared_native_coordinate_units')})
 
 def endpoint_signal_extraction_schema():
     witness = _witness_schema(True)

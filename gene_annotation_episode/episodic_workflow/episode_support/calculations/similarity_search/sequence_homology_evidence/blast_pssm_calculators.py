@@ -267,7 +267,7 @@ def calculate_blast_pssm_components(sheet: dict) -> dict:
         status = "incompatible"
     else:
         status = "unavailable"
-    return {"schema": "blast_pssm_components_v1", "status": status, "matrices": matrices,
+    return {"schema": "blast_pssm_components", "status": status, "matrices": matrices,
             "issues": issues, "definitions": _definitions()}
 
 

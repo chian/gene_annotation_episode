@@ -38,7 +38,7 @@ def _completion(assignment, initial_validations, receipts):
 
 
 def _selected_execution_task(parent_input):
-    """The old ``selected_execution_task_v1`` of the decision context: present only this episode's selected flux
+    """The old ``selected_execution_task`` of the decision context: present only this episode's selected flux
     balance work (the scientific parent's question, the selected tool information and the job view)."""
     assignment = parent_input['assignment']
     if not isinstance(assignment['requested_job'].get('native_flux_balance'), dict):

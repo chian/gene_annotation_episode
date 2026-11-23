@@ -10,7 +10,7 @@ by name in ``_UNITS``: exactly the four the root sends, ``OPERATIONAL_CREDIT_UNI
 
 This is the only place the assignment is read. The old checks of the assignment that need nothing but its value are
 carried: the selection and the revision origin are valid, every evidence reference has the reference form, the
-evidence task is the closed ``evidence_axis_task_v1`` of A101, and a proposed annotation is present (the old
+evidence task is the closed ``evidence_axis_task`` of A101, and a proposed annotation is present (the old
 ``credit_projector`` raised ``scientific_task_proposed_annotation_required`` for a head with private yield
 bindings, which this head always has). The old checks against the runner (the proposed annotation was received by
 the parent and is in scope, every evidence reference is in scope, the revision origin matches the parent's recorded
@@ -27,7 +27,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_
 
 AXIS = 'A101'
 _REFERENCE = re.compile(r'^[a-z][a-z_]*_[a-f0-9]{24,64}$')
-_EVIDENCE_TASK = obj({'version': {'const': 'evidence_axis_task_v1'}, 'kind': {'const': 'whole_axis_findings'},
+_EVIDENCE_TASK = obj({'version': {'const': 'evidence_axis_task'}, 'kind': {'const': 'whole_axis_findings'},
                       'evidence_axis': {'const': AXIS},
                       'credit_unit': {'type': 'number', 'exclusiveMinimum': 0}}, required=['version', 'kind',
                                                                                          'evidence_axis',
@@ -40,9 +40,9 @@ ASSIGNMENT_FORM = RecordForm({
     'proposed_annotation_ref': Field('text', 'The proposed annotation this task evaluates', required=False),
     'evidence_refs': Field('record_refs', 'In-scope references the parent supplies, in custody'),
     'constraints': Field('record', "The parent's constraints (a free object)"),
-    'context': Field('record', 'May carry evidence_task (evidence_axis_task_v1, whole_axis_findings, A101, '
+    'context': Field('record', 'May carry evidence_task (evidence_axis_task, whole_axis_findings, A101, '
                                'credit_unit) and the original task name a101_task'),
-    'revision_origin': Field('record', 'sequence_homology_evidence_revision_origin_v1 of the parent invocation and '
+    'revision_origin': Field('record', 'sequence_homology_evidence_revision_origin of the parent invocation and '
                                        'its process.revise preparation, when this is an alternative approach',
                              required=False),
     'scope': Field('record', 'The Store scope this episode investigates (new field: the old request scope)'),

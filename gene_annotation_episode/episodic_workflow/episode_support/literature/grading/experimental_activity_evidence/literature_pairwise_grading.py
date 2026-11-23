@@ -1,7 +1,7 @@
 """A105's own grading of one pairwise BLAST report (a copy of what A101's pairwise comparison does, owned by A105).
 
 The one native JSON report of the comparison of two sequences is graded into the pairwise sheet
-(``blast_pairwise_sheet_v1``), the graded result is kept through the scoped store (the grading artifact and its data-product
+(``blast_pairwise_sheet``), the graded result is kept through the scoped store (the grading artifact and its data-product
 row) and the controlled features of the sheet are read by code. The features are counts and fractions of paired residues
 (a count, a number in a range, a boolean, a value of a fixed vocabulary or a record reference); nothing is prose.
 
@@ -20,9 +20,9 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_al
     ARTIFACT_SCHEMA, validate_correspondence_artifacts)
 
 EVIDENCE_TYPE = 'pairwise_residue_correspondence'
-SHEET_SCHEMA = 'blast_pairwise_sheet_v1'
+SHEET_SCHEMA = 'blast_pairwise_sheet'
 PROVIDER = 'native.blast.pairwise'
-GRADING_SCHEMA = 'tool_grading_artifact_v2'
+GRADING_SCHEMA = 'tool_grading_artifact_with_correspondence'
 GRADING_MEDIA_TYPE = 'application/vnd.gene-annotation.tool-grading+json'
 GRADING_KIND = 'tool_grading_sheet'
 
@@ -131,7 +131,7 @@ def graded_report(report, program, query, subject):
     normalized = parse_blast_json(report, mode='pairwise', resource='local', request={'program': program, 'query_length': len(query)})
     sheet, common_sheet, calculated = build_pairwise_artifacts(normalized)
     grading = {'sheet': sheet, 'probabilities': None, 'correspondence': {
-        'version': ARTIFACT_SCHEMA, 'instances': [{'legacy_pointer': '/sheet', 'axis_basis': 'reported',
+        'version': ARTIFACT_SCHEMA, 'instances': [{'source_pointer': '/sheet', 'axis_basis': 'reported',
                                                     'sheet': common_sheet, 'components': calculated}]}}
     if sheet['schema'] != SHEET_SCHEMA:
         raise ValueError('blast_pairwise_result_type_conflict')

@@ -1345,7 +1345,7 @@
       "type": "object",
       "properties": {
         "schema_version": {
-          "const": "fastqutils_native_v2"
+          "const": "fastqutils_native"
         },
         "artifact": {
           "$ref": "#/$defs/Artifact"
@@ -2232,7 +2232,7 @@
           }
         },
         "schema_version": {
-          "const": "fastqutils_metadata_v2"
+          "const": "fastqutils_metadata"
         },
         "analysis_id": {
           "type": "string",
@@ -2281,7 +2281,7 @@
       "type": "object",
       "properties": {
         "schema_version": {
-          "const": "fastqutils_sheet_v2"
+          "const": "fastqutils_sheet"
         },
         "task_ref": {
           "type": "string",
@@ -2435,7 +2435,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "fastqutils_calculators_v2"
+          "const": "fastqutils_calculators"
         },
         "analysis_id": {
           "type": "string",
@@ -2540,12 +2540,12 @@
         "method": {
           "type": "string",
           "enum": [
-            "composition_v1",
-            "quality_phred_v1",
-            "retention_v1",
-            "mapping_v1",
-            "report_consistency_v1",
-            "samstat_report_mapping_v1"
+            "composition",
+            "quality_phred",
+            "retention",
+            "mapping",
+            "report_consistency",
+            "samstat_report_mapping"
           ]
         },
         "population_refs": {
@@ -2764,7 +2764,7 @@
       "type": "object",
       "properties": {
         "schema_version": {
-          "const": "fastqutils_components_v2"
+          "const": "fastqutils_components"
         },
         "sheet_sha256": {
           "type": "string",
@@ -2811,7 +2811,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "fastqutils_projection_v2"
+          "const": "fastqutils_projection"
         },
         "fields": {
           "type": "array",
@@ -2845,7 +2845,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "fastqutils_provider_v2"
+          "const": "fastqutils_provider"
         },
         "analysis_id": {
           "type": "string",
@@ -4353,10 +4353,10 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_appservice_request_v1"
+          "const": "bvbrc_appservice_request"
         },
         "effect_contract": {
-          "const": "selected_api_effects_v1"
+          "const": "selected_api_effects"
         },
         "required_application_id": {
           "$ref": "#/$defs/Host_RequiredApplication"
@@ -4414,7 +4414,7 @@
           "const": "bvbrc_appservice"
         },
         "execution_contract": {
-          "const": "bvbrc_appservice_execution_v1"
+          "const": "bvbrc_appservice_execution"
         },
         "endpoints": {
           "type": "object",
@@ -4724,7 +4724,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_appservice_result_selector_v1"
+          "const": "bvbrc_appservice_result_selector"
         },
         "endpoint": {
           "enum": [
@@ -5785,7 +5785,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "selected_api_effects_v1"
+          "const": "selected_api_effects"
         },
         "original_job_owner": {
           "$ref": "#/$defs/Host_OriginalJobOwner"
@@ -5903,7 +5903,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "selected_api_effect_receipt_v1"
+          "const": "selected_api_effect_receipt"
         },
         "effect_ref": {
           "type": "string",
@@ -6254,7 +6254,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_appservice_support_receipt_v1"
+          "const": "bvbrc_appservice_support_receipt"
         },
         "receipt_ref": {
           "type": "string",
@@ -6833,7 +6833,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_appservice_task_handoff_v1"
+          "const": "bvbrc_appservice_task_handoff"
         },
         "receipt": {
           "$ref": "#/$defs/Host_CommonReceipt"
@@ -7550,7 +7550,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_appservice_artifact_bundle_v1"
+          "const": "bvbrc_appservice_artifact_bundle"
         },
         "original_task": {
           "$ref": "#/$defs/Host_OriginalTask"
@@ -7646,7 +7646,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_appservice_acquisition_v1"
+          "const": "bvbrc_appservice_acquisition"
         },
         "origin": {
           "$ref": "#/$defs/Host_ReceiptOrigin"
@@ -7745,7 +7745,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_appservice_publication_inputs_v1"
+          "const": "bvbrc_appservice_publication_inputs"
         },
         "request": {
           "$ref": "#/$defs/Host_AppServiceRequest"
@@ -7889,7 +7889,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_appservice_bundle_publication_v1"
+          "const": "bvbrc_appservice_bundle_publication"
         },
         "origin": {
           "$ref": "#/$defs/Host_ReceiptOrigin"
@@ -7990,7 +7990,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_appservice_bound_inputs_v1"
+          "const": "bvbrc_appservice_bound_inputs"
         },
         "original_job_owner": {
           "$ref": "#/$defs/Host_OriginalJobOwner"
@@ -8095,10 +8095,10 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_appservice_prepared_operation_v1"
+          "const": "bvbrc_appservice_prepared_operation"
         },
         "execution_contract": {
-          "const": "bvbrc_appservice_execution_v1"
+          "const": "bvbrc_appservice_execution"
         },
         "operation": {
           "type": "string",
@@ -8168,7 +8168,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_appservice_replay_result_v1"
+          "const": "bvbrc_appservice_replay_result"
         },
         "mode": {
           "enum": [
@@ -9388,7 +9388,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "fastqutils_encoding_declaration_v1"
+          "const": "fastqutils_encoding_declaration"
         },
         "document_id": {
           "type": "string",
@@ -9556,7 +9556,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "fastqutils_library_annotation_v1"
+          "const": "fastqutils_library_annotation"
         },
         "input_pointer": {
           "type": "string",
@@ -9628,7 +9628,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "fastqutils_association_assertion_v1"
+          "const": "fastqutils_association_assertion"
         },
         "document_id": {
           "type": "string",
@@ -9694,7 +9694,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "fastqutils_pair_declaration_v1"
+          "const": "fastqutils_pair_declaration"
         },
         "left_document_id": {
           "type": "string",
@@ -9726,7 +9726,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "fastqutils_reference_declaration_v1"
+          "const": "fastqutils_reference_declaration"
         },
         "document_id": {
           "type": "string",
@@ -9773,7 +9773,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "fastqutils_lineage_declaration_v1"
+          "const": "fastqutils_lineage_declaration"
         },
         "before": {
           "$ref": "#/$defs/PopulationSelector"
@@ -10786,7 +10786,7 @@
               "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$"
             },
             "method": {
-              "const": "composition_v1"
+              "const": "composition"
             },
             "population": {
               "$ref": "#/$defs/PopulationSelector"
@@ -10807,7 +10807,7 @@
               "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$"
             },
             "method": {
-              "const": "quality_phred_v1"
+              "const": "quality_phred"
             },
             "population": {
               "$ref": "#/$defs/PopulationSelector"
@@ -10838,7 +10838,7 @@
               "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$"
             },
             "method": {
-              "const": "retention_v1"
+              "const": "retention"
             },
             "comparison_kind": {
               "type": "string",
@@ -10881,7 +10881,7 @@
               "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$"
             },
             "method": {
-              "const": "mapping_v1"
+              "const": "mapping"
             },
             "population": {
               "$ref": "#/$defs/PopulationSelector"
@@ -10930,7 +10930,7 @@
               "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$"
             },
             "method": {
-              "const": "report_consistency_v1"
+              "const": "report_consistency"
             },
             "report_measurement": {
               "$ref": "#/$defs/MeasurementSelector"
@@ -10955,7 +10955,7 @@
               "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$"
             },
             "method": {
-              "const": "samstat_report_mapping_v1"
+              "const": "samstat_report_mapping"
             },
             "populations": {
               "type": "array",
@@ -10986,12 +10986,12 @@
         "method": {
           "type": "string",
           "enum": [
-            "composition_v1",
-            "quality_phred_v1",
-            "retention_v1",
-            "mapping_v1",
-            "report_consistency_v1",
-            "samstat_report_mapping_v1"
+            "composition",
+            "quality_phred",
+            "retention",
+            "mapping",
+            "report_consistency",
+            "samstat_report_mapping"
           ]
         },
         "state": {
@@ -11731,12 +11731,12 @@
         "method": {
           "type": "string",
           "enum": [
-            "composition_v1",
-            "quality_phred_v1",
-            "retention_v1",
-            "mapping_v1",
-            "report_consistency_v1",
-            "samstat_report_mapping_v1"
+            "composition",
+            "quality_phred",
+            "retention",
+            "mapping",
+            "report_consistency",
+            "samstat_report_mapping"
           ]
         },
         "population_refs": {
@@ -13323,7 +13323,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "fastqutils_saved_components_v2"
+          "const": "fastqutils_saved_components"
         },
         "calculations": {
           "anyOf": [

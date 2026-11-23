@@ -19,9 +19,9 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.phylogeny i
 
 
 TOOL = "analyze_protein_conservation"
-SOURCE_VERSION = "ordinary_protein_conservation_result_v1"
-PACKET_VERSION = "ordinary_protein_conservation_values_v1"
-SELECTION_VERSION = "protein_conservation_selection_v1"
+SOURCE_VERSION = "ordinary_protein_conservation_result"
+PACKET_VERSION = "ordinary_protein_conservation_values"
+SELECTION_VERSION = "protein_conservation_selection"
 FACT_SOURCE = "protein_conservation_outcomes"
 _SOURCE = r"^source_[0-9a-f]{24,64}$"
 _ARTIFACT = r"^artifact_[0-9a-f]{64}$"

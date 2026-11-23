@@ -36,11 +36,11 @@ from .native_atac_differential_driver import (
 
 
 FIXED_OUTPUTS = (('sheet', 'sheet.json', SHEET_FORMAT),
-    ('calculations', 'calculations.json', 'atac_differential_calculations_v1'),
-    ('projection', 'projection.json', 'atac_differential_projection_v1'),
-    ('diagnostics', 'diagnostics.json', 'atac_differential_diagnostics_v1'))
-DERIVED_FORMATS = {'partitions': 'atac_interval_partitions_jsonl_v1', 'components': 'atac_interval_components_jsonl_v1',
-                   'regions': 'atac_differential_regions_jsonl_v1'}
+    ('calculations', 'calculations.json', 'atac_differential_calculations'),
+    ('projection', 'projection.json', 'atac_differential_projection'),
+    ('diagnostics', 'diagnostics.json', 'atac_differential_diagnostics'))
+DERIVED_FORMATS = {'partitions': 'atac_interval_partitions_jsonl', 'components': 'atac_interval_components_jsonl',
+                   'regions': 'atac_differential_regions_jsonl'}
 
 
 def track_table_identity(table):
@@ -178,7 +178,7 @@ def _track_parser(row, *, binding, artifact, directory, failures):
             failures.append(_stream_failure(error, binding['track_key']))
     require(summary is not None, 'atac_track_summary_unavailable')
     identity = _table_file(path, TABLE_FORMAT)
-    summary.update(arrays, version='atac_bedgraph_parsed_v1', rows=dict(storage='retained_table',
+    summary.update(arrays, version='atac_bedgraph_parsed', rows=dict(storage='retained_table',
         artifact_ref=identity['artifact_ref'], format=TABLE_FORMAT, columns=list(BEDGRAPH_COLUMNS), row_count=count,
         sha256=identity['sha256'], byte_count=identity['size_bytes'], order='native_file_order', source_artifact_ref=artifact['artifact_ref']))
     return summary
@@ -443,7 +443,7 @@ def _calculate_sheet(sheet, *, selector, streams, directory, failures):
         selected_population_bp=sum(r['end'] - r['start'] for r in selector['intervals']), partition_coverage=coverage,
         native_peak_counts=peaks, native_region_counts=native_regions, derived_region_counts=list(categories.values()),
         **{k: sheet[k] for k in ('reference_relation', 'normalization_compatibility', 'coverage_completeness')}, uncertainty=dict(kind='not_estimated', value=None))
-    return validate_atac_result_record('Calculations', dict(version='atac_differential_calculations_v1',
+    return validate_atac_result_record('Calculations', dict(version='atac_differential_calculations',
         comparison_key=sheet['comparison']['comparison_key'], reference_id=sheet['reference']['reference_id'],
         condition_ids=[sheet['comparison']['condition1_id'], sheet['comparison']['condition2_id']], selected_intervals=selector['intervals'],
         parameters=parameters, depth_operands=depths, eligibility=bridge['eligibility'], issues=bridge['issues'], tables=tables, summary=summary,
@@ -465,7 +465,7 @@ def run_atac_result_worker(plan):
     directory.mkdir(parents=True, exist_ok=True)
     require(not (directory / 'worker-result.json').exists(), 'atac_worker_already_sealed')
     failures, values, streams, raw_paths = deepcopy(plan.get('failures', [])), {}, {}, {}
-    diagnostics = dict(version='atac_differential_diagnostics_v1', mode=plan['mode'], issues=[], failures=[], stream_states=[])
+    diagnostics = dict(version='atac_differential_diagnostics', mode=plan['mode'], issues=[], failures=[], stream_states=[])
     with ExitStack() as stack:
         try:
             if plan['mode'] == 'native_result':

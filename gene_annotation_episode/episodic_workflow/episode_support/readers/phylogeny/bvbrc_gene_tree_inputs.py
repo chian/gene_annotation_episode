@@ -17,7 +17,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.readers.phylogeny
 from gene_annotation_episode.episodic_workflow.episode_support.forms.phylogeny.bvbrc_phylogeny_common_contracts import validate_shared_fields
 
 
-SCHEMA_VERSION = "bvbrc_gene_tree_sheet_v1"
+SCHEMA_VERSION = "bvbrc_gene_tree_sheet"
 TOOL = "C-L194-GeneTree"
 STAGES = ("supplied", "post_align", "post_trim", "post_gap_filter",
           "final_matrix", "final_tree")

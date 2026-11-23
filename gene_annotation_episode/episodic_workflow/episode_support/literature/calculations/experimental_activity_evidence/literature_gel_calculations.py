@@ -10,9 +10,8 @@ from copy import deepcopy
 from fractions import Fraction
 import math
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_gel_inputs import _canonical, _fail, _fraction, _hash, _keys, _rational, _same, validate_gel_extraction
-VERSION = 'gel_lane_sheet_v1'
-VERSION_V2 = 'gel_lane_sheet_v2'
-COMPARISON_VERSION = 'gel_competition_comparison_v1'
+VERSION = 'gel_lane_sheet'
+COMPARISON_VERSION = 'gel_competition_comparison'
 
 def gel_comparison_schema():
     text = {'type': 'string', 'minLength': 1}
@@ -54,15 +53,14 @@ def _overlap(a, b):
 def _inside(inner, outer):
     return inner is not None and outer is not None and (outer[0] <= inner[0] < inner[2] <= outer[2] and outer[1] <= inner[1] < inner[3] <= outer[3])
 
-def _region_dependency(image, lane, band, background, method=None):
+def _region_dependency(image, lane, band, background, method):
     result = {'source_ref': image['source_ref'], 'artifact_ref': image['artifact_ref'], 'image_byte_sha256': image['byte_sha256'], 'lane_id': lane, 'signal_region': deepcopy(band), 'background_region': deepcopy(background)}
-    if method is not None:
-        result['background_method'] = method
+    result['background_method'] = method
     return result
 
 def _lane(row, image):
     bands = row['bands']
-    method = row.get('background_method')
+    method = row['background_method']
     selected = [band for band in bands if band['role'] in ('shifted', 'free')]
     dependencies = [_region_dependency(image, row['lane_id'], band['region'], row['background']['region'], method) for band in selected]
     qualifications = []
@@ -190,7 +188,7 @@ def _calculate(extraction, comparison):
     for name in component_names:
         available = [(a['assignment_id'], _number(a['cells'][name])) for a in assignments if _number(a['cells'][name]) is not None]
         sensitivity[name] = {'kind': 'explicit_available_roi_assignment_range_not_sampling_interval', 'status': 'no_available_values' if not available else 'complete' if len(available) == len(assignments) else 'partial', 'bounds_unavailable_assignments': False, 'lower': None if not available else _rational(min((v for _, v in available))), 'upper': None if not available else _rational(max((v for _, v in available))), 'included_assignment_ids': [key for key, _ in available], 'unavailable_assignment_ids': [a['assignment_id'] for a in assignments if _number(a['cells'][name]) is None], 'sampling_confidence_level': None}
-    result = {'version': VERSION if extraction['version'] == 'gel_lane_extraction_v1' else VERSION_V2, 'extraction_digest': extraction['extraction_digest'], 'comparison': deepcopy(comparison), 'context': deepcopy(extraction['selection']['context']), 'origin': extraction['origin'], 'assignments': assignments, 'roi_sensitivity': sensitivity, 'sampling_uncertainty': {'status': 'not_supplied', 'value': None}, 'detector_response_calibration': {'status': 'not_supplied', 'value': None}, 'unimplemented_quantities': ['calibrated_molecular_occupancy', 'binding_observation_likelihood'], 'independent_preparation_count': None, 'annotation_credit': None}
+    result = {'version': VERSION, 'extraction_digest': extraction['extraction_digest'], 'comparison': deepcopy(comparison), 'context': deepcopy(extraction['selection']['context']), 'origin': extraction['origin'], 'assignments': assignments, 'roi_sensitivity': sensitivity, 'sampling_uncertainty': {'status': 'not_supplied', 'value': None}, 'detector_response_calibration': {'status': 'not_supplied', 'value': None}, 'unimplemented_quantities': ['calibrated_molecular_occupancy', 'binding_observation_likelihood'], 'independent_preparation_count': None, 'annotation_credit': None}
     result['sheet_digest'] = _hash(_canonical(result))
     return result
 
@@ -206,4 +204,4 @@ def validate_gel_sheet(extraction, comparison, sheet, *, expected_extraction_dig
     if not _same(expected, sheet):
         _fail('saved_gel_sheet_mismatch', 'sheet')
     return deepcopy(sheet)
-__all__ = ['VERSION', 'VERSION_V2', 'COMPARISON_VERSION', 'gel_comparison_schema', 'populate_gel_components', 'validate_gel_sheet']
+__all__ = ['VERSION', 'COMPARISON_VERSION', 'gel_comparison_schema', 'populate_gel_components', 'validate_gel_sheet']

@@ -20,7 +20,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
 
 
 PROVIDER = "literature.experimental.transport_response"
-FORMULA_CODES = {name: "transport_" + name + "_v1" for name in COMPONENTS}
+FORMULA_CODES = {name: "transport_" + name for name in COMPONENTS}
 BINDINGS = {"reported_subject_ref": "reference", "analyte_ref": "term",
             "test_curve_ref": "reference", "reference_curve_ref": "reference",
             "km_curve_ref": "reference"}
@@ -49,8 +49,8 @@ def _quantity_key(extraction):
 class LiteratureTransportRepository(LiteratureRateRepository):
     provider = PROVIDER
     components = COMPONENTS
-    record_version = "literature_transport_response_record_v2"
-    readable_record_versions = ("literature_transport_response_record_v1", record_version)
+    record_version = "literature_transport_response_record"
+    readable_record_versions = (record_version,)
     binding_fields = tuple(BINDINGS)
 
     def _provenance(self, context, reference):

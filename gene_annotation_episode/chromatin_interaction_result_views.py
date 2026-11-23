@@ -246,7 +246,7 @@ def project_chromatin_result(sheet: ContactSheet, components: ChromatinComponent
             if measurement['value'] is None and measurement['reason'] is not None:
                 failures.append(_failure(sheet, row['population_key'], measurement['reason'],
                     pair_key=row.get('pair_key'), stage='projection', field_path=f'/rows/{row_index}/fields/{field}'))
-    result = {'version': 'chromatin_interaction_projection_v1',
+    result = {'version': 'chromatin_interaction_projection',
               'source_sheet_sha256': components['source_sheet_sha256'],
               'parameters': deepcopy(components['parameters']), 'kind': kind,
               'population_keys': deepcopy(selector['population_keys']), 'requested_fields': deepcopy(requested),

@@ -18,7 +18,7 @@ def parse_rna_topology(dot_bracket: str, *, coordinate_system: str) -> dict:
     """
     if type(dot_bracket) is not str or coordinate_system != COORDINATE_SYSTEM:
         raise ValueError("rna_invalid_input_schema")
-    result = {"schema": "rna_topology_v1", "coordinate_system": coordinate_system,
+    result = {"schema": "rna_topology", "coordinate_system": coordinate_system,
         "dot_bracket": dot_bracket, "length_nt": len(dot_bracket),
         "status": "invalid", "positions": None, "pairs": None, "stems": None,
         "regions": None, "issues": []}

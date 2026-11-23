@@ -20,7 +20,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.evolutionary_history_evidence.literature_experimental_contracts import ExperimentalContractError
 
 
-VERSION = "a105_amount_inputs_v1"
+VERSION = "a105_amount_inputs"
 ROLES = ("numerator", "denominator")
 SOURCE_KINDS = ("primary_source", "retained_extraction", "synthetic_fixture")
 COMPARISON_KINDS = ("stock_target_mass_estimate_over_total_mass_estimate",
@@ -211,7 +211,7 @@ def _interpret(value, allowed, sources, field):
 def _amount_number(selection, sources):
     """Reuse released lexical guards only; no rate units or rate publication.
 
-    The legacy keyword ``rate`` selects signed scalar bounds/approximation and
+    The keyword ``rate`` selects signed scalar bounds/approximation and
     uncertainty-as-point guards. It does not assign this quantity a rate role.
     Mass/molar units and all experimental meanings remain this module's work.
     """
@@ -340,7 +340,7 @@ def _read_covariance(reference, quantities, sources):
 
 def _covariance_values(data, quantities):
     _keys(data, _COVARIANCE_FIELDS, "covariance_source")
-    expected = {"version": "a105_amount_covariance_v1", "quantity_order": list(ROLES),
+    expected = {"version": "a105_amount_covariance", "quantity_order": list(ROLES),
         "quantity_measurement_keys": [quantities[role]["measurement_key"] for role in ROLES],
         "quantity_physical_observation_keys": [quantities[role]["physical_observation_key"] for role in ROLES],
         "quantity_owner_keys": [quantities[role]["owner_key"] for role in ROLES],

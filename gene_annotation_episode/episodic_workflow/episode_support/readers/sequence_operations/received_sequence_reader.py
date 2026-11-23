@@ -30,7 +30,7 @@ def sequence(store, reference: str, *, molecule_model: str | None = None) -> str
     raise ContractError("referenced_record_has_no_sequence")
 
 
-REPRESENTATION = "packed_member_components_v1"
+REPRESENTATION = "packed_member_components"
 
 
 def packed(member):

@@ -27,7 +27,7 @@ def module(name):
 
 
 def assignment():
-    return {'version': 'practical_assignment_v1', 'assignment_id': 'a1', 'resource_kind': 'hpc',
+    return {'version': 'practical_assignment', 'assignment_id': 'a1', 'resource_kind': 'hpc',
             'workspace': WORKSPACE, 'endpoint': 'usable_handoff', 'requested_job': JOB,
             'progress_requirements': [
                 {'key': 'in_workspace', 'credit': 1.0, 'predicate': {'kind': 'context_cwd', 'path': WORKSPACE}},

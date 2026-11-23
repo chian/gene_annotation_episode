@@ -30,7 +30,7 @@ def plan_for(tmp_path, program="hmmsearch"):
             source = Path(str(HMM) + "." + row["role"].rsplit("_", 1)[1])
         row.update(path=str(source), size_bytes=source.stat().st_size, sha256=hashlib.sha256(source.read_bytes()).hexdigest())
     request = requested_job_from_native(job)
-    return {"version": "native_hmmer_run_plan_v1", "identity": {"run_id": "synthetic-run", "episode_id": "resource-child",
+    return {"version": "native_hmmer_run_plan", "identity": {"run_id": "synthetic-run", "episode_id": "resource-child",
         "resource_id": "local", "execution_id": "original-execution", "attempt_id": "attempt-one",
         "operation_key": "selected-start", "requested_job_sha256": native_hmmer_digest(request)},
         "requested_job": request, "attempt_directory": str(tmp_path / "attempt"),

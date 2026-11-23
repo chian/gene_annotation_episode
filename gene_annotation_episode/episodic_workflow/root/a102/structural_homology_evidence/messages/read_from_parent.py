@@ -7,7 +7,7 @@ of a model of the target obtained by the child).
 
 This is the only place the assignment is read. It checks what needs nothing but the value: the selection names the evidence axis
 A102, the proposed annotation is one reference, every reference has the reference form, the evidence task is the closed
-``evidence_axis_task_v1`` of A102 and the credit units are positive. ``yield_task`` is the key of the head's declaration in
+``evidence_axis_task`` of A102 and the credit units are positive. ``yield_task`` is the key of the head's declaration in
 ``yield_bindings`` (``yield_estimator.py``). Custody holds every record named in a ``record_refs`` field."""
 import re
 
@@ -21,7 +21,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.structura
 AXIS = 'A102'
 YIELD_TASK = AXIS + ':a102_structural_correspondence'
 _REFERENCE = re.compile(r'^[a-z][a-z_]*_[a-f0-9]{24,64}$')
-_EVIDENCE_TASK = obj({'version': {'const': 'evidence_axis_task_v1'}, 'kind': {'const': 'whole_axis_findings'},
+_EVIDENCE_TASK = obj({'version': {'const': 'evidence_axis_task'}, 'kind': {'const': 'whole_axis_findings'},
                       'evidence_axis': {'const': AXIS},
                       'credit_unit': {'type': 'number', 'exclusiveMinimum': 0}},
                      required=['version', 'kind', 'evidence_axis', 'credit_unit'])
@@ -33,7 +33,7 @@ ASSIGNMENT_FORM = RecordForm({
                                                     'passed in custody'),
     'evidence_refs': Field('record_refs', 'The evidence records the commission names, passed in custody'),
     'constraints': Field('record', "The commissioner's constraints"),
-    'context': Field('record', 'May carry evidence_task (evidence_axis_task_v1, whole_axis_findings, A102 and a positive '
+    'context': Field('record', 'May carry evidence_task (evidence_axis_task, whole_axis_findings, A102 and a positive '
                                'credit_unit)'),
     'scope': Field('record', 'The Store scope this episode investigates'),
     'scope_refs': Field('record_refs', 'The records the scope names, passed in custody'),

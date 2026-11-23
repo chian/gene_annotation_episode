@@ -49,7 +49,7 @@ def _supplied(selected, supplied_metadata):
         if type(item) is not dict or set(item) != {"file_identity", "document"}:
             raise ValueError("invalid_schema")
         file, document = validate_file_identity(item["file_identity"]), validate_metadata_document(item["document"])
-        if file["format"] != "protein_structure_metadata_v1":
+        if file["format"] != "protein_structure_metadata":
             raise ValueError("unsupported_format")
         if any(d["evidence_artifact_ref"] == file["artifact_ref"] for d in document["semantics_declarations"] + document["metric_unit_declarations"]):
             raise ValueError("metadata_join_conflict")
@@ -352,7 +352,7 @@ def extract_native_structure_metadata(parsed: ParsedStructure, *, selected_seque
     if not same(parsed["file_identity"], selection["file_identity"]):
         raise ValueError("input_digest_mismatch")
     supplied = _supplied(selection, supplied_metadata)
-    result = {"version": "protein_structure_metadata_extracted_v1", "state": "complete", "structure_role": selection["structure_role"],
+    result = {"version": "protein_structure_metadata_extracted", "state": "complete", "structure_role": selection["structure_role"],
         "file_identity": parsed["file_identity"], "selection": deepcopy(selection), "supplied_metadata": supplied,
         "atom_uncertainty": [], "metric_definitions": [], "qa_rows": [], "metadata_values": [], "unjoined_rows": [],
         "issues": [], "qualifications": ["uncertainty_not_used_as_weight"]}

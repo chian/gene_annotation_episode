@@ -233,7 +233,7 @@ CONTEXT_MASK = obj({"subject_refs": {"type": "array", "items": REF},
     "read_selection_refs": {"type": "array", "items": REF},
     "segments": {**FOOTPRINT, "minItems": 1}}, required=["subject_refs"])
 CONTEXT_MASK["description"] = "Fixed original material position set for a nonmolecular context interpretation. Frozen read selections of the same library union; segments restrict actual selected members. This is not a sequence mapping. {subject_refs: []} explicitly withdraws allocation; Episode scopes remain nonempty."
-SEQUENCE_MAPPING = obj({"version": {"const": "oriented_source_subject_path_v2"},
+SEQUENCE_MAPPING = obj({"version": {"const": "oriented_source_subject_path"},
     "units_per_symbol": {"enum": [1, 3]}, "symbol_length": {"type": "integer", "minimum": 1},
     "path": {"type": "array", "minItems": 1, "items": obj({"subject_ref": REF,
         "start": {"type": "integer", "minimum": 0}, "end": {"type": "integer", "minimum": 1},
@@ -325,12 +325,12 @@ RECORD_SCHEMAS['assessment']['properties']['investigation_finding'] = {
 NATIVE_EXECUTION_OPERATIONS = {'align_pair': 'pairwise_sequence_alignment',
     'xlsx_sheets': 'spreadsheet_selection', 'xlsx_rows': 'spreadsheet_selection'}
 RECORD_SCHEMAS.update({
-    "native_execution": obj({"representation": {"const": "native_execution_receipt_v2"},
+    "native_execution": obj({"representation": {"const": "native_execution_receipt"},
         'operation': {'enum': list(NATIVE_EXECUTION_OPERATIONS)},
         "measurement_artifact_ref": REF,
         "operands": {'type': 'array', 'uniqueItems': True, 'items': obj({
             'role': {'enum': ['query', 'reference', 'input_source']}, 'subject_ref': REF})}}),
-    "image_view": obj({"representation": {"const": "selected_native_image_frame_v1"},
+    "image_view": obj({"representation": {"const": "selected_native_image_frame"},
         "source_ref": REF, "input_source_ref": REF, "original_artifact_ref": REF,
         "image_artifact_ref": REF, "native_format": IDENTIFIER,
         "native_initial_mode": IDENTIFIER, "selected_mode": IDENTIFIER,
@@ -372,7 +372,7 @@ RECORD_SCHEMAS['source']['properties']['publication_identifiers'] = {
 RECORD_SCHEMAS["parse_attempt"]["properties"]["native_source_ref"] = {
     **REF, "description": "Optional tool-owned native GenBank JSONL assertion projection. Coordinates in that source describe normalized projection bytes, distinct from original GenBank bytes and current scientific annotations."}
 RECORD_SCHEMAS["collection"]["properties"]["storage_representation"] = {
-    "const": "packed_member_components_v1", "description": "Host physical storage of exact read-member component bytes. This is not a biological sequence target or coordinate system."}
+    "const": "packed_member_components", "description": "Host physical storage of exact read-member component bytes. This is not a biological sequence target or coordinate system."}
 for _native_stream in ("stdout_ref", "stderr_ref"):
     RECORD_SCHEMAS["source"]["properties"][_native_stream] = {
         **REF, "description": "Optional host-recorded exact native output stream artifact. This is provenance, not a biological observation or model-authored text."}
@@ -384,7 +384,7 @@ RECORD_SCHEMAS["source"]["properties"]["query_selection_ref"] = {
     **REF, "description": "Optional exact immutable original-read search selection. A library container named in a search-result custody observation does not mean all its members were searched."}
 RECORD_SCHEMAS["reference"]["properties"].update({"member_ref": REF})
 RECORD_SCHEMAS["read_selection"] = obj({"library_ref": REF,
-    "binding_version": {"const": "fixed_original_read_position_measure_v1"},
+    "binding_version": {"const": "fixed_original_read_position_measure"},
     "member_count": {"type": "integer", "minimum": 1},
     "position_mass": {"type": "integer", "minimum": 1},
     "membership_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}})

@@ -57,7 +57,7 @@ Qualification: TypeAlias = Literal["alternative_correspondences_not_enumerated",
 InputRole: TypeAlias = Literal["single_structure", "fixed_structure", "moving_structure", "explicit_map", "alignment_native", "alignment_grading", "fixed_sequence", "moving_sequence", "fixed_residue_map", "moving_residue_map", "supplied_metadata", "received_transform_components", "received_transform_sheet"]
 ManifestRole: TypeAlias = Union[InputRole, Literal["run_plan", "worker_input", "native_result", "sequence", "residue_map", "stdout", "stderr"]]
 AlignmentSymbol: TypeAlias = Annotated[str, "alignment_symbol"]
-FileFormat: TypeAlias = Union[StructureFormat, Literal["ascii_protein_sequence_v1", "protein_structure_sequence_v1", "protein_residue_map_v1", "protein_structure_metadata_v1", "biopython_pairwise_json", "tool_grading_artifact_v1", "tool_grading_artifact_v2", "protein_structure_comparison_sheet_v1", "protein_structure_components_v1", "protein_structure_projection_table_v1", "native_protein_structure_bundle_v1", "native_protein_structure_run_plan_v1", "protein_structure_worker_input_v1", "protein_structure_native_v1", "protein_structure_inventory_native_v1", "protein_structure_sequence_native_v1", "text"]]
+FileFormat: TypeAlias = Union[StructureFormat, Literal["ascii_protein_sequence", "protein_structure_sequence", "protein_residue_map", "protein_structure_metadata", "biopython_pairwise_json", "tool_grading_artifact", "tool_grading_artifact_with_correspondence", "protein_structure_comparison_sheet", "protein_structure_components", "protein_structure_projection_table", "native_protein_structure_bundle", "native_protein_structure_run_plan", "protein_structure_worker_input", "protein_structure_native", "protein_structure_inventory_native", "protein_structure_sequence_native", "text"]]
 
 class NumberCell(TypedDict):
     value: Real | None
@@ -249,7 +249,7 @@ class ChainInventoryRow(TypedDict):
     atom_row_keys: list[NonemptyText]
 
 class ParsedStructure(TypedDict):
-    version: Literal["protein_structure_parsed_v1"]
+    version: Literal["protein_structure_parsed"]
     file_identity: FileIdentity
     state: State
     pdb_records: list[PdbRecord]
@@ -326,7 +326,7 @@ class SequenceResidueMapRow(TypedDict):
     ca: CaSelection
 
 class StructureSequence(TypedDict):
-    version: Literal["protein_structure_sequence_v1"]
+    version: Literal["protein_structure_sequence"]
     state: State
     selection: StructureSelection
     alignment_sequence: Text | None
@@ -338,19 +338,13 @@ class StructureSequence(TypedDict):
     issues: list[StructuredIssue]
     qualifications: list[Qualification]
 
-class ResultCustody(TypedDict):
-    run_id: NonemptyText
-    result_episode_id: NonemptyText
-    result_operation_key: NonemptyText
-    result_receipt_key: NonemptyText
-    handoff_ref: SourceRef
+class ProteinStructureCustody(TypedDict):
+    version: Literal["protein_structure_custody"]
     source_ref: SourceRef
-    bundle_artifact_ref: ArtifactRef
-    original_request_sha256: Sha256
 
 class StructureSequenceDescriptor(TypedDict):
-    version: Literal["structure_sequence_descriptor_v1"]
-    custody: ResultCustody
+    version: Literal["structure_sequence_descriptor"]
+    custody: ProteinStructureCustody
     reference_ref: ReferenceRef
     sequence_file: FileIdentity
     residue_map_file: FileIdentity
@@ -360,8 +354,8 @@ class StructureSequenceDescriptor(TypedDict):
     allowed_uses: list[Literal["sequence_align", "structure_correspondence"]]
 
 class SavedSheetDescriptor(TypedDict):
-    version: Literal["protein_structure_saved_sheet_v1"]
-    custody: ResultCustody
+    version: Literal["protein_structure_saved_sheet"]
+    custody: ProteinStructureCustody
     sheet_file: FileIdentity
     original_components_file: FileIdentity
     operation: Literal["compare_protein_structures"]
@@ -369,7 +363,7 @@ class SavedSheetDescriptor(TypedDict):
     allowed_uses: list[Literal["recalculate", "select_projection", "use_transform"]]
 
 class AlignmentDescriptor(TypedDict):
-    version: Literal["structure_alignment_descriptor_v1"]
+    version: Literal["structure_alignment_descriptor"]
     observation_ref: ObservationRef
     source_ref: SourceRef
     original_operation_key: NonemptyText
@@ -386,15 +380,11 @@ class AlignmentDescriptor(TypedDict):
 Interval: TypeAlias = Annotated[list[Count], "two"]
 CoordinatePath: TypeAlias = Annotated[list[list[Count]], "two"]
 class AlignedNative(TypedDict):
+    native_format: Literal["biopython_pairwise_native"]
     aligned: Literal[True]
     native_score: Real
     query_length: Positive
     reference_length: Positive
-    paired_positions: Count
-    identical_positions: Count
-    identity_fraction: Real
-    query_coverage: Real
-    reference_coverage: Real
     query_interval: Interval | None
     reference_interval: Interval | None
     coordinates: CoordinatePath
@@ -408,39 +398,19 @@ class AlignedNative(TypedDict):
     limitations: list[Text]
 
 class NoAlignmentNative(TypedDict):
+    native_format: Literal["biopython_pairwise_native"]
     aligned: Literal[False]
-    query_length: Positive
-    reference_length: Positive
-    mode: Literal["local", "global"]
-    matrix: Literal["BLOSUM62"]
-    biopython_version: NonemptyText
-
-class AlignedNativeV2(TypedDict):
-    native_format: Literal["biopython_pairwise_native_v2"]
-    aligned: Literal[True]
-    native_score: Real
-    query_length: Positive
-    reference_length: Positive
-    query_interval: Interval | None
-    reference_interval: Interval | None
-    coordinates: CoordinatePath
-    aligned_query: NonemptyText
-    aligned_reference: NonemptyText
-    mode: Literal["local", "global"]
-    matrix: Literal["BLOSUM62"]
-    gap_open: Literal[-10.0]
-    gap_extend: Literal[-0.5]
-    biopython_version: NonemptyText
-    limitations: list[Text]
-
-class NoAlignmentNativeV2(NoAlignmentNative):
-    native_format: Literal["biopython_pairwise_native_v2"]
     native_score: None
+    query_length: Positive
+    reference_length: Positive
+    mode: Literal["local", "global"]
+    matrix: Literal["BLOSUM62"]
+    biopython_version: NonemptyText
     gap_open: Literal[-10.0]
     gap_extend: Literal[-0.5]
     limitations: list[Text]
 
-BiopythonPairwiseNative: TypeAlias = AlignedNative | NoAlignmentNative | AlignedNativeV2 | NoAlignmentNativeV2
+BiopythonPairwiseNative: TypeAlias = AlignedNative | NoAlignmentNative
 class PairwiseParameters(TypedDict):
     matrix: Text | None
     gap_open: Real | None
@@ -488,8 +458,8 @@ class PairwiseSymbols(TypedDict):
     reader_normalization: Literal["uppercase_of_native_traceback_symbols"]
     native_nucleotide_normalization: None
     identity: Literal["literal_normalized_symbol_equality_without_ambiguity_resolution"]
-class BiopythonPairwiseSheetV1(TypedDict):
-    schema: Literal["biopython_pairwise_sheet_v1"]
+class BiopythonPairwiseSheet(TypedDict):
+    schema: Literal["biopython_pairwise_sheet"]
     status: Text
     native_result: BiopythonPairwiseNative
     molecule: Literal["protein"]
@@ -510,7 +480,7 @@ class BiopythonPairwiseSheetV1(TypedDict):
 class AlignmentSnapshot(TypedDict):
     descriptor: AlignmentDescriptor
     native_result: BiopythonPairwiseNative
-    pairwise_sheet: BiopythonPairwiseSheetV1
+    pairwise_sheet: BiopythonPairwiseSheet
 class RetainedAlignmentInput(TypedDict):
     kind: Literal["retained_alignment"]
     alignment: AlignmentDescriptor
@@ -521,7 +491,7 @@ class ExplicitMapRow(TypedDict):
     fixed_position_key: PositionKey
     moving_position_key: PositionKey
 class ExplicitMapDocument(TypedDict):
-    version: Literal["protein_residue_map_v1"]
+    version: Literal["protein_residue_map"]
     declared_order: Literal["collinear"]
     fixed_selection: StructureSelection
     moving_selection: StructureSelection
@@ -552,7 +522,7 @@ class UnmappedPosition(TypedDict):
     correspondence_id: NonemptyText | None
     reason: Literal["outside_alignment", "explicit_map_unmapped", "gap_in_other_sequence", "no_alignment"]
 class Correspondence(TypedDict):
-    version: Literal["protein_structure_correspondence_v1"]
+    version: Literal["protein_structure_correspondence"]
     state: State
     population_available: bool
     origin: Literal["retained_alignment", "explicit_map"]
@@ -630,7 +600,7 @@ class MetricUnitDeclaration(TypedDict):
     evidence_artifact_ref: ArtifactRef
     evidence_span: ByteSpan | None
 class MetadataDocument(TypedDict):
-    version: Literal["protein_structure_metadata_v1"]
+    version: Literal["protein_structure_metadata"]
     semantics_declarations: list[SemanticsDeclaration]
     metric_unit_declarations: list[MetricUnitDeclaration]
 class SuppliedMetadata(TypedDict):
@@ -692,7 +662,7 @@ class UnjoinedMetadata(TypedDict):
     native_addresses: list[NativeAddress]
     reason: Reason
 class StructureMetadata(TypedDict):
-    version: Literal["protein_structure_metadata_extracted_v1"]
+    version: Literal["protein_structure_metadata_extracted"]
     state: State
     structure_role: Role
     file_identity: FileIdentity
@@ -717,9 +687,9 @@ class ReceivedTransform(TypedDict):
     saved_sheet: SavedSheetDescriptor
     components_file: FileIdentity
     calculation_id: NonemptyText
-    calculation_custody: ResultCustody
+    calculation_custody: ProteinStructureCustody
 class DeclaredTransform(TypedDict):
-    version: Literal["protein_structure_transform_v1"]
+    version: Literal["protein_structure_transform"]
     direction: Literal["moving_to_fixed"]
     convention: Literal["row_vector_y_R_plus_t"]
     rotation: Mat3
@@ -740,7 +710,7 @@ class CoordinateSetSelection(TypedDict):
     atom_scope: Literal["selected_ca", "selected_chain_all_atoms"]
     frame: Literal["original", "moving_in_fixed_frame"]
 class CalculationParameters(TypedDict):
-    version: Literal["protein_structure_calculation_parameters_v1"]
+    version: Literal["protein_structure_calculation_parameters"]
     mode: ScientificMode
     fit_selection: PairSelection | None
     evaluation_selection: PairSelection
@@ -884,7 +854,7 @@ class MetadataSides(TypedDict):
     fixed: StructureMetadata
     moving: StructureMetadata
 class ProteinStructureSheet(TypedDict):
-    version: Literal["protein_structure_comparison_sheet_v1"]
+    version: Literal["protein_structure_comparison_sheet"]
     operation: Literal["compare_protein_structures"]
     scientific_mode: ScientificMode
     input_identities: SheetInputIdentities
@@ -899,7 +869,7 @@ class ProteinStructureSheet(TypedDict):
     correspondence_issues: list[StructuredIssue]
     source_qualifications: list[Qualification]
 class ProteinStructureComponents(TypedDict):
-    version: Literal["protein_structure_components_v1"]
+    version: Literal["protein_structure_components"]
     calculation_id: NonemptyText
     input_numerical_sha256: Sha256
     parameters: CalculationParameters
@@ -949,7 +919,7 @@ class InventoryMetadata(TypedDict):
     native_addresses: list[NativeAddress]
     native_tokens: list[NativeToken]
 class StructureInventory(TypedDict):
-    version: Literal["protein_structure_inventory_v1"]
+    version: Literal["protein_structure_inventory"]
     state: State
     file_identity: FileIdentity
     selection: InventorySelection
@@ -963,8 +933,8 @@ PUBLIC_TYPE_NAMES = tuple("""FileIdentity BlockSelection ModelKey ChainKey Posit
 DeclaredResidueIdentity AtomIdentity RawAtomRow ParsedStructure NativeToken NativeNumber NativeAddress
 NumberCell VectorCell MatrixCell Role Side State ScientificMode Unit Origin Reason IssueCode IssueField
 StructuredIssue Qualification InputRole ManifestRole StructureSelection SequenceResidueMapRow StructureSequence
-ResultCustody StructureSequenceDescriptor SavedSheetDescriptor AlignmentDescriptor BiopythonPairwiseNative
-BiopythonPairwiseSheetV1 AlignmentSnapshot ExplicitMapDocument CorrespondenceInput CorrespondenceRow
+ProteinStructureCustody StructureSequenceDescriptor SavedSheetDescriptor AlignmentDescriptor BiopythonPairwiseNative
+BiopythonPairwiseSheet AlignmentSnapshot ExplicitMapDocument CorrespondenceInput CorrespondenceRow
 Correspondence UnmappedPosition PairSelector PairSelection ResolvedRequestRow ResolvedPairSelection CoordinatePair
 MetadataDocument SuppliedMetadata StructureMetadata AtomUncertainty NativeMetricDefinition NativeQaRow MetadataValueRow
 NumericalParameters DeclaredTransform CalculationParameters CoordinateSetSelection TransformResult FitResult SiteMeasurement
@@ -1043,9 +1013,11 @@ def _make_definitions():
     # Native producer limitations are fixed-order declarations, not free prose.
     for typename, values in (
         ("AlignedNative", ["pairwise_alignment_is_not_a_database_significance_test", "one_alignment_is_not_an_orthology_or_function_assignment"]),
-        ("BiopythonPairwiseSheetV1", ["only_the_supplied_native_alignment_is_available_not_all_optimal_alternatives", "original_unaligned_sequence_symbols_are_not_present_in_this_native_result", "native_score_is_not_database_significance_or_function_confidence"]),
+        ("BiopythonPairwiseSheet", ["only_the_supplied_native_alignment_is_available_not_all_optimal_alternatives", "original_unaligned_sequence_symbols_are_not_present_in_this_native_result", "native_score_is_not_database_significance_or_function_confidence"]),
     ):
         definitions[typename]["properties"]["limitations"] = {"const": values}
+    definitions["ProteinStructureCustody"]["properties"]["source_ref"].update(format="reference", **{"x-reference-namespace": "source"})
+    definitions["StructureSequenceDescriptor"]["properties"]["reference_ref"].update(format="reference", **{"x-reference-namespace": "reference"})
     return definitions
 
 
@@ -1057,11 +1029,7 @@ _STRICT_VALIDATOR = validators.extend(Draft202012Validator,
 _VALIDATORS = {name: _STRICT_VALIDATOR({"$defs": _DEFINITIONS, "$ref": "#/$defs/" + name}) for name in PUBLIC_TYPE_NAMES}
 
 
-def protein_structure_schema_definitions(*, action_custody=False) -> dict:
-    if type(action_custody) is not bool:
-        raise ValueError("invalid_schema")
-    if action_custody:
-        return protein_structure_action_schema_definitions()
+def protein_structure_schema_definitions() -> dict:
     return deepcopy(_DEFINITIONS)
 
 
@@ -1138,7 +1106,7 @@ def _check_selection(v):
         raise ValueError("invalid_schema")
     if (v["bfactor_semantics"] == "unspecified") != (v["semantics_evidence"] is None):
         raise ValueError("metadata_join_conflict")
-    if v["semantics_evidence"] is not None and v["semantics_evidence"]["file_identity"]["format"] != "protein_structure_metadata_v1":
+    if v["semantics_evidence"] is not None and v["semantics_evidence"]["file_identity"]["format"] != "protein_structure_metadata":
         raise ValueError("unsupported_format")
 
 
@@ -1245,7 +1213,7 @@ def _check_correspondence(v):
     if v["origin"] == "explicit_map":
         if v["alignment_native"] is not None or v["explicit_map"] is None or v["map_file"] is None:
             raise ValueError("conflicting_identity")
-        if v["map_file"]["format"] != "protein_residue_map_v1":
+        if v["map_file"]["format"] != "protein_residue_map":
             raise ValueError("unsupported_format")
     elif v["explicit_map"] is not None or v["map_file"] is not None or v["population_available"] and v["alignment_native"] is None:
         raise ValueError("conflicting_identity")
@@ -1357,12 +1325,21 @@ def _relations(v):
             raise ValueError("invalid_coordinate_identity")
         if (v["state"] == "available") != (v["primary_reason"] is None) or v["state"] == "available" and v["selected_atom_row_key"] is None:
             raise ValueError("invalid_coordinate_identity")
-    elif keys == set(ResultCustody.__annotations__):
-        payload = {"run_id": v["run_id"], "episode_id": v["result_episode_id"], "operation_key": v["result_operation_key"]}
-        if v["result_receipt_key"] != "protein_structure_result_receipt:" + digest(payload):
-            raise ValueError("conflicting_identity")
+    elif v.get("version") == "structure_sequence_descriptor":
+        _unique(v["allowed_uses"], nonempty=True)
+        if (not same(v["selection"]["file_identity"], v["structure_file"])
+                or v["sequence_file"]["byte_length"] != v["sequence_length"]):
+            raise ValueError("sequence_artifact_mismatch")
+        if (v["sequence_file"]["format"] != "ascii_protein_sequence"
+                or v["residue_map_file"]["format"] != "protein_structure_sequence"):
+            raise ValueError("unsupported_format")
+    elif v.get("version") == "protein_structure_saved_sheet":
+        _unique(v["allowed_uses"], nonempty=True)
+        if (v["sheet_file"]["format"] != "protein_structure_comparison_sheet"
+                or v["original_components_file"]["format"] != "protein_structure_components"):
+            raise ValueError("unsupported_format")
     elif keys == set(AlignmentDescriptor.__annotations__):
-        if v["native_file"]["format"] != "biopython_pairwise_json" or v["grading_file"]["format"] not in ("tool_grading_artifact_v1", "tool_grading_artifact_v2"):
+        if v["native_file"]["format"] != "biopython_pairwise_json" or v["grading_file"]["format"] not in ("tool_grading_artifact", "tool_grading_artifact_with_correspondence"):
             raise ValueError("unsupported_format")
     elif keys == set(AlignmentSnapshot.__annotations__):
         _check_snapshot(v)
@@ -1392,35 +1369,35 @@ def _relations(v):
         if v["blocks"]["kind"] == "explicit":
             _unique(v["blocks"]["blocks"], nonempty=True)
     version = v.get("version")
-    if version == "protein_structure_parsed_v1":
+    if version == "protein_structure_parsed":
         _check_parsed(v)
-    elif version == "protein_structure_sequence_v1":
+    elif version == "protein_structure_sequence":
         _check_sequence(v)
-    elif version == "structure_sequence_descriptor_v1":
+    elif version == "structure_sequence_descriptor":
         _unique(v["allowed_uses"], nonempty=True)
         if not same(v["selection"]["file_identity"], v["structure_file"]) or v["sequence_file"]["byte_length"] != v["sequence_length"]:
             raise ValueError("sequence_artifact_mismatch")
-        if v["sequence_file"]["format"] != "ascii_protein_sequence_v1" or v["residue_map_file"]["format"] != "protein_structure_sequence_v1":
+        if v["sequence_file"]["format"] != "ascii_protein_sequence" or v["residue_map_file"]["format"] != "protein_structure_sequence":
             raise ValueError("unsupported_format")
-    elif version == "protein_structure_saved_sheet_v1":
+    elif version == "protein_structure_saved_sheet":
         _unique(v["allowed_uses"], nonempty=True)
-        if v["sheet_file"]["format"] != "protein_structure_comparison_sheet_v1" or v["original_components_file"]["format"] != "protein_structure_components_v1":
+        if v["sheet_file"]["format"] != "protein_structure_comparison_sheet" or v["original_components_file"]["format"] != "protein_structure_components":
             raise ValueError("unsupported_format")
-    elif version == "protein_residue_map_v1":
+    elif version == "protein_residue_map":
         if v["fixed_selection"]["structure_role"] != "fixed" or v["moving_selection"]["structure_role"] != "moving":
             raise ValueError("conflicting_identity")
         for side in ("fixed", "moving"):
             _unique([r[side + "_position_key"] for r in v["rows"]], "map_not_injective")
             for row in v["rows"]:
                 _position_in_selection(row[side + "_position_key"], v[side + "_selection"])
-    elif version == "protein_structure_correspondence_v1":
+    elif version == "protein_structure_correspondence":
         _check_correspondence(v)
-    elif version == "protein_structure_metadata_v1":
+    elif version == "protein_structure_metadata":
         _unique([x["declaration_id"] for x in v["semantics_declarations"] + v["metric_unit_declarations"]], "metadata_join_conflict")
         for decl in v["metric_unit_declarations"]:
             if decl["meaning"] == "plddt" and decl["unit"] != "score_0_100" or decl["meaning"] == "pae" and decl["unit"] != "angstrom":
                 raise ValueError("metadata_join_conflict")
-    elif version == "protein_structure_metadata_extracted_v1":
+    elif version == "protein_structure_metadata_extracted":
         if v["structure_role"] != v["selection"]["structure_role"] or not same(v["file_identity"], v["selection"]["file_identity"]):
             raise ValueError("conflicting_identity")
         for atom in v["atom_uncertainty"]:
@@ -1437,18 +1414,18 @@ def _relations(v):
         metrics = {r["metric_key"] for r in v["metric_definitions"]}
         if any(r["metric_key"] not in metrics for r in v["qa_rows"]):
             raise ValueError("metadata_join_conflict")
-    elif version == "protein_structure_transform_v1":
+    elif version == "protein_structure_transform":
         if (v["origin"] == "supplied") != (v["received_from"] is None) or v["fixed_selection"]["structure_role"] != "fixed" or v["moving_selection"]["structure_role"] != "moving":
             raise ValueError("invalid_transform")
-        if v["received_from"] is not None and v["received_from"]["components_file"]["format"] != "protein_structure_components_v1":
+        if v["received_from"] is not None and v["received_from"]["components_file"]["format"] != "protein_structure_components":
             raise ValueError("unsupported_format")
-    elif version == "protein_structure_calculation_parameters_v1":
+    elif version == "protein_structure_calculation_parameters":
         _check_parameters(v)
-    elif version == "protein_structure_comparison_sheet_v1":
+    elif version == "protein_structure_comparison_sheet":
         _check_sheet(v)
-    elif version == "protein_structure_components_v1":
+    elif version == "protein_structure_components":
         _check_components(v)
-    elif version == "protein_structure_inventory_v1":
+    elif version == "protein_structure_inventory":
         _check_inventory(v)
 
 
@@ -1528,13 +1505,9 @@ def _check_inventory(v):
 def _validate(name, value):
     try:
         _json_only(value)
-        action_custody = _contains_action_custody(value)
-        validator = _action_validator(name) if action_custody else _VALIDATORS[name]
-        if not validator.is_valid(value):
+        if not _VALIDATORS[name].is_valid(value):
             raise ValueError("invalid_schema")
         _relations(value)
-        if action_custody:
-            _action_relations(value)
     except (KeyError, TypeError, IndexError, RecursionError, OverflowError) as error:
         raise ValueError("invalid_schema") from error
     return deepcopy(value)
@@ -1552,9 +1525,6 @@ def validate_parsed_structure(value: ParsedStructure) -> ParsedStructure:
 def validate_structure_sequence(value: StructureSequence) -> StructureSequence:
     return _validate("StructureSequence", value)
 
-def validate_structure_sequence_descriptor(value: StructureSequenceDescriptor) -> StructureSequenceDescriptor:
-    return _validate("StructureSequenceDescriptor", value)
-
 def validate_alignment_descriptor(value: AlignmentDescriptor) -> AlignmentDescriptor:
     return _validate("AlignmentDescriptor", value)
 
@@ -1566,7 +1536,7 @@ def validate_explicit_residue_map_document(value: ExplicitMapDocument) -> Explic
 
 def validate_correspondence_input(value: CorrespondenceInput) -> CorrespondenceInput:
     result = _validate("CorrespondenceInput", value)
-    if result["kind"] == "explicit_map" and result["map_file"]["format"] != "protein_residue_map_v1":
+    if result["kind"] == "explicit_map" and result["map_file"]["format"] != "protein_residue_map":
         raise ValueError("unsupported_format")
     if result["kind"] == "retained_alignment":
         fixed, moving = result["fixed_sequence_descriptor"], result["moving_sequence_descriptor"]
@@ -1596,9 +1566,6 @@ def validate_protein_structure_sheet(value: ProteinStructureSheet) -> ProteinStr
 def validate_protein_structure_components(value: ProteinStructureComponents) -> ProteinStructureComponents:
     return _validate("ProteinStructureComponents", value)
 
-def validate_saved_sheet_descriptor(value: SavedSheetDescriptor) -> SavedSheetDescriptor:
-    return _validate("SavedSheetDescriptor", value)
-
 def validate_inventory_selection(value: InventorySelection) -> InventorySelection:
     return _validate("InventorySelection", value)
 
@@ -1609,125 +1576,16 @@ __all__ = [*PUBLIC_TYPE_NAMES, "protein_structure_schema_definitions", "protein_
            *[name for name in globals() if name.startswith("validate_")]]
 
 
-# These authority types are deliberately defined AFTER the legacy cohort was
-# constructed. Default exported definitions and their historical digests stay
-# unchanged; only an explicitly selected action cohort includes these types.
-class ProteinStructureActionCustody(TypedDict):
-    version: Literal["protein_structure_action_custody_v1"]
-    source_ref: SourceRef
+def validate_protein_structure_custody(value):
+    return _validate("ProteinStructureCustody", value)
 
 
-class StructureSequenceDescriptorV2(TypedDict):
-    version: Literal["structure_sequence_descriptor_v2"]
-    custody: ProteinStructureActionCustody
-    reference_ref: ReferenceRef
-    sequence_file: FileIdentity
-    residue_map_file: FileIdentity
-    structure_file: FileIdentity
-    selection: StructureSelection
-    sequence_length: Positive
-    allowed_uses: list[Literal["sequence_align", "structure_correspondence"]]
+def validate_structure_sequence_descriptor(value):
+    return _validate("StructureSequenceDescriptor", value)
 
 
-class SavedSheetDescriptorV2(TypedDict):
-    version: Literal["protein_structure_saved_sheet_v2"]
-    custody: ProteinStructureActionCustody
-    sheet_file: FileIdentity
-    original_components_file: FileIdentity
-    operation: Literal["compare_protein_structures"]
-    original_mode: ScientificMode
-    allowed_uses: list[Literal["recalculate", "select_projection", "use_transform"]]
+def validate_saved_sheet_descriptor(value):
+    return _validate("SavedSheetDescriptor", value)
 
 
-def protein_structure_action_schema_definitions() -> dict:
-    """Extend only authority positions in a detached opt-in schema cohort."""
-    definitions = deepcopy(_DEFINITIONS)
-    definitions["ResultCustodyV1"] = deepcopy(definitions["ResultCustody"])
-    definitions["ProteinStructureActionCustody"] = {
-        "type": "object", "properties": {
-            "version": {"enum": ["protein_structure_action_custody_v1"]},
-            "source_ref": {**_type_schema(SourceRef), "format": "reference", "x-reference-namespace": "source"}},
-        "required": ["version", "source_ref"], "additionalProperties": False}
-    for name, version in (("StructureSequenceDescriptor", "structure_sequence_descriptor_v2"),
-                          ("SavedSheetDescriptor", "protein_structure_saved_sheet_v2")):
-        legacy = deepcopy(_DEFINITIONS[name])
-        legacy["properties"]["custody"] = {"$ref": "#/$defs/ResultCustodyV1"}
-        definitions[name + "V1"] = legacy
-        action = deepcopy(legacy)
-        action["properties"]["version"] = {"enum": [version]}
-        action["properties"]["custody"] = {"$ref": "#/$defs/ProteinStructureActionCustody"}
-        if name == "StructureSequenceDescriptor":
-            action["properties"]["reference_ref"].update(format="reference", **{"x-reference-namespace": "reference"})
-        definitions[name + "V2"] = action
-        definitions[name] = {"anyOf": [{"$ref": "#/$defs/" + name + "V1"},
-                                      {"$ref": "#/$defs/" + name + "V2"}]}
-    for suffix, descriptor, custody in (("V1", "SavedSheetDescriptorV1", "ResultCustodyV1"),
-                                       ("V2", "SavedSheetDescriptorV2", "ProteinStructureActionCustody")):
-        received = deepcopy(_DEFINITIONS["ReceivedTransform"])
-        received["properties"]["saved_sheet"] = {"$ref": "#/$defs/" + descriptor}
-        received["properties"]["calculation_custody"] = {"$ref": "#/$defs/" + custody}
-        definitions["ReceivedTransform" + suffix] = received
-    definitions["ReceivedTransform"] = {"anyOf": [{"$ref": "#/$defs/ReceivedTransformV1"},
-                                                 {"$ref": "#/$defs/ReceivedTransformV2"}]}
-    return definitions
-
-
-def _contains_action_custody(value):
-    pending = [value]
-    while pending:
-        item = pending.pop()
-        if isinstance(item, dict):
-            if isinstance(item.get("version"), str) and item["version"] in {"protein_structure_action_custody_v1",
-                    "structure_sequence_descriptor_v2", "protein_structure_saved_sheet_v2"}:
-                return True
-            pending.extend(item.values())
-        elif isinstance(item, list):
-            pending.extend(item)
-    return False
-
-
-def _action_validator(name):
-    definitions = protein_structure_action_schema_definitions()
-    if name not in definitions:
-        raise ValueError("invalid_schema")
-    return _STRICT_VALIDATOR({"$defs": definitions, "$ref": "#/$defs/" + name})
-
-
-def _action_relations(value):
-    if isinstance(value, list):
-        for item in value:
-            _action_relations(item)
-    elif isinstance(value, dict):
-        for item in value.values():
-            _action_relations(item)
-        version = value.get("version")
-        if version == "structure_sequence_descriptor_v2":
-            _unique(value["allowed_uses"], nonempty=True)
-            if (not same(value["selection"]["file_identity"], value["structure_file"])
-                    or value["sequence_file"]["byte_length"] != value["sequence_length"]):
-                raise ValueError("sequence_artifact_mismatch")
-            if (value["sequence_file"]["format"] != "ascii_protein_sequence_v1"
-                    or value["residue_map_file"]["format"] != "protein_structure_sequence_v1"):
-                raise ValueError("unsupported_format")
-        elif version == "protein_structure_saved_sheet_v2":
-            _unique(value["allowed_uses"], nonempty=True)
-            if (value["sheet_file"]["format"] != "protein_structure_comparison_sheet_v1"
-                    or value["original_components_file"]["format"] != "protein_structure_components_v1"):
-                raise ValueError("unsupported_format")
-
-
-def validate_protein_structure_action_custody(value):
-    return _validate("ProteinStructureActionCustody", value)
-
-
-def validate_structure_sequence_descriptor_v2(value):
-    return _validate("StructureSequenceDescriptorV2", value)
-
-
-def validate_saved_sheet_descriptor_v2(value):
-    return _validate("SavedSheetDescriptorV2", value)
-
-
-__all__ += ["ProteinStructureActionCustody", "StructureSequenceDescriptorV2", "SavedSheetDescriptorV2",
-    "protein_structure_action_schema_definitions", "validate_protein_structure_action_custody",
-    "validate_structure_sequence_descriptor_v2", "validate_saved_sheet_descriptor_v2"]
+__all__ += ["validate_protein_structure_custody", "validate_structure_sequence_descriptor", "validate_saved_sheet_descriptor"]

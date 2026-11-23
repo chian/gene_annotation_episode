@@ -1,6 +1,6 @@
-"""Deterministic v2 printed-relative-signal numerical sheet population.
+"""Deterministic printed-relative-signal numerical sheet population.
 
-Seven v1 component meanings are preserved. Only ratio, difference and positive
+Seven component meanings are preserved. Only ratio, difference and positive
 log transforms are populated; amount/response/observation models remain explicit
 route limits. These dependent descriptions are not separate evidence credits.
 """
@@ -31,7 +31,7 @@ def _component_facts(e, facts, name):
     return value, candidates, domains, unit, status, origin, reason, conditional
 
 
-def populate_relative_signal_v2(extraction):
+def populate_relative_signal_from_source(extraction):
     extraction = validate_relative_signal_source_extraction(extraction)
     facts = _facts(extraction)
     fields = ('value', 'value_candidates', 'reported_domains', 'unit', 'status', 'origin', 'unavailable_reason', 'conditional_on')
@@ -39,11 +39,11 @@ def populate_relative_signal_v2(extraction):
     for name in COMPONENTS:
         cells[name] = dict(zip(fields, _component_facts(extraction, facts, name)))
         cells[name]['formula'] = _FORMULAS[name]
-    sheet = {'version': 'relative_signal_sheet_v2', 'scope': 'reported_relative_signal', 'cells': cells,
+    sheet = {'version': 'relative_signal_sheet', 'scope': 'reported_relative_signal', 'cells': cells,
         'selected_roster_resolved': facts['resolved'], 'point_candidate_set_complete': facts['complete'],
         'known_source_conflict': facts['conflict'], 'independent_preparation_count': None, 'annotation_credit': None}
     _shape(sheet, _SHEET_SCHEMA, 'sheet')
     return sheet
 
 
-__all__ = ['populate_relative_signal_v2']
+__all__ = ['populate_relative_signal_from_source']

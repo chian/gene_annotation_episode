@@ -20,9 +20,9 @@ from .native_macs2_peak_execution import (
 from .native_atac_differential_contracts import failure, unique_failures
 
 
-REQUEST_VERSION = 'macs2_peak_worker_request_v1'
-RESULT_VERSION = 'macs2_peak_worker_result_v1'
-COMPONENT_FORMAT = 'macs2_peak_components_v1'
+REQUEST_VERSION = 'macs2_peak_worker_request'
+RESULT_VERSION = 'macs2_peak_worker_result'
+COMPONENT_FORMAT = 'macs2_peak_components'
 _PARSERS = {
     'peaks_xls': ('peaks_xls', 'macs2_peaks_xls_narrow', parse_macs2_peaks_xls),
     'narrowpeak': ('narrowpeaks', 'macs2_narrowpeak10', parse_macs2_narrowpeak),

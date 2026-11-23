@@ -17,7 +17,7 @@ from gene_annotation_episode.state import Store
 
 def selector(program, *, offset=0, limit=100, keys=None, metrics=None):
     family = family_for_program(program)
-    return {"version": "native_hmmer_result_selector_v1", "acquisition": "complete_bound_bundle",
+    return {"version": "native_hmmer_result_selector", "acquisition": "complete_bound_bundle",
         "projection": {"family": family, "rows": {"record_keys": keys} if keys is not None else
             {"offset": offset, "limit": limit}, "metrics": list(metrics or NATIVE_HMMER_METRICS[family])}}
 
@@ -25,7 +25,7 @@ def selector(program, *, offset=0, limit=100, keys=None, metrics=None):
 def source(store, prepared):
     return store.put("source", {"provider": "episode.execution_result", "accession": None,
         "uri": None, "artifact_ref": prepared["bundle_artifact_ref"], "text_ref": None,
-        "request_ref": None, "version": "native_hmmer_result_v1", "retrieved_at": None,
+        "request_ref": None, "version": "native_hmmer_result", "retrieved_at": None,
         "auxiliary_artifact_refs": [prepared["source_grading_artifact_ref"]]}, origin="tool")
 
 

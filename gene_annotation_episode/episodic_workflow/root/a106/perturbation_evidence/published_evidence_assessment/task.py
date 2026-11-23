@@ -62,10 +62,10 @@ STATE_QUERY_SCHEMA = obj({
                                   "records themselves, supply refs alone instead."}}, required=[])
 
 # What the model chooses for the child: the records that give the question its context and the one task (the old
-# ``strategy_assignment_v1`` without its version, which ``msg_to_child`` supplies; the task without ``credit_unit``,
+# ``strategy_assignment`` without its version, which ``msg_to_child`` supplies; the task without ``credit_unit``,
 # which ``msg_to_child`` supplies from this episode's own commission).
 UNIQUE_REFERENCES = {'type': 'array', 'items': REF, 'uniqueItems': True}
-TASK_VERSION = 'literature_local_task_v1'
+TASK_VERSION = 'literature_local_task'
 STRATEGY_TASK = obj({'version': {'const': TASK_VERSION}, 'evidence_axis': {'const': 'A106'},
                      'kind': {'const': 'verified_source_leads'}})
 COMMISSION = {

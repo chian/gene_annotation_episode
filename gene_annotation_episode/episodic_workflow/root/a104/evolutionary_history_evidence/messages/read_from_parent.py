@@ -28,7 +28,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.evolution
 AXIS = 'A104'
 # The old ``_EVIDENCE_TASK``: the whole-axis task the root commissions; ``credit_unit`` is the finding unit of the
 # explicitly configured credit definition for this exact task.
-_EVIDENCE_TASK = obj({'version': {'const': 'evidence_axis_task_v1'}, 'kind': {'const': 'whole_axis_findings'},
+_EVIDENCE_TASK = obj({'version': {'const': 'evidence_axis_task'}, 'kind': {'const': 'whole_axis_findings'},
                       'evidence_axis': {'const': AXIS},
                       'credit_unit': {'type': 'number', 'exclusiveMinimum': 0}})
 # The old ``_ASSIGNMENT`` context: the evidence task and, optionally, the original A104 task (name).

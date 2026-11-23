@@ -1019,13 +1019,13 @@ class Store:
                 source = self._require(data['source_ref'], {'source'})
                 if (origin != 'tool' or source['origin'] != 'tool'
                         or source['provider'] != 'episode.execution_result'
-                        or source.get('version') != 'native_blast_standard_database_bundle_v1'):
+                        or source.get('version') != 'native_blast_standard_database_bundle'):
                     raise ContractError('native_blast_standard_database_requires_native_tool_source')
                 if source['artifact_ref'] != native_database['bundle_artifact_ref']:
                     raise ContractError('native_blast_standard_database_bundle_source_mismatch')
                 bundle = json.loads(materials.artifact_path(self, source['artifact_ref']).read_bytes())
                 job = bundle.get('requested_job', {}).get('native_blast_standard_database', {})
-                if (bundle.get('version') != 'native_blast_standard_database_bundle_v1'
+                if (bundle.get('version') != 'native_blast_standard_database_bundle'
                         or bundle.get('mode') != 'database' or job.get('mode') != 'database'
                         or bundle.get('program') != native_database['program']
                         or job.get('program') != native_database['program']):
@@ -1045,13 +1045,13 @@ class Store:
                 source = self._require(data['source_ref'], {'source'})
                 if (origin != 'tool' or source['origin'] != 'tool'
                         or source['provider'] != 'episode.execution_result'
-                        or source.get('version') != 'native_blast_database_bundle_v1'):
+                        or source.get('version') != 'native_blast_database_bundle'):
                     raise ContractError('native_blast_database_requires_native_tool_source')
                 if source['artifact_ref'] != native_database['bundle_artifact_ref']:
                     raise ContractError('native_blast_database_bundle_source_mismatch')
                 bundle = json.loads(materials.artifact_path(self, source['artifact_ref']).read_bytes())
                 job = bundle.get('requested_job', {}).get('native_blast_database', {})
-                if (bundle.get('version') != 'native_blast_database_bundle_v1'
+                if (bundle.get('version') != 'native_blast_database_bundle'
                         or bundle.get('mode') != 'database' or job.get('mode') != 'database'
                         or bundle.get('program') != native_database['program']
                         or job.get('program') != native_database['program']):
@@ -1071,7 +1071,7 @@ class Store:
                 source = self._require(data["source_ref"], {"source"})
                 if (origin != "tool" or source["origin"] != "tool"
                         or source["provider"] != "episode.execution_result"
-                        or source.get("version") != "native_blast_bundle_v1"):
+                        or source.get("version") != "native_blast_bundle"):
                     raise ContractError("native_blast_pairwise_requires_native_tool_source")
                 if data["kind"] != "comparison":
                     raise ContractError("native_blast_pairwise_observation_kind_mismatch")
@@ -1083,7 +1083,7 @@ class Store:
                         bundle = json.load(stream)
                 except (OSError, ValueError, UnicodeError) as error:
                     raise ContractError("native_blast_pairwise_bundle_unreadable") from error
-                if (not isinstance(bundle, dict) or bundle.get("version") != "native_blast_bundle_v1"
+                if (not isinstance(bundle, dict) or bundle.get("version") != "native_blast_bundle"
                         or bundle.get("mode") != "pairwise"
                         or bundle.get("program") != native_pairwise["program"]
                         or not isinstance(bundle.get("requested_job"), dict)
@@ -1109,13 +1109,13 @@ class Store:
                 source = self._require(data["source_ref"], {"source"})
                 if (origin != "tool" or source["origin"] != "tool"
                         or source["provider"] != "episode.execution_result"
-                        or source.get("version") != "native_infernal_bundle_v1"):
+                        or source.get("version") != "native_infernal_bundle"):
                     raise ContractError("native_infernal_requires_native_tool_source")
                 if source["artifact_ref"] != native_infernal["bundle_artifact_ref"]:
                     raise ContractError("native_infernal_bundle_source_mismatch")
                 self._require(native_infernal["bundle_artifact_ref"], {"artifact"})
                 bundle = json.loads(self.get_artifact(native_infernal["bundle_artifact_ref"]))
-                if (not isinstance(bundle, dict) or bundle.get("version") != "native_infernal_bundle_v1"
+                if (not isinstance(bundle, dict) or bundle.get("version") != "native_infernal_bundle"
                         or bundle.get("program") != native_infernal["program"]):
                     raise ContractError("native_infernal_bundle_program_mismatch")
                 alignment = native_infernal["program"] == "cmalign"

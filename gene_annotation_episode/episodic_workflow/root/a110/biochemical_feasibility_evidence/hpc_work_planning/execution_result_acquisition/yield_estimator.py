@@ -10,7 +10,7 @@ read). A profile's cutoff is the controller's ``cost``.
   ``acquired_record_unit * (1 - original_fraction)`` (old ``estimate_bounded_credit_yield(maximum_credit=
   remaining)``). The original fraction is zero: the initial refs hold no result window.
 
-The old exact-zero forecast of an exhausted selector (``finite_result_selector_exhaustion_v1``), the practical
+The old exact-zero forecast of an exhausted selector (``finite_result_selector_exhaustion``), the practical
 completion estimator (``PracticalYieldEstimator(verify_completion)``) and the typed-selector controller
 (``results:typed_<kind>_<version>``) are deleted (README 7b, 3d): a verified completion proof is not a controller
 input. Nothing but this controller ends the Episode."""

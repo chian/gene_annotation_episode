@@ -10,7 +10,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.perturbat
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.perturbation_evidence.literature_assay_grading import COMPONENTS as GRADE_COMPONENTS
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_assay_grading_storage import assay_grading_cells_schema
 
-VERSION = 'a105_across_experiment_aggregation_v1'
+VERSION = 'a105_across_experiment_aggregation'
 SCOPE = 'a105_across_experiment_aggregation'
 COMPONENTS = ('reliability', 'validity', 'relevance', 'attribution', 'overall')
 REDUCERS = dict(reliability='sum', validity='sum', relevance='max', attribution='max', overall='sum')

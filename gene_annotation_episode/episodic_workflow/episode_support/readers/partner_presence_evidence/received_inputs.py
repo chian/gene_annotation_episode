@@ -44,7 +44,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.molecular_s
     validate_molecular_sequence_received_source)
 from gene_annotation_episode.episodic_workflow.episode_support.records.local_execution.partner_presence_evidence.native_file_capture import NativeFileCaptureError, _metadata, retained_native_file
 
-VERSION = 'a107_received_input_v1'
+VERSION = 'a107_received_input'
 # Store tables in which A107's tool registries save each operation's returned outcome by operation key.
 PRODUCING_STATUSES = ('completed', 'partial')
 UNIT_KINDS = ('tool', 'reason', 'child')

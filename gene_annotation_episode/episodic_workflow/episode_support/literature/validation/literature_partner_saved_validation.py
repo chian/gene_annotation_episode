@@ -1,6 +1,6 @@
 """Complete original saved partner-science validation; never rerun source reading or calculation."""
 from __future__ import annotations
-from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.literature_partner_sheet_records import BINDINGS, CHECK_REASONS, COMPONENTS, ContractError, EXPERIMENT_TYPES, FORMULA_CODES, LITERAL_FIELDS, LITERAL_REFERENCE_ROLES_VERSION, LITERAL_REFERENCE_TYPES, NATIVE_UNITS, PROVIDER, REASONS, SOURCE_KINDS, _COMPONENT_ROLES, _FIXED_METADATA, _NATIVE_ARGUMENT_SCHEMA, _NATIVE_BINDING_VERSION, _NATIVE_EVIDENCE_SCHEMA, _NATIVE_EVIDENCE_V2_SCHEMA, _NATIVE_IDENTITY_FIELDS, _ROLES, _arguments_schema, _arm_metadata_schema, _binding_record, _cell_schema, _check_schema, _checks_schema, _condition_refs, _condition_role, _direct_references, _factor_names, _factor_record, _input_schema, _metadata, _native_evidence_schema, _native_operand_projection, _native_population_schema, _native_version, _saved_check, _spread_schema, assessments, canonical, deepcopy, hashlib, identity, json, literal_reference_role, obj, partner_cells_schema, partner_population_schema, partner_source_population_schema, plain, publication, read_partner_inputs, source_literal_label, unicodedata, validate_schema
+from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.literature_partner_sheet_records import BINDINGS, CHECK_REASONS, COMPONENTS, ContractError, EXPERIMENT_TYPES, FORMULA_CODES, LITERAL_FIELDS, LITERAL_REFERENCE_ROLES_VERSION, LITERAL_REFERENCE_TYPES, NATIVE_UNITS, PROVIDER, REASONS, SOURCE_KINDS, _COMPONENT_ROLES, _FIXED_METADATA, _NATIVE_ARGUMENT_SCHEMA, _NATIVE_BINDING_VERSION, _NATIVE_EVIDENCE_SCHEMA, _NATIVE_PLAIN_EVIDENCE_SCHEMA, _NATIVE_IDENTITY_FIELDS, _ROLES, _arguments_schema, _arm_metadata_schema, _binding_record, _cell_schema, _check_schema, _checks_schema, _condition_refs, _condition_role, _direct_references, _factor_names, _factor_record, _input_schema, _metadata, _native_evidence_schema, _native_operand_projection, _native_population_schema, _native_version, _saved_check, _spread_schema, assessments, canonical, deepcopy, hashlib, identity, json, literal_reference_role, obj, partner_cells_schema, partner_population_schema, partner_source_population_schema, plain, publication, read_partner_inputs, source_literal_label, unicodedata, validate_schema
 
 def _validate_saved(self, sheet_ref, saved):
 
@@ -21,14 +21,14 @@ def _validate_saved(self, sheet_ref, saved):
     require(set(saved) == {'version', 'input_source_ref', 'input_artifact_ref', 'input_source_refs', 'direct_input_source_refs', 'data_source_ref', 'extraction', 'experimental_bindings', 'factor_bindings', 'sheet'} | ({'native_operand_bindings'} if marked else set()) | {'literal_reference_roles_version'} | ({'experiment_assessment'} if assessment is not None else set()))
     require(source['version'] == self.record_version and source['text_ref'] == source['artifact_ref'])
     native = args.get('input_mode') == 'native_source_spans'
-    require(extraction['version'] == (_native_version(args) if native else 'literature_partner_inputs_extraction_v1') and extraction['arguments'] == args)
+    require(extraction['version'] == (_native_version(args) if native else 'literature_partner_inputs_extraction') and extraction['arguments'] == args)
     require(set(extraction) == {'version', 'arguments', 'sources', 'literals', 'interpretations', 'recipe', 'calculation', 'cells'} | ({'native_evidence'} if native else set()))
     recipe = extraction['recipe']
-    require(set(recipe) == {'version', 'inputs'} and recipe['version'] == 'literature_partner_selection_v1')
+    require(set(recipe) == {'version', 'inputs'} and recipe['version'] == 'literature_partner_selection')
     validate_schema(recipe['inputs'], _input_schema())
     calculation = extraction['calculation']
     require(set(calculation) == {'version', 'inputs', 'cells', 'comparison_checks'})
-    require(calculation['version'] == 'literature_partner_components_v1' and calculation['inputs'] == recipe['inputs'])
+    require(calculation['version'] == 'literature_partner_components' and calculation['inputs'] == recipe['inputs'])
     require(calculation['cells'] == extraction['cells'])
     if native:
         self._validate_native_saved(args, extraction['native_evidence'], recipe['inputs'], version=extraction['version'])
@@ -101,7 +101,7 @@ def _validate_native_saved(self, args, evidence, inputs, *, version=None):
             raise ContractError('literature_partner_sheet_source_mismatch')
     expected_version = _native_version(args)
     require(version is None or version == expected_version)
-    validate_schema(evidence, _NATIVE_EVIDENCE_V2_SCHEMA if expected_version.endswith('_v2') else _NATIVE_EVIDENCE_SCHEMA)
+    validate_schema(evidence, _NATIVE_PLAIN_EVIDENCE_SCHEMA if expected_version == 'literature_partner_native_extraction' else _NATIVE_EVIDENCE_SCHEMA)
 
     def witness(selected, actual):
         if selected is None:

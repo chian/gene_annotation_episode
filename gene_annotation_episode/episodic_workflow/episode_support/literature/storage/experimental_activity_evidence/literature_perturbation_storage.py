@@ -10,7 +10,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.storag
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_perturbation_inputs import perturbation_population_schema, read_perturbation_inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence.literature_perturbation_calculations import COMPONENTS, CONDITIONAL_CODES, REASONS, populate_source_restoration, populate_source_summary_restoration
 PROVIDER = 'literature.experimental.perturbation'
-FORMULA_CODES = {name: 'perturbation_' + name + '_v1' for name in COMPONENTS}
+FORMULA_CODES = {name: 'perturbation_' + name for name in COMPONENTS}
 BINDINGS = {'assayed_subject_ref': ('molecule', 'reference'), 'recipient_ref': ('recipient', 'reference'), 'donor_ref': ('donor', 'reference'), 'experiment_ref': ('experiment', 'reference'), 'reference_arm_ref': ('reference_arm', 'reference'), 'perturbed_arm_ref': ('perturbed_arm', 'reference'), 'restored_arm_ref': ('restored_arm', 'reference'), 'partner_ref': ('partner', 'reference'), 'endpoint_ref': ('endpoint', 'term'), 'normalization_ref': ('normalization', 'term'), 'condition_ref': ('condition', 'context'), 'intended_change_ref': ('intended_change', 'term')}
 
 def _metadata(extraction):
@@ -22,7 +22,7 @@ RECEIVED = received_ledger('literature_perturbation_received')
 class LiteraturePerturbationRepository(LiteratureRateRepository):
     provider = PROVIDER
     components = COMPONENTS
-    record_version = 'literature_perturbation_record_v1'
+    record_version = 'literature_perturbation_rate_record'
     operations = OPERATIONS
     received = RECEIVED
     binding_fields = tuple(BINDINGS)
@@ -91,7 +91,7 @@ class LiteraturePerturbationRepository(LiteratureRateRepository):
             return {'artifact_ref': artifact, 'content': self.store.get_artifact(artifact)}
         extraction = read_perturbation_inputs(args, read_source=read_source)
         origin = extraction['data_origin'] or {'primary_source': 'reported', 'retained_extraction': 'derived', 'graph_extraction': 'graph_derived', 'synthetic_fixture': 'synthetic'}[args['source_kind']]
-        summary = extraction['version'] == 'a106_perturbation_inputs_v2'
+        summary = extraction['version'] == 'a106_perturbation_summary_inputs'
         if summary:
             sheet = populate_source_summary_restoration(extraction, origin=origin)
         else:
@@ -107,7 +107,7 @@ class LiteraturePerturbationRepository(LiteratureRateRepository):
             if assessment['revises_sheet_ref'] is not None:
                 parents.append(assessment['revises_sheet_ref'])
         parents = list(dict.fromkeys(parents))
-        record_version = 'literature_perturbation_record_v2' if summary else self.record_version
+        record_version = 'literature_perturbation_record' if summary else self.record_version
         payload = {'version': record_version, 'input_source_ref': source['id'], 'input_artifact_ref': source['artifact_ref'], 'input_source_refs': parents, 'direct_input_source_refs': direct, 'extraction': extraction, 'sheet': sheet, 'data_source_ref': args['data_source_ref']}
         with self.store.transaction():
             if assessment is not None:
@@ -164,7 +164,7 @@ class LiteraturePerturbationRepository(LiteratureRateRepository):
         return outcome
 
     def read(self, sheet_ref):
-        if self.store.get(sheet_ref).get('version') == 'literature_perturbation_record_v2':
+        if self.store.get(sheet_ref).get('version') == 'literature_perturbation_record':
             return self.summary_projection().read(sheet_ref)
         saved = super().read(sheet_ref)
         source = self.store.get(sheet_ref)
@@ -199,7 +199,7 @@ class LiteraturePerturbationRepository(LiteratureRateRepository):
                 source = self.store.get(outcome['result']['sheet_ref'])
                 if source.get('provider') == PROVIDER:
                     versions.add(source.get('version'))
-        if self.record_version not in versions and versions & {'literature_perturbation_record_v1', 'literature_perturbation_record_v2'}:
+        if self.record_version not in versions and versions & {'literature_perturbation_rate_record', 'literature_perturbation_record'}:
             raise ContractError('literature_perturbation_projection_version_mismatch')
 
     def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):

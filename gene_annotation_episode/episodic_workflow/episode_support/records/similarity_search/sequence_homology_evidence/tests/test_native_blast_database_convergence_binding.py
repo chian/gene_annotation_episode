@@ -311,14 +311,14 @@ def test_supplied_records_keep_namespace_source_order_and_conflicts(tmp_path, sc
     assert prepared["invocation"] == args["collection"]["invocation"]
     binding = bind(args)
     assert binding == original_binding
-    legacy = populate(args, prepared)
+    plain_sheets = populate(args, prepared)
     sheets = populate(args, prepared, binding)
-    assert sheets["iteration"]["convergence_records"] == legacy["iteration"]["convergence_records"] + binding["extraction"]["convergence_records"]
+    assert sheets["iteration"]["convergence_records"] == plain_sheets["iteration"]["convergence_records"] + binding["extraction"]["convergence_records"]
     result = iteration_calculators.calculate_blast_iteration_components(sheets["iteration"])
     observed = result["convergence_observations"]
     assert [r["native_converged"]["value"] for r in observed] == ([None, None] if scope == "query" else [False, True])
     assert [r["status"] for r in observed] == (["incompatible", "incompatible"] if scope == "query" else ["available", "available"])
-    for name, value in (("binding", binding), ("legacy-sheets", legacy), ("sheets", sheets), ("calculations", result)):
+    for name, value in (("binding", binding), ("plain_sheets-sheets", plain_sheets), ("sheets", sheets), ("calculations", result)):
         save(tmp_path / (name + ".json"), value)
 
 

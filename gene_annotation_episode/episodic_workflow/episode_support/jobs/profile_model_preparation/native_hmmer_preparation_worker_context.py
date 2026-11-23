@@ -141,7 +141,7 @@ def effective_metadata(bundle, occurrences, *, include_map_context=True):
     return metadata, problems
 
 def grading_context(bundle, occurrences, metadata):
-    return {"version": PREFIX + "grading_v1", "operation": deepcopy(bundle["operation"]),
+    return {"version": PREFIX + "grading", "operation": deepcopy(bundle["operation"]),
         "formats": {r["occurrence_id"]: r["format"] for r in eligible_occurrences(occurrences)},
         "metadata": deepcopy(metadata), "native_abi": deepcopy(bundle["native_abi"]),
         "requested_parameters": deepcopy(bundle["requested_job"]["native_hmmer_preparation"]["grading_parameters"])}

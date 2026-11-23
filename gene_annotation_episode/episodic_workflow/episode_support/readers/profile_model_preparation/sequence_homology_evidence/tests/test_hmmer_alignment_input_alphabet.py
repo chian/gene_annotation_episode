@@ -38,7 +38,7 @@ def checkpoint(counts, *, threshold, line, byte_end, alphabet, rule):
 
 def eof_probe(fmt, counts, *, line, byte_end, alphabet, rule):
     return {
-        "version": "hmmer_native_alignment_alphabet_probe_v1",
+        "version": "hmmer_native_alignment_alphabet_probe",
         "format": fmt,
         "state": "determined" if alphabet is not None else "undetermined",
         "alphabet": alphabet,
@@ -327,7 +327,7 @@ class AlphabetProbeTests(TestCase):
     def test_nonascii_scanned_byte_preserves_prefix_and_fetched_line_extent(self):
         content = b">q\n" + b"A" * 501 + b"\n\xffE\n"
         expected = {
-            "version": "hmmer_native_alignment_alphabet_probe_v1",
+            "version": "hmmer_native_alignment_alphabet_probe",
             "format": "afa", "state": "source_semantics_unestablished", "alphabet": None,
             "counts_az": histogram(A=501), "counted_letters": 501,
             "checkpoints": [checkpoint(histogram(A=501), threshold=500, line=2, byte_end=505,

@@ -11,7 +11,7 @@ records.
 
 Observation only reads what the receipts record; nothing is re-acquired:
 
-- execution status (``resource_execution_status_v1``): the task's ``resource_id``, resource kind ``api``, its
+- execution status (``resource_execution_status``): the task's ``resource_id``, resource kind ``api``, its
   execution identity (the AppService ``task_id``), the launch assignment digest as request digest, and the
   state of the latest ``TaskObservation`` receipt of this run whose ``original_task.submission_receipt_ref``
   is the handoff and whose ``origin.scope_sha256`` is the handoff's (else the handoff's own state), as of that
@@ -39,7 +39,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.perturbat
 from gene_annotation_episode.episodic_workflow.episode_support.records.perturbation_evidence.progress_records import resource_status
 
 HANDLE_PREFIX = 'appservice_task_'
-PROGRESS_VERSION = 'progress_snapshot_v1'
+PROGRESS_VERSION = 'progress_snapshot'
 
 
 class JobProvider:

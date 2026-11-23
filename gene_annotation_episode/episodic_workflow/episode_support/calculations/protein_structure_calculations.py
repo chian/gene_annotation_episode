@@ -690,7 +690,7 @@ def calculate_protein_structure_components(sheet: ProteinStructureSheet, *,
     qualifications = _qualifications(sheet["source_qualifications"] + fit["qualifications"]
         + (["available_subset_used"] if evaluation["state"] == "performed" and evaluation["excluded"] else [])
         + (["threshold_is_descriptive"] if parameters["distance_threshold_A"] is not None else []))
-    result = {"version": "protein_structure_components_v1",
+    result = {"version": "protein_structure_components",
         "calculation_id": "protein_structure_calculation_" + digest({"input_numerical_sha256": numerical_hash, "parameters": parameters}),
         "input_numerical_sha256": numerical_hash, "parameters": parameters,
         "state": _overall(fit, evaluation, coordinates, counts, sites), "counts": counts, "coverage": coverage,

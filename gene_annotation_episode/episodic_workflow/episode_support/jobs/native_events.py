@@ -70,7 +70,7 @@ class NativeEvents:
                 'publication': published['publication'], 'receipt_ref': receipt_ref})
 
     async def wait(self, ctx, condition):
-        """Wait for the selected events (``event_condition_v1``) or the reconsideration time. The outcome is
+        """Wait for the selected events (``event_condition``) or the reconsideration time. The outcome is
         ``selected_wait``'s, with the receipts of the events in custody: ``receipts`` lists ``{'handle',
         'record_ref', 'cursor', 'row_ref', 'receipt_ref'}`` and ``record_refs`` names the rows and artifacts."""
         outcome = await selected_wait(self, condition)

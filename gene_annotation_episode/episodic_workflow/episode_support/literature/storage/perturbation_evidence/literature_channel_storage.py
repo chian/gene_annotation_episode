@@ -17,7 +17,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.storag
 
 
 PROVIDER = 'literature.a105.channel'
-VERSION = 'literature_channel_record_v1'
+VERSION = 'literature_channel_record'
 NAMESPACE = 'literature_channel_cells'
 REQUESTED = 'requested_channel_components'
 VIEW = 'channel_components'

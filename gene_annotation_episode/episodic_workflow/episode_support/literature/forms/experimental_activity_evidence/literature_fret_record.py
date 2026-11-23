@@ -90,7 +90,7 @@ def unavailable(unit, key, reason):
 def fact(answer, refs=(), support='direct'):
     return {**literature_spr_record.fact(answer, refs), 'support': None if answer == 'unknown' else support}
 
-VERSION = 'a105_fret_record_v1'
+VERSION = 'a105_fret_record'
 EXPERIMENT_TYPE = 'fret'
 QUANTITIES = ('kd', 'ki', 'ec50', 'ic50', 'kd_spread', 'ki_spread', 'donor_concentration', 'acceptor_concentration', 'ratio_minimum', 'ratio_maximum', 'z_prime', 'delay_time', 'integration_time', 'assay_volume', 'incubation_time', 'koff', 'temperature', 'replicate_count')
 PREPARATION_KEYS = ('titrant_preparation_ref', 'fixed_partner_preparation_ref', 'dataset_ref')

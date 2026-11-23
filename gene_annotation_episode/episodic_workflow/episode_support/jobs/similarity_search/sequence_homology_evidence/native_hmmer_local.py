@@ -24,7 +24,7 @@ def prepare_local_hmmer(state, operation_key, *, root, policy):
     resource_id = state.assignment.get('resource_id')
     if not isinstance(resource_id, str) or not resource_id:
         raise ValueError('native_hmmer_resource_identity_required')
-    plan = {'version': 'native_hmmer_run_plan_v1', 'identity': {
+    plan = {'version': 'native_hmmer_run_plan', 'identity': {
         'run_id': state.run_id, 'episode_id': state.episode_id, 'resource_id': resource_id,
         'execution_id': str(handle.path), 'attempt_id': digest(operation_key),
         'operation_key': operation_key, 'requested_job_sha256': digest(request)},
@@ -52,7 +52,7 @@ def local_hmmer_plan(assignment, execution_id):
     plan = _read(handle.parent/'hmmer-plan.json')
     owner = plan.get('identity', {})
     native_request = native.NativeJobHandle(handle).read()
-    if (plan.get('version') != 'native_hmmer_run_plan_v1'
+    if (plan.get('version') != 'native_hmmer_run_plan'
             or plan.get('requested_job') != request
             or owner.get('requested_job_sha256') != digest(request)
             or owner.get('execution_id') != str(handle)

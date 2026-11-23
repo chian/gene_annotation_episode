@@ -32,7 +32,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     COUPLING_UNCOUPLING_BYPRODUCT_CRITERIA, PERCENT_PER_FRACTION)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_coupling_uncoupling_byproduct_grade_v1'
+VERSION = 'a105_coupling_uncoupling_byproduct_grade'
 CRITERIA = tuple(criterion['id'] for criterion in COUPLING_UNCOUPLING_BYPRODUCT_CRITERIA)
 CHOICES = ('spread_kind', 'byproduct_species', 'detection_reagent')   # the plain choice fields of the record, kept in native (recorded only; no criterion rests on one)
 COUPLED = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact coupled_product_detected_above_control

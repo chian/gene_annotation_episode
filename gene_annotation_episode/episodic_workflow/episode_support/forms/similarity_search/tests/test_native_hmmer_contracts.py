@@ -22,7 +22,7 @@ def job_for(program="hmmsearch", mode=None):
             path = "/selected/profile_database." + role.rsplit("_", 1)[1]
         operands.append({"role": role, "format": sorted(formats)[0], "path": path,
                          "sha256": "a" * 64, "size_bytes": 123, "artifact_ref": None})
-    return {"version": "native_hmmer_job_v1", "program": program, "mode": mode,
+    return {"version": "native_hmmer_job", "program": program, "mode": mode,
         "software": {"executable": "/selected/bin/" + program, "sha256": "b" * 64, "engine_version": "3.4"},
         "environment": {"HMMER_NCPU": "1"}, "operands": operands, "operand_bindings": [],
         "options": [] if program == "hmmalign" else ["--cpu", "1"],

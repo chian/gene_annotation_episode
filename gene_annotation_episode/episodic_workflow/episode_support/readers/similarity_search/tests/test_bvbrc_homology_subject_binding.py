@@ -78,7 +78,7 @@ def _fixture(*, retained=False, escaped=False, ancestor=False, native_mapping=Fa
         'actual_taxon_filter': None, 'actual_database_members': [{'identifier': reference['member_id'],
             'length': len(REFERENCE), 'molecule': 'aa', 'sequence_sha256': reference['sequence_sha256']}],
         'input_or_database_sequence_inventory_ref': source['source_ref']}
-    bundle = {'version': 'bvbrc_appservice_artifact_bundle_v1',
+    bundle = {'version': 'bvbrc_appservice_artifact_bundle',
         'original_task': {'required_application_id': 'Homology', 'native_application_id': 'Homology',
             'submitted_parameters': {'blast_program': 'blastx', 'input_source': 'fasta_data',
                 'input_fasta_data': query_input['inline_value'], **selection}},

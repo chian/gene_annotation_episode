@@ -76,10 +76,10 @@ def test_complete_capture_streams_multiple_chunks(store, producer, monkeypatch):
         patch.setattr(Path, "open", observed_open)
         patch.setattr(Path, "read_bytes", lambda self: pytest.fail("whole-file read"))
         identity = capture.capture_native_file(store, directory=str(producer),
-            relative_path="result.bin", format="native/v1", media_type="application/x-native")
+            relative_path="result.bin", format="native", media_type="application/x-native")
     digest = hashlib.sha256(data).hexdigest()
     assert identity == {"artifact_ref": "artifact_" + digest, "sha256": digest,
-        "size_bytes": len(data), "format": "native/v1"}
+        "size_bytes": len(data), "format": "native"}
     assert capture.retained_native_file(store, identity).read_bytes() == data
     assert store.get(identity["artifact_ref"])["media_type"] == "application/x-native"
     producer_reads = [length for path, _, length in reads if path.startswith("/proc/self/fd/")]

@@ -27,7 +27,7 @@ from ..goal import GOAL
 from .read_from_parent import REQUESTED_AGGREGATION, REQUESTED_GRADING
 
 OUTCOME_PAGE_SIZE = 8        # the old configuration outcome_page_size
-STRATEGY_ASSIGNMENT = 'strategy_assignment_v1'
+STRATEGY_ASSIGNMENT = 'strategy_assignment'
 WRITE_SEARCH = 'write_search'
 HISTORY_MEANING = ('Own outcome metadata only. The searches you wrote are shown as written_searches.')
 GRADING_NAMESPACE = 'literature_a108_grading_cells'

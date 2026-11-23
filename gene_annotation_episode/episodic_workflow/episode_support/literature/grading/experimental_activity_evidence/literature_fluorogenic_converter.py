@@ -121,7 +121,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_row_contract import SECONDS_PER_MINUTE
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_fluorogenic_converted_v1'
+VERSION = 'a105_fluorogenic_converted'
 CRITERIA_MAP = {'background_alternatives': ('spontaneous_reaction_control', 'substrate_independent_signal'), 'attribution_supported': ('enzyme_dependence', 'product_identity'),
                 'calibration_applicability': ('fluorophore_calibration', 'detector_linear_range'), 'matrix_interference': ('inner_filter_effect',),
                 'rate_regime': ('initial_rate_regime', 'enzyme_substrate_ratio'), 'kinetic_model': ('substrate_range',), 'normalization_basis': ('active_enzyme_amount',),

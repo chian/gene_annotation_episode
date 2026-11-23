@@ -16,7 +16,7 @@ byte chunks, preserves every artifact slot, and retains complete JSON15 or
 explicit-field tabular6/tabular7 bytes. It never starts or retries a search.
 Failed native attempts can supply partial results, while remaining unsuccessful.
 
-Use `native_blast_standard_database_selector_v1` with
+Use `native_blast_standard_database_selector` with
 `acquisition: complete_bound_bundle`. Each projection selects a family, rows by
 offset/limit or received record keys, and explicit numerical `metrics` or
 `booleans`. The current metric catalog describes exact sources, formulas, units,

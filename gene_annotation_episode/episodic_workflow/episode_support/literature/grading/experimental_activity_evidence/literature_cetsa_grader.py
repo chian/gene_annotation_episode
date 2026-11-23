@@ -39,7 +39,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     CETSA_CRITERIA, NM_PER_UNIT)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_cetsa_grade_v1'
+VERSION = 'a105_cetsa_grade'
 CRITERIA = tuple(criterion['id'] for criterion in CETSA_CRITERIA)
 INTERACTION = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact target_engagement_shown
 NO_EC50 = 'no_apparent_engagement_constant_reported'

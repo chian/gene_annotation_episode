@@ -15,7 +15,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records 
     JOB_LEDGER, checks, closure, job_rows)
 
 RESULT_PROVIDER = 'episode.execution_result'
-RESULT_VERSION = 'execution_result_information_v3'
+RESULT_VERSION = 'execution_result_information'
 
 
 def _credit_view(view, parent):

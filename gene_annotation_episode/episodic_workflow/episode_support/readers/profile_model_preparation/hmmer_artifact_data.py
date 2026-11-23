@@ -15,7 +15,7 @@ import re
 from gene_annotation_episode.episodic_workflow.episode_support.readers.profile_model_preparation.hmmer_model_data import extract_hmmer_models, _occurrence_valid, ALPHABETS
 
 
-SCHEMA = "hmmer_artifact_sheet_v1"
+SCHEMA = "hmmer_artifact_sheet"
 MODES = {"hmmconvert": frozenset({"ascii", "binary", "legacy_hmmer2"}),
          "hmmfetch": frozenset({"single_key", "key_file", "index"}),
          "hmmpress": frozenset({"index"})}

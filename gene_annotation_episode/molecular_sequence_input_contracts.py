@@ -12,10 +12,10 @@ import re
 import unicodedata
 
 
-RECEIVED_INPUT_VERSION = "molecular_sequence_received_input_result_v1"
-RECEIVED_FILE_VERSION = "molecular_sequence_received_file_result_v1"
-RECEIVED_SOURCE_VERSION = "molecular_sequence_received_source_result_v1"
-RECEIVED_SUBJECT_VERSION = "molecular_sequence_received_subject_result_v1"
+RECEIVED_INPUT_VERSION = "molecular_sequence_received_input_result"
+RECEIVED_FILE_VERSION = "molecular_sequence_received_file_result"
+RECEIVED_SOURCE_VERSION = "molecular_sequence_received_source_result"
+RECEIVED_SUBJECT_VERSION = "molecular_sequence_received_subject_result"
 NAMESPACES = ("artifact", "source")
 SUBJECT_NAMESPACES = ("input", "reference", "feature", "product", "read_subject")
 TAG_KEYS = ("schema", "version")

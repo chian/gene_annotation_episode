@@ -32,7 +32,7 @@ FIXED_BY_DEFINITION, not a judgment. Every judgment value (EXPERT_REVIEW) is
 in literature_spr_converter.py.
 """
 
-VERSION = 'a105_spr_criteria_v1'
+VERSION = 'a105_spr_criteria'
 
 # ---- Constants -----------------------------------------------------------
 NM_PER_M = 1e9  # FIXED_BY_DEFINITION: koff/kon is in molar; the sheet works in nM.

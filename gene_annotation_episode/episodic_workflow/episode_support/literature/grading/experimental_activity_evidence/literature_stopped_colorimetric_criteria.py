@@ -22,7 +22,7 @@ returns     every case the criterion can return, as (status, reason_code, when).
 No criterion reads a plain choice (spread_kind, reagent_class): a choice carries no span after the leaf records are merged.
 """
 
-VERSION = 'a105_stopped_colorimetric_criteria_v1'
+VERSION = 'a105_stopped_colorimetric_criteria'
 
 _fact_returns = (
     ('supported', 'facts_answered_yes', 'the fact is yes'),

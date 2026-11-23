@@ -63,7 +63,7 @@ _ISSUES = dict(type="array", items=_object(dict(code={"enum": list(ISSUE_CODES)}
 _FILE = _object(dict(artifact_ref=deepcopy(_ARTIFACT), sha256=dict(type="string", pattern="^[a-f0-9]{64}$"),
     byte_length=deepcopy(_COUNT), format={"enum": list(FILE_FORMATS)}))
 RCSB_ENTRY_RESULT_SCHEMA = _owned({"$defs": {"NativeJSON": _JSON}, **_object(dict(
-    version={"const": "rcsb_entry_result_v1"}, source_ref=deepcopy(_SOURCE), raw_artifact_ref=deepcopy(_ARTIFACT),
+    version={"const": "rcsb_entry_result"}, source_ref=deepcopy(_SOURCE), raw_artifact_ref=deepcopy(_ARTIFACT),
     requested=deepcopy(RCSB_ENTRY_ARGUMENTS_SCHEMA), response=deepcopy(_RESPONSE),
     parse_state={"enum": ["object", "non_object", "decode_failed"]},
     observed_identity=_object(dict(native_entry_id={"type": ["string", "null"]},
@@ -72,7 +72,7 @@ RCSB_ENTRY_RESULT_SCHEMA = _owned({"$defs": {"NativeJSON": _JSON}, **_object(dic
     values=dict(type="array", items=_object(dict(field={"enum": list(ENTRY_FIELDS)},
         state={"enum": ["present", "native_null", "missing", "unavailable"]}, value={"$ref": "#/$defs/NativeJSON"}))),
     issues=deepcopy(_ISSUES)))})
-RCSB_FILE_RESULT_SCHEMA = _object(dict(version={"const": "rcsb_file_result_v1"}, source_ref=deepcopy(_SOURCE),
+RCSB_FILE_RESULT_SCHEMA = _object(dict(version={"const": "rcsb_file_result"}, source_ref=deepcopy(_SOURCE),
     file=deepcopy(_FILE), requested=deepcopy(RCSB_FILE_ARGUMENTS_SCHEMA), response=deepcopy(_RESPONSE),
     observed_identity=_object(dict(native_entry_id={"type": "null"}, state={"const": "not_parsed"})),
     issues=deepcopy(_ISSUES)))
@@ -241,7 +241,7 @@ def rcsb_entry_result(snapshot, *, arguments, source_ref, artifact_ref):
             value = native[field]
             state = "native_null" if value is None else "present"
         values.append(dict(field=field, state=state, value=deepcopy(value)))
-    return validate_rcsb_entry_result(dict(version="rcsb_entry_result_v1", source_ref=source_ref,
+    return validate_rcsb_entry_result(dict(version="rcsb_entry_result", source_ref=source_ref,
         raw_artifact_ref=artifact_ref, requested=arguments, response=response, parse_state=parse_state,
         observed_identity=observed, values=values, issues=issues))
 
@@ -253,7 +253,7 @@ def rcsb_file_result(snapshot, *, arguments, source_ref, artifact_ref):
     file = dict(artifact_ref=artifact_ref, sha256=hashlib.sha256(snapshot.content).hexdigest(),
         byte_length=len(snapshot.content), format=arguments["file_format"])
     validate_file_identity(file)
-    return validate_rcsb_file_result(dict(version="rcsb_file_result_v1", source_ref=source_ref, file=file,
+    return validate_rcsb_file_result(dict(version="rcsb_file_result", source_ref=source_ref, file=file,
         requested=arguments, observed_identity=dict(native_entry_id=None, state="not_parsed"), response=response, issues=issues))
 
 
@@ -315,7 +315,7 @@ def _receipt_response_failure(value):
             or response["declared_body_bytes"] is not None
             and response["declared_body_bytes"] != response["retained_bytes"]):
         return "rcsb_response_incomplete"
-    # The legacy DTO also carries transport qualifications that cannot be
+    # The result record also carries transport qualifications that cannot be
     # reconstructed from its projected response fields, such as a bad limit.
     codes = {row["code"] for row in value["issues"]}
     for code in ("http_not_success", "transport_metadata_unavailable", "response_incomplete"):
@@ -324,9 +324,9 @@ def _receipt_response_failure(value):
     return None
 
 
-def rcsb_entry_receipt(legacy):
+def rcsb_entry_receipt(result):
     """Confirm the literal native entry and requested field availability."""
-    value = validate_rcsb_entry_result(legacy)
+    value = validate_rcsb_entry_result(result)
     failure = _receipt_response_failure(value)
     if failure is None:
         if value["parse_state"] == "decode_failed":
@@ -358,9 +358,9 @@ def rcsb_entry_receipt(legacy):
         data_ref=value["raw_artifact_ref"], failure_code=None))
 
 
-def rcsb_file_receipt(legacy):
+def rcsb_file_receipt(result):
     """Confirm the selected transfer, without parsing structure identity."""
-    value = validate_rcsb_file_result(legacy)
+    value = validate_rcsb_file_result(result)
     failure = _receipt_response_failure(value)
     if failure is None and value["issues"]:
         failure = "rcsb_" + value["issues"][0]["code"]

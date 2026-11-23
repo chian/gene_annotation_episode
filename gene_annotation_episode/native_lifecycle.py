@@ -25,7 +25,7 @@ from .local_jobs import LocalJobPolicy, LocalJobResult
 from .local_resources import LocalResources
 
 
-VERSION = 'durable_systemd_native_job_v2'
+VERSION = 'durable_systemd_native_job'
 
 
 def _control(arguments):

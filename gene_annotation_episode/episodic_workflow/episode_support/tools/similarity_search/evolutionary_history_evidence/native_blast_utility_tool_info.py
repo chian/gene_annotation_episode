@@ -11,7 +11,7 @@ from jsonschema import Draft202012Validator
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.evolutionary_history_evidence.blast_preparation_contracts import OPERATION_PARAMETERS, RESTRICTION_SCHEMA
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.native_blast_contracts import finite_json_copy
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.evolutionary_history_evidence.native_blast_utility_contracts import (
-    MODES, LEGACY_MODES, PREPARATION_MODES, VDB_MODES, SOFTWARE_SCHEMA,
+    MODES, STANDARD_MODES, PREPARATION_MODES, VDB_MODES, SOFTWARE_SCHEMA,
     NATIVE_BLAST_UTILITY_REQUESTED_JOB_SCHEMA,
     _error, _path, _schema, native_blast_utility_job_schema,
     validate_native_blast_utility_job,
@@ -59,8 +59,8 @@ _INSTRUCTIONS = {
 }
 
 # Key information by the selected pair, without changing any legacy wording.
-_DESCRIPTIONS = {pair: _DESCRIPTIONS[pair[1]] for pair in LEGACY_MODES}
-_INSTRUCTIONS = {pair: _INSTRUCTIONS[pair[1]] for pair in LEGACY_MODES}
+_DESCRIPTIONS = {pair: _DESCRIPTIONS[pair[1]] for pair in STANDARD_MODES}
+_INSTRUCTIONS = {pair: _INSTRUCTIONS[pair[1]] for pair in STANDARD_MODES}
 _DESCRIPTIONS.update({
     ('blastdb_aliastool', 'convert_gi_list'): 'Convert one supplied text GI list to a retained native binary GI list.',
     ('blastdb_aliastool', 'convert_seqid_list'): 'Convert one supplied sequence-identifier list, optionally against an explicitly supplied BLAST database.',
@@ -372,7 +372,7 @@ def native_blast_utility_tool_contracts(bindings: list[dict], *, resource_kind: 
                 'selected runtime files retain their original absolute paths in the isolated offline execution. '
                 'Apply the caller’s local allocation within 5 GiB RAM/4 GiB scratch, zero swap and no wall cap. '
                 'The two managed native outputs are stdout and stderr, with the mode’s fixed output format. '
-                'Results use selector-v2 and the shared extraction/inspection records; artifact roles and '
+                'Results use the result selector and the shared extraction/inspection records; artifact roles and '
                 'saved result data require explicit selection. Preserve useful partial outputs and specific '
                 'failures. Source metadata and nested provenance do not grant their file bytes. These library '
                 'instructions do not establish verification of every dataset type, native format or resource.')

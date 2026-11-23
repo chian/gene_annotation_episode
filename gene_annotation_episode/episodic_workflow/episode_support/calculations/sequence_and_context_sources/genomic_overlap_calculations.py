@@ -192,7 +192,7 @@ def calculate_genomic_overlap_components(sheet: Sheet, *, parameters: Parameters
             "intersection_union_segments": union if complete else None,
             "selected_intersection_union_segments": selected_union if complete else None,
             "edges": edges, "occurrences": occurrences})
-    result = {"version": "genomic_region_overlap_components_v1",
+    result = {"version": "genomic_region_overlap_components",
         "source_sheet_sha256": canonical_genomic_overlap_sheet_sha256(sheet), "parameters": parameters,
         "sets": set_components, "pairs": pairs,
         "issues": _unique_issues(sheet["issues"], *(row["issues"] for row in pairs))}

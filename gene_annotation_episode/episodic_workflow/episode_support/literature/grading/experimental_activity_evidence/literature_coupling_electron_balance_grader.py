@@ -34,7 +34,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     COUPLING_ELECTRON_BALANCE_CRITERIA, PERCENT_PER_FRACTION, UMOL_PER_UNIT)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import SUPPORTS, criterion_supports
 
-VERSION = 'a105_coupling_electron_balance_grade_v1'
+VERSION = 'a105_coupling_electron_balance_grade'
 CRITERIA = tuple(criterion['id'] for criterion in COUPLING_ELECTRON_BALANCE_CRITERIA)
 DETECTED = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact product_detected_from_electrons
 

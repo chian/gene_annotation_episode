@@ -172,14 +172,14 @@ def _lineage(sheet, before, after, method):
         left, right = select_rows(sheet, "population", value["before"]), select_rows(sheet, "population", value["after"])
         if len(left) == len(right) == 1 and left[0]["id"] == before["id"] and right[0]["id"] == after["id"]:
             declarations.append(item)
-    allowed = {"same_population"} if method == "report_consistency_v1" else {"successor_population", "subset_population"}
+    allowed = {"same_population"} if method == "report_consistency" else {"successor_population", "subset_population"}
     if len(declarations) > 1 or any(item["value"]["relation"] not in allowed for item in declarations):
         return unknown, "metadata_value_conflict"
     if len(native) > 1:
         return unknown, "selection_ambiguous"
     if native:
         edge = native[0]
-        if method == "report_consistency_v1" and edge["kind"] != "observed_record_correspondence":
+        if method == "report_consistency" and edge["kind"] != "observed_record_correspondence":
             return unknown, "incompatible_population"
         return dict(unknown, basis="native_report" if edge["kind"] == "native_report_before_after" else "observed_record_correspondence",
                     native_lineage_ref=edge["id"]), None
@@ -224,11 +224,11 @@ def resolve_calculation_inputs(sheet: dict, *, requests: list[dict]) -> dict:
                 return None
             return rows[0]
 
-        if method in ("composition_v1", "quality_phred_v1", "mapping_v1"):
+        if method in ("composition", "quality_phred", "mapping"):
             population = one("population", request["population"])
             if population:
                 job["population_refs"].append(population["id"])
-            if method == "composition_v1" and population:
+            if method == "composition" and population:
                 if population["population_key"] not in {"fastq_reads", "fastq_bases"}:
                     problem("incompatible_population", terminal=True, incompatible=True)
                 else:
@@ -247,7 +247,7 @@ def resolve_calculation_inputs(sheet: dict, *, requests: list[dict]) -> dict:
                     job["operand_measurement_refs"] = [r["id"] for r in cells]
                     if not all(any(r["metric"] == metric for r in cells) for metric in ("fastq_read_count", "fastq_base_count", "fastq_symbol_count")):
                         problem("missing_requested_value")
-            elif method == "quality_phred_v1" and population:
+            elif method == "quality_phred" and population:
                 if population["population_key"] not in {"fastq_quality_characters", "bam_quality_bases"}:
                     problem("incompatible_population", terminal=True, incompatible=True)
                 metric = "phred_histogram_count" if population["encoding_basis"]["basis"] in {"native_sam_phred", "native_bam_phred"} else "quality_character_count"
@@ -257,7 +257,7 @@ def resolve_calculation_inputs(sheet: dict, *, requests: list[dict]) -> dict:
                     problem("unknown_quality_encoding")
                 if not job["operand_measurement_refs"] and population["member_record_refs"]:
                     problem("missing_requested_value")
-            elif method == "mapping_v1":
+            elif method == "mapping":
                 if population and population["population_key"] != "bam_records":
                     problem("incompatible_population", terminal=True, incompatible=True)
                 input_population = one("population", request["input_population"], terminal=False)
@@ -274,7 +274,7 @@ def resolve_calculation_inputs(sheet: dict, *, requests: list[dict]) -> dict:
                 job["operand_measurement_refs"] = [r["id"] for r in sheet["measurements"] if
                     r["population_ref"] in job["population_refs"] and r["metric"] in
                     {"bam_record_count", "bam_primary_record_count", "fastq_read_count"}]
-        elif method == "samstat_report_mapping_v1":
+        elif method == "samstat_report_mapping":
             from .bvbrc_fastqutils_samstat_mapping import _count_operands, _report_mode, _mapping_conflicts
             for selector in request["populations"]:
                 population = one("population", selector)
@@ -320,7 +320,7 @@ def resolve_calculation_inputs(sheet: dict, *, requests: list[dict]) -> dict:
                     "native_header_conflict", "unsupported_version", "unsupported_format"}:
                 job["state"] = "incompatible"
         else:
-            if method == "retention_v1":
+            if method == "retention":
                 before = one("population", request["before_population"])
                 after = one("population", request["after_population"])
                 left = one("measurement", request["before_measurement"])
@@ -344,7 +344,7 @@ def resolve_calculation_inputs(sheet: dict, *, requests: list[dict]) -> dict:
                 problem(code, terminal=code != "explicit_lineage_assumption",
                         incompatible=code in {"metadata_value_conflict", "selection_ambiguous", "incompatible_population"})
         jobs.append(validate_contract("CalculationBinding", job))
-    return validate_contract("CalculatorParameters", dict(version="fastqutils_calculators_v2",
+    return validate_contract("CalculatorParameters", dict(version="fastqutils_calculators",
         analysis_id=sheet["analysis_id"], calculations=jobs))
 
 
@@ -363,7 +363,7 @@ def calculation_requirements(sheet, parameters):
             required = {"unknown_quality_encoding": "quality_encoding", "association_unresolved": "stage_input_association",
                 "metadata_value_conflict": "source_bound_metadata", "selection_ambiguous": "exact_source_cardinality",
                 "missing_denominator": "before_population"}.get(code, "requested_measurement")
-            if job["method"] == "samstat_report_mapping_v1":
+            if job["method"] == "samstat_report_mapping":
                 required = {"missing_denominator": "requested_measurement", "samstat_caller_failure": "native_execution_evidence",
                     "source_row_absent": "native_execution_evidence", "unsupported_version": "native_version",
                     "unsupported_format": "supported_parser"}.get(code, required)

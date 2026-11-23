@@ -237,7 +237,7 @@ def admit(registry, expected, hpc_ref, *, context, known, reader):
     native = json.loads(raw)
     require(native['version'] == scientific_profile(expected)
         and native['selection'] == expected['request']['selection'], 'original_scientific_selection_conflict')
-    if scientific_profile(expected) == 'a107_genomic_detection_v1':
+    if scientific_profile(expected) == 'a107_genomic_detection':
         from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_and_context_sources.genomic_detection_native import validate_reference_translations
         require(native['query_sequence_sha256'] == expected['request']['query_sequence_sha256']
             and native['database_sha256'] == expected['input_file']['sha256']
@@ -346,7 +346,7 @@ def received_components(store, references, scope, *, compact=True, known=None):
                     'source_ref': reference, 'artifact_ref': row['artifact_ref'],
                     'pointer': '/native_components/detection_criteria/'+side, 'preview': criteria[:4],
                     'complete_native_criteria_preserved': True}
-        if compact and row.get('scientific_profile') == 'a107_genomic_detection_v1':
+        if compact and row.get('scientific_profile') == 'a107_genomic_detection':
             for name, artifact in row['native_components']['native_artifacts'].items():
                 artifact.pop('bytes_base64')
                 artifact.update(source_ref=reference, artifact_ref=row['artifact_ref'],

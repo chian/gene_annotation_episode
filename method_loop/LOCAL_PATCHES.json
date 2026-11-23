@@ -1,5 +1,5 @@
 {
-  "patch_id": "generic_loop_outcomes_forms_v10",
+  "patch_id": "generic_loop_outcomes_forms",
   "upstream_revision": "7576c096c39bc6af4225d2df6e10be81b189fc60",
   "upstream_hashes_remain_in": "SOURCE.json",
   "license": "Original MIT license retained unchanged in LICENSE.",
@@ -17,8 +17,8 @@
         "Deleted: asynchronous-ownership machinery (DeferredUnit, PendingAction, ClosedChildUnit, start_async, allow_suspension, owned-child waiting, pending acquisition/observation/return bookkeeping, failed-source accounting hooks bind_execution_context, suspension_changed, record_execution_failure), report redelivery (ReportRedelivery, ReportDeliveryError, receive_failure, delivery_contract, delivery_failures), goal revision (GoalProposal, GoalPreview, GoalState, EpochMutation, next_epoch, goal_result, Context.transition), synchronous run, run_unit_async, resume_owned_accounting_async, leaves(), model_inputs.",
         "_record_value raises for a value that is not JSON instead of returning its repr.",
         "Deleted with archive.py: Episode.archive_record, EpisodeRecord.archived_record and archived(), the archived branch of EpisodeRecord.as_record, Episode._archive_completed_child; UnitRecord.child_result is a ClosedRecord.",
-        "Deleted (v9): SourceEnd, END_SOURCE_FAILED, SOURCE_END_KINDS, SOURCE_END_REASONS and the end_reason field of EpisodeCompletion and EpisodeRecord, which only carried a SourceEnd kind.",
-        "Deleted (v10): END_EXHAUSTED. An Episode ends in one way only: its controller's step for a completed unit says stop (END_YIELD_STOP; EPISODE_END_KINDS has that one value). A UnitSource always returns a unit; a source that returns None raises TypeError ('an Episode source must return a unit: only the controller ends an Episode'). Stopping belongs to the yield estimator alone."
+        "Deleted: SourceEnd, END_SOURCE_FAILED, SOURCE_END_KINDS, SOURCE_END_REASONS and the end_reason field of EpisodeCompletion and EpisodeRecord, which only carried a SourceEnd kind.",
+        "Deleted: END_EXHAUSTED. An Episode ends in one way only: its controller's step for a completed unit says stop (END_YIELD_STOP; EPISODE_END_KINDS has that one value). A UnitSource always returns a unit; a source that returns None raises TypeError ('an Episode source must return a unit: only the controller ends an Episode'). Stopping belongs to the yield estimator alone."
       ]
     },
     {
@@ -42,7 +42,7 @@
       "upstream_sha256": "15329d32cc2ae6160c2d292d6dd7f9f727b2a3a382e05eef51b45b7ccc3599a9",
       "local_sha256": "d7fe1a84e55e70dded29cb9fea0ed5ecdd613490bd52862d30fd638a84082814",
       "details": [
-        "Exports the typed forms, ChildProjection, EpisodeUpdate, EpisodeView, JsonRecord and ResumeUnit; no longer exports the deleted machinery (v11: also exports the concrete episode contract of episode_type.py; v9: nor SourceEnd, END_SOURCE_FAILED, SOURCE_END_KINDS, SOURCE_END_REASONS; v10: nor END_EXHAUSTED)."
+        "Exports the typed forms, ChildProjection, EpisodeUpdate, EpisodeView, JsonRecord and ResumeUnit; no longer exports the deleted machinery (also exports the concrete episode contract of episode_type.py; v9: nor SourceEnd, END_SOURCE_FAILED, SOURCE_END_KINDS, SOURCE_END_REASONS; v10: nor END_EXHAUSTED)."
       ]
     },
     {

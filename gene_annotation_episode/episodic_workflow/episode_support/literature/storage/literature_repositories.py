@@ -88,7 +88,7 @@ POPULATION_OWNERS = {
     'literature.binding.interaction.model.populate': ('own', 'binding_interaction_model'),
     'literature.ratio.populate': ('source', 'ratio'),
     'literature.ratio.source.populate': ('source', 'ratio_source'),
-    'literature.controlled_response.source_v3.populate': ('source', 'controlled_response'),
+    'literature.controlled_response.source.populate': ('source', 'controlled_response'),
     'literature.gel.populate': ('source', 'gel'),
     'literature.binding.populate': ('source', 'binding'),
     'literature.binding.model.populate': ('source', 'binding_model'),
@@ -186,18 +186,18 @@ class LiteratureRepositories:
     def owner(self, tool_name, arguments):
         """The repository that executes ``tool_name`` with these arguments."""
         if tool_name == 'literature.figure.populate' and arguments.get('version') == \
-                'literature_figure_endpoint_signal_population_v1':
+                'literature_figure_endpoint_signal_population':
             return self.own('endpoint_signal')
         if tool_name == 'literature.kinetic.populate' and arguments.get('version') == \
-                'literature_kinetic_summary_precision_population_v1':
+                'literature_kinetic_summary_precision_population':
             return self.own('summary_precision')
         kind, name = POPULATION_OWNERS[tool_name]
         return self.source(name) if kind == 'source' else self.own(name)
 
     def populate(self, context, tool_name, arguments, operation_key):
         repository = self.owner(tool_name, arguments)
-        if tool_name == 'literature.controlled_response.source_v3.populate':
-            return repository.populate_v3(context, arguments, operation_key)
+        if tool_name == 'literature.controlled_response.source.populate':
+            return repository.populate(context, arguments, operation_key)
         if tool_name == 'literature.rate.source.populate':
             return repository.populate_native(context, arguments, operation_key)
         return repository.populate(context, arguments, operation_key)
@@ -229,8 +229,7 @@ class LiteratureRepositories:
         if 'compiled_assay' in self.populations:
             from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence import literature_compiled_assay_storage as compiled
             routes += [(compiled.NAMESPACE, lambda: self.own('compiled_assay')),
-                       (compiled.NAMESPACE_V2, lambda: self.own('compiled_assay').v2_projection()),
-                       (compiled.NAMESPACE_V3, lambda: self.own('compiled_assay').v3_projection())]
+                       (compiled.COMMON_NAMESPACE, lambda: self.own('compiled_assay').common_projection())]
         for name in ('product_partition', 'completion_time', 'active_site'):
             if name in self.populations:
                 routes.append((import_module(_OWN[name][0]).NAMESPACE,
@@ -256,7 +255,7 @@ class LiteratureRepositories:
     def application_outcome_cells(self, context, publication_ref, fields):
         """The ``bvbrc_application_outcomes`` rows of the requested fields of one received AppService publication.
 
-        The publication is the ``bvbrc_appservice_acquired_bundle_v1`` record an A106 results episode published on
+        The publication is the ``bvbrc_appservice_acquired_bundle`` record an A106 results episode published on
         the shared Store and this episode received; its original selection is projected from the saved adapter
         sheet and components it binds (``project_application_facts``).
         """

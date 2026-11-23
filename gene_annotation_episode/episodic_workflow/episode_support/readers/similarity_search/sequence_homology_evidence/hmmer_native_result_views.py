@@ -48,7 +48,7 @@ _ROWS = {"oneOf": [
     _object({"offset": {"type": "integer", "minimum": 0}, "limit": {"type": "integer", "minimum": 1}}),
     _object({"record_keys": {"type": "array", "minItems": 1, "uniqueItems": True, "items": _KEY}})]}
 NATIVE_HMMER_RESULT_SELECTOR_SCHEMA = _object({
-    "version": {"const": "native_hmmer_result_selector_v1"},
+    "version": {"const": "native_hmmer_result_selector"},
     "acquisition": {"const": "complete_bound_bundle"},
     "projection": {"oneOf": [_object({"family": {"const": family}, "rows": _ROWS,
         "metrics": {"type": "array", "minItems": 1, "uniqueItems": True,

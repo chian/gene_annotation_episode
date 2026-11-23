@@ -15,7 +15,7 @@ selectable fields; every commission selects both (the old ``required_return_sour
 ``execution_handoff_refs`` of a launch whose parent is the A103 head; both are what this episode reads back).
 
 What the children's own forms need and the launch assignment does not carry as such is passed as the form asks: the
-API child takes the request's parts as separate fields (an ``api_service_assignment_v1`` request as ``request``),
+API child takes the request's parts as separate fields (an ``api_service_assignment`` request as ``request``),
 the launch's ``scope``, ``input_refs``, the launch's ``immutable_input_versions`` (a list in the launch assignment;
 the API child declares a record, so the list is passed as ``{'versions': [...]}``) and ``completion_target`` (the
 credit one verified handoff earns: ``handoff_unit``). The HPC child declares no ``record_refs`` field: the records
@@ -52,7 +52,7 @@ def msg_to_child(slot, arguments, summary):
     resource_id = arguments['resource_id']
     request = _request(summary, arguments)
     if slot == 'launch_api':
-        if request['version'] == 'api_execution_assignment_v1':
+        if request['version'] == 'api_execution_assignment':
             assignment = {name: request[name] for name in API_V1_FIELDS}
         else:
             assignment = {name: request[name] for name in ('version', 'resource_id', 'service', 'request',

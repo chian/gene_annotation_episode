@@ -150,7 +150,7 @@ _RESULT_INFORMATION = (
     "explicit grading_parameters. Saved-sheet recalculation acquires nothing and reruns no native tool. "
     "Choose requested typed numerical paths/checks from preparation_projection_catalog(program, mode), "
     "with an explicit row window or record keys, or select artifacts by direction/role/ordinal. "
-    "The native_hmmer_preparation_result_selector_v1 uses acquisition=complete_bound_bundle; "
+    "The native_hmmer_preparation_result_selector uses acquisition=complete_bound_bundle; "
     "artifact-only selection remains possible when numerical grading is unavailable. Full arrays stay "
     "retained while only the requested typed rows/artifacts and population qualifications return. "
     "Unknown measurements remain unknown, distinct from measured zero. Preparation success, indexing "

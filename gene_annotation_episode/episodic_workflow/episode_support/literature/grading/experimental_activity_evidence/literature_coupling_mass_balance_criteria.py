@@ -22,7 +22,7 @@ returns     every case the criterion can return, as (status, reason_code, when).
 There is no criterion for the sheet's reporter_specificity (a mass balance has no reporter) and none for measurement_identity: those sheet criteria are not selected.
 """
 
-VERSION = 'a105_coupling_mass_balance_criteria_v1'
+VERSION = 'a105_coupling_mass_balance_criteria'
 
 _fact_returns = (
     ('supported', 'facts_answered_yes', 'the fact is yes'),

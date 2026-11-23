@@ -28,7 +28,7 @@ def rows_from_reports(reports):
 def task_relevant(state):
     assignment = state.get('literature_assignment', {})
     return (isinstance(assignment, Mapping) and bool(assignment.get('requested_ion_discrimination_components'))
-        or state.get('literature_ion_discrimination_work', {}).get('version') == 'literature_ion_discrimination_task_v1'
+        or state.get('literature_ion_discrimination_work', {}).get('version') == 'literature_ion_discrimination_task'
         or any(rows_from_values(state.get('last_local_outcome', {})))
         or any(rows_from_values(state.get('current_report_update', {})))
         or any(rows_from_reports(state.get('child_reports', ()))))

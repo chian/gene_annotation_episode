@@ -106,7 +106,7 @@ separately when a full-request component is unavailable.
     for name, row in ratios.items():
         if row["numerator"] is not None and row["denominator"] == 0:
             states[name] = "not_applicable"
-    return {"schema": "reference_site_components_v1", "status": sheet["status"],
+    return {"schema": "reference_site_components", "status": sheet["status"],
         "summary": summary, "ratios": ratios,
         "observed_subset_counts": _observed_counts(sheet["sites"], sheet["insertions"]),
         "component_status": states, "issues": deepcopy(sheet["issues"]),

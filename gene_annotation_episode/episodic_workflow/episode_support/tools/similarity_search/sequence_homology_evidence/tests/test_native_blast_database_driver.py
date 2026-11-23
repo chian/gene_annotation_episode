@@ -106,7 +106,7 @@ raise SystemExit(7 if mode == "nonzero" else 0)
     owner["submission_token"] = c._digest({k: owner[k] for k in ("run_id", "episode_id", "assignment_sha256", "operation_key")})
     attempt = base / "attempt"
     attempt.mkdir()
-    plan = {"version": "native_blast_database_run_plan_v1", "identity": owner, "requested_job": request,
+    plan = {"version": "native_blast_database_run_plan", "identity": owner, "requested_job": request,
         "attempt_directory": str(attempt), "input_paths": {r["input_key"]: str(attempt / "inputs" / r["input_key"]) for r in job["inputs"]},
         "database_paths": {r["database_key"]: r["native_paths"] for r in job["databases"]},
         "output_directory": str(attempt / "outputs"), "resource_environment": {"RESOURCE_SETTING": "explicit"}}

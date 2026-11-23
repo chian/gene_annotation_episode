@@ -14,7 +14,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.experimen
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_assay_inputs import SOURCE_KINDS, VARIANCE_STATUSES, _Sources, _fail, _finite, _keys, _nullable, _numeric, _text, _witness_schema
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_experimental_contracts import ExperimentalContractError
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence.literature_transport_calculations import PRIMITIVE_ORDER
-VERSION = 'a105_transport_inputs_v1'
+VERSION = 'a105_transport_inputs'
 CONTEXT_FIELDS = ('molecule', 'analyte', 'preparation', 'experimental_system', 'endpoint', 'curve')
 _LITERAL_ROLES = PRIMITIVE_ORDER[:2]
 _OBSERVATION_MODELS = ('michaelis_menten', 'unknown')
@@ -87,7 +87,7 @@ def _covariance(reference, observations, sources):
         _fail('complete_covariance_owners_required', 'covariance_source_ref')
     value = _json_covariance(sources.source(reference, 'original')['content'])
     _keys(value, _COVARIANCE_FIELDS, 'covariance_source')
-    if value['version'] != 'a105_transport_covariance_v1':
+    if value['version'] != 'a105_transport_covariance':
         _fail('covariance_version_mismatch', 'covariance_source.version')
     if value['primitive_order'] != list(PRIMITIVE_ORDER):
         _fail('covariance_primitive_order_mismatch', 'covariance_source.primitive_order')

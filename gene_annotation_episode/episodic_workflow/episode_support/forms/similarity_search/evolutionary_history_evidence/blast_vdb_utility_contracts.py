@@ -53,7 +53,7 @@ VDB_MEMBER_SCHEMA = _object({
     "sample_key": _nullable(_STR), "provenance": _PROVENANCE,
 })
 VDB_UTILITY_CONTEXT_SCHEMA = _object({
-    "version": {"const": "blast_vdb_utility_context_v1"},
+    "version": {"const": "blast_vdb_utility_context"},
     "source_inputs": _array(_SOURCE_INPUT, minItems=1),
     "selection_kind": _nullable(_enum("entries all_native_sequences all_references")),
     "include_filtered_reads": _BOOL,
@@ -78,17 +78,17 @@ _PATH_RECORD = _object({"kind": _enum("vdb vdb_alias blast_db_alias"),
 _VARIANTS = [
     ("extract_sequences", _object({"kind": {"const": "entries"}, "source": {"const": source},
         "selectors": _array(_SELECTOR, minItems=1),
-        "batch_occurrence_id": _STR if source == "entry_batch" else _NULL}), _BOOL, "blast_vdb_cmd_table_v1")
+        "batch_occurrence_id": _STR if source == "entry_batch" else _NULL}), _BOOL, "blast_vdb_cmd_table")
     for source in ("entry", "entry_batch")
 ] + [
     ("extract_sequences", _object({"kind": {"const": kind}}),
-     {"const": False} if kind == "all_references" else _BOOL, "blast_vdb_cmd_table_v1")
+     {"const": False} if kind == "all_references" else _BOOL, "blast_vdb_cmd_table")
     for kind in ("all_native_sequences", "all_references")
 ] + [(mode, _NULL, {"const": False}, fmt) for mode, fmt in (
-    ("info", "blast_vdb_info_text_v1"), ("paths", "blast_vdb_paths_text_v1"),
-    ("paths_all", "blast_vdb_paths_text_v1"))]
+    ("info", "blast_vdb_info_text"), ("paths", "blast_vdb_paths_text"),
+    ("paths_all", "blast_vdb_paths_text"))]
 VDB_OPERATION_SCHEMA = {"anyOf": [_object({
-    "version": {"const": "blast_utility_operation_v3"}, "program": {"const": "blast_vdb_cmd"},
+    "version": {"const": "blast_vdb_utility_operation"}, "program": {"const": "blast_vdb_cmd"},
     "mode": {"const": mode}, "input_occurrence_ids": _unique(_STR),
     "database_key": _STR, "molecule": {"const": "dna"},
     "parameters": _object({"database_selection": _DATABASE_SELECTION, "line_length": _POS,
@@ -115,7 +115,7 @@ def build_vdb_utility_schemas(base: dict) -> dict:
     occurrence = deepcopy(base["ArtifactOccurrence"])
     occurrence["properties"]["role"]["enum"] += ["entry_batch"]
     occurrence["properties"]["native_format"]["enum"] += [
-        "blast_vdb_cmd_table_v1", "blast_vdb_info_text_v1", "blast_vdb_paths_text_v1"]
+        "blast_vdb_cmd_table", "blast_vdb_info_text", "blast_vdb_paths_text"]
     primitive = deepcopy(base["NativeField"]["anyOf"][0]["properties"])
     fields = {"anyOf": [_object({**primitive, "field_name": {"const": name, "description": meaning},
         "value": _nullable(kind), "unit": {"const": unit}})
@@ -131,11 +131,11 @@ def build_vdb_utility_schemas(base: dict) -> dict:
     additions = {"operation": VDB_OPERATION_SCHEMA, "output_occurrence": occurrence,
         "stderr_occurrence": occurrence, "operation_input_occurrences": _array(occurrence),
         "vdb_context": context}
-    extraction.update({**additions, "version": {"const": "blast_sequence_extraction_v2"},
+    extraction.update({**additions, "version": {"const": "blast_vdb_sequence_extraction"},
         "records": _array(_object(record)),
         "scope": _object({"kind": _enum("selected_entries all_native_sequences all_references")})})
     inspection = deepcopy(base["DatabaseInspection"]["properties"])
-    inspection.update({**additions, "version": {"const": "blast_database_inspection_v3"},
+    inspection.update({**additions, "version": {"const": "blast_vdb_database_inspection"},
         "native_fields": _array(fields), "path_sections": _array(_PATH_SECTION),
         "path_records": _array(_PATH_RECORD)})
     return deepcopy({"ArtifactOccurrence": occurrence, "NativeField": fields,

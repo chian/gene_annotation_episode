@@ -34,7 +34,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.progress_
 from gene_annotation_episode.episodic_workflow.episode_support.tools.tool_knowledge import (
     INSTRUCTIONS as KNOWLEDGE_INSTRUCTIONS, ToolKnowledge, catalog as knowledge_catalog)
 
-from .messages.read_from_parent import OLD_PROPERTIES
+from .messages.read_from_parent import ASSIGNMENT_PROPERTIES
 
 CHILD_SLOTS = {}
 SERVICES = ('job_access',)
@@ -88,7 +88,7 @@ OFFERED = ('api_operation', 'wait_for_service_job', 'knowledge_lookup', 'launch_
 
 
 def _assignment(summary):
-    return {name: summary[name] for name in OLD_PROPERTIES if name in summary}
+    return {name: summary[name] for name in ASSIGNMENT_PROPERTIES if name in summary}
 
 
 def _artifact_refs(items, ctx):

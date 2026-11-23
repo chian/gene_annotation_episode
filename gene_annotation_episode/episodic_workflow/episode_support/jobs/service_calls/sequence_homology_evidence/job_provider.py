@@ -2,25 +2,25 @@
 
 A target is one job an A101 job execution binding recorded in this run. Two kinds are recorded:
 
-- a practical job: the ``practical_assignment_v1`` one local or HPC job execution Episode executed. Each executed command of that
+- a practical job: the ``practical_assignment`` one local or HPC job execution Episode executed. Each executed command of that
   Episode is published to the Store as a ``source`` record of provider ``episode.practical_receipt``: its
-  artifact is the ``practical_receipt_information_v1`` body (run, Episode, assignment digest, scope and the
-  immutable command receipt) and its request artifact the ``practical_receipt_assignment_v1`` snapshot of the
+  artifact is the ``practical_receipt_information`` body (run, Episode, assignment digest, scope and the
+  immutable command receipt) and its request artifact the ``practical_receipt_assignment`` snapshot of the
   assignment. The target handle is ``practical_job_`` + the digest of the job's run, Episode and assignment
   digest;
 - an API job: the one API job an API job execution Episode ran
   (``execution_job_submission/api_job_execution/api_job_receipts``). Each executed operation of that Episode is
   published as a ``source`` record of provider ``episode.api_job_receipt``: its artifact is the
-  ``api_job_receipt_information_v1`` body (run, Episode, resource id, service, request digest, assignment
+  ``api_job_receipt_information`` body (run, Episode, resource id, service, request digest, assignment
   digest, scope and the operation receipt naming the retained ``api_job_execution.<operation>`` responses) and
-  its request artifact the ``api_job_receipt_assignment_v1`` snapshot of the commissioned assignment and the
+  its request artifact the ``api_job_receipt_assignment`` snapshot of the commissioned assignment and the
   admitted service request. The target handle is ``api_job_`` + the digest of the job's run, Episode and
   assignment digest.
 
 A target's scope is the scope its receipts record. Observation only reads what those receipts record; nothing
 is re-acquired:
 
-- execution status (``resource_execution_status_v1``). A practical job: the ``resource_id`` and
+- execution status (``resource_execution_status``). A practical job: the ``resource_id`` and
   ``resource_kind`` from its assignment, its execution identity (the job execution Episode), the assignment
   digest as request digest, and the native state of the latest receipt that records the requested job
   (``facts.requested_job``: its ``status``, ``returncode`` and that receipt's captured output snapshots); with
@@ -50,14 +50,14 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_
 from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_homology_evidence.progress_records import resource_status
 
 RECEIPT_PROVIDER = 'episode.practical_receipt'
-RECEIPT_VERSION = 'practical_receipt_information_v1'
-ASSIGNMENT_VERSION = 'practical_receipt_assignment_v1'
+RECEIPT_VERSION = 'practical_receipt_information'
+ASSIGNMENT_VERSION = 'practical_receipt_assignment'
 HANDLE_PREFIX = 'practical_job_'
 API_RECEIPT_PROVIDER = 'episode.api_job_receipt'
-API_RECEIPT_VERSION = 'api_job_receipt_information_v1'
-API_ASSIGNMENT_VERSION = 'api_job_receipt_assignment_v1'
+API_RECEIPT_VERSION = 'api_job_receipt_information'
+API_ASSIGNMENT_VERSION = 'api_job_receipt_assignment'
 API_HANDLE_PREFIX = 'api_job_'
-PROGRESS_VERSION = 'progress_snapshot_v1'
+PROGRESS_VERSION = 'progress_snapshot'
 
 
 class JobProvider:

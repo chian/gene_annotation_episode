@@ -53,7 +53,7 @@ def preparation_job(tmp_path, mode, *, bound=False, old=False, profile_type='rps
         'makeprofiledb' if mode == 'create_profile_database' else 'blastdb_aliastool')
     software = identity(tmp_path / 'fixture-executable', b'controlled executable, never run\n')
     Path(software['path']).chmod(0o755)
-    job = {'version': contracts.JOB_VERSION_V2, 'operation': None,
+    job = {'version': contracts.PREPARATION_JOB_VERSION, 'operation': None,
         'software': {'executable': software['path'], 'sha256': software['sha256'], 'engine_version': 'fixture'},
         'environment': {'BLAST_USAGE_REPORT': 'false', 'NCBI_DONT_USE_NCBIRC': '1'},
         'inputs': [], 'databases': [], 'materializations': {'database_copies': [], 'list_files': []},
@@ -131,7 +131,7 @@ def preparation_job(tmp_path, mode, *, bound=False, old=False, profile_type='rps
                 for i in range(2)]}]
     if mode in {'create_subset_alias','aggregate_databases','aggregate_volumes','create_profile_database'}:
         job['outputs'].append(output('family', 'database_family', p['output_prefix'], 'blastdb_family', population='prefix_members'))
-    job['operation'] = {'version': 'blast_utility_operation_v2', 'program': program, 'mode': mode,
+    job['operation'] = {'version': 'blast_preparation_operation', 'program': program, 'mode': mode,
         'molecule': molecule, 'database_key': source, 'input_occurrence_ids': [r['input_key'] for r in job['inputs']],
         'parameters': p}
     return job

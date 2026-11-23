@@ -41,7 +41,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.experimen
     canonical, identity, obj, plain, validate_schema)
 
 PROVIDER = GRADING_PROVIDER
-VERSION = 'literature_assay_grading_record_v2'
+VERSION = 'literature_assay_grading_record'
 NAMESPACE = 'literature_assay_grading_cells'
 REQUESTED = 'requested_assay_grading_components'
 SCOPE = 'assay_type_experimental_evidence'

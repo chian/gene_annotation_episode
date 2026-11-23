@@ -33,7 +33,7 @@ means that the ENZYME made it: the racemic standard (identity of both peaks), th
 configurational stability of the product (a product that racemizes or epimerizes on the bench or in the buffer hides the enzyme's selectivity).
 """
 
-VERSION = 'a105_distribution_chiral_criteria_v1'
+VERSION = 'a105_distribution_chiral_criteria'
 
 PERCENT_PER_FRACTION = 100.0   # FIXED_BY_DEFINITION: a percent is a hundredth.
 ISOMERS_IN_A_PAIR = 2.0        # FIXED_BY_DEFINITION: ee = (major - minor) / (major + minor) for two isomers, so the major share is (1 + ee) / 2 and the minor share (1 - ee) / 2.

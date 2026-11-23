@@ -1,16 +1,16 @@
 """A110's execution job provider over the records the Episode holds (the ``job_provider`` of ``progress_provider``).
 
 A target is one practical job an A110 job execution binding recorded in this run: the
-``practical_assignment_v1`` one local or HPC job execution Episode executed. Each executed command of that
+``practical_assignment`` one local or HPC job execution Episode executed. Each executed command of that
 Episode is published to the Store as a ``source`` record of provider ``episode.practical_receipt``: its
-artifact is the ``practical_receipt_information_v1`` body (run, Episode, assignment digest, scope and the
-immutable command receipt) and its request artifact the ``practical_receipt_assignment_v1`` snapshot of the
+artifact is the ``practical_receipt_information`` body (run, Episode, assignment digest, scope and the
+immutable command receipt) and its request artifact the ``practical_receipt_assignment`` snapshot of the
 assignment. The target handle is ``practical_job_`` + the digest of the job's run, Episode and assignment
 digest; its scope is the scope its receipts record.
 
 Observation only reads what those receipts record; nothing is re-acquired:
 
-- execution status (``resource_execution_status_v1``): the job's ``resource_id`` and ``resource_kind`` from its
+- execution status (``resource_execution_status``): the job's ``resource_id`` and ``resource_kind`` from its
   assignment, its execution identity (the job execution Episode), the assignment digest as request digest, and
   the native state of the latest receipt that records the requested job (``facts.requested_job``: its
   ``status``, ``returncode`` and that receipt's captured output snapshots); with no such receipt the native
@@ -35,10 +35,10 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.biochemic
 from gene_annotation_episode.episodic_workflow.episode_support.records.biochemical_feasibility_evidence.progress_records import resource_status
 
 RECEIPT_PROVIDER = 'episode.practical_receipt'
-RECEIPT_VERSION = 'practical_receipt_information_v1'
-ASSIGNMENT_VERSION = 'practical_receipt_assignment_v1'
+RECEIPT_VERSION = 'practical_receipt_information'
+ASSIGNMENT_VERSION = 'practical_receipt_assignment'
 HANDLE_PREFIX = 'practical_job_'
-PROGRESS_VERSION = 'progress_snapshot_v1'
+PROGRESS_VERSION = 'progress_snapshot'
 
 
 class JobProvider:

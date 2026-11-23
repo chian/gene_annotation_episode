@@ -3,7 +3,7 @@
 The facet bytes are the retained native response. Feature/molecular values are
 copied from retained native arrays into labeled synthetic Solr envelopes for
 these pure view tests. Neither fixture confers real host custody or establishes
-a new v2 acquisition, a durable admission, or an episode/model input path.
+a new acquisition, a durable admission, or an episode/model input path.
 """
 from copy import deepcopy
 import hashlib
@@ -27,13 +27,13 @@ RESULT_ID = "00000317-5d60-4e06-9c35-c42e53fd5ae3"
 
 
 def selector(projection=None, *, inputs=(), supplied=(), page=None):
-    return {"version": "bvbrc_data_result_selector_v2", "page": page,
+    return {"version": "bvbrc_data_result_selector", "page": page,
         "projection": projection or {"family": "query_metadata"},
         "inputs": list(inputs), "supplied_metadata": list(supplied)}
 
 
 def request(collection="genome", *, mode="page", fields=None):
-    result = {"version": "bvbrc_data_request_v2", "collection": collection, "mode": mode, "filters": []}
+    result = {"version": "bvbrc_data_request", "collection": collection, "mode": mode, "filters": []}
     if fields is not None:
         result["fields"] = fields
     return result
@@ -68,7 +68,7 @@ def qualified(collection="genome", docs=(), fields=None, *, selection=None, inpu
     metadata = [{"source_ref": r["provenance"]["source_ref"], "native_artifact_ref": "artifact_metadata_fixture",
         "native_sha256": "a" * 64, "record_path": r["provenance"]["record_path"],
         "metadata_sha256": json_digest({k: v for k, v in r.items() if k != "provenance"})} for r in selection["supplied_metadata"]]
-    grading = {"version": "bvbrc_data_grading_v1", "prepared": prepared, "selector": selection,
+    grading = {"version": "bvbrc_data_grading", "prepared": prepared, "selector": selection,
         "parse_result": parsed, "page_components": calculate_page_counts(sheet) if sheet else None,
         "facet_components": calculate_facet_fractions(sheet, denominator_policy="same_response_exact_document_count") if sheet and sheet["mode"] == "facet" else None,
         "feature_sequence_sheet": None, "feature_sequence_components": None, "molecular_sheet": None,
@@ -84,7 +84,7 @@ def qualified(collection="genome", docs=(), fields=None, *, selection=None, inpu
         grading["molecular_sheet"] = extract_molecular_experiment_rows(pages("bioset_result"),
             bioset_pages=pages("bioset"), experiment_pages=pages("experiment"), feature_pages=pages("genome_feature"),
             result_ids=projection["result_ids"], supplied_metadata=selection["supplied_metadata"])
-    return validate("QualifiedResult", {"version": "bvbrc_data_qualified_result_v1", "service": "bvbrc_data",
+    return validate("QualifiedResult", {"version": "bvbrc_data_qualified_result", "service": "bvbrc_data",
         "binding": binding, "host_qualification": {"run_id": "synthetic_run", "source_episode_id": "synthetic_results",
             "receiver_episode_id": "synthetic_receiver", "scope_sha256": "b" * 64,
             **{k: True for k in ("receipt_verified", "native_bytes_verified", "grading_custody_verified",

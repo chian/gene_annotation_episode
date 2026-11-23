@@ -77,7 +77,7 @@ def test_coordinate_witness_still_rejects_split_utf8_and_explicit_wrong_quote():
 def add_covariance(args, sources, reader, matrix=None):
     first = read_assay_inputs(args, read_source=reader)
     diagonal = [0.04, 0.0225, 0.0025, 0.01, 0.01, 0.01]
-    payload = {'version': 'a105_primitive_covariance_v1', 'primitive_order': list(PRIMITIVE_ORDER), 'primitive_measurement_keys': [first['primitive_observations'][role]['measurement_key'] for role in PRIMITIVE_ORDER], 'primitive_units': [first['primitive_observations'][role]['raw_unit'] for role in PRIMITIVE_ORDER], 'covariance': matrix or [[diagonal[i] if i == j else 0 for j in range(6)] for i in range(6)], 'origin': 'synthetic'}
+    payload = {'version': 'a105_primitive_covariance', 'primitive_order': list(PRIMITIVE_ORDER), 'primitive_measurement_keys': [first['primitive_observations'][role]['measurement_key'] for role in PRIMITIVE_ORDER], 'primitive_units': [first['primitive_observations'][role]['raw_unit'] for role in PRIMITIVE_ORDER], 'covariance': matrix or [[diagonal[i] if i == j else 0 for j in range(6)] for i in range(6)], 'origin': 'synthetic'}
     sources[COVARIANCE_SOURCE] = {'artifact_ref': 'artifact_' + '2' * 24, 'content': json.dumps(payload).encode()}
     args['covariance_source_ref'] = COVARIANCE_SOURCE
     return payload

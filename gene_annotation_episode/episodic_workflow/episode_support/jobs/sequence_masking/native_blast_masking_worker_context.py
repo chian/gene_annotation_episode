@@ -13,7 +13,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.sequence_ma
 
 PREFIX = "native_blast_masking_"
 
-MANIFEST_VERSION = PREFIX + "result_worker_manifest_v1"
+MANIFEST_VERSION = PREFIX + "result_worker_manifest"
 
 OUTPUT_FILES = {"sheet": "sheet.json", "calculations": "calculations.json",
                 "statistics": "statistics.json", "projection": "projection.json",

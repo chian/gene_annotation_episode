@@ -23,7 +23,7 @@ def hit(index, accession, score=10, taxid=562):
 
 def result(hits=None, **request):
     hits = hits if hits is not None else [hit(0, "A", 10), hit(1, "B", 9)]
-    return {"schema": "blast_normalized_result_v1", "mode": "database", "resource": "api",
+    return {"schema": "blast_normalized_result", "mode": "database", "resource": "api",
         "format": "json2", "query": {"id": "synthetic_query", "title": None, "length": 10},
         "search": {"program": "blastp", "version": "synthetic", "database": "synthetic_db",
             "parameters": {}, "statistics": {}, "request": request,
@@ -63,7 +63,7 @@ def test_native_measurements_and_inputs_preserved_without_mutation():
     assert sheet["hits"][0]["measurements"]["identical_unique_pair_count"] == 5
     assert sheet["hits"][0]["hsp_components"][0]["native_scores"]["bit_score"] == 10
     assert sheet["coverage"]["matched_metadata_row_count"] == 2
-    assert json.loads(json.dumps(sheet, allow_nan=False))["schema"] == "blast_database_sheet_v1"
+    assert json.loads(json.dumps(sheet, allow_nan=False))["schema"] == "blast_database_sheet"
 
 
 def test_hand_calculated_probabilities_and_database_representation():

@@ -21,7 +21,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_
     validate_rfam_input_identity, validate_rfam_capture, validate_rfam_alignment_result,
 )
 
-PARSE_VERSION = "rfam_batch_parse_result_v2"
+PARSE_VERSION = "rfam_batch_parse_result"
 PROFILES = {"json": "rfam_single_json", "tblout": "rfam_batch_tblout", "out": "rfam_batch_report"}
 HIT_ALIASES = {
     "native_score_bits": "bitscore", "native_evalue": "evalue", "native_gc_fraction": "gc_fraction",
@@ -555,7 +555,7 @@ def project_rfam_infernal_result(sheet: dict, calculation: dict, *, projection: 
         if representation == "out":
             projected["model_name"] = row["model"].get("name") if hit is not None else None
         result.append(projected)
-    return dict(version="rfam_selected_projection_v1", source_ref=bindings["source_ref"],
+    return dict(version="rfam_selected_projection", source_ref=bindings["source_ref"],
         sheet_ref=bindings["sheet_ref"], calculation_ref=bindings["calculation_ref"], family=family,
         selection=deepcopy(projection), available_row_count=len(rows), selected_row_count=len(result),
         more_rows=len(result) < len(rows), population_complete=all(

@@ -113,7 +113,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_product_distribution_direction import select_product_distribution_effect
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_distribution_gel_bands_converted_v1'
+VERSION = 'a105_distribution_gel_bands_converted'
 CRITERIA_MAP = {'species_identity': ('size_markers', 'band_resolution'), 'response_factors': ('equal_response',), 'common_denominator': ('denominator_coverage',),
                 'calibration_applicability': ('linear_range', 'minor_band_limit', 'lane_signal_accounted'), 'matrix_interference': ('reaction_quenched', 'background_subtraction'),
                 'background_alternatives': ('background_lane',), 'attribution_supported': ('inactive_enzyme_lane',), 'assertion_relevance': ('native_reaction', 'single_hit_regime'),

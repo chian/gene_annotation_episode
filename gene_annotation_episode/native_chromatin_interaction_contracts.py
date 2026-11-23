@@ -197,16 +197,16 @@ def chromatin_output_files(request):
     for ordinal, population in enumerate(request["populations"]):
         for role, name in zip(TABLE_ROLES, TABLE_NAMES):
             add(f"p{ordinal}.{role}", population["population_key"], role,
-                f"populations/p{ordinal}/{name}", "chromatin_contact_tables_v1:" + role)
+                f"populations/p{ordinal}/{name}", "chromatin_contact_tables:" + role)
     add("original_contact", None, "original_contact", "inputs/contact.native", request["contact"]["format"])
-    add("original_elements", None, "original_elements", "inputs/elements.bed", "bed_outer_span_v1")
-    add("original_metadata", None, "original_metadata", "inputs/metadata.json", "chromatin_supplied_metadata_v1")
+    add("original_elements", None, "original_elements", "inputs/elements.bed", "bed_outer_span")
+    add("original_metadata", None, "original_metadata", "inputs/metadata.json", "chromatin_supplied_metadata")
     for ordinal, population in enumerate(request["populations"]):
         add(f"p{ordinal}.population_manifest", population["population_key"], "population_manifest",
-            f"populations/p{ordinal}/manifest.json", "chromatin_interaction_population_seal_v1")
+            f"populations/p{ordinal}/manifest.json", "chromatin_interaction_population_seal")
     add("stdout", None, "stdout", "stdout.log", "native_stdout")
     add("stderr", None, "stderr", "stderr.log", "native_stderr")
-    add("bundle", None, "bundle", BUNDLE_FILENAME, "chromatin_interaction_native_bundle_v1")
+    add("bundle", None, "bundle", BUNDLE_FILENAME, "chromatin_interaction_native_bundle")
     return rows
 
 

@@ -106,7 +106,7 @@ def _bound(summary, ctx):
         config = settings['resources'].get(resource_id)
         if config is None:
             raise ValueError('execution_resource_not_bound')
-        kind = 'api' if request['version'] != 'practical_assignment_v1' else request['resource_kind']
+        kind = 'api' if request['version'] != 'practical_assignment' else request['resource_kind']
         if KINDS[config['kind']] != kind:
             raise ValueError('execution_resource_kind_conflict')
         if kind == 'api':
@@ -191,7 +191,7 @@ def _selected_execution_task(summary, resources):
     for resource_id, request in summary['assignment']['requests'].items():
         if resource_id not in resources:
             return None
-        if request['version'] != 'practical_assignment_v1':
+        if request['version'] != 'practical_assignment':
             if request.get('service') != 'ebi_hmmer':
                 return None
             kind, job = 'api', deepcopy(request)
@@ -207,7 +207,7 @@ def _selected_execution_task(summary, resources):
         selected.append({'resource_id': resource_id, 'resource_kind': kind, 'endpoint': deepcopy(request.get('endpoint')),
                          'constraints': deepcopy(request.get('constraints', {})), 'job': job,
                          'resource': resources[resource_id]})
-    return {'version': 'selected_execution_task_v1', 'scientific_question': task['scientific_question'],
+    return {'version': 'selected_execution_task', 'scientific_question': task['scientific_question'],
             'selected_tool_info': task['selected_tool_info'], 'requests': selected,
             'constraints': deepcopy(summary['assignment']['constraints']), 'selector': None,
             'result_description': None}

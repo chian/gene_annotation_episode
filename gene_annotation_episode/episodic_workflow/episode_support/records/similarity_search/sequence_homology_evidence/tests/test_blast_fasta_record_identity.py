@@ -20,7 +20,7 @@ def test_original_file_and_full_symbol_identities_are_separate():
     raw = b">s0\nACDEFGHIKL\n>s1\nACDEPQRSTV\n"
     result = parse(raw)
     assert set(result) == {"schema", "file_sha256", "size_bytes", "records", "issues"}
-    assert result["schema"] == "blast_fasta_source_records_v1"
+    assert result["schema"] == "blast_fasta_source_records"
     assert result["file_sha256"] == "84ae36a79e704b527256bdd454f360535de0517c7a7dffdf7927b4f67026aacc"
     assert result["size_bytes"] == 30 and result["issues"] == []
     assert [(r["record_ordinal"], r["byte_start"], r["byte_end"], r["header"], r["symbols"])

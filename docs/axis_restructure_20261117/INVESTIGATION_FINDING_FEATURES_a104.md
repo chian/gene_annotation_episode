@@ -165,15 +165,15 @@ The `value` and `credit` fields are the credit and are not restated.
 
 | Line | Finding field | Read from (or computed how) | Type | Range / vocabulary | Unit |
 |---|---|---|---|---|---|
-| V1 | `attribution_status` | `target_sheets[target].status` | enum | `attributed_phylogeny_received`, `unresolved_attribution`, `no_received_native_phylogeny_test` | – |
-| V2 | `placement_max` | max `native_dimensions.placement` over the target's cells | number | [0, 1] | bootstrap fraction |
-| V3 | `history_comparison_max` | max `native_dimensions.history_comparison` | number | [0, 1] | bootstrap fraction |
-| V4 | `characterized_clade_max` | max `native_dimensions.characterized_clade` | number | [0, 1] | (scale of the absent producer, 0.3) |
-| V5 | `supported_length` | Σ (end − start) over the cells with any dimension > 0 | integer | 0 … `assigned_length` | residues |
-| V6 | `assigned_length` | `assigned_length` | integer | ≥ 1 | residues |
-| V7 | `contribution_count` | `source_contribution_count` | integer | ≥ 0 | received measurements |
-| V8 | `pending_measurement_count` | `len(pending_measurement_refs)` | integer | ≥ 0 | measurements |
-| V9 | `competing_configuration_count` | `len(unresolved_variant_groups)` | integer | ≥ 0 | variant groups (disagreement across configurations) |
+| F1 | `attribution_status` | `target_sheets[target].status` | enum | `attributed_phylogeny_received`, `unresolved_attribution`, `no_received_native_phylogeny_test` | – |
+| F2 | `placement_max` | max `native_dimensions.placement` over the target's cells | number | [0, 1] | bootstrap fraction |
+| F3 | `history_comparison_max` | max `native_dimensions.history_comparison` | number | [0, 1] | bootstrap fraction |
+| F4 | `characterized_clade_max` | max `native_dimensions.characterized_clade` | number | [0, 1] | (scale of the absent producer, 0.3) |
+| F5 | `supported_length` | Σ (end − start) over the cells with any dimension > 0 | integer | 0 … `assigned_length` | residues |
+| F6 | `assigned_length` | `assigned_length` | integer | ≥ 1 | residues |
+| F7 | `contribution_count` | `source_contribution_count` | integer | ≥ 0 | received measurements |
+| F8 | `pending_measurement_count` | `len(pending_measurement_refs)` | integer | ≥ 0 | measurements |
+| F9 | `competing_configuration_count` | `len(unresolved_variant_groups)` | integer | ≥ 0 | variant groups (disagreement across configurations) |
 
 ### 4.2 `characterized_clade` and `placement_robustness` attachments
 
@@ -261,8 +261,8 @@ These belong to the homology axes. If the owner wants them as A104 evidence, eac
 
 | Child → parent | What the parent decides next (its `task.py` decide/action and `msg_to_child`) | Smallest controlled return |
 |---|---|---|
-| A104 head → root | `root/task.py` decide: which of the nine axes to commission next, with objective, purpose, thought pattern and tools. It is shown each axis's `credit`, `commissions`, `latest_finding` and `job_handoff_refs`. `msg_to_child` selects only `committed_record_refs` for A104. | `credit`; `finding` = {`evidence_types_present` (array of the section 1 enum), V1, V5, V6, V7, V8, V9}; `committed_record_refs` (selected). Whether to come back depends on V8 > 0 (pending native measurements) or on a job still outstanding. A104 declares no `execution_handoff_refs`, so the root's `job_handoff_refs` for A104 stays empty. The owner may want that field added. |
-| A104 head (own slot, narrower investigation) → A104 head | The head model decides the next unit: another tool, `reason`, `report`, `process.revise`, or another child commission (own slot or `hpc`). It reads the child's `credit`, `finding` and `committed_record_refs`. | `credit`; `committed_record_refs`; per received sheet the type-specific lines P1, P5, P6, P13, P14 (placement) and H1, H4, H5, H6, H8 (history), plus V1, V8, V9. These tell the head which relationship lacks support or agreement and which configuration is in conflict, which is where a narrower investigation is needed. |
+| A104 head → root | `root/task.py` decide: which of the nine axes to commission next, with objective, purpose, thought pattern and tools. It is shown each axis's `credit`, `commissions`, `latest_finding` and `job_handoff_refs`. `msg_to_child` selects only `committed_record_refs` for A104. | `credit`; `finding` = {`evidence_types_present` (array of the section 1 enum), F1, F5, F6, F7, F8, F9}; `committed_record_refs` (selected). Whether to come back depends on F8 > 0 (pending native measurements) or on a job still outstanding. A104 declares no `execution_handoff_refs`, so the root's `job_handoff_refs` for A104 stays empty. The owner may want that field added. |
+| A104 head (own slot, narrower investigation) → A104 head | The head model decides the next unit: another tool, `reason`, `report`, `process.revise`, or another child commission (own slot or `hpc`). It reads the child's `credit`, `finding` and `committed_record_refs`. | `credit`; `committed_record_refs`; per received sheet the type-specific lines P1, P5, P6, P13, P14 (placement) and H1, H4, H5, H6, H8 (history), plus F1, F8, F9. These tell the head which relationship lacks support or agreement and which configuration is in conflict, which is where a narrower investigation is needed. |
 | `hpc_work_planning` → A104 head | Whether to commission HPC planning again (more obligations), or to read the results it returned. | Already almost controlled: `credit`, `hpc_result_refs`, `hpc_accepted_obligations`, plus integer counts `plans_frozen`, `plans_closed`, `results_published` and `remaining_obligation_count` (replacing the `remaining_obligations` list). Leave out: the `qualification` text and the `hpc_model_ref` text, which should become a record ref. No evidence type: this is operational. |
 | `published_evidence_assessment` → A104 head | Not offered at present (0.7). If offered: whether to read the assessments into the head's credit or commission more literature. | `credit`; `assessment_refs` (A12) of the answers; per answer A0, A1, A2, A4, A5, A9; `literature_source_lead_dispositions` as D1/D2 only, when the task is `verified_source_leads`. |
 | `evidence_search_strategy_improvement` → `published_evidence_assessment` | Whether to commission the strategy child again with other `prior_search_refs`, or to read and reason itself. `msg_to_child` selects only leads (for `verified_source_leads`). | `credit` plus D1/D2 leads when selected. For `source_answer: assessment` tasks also A12 + A1 + A5 (the parent's own credit counts a child's retained assessment through custody). |

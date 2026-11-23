@@ -20,7 +20,7 @@ def test_natural_inline_original_html_exact_projection_and_untyped_spread():
     original = source()
     before = deepcopy(original)
     result = read(original)
-    assert result['version'] == VERSION == 'a105_html_quantity_v1'
+    assert result['version'] == VERSION == 'a105_html_quantity'
     assert result['value'] == 16.5
     assert result['unit'] == 'uM'
     assert result['normalization'] == 'none'

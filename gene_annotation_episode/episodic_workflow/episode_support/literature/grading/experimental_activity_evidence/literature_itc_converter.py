@@ -220,7 +220,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.experimental_activity_evidence.literature_binding_reader import _SCALES
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_itc_converted_v1'
+VERSION = 'a105_itc_converted'
 STATEMENTS = {'detected': 'interaction_detected', 'not_detected': 'interaction_not_detected', None: 'interaction_not_stated'}
 CRITERIA_MAP = {'binding_controls': ('heat_of_dilution_control', 'buffer_matching'), 'binding_regime': ('c_value_window', 'injections_sufficient', 'temperature_stated_and_controlled'), 'binding_parameter_definition': ('fit_model_appropriate', 'thermodynamic_consistency'), 'binding_species': ('concentration_accuracy_and_active_fraction',), 'calibration_applicability': ('stoichiometry_consistency',), 'sampling_basis': ('replicate_titrations_independent',)}
 N_OVER_EXPECTED_MIN = 0.7  # EXPERT_REVIEW: fitted n / expected n below this suggests an inactive fraction or a concentration error; full agreement from it. The low side is the more lenient (zero at a 3.3-fold deficit vs 2-fold excess): a low n is mostly a cell-side error, absorbed by a freely fitted n (KD unbiased), a high n a syringe-side error that biases KD and dH.

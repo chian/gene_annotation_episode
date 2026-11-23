@@ -101,7 +101,7 @@ def project_nmf_result(sheet: dict, calculations: dict, *, selector: dict) -> di
     filtered_count = len(rows)
     offset, limit = window['offset'], window['limit']
     returned = rows[offset:offset+limit]
-    return {'schema': 'expression_nmf_result_view_v1', 'view': view, 'selector': deepcopy(selector),
+    return {'schema': 'expression_nmf_result_view', 'view': view, 'selector': deepcopy(selector),
         'status': c['status'], 'native_outcome': sheet['outcome'], 'total_available_rows': available,
         'selected_row_count': selected_count, 'filtered_row_count': filtered_count, 'row_offset': offset,
         'returned_row_count': len(returned), 'has_more': offset + len(returned) < filtered_count, 'rows': returned,

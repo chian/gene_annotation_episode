@@ -34,7 +34,7 @@ def arm(role, value, *, coverage="complete"):
 
 
 def fixture(*, coverage="complete"):
-    inputs = {"version": "literature_partner_inputs_v1", "arms": {
+    inputs = {"version": "literature_partner_inputs", "arms": {
         role: arm(role, value, coverage=coverage)
         for role, value in (("reference", 100), ("omitted", 20), ("addback", 90))}}
     recipe = {"version": reader.DATA_VERSION, "inputs": inputs}
@@ -245,9 +245,9 @@ def test_selected_arguments_are_closed_and_do_not_accept_scientific_numbers(chan
     (b"[]", "closed_fields_required"),
     (b"{}", "closed_fields_required"),
     (b'{"version":"old","inputs":{}}', "unsupported_partner_selection_version"),
-    (b'{"version":"literature_partner_selection_v1","inputs":{},"extra":1}', "closed_fields_required"),
-    (b'{"version":"literature_partner_selection_v1","version":"again","inputs":{}}', "duplicate_json_key"),
-    (b'{"version":"literature_partner_selection_v1","inputs":{"a":1,"a":2}}', "duplicate_json_key"),
+    (b'{"version":"literature_partner_selection","inputs":{},"extra":1}', "closed_fields_required"),
+    (b'{"version":"literature_partner_selection","version":"again","inputs":{}}', "duplicate_json_key"),
+    (b'{"version":"literature_partner_selection","inputs":{"a":1,"a":2}}', "duplicate_json_key"),
 ])
 def test_malformed_retained_source_and_nested_duplicate_keys(raw, code):
     fix = fixture()

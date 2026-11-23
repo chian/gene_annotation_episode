@@ -1,4 +1,4 @@
-"""What the commissioner gives: the launch assignment (the old ``execution_launch_assignment_v1`` of ``from_parent.py``
+"""What the commissioner gives: the launch assignment (the old ``execution_launch_assignment`` of ``from_parent.py``
 and ``from_parent_launch.py``: ``version``, ``requests``, ``immutable_input_versions``, ``constraints``,
 ``launch_instructions``, one field per property of the old assignment schema, under the same names) and the values
 the old episode obtained from its runner.
@@ -29,14 +29,14 @@ from method_loop import DeclaredField, Field, RecordForm
 from gene_annotation_episode.episodic_workflow.episode_support.forms.perturbation_evidence.execution_contracts import (
     validate_api_assignment)
 
-LAUNCH_VERSION = 'execution_launch_assignment_v1'
+LAUNCH_VERSION = 'execution_launch_assignment'
 # The old ``ROLE_KINDS`` inverted: the launch child that owns each kind of resource (the only kind is ``api``).
 KIND_SLOTS = {'api': 'launch_api'}
 
 ASSIGNMENT_FORM = RecordForm({
     'version': DeclaredField('text', 'The assignment version', LAUNCH_VERSION),
     'requests': Field('record', 'The concrete execution requests by resource id, at least one: each is the closed '
-                                'API service request of that resource (api_service_assignment_v1)'),
+                                'API service request of that resource (api_service_assignment)'),
     'immutable_input_versions': Field('list', 'The input versions the job is pinned to: reference, version and '
                                               'content digest'),
     'constraints': Field('record', "The commissioner's resource constraints: allowed_resource_ids, allowed_kinds, "

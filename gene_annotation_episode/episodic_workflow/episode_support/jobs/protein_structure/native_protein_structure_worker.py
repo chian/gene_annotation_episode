@@ -60,7 +60,7 @@ def check_selected_software(selected: Software) -> None:
         spec = importlib.util.find_spec(row["module"])
         _require(spec is not None and spec.origin is not None, "software_identity_mismatch")
         observed["implementation_files"].append({"module": row["module"]})
-    print(canonical({"version": "protein_structure_software_observation_v1", "software": observed}), flush=True)
+    print(canonical({"version": "protein_structure_software_observation", "software": observed}), flush=True)
     _require(Path(selected["python_executable"]).resolve() == Path(sys.executable).resolve(), "software_identity_mismatch")
     for name in ("python_version", "numpy_version", "biopython_version"):
         _require(science.same(selected[name], observed[name]), "software_identity_mismatch")
@@ -123,9 +123,9 @@ def _alignment_correspondence(request, rows, parsed, sequences):
         _require(science.same(rebind_structure_sequence(original, structure_role=side), sequences[side]), "sequence_artifact_mismatch")
     native = strict_json(data["alignment_native"])
     grading = strict_json(data["alignment_grading"])
-    legacy = _alignment_grading(grading, native_artifact_ref=corr["alignment"]["native_file"]["artifact_ref"],
+    pairwise = _alignment_grading(grading, native_artifact_ref=corr["alignment"]["native_file"]["artifact_ref"],
         grading_format=corr["alignment"]["grading_file"]["format"])
-    sheet = legacy["sheet"]
+    sheet = pairwise["sheet"]
     _require(type(sheet) is dict and science.same(sheet.get("native_result"), native), "invalid_traceback")
     return correspondence_from_pairwise_sheet(sheet, native=native, alignment=corr["alignment"],
         fixed=sequences["fixed"], moving=sequences["moving"],
@@ -134,27 +134,27 @@ def _alignment_correspondence(request, rows, parsed, sequences):
 
 
 def _alignment_grading(grading, *, native_artifact_ref, grading_format):
-    """Read explicit original envelopes; compare v2 saved cells without regrading."""
+    """Read explicit original envelopes; compare saved cells without regrading."""
     _require(type(grading) is dict, "invalid_traceback")
     version = grading.get("schema")
     fields = {"schema", "provider", "native_artifact_ref", "grading"}
-    if version == "tool_grading_artifact_v2":
+    if version == "tool_grading_artifact_with_correspondence":
         fields.add("correspondence")
-    _require(version in {"tool_grading_artifact_v1", "tool_grading_artifact_v2"} and set(grading) == fields,
+    _require(version in {"tool_grading_artifact", "tool_grading_artifact_with_correspondence"} and set(grading) == fields,
         "invalid_traceback")
     _require(version == grading_format and grading["provider"] == "biopython.alignment"
         and grading["native_artifact_ref"] == native_artifact_ref,
         "alignment_operand_mismatch")
-    legacy = grading["grading"]
-    _require(type(legacy) is dict and set(legacy) == {"sheet", "scores"}, "invalid_traceback")
-    if version == "tool_grading_artifact_v2":
+    pairwise = grading["grading"]
+    _require(type(pairwise) is dict and set(pairwise) == {"sheet", "scores"}, "invalid_traceback")
+    if version == "tool_grading_artifact_with_correspondence":
         try:
             companion = validate_correspondence_artifacts(grading["correspondence"], admission=False)
             _require(len(companion["instances"]) == 1, "invalid_traceback")
-            validate_biopython_correspondence(legacy, companion["instances"][0])
+            validate_biopython_correspondence(pairwise, companion["instances"][0])
         except (ValueError, KeyError, TypeError, IndexError) as error:
             raise ValueError("invalid_traceback") from error
-    return legacy
+    return pairwise
 
 
 def _received_transform(request, rows):

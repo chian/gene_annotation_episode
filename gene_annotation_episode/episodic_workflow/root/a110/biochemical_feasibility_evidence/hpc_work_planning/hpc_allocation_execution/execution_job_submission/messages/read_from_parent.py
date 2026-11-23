@@ -1,4 +1,4 @@
-"""What the parent gives: the launch assignment (the old ``execution_launch_assignment_v1``, one field per property
+"""What the parent gives: the launch assignment (the old ``execution_launch_assignment``, one field per property
 of the old assignment schema, under the same names), and the records the job inputs name.
 
 This is the only place the assignment is read. The old ``_launch`` check of the assignment itself (every request
@@ -22,14 +22,14 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.biochemic
 from gene_annotation_episode.episodic_workflow.episode_support.records.hpc.resource_records import (
     INPUT_VERSION_SCHEMA)
 
-LAUNCH_VERSION = 'execution_launch_assignment_v1'
+LAUNCH_VERSION = 'execution_launch_assignment'
 # The old ROLE_KINDS: the launch child that owns each resource kind.
 KIND_SLOTS = {'local': 'launch_local', 'hpc': 'launch_hpc'}
 
 ASSIGNMENT_FORM = RecordForm({
     'version': DeclaredField('text', 'The assignment version', LAUNCH_VERSION),
     'requests': Field('record', 'The concrete execution requests by resource id, at least one: each is the closed '
-                                'practical_assignment_v1 request of that resource'),
+                                'practical_assignment request of that resource'),
     'immutable_input_versions': Field('list', 'The input versions the job is pinned to: reference, version and '
                                               'content digest'),
     'constraints': Field('record', "The commissioner's resource constraints: allowed_resource_ids, allowed_kinds, "
@@ -69,7 +69,7 @@ def _request(resource_id, request):
 
 
 def request_yield_class(request):
-    """The old ``ExecutionEpisodeYield._request_yield_class`` of a ``practical_assignment_v1`` request: the class of
+    """The old ``ExecutionEpisodeYield._request_yield_class`` of a ``practical_assignment`` request: the class of
     the original execution request without generated identities (copied; library candidate)."""
     requested = request['requested_job']
     native = sorted(key for key in requested if key.startswith('native_'))

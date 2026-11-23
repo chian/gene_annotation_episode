@@ -59,7 +59,7 @@ def fact(answer, refs=(), support='direct'):
     return {**literature_spr_record.fact(answer, refs), 'support': None if answer == 'unknown' else support}
 
 
-VERSION = 'a105_pulldown_record_v1'
+VERSION = 'a105_pulldown_record'
 EXPERIMENT_TYPE = 'pulldown'
 QUANTITIES = ('fold_enrichment', 'fold_enrichment_sd', 'fold_enrichment_sem', 'percent_input_recovered', 'input_fraction', 'nacl_wash', 'detergent_wash', 'wash_count', 'incubation_time', 'incubation_temperature', 'replicate_count')
 PREPARATION_KEYS = ('bait_preparation_ref', 'prey_preparation_ref', 'dataset_ref')

@@ -266,7 +266,7 @@ def standard_blast_database_row_schema(family: str) -> dict:
     context = dict(query_axis_kind={"enum": ["sequence", "pssm_master", None]}, reference_axis_kind={"const": "sequence"},
         stage={"enum": ["sequence_database", None]}, query_unit={"enum": ["aa", "nt"]}, reference_unit={"enum": ["aa", "nt"]}, alignment_unit={"enum": ["aa", "nt"]})
     if family == "sequence_population": context["count_unit"] = {"enum": ["unique_sequences", "sequence_groups"]}
-    schema = _object(dict(schema={"const": PREFIX + "numeric_row_v1"}, family={"const": family},
+    schema = _object(dict(schema={"const": PREFIX + "numeric_row"}, family={"const": family},
         record_key=ROW_ID, calculation_id=SHA, identity=_identity_schema(family), program={"enum": [p for p in PROGRAMS if _eligible(family, p)]},
         context=_object(context), component_refs=_array(_object(dict(artifact_role={"enum": ["collection", "sheets", "calculations"]}, pointer=POINTER))),
         native_status={"enum": list(NATIVE_STATUSES)}, measurements=_array(_cell_schema(family)), booleans=_array(_cell_schema(family, True))))
@@ -313,7 +313,7 @@ def standard_blast_database_fact_sources() -> dict:
 
 def _selector_schema(program):
     identity = dict(artifact_ref=REF, sha256=SHA, size_bytes=I0)
-    return _object(dict(version={"const": PREFIX + "selector_v1"}, acquisition={"const": "complete_bound_bundle"},
+    return _object(dict(version={"const": PREFIX + "selector"}, acquisition={"const": "complete_bound_bundle"},
         metadata_inputs=_array({"oneOf": [_object(dict(input_key=TOKEN, consumer={"const": consumer},
             schema_id={"const": schema}, **identity)) for consumer, schema in _METADATA_TUPLES]}),
         retained_sources=_array(_object(dict(source_ref=REF, **identity))),
@@ -418,7 +418,7 @@ def project_standard_blast_database_rows(full_rows: list, *, selector: dict, cal
                 saved[field] = [deepcopy(cells[name]) for name in names]
             projected.append(saved)
         output.append(dict(family=family, total_rows=len(population), selected_record_keys=[r["record_key"] for r in projected], next_offset=next_offset, rows=projected))
-    return dict(schema=PREFIX + "projection_v1", calculation_id=calculation_id, families=output, failures=failures)
+    return dict(schema=PREFIX + "projection", calculation_id=calculation_id, families=output, failures=failures)
 
 
 __all__ = ["standard_blast_database_metric_definitions", "standard_blast_database_row_schema",

@@ -8,7 +8,7 @@ from Bio.SeqIO.QualityIO import FastqGeneralIterator
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import parse_sequences
 from gene_annotation_episode.domain import ContractError
 
-VERSION = "supplied_material_parsing_v5.biopython_" + version("biopython")
+VERSION = "supplied_material_parsing.biopython_" + version("biopython")
 
 
 def recognize(prefix: bytes) -> str:

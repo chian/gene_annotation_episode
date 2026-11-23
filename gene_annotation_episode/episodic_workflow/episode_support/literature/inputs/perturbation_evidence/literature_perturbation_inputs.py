@@ -18,8 +18,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.perturbation_evidence.literature_experimental_contracts import ExperimentalContractError
 
 
-VERSION = "a106_perturbation_inputs_v1"
-DATA_VERSION = "a106_source_measurements_v1"
+VERSION = "a106_perturbation_inputs"
+DATA_VERSION = "a106_source_measurements"
 PRIMITIVE_ORDER = ("W", "K", "R", "A_reference", "A_restored", "B_pert", "B_rest")
 LITERAL_FIELDS = ("molecule", "recipient", "donor", "experiment", "reference_arm",
                   "perturbed_arm", "restored_arm", "partner", "endpoint",
@@ -143,7 +143,7 @@ def _measurements(reference, sources, status):
         return observations, "unreported", "unreported", None, "unreported", None
     source = sources.source(reference, "original")
     data = _json_measurements(source["content"])
-    if isinstance(data, dict) and data.get("version") == "a106_source_measurements_v2":
+    if isinstance(data, dict) and data.get("version") == "a106_source_summary_measurements":
         from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.perturbation_evidence.literature_perturbation_summary import read_summary_measurements
         observations, summary = read_summary_measurements(data, sources=sources,
             reference=reference, artifact_ref=source["artifact_ref"], status=status,
@@ -254,7 +254,7 @@ def read_perturbation_inputs(arguments, *, read_source):
         "uncertainty_basis": uncertainty, "source_refs": list(sources.references),
     }
     if summary is not None:
-        result.update(version="a106_perturbation_inputs_v2", summary_data=summary)
+        result.update(version="a106_perturbation_summary_inputs", summary_data=summary)
     if number_sources is not None:
         result["reported_number_sources"] = number_sources
     return result

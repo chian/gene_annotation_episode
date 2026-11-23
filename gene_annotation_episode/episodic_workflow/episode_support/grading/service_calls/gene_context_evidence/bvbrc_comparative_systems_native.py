@@ -21,13 +21,13 @@ _COMMIT = "670b3b6dd09509ebc62fb6f1b1caf3e38c33bd33"
 _SOURCE_SHA = "052f74f971ee149bf5e07d1f6a6f965f9233d6a8f1795daae7a7b182b47b747f"
 _PREFIX = "comparative_systems_"
 _PROFILES = {
-    _PREFIX + "pathways_json_v1": (("pathway", "manual_tabs_unquoted"),
+    _PREFIX + "pathways_json": (("pathway", "manual_tabs_unquoted"),
                                    ("ecnumber", "manual_tabs_unquoted"), ("genes", "pandas_tsv")),
-    _PREFIX + "subsystems_json_v1": (("subsystems", "pandas_tsv"), ("genes", "pandas_tsv")),
-    _PREFIX + "families_json_v1": (("plfam", "manual_tabs_unquoted"), ("pgfam", "manual_tabs_unquoted")),
-    _PREFIX + "pathways_tsv_v1": (("pathways_tsv", "pandas_tsv"),),
-    _PREFIX + "subsystems_tsv_v1": (("subsystems_tsv", "pandas_tsv"),),
-    _PREFIX + "variant_matrix_source670b_v1": (("variant_matrix", "pinned_variant_matrix"),),
+    _PREFIX + "subsystems_json": (("subsystems", "pandas_tsv"), ("genes", "pandas_tsv")),
+    _PREFIX + "families_json": (("plfam", "manual_tabs_unquoted"), ("pgfam", "manual_tabs_unquoted")),
+    _PREFIX + "pathways_tsv": (("pathways_tsv", "pandas_tsv"),),
+    _PREFIX + "subsystems_tsv": (("subsystems_tsv", "pandas_tsv"),),
+    _PREFIX + "variant_matrix_source670b": (("variant_matrix", "pinned_variant_matrix"),),
 }
 _HEADERS = {
     "plfam": "family_id feature_count genome_count product aa_length_min aa_length_max aa_length_mean aa_length_std genomes".split(),
@@ -344,20 +344,20 @@ def parse_comparative_systems_document(content: bytes, *, document: dict,
     Invalid call contracts raise ValueError; invalid artifact contents return a
     typed result with its original byte identity and bounded diagnostics.
     """
-    document = validate_shape("SourceDocumentV1", document)
-    evidence = [validate_shape("ProducerEvidenceV1", item) for item in producer_evidence]
+    document = validate_shape("SourceDocument", document)
+    evidence = [validate_shape("ProducerEvidence", item) for item in producer_evidence]
     if type(content) is not bytes:
         raise ValueError("comparative_systems_bytes_required")
     if format_profile != document["format_profile"] or format_profile not in _PROFILES:
         raise ValueError("comparative_systems_format_profile_mismatch")
     known = _known_producer(document, evidence)
-    result = {"version": "bvbrc_comparative_systems_native_v1", "status": "ok", "document": document,
+    result = {"version": "bvbrc_comparative_systems_native", "status": "ok", "document": document,
               "tables": [], "metadata": [], "reported_numbers": [], "diagnostics": []}
     diagnostics = result["diagnostics"]
     if len(content) != document["byte_count"] or hashlib.sha256(content).hexdigest() != document["sha256"]:
         diagnostics.append(_diagnostic(document, "byte_identity_mismatch"))
         result["status"] = "invalid"
-        return validate_shape("NativeDocumentResultV1", result)
+        return validate_shape("NativeDocumentResult", result)
     if not known:
         diagnostics.append(_diagnostic(document, "producer_version_unverified"))
     producing = next((item for item in evidence if item["evidence_id"] == document["producer_evidence_id"]), None)
@@ -374,7 +374,7 @@ def parse_comparative_systems_document(content: bytes, *, document: dict,
     except UnicodeError:
         diagnostics.append(_diagnostic(document, "outer_json_invalid" if is_json else "format_incompatible"))
         result["status"] = "invalid"
-        return validate_shape("NativeDocumentResultV1", result)
+        return validate_shape("NativeDocumentResult", result)
     metadata = {}
     if is_json:
         try:
@@ -383,11 +383,11 @@ def parse_comparative_systems_document(content: bytes, *, document: dict,
             code = str(error) if str(error) in ("duplicate_json_key", "nonfinite_number") else "outer_json_invalid"
             diagnostics.append(_diagnostic(document, code))
             result["status"] = "invalid"
-            return validate_shape("NativeDocumentResultV1", result)
+            return validate_shape("NativeDocumentResult", result)
         if type(metadata) is not dict:
             diagnostics.append(_diagnostic(document, "format_incompatible"))
             result["status"] = "invalid"
-            return validate_shape("NativeDocumentResultV1", result)
+            return validate_shape("NativeDocumentResult", result)
         table_names = {name for name, _ in _PROFILES[format_profile]}
         for key, value in metadata.items():
             if key not in table_names or type(value) is not str:
@@ -431,4 +431,4 @@ def parse_comparative_systems_document(content: bytes, *, document: dict,
     elif any(d["code"] not in {"producer_version_unverified", "native_query_completeness_unknown", "no_native_rows", "reference_release_unknown"}
              for d in diagnostics):
         result["status"] = "partial"
-    return validate_shape("NativeDocumentResultV1", result)
+    return validate_shape("NativeDocumentResult", result)

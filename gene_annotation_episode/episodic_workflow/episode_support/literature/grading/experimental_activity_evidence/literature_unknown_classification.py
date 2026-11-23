@@ -35,7 +35,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.experimen
     obj, validate_schema)
 
 PROVIDER = 'literature.a105.unknown_classification'
-VERSION = 'a105_unknown_classification_v1'
+VERSION = 'a105_unknown_classification'
 QUANTITIES = ('effect', 'effect_variance', 'recovery', 'attributed_signal', 'total_signal', 'condition_test',
               'condition_reference', 'assertion_prediction', 'alternative_prediction')
 PREDICTION_MODEL = 'prediction_model'

@@ -88,7 +88,7 @@ SERVICES = ('estimate_table', 'job_access')
 
 DISCOVERY_DIRECTORY = '/lus/flare/projects/BioReason-Aurora-Test'
 RESULT_PROVIDER = 'episode.hpc_result'
-RESULT_VERSION = 'hpc_result_v1'
+RESULT_VERSION = 'hpc_result'
 TEXT = {'type': 'string', 'minLength': 1}
 STRINGS = {'type': 'array', 'uniqueItems': True, 'items': TEXT}
 MONITOR_FIELDS = ('execution_status', 'measurements', 'log_windows', 'committed_record_refs', 'dependencies',

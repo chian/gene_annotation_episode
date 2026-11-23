@@ -18,9 +18,9 @@ import re
 from gene_annotation_episode.episodic_workflow.episode_support.instructions.launch_instructions import (SELECTION_SCHEMA as LAUNCH_INSTRUCTION_SELECTION_SCHEMA,
     validate_selection)
 
-ASSIGNMENT_VERSION = 'practical_assignment_v1'
-RECEIPT_VERSION = 'practical_action_receipt_v1'
-COMPLETION_VERSION = 'practical_completion_v1'
+ASSIGNMENT_VERSION = 'practical_assignment'
+RECEIPT_VERSION = 'practical_action_receipt'
+COMPLETION_VERSION = 'practical_completion'
 JOB_TOOLS = frozenset({'exec_command', 'practical.job.start', 'practical.job.status', 'practical.job.collect'})
 PREDICATE_FIELDS = {
     'context_cwd': {'kind', 'path'},

@@ -24,10 +24,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.evolutionary_history_evidence.literature_experimental_contracts import ExperimentalContractError
 
 
-VERSION = "gel_lane_selection_v1"
-EXTRACTION_VERSION = "gel_lane_extraction_v1"
-VERSION_V2 = "gel_lane_selection_v2"
-EXTRACTION_VERSION_V2 = "gel_lane_extraction_v2"
+VERSION = "gel_lane_selection"
+EXTRACTION_VERSION = "gel_lane_extraction"
 CONTEXT_FIELDS = ("experiment", "organism", "genotype", "subject", "construct",
                   "system", "endpoint", "intended_variable")
 SOURCE_KINDS = ("primary_source", "retained_extraction", "synthetic_fixture")
@@ -132,7 +130,7 @@ def _interpretation(value, field, *, choices=None):
     # number of independent sources is a prerequisite for retaining that fact.
 
 
-def gel_arguments_schema(*, version=VERSION):
+def gel_arguments_schema():
     """Closed selected image and literal/interpretation/geometry nominations."""
     def obj(properties):
         return {"type": "object", "properties": properties,
@@ -149,15 +147,12 @@ def gel_arguments_schema(*, version=VERSION):
         value = nullable_text if choices is None else {"anyOf": [{"enum": list(choices)}, {"type": "null"}]}
         return obj({"state": {"enum": ["known", "unknown", "conflicting"]},
                     "value": value, "witnesses": witnesses})
-    if version not in (VERSION, VERSION_V2):
-        _fail("unsupported_gel_selection_version", "version")
     lane_rois = obj({"lane_id": text, "background": box, "whole_lane": box,
                      "bands": {"type": "array", "items": obj({"band_id": text,
                         "role": {"enum": ["shifted", "free", "other"]}, "region": box})}})
-    if version == VERSION_V2:
-        lane_rois["properties"]["background_method"] = {"enum": ["mean", "median"]}
-        lane_rois["required"].append("background_method")
-    return obj({"version": {"const": version}, "image": obj({"source_ref": text,
+    lane_rois["properties"]["background_method"] = {"enum": ["mean", "median"]}
+    lane_rois["required"].append("background_method")
+    return obj({"version": {"const": VERSION}, "image": obj({"source_ref": text,
         "artifact_ref": text, "byte_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
         "width": {"type": "integer", "minimum": 1}, "height": {"type": "integer", "minimum": 1},
         "source_kind": {"enum": list(SOURCE_KINDS)}}),
@@ -172,7 +167,7 @@ def gel_arguments_schema(*, version=VERSION):
 
 def validate_gel_selection(arguments):
     _keys(arguments, ("version", "image", "context", "lanes", "roi_assignments"), "arguments")
-    if arguments["version"] not in (VERSION, VERSION_V2):
+    if arguments["version"] != VERSION:
         _fail("unsupported_gel_selection_version", "version")
     image = arguments["image"]
     _keys(image, ("source_ref", "artifact_ref", "byte_sha256", "width", "height", "source_kind"), "image")
@@ -212,11 +207,9 @@ def validate_gel_selection(arguments):
         if [row.get("lane_id") for row in assignment["lanes"] if isinstance(row, dict)] != lane_ids:
             _fail("exact_ordered_lane_roster_required", "roi_assignments.lanes")
         for row in assignment["lanes"]:
-            row_keys = ("lane_id", "background", "whole_lane", "bands")
-            if arguments["version"] == VERSION_V2:
-                row_keys += ("background_method",)
+            row_keys = ("lane_id", "background", "whole_lane", "bands", "background_method")
             _keys(row, row_keys, "roi_assignments.lanes")
-            if arguments["version"] == VERSION_V2 and row["background_method"] not in ("mean", "median"):
+            if row["background_method"] not in ("mean", "median"):
                 _fail("unsupported_background_method", "roi_assignments.lanes.background_method")
             for name in ("background", "whole_lane"):
                 _box_shape(row[name], "roi_assignments.lanes." + name)
@@ -251,7 +244,7 @@ def _summary(region, pixels, *, reason=None):
     return result
 
 
-def _corrected(signal, background, method=None):
+def _corrected(signal, background, method):
     reason = signal["unavailable_reason"] or background["unavailable_reason"]
     if reason:
         result = {"exact": None, "unavailable_reason": reason}
@@ -266,9 +259,8 @@ def _corrected(signal, background, method=None):
             level = Fraction(background["sum_darkness"], background["pixel_count"])
         value = Fraction(signal["sum_darkness"]) - signal["pixel_count"] * level
         result = {"exact": _rational(value), "unavailable_reason": None}
-    if method is not None:
-        result.update(background_method=method,
-                      background_per_pixel=None if level is None else _rational(level))
+    result.update(background_method=method,
+                  background_per_pixel=None if level is None else _rational(level))
     return result
 
 
@@ -300,7 +292,7 @@ def _decode(content):
 
 
 def _result(selection, image, sources, witnesses, assignments):
-    result = {"version": EXTRACTION_VERSION if selection["version"] == VERSION else EXTRACTION_VERSION_V2,
+    result = {"version": EXTRACTION_VERSION,
         "selection": deepcopy(selection),
         "image": image, "sources": sources, "authenticated_witnesses": witnesses,
         "interpretation_basis": "investigating_episode_nominations",
@@ -351,7 +343,7 @@ def read_gel_inputs(arguments, *, read_source):
         for assignment in selected["roi_assignments"]:
             rows = []
             for lane in assignment["lanes"]:
-                method = lane.get("background_method")
+                method = lane["background_method"]
                 def roi(region):
                     reason = error or _box_reason(region, spec["width"], spec["height"])
                     if reason:
@@ -368,8 +360,7 @@ def read_gel_inputs(arguments, *, read_source):
                 row = {"lane_id": lane["lane_id"], "background": background,
                     "whole_lane": whole, "whole_lane_corrected_signal": _corrected(whole, background, method),
                     "bands": bands}
-                if method is not None:
-                    row["background_method"] = method
+                row["background_method"] = method
                 rows.append(row)
             assignments.append({"assignment_id": assignment["assignment_id"], "lanes": rows})
         return _result(selected, image, source_records, witnesses, assignments)
@@ -469,9 +460,8 @@ def validate_gel_extraction(arguments, extraction, *, expected_digest=None):
         rows = []
         for row, nom in zip(saved["lanes"], choice["lanes"]):
             row_keys = ("lane_id", "background", "whole_lane", "whole_lane_corrected_signal", "bands")
-            method = nom.get("background_method")
-            if method is not None:
-                row_keys += ("background_method",)
+            method = nom["background_method"]
+            row_keys += ("background_method",)
             _keys(row, row_keys, "extraction.lanes")
             if row["lane_id"] != nom["lane_id"] or type(row["bands"]) is not list or len(row["bands"]) != len(nom["bands"]):
                 _fail("gel_lane_roster_mismatch", "extraction.lanes")
@@ -486,8 +476,7 @@ def validate_gel_extraction(arguments, extraction, *, expected_digest=None):
                               "corrected_signal": _corrected(measurement, background, method)})
             checked_row = {"lane_id": nom["lane_id"], "background": background,
                 "whole_lane": whole, "whole_lane_corrected_signal": _corrected(whole, background, method), "bands": bands}
-            if method is not None:
-                checked_row["background_method"] = method
+            checked_row["background_method"] = method
             rows.append(checked_row)
         checked.append({"assignment_id": choice["assignment_id"], "lanes": rows})
     expected = _result(selected, deepcopy(image), deepcopy(extraction["sources"]), wanted_witnesses, checked)
@@ -496,6 +485,5 @@ def validate_gel_extraction(arguments, extraction, *, expected_digest=None):
     return deepcopy(extraction)
 
 
-__all__ = ["VERSION", "EXTRACTION_VERSION", "VERSION_V2", "EXTRACTION_VERSION_V2",
-           "CONTEXT_FIELDS", "SOURCE_KINDS", "CONTROL_ROLES",
+__all__ = ["VERSION", "EXTRACTION_VERSION", "CONTEXT_FIELDS", "SOURCE_KINDS", "CONTROL_ROLES",
            "gel_arguments_schema", "validate_gel_selection", "read_gel_inputs", "validate_gel_extraction"]

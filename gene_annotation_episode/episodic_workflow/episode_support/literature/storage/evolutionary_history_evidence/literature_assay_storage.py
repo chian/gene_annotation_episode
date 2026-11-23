@@ -31,7 +31,7 @@ REASONS = ('endpoint_requires_different_model', 'assayed_molecule_unresolved', '
     'primitive_covariance_unreported', 'distinct_residual_variance_unreported',
     'invalid_propagated_variance', 'positive_effect_variance_required',
     'known_variance_required', 'observation_model_unspecified')
-# Legacy reasons remain valid for exact saved v1 returns. New population only
+# Earlier reasons remain valid for exact saved returns. New population only
 # describes supplied operands; it cannot establish publication-level absence.
 REASONS += ('correction_inputs_not_supplied', 'primitive_covariance_not_supplied',
             'distinct_residual_variance_not_supplied')
@@ -42,8 +42,8 @@ CONDITIONS = ('source_role_assignments', 'first_order_covariance_propagation',
 class LiteratureAssayRepository(LiteratureRateRepository):
     provider = PROVIDER
     components = COMPONENTS
-    record_version = 'literature_assay_population_record_v2'
-    readable_record_versions = ('literature_assay_population_record_v1', record_version)
+    record_version = 'literature_assay_population_record'
+    readable_record_versions = (record_version,)
     binding_fields = tuple(BINDINGS)
 
     def populate(self, context, arguments, operation_key):

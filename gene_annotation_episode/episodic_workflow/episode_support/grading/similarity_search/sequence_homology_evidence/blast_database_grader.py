@@ -18,10 +18,10 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.similarit
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.blast_database_population_associations import validate_blast_database_population_context, qualify_blast_database_population_context
 
 
-SHEET_SCHEMA = "blast_database_sheet_v1"
-SHEET_SCHEMA_V2 = "blast_database_sheet_v2"
-SHEET_SCHEMA_V3 = "blast_database_sheet_v3"
-MODEL_NAME = "conditional_reference_kernel_v1"
+SHEET_SCHEMA = "blast_database_sheet"
+SHEET_SCHEMA_RECORD_LOCATOR = "blast_database_sheet_record_locator"
+SHEET_SCHEMA_POPULATION = "blast_database_sheet_population"
+MODEL_NAME = "conditional_reference_kernel"
 QUALITY_FIELDS = ("completeness_fraction", "contamination_fraction",
                   "contig_count", "contig_n50", "total_sequence_length")
 _DESCRIPTION_BINDING_FIELDS = {"report_index", "hit_index", "description_index",
@@ -48,7 +48,7 @@ def _validate_record_locators(metadata, descriptions, sequences, *, association_
         raise ValueError("blast_database_association_version_invalid")
     if association_version == 1:
         if _uses_record_locators(metadata, descriptions, sequences):
-            raise ValueError("blast_record_locator_requires_v2_sheet")
+            raise ValueError("blast_record_locator_requires_record_locator_sheet")
         return
     for rows, field, source, pointer in (
             (metadata, "record_locator", "source", "native_pointer"),
@@ -896,13 +896,13 @@ def _build_database_sheet(result: dict, *, reference_metadata: list[dict] | None
     with its established coordinate program. Optional calculation_context
     carries reporting/database facts separately; neither null option changes
     legacy output or supplies missing extended-program semantics. Explicit
-    population context retains source assertions in v3 and qualifies only the
+    population context retains source assertions and qualifies only the
     existing census denominator; it neither changes native identities nor
     supplies absent population measurements.
     """
     from gene_annotation_episode.episodic_workflow.episode_support.grading.similarity_search.sequence_homology_evidence.blast_pairwise_grader import alignment_components, alignment_component_artifacts, project_alignment_component
 
-    if not isinstance(result, dict) or result.get("schema") != "blast_normalized_result_v1":
+    if not isinstance(result, dict) or result.get("schema") != "blast_normalized_result":
         raise ValueError("normalized_blast_result_required")
     if result.get("mode") != "database":
         raise ValueError("blast_database_mode_required")
@@ -999,7 +999,7 @@ def _build_database_sheet(result: dict, *, reference_metadata: list[dict] | None
         components = [project_alignment_component(component, common) if "denominators" in component else component
             for component, common in zip(components, common_components["rows"])]
         if _correspondence_instances is not None:
-            _correspondence_instances.append({"legacy_pointer": "/hits/" + str(len(hits)),
+            _correspondence_instances.append({"source_pointer": "/hits/" + str(len(hits)),
                 "axis_basis": "qualified" if qualification is not None else "reported",
                 "sheet": common_sheet, "components": common_components})
         associations = (_attach_explicit_metadata(native_hit, metadata, descriptions, description_links, matched, issues)
@@ -1064,7 +1064,7 @@ def _build_database_sheet(result: dict, *, reference_metadata: list[dict] | None
     for group in groups:
         for study in group["study_groups"]:
             studies[study].add(group["group_index"])
-    output = {"schema": SHEET_SCHEMA_V2 if association_version == 2 else SHEET_SCHEMA, "normalized_result": normalized,
+    output = {"schema": SHEET_SCHEMA_RECORD_LOCATOR if association_version == 2 else SHEET_SCHEMA, "normalized_result": normalized,
         "reference_metadata": metadata, "target_context": target_input,
         "database_profile": profile, "hits": hits, "sequence_groups": groups,
         "functions": by_function, "taxonomy": _taxonomy_summary(hits, groups, target),
@@ -1098,11 +1098,11 @@ def _build_database_sheet(result: dict, *, reference_metadata: list[dict] | None
             requested_hsp_limit=context["reporting"]["requested_hsp_limit"],
             hit_array_present=context["reporting"]["native_hit_array_present"])
     if explicit:
-        output.update(association_mode="explicit_bindings_v2" if association_version == 2 else "explicit_bindings_v1",
+        output.update(association_mode="explicit_bindings_record_locator" if association_version == 2 else "explicit_bindings",
                       description_bindings=description_bindings,
                       sequence_identity_bindings=sequence_identity_bindings)
     if population_context is not None:
-        output.update(schema=SHEET_SCHEMA_V3, database_population_context=population_context,
+        output.update(schema=SHEET_SCHEMA_POPULATION, database_population_context=population_context,
             database_population_relation=qualify_blast_database_population_context(population_context,
                 normalized_result=normalized, database_identity=context["database_identity"], database_profile=profile))
     _json_copy(output)
@@ -1121,8 +1121,8 @@ def build_database_sheet(result: dict, *, reference_metadata: list[dict] | None 
     """Populate numerical components and retain exact supplied associations.
 
     Both binding lists omitted preserves legacy accession matching. Supplying
-    both selects explicit links. A record locator selects v2; explicit population
-    context selects v3 with the current record-address semantics and requires
+    both selects explicit links. A record locator selects record-locator sheets; explicit population
+    context selects population sheets with the current record-address semantics and requires
     calculation_context. Record addresses never infer functions or independent
     sequences. The caller authenticates the supplied bytes and relationships.
     """
@@ -1144,7 +1144,7 @@ def build_database_sheet(result: dict, *, reference_metadata: list[dict] | None 
 
 
 def _validate_saved_population(sheet, groups):
-    """Recheck retained v3 relation/count facts without reconstructing a sheet."""
+    """Recheck retained relation/count facts without reconstructing a sheet."""
     fields = {"schema", "normalized_result", "reference_metadata", "target_context", "database_profile",
         "hits", "sequence_groups", "functions", "taxonomy", "source_quality", "dependence",
         "database_representation", "coverage", "search_limits", "issues", "calculation_context",
@@ -1188,16 +1188,16 @@ def calculate_database_probabilities(sheet: dict, *, model: dict | None = None) 
     correct annotation. Unknown-function and unscored groups are reported
     separately. Taxonomy and source-quality measurements are retained in the
     sheet but this initial model does not invent weighting rules for them.
-    V3 revalidates retained population assertions and numerical denominators;
+    Saved calculation revalidates retained population assertions and numerical denominators;
     this saved calculation performs no native parsing or sheet population.
     """
-    if not isinstance(sheet, dict) or sheet.get("schema") not in (SHEET_SCHEMA, SHEET_SCHEMA_V2, SHEET_SCHEMA_V3):
+    if not isinstance(sheet, dict) or sheet.get("schema") not in (SHEET_SCHEMA, SHEET_SCHEMA_RECORD_LOCATOR, SHEET_SCHEMA_POPULATION):
         raise ValueError("blast_database_sheet_required")
-    if sheet["schema"] == SHEET_SCHEMA_V3 and not {"database_population_context", "database_population_relation"} <= set(sheet):
+    if sheet["schema"] == SHEET_SCHEMA_POPULATION and not {"database_population_context", "database_population_relation"} <= set(sheet):
         raise ValueError("blast_database_sheet_required")
-    association_version = 2 if sheet["schema"] in (SHEET_SCHEMA_V2, SHEET_SCHEMA_V3) else 1
-    if (association_version == 2 and sheet.get("association_mode") != "explicit_bindings_v2"
-            or association_version == 1 and sheet.get("association_mode") == "explicit_bindings_v2"):
+    association_version = 2 if sheet["schema"] in (SHEET_SCHEMA_RECORD_LOCATOR, SHEET_SCHEMA_POPULATION) else 1
+    if (association_version == 2 and sheet.get("association_mode") != "explicit_bindings_record_locator"
+            or association_version == 1 and sheet.get("association_mode") == "explicit_bindings_record_locator"):
         raise ValueError("blast_database_association_mode_invalid")
     _validate_record_locators(sheet.get("reference_metadata"), sheet.get("description_bindings"),
                              sheet.get("sequence_identity_bindings"), association_version=association_version)
@@ -1210,7 +1210,7 @@ def calculate_database_probabilities(sheet: dict, *, model: dict | None = None) 
     groups = sheet.get("sequence_groups")
     if not isinstance(groups, list):
         raise ValueError("blast_sequence_groups_required")
-    if sheet["schema"] == SHEET_SCHEMA_V3:
+    if sheet["schema"] == SHEET_SCHEMA_POPULATION:
         _validate_saved_population(sheet, groups)
     measured = [group for group in groups if _number(group.get("maximum_bit_score")) is not None]
     functions = sorted({function for group in measured for function in group["functions"]})
@@ -1262,7 +1262,7 @@ def calculate_database_probabilities(sheet: dict, *, model: dict | None = None) 
         if corrected_denominator:
             adjusted = {function: value / corrected_denominator for function, value in corrected.items()}
     total_mass = assigned_global + unassigned
-    result = {"schema": "blast_database_probabilities_v1", "model": MODEL_NAME,
+    result = {"schema": "blast_database_probabilities", "model": MODEL_NAME,
         "parameters": {"temperature_bits": temperature, "function_priors": priors},
         "formula": {"sequence_group_weight": "2 ** ((maximum_bit_score - largest_scored_function_group_bit_score) / temperature_bits)",
             "all_reference_kernel_weight": "2 ** ((maximum_bit_score - largest_group_bit_score) / temperature_bits)",
@@ -1288,7 +1288,7 @@ def calculate_database_probabilities(sheet: dict, *, model: dict | None = None) 
             "Distinct explicit function labels within a sequence group divide its mass equally; this is not a claim that multifunctional proteins have only one function.",
             "Probabilities are conditional on the supplied candidate functions and returned matches; unreported or unannotated functions remain outside that distribution.",
             "Representation correction uses independently supplied matching database sequence counts; it is not inferred from returned-hit counts."]}
-    if (sheet.get("association_mode") in ("explicit_bindings_v1", "explicit_bindings_v2")
+    if (sheet.get("association_mode") in ("explicit_bindings", "explicit_bindings_record_locator")
             and sheet.get("dependence", {}).get("unknown_cross_hit_sequence_identity") is True):
         result["assumptions"].append(
             "Unresolved returned native-hit groups are counted as separate model components; "
@@ -1297,4 +1297,4 @@ def calculate_database_probabilities(sheet: dict, *, model: dict | None = None) 
     return result
 
 
-__all__ = ["build_database_sheet", "calculate_database_probabilities", "SHEET_SCHEMA", "SHEET_SCHEMA_V2", "SHEET_SCHEMA_V3", "MODEL_NAME"]
+__all__ = ["build_database_sheet", "calculate_database_probabilities", "SHEET_SCHEMA", "SHEET_SCHEMA_RECORD_LOCATOR", "SHEET_SCHEMA_POPULATION", "MODEL_NAME"]

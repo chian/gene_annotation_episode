@@ -20,7 +20,7 @@ from .domain import ContractError, canonical, identity, parse_sequences
 from .state import Store
 
 
-VERSION = 'fixed_target_seed_v1'
+VERSION = 'fixed_target_seed'
 _INTAKE_KINDS = {'input', 'source', 'material', 'parse_attempt', 'collection',
                  'collection_member', 'artifact'}
 _EXCLUDED_KINDS = ('hypothesis', 'assessment', 'annotation',
@@ -33,7 +33,7 @@ _EXCLUSIONS = ['historical_scientific_interpretations', 'historical_native_execu
 class FixedTargetSeedError(ValueError):
     """Typed preparation failure; a failed stage is retained for inspection."""
     def __init__(self, code, affected_refs=(), staging_workspace=None):
-        self.failure = {'version': 'fixed_target_seed_failure_v1', 'code': code,
+        self.failure = {'version': 'fixed_target_seed_failure', 'code': code,
             'affected_refs': [str(ref) for ref in affected_refs],
             'staging_workspace': None if staging_workspace is None else str(staging_workspace)}
         super().__init__(canonical(self.failure))

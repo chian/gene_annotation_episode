@@ -38,11 +38,11 @@ TEN_FILES = {'__init__.py', 'goal.py', 'task.py', 'credit.py', 'yield_estimator.
 CHILD_FOLDERS = ('execution_job_submission', 'execution_progress_assessment', 'execution_result_acquisition',
                  'hpc_work_planning')
 SHA = 'a' * 64
-AXIS_REF = {'version': 'biochemical_feasibility_evidence_option_ref_v1', 'library_id': SHA, 'slot': 'evidence_axis',
+AXIS_REF = {'version': 'biochemical_feasibility_evidence_option_ref', 'library_id': SHA, 'slot': 'evidence_axis',
             'option_id': 'A110', 'entry_sha256': SHA}
-THOUGHT_REF = {'version': 'biochemical_feasibility_evidence_option_ref_v1', 'library_id': SHA,
+THOUGHT_REF = {'version': 'biochemical_feasibility_evidence_option_ref', 'library_id': SHA,
                'slot': 'thought_pattern', 'option_id': 'P3', 'entry_sha256': SHA}
-SELECTION = {'version': 'selection_v1', 'evidence_axis': AXIS_REF, 'thought_pattern': THOUGHT_REF,
+SELECTION = {'version': 'selection', 'evidence_axis': AXIS_REF, 'thought_pattern': THOUGHT_REF,
              'child_tool_info': [{'name': 'source.read', 'resources': 'local'}]}
 HYPOTHESIS = 'hypothesis_' + '1' * 24
 EVIDENCE = 'source_' + '2' * 24
@@ -150,7 +150,7 @@ def test_each_commission_is_admitted_by_the_real_form_of_its_child():
                'facts': _facts('monitor')}
     message = _admitted('monitor', monitor, MONITOR_FORM, MONITOR_RETURN)
     # The job is named by the records this episode holds; nothing the model wrote passes to the monitor.
-    assert message.assignment == {'version': 'monitor_assignment_v2', 'handoff_refs': [JOB_HANDOFF],
+    assert message.assignment == {'version': 'monitor_assignment', 'handoff_refs': [JOB_HANDOFF],
                                   'known_progress_refs': [JOB_CHECK], 'dependency_handoff_refs': [],
                                   'requested_fields': ['execution_status'], 'information_unit': 1.0}
     assert message.selection == tuple(_facts('monitor')) and message.message == {}

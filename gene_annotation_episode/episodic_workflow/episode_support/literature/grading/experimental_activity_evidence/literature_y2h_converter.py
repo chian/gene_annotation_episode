@@ -82,7 +82,7 @@ import math
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_assay_grading import INPUT_VERSION, ROLES, grade_assay
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import SUPPORTS, apply_support
 
-VERSION = 'a105_y2h_converted_v1'
+VERSION = 'a105_y2h_converted'
 CRITERIA_MAP = {'binding_controls': ('bait_autoactivation', 'prey_autoactivation', 'non_interacting_control', 'positive_control', 'nonselective_growth', 'reciprocal_orientation'), 'binding_species': ('expression_verified',), 'binding_parameter_definition': ('interaction_observed', 'reporter_concordance', 'reporter_fold', 'growth_titre'), 'sampling_basis': ('replicates',)}
 REPORTER_FOLD_FULL_AGREEMENT = 10.0  # EXPERT_REVIEW: smallest fold of the beta-galactosidase activity of the pair over the negative control (empty vectors) that the sheet takes as a clear reporter activation; positive pairs usually give ten-fold or more over the empty-vector background, and the background itself varies by about two-fold between experiments.
 REPORTER_FOLD_ZERO_AGREEMENT = 2.0  # EXPERT_REVIEW: fold at or below which the activity of the pair cannot be told from the negative control (the between-experiment variation of the background); conflicting; the degree rises linearly in the log of the fold in between (a ratio of two activities with multiplicative error; range review).

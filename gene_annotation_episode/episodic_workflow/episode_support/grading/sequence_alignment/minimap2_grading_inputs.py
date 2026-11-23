@@ -15,7 +15,7 @@ import math
 import re
 
 
-SHEET_SCHEMA = "minimap2_placement_sheet_v1"
+SHEET_SCHEMA = "minimap2_placement_sheet"
 PRESETS = ("map-ont", "map-pb", "map-hifi", "lr:hq", "map-iclr", "sr")
 _CIGAR = re.compile(r"([1-9][0-9]*)([MIDN=X])")
 _CS = re.compile(r"(:[1-9][0-9]*|=[ACGTNacgtn]+|\*[ACGTNacgtn]{2}|[+-][ACGTNacgtn]+|~[ACGTNacgtn]{2}[0-9]+[ACGTNacgtn]{2})")

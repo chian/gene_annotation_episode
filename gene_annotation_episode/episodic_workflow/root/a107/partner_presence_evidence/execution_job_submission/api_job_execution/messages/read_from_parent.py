@@ -1,8 +1,8 @@
 """What the commissioning launch parent gives (carried from ``from_parent.py``, ``from_parent_launch.py`` and the
 request message).
 
-Old assignment properties, under the same names: ``version`` (``api_execution_assignment_v1`` or
-``api_service_assignment_v1``), ``service``, ``algorithm``, ``database``, ``resource_id``. The old code re-read the
+Old assignment properties, under the same names: ``version`` (``api_execution_assignment`` or
+``api_service_assignment``), ``service``, ``algorithm``, ``database``, ``resource_id``. The old code re-read the
 parent launch's own assignment (``requests``, ``immutable_input_versions``, ``constraints``,
 ``launch_instructions``) and the parent's scientific task through ``services.scientific_parent_task``
 (``scientific_question``, ``selected_tool_info``, used for an ``ebi_hmmer`` request): in the final form the parent
@@ -12,7 +12,7 @@ did not have are listed in the carry-over record as new fields: ``scope``, ``req
 """
 from method_loop import ChoiceField, Field, RecordForm
 
-VERSIONS = ('api_execution_assignment_v1', 'api_service_assignment_v1')
+VERSIONS = ('api_execution_assignment', 'api_service_assignment')
 
 ASSIGNMENT_FORM = RecordForm({
     'scope': Field('record', 'The subject scope fixed by the commissioning parent'),

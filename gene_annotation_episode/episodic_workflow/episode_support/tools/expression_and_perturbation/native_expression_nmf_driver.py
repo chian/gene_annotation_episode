@@ -28,7 +28,7 @@ def _now():
 def run_expression_nmf(prepared: dict, *, parameters: dict) -> dict:
     """Fit one explicit model, or retain an explicit input/dependency failure."""
     parameters = validate_parameters(parameters)
-    require(type(prepared) is dict and prepared.get('schema') == 'expression_nmf_prepared_v1', 'nmf_prepared_input_required')
+    require(type(prepared) is dict and prepared.get('schema') == 'expression_nmf_prepared', 'nmf_prepared_input_required')
     require(parameters['normalization'] == prepared.get('normalization'), 'nmf_preprocessing_parameter_conflict')
     components = axis([f'component_{k}' for k in range(parameters['rank'])], 'component')
     result = {'schema': NATIVE_SCHEMA, 'mode': MODE, 'input_identity': deepcopy(prepared['input_identity']),
@@ -109,7 +109,7 @@ def retain_expression_nmf_artifacts(raw: bytes, *, delimiter: str, metadata: dic
         declarations.append({'role': role, 'relative_path': path.name, 'format': ARTIFACT_FORMATS[role],
             'state': 'present' if present else 'absent', 'sha256': pin['sha256'], 'size_bytes': pin['size_bytes'],
             'shape': {'W': [G, K], 'H': [K, S]} if role == 'factors' else [G, S]})
-    manifest = {'schema': 'expression_nmf_native_manifest_v1', 'mode': MODE, 'input_identity': identity(raw),
+    manifest = {'schema': 'expression_nmf_native_manifest', 'mode': MODE, 'input_identity': identity(raw),
         'prepared_data_sha256': digest(prepared), 'shape': [G, S], 'axes': deepcopy(result['axes']),
         'files': declarations, 'result': {k: v for k, v in result.items() if k not in ('W', 'H')},
         'execution': deepcopy(execution), 'sealed': True, 'finished_at': _now()}

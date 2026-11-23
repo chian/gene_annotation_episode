@@ -21,7 +21,7 @@ from .data_acquisition_receipts import acquisition_receipt_schema, validate_acqu
 
 TOOL = "public.jaspar"
 ROOT = "https://jaspar.elixir.no/api/v1/matrix/"
-REQUEST_VERSION = "jaspar_acquisition_request_v1"
+REQUEST_VERSION = "jaspar_acquisition_request"
 MAX_BYTES = 8 * 1024 ** 2
 MAX_PAGE_SIZE = 100
 FILTERS = ("search", "name", "collection", "tax_group", "tax_id", "tf_class", "tf_family", "data_type")

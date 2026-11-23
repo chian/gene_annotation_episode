@@ -14,11 +14,11 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_experimental_contracts import ExperimentalContractError, RATE_UNITS
 
 def controlled_response_local_arguments_schema():
-    from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_controlled_response_v3_inputs import _schemas
+    from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_controlled_response_source_inputs import _schemas
     return cp(_schemas()['LOCAL_INPUT_SCHEMA_007'])
 
 def _result_schema():
-    from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_controlled_response_v3_inputs import _schemas
+    from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_controlled_response_source_inputs import _schemas
     return cp(_schemas()['LOCAL_OUTPUT_SCHEMA_007'])
 
 def _schema_check(schema, value, code):
@@ -255,7 +255,7 @@ def populate_controlled_response_local(inputs):
         bindings = [pair['protein_binding'], pair['control_binding']]
         covariance_dependency = _dependency(selectors, arms, numeric=False, covariance_index=pair['covariance_index'], bindings=bindings)
         pairs.append({'pair_key': pair['pair_key'], 'difference': difference, 'variance': variance_cell, 'standard_uncertainty': se_cell, 'dependencies': {'difference': _dependency(selectors, arms), 'variance': cp(covariance_dependency), 'standard_uncertainty': cp(covariance_dependency)}})
-    result = {'version': 'controlled_response_local_sheet_v1', 'inputs': cp(inputs), 'raw': raw, 'pairs': pairs, 'full_covariance_checks': [{'covariance_index': i, 'source_validation': validity, 'document_state': d['document_state']} for i, (d, matrix, validity) in enumerate(documents)]}
+    result = {'version': 'controlled_response_local_sheet', 'inputs': cp(inputs), 'raw': raw, 'pairs': pairs, 'full_covariance_checks': [{'covariance_index': i, 'source_validation': validity, 'document_state': d['document_state']} for i, (d, matrix, validity) in enumerate(documents)]}
     _schema_check(_result_schema(), result, 'local_sheet_schema_invalid')
     return result
 

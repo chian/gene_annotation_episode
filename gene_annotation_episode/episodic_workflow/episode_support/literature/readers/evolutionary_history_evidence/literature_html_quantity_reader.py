@@ -15,7 +15,7 @@ import re
 
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.evolutionary_history_evidence.literature_experimental_contracts import ExperimentalContractError
 
-VERSION = "a105_html_quantity_v1"
+VERSION = "a105_html_quantity"
 _VOID = frozenset("area base br col embed hr img input link meta param source track wbr".split())
 _EXCLUDED = frozenset("figure fig figcaption caption table script style template noscript iframe object svg math".split())
 _EXCLUDED_CLASSES = frozenset("fig fig-group table-wrap table-wrap-group caption fig-caption figcaption".split())

@@ -11,7 +11,7 @@ from math import isqrt
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import REF, identity, obj, validate_schema
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence.literature_calibration_recovery_calculations import _float, _q
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_measurement_validation_inputs import RELATIONSHIPS, RELATIONS, PAIR_REASONS, NUMBER_REASONS, _exact, _exact_schema, _nullable, _array, measurement_validation_extraction_schema, validate_measurement_validation_extraction
-VERSION = 'a105_measurement_validation_components_v1'
+VERSION = 'a105_measurement_validation_components'
 PRECISION_COMPONENTS = ('reported_cv', 'cv_fraction', 'relative_bias_squared', 'relative_variance_plugin', 'relative_squared_deviation_plugin', 'relative_rms_percent')
 ZPRIME_COMPONENTS = ('reported_zprime', 'control_band_ratio')
 COMPONENTS = (*PRECISION_COMPONENTS, *ZPRIME_COMPONENTS, 'raw_control_zprime')

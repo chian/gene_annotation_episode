@@ -30,7 +30,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     SECONDS_PER_TIME_UNIT, TRANSPORT_MEDIUM_ANALYSIS_CRITERIA)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_transport_medium_analysis_grade_v1'
+VERSION = 'a105_transport_medium_analysis_grade'
 CRITERIA = tuple(criterion['id'] for criterion in TRANSPORT_MEDIUM_ANALYSIS_CRITERIA)
 TRANSPORT = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact transport_detected_above_control
 

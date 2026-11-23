@@ -10,7 +10,7 @@ from yield_control import CompletionYieldController
 
 def _request_yield_class(request):
     """Classify the original execution request without generated IDs (the old classifier; the assignment of this
-    episode is always ``practical_assignment_v1``, so the old ``compact_<version>`` and API branches cannot
+    episode is always ``practical_assignment``, so the old ``compact_<version>`` and API branches cannot
     occur)."""
     requested = request['requested_job']
     native = sorted(key for key in requested if key.startswith('native_'))

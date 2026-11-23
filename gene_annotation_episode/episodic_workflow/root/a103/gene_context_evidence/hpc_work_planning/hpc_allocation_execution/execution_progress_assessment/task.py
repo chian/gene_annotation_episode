@@ -73,7 +73,7 @@ credit. No event probability, gain or scientific credit follows from registratio
 _TEXT = {'type': 'string', 'minLength': 1}
 _FIELDS = {'type': 'array', 'items': {'enum': list(FIELD_OPTIONS)}, 'uniqueItems': True}
 _TYPES = {'type': 'array', 'uniqueItems': True, 'items': {'enum': sorted(RECORD_SCHEMAS)}}
-EVENT_CONDITION = obj({'version': {'const': 'event_condition_v1'},
+EVENT_CONDITION = obj({'version': {'const': 'event_condition'},
                        'events': {'type': 'array', 'items': obj({'handle': _TEXT, 'event': _TEXT,
                                                                   'after_cursor': {'type': 'integer', 'minimum': 0}})},
                        'reconsider_at': {'type': ['string', 'null']}})
@@ -103,7 +103,7 @@ async def observe_target(ctx, assignment, fields):
 
     BLOCKED-ON-JOB-SERVICE: job_access; wanted call: ``await ctx.services['job_access'].observe_progress(
     target_handle, fields, permitted_committed_record_types=..., operation_key=ctx.operation_key)``, idempotent on
-    ``ctx.operation_key``; it returns the ``progress_snapshot_v1`` record of the delivered observation."""
+    ``ctx.operation_key``; it returns the ``progress_snapshot`` record of the delivered observation."""
     raise NotImplementedError("BLOCKED-ON-JOB-SERVICE: job_access; wanted call: await ctx.services['job_access']"
                               '.observe_progress(assignment[\'target_handle\'], fields, '
                               "permitted_committed_record_types=assignment['permitted_committed_record_types'], "

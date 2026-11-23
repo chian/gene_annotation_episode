@@ -18,7 +18,7 @@ _MISSING = object()
 _ASCII_SPACE = ' \t\n\r\x0b\x0c'
 _HEADER_TOKEN = re.compile('[^ \\t\\v\\f\\r]+')
 _AA = frozenset('ACDEFGHIKLMNPQRSTVWYBXZJUO*')
-_NORMALIZATION = 'ascii_whitespace_removed_uppercase_no_symbol_substitution_v1'
+_NORMALIZATION = 'ascii_whitespace_removed_uppercase_no_symbol_substitution'
 _TRANSLATION = str.maketrans({**{ord(c): None for c in _ASCII_SPACE}, **{n: n - 32 for n in range(ord('a'), ord('z') + 1)}})
 _DECIMAL = re.compile('[+-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+-]?[0-9]+)?\\Z')
 _MD5 = re.compile('[0-9a-fA-F]{32}\\Z')
@@ -79,7 +79,7 @@ def _sequence(text):
 def read_protein_fasta(content: bytes, *, source: dict, declared_format: str, inventory_key: str) -> dict:
     """Inspect every supplied FASTA occurrence, preserving exact byte intervals."""
     name = 'ProteinInventory'
-    source, failure = _source(content, source, declared_format, 'protein_fasta_utf8_v1', inventory_key, 'inventory_key', name)
+    source, failure = _source(content, source, declared_format, 'protein_fasta_utf8', inventory_key, 'inventory_key', name)
     if failure is not None:
         return failure
     binding = source['content']
@@ -151,7 +151,7 @@ def read_protein_fasta(content: bytes, *, source: dict, declared_format: str, in
     incomplete = _incompleteness(source, diagnostics, requirements)
     if not starts and (not prefix.strip(_ASCII_SPACE.encode('ascii'))):
         diagnostics.append(_diagnostic('input_empty', fields=[_field(binding, '')], severity='qualification'))
-    value = {'version': 'bvbrc_proteome_inventory_proposal_v1', 'inventory_key': inventory_key, 'format': declared_format, 'source': source, 'molecule': 'aa', 'normalization': _NORMALIZATION, 'records': records, 'observed_header_count': len(records), 'complete_record_count': sum((row['record_complete'] for row in records)), 'valid_complete_record_count': sum((row['record_complete'] and row['identifier'] is not None and row['valid_sequence'] for row in records)), 'duplicate_identifier_groups': duplicate_groups, 'sequence_groups': groups, 'diagnostics': diagnostics}
+    value = {'version': 'bvbrc_proteome_inventory_proposal', 'inventory_key': inventory_key, 'format': declared_format, 'source': source, 'molecule': 'aa', 'normalization': _NORMALIZATION, 'records': records, 'observed_header_count': len(records), 'complete_record_count': sum((row['record_complete'] for row in records)), 'valid_complete_record_count': sum((row['record_complete'] and row['identifier'] is not None and row['valid_sequence'] for row in records)), 'duplicate_identifier_groups': duplicate_groups, 'sequence_groups': groups, 'diagnostics': diagnostics}
     return _result(name, value, diagnostics, requirements, partial=incomplete or bool(duplicate_groups) or any((d['severity'] == 'error' for d in diagnostics)))
 
 @dataclass(frozen=True)
@@ -254,7 +254,7 @@ def _row_error(row, code, field=None):
     row['valid'] = False
 
 def _metadata(content, *, source, declared_format, snapshot_key, population, kind, coordinate_convention=None):
-    names = {'feature': ('FeatureSnapshot', 'bvbrc_genome_feature_json_array_v1', 'feature_metadata'), 'genome': ('GenomeSnapshot', 'bvbrc_genome_json_array_v1', 'genome_metadata'), 'sequence': ('FeatureSequenceSnapshot', 'bvbrc_feature_sequence_json_array_v1', 'feature_sequence')}
+    names = {'feature': ('FeatureSnapshot', 'bvbrc_genome_feature_json_array', 'feature_metadata'), 'genome': ('GenomeSnapshot', 'bvbrc_genome_json_array', 'genome_metadata'), 'sequence': ('FeatureSequenceSnapshot', 'bvbrc_feature_sequence_json_array', 'feature_sequence')}
     name, expected_format, required_input = names[kind]
     source, failure = _source(content, source, declared_format, expected_format, snapshot_key, 'snapshot_key', name)
     if failure is not None:
@@ -374,7 +374,7 @@ def _metadata(content, *, source, declared_format, snapshot_key, population, kin
         if fields:
             diagnostics.append(_diagnostic('coordinate_convention_unknown', '/coordinate_convention', fields=fields, severity='qualification'))
             requirements.append(_requirement('coordinate_convention_unknown', 'coordinate_convention', fields=fields))
-    value = {'version': 'bvbrc_proteome_metadata_proposal_v1', 'snapshot_key': snapshot_key, 'format': declared_format, 'source': source, 'population': population, 'records': records, 'unsupported_field_paths': unsupported, 'diagnostics': diagnostics}
+    value = {'version': 'bvbrc_proteome_metadata_proposal', 'snapshot_key': snapshot_key, 'format': declared_format, 'source': source, 'population': population, 'records': records, 'unsupported_field_paths': unsupported, 'diagnostics': diagnostics}
     if kind == 'feature':
         value['coordinate_convention'] = coordinate_convention
     return _result(name, value, diagnostics, requirements, partial=incomplete or population_state != 'yes' or bool(duplicates) or any((not row['valid'] for row in records)))
@@ -490,6 +490,6 @@ def index_original_inputs(original_task: dict, *, parameter_source: dict, source
                 field = snapshot[key]['source_field']
                 diagnostics.append(_diagnostic('native_invalid_cell', field['pointer'], fields=[field]))
                 requirements.append(_requirement('native_invalid_cell', 'valid_parameters', fields=[field]))
-    value = {'version': 'bvbrc_proteome_input_index_proposal_v1', 'parameter_source': parameter_source, 'reference_original_index': reference, 'inputs': entries, 'source_contract': source_contract, 'run_parameter_snapshots': snapshots, 'diagnostics': diagnostics}
+    value = {'version': 'bvbrc_proteome_input_index_proposal', 'parameter_source': parameter_source, 'reference_original_index': reference, 'inputs': entries, 'source_contract': source_contract, 'run_parameter_snapshots': snapshots, 'diagnostics': diagnostics}
     return _result(name, value, diagnostics, requirements, partial=bool(requirements))
 __all__ = ['read_protein_fasta', 'read_feature_metadata', 'read_genome_metadata', 'read_feature_sequences', 'index_original_inputs']

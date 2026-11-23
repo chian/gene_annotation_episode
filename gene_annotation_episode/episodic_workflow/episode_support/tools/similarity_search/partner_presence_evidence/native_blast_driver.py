@@ -65,7 +65,7 @@ def _digest_file(path):
 def _validate_plan(value):
     plan = finite_json_copy(value)
     if (type(plan) is not dict or set(plan) != {"version", "identity", "requested_job", "attempt_directory", "policy"}
-            or plan["version"] != "native_blast_run_plan_v1"):
+            or plan["version"] != "native_blast_run_plan"):
         raise ValueError("native_blast_run_plan_required")
     identity = plan["identity"]
     keys = {"run_id", "episode_id", "resource_id", "execution_id", "attempt_id", "operation_key", "requested_job_sha256"}
@@ -206,7 +206,7 @@ def validate_native_blast_bundle_files(bundle, directory):
     fields = {"version", "identity", "requested_job", "program", "mode", "software",
         "realized_argv", "environment", "inputs", "operand_bindings", "returncode", "artifacts",
         "failures", "started_at", "finished_at"}
-    if (type(bundle) is not dict or set(bundle) != fields or bundle["version"] != "native_blast_bundle_v1"
+    if (type(bundle) is not dict or set(bundle) != fields or bundle["version"] != "native_blast_bundle"
             or bundle["identity"] != plan["identity"] or bundle["requested_job"] != plan["requested_job"]
             or plan["attempt_directory"] != str(root)):
         raise ValueError("native_blast_sealed_manifest_identity_conflict")
@@ -311,11 +311,11 @@ def run_native_blast(plan) -> dict:
             raise ValueError("native_blast_unsealed_attempt_execution_uncertain")
         saved = _read_json(manifest_path)
         if (saved.get("identity") != plan["identity"] or saved.get("requested_job") != request
-                or saved.get("version") != "native_blast_bundle_v1"):
+                or saved.get("version") != "native_blast_bundle"):
             raise ValueError("native_blast_sealed_manifest_identity_conflict")
         return validate_native_blast_bundle_files(saved, root)
     _atomic_new(owner, plan)
-    bundle = {"version": "native_blast_bundle_v1", "identity": plan["identity"],
+    bundle = {"version": "native_blast_bundle", "identity": plan["identity"],
         "requested_job": request, "program": job["program"], "mode": job["mode"],
         "software": {"executable": job["software"]["executable"], "expected_sha256": job["software"]["sha256"],
                      "actual_sha256": None, "declared_engine_version": job["software"]["engine_version"]},

@@ -2,7 +2,7 @@
 
 Carried from the old ``yield_estimator.py`` (``_request_yield_class``, ``_task_yield_profile``,
 ``yield_controller`` / ``_launch_api_yield_controller``) and README 7b: ``PracticalYieldEstimator(verify_completion)``
-becomes ``CompletionYieldController``. The verified ``practical_completion_v1`` proof (endpoint ``usable_handoff``)
+becomes ``CompletionYieldController``. The verified ``practical_completion`` proof (endpoint ``usable_handoff``)
 was exactly one new handoff, so the target is ``handoff_unit``, read from the parent input; the controller's forecast
 is then zero ("verified original handoff completion gives exact zero future credit"). The profile of the request
 class (``launch_api:<class>``: ``cutoff`` = the controller's cost and ``parameters``) is the episode's setting
@@ -14,7 +14,7 @@ from yield_control import CompletionYieldController
 def _request_yield_class(request):
     """Classify the original execution request without generated IDs (api branch of the old function)."""
     version = request.get('version')
-    if version not in ('api_execution_assignment_v1', 'api_service_assignment_v1'):
+    if version not in ('api_execution_assignment', 'api_service_assignment'):
         raise ValueError('execution_request_version_not_an_api_assignment:' + str(version))
     parts = ['api', request.get('service', 'unknown')]
     for field in ('algorithm', 'database'):

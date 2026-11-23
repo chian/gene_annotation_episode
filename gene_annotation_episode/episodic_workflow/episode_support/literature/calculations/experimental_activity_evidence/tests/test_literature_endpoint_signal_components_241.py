@@ -75,7 +75,7 @@ def _attach_covariance(args, blobs, matrix, *, basis='joint_manual_reading_error
     initial = _read(args, blobs)
     field = 'physical_estimate_owner' if basis == 'joint_physical_ordinate_estimates' else 'coordinate_owner'
     owners = [initial['points'][r]['observation'][field] for r in POINT_ORDER]
-    wire = {'version': 'a105_endpoint_signal_covariance_v1', 'basis': basis, 'primitive_order': list(POINT_ORDER), 'primitive_owners': owners, 'primitive_units': ['native_ordinate_pixel'] * 3, 'covariance': matrix, 'variance_status': status, 'origin': origin, 'provenance_witnesses': [], 'native_coordinate_basis_witnesses': [args['context']['condition']] if basis == 'joint_physical_ordinate_estimates' else [], 'coordinate_units_status': 'already_in_declared_native_coordinate_units'}
+    wire = {'version': 'a105_endpoint_signal_covariance', 'basis': basis, 'primitive_order': list(POINT_ORDER), 'primitive_owners': owners, 'primitive_units': ['native_ordinate_pixel'] * 3, 'covariance': matrix, 'variance_status': status, 'origin': origin, 'provenance_witnesses': [], 'native_coordinate_basis_witnesses': [args['context']['condition']] if basis == 'joint_physical_ordinate_estimates' else [], 'coordinate_units_status': 'already_in_declared_native_coordinate_units'}
     args['covariance_source_ref'] = 'synthetic_covariance'
     blobs['synthetic_covariance', 'original'] = json.dumps(wire).encode()
     return wire

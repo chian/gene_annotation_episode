@@ -1,5 +1,4 @@
 """Bind existing reader results to reusable A105 assay assessments.
-
 Numerical inputs are possessed typed components or authenticated source spans.
 Assay selection and source interpretations belong to the investigating episode.
 This adapter does not manufacture scientific applicability or independent data.
@@ -25,8 +24,8 @@ SOURCE_SCHEMAS = {
     'literature_assay_cells': ('gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_assay_storage', 'assay_cells_schema'),
     'literature_controlled_response_component_cells': ('gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_controlled_response_storage', 'controlled_response_cells_schema'),
     'literature_compiled_assay_cells': ('gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_compiled_assay_storage', 'compiled_assay_cells_schema'),
-    'literature_compiled_assay_v2_cells': ('gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_compiled_assay_storage', 'compiled_assay_v2_cells_schema'),
-    'literature_compiled_assay_v3_cells': ('gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_compiled_assay_storage', 'compiled_assay_v3_cells_schema'),
+
+    'literature_common_assessment_cells': ('gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_compiled_assay_storage', 'common_assessment_cells_schema'),
     'literature_completion_time_cells': ('gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_completion_time_storage', 'completion_time_cells_schema'),
     'literature_product_partition_cells': ('gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_product_partition_storage', 'product_partition_cells_schema'),
     'literature_product_coupling_cells': ('gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_product_coupling_storage', 'product_coupling_cells_schema'),
@@ -381,7 +380,7 @@ def _component(selection, read_cells, *, schema=None):
             for child in value:
                 metadata(child)
     # Native formats already scope dependencies to the selected cell. Their
-    # wider estimate rosters and legacy full-model context are not its operands.
+    # wider estimate rosters and full-model context are not its operands.
     for container in (row, cell):
         if isinstance(container.get('dependencies'), (list, dict)):
             metadata(container['dependencies'])

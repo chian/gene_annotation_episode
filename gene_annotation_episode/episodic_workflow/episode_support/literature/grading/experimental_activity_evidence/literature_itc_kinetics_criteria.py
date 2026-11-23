@@ -21,7 +21,7 @@ returns     every case the criterion can return, as (status, reason_code, when).
             as 'never' cannot occur for this criterion.
 """
 
-VERSION = 'a105_itc_kinetics_criteria_v1'
+VERSION = 'a105_itc_kinetics_criteria'
 # FIXED_BY_DEFINITION: the thermal powers of the record in microwatts (1 nW is 0.001 uW; 1 ucal/s is 4.184 uW, the thermochemical calorie being exactly 4.184 J).
 POWER_UW_PER_UNIT = {'nW': 0.001, 'uW': 1.0, 'ucal/s': 4.184}
 

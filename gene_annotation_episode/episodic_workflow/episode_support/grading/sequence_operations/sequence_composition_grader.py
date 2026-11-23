@@ -28,8 +28,8 @@ import math
 from gene_annotation_episode.episodic_workflow.episode_support.calculations.sequence_operations import sequence_composition_counts as composition_counts
 
 
-SHEET_SCHEMA = "sequence_composition_sheet_v1"
-SCORES_SCHEMA = "sequence_composition_scores_v1"
+SHEET_SCHEMA = "sequence_composition_sheet"
+SCORES_SCHEMA = "sequence_composition_scores"
 _MOLECULES = {"dna", "rna", "protein", "unspecified"}
 _CANONICAL = composition_counts.CANONICAL_SYMBOLS
 _AMBIGUOUS = composition_counts.AMBIGUOUS_SYMBOLS

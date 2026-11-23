@@ -14,7 +14,7 @@ episode.
 Grading. The old runner graded every received or published A103 measurement automatically after each outcome
 (``automatic_score_updates``: the attachment refresh of the A103 registry). Here that is the ``context_grade`` tool
 (``context.grade``): ``attachments.refresh`` over the records this Episode holds writes one attachment sheet
-(``a103_tool_attachment_v1``) per held measurement and policy, and the context observation of each scored sheet. It
+(``a103_tool_attachment``) per held measurement and policy, and the context observation of each scored sheet. It
 runs without a model decision as the next unit whenever a held measurement has no sheet yet (the old automatic
 grading), and the model may select it. The old prose ``report`` tool is gone: the finding is the controlled features
 code reads from the sheets (``findings.gene_context_evidence.investigation_finding``), built in ``internal_summary``.
@@ -118,13 +118,13 @@ RECORD_REFS = {
 }
 # What the model writes in ``assignment`` for each child (the parent's own text; the child's form admits or refuses it).
 CHILD_ASSIGNMENTS = {
-    'gene_context_evidence': 'a narrower A103 investigation: {"selection": <gene_context_evidence_selection_v3 record: '
+    'gene_context_evidence': 'a narrower A103 investigation: {"selection": <gene_context_evidence_selection record: '
                              'the result.selection of process.revise, or the text "own" for your own selection>, "evidence_refs": [<records you '
                              'hold and hand on, with every record they name that the child reads>], "constraints": '
                              '{...}, "context": {...optional evidence_task and a103_task...}, "scope": <a scope '
                              'within yours>, "scope_refs": [<the records the scope names>], "revision_origin": '
                              '<revision_origin of process.revise, optional>}; your proposed annotation is inherited',
-    'execution_job_submission': 'the launch of execution work: {"version": "execution_launch_assignment_v1", '
+    'execution_job_submission': 'the launch of execution work: {"version": "execution_launch_assignment", '
                                 '"requests": {<resource_id>: <closed concrete request>}, '
                                 '"immutable_input_versions": [...], "constraints": {allowed_resource_ids, '
                                 'allowed_kinds, resource_id, kind}, "launch_instructions": {...optional...}, '
@@ -148,13 +148,13 @@ CHILD_ASSIGNMENTS = {
                          '"commission_source_ref": [<one held source>] (exactly one of the two), "tool_request": '
                          '{name, resources, arguments_json, result_reader, objective} (optional), "scope": {...}, '
                          '"input_refs": [...optional...]}',
-    'resource_work_submission': 'the submission of resource work: {"version": "resource_launch_assignment_v1", '
+    'resource_work_submission': 'the submission of resource work: {"version": "resource_launch_assignment", '
                                 '"job_request": {...}, "immutable_input_versions": [...], "constraints": {...}, '
                                 '"resource_selection": {...optional...}, "software_knowledge_refs": [...], '
                                 '"resource_knowledge_refs": [...], "launch_instructions": {...optional...}, '
                                 '"scope": {...}, "scope_refs": [...], "input_refs": [...]}',
     'resource_result_acquisition': 'the acquisition of resource work results: {"version": <the results assignment '
-                                   'version>, "handoff": <the execution_handoff_v1 record>, '
+                                   'version>, "handoff": <the execution_handoff record>, '
                                    '"requested_data_selector": {...}}',
 }
 TOOL_INSTRUCTION = (
@@ -178,7 +178,7 @@ TOOL_INSTRUCTION = (
 # function, path or scope verdict: use the grading sheet's existing criteria and status, without inventing a score
 # threshold or asking a child to judge the same result again."
 GRADING_SECTION = (
-    '\n\nA103 grading (operation context.grade, sheet a103_tool_attachment_v1). Every native context measurement '
+    '\n\nA103 grading (operation context.grade, sheet a103_tool_attachment). Every native context measurement '
     '(context.bind_locus, reference.neighborhood, context.compare_neighborhoods, context.fusion, '
     'context.cooccurrence, context.association_channels, context.contrast, context.detection_inventory) is graded '
     'when it is published or received: context.grade writes one attachment sheet per held measurement, attributing '
@@ -201,7 +201,7 @@ GRADING_SECTION = (
 
 
 GRADE_ENTRY = {'name': 'context.grade', 'description': 'Grade every held A103 context measurement of the assigned '
-               'targets into its attachment sheet (a103_tool_attachment_v1); operands {}',
+               'targets into its attachment sheet (a103_tool_attachment); operands {}',
                'input_schema': {'type': 'object', 'properties': {}, 'additionalProperties': False}}
 
 

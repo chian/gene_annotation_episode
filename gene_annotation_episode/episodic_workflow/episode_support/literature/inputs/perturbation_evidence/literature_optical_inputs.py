@@ -21,7 +21,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.perturbation_evidence.literature_rate_native_inputs import _number, _field_contexts
 
 
-VERSION = "a105_optical_inputs_v1"
+VERSION = "a105_optical_inputs"
 PRIMITIVE_ORDER = ("sample_slope", "blank_slope", "epsilon", "path_length")
 SOURCE_KINDS = ("primary_source", "retained_extraction", "synthetic_fixture")
 LITERAL_FIELDS = ("molecule", "construct", "preparation", "condition", "measured_entity")
@@ -309,7 +309,7 @@ def _covariance(reference, observations, refs, sources):
     source = sources.source(reference, "original")
     data = _json_source(source["content"], "covariance_source_ref")
     _keys(data, _COV_FIELDS, "covariance_source")
-    expected = {"version": "a105_optical_covariance_v1", "primitive_order": list(PRIMITIVE_ORDER),
+    expected = {"version": "a105_optical_covariance", "primitive_order": list(PRIMITIVE_ORDER),
         "primitive_measurement_keys": [r["measurement_key"] for r in rows],
         "primitive_physical_observation_keys": [r["physical_observation_key"] for r in rows],
         "primitive_owner_keys": [r["owner_key"] for r in rows], "primitive_units": [r["unit"]["raw_unit"] for r in rows]}
@@ -365,7 +365,7 @@ def read_optical_rate_operands(selection, *, read_source):
                 reasons[role].append("optical_signal_unit_mismatch")
         values[role] = row["value"] if row and not reasons[role] else None
     reasons["covariance"] = ["covariance_unreported"] if covariance is None else ["covariance_status_unknown"] if cov_status == "unknown" else []
-    calculation = {"version": "a105_nadh_optical_rate_operands_v1", **values,
+    calculation = {"version": "a105_nadh_optical_rate_operands", **values,
         "covariance": covariance, "covariance_status": cov_status,
         **{name: interpretations[name]["value"] for name in INTERPRETATIONS if name != "signal_kind"},
         "primitive_observation_refs": refs}

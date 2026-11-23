@@ -48,7 +48,7 @@ a dissociation window and a steady-state versus kinetic comparison (the
 counterpart here is the direct versus competition comparison).
 """
 
-VERSION = 'a105_fp_criteria_v1'
+VERSION = 'a105_fp_criteria'
 
 # ---- Threshold constants -------------------------------------------------
 MP_PER_POLARIZATION = 1000.0  # FIXED_BY_DEFINITION: one polarization unit is 1000 millipolarization units (mP).

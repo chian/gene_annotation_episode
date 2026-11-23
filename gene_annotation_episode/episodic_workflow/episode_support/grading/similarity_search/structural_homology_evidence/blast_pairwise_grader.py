@@ -503,7 +503,7 @@ def build_pairwise_artifacts(result: dict, *, population=None, selected_interval
     aggregate identity fraction is unavailable when alternatives conflict.
     Missing HSP geometry makes the observed union incomplete, not zero evidence.
     """
-    if not isinstance(result, dict) or result.get("schema") != "blast_normalized_result_v1":
+    if not isinstance(result, dict) or result.get("schema") != "blast_normalized_result":
         raise ValueError("normalized_blast_result_required")
     if result.get("mode") != "pairwise":
         raise ValueError("pairwise_blast_mode_required")
@@ -558,7 +558,7 @@ def build_pairwise_artifacts(result: dict, *, population=None, selected_interval
     else:
         state = "complete" if complete and not issues else "partial"
     sheet = {
-        "schema": "blast_pairwise_sheet_v1", "status": state,
+        "schema": "blast_pairwise_sheet", "status": state,
         "input": deepcopy(result), "query": deepcopy(query),
         "reference": {"length": hit.get("length"),
                       "descriptions": deepcopy(hit.get("descriptions", [])),
@@ -585,7 +585,7 @@ def validate_blast_correspondence_instance(legacy, instance, *, program=None):
     """Compare stored common inputs and projections, without HSP recalculation."""
     from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_alignment.alignment_correspondence import _same
     sheet, calculated = instance["sheet"], instance["components"]
-    if legacy.get("schema") == "blast_pairwise_sheet_v1":
+    if legacy.get("schema") == "blast_pairwise_sheet":
         components = [row["components"] for row in legacy["hsps"]]
         program = legacy["input"]["search"].get("program")
         lengths = legacy["union"]["denominators"]

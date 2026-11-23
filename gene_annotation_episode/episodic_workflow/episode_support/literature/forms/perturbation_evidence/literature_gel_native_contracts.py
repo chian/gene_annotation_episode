@@ -12,8 +12,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.calcul
 PROVIDER = 'literature.a105.gel'
 OPERATION = 'literature.gel.populate'
 FACT_SOURCE = 'literature_gel_component_cells'
-VERSION = 'literature_gel_record_v1'
-FACT_VERSION = 'literature_gel_component_fact_v1'
+VERSION = 'literature_gel_record'
+FACT_VERSION = 'literature_gel_component_fact'
 RAW_COMPONENTS = ('pixel_count', 'sum_gray', 'sum_darkness', 'minimum_gray', 'maximum_gray', 'zero_gray_count')
 CORRECTED_COMPONENT = 'background_corrected_band_darkness'
 LANE_COMPONENTS = ('shifted_display_darkness', 'free_display_darkness', 'selected_total_display_darkness',
@@ -54,8 +54,7 @@ def record_reference(namespace='reference'):
 
 
 def gel_population_schema():
-    return obj({'selection':{'anyOf':[inputs.gel_arguments_schema(),
-        inputs.gel_arguments_schema(version=inputs.VERSION_V2)]},
+    return obj({'selection':inputs.gel_arguments_schema(),
         'comparison':calculations.gel_comparison_schema()})
 
 
@@ -124,9 +123,7 @@ def gel_cells_schema():
             'included_assignment_ids':arr(text),'unavailable_assignment_ids':arr(text),
             'sampling_confidence_level':{'type':'null'}}),
     }
-    # V1 dependencies have no background method; V2 retains that original field.
-    v2=cp(D['SourceDependency']);v2['properties']['background_method']=enum('mean','median');v2['required'].append('background_method')
-    D['SourceDependency']={'oneOf':[D['SourceDependency'],v2]}
+    D['SourceDependency']['properties']['background_method']=enum('mean','median');D['SourceDependency']['required'].append('background_method')
     D['Dependency']=obj({'assignment_id':text,'source_dependency':ref('SourceDependency')})
     D['Cell']=obj({'value':{'type':['number','null']},'exact':nullable(ref('Rational')),
         'lower':nullable(ref('Rational')),'upper':nullable(ref('Rational')),
@@ -150,8 +147,7 @@ def gel_cells_schema():
         obj({'kind':{'const':'utf8_span'},'source_ref':record_reference('source'),'start':{'type':'integer','minimum':0},
             'end':{'type':'integer','minimum':1}}),
         obj({'kind':{'const':'unresolved'},'source_ref':record_reference('source')})]}
-    D['Method']=obj({'assignment_id':text,'lane_id':text,'background_method':enum('mean','median'),
-        'method_basis':enum('v1_mean_definition','explicit_v2_nomination')})
+    D['Method']=obj({'assignment_id':text,'lane_id':text,'background_method':enum('mean','median')})
     row=obj({'version':{'const':FACT_VERSION},'sheet_ref':record_reference('source'),'component_key':text,
         'view':enum(*VIEWS),'component':enum(*COMPONENTS),'assignment_id':nullable(text),'lane_id':nullable(text),
         'region_kind':nullable(enum('background','whole_lane','band')),'band_id':nullable(text),

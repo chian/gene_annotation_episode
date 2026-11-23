@@ -13,8 +13,8 @@ from decimal import Decimal
 from gene_annotation_episode.episodic_workflow.episode_support.records.expression_and_perturbation.intervention_record_values import _canonical, _content, _finite_json
 
 
-DOCUMENT_VERSION = "intervention_analysis_native_v1"
-COMPONENTS_VERSION = "intervention_analysis_components_v1"
+DOCUMENT_VERSION = "intervention_analysis_native"
+COMPONENTS_VERSION = "intervention_analysis_components"
 REPRESENTATIONS = ("transit_resampling", "transit_table", "deseq2", "count_matrix",
                    "sample_metadata", "quality_report")
 _NUMBER = re.compile(r"[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?\Z")

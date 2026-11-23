@@ -111,7 +111,7 @@ def test_native_source_population_keeps_raw_tokens_and_canonical_numerical_rows(
         validate_schema(args, partner_source_population_schema())
         outcome = repo.populate(context, args, 'native')
         saved = repo.read(outcome['result']['sheet_ref'])
-        assert saved['extraction']['version'] == 'literature_partner_inputs_extraction_v2'
+        assert saved['extraction']['version'] == 'literature_partner_native_extraction'
         assert saved['data_source_ref'] == records['data']['id']
         assert not store.get_artifact(records['data']['artifact_ref']).startswith(b'{')
         parsed = saved['extraction']['native_evidence']['reference']['rate']

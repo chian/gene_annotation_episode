@@ -21,11 +21,11 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.sequence_ma
 from gene_annotation_episode.episodic_workflow.episode_support.readers.sequence_masking.evolutionary_history_evidence.sequence_masking_result_views import PROJECTION_FIELDS, SAVED_SCHEMAS, failure, unique_failures, validate_masking_projection, validate_masking_result_selector
 from gene_annotation_episode.episodic_workflow.episode_support.grading.evolutionary_history_evidence.tool_grading_artifacts import retain_tool_grading
 PREFIX = 'native_blast_masking_'
-PREPARED_VERSION = PREFIX + 'prepared_v1'
-PUBLICATION_VERSION = PREFIX + 'publication_v1'
-RETAINED_VERSION = PREFIX + 'retained_v1'
-PROJECTION_VERSION = PREFIX + 'projection_artifact_v1'
-RECEIPT_VERSION = PREFIX + 'worker_receipt_v1'
+PREPARED_VERSION = PREFIX + 'prepared'
+PUBLICATION_VERSION = PREFIX + 'publication'
+RETAINED_VERSION = PREFIX + 'retained'
+PROJECTION_VERSION = PREFIX + 'projection_artifact'
+RECEIPT_VERSION = PREFIX + 'worker_receipt'
 NUMERICAL_REFS = {'sheet': 'sheet_artifact_ref', 'calculations': 'calculations_artifact_ref', 'statistics': 'statistics_artifact_ref'}
 _PREPARED_FIELDS = {'version', 'bundle_artifact_ref', 'source_grading_artifact_ref', *NUMERICAL_REFS.values(), 'operation', 'native_outcome', 'occurrences', 'failures', 'worker_completed'}
 _STABLE_FIELDS = {'version', 'bundle', 'capture', 'original_plan', 'bundle_sha256', 'numerical_artifacts', 'worker_receipt_artifact_ref', *_PREPARED_FIELDS - {'version', 'source_grading_artifact_ref'}}
@@ -96,7 +96,7 @@ def _stable(store, prepared):
         _error('prepared_source_grading_required')
     envelope = _json(store, prepared['source_grading_artifact_ref'])
     _shape(envelope, {'schema', 'provider', 'native_artifact_ref', 'grading'}, 'retained_envelope_invalid')
-    if envelope['schema'] != 'tool_grading_artifact_v1' or envelope['provider'] != 'episode.execution_result' or envelope['native_artifact_ref'] != prepared['bundle_artifact_ref']:
+    if envelope['schema'] != 'tool_grading_artifact' or envelope['provider'] != 'episode.execution_result' or envelope['native_artifact_ref'] != prepared['bundle_artifact_ref']:
         _error('retained_envelope_identity_conflict')
     stable = envelope['grading']
     _shape(stable, _STABLE_FIELDS, 'retained_grading_fields_invalid')

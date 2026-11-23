@@ -7,7 +7,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.sequence_ma
 from gene_annotation_episode.episodic_workflow.episode_support.forms.sequence_masking.sequence_homology_evidence.native_blast_masking_contracts import finite_json_copy
 from gene_annotation_episode.episodic_workflow.episode_support.forms.sequence_masking.sequence_homology_evidence.native_blast_masking_contracts import validate_preflight_failures
 
-VERSION = "native_blast_masking_capture_v1"
+VERSION = "native_blast_masking_capture"
 
 CAPTURE_FAILURE_CODES = frozenset({"sealed_bundle_unavailable", "original_bundle_invalid", "original_owner_invalid",
     "original_file_unavailable", "original_file_identity_mismatch", "input_not_original", "unsealed_file"})

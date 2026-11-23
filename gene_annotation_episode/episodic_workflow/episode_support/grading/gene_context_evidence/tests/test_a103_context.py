@@ -178,7 +178,7 @@ def _single_locus_comparison(case, right_index, partner_ref=None):
 def _detector_receipt(case, measured, **changes):
     """Host-publication contract fixture; no biological search is claimed."""
     store,target,known,*_ = case
-    proof = {'schema':'a103_detection_v1','producer_operation':'context.detection_inventory',
+    proof = {'schema':'a103_detection','producer_operation':'context.detection_inventory',
         'target_ref':target,'target_regions':[[0,6]],'component_ref':measured['partner_reference_ref'],
         'neighborhood_ref':measured['rows'][0]['neighborhood_ref'],'present':False,
         'native_search_complete':True,'all_actual_cds_in_search':True,
@@ -427,7 +427,7 @@ def test_contrast_regrades_from_received_maps_without_new_context_measurements(c
     grade(store,target,known)
     function = store.put('term',{'namespace':'engineering','accession':'bounded-context-role','label':'Engineering alternative',
         'term_type':'other','source_ref':definition,'anchor':None},origin='external')['id'];known.add(function)
-    panel = {'schema':'a103_contrast_v1','producer_operation':'context.contrast','target_ref':target,'target_regions':[[0,6]],
+    panel = {'schema':'a103_contrast','producer_operation':'context.contrast','target_ref':target,'target_regions':[[0,6]],
         'function_ref':function,'supporting_source_refs':[first],'opposing_source_refs':[second],
         'incompatibility_witness_refs':[definition]}
     contrast = publish(store,panel,[target]);known.add(contrast)

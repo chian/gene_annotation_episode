@@ -13,7 +13,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence.literature_calibration_recovery_calculations import _float, _q
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_experimental_contracts import ExperimentalContractError
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_partner_source_fields import _ALL_TAGS, _NUMBER, _LOWER, _contexts, _interval_contexts, _relation, _soft_break_numeric_token, _unit_contexts, _TABLE_BOUNDARY, _edge_contexts, number_selector_schema
-VERSION = 'a105_measurement_validation_inputs_v1'
+VERSION = 'a105_measurement_validation_inputs'
 NAMESPACE = 'literature_calibration_recovery_cells'
 SOURCE_KINDS = ('primary_source', 'retained_extraction', 'synthetic_fixture')
 ORIGINS = {'primary_source': 'reported', 'retained_extraction': 'derived', 'synthetic_fixture': 'synthetic'}

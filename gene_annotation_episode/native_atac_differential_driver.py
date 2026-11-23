@@ -289,7 +289,7 @@ def _execute(plan, key, *, inputs, argv, enabled, problems, directory, specs, po
             if row["declaration"]["state"] == "absent":
                 problems.append(failure("native_output_unavailable", "execution", step_key=key,
                     file_key=row["specification"]["file_key"], requirement="complete_native_output"))
-    seal = validate_atac_command_seal(dict(version="atac_native_command_seal_v1", identity=plan["identity"],
+    seal = validate_atac_command_seal(dict(version="atac_native_command_seal", identity=plan["identity"],
         step_key=key, producer_ref=producer_ref(plan, key), argv=argv, environment=environment, inputs=inputs,
         started_at=started, finished_at=finished, returncode=returncode, outcome=outcome,
         outputs=outputs, failures=problems), plan=plan, step_key=key)
@@ -348,7 +348,7 @@ def run_atac_differential_driver(plan):
                 output_relative_path=header_spec["relative_path"], policy=policy)
             own.extend(header["failures"])
         else:
-            header = dict(version="atac_bam_header_extraction_v1", input_key=binding["input_key"], callpeak_run_key=key,
+            header = dict(version="atac_bam_header_extraction", input_key=binding["input_key"], callpeak_run_key=key,
                 input_ordinal=0, input_file=binding["file"], header=declaration(header_spec, directory),
                 producer_outcome="not_run", supplied_extent="unknown", failures=list(own))
         inspections.append(header)
@@ -385,7 +385,7 @@ def run_atac_differential_driver(plan):
     with _writing(confined_file(directory, specs["stderr"]["relative_path"])) as stream:
         for item in problems:
             stream.write(canonical(item) + b"\n")
-    result = validate_atac_native_bundle(dict(version="atac_differential_native_bundle_v1", identity=plan["identity"],
+    result = validate_atac_native_bundle(dict(version="atac_differential_native_bundle", identity=plan["identity"],
         request=request, software=job["software"], input_inspections=inspections, steps=seals, depth_selection=depth,
         outputs=[{"specification": spec, "declaration": declaration(spec, directory)} for spec in plan["outputs"][:-1]],
         failures=problems), plan=plan)

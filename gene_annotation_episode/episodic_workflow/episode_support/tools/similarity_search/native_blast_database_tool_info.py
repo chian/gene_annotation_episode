@@ -62,7 +62,7 @@ def native_blast_database_tool_contracts(bindings, *, resource_kind, resource_id
         job["properties"]["software"] = {"const": binding["software"]}
         job["properties"]["databases"]["items"]["properties"]["manifest_file"] = {"enum": deepcopy(binding["database_manifests"])}
         instructions = (
-            "Supply the selected native_blast_database_job_v1 with actual query bytes, exact file identities, explicit software, "
+            "Supply the selected native_blast_database_job with actual query bytes, exact file identities, explicit software, "
             "prepared database manifests, native paths, selected options and required outputs. Start from the supplied sequence, "
             "CLUSTAL alignment or accepted scoremat ASN text; a candidate annotation or public query name is not required. "
             + _MEANINGS[program] + " "
@@ -80,7 +80,7 @@ def native_blast_database_tool_contracts(bindings, *, resource_kind, resource_id
             "charge EpiCalib. "
             "Monitoring uses existing resource status and selected complete-offset log observations. Native elapsed seconds measure "
             "only the native subprocess, separately from wrapper duration, queue wait and turnaround; liveness is not scientific progress. "
-            "Results acquisition must authenticate the original attempt and sealed native_blast_database_bundle_v1, then verify and retain "
+            "Results acquisition must authenticate the original attempt and sealed native_blast_database_bundle, then verify and retain "
             "complete declared artifact bytes before separate native parsers and metadata extractors populate numerical sheets. Sequence-database, profile, "
             "iteration/PSSM and VDB results retain their distinct numerical meanings and calculators. Producer success is neither a "
             "function assignment nor a confidence score. Missing reports, unsuccessful native exits, partial captures and successful "
@@ -88,7 +88,7 @@ def native_blast_database_tool_contracts(bindings, *, resource_kind, resource_id
         if program in {'blastn_vdb', 'tblastn_vdb'}:
             instructions += (
                 "Candidate-function results require the explicitly selected "
-                "native_blast_database_result_selector_vdb_function_v1, its vdb_function_model and calculation_input. "
+                "native_blast_database_result_selector_vdb_function, its vdb_function_model and calculation_input. "
                 "The captured_inputs mode accepts source-qualified vdb_function metadata, freezes the full function sheet "
                 "and calls the separate deterministic function calculator. Conditional function weights are model values, "
                 "not calibrated annotation probabilities; full census correction needs actual complete compatible enumeration. "

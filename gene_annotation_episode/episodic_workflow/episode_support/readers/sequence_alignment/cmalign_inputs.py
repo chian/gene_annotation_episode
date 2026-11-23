@@ -20,7 +20,7 @@ import re
 from gene_annotation_episode.episodic_workflow.episode_support.readers.sequence_alignment.hmmalign_inputs import (iter_hmmalign_stockholm_records,
                               posterior_bin_bounds, require_finite_json)
 
-SHEET_SCHEMA = "cmalign_sheet_v1"
+SHEET_SCHEMA = "cmalign_sheet"
 _FORMATS = {"stockholm", "cmalign_sfile", "cmalign_ifile", "cmalign_elfile"}
 _BASES = set("ACGUTRYMKSWHBVDNXI")
 _GAPS = set("-._")

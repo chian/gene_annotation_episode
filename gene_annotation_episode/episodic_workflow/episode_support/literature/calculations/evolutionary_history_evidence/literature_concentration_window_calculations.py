@@ -311,7 +311,7 @@ def populate_concentration_window(inputs):
         matrix=[[sum(G[i][a]*C[a][b]*G[j][b] for a in range(len(order)) for b in range(len(order))) for j in range(len(selected))] for i in range(len(selected))]
         display=[[_float(x) for x in row] for row in matrix]
         if all(x is not None for row in display for x in row):derived=dict(components=selected,matrix=display,method='G*C*G_transpose',covariance_source_ref=block['source_ref'])
-    result=dict(version='a105_concentration_window_sheet_v3',axis='A105',section='observed_concentration_window',
+    result=dict(version='a105_concentration_window_sheet',axis='A105',section='observed_concentration_window',
         cells=cells,assertion_resolution='total_chemical_extent_and_selected_product_fate',scientific_context=deepcopy(context),
         association=dict(selection_digest=inputs['selection_digest'],extraction_digest=inputs['extraction_digest'],calculation_inputs_digest=_digest(inputs)),
         source_artifacts=deepcopy(inputs['source_artifacts']),estimate_bindings=[{k:deepcopy(rows[r][k]) for k in ('role','owner_key','physical_owner_key','dependency_keys')} for r in ROLES if rows[r]],

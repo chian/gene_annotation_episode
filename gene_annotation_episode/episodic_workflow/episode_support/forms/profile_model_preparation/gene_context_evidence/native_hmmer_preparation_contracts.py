@@ -14,7 +14,7 @@ import re
 from gene_annotation_episode.episodic_workflow.episode_support.records.local_execution.native_record_identity import finite_json_copy, native_record_digest
 
 
-JOB_VERSION = "native_hmmer_preparation_job_v1"
+JOB_VERSION = "native_hmmer_preparation_job"
 PROGRAM_MODES = {
     "alimask": ("mask_alignment", "mask_model", "model_to_alignment", "alignment_to_model"),
     "hmmbuild": ("build_alignment", "build_single_sequence_matrix"),

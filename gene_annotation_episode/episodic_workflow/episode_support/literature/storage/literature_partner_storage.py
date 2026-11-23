@@ -27,7 +27,7 @@ class LiteraturePartnerRepository(SheetCustody):
     experiment_types = EXPERIMENT_TYPES
     provider = PROVIDER
     components = COMPONENTS
-    record_version = 'literature_partner_record_v1'
+    record_version = 'literature_partner_record'
     operations = OPERATIONS
     cells_table = CELLS
     current_table = CURRENT

@@ -10,7 +10,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence.literature_active_site_calculations import COMPONENTS, COMPONENT_ROLES, REASONS, CONDITIONS, VERSION as SHEET_VERSION, LIMITS, populate_active_site_components
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_rate_storage import LiteratureRateRepository
 PROVIDER = 'literature.a105.active_site_population'
-VERSION = 'literature_active_site_record_v1'
+VERSION = 'literature_active_site_record'
 NAMESPACE = 'literature_active_site_cells'
 
 def _witnesses(value):

@@ -81,7 +81,7 @@ def test_assignment_form_names_the_job_by_record_references_only():
     assert {name for name, field in fields.items() if field['type'] == 'record_refs'} == {
         'handoff_refs', 'known_progress_refs', 'dependency_handoff_refs'}
     assert 'target_handle' not in fields
-    assignment = {'version': 'monitor_assignment_v2', 'handoff_refs': ['row_1'], 'known_progress_refs': ['row_2'],
+    assignment = {'version': 'monitor_assignment', 'handoff_refs': ['row_1'], 'known_progress_refs': ['row_2'],
                   'dependency_handoff_refs': [], 'requested_fields': ['execution_status'], 'information_unit': 1.0}
     assert form.record_refs(form.admit(assignment, 'assignment')) == ('row_1', 'row_2')
     with pytest.raises(FormError):

@@ -136,7 +136,7 @@ def _location(location, docs):
 
 def validate_native_document(value: object) -> dict:
     """Validate a saved native result without reading or decoding source bytes."""
-    native = validate_shape("NativeDocumentResultV1", value)
+    native = validate_shape("NativeDocumentResult", value)
     document_id = native["document"]["document_id"]
     tables = _unique(native["tables"], "table", "duplicate_native_table")
     row_numbers = []
@@ -215,9 +215,9 @@ def _selection(selection, documents, evidence, task_ref):
         if view["document_id"] not in selected:
             _fail("view_document_reference_missing")
         profile = selected[view["document_id"]]["format_profile"].removeprefix("comparative_systems_")
-        allowed = {"families_json_v1": {"plfam", "pgfam"}, "pathways_json_v1": {"pathway", "ecnumber", "genes"},
-                   "subsystems_json_v1": {"subsystems", "genes", "overview"}, "pathways_tsv_v1": {"pathways_tsv"},
-                   "subsystems_tsv_v1": {"subsystems_tsv"}, "variant_matrix_source670b_v1": {"variant_matrix"}}[profile]
+        allowed = {"families_json": {"plfam", "pgfam"}, "pathways_json": {"pathway", "ecnumber", "genes"},
+                   "subsystems_json": {"subsystems", "genes", "overview"}, "pathways_tsv": {"pathways_tsv"},
+                   "subsystems_tsv": {"subsystems_tsv"}, "variant_matrix_source670b": {"variant_matrix"}}[profile]
         if view["table"] not in allowed:
             _fail("view_table_incompatible")
     for pair in selection["dependent_views"]:
@@ -228,7 +228,7 @@ def _selection(selection, documents, evidence, task_ref):
 
 def validate_sheet(value: object) -> dict:
     """Validate saved identities, cells and field relationships, not formulas."""
-    sheet = validate_shape("ComparativeSystemsSheetV1", value)
+    sheet = validate_shape("ComparativeSystemsSheet", value)
     docs = {}
     for native in sheet["native_documents"]:
         native = validate_native_document(native)

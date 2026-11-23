@@ -42,10 +42,10 @@ from .protease_kinetics_measurements import (
 )
 
 
-REQUEST_VERSION = "molecular_sequence_driver_request_v1"
-DECLARATION_VERSION = "molecular_sequence_driver_declaration_v1"
-REQUEST_VERSION_V2 = "molecular_sequence_driver_request_v2"
-DECLARATION_VERSION_V2 = "molecular_sequence_driver_declaration_v2"
+REQUEST_VERSION = "molecular_sequence_driver_request"
+DECLARATION_VERSION = "molecular_sequence_driver_declaration"
+PROTEASE_REQUEST_VERSION = "molecular_sequence_protease_driver_request"
+PROTEASE_DECLARATION_VERSION = "molecular_sequence_protease_driver_declaration"
 _PROTEASE = "analyze_protease_kinetics"
 _ORF = "annotate_open_reading_frames"
 _PLACEMENT = "align_sequences"
@@ -54,7 +54,7 @@ _OPERATIONS = {_ORF, _PLACEMENT, *_GLYCO}
 _IDENTITY_FIELDS = {"run_id", "episode_id", "resource_id", "operation_key", "execution_id"}
 _CAPTURE_FIELDS = {"version", "request", "request_canonical_sha256", "stage", "native_record",
     "native_call_state", "reference_data", "execution_receipt", "stdout", "stderr", "failure"}
-_CAPTURE_FIELDS_V3 = _CAPTURE_FIELDS | {"observer", "verification_failures"}
+_PROTEASE_CAPTURE_FIELDS = _CAPTURE_FIELDS | {"observer", "verification_failures"}
 _QUALIFICATION = (
     "Private output byte declaration only. Host-supplied run, episode, resource, operation and execution "
     "identities are assertions, not authenticated producing-attempt custody. The native helper receipt "
@@ -129,8 +129,8 @@ def _mapping(value):
 
 
 def _request(value):
-    if type(value) is dict and value.get("version") == REQUEST_VERSION_V2:
-        return _request_v2(value)
+    if type(value) is dict and value.get("version") == PROTEASE_REQUEST_VERSION:
+        return _protease_request(value)
     _closed(value, ("version", "mode", "attempt_identity", "selection", "scientific_context"), "request")
     _require(value["version"] == REQUEST_VERSION and value["mode"] in ("native", "saved_sheet"),
         "request_version_and_mode_required")
@@ -167,28 +167,28 @@ def _request(value):
     return operation
 
 
-def _request_v2(value):
-    _closed(value, ("version", "mode", "attempt_identity", "selection", "scientific_context"), "request_v2")
-    _require(value["version"] == REQUEST_VERSION_V2 and value["mode"] in ("native", "saved_sheet"), "request_version_and_mode_required")
+def _protease_request(value):
+    _closed(value, ("version", "mode", "attempt_identity", "selection", "scientific_context"), "protease_request")
+    _require(value["version"] == PROTEASE_REQUEST_VERSION and value["mode"] in ("native", "saved_sheet"), "request_version_and_mode_required")
     _closed(value["attempt_identity"], _IDENTITY_FIELDS, "attempt_identity")
     _require(all(type(v) is str and v for v in value["attempt_identity"].values()), "explicit_host_attempt_identity_required")
     selection = value["selection"]
-    _require(type(selection) is dict and selection.get("operation") == _PROTEASE, "v2_protease_operation_required")
+    _require(type(selection) is dict and selection.get("operation") == _PROTEASE, "protease_operation_required")
     if value["mode"] == "saved_sheet":
         _closed(selection, ("operation", "sheet_file"), "saved_selection")
         _file_pin(selection["sheet_file"])
         _require(value["scientific_context"] is None, "saved_sheet_owns_scientific_operands")
     else:
-        _closed(selection, ("version", "operation", "arguments", "deployment", "output_workspace", "environment"), "native_v3_selection")
-        _require(selection["version"] == "molecular_sequence_request_v3", "native_v3_selection_required")
+        _closed(selection, ("version", "operation", "arguments", "deployment", "output_workspace", "environment"), "native_protease_selection")
+        _require(selection["version"] == "molecular_sequence_protease_request", "native_protease_selection_required")
         _closed(value["scientific_context"], ("assay_context",), "protease_context")
     return _PROTEASE
 
 
 def _native_capture(capture, selection):
-    if selection["version"] == "molecular_sequence_request_v3":
-        _closed(capture, _CAPTURE_FIELDS_V3, "native_capture_v3")
-        _require(capture["version"] == "molecular_sequence_execution_v3" and capture["native_call_state"] in
+    if selection["version"] == "molecular_sequence_protease_request":
+        _closed(capture, _PROTEASE_CAPTURE_FIELDS, "native_protease_capture")
+        _require(capture["version"] == "molecular_sequence_protease_execution" and capture["native_call_state"] in
             ("not_started", "returned", "raised"), "native_capture_version_and_state_required")
         if capture["request"] is not None:
             _require(json.dumps(capture["request"], sort_keys=True, allow_nan=False) ==
@@ -198,9 +198,7 @@ def _native_capture(capture, selection):
                 "native_capture_input_conflict")
         return
     _closed(capture, _CAPTURE_FIELDS, "native_capture")
-    expected = ("molecular_sequence_execution_v2" if selection["version"] == "molecular_sequence_request_v2"
-        else "molecular_sequence_execution_v1")
-    _require(capture["version"] == expected and capture["native_call_state"] in
+    _require(capture["version"] == "molecular_sequence_execution" and capture["native_call_state"] in
         ("not_started", "returned", "raised"), "native_capture_version_and_state_required")
     if capture["request"] is None:
         _require(capture["native_call_state"] == "not_started" and capture["native_record"] is None
@@ -338,8 +336,8 @@ def run_molecular_sequence_driver(*, request_file: dict, output_directory: str) 
         declaration["request_file_pin_verified"] = True
         stage = "parse_request"
         request = _json(raw)
-        if type(request) is dict and request.get("version") == REQUEST_VERSION_V2:
-            declaration.update(version=DECLARATION_VERSION_V2, native_outcome=None,
+        if type(request) is dict and request.get("version") == PROTEASE_REQUEST_VERSION:
+            declaration.update(version=PROTEASE_DECLARATION_VERSION, native_outcome=None,
                 observer_state="not_requested", observer_failures=[], verification_failures=[], native_output_completion="not_requested")
         stage = "validate_request"
         operation = _request(request)
@@ -394,7 +392,7 @@ def run_molecular_sequence_driver(*, request_file: dict, output_directory: str) 
     # Failure to inspect/seal the output directory is a writer failure that the
     # caller must observe; it cannot be replaced by an invented declaration.
     declaration["files"] = _declarations(directory)
-    if declaration["version"] == DECLARATION_VERSION_V2 and request is not None and request.get("mode") == "native":
+    if declaration["version"] == PROTEASE_DECLARATION_VERSION and request is not None and request.get("mode") == "native":
         try:
             declaration["files"].update(_protease_native_declarations(directory, request["selection"],
                 failures=declaration["verification_failures"]))
@@ -422,7 +420,7 @@ def main(argv=None):
         return 1
     sys.stdout.write(json.dumps(declaration, allow_nan=False) + "\n")
     unsuccessful = declaration["driver_failure"] is not None or declaration["native_failure"] is not None
-    if declaration["version"] == DECLARATION_VERSION_V2:
+    if declaration["version"] == PROTEASE_DECLARATION_VERSION:
         unsuccessful = unsuccessful or bool(declaration["observer_failures"] or declaration["verification_failures"])
         unsuccessful = unsuccessful or declaration["mode"] == "native" and declaration["native_outcome"] != "completed"
         unsuccessful = unsuccessful or declaration["mode"] == "native" and declaration["observer_state"] != "captured"
@@ -433,5 +431,5 @@ if __name__ == "__main__":
     raise SystemExit(main())
 
 
-__all__ = ["REQUEST_VERSION", "DECLARATION_VERSION", "REQUEST_VERSION_V2", "DECLARATION_VERSION_V2",
+__all__ = ["REQUEST_VERSION", "DECLARATION_VERSION", "PROTEASE_REQUEST_VERSION", "PROTEASE_DECLARATION_VERSION",
     "run_molecular_sequence_driver", "main"]

@@ -1,4 +1,4 @@
-"""The investigation finding of a retained pairwise BLAST grading (``blast_pairwise_sheet_v1``): controlled features
+"""The investigation finding of a retained pairwise BLAST grading (``blast_pairwise_sheet``): controlled features
 that code reads from the saved grading artifact, each with its validator.
 
 A pairwise sheet records which residues of the query and of the subject correspond and how many, so the features are
@@ -15,7 +15,7 @@ import math
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.feature_rules import validated
 
 EVIDENCE_TYPE = 'pairwise_residue_correspondence'
-SHEET_SCHEMA = 'blast_pairwise_sheet_v1'
+SHEET_SCHEMA = 'blast_pairwise_sheet'
 
 # name -> validator: ('number', low, high), ('count',), ('choice', options), ('boolean',), ('refs',); ``optional``
 # marks a feature absent when the sheet or the report holds no value for it.
@@ -118,6 +118,6 @@ def grading_features(grading, sheet_ref):
 
 
 def saved_grading_features(reader, grading_ref):
-    """The features of one retained grading artifact this Episode holds (``tool_grading_artifact_v1/v2``)."""
+    """The features of one retained grading artifact this Episode holds (``tool_grading_artifact``)."""
     body = json.loads(reader.get_artifact(grading_ref))
     return grading_features(body['grading'], grading_ref)

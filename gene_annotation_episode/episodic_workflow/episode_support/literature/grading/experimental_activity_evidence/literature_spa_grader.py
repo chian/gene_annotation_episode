@@ -43,7 +43,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     MIN_PER_UNIT, NM_PER_UNIT, SPA_CRITERIA)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_spa_grade_v1'
+VERSION = 'a105_spa_grade'
 INTERACTION = {'yes': 'detected', 'no': 'not_detected'}   # the stated yes/no result of the fact binding_detected
 CRITERIA = tuple(criterion['id'] for criterion in SPA_CRITERIA)
 CONSTANTS = ('kd', 'ki')                      # the order in which the binding constant of a record is taken

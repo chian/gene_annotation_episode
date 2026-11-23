@@ -35,7 +35,7 @@ def retained_metadata(value):
         'per_file_bytes': 'hard_rlimit_fsize_equal_to_scratch_bytes',
         'process_tree': 'systemd_control_group', 'filesystem_sandbox': False,
     }
-    return {'native_lifecycle_version': 'durable_systemd_native_job_v2',
+    return {'native_lifecycle_version': 'durable_systemd_native_job',
         'policy': policy, 'enforcement': enforcement}
 
 

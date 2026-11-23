@@ -18,8 +18,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.evolution
 
 PROVIDER = 'native.a104.measurement'
 # A104 grades exactly these four native measurement kinds, each on the unit interval.
-KINDS = {'a104_placement_v1': 'placement', 'a104_history_comparison_v1': 'history_comparison',
-         'a104_clade_composition_v1': 'clade_composition', 'a104_robustness_v1': 'robustness'}
+KINDS = {'a104_placement': 'placement', 'a104_history_comparison': 'history_comparison',
+         'a104_clade_composition': 'clade_composition', 'a104_robustness': 'robustness'}
 PUBLICATIONS = TableDeclaration(name='a104_publications',
     columns=('source_ref', 'target_ref', 'kind', 'body', 'grading_artifact_ref'), key=('source_ref',),
     record_refs=('source_ref', 'target_ref', 'grading_artifact_ref'))
@@ -31,7 +31,7 @@ def native_grade(body):
     # An unevaluable value stays None, never 0.
     require(value is None or type(value) in {int, float} and math.isfinite(value) and 0 <= value <= 1,
             'a104_native_value_outside_unit_interval')
-    return {'schema': 'a104_native_sheet_v1', 'version': VERSION, 'profile': PROFILE,
+    return {'schema': 'a104_native_sheet', 'version': VERSION, 'profile': PROFILE,
         'kind': KINDS[body['schema']], 'producer_operation': body['producer_operation'],
         'target_ref': body['target_ref'], 'raw_value': value, 'native_measurement_sha256': digest(body),
         'attribution': 'this_native_tree_test_and_original_target_region',
@@ -48,9 +48,9 @@ def publish(store, body):
     from gene_annotation_episode.episodic_workflow.episode_support.grading.evolutionary_history_evidence.scoring import (
         placement, history_comparison, recompute_measurement)
     known = {body['native_phylogeny_ref']}
-    if body['schema'] == 'a104_placement_v1':
+    if body['schema'] == 'a104_placement':
         expected = placement(store, body['native_phylogeny_ref'], body['analysis'], body['split_index'], known)
-    elif body['schema'] == 'a104_history_comparison_v1':
+    elif body['schema'] == 'a104_history_comparison':
         expected = history_comparison(store, body['native_phylogeny_ref'], body['family_analysis'],
                                       body['organismal_analysis'], body['selected_tip_ids'], known)
     else:
@@ -97,16 +97,16 @@ def native_observation(store, reference):
     measured = received_measurement(store, reference)
     require(measured is not None, 'a104_observation_requires_host_native_measurement')
     body, values = measured['body'], {}
-    if body['schema'] == 'a104_placement_v1':
+    if body['schema'] == 'a104_placement':
         values = {'bootstrap_split_matches': body['bootstrap_population']['matches'],
             'bootstrap_split_denominator': body['bootstrap_population']['denominator'],
             'bootstrap_split_frequency': body['raw_value']}
-    elif body['schema'] == 'a104_history_comparison_v1':
+    elif body['schema'] == 'a104_history_comparison':
         values = {'unrooted_robinson_foulds_distance': body['comparison']['rf']['value'],
                   'matched_taxon_count': len(body['taxon_join'])}
-    elif body['schema'] == 'a104_clade_composition_v1':
+    elif body['schema'] == 'a104_clade_composition':
         values = {'native_reference_member_count': len(body['characterization_subject_refs'])}
-    elif body['schema'] == 'a104_robustness_v1':
+    elif body['schema'] == 'a104_robustness':
         values = {'placement_membership_intersection': body['stability_numerator'],
                   'placement_membership_union': body['stability_denominator'],
                   'placement_membership_stability': body['stability_fraction']}

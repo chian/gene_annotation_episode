@@ -25,12 +25,12 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.calcul
 )
 
 PROVIDER = 'literature.a105.product_coupling'
-VERSION = 'literature_product_coupling_record_v1'
+VERSION = 'literature_product_coupling_record'
 NAMESPACE = 'literature_product_coupling_cells'
 REQUESTED = 'requested_product_coupling_components'
 VIEW = 'product_coupling_components'
 SCOPE = 'source_product_coupling'
-PROJECTION_VERSION = 'product_coupling_projection_v2'
+PROJECTION_VERSION = 'product_coupling_projection'
 MODEL_COMPONENTS = frozenset(('productive_fraction', 'calculated_coupling_percent',
     'displayed_coupling_difference_pp', 'productive_fraction_variance',
     'productive_fraction_standard_uncertainty'))
@@ -116,7 +116,7 @@ _CONDITION = re.compile(r'\s*'+_SETTING+r'(?:\s*(?:at|and|,|;)\s*'+_SETTING+r')*
 _STATISTICAL_PREFIX = re.compile(r'\b(?:SD|SEM|SE|mean|CV|variance|uncertainty|CI|activity|rate|turnover|coupling)\b', re.I)
 
 
-def _meaning_v1(witness, locations, *, unit=False, condition=False):
+def _meaning(witness, locations, *, unit=False, condition=False):
     """Exact markerless saved-display policy from the immutable218pin001."""
     if witness is None:
         return None
@@ -172,7 +172,7 @@ def _meaning(witness, locations, *, unit=False, condition=False):
     if witness is None:
         return None
     # Coordinate masking follows the original artifact/span policy. Classify
-    # that display afresh; the v1 helper's already redacted display cannot be
+    # that display afresh; the helper's already redacted display cannot be
     # used here because chemical locants must still be available.
     raw = witness['quote'].encode(); flags = [False] * len(raw)
     for location in locations:
@@ -220,7 +220,7 @@ def _meaning(witness, locations, *, unit=False, condition=False):
 
 def _projection_policy(saved):
     if 'projection_version' not in saved:
-        return _meaning_v1
+        return _meaning
     if saved['projection_version'] != PROJECTION_VERSION:
         raise ContractError('product_coupling_saved_projection_version_unsupported')
     return _meaning

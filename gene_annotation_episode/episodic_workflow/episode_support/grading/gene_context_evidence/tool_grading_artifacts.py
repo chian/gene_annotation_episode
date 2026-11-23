@@ -12,15 +12,15 @@ import json
 from gene_annotation_episode.episodic_workflow.episode_support.records.gene_context_evidence.domain import ContractError, canonical
 
 
-SCHEMA = "tool_grading_artifact_v1"
-SCHEMA_V2 = "tool_grading_artifact_v2"
+SCHEMA = "tool_grading_artifact"
+SCHEMA_WITH_CORRESPONDENCE = "tool_grading_artifact_with_correspondence"
 MEDIA_TYPE = "application/vnd.gene-annotation.tool-grading+json"
 
 
 def _required_correspondence(grading):
     schema = grading.get("sheet", {}).get("schema") if isinstance(grading.get("sheet"), dict) else None
-    return schema in {"biopython_pairwise_sheet_v1", "blast_pairwise_sheet_v1",
-        "blast_database_sheet_v1", "blast_database_sheet_v2", "blast_database_sheet_v3"}
+    return schema in {"biopython_pairwise_sheet", "blast_pairwise_sheet",
+        "blast_database_sheet", "blast_database_sheet_record_locator", "blast_database_sheet_population"}
 
 
 def validate_tool_correspondence(grading, correspondence, *, admission=False):
@@ -30,17 +30,17 @@ def validate_tool_correspondence(grading, correspondence, *, admission=False):
     correspondence = validate_correspondence_artifacts(correspondence, admission=admission)
     schema = grading["sheet"]["schema"]
     instances = correspondence["instances"]
-    if schema == "biopython_pairwise_sheet_v1":
+    if schema == "biopython_pairwise_sheet":
         if len(instances) != 1:
             raise ValueError("tool_grading_correspondence_instances_conflict")
         validate_biopython_correspondence(grading, instances[0])
     else:
-        expected = ([('/sheet', grading['sheet'])] if schema == 'blast_pairwise_sheet_v1' else
+        expected = ([('/sheet', grading['sheet'])] if schema == 'blast_pairwise_sheet' else
             [('/sheet/hits/' + str(i), hit) for i, hit in enumerate(grading['sheet']['hits'])])
         if len(instances) != len(expected):
             raise ValueError("tool_grading_correspondence_instances_conflict")
         for instance, (pointer, legacy) in zip(instances, expected):
-            if instance['legacy_pointer'] != pointer or instance['axis_basis'] != 'reported':
+            if instance['source_pointer'] != pointer or instance['axis_basis'] != 'reported':
                 raise ValueError("tool_grading_correspondence_address_conflict")
             program = grading["sheet"].get("normalized_result", {}).get("search", {}).get("program")
             validate_blast_correspondence_instance(legacy, instance, program=program)
@@ -55,7 +55,7 @@ def retain_tool_grading(store, *, provider: str, native_artifact_ref: str,
         raise ContractError("tool_grading_native_artifact_required")
     grading = dict(grading)
     correspondence = grading.pop("correspondence", None)
-    body = {"schema": SCHEMA_V2 if correspondence is not None else SCHEMA, "provider": provider,
+    body = {"schema": SCHEMA_WITH_CORRESPONDENCE if correspondence is not None else SCHEMA, "provider": provider,
             "native_artifact_ref": native_artifact_ref, "grading": grading}
     if _required_correspondence(grading):
         if correspondence is None:
@@ -89,15 +89,15 @@ def source_tool_grading_entries(store, source_ref: str) -> list[dict]:
         try:
             body = json.loads(store.get_artifact(reference))
             fields = {"schema", "provider", "native_artifact_ref", "grading"}
-            if isinstance(body, dict) and body.get("schema") == SCHEMA_V2:
+            if isinstance(body, dict) and body.get("schema") == SCHEMA_WITH_CORRESPONDENCE:
                 fields.add("correspondence")
             if (not isinstance(body, dict) or set(body) != fields
-                    or body["schema"] not in (SCHEMA, SCHEMA_V2)
+                    or body["schema"] not in (SCHEMA, SCHEMA_WITH_CORRESPONDENCE)
                     or body["provider"] != source["provider"]
                     or body["native_artifact_ref"] != source["artifact_ref"]
                     or not isinstance(body["grading"], dict)):
                 raise ContractError("tool_grading_source_custody_mismatch")
-            if body["schema"] == SCHEMA_V2:
+            if body["schema"] == SCHEMA_WITH_CORRESPONDENCE:
                 if not _required_correspondence(body["grading"]):
                     raise ContractError("tool_grading_unexpected_correspondence")
                 validate_tool_correspondence(body["grading"], body["correspondence"])
@@ -115,4 +115,4 @@ def source_tool_gradings(store, source_ref: str) -> list[dict]:
     return [entry["grading"] for entry in source_tool_grading_entries(store, source_ref)]
 
 
-__all__ = ["retain_tool_grading", "source_tool_gradings", "source_tool_grading_entries", "SCHEMA", "SCHEMA_V2", "MEDIA_TYPE"]
+__all__ = ["retain_tool_grading", "source_tool_gradings", "source_tool_grading_entries", "SCHEMA", "SCHEMA_WITH_CORRESPONDENCE", "MEDIA_TYPE"]

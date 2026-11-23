@@ -51,7 +51,7 @@ magnesium, glycerol), the type and the amount of the non-specific nucleic acid i
 percent, the run (time, voltage, temperature), the spread of the KD and its kind, and the statement that only this method was used.
 """
 
-VERSION = 'a105_emsa_criteria_v1'
+VERSION = 'a105_emsa_criteria'
 
 # ---- Threshold constants -------------------------------------------------
 NM_PER_UNIT = {'pM': 0.001, 'nM': 1.0, 'uM': 1000.0, 'mM': 1000000.0}  # FIXED_BY_DEFINITION: nanomolar per concentration unit.

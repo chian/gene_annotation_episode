@@ -13,15 +13,14 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.calcul
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.evolutionary_history_evidence.literature_compiled_assay_inputs import ROLES, UNITS, LINKS
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.evolutionary_history_evidence.literature_experimental_contracts import ExperimentalContractError
 
-VERSION = 'a105_compiled_assay_sheet_v1'
-VERSION_V2 = 'a105_compiled_assay_sheet_v2'
+VERSION = 'a105_compiled_assay_sheet'
 PRIMITIVES = dict(q='net_rate', g='contaminant_rate', k='recovery', E='protein_amount',
                   u='condition_test_rate', v='condition_reference_rate')
-COMPONENTS = (*PRIMITIVES.values(), 'attributed_rate', 'condition_response',
+DIRECT_COMPONENTS = (*PRIMITIVES.values(), 'attributed_rate', 'condition_response',
     'measured_endpoint_per_selected_amount', 'calibrated_measured_endpoint_per_selected_amount',
     'corrected_activity', 'effect_variance', 'effect_standard_uncertainty', 'effect_precision',
     'source_profile_log_ratio', 'source_presence_index')
-FORMULAS = {**{name: 'selected_source_' + role for role, name in PRIMITIVES.items()},
+DIRECT_FORMULAS = {**{name: 'selected_source_' + role for role, name in PRIMITIVES.items()},
     'attributed_rate': 'q-g', 'condition_response': 'u/v',
     'measured_endpoint_per_selected_amount': 'q/E',
     'calibrated_measured_endpoint_per_selected_amount': 'q/(k*E)',
@@ -30,21 +29,21 @@ FORMULAS = {**{name: 'selected_source_' + role for role, name in PRIMITIVES.item
     'effect_standard_uncertainty': 'sqrt(effect_variance)', 'effect_precision': '1/effect_variance',
     'source_profile_log_ratio': 'max(0,corrected_activity)^2/(2*effect_variance)',
     'source_presence_index': 'tanh(source_profile_log_ratio/2)'}
-SECTIONS = {name: 'measurement' for name in PRIMITIVES.values()}
-SECTIONS.update(recovery='validity', protein_amount='amount_normalization',
+DIRECT_SECTIONS = {name: 'measurement' for name in PRIMITIVES.values()}
+DIRECT_SECTIONS.update(recovery='validity', protein_amount='amount_normalization',
     condition_test_rate='comparability', condition_reference_rate='comparability',
     attributed_rate='attribution', condition_response='comparability',
     measured_endpoint_per_selected_amount='amount_normalization',
     calibrated_measured_endpoint_per_selected_amount='calibration_and_amount_normalization',
     corrected_activity='compiled_source_endpoint_effect',
-    **{name: 'uncertainty' for name in COMPONENTS[-5:]})
+    **{name: 'uncertainty' for name in DIRECT_COMPONENTS[-5:]})
 DEPENDENCIES = {**{name: (role,) for role, name in PRIMITIVES.items()},
     'attributed_rate': ('q', 'g'), 'condition_response': ('u', 'v'),
     'measured_endpoint_per_selected_amount': ('q', 'E'),
     'calibrated_measured_endpoint_per_selected_amount': ('q', 'k', 'E'),
-    **{name: ROLES for name in COMPONENTS[10:]}}
-MEANINGS = {name: 'Selected source quantity; scientific eligibility for combination is separate.' for name in PRIMITIVES.values()}
-MEANINGS.update(attributed_rate='Endpoint rate after the additional supported contaminant subtraction only.',
+    **{name: ROLES for name in DIRECT_COMPONENTS[10:]}}
+DIRECT_MEANINGS = {name: 'Selected source quantity; scientific eligibility for combination is separate.' for name in PRIMITIVES.values()}
+DIRECT_MEANINGS.update(attributed_rate='Endpoint rate after the additional supported contaminant subtraction only.',
     condition_response='Applicable nuisance-condition test/reference response, excluding the intended change.',
     measured_endpoint_per_selected_amount='Measured endpoint rate per selected molecular amount; not contaminant-isolated or nuisance-corrected.',
     calibrated_measured_endpoint_per_selected_amount='Reporter-calibrated measured endpoint per selected molecular amount; not contaminant-isolated or nuisance-corrected.',
@@ -72,8 +71,8 @@ def _cell(name, value, unit, *, reason=None, formula=None, origin='derived', con
     if reason is not None:
         value = None
     return {'value': value, 'unit': unit, 'status': 'unavailable' if value is None else 'populated',
-        'unavailable_reason': reason, 'formula': formula or FORMULAS[name], 'origin': origin,
-        'section': SECTIONS[name], 'meaning': MEANINGS[name], 'conditional_on': list(conditional),
+        'unavailable_reason': reason, 'formula': formula or DIRECT_FORMULAS[name], 'origin': origin,
+        'section': DIRECT_SECTIONS[name], 'meaning': DIRECT_MEANINGS[name], 'conditional_on': list(conditional),
         'qualifications': list(qualifiers)}
 
 
@@ -126,10 +125,8 @@ def _matrix(extraction, values):
     return deepcopy(raw)
 
 
-def populate_compiled_assay(extraction):
+def _populate_direct(extraction):
     """Combine only physically eligible source operands, preserving partials."""
-    if extraction['version'] == 'a105_compiled_assay_inputs_v2':
-        return _populate_v2(extraction)
     operands = extraction['operands']; stages = extraction['correction_stages']
     reasons = {role: _role_reason(extraction, role) for role in ROLES}
     values = {role: None if operands[role] is None else operands[role]['value'] for role in ROLES}
@@ -248,7 +245,7 @@ def populate_compiled_assay(extraction):
         cells[name] = _cell(name, value, cell['unit'], reason=why, formula=formula,
             origin=cell['origin'], conditional=cell['conditional_on'])
     dependencies = {}
-    for name in COMPONENTS:
+    for name in DIRECT_COMPONENTS:
         selected = []
         for role in DEPENDENCIES[name]:
             if role in identities and name not in PRIMITIVES.values():
@@ -272,7 +269,7 @@ def populate_compiled_assay(extraction):
             'covariance_for_bypassed_correction_stages_unimplemented', 'no_target_correspondence_or_annotation_credit']}
 
 # Finite interpretation/failure codes are distinct from original source literals.
-REASONS = tuple(sorted({
+DIRECT_REASONS = tuple(sorted({
     'operand_not_selected', 'selected_component_unavailable', 'approximate_operand_requires_unimplemented_compilation',
     'bounded_operand_compilation_unimplemented', 'operand_unit_incompatible_with_compilation', 'numerical_model_range',
     'enzyme_activity_spike_is_not_reporter_recovery', 'reporter_recovery_meaning_unknown', 'reporter_recovery_meaning_conflicting',
@@ -290,11 +287,11 @@ REASONS = tuple(sorted({
       for state in ('not_applied', 'already_applied', 'unknown', 'conflicting')),
     *('residual_variance_relationship_' + state for state in ('different_or_already_included', 'unknown', 'conflicting')),
 }))
-FORMULA_VARIANTS = tuple(dict.fromkeys((*FORMULAS.values(),
+FORMULA_VARIANTS = tuple(dict.fromkeys((*DIRECT_FORMULAS.values(),
     'q_after_already_applied_contaminant_correction', 'identity_of_already_applied_nuisance_correction',
     'source_already_amount_normalized_value', 'source_already_calibrated_amount_normalized_value',
     'source_already_corrected_amount_normalized_value')))
-QUALIFICATIONS = (*REASONS, 'not_contaminant_isolated', 'not_nuisance_corrected',
+QUALIFICATIONS = (*DIRECT_REASONS, 'not_contaminant_isolated', 'not_nuisance_corrected',
                   'source_already_contaminant_corrected', 'source_already_nuisance_corrected')
 
 PROPAGATED_ESTIMANDS = {
@@ -304,18 +301,18 @@ PROPAGATED_ESTIMANDS = {
 }
 PROPAGATED_COMPONENTS = tuple(estimand + suffix for estimand in PROPAGATED_ESTIMANDS
     for suffix in ('_propagated_variance', '_propagated_standard_uncertainty'))
-COMPONENTS_V2 = (*COMPONENTS, *PROPAGATED_COMPONENTS)
-MEANINGS_V2 = {**MEANINGS, **{estimand + suffix:
+COMPONENTS = (*DIRECT_COMPONENTS, *PROPAGATED_COMPONENTS)
+MEANINGS = {**DIRECT_MEANINGS, **{estimand + suffix:
     ('First-order variance propagated from the actual joint operands of ' if suffix == '_propagated_variance'
      else 'Square root of the first-order propagated variance of ') + estimand
     + '; excludes distinct residual variability and uncertainty of other estimands.'
     for estimand in PROPAGATED_ESTIMANDS for suffix in ('_propagated_variance', '_propagated_standard_uncertainty')}}
-FORMULAS_V2 = {**FORMULAS, **{estimand + suffix:
+FORMULAS = {**DIRECT_FORMULAS, **{estimand + suffix:
     ('J_' + estimand + '*selected_joint_covariance*J_' + estimand + '_transpose'
      if suffix == '_propagated_variance' else 'sqrt(' + estimand + '_propagated_variance)')
     for estimand in PROPAGATED_ESTIMANDS for suffix in ('_propagated_variance', '_propagated_standard_uncertainty')}}
-SECTIONS_V2 = {**SECTIONS, **dict.fromkeys(PROPAGATED_COMPONENTS, 'uncertainty')}
-REASONS_V2 = (*REASONS, 'component_covariance_unreported', 'component_joint_covariance_not_supplied',
+SECTIONS = {**DIRECT_SECTIONS, **dict.fromkeys(PROPAGATED_COMPONENTS, 'uncertainty')}
+REASONS = (*DIRECT_REASONS, 'component_covariance_unreported', 'component_joint_covariance_not_supplied',
     'component_covariance_status_unknown')
 
 
@@ -343,25 +340,24 @@ def _uncertainty_metadata(estimand=None, block=None, roles=(), *, scope='not_app
         'propagation_model': 'first_order_covariance_propagation' if estimand else 'none'}
 
 
-def _populate_v2(extraction):
-    """Versioned same-sheet extension; no completion of missing joint blocks."""
+def populate_compiled_assay(extraction):
+    """Same-sheet propagation extension; no completion of missing joint blocks."""
     full_block, full_cov_reason = _block_for(extraction, ROLES)
-    legacy = deepcopy(extraction)
-    legacy['version'] = 'a105_compiled_assay_inputs_v1'
-    legacy.pop('covariance_sources')
-    legacy['covariance_source'] = None
+    working = deepcopy(extraction)
+    working.pop('covariance_sources')
+    working['covariance_source'] = None
     if full_block and not full_cov_reason:
-        legacy['covariance_source'] = deepcopy(full_block)
-        data = legacy['covariance_source']['data']
+        working['covariance_source'] = deepcopy(full_block)
+        data = working['covariance_source']['data']
         order = data['primitive_order']
         data['covariance'] = [[data['covariance'][order.index(a)][order.index(b)] for b in ROLES] for a in ROLES]
-        # The v1 arithmetic wrapper only consumes the matrix after its reader
-        # has checked ownership. V2 has already validated the actual named block.
-        legacy['variance_status'] = ('unknown' if extraction['variance_status'] == 'unknown'
+        # The arithmetic wrapper only consumes the matrix after its reader
+        # has checked ownership. The reader has already validated the actual named block.
+        working['variance_status'] = ('unknown' if extraction['variance_status'] == 'unknown'
             else 'estimated' if 'estimated' in (data['variance_status'], extraction['variance_status']) else 'known')
-    sheet = populate_compiled_assay(legacy)
-    sheet.update(version=VERSION_V2, original_extraction=deepcopy(extraction))
-    sheet['uncertainty'] = {name: _uncertainty_metadata() for name in COMPONENTS}
+    sheet = _populate_direct(working)
+    sheet.update(original_extraction=deepcopy(extraction))
+    sheet['uncertainty'] = {name: _uncertainty_metadata() for name in DIRECT_COMPONENTS}
     for estimand, roles in PROPAGATED_ESTIMANDS.items():
         mean = sheet['cells'][estimand]
         block, why = _block_for(extraction, roles)
@@ -391,19 +387,19 @@ def _populate_v2(extraction):
                 propagated, why = None, 'invalid_propagated_variance'
         variance_name = estimand + '_propagated_variance'
         variance = _cell(estimand, propagated, 'per_min_squared', reason=why,
-            formula=FORMULAS_V2[variance_name], conditional=('first_order_covariance_propagation',))
+            formula=FORMULAS[variance_name], conditional=('first_order_covariance_propagation',))
         for suffix, unit, value in (('_propagated_variance', 'per_min_squared', variance['value']),
                 ('_propagated_standard_uncertainty', 'per_min', math.sqrt(variance['value']) if variance['value'] is not None else None)):
             name = estimand + suffix
             cell = _cell(estimand, value, unit, reason=variance['unavailable_reason'],
-                formula=FORMULAS_V2[name], conditional=('first_order_covariance_propagation',))
-            cell.update(section='uncertainty', meaning=MEANINGS_V2[name], qualifications=deepcopy(mean['qualifications']))
+                formula=FORMULAS[name], conditional=('first_order_covariance_propagation',))
+            cell.update(section='uncertainty', meaning=MEANINGS[name], qualifications=deepcopy(mean['qualifications']))
             sheet['cells'][name] = cell
             sheet['dependencies'][name] = deepcopy(sheet['dependencies'][estimand])
             sheet['uncertainty'][name] = _uncertainty_metadata(estimand, block, roles, scope='operand_propagated')
-    # The legacy total/profile still require the distinct residual and supported
+    # The working total/profile still require the distinct residual and supported
     # full model. A smaller component covariance cannot supply those quantities.
-    for name in COMPONENTS[11:]:
+    for name in DIRECT_COMPONENTS[11:]:
         sheet['uncertainty'][name] = _uncertainty_metadata('corrected_activity', full_block, ROLES if full_block else (), scope='total_with_distinct_residual')
         if full_cov_reason and sheet['cells']['corrected_activity']['status'] == 'populated':
             sheet['cells'][name].update(value=None, status='unavailable', unavailable_reason=full_cov_reason)
@@ -413,7 +409,7 @@ def _populate_v2(extraction):
     return sheet
 
 # Pure common scientific assessment, not yet bound to a selected operation.
-COMMON_SHEET = 'a105_common_assessment_sheet_v1'
+COMMON_SHEET = 'a105_common_assessment_sheet'
 _COMMON_FORMULAS = {
     'product_reference_contrast':'P_test/P_reference',
     'reporter_reference_contrast':'H_test/H_reference',

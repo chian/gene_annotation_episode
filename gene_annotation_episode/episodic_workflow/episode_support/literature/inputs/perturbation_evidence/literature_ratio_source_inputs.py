@@ -91,7 +91,7 @@ def _build_schemas():
             'comparison_relation': RELATION, 'physical_measurement': meaning(), 'reference_measurement': meaning()})
 
 
-    REQUEST = obj({'version': {'const': 'relative_signal_source_selection_v2'}, 'source_ref': REF,
+    REQUEST = obj({'version': {'const': 'relative_signal_source_selection'}, 'source_ref': REF,
         'comparison': obj(comparison), 'representations': arr({'oneOf': [representation('jats_percent', jats_selection),
             *[representation(kind, visual_selection) for kind in ('visual_ratio', 'visual_percent', 'visual_signal_pair')]]})})
     RATIONAL = obj({'numerator': {'type': 'string', 'pattern': '^-?[0-9]+$'},
@@ -120,7 +120,7 @@ def _build_schemas():
 
 
     view_fields = {'id': REF, 'record_type': {'const': 'image_view'}, 'origin': {'const': 'tool'},
-        'representation': {'const': 'selected_native_image_frame_v1'}, 'source_ref': REF, 'input_source_ref': REF,
+        'representation': {'const': 'selected_native_image_frame'}, 'source_ref': REF, 'input_source_ref': REF,
         'original_artifact_ref': REF, 'image_artifact_ref': REF, 'native_format': TEXT, 'native_initial_mode': TEXT,
         'selected_mode': TEXT, 'display_mode': TEXT, 'frame': INDEX,
         'frame_count': {'type': 'integer', 'minimum': 1}, 'width': {'type': 'integer', 'minimum': 1},
@@ -145,7 +145,7 @@ def _build_schemas():
         'reading_state': choice(*READING), 'readings': arr(reading),
         'fragments': arr(obj({'selection': FRAGMENT, 'locator': nullable(IMAGE_LOCATOR), 'diagnostics': arr(DIAGNOSTIC)})),
         'origin': choice('reported', 'visual_transcription'), 'diagnostics': arr(DIAGNOSTIC)})
-    EXTRACTION = obj({'version': {'const': 'relative_signal_source_extraction_v2'}, 'selection': REQUEST,
+    EXTRACTION = obj({'version': {'const': 'relative_signal_source_extraction'}, 'selection': REQUEST,
         'sources': arr(obj({'source_ref': REF, 'representation': choice('original', 'text'),
             'artifact_ref': {'type': ['string', 'null'], 'format': 'reference'},
             'byte_sha256': {'type': ['string', 'null']}, 'state': choice('available', 'unavailable'),
@@ -157,7 +157,7 @@ def _build_schemas():
         'status': choice('populated', 'conflicting', 'unavailable'), 'origin': choice('reported', 'visual_transcription', 'derived', 'proposed'),
         'formula': TEXT, 'unavailable_reason': {'type': ['string', 'null'], 'enum': [*REASONS, None]},
         'conditional_on': arr(choice('source_comparison_interpretation', 'nominated_printed_signal_pair'), uniqueItems=True)})
-    SHEET = obj({'version': {'const': 'relative_signal_sheet_v2'}, 'scope': {'const': 'reported_relative_signal'},
+    SHEET = obj({'version': {'const': 'relative_signal_sheet'}, 'scope': {'const': 'reported_relative_signal'},
         'cells': obj({name: CELL for name in COMPONENTS}), 'selected_roster_resolved': BOOL,
         'point_candidate_set_complete': BOOL, 'known_source_conflict': BOOL,
         'independent_preparation_count': {'type': 'null'}, 'annotation_credit': {'type': 'null'}})
@@ -200,7 +200,6 @@ def _build_schemas():
             for child in node:
                 add_text_spans(child)
     add_text_spans(EXTRACTION)
-    EXTRACTION['properties']['version']['const'] = 'relative_signal_source_extraction_v3'
     return REQUEST, EXTRACTION, SHEET
 
 
@@ -490,7 +489,7 @@ def read_relative_signal_source_inputs(selection, *, read_source, read_view, evi
                 row['diagnostics'].append(_diagnostic('ambiguous_transcription' if row['reading_state'] == 'ambiguous' else 'source_representation_conflict', 'reading_state'))
         row['parse_status'] = _parse_status(row)
         rows.append(row)
-    output = {'version': 'relative_signal_source_extraction_v3', 'selection': selection,
+    output = {'version': 'relative_signal_source_extraction', 'selection': selection,
         'sources': sources, 'views': views, 'comparison': {k: meaning(v) for k, v in selection['comparison'].items()},
         'representations': rows, 'interpretation_attribution': 'investigating_episode_interpretation', 'evidence_origin': evidence_origin}
     return validate_relative_signal_source_extraction(output)

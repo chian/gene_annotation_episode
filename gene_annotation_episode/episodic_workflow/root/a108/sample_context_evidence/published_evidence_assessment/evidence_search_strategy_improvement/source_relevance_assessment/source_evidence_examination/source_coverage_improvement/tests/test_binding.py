@@ -22,7 +22,7 @@ SOURCE = 'source_' + 'a' * 24
 ARTIFACT = 'artifact_' + 'a' * 24
 ROOT = 'gene_annotation_episode.episodic_workflow.root'
 TASK = {'kind': 'verified_source_leads', 'evidence_axis': 'A108', 'credit_unit': 1.0,
-        'version': 'literature_local_task_v1'}
+        'version': 'literature_local_task'}
 FIRST = {'source_ref': SOURCE, 'representation': 'text', 'offset': 0, 'limit': 10}
 SECOND = {'source_ref': SOURCE, 'representation': 'text', 'offset': 10, 'limit': 10}
 
@@ -33,9 +33,9 @@ def files():
 
 
 def assignment(task=TASK, spans=(FIRST, SECOND)):
-    page = {'version': 'page_assignment_v1', 'source_ref': SOURCE, 'representation': 'text', 'artifact_ref': ARTIFACT,
+    page = {'version': 'page_assignment', 'source_ref': SOURCE, 'representation': 'text', 'artifact_ref': ARTIFACT,
             'question_context_refs': [], 'prior_delivery_refs': []}
-    return {'version': 'reading_assignment_v1', 'page': page, 'selection': {'spans': list(spans)},
+    return {'version': 'reading_assignment', 'page': page, 'selection': {'spans': list(spans)},
             'literature_task': task, 'proposed_annotation_ref': 'hyp_1', 'scope': {'subject_refs': ['sub_1']},
             'received_record_refs': [SOURCE, ARTIFACT]}
 

@@ -164,12 +164,12 @@ def test_actual_saved_partition_component_is_bound_and_cannot_masquerade_as_rate
 
 
 def test_controlled_design_uses_actual_component_key_and_preserves_native_value(tmp_path):
-    from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.tests.test_literature_controlled_response_storage_v3 import native_case
+    from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.tests.test_literature_controlled_response_storage import native_case
     from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_controlled_response_storage import LiteratureControlledResponseRepository
     store, context, native_args, _ = native_case(tmp_path)
     try:
         repo = LiteratureControlledResponseRepository(store, context.run_id, evidence_origin='synthetic_fixture')
-        outcome = repo.populate_v3(context, native_args, 'controlled')
+        outcome = repo.populate(context, native_args, 'controlled')
         rows = [r for r in outcome['result']['cells'] if r['component'] == 'controlled_response_difference' and r['kind'] == 'final']
         assert len(rows) == 1
         row = rows[0]

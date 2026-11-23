@@ -11,7 +11,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.structura
 from gene_annotation_episode.episodic_workflow.episode_support.records.structural_homology_evidence.domain import ContractError, canonical, obj, validate_schema
 
 
-RESOURCE_STATUS_VERSION = 'resource_execution_status_v1'
+RESOURCE_STATUS_VERSION = 'resource_execution_status'
 _TEXT = {'type': 'string', 'minLength': 1}
 RESOURCE_OBSERVATION_SCHEMA = obj({
     'observed_at': _TEXT,

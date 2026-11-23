@@ -73,7 +73,7 @@ class NativeTimingInformation:
             raise ValueError('explicit_positive_monitoring_information_unit_required')
 
     def as_record(self):
-        return {'version': 'received_native_timing_information_v2', 'information_unit': self.information_unit,
+        return {'version': 'received_native_timing_information', 'information_unit': self.information_unit,
             'contribution': 'new_received_complete_duration_per_physical_attempt',
             'received_job_duration': 'typed_child_status_with_matching_recorded_native_measurement',
             'baseline': 'frozen_inherited_receipts_and_original_inputs',

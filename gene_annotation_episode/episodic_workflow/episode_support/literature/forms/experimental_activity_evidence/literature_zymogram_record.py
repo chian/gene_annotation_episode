@@ -55,7 +55,7 @@ does not judge it; the converter does. The constructors take ``support`` and def
 the extraction (the extraction always passes the model's answer).
 """
 
-VERSION = 'a105_zymogram_record_v1'
+VERSION = 'a105_zymogram_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'zymogram'
 QUANTITIES = ('band_mass', 'expected_mass', 'replicate_count')

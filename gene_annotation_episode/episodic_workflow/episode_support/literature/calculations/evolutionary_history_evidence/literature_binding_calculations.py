@@ -15,7 +15,7 @@ import math
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.evolutionary_history_evidence.literature_experimental_contracts import ExperimentalContractError
 
 
-VERSION = "binding_parameter_sheet_v1"
+VERSION = "binding_parameter_sheet"
 COMPONENTS = (
     "reference_parameter", "test_parameter", "reference_reported_spread",
     "test_reported_spread", "reference_relative_spread", "test_relative_spread",
@@ -141,7 +141,7 @@ def _physical_identity(row):
 
 def _validate(extraction):
     _keys(extraction, _EXTRACTION_KEYS, "extraction")
-    if extraction["version"] != "binding_parameter_extraction_v1":
+    if extraction["version"] != "binding_parameter_extraction":
         _fail("unsupported_extraction_version", "version")
     if extraction["parameter_kind"] not in ("ic50", "reported_hill_kd"):
         _fail("unsupported_parameter_kind", "parameter_kind")

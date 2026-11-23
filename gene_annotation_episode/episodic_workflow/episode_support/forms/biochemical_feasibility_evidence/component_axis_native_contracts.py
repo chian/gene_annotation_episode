@@ -6,7 +6,7 @@ attribution. Only the shared HPC adapter authenticates their input/output bytes.
 from copy import deepcopy
 
 
-VERSION = 'component_axis_native_v1'
+VERSION = 'component_axis_native'
 OPERATIONS = {'A110': 'chemistry.request_accounting_hpc'}
 
 

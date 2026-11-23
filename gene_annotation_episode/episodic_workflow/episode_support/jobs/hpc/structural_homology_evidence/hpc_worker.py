@@ -20,7 +20,7 @@ from urllib.request import urlopen
 import zlib
 
 
-VERSION = 'a102_shared_hpc_native_v1'
+VERSION = 'a102_shared_hpc_native'
 
 
 def canonical(value):

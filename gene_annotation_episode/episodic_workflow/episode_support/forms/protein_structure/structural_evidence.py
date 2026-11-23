@@ -9,7 +9,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.structura
 from gene_annotation_episode.episodic_workflow.episode_support.instructions.structural_homology_evidence.evidence_axis_instructions import VERSION as INSTRUCTION_VERSION, validate_instruction_entry
 
 
-VERSION = 'a102_structural_evidence_v2'
+VERSION = 'a102_structural_evidence'
 NAME = 'Structural evidence'
 DESCRIPTION = ('Investigate comparative and experimentally determined structural evidence, '
     'including model identity, correspondence, function-relevant features and local validation.')

@@ -315,7 +315,7 @@ def _conversion_output(*, operation, input_records, parsed_maskinfo, custody, na
     for failure in failures:
         if failure not in unique:
             unique.append(failure)
-    return {"version": "sequence_masking_parsed_output_v1", "format": operation["output_format"],
+    return {"version": "sequence_masking_parsed_output", "format": operation["output_format"],
         "occurrence": occurrence, "custody": custody, "records": records, "unassigned_records": unassigned,
         "checks": checks, "failures": unique, "native_maskinfo": parsed, "known_zero_records": zeros}
 

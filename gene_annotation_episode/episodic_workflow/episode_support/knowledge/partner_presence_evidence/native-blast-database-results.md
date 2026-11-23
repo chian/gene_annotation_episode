@@ -9,7 +9,7 @@ and monitoring section describes the actual software/resource requirements.
 
 ## Choose the measurements needed for the assigned investigation
 
-The result selector is `native_blast_database_result_selector_v1` with
+The result selector is `native_blast_database_result_selector` with
 `acquisition: complete_bound_bundle`. Each projection selects one result family,
 rows by offset/limit or previously received record keys, and explicit `metrics`
 and `booleans`. A family occurs once in a selector. At least one measurement or

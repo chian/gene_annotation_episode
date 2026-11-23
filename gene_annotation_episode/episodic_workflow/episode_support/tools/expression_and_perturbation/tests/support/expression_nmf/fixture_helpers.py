@@ -23,7 +23,7 @@ def prepared_software(attempt):
             runtime[row['path']] = {'path': row['path']}
     python = {'path': file_pin(sys.executable)['path']}
     runtime.pop(python['path'], None)
-    result = {'version': 'expression_nmf_software_v1', 'python': python, 'python_version': sys.version,
+    result = {'version': 'expression_nmf_software', 'python': python, 'python_version': sys.version,
         'python_home': str(attempt / 'runtime'), 'module_root': str(source),
         'implementation_files': [{'path': str(p)} for p in sorted(implementations)], 'dependency_roots': [str(deps)],
         'distributions': [{'name': d.metadata['Name'], 'version': d.version, 'requires': d.requires or []}
@@ -34,7 +34,7 @@ def prepared_software(attempt):
 def selected_job(software, input_path, *, normalization='none', rank=2, max_iter=1000):
     path = Path(input_path)
     raw = path.read_bytes()
-    return {'version': 'native_expression_nmf_job_v1', 'operation': OPERATION, 'mode': MODE,
+    return {'version': 'native_expression_nmf_job', 'operation': OPERATION, 'mode': MODE,
         'input': {'path': str(path), **identity(raw), 'artifact_ref': 'artifact_' + identity(raw)['sha256'],
             'delimiter': ',', 'metadata': {'units': 'counts'}},
         'parameters': default_nmf_parameters(rank=rank, normalization=normalization, max_iter=max_iter),

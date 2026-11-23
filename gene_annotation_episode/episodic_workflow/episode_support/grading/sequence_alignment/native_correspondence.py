@@ -39,7 +39,7 @@ class NativeCorrespondenceScoring:
         for row in annotation_assessments(store, known, annotation, target, scope):
             observation = row['observation']
             source = store.get(observation['source_ref']) if observation['source_ref'] in known else None
-            native_sequence = source is not None and observation['origin'] == 'tool' and ('native_blast' in observation or source.get('provider') in {'ncbi_blast', 'native.phmmer.alignment'} or any(((entry['grading'].get('sheet') or {}).get('schema', '').startswith('blast_') or (entry['grading'].get('sheet') or {}).get('schema') == 'hmmer_search_sheet_v1' for entry in source_tool_grading_entries(store, source['id']))))
+            native_sequence = source is not None and observation['origin'] == 'tool' and ('native_blast' in observation or source.get('provider') in {'ncbi_blast', 'native.phmmer.alignment'} or any(((entry['grading'].get('sheet') or {}).get('schema', '').startswith('blast_') or (entry['grading'].get('sheet') or {}).get('schema') == 'hmmer_search_sheet' for entry in source_tool_grading_entries(store, source['id']))))
             references = [observation['id']] if native_sequence else []
             if not references:
                 continue
@@ -133,7 +133,7 @@ class NativeCorrespondenceScoring:
                         raise A101ScoringUnavailable('a101_native_grader_failed', observation_ref=reference, failure=grading['failure'])
                     continue
                 schema = (grading.get('sheet') or {}).get('schema', '')
-                if not (schema == 'hmmer_search_sheet_v1' or schema.startswith('blast_')):
+                if not (schema == 'hmmer_search_sheet' or schema.startswith('blast_')):
                     if observed['kind'] == 'alignment':
                         unsupported.append({'observation_ref': reference, 'schema': schema})
                     continue

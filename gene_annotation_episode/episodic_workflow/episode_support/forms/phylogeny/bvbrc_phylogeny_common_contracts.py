@@ -586,7 +586,7 @@ def _populations(value, alignments, trees, records, anchors):
 
 def _assembly(value, provider, analysis, alignments, trees, records, anchors, members):
     _shape(value, ('version', 'analysis_id', 'caller_populations', 'locus_bindings', 'genome_request_sets', 'family_matrices', 'historical_frequencies', 'model_associations'), 'assembly_shape_invalid')
-    _require(value['version'] == 'bvbrc_phylogeny_assembly_v1' and value['analysis_id'] == analysis['analysis_id'], 'assembly_analysis_conflict')
+    _require(value['version'] == 'bvbrc_phylogeny_assembly' and value['analysis_id'] == analysis['analysis_id'], 'assembly_analysis_conflict')
     _populations(value['caller_populations'], alignments, trees, records, anchors)
     _require(not value['caller_populations']['native'], 'caller_native_population_forbidden')
     for key in ('locus_bindings', 'genome_request_sets', 'family_matrices', 'historical_frequencies', 'model_associations'):
@@ -859,7 +859,7 @@ def validate_shared_fields(sheet: dict, *, provider: Literal['gene_tree', 'codon
     _require(provider in ('gene_tree', 'codon_tree'), 'provider_invalid')
     specific = {'loci'} if provider == 'gene_tree' else {'genomes', 'families', 'models'}
     _shape(sheet, COMMON_KEYS | specific | {'schema_version', 'tool', 'mode'}, 'sheet_shape_invalid')
-    expected = ('bvbrc_gene_tree_sheet_v1', 'C-L194-GeneTree') if provider == 'gene_tree' else ('bvbrc_codon_tree_sheet_v1', 'C-L193-CodonTree')
+    expected = ('bvbrc_gene_tree_sheet', 'C-L194-GeneTree') if provider == 'gene_tree' else ('bvbrc_codon_tree_sheet', 'C-L193-CodonTree')
     _require((sheet['schema_version'], sheet['tool']) == expected, 'sheet_header_invalid')
     for key in specific:
         c.sequence(sheet[key], stored=True)

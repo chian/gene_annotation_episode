@@ -1,4 +1,4 @@
-"""What the parent gives: one practical assignment (``practical_assignment_v1``) for a configured HPC resource.
+"""What the parent gives: one practical assignment (``practical_assignment``) for a configured HPC resource.
 
 Every field is a property of the old ``ASSIGNMENT_SCHEMA`` (``practical_execution_records``) under its own name;
 ``resource_kind`` is the one the old request schema fixed for this role (``hpc``), and ``resource_id`` was the
@@ -8,7 +8,7 @@ selection) is optional (omitted when absent). ``native_flux_balance_execution`` 
 that ``validate_assignment`` refuses on an HPC resource (``native_flux_balance_local_resource_required``): it is
 declared under its name and raises where the assignment is read.
 
-The old episode also read its parent's own ``execution_launch_assignment_v1`` (``requests``,
+The old episode also read its parent's own ``execution_launch_assignment`` (``requests``,
 ``immutable_input_versions``, ``constraints``) and the parent's recorded request (``runtime_episodes``), and chose
 its request among the parent's frozen HPC requests (``child_assignment_schema``,
 ``frozen_hpc_launch_request_missing``): a child cannot read its parent's assignment, the old runner tables are
@@ -44,7 +44,7 @@ ASSIGNMENT_FORM = RecordForm({
 
 
 def request_yield_class(request):
-    """The old ``ExecutionEpisodeYield._request_yield_class`` for a ``practical_assignment_v1`` request: the class
+    """The old ``ExecutionEpisodeYield._request_yield_class`` for a ``practical_assignment`` request: the class
     of the original execution request without generated identities (copied; the ``compact_<version>`` class it
     gave other versions belonged to the compact flux balance assignments of the local sibling)."""
     requested = request['requested_job']

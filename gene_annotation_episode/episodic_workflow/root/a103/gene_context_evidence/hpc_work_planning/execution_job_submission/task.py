@@ -249,7 +249,7 @@ def selected_execution_task(summary, settings, api):
                          'endpoint': deepcopy(request.get('endpoint')),
                          'constraints': deepcopy(request.get('constraints', {})), 'job': job,
                          'resource': resource_information(settings, resource_id, api)})
-    return {'version': 'selected_execution_task_v1', 'scientific_question': task['scientific_question'],
+    return {'version': 'selected_execution_task', 'scientific_question': task['scientific_question'],
             'selected_tool_info': task['selected_tool_info'], 'requests': selected,
             'constraints': summary['constraints'], 'selector': None, 'result_description': None}
 
@@ -339,7 +339,7 @@ def decide(summary, feedback, ctx):
                'execution_progress': {'handoff_resource_ids': list(summary['handed_off']),
                                       'new_handoff_resource_ids': summary['new_handoff_resource_ids'],
                                       'completed': summary['completed'], 'commissions': summary['commissions']},
-               'credit_binding': {'version': 'execution_received_records_credit_v1',
+               'credit_binding': {'version': 'execution_received_records_credit',
                                   'handoff_unit': summary['handoff_unit'],
                                   'qualification': 'original_request_resource_scope_selector_and_actual_received_'
                                                    'unique_information'},

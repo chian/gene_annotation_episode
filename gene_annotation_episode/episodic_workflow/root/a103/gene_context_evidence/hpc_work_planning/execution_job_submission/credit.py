@@ -1,5 +1,5 @@
 """Credit: the old operational credit of ``launch`` (carried from ``credit.py``: ``credit_kind`` was
-``operational``, ``_live_project_credit`` the formula, binding record ``execution_received_records_credit_v1``,
+``operational``, ``_live_project_credit`` the formula, binding record ``execution_received_records_credit``,
 qualification ``original_request_resource_scope_selector_and_actual_received_unique_information``).
 
 ``handoff_unit`` times the number of distinct resource ids with a usable received handoff, not counting the resource

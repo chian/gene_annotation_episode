@@ -33,9 +33,9 @@ from episode_runtime.journal import same_record
 
 from gene_annotation_episode.episodic_workflow.episode_support.forms.gene_context_evidence.communication import plain
 from gene_annotation_episode.episodic_workflow.episode_support.records.gene_context_evidence.domain import ContractError, canonical, identity
-from gene_annotation_episode.episodic_workflow.episode_support.records.documents.gene_context_evidence.materials import _verified_artifact_path, source_window_selection
+from gene_annotation_episode.materials import _verified_artifact_path, source_window_selection
 
-VERSION = 'a103_received_file_v1'
+VERSION = 'a103_received_file'
 NAMESPACES = ('source',)
 # Store tables in which A103's tool registries save each operation's returned tool result by operation key.
 PRODUCING_STATUSES = ('completed', 'partial')

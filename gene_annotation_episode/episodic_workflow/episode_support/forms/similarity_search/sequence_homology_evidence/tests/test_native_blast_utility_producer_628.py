@@ -38,11 +38,11 @@ def job_fixture(tmp_path, mode="create_sequence_database"):
     source = tmp_path / "selected"
     software = identity(source / operation(mode)["program"], b"fixture software: never executed\n")
     Path(software["path"]).chmod(0o755)
-    job = {"version": "native_blast_utility_job_v1", "operation": operation(mode),
+    job = {"version": "native_blast_standard_utility_job", "operation": operation(mode),
         "software": {"executable": software["path"], "sha256": software["sha256"], "engine_version": "fixture-only"},
         "environment": {"BLAST_USAGE_REPORT": "false", "NCBI_DONT_USE_NCBIRC": "1"}, "inputs": [], "databases": [],
         "outputs": [{"role": "stdout", "path_kind": "file", "relative_path": "logs/native.stdout", "format": {
-            "create_sequence_database": "text", "extract_sequences": "blastdbcmd_tabular_v1", "info": "blastdb_info_text",
+            "create_sequence_database": "text", "extract_sequences": "blastdbcmd_tabular", "info": "blastdb_info_text",
             "metadata": "blastdb_metadata_json", "integrity": "blastdbcheck_text"}[mode]},
             {"role": "stderr", "path_kind": "file", "relative_path": "logs/native.stderr", "format": "text"}]}
     if mode == "create_sequence_database":
@@ -58,7 +58,7 @@ def job_fixture(tmp_path, mode="create_sequence_database"):
         provenance = {"source_ref": "source_fixture_only", "pointer": ""}
         db_identity = {"namespace": "fixture", "value": "tiny", "version": None, "release": None,
             "scope": None, "preparation_type": "sequence_database", "source": provenance}
-        manifest = {"version": "native_blast_standard_prepared_database_manifest_v1", "database_key": "tiny",
+        manifest = {"version": "native_blast_standard_prepared_database_manifest", "database_key": "tiny",
             "kind": "blast_nucleotide_sequence", "identity": db_identity, "native_paths": [str(source / "tiny")],
             "files": [{k: v for k, v in f.items() if k != "artifact_ref"} for f in files],
             "preparation": {"method": "other_recorded", "preparation_type": "sequence_database",

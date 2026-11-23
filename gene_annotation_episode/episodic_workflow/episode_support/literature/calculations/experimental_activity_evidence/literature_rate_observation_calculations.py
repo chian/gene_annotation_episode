@@ -4,7 +4,7 @@ from copy import deepcopy
 from decimal import Decimal, localcontext
 from fractions import Fraction
 import math
-VERSION = 'a105_reported_rate_contrast_v1'
+VERSION = 'a105_reported_rate_contrast'
 GROUP_COMPONENTS = ('rate', 'sample_sd', 'cv', 'observed_point_mean', 'observed_point_sd')
 COMPONENTS = ('reference_rate', 'test_rate', 'rate_difference', 'retained_fraction', 'fractional_decrease', 'reference_sample_sd', 'test_sample_sd', 'reference_cv', 'test_cv', 'reference_observed_point_mean', 'test_observed_point_mean', 'reference_observed_point_sd', 'test_observed_point_sd')
 REASONS = ('numerical_model_range', 'insufficient_entry_count', 'no_point_observations', 'nonpositive_mean', 'conflicting_reported_entry', 'source_entry_association_unresolved', 'incomplete_selected_roster', 'missing_reference_group', 'missing_test_group', 'zero_reference_rate')
@@ -96,8 +96,8 @@ def populate_rate_observation_contrast(extraction, *, reference_group, test_grou
     cells['retained_fraction'] = _cell(ratio, 'fraction', FORMULAS['retained_fraction'], reason=ratio_reason)
     cells['fractional_decrease'] = _cell(1 - ratio if ratio is not None else None, 'fraction', FORMULAS['fractional_decrease'], reason=ratio_reason)
     return {'version': VERSION, 'axis': 'A105', 'scope': 'source_reported_entry_endpoint', 'extraction': data, 'groups': groups, 'reference_group': reference_group, 'test_group': test_group, 'cells': cells, 'qualifications': list(QUALIFICATIONS), 'preparation_count': None, 'between_preparation_sd': None, 'mean_se': None, 'difference_se': None, 'corrected_activity': None, 'annotation_credit': None, 'assay_error_rate': None}
-GRID_SHEET_VERSION = 'a105_reported_curve_precision_v1'
-GRID_SOLVER_VERSION = 'dimensionless_profile_stationarity_log2_32_v1'
+GRID_SHEET_VERSION = 'a105_reported_curve_precision'
+GRID_SOLVER_VERSION = 'dimensionless_profile_stationarity_log2_32'
 GRID_REASONS = ('incomplete_selected_roster', 'no_point_observations', 'insufficient_entry_count', 'nonpositive_mean', 'numerical_model_range', 'model_not_selected', 'concentration_unit_unknown', 'positive_concentrations_required', 'insufficient_distinct_concentrations', 'fit_nonpositive_response', 'fit_domain_exhausted', 'fit_solution_unresolved', 'fit_nonidentifiable', 'fit_solver_failed', 'sampling_model_unknown', 'sampling_model_conflicting', 'not_applicable_to_estimator', 'zero_covariance_variance', 'source_measurement_unavailable', 'nondetection_without_point', 'censored_measurement', 'formula_measurement_unsupported', 'numeric_cell_type_required', 'source_cell_error', 'source_error_cell', 'invalid_numeric_lexeme')
 _GRID_POINT_COMPONENTS = ('mean', 'sample_variance', 'sample_sd', 'cv', 'available_point_mean', 'available_point_variance', 'available_point_sd', 'available_point_cv', 'selected_entry_count', 'available_point_count')
 _GRID_ESTIMATORS = ('mean_of_reported_curve_fits', 'fit_of_point_means')
@@ -113,7 +113,7 @@ def reported_curve_precision_selector_schema():
 
 def reported_curve_precision_request_schema():
     from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import obj
-    return obj({'version': {'const': 'a105_reported_curve_precision_request_v1'}, 'fit_model': {'enum': ['none', 'unweighted_positive_km_mm']}, 'requested_components': {'type': 'array', 'uniqueItems': True, 'items': reported_curve_precision_selector_schema()}})
+    return obj({'version': {'const': 'a105_reported_curve_precision_request'}, 'fit_model': {'enum': ['none', 'unweighted_positive_km_mm']}, 'requested_components': {'type': 'array', 'uniqueItems': True, 'items': reported_curve_precision_selector_schema()}})
 
 def _grid_formula(selector):
     scope, component = (selector['scope'], selector['component'])

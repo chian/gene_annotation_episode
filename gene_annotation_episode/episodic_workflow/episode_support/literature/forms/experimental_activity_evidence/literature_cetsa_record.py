@@ -51,7 +51,7 @@ def fact(answer, refs=(), support='direct'):
     return {**literature_spr_record.fact(answer, refs), 'support': None if answer == 'unknown' else support}
 
 
-VERSION = 'a105_cetsa_record_v1'
+VERSION = 'a105_cetsa_record'
 EXPERIMENT_TYPE = 'cetsa'
 QUANTITIES = ('engagement_ec50', 'engagement_ec50_spread', 'tm_vehicle', 'tm_ligand', 'tm_shift', 'tm_spread', 'isothermal_temperature', 'heating_time', 'temperature_lowest', 'temperature_highest', 'temperature_count', 'compound_concentration_lowest', 'compound_concentration_highest', 'concentration_count', 'compound_incubation_time', 'replicate_count')
 PREPARATION_KEYS = ('ligand_preparation_ref', 'target_preparation_ref', 'dataset_ref')

@@ -49,7 +49,7 @@ _RECORD = _object({"record_ordinal": {"type": "integer", "minimum": 0},
     "loci": {"type": "array", "items": _object({"locus_ordinal": {"type": "integer", "minimum": 0},
         "path": _PATH, "commentaries": {"type": "array", "items": _COMMENTARY}})},
     "native_record": _TREE_REF})
-_SCHEMA = _object({"version": {"const": "ncbi_gene_native_v1"},
+_SCHEMA = _object({"version": {"const": "ncbi_gene_native"},
     "source_ref": {"type": "string", "minLength": 1},
     "request": _object({"gene_ids": {"anyOf": [{"type": "null"},
         {"type": "array", "minItems": 1, "uniqueItems": True,
@@ -263,7 +263,7 @@ def read_ncbi_gene_xml(content: bytes, *, source_ref: str,
     if not response_complete:
         issue("response_incomplete")
     issues.extend(_identity_issues(records, requested_gene_ids))
-    result = {"version": "ncbi_gene_native_v1", "source_ref": source_ref,
+    result = {"version": "ncbi_gene_native", "source_ref": source_ref,
         "request": {"gene_ids": deepcopy(requested_gene_ids)},
         "response_complete": response_complete, "parse_status": _status(records, issues),
         "records": records, "issues": issues}

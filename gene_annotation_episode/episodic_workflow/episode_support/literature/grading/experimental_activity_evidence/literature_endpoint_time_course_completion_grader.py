@@ -32,7 +32,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     ENDPOINT_TIME_COURSE_COMPLETION_CRITERIA, LOADING_SCALE, MIN_PER_UNIT)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_endpoint_time_course_completion_grade_v1'
+VERSION = 'a105_endpoint_time_course_completion_grade'
 CRITERIA = tuple(criterion['id'] for criterion in ENDPOINT_TIME_COURSE_COMPLETION_CRITERIA)
 CONVERSION = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact conversion_detected_above_control
 

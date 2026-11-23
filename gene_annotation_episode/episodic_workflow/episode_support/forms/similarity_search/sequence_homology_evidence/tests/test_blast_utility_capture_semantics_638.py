@@ -101,7 +101,7 @@ def test_occurrence_qualification_identifies_the_actual_partial_stream():
 ])
 def test_partial_final_rows_preserve_symbols_without_false_inventory_failure(completeness, newline, row_complete):
     raw = b"0\tlcl|ALPHA\tALPHA\t8\tACGTACGT" + (b"\n" if newline else b"")
-    row = occurrence(fmt="blastdbcmd_tabular_v1", data=raw)
+    row = occurrence(fmt="blastdbcmd_tabular", data=raw)
     row["completeness"] = completeness
     result = extraction.parse_blastdbcmd_sequences(raw, occurrence=row, operation=operation(),
         database_binding=binding(), outcome=outcome(state="failed", returncode=7))

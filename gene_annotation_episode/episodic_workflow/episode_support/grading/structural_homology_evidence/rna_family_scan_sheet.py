@@ -23,7 +23,7 @@ hits. A sequence with no hit has outcome ``no_family``: a graded sheet with no r
 The sheet is controlled data: numbers, marks of the table's own vocabulary, accessions, family names and clan names of the database,
 and record references."""
 GRADING_VERSION = 'rfam_gathering_threshold_over_cmscan_format_2'
-SCHEMA = 'a102_rna_family_scan_sheet_v1'
+SCHEMA = 'a102_rna_family_scan_sheet'
 PROVIDER = 'rna_family_scan'
 OUTCOMES = ('families', 'no_family')
 TRUNCATIONS = ('no', "5'", "3'", "5'&3'")

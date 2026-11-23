@@ -73,7 +73,7 @@ def test_the_return_form_declares_credit_and_finding_and_the_old_fact_sources():
 
 
 def _request(resource_id, kind, **changes):
-    value = {'version': 'practical_assignment_v1', 'assignment_id': 'a_' + resource_id, 'resource_id': resource_id,
+    value = {'version': 'practical_assignment', 'assignment_id': 'a_' + resource_id, 'resource_id': resource_id,
              'resource_kind': kind, 'workspace': '/work/space', 'endpoint': 'usable_handoff',
              'requested_job': {'argv': ['/bin/true'], 'environment': {}},
              'progress_requirements': [
@@ -86,7 +86,7 @@ def _request(resource_id, kind, **changes):
 
 
 def _assignment(**changes):
-    value = {'version': 'execution_launch_assignment_v1',
+    value = {'version': 'execution_launch_assignment',
              'requests': {'aurora': _request('aurora', 'hpc'), 'workstation': _request('workstation', 'local')},
              'immutable_input_versions': [], 'constraints': {}, 'handoff_unit': 2.0, 'acquired_record_unit': 1.0}
     value.update(changes)

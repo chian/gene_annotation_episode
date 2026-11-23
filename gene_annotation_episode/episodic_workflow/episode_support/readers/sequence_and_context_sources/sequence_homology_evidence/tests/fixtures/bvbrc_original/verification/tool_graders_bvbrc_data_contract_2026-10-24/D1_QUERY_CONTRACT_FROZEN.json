@@ -1,5 +1,5 @@
 {
-  "version": "bvbrc_data_D1_frozen_2026_10_24_v1",
+  "version": "bvbrc_data_D1_frozen_2026_10_24",
   "purpose": "Fixed planning interface for D1 only; no production implementation claim",
   "field_registry": {
     "genome": {
@@ -6939,7 +6939,7 @@
   },
   "exports": {
     "bvbrc_data_fields.py": {
-      "FIELD_CONTRACT_VERSION": "bvbrc_data_fields_2026_10_24_v1",
+      "FIELD_CONTRACT_VERSION": "bvbrc_data_fields_2026_10_24",
       "COLLECTIONS": "tuple(field_registry keys in document order)",
       "FIELD_REGISTRY": "field_registry",
       "SELECTABLE_FIELDS": "collection -> tuple(selectable_fields)",
@@ -7015,7 +7015,7 @@
     "bvbrc_data_query.py": {
       "DATA_QUERY_SCHEMA": "DataQuery",
       "PREPARED_DATA_QUERY_SCHEMA": "PreparedQuery",
-      "COMPILER_VERSION": "bvbrc_solr_compiler_v1"
+      "COMPILER_VERSION": "bvbrc_solr_compiler"
     }
   },
   "schemas": {
@@ -8382,7 +8382,7 @@
         "type": "object",
         "properties": {
           "version": {
-            "const": "bvbrc_data_request_v2"
+            "const": "bvbrc_data_request"
           },
           "collection": {
             "type": "string",
@@ -8660,7 +8660,7 @@
         "type": "object",
         "properties": {
           "version": {
-            "const": "bvbrc_data_effective_query_v2"
+            "const": "bvbrc_data_effective_query"
           },
           "collection": {
             "type": "string",
@@ -8949,7 +8949,7 @@
         "type": "object",
         "properties": {
           "version": {
-            "const": "bvbrc_data_population_v1"
+            "const": "bvbrc_data_population"
           },
           "base_url": {
             "type": "string"
@@ -8991,10 +8991,10 @@
             "const": "public_unauthenticated"
           },
           "compiler_version": {
-            "const": "bvbrc_solr_compiler_v1"
+            "const": "bvbrc_solr_compiler"
           },
           "field_contract_version": {
-            "const": "bvbrc_data_fields_2026_10_24_v1"
+            "const": "bvbrc_data_fields_2026_10_24"
           },
           "population_key": {
             "type": "string",
@@ -9052,7 +9052,7 @@
         "type": "object",
         "properties": {
           "version": {
-            "const": "bvbrc_data_prepared_v2"
+            "const": "bvbrc_data_prepared"
           },
           "service": {
             "const": "bvbrc_data"
@@ -9745,7 +9745,7 @@
             "additionalProperties": false
           },
           "request_profile": {
-            "const": "solr_query_solr_json_v1"
+            "const": "solr_query_solr_json"
           },
           "native_request": {
             "type": "object",

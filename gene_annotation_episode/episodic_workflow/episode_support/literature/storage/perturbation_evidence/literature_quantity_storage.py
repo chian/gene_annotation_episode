@@ -30,7 +30,7 @@ BINDINGS = {"reported_subject_ref": "reference", "experiment_ref": "reference",
 class LiteratureQuantityRepository(LiteratureRateRepository):
     provider = PROVIDER
     components = COMPONENTS
-    record_version = "literature_source_quantity_record_v2"
+    record_version = "literature_source_quantity_record"
     readable_record_versions = (record_version,)
     received_table = "literature_quantity_received"
     binding_fields = tuple(BINDINGS)

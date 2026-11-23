@@ -62,7 +62,7 @@ def bind_uniprot_publication(parsed: dict, *, source_ref: str,
             "record_ordinal": anchor["record_ordinal"], "record_pointer": anchor["record_pointer"],
             "primary_accession": anchor["primary_accession"]},
             "sequence_ref": stored["sequence_ref"], "record": deepcopy(native)})
-    publication = {"version": "uniprot_publication_v1", "source_ref": source_ref,
+    publication = {"version": "uniprot_publication", "source_ref": source_ref,
         "native_artifact_ref": native_artifact_ref, "content_sha256": parsed["content_sha256"],
         "page": deepcopy(parsed["page"]), "records": rows, "issues": deepcopy(parsed["issues"])}
     Draft202012Validator(PUBLICATION_SCHEMA).validate(publication)

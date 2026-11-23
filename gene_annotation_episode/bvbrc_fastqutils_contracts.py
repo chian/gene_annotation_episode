@@ -213,7 +213,7 @@ def validate_requested_form(schema: dict) -> dict:
         node = schema['properties'][field]
         _require(type(node) is dict and 'x-bvbrc-fastqutils' in node, 'requested_form_invalid')
         fields.append({'field': field, 'selection': deepcopy(node['x-bvbrc-fastqutils'])})
-    form = {'version': 'fastqutils_projection_v2', 'fields': fields}
+    form = {'version': 'fastqutils_projection', 'fields': fields}
     expected = make_requested_schema(form)
     _require(canonical_json(schema) == canonical_json(expected), 'requested_form_invalid')
     return form

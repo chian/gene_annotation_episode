@@ -166,7 +166,7 @@ def intake_witness(workspace):
 
 def assert_seed_matches(receipt, original, destination):
     assert set(receipt) == {'version', 'source', 'workspace', 'fixed_identity', 'input_files', 'intake_records', 'artifact_manifest', 'initial_known_record_refs', 'verification', 'exclusions'}
-    assert receipt['version'] == 'fixed_target_seed_v1'
+    assert receipt['version'] == 'fixed_target_seed'
     assert receipt['workspace'] == str(Path(destination).resolve())
     assert json.loads((Path(destination) / 'fixed-target-seed.json').read_text()) == receipt
     actual = intake_witness(destination)
@@ -222,7 +222,7 @@ def assert_failure(error, *, code, destination, staged):
     record = error.as_record()
     assert record == error.failure
     assert set(record) == {'version', 'code', 'affected_refs', 'staging_workspace'}
-    assert record['version'] == 'fixed_target_seed_failure_v1'
+    assert record['version'] == 'fixed_target_seed_failure'
     assert record['code'] == code
     assert isinstance(record['affected_refs'], list) and record['affected_refs']
     assert all(isinstance(ref, str) and ref for ref in record['affected_refs'])

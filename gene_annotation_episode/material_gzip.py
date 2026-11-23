@@ -10,7 +10,7 @@ import platform
 import zlib
 
 
-MODE = "native_gzip_read1_prefix_v1"
+MODE = "native_gzip_read1_prefix"
 
 
 def decode_prefix(original, destination):

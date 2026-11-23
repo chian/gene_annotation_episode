@@ -150,7 +150,7 @@ def _selected_execution_task(summary, resource):
     assignment = summary['assignment']
     if assignment.get('service') != 'ebi_hmmer':
         return None
-    return {'version': 'selected_execution_task_v1', 'scientific_question': summary['scientific_question'],
+    return {'version': 'selected_execution_task', 'scientific_question': summary['scientific_question'],
             'selected_tool_info': summary['selected_tool_info'],
             'requests': [{'resource_id': assignment['resource_id'], 'resource_kind': 'api',
                           'endpoint': deepcopy(assignment.get('endpoint')),

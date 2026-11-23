@@ -13,7 +13,7 @@ import sqlite3
 from gene_annotation_episode.episodic_workflow.episode_support.records.evolutionary_history_evidence.domain import ContractError, obj, validate_schema
 from gene_annotation_episode.episodic_workflow.episode_support.tools.documents.evolutionary_history_evidence.spreadsheet_tools import Workbook
 
-VERSION = 'a105_parent_depletion_xlsx_selection_v1'
+VERSION = 'a105_parent_depletion_xlsx_selection'
 HEADERS = {'A':'Time','B':'Bio','C':'Stdev1','D':'Ab','E':'Stdev2',
     'F':'inactive_enzyme','G':'Stdev3','I':'Compound','J':'Submix',
     'K':'Difference_dead_enzyme','L':'Difference_abio'}
@@ -87,7 +87,7 @@ def read_parent_depletion_inputs(selection, workbook_bytes):
     row,cells=matches[0];index=row['row_number']
     values={role:_number(cells.get(column+str(index)),column+str(index),
         allow_formula_cache=role.startswith('reported_active_minus_')) for role,column in VALUES.items()}
-    return {'version':'a105_parent_depletion_extraction_v1','source_ref':selection['source_ref'],
+    return {'version':'a105_parent_depletion_extraction','source_ref':selection['source_ref'],
         'workbook_sha256':digest,'sheet_name':selection['sheet_name'],
         'sheet_key':result['sheet']['sheet_key'],'worksheet_part':result['sheet']['worksheet_part'],
         'row_number':index,'compound':selection['compound'],'submix':selection['submix'],

@@ -29,7 +29,7 @@ class OrdinaryExecutionStatistics:
             object.__setattr__(self, name, Path(getattr(self, name)).expanduser().resolve())
 
     def as_record(self):
-        return {'version': 'ordinary_native_statistics_binding_v2',
+        return {'version': 'ordinary_native_statistics_binding',
                 'history_path': str(self.history_path), 'resource_id': self.resource_id,
                 'recovery_directory': str(self.recovery_directory),
                 'phases': list(PHASE_TO_TOOLS)}
@@ -64,7 +64,7 @@ class OrdinaryExecutionStatistics:
         implementation = _sha({'python_version': sys.version, 'native_lifecycle_version': lifecycle_version,
             'adapter_version': spreadsheet_tools.VERSION})
         parameters = {'operation': operation, 'input_bytes': Path(path).stat().st_size, 'selection': selection,
-                      'compatibility': 'same_input_size_and_technical_selection_features_v1'}
+                      'compatibility': 'same_input_size_and_technical_selection_features'}
         return ExecutionClass(phase='spreadsheet_selection', backend='local', resource_id=self.resource_id,
             implementation_sha256=implementation, parameters_sha256=_sha(parameters),
             memory_bytes=policy.memory_bytes, scratch_bytes=policy.scratch_bytes,

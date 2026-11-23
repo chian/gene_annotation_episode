@@ -75,7 +75,7 @@ def build(original, fabg, output):
         str(reference.resolve()): {'sha256': hashlib.sha256(reference.read_bytes()).hexdigest(),
             'size_bytes': reference.stat().st_size,
             'request': json.loads(reference.with_name('family-fabg-request.json').read_text())}}
-    output.write_text(json.dumps({'version': 'a104_real_input_bundle_v1', 'case_id': 'oarx',
+    output.write_text(json.dumps({'version': 'a104_real_input_bundle', 'case_id': 'oarx',
         'target_accession': target['accession'], 'records': records,
         'analyses': [family, sensitivity, regional], 'source_files': sources,
         'interpretation': 'original_publication_peptides_and_comparison_leads; no_assayed_function_or_independent_organismal_tree_supplied'}, indent=2)+'\n')

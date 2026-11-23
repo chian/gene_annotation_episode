@@ -54,9 +54,9 @@ import hashlib
 import json
 import math
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_experimental_contracts import ExperimentalContractError
-INPUT_VERSION = 'binding_interaction_inputs_v1'
-MODEL_VERSION = 'binding_interaction_log_model_v1'
-SHEET_VERSION = 'binding_interaction_sheet_v1'
+INPUT_VERSION = 'binding_interaction_inputs'
+MODEL_VERSION = 'binding_interaction_log_model'
+SHEET_VERSION = 'binding_interaction_sheet'
 ROLES = ('reference_subject_reference_ligand', 'reference_subject_test_ligand', 'test_subject_reference_ligand', 'test_subject_test_ligand')
 CONTEXT_FIELDS = ('subject', 'construct', 'state', 'preparation', 'experiment', 'ligand', 'tracer', 'readout', 'normalization', 'conditions')
 ID_FIELDS = CONTEXT_FIELDS + ('parameter_definition',)

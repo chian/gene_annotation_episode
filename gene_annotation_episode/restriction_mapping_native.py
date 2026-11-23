@@ -87,7 +87,7 @@ def _catalog_row(enzyme, ordinal, dictionary):
 
 
 def _empty(sequence, binding, selection, topology):
-    return {"version": "restriction_mapping_native_v1", "request": {
+    return {"version": "restriction_mapping_native", "request": {
         "sequence": sequence, "normalized_sequence": sequence.upper(), "sequence_binding": binding,
         "enzyme_selection": selection, "topology": topology}, "software": {
         "biopython_version": None, "dictionary_file": None, "native_source_file": None},
@@ -157,7 +157,7 @@ def _run(result):
         return
     rows = [_catalog_row(enzyme, index, Restriction_Dictionary.rest_dict) for index, enzyme in enumerate(enzymes)]
     catalog = validate_restriction_record("Catalog", {
-        "version": "restriction_catalog_snapshot_v1", "biopython_version": native_version,
+        "version": "restriction_catalog_snapshot", "biopython_version": native_version,
         "dictionary_file": result["software"]["dictionary_file"], "selection": deepcopy(selection),
         "resolved_names": list(names), "enzymes": rows})
     batch = Restriction.RestrictionBatch(enzymes)

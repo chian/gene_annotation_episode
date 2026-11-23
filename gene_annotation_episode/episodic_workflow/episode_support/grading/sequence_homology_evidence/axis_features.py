@@ -1,4 +1,4 @@
-"""The investigation finding of the A101 axis sheet (``a101_native_correspondence_015_v1``): controlled features
+"""The investigation finding of the A101 axis sheet (``a101_native_correspondence_015``): controlled features
 that code reads from the sheet of each target, each with its validator (``INVESTIGATION_FINDING_FEATURES_a101.md``
 sections 1 and 2.3).
 

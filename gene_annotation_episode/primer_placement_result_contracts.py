@@ -15,11 +15,11 @@ from .native_file_capture import _identity as file_identity
 
 
 TOOL = "align_sequences"
-PACKET_VERSION = "ordinary_primer_placement_values_v1"
-SOURCE_VERSION = "ordinary_primer_placement_result_v1"
+PACKET_VERSION = "ordinary_primer_placement_values"
+SOURCE_VERSION = "ordinary_primer_placement_result"
 FACT_SOURCE = "primer_placement_outcomes"
-CONTEXT_VERSION = "primer_placement_public_context_v1"
-OPERANDS_VERSION = "ordinary_primer_placement_operands_v1"
+CONTEXT_VERSION = "primer_placement_public_context"
+OPERANDS_VERSION = "ordinary_primer_placement_operands"
 SOURCE_ASSUMPTIONS = ("All complete ungapped windows, <=1 literal mismatch, source uppercasing, A/C/G/T-only reverse complement; "
     "retained occurrences are not PCR, primer-design, significance or confidence evidence. Candidate windows are structural counts, not execution attestations.")
 _KINDS = ({"kind": "summary"}, {"kind": "placement_group", "group_ordinal": 0},
@@ -66,17 +66,17 @@ def _shape(value, schema):
 def profile():
     stem = "ordinary_primer_placement"
     return dict(operation=TOOL, fact_source=FACT_SOURCE, native_source="molecular",
-        native_request_version="molecular_sequence_request_v1", deployment_version="molecular_sequence_deployment_v1",
-        driver_request_version="molecular_sequence_driver_request_v1", native_argument_names=[], molecule_model="dna",
-        operand_version=stem + "_sequence_operand_v1", prepared_version=stem + "_prepared_v1",
-        execution_version=stem + "_execution_v1", binding_version=stem + "_attempt_binding_v1",
-        binding_filename="ordinary-primer-placement-input-binding.json", intent_version=stem + "_intent_v1",
-        saved_intent_version=stem + "_saved_intent_v1", custody_version=stem + "_publication_v1",
-        saved_custody_version=stem + "_saved_publication_v1", public_version=PACKET_VERSION,
-        source_version=SOURCE_VERSION, packet_format=stem + "_values_packet_v1",
-        publication_request_version=stem + "_publication_request_v1", saved_request_version=stem + "_saved_request_v1",
-        read_receipt_version=stem + "_read_receipt_v1", calculation_started_version=stem + "_calculation_started_v1",
-        calculation_result_version=stem + "_calculation_result_v1", calculation_diagnostic_version=stem + "_calculation_diagnostic_v1",
+        native_request_version="molecular_sequence_request", deployment_version="molecular_sequence_deployment",
+        driver_request_version="molecular_sequence_driver_request", native_argument_names=[], molecule_model="dna",
+        operand_version=stem + "_sequence_operand", prepared_version=stem + "_prepared",
+        execution_version=stem + "_execution", binding_version=stem + "_attempt_binding",
+        binding_filename="ordinary-primer-placement-input-binding.json", intent_version=stem + "_intent",
+        saved_intent_version=stem + "_saved_intent", custody_version=stem + "_publication",
+        saved_custody_version=stem + "_saved_publication", public_version=PACKET_VERSION,
+        source_version=SOURCE_VERSION, packet_format=stem + "_values_packet",
+        publication_request_version=stem + "_publication_request", saved_request_version=stem + "_saved_request",
+        read_receipt_version=stem + "_read_receipt", calculation_started_version=stem + "_calculation_started",
+        calculation_result_version=stem + "_calculation_result", calculation_diagnostic_version=stem + "_calculation_diagnostic",
         calculator_id="primer_placement_measurements.calculate_primer_placement_components",
         selector_version=stored.PLACEMENT_SELECTOR_VERSION, projection_version=stored.PLACEMENT_PROJECTION_VERSION,
         selected_values_version=stored.PLACEMENT_PUBLIC_VERSION)

@@ -23,7 +23,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_
 
 IDENTITY = "native_first_hsp_alignment_identity_fraction"
 ENDPOINT = "native_subject_endpoint_difference_fraction"
-CONTRACT = {"id": "GenomeComparison_inspected_source_v1",
+CONTRACT = {"id": "GenomeComparison_inspected_source",
             "application_tree": "5c365e1dca2b3a8c311d7d352e862ff1442eefc9",
             "application_sha256": "4267b35bdd5ad858b833fa2b84eb794c91e95b7f5abc0628b90ec4d6a0a33c14",
             "dependency_tree": "18196fe0df123702457e4af2e0b1e0707d5f5281",
@@ -83,7 +83,7 @@ def native(rows=None, *, key="synthetic-primary", complete="yes", body=True, fmt
         lines += ["\t".join(str(row.get(k, "")) for k in headers) for row in rows]
         raw = ("\n".join(lines) + "\n").encode()
     result = parser.parse_genome_comparison(raw, source=source(raw, key, complete=complete, body=body),
-        declared_format=f"genome_comparison_{fmt}_v1", source_contract=deepcopy(CONTRACT))
+        declared_format=f"genome_comparison_{fmt}", source_contract=deepcopy(CONTRACT))
     assert result["value"] is not None
     return result
 
@@ -114,7 +114,7 @@ def index(kind="user_genome"):
 
 def inventory(key, raw, *, complete="yes"):
     result = inputs.read_protein_fasta(raw, source=source(raw, key + "-source", complete=complete),
-                                      declared_format="protein_fasta_utf8_v1", inventory_key=key)
+                                      declared_format="protein_fasta_utf8", inventory_key=key)
     assert result["value"] is not None
     return result["value"]
 
@@ -127,7 +127,7 @@ def linked_arguments(*, ref_raw=b">R0\nAAAA\n>R1\nCCCC\n>R2\nDDDD\n>R3\nEEEE\n",
     ref = inventory("reference-input", ref_raw, complete=ref_complete)
     sub = inventory("subject-input", sub_raw, complete=sub_complete)
     args["inventories"] = [ref, sub]
-    joins = {"version": "bvbrc_proteome_joins_proposal_v1", "primary_source_ref": args["primary_source_ref"],
+    joins = {"version": "bvbrc_proteome_joins_proposal", "primary_source_ref": args["primary_source_ref"],
              "execution_links": [], "requested_native_links": [], "requested_metadata_links": [],
              "track_bindings": [], "reference_joins": [], "subject_joins": [], "metadata_joins": [],
              "sequence_groups": deepcopy(ref["sequence_groups"] + sub["sequence_groups"]), "diagnostics": []}
@@ -162,7 +162,7 @@ def linked_arguments(*, ref_raw=b">R0\nAAAA\n>R1\nCCCC\n>R2\nDDDD\n>R3\nEEEE\n",
 
 
 def parameters(identity=.6, endpoint=.7):
-    return {"version": "bvbrc_proteome_native_parameters_proposal_v1", "track_keys": ["comp_genome_2"],
+    return {"version": "bvbrc_proteome_native_parameters_proposal", "track_keys": ["comp_genome_2"],
             "minimum_identity_fraction": identity, "minimum_subject_endpoint_difference_fraction": endpoint,
             "allowed_hit_categories": None}
 
@@ -252,7 +252,7 @@ def test_invalid_nonprimary_envelope_retained_and_exact_primary_required():
     args = arguments()
     raw = b"{bad JSON"
     invalid = parser.parse_genome_comparison(raw, source=source(raw, "synthetic-invalid"),
-        declared_format="genome_comparison_json_v1", source_contract=deepcopy(CONTRACT))
+        declared_format="genome_comparison_json", source_contract=deepcopy(CONTRACT))
     assert invalid["status"] == "invalid"
     args["native_results"].insert(0, invalid)
     sheet = build(args)
@@ -443,7 +443,7 @@ def test_wrong_width_tsv_retains_native_cells_but_excludes_semantic_numeric_use(
     lines += ["\t".join(row.get(k, "") for k in headers) + ("\textra" if i == 0 else "") for i, row in enumerate(rows)]
     raw = ("\n".join(lines) + "\n").encode()
     result = parser.parse_genome_comparison(raw, source=source(raw, "synthetic-malformed-table"),
-        declared_format="genome_comparison_tsv_v1", source_contract=deepcopy(CONTRACT))
+        declared_format="genome_comparison_tsv", source_contract=deepcopy(CONTRACT))
     sheet = build(arguments(result))
     assert sheet["association_rows"][0][IDENTITY]["value"] == .875
     assert sheet["association_rows"][0]["layout_state"] == "uncertain_table_layout"
@@ -547,10 +547,10 @@ def metadata_args():
                       {"patric_id": "R0", "genome_id": "G", "product": "reference function",
                        "aa_sequence_md5": ref["sequence_md5"], "start": 1, "end": 12, "strand": "+"}]
     for kind, values, reader, fmt in (
-        ("feature", feature_values, inputs.read_feature_metadata, "bvbrc_genome_feature_json_array_v1"),
-        ("genome", [{"genome_id": "G", "taxon_id": 7}], inputs.read_genome_metadata, "bvbrc_genome_json_array_v1"),
+        ("feature", feature_values, inputs.read_feature_metadata, "bvbrc_genome_feature_json_array"),
+        ("genome", [{"genome_id": "G", "taxon_id": 7}], inputs.read_genome_metadata, "bvbrc_genome_json_array"),
         ("sequence", [{"md5": sub["sequence_md5"], "sequence": "FFFF"}, {"md5": ref["sequence_md5"], "sequence": "AAAA"}],
-         inputs.read_feature_sequences, "bvbrc_feature_sequence_json_array_v1"),
+         inputs.read_feature_sequences, "bvbrc_feature_sequence_json_array"),
     ):
         raw = json.dumps(values).encode(); src = source(raw, "synthetic-" + kind)
         options = {"coordinate_convention": {"value": "one_based_closed", "source_fields": [field(source(b"one based closed", "convention-source"))]}} if kind == "feature" else {}
@@ -585,7 +585,7 @@ def test_separate_source_assignments_keep_separate_metadata_array_positions():
     original = args["feature_snapshots"][0]
     raw = b'[{"feature_id":"S0","product":"another supplied assignment"}]'
     snapshot = inputs.read_feature_metadata(raw, source=source(raw, "synthetic-other-feature"),
-        declared_format="bvbrc_genome_feature_json_array_v1", snapshot_key="other-feature-snapshot",
+        declared_format="bvbrc_genome_feature_json_array", snapshot_key="other-feature-snapshot",
         population=original["population"], coordinate_convention={"value": "unknown", "source_fields": []})["value"]
     args["feature_snapshots"].append(snapshot)
     link = deepcopy(args["joins"]["requested_metadata_links"][0])
@@ -624,7 +624,7 @@ def test_coordinate_kind_requires_explicit_input_and_relevant_bound_metadata():
 
 def test_empty_complete_projection_and_unavailable_directional_attachment_are_distinct():
     args = arguments(native([], extra_tracks=False))
-    args["directional_attachment"] = {"version": "bvbrc_proteome_directional_attachment_proposal_v1", "state": "unavailable",
+    args["directional_attachment"] = {"version": "bvbrc_proteome_directional_attachment_proposal", "state": "unavailable",
         "expected_scopes": [{"comparison_track_key": "comp_genome_2", "direction": "reference_to_comparison"}],
         "reports": [], "operand_links": [],
         "requirements": [{"code": "directional_report_missing", "required_input": "directional_report", "scope": scope(track_key="comp_genome_2"), "source_fields": []}],

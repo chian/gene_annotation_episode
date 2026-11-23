@@ -22,7 +22,7 @@ CHILDREN = ('table_evidence_extraction', 'source_coverage_improvement', 'passage
 ROOT = 'gene_annotation_episode.episodic_workflow.root'
 EMPTY = {'intervention_assessments': [], 'a106_subscores': []}
 SRC = 'source_' + 'a' * 24
-PAGE = {'version': 'page_assignment_v1', 'source_ref': SRC, 'representation': 'original', 'artifact_ref': 'art_1',
+PAGE = {'version': 'page_assignment', 'source_ref': SRC, 'representation': 'original', 'artifact_ref': 'art_1',
         'question_context_refs': ['ctx_1'], 'prior_delivery_refs': []}
 TASK = {'kind': 'verified_source_leads', 'evidence_axis': 'A106', 'credit_unit': 1.0}
 ASSIGNMENT = {**PAGE, 'literature_task': TASK, 'proposed_annotation_ref': 'hyp_1',

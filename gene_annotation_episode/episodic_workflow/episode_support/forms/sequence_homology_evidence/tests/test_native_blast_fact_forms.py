@@ -54,7 +54,7 @@ def numeric_row(family="search", *, scope="search"):
     else:
         assert family == "search"
         identity = dict(search_key=search_identity())
-    return dict(schema="native_blast_database_numeric_row_v1", family=family,
+    return dict(schema="native_blast_database_numeric_row", family=family,
         record_key=ROW_KEY, calculation_id="a" * 64, identity=identity, program="psiblast",
         context=dict(query_axis_kind="sequence", reference_axis_kind="sequence",
             stage="sequence_database", native_iteration=None, biological_round=None),

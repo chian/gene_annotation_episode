@@ -14,7 +14,7 @@ from episode_runtime import TableDeclaration
 JOB_LEDGER = TableDeclaration(name='job_ledger', columns=('job', 'event', 'at', 'detail', 'source_ref'),
                               key=('job', 'event', 'at'), record_refs=('source_ref',))
 
-OPERATIONAL_CREDIT_BINDING = {'version': 'execution_episode_v1', 'scientific_credit': False,
+OPERATIONAL_CREDIT_BINDING = {'version': 'execution_episode', 'scientific_credit': False,
                               'monitoring_credit': False}
 
 

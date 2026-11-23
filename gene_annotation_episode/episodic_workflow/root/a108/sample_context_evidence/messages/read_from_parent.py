@@ -1,6 +1,6 @@
 """What the parent gives: the A108 assignment of the old ``from_parent.py`` (``_ASSIGNMENT``): the selection (the
 evidence axis A108, a thought pattern and the selected tools), the proposed annotation the task evaluates, the evidence
-references, the constraints, the context holding the evidence task (``evidence_axis_task_v1``, the credit unit of the
+references, the constraints, the context holding the evidence task (``evidence_axis_task``, the credit unit of the
 whole-axis findings) and, for a child that is an alternative approach, the revision origin; with the Store scope of the
 commission and the records passed in custody. This is the only place the assignment is read.
 
@@ -35,7 +35,7 @@ ASSIGNMENT_FORM = RecordForm({
     'proposed_annotation_ref': Field('text', 'The proposed annotation this task evaluates'),
     'evidence_refs': Field('record_refs', 'The evidence records passed in custody'),
     'constraints': Field('record', 'The parent\'s constraints'),
-    'context': Field('record', 'The task context; context.evidence_task is version evidence_axis_task_v1, kind '
+    'context': Field('record', 'The task context; context.evidence_task is version evidence_axis_task, kind '
                      'whole_axis_findings, evidence_axis A108 and the credit_unit of the finding progress'),
     'revision_origin': Field('record', 'For a child that is an alternative approach: the parent invocation and the '
                              'process_revise operation that prepared the selection', required=False),
@@ -66,7 +66,7 @@ def evidence_task_of(context):
     """The old ``original_task_projector`` form: the commissioned whole-axis finding task of this axis."""
     task = context.get('evidence_task') if isinstance(context, dict) else None
     if (not isinstance(task, dict) or set(task) != EVIDENCE_TASK_FIELDS
-            or task['version'] != 'evidence_axis_task_v1' or task['kind'] != 'whole_axis_findings'
+            or task['version'] != 'evidence_axis_task' or task['kind'] != 'whole_axis_findings'
             or task['evidence_axis'] != AXIS):
         raise ValueError('original_axis_finding_task_required')
     return task

@@ -17,8 +17,8 @@ import json
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.feature_rules import (
     validated)
 
-GRAPH_SCHEMA = 'blast_all_vs_all_graph_sheet_v1'
-CONTEXT_SCHEMA = 'blast_all_vs_all_context_sheet_v1'
+GRAPH_SCHEMA = 'blast_all_vs_all_graph_sheet'
+CONTEXT_SCHEMA = 'blast_all_vs_all_context_sheet'
 GRAPH_PROVIDER = 'native.blast.all_vs_all.graph'
 CONTEXT_PROVIDER = 'native.blast.all_vs_all.context'
 _OPT = 'optional'

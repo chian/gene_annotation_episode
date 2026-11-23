@@ -37,7 +37,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.service_cal
 from gene_annotation_episode.episodic_workflow.episode_support.records.evolutionary_history_evidence.domain import canonical
 
 DEFINITION_PROVIDER = 'episode.bvbrc_appservice_definition'
-DEFINITION_VERSION = 'bvbrc_appservice_definition_extraction_v1'
+DEFINITION_VERSION = 'bvbrc_appservice_definition_extraction'
 _UUID = re.compile(r'[a-fA-F0-9]{8}(?:-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}\Z')
 
 
@@ -494,7 +494,7 @@ class _Selection:
     def resolve(self):
         resolved = {'operation': self.name, **self.operands()}
         return validate_contract('BoundInputs', {
-            'version': 'bvbrc_appservice_bound_inputs_v1', 'original_job_owner': self.h.owner,
+            'version': 'bvbrc_appservice_bound_inputs', 'original_job_owner': self.h.owner,
             'request_sha256': digest(self.request), 'selected_argument_sha256': digest(self.args),
             'definition': self.definition, 'inputs': self.inputs, 'objects': self.objects,
             'support_receipt_refs': list(dict.fromkeys(self.support)), 'original_handoff_ref': self.handoff_ref,

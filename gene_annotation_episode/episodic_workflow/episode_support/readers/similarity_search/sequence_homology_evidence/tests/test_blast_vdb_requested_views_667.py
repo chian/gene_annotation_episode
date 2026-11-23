@@ -17,7 +17,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.readers.similarit
 from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_homology_evidence.domain import ContractError
 from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.sequence_homology_evidence.tests.test_blast_vdb_utility_inputs_663 import supplied, occurrence, identity, provenance, INFO
 from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.sequence_homology_evidence.tests.test_blast_utility_result_views_629 import (
-    project as legacy_project, selected_sequences, selector as legacy_selector,
+    project as standard_project, selected_sequences, selector as standard_selector,
 )
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.sequence_homology_evidence.tests.test_blast_utility_contracts_625 import extraction, inspection, integrity
 
@@ -25,12 +25,12 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_
 def legacy_reference():
     schemas = getattr(views, "_LEGACY_FACT_SCHEMAS", views._FACT_SCHEMAS)
     selected = [
-        legacy_project(extraction(), selected_sequences(0))[0],
-        legacy_project(extraction(), legacy_selector())[0],
-        legacy_project(inspection(), legacy_selector(database_fields=[inspection()["native_fields"][0]["field_name"]], include_checks=True))[0],
-        legacy_project(integrity(), legacy_selector(integrity={"fields": ["observed_checked_count"]}))[0],
+        standard_project(extraction(), selected_sequences(0))[0],
+        standard_project(extraction(), standard_selector())[0],
+        standard_project(inspection(), standard_selector(database_fields=[inspection()["native_fields"][0]["field_name"]], include_checks=True))[0],
+        standard_project(integrity(), standard_selector(integrity={"fields": ["observed_checked_count"]}))[0],
     ]
-    return {"selector_v1": getattr(views, "NATIVE_BLAST_UTILITY_RESULT_SELECTOR_V1_SCHEMA",
+    return {"standard_selector_schema": getattr(views, "NATIVE_BLAST_UTILITY_RESULT_SELECTOR_STANDARD_SCHEMA",
                                   views.NATIVE_BLAST_UTILITY_RESULT_SELECTOR_SCHEMA),
             "projection_fields": views.PROJECTION_FIELDS, "fact_schemas": schemas, "examples": selected}
 
@@ -39,7 +39,7 @@ SOURCE = "source_original_vdb667"
 
 
 def selector(**changes):
-    return {**legacy_selector(), "version": "native_blast_utility_result_selector_v2", "paths": None,
+    return {**standard_selector(), "version": "native_blast_utility_result_selector", "paths": None,
             "vdb_context": False, **changes}
 
 
@@ -90,9 +90,9 @@ def validate(view, args):
 
 def test_versions_closed_sources_and_reference_namespace_schemas():
     assert views.NATIVE_BLAST_UTILITY_RESULT_SELECTOR_SCHEMA["anyOf"] == [
-        views.NATIVE_BLAST_UTILITY_RESULT_SELECTOR_V1_SCHEMA, views.NATIVE_BLAST_UTILITY_RESULT_SELECTOR_V2_SCHEMA]
+        views.NATIVE_BLAST_UTILITY_RESULT_SELECTOR_STANDARD_SCHEMA, views.NATIVE_BLAST_UTILITY_RESULT_SELECTOR_VDB_SCHEMA]
     assert views.blast_utility_projection_fields(selector()) == (*views.PROJECTION_FIELDS, "paths", "path_sections", "vdb_context")
-    assert views.blast_utility_projection_fields(legacy_selector()) == views.PROJECTION_FIELDS
+    assert views.blast_utility_projection_fields(standard_selector()) == views.PROJECTION_FIELDS
     assert len(views.FACT_SOURCES) == 14 and len(views.IDENTIFIER_NAMESPACES) == 4
     jsonschema.Draft202012Validator.check_schema(views.NATIVE_BLAST_UTILITY_RESULT_SELECTOR_SCHEMA)
     for name, descriptor in views.blast_utility_fact_sources().items():
@@ -108,7 +108,7 @@ def test_versions_closed_sources_and_reference_namespace_schemas():
             for child in node:
                 yield from references(child)
     assert list(references(views.VDB_CONTEXT_SCHEMA)) == ["execution_result"]
-    assert list(references(views.SEQUENCE_V2_SCHEMA)).count("artifact") == 0
+    assert list(references(views.VDB_SEQUENCE_SCHEMA)).count("artifact") == 0
     changed = views.blast_utility_fact_sources()
     changed[views.FACT_PREFIX + "vdb_context"]["report_schema"]["items"]["properties"].clear()
     assert views.blast_utility_fact_sources()[views.FACT_PREFIX + "vdb_context"]["report_schema"]["items"]["properties"]
@@ -131,7 +131,7 @@ def test_selector_rejects_unrequested_modes_fields_and_artifacts_before_capture(
 
 def test_selector_version_all_mode_and_paths_applicability():
     with pytest.raises(ContractError, match="selector_operation_version_conflict"):
-        views.validate_blast_utility_result_selector(legacy_selector(), operation=inputs()["operation"])
+        views.validate_blast_utility_result_selector(standard_selector(), operation=inputs()["operation"])
     with pytest.raises(ContractError, match="selector_operation_version_conflict"):
         views.validate_blast_utility_result_selector(selector(), operation=extraction()["operation"])
     for kind in ("all_native_sequences", "all_references"):
@@ -157,7 +157,7 @@ def test_duplicate_entries_keep_original_requested_ordinals_without_unselected_f
     assert view["checks"] == view["vdb_context"] == view["artifacts"] == view["saved_data"] == []
     assert view["record_refs"] == [SOURCE] and view["status"]["state"] == "complete"
     assert validate(json.loads(json.dumps(view)), args) == view
-    assert set(view) == set(views.PROJECTION_V2_FIELDS)
+    assert set(view) == set(views.VDB_PROJECTION_FIELDS)
 
 
 @pytest.mark.parametrize("symbols,length,count,reason", [
@@ -222,7 +222,7 @@ def test_native_row_gaps_and_null_vs_empty_enumeration(kind):
     view, _ = project(raw, sequences((2, 1, 0), kind="native_row_ordinals"), kind=kind)
     assert [row["native_row_ordinal"] for row in view["sequences"]] == [0, 2]
     assert all(row["selector_ordinals"] == [] and row["association"] == "not_applicable" for row in view["sequences"])
-    assert view["missing"] == [{"version": "native_blast_utility_missing_fact_v2", "source_ref": SOURCE,
+    assert view["missing"] == [{"version": "native_blast_utility_missing_fact", "source_ref": SOURCE,
         "request": {"type": "native_row", "ordinal": 1}, "reason": "selection_unavailable"}]
     assert any(row["record_key"] == "stdout#/records/1" and row["line_number"] == 2 for row in view["failures"])
     assert view["status"]["state"] == "partial"
@@ -472,7 +472,7 @@ def test_selected_artifact_saved_result_only_grants_and_empty_selection():
     payload = json.dumps(args["result"], sort_keys=True).encode()
     digest = hashlib.sha256(payload).hexdigest()
     args["saved_data"] = [{"source_ref": SOURCE, "kind": "result", "artifact_ref": "artifact_" + digest,
-        "sha256": digest, "size_bytes": len(payload), "schema": "blast_sequence_extraction_v2"}]
+        "sha256": digest, "size_bytes": len(payload), "schema": "blast_vdb_sequence_extraction"}]
     view = views.project_blast_utility_result(**args)
     assert view["record_refs"] == [SOURCE, args["result"]["output_occurrence"]["artifact_ref"], "artifact_" + digest]
     assert view["sequences"] == view["vdb_context"] == []
@@ -500,7 +500,7 @@ def test_unrequested_fields_wrong_original_sources_and_invented_qualifiers_rejec
 def test_selected_context_cannot_be_replaced_with_fabricated_missing():
     view, args = project(selection=selector(vdb_context=True))
     view["vdb_context"] = []
-    view["missing"] = [{"version": "native_blast_utility_missing_fact_v2", "source_ref": SOURCE,
+    view["missing"] = [{"version": "native_blast_utility_missing_fact", "source_ref": SOURCE,
         "request": {"type": "vdb_context"}, "reason": "result_unavailable"}]
     view["status"]["state"] = "unavailable"
     with pytest.raises(ContractError, match="context_selection_conflict"):
@@ -512,7 +512,7 @@ def test_fact_unions_reject_impossible_vdb_missing_names_and_section_indices():
                     {"type": "saved_data", "kind": "prepared_database"}):
         with pytest.raises(ContractError):
             views.validate_blast_utility_fact_values(views.FACT_PREFIX + "missing", [{
-                "version": "native_blast_utility_missing_fact_v2", "source_ref": SOURCE,
+                "version": "native_blast_utility_missing_fact", "source_ref": SOURCE,
                 "request": request, "reason": "result_unavailable"}])
     args = path_args(); view = views.project_blast_utility_result(**args)
     row = view["path_sections"][1]

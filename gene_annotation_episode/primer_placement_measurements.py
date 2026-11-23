@@ -16,9 +16,9 @@ from .sequence_extraction_grader import frozen_reverse_complement
 from .sequence_mapping import map_interval, reverse_path, slice_path, validate_mapping
 
 
-NATIVE_SCHEMA = "biomni_primer_placement_native_v1"
-SHEET_SCHEMA = "primer_placement_sheet_v1"
-COMPONENT_SCHEMA = "primer_placement_components_v1"
+NATIVE_SCHEMA = "biomni_primer_placement_native"
+SHEET_SCHEMA = "primer_placement_sheet"
+COMPONENT_SCHEMA = "primer_placement_components"
 _DNA = frozenset("ACGT")
 _INPUT_KEYS = {"native_record", "target_sequence", "primers", "target_ref", "primer_refs", "target_mapping", "primer_mappings"}
 

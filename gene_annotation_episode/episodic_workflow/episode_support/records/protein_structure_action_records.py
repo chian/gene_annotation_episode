@@ -23,8 +23,8 @@ SAVED_SOURCE = "protein_structure_action_saved_sheets"
 FACT_SOURCES = (VIEW_SOURCE, SEQUENCE_SOURCE, SAVED_SOURCE)
 TOOLS = {"inspect_protein_structure": "inspect",
     "extract_protein_structure_sequence": "extract_sequence", "compare_protein_structures": "compare"}
-RESULT_VERSION = "protein_structure_tool_result_v1"
-SAVED_ACTION_SOURCE_VERSION = "protein_structure_saved_action_v1"
+RESULT_VERSION = "protein_structure_tool_result"
+SAVED_ACTION_SOURCE_VERSION = "protein_structure_saved_action"
 _PAYLOAD_FIELDS = {VIEW_SOURCE: "views", SEQUENCE_SOURCE: "sequences", SAVED_SOURCE: "saved_sheets"}
 
 
@@ -42,10 +42,9 @@ def _object(**properties):
 
 
 def _definitions():
-    # Reuse shared row/cell schemas. Only this opt-in resource admits action
-    # descriptors; the default legacy public resources are untouched.
+    # Reuse shared row/cell schemas and the protein structure descriptors.
     definitions = views._schema("ProjectionRows")["$defs"]
-    definitions.update(science.protein_structure_schema_definitions(action_custody=True))
+    definitions.update(science.protein_structure_schema_definitions())
     ref = lambda name: {"$ref": "#/$defs/" + name}
     artifact = deepcopy(definitions["ProjectionRows"]["oneOf"])
     artifacts = []
@@ -53,16 +52,16 @@ def _definitions():
         row_type = deepcopy(definitions[row_ref["$ref"].rsplit("/", 1)[1]])
         properties = row_type["properties"]
         properties.pop("rows")
-        properties["version"] = {"const": "protein_structure_action_artifact_view_v1"}
+        properties["version"] = {"const": "protein_structure_action_artifact_view"}
         properties["delivery"] = ref("ArtifactDelivery")
         row_type["required"] = list(properties)
         artifacts.append(row_type)
     definitions["ProteinActionArtifactView"] = {"oneOf": artifacts}
     definitions["ProteinActionUnavailable"] = _object(
-        version={"const": "protein_structure_action_unavailable_v1"},
+        version={"const": "protein_structure_action_unavailable"},
         issues={"type": "array", "items": ref("StructuredIssue"), "minItems": 1})
     definitions["ProteinActionView"] = _object(
-        version={"const": "protein_structure_action_view_v1"},
+        version={"const": "protein_structure_action_view"},
         source_ref={"type": "string", "format": "reference", "x-reference-namespace": "source",
             "pattern": "^source_[a-f0-9]{24,64}$"},
         operation={"enum": list(TOOLS.values())}, selection=ref("ProjectionSelection"),
@@ -72,8 +71,8 @@ def _definitions():
         source_ref=deepcopy(definitions["ProteinActionView"]["properties"]["source_ref"]),
         operation={"enum": list(TOOLS.values())},
         views={"type": "array", "items": ref("ProteinActionView")},
-        sequences={"type": "array", "items": ref("StructureSequenceDescriptorV2")},
-        saved_sheets={"type": "array", "items": ref("SavedSheetDescriptorV2")},
+        sequences={"type": "array", "items": ref("StructureSequenceDescriptor")},
+        saved_sheets={"type": "array", "items": ref("SavedSheetDescriptor")},
         issues={"type": "array", "items": ref("StructuredIssue")})
     return definitions
 
@@ -112,8 +111,8 @@ def _reachable_definitions(definitions, name):
 
 
 def protein_structure_action_fact_sources():
-    names = {VIEW_SOURCE: "ProteinActionView", SEQUENCE_SOURCE: "StructureSequenceDescriptorV2",
-        SAVED_SOURCE: "SavedSheetDescriptorV2"}
+    names = {VIEW_SOURCE: "ProteinActionView", SEQUENCE_SOURCE: "StructureSequenceDescriptor",
+        SAVED_SOURCE: "SavedSheetDescriptor"}
     meanings = {VIEW_SOURCE: "Exactly selected retained protein values or selected-table identity from an authenticated ordinary action.",
         SEQUENCE_SOURCE: "Original structure-derived sequence descriptor and explicitly selected allowed uses from an authenticated ordinary action.",
         SAVED_SOURCE: "Original protein saved-sheet descriptor with declared uses; Source custody does not itself grant Files or authority."}
@@ -139,12 +138,12 @@ def validate_protein_structure_action_view(value):
             or family == "native_uncertainty" and (kind == "extract_sequence") != (
                 selection["members"]["structure_role"] == "single")):
         raise ValueError("invalid_schema")
-    if outcome["version"] == "protein_structure_action_unavailable_v1":
+    if outcome["version"] == "protein_structure_action_unavailable":
         science._relations(outcome)
         return deepcopy(value)
     if not science.same(selection, outcome["selection"]):
         raise ValueError("conflicting_identity")
-    if outcome["version"] == "protein_structure_projection_rows_v1":
+    if outcome["version"] == "protein_structure_projection_rows":
         if selection["delivery_kind"] != "values":
             raise ValueError("conflicting_identity")
         views.validate_protein_structure_projection_rows(outcome)
@@ -154,7 +153,7 @@ def validate_protein_structure_action_view(value):
         views._envelope(outcome, None)
         delivery = outcome["delivery"]
         science.validate_file_identity(delivery["table_file"])
-        if (delivery["table_file"]["format"] != "protein_structure_projection_table_v1"
+        if (delivery["table_file"]["format"] != "protein_structure_projection_table"
                 or delivery["row_count"] != outcome["returned_count"]
                 or "artifact_descriptor_not_numerical_delivery" not in outcome["qualifications"]):
             raise ValueError("conflicting_identity")
@@ -177,8 +176,8 @@ def validate_protein_structure_tool_result(value):
     if len(keys) != len(set(keys)):
         raise ValueError("duplicate_selection")
     for field, version, operation, validator in (
-            ("sequences", "structure_sequence_descriptor_v2", "extract_sequence", science.validate_structure_sequence_descriptor_v2),
-            ("saved_sheets", "protein_structure_saved_sheet_v2", "compare", science.validate_saved_sheet_descriptor_v2)):
+            ("sequences", "structure_sequence_descriptor", "extract_sequence", science.validate_structure_sequence_descriptor),
+            ("saved_sheets", "protein_structure_saved_sheet", "compare", science.validate_saved_sheet_descriptor)):
         if value[field] and value["operation"] != operation:
             raise ValueError("conflicting_identity")
         for item in value[field]:
@@ -201,9 +200,9 @@ def action_view_from_projection_rows(rows, *, source_ref, operation, table_file=
             raise ValueError("selected_field_unavailable")
         science.validate_file_identity(table_file)
         outcome = {key: deepcopy(item) for key, item in rows.items() if key != "rows"}
-        outcome.update(version="protein_structure_action_artifact_view_v1", delivery=dict(kind="artifact",
+        outcome.update(version="protein_structure_action_artifact_view", delivery=dict(kind="artifact",
             table_file=deepcopy(table_file), row_count=rows["returned_count"], allowed_use="read_exact_selected_table"))
-    return validate_protein_structure_action_view(dict(version="protein_structure_action_view_v1",
+    return validate_protein_structure_action_view(dict(version="protein_structure_action_view",
         source_ref=source_ref, operation=operation, selection=deepcopy(rows["selection"]), outcome=outcome))
 
 
@@ -216,16 +215,16 @@ def project_protein_structure_action_views(scientific, *, source_ref, operation,
         selection = views.validate_protein_structure_projection_selection(selection)
         if scientific is None:
             selected_issues = list(deepcopy(issues)) or [science.issue("selected_field_unavailable", stage="projection", field="projection_fields")]
-            item = dict(version="protein_structure_action_view_v1", source_ref=source_ref, operation=operation,
-                selection=selection, outcome=dict(version="protein_structure_action_unavailable_v1", issues=selected_issues))
+            item = dict(version="protein_structure_action_view", source_ref=source_ref, operation=operation,
+                selection=selection, outcome=dict(version="protein_structure_action_unavailable", issues=selected_issues))
         else:
             try:
                 rows, = views.project_protein_structure_results(scientific, selection=[selection])
             except ValueError as error:
                 from typing import get_args
                 code = str(error) if str(error) in get_args(science.IssueCode) else "invalid_schema"
-                item = dict(version="protein_structure_action_view_v1", source_ref=source_ref, operation=operation,
-                    selection=selection, outcome=dict(version="protein_structure_action_unavailable_v1",
+                item = dict(version="protein_structure_action_view", source_ref=source_ref, operation=operation,
+                    selection=selection, outcome=dict(version="protein_structure_action_unavailable",
                         issues=[science.issue(code, stage="projection", field="projection_fields")]))
             else:
                 table = None if artifact_files is None else artifact_files.get(selection["projection_id"])
@@ -238,9 +237,9 @@ def _validate_fact(value, fact_source):
     if fact_source == VIEW_SOURCE:
         return validate_protein_structure_action_view(value)
     if fact_source == SEQUENCE_SOURCE:
-        return science.validate_structure_sequence_descriptor_v2(value)
+        return science.validate_structure_sequence_descriptor(value)
     if fact_source == SAVED_SOURCE:
-        return science.validate_saved_sheet_descriptor_v2(value)
+        return science.validate_saved_sheet_descriptor(value)
     raise ValueError("invalid_schema")
 
 

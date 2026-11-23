@@ -341,7 +341,7 @@ def test_invalid_detached_inputs_fail_precisely(mutation):
     elif mutation == 'wrong_dimension':
         data['sd_canonical_unit'] = 'uM'
     else:
-        data['scenario'] = {'version': 'a105_summary_precision_scenario_v1', 'count_rule': 'source_statistical_count', 'stipulated_assumptions': ['sample_sd_n_minus_one']}
+        data['scenario'] = {'version': 'a105_summary_precision_scenario', 'count_rule': 'source_statistical_count', 'stipulated_assumptions': ['sample_sd_n_minus_one']}
     with pytest.raises(ExperimentalContractError):
         validate_kinetic_summary_precision_inputs(data)
 

@@ -339,7 +339,7 @@ def parse_blast_maskinfo(content: bytes, *, occurrence: dict, native_format: str
         raise ContractError("sequence_masking_output_format")
     _bytes(content, occurrence)
     oid = occurrence["occurrence_id"]
-    result = {"version": "blast_maskinfo_parse_v1", "occurrence": occurrence, "native_format": native_format,
+    result = {"version": "blast_maskinfo_parse", "occurrence": occurrence, "native_format": native_format,
               "parse_state": "complete", "roots": [], "records": [], "unparsed_spans": [], "checks": [], "failures": []}
     def fail(code, line=None):
         item = _failure("parse", code, oid, line_number=line)
@@ -586,7 +586,7 @@ def _conversion_output(*, operation, input_records, parsed_maskinfo, custody, na
     for failure in failures:
         if failure not in unique:
             unique.append(failure)
-    return {"version": "sequence_masking_parsed_output_v1", "format": operation["output_format"],
+    return {"version": "sequence_masking_parsed_output", "format": operation["output_format"],
         "occurrence": occurrence, "custody": custody, "records": records, "unassigned_records": unassigned,
         "checks": checks, "failures": unique, "native_maskinfo": parsed, "known_zero_records": zeros}
 

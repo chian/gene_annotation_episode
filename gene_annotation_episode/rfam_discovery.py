@@ -13,7 +13,7 @@ import re
 from urllib.parse import urlsplit
 
 BASE_URL = "https://batch.rfam.org"
-VERSION = "rfam_batch_discovery_v1"
+VERSION = "rfam_batch_discovery"
 JOB = re.compile(r"infernal_cmscan-[A-Za-z0-9_-]+")
 ACCESSION = re.compile(r"RF[0-9]{5}")
 
@@ -93,7 +93,7 @@ def hit_row(native: dict, *, family_key: str, sequence_length: int) -> dict:
         **values, "coordinate_system": "zero_based_half_open"}
 
 
-FAILURE_FEEDBACK_VERSION = "rfam_native_submission_feedback_v1"
+FAILURE_FEEDBACK_VERSION = "rfam_native_submission_feedback"
 
 
 def submission_failure_feedback(content: bytes, *, http_status: int, submitted_length: int) -> dict | None:

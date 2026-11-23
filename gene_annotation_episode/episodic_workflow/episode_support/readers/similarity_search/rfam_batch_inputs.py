@@ -23,7 +23,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_
     validate_rfam_input_identity)
 
 
-_FORMAT = "rfam_cmscan_single_json_v1"
+_FORMAT = "rfam_cmscan_single_json"
 _ALIGNMENT_METRICS = ("display_model_from", "display_model_to", "represented_model_positions",
     "model_consensus_equal_count", "model_consensus_compared_count", "model_consensus_equal_fraction")
 _FORMAT_FIELDS = ("native_program", "native_program_version", "rfam_release", "search_space_nt",
@@ -65,7 +65,7 @@ def _metadata_bundle(value, issues):
     try:
         value = finite_json_copy(value, code=code)
         closed_object(value, ("version", "records", "bindings"), code=code)
-        if value["version"] != "rfam_model_metadata_v1" or type(value["records"]) is not list or type(value["bindings"]) is not list:
+        if value["version"] != "rfam_model_metadata" or type(value["records"]) is not list or type(value["bindings"]) is not list:
             raise ContractError(code)
         for record in value["records"]:
             closed_object(record, ("metadata_ref", "accession", "model_name", "model_length_positions",
@@ -94,7 +94,7 @@ def _alignment_index(bundle, capture, expected_keys, issues):
     try:
         bundle = finite_json_copy(bundle, code=code)
         closed_object(bundle, ("version", "artifact_ref", "source_sha256", "rows"), code=code)
-        if (bundle["version"] != "rfam_alignment_components_bundle_v1"
+        if (bundle["version"] != "rfam_alignment_components_bundle"
                 or bundle["artifact_ref"] != capture["artifact_ref"]
                 or bundle["source_sha256"] != capture["source_sha256"] or type(bundle["rows"]) is not list):
             raise ContractError(code)

@@ -1,9 +1,9 @@
-"""Native report source contracts, selected metric names and historical v1 shapes.
+"""Native report source contracts, selected metric names and saved shapes.
 
 All coordinates in native cells are one-based inclusive; represented intervals
 and paired positions are zero-based, half-open/physical. Unknown RF accessions,
 model releases and full-model lengths are never inferred from model names or
-display endpoints. REPORT_METRIC_DEFINITIONS documents saved v1 semantics;
+display endpoints. REPORT_METRIC_DEFINITIONS documents saved semantics;
 new calculations use the shared Infernal sheet and numerical definitions.
 """
 from __future__ import annotations
@@ -18,10 +18,10 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
 )
 
 REPORT_FORMAT = "rfam_cmscan_batch_report_1_1_5"
-REPORT_PARSE_VERSION = "rfam_batch_report_parse_result_v1"
-REPORT_SHEET_VERSION = "rfam_batch_report_sheet_v1"
-REPORT_CALCULATION_VERSION = "rfam_batch_report_calculation_v1"
-REPORT_CORRESPONDENCE_VERSION = "rfam_batch_report_correspondence_v1"
+REPORT_PARSE_VERSION = "rfam_batch_report_parse_result"
+REPORT_SHEET_VERSION = "rfam_batch_report_sheet"
+REPORT_CALCULATION_VERSION = "rfam_batch_report_calculation"
+REPORT_CORRESPONDENCE_VERSION = "rfam_batch_report_correspondence"
 RFAM_ALIGNMENT_COUNT_FIELDS = (
     "model_consensus_compared_count", "model_consensus_equal_count", "query_insert_count",
     "model_delete_count", "truncated_model_count_5p", "truncated_model_count_3p",
@@ -390,7 +390,7 @@ def validate_rfam_saved_batch_identity(identity, capture, *, representation):
     code = "rfam_sheet_invalid"
     closed_object(identity, RfamBatchFileInputIdentity.__annotations__, code=code)
     closed_object(capture, RfamBatchTableCapture.__annotations__, code=code)
-    if (identity["version"] != "rfam_batch_file_input_v1" or not is_int(identity["submitted_file_bytes"], minimum=1)
+    if (identity["version"] != "rfam_batch_file_input" or not is_int(identity["submitted_file_bytes"], minimum=1)
             or not is_sha256(identity["submitted_file_sha256"]) or not is_text(identity["filename"])
             or identity["header_transform"] not in {"generated_unique_headers", "unchanged_unique_headers"}
             or not is_text(identity["submission_source_ref"]) or not is_text(identity["expected_job_id"])

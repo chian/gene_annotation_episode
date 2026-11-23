@@ -14,7 +14,7 @@ import re
 from gene_annotation_episode.episodic_workflow.episode_support.records.local_execution.native_record_identity import finite_json_copy, native_record_digest
 
 
-JOB_VERSION = "native_hmmer_preparation_job_v1"
+JOB_VERSION = "native_hmmer_preparation_job"
 PROGRAM_MODES = {
     "alimask": ("mask_alignment", "mask_model", "model_to_alignment", "alignment_to_model"),
     "hmmbuild": ("build_alignment", "build_single_sequence_matrix"),
@@ -529,7 +529,7 @@ def requested_job_from_hmmer_preparation(job):
 def recorded_operation_matches_compiled(recorded, compiled):
     """Validate original operations without rewriting old incomplete records.
 
-    The initial v1 producer omitted two false hmmsim defaults. Their absence
+    The initial producer omitted two false hmmsim defaults. Their absence
     remains absent in saved bundles and saved grading. Only that exact omission
     is accepted; a selected true flag, changed quantity, or other missing field
     cannot pass through this historical-record check. New compilation always

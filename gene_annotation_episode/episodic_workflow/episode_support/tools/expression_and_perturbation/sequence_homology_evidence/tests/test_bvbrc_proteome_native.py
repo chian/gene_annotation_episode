@@ -17,10 +17,10 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.expression_
 from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.sequence_homology_evidence.bvbrc_proteome_native_contracts import NativeValidationError
 
 
-JSON_FORMAT = "genome_comparison_json_v1"
-TSV_FORMAT = "genome_comparison_tsv_v1"
+JSON_FORMAT = "genome_comparison_json"
+TSV_FORMAT = "genome_comparison_tsv"
 CONTRACT = {
-    "id": "GenomeComparison_inspected_source_v1",
+    "id": "GenomeComparison_inspected_source",
     "application_tree": "5c365e1dca2b3a8c311d7d352e862ff1442eefc9",
     "application_sha256": "4267b35bdd5ad858b833fa2b84eb794c91e95b7f5abc0628b90ec4d6a0a33c14",
     "dependency_tree": "18196fe0df123702457e4af2e0b1e0707d5f5281",
@@ -407,7 +407,7 @@ def test_source_three_state_completeness_does_not_accept_boolean_substitution(fi
     assert result["value"] is None and codes(result) == {"artifact_binding_unqualified"}
 
 
-@pytest.mark.parametrize("field,value", [("application_tree", "unknown"), ("id", "Other_v1"), ("deployment_match", "different")])
+@pytest.mark.parametrize("field,value", [("application_tree", "unknown"), ("id", "Other"), ("deployment_match", "different")])
 def test_other_source_version_is_incompatible_not_silently_reinterpreted(field, value):
     contract = deepcopy(CONTRACT)
     contract[field] = value

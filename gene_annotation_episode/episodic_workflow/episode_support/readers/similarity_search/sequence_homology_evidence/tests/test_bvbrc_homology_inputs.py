@@ -65,7 +65,7 @@ def bundle(document=None, *, primary="raw", mode="database_identification", extr
             "blast_tabular_header": (FIXTURES / "synthetic_database/blast_headers.txt").read_bytes()})
     artifacts = {role: artifact(content, role, mode=mode) for role, content in contents.items()}
     program = entries[0]["report"]["program"] if entries else "blastp"
-    binding = {"schema": "bvbrc_homology_artifact_bundle_v1", "primary_representation": primary,
+    binding = {"schema": "bvbrc_homology_artifact_bundle", "primary_representation": primary,
         "original_task": {"resource_id": "SYNTHETIC-api", "task_id": "SYNTHETIC-task",
             "required_application_id": "Homology", "native_application_id": "Homology",
             "submitted_parameters": {"blast_program": program, "blast_max_hits": 3},

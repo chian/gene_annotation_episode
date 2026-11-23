@@ -45,7 +45,7 @@ def fact(answer, refs=(), support='direct'):
     return {**literature_spr_record.fact(answer, refs), 'support': None if answer == 'unknown' else support}
 
 
-VERSION = 'a105_colocalization_record_v1'
+VERSION = 'a105_colocalization_record'
 EXPERIMENT_TYPE = 'colocalization'
 QUANTITIES = ('objects_counted', 'fraction_colocalized', 'pearson_coefficient', 'enrichment_ratio', 'replicate_count')
 PREPARATION_KEYS = ('component_a_preparation_ref', 'component_b_preparation_ref', 'dataset_ref')

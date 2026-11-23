@@ -33,7 +33,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     ENDPOINT_MS_QUANT_CRITERIA, FRACTION_PER_UNIT, UM_PER_UNIT)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_endpoint_ms_quant_grade_v1'
+VERSION = 'a105_endpoint_ms_quant_grade'
 CRITERIA = tuple(criterion['id'] for criterion in ENDPOINT_MS_QUANT_CRITERIA)
 CONVERSION = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact conversion_detected_above_control
 

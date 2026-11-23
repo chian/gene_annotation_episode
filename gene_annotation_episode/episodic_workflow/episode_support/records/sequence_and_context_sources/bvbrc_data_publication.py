@@ -75,7 +75,7 @@ def _publication_inputs(request, selector, value):
                  "bvbrc_publication_input_binding_mismatch")
         _require(sheet["mode"] == "page" and sheet["qualification"]["service_matches"]
                  and sheet["qualification"]["request_matches"]
-                 and sheet["custody"]["native_profile"] == "solr_json_envelope_v1",
+                 and sheet["custody"]["native_profile"] == "solr_json_envelope",
                  "bvbrc_publication_input_incompatible")
     expected = _unique([{"source_ref": item["provenance"]["source_ref"],
         "record_path": item["provenance"]["record_path"],
@@ -112,7 +112,7 @@ def requested_projection_failures(grading: dict, *, input_results: list[dict]) -
     selector = validate_data_result_selector(grading["selector"],
         request=grading["prepared"]["original_request"])
     inputs = _publication_inputs(grading["prepared"]["original_request"], selector, {
-        "version": "bvbrc_data_publication_inputs_v1", "prepared": grading["prepared"],
+        "version": "bvbrc_data_publication_inputs", "prepared": grading["prepared"],
         "input_results": input_results, "supplied_metadata": selector["supplied_metadata"],
         "metadata_bindings": grading["metadata_bindings"],
     })
@@ -201,7 +201,7 @@ def publish_bvbrc_data(tools, *, request, selector, snapshot,
     prepared = inputs["prepared"]
     parsed = parse_data_snapshot(snapshot, prepared=prepared)
     sheet = parsed["sheet"]
-    grading = {"version": "bvbrc_data_grading_v1", "prepared": prepared,
+    grading = {"version": "bvbrc_data_grading", "prepared": prepared,
         "selector": selector, "parse_result": parsed,
         "page_components": None if sheet is None else calculate_page_counts(sheet),
         "facet_components": None if sheet is None or sheet["mode"] != "facet" else

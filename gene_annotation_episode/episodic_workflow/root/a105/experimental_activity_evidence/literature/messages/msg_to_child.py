@@ -23,7 +23,7 @@ EXAMINED = 'examined_article_refs'
 def msg_to_child(slot, arguments, summary):
     if slot != 'strategy':
         raise LookupError('no_such_child_slot:' + slot)
-    assignment = {'version': 'strategy_assignment_v1',
+    assignment = {'version': 'strategy_assignment',
                   'question_context_refs': summary['literature']['question_context_refs'],
                   'literature_task': summary['task'], 'proposed_annotation_ref': summary['proposed_annotation_ref'],
                   SHEET_STATE_REFS: list(summary['sheet_state_refs']),

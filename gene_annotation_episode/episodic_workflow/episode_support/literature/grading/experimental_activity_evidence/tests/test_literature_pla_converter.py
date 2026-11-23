@@ -17,7 +17,7 @@ def record(spread_kind=None, **values):
     """A PLA record stating every fact as yes and every quantity of STATED (overridden by ``values``; None makes it unavailable); ``spread_kind`` is the choice that names the spread."""
     stated = {**STATED, **values}
     quantities = {name: unavailable(UNITS[name][0], name, 'not_stated_in_passage') if stated[name] is None else point(stated[name], UNITS[name][0], name, ['span_' + name]) for name in QUANTITIES}
-    return {'version': 'a105_pla_record_v1', 'experiment_type': 'pla', 'experiment_ref': 'exp_pla_1', 'source_ref': 'src_pla_1', 'assertion_ref': 'assert_pla_1',
+    return {'version': 'a105_pla_record', 'experiment_type': 'pla', 'experiment_ref': 'exp_pla_1', 'source_ref': 'src_pla_1', 'assertion_ref': 'assert_pla_1',
             'preparations': {'component_a_preparation_ref': 'prep_a', 'component_b_preparation_ref': 'prep_b', 'dataset_ref': 'dataset_pla_1'}, 'quantities': quantities,
             'cell_system': 'cultured_cells', 'fixation': 'paraformaldehyde', 'quantification_software': 'imagej', 'puncta_spread_kind': spread_kind, 'facts': {name: fact('yes', ['span_' + name]) for name in FACTS},
             'choice_support': {'cell_system': 'direct', 'fixation': 'direct', 'quantification_software': 'direct', 'puncta_spread_kind': None if spread_kind is None else 'direct'}, 'spans': {}}

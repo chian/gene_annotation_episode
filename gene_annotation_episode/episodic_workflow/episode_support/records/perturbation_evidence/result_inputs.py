@@ -63,7 +63,7 @@ class ResultInputs(HeldInputs):
             if not any(_same(row, item) for item in supplied):
                 supplied.append(deepcopy(row))
         return validate_contract('PublicationInputs', {
-            'version': 'bvbrc_appservice_publication_inputs_v1', 'request': self.request, 'selector': self.selector,
+            'version': 'bvbrc_appservice_publication_inputs', 'request': self.request, 'selector': self.selector,
             'original_handoff_ref': self.handoff_ref, 'current_operation': operation,
             'current_snapshot': snapshot_binding, 'prior_acquisition_receipt_refs': list(prior_acquisition_refs),
             'support_receipt_refs': prepared['bound_inputs']['support_receipt_refs'], 'supplied_evidence': supplied,

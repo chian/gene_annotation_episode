@@ -16,7 +16,7 @@ The slot keeps the old role name ``launch_api``."""
 from episode_runtime import ChildMessage
 
 SELECTION = ('bvbrc_appservice_support_refs',)
-OLD_PROPERTIES = ('version', 'resource_id', 'service', 'request', 'endpoint', 'constraints')
+ASSIGNMENT_PROPERTIES = ('version', 'resource_id', 'service', 'request', 'endpoint', 'constraints')
 
 
 def msg_to_child(slot, arguments, summary):
@@ -24,7 +24,7 @@ def msg_to_child(slot, arguments, summary):
         raise ValueError('execution_job_submission_slot_unknown:' + slot)
     resource_id = arguments['resource_id']
     request = summary['requests'][resource_id]
-    assignment = {name: request[name] for name in OLD_PROPERTIES}
+    assignment = {name: request[name] for name in ASSIGNMENT_PROPERTIES}
     instructions = request.get('launch_instructions')
     if instructions is None:
         instructions = summary['launch_instructions']

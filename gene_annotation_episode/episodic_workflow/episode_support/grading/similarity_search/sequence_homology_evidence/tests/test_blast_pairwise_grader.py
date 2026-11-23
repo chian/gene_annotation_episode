@@ -19,7 +19,7 @@ def hsp(query="ACDE", reference="ACDE", **changes):
 
 
 def normalized(hsps, *, length=10, reference_length=10, program="blastp"):
-    return {"schema": "blast_normalized_result_v1", "mode": "pairwise",
+    return {"schema": "blast_normalized_result", "mode": "pairwise",
             "resource": "local", "format": "json2",
             "query": {"id": "synthetic_query", "title": None, "length": length},
             "search": {"program": program, "version": "synthetic",

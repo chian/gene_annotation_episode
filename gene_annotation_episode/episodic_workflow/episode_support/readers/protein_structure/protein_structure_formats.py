@@ -99,7 +99,7 @@ def _input(data, file_identity, expected):
 
 
 def _empty(identity):
-    return {"version": "protein_structure_parsed_v1", "file_identity": identity,
+    return {"version": "protein_structure_parsed", "file_identity": identity,
             "state": "complete", "pdb_records": [], "cif_blocks": [], "atoms": [],
             "models": [], "chains": [], "unparsed_spans": [], "issues": []}
 

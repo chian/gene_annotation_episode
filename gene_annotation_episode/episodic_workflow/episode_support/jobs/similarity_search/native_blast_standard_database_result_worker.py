@@ -30,15 +30,15 @@ _MODEL = {"anyOf": [{"type": "null"}, {"type": "object", "properties": {
     "function_priors": {"anyOf": [{"type": "null"}, {"type": "object", "additionalProperties": {"type": "number", "minimum": 0}}]}},
     "additionalProperties": False}]}
 _ROLES = {"inputs": ("inputs.json", metadata.PREPARED_INPUTS_SCHEMA),
-    "collection": ("collection.json", "blast_report_collection_v1"), "sheets": ("sheets.json", metadata.SHEET_SET_SCHEMA),
+    "collection": ("collection.json", "blast_report_collection"), "sheets": ("sheets.json", metadata.SHEET_SET_SCHEMA),
     "calculations": ("calculations.json", calculators.CALCULATION_SCHEMA),
-    "rows": ("rows.ndjson", PREFIX + "numeric_row_v1"), "row_index": ("row-index.json", PREFIX + "row_index_v1"),
-    "metric_definitions": ("metric-definitions.json", PREFIX + "metric_definitions_v1"),
-    "diagnostics": ("diagnostics.json", PREFIX + "diagnostics_v1")}
-_MANIFEST_VERSION = PREFIX + "result_worker_manifest_v2"
+    "rows": ("rows.ndjson", PREFIX + "numeric_row"), "row_index": ("row-index.json", PREFIX + "row_index"),
+    "metric_definitions": ("metric-definitions.json", PREFIX + "metric_definitions"),
+    "diagnostics": ("diagnostics.json", PREFIX + "diagnostics")}
+_MANIFEST_VERSION = PREFIX + "result_worker_manifest"
 
 STANDARD_BLAST_DATABASE_WORKER_REQUEST_SCHEMA = views._object(dict(
-    version={"const": PREFIX + "result_worker_request_v1"}, calculation_id=views.SHA,
+    version={"const": PREFIX + "result_worker_request"}, calculation_id=views.SHA,
     bundle=contracts.NATIVE_BLAST_STANDARD_DATABASE_BUNDLE_SCHEMA, bundle_artifact_ref=views.REF,
     bundle_capture=views._object(dict(path=_ABS, sha256=views.SHA, size_bytes=views.I0)),
     authenticated_attempt=_ATTEMPT,
@@ -136,7 +136,7 @@ def _catalog(request, failures):
         raise _WorkerFailure("capture", "artifact_identity_mismatch", "artifact_digest_conflict", pointer="/retained_sources")
     catalog = dict(bundle_source_ref=request["bundle_artifact_ref"], bundle_artifact_ref=request["bundle_artifact_ref"],
         bundle_sha256=request["bundle_capture"]["sha256"], entries=entries, retained_sources=deepcopy(request["retained_sources"]))
-    if any(r["schema_id"] == "native_blast_database_sequence_metadata_v3" for r in request["metadata_descriptors"]):
+    if any(r["schema_id"] == "native_blast_database_sequence_population_metadata" for r in request["metadata_descriptors"]):
         catalog["bundle_size_bytes"] = request["bundle_capture"]["size_bytes"]
     return catalog, contents, collector_contents
 
@@ -329,7 +329,7 @@ def run_standard_blast_database_result_worker(request_path: str) -> dict:
             position += len(raw)
         record = _atomic_bytes(directory, "rows.ndjson", b"".join(chunks))
         manifest["artifacts"].append(dict(role="rows", relative_path="rows.ndjson", schema=_ROLES["rows"][1], **record))
-        save("row_index", dict(schema=PREFIX + "row_index_v1", calculation_id=request["calculation_id"], rows=index))
+        save("row_index", dict(schema=PREFIX + "row_index", calculation_id=request["calculation_id"], rows=index))
         manifest["counts"]["numerical_rows"] = len(rows)
         save("metric_definitions", views.standard_blast_database_metric_definitions())
         manifest["status"] = "partial" if failures else "complete"
@@ -344,7 +344,7 @@ def run_standard_blast_database_result_worker(request_path: str) -> dict:
         detail = "resource_limit" if resource else "calculator_contract_invalid" if stage in {"inputs", "population", "calculation"} else "implementation_failure"
         failures.append(_WorkerFailure("worker" if resource else stage, code, detail).failure)
         errors.append(dict(failure_index=len(failures) - 1, exception_type=type(error).__module__ + "." + type(error).__qualname__, message=str(error)))
-    save("diagnostics", dict(schema=PREFIX + "diagnostics_v1", failures=failures, metadata_issues=metadata_issues, exceptions=errors))
+    save("diagnostics", dict(schema=PREFIX + "diagnostics", failures=failures, metadata_issues=metadata_issues, exceptions=errors))
     _shape(manifest, STANDARD_BLAST_DATABASE_WORKER_MANIFEST_SCHEMA)
     _atomic_bytes(directory, "worker-manifest.json", _json_bytes(manifest))
     return views._copy(manifest)

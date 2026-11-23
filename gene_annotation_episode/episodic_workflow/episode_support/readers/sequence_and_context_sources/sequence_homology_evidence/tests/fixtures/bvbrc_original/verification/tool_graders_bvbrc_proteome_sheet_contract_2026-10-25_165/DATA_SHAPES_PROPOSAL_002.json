@@ -587,15 +587,15 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_proteome_native_projection_v1"
+          "const": "bvbrc_proteome_native_projection"
         },
         "scientific_mode": {
           "const": "proteome_comparison"
         },
         "format": {
           "enum": [
-            "genome_comparison_json_v1",
-            "genome_comparison_tsv_v1"
+            "genome_comparison_json",
+            "genome_comparison_tsv"
           ]
         },
         "source": {
@@ -1103,7 +1103,7 @@
       "type": "object",
       "properties": {
         "id": {
-          "const": "GenomeComparison_inspected_source_v1"
+          "const": "GenomeComparison_inspected_source"
         },
         "application_tree": {
           "const": "5c365e1dca2b3a8c311d7d352e862ff1442eefc9"
@@ -1736,7 +1736,7 @@
           "const": "aa"
         },
         "normalization": {
-          "const": "ascii_whitespace_removed_uppercase_no_symbol_substitution_v1"
+          "const": "ascii_whitespace_removed_uppercase_no_symbol_substitution"
         },
         "sequence_sha256": {
           "type": "string",
@@ -1889,14 +1889,14 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_proteome_inventory_proposal_v1"
+          "const": "bvbrc_proteome_inventory_proposal"
         },
         "inventory_key": {
           "type": "string",
           "minLength": 1
         },
         "format": {
-          "const": "protein_fasta_utf8_v1"
+          "const": "protein_fasta_utf8"
         },
         "source": {
           "$ref": "#/$defs/NativeSource"
@@ -1905,7 +1905,7 @@
           "const": "aa"
         },
         "normalization": {
-          "const": "ascii_whitespace_removed_uppercase_no_symbol_substitution_v1"
+          "const": "ascii_whitespace_removed_uppercase_no_symbol_substitution"
         },
         "records": {
           "type": "array",
@@ -2282,14 +2282,14 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_proteome_metadata_proposal_v1"
+          "const": "bvbrc_proteome_metadata_proposal"
         },
         "snapshot_key": {
           "type": "string",
           "minLength": 1
         },
         "format": {
-          "const": "bvbrc_genome_feature_json_array_v1"
+          "const": "bvbrc_genome_feature_json_array"
         },
         "source": {
           "$ref": "#/$defs/NativeSource"
@@ -2337,14 +2337,14 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_proteome_metadata_proposal_v1"
+          "const": "bvbrc_proteome_metadata_proposal"
         },
         "snapshot_key": {
           "type": "string",
           "minLength": 1
         },
         "format": {
-          "const": "bvbrc_genome_json_array_v1"
+          "const": "bvbrc_genome_json_array"
         },
         "source": {
           "$ref": "#/$defs/NativeSource"
@@ -2388,14 +2388,14 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_proteome_metadata_proposal_v1"
+          "const": "bvbrc_proteome_metadata_proposal"
         },
         "snapshot_key": {
           "type": "string",
           "minLength": 1
         },
         "format": {
-          "const": "bvbrc_feature_sequence_json_array_v1"
+          "const": "bvbrc_feature_sequence_json_array"
         },
         "source": {
           "$ref": "#/$defs/NativeSource"
@@ -2595,7 +2595,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_proteome_input_index_proposal_v1"
+          "const": "bvbrc_proteome_input_index_proposal"
         },
         "parameter_source": {
           "$ref": "#/$defs/ParameterSource"
@@ -3027,7 +3027,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_proteome_joins_proposal_v1"
+          "const": "bvbrc_proteome_joins_proposal"
         },
         "primary_source_ref": {
           "type": "string",
@@ -3924,7 +3924,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_proteome_directional_attachment_proposal_v1"
+          "const": "bvbrc_proteome_directional_attachment_proposal"
         },
         "state": {
           "enum": [
@@ -3979,7 +3979,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_proteome_native_sheet_proposal_v1"
+          "const": "bvbrc_proteome_native_sheet_proposal"
         },
         "scientific_mode": {
           "const": "proteome_comparison"
@@ -4110,7 +4110,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_proteome_native_parameters_proposal_v1"
+          "const": "bvbrc_proteome_native_parameters_proposal"
         },
         "track_keys": {
           "type": "array",
@@ -4457,10 +4457,10 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_proteome_native_components_proposal_v1"
+          "const": "bvbrc_proteome_native_components_proposal"
         },
         "formula_version": {
-          "const": "native_descriptive_components_v1"
+          "const": "native_descriptive_components"
         },
         "sheet_sha256": {
           "type": "string",

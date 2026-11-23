@@ -15,7 +15,7 @@ import math
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.perturbation_evidence.literature_experimental_contracts import ExperimentalContractError
 
 
-VERSION = "a105_channel_components_v1"
+VERSION = "a105_channel_components"
 PRIMITIVE_ORDER = ("current", "applied_voltage", "reversal_voltage")
 QUANTITIES = (*PRIMITIVE_ORDER, "reported_conductance")
 CURRENT_KINDS = ("signed_current", "current_step_magnitude", "unknown", "conflicting")

@@ -1,4 +1,4 @@
-"""What the parent gives: the results assignment (``execution_results_assignment_v1``: ``handoff_ref`` and
+"""What the parent gives: the results assignment (``execution_results_assignment``: ``handoff_ref`` and
 ``selector``) and the records it passes.
 
 This is the only place the assignment is read. The handoff arrives as a record reference: ``handoff_ref`` names the
@@ -44,15 +44,15 @@ from gene_annotation_episode.episodic_workflow.episode_support.readers.similarit
 from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.evolutionary_history_evidence.native_blast_standard_database_result_views import (
     validate_standard_blast_database_selector)
 
-RESULTS_VERSION = 'execution_results_assignment_v1'
-LOCAL_FILE_SOURCE_VERSION = 'local_file_source_selector_v1'
+RESULTS_VERSION = 'execution_results_assignment'
+LOCAL_FILE_SOURCE_VERSION = 'local_file_source_selector'
 OFFSET = {'type': 'integer', 'minimum': 0}
 LIMIT = {'type': 'integer', 'minimum': 1}
 RESULTS_SCHEMA = obj({'version': {'const': RESULTS_VERSION}, 'handoff_ref': TEXT, 'selector': {'type': 'object'}})
 NATIVE_SELECTOR_SCHEMA = obj({'paths': {'type': 'array', 'minItems': 1, 'uniqueItems': True, 'items': TEXT},
                               'path': TEXT, 'offset': OFFSET, 'limit': LIMIT}, [])
-MASKING_SELECTOR_VERSION = 'native_blast_masking_result_selector_v1'
-UTILITY_SELECTOR_VERSIONS = ('native_blast_utility_result_selector_v1', 'native_blast_utility_result_selector_v2')
+MASKING_SELECTOR_VERSION = 'native_blast_masking_result_selector'
+UTILITY_SELECTOR_VERSION = 'native_blast_utility_result_selector'
 
 ASSIGNMENT_FORM = RecordForm({
     'version': DeclaredField('text', 'The assignment version', RESULTS_VERSION),
@@ -60,7 +60,7 @@ ASSIGNMENT_FORM = RecordForm({
                                  'itself is passed in record_refs'),
     'selector': Field('record', 'The requested results: plain file results (paths, or one path with offset and '
                                 'limit, inside the job\'s directory) or a typed native result selector'),
-    'target': Field('record', 'The execution target the handoff names (execution_target_v1); the commissioner '
+    'target': Field('record', 'The execution target the handoff names (execution_target); the commissioner '
                               'builds it from the handoff row'),
     'acquired_record_unit': Field('number', 'The credit of one fully acquired requested selector'),
     'record_refs': Field('record_refs', 'Every record the code reads, passed in custody: the handoff row, the job '
@@ -82,7 +82,7 @@ def family(target, selector):
         return 'local_file_source'
     if selector.get('version') == MASKING_SELECTOR_VERSION or is_native_blast_masking_target(target):
         return 'native_blast_masking'
-    if selector.get('version') in UTILITY_SELECTOR_VERSIONS or is_native_blast_utility_target(target):
+    if selector.get('version') == UTILITY_SELECTOR_VERSION or is_native_blast_utility_target(target):
         return 'native_blast_utility'
     if target['resource_kind'] == 'api':
         return 'api'

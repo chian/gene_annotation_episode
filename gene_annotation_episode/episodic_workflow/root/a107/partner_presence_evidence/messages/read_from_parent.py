@@ -32,9 +32,9 @@ from method_loop import Field, RecordForm
 from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence.domain import obj
 
 AXIS = 'A107'
-SELECTION_VERSION = 'partner_presence_evidence_selection_v3'
-OPTION_REF_VERSION = 'partner_presence_evidence_option_ref_v1'
-REVISION_ORIGIN_VERSION = 'partner_presence_evidence_revision_origin_v1'
+SELECTION_VERSION = 'partner_presence_evidence_selection'
+OPTION_REF_VERSION = 'partner_presence_evidence_option_ref'
+REVISION_ORIGIN_VERSION = 'partner_presence_evidence_revision_origin'
 REFERENCE = {'type': 'string', 'pattern': '^[a-z][a-z_]*_[a-f0-9]{24,64}$'}
 SHA256 = {'type': 'string', 'pattern': '^[a-f0-9]{64}$'}
 
@@ -54,7 +54,7 @@ SELECTION = obj({'version': {'const': SELECTION_VERSION}, 'evidence_axis': EVIDE
 REVISION_ORIGIN = obj({'version': {'const': REVISION_ORIGIN_VERSION},
                        'parent_invocation_ref': {'type': 'string', 'pattern': '^scientific_invocation_[a-f0-9]{24}$'},
                        'preparation_operation_ref': {'type': 'string', 'pattern': '^operation_[a-f0-9]{24}$'}})
-EVIDENCE_TASK = obj({'version': {'const': 'evidence_axis_task_v1'}, 'kind': {'const': 'whole_axis_findings'},
+EVIDENCE_TASK = obj({'version': {'const': 'evidence_axis_task'}, 'kind': {'const': 'whole_axis_findings'},
                      'evidence_axis': {'const': AXIS},
                      'credit_unit': {'type': 'number', 'exclusiveMinimum': 0,
                                      'description': 'Use the finding unit in the explicitly configured credit '
@@ -76,7 +76,7 @@ ASSIGNMENT_FORM = RecordForm({
                                                     'reference, passed in custody', required=False),
     'evidence_refs': Field('record_refs', 'The evidence operands selected by the parent, passed in custody'),
     'constraints': Field('record', "The parent's constraints"),
-    'context': Field('record', 'The parent-supplied context; optionally evidence_task (evidence_axis_task_v1, '
+    'context': Field('record', 'The parent-supplied context; optionally evidence_task (evidence_axis_task, '
                                'whole_axis_findings, A107, credit_unit)'),
     'revision_origin': Field('record', 'The preparation this selection is an alternative approach of (a '
                                        'process.revise result), when it is one', required=False),

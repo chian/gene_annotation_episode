@@ -14,7 +14,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_experimental_contracts import ExperimentalContractError
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_measurement_validation_inputs import _read_number, _number_schema, _associate, _visible_span, _field_witness, _retained_witness_schema, _nullable, _array, _exact_schema, _exact, _unit as _fraction_unit, _unit_value as _fraction_unit_value, _APPROX_POINT, _RANGE, NUMBER_REASONS, RELATIONS, _visible
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_partner_source_fields import number_selector_schema, read_source_rate_unit, _rate_unit, _NUMBER, _unit_contexts, _PRINTED_RATE_UNIT, _RATE_UNIT_START, _unit_continuation
-VERSION = 'a105_product_coupling_inputs_v1'
+VERSION = 'a105_product_coupling_inputs'
 SOURCE_KINDS = ('primary_source', 'retained_extraction', 'synthetic_fixture')
 ORIGINS = dict(primary_source='reported', retained_extraction='derived', synthetic_fixture='synthetic')
 ROLES = ('product', 'cofactor', 'reported_coupling')
@@ -165,7 +165,7 @@ def _covariance(reference, quantities, sources):
     except (UnicodeDecodeError, ValueError):
         result['unavailable_reason'] = 'covariance_json_invalid'
         return result
-    if not isinstance(raw, dict) or set(raw) != set(_COV_FIELDS) or raw['version'] != 'a105_product_coupling_covariance_v1' or (raw['order'] != ['product', 'cofactor']):
+    if not isinstance(raw, dict) or set(raw) != set(_COV_FIELDS) or raw['version'] != 'a105_product_coupling_covariance' or (raw['order'] != ['product', 'cofactor']):
         result['unavailable_reason'] = 'covariance_contract_mismatch'
         return result
     if raw['origin'] not in ('reported', 'derived', 'synthetic') or raw['variance_status'] not in ('known', 'estimated', 'unknown'):

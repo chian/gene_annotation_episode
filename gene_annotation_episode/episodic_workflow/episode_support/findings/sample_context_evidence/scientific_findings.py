@@ -8,7 +8,7 @@ interpretation is true or recognize arbitrary synonyms automatically.
 from gene_annotation_episode.episodic_workflow.episode_support.records.sample_context_evidence.domain import canonical, identity
 
 
-IDENTITY_VERSION = 'typed_source_claim_question_qualification_v2'
+IDENTITY_VERSION = 'typed_source_claim_question_qualification'
 
 
 def finding_target_roots(store, assessment):
@@ -33,7 +33,7 @@ class FindingIdentity:
             return self._sources[ref]
         row = self.store.get(ref)
         if (row.get('origin') == 'tool' and row.get('provider') == 'xlsx.rows'
-                and row.get('version') == 'xlsx_selected_cells_v1'
+                and row.get('version') == 'xlsx_selected_cells'
                 and len(row.get('parent_source_refs', ())) == 1):
             # This adapter only decodes retained original cells/formula caches;
             # its page/filter/header selection is not a new biological source.
@@ -41,7 +41,7 @@ class FindingIdentity:
             # combine different supplements) or the selected-page artifact.
             workbook = self.store.get(row['parent_source_refs'][0])
             value = {'original_xlsx_workbook_artifact': workbook['artifact_ref'],
-                     'representation': 'original_cells_and_formula_caches_v1'}
+                     'representation': 'original_cells_and_formula_caches'}
             self._sources[ref] = value
             return value
         identifiers = {}

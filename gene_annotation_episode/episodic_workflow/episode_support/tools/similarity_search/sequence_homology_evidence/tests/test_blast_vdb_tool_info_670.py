@@ -59,7 +59,7 @@ def test_configured_variant_matches_exact_requested_job_schema_and_runtime(
     assert descriptor['invocation_route']['routes'] == [
         {'entry_role': 'launch', 'resource_id': 'selected', 'resource_role': 'launch_local'}]
     assert descriptor['input_schema']['properties']['native_blast_utility']['properties']['version'] == {
-        'const': 'native_blast_utility_job_v3'}
+        'const': 'native_blast_vdb_utility_job'}
     assert descriptor['description'] and descriptor['instructions']
 
 

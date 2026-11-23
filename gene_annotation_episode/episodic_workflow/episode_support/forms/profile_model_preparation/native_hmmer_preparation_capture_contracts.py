@@ -5,7 +5,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_
 from pathlib import PurePosixPath
 from gene_annotation_episode.episodic_workflow.episode_support.records.local_execution.native_record_identity import finite_json_copy
 
-VERSION = "native_hmmer_preparation_capture_v1"
+VERSION = "native_hmmer_preparation_capture"
 
 _PREFIX = "native_hmmer_preparation_"
 

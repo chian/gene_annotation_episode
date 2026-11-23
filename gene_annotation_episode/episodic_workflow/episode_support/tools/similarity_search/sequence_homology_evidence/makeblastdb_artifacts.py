@@ -173,7 +173,7 @@ def populate_database_artifact_set(*, operation: dict, inputs: list[dict], outpu
     software/command identities established by the actual execution boundary.
     """
     operation = validate_blast_utility_operation(operation)
-    if operation["version"] == "blast_utility_operation_v2":
+    if operation["version"] == "blast_preparation_operation":
         from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.blast_preparation_population import populate_blast_preparation_artifact_set
         if type(preparation_context) is not dict or set(preparation_context) != {
                 "database_bindings", "materializations", "documents"}:
@@ -194,7 +194,7 @@ def populate_database_artifact_set(*, operation: dict, inputs: list[dict], outpu
     inputs = [validate_blast_utility_record("ArtifactOccurrence", row) for row in inputs]
     outputs = [validate_blast_utility_record("ArtifactOccurrence", row) for row in outputs]
     record = {
-        "version": "blast_database_artifact_set_v1", "kind": "sequence_database",
+        "version": "blast_database_artifact_set", "kind": "sequence_database",
         "operation": operation, "original_outcome": outcome, "database_key": database_key,
         "identity": identity, "software": software, "argv": argv, "native_paths": native_paths,
         "inputs": inputs, "outputs": outputs, "dependencies": dependency_bindings,
@@ -218,7 +218,7 @@ def populate_database_artifact_set(*, operation: dict, inputs: list[dict], outpu
 
 def validate_database_artifact_relationships(record: dict) -> dict:
     """Validate a saved artifact set without acquiring or inspecting its files."""
-    if type(record) is dict and record.get("version") == "blast_database_artifact_set_v2":
+    if type(record) is dict and record.get("version") == "blast_prepared_database_artifact_set":
         from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.blast_preparation_population import validate_blast_preparation_relationships
         return validate_blast_preparation_relationships(record)
     record = validate_blast_utility_record("DatabaseArtifactSet", record)
@@ -262,7 +262,7 @@ def project_prepared_blast_database(record: dict, *, contract: str,
     identity is fabricated for this not-yet-saved returned manifest.
     """
     record = validate_database_artifact_relationships(record)
-    if record["version"] == "blast_database_artifact_set_v2":
+    if record["version"] == "blast_prepared_database_artifact_set":
         return _project_preparation(record, contract=contract, preparation_receipt=preparation_receipt,
             input_manifest=input_manifest, metadata_manifests=metadata_manifests)
     if type(contract) is not str or contract != "standard":
@@ -306,7 +306,7 @@ def project_prepared_blast_database(record: dict, *, contract: str,
                           "size_bytes": occurrence["size_bytes"]})
             seen_paths.add(occurrence["native_path"])
     manifest = {
-        "version": "native_blast_standard_prepared_database_manifest_v1",
+        "version": "native_blast_standard_prepared_database_manifest",
         "database_key": record["database_key"],
         "kind": "blast_nucleotide_sequence" if record["operation"]["molecule"] == "dna" else "blast_protein_sequence",
         "identity": record["identity"], "native_paths": record["native_paths"], "files": files,
@@ -381,7 +381,7 @@ def _project_preparation(record, *, contract, preparation_receipt, input_manifes
                 "failures": [_failure("dependency_unavailable", stage="projection", occurrence_id=row["occurrence_id"])]})
         files.append({"path": row["native_path"], "sha256": row["sha256"], "size_bytes": row["size_bytes"]})
         seen.add(row["native_path"])
-    manifest = {"version": "native_blast_standard_prepared_database_manifest_v1" if classic else "native_blast_prepared_database_manifest_v1",
+    manifest = {"version": "native_blast_standard_prepared_database_manifest" if classic else "native_blast_prepared_database_manifest",
         "database_key": record["database_key"], "kind": ("blast_nucleotide_sequence" if record["operation"]["molecule"] == "dna"
             else "blast_protein_sequence") if classic else profile_type + "_profile",
         "identity": record["identity"], "native_paths": record["native_paths"], "files": files,

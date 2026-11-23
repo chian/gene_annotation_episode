@@ -10,8 +10,8 @@ from copy import deepcopy
 from itertools import combinations
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence import literature_controlled_response_calculations as arithmetic
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_experimental_contracts import RATE_UNITS
-_INPUT_VERSION = 'controlled_response_owner_inputs_v2'
-_VERSION = 'controlled_response_owner_sheet_v2'
+_INPUT_VERSION = 'controlled_response_owner_inputs'
+_VERSION = 'controlled_response_owner_sheet'
 _ROLES = arithmetic.PRIMITIVE_ORDER
 _COEFFICIENTS = (1, -1, -1, 1)
 

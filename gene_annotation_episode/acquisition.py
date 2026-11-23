@@ -189,7 +189,7 @@ class PublicClients:
             self.work_dir.mkdir(parents=True, exist_ok=True)
             script = script.absolute()
         observer_policy = (None if max_bytes is None else {
-            'version': 'bounded_skill_http_entity_capture_v1',
+            'version': 'bounded_skill_http_entity_capture',
             'adapter_module': __name__,
             'response_byte_limit': max_bytes, 'byte_basis': 'requests_decoded_entity_bytes',
             'stream': True, 'automatic_redirects': False, 'redirect_preparation': False})

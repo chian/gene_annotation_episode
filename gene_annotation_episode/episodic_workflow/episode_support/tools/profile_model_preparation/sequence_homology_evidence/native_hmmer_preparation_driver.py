@@ -25,8 +25,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.jobs.local_execut
 from gene_annotation_episode.episodic_workflow.episode_support.forms.profile_model_preparation.sequence_homology_evidence.native_hmmer_preparation_contracts import RANGE_FLAGS, native_options, parse_ranges, compile_native_hmmer_preparation_job, recorded_operation_matches_compiled, validate_native_hmmer_preparation_requested_job
 
 
-PLAN_VERSION = "native_hmmer_preparation_run_plan_v1"
-BUNDLE_VERSION = "native_hmmer_preparation_bundle_v1"
+PLAN_VERSION = "native_hmmer_preparation_run_plan"
+BUNDLE_VERSION = "native_hmmer_preparation_bundle"
 OWNER_NAME = ".native-hmmer-preparation-owner.json"
 BUNDLE_NAME = "bundle.json"
 INPUT_DIRECTORY = "inputs"

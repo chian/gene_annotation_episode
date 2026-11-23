@@ -56,7 +56,7 @@ def selection_of(slot, arguments, summary):
 def msg_to_child(slot, arguments, summary):
     assignment = summary['literature_assignment']
     page = summary['page']
-    child = {'version': 'reading_assignment_v1', 'page': page, 'selection': selection_of(slot, arguments, summary),
+    child = {'version': 'reading_assignment', 'page': page, 'selection': selection_of(slot, arguments, summary),
              'literature_task': summary['task'], 'proposed_annotation_ref': summary['proposed_annotation_ref'],
              **{name: assignment[name] for name in (REQUESTED_GRADING, REQUESTED_AGGREGATION)
                 if slot in CELLS_FROM and assignment.get(name)},

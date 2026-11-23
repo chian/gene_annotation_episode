@@ -9,8 +9,8 @@ another representation of its operands.
 from copy import deepcopy
 
 
-SHEET_SCHEMA = "sequence_composition_count_sheet_v1"
-COMPONENTS_SCHEMA = "sequence_composition_count_components_v1"
+SHEET_SCHEMA = "sequence_composition_count_sheet"
+COMPONENTS_SCHEMA = "sequence_composition_count_components"
 CANONICAL_SYMBOLS = {"dna": "ACGT", "rna": "ACGU", "protein": "ACDEFGHIKLMNPQRSTVWYOU"}
 AMBIGUOUS_SYMBOLS = {"dna": "RYSWKMBDHVN", "rna": "RYSWKMBDHVN", "protein": "BXZJ"}
 SUMMARY_FIELDS = ("unambiguous_nucleotide_count", "ambiguous_symbol_count",

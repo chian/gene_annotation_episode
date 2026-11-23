@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 
 from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.sequence_homology_evidence import blast_vdb_function_inputs as module
-from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search import blast_vdb_inputs as v1
+from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search import blast_vdb_inputs as vdb_inputs
 from gene_annotation_episode.episodic_workflow.episode_support.calculations.similarity_search.sequence_homology_evidence import blast_vdb_calculators as base
 
 
@@ -58,9 +58,9 @@ def test_valid_frozen_groups_remain_identical_without_parsing_or_recalculation(n
     sheet = json.loads((FIXTURES / (name + ".json")).read_text())
     original = deepcopy(sheet)
     def forbidden(*args, **kwargs):
-        raise AssertionError("Saved relation checks must not parse, populate or recalculate the v1 base")
+        raise AssertionError("Saved relation checks must not parse, populate or recalculate the vdb_inputs base")
     for port in ("_reparse", "_recheck_metadata", "populate_blast_vdb_sheet", "parse_ncbi_sra_runinfo", "parse_ncbi_gbseq_vdb_metadata", "parse_blast_vdb_member_sequences"):
-        monkeypatch.setattr(v1, port, forbidden)
+        monkeypatch.setattr(vdb_inputs, port, forbidden)
     monkeypatch.setattr(base, "calculate_blast_vdb_components", forbidden)
     monkeypatch.setattr(module, "populate_blast_vdb_function_sheet", forbidden)
     result = module.validate_blast_vdb_function_sheet(sheet)
@@ -97,7 +97,7 @@ def test_conflicting_assignment_key_retains_exact_entity_and_valid_siblings(dest
     def forbidden(*args, **kwargs):
         raise AssertionError("Saved conflict validation cannot parse, repopulate or recalculate")
     for port in ("_reparse", "_recheck_metadata", "populate_blast_vdb_sheet", "parse_ncbi_sra_runinfo", "parse_ncbi_gbseq_vdb_metadata", "parse_blast_vdb_member_sequences"):
-        monkeypatch.setattr(v1, port, forbidden)
+        monkeypatch.setattr(vdb_inputs, port, forbidden)
     monkeypatch.setattr(base, "calculate_blast_vdb_components", forbidden)
     monkeypatch.setattr(module, "populate_blast_vdb_function_sheet", forbidden)
     assert module.validate_blast_vdb_function_sheet(sheet) == sheet

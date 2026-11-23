@@ -7,9 +7,9 @@ independent evidence. This helper does not add a score or numerical formula.
 from copy import deepcopy
 from gene_annotation_episode.episodic_workflow.episode_support.records.biochemical_feasibility_evidence.domain import LABEL, identity
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.partner_presence_evidence.literature_assay_inputs import _fail, _keys
-INPUT_VERSION = 'a110_reaction_inputs_v2'
-DATA_VERSION = 'a110_source_reaction_measurements_v2'
-RECORD_VERSION = 'literature_reaction_record_v3'
+INPUT_VERSION = 'a110_reaction_meaning_inputs'
+DATA_VERSION = 'a110_source_reaction_meaning_measurements'
+RECORD_VERSION = 'literature_reaction_semantic_record'
 NAMESPACE = 'literature_reaction_semantic_cells'
 BASES = ('source_reported', 'source_supported_inference', 'conditional_assumption', 'unresolved')
 MODEL_FIELDS = {'definition': 'reference', 'reaction': 'term', 'function_relation': 'term', 'prediction_evidence': 'reference'}

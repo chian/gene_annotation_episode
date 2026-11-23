@@ -667,16 +667,16 @@ def _failure(context, request, problem):
 
 
 def calculate_comparative_systems_components(sheet: dict, *, parameters: dict) -> dict:
-    """Calculate each selected QuantityV1 once using only saved supplied data.
+    """Calculate each selected Quantity once using only saved supplied data.
 
     Repeating this call with changed explicit parameters returns a detached new
     result. The sheet, previous components, and all historical credit are untouched.
     """
-    saved = validate_shape("ComparativeSystemsSheetV1", sheet)
+    saved = validate_shape("ComparativeSystemsSheet", sheet)
     selected = validate_calculation_parameters(parameters)
     context = _Context(saved)
-    result = {"version": "bvbrc_comparative_systems_components_v1",
-              "formula_version": "bvbrc_comparative_systems_formulas_v1",
+    result = {"version": "bvbrc_comparative_systems_components",
+              "formula_version": "bvbrc_comparative_systems_formulas",
               "analysis_id": saved["analysis_id"], "sheet_sha256": canonical_sha256(saved),
               "parameters": selected, "components": [], "requirements": [], "diagnostics": []}
     for request in selected["requests"]:

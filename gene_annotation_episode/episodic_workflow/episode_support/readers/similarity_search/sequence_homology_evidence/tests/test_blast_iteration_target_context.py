@@ -39,8 +39,8 @@ def test_distinct_targets_change_only_their_own_comparisons_and_survive_saved_re
     before = deepcopy(args)
     sheet, result = run(args)
     assert args == before
-    assert sheet["schema"] == "blast_iteration_sheet_v2"
-    assert result["schema"] == "blast_iteration_components_v2"
+    assert sheet["schema"] == "blast_iteration_sheet_target_context"
+    assert result["schema"] == "blast_iteration_components_target_context"
     first, second = result["searches"]
     assert first["target_context_qualification"] == dict(status="available", input_indices=[0])
     assert second["target_context_qualification"] == dict(status="available", input_indices=[1])
@@ -106,7 +106,7 @@ def test_invalid_target_context_rows_fail_the_sheet_contract(bad):
         populate_blast_iteration_sheet(**args)
 
 
-def test_v2_rejects_global_fallback_and_nonfinite_fields():
+def test_rejects_global_fallback_and_nonfinite_fields():
     args = example()
     args["target_context"] = deepcopy(args["target_contexts"][0]["target_context"])
     with pytest.raises(ValueError):

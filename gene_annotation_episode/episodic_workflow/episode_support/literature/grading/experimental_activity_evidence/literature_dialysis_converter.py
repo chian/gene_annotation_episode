@@ -158,7 +158,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_dialysis_criteria import NM_PER_UNIT, PERCENT_FULL
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_dialysis_grader import BOUND_FROM
 
-VERSION = 'a105_dialysis_converted_v1'
+VERSION = 'a105_dialysis_converted'
 BINDING_CONSTANTS = ('kd', 'ki')
 CRITERIA_MAP = {'binding_controls': ('buffer_only_control', 'protein_retained', 'device_adsorption', 'ligand_stability'), 'binding_regime': ('equilibrium', 'ligand_depletion', 'protein_level', 'concentration_series', 'volume_shift'), 'binding_parameter_definition': ('binding_observed', 'fit_model'), 'calibration_applicability': ('recovery', 'free_measured_directly', 'free_fraction_measurable'), 'sampling_basis': ('replicates',)}
 MIN_PERCENT_BOUND = 5.0  # EXPERT_REVIEW: smallest percent of the total ligand bound that shows binding; below about 5 percent the free and the total concentration differ by no more than the error of the two measurements (a few percent each), so no binding is shown. It decides the qualitative statement (detected or not) and is the zero end of the credit of a detected binding.

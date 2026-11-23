@@ -307,7 +307,7 @@ def _extract_validated_structure_sequence(parsed, *, selection):
     own result; all population and selection checks below are identical.
     """
     role = selection["structure_role"]
-    result = {"version": "protein_structure_sequence_v1", "state": "complete", "selection": selection,
+    result = {"version": "protein_structure_sequence", "state": "complete", "selection": selection,
         "alignment_sequence": None, "native_symbols": [], "residues": [], "sequence_length": None,
         "declared_polymer_length": None, "sequence_available": False, "issues": [], "qualifications": []}
     failure = _selection_failure(parsed, selection)
@@ -396,7 +396,7 @@ def inspect_structure(parsed: ParsedStructure, *, inventory_selection: Inventory
     else:
         allowed = set(blocks) | {None}
     include = set(selection["include"])
-    result = {"version": "protein_structure_inventory_v1", "state": parsed["state"], "file_identity": parsed["file_identity"],
+    result = {"version": "protein_structure_inventory", "state": parsed["state"], "file_identity": parsed["file_identity"],
         "selection": selection, "models": [], "chains": [], "positions": [], "metadata": [], "issues": deepcopy(parsed["issues"])}
     if "models" in include:
         for index, row in enumerate(parsed["models"]):

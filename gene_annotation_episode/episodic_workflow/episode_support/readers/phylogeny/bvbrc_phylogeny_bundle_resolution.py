@@ -78,7 +78,7 @@ def parse_reader(data, *, artifact, spec):
 
 def _empty_scientific(analysis_id, provider):
     return {"version": c.SUPPLIED_VERSION,
-        "assembly": {"version": "bvbrc_phylogeny_assembly_v1", "analysis_id": analysis_id,
+        "assembly": {"version": "bvbrc_phylogeny_assembly", "analysis_id": analysis_id,
             "caller_populations": {key: [] for key in c.POPULATION_KEYS}, "locus_bindings": [],
             "genome_request_sets": [], "family_matrices": [], "historical_frequencies": [], "model_associations": []},
         "joins": {key: [] for key in (*c.JOIN_KEYS, *(("family_blocks",) if provider == "codon_tree" else ()))},

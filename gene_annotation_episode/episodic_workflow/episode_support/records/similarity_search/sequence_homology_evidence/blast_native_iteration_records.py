@@ -80,7 +80,7 @@ class _Query(TypedDict):
 
 
 class _Extraction(TypedDict):
-    schema: Literal["blast_native_convergence_extraction_v1"]
+    schema: Literal["blast_native_convergence_extraction"]
     status: Literal["complete", "partial", "unavailable", "incompatible"]
     report: _Report
     query: _Query
@@ -155,7 +155,7 @@ def _operand(value, path):
 def _collection(value):
     """Check fields used here and reuse the public 311 closed collection port."""
     _keys(value, {"schema", "invocation", "artifacts", "searches", "issues"}, "/collection")
-    _type(value["schema"] == "blast_report_collection_v1", "/collection/schema")
+    _type(value["schema"] == "blast_report_collection", "/collection/schema")
     inv = value["invocation"]
     _keys(inv, _INVOCATION, "/collection/invocation")
     for name in ("execution_program", "scientific_mode", "resource_kind", "query_kind", "reference_kind"):
@@ -278,7 +278,7 @@ def extract_blast_tabular7_convergence(report_contents: bytes, *, artifact_key: 
     query_operand, collection = values["query_operand"], values["collection"]
     _operand(query_operand, "/query_operand")
     _collection(collection)
-    result: _Extraction = dict(schema="blast_native_convergence_extraction_v1", status="unavailable",
+    result: _Extraction = dict(schema="blast_native_convergence_extraction", status="unavailable",
         report=dict(artifact_key=artifact_key, source_ref=source_ref, **_bytes(report_contents),
                     format=None, fields=None, delimiter=None, native_programs=[], native_versions=[]),
         query=dict(input_key=None, artifact_key=None, **_bytes(query_contents), record_count=None, query_operand=None),
@@ -432,7 +432,7 @@ def extract_blast_tabular7_convergence(report_contents: bytes, *, artifact_key: 
         # only an untrusted retained candidate, never an admitted observation.
         identity = bundle.get("identity")
         attempt_id = identity.get("attempt_id") if type(identity) is dict else None
-        token = json.dumps(["v1", attempt_id, artifact_key, report["sha256"], start, end],
+        token = json.dumps(["blast-native-convergence", attempt_id, artifact_key, report["sha256"], start, end],
                            ensure_ascii=False, separators=(",", ":"), allow_nan=False)
         key = "blast-native-convergence:" + hashlib.sha256(token.encode("utf-8")).hexdigest()
         if not complete:

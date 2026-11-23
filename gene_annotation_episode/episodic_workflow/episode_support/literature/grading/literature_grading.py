@@ -7,8 +7,8 @@ labels are never converted into numerical strength weights.
 """
 from copy import deepcopy
 from gene_annotation_episode.episodic_workflow.episode_support.records.sample_context_evidence.domain import ContractError, obj, validate_schema
-INPUT_VERSION = 'a108_context_observation_inputs_v1'
-VERSION = 'a108_context_observation_sheet_v1'
+INPUT_VERSION = 'a108_context_observation_inputs'
+VERSION = 'a108_context_observation_sheet'
 SCOPE = 'a108_organism_context_observations'
 UNIT = 'distinct_contextual_observations'
 COMPONENTS = ('support_count', 'conflict_count', 'overlap_count', 'evidence_amount', 'net_support', 'unresolved_count')

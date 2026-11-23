@@ -58,7 +58,7 @@ does not judge it; the converter does. The constructors take ``support`` and def
 the extraction (the extraction always passes the model's answer).
 """
 
-VERSION = 'a105_coupling_isotope_label_record_v1'
+VERSION = 'a105_coupling_isotope_label_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'coupling_isotope_label'
 QUANTITIES = ('label_incorporation', 'label_incorporation_spread', 'label_retention', 'label_retention_spread', 'label_atoms_per_product', 'label_atoms_expected',

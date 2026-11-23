@@ -17,7 +17,7 @@ TEN_FILES = {'__init__.py', 'goal.py', 'task.py', 'credit.py', 'yield_estimator.
              'messages/__init__.py', 'messages/read_from_parent.py', 'messages/internal_summary.py',
              'messages/final_to_parent.py'}
 ROOT_PACKAGE = 'gene_annotation_episode.episodic_workflow.root'
-ASSIGNMENT = {'scope': {'subject_refs': []}, 'version': 'api_service_assignment_v1', 'service': 'ncbi_blast',
+ASSIGNMENT = {'scope': {'subject_refs': []}, 'version': 'api_service_assignment', 'service': 'ncbi_blast',
               'resource_id': 'ncbi_blast', 'request': {'program': 'blastp'}, 'input_refs': [],
               'immutable_input_versions': {}, 'completion_target': 1.0}
 

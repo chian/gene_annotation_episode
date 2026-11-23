@@ -48,7 +48,7 @@ def prepare_local_expression_nmf(state, operation_key, *, root, policy):
     _allocation(state.assignment, policy.to_dict())
     root = directory(root)
     handle = native.NativeJobHandle(root / 'native.json')
-    plan = validate_expression_nmf_run_plan({'version': 'expression_nmf_run_plan_v1', 'identity': {
+    plan = validate_expression_nmf_run_plan({'version': 'expression_nmf_run_plan', 'identity': {
         'run_id': state.run_id, 'episode_id': state.episode_id, 'resource_id': state.assignment['resource_id'],
         'execution_id': str(handle.path), 'attempt_id': digest(operation_key), 'operation_key': operation_key,
         'requested_job_sha256': digest(request), 'assignment_sha256': digest(state.assignment)},

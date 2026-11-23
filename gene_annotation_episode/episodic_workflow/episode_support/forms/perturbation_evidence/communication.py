@@ -112,29 +112,29 @@ def _compile_closed_schema(schema):
         if source == 'literature_concentration_window_cells':
             if depth != 1:
                 raise ReportBoundaryError(f'{path}: fact bindings apply to whole top-level fields', code='invalid_schema')
-            from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_concentration_window_storage import CONCENTRATION_WINDOW_CELLS_SCHEMA_V1
-            if not _schema_cacheable(node) or json.dumps(node, sort_keys=True, allow_nan=False) != json.dumps(CONCENTRATION_WINDOW_CELLS_SCHEMA_V1, sort_keys=True, allow_nan=False):
+            from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_concentration_window_storage import CONCENTRATION_WINDOW_CELLS_SCHEMA
+            if not _schema_cacheable(node) or json.dumps(node, sort_keys=True, allow_nan=False) != json.dumps(CONCENTRATION_WINDOW_CELLS_SCHEMA, sort_keys=True, allow_nan=False):
                 raise ReportBoundaryError(f'{path}: concentration-window schema must match its registered source', code='invalid_schema')
             return
         if source == 'literature_measurement_comparison_cells':
             if depth != 1:
                 raise ReportBoundaryError(f'{path}: fact bindings apply to whole top-level fields', code='invalid_schema')
-            from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_measurement_comparison_storage import MEASUREMENT_COMPARISON_CELLS_SCHEMA_V2
-            if not _schema_cacheable(node) or json.dumps(node, sort_keys=True, allow_nan=False) != json.dumps(MEASUREMENT_COMPARISON_CELLS_SCHEMA_V2, sort_keys=True, allow_nan=False):
+            from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_measurement_comparison_storage import MEASUREMENT_COMPARISON_CELLS_SCHEMA
+            if not _schema_cacheable(node) or json.dumps(node, sort_keys=True, allow_nan=False) != json.dumps(MEASUREMENT_COMPARISON_CELLS_SCHEMA, sort_keys=True, allow_nan=False):
                 raise ReportBoundaryError(f'{path}: comparison schema must match its registered source', code='invalid_schema')
             return
         if source == 'literature_kinetic_summary_precision_cells':
             if depth != 1:
                 raise ReportBoundaryError(f'{path}: fact bindings apply to whole top-level fields', code='invalid_schema')
-            from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_kinetic_summary_precision_storage import SUMMARY_PRECISION_CELLS_SCHEMA_V1
-            if not _schema_cacheable(node) or json.dumps(node, sort_keys=True, allow_nan=False) != json.dumps(SUMMARY_PRECISION_CELLS_SCHEMA_V1, sort_keys=True, allow_nan=False):
+            from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_kinetic_summary_precision_storage import SUMMARY_PRECISION_CELLS_SCHEMA
+            if not _schema_cacheable(node) or json.dumps(node, sort_keys=True, allow_nan=False) != json.dumps(SUMMARY_PRECISION_CELLS_SCHEMA, sort_keys=True, allow_nan=False):
                 raise ReportBoundaryError(f'{path}: summary precision schema must match its registered source', code='invalid_schema')
             return
         if source == 'literature_endpoint_signal_cells':
             if depth != 1:
                 raise ReportBoundaryError(f'{path}: fact bindings apply to whole top-level fields', code='invalid_schema')
-            from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_endpoint_signal_storage import ENDPOINT_SIGNAL_CELLS_SCHEMA_V1
-            if not _schema_cacheable(node) or json.dumps(node, sort_keys=True, allow_nan=False) != json.dumps(ENDPOINT_SIGNAL_CELLS_SCHEMA_V1, sort_keys=True, allow_nan=False):
+            from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_endpoint_signal_storage import ENDPOINT_SIGNAL_CELLS_SCHEMA
+            if not _schema_cacheable(node) or json.dumps(node, sort_keys=True, allow_nan=False) != json.dumps(ENDPOINT_SIGNAL_CELLS_SCHEMA, sort_keys=True, allow_nan=False):
                 raise ReportBoundaryError(f'{path}: endpoint schema must match its registered source', code='invalid_schema')
             return
         if source == 'literature_product_coupling_cells':
@@ -185,11 +185,11 @@ def _compile_closed_schema(schema):
             if not _schema_cacheable(node) or json.dumps(node, sort_keys=True, allow_nan=False) != json.dumps(expected, sort_keys=True, allow_nan=False):
                 raise ReportBoundaryError(f'{path}: channel fact schema must match its registered source', code='invalid_schema')
             return
-        if source in {'literature_compiled_assay_cells', 'literature_compiled_assay_v2_cells', 'literature_compiled_assay_v3_cells'}:
+        if source in {'literature_compiled_assay_cells', 'literature_common_assessment_cells'}:
             if depth != 1:
                 raise ReportBoundaryError(f'{path}: fact bindings apply to whole top-level fields', code='invalid_schema')
-            from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_compiled_assay_storage import compiled_assay_cells_schema
-            expected = compiled_assay_cells_schema(3 if source == 'literature_compiled_assay_v3_cells' else 2 if source == 'literature_compiled_assay_v2_cells' else 1)
+            from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_compiled_assay_storage import common_assessment_cells_schema, compiled_assay_cells_schema
+            expected = common_assessment_cells_schema() if source == 'literature_common_assessment_cells' else compiled_assay_cells_schema()
             if not _schema_cacheable(node) or json.dumps(node, sort_keys=True, allow_nan=False) != json.dumps(expected, sort_keys=True, allow_nan=False):
                 raise ReportBoundaryError(f'{path}: compiled assay schema must match its registered source', code='invalid_schema')
             return

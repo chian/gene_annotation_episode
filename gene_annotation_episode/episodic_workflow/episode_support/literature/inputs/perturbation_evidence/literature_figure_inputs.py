@@ -16,8 +16,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.perturbation_evidence.literature_figure_measurements import BOUND_KIND, compare_ordinate_cells, read_bar_ordinate
 
 
-VERSION = "a105_figure_inputs_v1"
-DATA_VERSION = "literature_figure_selection_v1"
+VERSION = "a105_figure_inputs"
+DATA_VERSION = "literature_figure_selection"
 LITERAL_FIELDS = ("first_subject", "first_partner", "second_subject", "second_partner",
                   "experiment", "endpoint", "first_condition", "second_condition",
                   "normalization", "function")

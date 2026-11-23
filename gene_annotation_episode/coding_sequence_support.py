@@ -102,14 +102,14 @@ def plan_coding_sequence_extractions(records, *, selection, source_ref, molecule
         if orientation=='reverse_complement':segments.reverse()
         row.update(status='ready',geometry_basis='nominal_fuzzy' if fuzzy else 'exact',
             effective_request={'molecule':molecule_model,'segments':segments,'orientation':orientation})
-    return {'version':'coding_sequence_plan_v1','source_ref':source_ref,'molecule_model':molecule_model,
+    return {'version':'coding_sequence_plan','source_ref':source_ref,'molecule_model':molecule_model,
         'records':records,'selection':selection,'rows':deepcopy(rows)}
 
 
 def _validated_plan(plan):
     plan=_copy(plan)
     _require(type(plan) is dict and set(plan)=={'version','source_ref','molecule_model','records','selection','rows'}
-        and plan['version']=='coding_sequence_plan_v1','plan_required')
+        and plan['version']=='coding_sequence_plan','plan_required')
     expected=plan_coding_sequence_extractions(plan['records'],selection=plan['selection'],
         source_ref=plan['source_ref'],molecule_model=plan['molecule_model'])
     _require(_same(plan,expected),'plan_source_binding_conflict')
@@ -156,7 +156,7 @@ def read_coding_sequence_results(plan, *, extracted):
             continue
         row['extraction_status']=('completed' if row['grading']['scores']['status']=='complete'
             and not row['issue_codes'] else 'partial')
-    return {'version':'coding_sequence_results_v1','source_ref':plan['source_ref'],'plan':plan,'rows':rows,
+    return {'version':'coding_sequence_results','source_ref':plan['source_ref'],'plan':plan,'rows':rows,
         'population_scope':'explicit_selected_source_features_only',
         'status':'complete' if all(r['extraction_status']=='completed' for r in rows) else 'partial'}
 

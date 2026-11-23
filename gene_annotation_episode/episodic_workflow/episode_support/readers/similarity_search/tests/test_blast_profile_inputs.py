@@ -132,7 +132,7 @@ def test_population_retains_native_numerical_cells_unknown_metadata_and_exact_ke
     expected = deepcopy(inputs)
     sheet = populate_blast_profile_sheet(**inputs)
     assert set(sheet) == set(inputs) | {"schema"}
-    assert sheet["schema"] == "blast_profile_search_sheet_v1"
+    assert sheet["schema"] == "blast_profile_search_sheet"
     assert {key: sheet[key] for key in inputs} == expected
     inputs["search"]["native"]["search"]["hits"][0]["hsps"][0]["bit_score"] = -999
     inputs["profile_records"][0]["native_record"]["unrecognized_supplied_field"][0] = "changed"

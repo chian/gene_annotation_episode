@@ -14,7 +14,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.calcul
     component_roles, populate_product_partition_components)
 
 PROVIDER = "literature.a105.product_partition_population"
-VERSION = "literature_product_partition_population_record_v1"
+VERSION = "literature_product_partition_population_record"
 NAMESPACE = "literature_product_partition_cells"
 
 

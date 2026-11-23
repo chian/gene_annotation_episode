@@ -4,7 +4,7 @@
 
 Each decision the model selects one of: ``service_operation`` (one operation of the API service's catalog),
 ``capabilities`` (the caller-bound resource configuration), ``wait`` (only for a service job that continues
-remotely: assignment version ``api_service_assignment_v1``), and, when the settings name the libraries,
+remotely: assignment version ``api_service_assignment``), and, when the settings name the libraries,
 ``launch_instructions`` and ``tool_knowledge`` lookups. The old ``reason`` selection was never permitted for this
 episode and is not carried. The model's ``report_update`` (its current interpretation for the parent) rides in the
 arguments of the unit it selects. A selection that fails admission is rejected and creates no unit. The task offers
@@ -35,7 +35,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.unit_outcom
 
 CHILD_SLOTS = {}
 SERVICES = ('job_access',)
-WAIT_VERSION = 'api_service_assignment_v1'
+WAIT_VERSION = 'api_service_assignment'
 HMMER_SERVICE = 'ebi_hmmer'
 
 GOAL_TEXT = (
@@ -63,7 +63,7 @@ WAITING_SUPPORT = {'condition': 'The service job named by handoff_refs and the c
 
 
 def wait_permitted(summary):
-    """Old ``permitted_common_actions``: ``tool`` always; ``wait`` only for ``api_service_assignment_v1``."""
+    """Old ``permitted_common_actions``: ``tool`` always; ``wait`` only for ``api_service_assignment``."""
     return summary['version'] == WAIT_VERSION
 
 
@@ -86,7 +86,7 @@ def selected_execution_task(summary, settings):
     if summary['service'] != HMMER_SERVICE or summary['scientific_question'] is None:
         return None
     request = summary['request']
-    return {'version': 'selected_execution_task_v1', 'scientific_question': summary['scientific_question'],
+    return {'version': 'selected_execution_task', 'scientific_question': summary['scientific_question'],
             'selected_tool_info': summary['selected_tool_info'],
             'requests': [{'resource_id': summary['resource_id'], 'resource_kind': 'api',
                           'endpoint': request.get('endpoint'), 'constraints': request.get('constraints', {}),

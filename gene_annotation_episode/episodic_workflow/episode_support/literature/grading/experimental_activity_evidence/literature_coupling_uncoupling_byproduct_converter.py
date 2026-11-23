@@ -125,7 +125,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_row_contract import SUPPORT_WEAKEST_ORDER
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_coupling_uncoupling_byproduct_converted_v1'
+VERSION = 'a105_coupling_uncoupling_byproduct_converted'
 CRITERIA_MAP = {'measurement_identity': ('same_preparation',), 'calibration_applicability': ('standard_series', 'standard_recovery'), 'matrix_interference': ('reductant_interference_excluded',),
                 'background_alternatives': ('no_enzyme_blank', 'blank_signal_share'), 'attribution_supported': ('inactive_enzyme_control', 'substrate_dependent_turnover'),
                 'assertion_relevance': ('native_reaction',), 'condition_scope': ('purified_enzyme',), 'sampling_basis': ('replicates',), 'product_identity': ('product_identity',),

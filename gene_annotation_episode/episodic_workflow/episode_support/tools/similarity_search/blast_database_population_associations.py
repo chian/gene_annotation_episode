@@ -12,10 +12,10 @@ import math
 import re
 
 
-CONTEXT_SCHEMA = "blast_database_population_context_v1"
-ASSOCIATION_SCHEMA = "blast_database_population_association_input_v1"
-RELATION_SCHEMA = "blast_database_population_relation_v1"
-ASSERTION_SCHEMA = "blast_database_population_assertion_v1"
+CONTEXT_SCHEMA = "blast_database_population_context"
+ASSOCIATION_SCHEMA = "blast_database_population_association_input"
+RELATION_SCHEMA = "blast_database_population_relation"
+ASSERTION_SCHEMA = "blast_database_population_assertion"
 PREFIX = "blast_database_population_"
 _KEY = {"artifact_key", "member_ordinal", "report_index", "search_pointer"}
 _PROVENANCE = {"source_ref", "pointer"}
@@ -180,7 +180,7 @@ def qualify_blast_database_population_context(context: dict, *, normalized_resul
     context = validate_blast_database_population_context(context)
     normalized_result = _copy(normalized_result)
     database_identity, database_profile = _copy(database_identity), _copy(database_profile)
-    if (type(normalized_result) is not dict or normalized_result.get("schema") != "blast_normalized_result_v1"
+    if (type(normalized_result) is not dict or normalized_result.get("schema") != "blast_normalized_result"
             or type(normalized_result.get("search")) is not dict or type(normalized_result.get("native")) is not dict
             or database_identity is not None and not _identity(database_identity, source=True)
             or database_profile is not None and type(database_profile) is not dict):

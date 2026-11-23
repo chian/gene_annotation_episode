@@ -42,7 +42,7 @@ def _completion(assignment, initial_validations, receipts):
 
 
 def _selected_execution_task(parent_input):
-    """The old ``selected_execution_task_v1`` of the decision context: the scientific parent's question, the
+    """The old ``selected_execution_task`` of the decision context: the scientific parent's question, the
     selected tool information and the one native job family of the request."""
     task = parent_input.get('scientific_task')
     if task is None:
@@ -52,7 +52,7 @@ def _selected_execution_task(parent_input):
     chosen = [name for name in NATIVE_JOBS if isinstance(job.get(name), dict)]
     if len(chosen) != 1:
         return None
-    return {'version': 'selected_execution_task_v1', 'scientific_question': task['scientific_question'],
+    return {'version': 'selected_execution_task', 'scientific_question': task['scientific_question'],
             'selected_tool_info': task['selected_tool_info'],
             'requests': [{'resource_id': assignment['resource_id'], 'resource_kind': 'local',
                           'endpoint': assignment['endpoint'], 'constraints': deepcopy(assignment['constraints']),

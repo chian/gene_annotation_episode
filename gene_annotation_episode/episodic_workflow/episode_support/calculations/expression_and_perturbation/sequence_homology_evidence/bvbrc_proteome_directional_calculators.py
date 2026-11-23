@@ -586,8 +586,8 @@ def calculate_directional_components(sheet: dict, *, parameters: dict) -> dict:
             record[field] = _cell(sum(q[field]['value'] for q in queries), unit, inputs)
         reports.append(record)
         diagnostics.extend(record['diagnostics'])
-    components = {'version': 'bvbrc_proteome_directional_components_v1',
-        'formula_version': 'displayed_blastp_correspondence_v1',
+    components = {'version': 'bvbrc_proteome_directional_components',
+        'formula_version': 'displayed_blastp_correspondence',
         'sheet_sha256': canonical_sheet_sha256(observed), 'parameters': options,
         'reports': reports, 'diagnostics': _unique(diagnostics),
         'correspondence_used_inputs': ['native_counts', 'traceback_symbols', 'traceback_coordinates',

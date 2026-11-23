@@ -155,7 +155,7 @@ def selected_execution_task(summary, settings):
         selected.append({'resource_id': resource_id, 'resource_kind': kind, 'endpoint': deepcopy(request.get('endpoint')),
                          'constraints': deepcopy(request.get('constraints', {})), 'job': job,
                          'resource': resource_information(settings, resource_id, None)})
-    return {'version': 'selected_execution_task_v1', 'scientific_question': task['scientific_question'],
+    return {'version': 'selected_execution_task', 'scientific_question': task['scientific_question'],
             'selected_tool_info': task['selected_tool_info'], 'requests': selected,
             'constraints': summary['constraints']}
 
@@ -214,5 +214,5 @@ def action(response, summary, records, ctx):
         return ToolCall(CAPABILITIES, {})
     resource_id = selection[len(COMMISSION):]
     request = summary['requests'][resource_id]
-    kind = 'api' if request['version'] != 'practical_assignment_v1' else request['resource_kind']
+    kind = 'api' if request['version'] != 'practical_assignment' else request['resource_kind']
     return ChildCall(SLOT_OF_KIND[kind], {'resource_id': resource_id})

@@ -22,7 +22,7 @@ import zipfile
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.blast_search import PROGRAM_UNITS
 
 
-SCHEMA = "blast_normalized_result_v1"
+SCHEMA = "blast_normalized_result"
 _MODES = {"pairwise", "database"}
 _RESOURCES = {"api", "hpc", "local"}
 _INT_MIN = {"query_from": 1, "query_to": 1, "hit_from": 1, "hit_to": 1,

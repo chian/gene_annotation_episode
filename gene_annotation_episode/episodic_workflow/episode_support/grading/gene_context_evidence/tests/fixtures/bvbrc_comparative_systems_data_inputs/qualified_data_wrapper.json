@@ -1,10 +1,10 @@
 {
   "example_id": "qualified_data_wrapper",
-  "schema_name": "QualifiedDataInputV1",
+  "schema_name": "QualifiedDataInput",
   "basis": "synthetic_existing_Data_encoder_reader_output_with_hypothetical_host_flags_NO_REAL_ADMISSION",
   "value": {
     "qualified_result": {
-      "version": "bvbrc_data_qualified_result_v1",
+      "version": "bvbrc_data_qualified_result",
       "service": "bvbrc_data",
       "binding": {
         "source_ref": "synthetic_data_pathway",
@@ -29,12 +29,12 @@
         "possession_basis": "admitted_return"
       },
       "grading": {
-        "version": "bvbrc_data_grading_v1",
+        "version": "bvbrc_data_grading",
         "prepared": {
-          "version": "bvbrc_data_prepared_v2",
+          "version": "bvbrc_data_prepared",
           "service": "bvbrc_data",
           "original_request": {
-            "version": "bvbrc_data_request_v2",
+            "version": "bvbrc_data_request",
             "collection": "pathway",
             "mode": "page",
             "filters": [
@@ -72,7 +72,7 @@
           },
           "page_selector": null,
           "effective_request": {
-            "version": "bvbrc_data_effective_query_v2",
+            "version": "bvbrc_data_effective_query",
             "collection": "pathway",
             "mode": "page",
             "filters": [
@@ -110,7 +110,7 @@
             "facet": null
           },
           "query_population": {
-            "version": "bvbrc_data_population_v1",
+            "version": "bvbrc_data_population",
             "base_url": "https://www.bv-brc.org/api",
             "collection": "pathway",
             "filters": [
@@ -125,8 +125,8 @@
               }
             ],
             "visibility": "public_unauthenticated",
-            "compiler_version": "bvbrc_solr_compiler_v1",
-            "field_contract_version": "bvbrc_data_fields_2026_10_24_v1",
+            "compiler_version": "bvbrc_solr_compiler",
+            "field_contract_version": "bvbrc_data_fields_2026_10_24",
             "population_key": "b2828e19de6d541338f8a3b7147789a41e8925e72d1a2390d08fe4329a98ed3e"
           },
           "field_selection": {
@@ -156,7 +156,7 @@
             "defaulted_sort": [],
             "tie_breaker_added": null
           },
-          "request_profile": "solr_query_solr_json_v1",
+          "request_profile": "solr_query_solr_json",
           "native_request": {
             "method": "GET",
             "url": "https://www.bv-brc.org/api/pathway/?q=genome_id%3A%28%221.1%22%20OR%20%222.1%22%20OR%20%223.1%22%29&rows=100&start=0&fl=id%2Cannotation%2Cec_description%2Cec_number%2Cfeature_id%2Cgenome_id%2Cpathway_class%2Cpathway_id%2Cpathway_name%2Cpatric_id%2Cproduct&sort=id%20asc",
@@ -200,7 +200,7 @@
           }
         },
         "selector": {
-          "version": "bvbrc_data_result_selector_v2",
+          "version": "bvbrc_data_result_selector",
           "page": null,
           "projection": {
             "family": "query_metadata"
@@ -209,10 +209,10 @@
           "supplied_metadata": []
         },
         "parse_result": {
-          "version": "bvbrc_data_parse_result_v1",
+          "version": "bvbrc_data_parse_result",
           "status": "complete",
           "sheet": {
-            "version": "bvbrc_data_sheet_v1",
+            "version": "bvbrc_data_sheet",
             "collection": "pathway",
             "mode": "page",
             "custody": {
@@ -221,9 +221,9 @@
               "requested_url": "https://www.bv-brc.org/api/pathway/?q=genome_id%3A%28%221.1%22%20OR%20%222.1%22%20OR%20%223.1%22%29&rows=100&start=0&fl=id%2Cannotation%2Cec_description%2Cec_number%2Cfeature_id%2Cgenome_id%2Cpathway_class%2Cpathway_id%2Cpathway_name%2Cpatric_id%2Cproduct&sort=id%20asc",
               "effective_url": "https://www.bv-brc.org/api/pathway/?q=genome_id%3A%28%221.1%22%20OR%20%222.1%22%20OR%20%223.1%22%29&rows=100&start=0&fl=id%2Cannotation%2Cec_description%2Cec_number%2Cfeature_id%2Cgenome_id%2Cpathway_class%2Cpathway_id%2Cpathway_name%2Cpatric_id%2Cproduct&sort=id%20asc",
               "media_type": "application/solr+json",
-              "native_profile": "solr_json_envelope_v1",
+              "native_profile": "solr_json_envelope",
               "prepared_sha256": "4e90c63dec5d9bd125f002531c895a47188fa339240b0ee5941d26fdd846fe17",
-              "field_contract_version": "bvbrc_data_fields_2026_10_24_v1"
+              "field_contract_version": "bvbrc_data_fields_2026_10_24"
             },
             "transport": {
               "http_status": 200,
@@ -1400,7 +1400,7 @@
           "retained_native_sha256": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f"
         },
         "page_components": {
-          "version": "bvbrc_data_page_components_v1",
+          "version": "bvbrc_data_page_components",
           "native_row_count": 5,
           "valid_row_count": 5,
           "invalid_row_count": 0,

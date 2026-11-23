@@ -18,13 +18,13 @@ from .unit_world import held, in_unit
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence import literature_gel_storage as storage
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence import literature_gel_inputs as inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence import literature_gel_calculations as calculations
-from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.tests.test_literature_gel_inputs import make_case, select_v2
+from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.tests.test_literature_gel_inputs import make_case, select
 
 def source(store, data, *, parents=()):
     artifact = store.artifact(data)
     return store.put('source', {'provider': 'constructed_gel_fixture', 'accession': None, 'uri': None, 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': None, 'version': None, 'retrieved_at': None, 'parent_source_refs': list(parents)}, origin='caller')['id']
 
-def native_case(store, ctx, *, alternatives=False, v2=True, assignment=None):
+def native_case(store, ctx, *, alternatives=False, selected_meanings=True, assignment=None):
     store.create_problem(raw_sequence='MKWAA', molecule='protein')
     selected, _, sources, _, comparison = make_case()
     caption = source(store, sources['source_caption', 'text']['content'])
@@ -32,8 +32,8 @@ def native_case(store, ctx, *, alternatives=False, v2=True, assignment=None):
     selected['image'].update(source_ref=image, artifact_ref=store.get(image)['artifact_ref'])
     for witness in inputs._witnesses(selected):
         witness['source_ref'] = caption
-    if v2:
-        select_v2(selected)
+    if selected_meanings:
+        select(selected)
     if alternatives:
         alternate = cp(selected['roi_assignments'][0])
         alternate['assignment_id'] = 'same:region / α'
@@ -67,7 +67,7 @@ def test_original_image_exact_rows_methods_and_original_scientific_ids(store, ct
     assert all((r['cell']['exact'] == {'numerator': '3', 'denominator': '5'} for r in direct))
     assert direct[0]['cell']['value'] == pytest.approx(0.6)
     assert [l['observation_id'] for l in direct[0]['scientific_context']['lanes']] == ['observation_baseline', 'observation_protein', 'observation_competitor']
-    assert all((m['background_method'] == 'mean' and m['method_basis'] == 'explicit_v2_nomination' for m in direct[0]['roi_methods']))
+    assert all((m['background_method'] == 'mean' and m['method_basis'] == 'explicit_nomination' for m in direct[0]['roi_methods']))
     raw = next((r for r in rows if r['component_key'] == 'raw:declared:protein:band:shifted:sum_darkness'))
     assert type(raw['cell']['value']) is int and raw['cell']['value'] == 80
     assert saved['extraction']['origin'] == 'synthetic'
@@ -144,7 +144,7 @@ def test_missing_background_and_baseline_preserve_valid_partial_rows(store, ctx)
 
 @in_unit
 def test_unknown_conflicting_meanings_and_schema_relationships_survive(store, ctx):
-    store, context, args = native_case(store, ctx, v2=False)
+    store, context, args = native_case(store, ctx, selected_meanings=False)
     args['selection']['context']['organism'] = {'state': 'unknown', 'value': None, 'witnesses': []}
     args['selection']['context']['genotype'].update(state='conflicting', value=None)
     args['selection']['lanes'][1]['condition'].update(state='conflicting', value=None)
@@ -155,7 +155,7 @@ def test_unknown_conflicting_meanings_and_schema_relationships_survive(store, ct
     assert row['scientific_context']['global']['genotype']['state'] == 'conflicting'
     assert row['scientific_context']['global']['genotype']['witness_refs']
     assert row['scientific_context']['interpretation']['status'] == 'conflicting'
-    assert all((m['method_basis'] == 'v1_mean_definition' for m in row['roi_methods']))
+    assert all((m['method_basis'] == 'mean_definition' for m in row['roi_methods']))
     bad = cp(row)
     bad['scientific_context']['global']['organism']['state'] = 'known'
     with pytest.raises(ContractError):

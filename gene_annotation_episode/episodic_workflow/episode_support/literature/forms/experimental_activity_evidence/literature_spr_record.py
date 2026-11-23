@@ -50,7 +50,7 @@ and default it to 'direct', and the default is only for forms built by tests tha
 (the extraction always passes the model's answer).
 """
 
-VERSION = 'a105_spr_record_v1'
+VERSION = 'a105_spr_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'spr'
 QUANTITIES = ('kd', 'kd_steady_state', 'kon', 'koff', 'rmax', 'kd_spread', 'chi_squared', 'baseline_noise', 'immobilization_level', 'analyte_mass', 'ligand_mass', 'stoichiometry', 'replicate_count')

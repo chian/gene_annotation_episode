@@ -29,7 +29,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.storag
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_assay_grading_storage import (
     LiteratureAssayGradingRepository)
 
-VERSION = 'literature_local_task_v1'
+VERSION = 'literature_local_task'
 QUANTITY_PROVIDER = 'literature.a105.source_quantity'
 MEASUREMENT_UNAVAILABLE_OK = {'reported_spread_unavailable', 'zero_reported_value'}
 

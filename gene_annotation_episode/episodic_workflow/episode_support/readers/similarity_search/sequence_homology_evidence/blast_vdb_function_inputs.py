@@ -1,8 +1,8 @@
 """Explicit VDB function inputs and attributable, original-HSP measurements.
 
 The frozen 338 contract and its validation addendum define this additive sheet.
-Only population invokes the existing v1 calculator, exactly once. Validation
-checks saved values and relations; it never parses or recalculates the v1 base.
+Only population invokes the existing base calculator, exactly once. Validation
+checks saved values and relations; it never parses or recalculates the base.
 No function weights, acquisition, resource decisions or annotation credit live
 here. Source authentication remains the acquiring caller's responsibility.
 """
@@ -17,7 +17,7 @@ import re as _re
 from Bio.Data import CodonTable as _CodonTable
 from Bio.Seq import Seq as _Seq
 
-from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search import blast_vdb_inputs as _v1
+from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search import blast_vdb_inputs as _vdb_inputs
 from gene_annotation_episode.episodic_workflow.episode_support.calculations.similarity_search.sequence_homology_evidence import blast_vdb_calculators as _base
 from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_alignment import alignment_correspondence as _correspondence
 
@@ -25,7 +25,7 @@ __all__ = ["extract_blast_vdb_feature_function_assignments",
            "populate_blast_vdb_function_sheet", "validate_blast_vdb_function_sheet"]
 
 _PREFIX = "blast_vdb_function_"
-_SCHEMA = "blast_vdb_function_sheet_v2"
+_SCHEMA = "blast_vdb_function_sheet"
 _FIELDS = "schema base_sheet base_components assignment_records dependency_records census_records entities observations link_results issues"
 _REASONS = set((
     "base_source_unavailable base_source_conflict query_binding_unavailable "
@@ -106,7 +106,7 @@ def _array(value, check):
         check(row)
 
 
-def _v1_shape(check, value):
+def _vdb_shape(check, value):
     try:
         check(value)
     except (ValueError, KeyError, TypeError, IndexError):
@@ -114,35 +114,35 @@ def _v1_shape(check, value):
 
 
 def _identity(value):
-    _v1_shape(_v1._identity, value)
+    _vdb_shape(_vdb_inputs._identity, value)
 
 
 def _function(value):
-    _v1_shape(_v1._function, value)
+    _vdb_shape(_vdb_inputs._function, value)
 
 
 def _prov(value):
-    _v1_shape(_v1._prov, value)
+    _vdb_shape(_vdb_inputs._prov, value)
 
 
 def _member(value):
-    _v1_shape(_v1._member_key, value)
+    _vdb_shape(_vdb_inputs._member_key, value)
 
 
 def _digest(value):
-    _v1_shape(_v1._digest, value)
+    _vdb_shape(_vdb_inputs._digest, value)
 
 
 def _interval(value):
-    _v1_shape(_v1._interval, value)
+    _vdb_shape(_vdb_inputs._interval, value)
 
 
 def _pointer(value):
-    _v1_shape(_v1._pointer, value)
+    _vdb_shape(_vdb_inputs._pointer, value)
 
 
 def _issue_shape(value):
-    _v1_shape(_v1._issue_shape, value)
+    _vdb_shape(_vdb_inputs._issue_shape, value)
 
 
 def _token(value):
@@ -186,7 +186,7 @@ def _get(value, pointer):
 
 def _base_shape(sheet):
     try:
-        _v1._validate_sheet(sheet)
+        _vdb_inputs._validate_sheet(sheet)
     except ValueError as error:
         suffix = str(error).removeprefix("blast_vdb_")
         if suffix in {"unknown_dataset_key", "unknown_metadata_key", "binding_index_out_of_range"}:
@@ -245,9 +245,9 @@ def _sequence_identity(value):
 def _target_identity(value):
     _keys(value, "assignment_scope representation molecule sha256 length coding")
     _enum(value["assignment_scope"], {"whole_sequence", "feature"})
-    _enum(value["representation"], {"full_member_nt_v1", "oriented_feature_nt_v1"})
+    _enum(value["representation"], {"full_member_nt", "oriented_feature_nt"})
     _sequence_identity({k: value[k] for k in ("molecule", "sha256", "length")})
-    if (value["assignment_scope"] == "whole_sequence") != (value["representation"] == "full_member_nt_v1"):
+    if (value["assignment_scope"] == "whole_sequence") != (value["representation"] == "full_member_nt"):
         _fail()
     coding = value["coding"]
     if coding is not None:
@@ -269,7 +269,7 @@ def _census_shape(value):
     def dataset(row):
         _keys(row, "dataset_key identifier snapshot selected_input sra_mode include_filtered_reads")
         _str(row["dataset_key"]); _identity(row["identifier"])
-        _v1_shape(_v1._snapshot, row["snapshot"]); _v1_shape(_v1._selected, row["selected_input"])
+        _vdb_shape(_vdb_inputs._snapshot, row["snapshot"]); _vdb_shape(_vdb_inputs._selected, row["selected_input"])
         _enum(row["sra_mode"], {0, 1, 2}); _bool(row["include_filtered_reads"])
     _array(value["datasets"], dataset); _unique(value["datasets"], "dataset_key")
     snapshot = value["annotation_snapshot"]
@@ -300,7 +300,7 @@ def _census_shape(value):
     def proof(row):
         _keys(row, "entity_key sequence_source linkage_source normalization symbols")
         _str(row["entity_key"]); _prov(row["sequence_source"]); _prov(row["linkage_source"])
-        _enum(row["normalization"], {"full_member_nt_v1", "oriented_feature_nt_v1"}); _str(row["symbols"])
+        _enum(row["normalization"], {"full_member_nt", "oriented_feature_nt"}); _str(row["symbols"])
     _array(value["identity_proofs"], proof)
 
 
@@ -381,7 +381,7 @@ def _extract(sheet):
                 scope_origin="native_feature_record" if meta["extraction_method"] == "native_parser" else "supplied_explicit_scope",
                 scope_source=_deepcopy(meta["source"]), whole_sequence_cds_feature_identifier=None,
                 sources=_deepcopy(_distinct(sources))))
-    return dict(schema="blast_vdb_feature_function_assignments_v1", records=records, issues=issues)
+    return dict(schema="blast_vdb_feature_function_assignments", records=records, issues=issues)
 
 
 def extract_blast_vdb_feature_function_assignments(vdb_sheet: dict) -> dict:
@@ -448,7 +448,7 @@ def _parent_sequence(sheet, base, address):
     for m in rows:
         sequence = m["sequence"]
         if (m["linkage_source"] is None or _metadata_unqualified(base, m["metadata_key"])
-                or sequence["molecule"] != "nt" or _v1._symbols(sequence["symbols"], sequence["length"]) != sequence):
+                or sequence["molecule"] != "nt" or _vdb_inputs._symbols(sequence["symbols"], sequence["length"]) != sequence):
             return None, "target_identity_conflict"
         identities.append(sequence)
     if len(_distinct(identities)) != 1:
@@ -509,7 +509,7 @@ def _feature_state(sheet, base, address, sequence):
     if len(components) != 1:
         return feature, None, None, "assignment_entity_conflict"
     index, component = components[0]
-    target = dict(assignment_scope="feature", representation="oriented_feature_nt_v1", molecule="nt",
+    target = dict(assignment_scope="feature", representation="oriented_feature_nt", molecule="nt",
                   sha256=digest, length=len(symbols), coding=None)
     if sheet["search"]["program_context"]["execution_program"] == "tblastn_vdb":
         mapping = component["translation_map"]
@@ -535,7 +535,7 @@ def _entity_context(sheet, base, address):
     statuses = [o["status"] if address["member_key"] in o["member_keys"] else "ambiguous" if o["status"] == "ambiguous" else "unavailable" for o in origins]
     origin = "available" if "available" in statuses else "ambiguous" if "ambiguous" in statuses else "unavailable"
     sequence, reason = _parent_sequence(sheet, base, address)
-    target = None if sequence is None else dict(assignment_scope="whole_sequence", representation="full_member_nt_v1",
+    target = None if sequence is None else dict(assignment_scope="whole_sequence", representation="full_member_nt",
         molecule="nt", sha256=sequence["sha256"], length=sequence["length"], coding=None)
     feature = component = None
     if address["assignment_scope"] == "feature":
@@ -666,14 +666,14 @@ def _dependency_issues(sheet, record, addresses):
 
 
 def _proof_matches(proof, identity):
-    sequence = _v1._symbols(proof["symbols"])
+    sequence = _vdb_inputs._symbols(proof["symbols"])
     return sequence is not None and all(sequence[k] == identity[k] for k in ("molecule", "sha256", "length"))
 
 
 def _coding_proof_matches(symbols, coding):
     if coding is None:
         return True
-    sequence = _v1._symbols(symbols)
+    sequence = _vdb_inputs._symbols(symbols)
     if sequence is None:
         return False
     bases = sequence["symbols"][coding["codon_start"] - 1:]
@@ -759,7 +759,7 @@ def _census_issues(sheet, census, entities, assignments, observations):
             add("census_membership_unverified", census_entity_key=key)
         expected = [(target["representation"], target)]
         if address["assignment_scope"] == "feature":
-            expected.append(("full_member_nt_v1", entity["parent_sequence_identity"]))
+            expected.append(("full_member_nt", entity["parent_sequence_identity"]))
         elif {k: target[k] for k in ("molecule", "sha256", "length")} != entity["parent_sequence_identity"]:
             add("census_membership_unverified", census_entity_key=key, parent_identity_conflict=True)
         for normalization, identity in expected:
@@ -770,9 +770,9 @@ def _census_issues(sheet, census, entities, assignments, observations):
                 if (not _proof_matches(proof, identity) or proof["sequence_source"]["source_ref"] in report_sources
                         or proof["linkage_source"]["source_ref"] in report_sources):
                     add("census_membership_unverified", census_entity_key=key, normalization=normalization, identity_proof_conflict=True)
-                if normalization == "oriented_feature_nt_v1" and not _coding_proof_matches(proof["symbols"], target["coding"]):
+                if normalization == "oriented_feature_nt" and not _coding_proof_matches(proof["symbols"], target["coding"]):
                     add("census_membership_unverified", census_entity_key=key, coding_proof_conflict=True)
-            normalized = [_v1._symbols(p["symbols"]) for p in proofs]
+            normalized = [_vdb_inputs._symbols(p["symbols"]) for p in proofs]
             if len(_distinct(normalized)) > 1:
                 add("census_count_conflict", census_entity_key=key, conflicting_identity_proofs=True)
     by_address = {}
@@ -941,7 +941,7 @@ def populate_blast_vdb_function_sheet(vdb_sheet: dict, *, supplied_assignments: 
 
 def _rowkey(row):
     _keys(row, "search_key hit_ordinal hsp_ordinal description_ordinal")
-    _v1_shape(_v1._search_key, row["search_key"])
+    _vdb_shape(_vdb_inputs._search_key, row["search_key"])
     for name in ("hit_ordinal", "hsp_ordinal", "description_ordinal"):
         _nullable(row[name], _int)
 
@@ -949,7 +949,7 @@ def _rowkey(row):
 def _locator(row):
     _keys(row, "artifact_ref report_index pointer search_key member_ordinal member_sha256 native_format hit_index description_index hsp_index line_numbers data_row_ordinals")
     _str(row["artifact_ref"]); _int(row["report_index"]); _pointer(row["pointer"])
-    _v1_shape(_v1._search_key, row["search_key"])
+    _vdb_shape(_vdb_inputs._search_key, row["search_key"])
     _nullable(row["member_sha256"], _digest)
     _enum(row["native_format"], {"json2", "tabular"})
     for name in ("member_ordinal", "hit_index", "description_index", "hsp_index"):
@@ -1323,7 +1323,7 @@ def _saved_translation(sheet, feature):
 def _saved_membership_and_samples(sheet, base):
     """Check saved grouping relations against their original supplied records.
 
-    Reuse the v1 pure relation joins, not its parser or component calculator.
+    Reuse the base pure relation joins, not its parser or component calculator.
     These checks compare saved identities/indices/counts; they never replace a
     saved component or calculate candidate-function weights. In particular,
     derived sample labels cannot become their own source of authority.
@@ -1384,7 +1384,7 @@ def _saved_membership_and_samples(sheet, base):
 
 def _saved_base(sheet, base):
     _keys(base, "schema search_key status hsps subjects membership sequence_groups sample_groups feature_components taxonomy source_quality population_components issues", "sheet_schema_invalid")
-    if base["schema"] != "blast_vdb_components_v1" or base["search_key"] != sheet["search"]["search_key"]:
+    if base["schema"] != "blast_vdb_components" or base["search_key"] != sheet["search"]["search_key"]:
         _fail("sheet_schema_invalid")
     _enum(base["status"], {"complete", "partial", "no_reported_hits", "unavailable", "incompatible"})
     _array(base["issues"], _issue_shape)

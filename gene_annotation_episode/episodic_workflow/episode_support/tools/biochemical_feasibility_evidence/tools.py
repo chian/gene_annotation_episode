@@ -121,7 +121,7 @@ class ToolRegistry:
         return {'local_jobs': self.local_job_policy.to_dict(), 'local_resources': self.local_resources.as_record(), **({'knowledge_library_directory': str(self.knowledge_library_directory)} if self.knowledge_library_directory is not None else {}), **({'ordinary_execution_statistics': self.native_statistics.as_record()} if self.native_statistics is not None else {}), 'pdf_tools': {name: document_resource(path) for name, path in self.pdf_executables.items()}}
 
     def as_record(self):
-        return {'a110_source_tools': {'version': 'a110_source_tool_registry_v1', 'resources': self.resource_binding()}}
+        return {'a110_source_tools': {'version': 'a110_source_tool_registry', 'resources': self.resource_binding()}}
 
     @property
     def _written(self) -> list[str]:
@@ -276,7 +276,7 @@ class ToolRegistry:
         declaration until _save also preserves truthful partial-publication
         counts when a later native row fails.
         """
-        batch = {'representation': 'native_publications_v1', 'published_rows_total': 0, 'failure_rows_total': 0 if failures else None, 'observation_query': None}
+        batch = {'representation': 'native_publications', 'published_rows_total': 0, 'failure_rows_total': 0 if failures else None, 'observation_query': None}
         self._publication_batch.set(batch)
         return batch
 
@@ -955,7 +955,7 @@ class ToolRegistry:
 
     def _import_uniprot(self, name, args, snapshot, source):
         """Project one retained page while preserving original native row identity."""
-        from gene_annotation_episode.uniprot_native import legacy_uniprot_records
+        from gene_annotation_episode.uniprot_native import uniprot_source_records
         from gene_annotation_episode.uniprot_publication import bind_uniprot_publication
         operation = name.rsplit('.', 1)[1]
         request = {'operation': operation, **args, **({'size': args.get('size', 10)} if operation == 'search' else {})}
@@ -969,49 +969,49 @@ class ToolRegistry:
         errors = [dict(issue) for issue in parsed['issues'] if issue['effect'] != 'qualification']
         release = parsed['page']['release']
         if release['state'] == 'present' and source['version'] != release['value']:
-            result['projection_qualifications'] = [{'code': 'uniprot_legacy_source_version_omitted', 'record_ordinal': None, 'pointer': release['pointer'], 'field': 'legacy_source', 'effect': 'qualification'}]
+            result['projection_qualifications'] = [{'code': 'uniprot_projection_source_version_omitted', 'record_ordinal': None, 'pointer': release['pointer'], 'field': 'projection_source', 'effect': 'qualification'}]
         by_ordinal = {}
 
         def projection_failure(native, pointer, code, effect='field_partial'):
-            errors.append({'code': code, 'record_ordinal': native['identity']['record_ordinal'], 'pointer': pointer, 'primary_accession': native['identity']['primary_accession'], 'field': 'legacy_publication', 'effect': effect})
+            errors.append({'code': code, 'record_ordinal': native['identity']['record_ordinal'], 'pointer': pointer, 'primary_accession': native['identity']['primary_accession'], 'field': 'source_fields', 'effect': effect})
 
-        def legacy_label(value, fallback, native, pointer):
+        def projected_label(value, fallback, native, pointer):
             try:
                 validate_schema(value, RECORD_SCHEMAS['reference']['properties']['label'])
             except ContractError:
-                projection_failure(native, pointer, 'uniprot_legacy_label_unrepresentable')
+                projection_failure(native, pointer, 'uniprot_projection_label_unrepresentable')
                 return fallback
             return value
 
-        def legacy_term(namespace, accession, label, kind, native, pointer):
+        def projected_term(namespace, accession, label, kind, native, pointer):
             payload = {'namespace': namespace, 'accession': accession, 'label': label, 'term_type': kind, 'source_ref': source['id'], 'anchor': None}
             try:
                 validate_schema(payload, RECORD_SCHEMAS['term'])
             except ContractError:
-                projection_failure(native, pointer, 'uniprot_legacy_term_unrepresentable')
+                projection_failure(native, pointer, 'uniprot_projection_term_unrepresentable')
                 return None
             term = self._put('term', payload, origin='external')
             refs.append(term['id'])
             return term['id']
-        for native, protein in zip(parsed['records'], legacy_uniprot_records(parsed, snapshot.content), strict=True):
+        for native, protein in zip(parsed['records'], uniprot_source_records(parsed, snapshot.content), strict=True):
             anchor = native['identity']
             if protein['accession'] != anchor['primary_accession']:
-                raise ContractError('uniprot_legacy_record_identity_conflict')
+                raise ContractError('uniprot_projection_record_identity_conflict')
             try:
                 validate_schema(protein['accession'], RECORD_SCHEMAS['reference']['properties']['accession'])
             except ContractError:
-                projection_failure(native, anchor['record_pointer'] + '/primaryAccession', 'uniprot_legacy_reference_unrepresentable', 'record_unpublishable')
+                projection_failure(native, anchor['record_pointer'] + '/primaryAccession', 'uniprot_projection_reference_unrepresentable', 'record_unpublishable')
                 continue
             terms = []
             if protein['taxon_id'] is not None:
                 taxon_id = str(protein['taxon_id'])
-                label = legacy_label(protein['organism'] or taxon_id, taxon_id, native, native['taxon']['scientific_name']['pointer'])
-                terms.append(legacy_term('ncbi_taxonomy', taxon_id, label, 'taxon', native, native['taxon']['taxon_id']['pointer']))
-            legacy = native['legacy_publication']
-            if legacy['source_name']:
-                terms.append(legacy_term('uniprot_source_name', protein['accession'], legacy['source_name'], 'molecular_role', native, legacy['source_name_pointer']))
-            for ec, pointer in zip(legacy['source_ec_numbers'], legacy['source_ec_number_pointers'], strict=True):
-                terms.append(legacy_term('EC', ec, 'EC ' + ec, 'molecular_role', native, pointer))
+                label = projected_label(protein['organism'] or taxon_id, taxon_id, native, native['taxon']['scientific_name']['pointer'])
+                terms.append(projected_term('ncbi_taxonomy', taxon_id, label, 'taxon', native, native['taxon']['taxon_id']['pointer']))
+            source_fields = native['source_fields']
+            if source_fields['source_name']:
+                terms.append(projected_term('uniprot_source_name', protein['accession'], source_fields['source_name'], 'molecular_role', native, source_fields['source_name_pointer']))
+            for ec, pointer in zip(source_fields['source_ec_numbers'], source_fields['source_ec_number_pointers'], strict=True):
+                terms.append(projected_term('EC', ec, 'EC ' + ec, 'molecular_role', native, pointer))
             sequence = native['sequence']
             sequence_ref = None
             if sequence['value']['state'] == 'present':
@@ -1019,7 +1019,7 @@ class ToolRegistry:
                 sequence_ref = self.store.artifact(sequence_bytes, 'text/plain')
                 if self.store.get_artifact(sequence_ref) != sequence_bytes:
                     raise ContractError('uniprot_sequence_artifact_content_conflict')
-            label = legacy_label(legacy['source_name'] or protein['accession'], protein['accession'], native, legacy['source_name_pointer'])
+            label = projected_label(source_fields['source_name'] or protein['accession'], protein['accession'], native, source_fields['source_name_pointer'])
             record = self._put('reference', {'reference_type': 'protein', 'source_ref': source['id'], 'accession': protein['accession'], 'label': label, 'sequence_ref': sequence_ref, 'molecule': 'protein', 'length': sequence['observed_length_aa'], 'term_refs': list(dict.fromkeys((term for term in terms if term is not None))), 'context_refs': []}, origin='external')
             by_ordinal[anchor['record_ordinal']] = record
             refs.append(record['id'])
@@ -1028,7 +1028,7 @@ class ToolRegistry:
             raise ContractError('uniprot_native_artifact_content_conflict')
         for native in parsed['records']:
             anchor = native['identity']
-            if anchor['record_ordinal'] not in by_ordinal and (not any((error.get('code') == 'uniprot_legacy_reference_unrepresentable' and error.get('effect') == 'record_unpublishable' and (error.get('record_ordinal') == anchor['record_ordinal']) and (error.get('pointer') == anchor['record_pointer'] + '/primaryAccession') and (error.get('primary_accession') == anchor['primary_accession']) for error in errors))):
+            if anchor['record_ordinal'] not in by_ordinal and (not any((error.get('code') == 'uniprot_projection_reference_unrepresentable' and error.get('effect') == 'record_unpublishable' and (error.get('record_ordinal') == anchor['record_ordinal']) and (error.get('pointer') == anchor['record_pointer'] + '/primaryAccession') and (error.get('primary_accession') == anchor['primary_accession']) for error in errors))):
                 raise ContractError('uniprot_publication_omission_not_reported')
         result.update(count=len(by_ordinal), projection_errors=errors, uniprot_publication=bind_uniprot_publication(parsed, source_ref=source['id'], native_artifact_ref=source['artifact_ref'], references_by_ordinal=by_ordinal))
         if operation == 'search':

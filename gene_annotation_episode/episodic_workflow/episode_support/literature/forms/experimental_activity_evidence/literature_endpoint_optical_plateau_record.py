@@ -47,7 +47,7 @@ how well its quote supports it: 'direct' (the quote itself states the value or f
 it to 'direct'; the default is only for forms built by tests that do not go through the extraction (the extraction always passes the model's answer).
 """
 
-VERSION = 'a105_endpoint_optical_plateau_record_v1'
+VERSION = 'a105_endpoint_optical_plateau_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'endpoint_optical_plateau'
 QUANTITIES = ('conversion_percent', 'conversion_percent_spread', 'net_conversion_percent', 'net_conversion_percent_spread', 'control_conversion',

@@ -22,7 +22,7 @@ from .ucsc_acquisition import _parse, _analyse
 
 OPERATIONS = ("public.eva.request", "public.gnomad.request")
 MAX_BYTES = 8 * 1024 ** 2
-VALUE_VERSION = "variant_provider_value_v1"
+VALUE_VERSION = "variant_provider_value"
 EVA_ROOT = "https://www.ebi.ac.uk/eva/webservices/rest/v1"
 GNOMAD_ROOT = "https://gnomad.broadinstitute.org/api"
 DATASET_REFERENCES = {
@@ -535,7 +535,7 @@ def publish_provider_request(registry, operation, args, snapshot):
         value = provider_value(snapshot, operation=operation, arguments=args, artifact_ref=artifact_ref)
     except (ValueError, ContractError, TypeError, UnicodeError, OverflowError, RecursionError) as error:
         code = str(error) if str(error) in PROVIDER_FAILURE_CODES else "variant_provider_snapshot_invalid"
-        value, private = None, {"version": "variant_provider_failure_witness_v1",
+        value, private = None, {"version": "variant_provider_failure_witness",
             "observed_snapshot_service": snapshot.service, "observed_snapshot_url": snapshot.url, "failure_code": code}
         _json(private)
     else:

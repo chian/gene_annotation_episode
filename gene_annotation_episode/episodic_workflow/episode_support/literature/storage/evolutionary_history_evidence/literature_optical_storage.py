@@ -21,7 +21,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.calcul
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.evolutionary_history_evidence.literature_rate_storage import LiteratureRateRepository
 
 PROVIDER = "literature.a105.optical_population"
-VERSION = "literature_optical_population_record_v1"
+VERSION = "literature_optical_population_record"
 COMPONENTS = ("net_rate", "variance_net_rate")
 CELL_MAP = {"net_rate": "net_depletion_rate", "variance_net_rate": "net_depletion_variance"}
 EVALUATION_SCOPE = "source_nadh_depletion_endpoint"
@@ -172,7 +172,7 @@ def _finite_cell(value):
 def _validate_calculation(saved):
     result, inputs = saved["calculation"], saved["extraction"]["calculation_inputs"]
     _keys(result, ("version", "endpoint", *CELL_MAP.values(), "primitive_observation_refs", "input_snapshot"))
-    if (result["version"] != "a105_nadh_optical_rate_cells_v1" or result["endpoint"] != "NADH_depletion"
+    if (result["version"] != "a105_nadh_optical_rate_cells" or result["endpoint"] != "NADH_depletion"
             or not _saved_equal(result["input_snapshot"], inputs)
             or not _saved_equal(result["primitive_observation_refs"], inputs["primitive_observation_refs"])):
         _fail("saved_calculation_mismatch")

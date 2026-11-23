@@ -11,7 +11,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.perturbation_evidence.literature_rate_observation_calculations import VERSION as SHEET_VERSION, COMPONENTS, REASONS, FORMULAS, QUALIFICATIONS, populate_rate_observation_contrast
 
 PROVIDER='literature.a105.reported_rate_observations'
-VERSION='literature_reported_rate_observation_record_v1'
+VERSION='literature_reported_rate_observation_record'
 NAMESPACE='literature_rate_observation_cells'
 REQUESTED='requested_rate_observation_components'
 VIEW='reported_rate_observation_components'
@@ -286,9 +286,9 @@ class LiteratureRateObservationRepository(LiteratureRateRepository):
             raise ContractError('literature_rate_grid_projection_version_mismatch')
 
 
-# Explicit reported-curve branch; original v1 schemas and numerical meaning stay separate.
-GRID_POPULATION='a105_reported_curve_population_v1'
-GRID_RECORD='literature_reported_rate_observation_record_v2'
+# Explicit reported-curve branch; original schemas and numerical meaning stay separate.
+GRID_POPULATION='a105_reported_curve_population'
+GRID_RECORD='literature_reported_rate_grid_record'
 GRID_NAMESPACE='literature_rate_grid_cells'
 GRID_REQUESTED='requested_rate_grid_components'
 GRID_VIEW='reported_curve_precision_components'
@@ -327,7 +327,7 @@ def rate_grid_cells_schema():
     span=obj({'source_ref':_grid_ref('source'),'artifact_ref':_grid_ref('artifact'),
         'start':{'type':'integer','minimum':0},'end':{'type':'integer','minimum':1}})
     props={'sheet_ref':_grid_ref('source'),'evidence_source_ref':_grid_ref('source'),
-        'record_version':{'const':GRID_RECORD},'scientific_sheet_version':{'const':'a105_reported_curve_precision_v1'},
+        'record_version':{'const':GRID_RECORD},'scientific_sheet_version':{'const':'a105_reported_curve_precision'},
         'evaluation_scope':{'const':GRID_SCOPE},'component':deepcopy(TEXT),**cell,'origin':{'const':'derived'},
         'source_context':obj({name:deepcopy(label) for name in ('subject','panel','native_endpoint')}),
         'coordinate_context':_array(coordinate),'sampling':obj({

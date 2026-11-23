@@ -426,7 +426,7 @@ def extract_molecular_experiment_rows(result_pages: list[dict], *,
     supplied = _supplied(supplied_metadata)
     indices = {collection: _index(items) for collection, items in pages.items()}
     selected = set(result_ids)
-    result = {"version": "bvbrc_molecular_sheet_v1", "selected_result_ids": result_ids[:],
+    result = {"version": "bvbrc_molecular_sheet", "selected_result_ids": result_ids[:],
               "input_native_sha256s": list(dict.fromkeys(
                   page["custody"]["native_sha256"] for items in pages.values() for page in items)),
               "supplied_metadata": supplied, "rows": [], "missing_result_ids": [],

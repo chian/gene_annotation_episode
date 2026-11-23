@@ -6,7 +6,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.reader
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.literature_grading_storage import LiteratureA108GradingRepository, grading_cells_schema
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.literature_storage import A108SheetRepository
 PROVIDER = 'literature.a108.aggregation'
-VERSION = 'literature_a108_context_aggregation_record_v1'
+VERSION = 'literature_a108_context_aggregation_record'
 NAMESPACE = 'literature_a108_aggregation_cells'
 REQUESTED = 'requested_a108_aggregation_components'
 OPERATIONS = TableDeclaration(name='literature_a108_aggregation_operations', columns=('sheet_ref',), key=('sheet_ref',), record_refs=('sheet_ref',))

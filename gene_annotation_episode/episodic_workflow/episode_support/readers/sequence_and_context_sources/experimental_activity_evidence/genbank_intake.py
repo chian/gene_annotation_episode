@@ -16,7 +16,7 @@ from Bio.SeqFeature import CompoundLocation, Position, Reference, SimpleLocation
 from gene_annotation_episode.episodic_workflow.episode_support.records.experimental_activity_evidence.domain import parse_sequences
 from gene_annotation_episode.domain import ContractError
 
-REPRESENTATION = "native_genbank_assertions_jsonl_v1"
+REPRESENTATION = "native_genbank_assertions_jsonl"
 
 
 def native_position(value):

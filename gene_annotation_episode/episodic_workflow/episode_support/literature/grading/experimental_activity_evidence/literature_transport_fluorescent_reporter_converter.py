@@ -104,7 +104,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_transport_response_direction import select_transport_effect
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_transport_fluorescent_reporter_converted_v1'
+VERSION = 'a105_transport_fluorescent_reporter_converted'
 CRITERIA_MAP = {'background_alternatives': ('control_cells', 'no_substrate_baseline'), 'matrix_interference': ('background_fluorescence', 'signal_drift'),
                 'calibration_applicability': ('indicator_calibration', 'assay_window'), 'attribution_supported': ('expression_confirmed',),
                 'assertion_relevance': ('substrate_identity',), 'transport_specificity': ('analogue_competition', 'indicator_specificity'),

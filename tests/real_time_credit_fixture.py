@@ -4,7 +4,7 @@
 def progress_time(seconds, *, first_seconds=10., decision_index=0,
                   run_id="fixture-run", episode_id="fixture-episode", query=False):
     origin = 1_000_000_000
-    return {"version": "episode_progress_time_v1", "status": "available",
+    return {"version": "episode_progress_time", "status": "available",
         "run_id": run_id, "episode_id": episode_id,
         "original_decision_index": None if query else decision_index,
         "point_kind": "decision_query" if query else "progress_receipt",

@@ -1,4 +1,4 @@
-"""What the parent gives: the search assignment ``search_assignment_v1``: ONE search, ``search_query_ref`` (a record of
+"""What the parent gives: the search assignment ``search_assignment``: ONE search, ``search_query_ref`` (a record of
 the strategy that wrote it; the query text never travels, this episode reads the record through custody and runs the
 provider search for it), the records that give the question its context, the commissioned A108 literature task (the
 verified source leads, the one task kind), the proposed annotation, the A108 grading and aggregation components the
@@ -28,10 +28,10 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.sample_co
 
 REQUESTED_GRADING = 'requested_a108_grading_components'
 REQUESTED_AGGREGATION = 'requested_a108_aggregation_components'
-VERSION = 'literature_local_task_v1'
+VERSION = 'literature_local_task'
 
 ASSIGNMENT_FORM = RecordForm({
-    'version': DeclaredField('text', 'The search assignment version', 'search_assignment_v1'),
+    'version': DeclaredField('text', 'The search assignment version', 'search_assignment'),
     'question_context_refs': Field('record_refs', 'Records giving the assigned question its context'),
     'search_query_ref': Field('text', 'The one search to run: a record of the strategy that holds the provider '
                               'request (the query), read through custody'),

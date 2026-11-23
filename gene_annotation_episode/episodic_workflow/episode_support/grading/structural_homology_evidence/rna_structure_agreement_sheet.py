@@ -24,7 +24,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.calculations.rna_
 from gene_annotation_episode.episodic_workflow.episode_support.forms.rna_structure.rna_structure_contracts import COORDINATE_SYSTEM
 
 GRADING_VERSION = 'canonical_pairs_over_consensus_pairs_of_cmalign_span'
-SCHEMA = 'a102_rna_structure_agreement_sheet_v1'
+SCHEMA = 'a102_rna_structure_agreement_sheet'
 PROVIDER = 'rna_structure_agreement'
 OPEN, CLOSE = '<([{', '>)]}'
 CANONICAL = ('AU', 'UA', 'GC', 'CG', 'GU', 'UG')

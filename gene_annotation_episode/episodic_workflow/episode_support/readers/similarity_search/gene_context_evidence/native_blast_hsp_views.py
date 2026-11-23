@@ -14,7 +14,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.readers.similarit
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.gene_context_evidence.blast_pairwise_results import _validate
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.blast_search import PROGRAM_UNITS
 from gene_annotation_episode.episodic_workflow.episode_support.records.gene_context_evidence.domain import ContractError, canonical
-from gene_annotation_episode.episodic_workflow.episode_support.records.documents.gene_context_evidence.materials import artifact_path
+from gene_annotation_episode.materials import artifact_path
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.native_blast_contracts import native_blast_digest, validate_native_blast_requested_job
 from gene_annotation_episode.episodic_workflow.episode_support.records.similarity_search.gene_context_evidence.native_blast_result_publication import (_read_json, _captured_paths, _binding_snapshots,
     _validate_sequence, _reference, _record)
@@ -49,7 +49,7 @@ def _source_grading(store, source, bundle):
             continue
         envelope = _read_json(store, reference)
         grading = envelope.get("grading", {})
-        if grading.get("schema") != "native_blast_retained_grading_v2":
+        if grading.get("schema") != "native_blast_retained_grading":
             continue
         _require(set(envelope) == {"schema", "provider", "native_artifact_ref", "grading"}
             and envelope["schema"] == SCHEMA and envelope["provider"] == source["provider"]
@@ -62,7 +62,7 @@ def _source_grading(store, source, bundle):
 
 def _selected_native(store, bundle, grading, sheet, scores, row, marker):
     collection = sheet["collection"]
-    _require(collection["schema"] == "blast_report_collection_v1", "collection_required")
+    _require(collection["schema"] == "blast_report_collection", "collection_required")
     search = _one((item for item in collection["searches"]
         if _equal(item["search_key"], marker["search_key"])), "original_search_conflict")
     saved_sheet = _one((item for item in sheet["searches"]
@@ -70,8 +70,8 @@ def _selected_native(store, bundle, grading, sheet, scores, row, marker):
     saved_scores = _one((item for item in scores["searches"]
         if _equal(item["search_key"], marker["search_key"])), "original_scores_conflict")
     _require(saved_sheet["failure"] is None and saved_scores["failure"] is None
-        and saved_sheet["sheet"]["schema"] == "blast_pairwise_result_sheet_v1"
-        and saved_scores["scores"]["schema"] == "blast_pairwise_result_components_v1"
+        and saved_sheet["sheet"]["schema"] == "blast_pairwise_result_sheet"
+        and saved_scores["scores"]["schema"] == "blast_pairwise_result_components"
         and _equal(saved_sheet["sheet"]["search"], search), "search_grading_conflict")
     bindings = saved_sheet["sheet"]["operand_bindings"]
     normalized = _validate(search, bindings)  # Validation of saved facts; no calculation.
@@ -87,7 +87,7 @@ def _selected_native(store, bundle, grading, sheet, scores, row, marker):
     search_index = scores["searches"].index(saved_scores)
     pointer = "/searches/" + str(search_index) + "/scores/components"
     instance = _one((item for item in scores["correspondence"]["instances"]
-        if item["legacy_pointer"] == pointer and item["axis_basis"] == "qualified"), "common_components_required")
+        if item["source_pointer"] == pointer and item["axis_basis"] == "qualified"), "common_components_required")
     expected_values = _hsp_values(component["components"], instance["components"]["rows"][index])
     _require(component["hsp_index"] == index and _equal(component["native"], native)
         and _equal(row["values"], expected_values), "frozen_measurement_conflict")
@@ -182,17 +182,17 @@ def _native_blast_pairwise_hsp(store, observation):
     _require(_equal(observation, store.get(observation["id"])), "observation_record_conflict")
     marker = observation["native_blast_pairwise"]
     _require(set(marker) == {"version", "program", "record_key", "search_key", "hit_ordinal",
-        "hsp_ordinal", "bundle_artifact_ref"} and marker["version"] == "native_blast_pairwise_observation_v1"
+        "hsp_ordinal", "bundle_artifact_ref"} and marker["version"] == "native_blast_pairwise_observation"
         and marker["program"] in PROGRAM_UNITS, "marker_conflict")
     source = store.get(observation["source_ref"])
     immutable_record(source)
     _require(source.get("record_type") == "source" and source.get("origin") == "tool"
         and source.get("provider") == "episode.execution_result"
-        and source.get("version") == "native_blast_bundle_v1"
+        and source.get("version") == "native_blast_bundle"
         and source["artifact_ref"] == marker["bundle_artifact_ref"], "source_required")
     bundle = _read_json(store, source["artifact_ref"])
     request = validate_native_blast_requested_job(bundle["requested_job"])
-    _require(bundle["version"] == "native_blast_bundle_v1" and bundle["mode"] == "pairwise"
+    _require(bundle["version"] == "native_blast_bundle" and bundle["mode"] == "pairwise"
         and bundle["program"] == request["native_blast"]["program"] == marker["program"]
         and bundle["operand_bindings"] == request["native_blast"]["operand_bindings"]
         and bundle["identity"]["requested_job_sha256"] == native_blast_digest(request)
@@ -207,8 +207,8 @@ def _native_blast_pairwise_hsp(store, observation):
     # Unrelated unavailable outputs may survive in a partial source. Required
     # input/report custody is checked below against the actual captured files.
     sheet, scores = (_read_json(store, grading[key]) for key in ("sheet_artifact_ref", "scores_artifact_ref"))
-    _require(sheet["schema"] == grading["sheet_schema"] == "native_blast_sheet_collection_v2"
-        and scores["schema"] == grading["scores_schema"] == "native_blast_scores_collection_v2",
+    _require(sheet["schema"] == grading["sheet_schema"] == "native_blast_sheet_collection"
+        and scores["schema"] == grading["scores_schema"] == "native_blast_scores_collection",
         "grading_collection_required")
     validate_native_blast_correspondence_collections(sheet, scores)
     _require(marker["record_key"] == record_key(bundle, marker["search_key"], "pairwise_hsp",
@@ -218,7 +218,7 @@ def _native_blast_pairwise_hsp(store, observation):
             "complete_row_required")
     scored = _one((item for item in scores["rows"]["pairwise_hsp"]
         if item["record_key"] == marker["record_key"]), "scored_row_required")
-    _require(_equal(row, scored) and row["version"] == "native_blast_complete_row_v1"
+    _require(_equal(row, scored) and row["version"] == "native_blast_complete_row"
         and row["family"] == "pairwise_hsp" and row["invalid"] is False
         and all(_equal(row[key], marker[key]) for key in ("search_key", "program", "hit_ordinal", "hsp_ordinal"))
         and row["coordinate_units"] == dict(zip(("query", "reference", "alignment"), PROGRAM_UNITS[bundle["program"]])),

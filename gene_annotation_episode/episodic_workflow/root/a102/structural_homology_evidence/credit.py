@@ -43,7 +43,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_s
 # (tmalign, afdb-swissprot, ``runs/a102_service_probe/foldseek/result_tmalign_afdb_swissprot_cspa.json``), 548 (tmalign,
 # pdb100, ``result2_tmalign_0.json``) and 982, 481 and 549 (3diaa, afdb-swissprot, cath50, pdb100, ``result_0.json``): the
 # largest is 982, below 1000. A result with more hits than this would earn more than its ceiling and the run would end with
-# ``episode_ceiling_exceeded``: the figure is then wrong and is to be changed with its ``CEILING_VERSIONS`` entry.
+# ``episode_ceiling_exceeded``: the figure is then wrong and is to be changed with its ``CEILINGS`` entry.
 HIT_BOUND = 1000
 SLOT = 'structure_search'
 COFOLDING_SLOT = 'partner_cofolding'
@@ -61,7 +61,7 @@ class A102DifferentialCredit:
     yield_method = 'forecast'
 
     def as_record(self):
-        return {'kind': 'a102_differential_credit', 'version': 'a102_differential_credit_v7', 'axis': 'A102',
+        return {'kind': 'a102_differential_credit', 'version': 'a102_differential_credit', 'axis': 'A102',
                 'measurement': 'index_b_of_each_hit_of_one_structure_search_from_the_aligned_pairs_after_superposition',
                 'site_measurement': 'mean_e_of_the_hits_with_sites_e_is_b_times_the_mean_residue_score_of_class_match_times_kernel',
                 'candidates': 'product_from_the_uniprot_name_of_the_hit',
@@ -407,12 +407,12 @@ def outcome_pending(summary, records, position):
 
 
 # What ``ceiling`` means for each action type the head offers. The forecast controller learns an action's share of its
-# ceiling only from ledger rows recorded under the same credit definition and the same version of that action's ceiling
-# (``yield_estimator.py``): change an action's version whenever its ceiling's derivation changes, and only that action's.
-CEILING_VERSIONS = {'structure_search': 'a102_ceiling_v2', 'site_correspondence': 'a102_ceiling_v2',
-                    'partner_contacts': 'a102_ceiling_v2', 'ligand_transplants': 'a102_ceiling_v1',
-                    'rna_family_scan': 'a102_ceiling_v1', 'rna_structure_agreement': 'a102_ceiling_v1',
-                    'partner_cofolding': 'a102_ceiling_v1'}
+# ceiling only from ledger rows recorded under the same credit definition and the same name of that action's ceiling
+# (``yield_estimator.py``).
+CEILINGS = {'structure_search': 'a102_ceiling', 'site_correspondence': 'a102_ceiling',
+            'partner_contacts': 'a102_ceiling', 'ligand_transplants': 'a102_ceiling',
+            'rna_family_scan': 'a102_ceiling', 'rna_structure_agreement': 'a102_ceiling',
+            'partner_cofolding': 'a102_ceiling'}
 
 
 def ceiling(summary, records, action_type, arguments, ctx):

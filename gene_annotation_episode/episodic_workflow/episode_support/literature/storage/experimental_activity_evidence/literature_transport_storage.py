@@ -18,7 +18,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.storag
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence.literature_transport_calculations import COMPONENTS, populate_transport_response
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_transport_inputs import read_transport_inputs, transport_response_population_schema
 PROVIDER = 'literature.experimental.transport_response'
-FORMULA_CODES = {name: 'transport_' + name + '_v1' for name in COMPONENTS}
+FORMULA_CODES = {name: 'transport_' + name for name in COMPONENTS}
 BINDINGS = {'reported_subject_ref': 'reference', 'analyte_ref': 'term', 'test_curve_ref': 'reference', 'reference_curve_ref': 'reference', 'km_curve_ref': 'reference'}
 REASONS = ('concentration_unreported', 'concentration_inputs_unreported', 'concentration_not_supplied', 'concentration_inputs_not_supplied', 'kinetic_curve_identity_not_supplied', 'primitive_covariance_not_supplied', 'primitive_measurement_identity_not_supplied', 'positive_concentration_required', 'kinetic_curve_identity_unreported', 'different_kinetic_curves', 'observation_model_unspecified', 'primitive_covariance_unreported', 'primitive_measurement_identity_unreported', 'primitive_variance_status_unknown', 'numerical_model_range')
 CONDITIONS = ('same_kinetic_curve', 'michaelis_menten_response', 'first_order_covariance_propagation')
@@ -37,8 +37,8 @@ RECEIVED = received_ledger('literature_transport_received')
 class LiteratureTransportRepository(LiteratureRateRepository):
     provider = PROVIDER
     components = COMPONENTS
-    record_version = 'literature_transport_response_record_v2'
-    readable_record_versions = ('literature_transport_response_record_v1', record_version)
+    record_version = 'literature_transport_response_record'
+    readable_record_versions = (record_version,)
     operations = OPERATIONS
     received = RECEIVED
     binding_fields = tuple(BINDINGS)

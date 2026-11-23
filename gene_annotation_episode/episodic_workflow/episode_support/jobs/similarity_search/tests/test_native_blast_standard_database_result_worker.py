@@ -33,7 +33,7 @@ def request_for(tmp_path, *, inputs=None, model=None):
     # Deliberately pretty serialized; bundle identity is captured bytes, not a
     # hash of a different canonical serialization inside the preparer.
     raw = json.dumps(inputs["bundle"], indent=2).encode(); path = root / "bundle.json"; path.write_bytes(raw)
-    request = dict(version=v.PREFIX + "result_worker_request_v1", calculation_id="a" * 64, bundle=inputs["bundle"],
+    request = dict(version=v.PREFIX + "result_worker_request", calculation_id="a" * 64, bundle=inputs["bundle"],
         bundle_artifact_ref="artifact-bundle", bundle_capture=dict(path=str(path), sha256=sha(raw), size_bytes=len(raw)),
         authenticated_attempt=inputs["attempt_identity"], artifacts=artifacts,
         metadata_descriptors=[r["descriptor"] for r in inputs["metadata_payloads"]], retained_sources=retained,
@@ -306,7 +306,7 @@ def test_R10_pssm_calculator_exception_preserves_native_sequence_result(tmp_path
     sheets = json.loads((Path(request["output_directory"]) / "sheets.json").read_bytes())
     assert calculations["pssm"] == [dict(artifact_key="query", components=None)]
     assert sheets["pssm"][0]["artifact_key"] == "query" and sheets["pssm"][0]["pssms"]
-    assert calculations["sequence"][0]["components"]["schema"] == "blast_sequence_database_result_components_v1"
+    assert calculations["sequence"][0]["components"]["schema"] == "blast_sequence_database_result_components"
     failures = [(i, row) for i, row in enumerate(manifest["failures"]) if row["code"] == v.PREFIX + "calculation_failed"]
     assert len(failures) == 1 and failures[0][1]["artifact_key"] == "query"
     assert failures[0][1]["detail_code"] == "calculator_contract_invalid"

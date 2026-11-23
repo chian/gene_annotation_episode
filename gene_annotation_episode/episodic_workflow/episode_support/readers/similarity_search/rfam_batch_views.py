@@ -16,7 +16,7 @@ def _checked_calculation(sheet, calculation):
     code = "rfam_projection_reference_conflict"
     calculation = finite_json_copy(calculation, code=code)
     closed_object(calculation, RfamCalculationResult.__annotations__, code=code)
-    if (calculation["version"] != "rfam_batch_calculation_v1" or calculation["sheet_digest"] != rfam_digest(sheet)
+    if (calculation["version"] != "rfam_batch_calculation" or calculation["sheet_digest"] != rfam_digest(sheet)
             or type(calculation["hits"]) is not list or type(calculation["query_strands"]) is not list
             or type(calculation["issues"]) is not list):
         raise ContractError(code)
@@ -64,7 +64,7 @@ def project_rfam_batch_result(sheet, calculation, *, projection, artifact_bindin
 This checks supplied digests and exact original row associations. It neither
 opens referenced artifacts nor recalculates the scientific components.
     """
-    if isinstance(sheet, dict) and sheet.get("schema") == "infernal_search_sheet_v2":
+    if isinstance(sheet, dict) and sheet.get("schema") == "infernal_search_sheet":
         from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.rfam_batch_infernal import project_rfam_infernal_result
         return project_rfam_infernal_result(sheet, calculation, projection=projection,
             artifact_bindings=artifact_bindings, representation="json")
@@ -113,7 +113,7 @@ opens referenced artifacts nor recalculates the scientific components.
         projected.append({"record_key": keys[index], "query_occurrence_key": row["query_occurrence_key"],
             "family_accession": row.get("family_accession"), "strand": row["strand"],
             "measured": measured, "unavailable": unavailable})
-    return {"version": "rfam_selected_projection_v1", "source_ref": bindings["source_ref"],
+    return {"version": "rfam_selected_projection", "source_ref": bindings["source_ref"],
         "sheet_ref": bindings["sheet_ref"], "calculation_ref": bindings["calculation_ref"],
         "family": family, "selection": deepcopy(projection), "available_row_count": len(rows),
         "selected_row_count": len(projected), "more_rows": len(projected) < len(rows),

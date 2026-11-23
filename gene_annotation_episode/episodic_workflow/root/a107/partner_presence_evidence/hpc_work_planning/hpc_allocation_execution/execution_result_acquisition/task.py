@@ -50,7 +50,7 @@ SERVICES = ('job_access',)
 MODEL_ROLE = 'REASONING'
 TRANSPORT = {'open_records_as_text': True, 'argument_transport_error': 'results_argument_transport_not_carried'}
 RESULT_PROVIDER = 'episode.execution_result'
-RESULT_VERSION = 'execution_result_information_v3'
+RESULT_VERSION = 'execution_result_information'
 FILE_LIMIT_BYTES = 1024 * 1024
 
 _OFFSET = {'type': 'integer', 'minimum': 0}

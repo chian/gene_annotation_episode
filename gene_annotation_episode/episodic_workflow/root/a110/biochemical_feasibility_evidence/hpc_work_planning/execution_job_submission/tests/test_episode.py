@@ -26,7 +26,7 @@ def module(name):
 
 
 def request(resource_id, kind, workspace):
-    return {'version': 'practical_assignment_v1', 'assignment_id': 'a-' + resource_id, 'resource_kind': kind,
+    return {'version': 'practical_assignment', 'assignment_id': 'a-' + resource_id, 'resource_kind': kind,
             'workspace': workspace, 'endpoint': 'usable_handoff',
             'requested_job': {'argv': ['run', 'job.sh'], 'environment': {}},
             'progress_requirements': [
@@ -37,7 +37,7 @@ def request(resource_id, kind, workspace):
 
 
 def assignment(**extra):
-    return {'version': 'execution_launch_assignment_v1',
+    return {'version': 'execution_launch_assignment',
             'requests': {'aurora': request('aurora', 'hpc', HPC_WORKSPACE),
                          'laptop': request('laptop', 'local', LOCAL_WORKSPACE)},
             'immutable_input_versions': [], 'constraints': {}, 'handoff_unit': 1.5, **extra}

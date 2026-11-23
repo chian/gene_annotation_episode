@@ -26,7 +26,7 @@ def list_inspection(*, count=1):
     field = {"field_name": "identifier_list_count", "value": count, "unit": "identifiers",
         "value_basis": "native_reported_exact", "native_lexeme": str(count),
         "occurrence_id": output["occurrence_id"], "line_number": 2, "json_pointer": None, "missing_reason": None}
-    result = {"version": "blast_database_inspection_v2", "operation": operation("inspect_seqid_list"),
+    result = {"version": "blast_prepared_database_inspection", "operation": operation("inspect_seqid_list"),
         "original_outcome": outcome(), "subject": {"kind": "identifier_list", "occurrence_id": "ids"},
         "database_bindings": [], "output_occurrence": output, "native_fields": [field],
         "completeness": "complete", "checks": [], "failures": []}
@@ -56,7 +56,7 @@ def selected(result, selection, *, occurrences=None, prepared=None, saved_data=(
     return project_blast_utility_result(**context), context
 
 
-def test_closed_versioned_schemas_are_detached_and_accept_v2_artifact_branches():
+def test_closed_schemas_are_detached_and_accept_prepared_artifact_branches():
     for schema in (NATIVE_BLAST_UTILITY_RESULT_SELECTOR_SCHEMA, DATABASE_FIELD_SCHEMA,
                    PREPARATION_SCHEMA, SAVED_DATA_SCHEMA):
         jsonschema.Draft202012Validator.check_schema(schema)
@@ -142,7 +142,7 @@ def test_inspection_missing_field_remains_missing_and_never_becomes_zero():
 def test_empty_filter_inspection_keeps_selected_database_and_no_invented_count():
     member, binding = database()
     output = occurrence("filters", "stdout", b"\n", direction="output", path="/attempt/filters")
-    result = {"version": "blast_database_inspection_v2", "operation": operation("show_filters"),
+    result = {"version": "blast_prepared_database_inspection", "operation": operation("show_filters"),
         "original_outcome": outcome(), "subject": {"kind": "database", "database_key": "db"},
         "database_bindings": [binding], "output_occurrence": output, "native_fields": [],
         "completeness": "unknown", "checks": [], "failures": []}
@@ -202,7 +202,7 @@ def test_prepared_alias_manifest_cannot_change_identity_method_or_dependency_clo
 def test_saved_prepared_descriptor_must_match_actual_standard_or_additional_version():
     result = alias_result(); prepared = projection(result)
     wrong = saved("prepared_database", prepared["manifest"])
-    wrong["schema"] = "native_blast_prepared_database_manifest_v1"
+    wrong["schema"] = "native_blast_prepared_database_manifest"
     with pytest.raises(ContractError, match="saved_prepared_database_schema_conflict"):
         selected(result, selector(saved_data=["prepared_database"]), prepared=prepared, saved_data=[wrong])
 
@@ -288,7 +288,7 @@ def test_file_inspection_cannot_select_a_fabricated_database_artifact():
 def test_saved_result_version_must_agree_with_original_operation_on_replay():
     result, rows = list_inspection()
     view, context = selected(result, selector(saved_data=["result"]), occurrences=rows, saved_data=[saved("result", result)])
-    view["saved_data"][0]["schema"] = "blast_database_inspection_v1"
+    view["saved_data"][0]["schema"] = "blast_database_inspection"
     with pytest.raises(ContractError, match="saved_result_version"):
         validate(view, context)
 

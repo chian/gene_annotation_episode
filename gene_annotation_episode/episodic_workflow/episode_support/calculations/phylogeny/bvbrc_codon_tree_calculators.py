@@ -212,7 +212,7 @@ def codon_family_population_components(sheet: dict, *, family_population_id: str
     """
     c.shape(sheet, _SHEET_KEYS, "codon_sheet_shape_invalid")
     _require((sheet["schema_version"], sheet["tool"], sheet["mode"]) ==
-             ("bvbrc_codon_tree_sheet_v1", "C-L193-CodonTree", "core_genome_codon_protein"), "sheet_identity_conflict")
+             ("bvbrc_codon_tree_sheet", "C-L193-CodonTree", "core_genome_codon_protein"), "sheet_identity_conflict")
     c.text(family_population_id)
     c.text(genome_population_id)
     c.shape(sheet["populations"], {"alignments", "leaves", "composition", "taxonomy", "genomes", "families",

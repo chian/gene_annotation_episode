@@ -21,7 +21,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.partner_p
 TOOL = "public.ncbi.geo"
 MAX_DOWNLOAD_BYTES = 1024 ** 3
 ROOT = "https://ftp.ncbi.nlm.nih.gov/geo/series/"
-REQUEST_VERSION = "geo_download_request_v1"
+REQUEST_VERSION = "geo_download_request"
 _STUDY = re.compile(r"GSE[1-9][0-9]*\Z", re.ASCII)
 _STUDY_SCHEMA = {"type": "string", "pattern": "^GSE[1-9][0-9]*$"}
 _LIMIT = {"type": "integer", "minimum": 1, "maximum": MAX_DOWNLOAD_BYTES}

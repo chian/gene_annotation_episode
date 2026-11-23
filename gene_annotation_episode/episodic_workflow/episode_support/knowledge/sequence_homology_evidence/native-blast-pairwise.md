@@ -36,7 +36,7 @@ The native producer is one selected primitive, not a new episode or agent loop.
 `native_blast` job. `validate_native_blast_requested_job` verifies that the
 wrapper equals the compiler's output. The producer stages the exact two inputs,
 checks their single-record FASTA content and selected ranges, executes one native
-process, and seals `native_blast_bundle_v1`. The bundle keeps original selection,
+process, and seals `native_blast_bundle`. The bundle keeps original selection,
 realized argv/environment, native return code, complete stdout/stderr/report,
 original and staged input identities, output byte hashes and structured failures.
 Temporary/cache/output paths remain within the selected attempt directory.

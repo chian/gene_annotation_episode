@@ -62,12 +62,12 @@ def test_no_module_imports_another_episode_folder():
 def test_the_assignment_admits_the_old_assignment_and_the_return_declares_credit_and_finding():
     from_parent = importlib.import_module(MODULE + '.messages.read_from_parent')
     final = importlib.import_module(MODULE + '.messages.final_to_parent')
-    assignment = {'version': 'api_service_assignment_v1', 'resource_id': 'bvbrc', 'service': 'bvbrc_appservice',
+    assignment = {'version': 'api_service_assignment', 'resource_id': 'bvbrc', 'service': 'bvbrc_appservice',
                   'request': {'application': 'RNASeq'}, 'endpoint': 'usable_handoff', 'constraints': {},
                   'completion_target': 1.0, 'input_refs': ['sub_1']}
     admitted = from_parent.ASSIGNMENT_FORM.admit(assignment, 'assignment')
     parent_input = from_parent.read_from_parent(admitted, {'purpose': 'x'})
-    assert parent_input['version'] == 'api_service_assignment_v1'
+    assert parent_input['version'] == 'api_service_assignment'
     assert parent_input['completion_target'] == 1.0
     assert final.RETURN_FORM.fields['credit'].required and final.RETURN_FORM.fields['finding'].required
     assert not final.RETURN_FORM.fields['execution_result_refs'].required

@@ -60,7 +60,7 @@ def native_blast_tool_contracts(rows, *, resource_kind, resource_id):
             'that resource child selects practical.job.start under its caller allocation. The native producer executes one selected -subject command. '
             'No database, index, download, remote search, automatic retry or alternate resource is part of this operation. '
             'Monitoring uses existing native status and selected stdout/stderr observations; a live process alone does not establish productive search progress. '
-            'Results acquisition reads the original sealed native_blast_bundle_v1 and all complete original artifacts, uses '
+            'Results acquisition reads the original sealed native_blast_bundle and all complete original artifacts, uses '
             'parse_blast_report_collection with their actual declared format, then populate_blast_pairwise_sheet and '
             'calculate_blast_pairwise_components. These are separate readers, numerical storage and deterministic calculations. '
             'Request the numerical components and query/reference relationships needed by the receiving episode. '

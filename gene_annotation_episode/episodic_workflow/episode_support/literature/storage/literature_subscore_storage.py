@@ -14,7 +14,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.storag
 from gene_annotation_episode.episodic_workflow.episode_support.literature.readers.literature_subscore import COMPONENTS, REQUESTED, NAMESPACE, SCORE_COMPONENT, population_schema, cell_schema, cells_schema, finalize_a106, TASK
 
 PROVIDER = "literature.a106.subscore"
-VERSION = "literature_a106_subscore_record_v1"
+VERSION = "literature_a106_subscore_record"
 OPERATION_DESCRIPTION = TASK
 QUESTION_FIELDS = ("subject_ref", "assertion_ref", "comparison_ref", "scope_statement")
 

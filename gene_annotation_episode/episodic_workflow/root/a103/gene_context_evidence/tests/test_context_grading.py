@@ -101,7 +101,7 @@ def test_measurements_are_graded_into_sheets_and_the_return_is_their_controlled_
     reader = run.view.records
     sheets = received_attachments(reader, reader.refs())
     recurrence = next(row for row in sheets if row['measurement_ref'] == comparison['comparison_ref'])
-    assert recurrence['policy'] == 'recurrence_specific_loci_components_and_sampling_v1'
+    assert recurrence['policy'] == 'recurrence_specific_loci_components_and_sampling'
     assert reader.receipt(recurrence['source_ref'])['how'] == 'produced'
     assert reader.table(ATTACHMENTS).select({'source_ref': recurrence['source_ref']})
     summary = internal_summary.internal_summary(run.view)

@@ -35,7 +35,7 @@ from ..task import (EXECUTION_SELECTION, LAUNCH_JOB_INSTRUCTIONS, LAUNCH_SELECTI
                     PREDICTION_SELECTION, RESULTS_SELECTION)
 
 INITIAL_REPORT = 'nothing yet'
-RESULTS_VERSION = 'execution_results_assignment_v1'
+RESULTS_VERSION = 'execution_results_assignment'
 
 
 def identity_of(summary):
@@ -95,7 +95,7 @@ def msg_to_child(slot, arguments, summary):
         return ChildMessage(
             objective='Report the state of execution target ' + arguments['target_handle'],
             message={'initial_report': INITIAL_REPORT},
-            assignment={'version': 'monitor_assignment_v1', 'target_handle': arguments['target_handle'],
+            assignment={'version': 'monitor_assignment', 'target_handle': arguments['target_handle'],
                         'requested_fields': list(arguments['requested_fields']),
                         'known_progress_refs': list(arguments['known_progress_refs']),
                         'permitted_committed_record_types': list(arguments['permitted_committed_record_types']),

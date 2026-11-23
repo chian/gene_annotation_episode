@@ -24,7 +24,7 @@ def validate_native_database_resource(configuration, key):
     """Preserve the previous deployment checks without its operation dispatcher."""
     value = configuration[key]
     _require(isinstance(value, dict) and set(value) == {'version', 'producer', 'environment', 'bindings'}
-        and value['version'] == key + '_resource_v1'
+        and value['version'] == key + '_resource'
         and isinstance(value['producer'], dict) and set(value['producer']) == {'module_root'}
         and isinstance(value['environment'], dict)
         and all(isinstance(k, str) and k and isinstance(v, str) and '\0' not in k + v
@@ -80,7 +80,7 @@ def qualify_manifest(target, receipt, raw, *, configuration=None):
     descriptor = assignment.get('scientific_manifest')
     _require(isinstance(descriptor, dict), 'native_database_scientific_manifest_not_supplied')
     key = next((name for name in PROFILES if name in assignment['requested_job']), None)
-    _require(key is not None and descriptor['format'] == key + '_run_plan_v1')
+    _require(key is not None and descriptor['format'] == key + '_run_plan')
     _require(receipt['tool_name'] == 'exec_command'
         and receipt['assignment_sha256'] == digest(assignment)
         and receipt['run_id'] == target['run_id'] and receipt['episode_id'] == target['origin_episode_id']
@@ -107,7 +107,7 @@ def qualify_manifest(target, receipt, raw, *, configuration=None):
     if configuration is not None:
         binding = configuration[key]
         _require(plan['resource_environment'] == binding['environment'])
-    return {'version': 'terminal_native_database_attempt_v1',
+    return {'version': 'terminal_native_database_attempt',
         'authenticated_attempt': {'identity': {**plan['identity'], 'execution_id': target['execution_id']},
             'attempt_directory': plan['attempt_directory'], 'plan_sha256': digest(plan)},
         'plan_path': descriptor['path'], 'scientific_manifest': deepcopy(descriptor),
@@ -115,11 +115,11 @@ def qualify_manifest(target, receipt, raw, *, configuration=None):
 
 
 def validate_terminal_database_attempt(target, witness):
-    """Recheck saved current custody; legacy submission ledgers remain separate."""
+    """Recheck saved current custody; submission ledgers remain separate."""
     from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence.practical_execution_records import terminal_job_matches
     _require(set(witness) == {'version', 'authenticated_attempt', 'plan_path',
         'scientific_manifest', 'plan', 'submission_receipt'}
-        and witness['version'] == 'terminal_native_database_attempt_v1')
+        and witness['version'] == 'terminal_native_database_attempt')
     assignment, receipt = target['assignment'], witness['submission_receipt']
     descriptor = assignment.get('scientific_manifest')
     plan = witness['plan']

@@ -65,7 +65,7 @@ def _comparison_inputs(sheet, job, parameters_sha256, method):
                  basis['native_lineage_ref'] is None and
                  _matches(declaration['before'], selected_populations[0]) and
                  _matches(declaration['after'], selected_populations[1]))
-        relations = ('same_population',) if method == 'report_consistency_v1' else ('successor_population', 'subset_population')
+        relations = ('same_population',) if method == 'report_consistency' else ('successor_population', 'subset_population')
         conflicting = [m for m in sheet['supplied_metadata']
             if m['kind'] == 'lineage_declaration' and
             _matches(m['value']['before'], selected_populations[0]) and
@@ -84,7 +84,7 @@ def _comparison_inputs(sheet, job, parameters_sha256, method):
                  all(basis[k] is None for k in ('metadata_id', 'evidence', 'declaration')))
         if job['lineage_ref'] is not None and job['lineage_ref'] != basis['native_lineage_ref']:
             valid = False
-        if method == 'report_consistency_v1' and basis['basis'] == 'native_report':
+        if method == 'report_consistency' and basis['basis'] == 'native_report':
             valid = False  # A before/after relation does not say these are the same population.
         if not valid:
             state = 'incompatible'; codes.append('incompatible_population')
@@ -109,7 +109,7 @@ def _component(sheet, job, parameter_hash, metric, *, state, value, unit, cells,
 
 
 def calculate_retention(sheet: dict, *, job: dict, parameters_sha256: str) -> list[dict]:
-    job, populations, cells, state, codes = _comparison_inputs(sheet, job, parameters_sha256, 'retention_v1')
+    job, populations, cells, state, codes = _comparison_inputs(sheet, job, parameters_sha256, 'retention')
     kind = job['comparison_kind']
     fractions = {'read_retention': 'read_retention_fraction', 'base_retention': 'base_retention_fraction',
                  'pair_retention': 'pair_retention_fraction', 'native_report_retention': 'native_report_retention_fraction'}

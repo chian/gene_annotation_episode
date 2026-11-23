@@ -54,7 +54,7 @@ def _entity(entity, kind):
 
 def validate_calculation_parameters(value: object) -> dict:
     """Validate finite explicit tolerances and every quantity's selector fields."""
-    result = validate_shape("CalculationParametersV1", value)
+    result = validate_shape("CalculationParameters", value)
     seen = set()
     for request in result["requests"]:
         if request["component_id"] in seen:
@@ -163,8 +163,8 @@ def validate_components(value: object, *, sheet: dict) -> dict:
     Formula arithmetic is calculated once by C. Host content bindings protect
     the resulting bytes; this function is not a second scientific grader.
     """
-    saved = validate_shape("ComparativeSystemsSheetV1", sheet)
-    result = validate_shape("ComparativeSystemsComponentsV1", value)
+    saved = validate_shape("ComparativeSystemsSheet", sheet)
+    result = validate_shape("ComparativeSystemsComponents", value)
     parameters = validate_calculation_parameters(result["parameters"])
     if result["analysis_id"] != saved["analysis_id"] or result["sheet_sha256"] != canonical_sha256(saved):
         _fail("component_sheet_identity_mismatch")

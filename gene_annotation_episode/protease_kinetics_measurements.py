@@ -16,9 +16,9 @@ from pathlib import PurePosixPath
 from .bivariate_covariance import assess_bivariate_covariance, propagate_bivariate_variance
 
 
-SHEET_SCHEMA = "protease_kinetics_sheet_v1"
-COMPONENTS_SCHEMA = "protease_kinetics_components_v2"
-CAPTURE_VERSION = "molecular_sequence_execution_v3"
+SHEET_SCHEMA = "protease_kinetics_sheet"
+COMPONENTS_SCHEMA = "protease_kinetics_components"
+CAPTURE_VERSION = "molecular_sequence_protease_execution"
 OPERATION = "analyze_protease_kinetics"
 MEASUREMENT_FIELDS = {"time_points", "fluorescence_data", "substrate_concentrations", "enzyme_concentration"}
 SHEET_FIELDS = {"schema", "source_method", "numeric_interpretation", "measurements", "assay_context",
@@ -120,7 +120,7 @@ def _context(raw):
     if calibration is not None:
         fields = {"schema", "response_per_product_concentration", "signal_unit", "product_concentration_unit",
             "curve_ordinals", "applicability", "source_ref"}
-        if type(calibration) is not dict or set(calibration) != fields or calibration["schema"] != "protease_signal_calibration_v1":
+        if type(calibration) is not dict or set(calibration) != fields or calibration["schema"] != "protease_signal_calibration":
             _fail("closed_calibration_required", "/assay_context/calibration")
         factor = calibration["response_per_product_concentration"]
         if _number(factor) is None or factor <= 0:
@@ -208,7 +208,7 @@ def _pin(value, field):
 
 def _native_request(request):
     _closed(request, {"version", "operation", "arguments", "deployment", "output_workspace", "environment"}, "/native_observation/request")
-    if request["version"] != "molecular_sequence_request_v3" or request["operation"] != OPERATION:
+    if request["version"] != "molecular_sequence_protease_request" or request["operation"] != OPERATION:
         _fail("native_operation_conflict", "/native_observation/request")
     _closed(request["arguments"], MEASUREMENT_FIELDS | {"output_prefix", "output_dir"}, "/native_observation/request/arguments")
     prefix = request["arguments"]["output_prefix"]
@@ -227,7 +227,7 @@ def _native_request(request):
             _fail("native_environment_conflict", "/native_observation/request/environment/" + name)
     deployment = request["deployment"]
     _closed(deployment, {"version", "runtime", "module", "import_roots", "software_files_ref", "software_files_file"}, "/native_observation/request/deployment")
-    if deployment["version"] != "molecular_sequence_deployment_v3":
+    if deployment["version"] != "molecular_sequence_protease_deployment":
         _fail("native_deployment_version_required", "/native_observation/request/deployment/version")
     _closed(deployment["runtime"], {"executable", "home"}, "/native_observation/request/deployment/runtime")
     _pin(deployment["runtime"]["executable"], "/native_observation/request/deployment/runtime/executable")
@@ -262,7 +262,7 @@ def _native(capture, measurements):
     record = capture.get("native_record")
     if record is not None:
         _closed(record, {"schema", "outcome", "result_kind", "result", "failure", "source_identity"}, "/native_observation/native_record")
-        if record["schema"] != "biomni_protease_kinetics_native_v1":
+        if record["schema"] != "biomni_protease_kinetics_native":
             _fail("native_record_schema_required", "/native_observation/native_record/schema")
     if capture["native_call_state"] not in {"not_started", "returned", "raised"}:
         _fail("native_terminal_state_required", "/native_observation/native_call_state")
@@ -292,7 +292,7 @@ def _native(capture, measurements):
     observer = capture.get("observer")
     _closed(observer, {"schema", "mechanism", "state", "reason", "selected_call_count", "selected_terminal_event_count",
         "profile_restored", "locals", "failures"}, "/native_observation/observer")
-    if (observer["schema"] != "native_selected_return_observation_v1" or observer["mechanism"] != "selected_code_return_profile"
+    if (observer["schema"] != "native_selected_return_observation" or observer["mechanism"] != "selected_code_return_profile"
             or type(observer.get("locals")) is not dict or type(observer["failures"]) is not list
             or type(capture["verification_failures"]) is not list):
         _fail("native_observer_record_required", "/native_observation/observer")
@@ -354,7 +354,7 @@ def _cell(value, unit, formula, *, origin="derived_saved_native_fit", reason=Non
 
 
 def _covariance(value):
-    assessment = {"schema": "protease_covariance_assessment_v1", "native_symmetry": "unavailable",
+    assessment = {"schema": "protease_covariance_assessment", "native_symmetry": "unavailable",
         "symmetric_part_positive_semidefinite": None, "assessment_arithmetic": "exact_rational_retained_entries",
         "propagation_basis": "symmetric_bilinear_part_of_observed_native_matrix",
         "statistical_covariance_validity": "unestablished", "qualifications": []}

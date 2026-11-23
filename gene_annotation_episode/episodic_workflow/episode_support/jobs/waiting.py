@@ -1,6 +1,6 @@
 """A selected wait on native job events, as one completed unit of an episode.
 
-An episode may offer its model a ``wait`` selection: an ``event_condition_v1`` condition naming registered native
+An episode may offer its model a ``wait`` selection: an ``event_condition`` condition naming registered native
 event targets it owns or received, the event it waits for after the cursor it last saw (a native target has one
 event, ``state_changed``), and an optional ``reconsider_at`` UTC time. Waiting reports readiness only: it earns no
 credit, so the wait unit's controller input carries the credit the controller already holds
@@ -9,7 +9,7 @@ credit, so the wait unit's controller input carries the credit the controller al
 * ``await selected_wait(events, condition)`` checks the condition's targets against ``events`` (a
   ``NativeEventLedger`` of ``episode_support.jobs.native_event_ledger``: ``validate_event_targets`` and
   ``wait_events``), awaits the ledger's wake and returns the wait outcome
-  ``{'status': 'completed', 'record_refs': [], 'changed_record_refs': [], 'result': <event_wake_v1>}``. A target
+  ``{'status': 'completed', 'record_refs': [], 'changed_record_refs': [], 'result': <event_wake>}``. A target
   the ledger does not know or does not support for that event raises ``EventTargetError`` in the ledger; that is
   returned as a failed outcome with ``wait_target_feedback(error, status='failed')`` so it enters the iterator
   like any other failed unit. Every other error propagates.

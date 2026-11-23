@@ -1,4 +1,4 @@
-"""What the parent gives: the reading assignment ``reading_assignment_v1`` (the page of one source and the windows of it to
+"""What the parent gives: the reading assignment ``reading_assignment`` (the page of one source and the windows of it to
 read in document order, each a byte window), the commissioned literature task (``verified_source_leads`` only), the proposed
 annotation, the Store scope of the commission and the records passed in custody. The windows' text is not passed: it is read
 from the artifact of the page. This is the only place the assignment is read. A task of another kind, a window that is not of
@@ -11,7 +11,7 @@ from method_loop import ChoiceField, DeclaredField, Field, RecordForm
 REPRESENTATIONS = ('text', 'original')      # the representations a witness of the perturbation form can name
 
 PAGE_FORM = RecordForm({
-    'version': DeclaredField('text', 'The page assignment version', 'page_assignment_v1'),
+    'version': DeclaredField('text', 'The page assignment version', 'page_assignment'),
     'source_ref': Field('text', 'The source being read'),
     'representation': ChoiceField('text', 'The representation of the source that is read', REPRESENTATIONS),
     'artifact_ref': Field('text', "The source's artifact for that representation"),
@@ -28,7 +28,7 @@ SELECTION_FORM = RecordForm({
     'spans': Field('list', 'The windows to read in document order, each once: one or more', items=WINDOW_FORM),
 })
 ASSIGNMENT_FORM = RecordForm({
-    'version': DeclaredField('text', 'The reading assignment version', 'reading_assignment_v1'),
+    'version': DeclaredField('text', 'The reading assignment version', 'reading_assignment'),
     'page': Field('record', 'The source being read', form=PAGE_FORM),
     'selection': Field('record', 'The windows of that source to read in document order', form=SELECTION_FORM),
     'literature_task': Field('record', 'The commissioned literature task: its kind (verified_source_leads), '

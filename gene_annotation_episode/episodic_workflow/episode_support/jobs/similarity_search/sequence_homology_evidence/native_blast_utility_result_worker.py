@@ -34,7 +34,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.acquisition.profi
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.profile_model_preparation.sequence_homology_evidence.native_hmmer_preparation_result_worker import _read_bytes, _write
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.local_execution.sequence_homology_evidence.native_worker_files import _encoded
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.sequence_homology_evidence.practical_execution_state import _immutable
-from gene_annotation_episode.episodic_workflow.episode_support.jobs.similarity_search.native_blast_utility_worker_context import MANIFEST_VERSION, MANIFEST_VERSION_V2, OUTPUT_FILES, PLAN_VERSION_V2, PREFIX, _can_read_result, _error, _file_descriptor, diagnostic, failure, unique_failures, validate_worker_manifest, validate_worker_plan
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.similarity_search.native_blast_utility_worker_context import MANIFEST_VERSION, VDB_MANIFEST_VERSION, OUTPUT_FILES, VDB_PLAN_VERSION, PREFIX, _can_read_result, _error, _file_descriptor, diagnostic, failure, unique_failures, validate_worker_manifest, validate_worker_plan
 
 
 
@@ -84,7 +84,7 @@ def _parse_original(plan, directory, manifest):
     if _decode(_read_bytes(plan["bundle_file"])) != bundle:
         _error("worker_original_bundle_bytes_conflict")
     content = {}
-    vdb = context["operation"]["version"] == "blast_utility_operation_v3"
+    vdb = context["operation"]["version"] == "blast_vdb_utility_operation"
     authentication_ids = set()
     if vdb:
         from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.native_blast_vdb_utility_context import vdb_utility_authentication_occurrence_ids
@@ -93,7 +93,7 @@ def _parse_original(plan, directory, manifest):
         descriptor = {k: row[k] for k in ("path", "sha256", "size_bytes")}
         if (occurrence["occurrence_id"] in authentication_ids or
                 (occurrence["direction"] == "output" and occurrence["role"] in {"stdout", "stderr", "database_metadata"})
-                or context["operation"]["version"] == "blast_utility_operation_v2" and (
+                or context["operation"]["version"] == "blast_preparation_operation" and (
                     occurrence["role"] in {"database_list", "profile_list", "materialized_list", "alias_file"}
                     or occurrence["native_format"] == "blast_profile_aux_text")):
             content[occurrence["occurrence_id"]] = _read_bytes(descriptor)
@@ -118,7 +118,7 @@ def _parse_original(plan, directory, manifest):
         manifest["outputs"]["result"] = _write(directory, OUTPUT_FILES["result"], result)
         manifest["failures"].extend(result["failures"])
         return
-    if operation["version"] == "blast_utility_operation_v2":
+    if operation["version"] == "blast_preparation_operation":
         from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.blast_preparation_result_assembly import assemble_blast_preparation_result
         result, prepared = assemble_blast_preparation_result(
             context=context, capture=plan["capture"], contents=content)
@@ -199,9 +199,9 @@ def _project_saved(plan, directory, manifest):
     selected = project_blast_utility_result(source_ref=plan["source_ref"], operation=context["operation"],
         native_outcome=context["native_outcome"], result=saved["result"], prepared_database=prepared,
         occurrences=context["occurrences"], selector=plan["selector"], failures=context["failures"], saved_data=plan["saved_data"],
-        **({"context": context} if plan["version"] == PLAN_VERSION_V2 else {}))
+        **({"context": context} if plan["version"] == VDB_PLAN_VERSION else {}))
     manifest["outputs"]["projection"] = _write(directory, OUTPUT_FILES["projection"], selected)
-    if plan["version"] == PLAN_VERSION_V2:
+    if plan["version"] == VDB_PLAN_VERSION:
         manifest["context_authentication"] = deepcopy(plan["context_authentication"])
 
 
@@ -223,8 +223,8 @@ def run(plan: dict) -> dict:
             _verify_file({"path": str(directory / row["filename"]), **{k: row[k] for k in ("sha256", "size_bytes")}})
         return saved
     _immutable(directory / "worker-intent.json", intent)
-    vdb = plan["version"] == PLAN_VERSION_V2
-    manifest = {"version": MANIFEST_VERSION_V2 if vdb else MANIFEST_VERSION, "task": plan["task"], "plan_sha256": native_blast_digest(plan),
+    vdb = plan["version"] == VDB_PLAN_VERSION
+    manifest = {"version": VDB_MANIFEST_VERSION if vdb else MANIFEST_VERSION, "task": plan["task"], "plan_sha256": native_blast_digest(plan),
         "completed": False, "outputs": {}, "failures": deepcopy(plan["context"]["failures"])}
     if vdb:
         manifest["context_authentication"] = None

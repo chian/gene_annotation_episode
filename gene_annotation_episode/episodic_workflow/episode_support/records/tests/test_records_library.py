@@ -15,14 +15,14 @@ AXES = ('gene_context_evidence', 'partner_presence_evidence')
 
 
 def recurrence(target):
-    return {'schema': 'a103_recurrence_v1', 'group_balanced_fraction': 0.4, 'producer_operation': 'recurrence',
+    return {'schema': 'a103_recurrence', 'group_balanced_fraction': 0.4, 'producer_operation': 'recurrence',
             'target_ref': target}
 
 
 @pytest.mark.parametrize('axis', AXES)
 def test_a103_measurement_is_published_with_its_grant_row_received_back_and_read_by_credit(world, axis):
     target = world['target']
-    binding = {'schema': 'a103_locus_binding_v1', 'producer_operation': 'bind', 'target_ref': target}
+    binding = {'schema': 'a103_locus_binding', 'producer_operation': 'bind', 'target_ref': target}
     result, units = run(world, 'measurement_' + axis, [
         tool('publish_measurement', axis=axis, body=recurrence(target)),
         tool('publish_measurement', axis=axis, body=binding, binding={**binding, 'genbank_projection': {'x': 1}})])
@@ -76,7 +76,7 @@ def test_a103_attachment_row_is_written_with_its_source_and_received(world):
 
 def test_a102_attachment_request_and_attachment_are_rows_and_the_attachment_is_received(world):
     target = world['target']
-    body = {'target_ref': target, 'policy': 'direct_native_geometry_v1', 'score': 0.5}
+    body = {'target_ref': target, 'policy': 'direct_native_geometry', 'score': 0.5}
     _, units = run(world, 'a102_attachment', [tool('attach_a102', request={'operation': 'structure.reference_align'},
                                                    body=body, target_ref=target)])
     done = units[0]['outcome']

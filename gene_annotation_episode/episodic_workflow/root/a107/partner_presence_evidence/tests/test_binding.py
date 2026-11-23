@@ -29,10 +29,10 @@ FILES = {'__init__.py', 'goal.py', 'task.py', 'credit.py', 'yield_estimator.py',
 ROOT = 'gene_annotation_episode.episodic_workflow.root'
 SOURCE, ARTIFACT, SUBJECT = 'source_' + 'a' * 24, 'artifact_' + 'b' * 24, 'input_' + 'c' * 24
 LIBRARY_ID, ENTRY = 'd' * 64, 'e' * 64
-SELECTION = {'version': 'partner_presence_evidence_selection_v3',
-             'evidence_axis': {'version': 'partner_presence_evidence_option_ref_v1', 'library_id': LIBRARY_ID,
+SELECTION = {'version': 'partner_presence_evidence_selection',
+             'evidence_axis': {'version': 'partner_presence_evidence_option_ref', 'library_id': LIBRARY_ID,
                                'slot': 'evidence_axis', 'option_id': 'A107', 'entry_sha256': ENTRY},
-             'thought_pattern': {'version': 'partner_presence_evidence_option_ref_v1', 'library_id': LIBRARY_ID,
+             'thought_pattern': {'version': 'partner_presence_evidence_option_ref', 'library_id': LIBRARY_ID,
                                  'slot': 'thought_pattern', 'option_id': 'P12', 'entry_sha256': ENTRY},
              'child_tool_info': [{'name': 'source.read', 'resources': 'local'}]}
 ASSIGNMENT = {'selection': SELECTION, 'evidence_refs': [SOURCE], 'constraints': {}, 'context': {},
@@ -199,7 +199,7 @@ def arguments_for(slot, task):
     values = {'objective': 'o', 'purpose': 'p', 'return_fields': []}
     samples = {'process_selection': {**SELECTION, 'child_tool_info': [
         {'name': 'source.read', 'resources': 'local', 'description': 'd', 'instructions': 'i'}]},
-        'revision_origin': {'version': 'partner_presence_evidence_revision_origin_v1',
+        'revision_origin': {'version': 'partner_presence_evidence_revision_origin',
                             'parent_invocation_ref': 'scientific_invocation_' + 'a' * 24,
                             'preparation_operation_ref': 'operation_' + 'a' * 24},
         'evidence_refs': [SOURCE], 'constraints': {}, 'context': {}, 'requests': {'r': {}},
@@ -233,7 +233,7 @@ def test_the_commission_of_each_child_uses_only_fields_the_child_declares_and_fi
     assert message.selection == tuple(selectable)
     if slot == 'monitor':
         # The job is named by the records this episode holds; nothing the model wrote passes to the monitor.
-        assert message.assignment == {'version': 'monitor_assignment_v2', 'handoff_refs': [JOB_HANDOFF],
+        assert message.assignment == {'version': 'monitor_assignment', 'handoff_refs': [JOB_HANDOFF],
                                       'known_progress_refs': [JOB_CHECK], 'dependency_handoff_refs': [],
                                       'requested_fields': ['execution_status'], 'information_unit': 4.0}
         assert message.message == {} and message.objective == 'Assess the progress of job ' + JOBS[0]['job'] + '.'

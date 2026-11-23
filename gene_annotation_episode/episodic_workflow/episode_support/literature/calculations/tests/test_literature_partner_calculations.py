@@ -27,7 +27,7 @@ def _arm(value, identity, *, present=True):
 
 
 def _inputs(w=100, o=20, a=90):
-    return {"version": "literature_partner_inputs_v1", "arms": {
+    return {"version": "literature_partner_inputs", "arms": {
         "reference": _arm(w, "physical:W"),
         "omitted": _arm(o, "physical:O", present=False),
         "addback": _arm(a, "physical:A"),
@@ -351,7 +351,7 @@ def test_nonzero_underflow_is_unavailable_but_other_components_survive():
 
 
 def test_all_absent_arms_return_specific_unknowns():
-    source = {"version": "literature_partner_inputs_v1", "arms": dict.fromkeys(("reference", "omitted", "addback"))}
+    source = {"version": "literature_partner_inputs", "arms": dict.fromkeys(("reference", "omitted", "addback"))}
     result = populate_partner_components(source)
     assert all(cell["value"] is None for cell in result["cells"].values())
     assert all(cell["unavailable_reason"] == "arm_unreported" for cell in result["cells"].values())

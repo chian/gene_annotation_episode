@@ -64,7 +64,7 @@ def run(manifest_path, expected_sha):
     if status_path.exists():
         raise RuntimeError('allocation_already_started; inspect_original_intents')
     started = time.time()
-    state = {'version': 'hpc_allocation_status_v1', 'manifest_sha256': expected_sha,
+    state = {'version': 'hpc_allocation_status', 'manifest_sha256': expected_sha,
         'plan_id': manifest['plan_id'], 'job_id': os.environ['PBS_JOBID'],
         'started_at': started, 'updated_at': started, 'state': 'running', 'units': [],
         'wall_seconds': manifest['wall_seconds'], 'current_unit_id': None}

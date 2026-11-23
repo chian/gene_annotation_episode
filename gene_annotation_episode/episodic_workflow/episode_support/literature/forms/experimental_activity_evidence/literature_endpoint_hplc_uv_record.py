@@ -48,7 +48,7 @@ about how well its quote supports it: 'direct' (the quote itself states the valu
 it to 'direct'; the default is only for forms built by tests that do not go through the extraction (the extraction always passes the model's answer).
 """
 
-VERSION = 'a105_endpoint_hplc_uv_record_v1'
+VERSION = 'a105_endpoint_hplc_uv_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'endpoint_hplc_uv'
 QUANTITIES = ('conversion_percent', 'conversion_spread', 'net_conversion_percent', 'net_conversion_spread', 'control_conversion_percent', 'product_amount',

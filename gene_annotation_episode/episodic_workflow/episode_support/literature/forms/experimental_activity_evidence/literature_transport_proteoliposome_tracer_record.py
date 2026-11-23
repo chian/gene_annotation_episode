@@ -41,7 +41,7 @@ judge it; the converter does. The constructors take ``support`` and default it t
 extraction (the extraction always passes the model's answer).
 """
 
-VERSION = 'a105_transport_proteoliposome_tracer_record_v1'
+VERSION = 'a105_transport_proteoliposome_tracer_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'transport_proteoliposome_tracer'
 QUANTITIES = ('km', 'km_spread', 'turnover', 'turnover_spread', 'normalized_rate', 'normalized_rate_spread', 'fold_over_control', 'fold_over_control_spread',

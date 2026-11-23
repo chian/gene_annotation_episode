@@ -2,9 +2,9 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:gene-annotation:review:comparative-systems:handoffs:001",
   "$comment": "Review-only proposal. Shape validation never confers custody, scientific completeness, or live provenance. See SCHEMA_DECISIONS_001.md for relational invariants.",
-  "$ref": "#/$defs/ComparativeSystemsSheetV1",
+  "$ref": "#/$defs/ComparativeSystemsSheet",
   "$defs": {
-    "DiagnosticCodeV1": {
+    "DiagnosticCode": {
       "type": "string",
       "enum": [
         "outer_json_invalid",
@@ -59,7 +59,7 @@
         "source_version_mismatch"
       ]
     },
-    "RoleV1": {
+    "Role": {
       "type": "string",
       "enum": [
         "family_summary",
@@ -83,7 +83,7 @@
         "reference_membership"
       ]
     },
-    "TableV1": {
+    "Table": {
       "type": "string",
       "enum": [
         "plfam",
@@ -100,7 +100,7 @@
         "document"
       ]
     },
-    "BasisV1": {
+    "Basis": {
       "type": "string",
       "enum": [
         "service_artifact",
@@ -109,7 +109,7 @@
         "supplied_data_api"
       ]
     },
-    "CompletenessV1": {
+    "Completeness": {
       "type": "string",
       "enum": [
         "complete_for_declared_population",
@@ -118,7 +118,7 @@
         "incompatible"
       ]
     },
-    "CellReferenceV1": {
+    "CellReference": {
       "type": "object",
       "properties": {
         "kind": {
@@ -146,7 +146,7 @@
       ],
       "additionalProperties": false
     },
-    "SourceLocationV1": {
+    "SourceLocation": {
       "type": "object",
       "properties": {
         "source_ref": {
@@ -175,7 +175,7 @@
         "table": {
           "anyOf": [
             {
-              "$ref": "#/$defs/TableV1"
+              "$ref": "#/$defs/Table"
             },
             {
               "type": "null"
@@ -227,7 +227,7 @@
       ],
       "additionalProperties": false
     },
-    "NumericCellV1": {
+    "NumericCell": {
       "type": "object",
       "properties": {
         "state": {
@@ -322,7 +322,7 @@
         "input_refs": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/CellReferenceV1"
+            "$ref": "#/$defs/CellReference"
           }
         },
         "uncertainty": {
@@ -331,7 +331,7 @@
         "qualification_codes": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/DiagnosticCodeV1"
+            "$ref": "#/$defs/DiagnosticCode"
           },
           "uniqueItems": true
         }
@@ -374,7 +374,7 @@
         }
       ]
     },
-    "NativeNumberV1": {
+    "NativeNumber": {
       "type": "object",
       "properties": {
         "native_field": {
@@ -391,10 +391,10 @@
           ]
         },
         "location": {
-          "$ref": "#/$defs/SourceLocationV1"
+          "$ref": "#/$defs/SourceLocation"
         },
         "cell": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         }
       },
       "required": [
@@ -405,11 +405,11 @@
       ],
       "additionalProperties": false
     },
-    "DiagnosticV1": {
+    "Diagnostic": {
       "type": "object",
       "properties": {
         "code": {
-          "$ref": "#/$defs/DiagnosticCodeV1"
+          "$ref": "#/$defs/DiagnosticCode"
         },
         "phase": {
           "type": "string",
@@ -446,7 +446,7 @@
         "field": {
           "anyOf": [
             {
-              "$ref": "#/$defs/RoleV1"
+              "$ref": "#/$defs/Role"
             },
             {
               "type": "null"
@@ -464,7 +464,7 @@
         "locations": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/SourceLocationV1"
+            "$ref": "#/$defs/SourceLocation"
           }
         },
         "affected_field_ids": {
@@ -478,7 +478,7 @@
         "required_input_role": {
           "anyOf": [
             {
-              "$ref": "#/$defs/RoleV1"
+              "$ref": "#/$defs/Role"
             },
             {
               "type": "null"
@@ -499,7 +499,7 @@
       ],
       "additionalProperties": false
     },
-    "RequirementV1": {
+    "Requirement": {
       "type": "object",
       "properties": {
         "requirement_id": {
@@ -507,10 +507,10 @@
           "minLength": 1
         },
         "code": {
-          "$ref": "#/$defs/DiagnosticCodeV1"
+          "$ref": "#/$defs/DiagnosticCode"
         },
         "required_input_role": {
-          "$ref": "#/$defs/RoleV1"
+          "$ref": "#/$defs/Role"
         },
         "document_id": {
           "anyOf": [
@@ -550,7 +550,7 @@
       ],
       "additionalProperties": false
     },
-    "ProducerEvidenceV1": {
+    "ProducerEvidence": {
       "type": "object",
       "properties": {
         "evidence_id": {
@@ -632,7 +632,7 @@
         "source_locations": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/SourceLocationV1"
+            "$ref": "#/$defs/SourceLocation"
           }
         }
       },
@@ -649,11 +649,11 @@
       ],
       "additionalProperties": false
     },
-    "QualifiedProducerEvidenceV1": {
+    "QualifiedProducerEvidence": {
       "type": "object",
       "properties": {
         "evidence": {
-          "$ref": "#/$defs/ProducerEvidenceV1"
+          "$ref": "#/$defs/ProducerEvidence"
         },
         "qualification": {
           "type": "object",
@@ -713,7 +713,7 @@
       ],
       "additionalProperties": false
     },
-    "OriginalRequestV1": {
+    "OriginalRequest": {
       "type": "object",
       "properties": {
         "application": {
@@ -767,7 +767,7 @@
         "executed_population_evidence": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/SourceLocationV1"
+            "$ref": "#/$defs/SourceLocation"
           }
         }
       },
@@ -784,7 +784,7 @@
       ],
       "additionalProperties": false
     },
-    "SourceDocumentV1": {
+    "SourceDocument": {
       "type": "object",
       "properties": {
         "document_id": {
@@ -792,17 +792,17 @@
           "minLength": 1
         },
         "role": {
-          "$ref": "#/$defs/RoleV1"
+          "$ref": "#/$defs/Role"
         },
         "format_profile": {
           "type": "string",
           "enum": [
-            "comparative_systems_pathways_json_v1",
-            "comparative_systems_subsystems_json_v1",
-            "comparative_systems_families_json_v1",
-            "comparative_systems_pathways_tsv_v1",
-            "comparative_systems_subsystems_tsv_v1",
-            "comparative_systems_variant_matrix_source670b_v1"
+            "comparative_systems_pathways_json",
+            "comparative_systems_subsystems_json",
+            "comparative_systems_families_json",
+            "comparative_systems_pathways_tsv",
+            "comparative_systems_subsystems_tsv",
+            "comparative_systems_variant_matrix_source670b"
           ]
         },
         "source_ref": {
@@ -853,7 +853,7 @@
           ]
         },
         "basis": {
-          "$ref": "#/$defs/BasisV1"
+          "$ref": "#/$defs/Basis"
         }
       },
       "required": [
@@ -872,7 +872,7 @@
       ],
       "additionalProperties": false
     },
-    "PopulationV1": {
+    "Population": {
       "type": "object",
       "properties": {
         "population_id": {
@@ -912,17 +912,17 @@
         "source_locations": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/SourceLocationV1"
+            "$ref": "#/$defs/SourceLocation"
           }
         },
         "raw_occurrence_count": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "distinct_valid_member_count": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "completeness": {
-          "$ref": "#/$defs/CompletenessV1"
+          "$ref": "#/$defs/Completeness"
         },
         "missing_members": {
           "type": "array",
@@ -950,7 +950,7 @@
         "qualification_codes": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/DiagnosticCodeV1"
+            "$ref": "#/$defs/DiagnosticCode"
           },
           "uniqueItems": true
         }
@@ -971,7 +971,7 @@
       ],
       "additionalProperties": false
     },
-    "NativeFieldV1": {
+    "NativeField": {
       "type": "object",
       "properties": {
         "name": {
@@ -981,7 +981,7 @@
           "type": "string"
         },
         "location": {
-          "$ref": "#/$defs/SourceLocationV1"
+          "$ref": "#/$defs/SourceLocation"
         }
       },
       "required": [
@@ -991,7 +991,7 @@
       ],
       "additionalProperties": false
     },
-    "NativeTableRowV1": {
+    "NativeTableRow": {
       "type": "object",
       "properties": {
         "row_ordinal": {
@@ -1015,13 +1015,13 @@
         "numeric_fields": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/NativeNumberV1"
+            "$ref": "#/$defs/NativeNumber"
           }
         },
         "qualification_codes": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/DiagnosticCodeV1"
+            "$ref": "#/$defs/DiagnosticCode"
           },
           "uniqueItems": true
         }
@@ -1035,11 +1035,11 @@
       ],
       "additionalProperties": false
     },
-    "NativeTableV1": {
+    "NativeTable": {
       "type": "object",
       "properties": {
         "table": {
-          "$ref": "#/$defs/TableV1"
+          "$ref": "#/$defs/Table"
         },
         "json_pointer": {
           "type": "string",
@@ -1068,7 +1068,7 @@
         "rows": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/NativeTableRowV1"
+            "$ref": "#/$defs/NativeTableRow"
           }
         }
       },
@@ -1082,14 +1082,14 @@
       ],
       "additionalProperties": false
     },
-    "NativeMetadataV1": {
+    "NativeMetadata": {
       "type": "object",
       "properties": {
         "location": {
-          "$ref": "#/$defs/SourceLocationV1"
+          "$ref": "#/$defs/SourceLocation"
         },
         "value": {
-          "$ref": "#/$defs/JSONValueV1"
+          "$ref": "#/$defs/JSONValue"
         }
       },
       "required": [
@@ -1098,7 +1098,7 @@
       ],
       "additionalProperties": false
     },
-    "JSONValueV1": {
+    "JSONValue": {
       "oneOf": [
         {
           "type": [
@@ -1111,22 +1111,22 @@
         {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/JSONValueV1"
+            "$ref": "#/$defs/JSONValue"
           }
         },
         {
           "type": "object",
           "additionalProperties": {
-            "$ref": "#/$defs/JSONValueV1"
+            "$ref": "#/$defs/JSONValue"
           }
         }
       ]
     },
-    "NativeDocumentResultV1": {
+    "NativeDocumentResult": {
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_comparative_systems_native_v1"
+          "const": "bvbrc_comparative_systems_native"
         },
         "status": {
           "type": "string",
@@ -1138,30 +1138,30 @@
           ]
         },
         "document": {
-          "$ref": "#/$defs/SourceDocumentV1"
+          "$ref": "#/$defs/SourceDocument"
         },
         "tables": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/NativeTableV1"
+            "$ref": "#/$defs/NativeTable"
           }
         },
         "metadata": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/NativeMetadataV1"
+            "$ref": "#/$defs/NativeMetadata"
           }
         },
         "reported_numbers": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/NativeNumberV1"
+            "$ref": "#/$defs/NativeNumber"
           }
         },
         "diagnostics": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/DiagnosticV1"
+            "$ref": "#/$defs/Diagnostic"
           }
         }
       },
@@ -1176,7 +1176,7 @@
       ],
       "additionalProperties": false
     },
-    "EntityV1": {
+    "Entity": {
       "type": "object",
       "properties": {
         "kind": {
@@ -1348,7 +1348,7 @@
       ],
       "additionalProperties": false
     },
-    "AssociationRowV1": {
+    "AssociationRow": {
       "type": "object",
       "properties": {
         "association_id": {
@@ -1378,7 +1378,7 @@
           ]
         },
         "table": {
-          "$ref": "#/$defs/TableV1"
+          "$ref": "#/$defs/Table"
         },
         "row_ordinal": {
           "type": "integer",
@@ -1554,7 +1554,7 @@
         "fields": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/NativeFieldV1"
+            "$ref": "#/$defs/NativeField"
           }
         },
         "identity_status": {
@@ -1576,7 +1576,7 @@
         "qualification_codes": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/DiagnosticCodeV1"
+            "$ref": "#/$defs/DiagnosticCode"
           },
           "uniqueItems": true
         }
@@ -1596,7 +1596,7 @@
       ],
       "additionalProperties": false
     },
-    "GenomeFamilyCountV1": {
+    "GenomeFamilyCount": {
       "type": "object",
       "properties": {
         "genome_id": {
@@ -1608,7 +1608,7 @@
           "minimum": 0
         },
         "reported_occurrences": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "presence_state": {
           "type": "string",
@@ -1626,7 +1626,7 @@
         "source_locations": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/SourceLocationV1"
+            "$ref": "#/$defs/SourceLocation"
           }
         }
       },
@@ -1639,7 +1639,7 @@
       ],
       "additionalProperties": false
     },
-    "FamilyRowV1": {
+    "FamilyRow": {
       "type": "object",
       "properties": {
         "document_id": {
@@ -1651,18 +1651,18 @@
           "minimum": 0
         },
         "entity": {
-          "$ref": "#/$defs/EntityV1"
+          "$ref": "#/$defs/Entity"
         },
         "source_locations": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/SourceLocationV1"
+            "$ref": "#/$defs/SourceLocation"
           }
         },
         "qualification_codes": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/DiagnosticCodeV1"
+            "$ref": "#/$defs/DiagnosticCode"
           },
           "uniqueItems": true
         },
@@ -1679,29 +1679,29 @@
         "genome_counts": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/GenomeFamilyCountV1"
+            "$ref": "#/$defs/GenomeFamilyCount"
           }
         },
         "reported_feature_occurrences": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "reported_genome_count": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "reported_length_min": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "reported_length_max": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "reported_length_mean": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "reported_length_population_sd": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "positive_genome_count_from_list": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         }
       },
       "required": [
@@ -1723,7 +1723,7 @@
       ],
       "additionalProperties": false
     },
-    "PathwayRowV1": {
+    "PathwayRow": {
       "type": "object",
       "properties": {
         "document_id": {
@@ -1735,38 +1735,38 @@
           "minimum": 0
         },
         "entity": {
-          "$ref": "#/$defs/EntityV1"
+          "$ref": "#/$defs/Entity"
         },
         "source_locations": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/SourceLocationV1"
+            "$ref": "#/$defs/SourceLocation"
           }
         },
         "qualification_codes": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/DiagnosticCodeV1"
+            "$ref": "#/$defs/DiagnosticCode"
           },
           "uniqueItems": true
         },
         "reported_genome_count": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "reported_ec_token_count": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "reported_feature_token_count": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "reported_genome_ec_count": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "reported_ec_conservation_percent": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "reported_gene_conservation": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         }
       },
       "required": [
@@ -1784,7 +1784,7 @@
       ],
       "additionalProperties": false
     },
-    "PathwayECRowV1": {
+    "PathwayECRow": {
       "type": "object",
       "properties": {
         "document_id": {
@@ -1796,32 +1796,32 @@
           "minimum": 0
         },
         "entity": {
-          "$ref": "#/$defs/EntityV1"
+          "$ref": "#/$defs/Entity"
         },
         "source_locations": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/SourceLocationV1"
+            "$ref": "#/$defs/SourceLocation"
           }
         },
         "qualification_codes": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/DiagnosticCodeV1"
+            "$ref": "#/$defs/DiagnosticCode"
           },
           "uniqueItems": true
         },
         "reported_genome_count": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "reported_ec_token_count": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "reported_feature_token_count": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "reported_genome_ec_count": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         }
       },
       "required": [
@@ -1837,7 +1837,7 @@
       ],
       "additionalProperties": false
     },
-    "SubsystemRowV1": {
+    "SubsystemRow": {
       "type": "object",
       "properties": {
         "document_id": {
@@ -1849,38 +1849,38 @@
           "minimum": 0
         },
         "entity": {
-          "$ref": "#/$defs/EntityV1"
+          "$ref": "#/$defs/Entity"
         },
         "source_locations": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/SourceLocationV1"
+            "$ref": "#/$defs/SourceLocation"
           }
         },
         "qualification_codes": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/DiagnosticCodeV1"
+            "$ref": "#/$defs/DiagnosticCode"
           },
           "uniqueItems": true
         },
         "reported_role_token_count": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "reported_feature_token_count": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "reported_genome_count": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "reported_gene_conservation": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "reported_role_conservation_percent": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "reported_record_genome_fraction": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         }
       },
       "required": [
@@ -1898,7 +1898,7 @@
       ],
       "additionalProperties": false
     },
-    "OverviewRowV1": {
+    "OverviewRow": {
       "type": "object",
       "properties": {
         "document_id": {
@@ -1910,18 +1910,18 @@
           "minimum": 0
         },
         "entity": {
-          "$ref": "#/$defs/EntityV1"
+          "$ref": "#/$defs/Entity"
         },
         "source_locations": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/SourceLocationV1"
+            "$ref": "#/$defs/SourceLocation"
           }
         },
         "qualification_codes": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/DiagnosticCodeV1"
+            "$ref": "#/$defs/DiagnosticCode"
           },
           "uniqueItems": true
         },
@@ -1934,10 +1934,10 @@
           ]
         },
         "reported_subsystem_name_count": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "reported_feature_count": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         }
       },
       "required": [
@@ -1952,7 +1952,7 @@
       ],
       "additionalProperties": false
     },
-    "VariantRowV1": {
+    "VariantRow": {
       "type": "object",
       "properties": {
         "document_id": {
@@ -1964,18 +1964,18 @@
           "minimum": 0
         },
         "entity": {
-          "$ref": "#/$defs/EntityV1"
+          "$ref": "#/$defs/Entity"
         },
         "source_locations": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/SourceLocationV1"
+            "$ref": "#/$defs/SourceLocation"
           }
         },
         "qualification_codes": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/DiagnosticCodeV1"
+            "$ref": "#/$defs/DiagnosticCode"
           },
           "uniqueItems": true
         },
@@ -1994,16 +1994,16 @@
           "minimum": 0
         },
         "reported_active_occurrences": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "reported_likely_occurrences": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "reported_inactive_placeholder": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "reported_missing_genome_count": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         }
       },
       "required": [
@@ -2022,7 +2022,7 @@
       ],
       "additionalProperties": false
     },
-    "DuplicateGroupV1": {
+    "DuplicateGroup": {
       "type": "object",
       "properties": {
         "group_id": {
@@ -2040,7 +2040,7 @@
         "members": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/CellReferenceV1"
+            "$ref": "#/$defs/CellReference"
           }
         },
         "native_unique_key": {
@@ -2072,7 +2072,7 @@
       ],
       "additionalProperties": false
     },
-    "JoinResultV1": {
+    "JoinResult": {
       "type": "object",
       "properties": {
         "join_id": {
@@ -2107,24 +2107,24 @@
           "const": "inner"
         },
         "left_occurrence_count": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "right_occurrence_count": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "output_occurrence_count": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "unmatched_left_refs": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/CellReferenceV1"
+            "$ref": "#/$defs/CellReference"
           }
         },
         "unmatched_right_refs": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/CellReferenceV1"
+            "$ref": "#/$defs/CellReference"
           }
         },
         "multiplicity": {
@@ -2140,7 +2140,7 @@
         "qualification_codes": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/DiagnosticCodeV1"
+            "$ref": "#/$defs/DiagnosticCode"
           },
           "uniqueItems": true
         }
@@ -2161,7 +2161,7 @@
       ],
       "additionalProperties": false
     },
-    "ReferenceMembershipV1": {
+    "ReferenceMembership": {
       "type": "object",
       "properties": {
         "membership_id": {
@@ -2176,7 +2176,7 @@
           ]
         },
         "entity": {
-          "$ref": "#/$defs/EntityV1"
+          "$ref": "#/$defs/Entity"
         },
         "members": {
           "type": "array",
@@ -2207,21 +2207,21 @@
           ]
         },
         "completeness": {
-          "$ref": "#/$defs/CompletenessV1"
+          "$ref": "#/$defs/Completeness"
         },
         "basis": {
-          "$ref": "#/$defs/BasisV1"
+          "$ref": "#/$defs/Basis"
         },
         "source_locations": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/SourceLocationV1"
+            "$ref": "#/$defs/SourceLocation"
           }
         },
         "qualification_codes": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/DiagnosticCodeV1"
+            "$ref": "#/$defs/DiagnosticCode"
           },
           "uniqueItems": true
         }
@@ -2240,7 +2240,7 @@
       ],
       "additionalProperties": false
     },
-    "InputSelectionV1": {
+    "InputSelection": {
       "oneOf": [
         {
           "type": "object",
@@ -2283,11 +2283,11 @@
         }
       ]
     },
-    "DocumentSelectionV1": {
+    "DocumentSelection": {
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_comparative_systems_document_selection_v1"
+          "const": "bvbrc_comparative_systems_document_selection"
         },
         "documents": {
           "type": "array",
@@ -2299,17 +2299,17 @@
                 "minLength": 1
               },
               "role": {
-                "$ref": "#/$defs/RoleV1"
+                "$ref": "#/$defs/Role"
               },
               "format_profile": {
                 "type": "string",
                 "enum": [
-                  "comparative_systems_pathways_json_v1",
-                  "comparative_systems_subsystems_json_v1",
-                  "comparative_systems_families_json_v1",
-                  "comparative_systems_pathways_tsv_v1",
-                  "comparative_systems_subsystems_tsv_v1",
-                  "comparative_systems_variant_matrix_source670b_v1"
+                  "comparative_systems_pathways_json",
+                  "comparative_systems_subsystems_json",
+                  "comparative_systems_families_json",
+                  "comparative_systems_pathways_tsv",
+                  "comparative_systems_subsystems_tsv",
+                  "comparative_systems_variant_matrix_source670b"
                 ]
               },
               "producer_evidence_id": {
@@ -2324,7 +2324,7 @@
                 ]
               },
               "input": {
-                "$ref": "#/$defs/InputSelectionV1"
+                "$ref": "#/$defs/InputSelection"
               }
             },
             "required": [
@@ -2351,7 +2351,7 @@
                 "minLength": 1
               },
               "table": {
-                "$ref": "#/$defs/TableV1"
+                "$ref": "#/$defs/Table"
               }
             },
             "required": [
@@ -2392,11 +2392,11 @@
       ],
       "additionalProperties": false
     },
-    "PopulationAssignmentsV1": {
+    "PopulationAssignments": {
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_comparative_systems_population_assignments_v1"
+          "const": "bvbrc_comparative_systems_population_assignments"
         },
         "assignments": {
           "type": "array",
@@ -2431,7 +2431,7 @@
               "entity": {
                 "anyOf": [
                   {
-                    "$ref": "#/$defs/EntityV1"
+                    "$ref": "#/$defs/Entity"
                   },
                   {
                     "type": "null"
@@ -2725,7 +2725,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_data_request_v2"
+          "const": "bvbrc_data_request"
         },
         "collection": {
           "$ref": "#/$defs/Data__Collection"
@@ -2783,7 +2783,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_data_effective_query_v2"
+          "const": "bvbrc_data_effective_query"
         },
         "collection": {
           "$ref": "#/$defs/Data__Collection"
@@ -2852,7 +2852,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_data_population_v1"
+          "const": "bvbrc_data_population"
         },
         "base_url": {
           "type": "string"
@@ -2870,10 +2870,10 @@
           "const": "public_unauthenticated"
         },
         "compiler_version": {
-          "const": "bvbrc_solr_compiler_v1"
+          "const": "bvbrc_solr_compiler"
         },
         "field_contract_version": {
-          "const": "bvbrc_data_fields_2026_10_24_v1"
+          "const": "bvbrc_data_fields_2026_10_24"
         },
         "population_key": {
           "type": "string",
@@ -2931,7 +2931,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_data_prepared_v2"
+          "const": "bvbrc_data_prepared"
         },
         "service": {
           "const": "bvbrc_data"
@@ -3036,7 +3036,7 @@
           "additionalProperties": false
         },
         "request_profile": {
-          "const": "solr_query_solr_json_v1"
+          "const": "solr_query_solr_json"
         },
         "native_request": {
           "type": "object",
@@ -3902,7 +3902,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_data_sheet_v1"
+          "const": "bvbrc_data_sheet"
         },
         "collection": {
           "$ref": "#/$defs/Data__Collection"
@@ -3937,8 +3937,8 @@
             "native_profile": {
               "type": "string",
               "enum": [
-                "json_array_with_headers_v1",
-                "solr_json_envelope_v1"
+                "json_array_with_headers",
+                "solr_json_envelope"
               ]
             },
             "prepared_sha256": {
@@ -3946,7 +3946,7 @@
               "pattern": "^[0-9a-f]{64}$"
             },
             "field_contract_version": {
-              "const": "bvbrc_data_fields_2026_10_24_v1"
+              "const": "bvbrc_data_fields_2026_10_24"
             }
           },
           "required": [
@@ -4076,7 +4076,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_data_parse_result_v1"
+          "const": "bvbrc_data_parse_result"
         },
         "status": {
           "type": "string",
@@ -4120,7 +4120,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_data_page_components_v1"
+          "const": "bvbrc_data_page_components"
         },
         "native_row_count": {
           "type": "integer",
@@ -4227,7 +4227,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_data_facet_components_v1"
+          "const": "bvbrc_data_facet_components"
         },
         "denominator_policy": {
           "const": "same_response_exact_document_count"
@@ -4498,7 +4498,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_feature_sequence_sheet_v1"
+          "const": "bvbrc_feature_sequence_sheet"
         },
         "selection": {
           "type": "object",
@@ -4598,7 +4598,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_feature_sequence_components_v1"
+          "const": "bvbrc_feature_sequence_components"
         },
         "selected_feature_count": {
           "type": "integer",
@@ -5022,7 +5022,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_molecular_sheet_v1"
+          "const": "bvbrc_molecular_sheet"
         },
         "selected_result_ids": {
           "type": "array",
@@ -5239,7 +5239,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_data_result_selector_v2"
+          "const": "bvbrc_data_result_selector"
         },
         "page": {
           "anyOf": [
@@ -5363,7 +5363,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_data_grading_v1"
+          "const": "bvbrc_data_grading"
         },
         "prepared": {
           "$ref": "#/$defs/Data__PreparedQuery"
@@ -5456,7 +5456,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_data_qualified_result_v1"
+          "const": "bvbrc_data_qualified_result"
         },
         "service": {
           "const": "bvbrc_data"
@@ -5912,7 +5912,7 @@
       ],
       "additionalProperties": false
     },
-    "QualifiedDataInputV1": {
+    "QualifiedDataInput": {
       "type": "object",
       "properties": {
         "qualified_result": {
@@ -5958,7 +5958,7 @@
       ],
       "additionalProperties": false
     },
-    "SnapshotEvidenceV1": {
+    "SnapshotEvidence": {
       "type": "object",
       "properties": {
         "kind": {
@@ -5983,7 +5983,7 @@
         "source_locations": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/SourceLocationV1"
+            "$ref": "#/$defs/SourceLocation"
           }
         }
       },
@@ -5994,11 +5994,11 @@
       ],
       "additionalProperties": false
     },
-    "DataPopulationSelectionV1": {
+    "DataPopulationSelection": {
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_comparative_systems_data_selection_v1"
+          "const": "bvbrc_comparative_systems_data_selection"
         },
         "record_sets": {
           "type": "array",
@@ -6030,7 +6030,7 @@
                 "uniqueItems": true
               },
               "declared_genome_population": {
-                "$ref": "#/$defs/PopulationV1"
+                "$ref": "#/$defs/Population"
               },
               "query_population_key": {
                 "type": "string",
@@ -6065,7 +6065,7 @@
                 ]
               },
               "snapshot_evidence": {
-                "$ref": "#/$defs/SnapshotEvidenceV1"
+                "$ref": "#/$defs/SnapshotEvidence"
               },
               "release": {
                 "anyOf": [
@@ -6080,7 +6080,7 @@
               "roles": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/$defs/RoleV1"
+                  "$ref": "#/$defs/Role"
                 },
                 "uniqueItems": true
               }
@@ -6109,7 +6109,7 @@
       ],
       "additionalProperties": false
     },
-    "SuppliedRecordV1": {
+    "SuppliedRecord": {
       "type": "object",
       "properties": {
         "record_set_id": {
@@ -6145,7 +6145,7 @@
         "association": {
           "anyOf": [
             {
-              "$ref": "#/$defs/AssociationRowV1"
+              "$ref": "#/$defs/AssociationRow"
             },
             {
               "type": "null"
@@ -6171,7 +6171,7 @@
         "qualification_codes": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/DiagnosticCodeV1"
+            "$ref": "#/$defs/DiagnosticCode"
           },
           "uniqueItems": true
         }
@@ -6190,7 +6190,7 @@
       ],
       "additionalProperties": false
     },
-    "PageEvidenceV1": {
+    "PageEvidence": {
       "type": "object",
       "properties": {
         "binding": {
@@ -6250,7 +6250,7 @@
           ]
         },
         "snapshot_evidence": {
-          "$ref": "#/$defs/SnapshotEvidenceV1"
+          "$ref": "#/$defs/SnapshotEvidence"
         }
       },
       "required": [
@@ -6266,7 +6266,7 @@
       ],
       "additionalProperties": false
     },
-    "SuppliedRecordSetV1": {
+    "SuppliedRecordSet": {
       "type": "object",
       "properties": {
         "record_set_id": {
@@ -6286,18 +6286,18 @@
           ]
         },
         "population": {
-          "$ref": "#/$defs/PopulationV1"
+          "$ref": "#/$defs/Population"
         },
         "pages": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/PageEvidenceV1"
+            "$ref": "#/$defs/PageEvidence"
           }
         },
         "rows": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/SuppliedRecordV1"
+            "$ref": "#/$defs/SuppliedRecord"
           }
         },
         "annotation_filter": {
@@ -6326,10 +6326,10 @@
           ]
         },
         "original_query_record_count": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "locally_included_record_count": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         }
       },
       "required": [
@@ -6346,31 +6346,31 @@
       ],
       "additionalProperties": false
     },
-    "SuppliedRecordSetsV1": {
+    "SuppliedRecordSets": {
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_comparative_systems_supplied_records_v1"
+          "const": "bvbrc_comparative_systems_supplied_records"
         },
         "selection": {
-          "$ref": "#/$defs/DataPopulationSelectionV1"
+          "$ref": "#/$defs/DataPopulationSelection"
         },
         "record_sets": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/SuppliedRecordSetV1"
+            "$ref": "#/$defs/SuppliedRecordSet"
           }
         },
         "requirements": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/RequirementV1"
+            "$ref": "#/$defs/Requirement"
           }
         },
         "diagnostics": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/DiagnosticV1"
+            "$ref": "#/$defs/Diagnostic"
           }
         }
       },
@@ -6383,95 +6383,95 @@
       ],
       "additionalProperties": false
     },
-    "ComparativeSystemsSheetV1": {
+    "ComparativeSystemsSheet": {
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_comparative_systems_sheet_v1"
+          "const": "bvbrc_comparative_systems_sheet"
         },
         "analysis_id": {
           "type": "string",
           "minLength": 1
         },
         "original_request": {
-          "$ref": "#/$defs/OriginalRequestV1"
+          "$ref": "#/$defs/OriginalRequest"
         },
         "source_documents": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/SourceDocumentV1"
+            "$ref": "#/$defs/SourceDocument"
           }
         },
         "producer_evidence": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/ProducerEvidenceV1"
+            "$ref": "#/$defs/ProducerEvidence"
           }
         },
         "populations": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/PopulationV1"
+            "$ref": "#/$defs/Population"
           }
         },
         "document_selection": {
-          "$ref": "#/$defs/DocumentSelectionV1"
+          "$ref": "#/$defs/DocumentSelection"
         },
         "population_assignments": {
-          "$ref": "#/$defs/PopulationAssignmentsV1"
+          "$ref": "#/$defs/PopulationAssignments"
         },
         "native_documents": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/NativeDocumentResultV1"
+            "$ref": "#/$defs/NativeDocumentResult"
           }
         },
         "family_rows": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/FamilyRowV1"
+            "$ref": "#/$defs/FamilyRow"
           }
         },
         "pathway_rows": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/PathwayRowV1"
+            "$ref": "#/$defs/PathwayRow"
           }
         },
         "pathway_ec_rows": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/PathwayECRowV1"
+            "$ref": "#/$defs/PathwayECRow"
           }
         },
         "subsystem_rows": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/SubsystemRowV1"
+            "$ref": "#/$defs/SubsystemRow"
           }
         },
         "association_rows": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/AssociationRowV1"
+            "$ref": "#/$defs/AssociationRow"
           }
         },
         "overview_rows": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/OverviewRowV1"
+            "$ref": "#/$defs/OverviewRow"
           }
         },
         "variant_rows": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/VariantRowV1"
+            "$ref": "#/$defs/VariantRow"
           }
         },
         "supplied_record_sets": {
           "anyOf": [
             {
-              "$ref": "#/$defs/SuppliedRecordSetsV1"
+              "$ref": "#/$defs/SuppliedRecordSets"
             },
             {
               "type": "null"
@@ -6481,31 +6481,31 @@
         "reference_memberships": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/ReferenceMembershipV1"
+            "$ref": "#/$defs/ReferenceMembership"
           }
         },
         "duplicate_groups": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/DuplicateGroupV1"
+            "$ref": "#/$defs/DuplicateGroup"
           }
         },
         "join_results": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/JoinResultV1"
+            "$ref": "#/$defs/JoinResult"
           }
         },
         "requirements": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/RequirementV1"
+            "$ref": "#/$defs/Requirement"
           }
         },
         "diagnostics": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/DiagnosticV1"
+            "$ref": "#/$defs/Diagnostic"
           }
         }
       },
@@ -6535,7 +6535,7 @@
       ],
       "additionalProperties": false
     },
-    "QuantityV1": {
+    "Quantity": {
       "type": "string",
       "enum": [
         "family_returned_genome_occupancy",
@@ -6558,7 +6558,7 @@
         "reported_formula_check"
       ]
     },
-    "ViewSelectionV1": {
+    "ViewSelection": {
       "type": "object",
       "properties": {
         "kind": {
@@ -6598,7 +6598,7 @@
       ],
       "additionalProperties": false
     },
-    "ComponentRequestV1": {
+    "ComponentRequest": {
       "type": "object",
       "properties": {
         "component_id": {
@@ -6606,13 +6606,13 @@
           "minLength": 1
         },
         "quantity": {
-          "$ref": "#/$defs/QuantityV1"
+          "$ref": "#/$defs/Quantity"
         },
         "entity": {
-          "$ref": "#/$defs/EntityV1"
+          "$ref": "#/$defs/Entity"
         },
         "view_selection": {
-          "$ref": "#/$defs/ViewSelectionV1"
+          "$ref": "#/$defs/ViewSelection"
         },
         "population_id": {
           "type": "string",
@@ -6707,16 +6707,16 @@
       ],
       "additionalProperties": false
     },
-    "CalculationParametersV1": {
+    "CalculationParameters": {
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_comparative_systems_calculation_parameters_v1"
+          "const": "bvbrc_comparative_systems_calculation_parameters"
         },
         "requests": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/ComponentRequestV1"
+            "$ref": "#/$defs/ComponentRequest"
           }
         },
         "duplicate_policy": {
@@ -6740,14 +6740,14 @@
       ],
       "additionalProperties": false
     },
-    "RatioComponentV1": {
+    "RatioComponent": {
       "type": "object",
       "properties": {
         "numerator": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "denominator": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "scale": {
           "enum": [
@@ -6756,7 +6756,7 @@
           ]
         },
         "output": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "genome_population_id": {
           "anyOf": [
@@ -6791,7 +6791,7 @@
       ],
       "additionalProperties": false
     },
-    "CalculatedComponentV1": {
+    "CalculatedComponent": {
       "type": "object",
       "properties": {
         "component_id": {
@@ -6799,18 +6799,18 @@
           "minLength": 1
         },
         "quantity": {
-          "$ref": "#/$defs/QuantityV1"
+          "$ref": "#/$defs/Quantity"
         },
         "entity": {
-          "$ref": "#/$defs/EntityV1"
+          "$ref": "#/$defs/Entity"
         },
         "value": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "ratio": {
           "anyOf": [
             {
-              "$ref": "#/$defs/RatioComponentV1"
+              "$ref": "#/$defs/RatioComponent"
             },
             {
               "type": "null"
@@ -6820,7 +6820,7 @@
         "input_refs": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/CellReferenceV1"
+            "$ref": "#/$defs/CellReference"
           }
         },
         "population_ids": {
@@ -6845,7 +6845,7 @@
         "qualification_codes": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/DiagnosticCodeV1"
+            "$ref": "#/$defs/DiagnosticCode"
           },
           "uniqueItems": true
         }
@@ -6863,14 +6863,14 @@
       ],
       "additionalProperties": false
     },
-    "ComparativeSystemsComponentsV1": {
+    "ComparativeSystemsComponents": {
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_comparative_systems_components_v1"
+          "const": "bvbrc_comparative_systems_components"
         },
         "formula_version": {
-          "const": "bvbrc_comparative_systems_formulas_v1"
+          "const": "bvbrc_comparative_systems_formulas"
         },
         "analysis_id": {
           "type": "string",
@@ -6881,24 +6881,24 @@
           "pattern": "^[0-9a-f]{64}$"
         },
         "parameters": {
-          "$ref": "#/$defs/CalculationParametersV1"
+          "$ref": "#/$defs/CalculationParameters"
         },
         "components": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/CalculatedComponentV1"
+            "$ref": "#/$defs/CalculatedComponent"
           }
         },
         "requirements": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/RequirementV1"
+            "$ref": "#/$defs/Requirement"
           }
         },
         "diagnostics": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/DiagnosticV1"
+            "$ref": "#/$defs/Diagnostic"
           }
         }
       },
@@ -6914,7 +6914,7 @@
       ],
       "additionalProperties": false
     },
-    "ProviderParametersV1": {
+    "ProviderParameters": {
       "type": "object",
       "properties": {
         "analysis_id": {
@@ -6922,10 +6922,10 @@
           "minLength": 1
         },
         "document_selection": {
-          "$ref": "#/$defs/DocumentSelectionV1"
+          "$ref": "#/$defs/DocumentSelection"
         },
         "population_assignments": {
-          "$ref": "#/$defs/PopulationAssignmentsV1"
+          "$ref": "#/$defs/PopulationAssignments"
         },
         "producer_evidence_selections": {
           "type": "array",
@@ -6961,7 +6961,7 @@
         "supplied_data_selection": {
           "anyOf": [
             {
-              "$ref": "#/$defs/DataPopulationSelectionV1"
+              "$ref": "#/$defs/DataPopulationSelection"
             },
             {
               "type": "null"
@@ -6971,11 +6971,11 @@
         "reference_memberships": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/ReferenceMembershipV1"
+            "$ref": "#/$defs/ReferenceMembership"
           }
         },
         "calculation_parameters": {
-          "$ref": "#/$defs/CalculationParametersV1"
+          "$ref": "#/$defs/CalculationParameters"
         }
       },
       "required": [
@@ -6989,7 +6989,7 @@
       ],
       "additionalProperties": false
     },
-    "NativeMeasurementFieldV1": {
+    "NativeMeasurementField": {
       "type": "string",
       "enum": [
         "positive_genome_count_from_list",
@@ -7015,7 +7015,7 @@
         "reported_subsystem_name_count"
       ]
     },
-    "FactSelectorV1": {
+    "FactSelector": {
       "oneOf": [
         {
           "type": "object",
@@ -7028,10 +7028,10 @@
               "minLength": 1
             },
             "entity": {
-              "$ref": "#/$defs/EntityV1"
+              "$ref": "#/$defs/Entity"
             },
             "native_field": {
-              "$ref": "#/$defs/NativeMeasurementFieldV1"
+              "$ref": "#/$defs/NativeMeasurementField"
             }
           },
           "required": [
@@ -7100,7 +7100,7 @@
               "const": "membership"
             },
             "entity": {
-              "$ref": "#/$defs/EntityV1"
+              "$ref": "#/$defs/Entity"
             },
             "genome_id": {
               "anyOf": [
@@ -7138,7 +7138,7 @@
               "const": "requirement"
             },
             "required_input_role": {
-              "$ref": "#/$defs/RoleV1"
+              "$ref": "#/$defs/Role"
             }
           },
           "required": [
@@ -7154,7 +7154,7 @@
               "const": "qualification"
             },
             "code": {
-              "$ref": "#/$defs/DiagnosticCodeV1"
+              "$ref": "#/$defs/DiagnosticCode"
             }
           },
           "required": [
@@ -7177,7 +7177,7 @@
         }
       ]
     },
-    "RequestedFieldV1": {
+    "RequestedField": {
       "type": "object",
       "properties": {
         "field_id": {
@@ -7185,7 +7185,7 @@
           "minLength": 1
         },
         "selector": {
-          "$ref": "#/$defs/FactSelectorV1"
+          "$ref": "#/$defs/FactSelector"
         },
         "expected_cardinality": {
           "type": "integer",
@@ -7208,16 +7208,16 @@
       ],
       "additionalProperties": false
     },
-    "RequestedSelectionV1": {
+    "RequestedSelection": {
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_comparative_systems_requested_selection_v1"
+          "const": "bvbrc_comparative_systems_requested_selection"
         },
         "fields": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/RequestedFieldV1"
+            "$ref": "#/$defs/RequestedField"
           }
         }
       },
@@ -7227,11 +7227,11 @@
       ],
       "additionalProperties": false
     },
-    "MembershipFactV1": {
+    "MembershipFact": {
       "type": "object",
       "properties": {
         "entity": {
-          "$ref": "#/$defs/EntityV1"
+          "$ref": "#/$defs/Entity"
         },
         "genome_id": {
           "anyOf": [
@@ -7268,7 +7268,7 @@
         "source_locations": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/SourceLocationV1"
+            "$ref": "#/$defs/SourceLocation"
           }
         }
       },
@@ -7282,7 +7282,7 @@
       ],
       "additionalProperties": false
     },
-    "PopulationFactV1": {
+    "PopulationFact": {
       "type": "object",
       "properties": {
         "population_id": {
@@ -7302,18 +7302,18 @@
           ]
         },
         "raw_occurrence_count": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "distinct_valid_member_count": {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         "completeness": {
-          "$ref": "#/$defs/CompletenessV1"
+          "$ref": "#/$defs/Completeness"
         },
         "qualification_codes": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/DiagnosticCodeV1"
+            "$ref": "#/$defs/DiagnosticCode"
           },
           "uniqueItems": true
         }
@@ -7328,25 +7328,25 @@
       ],
       "additionalProperties": false
     },
-    "FactValueV1": {
+    "FactValue": {
       "oneOf": [
         {
-          "$ref": "#/$defs/NumericCellV1"
+          "$ref": "#/$defs/NumericCell"
         },
         {
-          "$ref": "#/$defs/RatioComponentV1"
+          "$ref": "#/$defs/RatioComponent"
         },
         {
-          "$ref": "#/$defs/PopulationFactV1"
+          "$ref": "#/$defs/PopulationFact"
         },
         {
-          "$ref": "#/$defs/MembershipFactV1"
+          "$ref": "#/$defs/MembershipFact"
         },
         {
-          "$ref": "#/$defs/RequirementV1"
+          "$ref": "#/$defs/Requirement"
         },
         {
-          "$ref": "#/$defs/DiagnosticV1"
+          "$ref": "#/$defs/Diagnostic"
         },
         {
           "type": "object",
@@ -7377,7 +7377,7 @@
         }
       ]
     },
-    "ProjectedFieldV1": {
+    "ProjectedField": {
       "type": "object",
       "properties": {
         "field_id": {
@@ -7387,7 +7387,7 @@
         "values": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/FactValueV1"
+            "$ref": "#/$defs/FactValue"
           }
         },
         "status": {
@@ -7407,17 +7407,17 @@
       ],
       "additionalProperties": false
     },
-    "ProviderFactsV1": {
+    "ProviderFacts": {
       "type": "object",
       "propertyNames": {
         "type": "string",
         "minLength": 1
       },
       "additionalProperties": {
-        "$ref": "#/$defs/ProjectedFieldV1"
+        "$ref": "#/$defs/ProjectedField"
       }
     },
-    "RequestedFactV1": {
+    "RequestedFact": {
       "type": "object",
       "properties": {
         "source_ref": {
@@ -7429,7 +7429,7 @@
           "minLength": 1
         },
         "value": {
-          "$ref": "#/$defs/ProjectedFieldV1"
+          "$ref": "#/$defs/ProjectedField"
         }
       },
       "required": [
@@ -7439,14 +7439,14 @@
       ],
       "additionalProperties": false
     },
-    "RequestedFactsV1": {
+    "RequestedFacts": {
       "type": "object",
       "properties": {
         "version": {
-          "const": "bvbrc_comparative_systems_requested_facts_v1"
+          "const": "bvbrc_comparative_systems_requested_facts"
         },
         "facts": {
-          "$ref": "#/$defs/ProviderFactsV1"
+          "$ref": "#/$defs/ProviderFacts"
         },
         "status": {
           "type": "string",
@@ -7460,13 +7460,13 @@
         "missing_requirements": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/RequirementV1"
+            "$ref": "#/$defs/Requirement"
           }
         },
         "diagnostics": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/DiagnosticV1"
+            "$ref": "#/$defs/Diagnostic"
           }
         }
       },
@@ -7479,7 +7479,7 @@
       ],
       "additionalProperties": false
     },
-    "ProviderResultV1": {
+    "ProviderResult": {
       "type": "object",
       "properties": {
         "adapter_id": {
@@ -7499,7 +7499,7 @@
         "sheet": {
           "anyOf": [
             {
-              "$ref": "#/$defs/ComparativeSystemsSheetV1"
+              "$ref": "#/$defs/ComparativeSystemsSheet"
             },
             {
               "type": "null"
@@ -7509,7 +7509,7 @@
         "components": {
           "anyOf": [
             {
-              "$ref": "#/$defs/ComparativeSystemsComponentsV1"
+              "$ref": "#/$defs/ComparativeSystemsComponents"
             },
             {
               "type": "null"
@@ -7517,18 +7517,18 @@
           ]
         },
         "facts": {
-          "$ref": "#/$defs/ProviderFactsV1"
+          "$ref": "#/$defs/ProviderFacts"
         },
         "missing_requirements": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/RequirementV1"
+            "$ref": "#/$defs/Requirement"
           }
         },
         "diagnostics": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/DiagnosticV1"
+            "$ref": "#/$defs/Diagnostic"
           }
         }
       },

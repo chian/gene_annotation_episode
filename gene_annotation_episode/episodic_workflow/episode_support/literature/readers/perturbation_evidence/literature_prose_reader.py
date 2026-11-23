@@ -14,7 +14,7 @@ import xml.etree.ElementTree as ET
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.perturbation_evidence.literature_experimental_contracts import ExperimentalContractError
 
 
-VERSION = "a105_jats_quantity_v1"
+VERSION = "a105_jats_quantity"
 _NUMBER = r"[+−-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+−-]?\d+)?"
 _SPREAD = rf"(?:\s*(?:\+\s*/\s*[−-]|±)\s*(?P<spread>{_NUMBER}))?"
 _ACTIVITY_UNIT = (

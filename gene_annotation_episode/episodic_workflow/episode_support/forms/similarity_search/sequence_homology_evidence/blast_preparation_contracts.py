@@ -75,7 +75,7 @@ OPERATION_PARAMETERS = {
         "taxid": _nullable(_INT), "taxid_map_occurrence_id": _nullable(_STR)}),
 }
 OPERATION_SCHEMA = {"anyOf": [_object({
-    "version": {"const": "blast_utility_operation_v2"}, "program": {"const": program},
+    "version": {"const": "blast_preparation_operation"}, "program": {"const": program},
     "mode": {"const": mode}, "input_occurrence_ids": _unique(_STR),
     "database_key": _nullable(_STR), "molecule": _enum("dna protein unknown"), "parameters": parameters,
 }) for (program, mode), parameters in OPERATION_PARAMETERS.items()]}
@@ -139,7 +139,7 @@ def build_preparation_schemas(common):
                 "profile_size_conflict parameter_conflict native_error unknown"),
             "native_reference": _nullable(_STR), "native_lexeme": _TEXT}),
     }
-    documents = {kind: _object({"version": {"const": "blast_preparation_document_v1"},
+    documents = {kind: _object({"version": {"const": "blast_preparation_document"},
         "kind": {"const": kind}, "occurrence_id": _STR,
         "native_fields": _array(field, **({} if kind in {"alias", "seqid_info", "aliastool_diagnostics"} else {"maxItems": 0})),
         "rows": _array(row, **({"maxItems": 0} if kind == "seqid_info" else {})), **diagnostics,
@@ -173,14 +173,14 @@ def build_preparation_schemas(common):
             "component": _enum("sequence_database rps lookup auxiliary frequency delta_weights delta_observations cobalt_blocks alias unknown")}))})
     artifact_base = {k: v for k, v in common["DatabaseArtifactSet"]["properties"].items()
                      if k not in {"version", "kind", "operation", "identity", "dependencies", "detail"}}
-    artifact_base.update({"version": {"const": "blast_database_artifact_set_v2"},
+    artifact_base.update({"version": {"const": "blast_prepared_database_artifact_set"},
         "operation": OPERATION_SCHEMA, "identity": DATABASE_IDENTITY_SCHEMA,
         "dependencies": _array(DEPENDENCY_SCHEMA), "database_bindings": _array(common["DatabaseBinding"]),
         "materializations": _array(MATERIALIZATION_RECEIPT_SCHEMA)})
     artifact = {"anyOf": [_object({**artifact_base, "kind": {"const": kind}, "detail": detail})
         for kind, detail in (("identifier_list", identifier_detail), ("database_alias", alias_detail),
                              ("megablast_index", index_detail), ("profile_database", profile_detail))]}
-    inspection = _object({"version": {"const": "blast_database_inspection_v2"},
+    inspection = _object({"version": {"const": "blast_prepared_database_inspection"},
         "operation": OPERATION_SCHEMA, "original_outcome": common["NativeOutcome"],
         "subject": {"anyOf": [_object({"kind": {"const": "identifier_list"}, "occurrence_id": _STR}),
             _object({"kind": {"const": "database"}, "database_key": _STR})]},
@@ -202,7 +202,7 @@ def _ordinals(rows, field="ordinal", *, partial=False):
 
 
 def validate_preparation_operation(value):
-    """Relationships for the closed v2 branch; called after shared shape checks."""
+    """Relationships for the closed branch; called after shared shape checks."""
     p, mode, key = value["parameters"], value["mode"], value["database_key"]
     refs = set()
     source = p.get("source_database_key", p.get("seqid_database_key"))

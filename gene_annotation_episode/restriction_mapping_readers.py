@@ -47,7 +47,7 @@ def _add(issues, code, phase="read", *, enzyme=None, match=None, position=None):
 
 
 def _empty(selected):
-    return {"version": "restriction_mapping_result_v1", "native_sha256": None,
+    return {"version": "restriction_mapping_result", "native_sha256": None,
         "selected_sequence": selected, "native_sequence": None,
         "binding_status": "unavailable", "topology": None,
         "enzyme_selection": None, "catalog_identity": None,
@@ -207,7 +207,7 @@ def read_restriction_mapping(native, *, selected_sequence, enzyme_catalog):
         result["native_sha256"] = restriction_digest(native)
     except (ValueError, TypeError, RecursionError):
         _add(result["issues"], "retained_record_conflict")
-    if type(native) is not dict or native.get("version") != "restriction_mapping_native_v1":
+    if type(native) is not dict or native.get("version") != "restriction_mapping_native":
         result["status"] = "invalid"
         _add(result["issues"], "unsupported_native_version")
         return validate_restriction_record("MappingResult", result)

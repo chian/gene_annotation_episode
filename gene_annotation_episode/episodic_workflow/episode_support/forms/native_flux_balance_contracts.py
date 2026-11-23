@@ -22,9 +22,9 @@ DRIVER_MODULE = "gene_annotation_episode.episodic_workflow.episode_support.tools
 POLICY = {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4294967296}
 STACK = {"cobra": "0.32.1", "optlang": "1.9.1", "swiglpk": "5.0.13", "python-libsbml": "5.21.2"}
 ARTIFACT_FORMATS = {
-    "selected_request": "flux_balance_selected_request_v1", "effective_model": "cobra_model_capture_v1",
-    "effective_problem": "cobra_glpk_problem_capture_v1", "solution": "cobra_glpk_solution_capture_v1",
-    "flux_csv": "biomni_fba_csv_v1", "native_log": "utf8_text", "manifest": "flux_balance_native_manifest_v1",
+    "selected_request": "flux_balance_selected_request", "effective_model": "cobra_model_capture",
+    "effective_problem": "cobra_glpk_problem_capture", "solution": "cobra_glpk_solution_capture",
+    "flux_csv": "biomni_fba_csv", "native_log": "utf8_text", "manifest": "flux_balance_native_manifest",
 }
 
 
@@ -132,12 +132,12 @@ def bind_flux_balance_environment(requested_job, *, execution_id, attempt_direct
         require(selected == actual, "fba_runtime_environment_mismatch")
     else:
         require(type(selection) is dict and selection == {
-            "version": "flux_balance_execution_selection_v1",
-            "environment_realization": "operation_scoped_tmp_and_cache_v1"}, "fba_environment_selection_invalid")
+            "version": "flux_balance_execution_selection",
+            "environment_realization": "operation_scoped_tmp_and_cache"}, "fba_environment_selection_invalid")
     names = ("TMPDIR", "TMP", "TEMP", "XDG_CACHE_HOME", "PIP_CACHE_DIR")
     require({k: v for k, v in selected.items() if k not in names}
             == {k: v for k, v in actual.items() if k not in names}, "fba_runtime_environment_mismatch")
-    return {"version": "flux_balance_environment_binding_v1", "selection": deepcopy(selection),
+    return {"version": "flux_balance_environment_binding", "selection": deepcopy(selection),
         "requested_job_sha256": digest(request), "requested_environment": deepcopy(selected),
         "realized_environment": actual, "relocations": [
             {"name": name, "selected": selected[name], "realized": actual[name]} for name in names]}
@@ -151,24 +151,20 @@ def validate_flux_balance_environment_binding(value, *, requested_job, execution
 
 
 def validate_flux_balance_run_plan(value):
-    require(type(value) is dict and value.get("version") in ("flux_balance_run_plan_v1", "flux_balance_run_plan_v2"),
+    require(type(value) is dict and value.get("version") == "flux_balance_run_plan",
             "fba_invalid_run_plan")
-    is_v2 = value["version"] == "flux_balance_run_plan_v2"
+    selected = "environment_binding" in value
     keys = {"version", "identity", "requested_job", "attempt_directory", "policy", "outputs"}
-    require(set(value) == keys | ({"environment_binding"} if is_v2 else set()), "fba_invalid_run_plan")
+    require(set(value) == keys | ({"environment_binding"} if selected else set()), "fba_invalid_run_plan")
     request = validate_flux_balance_requested_job(value["requested_job"])
     owner = validate_flux_balance_record("FBAAttemptIdentity", value["identity"])
     execution = path_value(owner["execution_id"], absolute=True)
     attempt = path_value(value["attempt_directory"], absolute=True)
     from gene_annotation_episode.episodic_workflow.episode_support.findings.biochemical_feasibility_evidence.terminal_scientific_evidence import terminal_plan_identity
-    legacy = (execution.name == "native.json" and attempt == execution.parent / ATTEMPT_DIRECTORY_NAME
-            and execution.parent.name == owner["attempt_id"]
-            and execution.parent.parent.name == digest({"run": owner["run_id"], "episode": owner["episode_id"]})
-            and execution.parent.parent.parent.name == ".episode-operations")
-    require((legacy or terminal_plan_identity(owner, attempt_directory=str(attempt)))
+    require(terminal_plan_identity(owner, attempt_directory=str(attempt))
             and owner["attempt_id"] == digest(owner["operation_key"])
             and owner["requested_job_sha256"] == digest(request), "fba_original_attempt_mismatch")
-    if is_v2:
+    if selected:
         binding = value["environment_binding"]
         require(type(binding) is dict and binding.get("selection") is not None, "fba_environment_selection_invalid")
         validate_flux_balance_environment_binding(binding, requested_job=request, execution_id=str(execution),

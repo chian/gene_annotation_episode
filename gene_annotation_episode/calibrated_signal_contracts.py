@@ -13,9 +13,9 @@ import math
 from .domain import ContractError, obj, validate_schema
 
 
-SHEET_VERSION = "calibrated_signal_sheet_v1"
-COMPONENTS_VERSION = "calibrated_signal_components_v1"
-SELECTION_VERSION = "calibrated_signal_selection_v1"
+SHEET_VERSION = "calibrated_signal_sheet"
+COMPONENTS_VERSION = "calibrated_signal_components"
+SELECTION_VERSION = "calibrated_signal_selection"
 TEXT = {"type": "string", "minLength": 1}
 NUMBER = {"type": "number"}
 SIGNAL_KINDS = ("sampled_signal", "peak_height", "integrated_area")

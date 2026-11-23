@@ -19,7 +19,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.similarit
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.blast_program_context import resolve_blast_program_context
 
 
-SCHEMA = "blast_report_collection_v1"
+SCHEMA = "blast_report_collection"
 _INVOCATION = {"execution_program", "scientific_mode", "resource_kind", "query_kind",
                "reference_kind", "request", "effective_options", "operands", "completion"}
 _ARTIFACT = {"artifact_key", "role", "format", "fields", "delimiter"}

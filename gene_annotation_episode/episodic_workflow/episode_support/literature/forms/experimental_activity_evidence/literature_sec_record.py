@@ -56,7 +56,7 @@ def fact(answer, refs=(), support='direct'):
     return {**literature_spr_record.fact(answer, refs), 'support': None if answer == 'unknown' else support}
 
 
-VERSION = 'a105_sec_record_v1'
+VERSION = 'a105_sec_record'
 EXPERIMENT_TYPE = 'sec'
 QUANTITIES = ('kd', 'kd_spread', 'complex_elution_volume', 'component_elution_volume_earlier', 'component_elution_volume_later', 'elution_volume_shift', 'complex_mass_measured', 'complex_mass_theoretical', 'component_mass_measured_larger', 'component_mass_measured_smaller', 'stoichiometry_ratio', 'polydispersity', 'flow_rate', 'column_volume', 'run_temperature', 'loaded_concentration', 'loaded_volume', 'salt_concentration', 'incubation_time', 'replicate_count')
 PREPARATION_KEYS = ('component_a_preparation_ref', 'component_b_preparation_ref', 'dataset_ref')

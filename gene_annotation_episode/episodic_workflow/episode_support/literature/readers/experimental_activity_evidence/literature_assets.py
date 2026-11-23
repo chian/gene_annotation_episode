@@ -7,7 +7,7 @@ from xml.etree import ElementTree
 from gene_annotation_episode.episodic_workflow.episode_support.acquisition.experimental_activity_evidence.acquisition import SourceSnapshot
 from gene_annotation_episode.acquisition import AcquisitionError
 from gene_annotation_episode.domain import ContractError
-VERSION = 'pmc_cloud_advertised_assets_v1'
+VERSION = 'pmc_cloud_advertised_assets'
 BASE_URL = 'https://pmc-oa-opendata.s3.amazonaws.com/'
 BUCKET = 'pmc-oa-opendata'
 PMCID = re.compile('^PMC[0-9]+$')

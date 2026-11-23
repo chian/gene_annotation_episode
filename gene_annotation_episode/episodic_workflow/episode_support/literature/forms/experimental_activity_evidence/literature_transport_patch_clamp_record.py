@@ -56,7 +56,7 @@ unstated choice carry None. The grader does not judge it; the converter does. Th
 only for forms built by tests that do not go through the extraction (the extraction always passes the model's answer).
 """
 
-VERSION = 'a105_transport_patch_clamp_record_v1'
+VERSION = 'a105_transport_patch_clamp_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'transport_patch_clamp'
 QUANTITIES = ('unitary_conductance', 'unitary_conductance_spread', 'charge_rate', 'charge_rate_spread', 'fold_over_control', 'fold_over_control_spread',

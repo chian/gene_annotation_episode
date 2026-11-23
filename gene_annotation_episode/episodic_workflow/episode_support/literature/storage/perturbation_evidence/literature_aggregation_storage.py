@@ -11,7 +11,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.storag
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_rate_storage import LiteratureRateRepository
 
 PROVIDER = 'literature.a105.aggregation'
-VERSION = 'literature_a105_aggregation_record_v1'
+VERSION = 'literature_a105_aggregation_record'
 OPERATIONS = TableDeclaration(name='literature_a105_aggregation_operations', columns=('sheet_ref',), key=('sheet_ref',), record_refs=('sheet_ref',))
 CELLS = TableDeclaration(name='literature_a105_aggregation_cells', columns=('sheet_ref', 'component', 'cell'), key=('sheet_ref', 'component'), record_refs=('sheet_ref',))
 NAMESPACE = 'literature_a105_aggregation_cells'

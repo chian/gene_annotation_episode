@@ -7,7 +7,7 @@ from copy import deepcopy
 from collections.abc import Mapping
 
 
-VERSION = 'component_axis_native_v1'
+VERSION = 'component_axis_native'
 OPERATIONS = {'A107': 'partner.request_expression_hpc'}
 
 
@@ -51,8 +51,8 @@ def identities():
     return {**array(text()), 'uniqueItems': True}
 
 
-def expression_schema(version=None):
-    return _contract('A107').source_schema(version)
+def expression_schema():
+    return _contract('A107').source_schema()
 
 
 def source_schema(axis):

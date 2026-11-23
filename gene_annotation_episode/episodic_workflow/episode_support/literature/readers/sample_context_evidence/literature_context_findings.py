@@ -4,9 +4,9 @@ reads from the saved sheets, each with its validator, and the controlled returns
 Two sheets and nothing else (section 0 of the feature table):
 
 - S1, the contextual observation subscoring sheet (``literature.a108.context_grading``, version
-  ``a108_context_observation_sheet_v1``): one finding per saved sheet, lines A1 to A28 (A29, one field per
+  ``a108_context_observation_sheet``): one finding per saved sheet, lines A1 to A28 (A29, one field per
   criterion of the grader, is left out: its field names change with the grader, so it has no fixed form).
-- S2, the main evidence sheet (``literature.a108.aggregation``, version ``a108_across_observation_aggregation_v1``):
+- S2, the main evidence sheet (``literature.a108.aggregation``, version ``a108_across_observation_aggregation``):
   one finding per cell, lines B1 to B18.
 
 A sheet or cell whose status is ``unavailable`` (no relation was graded) gives no finding: its counts are null in

@@ -8,7 +8,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.storag
 
 from .evolutionary_history_world import run, source, world  # noqa: F401
 
-FIXTURE = Path(__file__).parent / 'fixtures' / 'controlled_response_v3'
+FIXTURE = Path(__file__).parent / 'fixtures' / 'controlled_response'
 SHEET = {'from_step': 0, 'path': ['result', 'sheet_ref']}
 REPOSITORY = __name__ + ':SyntheticControlledResponse'
 

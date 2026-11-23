@@ -23,7 +23,7 @@ def database(kind='blast_protein_sequence'):
         'scope': None, 'preparation_type': 'sequence_database', 'source': source}
     paths = ['/selected/db/target']
     prefix = 'p' if kind == 'blast_protein_sequence' else 'n'
-    manifest = {'version': 'native_blast_standard_prepared_database_manifest_v1', 'database_key': 'target',
+    manifest = {'version': 'native_blast_standard_prepared_database_manifest', 'database_key': 'target',
         'kind': kind, 'identity': ident, 'native_paths': paths,
         'files': [{'path': paths[0] + '.' + prefix + suffix, 'sha256': 'b' * 64, 'size_bytes': 23}
                   for suffix in ['hr', 'in', 'sq']],
@@ -37,7 +37,7 @@ def database(kind='blast_protein_sequence'):
 
 
 def job_for(program='blastp', query='sequence', fmt='json15'):
-    return {'version': 'native_blast_standard_database_job_v1', 'program': program, 'mode': 'database',
+    return {'version': 'native_blast_standard_database_job', 'program': program, 'mode': 'database',
         'software': {'executable': '/selected/bin/' + program, 'sha256': 'c' * 64, 'engine_version': '2.17.0+'},
         'environment': {'EXPLICIT': 'selected'}, 'inputs': [{'input_key': 'query', 'role': 'query_' + query,
             'format': 'fasta' if query == 'sequence' else 'scoremat_asn_text', **identity('/selected/query')}],
@@ -184,7 +184,7 @@ def test_wrong_target_kind_fails(program):
 
 def test_metadata_registry_is_exact_and_public_validator_accepts_real_standard_job(monkeypatch):
     job = job_for()
-    payload = {'schema': 'native_blast_database_sequence_metadata_v1', 'documents': [], 'searches': []}
+    payload = {'schema': 'native_blast_database_sequence_metadata', 'documents': [], 'searches': []}
     descriptor = {'input_key': 'meta', 'consumer': 'sequence_database', 'schema_id': payload['schema'],
         'artifact_ref': 'artifact_meta', 'sha256': 'd' * 64, 'size_bytes': 12, 'origin': 'original_job_input'}
     job['inputs'].append({'input_key': 'meta', 'role': 'metadata', 'format': 'json', **identity('/selected/meta')})
@@ -198,7 +198,7 @@ def test_metadata_registry_is_exact_and_public_validator_accepts_real_standard_j
         assert c.validate_standard_blast_database_job(job) == job
         result = validate_native_blast_database_metadata_payload(payload, descriptor=descriptor, document_catalog=catalog, job=job)
         assert result['status'] == 'valid' and result['normalized']['searches'] == []
-        assert job['version'] == 'native_blast_standard_database_job_v1'
+        assert job['version'] == 'native_blast_standard_database_job'
 
 
 @pytest.mark.parametrize('change', [lambda j: j.update(mode='pairwise'), lambda j: j.update(extra='undeclared'),

@@ -62,7 +62,7 @@ class _Reader:
     def __init__(self, content, source, declared_format, report_key):
         self.content = content
         self.lines = []
-        self.result = {"version": "bvbrc_proteome_directional_v1", "declared_format": declared_format,
+        self.result = {"version": "bvbrc_proteome_directional", "declared_format": declared_format,
                        "report_key": report_key, "source": deepcopy(source), "parse_state": "failure",
                        "banners": [], "queries": [], "raw_records": [], "issues": []}
         self.binding = source["content"]

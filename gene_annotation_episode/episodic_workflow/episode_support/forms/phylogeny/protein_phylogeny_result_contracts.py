@@ -21,11 +21,11 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.phylogeny.p
 
 
 TOOL = "analyze_protein_phylogeny"
-SOURCE_VERSION = "ordinary_protein_phylogeny_result_v1"
-SHEET_VERSION = "protein_phylogeny_sheet_v1"
-PACKET_VERSION = "ordinary_protein_phylogeny_values_v1"
-SELECTION_VERSION = "protein_phylogeny_selection_v1"
-CONTEXT_VERSION = "protein_phylogeny_context_v1"
+SOURCE_VERSION = "ordinary_protein_phylogeny_result"
+SHEET_VERSION = "protein_phylogeny_sheet"
+PACKET_VERSION = "ordinary_protein_phylogeny_values"
+SELECTION_VERSION = "protein_phylogeny_selection"
+CONTEXT_VERSION = "protein_phylogeny_context"
 FACT_SOURCE = "protein_phylogeny_outcomes"
 ROLES = ("maximum_likelihood_tree", "bootstrap_consensus_tree")
 INPUT_MODES = ("supplied_alignment", "selected_MUSCLE_alignment")

@@ -13,9 +13,9 @@ import math
 import re
 
 
-SHEET_SCHEMA = "alignment_correspondence_sheet_v1"
-COMPONENT_SCHEMA = "alignment_correspondence_components_v1"
-ARTIFACT_SCHEMA = "alignment_correspondence_artifacts_v1"
+SHEET_SCHEMA = "alignment_correspondence_sheet"
+COMPONENT_SCHEMA = "alignment_correspondence_components"
+ARTIFACT_SCHEMA = "alignment_correspondence_artifacts"
 BASE_COUNT_NAMES = (
     "alignment_columns", "paired_positions", "identical_positions",
     "query_gap_columns", "reference_gap_columns",
@@ -546,8 +546,8 @@ def validate_correspondence_artifacts(value, *, admission=False):
     seen = set()
     for index, instance in enumerate(value["instances"]):
         path = "/instances/" + str(index)
-        _closed(instance, {"legacy_pointer", "axis_basis", "sheet", "components"}, path)
-        pointer, basis = instance["legacy_pointer"], instance["axis_basis"]
+        _closed(instance, {"source_pointer", "axis_basis", "sheet", "components"}, path)
+        pointer, basis = instance["source_pointer"], instance["axis_basis"]
         if (type(pointer) is not str or pointer and not pointer.startswith("/")
                 or re.search(r"~(?![01])", pointer) is not None
                 or basis not in ("direct", "reported", "qualified")

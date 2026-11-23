@@ -1,4 +1,4 @@
-"""What the commissioner gives: the launch assignment (the old ``execution_launch_assignment_v1`` of ``from_parent.py``:
+"""What the commissioner gives: the launch assignment (the old ``execution_launch_assignment`` of ``from_parent.py``:
 ``version``, ``requests``, ``immutable_input_versions``, ``constraints``, ``launch_instructions``, one field per
 property of the old assignment schema, under the same names) and the values the old episode obtained from its runner.
 
@@ -30,17 +30,17 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.partner_pre
 from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence.practical_execution_records import (
     validate_assignment)
 
-LAUNCH_VERSION = 'execution_launch_assignment_v1'
-PRACTICAL_VERSION = 'practical_assignment_v1'
-API_VERSIONS = ('api_execution_assignment_v1', 'api_service_assignment_v1')
+LAUNCH_VERSION = 'execution_launch_assignment'
+PRACTICAL_VERSION = 'practical_assignment'
+API_VERSIONS = ('api_execution_assignment', 'api_service_assignment')
 # The old ``ROLE_KINDS`` (``binding_roles.py``) inverted: the launch child that owns each kind of resource.
 KIND_SLOTS = {'api': 'launch_api', 'local': 'launch_local', 'hpc': 'launch_hpc'}
 
 ASSIGNMENT_FORM = RecordForm({
     'version': DeclaredField('text', 'The assignment version', LAUNCH_VERSION),
     'requests': Field('record', 'The concrete execution requests by resource id, at least one: each is the closed '
-                                'request of that resource (practical_assignment_v1, api_execution_assignment_v1 or '
-                                'api_service_assignment_v1)'),
+                                'request of that resource (practical_assignment, api_execution_assignment or '
+                                'api_service_assignment)'),
     'immutable_input_versions': Field('list', 'The input versions the job is pinned to: reference, version and '
                                               'content digest'),
     'constraints': Field('record', "The commissioner's resource constraints: allowed_resource_ids, allowed_kinds, "

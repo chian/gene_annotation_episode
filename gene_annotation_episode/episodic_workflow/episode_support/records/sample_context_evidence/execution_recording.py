@@ -17,10 +17,9 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.local_exe
 from gene_annotation_episode.episodic_workflow.episode_support.calculations.sample_context_evidence.run_statistics import ExecutionClass, RunHistory, RunStatistic
 
 
-VERSION = 'native_execution_statistics_context_v1'
-RECOVERABLE_VERSION = 'native_execution_statistics_context_v2'
-MEASUREMENT_VERSION = 'native_execution_measurement_v1'
-RECOVERY_VERSION = 'native_execution_measurement_recovery_v1'
+VERSION = 'native_execution_statistics_context'
+MEASUREMENT_VERSION = 'native_execution_measurement'
+RECOVERY_VERSION = 'native_execution_measurement_recovery'
 
 
 def _json(value):
@@ -78,15 +77,14 @@ class NativeStatistics:
                 'execution_class': asdict(self.execution_class), 'condition_ref': self.condition_ref,
                 'condition_capture': self.condition_capture}
         if self.recovery_directory is not None:
-            value.update(version=RECOVERABLE_VERSION, recovery_directory=str(self.recovery_directory))
+            value.update(recovery_directory=str(self.recovery_directory))
         return value
 
     @classmethod
     def from_record(cls, value):
         fields = {'version', 'history_path', 'execution_class', 'condition_ref', 'condition_capture'}
-        if not ((value.get('version') == VERSION and set(value) == fields)
-                or (value.get('version') == RECOVERABLE_VERSION and set(value) == fields | {'recovery_directory'}
-                    and type(value['recovery_directory']) is str)):
+        if not (value.get('version') == VERSION and (set(value) == fields
+                or (set(value) == fields | {'recovery_directory'} and type(value['recovery_directory']) is str))):
             raise ValueError('unsupported_native_statistics_context')
         return cls(value['history_path'], ExecutionClass(**value['execution_class']),
                    value['condition_ref'], value['condition_capture'], value.get('recovery_directory'))

@@ -28,8 +28,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.readers.similarit
 
 ADAPTER_ID = "bvbrc_homology"
 ADAPTER_VERSION = "1"
-PARAMETERS_VERSION = "bvbrc_homology_bundle_parameters_v1"
-SCIENTIFIC_INPUTS_VERSION = "bvbrc_homology_scientific_inputs_v1"
+PARAMETERS_VERSION = "bvbrc_homology_bundle_parameters"
+SCIENTIFIC_INPUTS_VERSION = "bvbrc_homology_scientific_inputs"
 _PRIMARY = {"raw": "blast_json15_raw", "processed": "homology_processed_json", "tabular": "blast_tabular"}
 _ROLES = tuple(FORMATS)
 _QUERY_FIELDS = {"input_source_ref", "member_ref", "subject_ref", "molecule", "supplied_id",
@@ -258,7 +258,7 @@ def _unique(rows):
 
 
 def _empty_metadata():
-    return {"schema": "bvbrc_homology_metadata_bindings_v1", "description_links": [], "records": [],
+    return {"schema": "bvbrc_homology_metadata_bindings", "description_links": [], "records": [],
             "bindings": [], "sequence_identity_bindings": [], "target_context_by_query": [], "database_profile": None}
 
 
@@ -482,7 +482,7 @@ def _fact(selection, sheet, components):
             value = normalized["query"]["length"]
         elif section == "kernel":
             value = (scored["conditional_function_weights"] or {}).get(metric)
-        elif blast and blast["schema"] == "blast_database_sheet_v1":
+        elif blast and blast["schema"] == "blast_database_sheet":
             value = blast[section].get(metric)
     elif metric in _HIT_METRICS:
         hit = _one(normalized["hits"], "hit_index", selection["hit_index"])
@@ -498,7 +498,7 @@ def _fact(selection, sheet, components):
             sh = _one(supplement["hits"], "hit_index", selection["hit_index"])
             if sh:
                 value = sh["span_union"][metric.split("_", 1)[0]]["coverage"]["value"]
-        elif blast and blast["schema"] == "blast_database_sheet_v1":
+        elif blast and blast["schema"] == "blast_database_sheet":
             bh = _one(blast["hits"], "hit_index", selection["hit_index"])
             value = bh["measurements"].get(metric) if bh else None
     elif metric in _HSP_METRICS:
@@ -516,7 +516,7 @@ def _fact(selection, sheet, components):
         kernel = scored["conditional_function_weights"]
         if kernel and metric in {"conditional_function_weight", "representation_adjusted_function_weight", "function_kernel_mass"}:
             value = (kernel[_FUNCTION_METRICS[metric][1]] or {}).get(selection["function"])
-        elif blast and blast["schema"] == "blast_database_sheet_v1":
+        elif blast and blast["schema"] == "blast_database_sheet":
             row = _one(blast["database_representation"]["function_representation"], "function", selection["function"])
             if row and blast["database_representation"]["available_for_adjustment"]:
                 value = row[_FUNCTION_METRICS[metric][1]]
@@ -531,10 +531,10 @@ def _fact(selection, sheet, components):
             # This is the empty reported candidate population, never a claim
             # of zero functions in the database. Unknown/missing hits stay null.
             value = []
-    elif metric in _TAXON_METRICS and blast and blast["schema"] == "blast_database_sheet_v1":
+    elif metric in _TAXON_METRICS and blast and blast["schema"] == "blast_database_sheet":
         row = _one(blast["taxonomy"]["ranks"], "rank", selection["rank"])
         value = row.get(metric) if row else None
-    elif metric == "source_quality_mean" and blast and blast["schema"] == "blast_database_sheet_v1":
+    elif metric == "source_quality_mean" and blast and blast["schema"] == "blast_database_sheet":
         rows = [row for row in blast["source_quality"]["numerical_summaries"]
                 if row["field"] == selection["field"] and row["quality_method"] == selection["method"]]
         value = rows[0]["mean"] if len(rows) == 1 else None
@@ -544,7 +544,7 @@ def _fact(selection, sheet, components):
             value = row.get(metric[len("tabular_"):])
     if value is not None:
         return value, None
-    if metric in _PAIR_METRICS and (not blast or blast["schema"] != "blast_pairwise_sheet_v1"):
+    if metric in _PAIR_METRICS and (not blast or blast["schema"] != "blast_pairwise_sheet"):
         reason = "homology_pairwise_subject_membership_unproved"
     elif metric in _TAXON_METRICS:
         reason = "homology_linked_taxonomy_or_comparison_population_unavailable"
@@ -625,7 +625,7 @@ def consume_bundle(bundle: dict, *, artifact_bytes: dict[str, bytes], supplied_v
         task["effective_parameters_source"] = (None if effective is None else {
             "source_ref": effective["evidence"]["content"]["source_ref"], "pointer": effective["evidence"]["pointer"]})
         primary_role = _PRIMARY[parameters["primary_representation"]]
-        binding = {"schema": "bvbrc_homology_artifact_bundle_v1", "original_task": task,
+        binding = {"schema": "bvbrc_homology_artifact_bundle", "original_task": task,
             "scientific_mode": parameters["scientific_mode"], "primary_representation": parameters["primary_representation"],
             "query_bindings": _query_bindings(bundle, scientific, parameters["primary_representation"],
                                                selected.get(primary_role), diagnostics, requirements),

@@ -110,7 +110,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_coupling_electron_balance_criteria import PERCENT_PER_FRACTION
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_coupling_electron_balance_converted_v1'
+VERSION = 'a105_coupling_electron_balance_converted'
 CRITERIA_MAP = {'measurement_identity': ('both_sides_stated',), 'calibration_applicability': ('delivery_calibration', 'product_calibration', 'standard_recovery'),
                 'matrix_interference': ('headspace_accounting',), 'background_alternatives': ('no_enzyme_control', 'background_electrons'),
                 'attribution_supported': ('inactive_enzyme_control',), 'product_identity': ('product_identity',),

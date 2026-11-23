@@ -26,7 +26,7 @@ import re
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.site_correspondence_sheet import (
     kernel)
 
-SCHEMA = 'a102_ligand_transplants_sheet_v1'
+SCHEMA = 'a102_ligand_transplants_sheet'
 PROVIDER = 'ligand_transplants'
 OUTCOMES = ('transplants', 'no_transplants', 'no_alphafill_entry')
 # The scale of each degree is AlphaFill's own published boundary between high and medium confidence (paper, "Analysis of the quality

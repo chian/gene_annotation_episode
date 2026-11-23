@@ -7,7 +7,7 @@ from Bio.SeqIO.QualityIO import FastqGeneralIterator
 
 from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_homology_evidence.domain import ContractError, parse_sequences
 
-VERSION = "supplied_material_parsing_v5.biopython_" + version("biopython")
+VERSION = "supplied_material_parsing.biopython_" + version("biopython")
 FORMATS = ["auto", "raw", "fasta", "fastq", "text", "opaque", "genbank"]
 
 

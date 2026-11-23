@@ -11,8 +11,8 @@ import json
 import math
 import re
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.experimental_activity_evidence.literature_experimental_contracts import ExperimentalContractError
-VERSION = 'binding_parameter_extraction_v1'
-TABLE_VERSION = 'binding_parameter_table_v1'
+VERSION = 'binding_parameter_extraction'
+TABLE_VERSION = 'binding_parameter_table'
 _KINDS = ('ic50', 'reported_hill_kd')
 _REPRESENTATIONS = ('retained_visual_transcription', 'primary_table', 'synthetic_fixture')
 _BASES = ('fit_to_averaged_curve', 'between_independent_fitted_parameters', 'unknown')

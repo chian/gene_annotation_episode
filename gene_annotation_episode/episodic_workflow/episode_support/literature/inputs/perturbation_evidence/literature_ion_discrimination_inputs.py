@@ -13,7 +13,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.storag
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.perturbation_evidence.literature_experimental_contracts import ExperimentalContractError
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.perturbation_evidence.literature_ion_discrimination_numbers import read_ion_number, read_ion_unit, check_explicit_unit, rational
 
-VERSION = 'a105_ion_discrimination_extraction_v1'
+VERSION = 'a105_ion_discrimination_extraction'
 ROLES = ('preferred', 'alternative')
 
 _SELECTION_SCHEMA = {'$schema': 'https://json-schema.org/draft/2020-12/schema',
@@ -335,7 +335,7 @@ _SELECTION_SCHEMA = {'$schema': 'https://json-schema.org/draft/2020-12/schema',
                                               'witnesses'],
                                  'additionalProperties': False}},
  'type': 'object',
- 'properties': {'version': {'const': 'a105_ion_discrimination_selection_v1'},
+ 'properties': {'version': {'const': 'a105_ion_discrimination_selection'},
                 'source_ref': {'type': 'string', 'format': 'reference', 'minLength': 1},
                 'source_kind': {'type': 'string',
                                 'enum': ['primary_source', 'retained_extraction', 'synthetic_fixture']},
@@ -347,7 +347,7 @@ _SELECTION_SCHEMA = {'$schema': 'https://json-schema.org/draft/2020-12/schema',
 
 _SHEET_SCHEMA = {'$schema': 'https://json-schema.org/draft/2020-12/schema',
  'type': 'object',
- 'properties': {'version': {'const': 'a105_ion_discrimination_sheet_v1'},
+ 'properties': {'version': {'const': 'a105_ion_discrimination_sheet'},
                 'axis': {'const': 'A105'},
                 'route': {'type': 'string',
                           'enum': ['compiled_activity_pair', 'reported_ratio', 'reported_threshold_pair']},
@@ -589,7 +589,7 @@ _SHEET_SCHEMA = {'$schema': 'https://json-schema.org/draft/2020-12/schema',
                     'additionalProperties': False}}}
 
 _COVARIANCE_SCHEMA = {'type': 'object',
- 'properties': {'version': {'const': 'a105_ion_activity_covariance_v1'},
+ 'properties': {'version': {'const': 'a105_ion_activity_covariance'},
                 'activity_order': {'const': ['preferred', 'alternative']},
                 'activity_keys': {'type': 'array',
                                   'items': {'type': 'string', 'minLength': 1},

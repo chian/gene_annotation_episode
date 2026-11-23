@@ -27,7 +27,7 @@ from episode_runtime import ChildMessage
 
 from ..credit import AXIS_CREDIT_UNITS, OPERATIONAL_CREDIT_UNITS
 
-TASK_VERSION = 'evidence_axis_task_v1'
+TASK_VERSION = 'evidence_axis_task'
 TASK_KIND = 'whole_axis_findings'
 
 # The selectable fields of each head's return form the root asks for.

@@ -25,8 +25,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.profile_mod
 )
 
 
-PLAN_VERSION = "native_infernal_preparation_run_plan_v1"
-BUNDLE_VERSION = "native_infernal_preparation_bundle_v1"
+PLAN_VERSION = "native_infernal_preparation_run_plan"
+BUNDLE_VERSION = "native_infernal_preparation_bundle"
 OWNER_NAME = ".native-infernal-preparation-owner.json"
 _BUNDLE_FIELDS = {"version", "identity", "requested_job", "program", "mode", "operation",
     "software", "realized_argv", "environment", "inputs", "working_copies", "returncode",

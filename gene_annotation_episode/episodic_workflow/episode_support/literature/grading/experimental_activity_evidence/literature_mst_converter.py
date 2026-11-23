@@ -153,7 +153,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_mst_converted_v1'
+VERSION = 'a105_mst_converted'
 STATEMENTS = {'detected': 'interaction_detected', 'not_detected': 'interaction_not_detected', None: 'interaction_not_stated'}
 BINDING_CONSTANTS = ('kd', 'ki')
 CRITERIA_MAP = {'binding_controls': ('initial_fluorescence', 'aggregation_adsorption', 'specificity_control', 'fluorescence_level'), 'binding_regime': ('labelled_concentration', 'concentration_series', 'equilibrium', 'direct_vs_competition'), 'binding_parameter_definition': ('fit_model', 'labelling_scheme', 'readout_window'), 'calibration_applicability': ('signal_amplitude',), 'sampling_basis': ('replicates',)}

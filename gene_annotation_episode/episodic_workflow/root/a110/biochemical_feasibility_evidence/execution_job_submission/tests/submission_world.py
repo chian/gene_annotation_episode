@@ -1,6 +1,6 @@
 """The held world of the job submission tests: a real Store, the real job services (the detached local route on a
 workspace under the test's directory), the settings of the submission episode and of its launch children, and a
-launch assignment with one request: a valid ``practical_assignment_v1`` for the local resource whose job writes
+launch assignment with one request: a valid ``practical_assignment`` for the local resource whose job writes
 ``answer.txt`` and whose handoff requirement has a credit of 4. One usable handoff is worth 2 to the submission."""
 import asyncio
 import json
@@ -30,7 +30,7 @@ def registry():
 
 
 def practical_request(workspace):
-    return {'version': 'practical_assignment_v1', 'assignment_id': 'a110-local-1', 'resource_id': RESOURCE_ID,
+    return {'version': 'practical_assignment', 'assignment_id': 'a110-local-1', 'resource_id': RESOURCE_ID,
             'resource_kind': 'local', 'workspace': workspace, 'endpoint': 'usable_handoff',
             'requested_job': {'argv': [sys.executable, '-c', JOB_CODE], 'environment': {}},
             'progress_requirements': [{'key': 'handoff', 'credit': CHILD_HANDOFF_CREDIT,
@@ -50,7 +50,7 @@ def world(tmp_path, **resource):
         # No episode of these runs declares the instruction libraries, so they are never built.
         'launch_instructions_directory': str(tmp_path / 'no_launch_instructions'),
         'tool_knowledge_directory': str(tmp_path / 'no_tool_knowledge')}
-    assignment = {'version': 'execution_launch_assignment_v1', 'requests': {RESOURCE_ID: practical_request(workspace)},
+    assignment = {'version': 'execution_launch_assignment', 'requests': {RESOURCE_ID: practical_request(workspace)},
                   'immutable_input_versions': [], 'constraints': {}, 'handoff_unit': HANDOFF_UNIT,
                   'acquired_record_unit': 0.5}
     profile = {'cutoff': 0.5, 'parameters': {}}

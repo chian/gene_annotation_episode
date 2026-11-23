@@ -19,7 +19,7 @@ returns     every case the criterion can return, as (status, reason_code, when).
             as 'never' cannot occur for this criterion.
 """
 
-VERSION = 'a105_distribution_gel_bands_criteria_v1'
+VERSION = 'a105_distribution_gel_bands_criteria'
 # FIXED_BY_DEFINITION: a percent is a hundredth of a fraction. The only number of this declaration; it only changes the spelling of a stated share.
 FRACTION_PER_UNIT = {'fraction': 1.0, 'percent': 0.01}
 

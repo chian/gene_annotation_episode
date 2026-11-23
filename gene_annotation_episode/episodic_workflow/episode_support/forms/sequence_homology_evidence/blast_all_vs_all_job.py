@@ -20,7 +20,7 @@ import re
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.native_blast_contracts import (
     RESERVED_ENVIRONMENT, _absolute, _options, _relative, _schema, finite_json_copy, native_blast_digest)
 
-VERSION = "native_blast_all_vs_all_job_v1"
+VERSION = "native_blast_all_vs_all_job"
 PROGRAMS = ("blastp", "blastn")
 REPORT_FIELDS = ("qaccver", "saccver", "pident", "nident", "length", "mismatch", "gapopen",
                  "qstart", "qend", "sstart", "send", "qlen", "slen", "evalue", "bitscore")

@@ -14,13 +14,13 @@ from method_loop.identities import normalize_structural_path
 from gene_annotation_episode.episodic_workflow.episode_support.records.sample_context_evidence.domain import identity
 
 
-OPTION_REF_VERSION = "sample_context_evidence_option_ref_v1"
-SELECTION_VERSION = "sample_context_evidence_selection_v3"
-SELECTION_VIEW_VERSION = "sample_context_evidence_selection_view_v1"
-FILLED_PROCESS_VERSION = "filled_sample_context_evidence_v1"
-REVISION_VERSION = "sample_context_evidence_revision_v1"
-CHILD_SELECTION_VERSION = "sample_context_evidence_child_selection_v1"
-REVISION_ORIGIN_VERSION = "sample_context_evidence_revision_origin_v1"
+OPTION_REF_VERSION = "sample_context_evidence_option_ref"
+SELECTION_VERSION = "sample_context_evidence_selection"
+SELECTION_VIEW_VERSION = "sample_context_evidence_selection_view"
+FILLED_PROCESS_VERSION = "filled_sample_context_evidence"
+REVISION_VERSION = "sample_context_evidence_revision"
+CHILD_SELECTION_VERSION = "sample_context_evidence_child_selection"
+REVISION_ORIGIN_VERSION = "sample_context_evidence_revision_origin"
 SLOTS = ("evidence_axis", "thought_pattern")
 _PREFIXES = {"evidence_axis": "A", "thought_pattern": "P"}
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")

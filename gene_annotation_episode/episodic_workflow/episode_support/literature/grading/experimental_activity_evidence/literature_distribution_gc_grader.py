@@ -30,7 +30,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     DISTRIBUTION_GC_CRITERIA, PERCENT_PER_FRACTION)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_distribution_gc_grade_v1'
+VERSION = 'a105_distribution_gc_grade'
 CRITERIA = tuple(criterion['id'] for criterion in DISTRIBUTION_GC_CRITERIA)
 PRODUCT = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact claimed_product_detected
 

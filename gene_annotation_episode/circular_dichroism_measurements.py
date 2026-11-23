@@ -24,9 +24,9 @@ import json
 import math
 
 
-INPUT_SCHEMA = "circular_dichroism_measurements_v1"
-SHEET_SCHEMA = "circular_dichroism_sheet_v1"
-COMPONENTS_SCHEMA = "circular_dichroism_components_v1"
+INPUT_SCHEMA = "circular_dichroism_measurements"
+SHEET_SCHEMA = "circular_dichroism_sheet"
+COMPONENTS_SCHEMA = "circular_dichroism_components"
 _TAG = "$cd_retained_invalid_value"
 _OBJECT_TAG = "$cd_retained_object"
 _SIGNAL_UNITS = {"mdeg", "delta_epsilon", "unknown"}

@@ -11,7 +11,7 @@ import math
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.evolutionary_history_evidence.literature_amount_inputs import ROLES, validate_amount_calculation_inputs
 
 
-VERSION = "a105_amount_components_v1"
+VERSION = "a105_amount_components"
 COMPONENTS = ("numerator_amount", "denominator_amount", "amount_difference", "amount_ratio",
     "reciprocal_amount_ratio", "conditional_mass_denominator_factor", "amount_difference_variance",
     "amount_difference_standard_uncertainty", "amount_ratio_variance", "amount_ratio_standard_uncertainty",

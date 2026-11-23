@@ -12,7 +12,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.similarit
 
 
 def selector(*projections):
-    return dict(version="native_blast_database_result_selector_v1", acquisition="complete_bound_bundle",
+    return dict(version="native_blast_database_result_selector", acquisition="complete_bound_bundle",
         metadata_inputs=[], retained_sources=[], projections=list(projections))
 
 
@@ -56,7 +56,7 @@ def test_all_closed_families_and_exact_publication_sources():
     assert set(descriptor["properties"]) == set(descriptor["required"]) == {
         "schema", "original_result_receipt", "manifest_artifact_ref", "manifest_sha256", "sheets_artifact_ref",
         "sheets_sha256", "collection_artifact_ref", "collection_sha256", "input_interpretation_id", "original_calculation_id"}
-    assert descriptor["properties"]["schema"] == {"const": "native_blast_vdb_function_saved_input_v1"}
+    assert descriptor["properties"]["schema"] == {"const": "native_blast_vdb_function_saved_input"}
     address = descriptor["properties"]["original_result_receipt"]
     assert address["additionalProperties"] is False
     assert set(address["properties"]) == set(address["required"]) == {"source_ref", "run_id", "episode_id", "operation_key", "receipt_sha256"}

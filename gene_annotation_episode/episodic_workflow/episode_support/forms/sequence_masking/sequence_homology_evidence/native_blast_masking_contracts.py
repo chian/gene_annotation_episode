@@ -19,9 +19,9 @@ MODES = (("dustmasker", "mask"), ("segmasker", "mask"),
          ("windowmasker", "mask"), ("windowmasker", "create_counts"),
          ("convert2blastmask", "convert_mask"))
 PREFIX = "native_blast_masking_"
-JOB_VERSION = PREFIX + "job_v1"
-PLAN_VERSION = PREFIX + "run_plan_v1"
-BUNDLE_VERSION = PREFIX + "bundle_v1"
+JOB_VERSION = PREFIX + "job"
+PLAN_VERSION = PREFIX + "run_plan"
+BUNDLE_VERSION = PREFIX + "bundle"
 OWNER_NAME = ".native-blast-masking-owner.json"
 ATTEMPT_NAME = "blast-masking-attempt"
 PLAN_NAME = "blast-masking-plan.json"

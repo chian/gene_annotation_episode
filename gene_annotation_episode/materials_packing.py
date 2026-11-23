@@ -12,7 +12,7 @@ import tempfile
 
 from .domain import ContractError
 
-REPRESENTATION = "packed_member_components_v1"
+REPRESENTATION = "packed_member_components"
 CHUNK_BYTES = 8 * 1024 * 1024
 COMPONENTS = ("header", "sequence", "quality")
 MEDIA = {"header": "text/x-parser-title; charset=utf-8", "sequence": "text/x-sequence",

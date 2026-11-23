@@ -148,7 +148,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_fcs_criteria import NM_PER_UNIT
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_fcs_converted_v1'
+VERSION = 'a105_fcs_converted'
 STATEMENTS = {'detected': 'interaction_detected', 'not_detected': 'interaction_not_detected', None: 'interaction_not_stated'}
 CRITERIA_MAP = {'binding_controls': ('volume_calibration', 'triplet_state', 'brightness', 'crosstalk', 'background', 'aggregates', 'photobleaching', 'surface_adsorption', 'labelling', 'specificity_control'), 'binding_regime': ('saturation', 'labelled_range', 'labelled_over_kd', 'concentration_series', 'equilibrium'), 'binding_parameter_definition': ('diffusion_model', 'fit_model'), 'calibration_applicability': ('diffusion_change', 'mass_consistency', 'acquisition'), 'sampling_basis': ('replicates',)}
 MIN_DIFFUSION_RATIO = 1.3  # EXPERT_REVIEW: smallest slow-over-fast diffusion ratio of the complex and the free labelled partner that can be read as a fraction bound; diffusion times of repeated measurements scatter by about ten percent, so a change below about thirty percent cannot be told from the scatter (with nothing fixed a two-component fit needs about 1.6, Meseth et al. 1999, Biophys J 76:1619; the free time fixed, judged by diffusion_model, lowers it).

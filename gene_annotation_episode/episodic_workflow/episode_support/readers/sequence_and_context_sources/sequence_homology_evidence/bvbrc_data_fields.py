@@ -10,7 +10,7 @@ There is no file read, discovery or schema refresh at runtime.
 
 __all__ = ('FIELD_CONTRACT_VERSION', 'COLLECTIONS', 'FIELD_REGISTRY', 'SELECTABLE_FIELDS', 'NUMERICAL_FIELDS', 'METADATA_FIELDS', 'MOLECULAR_MEASUREMENT_FIELDS', 'SUPPLIED_METADATA_FIELDS', 'UNAVAILABLE_REASONS', 'ISSUE_CODES')
 
-FIELD_CONTRACT_VERSION = 'bvbrc_data_fields_2026_10_24_v1'
+FIELD_CONTRACT_VERSION = 'bvbrc_data_fields_2026_10_24'
 
 # Every row specifies every field property; no native capability is inferred.
 

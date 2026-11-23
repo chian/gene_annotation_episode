@@ -25,8 +25,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.jobs.gene_context
 
 
 PREFIX = "native_hmmer_preparation_"
-PLAN_VERSION = PREFIX + "result_worker_plan_v1"
-MANIFEST_VERSION = PREFIX + "result_worker_manifest_v1"
+PLAN_VERSION = PREFIX + "result_worker_plan"
+MANIFEST_VERSION = PREFIX + "result_worker_manifest"
 NUMERICAL_FILES = {"grading": "grading.json", "sheet": "sheet.json",
                    "calculations": "calculations.json"}
 
@@ -188,7 +188,7 @@ def effective_metadata(bundle, occurrences):
 
 
 def grading_context(bundle, occurrences, metadata):
-    return {"version": PREFIX + "grading_v1", "operation": deepcopy(bundle["operation"]),
+    return {"version": PREFIX + "grading", "operation": deepcopy(bundle["operation"]),
         "formats": {r["occurrence_id"]: r["format"] for r in eligible_occurrences(occurrences)},
         "metadata": deepcopy(metadata), "native_abi": deepcopy(bundle["native_abi"]),
         "requested_parameters": deepcopy(bundle["requested_job"]["native_hmmer_preparation"]["grading_parameters"])}

@@ -30,7 +30,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_
 from gene_annotation_episode.episodic_workflow.episode_support.records.similarity_search.native_blast_database_worker_values import _ABS, _ATTEMPT, _FILE_ID, _FUNCTION_CALCULATIONS, _FUNCTION_REQUEST, _FUNCTION_SHEETS, _SNAPSHOT_ID, _absolute_path, _at, _descriptor, _model, _shape, _sheet_binding, build_native_blast_database_rows, calculate_native_blast_database_sheets, native_blast_database_calculation_identity, native_blast_database_input_identity
 
 
-_FUNCTION_MANIFEST = "native_blast_database_result_worker_manifest_vdb_function_v1"
+_FUNCTION_MANIFEST = "native_blast_database_result_worker_manifest_vdb_function"
 
 
 
@@ -77,7 +77,7 @@ _MODEL = {"anyOf": [{"type": "null"}, {"type": "object", "properties": {
 
 
 def _population_capture_binding(sheet_set, request, catalog):
-    """Tie v3 retained JSON facts to the caller's original captured bytes.
+    """Tie the retained population JSON facts to the caller's original captured bytes.
 
     This is worker custody validation, separate from the pure saved metadata
     validator. JSON decoding checks original source values; no native parser,
@@ -150,7 +150,7 @@ def _population_capture_binding(sheet_set, request, catalog):
     bykey = {r["artifact_key"]: r for r in catalog["entries"]}
     for row in sheet_set["sequence"]:
         scientific = row["sheet"]
-        if scientific["schema"] != "blast_sequence_database_result_sheet_v3":
+        if scientific["schema"] != "blast_sequence_database_result_sheet_population":
             continue
         report = bykey.get(row["search_key"]["artifact_key"])
         source = scientific["report_source"]
@@ -190,31 +190,31 @@ def _population_capture_binding(sheet_set, request, catalog):
 
 
 
-_ARTIFACT_ROLES = {"inputs": ("inputs.json", "native_blast_database_prepared_inputs_v1"),
-    "collection": ("collection.json", "blast_report_collection_v1"), "sheets": ("sheets.json", "native_blast_database_sheet_set_v1"),
-    "calculations": ("calculations.json", "native_blast_database_calculations_v1"),
-    "rows": ("rows.ndjson", "native_blast_database_numeric_row_v1"), "row_index": ("row-index.json", "native_blast_database_row_index_v1"),
-    "metric_definitions": ("metric-definitions.json", "native_blast_database_metric_definitions_v1"),
-    "diagnostics": ("diagnostics.json", "native_blast_database_diagnostics_v1")}
-_ARTIFACT_ROLES_V2 = {**_ARTIFACT_ROLES,
-    "sheets": ("sheets.json", "native_blast_database_sheet_set_v2"),
-    "native_convergence": ("native-convergence.json", "blast_native_convergence_extraction_v1")}
+_ARTIFACT_ROLES = {"inputs": ("inputs.json", "native_blast_database_prepared_inputs"),
+    "collection": ("collection.json", "blast_report_collection"), "sheets": ("sheets.json", "native_blast_database_sheet_set"),
+    "calculations": ("calculations.json", "native_blast_database_calculations"),
+    "rows": ("rows.ndjson", "native_blast_database_numeric_row"), "row_index": ("row-index.json", "native_blast_database_row_index"),
+    "metric_definitions": ("metric-definitions.json", "native_blast_database_metric_definitions"),
+    "diagnostics": ("diagnostics.json", "native_blast_database_diagnostics")}
+_ARTIFACT_ROLES_WITH_NATIVE_CONVERGENCE = {**_ARTIFACT_ROLES,
+    "sheets": ("sheets.json", "native_blast_database_sheet_set_with_native_convergence"),
+    "native_convergence": ("native-convergence.json", "blast_native_convergence_extraction")}
 _ARTIFACT_ROLES_FUNCTION = {**_ARTIFACT_ROLES,
     "sheets": ("sheets.json", _FUNCTION_SHEETS), "calculations": ("calculations.json", _FUNCTION_CALCULATIONS),
-    "rows": ("rows.ndjson", "native_blast_vdb_function_numeric_row_v1")}
+    "rows": ("rows.ndjson", "native_blast_vdb_function_numeric_row")}
 
 
 def _artifact_roles(version):
-    if version == "native_blast_database_result_worker_manifest_v1":
+    if version == "native_blast_database_result_worker_manifest":
         return _ARTIFACT_ROLES
-    if version == "native_blast_database_result_worker_manifest_v2":
-        return _ARTIFACT_ROLES_V2
+    if version == "native_blast_database_result_worker_manifest_with_native_convergence":
+        return _ARTIFACT_ROLES_WITH_NATIVE_CONVERGENCE
     if version == _FUNCTION_MANIFEST:
         return _ARTIFACT_ROLES_FUNCTION
     raise ValueError("native_blast_database_manifest_version_invalid")
 
 
-def _request_schema(version="native_blast_database_result_worker_request_v1"):
+def _request_schema(version="native_blast_database_result_worker_request"):
     function_mode = version == _FUNCTION_REQUEST
     value = _views._object(dict(version={"const": version}, calculation_id=_views._SHA,
         bundle=_contracts.NATIVE_BLAST_DATABASE_BUNDLE_SCHEMA, bundle_artifact_ref=_views._REF,
@@ -227,12 +227,12 @@ def _request_schema(version="native_blast_database_result_worker_request_v1"):
     if function_mode:
         value["properties"]["vdb_function_model"] = {"type": "object"}
         value["required"].append("vdb_function_model")
-    elif version != "native_blast_database_result_worker_request_v1":
+    elif version != "native_blast_database_result_worker_request":
         raise ValueError("native_blast_database_request_version_invalid")
     return value
 
 
-def _manifest_schema(version="native_blast_database_result_worker_manifest_v1"):
+def _manifest_schema(version="native_blast_database_result_worker_manifest"):
     roles = _artifact_roles(version)
     value = _views._object(dict(version={"const": version}, calculation_id=_views._SHA,
         request_sha256=_views._SHA, status={"enum": ["complete", "partial", "failed"]}, input_identity=_views._SHA,
@@ -328,7 +328,7 @@ def _catalog(request, failures):
             failures.append(error.failure)
     catalog = dict(bundle_source_ref=request["bundle_artifact_ref"], bundle_artifact_ref=request["bundle_artifact_ref"],
         bundle_sha256=request["bundle_capture"]["sha256"], entries=entries, retained_sources=deepcopy(request["retained_sources"]))
-    if any(r["schema_id"] == "native_blast_database_sequence_metadata_v3" for r in request["metadata_descriptors"]):
+    if any(r["schema_id"] == "native_blast_database_sequence_population_metadata" for r in request["metadata_descriptors"]):
         catalog["bundle_size_bytes"] = request["bundle_capture"]["size_bytes"]
     return catalog, contents
 
@@ -416,7 +416,7 @@ def _reuse(request, input_identity):
             raise
         raise _WorkerFailure("population", "native_blast_database_sheet_invalid", "metadata_shape_invalid", pointer="/reuse/sheets_path") from error
     if (values["sheets"]["collection"] != values["collection"]
-            or values["sheets"]["prepared_inputs"].get("schema") != "native_blast_database_prepared_inputs_v1"):
+            or values["sheets"]["prepared_inputs"].get("schema") != "native_blast_database_prepared_inputs"):
         raise _WorkerFailure("inputs", "native_blast_database_sheet_invalid", "calculator_contract_invalid", pointer="/reuse")
     if binding is not None:
         expected_context = dict(original_job=request["bundle"]["requested_job"]["native_blast_database"],
@@ -482,7 +482,7 @@ def run_native_blast_database_result_worker(request_path):
     initial = native_blast_database_calculation_identity(input_identity=input_identity,
         sequence_model=request["sequence_model"], vdb_function_model=request.get("vdb_function_model"))
     program = request["bundle"]["requested_job"]["native_blast_database"]["program"]
-    version = _FUNCTION_MANIFEST if function_mode else "native_blast_database_result_worker_manifest_v2" if program in ("psiblast", "deltablast") else "native_blast_database_result_worker_manifest_v1"
+    version = _FUNCTION_MANIFEST if function_mode else "native_blast_database_result_worker_manifest_with_native_convergence" if program in ("psiblast", "deltablast") else "native_blast_database_result_worker_manifest"
     manifest = dict(version=version, calculation_id=request["calculation_id"],
         request_sha256=hashlib.sha256(request_bytes).hexdigest(), status="failed", input_identity=input_identity,
         input_interpretation_id=initial["input_interpretation_id"], sequence_model=deepcopy(request["sequence_model"]),
@@ -508,7 +508,7 @@ def run_native_blast_database_result_worker(request_path):
             raise _WorkerFailure("capture", "native_blast_database_artifact_identity_mismatch", "artifact_digest_conflict", pointer="/bundle_capture")
         bundle = _contracts.validate_native_blast_database_bundle(request["bundle"],
             original_job=request["bundle"]["requested_job"]["native_blast_database"], attempt_identity=request["authenticated_attempt"])
-        population_selected = any(r["schema_id"] == "native_blast_database_sequence_metadata_v3" for r in request["metadata_descriptors"])
+        population_selected = any(r["schema_id"] == "native_blast_database_sequence_population_metadata" for r in request["metadata_descriptors"])
         catalog, contents = _catalog(request, failures) if request["reuse"] is None or population_selected else (None, None)
         for i, native_failure in enumerate(bundle["failures"]):
             failures.append(_WorkerFailure("capture", "native_blast_database_capture_incomplete", "artifact_bytes_unavailable",
@@ -559,7 +559,7 @@ def run_native_blast_database_result_worker(request_path):
             if population_selected:
                 _population_capture_binding(sheets, request, catalog)
             save("inputs", prepared); save("collection", collection)
-            if sheets["schema"] == "native_blast_database_sheet_set_v2":
+            if sheets["schema"] == "native_blast_database_sheet_set_with_native_convergence":
                 save_extraction(sheets["native_convergence"])
             save("sheets", sheets)
         metadata_issues.extend(sheets["issues"])
@@ -585,7 +585,7 @@ def run_native_blast_database_result_worker(request_path):
             chunks.append(data); position += len(data)
         record = _atomic_bytes(directory, "rows.ndjson", b"".join(chunks))
         manifest["artifacts"].append(dict(role="rows", relative_path="rows.ndjson", schema=_artifact_roles(manifest["version"])["rows"][1], **record))
-        save("row_index", dict(schema="native_blast_database_row_index_v1", calculation_id=request["calculation_id"], rows=index))
+        save("row_index", dict(schema="native_blast_database_row_index", calculation_id=request["calculation_id"], rows=index))
         manifest["counts"]["numerical_rows"] = len(rows)
         save("metric_definitions", _views.native_blast_database_metric_definitions(include_vdb_function=function_mode))
         manifest["status"] = "partial" if failures else "complete"
@@ -604,7 +604,7 @@ def run_native_blast_database_result_worker(request_path):
         detail = "resource_limit" if resource else "calculator_contract_invalid" if isinstance(error, ValueError) and stage in ("inputs", "population", "calculation") else "implementation_failure"
         failures.append(_WorkerFailure("worker" if resource else stage, code, detail).failure)
         errors.append(dict(failure_index=len(failures) - 1, exception_type=type(error).__module__ + "." + type(error).__qualname__, message=str(error)))
-    save("diagnostics", dict(schema="native_blast_database_diagnostics_v1", failures=failures, metadata_issues=metadata_issues, errors=errors))
+    save("diagnostics", dict(schema="native_blast_database_diagnostics", failures=failures, metadata_issues=metadata_issues, errors=errors))
     _shape(manifest, _manifest_schema(manifest["version"]))
     _atomic_bytes(directory, "worker-manifest.json", _json_bytes(manifest))
     return manifest

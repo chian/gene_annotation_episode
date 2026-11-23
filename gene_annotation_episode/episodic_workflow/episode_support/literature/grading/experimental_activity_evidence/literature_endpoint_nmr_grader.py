@@ -29,7 +29,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     ENDPOINT_NMR_CRITERIA, MINUTES_PER_UNIT, PERCENT_PER_FRACTION, SECONDS_PER_UNIT)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_endpoint_nmr_grade_v1'
+VERSION = 'a105_endpoint_nmr_grade'
 CRITERIA = tuple(criterion['id'] for criterion in ENDPOINT_NMR_CRITERIA)
 CONVERSION = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact conversion_detected_above_control
 

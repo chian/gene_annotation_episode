@@ -1,5 +1,5 @@
 """The held world of the local job execution tests: a real Store, the real job services (the detached local route
-on a workspace under the test's directory), the episode's settings, and a valid ``practical_assignment_v1`` whose
+on a workspace under the test's directory), the episode's settings, and a valid ``practical_assignment`` whose
 requested job writes ``answer.txt`` and whose one requirement gives the handoff a credit of 4."""
 import asyncio
 import json
@@ -26,7 +26,7 @@ JOB_CODE = "import pathlib; pathlib.Path('answer.txt').write_text('42'); print('
 
 
 def practical_assignment(workspace, **changes):
-    return {'version': 'practical_assignment_v1', 'assignment_id': 'a107-local-1', 'resource_id': RESOURCE_ID,
+    return {'version': 'practical_assignment', 'assignment_id': 'a107-local-1', 'resource_id': RESOURCE_ID,
             'resource_kind': 'local', 'workspace': workspace, 'endpoint': 'usable_handoff',
             'requested_job': {'argv': [sys.executable, '-c', JOB_CODE], 'environment': {}},
             'progress_requirements': [

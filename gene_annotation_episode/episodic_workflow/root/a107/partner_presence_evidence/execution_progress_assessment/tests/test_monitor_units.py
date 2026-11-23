@@ -392,7 +392,7 @@ def test_a_dependency_the_commissioner_passes_is_offered_and_its_commission_pass
     message = Monitor.msg_to_child('monitor', {'dependency_handle': dependency}, summary)
     assert message.selection == () and message.message == {}
     assert read_from_parent.ASSIGNMENT_FORM.admit(message.assignment, 'assignment') == {
-        'version': 'monitor_assignment_v2', 'handoff_refs': [dependency_ref], 'known_progress_refs': [],
+        'version': 'monitor_assignment', 'handoff_refs': [dependency_ref], 'known_progress_refs': [],
         'dependency_handoff_refs': [], 'requested_fields': list(read_from_parent.FIELD_OPTIONS),
         'information_unit': 1.0}
     with pytest.raises(KeyError):                             # a job the commissioner did not pass as a dependency
@@ -420,7 +420,7 @@ def test_the_heads_commission_names_a_held_job_by_its_rows_and_the_monitor_runs_
     assert message.message == {} and message.selection == ('job_returncode',)      # nothing the model wrote passes
     assert message.objective == 'Assess the progress of job ' + handle + '.'
     assert message.assignment == {
-        'version': 'monitor_assignment_v2', 'handoff_refs': [handoff_ref], 'known_progress_refs': [known],
+        'version': 'monitor_assignment', 'handoff_refs': [handoff_ref], 'known_progress_refs': [known],
         'dependency_handoff_refs': [], 'requested_fields': list(read_from_parent.FIELD_OPTIONS),
         'information_unit': 1.0}
     entry = {'assignment': message.assignment, 'message': message.message, 'selection': list(message.selection)}

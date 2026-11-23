@@ -17,7 +17,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.readers.similarit
 )
 
 
-SCHEMA = "bvbrc_homology_metadata_bindings_v1"
+SCHEMA = "bvbrc_homology_metadata_bindings"
 
 
 def _empty():

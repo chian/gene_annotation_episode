@@ -14,7 +14,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.partner_p
 
 
 _PROGRAMS = ("psiblast", "deltablast", "rpsblast", "rpstblastn", "blastn_vdb", "tblastn_vdb")
-FUNCTION_SELECTOR = "native_blast_database_result_selector_vdb_function_v1"
+FUNCTION_SELECTOR = "native_blast_database_result_selector_vdb_function"
 FUNCTION_FAMILIES = ("vdb_function_summary", "vdb_function", "vdb_function_contribution", "vdb_function_census")
 SAVED_INPUT_SOURCE = "execution_blast_database_vdb_function_saved_inputs"
 _BOOLEANS = {
@@ -230,7 +230,7 @@ _SAVED_RECEIPT = _object(dict(source_ref=_REF, run_id=_TOKEN, episode_id=_TOKEN,
 _SAVED_INPUT_FIELDS = dict(original_result_receipt=_SAVED_RECEIPT,
     manifest_artifact_ref=_REF, manifest_sha256=_SHA, sheets_artifact_ref=_REF, sheets_sha256=_SHA,
     collection_artifact_ref=_REF, collection_sha256=_SHA, input_interpretation_id=_SHA, original_calculation_id=_SHA)
-_SAVED_INPUT_SCHEMA = _object(dict(schema={"const": "native_blast_vdb_function_saved_input_v1"}, **_SAVED_INPUT_FIELDS))
+_SAVED_INPUT_SCHEMA = _object(dict(schema={"const": "native_blast_vdb_function_saved_input"}, **_SAVED_INPUT_FIELDS))
 _CALCULATION_INPUT = {"oneOf": [_object(dict(mode={"const": "captured_inputs"})),
     _object(dict(mode={"const": "saved_function_sheet"}, **_SAVED_INPUT_FIELDS))]}
 
@@ -240,7 +240,7 @@ def saved_function_descriptor(calculation_input):
     validate_schema(value, _CALCULATION_INPUT)
     if value["mode"] != "saved_function_sheet":
         raise ContractError("native_blast_database_saved_function_input_required")
-    return dict(schema="native_blast_vdb_function_saved_input_v1", **{k: v for k, v in value.items() if k != "mode"})
+    return dict(schema="native_blast_vdb_function_saved_input", **{k: v for k, v in value.items() if k != "mode"})
 
 
 def _identities():
@@ -346,7 +346,7 @@ def native_blast_database_row_schema(family):
     """Closed FullRow schema. Fact sources add the publication-only fields."""
     if family not in _METRICS:
         raise ContractError("native_blast_database_family_invalid")
-    return deepcopy(_object(dict(schema={"const": "native_blast_vdb_function_numeric_row_v1" if family in FUNCTION_FAMILIES else "native_blast_database_numeric_row_v1"}, family={"const": family},
+    return deepcopy(_object(dict(schema={"const": "native_blast_vdb_function_numeric_row" if family in FUNCTION_FAMILIES else "native_blast_database_numeric_row"}, family={"const": family},
         record_key=_ROW_ID, calculation_id=_SHA, identity=_IDENTITIES[family],
         program={"enum": [p for p in _PROGRAMS if _eligible(family, p)]},
         context=_object(dict(query_axis_kind={"enum": ["sequence", "msa_master", "pssm_master", None]},
@@ -395,7 +395,7 @@ def validate_native_blast_database_result_selector(selector, *, program):
     function_mode = selector.get("version") == FUNCTION_SELECTOR if type(selector) is dict else False
     if function_mode and program not in ("blastn_vdb", "tblastn_vdb"):
         raise ContractError("native_blast_database_result_program_unsupported")
-    schema = _object(dict(version={"const": FUNCTION_SELECTOR if function_mode else "native_blast_database_result_selector_v1"}, acquisition={"const": "complete_bound_bundle"},
+    schema = _object(dict(version={"const": FUNCTION_SELECTOR if function_mode else "native_blast_database_result_selector"}, acquisition={"const": "complete_bound_bundle"},
         metadata_inputs=_array(_object(dict(input_key=_TOKEN, consumer={"enum": ["query_identity", "sequence_database", "profile", "iteration", "vdb"] + (["vdb_function"] if function_mode else [])}, schema_id=_TOKEN, **identity))),
         retained_sources=_array(_object(dict(source_ref=_REF, **identity))), projections=_array({"oneOf": [_object(dict(family={"const": f},
             rows={"oneOf": [_object(dict(offset=_I0, limit={"type": "integer", "minimum": 1})), _object(dict(record_keys=_array(_ROW_ID, minItems=1, uniqueItems=True)))]},
@@ -519,7 +519,7 @@ def project_native_blast_database_rows(full_rows, *, selector, calculation_id):
                 saved[field] = [deepcopy(cells[name]) for name in names]
             projected.append(saved)
         output.append(dict(family=family, total_rows=len(population), selected_record_keys=[r["record_key"] for r in projected], next_offset=next_offset, rows=projected))
-    return dict(schema="native_blast_database_projection_v1", calculation_id=calculation_id, families=output, failures=failures)
+    return dict(schema="native_blast_database_projection", calculation_id=calculation_id, families=output, failures=failures)
 
 
 def native_blast_database_metric_definitions(*, include_vdb_function=True):

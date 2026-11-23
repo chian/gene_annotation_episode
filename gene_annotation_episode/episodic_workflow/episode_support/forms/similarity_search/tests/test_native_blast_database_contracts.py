@@ -22,7 +22,7 @@ def database(key="target", kind="blast_protein_sequence"):
     ident = {"namespace": "synthetic", "value": key, "version": None, "release": None, "scope": None,
         "preparation_type": "unknown" if prep == "vdb" else prep, "source": source}
     paths = ["/selected/db/" + key]
-    manifest = {"version": "native_blast_prepared_database_manifest_v1", "database_key": key, "kind": kind,
+    manifest = {"version": "native_blast_prepared_database_manifest", "database_key": key, "kind": kind,
         "identity": ident, "native_paths": paths,
         "files": [{"path": paths[0] + ("/dataset.bin" if kind == "vdb" else ".pin"), "sha256": "b" * 64, "size_bytes": 23}],
         "preparation": {"method": "publisher_package", "preparation_type": prep,
@@ -37,7 +37,7 @@ def database(key="target", kind="blast_protein_sequence"):
 def job_for(program="psiblast", query="sequence", fmt="json15"):
     kind = "blast_protein_sequence" if program in {"psiblast", "deltablast"} else (
         "rps_profile" if program in {"rpsblast", "rpstblastn"} else "vdb")
-    job = {"version": "native_blast_database_job_v1", "program": program, "mode": "database",
+    job = {"version": "native_blast_database_job", "program": program, "mode": "database",
         "software": {"executable": "/selected/bin/" + program, "sha256": "c" * 64, "engine_version": "2.17.0+"},
         "environment": {"EXPLICIT": "selected"}, "inputs": [{"input_key": "query", "role": "query_" + query,
             "format": {"sequence": "fasta", "msa": "clustal", "pssm": "scoremat_asn_text"}[query], **identity("/selected/query")}],

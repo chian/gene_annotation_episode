@@ -9,7 +9,7 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.sequence_homology_evidence import bvbrc_proteome_bundle_contracts as contracts
+from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.sequence_homology_evidence import bvbrc_proteome_native_bundle_contracts as contracts
 from gene_annotation_episode.episodic_workflow.episode_support.readers.expression_and_perturbation.sequence_homology_evidence import bvbrc_proteome_bundle_projection as projection
 from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.sequence_homology_evidence import bvbrc_proteome_fact_contracts as facts
 from gene_annotation_episode.episodic_workflow.episode_support.readers.expression_and_perturbation.sequence_homology_evidence import bvbrc_proteome_inputs as inputs
@@ -47,7 +47,7 @@ def saved_example(selections=None, *, mutate_native=None):
     index_result = inputs.index_original_inputs(task, parameter_source=parameter_source, source_contract=deepcopy(CONTRACT))
     data["input_index"] = deepcopy(index_result["value"])
     inventory_results = [inputs.read_protein_fasta(raw, source=source(raw, "synthetic-" + key),
-        declared_format="protein_fasta_utf8_v1", inventory_key=key) for key, raw in (
+        declared_format="protein_fasta_utf8", inventory_key=key) for key, raw in (
             ("ref", b">r1\nACDE\n>r2\nCCCC\n"), ("subject", b">s1\nACDE\n>s2\nAGG\n"))]
     parsed = native_result()
     if mutate_native is not None:
@@ -63,9 +63,9 @@ def saved_example(selections=None, *, mutate_native=None):
     assert result["value"] is not None
     components = calculators.calculate_native_components(result["value"], parameters=calculation_parameters())
     assert components["value"] is not None
-    supplied = dict(version="bvbrc_proteome_supplied_data_v1",
+    supplied = dict(version="bvbrc_proteome_supplied_data",
         original_input_index=dict(mode="construct", parameter_source=parameter_source, additional_parameter_sources=[]),
-        inventories=[dict(mode="raw", inventory_key=r["value"]["inventory_key"], declared_format="protein_fasta_utf8_v1",
+        inventories=[dict(mode="raw", inventory_key=r["value"]["inventory_key"], declared_format="protein_fasta_utf8",
             source=dict(kind="original_retained_input", input_binding_id="input-" + r["value"]["inventory_key"])) for r in inventory_results],
         feature_snapshots=[], genome_snapshots=[], sequence_snapshots=[],
         execution_links=deepcopy(data["execution_links"]), native_links=deepcopy(data["native_links"]),
@@ -73,7 +73,7 @@ def saved_example(selections=None, *, mutate_native=None):
     supplied_raw = facts.canonical(supplied).encode()
     evidence = dict(content=source(supplied_raw, "synthetic-supplied")["content"], pointer="")
     binding = parsed["value"]["source"]["content"]
-    params = dict(version="bvbrc_proteome_bundle_parameters_v1", analysis_id="synthetic-analysis",
+    params = dict(version="bvbrc_proteome_bundle_parameters", analysis_id="synthetic-analysis",
         native_documents=[dict(document_id="primary", source_ref=binding["source_ref"], raw_artifact_ref=binding["artifact_ref"],
             role="proteome_native_projection", declared_format=dict(format=parsed["value"]["format"], version=None, mode=None,
                 producer_source_ref=None, transformation_evidence=[]), source_contract=deepcopy(CONTRACT))],
@@ -87,7 +87,7 @@ def saved_example(selections=None, *, mutate_native=None):
     resolutions.extend(dict(selector_kind="inventory", selection_index=i, state="resolved" if r["status"] == "ok" else "partial",
         content=r["value"]["source"]["content"], construction_evidence=None, result_index=i, requirement_ids=[])
         for i, r in enumerate(inventory_results))
-    wrapper = dict(version="bvbrc_proteome_provider_sheet_v1", analysis_id=params["analysis_id"], original_task=task,
+    wrapper = dict(version="bvbrc_proteome_provider_sheet", analysis_id=params["analysis_id"], original_task=task,
         parameters=params, requested_form=form, bundle_sha256=hashlib.sha256(b"explicitly synthetic bundle").hexdigest(),
         supplied_values=[dict(evidence=evidence, value=supplied),
                          dict(evidence=parameter_evidence, value=deepcopy(original_parameters))],

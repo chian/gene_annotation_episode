@@ -83,7 +83,7 @@ def test_actual_distributed_native_binary_conflict_and_saved_evd_view_without_ne
     for name in PINS:
         native_fixture(name)
     (tmp_path / "HMMER2_RETAINED_NATIVE_VERIFICATION.json").write_text(json.dumps({
-        "version": "hmmer2_retained_native_fixture_verification_v1", "fixture_pins": retained_pins,
+        "version": "hmmer2_retained_native_fixture_verification", "fixture_pins": retained_pins,
         "binary_native_field_conflicts": conflicts, "remaining_native_fields_equal": True,
         "native_EVD_saved_values": values, "native_EVD_original_tokens": ["-44.976292", "0.254831"],
         "new_HTTP_requests": 0, "HMMER_execution_or_recalibration": False,

@@ -53,7 +53,7 @@ unstated choice carry None. The grader does not judge it; the converter does. Th
 only for forms built by tests that do not go through the extraction (the extraction always passes the model's answer).
 """
 
-VERSION = 'a105_transport_vesicle_probe_flux_record_v1'
+VERSION = 'a105_transport_vesicle_probe_flux_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'transport_vesicle_probe_flux'
 QUANTITIES = ('turnover', 'turnover_spread', 'normalized_rate', 'normalized_rate_spread', 'fold_over_control', 'fold_over_control_spread', 'release_fraction',

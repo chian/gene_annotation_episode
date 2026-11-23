@@ -29,8 +29,8 @@ PUBLISHED = TableDeclaration(name='encode_published_outcomes',
     columns=('tool', 'operation_ref', 'operation_key', 'source_ref', 'arguments', 'outcome'),
     key=('tool', 'operation_ref'))
 ROOT = "https://www.encodeproject.org"
-REQUEST_VERSION = "encode_acquisition_request_v1"
-SELECTION_VERSION = "encode_advertised_file_selection_v1"
+REQUEST_VERSION = "encode_acquisition_request"
+SELECTION_VERSION = "encode_advertised_file_selection"
 MAX_METADATA_BYTES = 8 * 1024 ** 2
 MAX_FILE_BYTES = 1024 ** 3
 MAX_LIMIT = 100

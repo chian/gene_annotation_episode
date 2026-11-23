@@ -20,12 +20,12 @@ _SHEET = "/sheet/native_sheet_result/value"
 
 
 def _provider_contracts():
-    from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.sequence_homology_evidence import bvbrc_proteome_bundle_contracts
-    return bvbrc_proteome_bundle_contracts
+    from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_and_perturbation.sequence_homology_evidence import bvbrc_proteome_native_bundle_contracts
+    return bvbrc_proteome_native_bundle_contracts
 
 
 def _error(code, path=""):
-    raise _provider_contracts().ProteomeBundleError("proteome_" + code, path)
+    raise _provider_contracts().ProteomeNativeBundleError("proteome_" + code, path)
 
 
 def _equal(left, right):
@@ -94,7 +94,7 @@ def _validate_inputs(sheet, components, parameters, form, requirements, diagnost
     try:
         form = validate_requested_form(form)
     except c.ProteomeFactError as error:
-        raise contracts.ProteomeBundleError("proteome_projection_requested_form_invalid", error.path) from error
+        raise contracts.ProteomeNativeBundleError("proteome_projection_requested_form_invalid", error.path) from error
     if type(requirements) is not tuple or type(diagnostics) is not tuple:
         _error("saved_projection_conflict")
     codes = set(contracts.BINDING_CODES) | set(c.P_REASONS) | set(c._SHEET_DEFS["Diagnostic"]["properties"]["code"]["enum"])
@@ -124,7 +124,7 @@ def _validate_inputs(sheet, components, parameters, form, requirements, diagnost
         try:
             components = validate_proteome_sheet_data("NativeComponentsResult", components)
         except ValueError as error:
-            raise contracts.ProteomeBundleError("proteome_saved_components_invalid", getattr(error, "path", "")) from error
+            raise contracts.ProteomeNativeBundleError("proteome_saved_components_invalid", getattr(error, "path", "")) from error
         values = components["value"]
         if values is not None:
             native = sheet["native_sheet_result"]
@@ -228,7 +228,7 @@ class _Projection:
 
     def field_failure(self, field, selector, reason):
         role = "proteome_requested_projection"
-        payload = dict(version="bvbrc_proteome_requirement_v1", analysis_id=self.aid,
+        payload = dict(version="bvbrc_proteome_requirement", analysis_id=self.aid,
             reason_code="proteome_" + reason, role=role, field=field,
             selection=deepcopy(selector), source_refs=[], pure_requirement=None)
         requirement = dict(requirement_id="proteome_requirement_" + hashlib.sha256(c.canonical(payload).encode()).hexdigest(),

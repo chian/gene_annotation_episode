@@ -15,8 +15,8 @@ import re
 TOOL = "detect_and_annotate_somatic_mutations"
 NATIVE_OPERATION = "somatic_variant_native"
 RESULT_OPERATION = "somatic_variant_result"
-NATIVE_REQUEST_VERSION = "somatic_variant_native_request_v1"
-NATIVE_MANIFEST_VERSION = "somatic_variant_native_manifest_v1"
+NATIVE_REQUEST_VERSION = "somatic_variant_native_request"
+NATIVE_MANIFEST_VERSION = "somatic_variant_native_manifest"
 NATIVE_DIRECTORY = "somatic-variant-native"
 STAGES = ("raw", "filtered", "annotated")
 INPUTS = (
@@ -41,9 +41,9 @@ OUTPUTS = (
     ("normal_header", "normal.header.sam", "sam_header_text"),
 )
 POLICY = {'memory_bytes': 5 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
-PACKET_VERSION = "ordinary_somatic_variant_values_v1"
-SOURCE_VERSION = "ordinary_somatic_variant_result_v1"
-CONTEXT_VERSION = "somatic_variant_context_v1"
+PACKET_VERSION = "ordinary_somatic_variant_values"
+SOURCE_VERSION = "ordinary_somatic_variant_result"
+CONTEXT_VERSION = "somatic_variant_context"
 FACT_SOURCE = "somatic_variant_outcomes"
 ISSUE_CODES = ("input_identity_conflict", "software_identity_conflict", "header_unavailable",
     "sample_identity_conflict", "software_changed_after_execution", "staged_input_changed",
@@ -502,7 +502,7 @@ def validate_somatic_return(value):
 
 def somatic_fact_sources():
     schema = somatic_result_schema("Return")
-    schema.update({"$id": "https://gene-annotation.invalid/somatic-variant-facts-v1"})
+    schema.update({"$id": "https://gene-annotation.invalid/somatic-variant-facts"})
     schema["$defs"]["SomaticReturn"]["properties"]["source_ref"]["x-reference-namespace"] = "source"
     schema["$defs"]["SomaticReturn"]["properties"]["source_ref"]["format"] = "reference"
     schema.pop("$ref")

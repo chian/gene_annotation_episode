@@ -2,7 +2,7 @@
   "pathway_subsystem": {
     "classification": "source-executed synthetic native outputs; hypothetical wrapper flags; NO REAL HOST ADMISSION",
     "bundle": {
-      "version": "bvbrc_appservice_artifact_bundle_v1",
+      "version": "bvbrc_appservice_artifact_bundle",
       "original_task": {
         "resource_id": "synthetic_api",
         "task_id": "synthetic_remote_pathway_subsystem",
@@ -60,7 +60,7 @@
             "object_complete": "yes"
           },
           "declared_format": {
-            "format": "comparative_systems_pathways_json_v1",
+            "format": "comparative_systems_pathways_json",
             "version": null,
             "mode": null,
             "producer_source_ref": null,
@@ -101,7 +101,7 @@
             "object_complete": "yes"
           },
           "declared_format": {
-            "format": "comparative_systems_subsystems_json_v1",
+            "format": "comparative_systems_subsystems_json",
             "version": null,
             "mode": null,
             "producer_source_ref": null,
@@ -142,7 +142,7 @@
             "object_complete": "yes"
           },
           "declared_format": {
-            "format": "comparative_systems_pathways_tsv_v1",
+            "format": "comparative_systems_pathways_tsv",
             "version": null,
             "mode": null,
             "producer_source_ref": null,
@@ -183,7 +183,7 @@
             "object_complete": "yes"
           },
           "declared_format": {
-            "format": "comparative_systems_subsystems_tsv_v1",
+            "format": "comparative_systems_subsystems_tsv",
             "version": null,
             "mode": null,
             "producer_source_ref": null,
@@ -224,7 +224,7 @@
             "object_complete": "yes"
           },
           "declared_format": {
-            "format": "comparative_systems_variant_matrix_source670b_v1",
+            "format": "comparative_systems_variant_matrix_source670b",
             "version": null,
             "mode": null,
             "producer_source_ref": null,
@@ -270,12 +270,12 @@
     "parameters": {
       "analysis_id": "discard_and_dependence",
       "document_selection": {
-        "version": "bvbrc_comparative_systems_document_selection_v1",
+        "version": "bvbrc_comparative_systems_document_selection",
         "documents": [
           {
             "document_id": "pathways",
             "role": "pathway_summary",
-            "format_profile": "comparative_systems_pathways_json_v1",
+            "format_profile": "comparative_systems_pathways_json",
             "producer_evidence_id": "source670b",
             "input": {
               "kind": "possessed_artifact",
@@ -286,7 +286,7 @@
           {
             "document_id": "subsystems",
             "role": "subsystem_summary",
-            "format_profile": "comparative_systems_subsystems_json_v1",
+            "format_profile": "comparative_systems_subsystems_json",
             "producer_evidence_id": "source670b",
             "input": {
               "kind": "possessed_artifact",
@@ -297,7 +297,7 @@
           {
             "document_id": "pathway_raw",
             "role": "pathway_associations",
-            "format_profile": "comparative_systems_pathways_tsv_v1",
+            "format_profile": "comparative_systems_pathways_tsv",
             "producer_evidence_id": "source670b",
             "input": {
               "kind": "possessed_artifact",
@@ -308,7 +308,7 @@
           {
             "document_id": "subsystem_raw",
             "role": "subsystem_associations",
-            "format_profile": "comparative_systems_subsystems_tsv_v1",
+            "format_profile": "comparative_systems_subsystems_tsv",
             "producer_evidence_id": "source670b",
             "input": {
               "kind": "possessed_artifact",
@@ -319,7 +319,7 @@
           {
             "document_id": "variants",
             "role": "subsystem_variants",
-            "format_profile": "comparative_systems_variant_matrix_source670b_v1",
+            "format_profile": "comparative_systems_variant_matrix_source670b",
             "producer_evidence_id": "source670b",
             "input": {
               "kind": "possessed_artifact",
@@ -353,7 +353,7 @@
         "dependent_views": []
       },
       "population_assignments": {
-        "version": "bvbrc_comparative_systems_population_assignments_v1",
+        "version": "bvbrc_comparative_systems_population_assignments",
         "assignments": [
           {
             "population_id": "discard_and_dependence_requested",
@@ -431,7 +431,7 @@
         }
       ],
       "supplied_data_selection": {
-        "version": "bvbrc_comparative_systems_data_selection_v1",
+        "version": "bvbrc_comparative_systems_data_selection",
         "record_sets": [
           {
             "record_set_id": "later_pathway_records",
@@ -524,7 +524,7 @@
       },
       "reference_memberships": [],
       "calculation_parameters": {
-        "version": "bvbrc_comparative_systems_calculation_parameters_v1",
+        "version": "bvbrc_comparative_systems_calculation_parameters",
         "requests": [
           {
             "component_id": "retained_pathway_percent",
@@ -740,7 +740,7 @@
     "qualified_data_inputs": [
       {
         "qualified_result": {
-          "version": "bvbrc_data_qualified_result_v1",
+          "version": "bvbrc_data_qualified_result",
           "service": "bvbrc_data",
           "binding": {
             "source_ref": "synthetic_data_pathway",
@@ -765,12 +765,12 @@
             "possession_basis": "admitted_return"
           },
           "grading": {
-            "version": "bvbrc_data_grading_v1",
+            "version": "bvbrc_data_grading",
             "prepared": {
-              "version": "bvbrc_data_prepared_v2",
+              "version": "bvbrc_data_prepared",
               "service": "bvbrc_data",
               "original_request": {
-                "version": "bvbrc_data_request_v2",
+                "version": "bvbrc_data_request",
                 "collection": "pathway",
                 "mode": "page",
                 "filters": [
@@ -808,7 +808,7 @@
               },
               "page_selector": null,
               "effective_request": {
-                "version": "bvbrc_data_effective_query_v2",
+                "version": "bvbrc_data_effective_query",
                 "collection": "pathway",
                 "mode": "page",
                 "filters": [
@@ -846,7 +846,7 @@
                 "facet": null
               },
               "query_population": {
-                "version": "bvbrc_data_population_v1",
+                "version": "bvbrc_data_population",
                 "base_url": "https://www.bv-brc.org/api",
                 "collection": "pathway",
                 "filters": [
@@ -861,8 +861,8 @@
                   }
                 ],
                 "visibility": "public_unauthenticated",
-                "compiler_version": "bvbrc_solr_compiler_v1",
-                "field_contract_version": "bvbrc_data_fields_2026_10_24_v1",
+                "compiler_version": "bvbrc_solr_compiler",
+                "field_contract_version": "bvbrc_data_fields_2026_10_24",
                 "population_key": "b2828e19de6d541338f8a3b7147789a41e8925e72d1a2390d08fe4329a98ed3e"
               },
               "field_selection": {
@@ -892,7 +892,7 @@
                 "defaulted_sort": [],
                 "tie_breaker_added": null
               },
-              "request_profile": "solr_query_solr_json_v1",
+              "request_profile": "solr_query_solr_json",
               "native_request": {
                 "method": "GET",
                 "url": "https://www.bv-brc.org/api/pathway/?q=genome_id%3A%28%221.1%22%20OR%20%222.1%22%20OR%20%223.1%22%29&rows=100&start=0&fl=id%2Cannotation%2Cec_description%2Cec_number%2Cfeature_id%2Cgenome_id%2Cpathway_class%2Cpathway_id%2Cpathway_name%2Cpatric_id%2Cproduct&sort=id%20asc",
@@ -936,7 +936,7 @@
               }
             },
             "selector": {
-              "version": "bvbrc_data_result_selector_v2",
+              "version": "bvbrc_data_result_selector",
               "page": null,
               "projection": {
                 "family": "query_metadata"
@@ -945,10 +945,10 @@
               "supplied_metadata": []
             },
             "parse_result": {
-              "version": "bvbrc_data_parse_result_v1",
+              "version": "bvbrc_data_parse_result",
               "status": "complete",
               "sheet": {
-                "version": "bvbrc_data_sheet_v1",
+                "version": "bvbrc_data_sheet",
                 "collection": "pathway",
                 "mode": "page",
                 "custody": {
@@ -957,9 +957,9 @@
                   "requested_url": "https://www.bv-brc.org/api/pathway/?q=genome_id%3A%28%221.1%22%20OR%20%222.1%22%20OR%20%223.1%22%29&rows=100&start=0&fl=id%2Cannotation%2Cec_description%2Cec_number%2Cfeature_id%2Cgenome_id%2Cpathway_class%2Cpathway_id%2Cpathway_name%2Cpatric_id%2Cproduct&sort=id%20asc",
                   "effective_url": "https://www.bv-brc.org/api/pathway/?q=genome_id%3A%28%221.1%22%20OR%20%222.1%22%20OR%20%223.1%22%29&rows=100&start=0&fl=id%2Cannotation%2Cec_description%2Cec_number%2Cfeature_id%2Cgenome_id%2Cpathway_class%2Cpathway_id%2Cpathway_name%2Cpatric_id%2Cproduct&sort=id%20asc",
                   "media_type": "application/solr+json",
-                  "native_profile": "solr_json_envelope_v1",
+                  "native_profile": "solr_json_envelope",
                   "prepared_sha256": "4e90c63dec5d9bd125f002531c895a47188fa339240b0ee5941d26fdd846fe17",
-                  "field_contract_version": "bvbrc_data_fields_2026_10_24_v1"
+                  "field_contract_version": "bvbrc_data_fields_2026_10_24"
                 },
                 "transport": {
                   "http_status": 200,
@@ -2136,7 +2136,7 @@
               "retained_native_sha256": "cc0237e807f0821a05f01cbe722ff27b33dc8c8e6c450069e02271266c35e11f"
             },
             "page_components": {
-              "version": "bvbrc_data_page_components_v1",
+              "version": "bvbrc_data_page_components",
               "native_row_count": 5,
               "valid_row_count": 5,
               "invalid_row_count": 0,
@@ -2174,7 +2174,7 @@
   "families": {
     "classification": "source-executed synthetic native outputs; hypothetical wrapper flags; NO REAL HOST ADMISSION",
     "bundle": {
-      "version": "bvbrc_appservice_artifact_bundle_v1",
+      "version": "bvbrc_appservice_artifact_bundle",
       "original_task": {
         "resource_id": "synthetic_api",
         "task_id": "synthetic_remote_families",
@@ -2232,7 +2232,7 @@
             "object_complete": "yes"
           },
           "declared_format": {
-            "format": "comparative_systems_families_json_v1",
+            "format": "comparative_systems_families_json",
             "version": null,
             "mode": null,
             "producer_source_ref": null,
@@ -2266,12 +2266,12 @@
     "parameters": {
       "analysis_id": "families",
       "document_selection": {
-        "version": "bvbrc_comparative_systems_document_selection_v1",
+        "version": "bvbrc_comparative_systems_document_selection",
         "documents": [
           {
             "document_id": "families_document",
             "role": "family_summary",
-            "format_profile": "comparative_systems_families_json_v1",
+            "format_profile": "comparative_systems_families_json",
             "producer_evidence_id": "source670b",
             "input": {
               "kind": "possessed_artifact",
@@ -2295,7 +2295,7 @@
         "dependent_views": []
       },
       "population_assignments": {
-        "version": "bvbrc_comparative_systems_population_assignments_v1",
+        "version": "bvbrc_comparative_systems_population_assignments",
         "assignments": [
           {
             "population_id": "families_requested",
@@ -2324,7 +2324,7 @@
       "supplied_data_selection": null,
       "reference_memberships": [],
       "calculation_parameters": {
-        "version": "bvbrc_comparative_systems_calculation_parameters_v1",
+        "version": "bvbrc_comparative_systems_calculation_parameters",
         "requests": [
           {
             "component_id": "family_occupancy",
@@ -2484,7 +2484,7 @@
   "hex_256": {
     "classification": "source-executed synthetic native outputs; hypothetical wrapper flags; NO REAL HOST ADMISSION",
     "bundle": {
-      "version": "bvbrc_appservice_artifact_bundle_v1",
+      "version": "bvbrc_appservice_artifact_bundle",
       "original_task": {
         "resource_id": "synthetic_api",
         "task_id": "synthetic_remote_hex_256",
@@ -2541,7 +2541,7 @@
             "object_complete": "yes"
           },
           "declared_format": {
-            "format": "comparative_systems_families_json_v1",
+            "format": "comparative_systems_families_json",
             "version": null,
             "mode": null,
             "producer_source_ref": null,
@@ -2575,12 +2575,12 @@
     "parameters": {
       "analysis_id": "hex_256",
       "document_selection": {
-        "version": "bvbrc_comparative_systems_document_selection_v1",
+        "version": "bvbrc_comparative_systems_document_selection",
         "documents": [
           {
             "document_id": "hex_256_document",
             "role": "family_summary",
-            "format_profile": "comparative_systems_families_json_v1",
+            "format_profile": "comparative_systems_families_json",
             "producer_evidence_id": "source670b",
             "input": {
               "kind": "possessed_artifact",
@@ -2604,7 +2604,7 @@
         "dependent_views": []
       },
       "population_assignments": {
-        "version": "bvbrc_comparative_systems_population_assignments_v1",
+        "version": "bvbrc_comparative_systems_population_assignments",
         "assignments": [
           {
             "population_id": "hex_256_requested",
@@ -2633,7 +2633,7 @@
       "supplied_data_selection": null,
       "reference_memberships": [],
       "calculation_parameters": {
-        "version": "bvbrc_comparative_systems_calculation_parameters_v1",
+        "version": "bvbrc_comparative_systems_calculation_parameters",
         "requests": [
           {
             "component_id": "family_occupancy",

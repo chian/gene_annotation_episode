@@ -21,7 +21,7 @@ Units. Each is one unit of the episode's iterator with its own outcome:
   papers that can be opened to the hit list, each once and marked with where it came from. The database's list is
   partial and says so to the model.
 * ``assess_search_results`` (automatic): the search step's Jev measurement (nano-graphrag ``web_search_binding``,
-  ``SEARCH_PAGE_SELECTION_VERSION`` ``model_planned_from_jev_evidence_v5``): a search result is ONE HIT of the provider's
+  ``SEARCH_PAGE_SELECTION_VERSION`` ``model_planned_from_jev_evidence``): a search result is ONE HIT of the provider's
   result list (its PMCID, rank, title, journal, year and the abstract the provider returned), not a fetched document.
   Jev measures every hit once, from its description, against the immutable Search Goal and the assessment is held as an
   artifact.

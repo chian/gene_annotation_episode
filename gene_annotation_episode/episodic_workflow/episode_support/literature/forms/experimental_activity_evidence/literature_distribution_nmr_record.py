@@ -44,7 +44,7 @@ about how well its quote supports it: 'direct' (the quote itself states the valu
 it to 'direct'; the default is only for forms built by tests that do not go through the extraction (the extraction always passes the model's answer).
 """
 
-VERSION = 'a105_distribution_nmr_record_v1'
+VERSION = 'a105_distribution_nmr_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'distribution_nmr'
 QUANTITIES = ('product_fraction', 'product_fraction_spread', 'product_fraction_ratio', 'product_fraction_ratio_spread',

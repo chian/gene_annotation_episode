@@ -59,7 +59,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.calculations.prot
 from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.scoring import (
     geometry, VERSION as INDEX_VERSION)
 
-SCHEMA = 'a102_structure_search_sheet_v1'
+SCHEMA = 'a102_structure_search_sheet'
 PROVIDER = 'foldseek'
 DATABASES = ('afdb-swissprot', 'pdb100')
 MODES = ('tmalign',)
@@ -171,7 +171,7 @@ def is_model_itself(hit, model_facts):
 
 
 def grade_structure_search(hits, model_ca, target_length, names, *, database, mode, model_facts, measured=None):
-    """The sheet ``a102_structure_search_sheet_v1`` of one search.
+    """The sheet ``a102_structure_search_sheet`` of one search.
 
     ``hits``: the parsed hit rows (``parse_foldseek_result(...)['hits']``); ``model_ca``, ``target_length``: see the module;
     ``names``: ``{'products': {accession: {'product', 'name_source'}}, 'asked': [accessions asked]}`` (what

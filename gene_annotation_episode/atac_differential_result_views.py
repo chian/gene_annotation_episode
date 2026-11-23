@@ -41,7 +41,7 @@ def project_atac_result(sheet, calculations, *, selector, component_rows=None, r
         and calculations['selected_intervals'] == selector['intervals'], 'atac_result_calculation_binding_conflict')
     view = selector['projection']
     kind = view['kind']
-    projection = dict(version='atac_differential_projection_v1', comparison_key=comparison['comparison_key'],
+    projection = dict(version='atac_differential_projection', comparison_key=comparison['comparison_key'],
         reference_id=calculations['reference_id'], condition_ids=deepcopy(calculations['condition_ids']),
         selected_intervals=deepcopy(selector['intervals']), parameters=deepcopy(selector['parameters']), kind=kind,
         row_window=deepcopy(view['row_window']), total_rows=None, row_extent='unavailable', rows=[], summary=None,

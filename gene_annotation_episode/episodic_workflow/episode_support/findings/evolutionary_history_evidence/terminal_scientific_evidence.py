@@ -171,7 +171,7 @@ def scientific_command_proof(assignment, arguments, outcome):
         actual = before[original['path']]
         verified_snapshot_path(actual)
         _require(actual['sha256'] == original['sha256'] and ('size_bytes' not in original and 'size' not in original or actual['size_bytes'] == original.get('size_bytes', original.get('size'))))
-    return {'version': 'terminal_scientific_command_proof_v1', 'profile': profile[0], 'original_plan': deepcopy(plan), 'plan_snapshot': deepcopy(before[str(path)]), 'execution_command': deepcopy(executed), 'command': deepcopy(command), 'input_snapshots': deepcopy(detail.get('input_snapshots', [])), 'output_snapshots': deepcopy(detail.get('output_snapshots', []))}
+    return {'version': 'terminal_scientific_command_proof', 'profile': profile[0], 'original_plan': deepcopy(plan), 'plan_snapshot': deepcopy(before[str(path)]), 'execution_command': deepcopy(executed), 'command': deepcopy(command), 'input_snapshots': deepcopy(detail.get('input_snapshots', [])), 'output_snapshots': deepcopy(detail.get('output_snapshots', []))}
 
 def _identified_file_values(value):
     if isinstance(value, Mapping):
@@ -219,7 +219,7 @@ def terminal_local_job_matches(assignment, outcome):
         executed = detail['execution_command']
         job = outcome['facts']['requested_job']
         profile = _profile(assignment['requested_job'])
-        _require(profile is not None and proof['profile'] == profile[0] and (proof['version'] == 'terminal_scientific_command_proof_v1') and (proof['command'] == command) and (proof['execution_command'] == executed))
+        _require(profile is not None and proof['profile'] == profile[0] and (proof['version'] == 'terminal_scientific_command_proof') and (proof['command'] == command) and (proof['execution_command'] == executed))
         plan = profile[1](proof['original_plan'])
         _require(plan['requested_job'] == assignment['requested_job'] and plan['identity']['assignment_sha256'] == digest(assignment))
         actual = {name: executed[name] for name in ('cmd', 'workdir', 'env')}

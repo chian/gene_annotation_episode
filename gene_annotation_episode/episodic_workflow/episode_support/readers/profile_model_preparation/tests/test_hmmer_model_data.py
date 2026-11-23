@@ -42,7 +42,7 @@ def test_full_native_protein_body_and_provenance():
     supplied = occurrence(data)
     result = extract_hmmer_models(data, occurrence=supplied, format="hmmer3_ascii")
     assert set(result) == {"schema", "occurrence", "format", "records", "population", "issues"}
-    assert result["schema"] == "hmmer_model_extraction_v1"
+    assert result["schema"] == "hmmer_model_extraction"
     assert result["occurrence"] == supplied and result["occurrence"] is not supplied
     assert result["population"] == {"decoded_count": 1, "complete": True, "state": "decoded"}
     assert result["issues"] == []

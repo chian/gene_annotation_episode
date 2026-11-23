@@ -36,7 +36,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     MIN_PER_UNIT, MM_PER_UNIT, PULLDOWN_CRITERIA)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_pulldown_grade_v1'
+VERSION = 'a105_pulldown_grade'
 CRITERIA = tuple(criterion['id'] for criterion in PULLDOWN_CRITERIA)
 INTERACTION = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact prey_detected_in_eluate
 

@@ -46,7 +46,7 @@ def metadata(index=0, genome="456.2", *, mode="genome", **values):
 
 
 def selector(records=None, *, mode="native_result"):
-    return {"version": "bvbrc_minhash_result_selector_v2", "mode": mode,
+    return {"version": "bvbrc_minhash_result_selector", "mode": mode,
             "saved_result_ref": SAVED_SOURCE if mode == "saved_sheet" else None,
             "pair_metadata": deepcopy([] if records is None else records)}
 
@@ -57,7 +57,7 @@ def saved_result(service_request):
         "source_ref": SAVED_SOURCE, "native_artifact_ref": "artifact_" + "c" * 64,
         "native_sha256": "c" * 64, "grading_artifact_ref": "artifact_" + "d" * 64,
         "grading_sha256": "d" * 64,
-        "sheet": {"schema": "bvbrc_minhash_sheet_v1", "mode": service_request["mode"],
+        "sheet": {"schema": "bvbrc_minhash_sheet", "mode": service_request["mode"],
                   "request": {"version": "1.1", "id": "synthetic-original-rpc",
                               "method": f"Minhash.compute_genome_distance_for_{service_request['mode']}2",
                               "params": [service_request[name] for name in OPERANDS]},
@@ -65,7 +65,7 @@ def saved_result(service_request):
                   "native_result": [], "rows": [],
                   "search_metadata": dict.fromkeys(("population_size", "reference_release", "truncated",
                                                      "kmer_length", "hash_seed", "sketch_size"))},
-        "original_components": {"schema": "bvbrc_minhash_components_v1", "rows": [],
+        "original_components": {"schema": "bvbrc_minhash_components", "rows": [],
                                 "diagnostics": [{"code": "empty_result_completeness_unknown",
                                                  "path": "native_result", "severity": "warning"}]},
     }
@@ -74,7 +74,7 @@ def saved_result(service_request):
 def publication(selected, *, service_request=None):
     records = selected["pair_metadata"]
     return {
-        "version": "bvbrc_minhash_publication_inputs_v1", "selector": deepcopy(selected),
+        "version": "bvbrc_minhash_publication_inputs", "selector": deepcopy(selected),
         "pair_metadata": deepcopy(records),
         "metadata_bindings": [
             {"pair_metadata_index": index, **deepcopy(item),

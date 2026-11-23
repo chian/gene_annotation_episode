@@ -22,7 +22,7 @@ returns     every case the criterion can return, as (status, reason_code, when).
 No criterion rests on a plain choice field (spread_kind, patch_configuration): a choice holds no span in the merged record.
 """
 
-VERSION = 'a105_transport_patch_clamp_criteria_v1'
+VERSION = 'a105_transport_patch_clamp_criteria'
 
 _fact_returns = (
     ('supported', 'facts_answered_yes', 'the fact is yes'),

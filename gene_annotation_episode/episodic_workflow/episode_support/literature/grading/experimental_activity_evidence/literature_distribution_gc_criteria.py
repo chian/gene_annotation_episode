@@ -21,7 +21,7 @@ returns     every case the criterion can return, as (status, reason_code, when).
             as 'never' cannot occur for this criterion.
 """
 
-VERSION = 'a105_distribution_gc_criteria_v1'
+VERSION = 'a105_distribution_gc_criteria'
 PERCENT_PER_FRACTION = 100.0  # FIXED_BY_DEFINITION: a percent is a hundredth; a share given in percent is turned into a fraction by this exact factor.
 
 _fact_returns = (

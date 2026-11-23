@@ -50,7 +50,7 @@ def fact(answer, refs=(), support='direct'):
     return {**literature_spr_record.fact(answer, refs), 'support': None if answer == 'unknown' else support}
 
 
-VERSION = 'a105_pla_record_v1'
+VERSION = 'a105_pla_record'
 EXPERIMENT_TYPE = 'pla'
 QUANTITIES = ('puncta_per_cell_target', 'puncta_per_cell_control', 'puncta_per_cell_knockdown', 'puncta_spread_target', 'puncta_spread_control', 'protein_depletion_percent', 'cells_counted', 'amplification_time', 'replicate_count')
 PREPARATION_KEYS = ('component_a_preparation_ref', 'component_b_preparation_ref', 'dataset_ref')

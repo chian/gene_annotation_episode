@@ -2,7 +2,7 @@
 from copy import deepcopy
 
 MAX_NATIVE_DEPTH = 32
-VALUE_VERSION = "bvbrc_intervention_selected_field_v1"
+VALUE_VERSION = "bvbrc_intervention_selected_field"
 
 def _object(properties):
     return {"type": "object", "properties": properties,
@@ -69,7 +69,7 @@ def selected_field_schema():
     Native JSON is opaque data. The only reference implication is attached by
     the actual AppService return owner's separate top-level Source field.
     """
-    placeholder = {"version": "bvbrc_intervention_selection_v1", "document_id": "schema-only",
+    placeholder = {"version": "bvbrc_intervention_selection", "document_id": "schema-only",
         "kind": "records", "ordinals": None, "offset": 0, "limit": 0, "member_names": None}
     result = _field_schema(placeholder)
     result["properties"]["selection"] = {}

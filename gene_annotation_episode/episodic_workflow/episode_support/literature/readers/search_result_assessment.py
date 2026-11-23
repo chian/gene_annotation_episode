@@ -33,7 +33,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.je
     JEV_EVALUATION_TOKEN_BUDGET, JEV_TOKEN_BOUND, JEV_TOKEN_ESTIMATE_MULTIPLIER, JEV_TOKEN_HEADROOM, token_bound,
     window_text)
 
-SEARCH_PAGE_SELECTION_VERSION = 'model_planned_from_jev_evidence_v5'      # nano-graphrag's version name
+SEARCH_PAGE_SELECTION_VERSION = 'model_planned_from_jev_evidence'
 JEV_PAGE_TEXT_TOKEN_LIMIT = JEV_EVALUATION_TOKEN_BUDGET - JEV_TOKEN_HEADROOM   # nano-graphrag's limit
 QUESTION = 'search_result_relevance'
 INSTRUCTIONS = ('Does `candidate_text_window` contain evidence that could fill at least one result requested by '

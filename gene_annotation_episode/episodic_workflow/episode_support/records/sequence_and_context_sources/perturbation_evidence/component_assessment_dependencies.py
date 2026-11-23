@@ -5,7 +5,7 @@ digest. Retain the original use and identify received corrections separately;
 never substitute a newer claim or inspect an unreceived assessment.
 """
 
-VERSION = 'received_component_assessment_dependencies_v1'
+VERSION = 'received_component_assessment_dependencies'
 
 
 def assessment_dependencies(store, reference, known, *, anchor=None):

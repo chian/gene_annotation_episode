@@ -15,7 +15,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.expression_
 
 
 FIXTURES = Path(__file__).parent / "fixtures" / "bvbrc_proteome_directional"
-FORMAT = "ncbi_blastall_blastp_pairwise_text_v1"
+FORMAT = "ncbi_blastall_blastp_pairwise_text"
 NATIVE_FILES = {
     "2011": ("biopython_text_2011L_blastp_002.txt", "c122ef42cd2d2da7ae5318045aa88a73c84713572a2c14d15c562117f3eec62d"),
     "2202": ("biopython_text_2202L_blastp_001.txt", "c0f5e5d3541500aef1ac93957fe35fbd4481f5788314e3e12ed1ea5f9d16510a"),

@@ -20,7 +20,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.evolutionary_history_evidence.literature_calibration_recovery_calculations import VERSION as SHEET_VERSION, COMPONENTS, FORMULAS, REASONS
 
 PROVIDER = 'literature.a105.calibration_recovery'
-VERSION = 'literature_calibration_recovery_record_v1'
+VERSION = 'literature_calibration_recovery_record'
 NAMESPACE = 'literature_calibration_recovery_cells'
 REQUESTED = 'requested_calibration_recovery_components'
 VIEW = 'calibration_recovery_components'

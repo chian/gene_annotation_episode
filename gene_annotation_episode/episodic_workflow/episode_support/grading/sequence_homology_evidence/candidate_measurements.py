@@ -25,14 +25,14 @@ The kinds of held graded source read, by the content of their retained sheet:
   ``search_hit_metadata`` product of the search, gives ``not_asked``): its function is unknown, not absent. Every other
   hit with no function was asked and carries no product (``no_product``). Hits with the same function are replicates of
   that candidate in the test.
-* a profile scan (``hmmer_search_sheet_v1`` of ``hmmscan``): test ``profile_scan:<database name>``; each matched family
+* a profile scan (``hmmer_search_sheet`` of ``hmmscan``): test ``profile_scan:<database name>``; each matched family
   is a candidate of vocabulary ``profile_family`` (identifier: its accession, name: its name, as the profile database
   gives them); its value is the subscore of its domains.
-* a pairwise comparison (``blast_pairwise_sheet_v1``): test ``pairwise:<program>``; the reference sequence record
+* a pairwise comparison (``blast_pairwise_sheet``): test ``pairwise:<program>``; the reference sequence record
   it was compared with is a candidate of vocabulary ``reference_sequence`` (identifier: its record reference, name: the
   record's name); its value is the subscore of its alignments.
 
-* a multiple sequence alignment (``msa_alignment_sheet_v1``): test ``msa:<provider>:<aligner>:<alphabet>``; the owner's
+* a multiple sequence alignment (``msa_alignment_sheet``): test ``msa:<provider>:<aligner>:<alphabet>``; the owner's
   conserved-site count (2026-11-21): the residue conservation pattern of one candidate group against another
   differentiates function, so the same residue pattern on the same conserved sites adds nothing. A distinguishing site is
   identified by (target position, the group's conserved residue, the group's candidate), never by column or job
@@ -46,7 +46,7 @@ The kinds of held graded source read, by the content of their retained sheet:
   and a candidate's msa sheet cannot exceed (the target's length) x ``SITE_WEIGHT``, because a site counts once.
   ``matched_positions_taken`` gives, per candidate, the target positions whose matched site of it a held alignment has
   identified, and ``alignment_contexts`` the held alignments' inputs (what the ceiling reads).
-* a graded clustering (``cluster_sheet_v1``, the all-vs-all child): test ``cluster:<method>`` (``cluster:mcl``; one test per
+* a graded clustering (``cluster_sheet``, the all-vs-all child): test ``cluster:<method>`` (``cluster:mcl``; one test per
   graded clustering, as every test is named, so ``@<source>`` follows); the sheet's groups are the candidate groups (the
   sequences of one ``product`` candidate in the set; the target is in no group), and for each candidate group with a sequence
   in the set one measurement: its value is the SHARE of the group's sequences that fall in the target's cluster (0 to 1), the
@@ -60,7 +60,7 @@ The kinds of held graded source read, by the content of their retained sheet:
   best so far; a replicate earns 0), and a candidate's value on the cluster sheet from one dataset is its largest value over
   that dataset's clusterings (``differential_credit``). ``dataset_bests`` gives each dataset's best so far (what the
   ceiling reads).
-* a MetaCATS report (``metacats_sheet_v1``): the owner (2026-11-21): "It's wrong that it has no credit. i told you it gains
+* a MetaCATS report (``metacats_sheet``): the owner (2026-11-21): "It's wrong that it has no credit. i told you it gains
   credit by confirming conserved sites in comparison to a gene family." MetaCATS ran on a held alignment with the alignment's
   candidate groups (each group one product candidate's reference sequences, a gene family) and reports the alignment positions
   where the groups' residue frequencies differ significantly (p fixed at ``bvbrc_metacats_analysis.P_VALUE``). The job took a
@@ -103,15 +103,15 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_
 from gene_annotation_episode.episodic_workflow.episode_support.records.data_products import products
 
 VOCABULARIES = ('product', 'profile_family', 'reference_sequence')
-METACATS_SHEET = 'metacats_sheet_v1'
+METACATS_SHEET = 'metacats_sheet'
 METACATS_TEST = 'msa:bvbrc_metacats:confirmed_sites'
 ALIGNMENT_KIND = 'multiple_sequence_alignment'
 REPORT_KIND = 'alignment_position_report'
 ALIGNMENT_PROVIDER = 'bvbrc_msa'
-DATABASE_SHEETS = ('blast_database_sheet_v1', 'blast_database_sheet_v2', 'blast_database_sheet_v3')
-PAIRWISE_SHEET = 'blast_pairwise_sheet_v1'
-PROFILE_SHEET = 'hmmer_search_sheet_v1'
-MSA_SHEET = 'msa_alignment_sheet_v1'
+DATABASE_SHEETS = ('blast_database_sheet', 'blast_database_sheet_record_locator', 'blast_database_sheet_population')
+PAIRWISE_SHEET = 'blast_pairwise_sheet'
+PROFILE_SHEET = 'hmmer_search_sheet'
+MSA_SHEET = 'msa_alignment_sheet'
 # The data product of a search's hit metadata (``bvbrc_blast_search.METADATA_KIND``; that module imports this one).
 HIT_METADATA_KIND = 'search_hit_metadata'
 # The owner (2026-11-21): "if you expect 10 conserve sites per protein on average, you would make the weighting 0.1 -- now I
@@ -212,7 +212,7 @@ def new_site_values(sites, seen, target):
 
 
 def _held_msa(source, grading, seen):
-    """A graded multiple sequence alignment (``msa_alignment_sheet_v1``): test ``msa:<provider>:<aligner>:<alphabet>``;
+    """A graded multiple sequence alignment (``msa_alignment_sheet``): test ``msa:<provider>:<aligner>:<alphabet>``;
     one measurement per candidate with new distinguishing sites (``new_site_values``): its candidate is the ``product`` the
     search gave it (the same candidate identity, so the same candidate on the list); its value is its new matched sites x
     ``SITE_WEIGHT``; the measurement records ``fraction``, ``new_matched`` and ``new_mismatched`` too. Evidence is
@@ -228,7 +228,7 @@ def _held_msa(source, grading, seen):
 
 
 def _held_cluster(source, grading):
-    """A graded clustering (``cluster_sheet_v1``): test ``cluster:<method>``; one measurement per candidate group with a
+    """A graded clustering (``cluster_sheet``): test ``cluster:<method>``; one measurement per candidate group with a
     sequence in the set (``cluster_sheet.group_values``), value = the share of its sequences in the target's cluster. Its
     ``dataset`` is the graded search the set's sequences are drawn from (the commission's ``search_ref``): all the clusterings
     of one dataset earn one test's credit together (``differential_credit``, the owner's "You only can earn one credit for one
@@ -241,7 +241,7 @@ def _held_cluster(source, grading):
 
 
 def alignment_sheet(reader, alignment_ref):
-    """The graded sheet (``msa_alignment_sheet_v1``) of the held alignment data product ``alignment_ref``: the sheet of the held
+    """The graded sheet (``msa_alignment_sheet``) of the held alignment data product ``alignment_ref``: the sheet of the held
     source of provider ``bvbrc_msa`` whose artifact the product row labels."""
     (row,) = [item for item in products(reader, ALIGNMENT_KIND) if item['id'] == alignment_ref]
     (source,) = [item for item in reader.list('source')
@@ -280,7 +280,7 @@ def confirmed_site_values(sites, significant_columns, confirmed, target):
 
 
 def _held_metacats(reader, source, grading, confirmed):
-    """A graded MetaCATS report (``metacats_sheet_v1``): test ``METACATS_TEST``; one measurement per candidate with matched sites
+    """A graded MetaCATS report (``metacats_sheet``): test ``METACATS_TEST``; one measurement per candidate with matched sites
     of the analysed alignment that no earlier report confirmed (``confirmed_site_values``)."""
     sheet = alignment_sheet(reader, analysed_alignment(reader, source))
     significant = {position['position'] for position in grading['sheet']['significant_positions']}

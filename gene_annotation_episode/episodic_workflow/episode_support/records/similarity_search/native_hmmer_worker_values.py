@@ -187,7 +187,7 @@ def _join_multiple_queries(grading, bundle, records, inputs):
             native["queries"] = [q for q in native["queries"] if q["record_key"] == qkey]
             rebuilt = build_nhmmer_sheet(native, inputs=selected_inputs)
         else:
-            native = {**sheet, "schema": "hmmer_search_native_v1"}
+            native = {**sheet, "schema": "hmmer_search_native"}
             for name in ("hits", "domains", "iterations"):
                 native[name] = [row for row in sheet[name] if row.get("query_record_key") == qkey]
             native["queries"] = [q for q in sheet["queries"] if q["record_key"] == qkey]

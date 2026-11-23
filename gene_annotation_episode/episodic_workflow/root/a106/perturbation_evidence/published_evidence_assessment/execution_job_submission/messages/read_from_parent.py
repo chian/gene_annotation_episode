@@ -1,4 +1,4 @@
-"""What the commissioner gives: the old ``execution_launch_assignment_v1`` (carried from ``from_parent.py``,
+"""What the commissioner gives: the old ``execution_launch_assignment`` (carried from ``from_parent.py``,
 ``from_parent_launch.py`` and ``execution_contracts.py``) and the values the old episode obtained from its runner.
 
 Old assignment properties, under the same names: ``version``, ``requests`` (resource_id -> concrete API request,
@@ -26,7 +26,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.perturbatio
 from gene_annotation_episode.episodic_workflow.episode_support.instructions.launch_instructions import (
     validate_selection)
 
-LAUNCH_VERSION = 'execution_launch_assignment_v1'
+LAUNCH_VERSION = 'execution_launch_assignment'
 KIND = 'api'
 
 ASSIGNMENT_FORM = RecordForm({

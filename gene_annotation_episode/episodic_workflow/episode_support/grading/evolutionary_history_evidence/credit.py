@@ -217,7 +217,7 @@ class A104RobustnessCredit:
         incompatible = {ref for ref, groups in by_measurement.items() if len(groups) > 1}
         selected = {}
         for item in attachments:
-            if (item['policy'] != 'phylogeny.compare_placements_original_native_operands_v1'
+            if (item['policy'] != 'phylogeny.compare_placements_original_native_operands'
                     or item['score'] is None or item['state'] != 'attributed_phylogeny_received'
                     or item['target_ref'] not in regions
                     or item['measurement_ref'] in incompatible

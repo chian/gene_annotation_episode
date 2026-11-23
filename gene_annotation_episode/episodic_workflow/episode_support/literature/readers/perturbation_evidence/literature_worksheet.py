@@ -16,8 +16,7 @@ from jsonschema import Draft202012Validator
 from gene_annotation_episode.episodic_workflow.episode_support.forms.perturbation_evidence.communication import CODE, plain
 from gene_annotation_episode.episodic_workflow.episode_support.records.perturbation_evidence.domain import ContractError, canonical, obj
 
-VERSION = 'a105_source_evidence_worksheet_v1'
-VERSION_V2 = 'a105_source_evidence_worksheet_v2'
+VERSION = 'a105_source_evidence_worksheet'
 NATIVE = 'literature_kinetic_cells'
 SUMMARY = 'literature_kinetic_summary_precision_cells'
 
@@ -39,10 +38,10 @@ FAMILIES = {
         'product_coupling_cells_schema', 'product_reporter_stoichiometric_relationship'),
     'literature_calibration_recovery_cells': ('requested_calibration_recovery_components', 'gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_calibration_recovery_storage',
         'calibration_recovery_cells_schema', 'calibration_standard_recovery'),
-    'literature_compiled_assay_v2_cells': ('requested_compiled_assay_components_v2', 'gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_compiled_assay_storage',
-        'compiled_assay_v2_cells_schema', 'within_assay_measurement_equation'),
-    'literature_compiled_assay_v3_cells': ('requested_compiled_assay_components_v3', 'gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_compiled_assay_storage',
-        'compiled_assay_v3_cells_schema', 'functional_quantity_model_comparison'),
+    'literature_compiled_assay_cells': ('requested_compiled_assay_components', 'gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_compiled_assay_storage',
+        'compiled_assay_cells_schema', 'within_assay_measurement_equation'),
+    'literature_common_assessment_cells': ('requested_common_assessment_components', 'gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_compiled_assay_storage',
+        'common_assessment_cells_schema', 'functional_quantity_model_comparison'),
     'literature_channel_cells': ('requested_channel_components', 'gene_annotation_episode.episodic_workflow.episode_support.literature.storage.perturbation_evidence.literature_channel_storage',
         'channel_cells_schema', 'source_electrical_activity'),
     'literature_ion_discrimination_cells': ('requested_ion_discrimination_components',
@@ -68,8 +67,7 @@ FAMILIES = {
         'a105_across_experiment_aggregation'),
 }
 QUANTITY_RELATIONS = ('same_reported_parameter', 'same_reported_spread', 'same_count_report',
-    'conditional_precision_of_report', 'unresolved', 'conflicting')
-QUANTITY_RELATIONS_V2 = (*QUANTITY_RELATIONS, 'same_physical_measurement')
+    'conditional_precision_of_report', 'unresolved', 'conflicting', 'same_physical_measurement')
 ASSERTION_RELATIONS = ('measures_asserted_endpoint', 'addresses_named_weakness',
     'does_not_establish_assertion', 'unknown', 'conflicting')
 _SCOPES = {
@@ -83,8 +81,8 @@ _SCOPES = {
     'literature_endpoint_signal_cells': 'source_endpoint_signal_contribution',
     'literature_product_coupling_cells': 'source_product_coupling',
     'literature_calibration_recovery_cells': 'source_calibration_recovery',
-    'literature_compiled_assay_v2_cells': 'compiled_source_endpoint',
-    'literature_compiled_assay_v3_cells': 'common_assertion_contrast',
+    'literature_compiled_assay_cells': 'compiled_source_endpoint',
+    'literature_common_assessment_cells': 'common_assertion_contrast',
     'literature_channel_cells': 'source_electrical_activity',
     'literature_ion_discrimination_cells': 'source_ion_discrimination',
     'literature_parent_depletion_cells':'finite_parent_compound_removal',
@@ -112,9 +110,7 @@ def _reference(namespace=None, nullable=False):
     return result
 
 
-def _context_schema(requests, *, fallback_components=(), version=VERSION):
-    if version not in (VERSION, VERSION_V2):
-        _fail('request_invalid')
+def _context_schema(requests, *, fallback_components=()):
     fields = [r['field'] for r in requests]
     components = list(dict.fromkeys(c for r in requests for c in r['components']))
     empty = not components
@@ -127,27 +123,26 @@ def _context_schema(requests, *, fallback_components=(), version=VERSION):
     support = {'type': 'array', 'items': _reference(), 'uniqueItems': True}
     quantities = {'type': 'array', 'uniqueItems': True, 'items': obj({
         'left': deepcopy(selector), 'right': deepcopy(selector),
-        'relation': {'type': 'string', 'enum': list(QUANTITY_RELATIONS_V2 if version == VERSION_V2 else QUANTITY_RELATIONS)},
+        'relation': {'type': 'string', 'enum': list(QUANTITY_RELATIONS)},
         'support_record_refs': deepcopy(support)})}
     assertions = {'type': 'array', 'uniqueItems': True, 'items': obj({
         'selector': deepcopy(selector), 'assertion_ref': _reference('hypothesis', True),
         'relation': {'type': 'string', 'enum': list(ASSERTION_RELATIONS)}, 'support_record_refs': deepcopy(support)})}
     if empty:
         quantities['maxItems'] = assertions['maxItems'] = 0
-    return obj({'version': {'type': 'string', 'const': version},
+    return obj({'version': {'type': 'string', 'const': VERSION},
         'assertion_refs': {'type': 'array', 'items': _reference('hypothesis'), 'uniqueItems': True},
         'quantity_links': quantities, 'assertion_links': assertions})
 
 
-def a105_worksheet_template(section_requests, *, context_field='assessment_context', worksheet_version=VERSION):
+def a105_worksheet_template(section_requests, *, context_field='assessment_context'):
     """Return aliases, existing component rosters and host presentation roles.
 
     No experiment, cell or population operation is selected by constructing a
     form. Supported source formats do not represent completed assay counts.
     """
     if (not isinstance(section_requests, (list, tuple)) or not section_requests
-            or not isinstance(context_field, str) or not CODE.fullmatch(context_field)
-            or worksheet_version not in (VERSION, VERSION_V2)):
+            or not isinstance(context_field, str) or not CODE.fullmatch(context_field)):
         _fail('request_invalid')
     requests, fields, sources, rosters, roles, vocabulary = [], set(), set(), {}, [], []
     for value in section_requests:
@@ -168,8 +163,7 @@ def a105_worksheet_template(section_requests, *, context_field='assessment_conte
         roles.append({**deepcopy(request), 'numerical_role': FAMILIES[source][3]})
         vocabulary.extend(allowed)
     properties = {r['field']: {'$ref': 'episode-fact:' + r['source']} for r in requests}
-    properties[context_field] = _context_schema(requests, fallback_components=list(dict.fromkeys(vocabulary)),
-        version=worksheet_version)
+    properties[context_field] = _context_schema(requests, fallback_components=list(dict.fromkeys(vocabulary)))
     return {'submitted_form': obj(properties), 'assignment_rosters': rosters, 'section_roles': roles}
 
 
@@ -187,9 +181,9 @@ def _layout(form, schema, assignment):
         return None
     properties = schema['properties']
     contexts = [field for field, node in properties.items() if isinstance(node, Mapping)
-        and node.get('properties', {}).get('version', {}).get('const') in (VERSION, VERSION_V2)]
+        and node.get('properties', {}).get('version', {}).get('const') == VERSION]
     if not contexts:
-        if isinstance(form, Mapping) and any(isinstance(v, Mapping) and v.get('version') in (VERSION, VERSION_V2) for v in form.values()):
+        if isinstance(form, Mapping) and any(isinstance(v, Mapping) and v.get('version') == VERSION for v in form.values()):
             _fail('schema_invalid')
         return None
     if len(contexts) != 1 or not isinstance(form, Mapping) or not isinstance(assignment, Mapping):
@@ -230,8 +224,7 @@ def _layout(form, schema, assignment):
         raise ContractError('a105_worksheet_schema_invalid') from cause
     vocabulary = list(dict.fromkeys(c for r in requests
         for c in properties[r['field']]['items']['properties']['component']['enum']))
-    expected = _context_schema(requests, fallback_components=vocabulary,
-        version=properties[context_field]['properties']['version']['const'])
+    expected = _context_schema(requests, fallback_components=vocabulary)
     if plain(properties[context_field]) != expected:
         _fail('schema_invalid')
     context = plain(form[context_field])
@@ -500,4 +493,4 @@ def validate_a105_worksheet_links(form, schema, assignment, *, read_public_recor
             _fail('assertion_reference_invalid')
 
 
-__all__ = ['VERSION', 'VERSION_V2', 'a105_worksheet_template', 'validate_a105_worksheet_links']
+__all__ = ['VERSION', 'a105_worksheet_template', 'validate_a105_worksheet_links']

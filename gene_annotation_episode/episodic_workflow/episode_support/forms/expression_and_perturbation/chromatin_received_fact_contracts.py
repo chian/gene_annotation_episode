@@ -8,8 +8,8 @@ SAVED_SOURCE = 'chromatin_interaction_saved_sheets'
 FAILURE_SOURCE = 'chromatin_interaction_failures'
 FACT_SOURCES = (PROJECTION_SOURCE, SAVED_SOURCE, FAILURE_SOURCE)
 _RECORDS = {PROJECTION_SOURCE: 'RequestedProjection', SAVED_SOURCE: 'SavedSheetBundle', FAILURE_SOURCE: 'Failure'}
-_SHEET_FORMAT = 'chromatin_interaction_sheet_v1'
-_TABLE_FORMATS = tuple(('chromatin_contact_tables_v1:' + role for role in ('bins', 'contacts', 'weights', 'cell_states', 'dense_values')))
+_SHEET_FORMAT = 'chromatin_interaction_sheet'
+_TABLE_FORMATS = tuple(('chromatin_contact_tables:' + role for role in ('bins', 'contacts', 'weights', 'cell_states', 'dense_values')))
 _MEANINGS = {PROJECTION_SOURCE: 'Exactly requested chromatin measurements, populations, denominators and qualifications; heuristic values retain their meaning.', SAVED_SOURCE: 'Explicitly returned numerical sheet and complete table identities for later selected recalculation; no access to unrequested child outputs.', FAILURE_SOURCE: 'Actual located chromatin input, capture, calculation or delivery failures, with their specific missing requirements.'}
 
 def _array_schema(source: str) -> dict:

@@ -6,7 +6,7 @@ ID cannot establish custody. This module validates supplied relationships and
 copies saved quantities; it does not read a store, acquire, parse again, regrade,
 choose work, render a prompt, or assign credit.
 
-The v1 publication contains C2 outputs calculated without pair metadata. The v2
+A publication without publication inputs contains C2 outputs calculated without pair metadata. One with them
 envelope retains explicit calculation inputs with the same sheet/components.
 Checks against native cells, supplied inputs and saved operands detect
 inconsistent records; they never replace saved values or reconstruct a grade.
@@ -351,12 +351,12 @@ def _validate_component(row, saved, index, path, *, matches=None, typed_diagnost
 
 
 def _validate_grading(grading, path, *, typed_diagnostics=False):
-    v2 = type(grading) is dict and grading.get("schema") == "bvbrc_minhash_grading_v2"
+    with_inputs = type(grading) is dict and "publication_inputs" in grading
     fields = ("schema", "request", "rpc_request", "selector", "parse_status", "sheet", "components", "diagnostics")
-    _fields(grading, fields + (("publication_inputs",) if v2 else ()), path)
-    _require(grading["schema"] in ("bvbrc_minhash_grading_v1", "bvbrc_minhash_grading_v2"),
+    _fields(grading, fields + (("publication_inputs",) if with_inputs else ()), path)
+    _require(grading["schema"] == "bvbrc_minhash_grading",
              "grading_schema", path + ".schema")
-    if not v2:
+    if not with_inputs:
         _require(grading["selector"] == {}, "selector", path + ".selector")
     _require(grading["parse_status"] in ("ok", "partial", "invalid"), "parse_status", path + ".parse_status")
     request, rpc = grading["request"], grading["rpc_request"]
@@ -376,12 +376,12 @@ def _validate_grading(grading, path, *, typed_diagnostics=False):
                  and all(part not in ("", ".", "..") for part in parts[1:]),
                  "workspace_fasta_path", path + ".request.query")
     publication_inputs = None
-    if v2:
+    if with_inputs:
         publication_inputs = validate_minhash_publication_inputs(
             grading["publication_inputs"], request=request, selector=grading["selector"])
     sheet, components = grading["sheet"], grading["components"]
     _fields(sheet, ("schema", "mode", "request", "provenance", "native_result", "rows", "search_metadata"), path + ".sheet")
-    _require(sheet["schema"] == "bvbrc_minhash_sheet_v1", "sheet_schema", path + ".sheet.schema")
+    _require(sheet["schema"] == "bvbrc_minhash_sheet", "sheet_schema", path + ".sheet.schema")
     _require(_same(sheet["mode"], request["mode"]) and _same(sheet["request"], rpc),
              "sheet_request_identity", path + ".sheet.request")
     _require(type(sheet["provenance"]) in (dict, list), "structured_provenance", path + ".sheet.provenance")
@@ -390,7 +390,7 @@ def _validate_grading(grading, path, *, typed_diagnostics=False):
     _require(all(value is None for value in sheet["search_metadata"].values()),
              "search_metadata_unavailable", path + ".sheet.search_metadata")
     _fields(components, ("schema", "rows", "diagnostics"), path + ".components")
-    _require(components["schema"] == "bvbrc_minhash_components_v1", "components_schema", path + ".components.schema")
+    _require(components["schema"] == "bvbrc_minhash_components", "components_schema", path + ".components.schema")
     native, rows, calculated = sheet["native_result"], sheet["rows"], components["rows"]
     _require(type(native) is list and type(rows) is list and type(calculated) is list,
              "row_arrays", path)
@@ -404,10 +404,10 @@ def _validate_grading(grading, path, *, typed_diagnostics=False):
                  "saved_sheet_association", path + ".sheet")
     for index, (row, component) in enumerate(zip(rows, calculated)):
         _validate_component(component, row, index, f"{path}.components.rows[{index}]",
-            matches=grouped.get((index, row["genome_id"]), []) if v2 else None,
-            typed_diagnostics=v2 or typed_diagnostics)
-    _diagnostics(grading["diagnostics"], path + ".diagnostics", typed=v2 or typed_diagnostics)
-    _diagnostics(components["diagnostics"], path + ".components.diagnostics", typed=v2 or typed_diagnostics)
+            matches=grouped.get((index, row["genome_id"]), []) if with_inputs else None,
+            typed_diagnostics=with_inputs or typed_diagnostics)
+    _diagnostics(grading["diagnostics"], path + ".diagnostics", typed=with_inputs or typed_diagnostics)
+    _diagnostics(components["diagnostics"], path + ".components.diagnostics", typed=with_inputs or typed_diagnostics)
     empty = [{"code": "empty_result_completeness_unknown", "path": "native_result", "severity": "warning"}] if not rows else []
     _require(_same(grading["diagnostics"], [item for row in rows for item in row["diagnostics"]] + empty),
              "parse_diagnostics_association", path + ".diagnostics")

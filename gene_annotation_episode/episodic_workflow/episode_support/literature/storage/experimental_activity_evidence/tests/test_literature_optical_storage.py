@@ -37,12 +37,12 @@ def setup(store, ctx, *, covariance=True, status='known', text=TEXT + SUFFIX, ch
     if covariance:
         ex = read_optical_rate_operands(args, read_source=read)
         rows = [ex['signals']['sample'], ex['signals']['blank'], ex['calibration']['epsilon'], ex['calibration']['path_length']]
-        data = {'version': 'a105_optical_covariance_v1', 'primitive_order': list(PRIMITIVE_ORDER), 'primitive_measurement_keys': [r['measurement_key'] for r in rows], 'primitive_physical_observation_keys': [r['physical_observation_key'] for r in rows], 'primitive_owner_keys': [r['owner_key'] for r in rows], 'primitive_units': [r['unit']['raw_unit'] for r in rows], 'covariance': [[1e-08, 5e-09, 0, 0], [5e-09, 1e-08, 0, 0], [0, 0, 10000, 0], [0, 0, 0, 0.01]], 'origin': 'synthetic', 'covariance_status': status}
+        data = {'version': 'a105_optical_covariance', 'primitive_order': list(PRIMITIVE_ORDER), 'primitive_measurement_keys': [r['measurement_key'] for r in rows], 'primitive_physical_observation_keys': [r['physical_observation_key'] for r in rows], 'primitive_owner_keys': [r['owner_key'] for r in rows], 'primitive_units': [r['unit']['raw_unit'] for r in rows], 'covariance': [[1e-08, 5e-09, 0, 0], [5e-09, 1e-08, 0, 0], [0, 0, 10000, 0], [0, 0, 0, 0.01]], 'origin': 'synthetic', 'covariance_status': status}
         cov_artifact = store.artifact(canonical(data), 'application/json')
         cov_source = store.put('source', {'provider': 'synthetic_optical_covariance', 'accession': None, 'uri': None, 'artifact_ref': cov_artifact, 'text_ref': cov_artifact, 'request_ref': None, 'version': None, 'retrieved_at': None, 'parent_source_refs': [source]}, origin='caller')['id']
         refs.append(cov_source)
         args['covariance_source_ref'] = cov_source
-    context = LiteratureContext(ctx.run_id, ctx.episode_id, 'literature', (('literature', 'case'),), store.validate_scope({'subject_refs': store.problem()['subject_refs']}), {'version': 'literature_assignment_v1', 'question_context_refs': [], 'source_refs': [source]}, {}, refs)
+    context = LiteratureContext(ctx.run_id, ctx.episode_id, 'literature', (('literature', 'case'),), store.validate_scope({'subject_refs': store.problem()['subject_refs']}), {'version': 'literature_assignment', 'question_context_refs': [], 'source_refs': [source]}, {}, refs)
     return (store, context, args)
 
 

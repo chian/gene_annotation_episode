@@ -18,7 +18,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.storag
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_ion_discrimination_inputs import VERSION as EXTRACTION_VERSION, ion_discrimination_population_schema, ion_discrimination_sheet_schema, read_ion_discrimination_inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence.literature_ion_discrimination_calculations import COMPONENTS, FORMULAS, populate_ion_discrimination
 PROVIDER = 'literature.a105.ion_discrimination'
-VERSION = 'literature_ion_discrimination_record_v1'
+VERSION = 'literature_ion_discrimination_record'
 NAMESPACE = 'literature_ion_discrimination_cells'
 REQUESTED = 'requested_ion_discrimination_components'
 VIEW = 'ion_discrimination_components'

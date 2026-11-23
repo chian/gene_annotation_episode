@@ -24,8 +24,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_
 from gene_annotation_episode.episodic_workflow.episode_support.grading.evolutionary_history_evidence.tool_grading_artifacts import retain_tool_grading
 
 
-_PREPARED_VERSION = "native_hmmer_prepared_grading_v1"
-_SCHEMA_VERSION = "native_hmmer_retained_grading_v1"
+_PREPARED_VERSION = "native_hmmer_prepared_grading"
+_SCHEMA_VERSION = "native_hmmer_retained_grading"
 
 
 def _failure(stage, code, record_key=None):
@@ -96,7 +96,7 @@ def _prepare_native_hmmer_grading(scratch, store, *, bundle, bundle_artifact_ref
     original artifacts; a different request needs its own acquisition directory.
     """
     bundle = finite_json_copy(bundle)
-    if bundle.get("version") != "native_hmmer_bundle_v1":
+    if bundle.get("version") != "native_hmmer_bundle":
         raise ContractError("native_hmmer_original_bundle_required")
     if not isinstance(policy, LocalJobPolicy):
         raise ContractError("native_hmmer_local_job_policy_required")
@@ -123,7 +123,7 @@ def _prepare_native_hmmer_grading(scratch, store, *, bundle, bundle_artifact_ref
         return prepared
     directory.mkdir(parents=True)
     _json_file(directory / "intent.json", {"request_sha256": fingerprint})
-    plan = {"version": "native_hmmer_grading_plan_v1", "bundle": bundle,
+    plan = {"version": "native_hmmer_grading_plan", "bundle": bundle,
         "artifacts": paths, "directory": str(directory), "selector": selector, "failures": failures}
     _json_file(directory / "plan.json", plan)
     prepared = {"version": _PREPARED_VERSION, "bundle_artifact_ref": bundle_artifact_ref,
@@ -174,7 +174,7 @@ def _prepare_native_hmmer_grading(scratch, store, *, bundle, bundle_artifact_ref
         native_artifact_ref=bundle_artifact_ref, grading=stable)
     selected = {**stable, "source_grading_artifact_ref": prepared["source_grading_artifact_ref"],
         "selected_rows_artifact_ref": prepared["selected_rows_artifact_ref"],
-        "selected_rows_schema": "native_hmmer_selected_row_v1", "selected_rows_format": "ndjson",
+        "selected_rows_schema": "native_hmmer_selected_row", "selected_rows_format": "ndjson",
         "bundle_sha256": native_hmmer_digest(bundle), "selector": selector,
         "failures": failures, "numerical_complete": prepared["numerical_complete"],
         "diagnostic_artifacts": retained, "worker_receipt": receipt}
@@ -208,7 +208,7 @@ def _subject_chunks(store, reference, start=0, end=None, reverse=False):
     sequence_ref = row.get("sequence_ref")
     if sequence_ref is None and row["record_type"] != "read_subject":
         raise ContractError("native_hmmer_subject_sequence_unavailable")
-    from gene_annotation_episode.episodic_workflow.episode_support.records.documents.evolutionary_history_evidence import materials_packing
+    from gene_annotation_episode import materials_packing
     molecule = store.subject_molecule(reference)
     if reverse and molecule not in {"dna", "rna"}:
         raise ContractError("native_hmmer_reverse_sequence_model_invalid")
@@ -297,7 +297,7 @@ def publish_selected_native_hmmer_rows(store, *, source_ref, bundle, prepared, s
         raise ContractError("native_hmmer_publication_source_custody_mismatch")
     envelope = json.loads(store.get_artifact(prepared["grading_artifact_ref"]))
     grading = envelope.get("grading", {})
-    if (envelope.get("schema") != "tool_grading_artifact_v1" or envelope.get("provider") != source["provider"]
+    if (envelope.get("schema") != "tool_grading_artifact" or envelope.get("provider") != source["provider"]
             or envelope.get("native_artifact_ref") != source["artifact_ref"]
             or grading.get("bundle_sha256") != native_hmmer_digest(bundle) or grading.get("selector") != selector
             or any(grading.get(field) != prepared.get(field) for field in (
@@ -318,7 +318,7 @@ def publish_selected_native_hmmer_rows(store, *, source_ref, bundle, prepared, s
             if key in seen:
                 raise ContractError("native_hmmer_selected_row_duplicate")
             seen.add(key)
-            if native.get("version") != "native_hmmer_selected_row_v1" or native.get("family") != family:
+            if native.get("version") != "native_hmmer_selected_row" or native.get("family") != family:
                 raise ContractError("native_hmmer_selected_row_schema_mismatch")
             projected = {"record_key": key, "source_ref": source_ref, "observation_ref": None,
                 "subject_ref": None, "reference_refs": [], "query_occurrence": native["query_occurrence"],
@@ -355,7 +355,7 @@ def publish_selected_native_hmmer_rows(store, *, source_ref, bundle, prepared, s
                         "dependencies": list(dict.fromkeys([source_ref, subject, *references])), "anchor": None,
                         "operand_intervals": [{"role": "query", "subject_ref": subject, "start": native["subject_interval"][0],
                             "end": native["subject_interval"][1], "unit": unit, "model_unit": unit}],
-                        "native_hmmer": {"version": "native_hmmer_observation_v1", "program": bundle["program"],
+                        "native_hmmer": {"version": "native_hmmer_observation", "program": bundle["program"],
                             "family": family, "record_key": key, "bundle_artifact_ref": source["artifact_ref"]}},
                         origin="tool", scope=scope)
                 projected.update(observation_ref=observation["id"], subject_ref=subject,

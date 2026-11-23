@@ -15,7 +15,7 @@ import re
 from gene_annotation_episode.episodic_workflow.episode_support.calculations.run_statistics import CONDITIONS, EXECUTION_PHASE_BACKENDS, VERSION as STATISTICS_VERSION, ExecutionClass
 
 
-VERSION = 'resource_tool_duration_estimator_v2'
+VERSION = 'resource_tool_duration_estimator'
 METHOD = 'exact_class_current_condition_successful_duration_mean'
 OUTCOMES = ('succeeded', 'failed', 'cancelled', 'resource_limit', 'unknown')
 
@@ -87,7 +87,7 @@ def _support(data, scope):
     """Validate descriptive groups, then project only the current condition."""
     if (data['version'] != STATISTICS_VERSION or data['class_ref'] != scope.ref
             or data['execution_class'] != asdict(scope)
-            or data['expectation_method'] != 'empirical_complete_duration_mean_by_condition_and_outcome_v1'):
+            or data['expectation_method'] != 'empirical_complete_duration_mean_by_condition_and_outcome'):
         raise ValueError('execution_class_identity_mismatch')
     condition = data['current_condition']
     if condition['state'] not in CONDITIONS or condition['resource_id'] != scope.resource_id:

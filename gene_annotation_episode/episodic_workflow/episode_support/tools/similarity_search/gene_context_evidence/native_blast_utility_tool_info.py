@@ -10,7 +10,7 @@ from jsonschema import Draft202012Validator
 
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.gene_context_evidence.blast_preparation_contracts import OPERATION_PARAMETERS, RESTRICTION_SCHEMA
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.native_blast_contracts import finite_json_copy
-from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.gene_context_evidence.native_blast_utility_contracts import MODES, LEGACY_MODES, PREPARATION_MODES, VDB_MODES, SOFTWARE_SCHEMA, _error, _path, _schema, native_blast_utility_job_schema, validate_native_blast_utility_job
+from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.gene_context_evidence.native_blast_utility_contracts import MODES, STANDARD_MODES, PREPARATION_MODES, VDB_MODES, SOFTWARE_SCHEMA, _error, _path, _schema, native_blast_utility_job_schema, validate_native_blast_utility_job
 
 _DESCRIPTIONS = {
     'create_sequence_database': 'Build a retained nucleotide or protein BLAST database from supplied FASTA sequences.',
@@ -54,8 +54,8 @@ _INSTRUCTIONS = {
 }
 
 # Key information by the selected pair, without changing any legacy wording.
-_DESCRIPTIONS = {pair: _DESCRIPTIONS[pair[1]] for pair in LEGACY_MODES}
-_INSTRUCTIONS = {pair: _INSTRUCTIONS[pair[1]] for pair in LEGACY_MODES}
+_DESCRIPTIONS = {pair: _DESCRIPTIONS[pair[1]] for pair in STANDARD_MODES}
+_INSTRUCTIONS = {pair: _INSTRUCTIONS[pair[1]] for pair in STANDARD_MODES}
 _DESCRIPTIONS.update({
     ('blastdb_aliastool', 'convert_gi_list'): 'Convert one supplied text GI list to a retained native binary GI list.',
     ('blastdb_aliastool', 'convert_seqid_list'): 'Convert one supplied sequence-identifier list, optionally against an explicitly supplied BLAST database.',

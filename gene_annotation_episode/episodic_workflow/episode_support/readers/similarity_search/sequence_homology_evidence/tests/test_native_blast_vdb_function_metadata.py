@@ -105,8 +105,8 @@ def wire_case(sheet=None, *, assignments=None, dependencies=None, censuses=None,
     job = job_for(program)
     next(o for o in job["outputs"] if o["role"] == "primary_report")["output_key"] = "selected-report"
     invocation = dict(execution_program=program, request=dict(native_blast_database=job))
-    prepared = dict(schema="native_blast_database_prepared_inputs_v1", metadata=[], invocation=invocation)
-    base = dict(schema="native_blast_database_sheet_set_v1", vdb=[dict(search_key=key, sheet=sheet["base_sheet"])])
+    prepared = dict(schema="native_blast_database_prepared_inputs", metadata=[], invocation=invocation)
+    base = dict(schema="native_blast_database_sheet_set", vdb=[dict(search_key=key, sheet=sheet["base_sheet"])])
     return dict(sheet=sheet, original=original, payload=payload, descriptor=descriptor, catalog=catalog,
                 artifacts=artifacts, job=job, base=base, prepared=prepared)
 
@@ -166,7 +166,7 @@ def test_closed_dispatch_and_default_helpers_do_not_mutate_registration(monkeypa
         legacy_catalog["descriptor"]["consumer"] = "vdb"
         legacy._validate_catalog(legacy_catalog)
         legacy._validate_catalog(case["catalog"], consumers=("vdb_function",))
-        unsupported = dict(case["descriptor"], schema_id="future_unknown_v1")
+        unsupported = dict(case["descriptor"], schema_id="unknown_schema")
         old = legacy.validate_native_blast_database_metadata_payload(case["payload"], descriptor=unsupported,
             document_catalog=case["catalog"], job=case["job"])
         assert old["status"] == "unsupported"
@@ -179,7 +179,7 @@ def test_closed_dispatch_and_default_helpers_do_not_mutate_registration(monkeypa
         assert case == before
 
 
-@pytest.mark.parametrize("field,value", [("consumer", "vdb"), ("schema_id", "future_v1")])
+@pytest.mark.parametrize("field,value", [("consumer", "vdb"), ("schema_id", "future_schema")])
 def test_wrong_tuple_unsupported_retains_original(field, value):
     case = wire_case(); case["descriptor"][field] = value
     out = validate(case)
@@ -193,7 +193,7 @@ def test_wrong_tuple_unsupported_retains_original(field, value):
     lambda p: p["searches"][0]["supplied_assignments"][0]["target"].update(feature_identifier=dict(namespace="x", value="x", version=None)),
     lambda p: p["searches"][0]["supplied_assignments"][0].pop("scope_source"),
     lambda p: p["searches"][0]["census_records"][0]["datasets"][0].update(sra_mode=1.0),
-    lambda p: p["searches"][0]["census_records"][0]["entities"][0]["target_identity"].update(representation="oriented_feature_nt_v1"),
+    lambda p: p["searches"][0]["census_records"][0]["entities"][0]["target_identity"].update(representation="oriented_feature_nt"),
 ])
 def test_closed_nested_fields_and_true_integer_validation(mutation):
     case = wire_case(); mutation(case["payload"])
@@ -500,7 +500,7 @@ def test_malformed_validation_envelope_is_a_closed_outer_failure(field):
         populate(case, [validation])
 
 
-def test_actual_v1_multiple_payload_merge_resolves_final_feature_indices(tmp_path, monkeypatch):
+def test_actual_multiple_payload_merge_resolves_final_feature_indices(tmp_path, monkeypatch):
     from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.sequence_homology_evidence.tests import test_native_blast_database_metadata as old
     from gene_annotation_episode.episodic_workflow.episode_support.readers.similarity_search.tests.test_blast_vdb_inputs import inputs as base_inputs, hsp
     from gene_annotation_episode.episodic_workflow.episode_support.calculations.similarity_search.sequence_homology_evidence.tests.test_blast_vdb_calculators import feature
@@ -551,9 +551,9 @@ def test_actual_v1_multiple_payload_merge_resolves_final_feature_indices(tmp_pat
     features = [e for e in sheet["entities"] if e["address"]["assignment_scope"] == "feature"]
     assert [e["member_binding_indices"] for e in features] == [[0], [1]]
     assert {o["function"]["value"] for o in sheet["observations"] if o["function"] and o["qualification"] == "available"} == {"A", "B"}
-    (tmp_path / "actual-v1-merge-inputs.json").write_bytes(encoded(dict(job=job, bundle=bundle, artifact_catalog=catalog, metadata_payloads=payloads)))
-    (tmp_path / "actual-v1-merge-base.json").write_bytes(encoded(base))
-    (tmp_path / "actual-v1-merge-function.json").write_bytes(encoded(out))
+    (tmp_path / "actual-merge-inputs.json").write_bytes(encoded(dict(job=job, bundle=bundle, artifact_catalog=catalog, metadata_payloads=payloads)))
+    (tmp_path / "actual-merge-base.json").write_bytes(encoded(base))
+    (tmp_path / "actual-merge-function.json").write_bytes(encoded(out))
 
 
 def test_actual_native_gbseq_assignment_survives_without_new_native_reader(tmp_path, monkeypatch):

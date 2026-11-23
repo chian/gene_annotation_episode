@@ -19,7 +19,7 @@ from method_loop.jsonvalue import canonical, content_digest
 from gene_annotation_episode.episodic_workflow.episode_support.forms.tool_schema_validation import check_tool_schema
 
 
-INFO_VERSION = "scientific_tool_library_v2"
+INFO_VERSION = "scientific_tool_library"
 
 
 def tool_names(value):

@@ -91,9 +91,9 @@ class MonitorCronController:
                   if row['body']['plan_id'] == plan['plan_id']]
         if not issued:
             raise ValueError('monitor_requires_original_forecast')
-        self.ledger.put('monitor_controller', {'version': 'hpc_monitor_controller_v1',
+        self.ledger.put('monitor_controller', {'version': 'hpc_monitor_controller',
             'plan_id': plan['plan_id'], 'job_id': job_id, 'policy': validate_policy(policy),
-            'wake_action': 'hpc.monitor', 'scheduler_backend': 'systemd_calendar_v1'}, identity=reference)
+            'wake_action': 'hpc.monitor', 'scheduler_backend': 'systemd_calendar'}, identity=reference)
         return reference
 
     def reserve(self, plan, candidate, monitor, operation_key, *, now=None):
@@ -109,7 +109,7 @@ class MonitorCronController:
             selection = choose_schedule(monitor['conditional_prediction'], candidate, self.ledger.commission,
                 controller['policy'], credited=credited, now=issued)
             due = issued+selection.get('delay_seconds', 0.)
-            return {'version': 'hpc_monitor_schedule_v1', 'schedule_ref': reference,
+            return {'version': 'hpc_monitor_schedule', 'schedule_ref': reference,
                 'controller_ref': 'monitor-controller:'+plan['plan_id'], 'plan_id': plan['plan_id'],
                 'job_id': controller['job_id'], 'operation_key': operation_key, 'plan_ref': plans[0]['id'],
                 'forecast_ref': monitor['forecast_ref'], 'issued_at': issued, 'due_at': due,

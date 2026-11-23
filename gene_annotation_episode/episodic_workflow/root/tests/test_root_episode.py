@@ -52,22 +52,22 @@ FILES = {'__init__.py', 'goal.py', 'task.py', 'credit.py', 'yield_estimator.py',
 LIBRARY_ID, ENTRY_DIGEST = 'd' * 64, 'e' * 64
 SELECTOR = {'name': 'source.read', 'resources': 'local'}
 CANONICAL = {**SELECTOR, 'description': 'Read a held source', 'instructions': 'Name the source to read'}
-# The selection version and the form of the tool rows each head's own selection takes.
+# The selection name and the form of the tool rows each head's own selection takes.
 SELECTION_FORMS = {
-    'sequence_homology_evidence': ('sequence_homology_evidence_selection_v3', CANONICAL),
-    'structural_homology_evidence': ('structural_homology_evidence_selection_v3', SELECTOR),
-    'gene_context_evidence': ('gene_context_evidence_selection_v3', CANONICAL),
-    'evolutionary_history_evidence': ('evolutionary_history_evidence_selection_v3', CANONICAL),
-    'experimental_activity_evidence': ('experimental_activity_evidence_selection_v1', SELECTOR),
-    'perturbation_evidence': ('perturbation_evidence_selection_v3', CANONICAL),
-    'partner_presence_evidence': ('partner_presence_evidence_selection_v3', SELECTOR),
-    'sample_context_evidence': ('sample_context_evidence_selection_v3', SELECTOR),
-    'biochemical_feasibility_evidence': ('biochemical_feasibility_evidence_selection_v1', SELECTOR),
+    'sequence_homology_evidence': ('sequence_homology_evidence_selection', CANONICAL),
+    'structural_homology_evidence': ('structural_homology_evidence_selection', SELECTOR),
+    'gene_context_evidence': ('gene_context_evidence_selection', CANONICAL),
+    'evolutionary_history_evidence': ('evolutionary_history_evidence_selection', CANONICAL),
+    'experimental_activity_evidence': ('experimental_activity_evidence_selection', SELECTOR),
+    'perturbation_evidence': ('perturbation_evidence_selection', CANONICAL),
+    'partner_presence_evidence': ('partner_presence_evidence_selection', SELECTOR),
+    'sample_context_evidence': ('sample_context_evidence_selection', SELECTOR),
+    'biochemical_feasibility_evidence': ('biochemical_feasibility_evidence_selection', SELECTOR),
 }
 
 
 def option(slot, library_slot, option_id):
-    return {'version': slot + '_option_ref_v1', 'library_id': LIBRARY_ID, 'slot': library_slot,
+    return {'version': slot + '_option_ref', 'library_id': LIBRARY_ID, 'slot': library_slot,
             'option_id': option_id, 'entry_sha256': ENTRY_DIGEST}
 
 
@@ -88,7 +88,7 @@ ENTRY = {'assignment': {'scope': {'subject_refs': [SUBJECT]}, 'scope_refs': [SUB
                         'received_record_refs': [SOURCE]},
          'message': {}, 'selection': []}
 MODEL_TEXT = 'A PARAGRAPH A MODEL WROTE IN A HEAD'
-VOCABULARY = {'evidence_axis_task_v1', 'whole_axis_findings', 'A101', 'A102', 'A103', 'A104', 'A105', 'A106',
+VOCABULARY = {'evidence_axis_task', 'whole_axis_findings', 'A101', 'A102', 'A103', 'A104', 'A105', 'A106',
               'A107', 'A108', 'A110'}
 
 
@@ -244,7 +244,7 @@ def test_the_head_of_each_slot_admits_the_roots_commission_and_reads_it(slot):
     parent_input = own.read_from_parent(admitted, dict(message.message))
     assert parent_input['selection']['evidence_axis']['option_id'] == AXES[slot][1]
     assert admitted['context']['evidence_task'] == {
-        'version': 'evidence_axis_task_v1', 'kind': 'whole_axis_findings', 'evidence_axis': AXES[slot][1],
+        'version': 'evidence_axis_task', 'kind': 'whole_axis_findings', 'evidence_axis': AXES[slot][1],
         'credit_unit': AXIS_CREDIT_UNITS[slot]}
 
 

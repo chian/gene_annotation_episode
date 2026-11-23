@@ -48,7 +48,7 @@ def prepare_local_infernal(state, operation_key, *, root, policy):
         raise ValueError("native_infernal_resource_identity_required")
     if state.assignment.get("resource_kind") != "local":
         raise ValueError("native_infernal_local_resource_required")
-    plan = _validate_plan({"version": "native_infernal_run_plan_v1", "identity": {
+    plan = _validate_plan({"version": "native_infernal_run_plan", "identity": {
         "run_id": state.run_id, "episode_id": state.episode_id, "resource_id": resource_id,
         "execution_id": str(handle.path), "attempt_id": native_infernal_digest(operation_key),
         "operation_key": operation_key, "requested_job_sha256": native_infernal_digest(request)},

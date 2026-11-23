@@ -124,7 +124,7 @@ class Locator(TypedDict):
 class AtacRetainedTrackTable(TypedDict):
     storage: Literal['retained_table']
     artifact_ref: str
-    format: Literal['atac_bedgraph_rows_jsonl_v1']
+    format: Literal['atac_bedgraph_rows_jsonl']
     columns: list[str]
     row_count: int
     sha256: str
@@ -172,7 +172,7 @@ def _bool(value, code, nullable=False):
 def validate_atac_retained_track_table(value):
     code = 'invalid_atac_retained_track_table'
     _keys(value, AtacRetainedTrackTable.__annotations__, code)
-    if value['storage'] != 'retained_table' or value['format'] != 'atac_bedgraph_rows_jsonl_v1':
+    if value['storage'] != 'retained_table' or value['format'] != 'atac_bedgraph_rows_jsonl':
         raise ValueError(code)
     if value['columns'] != list(BEDGRAPH_COLUMNS):
         raise ValueError(code)

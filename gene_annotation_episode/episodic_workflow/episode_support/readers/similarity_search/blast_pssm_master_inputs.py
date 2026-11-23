@@ -29,7 +29,7 @@ def _finite_json(value):
 def _validate_sheet(sheet):
     keys = {"schema", "artifact_key", "source_ref", "format", "input_identity", "status", "native_text", "pssms", "issues"}
     records = {"record_ordinal", "pssm_key", "character_span", "native_type", "native_record", "native_pssm", "native_params", "issues"}
-    if not _finite_json(sheet) or type(sheet) is not dict or set(sheet) != keys or sheet["schema"] != "blast_pssm_sheet_v1":
+    if not _finite_json(sheet) or type(sheet) is not dict or set(sheet) != keys or sheet["schema"] != "blast_pssm_sheet":
         raise ValueError("blast_pssm_sheet_invalid")
     if type(sheet["pssms"]) is not list or type(sheet["issues"]) is not list:
         raise ValueError("blast_pssm_sheet_invalid")
@@ -195,7 +195,7 @@ def extract_blast_pssm_master_metadata(sheet: dict) -> dict:
         for problem in record["issues"]:
             if problem not in issues:
                 issues.append(deepcopy(problem))
-    return {"schema": "blast_pssm_master_metadata_v1", "artifact_key": deepcopy(sheet["artifact_key"]),
+    return {"schema": "blast_pssm_master_metadata", "artifact_key": deepcopy(sheet["artifact_key"]),
             "source_ref": deepcopy(sheet["source_ref"]), "input_identity": deepcopy(sheet["input_identity"]),
             "records": records, "issues": issues}
 

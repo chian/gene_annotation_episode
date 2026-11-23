@@ -16,12 +16,12 @@ LIBRARY = "literal library/~name"
 
 
 def request(**updates):
-    value = {"version": core.REQUEST_VERSION, "protocol_profile": "speedrichr_v1",
+    value = {"version": core.REQUEST_VERSION, "protocol_profile": "speedrichr",
         "library": LIBRARY, "genes": ["CUL2", "INSR", "CUL2", "insr"],
         "identifier_policy": "literal_no_mapping", "species_context": "caller supplied human",
         "description": "engineering input, not a submitted biological query",
         "background": {"policy": "supplied", "genes": ["CUL2", "INSR", "OTHER"]},
-        "native_statistic_profile": "documented_odds_v1"}
+        "native_statistic_profile": "documented_odds"}
     return {**value, **updates}
 
 
@@ -53,7 +53,7 @@ def test_request_preserves_literal_order_duplicates_case_background_and_context(
     assert actual["background"] == {"policy": "supplied", "genes": ["BG"]}
     actual["genes"].append("detached")
     assert original["genes"] == ["CUL2", "INSR", "CUL2", "insr"]
-    native = request(protocol_profile="standard_enrichr_v1",
+    native = request(protocol_profile="standard_enrichr",
         background={"policy": "service_native", "genes": None})
     assert core.validate_enrichr_request(native) == native
     assert core.validate_enrichr_request(request(genes=[" A "]))["genes"] == [" A "]
@@ -74,7 +74,7 @@ def test_empty_uploads_are_rejected_and_never_select_a_service_background(change
     {"description": None}, {"native_statistic_profile": "z_from_sign"}, {"extra": 1},
     {"background": {"policy": "service_native", "genes": []}},
     {"background": {"policy": "supplied", "genes": None}},
-    {"protocol_profile": "standard_enrichr_v1"},
+    {"protocol_profile": "standard_enrichr"},
 ])
 def test_invalid_request_never_normalizes_or_inserts_a_background(changes):
     with pytest.raises(ValueError):
@@ -105,7 +105,7 @@ def test_documented_nine_field_example_retains_values_and_declared_meaning():
     assert kept["statistics"]["adjusted_p_value"]["value"] == row[6]
     assert kept["statistics"]["statistic_3"]["value"] == row[3]
     assert kept["statistic_3_interpretation"] == {
-        "profile": "documented_odds_v1", "declared_meaning": "odds_ratio", "meaning": "odds_ratio",
+        "profile": "documented_odds", "declared_meaning": "odds_ratio", "meaning": "odds_ratio",
         "claimed_client_label": None, "basis": "documentation", "server_version_verified": False,
         "qualification_codes": ["declared_documentation_interpretation"]}
     assert kept["pointer"] == "/literal library~1~0name/0"
@@ -114,11 +114,11 @@ def test_documented_nine_field_example_retains_values_and_declared_meaning():
 
 
 @pytest.mark.parametrize("profile,slot,width,meaning,code", [
-    ("documented_odds_v1", 2.5, 9, "odds_ratio", "declared_documentation_interpretation"),
-    ("documented_odds_v1", -1.8, 9, "unknown", "profile_value_conflict"),
-    ("documented_odds_v1", 2.5, 7, "unknown", "profile_width_conflict"),
-    ("gget_z_label_v1", 2.5, 9, "unknown", "interface_definition_conflict"),
-    ("gget_z_label_v1", -1.8, 7, "unknown", "interface_definition_conflict"),
+    ("documented_odds", 2.5, 9, "odds_ratio", "declared_documentation_interpretation"),
+    ("documented_odds", -1.8, 9, "unknown", "profile_value_conflict"),
+    ("documented_odds", 2.5, 7, "unknown", "profile_width_conflict"),
+    ("gget_z_label", 2.5, 9, "unknown", "interface_definition_conflict"),
+    ("gget_z_label", -1.8, 7, "unknown", "interface_definition_conflict"),
     ("uninterpreted", 2.5, 9, "unknown", "statistic_uninterpreted"),
     ("uninterpreted", -1.8, 7, "unknown", "statistic_uninterpreted"),
 ])
@@ -130,7 +130,7 @@ def test_statistic_profile_is_explicit_and_never_inferred_from_sign(profile, slo
     assert kept["statistic_3_interpretation"]["meaning"] == meaning
     assert code in kept["statistic_3_interpretation"]["qualification_codes"]
     assert kept["statistic_3_interpretation"]["claimed_client_label"] == (
-        "z_score" if profile == "gget_z_label_v1" else None)
+        "z_score" if profile == "gget_z_label" else None)
     if width == 7:
         assert kept["statistics"]["old_p_value"]["state"] == "missing"
         assert kept["statistics"]["old_adjusted_p_value"]["value"] is None

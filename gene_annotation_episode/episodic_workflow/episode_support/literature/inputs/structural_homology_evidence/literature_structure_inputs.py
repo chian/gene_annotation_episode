@@ -23,7 +23,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
 )
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.literature_contract_error import ExperimentalContractError
 
-VERSION = "a111_structure_inputs_v1"
+VERSION = "a111_structure_inputs"
 SCOPE = "conditional_deposited_model_geometry"
 LITERAL_FIELDS = ("molecule", "construct", "experimental_system", "condition", "partner", "experiment")
 _ARGS = ("source_ref", "coordinate_source_ref", "validation_source_ref", "source_kind",

@@ -46,7 +46,7 @@ converter does. The constructors take ``support`` and default it to 'direct'; th
 through the extraction (the extraction always passes the model's answer).
 """
 
-VERSION = 'a105_endpoint_ms_quant_record_v1'
+VERSION = 'a105_endpoint_ms_quant_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'endpoint_ms_quant'
 QUANTITIES = ('conversion_fraction', 'conversion_fraction_spread', 'conversion_difference', 'conversion_difference_spread', 'completion_time_ratio', 'completion_time_ratio_spread',

@@ -91,11 +91,11 @@ def entry_input(w, launch_run, handoff_ref, *, selector=None, selection=(
     """The results commission, built as the commissioner builds it: from the handoff row it holds."""
     launched = w['journal'].units(launch_run, (('job_probe', launch_run),))[0][2]['outcome']
     directory = str(w['jobs'] / launched['job'])
-    target = {'version': 'execution_target_v1', 'handle': handoff_ref, 'run_id': launch_run, 'resource_id': LOCAL,
+    target = {'version': 'execution_target', 'handle': handoff_ref, 'run_id': launch_run, 'resource_id': LOCAL,
               'resource_kind': 'local', 'execution_id': launched['job'], 'request_sha256': content_digest(w['job']),
               'origin_episode_id': 'job_probe', 'assignment': {'workspace': directory}, 'scope': {}}
     w['result_path'] = directory + '/result.txt'
-    assignment = {'version': 'execution_results_assignment_v1', 'handoff_ref': handoff_ref,
+    assignment = {'version': 'execution_results_assignment', 'handoff_ref': handoff_ref,
                   'selector': {'paths': [w['result_path']]} if selector is None else selector(w['result_path']),
                   'target': target, 'acquired_record_unit': 1.0, 'record_refs': [handoff_ref]}
     return {'assignment': assignment, 'message': {}, 'selection': list(selection)}

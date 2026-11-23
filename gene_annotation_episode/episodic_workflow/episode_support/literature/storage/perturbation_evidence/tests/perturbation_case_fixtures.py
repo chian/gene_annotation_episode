@@ -56,7 +56,7 @@ def setup_case(ctx, *, primary=False):
     refs = [ref]
     if not primary:
         values = dict(zip(PRIMITIVE_ORDER, [100., 20., 90., 100., 90., 8., 7.]))
-        data = {'version': 'a106_source_measurements_v1', 'endpoint_unit': 'events_per_100000_cells',
+        data = {'version': 'a106_source_measurements', 'endpoint_unit': 'events_per_100000_cells',
             'exposure_unit': 'molecules_per_cell', 'origin': 'synthetic', 'uncertainty_basis': 'unreported',
             'measurements': {role: {'value': values[role], 'measurement_id': role+'-observed'} for role in PRIMITIVE_ORDER}}
         data_source = source(store, canonical(data), parents=[ref])
@@ -68,7 +68,7 @@ def setup_case(ctx, *, primary=False):
         'measurement_status': 'qualitative_only' if primary else 'validated_ratio_scale',
         'same_endpoint_scope': 'unknown' if primary else 'yes', 'amount_role': 'unknown' if primary else 'nuisance',
         'orientation': None if primary else 1, 'interpretation_witnesses': interpretation}
-    assignment = {'version': 'literature_assignment_v1', 'question_context_refs': [],
+    assignment = {'version': 'literature_assignment', 'question_context_refs': [],
                   'source_refs': refs, 'requested_perturbation_components': COMPONENTS}
     context = LiteratureContext(ctx.run_id, ctx.episode_id, 'literature',
         (('literature', 'fixture'),), store.validate_scope({'subject_refs': store.problem()['subject_refs']}), assignment, {}, tuple(refs))

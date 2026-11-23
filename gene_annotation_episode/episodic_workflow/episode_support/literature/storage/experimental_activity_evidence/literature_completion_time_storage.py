@@ -10,7 +10,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence.literature_completion_time_calculations import COMPONENTS, REASONS, CONDITIONS, populate_completion_time_components
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_rate_storage import LiteratureRateRepository
 PROVIDER = 'literature.a105.completion_time_population'
-VERSION = 'literature_completion_time_record_v1'
+VERSION = 'literature_completion_time_record'
 NAMESPACE = 'literature_completion_time_cells'
 
 def _witnesses(value):

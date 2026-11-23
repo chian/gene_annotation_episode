@@ -30,7 +30,7 @@ replicate_count, replicate_independent, replicate_refs, transport, each with its
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_transport_planar_bilayer_criteria import TRANSPORT_PLANAR_BILAYER_CRITERIA
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_transport_planar_bilayer_grade_v1'
+VERSION = 'a105_transport_planar_bilayer_grade'
 CRITERIA = tuple(criterion['id'] for criterion in TRANSPORT_PLANAR_BILAYER_CRITERIA)
 TRANSPORT = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact transport_detected_above_control
 PA_PER_UNIT = {'pA': 1.0, 'nA': 1.0e3}   # FIXED_BY_DEFINITION: 1 nA is 1000 pA.

@@ -5,7 +5,7 @@ import math
 from gene_annotation_episode.episodic_workflow.episode_support.forms.perturbation_evidence.communication import plain
 
 
-VERSION = 'signed_root_axis_scalar_mappings_v1'
+VERSION = 'signed_root_axis_scalar_mappings'
 
 
 def _number(value, *, minimum=None, maximum=None):

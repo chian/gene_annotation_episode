@@ -218,7 +218,7 @@ def scientific_command_proof(assignment, arguments, outcome):
         _require(actual['sha256'] == original['sha256']
             and ('size_bytes' not in original and 'size' not in original
                 or actual['size_bytes'] == original.get('size_bytes', original.get('size'))))
-    return {'version': 'terminal_scientific_command_proof_v1',
+    return {'version': 'terminal_scientific_command_proof',
         'profile': profile[0], 'original_plan': deepcopy(plan),
         'plan_snapshot': deepcopy(before[str(path)]),
         'execution_command': deepcopy(executed), 'command': deepcopy(command),
@@ -286,7 +286,7 @@ def terminal_local_job_matches(assignment, outcome):
         job = outcome['facts']['requested_job']
         profile = _profile(assignment['requested_job'])
         _require(profile is not None and proof['profile'] == profile[0]
-            and proof['version'] == 'terminal_scientific_command_proof_v1'
+            and proof['version'] == 'terminal_scientific_command_proof'
             and proof['command'] == command and proof['execution_command'] == executed)
         plan = profile[1](proof['original_plan'])
         _require(plan['requested_job'] == assignment['requested_job']

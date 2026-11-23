@@ -18,7 +18,7 @@ TEN_FILES = {'__init__.py', 'goal.py', 'task.py', 'credit.py', 'yield_estimator.
              'messages/final_to_parent.py'}
 ROOT_PACKAGE = 'gene_annotation_episode.episodic_workflow.root'
 ASSIGNMENT = {'scope': {'subject_refs': []}, 'service': 'bvbrc_appservice', 'resource_id': 'bvbrc',
-              'request': {'version': 'bvbrc_appservice_request_v1'}, 'input_refs': [],
+              'request': {'version': 'bvbrc_appservice_request'}, 'input_refs': [],
               'immutable_input_versions': {}, 'completion_target': 1.0}
 
 

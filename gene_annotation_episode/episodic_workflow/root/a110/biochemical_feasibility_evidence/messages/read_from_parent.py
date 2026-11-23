@@ -37,7 +37,7 @@ _TEXT = {'type': 'string', 'minLength': 1}
 
 
 def _ref_schema(slot, prefix):
-    return obj({'version': {'const': 'biochemical_feasibility_evidence_option_ref_v1'}, 'library_id': _SHA256,
+    return obj({'version': {'const': 'biochemical_feasibility_evidence_option_ref'}, 'library_id': _SHA256,
                 'slot': {'const': slot}, 'option_id': {'type': 'string', 'pattern': '^' + prefix + '[0-9]+$'},
                 'entry_sha256': _SHA256})
 
@@ -53,10 +53,10 @@ _TOOL_INFO = obj({**_TOOL_SELECTOR['properties'], 'description': _TEXT, 'instruc
 SELECTION = obj({'version': _TEXT, 'evidence_axis': _EVIDENCE_AXIS, 'thought_pattern': _THOUGHT_REF,
                  'child_tool_info': {'type': 'array', 'items': {'anyOf': [_TOOL_SELECTOR, _TOOL_INFO]},
                                      'uniqueItems': True}})
-REVISION_ORIGIN = obj({'version': {'const': 'biochemical_feasibility_evidence_revision_origin_v1'},
+REVISION_ORIGIN = obj({'version': {'const': 'biochemical_feasibility_evidence_revision_origin'},
                        'parent_invocation_ref': {'type': 'string', 'pattern': '^scientific_invocation_[a-f0-9]{24}$'},
                        'preparation_operation_ref': {'type': 'string', 'pattern': '^operation_[a-f0-9]{24}$'}})
-EVIDENCE_TASK = obj({'version': {'const': 'evidence_axis_task_v1'}, 'kind': {'const': 'whole_axis_findings'},
+EVIDENCE_TASK = obj({'version': {'const': 'evidence_axis_task'}, 'kind': {'const': 'whole_axis_findings'},
                      'evidence_axis': {'const': AXIS},
                      'credit_unit': {'type': 'number', 'exclusiveMinimum': 0,
                                      'description': 'Use the finding unit in the explicitly configured credit '
@@ -71,7 +71,7 @@ ASSIGNMENT_FORM = RecordForm({
                                                     'hypothesis record, passed in custody'),
     'evidence_refs': Field('record_refs', 'The evidence records the parent selected, passed in custody'),
     'constraints': Field('record', "The parent's constraints"),
-    'context': Field('record', 'The parent-supplied context; optionally the evidence_axis_task_v1 task and the A110 '
+    'context': Field('record', 'The parent-supplied context; optionally the evidence_axis_task task and the A110 '
                                'task name (a110_task)'),
     'revision_origin': Field('record', 'The origin of an alternative process this episode revises, when it is one',
                              required=False),

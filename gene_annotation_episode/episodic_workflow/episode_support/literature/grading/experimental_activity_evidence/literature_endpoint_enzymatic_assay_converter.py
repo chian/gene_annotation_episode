@@ -136,7 +136,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_endpoint_conversion_direction import select_endpoint_effect
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_endpoint_enzymatic_assay_converted_v1'
+VERSION = 'a105_endpoint_enzymatic_assay_converted'
 CRITERIA_MAP = {'measurement_identity': ('estimate_identity',),
                 'calibration_applicability': ('standard_series_through_second_enzyme', 'standard_curve_fit', 'standard_series_size', 'read_inside_standard_series', 'non_detection_limit'),
                 'matrix_interference': ('matrix_effect_addressed',), 'background_alternatives': ('first_enzyme_controls',), 'attribution_supported': ('enzyme_dependence',),

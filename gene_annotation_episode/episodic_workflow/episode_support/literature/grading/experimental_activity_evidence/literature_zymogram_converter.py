@@ -95,7 +95,7 @@ import math
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_assay_grading import INPUT_VERSION, ROLES, grade_assay
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_zymogram_converted_v1'
+VERSION = 'a105_zymogram_converted'
 CRITERIA_MAP = {'background_alternatives': ('substrate_dependence_control', 'inactive_sample_control'), 'calibration_applicability': ('stain_positive_control',),
                 'measurement_identity': ('band_position',), 'attribution_supported': ('band_assignment', 'inhibitor_sensitivity'), 'sampling_basis': ('replicates',),
                 'assertion_relevance': ('native_substrate',), 'condition_scope': ('purified_enzyme',)}

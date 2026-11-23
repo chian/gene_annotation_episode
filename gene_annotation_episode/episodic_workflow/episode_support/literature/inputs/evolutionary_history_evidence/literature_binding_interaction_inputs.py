@@ -61,8 +61,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.calcul
 )
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.evolutionary_history_evidence.literature_experimental_contracts import ExperimentalContractError
 
-VERSION = "binding_interaction_source_inputs_v1"
-OUTPUT_VERSION = "binding_interaction_source_extraction_v1"
+VERSION = "binding_interaction_source_inputs"
+OUTPUT_VERSION = "binding_interaction_source_extraction"
 KINDS = ("ic50", "reported_hill_kd", "unknown", "conflicting")
 STATES = ("exact", "ambiguous", "unreadable", "conflicting")
 STATISTICS = ("sd", "sem", "confidence_interval", "unspecified", "unreported", "unknown", "conflicting")

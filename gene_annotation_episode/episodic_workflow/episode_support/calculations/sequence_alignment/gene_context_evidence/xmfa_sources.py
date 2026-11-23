@@ -197,7 +197,7 @@ def bind_xmfa_sources(document: dict, *, inputs: dict,
     document=validate_xmfa_document(document)
     inputs=c.validate_xmfa_source_inputs(inputs)
     c.require(source_comparison=='case_insensitive_iupac_exact', 'source_comparison_invalid')
-    result={'schema_version':'mauve_xmfa_source_bindings_v1','document_id':document['document_id'],
+    result={'schema_version':'mauve_xmfa_source_bindings','document_id':document['document_id'],
         'status':'ok','invocation_mode':inputs['invocation']['mode'],
         'member_registry_completeness':'unknown','members':[],'source_checks':[],
         'original_maps':deepcopy(inputs['original_maps']),'requirements':[],'diagnostics':[]}

@@ -23,9 +23,7 @@ _ENDPOINT = "native_subject_endpoint_difference_fraction"
 _MATERIALIZED = {"table_field_block", "published_association"}
 _SCOPE_KEYS = ("track_key", "reference_row_ordinal", "association_key", "protein_key",
                "report_key", "query_ordinal", "hit_ordinal", "hsp_ordinal")
-_LEGACY = ("legacy_first_hsp_only", "legacy_rounded_fraction",
-           "legacy_subject_endpoint_difference", "legacy_zero_fallback_possible",
-           "native_category_not_orthology_probability",
+_CAVEATS = ("native_category_not_orthology_probability",
            "postfilter_cannot_recover_filtered_associations", "dependence_not_independence")
 _JOIN_REASONS = {"not_supplied": "row_join_missing", "unmatched": "row_join_missing",
                  "ambiguous": "row_join_ambiguous", "conflicting": "row_join_conflict"}
@@ -261,7 +259,7 @@ def _track_components(track, rows, association_components, primary, sheet, refer
                     if no_published_reasons else
                     _cell(reference_count["value"] - counts["observed_bound_reference_count"],
                           fields=reference_count["source_fields"]))
-    qualifications = list(_LEGACY)
+    qualifications = list(_CAVEATS)
     qualifications.extend(code for count in (reference_count, track["input_record_count"])
                           for code in count["reason_codes"])
     qualifications.extend(complete_reasons)
@@ -341,8 +339,8 @@ def calculate_native_components(sheet: dict, *, parameters: dict) -> dict:
     requirements = _unique(requirements)
     diagnostics = _unique(diagnostics)
     components = {
-        "version": "bvbrc_proteome_native_components_proposal_v1",
-        "formula_version": "native_descriptive_components_v1",
+        "version": "bvbrc_proteome_native_components_proposal",
+        "formula_version": "native_descriptive_components",
         "sheet_sha256": hashlib.sha256(sheet_bytes).hexdigest(), "parameters": options,
         "associations": associations, "tracks": calculated_tracks,
         "used_component_families": ["legacy_identity", "legacy_subject_endpoint_difference", "native_category",

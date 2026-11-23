@@ -6,7 +6,7 @@ from urllib.parse import parse_qs, quote, unquote, urlparse
 from xml.etree import ElementTree
 from gene_annotation_episode.episodic_workflow.episode_support.acquisition.partner_presence_evidence.acquisition import AcquisitionError, SourceSnapshot
 from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence.domain import ContractError
-VERSION = 'pmc_cloud_advertised_assets_v1'
+VERSION = 'pmc_cloud_advertised_assets'
 BASE_URL = 'https://pmc-oa-opendata.s3.amazonaws.com/'
 BUCKET = 'pmc-oa-opendata'
 PMCID = re.compile('^PMC[0-9]+$')

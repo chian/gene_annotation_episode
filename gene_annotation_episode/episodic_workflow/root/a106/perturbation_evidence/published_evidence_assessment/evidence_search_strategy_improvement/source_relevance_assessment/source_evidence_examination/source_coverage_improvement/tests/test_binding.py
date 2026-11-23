@@ -55,12 +55,12 @@ def test_the_episode_has_the_one_action_extract_and_no_reasoning_commit_or_read_
 
 def test_the_commission_form_admits_ordered_windows_and_refuses_what_is_not_a_leaf_commission():
     form = EPISODE.assignment_form
-    page = {'version': 'page_assignment_v1', 'source_ref': 'src_1', 'representation': 'text', 'artifact_ref': 'art_1',
+    page = {'version': 'page_assignment', 'source_ref': 'src_1', 'representation': 'text', 'artifact_ref': 'art_1',
             'question_context_refs': [], 'prior_delivery_refs': []}
     first = {'source_ref': 'src_1', 'representation': 'text', 'offset': 0, 'limit': 10}
     second = {**first, 'offset': 10}
     task = {'kind': 'verified_source_leads', 'evidence_axis': 'A106', 'credit_unit': 1.0}
-    assignment = {'version': 'reading_assignment_v1', 'page': page, 'selection': {'spans': [first, second]},
+    assignment = {'version': 'reading_assignment', 'page': page, 'selection': {'spans': [first, second]},
                   'literature_task': task, 'proposed_annotation_ref': 'hyp_1',
                   'scope': {'subject_refs': ['sub_1']}, 'received_record_refs': ['src_1', 'art_1']}
     admitted = form.admit(assignment, 'test')

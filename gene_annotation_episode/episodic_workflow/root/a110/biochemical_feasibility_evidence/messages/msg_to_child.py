@@ -10,7 +10,7 @@ reference) are old-runner machinery. What each sent of its own is kept: the obje
 ``goal_text`` and ``purpose``), the assignment the model chose, the scope and the launch instructions. The parent
 now selects return fields (``selection``): the facts the model lists in the commission. The monitor is commissioned
 on one job this episode holds as outstanding (``summary['outstanding_jobs']``), named by its held handoff reference:
-its assignment (``monitor_assignment_v2``) passes the job's handoff row and the check rows held of it in custody;
+its assignment (``monitor_assignment``) passes the job's handoff row and the check rows held of it in custody;
 its credit, finding and check rows (``check_refs``) are always returned (the old forced ``monitoring_progress_refs``
 is that). Every record the child's code reads is named in a ``record_refs`` field, because a pass carries only the
 records named.
@@ -26,9 +26,9 @@ the monitor child's ``information_unit``; the hpc child's ``scope`` and ``input_
 and ``received_record_refs``."""
 from episode_runtime import ChildMessage
 
-LAUNCH_VERSION = 'execution_launch_assignment_v1'
-RESULTS_VERSION = 'execution_results_assignment_v1'
-MONITOR_VERSION = 'monitor_assignment_v2'
+LAUNCH_VERSION = 'execution_launch_assignment'
+RESULTS_VERSION = 'execution_results_assignment'
+MONITOR_VERSION = 'monitor_assignment'
 
 
 def _selection(arguments, *forced):

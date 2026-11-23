@@ -13,7 +13,7 @@ import re
 
 from .domain import ContractError
 
-VERSION = 'rhea_chebi_source_projection_v1'
+VERSION = 'rhea_chebi_source_projection'
 RHEA_ID = re.compile(r'^(?:RHEA:)?([0-9]+)$', re.I)
 CHEBI_ID = re.compile(r'^(?:CHEBI:)?([0-9]+)$', re.I)
 DIRECTIONS = {'=': 'undefined', '=>': 'left_to_right', '<=': 'right_to_left', '<=>': 'bidirectional'}

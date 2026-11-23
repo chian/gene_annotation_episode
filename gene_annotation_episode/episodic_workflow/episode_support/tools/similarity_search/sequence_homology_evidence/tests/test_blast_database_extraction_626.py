@@ -16,18 +16,18 @@ EVIDENCE = Path(__file__).resolve().parent / "fixtures/blast_database_readers"
 def occurrence(content, *, oid="out", complete="complete"):
     return {"occurrence_id": oid, "direction": "output", "role": "stdout", "ordinal": 0,
             "artifact_ref": "fixture:" + oid, "sha256": hashlib.sha256(content).hexdigest(),
-            "size_bytes": len(content), "native_format": "blastdbcmd_tabular_v1",
+            "size_bytes": len(content), "native_format": "blastdbcmd_tabular",
             "completeness": complete, "native_path": None}
 
 
 def context(selectors=("seqA",), *, molecule="dna", selected_range=None, strand="plus",
             returncode=0, database_path="/explicit/database"):
     return {
-        "operation": {"version": "blast_utility_operation_v1", "program": "blastdbcmd",
+        "operation": {"version": "blast_utility_operation", "program": "blastdbcmd",
             "mode": "extract_sequences", "input_occurrence_ids": ["db-file"], "database_key": "db",
             "molecule": molecule, "parameters": {
                 "selectors": [{"ordinal": i, "value": s} for i, s in enumerate(selectors)],
-                "output_format": "blastdbcmd_tabular_v1", "range": selected_range,
+                "output_format": "blastdbcmd_tabular", "range": selected_range,
                 "strand": strand, "get_dups": False, "target_only": False}},
         "database_binding": {"database_key": "db", "kind": "blast_nucleotide_sequence" if molecule == "dna" else "blast_protein_sequence",
             "molecule": molecule, "identity": {"namespace": "explicit_fixture", "value": "db", "version": None, "release": None},

@@ -132,7 +132,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_row_contract import SECONDS_PER_MINUTE, SUPPORT_WEAKEST_ORDER
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_protein_film_electrochem_converted_v1'
+VERSION = 'a105_protein_film_electrochem_converted'
 CRITERIA_MAP = {'background_alternatives': ('bare_electrode_control', 'substrate_free_baseline'), 'attribution_supported': ('substrate_dependence', 'product_identity'),
                 'calibration_applicability': ('potential_reference', 'electrode_area'), 'rate_regime': ('mass_transport_excluded', 'steady_state_wave'),
                 'normalization_basis': ('electroactive_amount', 'film_stability'), 'kinetic_model': ('substrate_range',), 'sampling_basis': ('replicates',),

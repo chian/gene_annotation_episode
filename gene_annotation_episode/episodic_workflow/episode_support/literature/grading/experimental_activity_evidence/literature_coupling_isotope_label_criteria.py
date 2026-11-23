@@ -21,7 +21,7 @@ returns     every case the criterion can return, as (status, reason_code, when).
             as 'never' cannot occur for this criterion.
 """
 
-VERSION = 'a105_coupling_isotope_label_criteria_v1'
+VERSION = 'a105_coupling_isotope_label_criteria'
 FRACTION_PER_UNIT = {'fraction': 1.0, 'percent': 0.01}   # FIXED_BY_DEFINITION: a percent is a hundredth of a fraction.
 
 _fact_returns = (

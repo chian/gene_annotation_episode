@@ -18,7 +18,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.jobs.partner_pres
 from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence.domain import (
     obj, validate_schema)
 
-RESULTS_VERSION = 'execution_results_assignment_v1'
+RESULTS_VERSION = 'execution_results_assignment'
 _TEXT = {'type': 'string', 'minLength': 1}
 NATIVE_SELECTOR_SCHEMA = obj({'paths': {'type': 'array', 'minItems': 1, 'uniqueItems': True, 'items': _TEXT},
                               'path': _TEXT, 'offset': {'type': 'integer', 'minimum': 0},

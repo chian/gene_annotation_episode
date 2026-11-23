@@ -62,7 +62,7 @@ def test_the_return_form_declares_credit_and_finding_and_the_old_fact_sources_as
 
 
 def _assignment(**changes):
-    value = {'version': 'practical_assignment_v1', 'assignment_id': 'a1', 'resource_id': 'hpc',
+    value = {'version': 'practical_assignment', 'assignment_id': 'a1', 'resource_id': 'hpc',
              'resource_kind': 'hpc', 'workspace': '/work/space', 'endpoint': 'usable_handoff',
              'requested_job': {'argv': ['/bin/true'], 'environment': {}},
              'progress_requirements': [

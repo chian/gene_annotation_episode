@@ -80,7 +80,7 @@ def test_a_launch_returns_credit_finding_and_every_selectable_fact_empty_and_is_
 
 
 def _assignment(**changes):
-    value = {'version': 'practical_assignment_v1', 'assignment_id': 'a1', 'resource_id': 'local',
+    value = {'version': 'practical_assignment', 'assignment_id': 'a1', 'resource_id': 'local',
              'resource_kind': 'local', 'workspace': '/work/space', 'endpoint': 'usable_handoff',
              'requested_job': {'argv': ['/bin/true'], 'environment': {}},
              'progress_requirements': [

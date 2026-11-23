@@ -13,7 +13,7 @@ the binding of the application to it (``APPLICATION``, with ``route_kind`` ``pbs
   duration is observed (``structure_search_child.monitor_job``): the launch to the first status that showed the end, the wait in the
   queue included. The first figure is ``FIRST_JOB_SECONDS``.
 * ``extract`` (ONE unit): fetch ``scores.json`` through the route, keep it as the data product ``cofolding_results``, grade it
-  (``partner_cofolding_sheet.grade_partner_cofolding``: sheet ``a102_partner_cofolding_sheet_v1``, with the SMILES used and their
+  (``partner_cofolding_sheet.grade_partner_cofolding``: sheet ``a102_partner_cofolding_sheet``, with the SMILES used and their
   source) and retain the grading (``retain_tool_grading``, a source record of provider ``partner_cofolding``) as a ``tool_grading_sheet``
   data product (``record_grading_product``).
 """

@@ -16,8 +16,8 @@ import math
 from gene_annotation_episode.episodic_workflow.episode_support.readers.sequence_operations.sequence_mapping import map_interval, reverse_path, validate_mapping
 
 
-SHEET_SCHEMA = "sequence_translation_sheet_v1"
-SCORES_SCHEMA = "sequence_translation_scores_v1"
+SHEET_SCHEMA = "sequence_translation_sheet"
+SCORES_SCHEMA = "sequence_translation_scores"
 _REQUEST_KEYS = {"code", "strand", "frame", "start", "end", "cds"}
 _TABLE_KEYS = {"code", "names", "start_codons", "stop_codons", "forward_table", "biopython_version"}
 _DNA = {"A": "A", "C": "C", "G": "G", "T": "T", "R": "AG", "Y": "CT",

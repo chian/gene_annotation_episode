@@ -13,7 +13,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.calcul
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.evolutionary_history_evidence.literature_rate_storage import LiteratureRateRepository
 
 PROVIDER = "literature.a105.active_site_population"
-VERSION = "literature_active_site_record_v1"
+VERSION = "literature_active_site_record"
 NAMESPACE = "literature_active_site_cells"
 
 

@@ -29,7 +29,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     TRANSPORT_PATCH_CLAMP_CRITERIA)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_transport_patch_clamp_grade_v1'
+VERSION = 'a105_transport_patch_clamp_grade'
 CRITERIA = tuple(criterion['id'] for criterion in TRANSPORT_PATCH_CLAMP_CRITERIA)
 TRANSPORT = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact transport_detected_above_control
 GOHM_PER_UNIT = {'MOhm': 1.0e-3, 'GOhm': 1.0}   # FIXED_BY_DEFINITION: the unit of a resistance to GOhm (1 MOhm is 1e-3 GOhm)

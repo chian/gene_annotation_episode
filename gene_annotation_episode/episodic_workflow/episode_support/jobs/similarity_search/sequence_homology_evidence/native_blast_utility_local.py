@@ -73,7 +73,7 @@ def prepare_local_blast_utility(state, operation_key, *, root, policy):
     root = _directory(str(root))
     handle = native.NativeJobHandle(root / "native.json")
     attempt = root / ATTEMPT_NAME
-    plan = validate_native_blast_utility_plan({"version": "native_blast_utility_run_plan_v1", "identity": {
+    plan = validate_native_blast_utility_plan({"version": "native_blast_utility_run_plan", "identity": {
         "run_id": state.run_id, "episode_id": state.episode_id,
         "resource_id": _resource(state.assignment), "execution_id": str(handle.path),
         "attempt_id": native_blast_digest(operation_key), "operation_key": operation_key,

@@ -70,7 +70,7 @@ def prepare(registry, name, arguments, *, context, scope, known, invocation):
         if args.get('neighborhood_ref'):
             received(args['neighborhood_ref'])
             neighborhood = received_measurement(store,args['neighborhood_ref'])
-            require(neighborhood is not None and neighborhood['body']['schema']=='a103_neighborhood_v1'
+            require(neighborhood is not None and neighborhood['body']['schema']=='a103_neighborhood'
                 and neighborhood['body']['binding_ref'] in args['binding_refs'], 'a103_detection_actual_neighborhood_scope_required')
             neighborhood = neighborhood['body']
         native = {'operation': 'detection', **args, 'native_path': native_path, 'database_path': database_path,

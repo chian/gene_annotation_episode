@@ -36,7 +36,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
     PERCENT_PER_FRACTION, PLA_CRITERIA)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_pla_grade_v1'
+VERSION = 'a105_pla_grade'
 CRITERIA = tuple(criterion['id'] for criterion in PLA_CRITERIA)
 INTERACTION = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact proximity_signal_detected
 

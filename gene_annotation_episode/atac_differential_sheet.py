@@ -50,7 +50,7 @@ def select_atac_depth_counts(reports: Sequence[ParsedMacs2PeaksXls], *,
     for binding in callpeak_bindings:
         validate_atac_callpeak_binding(binding)
     for report in reports:
-        validate_atac_parsed_table(report, version='macs2_peaks_xls_parsed_v1')
+        validate_atac_parsed_table(report, version='macs2_peaks_xls_parsed')
     issues, selected = [], []
     for condition in conditions:
         bindings = [b for b in callpeak_bindings if b['condition_id'] == condition]
@@ -74,7 +74,7 @@ def select_atac_depth_counts(reports: Sequence[ParsedMacs2PeaksXls], *,
                                            condition, field='peaks_xls', requirement='original_native_metadata'))
             continue
         report = candidates[0]
-        if report.get('version') != 'macs2_peaks_xls_parsed_v1':
+        if report.get('version') != 'macs2_peaks_xls_parsed':
             raise ValueError('invalid_atac_peaks_xls_report')
         row['source_artifact_ref'] = report['artifact']['artifact_ref']
         count = report['reported_numbers']['treatment_postfilter_tags']
@@ -266,10 +266,10 @@ def build_atac_differential_sheet(*, reference: AtacReference, samples: Sequence
         validate_atac_sample(row)
     for row in callpeak_bindings:
         validate_atac_callpeak_binding(row)
-    for records, version in ((tracks, 'atac_bedgraph_parsed_v1'), (peaks_xls, 'macs2_peaks_xls_parsed_v1'),
-                             (narrowpeaks, 'macs2_narrowpeak_parsed_v1'), (summits, 'macs2_summits_parsed_v1'),
-                             (native_differential, 'macs2_bdgdiff_parsed_v1'),
-                             (bam_references, 'atac_bam_reference_parsed_v1')):
+    for records, version in ((tracks, 'atac_bedgraph_parsed'), (peaks_xls, 'macs2_peaks_xls_parsed'),
+                             (narrowpeaks, 'macs2_narrowpeak_parsed'), (summits, 'macs2_summits_parsed'),
+                             (native_differential, 'macs2_bdgdiff_parsed'),
+                             (bam_references, 'atac_bam_reference_parsed')):
         for report in records:
             validate_atac_parsed_table(report, version=version)
     sample_map = _unique_map(samples, 'sample_id', 'duplicate_atac_sample_id')
@@ -277,7 +277,7 @@ def build_atac_differential_sheet(*, reference: AtacReference, samples: Sequence
     run_map = _unique_map(callpeak_bindings, 'run_key', 'duplicate_atac_callpeak_run_key')
     track_map = _unique_map(tracks, 'binding_key', 'duplicate_atac_track_key')
     issues, key = [], comparison['comparison_key']
-    sheet = dict(version='atac_differential_native_sheet_v1', tool_row='B-L125-analyze_atac_seq_differential_accessibility',
+    sheet = dict(version='atac_differential_native_sheet', tool_row='B-L125-analyze_atac_seq_differential_accessibility',
                  reference=deepcopy(reference), samples=deepcopy(list(samples)), conditions=deepcopy(list(conditions)),
                  callpeak_bindings=deepcopy(list(callpeak_bindings)), comparison=deepcopy(comparison),
                  tracks=[], peaks_xls=_complete_peak_roles(peaks_xls, callpeak_bindings, 'peaks_xls'),

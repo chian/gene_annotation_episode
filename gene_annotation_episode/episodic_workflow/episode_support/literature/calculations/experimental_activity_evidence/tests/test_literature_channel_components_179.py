@@ -353,7 +353,7 @@ def test_nonzero_result_underflow_is_not_reported_as_zero():
 def covariance_args(source):
     args = source.args()
     extraction = read_channel_inputs(args, read_source=source.read)
-    source.covariance = {'version': 'a105_channel_covariance_v1', 'primitive_order': list(PRIMITIVE_ORDER), 'primitive_measurement_keys': [extraction['measurement_keys'][name] for name in PRIMITIVE_ORDER], 'primitive_units': ['pA', 'mV', 'mV'], 'covariance': [[0.04, 0, 0], [0, 1, 0], [0, 0, 4]], 'origin': 'synthetic'}
+    source.covariance = {'version': 'a105_channel_covariance', 'primitive_order': list(PRIMITIVE_ORDER), 'primitive_measurement_keys': [extraction['measurement_keys'][name] for name in PRIMITIVE_ORDER], 'primitive_units': ['pA', 'mV', 'mV'], 'covariance': [[0.04, 0, 0], [0, 1, 0], [0, 0, 4]], 'origin': 'synthetic'}
     args.update(covariance_source_ref=source.covariance_ref, variance_status='known', variance_witnesses=[source.witness('Known synthetic primitive covariance')])
     return args
 

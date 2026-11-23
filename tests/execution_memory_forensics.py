@@ -17,7 +17,7 @@ import stat
 import traceback
 
 
-VERSION = 'execution_memory_locked_forensics_v1'
+VERSION = 'execution_memory_locked_forensics'
 DATABASES = (
     'gene_annotation_episode/episodic_workflow/root/runs/shared-execution/memory.sqlite3',
     'runs/shared-execution/memory.sqlite3',

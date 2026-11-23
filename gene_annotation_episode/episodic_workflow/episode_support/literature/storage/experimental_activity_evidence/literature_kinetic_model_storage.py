@@ -18,9 +18,9 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.storag
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_rate_storage import LiteratureRateRepository
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.literature_kinetic_model_inputs import read_kinetic_model
 PROVIDER = 'literature.a105.kinetic_model_population'
-VERSION = 'literature_kinetic_model_population_record_v1'
+VERSION = 'literature_kinetic_model_population_record'
 COMPONENTS = ALL_COMPONENTS[5:]
-FORMULA_CODES = {name: 'kinetic_model_' + name + '_v1' for name in COMPONENTS}
+FORMULA_CODES = {name: 'kinetic_model_' + name for name in COMPONENTS}
 FORMULA_MEANINGS = {FORMULA_CODES[name]: FORMULAS[name] for name in COMPONENTS}
 VIEW = 'kinetic_log_model_components'
 REQUESTED = 'requested_kinetic_model_components'

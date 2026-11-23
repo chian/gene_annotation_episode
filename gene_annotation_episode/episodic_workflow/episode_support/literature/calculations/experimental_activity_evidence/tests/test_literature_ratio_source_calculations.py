@@ -5,12 +5,12 @@ import json
 import math
 from pathlib import Path
 import pytest
-from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence.literature_ratio_source_calculations import populate_relative_signal_v2
+from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence.literature_ratio_source_calculations import populate_relative_signal_from_source
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.experimental_activity_evidence.tests.test_literature_ratio_source_inputs import extract, request, visual, image, prose
 
 def sheet(rows):
     extraction, _ = extract(request(rows))
-    return populate_relative_signal_v2(extraction)
+    return populate_relative_signal_from_source(extraction)
 
 def test_all_twelve_declared_constructed_cases():
     ambiguous = visual(state='ambiguous')
@@ -49,7 +49,7 @@ def test_literal_capability_partials_never_become_zeros(literal, reason):
     reading = extraction['representations'][0]['readings'][0]
     assert reading['numerator']['literal'] == literal
     assert reading['ratio'] is None and reading['reported_domains'] == []
-    out = populate_relative_signal_v2(extraction)
+    out = populate_relative_signal_from_source(extraction)
     assert out['cells']['reported_ratio']['value'] is None
     assert out['cells']['reported_ratio']['unavailable_reason'] == reason
 
@@ -92,7 +92,7 @@ def test_numerical_range_during_division_and_nonunit_log_underflow():
     extraction, _ = extract(request([visual('1e308', '1e-308')]))
     reading = extraction['representations'][0]['readings'][0]
     assert reading['ratio_exact'] is not None and reading['ratio'] is None
-    assert populate_relative_signal_v2(extraction)['cells']['reported_ratio']['unavailable_reason'] == 'numerical_model_range'
+    assert populate_relative_signal_from_source(extraction)['cells']['reported_ratio']['unavailable_reason'] == 'numerical_model_range'
     value = '1.' + '0' * 330 + '1'
     out = sheet([visual(value)])
     assert out['cells']['log_reported_ratio']['value'] is None
@@ -119,5 +119,5 @@ def test_extreme_exponent_preserves_literal_without_allocating_giant_integer():
     extraction, _ = extract(request([visual('1e999999999999')]))
     operand = extraction['representations'][0]['readings'][0]['numerator']
     assert operand['literal'] == '1e999999999999' and operand['value'] is None
-    out = populate_relative_signal_v2(extraction)
+    out = populate_relative_signal_from_source(extraction)
     assert out['cells']['reported_ratio']['unavailable_reason'] == 'numerical_model_range'

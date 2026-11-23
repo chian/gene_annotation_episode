@@ -1,4 +1,4 @@
-"""Saved Infernal search v2 cells and their non-calculating validation boundary.
+"""Saved Infernal search cells and their non-calculating validation boundary.
 
 Parsers retain source facts; the common calculator alone publishes numerical
 components. Validation checks custody and relationships without parsing source
@@ -13,8 +13,8 @@ import math
 import re
 from typing import Literal, NotRequired, TypedDict
 
-SHEET_SCHEMA = "infernal_search_sheet_v2"
-SCORE_SCHEMA = "infernal_search_scores_v2"
+SHEET_SCHEMA = "infernal_search_sheet"
+SCORE_SCHEMA = "infernal_search_scores"
 SOURCE_PROFILES = ("infernal_tblout", "rfam_single_json", "rfam_batch_tblout", "rfam_batch_report")
 CORRESPONDENCE_COUNT_FIELDS = (
     "model_consensus_compared_count", "model_consensus_equal_count", "query_insert_count",

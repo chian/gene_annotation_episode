@@ -19,8 +19,8 @@ from .data_acquisition_receipts import acquisition_receipt_schema, validate_acqu
 from .domain import canonical
 
 
-VERSION = "molecular_provider_result_v1"
-VALUE_VERSION = "molecular_provider_value_v1"
+VERSION = "molecular_provider_result"
+VALUE_VERSION = "molecular_provider_value"
 MAX_RESPONSE_BYTES = 8 * 1024 * 1024
 _SERVICES = {"public.string.network": "string", "public.kegg.reaction": "kegg",
     "public.reactome.record": "reactome", "public.quickgo.term": "quickgo",
@@ -640,11 +640,11 @@ def provider_receipt(value, *, source_ref):
 
 
 def _failure_witness(snapshot, failure_code):
-    schema = _object({"version": {"const": "molecular_provider_failure_witness_v1"},
+    schema = _object({"version": {"const": "molecular_provider_failure_witness"},
         "observed_snapshot_service": {"type": "string"},
         "observed_snapshot_url": {"type": "string"},
         "failure_code": {"enum": list(PROVIDER_FAILURE_CODES)}})
-    return _validated(dict(version="molecular_provider_failure_witness_v1",
+    return _validated(dict(version="molecular_provider_failure_witness",
         observed_snapshot_service=snapshot.service, observed_snapshot_url=snapshot.url,
         failure_code=failure_code), schema)
 

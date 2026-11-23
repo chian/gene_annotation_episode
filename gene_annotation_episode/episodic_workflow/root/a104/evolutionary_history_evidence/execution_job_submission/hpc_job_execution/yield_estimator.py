@@ -12,7 +12,7 @@ EPOCH = 'hpc_job_execution'
 
 def request_yield_class(request):
     """Classify the original execution request without generated IDs."""
-    if request['version'] != 'practical_assignment_v1':
+    if request['version'] != 'practical_assignment':
         raise ValueError('execution_hpc_request_version_unsupported:' + str(request['version']))
     requested = request['requested_job']
     native = sorted(key for key in requested if key.startswith('native_'))

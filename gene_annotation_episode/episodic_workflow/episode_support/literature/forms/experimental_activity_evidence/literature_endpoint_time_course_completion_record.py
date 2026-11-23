@@ -44,7 +44,7 @@ the converter does. The constructors take ``support`` and default it to 'direct'
 extraction always passes the model's answer).
 """
 
-VERSION = 'a105_endpoint_time_course_completion_record_v1'
+VERSION = 'a105_endpoint_time_course_completion_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'endpoint_time_course_completion'
 QUANTITIES = ('completion_time', 'completion_time_spread', 'reference_completion_time', 'completion_time_ratio', 'completion_time_ratio_spread', 'sampling_interval',

@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.
 from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.perturbation_evidence.literature_rate_replicate_inputs import GROUP_FIELDS, validate_rate_replicate_extraction
 
 
-VERSION = "a105_rate_replicate_summary_v1"
+VERSION = "a105_rate_replicate_summary"
 _BASE = {"amount_rate": "umol/min", "concentration_rate": "uM/min",
          "turnover_rate": "per_min", "specific_amount_rate": "umol/min/mg"}
 
@@ -291,7 +291,7 @@ def populate_rate_replicate_contrast(extraction, *, reference, test,
         "paired_sample_sd/sqrt(pair_count)" if dependence == "paired_units" else
         "sqrt(reference_mean_se^2+test_mean_se^2)", rows, reason=se_reason,
         conditional=conditional)
-    return {"version": "a105_rate_replicate_contrast_v1", "axis": "A105",
+    return {"version": "a105_rate_replicate_contrast", "axis": "A105",
             "scope": "source_preparation_endpoint", "subject": data["subject"],
             "experiment": data["experiment"], "reference": deepcopy(reference), "test": deepcopy(test),
             "summary": summary, "dependence": dependence,

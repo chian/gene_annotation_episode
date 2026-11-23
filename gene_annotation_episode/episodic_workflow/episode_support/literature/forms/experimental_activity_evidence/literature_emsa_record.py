@@ -64,7 +64,7 @@ def fact(answer, refs=(), support='direct'):
     return {**literature_spr_record.fact(answer, refs), 'support': None if answer == 'unknown' else support}
 
 
-VERSION = 'a105_emsa_record_v1'
+VERSION = 'a105_emsa_record'
 EXPERIMENT_TYPE = 'emsa'
 QUANTITIES = ('kd', 'kd_spread', 'fraction_shifted_highest', 'plateau_shifted_fraction', 'competition_protein_concentration', 'protein_concentration_lowest', 'protein_concentration_highest', 'probe_concentration', 'probe_length', 'salt_concentration', 'magnesium_concentration', 'glycerol_percent', 'nonspecific_competitor_amount', 'specific_competitor_excess', 'incubation_time', 'incubation_temperature', 'gel_percent', 'run_time', 'run_voltage', 'run_temperature', 'titration_point_count', 'shifted_species_count', 'replicate_count')
 PREPARATION_KEYS = ('probe_preparation_ref', 'protein_preparation_ref', 'dataset_ref')

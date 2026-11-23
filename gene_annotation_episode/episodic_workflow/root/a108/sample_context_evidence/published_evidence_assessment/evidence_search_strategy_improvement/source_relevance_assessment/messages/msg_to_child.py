@@ -1,5 +1,5 @@
 """The commission of the source evidence examination child (the page): ONE paper. The parent states what the child
-takes in its own assignment: the page assignment ``page_assignment_v1`` (the source of the paper the picked hit names,
+takes in its own assignment: the page assignment ``page_assignment`` (the source of the paper the picked hit names,
 its representation and artifact, filled by code from the source record, with the records that give the question
 context and no earlier delivery), the commissioned literature task, the proposed annotation, the A108 components the
 parent wants returned, the scope and the records the child reads.
@@ -60,7 +60,7 @@ def msg_to_child(slot, arguments, summary):
         raise LookupError('no_such_child_slot:' + slot)
     assignment = summary['literature_assignment']
     page = arguments['page']
-    child = {'version': 'page_assignment_v1', **page, 'question_context_refs': summary['question_context_refs'],
+    child = {'version': 'page_assignment', **page, 'question_context_refs': summary['question_context_refs'],
              'literature_task': summary['task'], 'proposed_annotation_ref': summary['proposed_annotation_ref'],
              **{name: assignment[name] for name in (REQUESTED_GRADING, REQUESTED_AGGREGATION)
                 if assignment.get(name)},

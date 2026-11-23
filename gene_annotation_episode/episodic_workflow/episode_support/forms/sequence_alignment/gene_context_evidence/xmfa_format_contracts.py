@@ -342,7 +342,7 @@ def validate_xmfa_document(value: dict) -> dict:
     _parameters(value['dialect'], value['alphabet'], value['encoding'])
     _artifact(value['artifact'])
     artifact, encoding = value['artifact'], value['encoding']
-    _require(value['schema_version'] == 'mauve_xmfa_document_v1', 'schema_version_invalid')
+    _require(value['schema_version'] == 'mauve_xmfa_document', 'schema_version_invalid')
     expected_id = document_id('mauve_xmfa', artifact=artifact,
         parameters={key: value[key] for key in ('dialect', 'alphabet', 'encoding')})
     _require(value['document_id'] == expected_id, 'document_identity_conflict')

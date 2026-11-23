@@ -49,7 +49,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import criterion_supports
 
-VERSION = 'a105_fcs_grade_v1'
+VERSION = 'a105_fcs_grade'
 INTERACTION = {'yes': 'detected', 'no': 'not_detected'}   # the stated yes/no result of the fact binding_detected
 CRITERIA = tuple(criterion['id'] for criterion in FCS_CRITERIA)
 CONSTANTS = ('kd',)       # the reported constant of a series: only a KD is a binding constant

@@ -21,7 +21,7 @@ def identifier(kind, ordinal):
 def native(query="AC", reference="AC", coordinates=None, *, mode="global", lengths=None):
     """Declare native-shaped cells; this does not run a native producer."""
     lengths = lengths or (len(query.replace("-", "")), len(reference.replace("-", "")))
-    return dict(native_format="biopython_pairwise_native_v2", aligned=True, native_score=0,
+    return dict(native_format="biopython_pairwise_native", aligned=True, native_score=0,
         query_length=lengths[0], reference_length=lengths[1], mode=mode,
         matrix="engineered_literal_model", gap_open=-2, gap_extend=-.5,
         biopython_version="engineered_no_native_execution", aligned_query=query, aligned_reference=reference,
@@ -41,7 +41,7 @@ def capture(raw=None, *, ordinal=1, molecule="dna", mappings=True):
     operands = dict(query=operand(qref, raw.get("query_length")), reference=operand(rref, raw.get("reference_length")))
     def mapping(operand):
         length = operand["length"]
-        return None if not length else dict(version="oriented_source_subject_path_v2", units_per_symbol=1,
+        return None if not length else dict(version="oriented_source_subject_path", units_per_symbol=1,
             symbol_length=length, path=[dict(subject_ref=operand["subject_ref"], start=0, end=length, unit="nt", strand="+")])
     return dict(source=dict(alignment_ref=identifier("observation", ordinal), source_ref=identifier("source", ordinal),
         native_artifact_ref=identifier("artifact", ordinal), provider="biopython.alignment", format="biopython_pairwise_json",

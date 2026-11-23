@@ -77,7 +77,7 @@ def unavailable(unit, key, reason):
 def fact(answer, refs=(), support='direct'):
     return {**literature_spr_record.fact(answer, refs), 'support': None if answer == 'unknown' else support}
 
-VERSION = 'a105_fp_record_v2'
+VERSION = 'a105_fp_record'
 EXPERIMENT_TYPE = 'fp'
 QUANTITIES = ('kd', 'ki', 'kd_spread', 'ki_spread', 'ic50', 'tracer_concentration', 'signal_minimum', 'signal_maximum', 'signal_noise', 'total_intensity_change', 'assay_volume', 'incubation_time', 'temperature', 'replicate_count')
 PREPARATION_KEYS = ('titrant_preparation_ref', 'tracer_preparation_ref', 'dataset_ref')

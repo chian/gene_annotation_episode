@@ -86,5 +86,5 @@ def calculate_sequence_masking_components(sheet: dict) -> dict:
             "checks": source["checks"] + [c for c in output["checks"] if c["record_key"] == key],
             "failures": record_failures})
     return validate_sequence_masking_record("SequenceMaskingComponents", {
-        "version": "sequence_masking_components_v1", "analysis": "sequence_masking_preparation",
+        "version": "sequence_masking_components", "analysis": "sequence_masking_preparation",
         "records": records, "checks": sheet["checks"], "failures": sheet["failures"]})

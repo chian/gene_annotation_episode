@@ -33,7 +33,7 @@ ATTEMPT = dict(run_id="synthetic:318", episode_id="synthetic:child", resource_id
 
 
 def sheet_set(collection, *, iteration_sheet=None, profile_sheet=None, vdb_sheet=None, pssm_sheets=()):
-    return dict(schema="native_blast_database_sheet_set_v1", collection=deepcopy(collection),
+    return dict(schema="native_blast_database_sheet_set", collection=deepcopy(collection),
         prepared_inputs={"metadata": []}, derived_search_bindings=[], sequence=[],
         profile=[] if profile_sheet is None else [dict(search_key=deepcopy(profile_sheet["search"]["search_key"]), sheet=profile_sheet)],
         vdb=[] if vdb_sheet is None else [dict(search_key=deepcopy(vdb_sheet["search"]["search_key"]), sheet=vdb_sheet)],
@@ -194,7 +194,7 @@ def request_fixture(tmp_path, program="psiblast", *, metadata_payload=None, meta
     assert process.returncode == 0, process.stderr
     native.validate_bundle(bundle, plan)
     capture = native.file_identity(path.parent / "bundle.json")
-    request = dict(version="native_blast_database_result_worker_request_v1", calculation_id="0" * 64,
+    request = dict(version="native_blast_database_result_worker_request", calculation_id="0" * 64,
         bundle=bundle, bundle_artifact_ref="artifact:synthetic-bundle", bundle_capture={k: capture[k] for k in ("path", "sha256", "size_bytes")},
         authenticated_attempt=dict(identity=bundle["identity"], attempt_directory=plan["attempt_directory"], plan_sha256=native.c._digest(plan)),
         artifacts=[dict(artifact_key=r["artifact_key"], artifact_ref="artifact:" + r["artifact_key"],
@@ -239,7 +239,7 @@ def test_identity_exact_canonical_recipe_path_invariance_and_model_changes(tmp_p
 
 
 @pytest.mark.parametrize("program", views._PROGRAMS)
-def test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet(tmp_path, program):
+def test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_native_convergence_sheet(tmp_path, program):
     request = request_fixture(tmp_path, program)
     manifest = run_request(tmp_path, request, cli=True)
     output = Path(request["output_directory"])
@@ -254,7 +254,7 @@ def test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet(tmp
         assert len(raw) == artifact["size_bytes"] and hashlib.sha256(raw).hexdigest() == artifact["sha256"]
     assert [r["role"] for r in sheets["collection"]["artifacts"]].count("native_log") == 2
     if program in ("psiblast", "deltablast"):
-        assert sheets["iteration"]["schema"] == "blast_iteration_sheet_v2"
+        assert sheets["iteration"]["schema"] == "blast_iteration_sheet_target_context"
     else:
         assert sheets["iteration"] is None
         assert len(sheets["profile" if program in ("rpsblast", "rpstblastn") else "vdb"]) == 1
@@ -537,7 +537,7 @@ def test_retained_native_pssm_full_matrix_values_are_not_compacted():
 
 
 def test_distinct_metadata_tuples_share_captured_bytes_without_overwrite(tmp_path):
-    payload = dict(schema="native_blast_database_query_metadata_v1", documents=[], sequence_records=[],
+    payload = dict(schema="native_blast_database_query_metadata", documents=[], sequence_records=[],
         effective_msa_masters=[], master_subjects=[], search_bindings=[], target_contexts=[])
     tuples = [dict(input_key="metadata", consumer="query_identity", schema_id=payload["schema"]),
         dict(input_key="metadata", consumer="profile", schema_id="synthetic.unregistered.v2")]
@@ -566,7 +566,7 @@ def test_distinct_metadata_tuples_share_captured_bytes_without_overwrite(tmp_pat
 
 @pytest.mark.parametrize("raw", [b'{"schema":"one","schema":"two"}', b'{"value":NaN}', b'not JSON\x00\xff'])
 def test_malformed_metadata_bytes_preserve_native_sibling_measurements(tmp_path, raw):
-    tuples = [dict(input_key="metadata", consumer="query_identity", schema_id="native_blast_database_query_metadata_v1")]
+    tuples = [dict(input_key="metadata", consumer="query_identity", schema_id="native_blast_database_query_metadata")]
     request = request_fixture(tmp_path, metadata_payload=raw, metadata_tuples=tuples)
     result = run_request(tmp_path, request)
     output = Path(request["output_directory"])

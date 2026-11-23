@@ -39,7 +39,7 @@ def _base(document, selection, family, tail):
     check.ok(all(i < len(document['rows']) for i in selection['row_indices']), 'selection_record_unknown')
     if selection['population_scope'] == 'all_observed_document_rows':
         check.ok(set(selection['row_indices']) == set(range(len(document['rows']))), 'selection_population_incomplete')
-    return {'schema_version': 'mauve_' + family + '_components_v1',
+    return {'schema_version': 'mauve_' + family + '_components',
         'document_id': document['document_id'], 'status': 'ok', 'selection': selection,
         'rows': [], tail: [], 'requirements': [], 'diagnostics': []}
 
@@ -47,7 +47,7 @@ def _base(document, selection, family, tail):
 def _cell(selection, family, field, unit, value=None, *, state='available', origin='calculated',
           numerator=None, denominator=None, evidence=(), ids=()):
     return numeric_cell(value, state=state, unit=unit, origin=origin,
-        population_id=selection['population_id'], method_id='mauve_' + family + '_' + field + '_v1',
+        population_id=selection['population_id'], method_id='mauve_' + family + '_' + field,
         numerator=numerator, denominator=denominator, evidence=_evidence(selection['evidence'], evidence),
         requirement_ids=list(dict.fromkeys(ids)), uncertainty=None)
 

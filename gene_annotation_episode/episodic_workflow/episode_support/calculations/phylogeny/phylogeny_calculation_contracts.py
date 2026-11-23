@@ -269,8 +269,8 @@ def diagnostic(code, *, path="", evidence_refs=()):
             "severity": "qualification", "evidence_refs": list(dict.fromkeys(evidence_refs))}
 
 
-LITERAL_CONSERVATION_VERSION = "literal_site_conservation_v1"
-LITERAL_CONSERVATION_CONVENTION = "modal_literal_all_rows_first_source_row_v1"
+LITERAL_CONSERVATION_VERSION = "literal_site_conservation"
+LITERAL_CONSERVATION_CONVENTION = "modal_literal_all_rows_first_source_row"
 _QUANTITY_KEYS = {"value", "state", "unit", "origin", "numerator", "denominator",
                   "population_ref", "method", "evidence", "requirement_ids"}
 

@@ -39,7 +39,7 @@ no_substrate_percent, peroxide_percent, window_ratio, replicate_count, replicate
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_coupling_oxygen_product_criteria import COUPLING_OXYGEN_PRODUCT_CRITERIA
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import SUPPORTS, criterion_supports
 
-VERSION = 'a105_coupling_oxygen_product_grade_v1'
+VERSION = 'a105_coupling_oxygen_product_grade'
 CRITERIA = tuple(criterion['id'] for criterion in COUPLING_OXYGEN_PRODUCT_CRITERIA)
 INTERACTION = {'yes': 'detected', 'no': 'not_detected'}   # the qualitative statement of the fact coupling_detected_above_control
 FRACTION_PER_PERCENT = 0.01      # FIXED_BY_DEFINITION: a percent is a hundredth.

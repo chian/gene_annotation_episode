@@ -10,7 +10,7 @@ def extraction(a=3.0, b=1.0, *, sd=2.0, count=5):
     rows = []
     for index, (arm, condition, value) in enumerate((('reference', 'without_inhibitor', a), ('test', 'with_inhibitor', b)), 2):
         rows.append({'arm': arm, 'condition': condition, 'endpoint': 'oxygen_consumption', 'normalization': 'per_preparation', 'value': value, 'unit': 'umol/min', 'status': 'observed', 'bound': 'none', 'approximate': False, 'uncertainty': {'kind': 'sd', 'magnitude': sd, 'count': count, 'sampling_basis': 'unspecified'}, 'origin': 'synthetic', 'source': {'source_ref': 'source_synthetic', 'artifact_ref': 'artifact_synthetic', 'representation': 'synthetic_fixture', 'row_number': index, 'header': 'synthetic summary header', 'raw_row': 'synthetic summary row'}})
-    return {'version': 'a105_rate_extraction_v1', 'subject': 'SyntheticConstruct', 'experiment': 'synthetic_rate_comparison', 'rows': rows}
+    return {'version': 'a105_rate_table_extraction', 'subject': 'SyntheticConstruct', 'experiment': 'synthetic_rate_comparison', 'rows': rows}
 
 def populate(data=None, **kwargs):
     selection = {'reference_arm': 'reference', 'test_arm': 'test', 'reference_condition': 'without_inhibitor', 'test_condition': 'with_inhibitor'}

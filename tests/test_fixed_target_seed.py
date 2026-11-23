@@ -50,7 +50,7 @@ def test_complete_original_intake_and_explicit_baseline_without_old_work(tmp_pat
     receipt = invoke(original, destination)
     assert set(receipt) == {'version', 'source', 'workspace', 'fixed_identity', 'input_files',
         'intake_records', 'artifact_manifest', 'initial_known_record_refs', 'verification', 'exclusions'}
-    assert receipt['version'] == 'fixed_target_seed_v1'
+    assert receipt['version'] == 'fixed_target_seed'
     assert json.loads((destination/'fixed-target-seed.json').read_text()) == receipt
     assert (destination/'fixed-target-seed.json').stat().st_mode & 0o777 == 0o444
     assert receipt['workspace'] == str(destination)
@@ -97,7 +97,7 @@ def test_existing_destinations_are_never_adopted_or_replaced(tmp_path, kind):
     before = tree_bytes(destination) if destination.is_dir() else destination.read_bytes()
     with pytest.raises(FixedTargetSeedError) as caught:
         invoke(original, destination)
-    assert caught.value.failure == {'version': 'fixed_target_seed_failure_v1',
+    assert caught.value.failure == {'version': 'fixed_target_seed_failure',
         'code': 'destination_exists', 'affected_refs': [str(destination)], 'staging_workspace': None}
     assert (tree_bytes(destination) if destination.is_dir() else destination.read_bytes()) == before
 
@@ -241,7 +241,7 @@ def test_parent_fsync_failure_reports_published_output_without_fictional_stage(t
     monkeypatch.setattr(module, '_publish_directory', parent_sync_fails)
     with pytest.raises(FixedTargetSeedError) as caught:
         invoke(original, destination)
-    assert caught.value.failure == {'version': 'fixed_target_seed_failure_v1',
+    assert caught.value.failure == {'version': 'fixed_target_seed_failure',
         'code': 'publication_failure', 'affected_refs': [str(destination)], 'staging_workspace': None}
     assert (destination/'state.sqlite3').is_file()
     assert (destination/'fixed-target-seed.json').is_file()
@@ -289,7 +289,7 @@ def test_destination_filesystem_errors_are_typed_before_staging(tmp_path, monkey
     monkeypatch.setattr(Path, method, fail_selected)
     with pytest.raises(FixedTargetSeedError) as caught:
         invoke(original, destination)
-    assert caught.value.failure == {'version': 'fixed_target_seed_failure_v1',
+    assert caught.value.failure == {'version': 'fixed_target_seed_failure',
         'code': 'destination_invalid', 'affected_refs': [str(destination)], 'staging_workspace': None}
 
 

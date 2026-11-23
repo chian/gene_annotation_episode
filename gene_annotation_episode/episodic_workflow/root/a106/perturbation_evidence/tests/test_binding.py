@@ -42,13 +42,13 @@ JOBS = [{'job': 'job_' + '3' * 32, 'handoff_ref': JOB_HANDOFF, 'record_refs': [J
 
 
 def option(slot, option_id):
-    return {'version': 'perturbation_evidence_option_ref_v1', 'library_id': '1' * 64, 'slot': slot,
+    return {'version': 'perturbation_evidence_option_ref', 'library_id': '1' * 64, 'slot': slot,
             'option_id': option_id, 'entry_sha256': '2' * 64}
 
 
-SELECTION = {'version': 'perturbation_evidence_selection_v3', 'evidence_axis': option('evidence_axis', 'A106'),
+SELECTION = {'version': 'perturbation_evidence_selection', 'evidence_axis': option('evidence_axis', 'A106'),
              'thought_pattern': option('thought_pattern', 'P07'), 'child_tool_info': []}
-TASK = {'version': 'evidence_axis_task_v1', 'kind': 'whole_axis_findings', 'evidence_axis': 'A106',
+TASK = {'version': 'evidence_axis_task', 'kind': 'whole_axis_findings', 'evidence_axis': 'A106',
         'credit_unit': 2.0}
 ASSIGNMENT = {'selection': SELECTION, 'proposed_annotation_ref': HYPOTHESIS, 'evidence_refs': [EVIDENCE],
               'constraints': {}, 'context': {'evidence_task': TASK}, 'scope': {'subject_refs': ['sub_1']},
@@ -279,7 +279,7 @@ def test_the_launch_monitor_and_results_commissions_are_admitted_by_the_forms_of
             assert message.selection == ('execution_handoff_refs', 'execution_completed')
         if slot == 'monitor':
             # The job is named by the records this episode holds: its handoff row and the check row held of it.
-            assert admitted == {'version': 'monitor_assignment_v2', 'handoff_refs': [JOB_HANDOFF],
+            assert admitted == {'version': 'monitor_assignment', 'handoff_refs': [JOB_HANDOFF],
                                 'known_progress_refs': [JOB_CHECK], 'dependency_handoff_refs': [],
                                 'requested_fields': ['execution_status'], 'information_unit': 0.5}
             assert set(form.record_refs(admitted)) == {JOB_HANDOFF, JOB_CHECK}
@@ -296,7 +296,7 @@ def test_the_launch_monitor_and_results_commissions_are_admitted_by_the_forms_of
 def test_the_commission_of_a_child_of_this_process_is_admitted_by_this_episodes_own_form():
     parent_input = EPISODE.read_from_parent(ASSIGNMENT, {})
     revised = {**SELECTION, 'thought_pattern': option('thought_pattern', 'P08')}
-    origin = {'version': 'perturbation_evidence_revision_origin_v1',
+    origin = {'version': 'perturbation_evidence_revision_origin',
               'parent_invocation_ref': 'scientific_invocation_' + '3' * 24,
               'preparation_operation_ref': 'operation_' + '4' * 24}
     arguments = {'selection': revised, 'revision_origin': origin}

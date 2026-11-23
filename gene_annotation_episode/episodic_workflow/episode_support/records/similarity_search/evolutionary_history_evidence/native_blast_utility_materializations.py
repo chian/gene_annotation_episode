@@ -1,4 +1,4 @@
-"""Pure v2 BLAST preparation selection, realization and custody relationships.
+"""Pure BLAST preparation selection, realization and custody relationships.
 
 No filesystem reads, processes, discovery, scoring, or input repair. The supplied
 lexical reader owns list syntax; these functions own the exact selected joins.
@@ -61,9 +61,9 @@ def _lists(job):
 
 
 def validate_preparation_job(job):
-    strict_schema(job, c.NATIVE_BLAST_UTILITY_JOB_V2_SCHEMA)
+    strict_schema(job, c.NATIVE_BLAST_PREPARATION_UTILITY_JOB_SCHEMA)
     op = validate_blast_utility_operation(job['operation'])
-    _require(op['version'] == 'blast_utility_operation_v2' and
+    _require(op['version'] == 'blast_preparation_operation' and
              (op['program'], op['mode']) in c.PREPARATION_MODES, 'unsupported_program_mode')
     c._path(job['software']['executable'], absolute=True)
     for key, value in job['environment'].items():
@@ -82,7 +82,7 @@ def validate_preparation_job(job):
     _require(list(inputs) == op['input_occurrence_ids'], 'input_selection_conflict')
     for db in job['databases']:
         _require(db['database_key'] not in dbs and db['role'] == 'target', 'database_selection_conflict')
-        if db['manifest']['version'] == 'native_blast_standard_prepared_database_manifest_v1':
+        if db['manifest']['version'] == 'native_blast_standard_prepared_database_manifest':
             c._database(db)
         else:
             validate_native_blast_database_operand(db)
@@ -274,7 +274,7 @@ def copy_receipt_plan(job):
 def realize_blast_utility_materializations(job: dict, *, input_contents: dict, attempt_directory: str) -> dict:
     """Validate supplied list bytes and replace exactly their selected spans."""
     job = c.validate_native_blast_utility_job(job)
-    _require(job['version'] == c.JOB_VERSION_V2, 'materialization_v2_required')
+    _require(job['version'] == c.PREPARATION_JOB_VERSION, 'materialization_required')
     inputs = {r['input_key']: r for r in job['inputs']}
     required = {r['input_key'] for r in job['materializations']['list_files']}
     _require(type(input_contents) is dict and required <= set(input_contents) <= set(inputs), 'list_contents_population')
@@ -419,7 +419,7 @@ def copied_relative_paths(job):
 
 
 def validate_materialization_failure(row, job):
-    _require(job['version'] == c.JOB_VERSION_V2, 'materialization_v2_required')
+    _require(job['version'] == c.PREPARATION_JOB_VERSION, 'materialization_required')
     candidates = [{'input_key': r['input_key'], 'database_key': None, 'relative_path': r['relative_path']}
                   for r in job['materializations']['list_files']]
     candidates += [{'input_key': None, 'database_key': copy['database_key'], 'relative_path': r['relative_path']}

@@ -1,6 +1,6 @@
 """Private A105 received-assessment identity and revision dependencies."""
 
-VERSION = 'received_component_assessment_dependencies_v1'
+VERSION = 'received_component_assessment_dependencies'
 
 def assessment_dependencies(store, reference, known, *, anchor=None):
     known = set(known)

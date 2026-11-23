@@ -40,7 +40,7 @@ def parse_windowmasker_statistics(content: bytes, *, occurrence: dict, format: s
         if reference_binding["statistics_occurrence_id"] != occurrence["occurrence_id"]:
             raise ContractError("sequence_masking_statistics_occurrence_reference")
     _bytes(content, occurrence)
-    result = {"version": "windowmasker_statistics_v1", "occurrence": occurrence,
+    result = {"version": "windowmasker_statistics", "occurrence": occurrence,
         "format": format, "reference_binding": reference_binding, "format_version": None,
         "algorithm_version": None, "unit_length": None, "metadata_lines": [], "unit_counts": [],
         "thresholds": dict.fromkeys(_THRESHOLDS), "percentiles": [], "checks": [], "failures": []}

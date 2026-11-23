@@ -197,7 +197,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_elisa_criteria import NM_PER_UNIT
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_elisa_converted_v1'
+VERSION = 'a105_elisa_converted'
 STATEMENTS = {'detected': 'interaction_detected', 'not_detected': 'interaction_not_detected', None: 'interaction_not_stated'}
 BINDING_CONSTANTS = ('kd', 'ki')
 CRITERIA_MAP = {'binding_controls': ('blank_subtraction', 'specificity_control', 'avidity', 'coated_protein_activity', 'detection_interference'), 'binding_regime': ('saturation', 'concentration_series', 'equilibrium', 'wash_dissociation', 'direct_vs_competition'), 'binding_parameter_definition': ('fit_model',), 'calibration_applicability': ('signal_window', 'detector_range'), 'sampling_basis': ('replicates',)}

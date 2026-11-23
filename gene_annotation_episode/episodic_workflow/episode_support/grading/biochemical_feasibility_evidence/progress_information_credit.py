@@ -16,7 +16,7 @@ import math
 from gene_annotation_episode.episodic_workflow.episode_support.records.biochemical_feasibility_evidence.progress_records import RESOURCE_STATUS_VERSION, validate_resource_status
 
 
-VERSION = 'received_progress_information_v1'
+VERSION = 'received_progress_information'
 _LIFECYCLE = {'pending', 'executing', 'returned', 'admitted'}
 
 
@@ -55,7 +55,7 @@ def _facts(snapshot):
         facts.add(('result_available', snapshot['result_available']))
 
     version = status.get('version')
-    if version == 'execution_status_v2':
+    if version == 'execution_status':
         if status.get('liveness') in {'live', 'not_live'}:
             facts.add(('liveness', status['liveness']))
         failure = status.get('failure')
@@ -146,7 +146,7 @@ class ProgressInformationCredit:
             if reference not in read:
                 snapshot = self.progress_provider.read_progress(reference, scope)
                 if (not isinstance(snapshot, Mapping)
-                        or snapshot.get('version') != 'progress_snapshot_v1'
+                        or snapshot.get('version') != 'progress_snapshot'
                         or snapshot.get('progress_ref') != reference):
                     raise ValueError('progress_credit_reference_identity_mismatch')
                 read[reference] = _facts(snapshot)

@@ -48,7 +48,7 @@ SERVICES = ('job_access',)
 
 TRANSPORT_ERROR = 'a107_execution_result_acquisition_selection_has_no_argument_transport'
 RESULT_PROVIDER = 'episode.execution_result'
-RESULT_VERSION = 'execution_result_information_v3'
+RESULT_VERSION = 'execution_result_information'
 MEBIBYTE = 1024 * 1024
 
 _OFFSET = {'type': 'integer', 'minimum': 0}

@@ -12,7 +12,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.similarity_search.sequence_homology_evidence.homology_jobs import STATUS_SCHEMA
 
 
-JOB_STATUS_VERSION = 'job_execution_status_v1'
+JOB_STATUS_VERSION = 'job_execution_status'
 JOB_STATUS_SCHEMA = obj({
     'version': {'const': JOB_STATUS_VERSION},
     'handle': {'type': 'string', 'minLength': 1},
@@ -27,7 +27,7 @@ _LIFECYCLE = {'not_submitted': 'pending', 'prepared': 'pending',
               'submission_unconfirmed': None, 'execution_unknown': None}
 
 
-RESOURCE_STATUS_VERSION = 'resource_execution_status_v1'
+RESOURCE_STATUS_VERSION = 'resource_execution_status'
 _TEXT = {'type': 'string', 'minLength': 1}
 RESOURCE_OBSERVATION_SCHEMA = obj({
     'observed_at': _TEXT,

@@ -30,11 +30,11 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.gene_cont
     validate_revision_origin, validate_selection)
 
 AXIS = 'A103'
-EVIDENCE_TASK_VERSION = 'evidence_axis_task_v1'
+EVIDENCE_TASK_VERSION = 'evidence_axis_task'
 
 ASSIGNMENT_FORM = RecordForm({
     'selection': Field('record', 'The selected evidence axis option (A103), the thought pattern option and the '
-                                 'canonical information of the selected tools (gene_context_evidence_selection_v3)'),
+                                 'canonical information of the selected tools (gene_context_evidence_selection)'),
     'proposed_annotation_ref': Field('record_refs', 'The proposed annotation (a hypothesis) this task evaluates: '
                                      'exactly one reference, passed in custody', required=False),
     'evidence_refs': Field('record_refs', 'Records the commissioner hands on as evidence, with every record the '

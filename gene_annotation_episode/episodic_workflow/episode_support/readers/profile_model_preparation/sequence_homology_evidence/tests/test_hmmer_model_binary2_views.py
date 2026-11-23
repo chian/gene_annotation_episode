@@ -31,7 +31,7 @@ def prepared(raw, *, format):
 
 
 def selector():
-    return {"version": "native_hmmer_preparation_result_selector_v1", "acquisition": "complete_bound_bundle",
+    return {"version": "native_hmmer_preparation_result_selector", "acquisition": "complete_bound_bundle",
         "projection": {"collection": "input_records", "rows": {"offset": 0, "limit": 1},
             "quantities": PATHS[:], "checks": []}, "artifacts": []}
 

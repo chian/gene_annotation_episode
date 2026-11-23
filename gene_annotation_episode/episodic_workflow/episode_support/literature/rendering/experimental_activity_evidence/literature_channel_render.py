@@ -27,7 +27,7 @@ def task_relevant(state):
     assignment = state.get('literature_assignment', {})
     if isinstance(assignment, Mapping) and assignment.get('requested_channel_components'):
         return True
-    if state.get('literature_channel_work', {}).get('version') == 'literature_channel_task_v1':
+    if state.get('literature_channel_work', {}).get('version') == 'literature_channel_task':
         return True
     outcome = state.get('last_local_outcome') or {}
     if isinstance(outcome, Mapping) and isinstance(outcome.get('result'), Mapping) and (outcome['result'].get('view') == 'channel_components'):

@@ -16,8 +16,8 @@ import numpy as np
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.perturbation_evidence.literature_experimental_contracts import ExperimentalContractError
 
 
-OPERANDS_VERSION = "a105_nadh_optical_rate_operands_v1"
-VERSION = "a105_nadh_optical_rate_cells_v1"
+OPERANDS_VERSION = "a105_nadh_optical_rate_operands"
+VERSION = "a105_nadh_optical_rate_cells"
 PRIMITIVE_ORDER = ("sample_slope", "blank_slope", "epsilon", "path_length")
 _UNITS = ("absorbance/min", "absorbance/min", "mM^-1cm^-1", "cm")
 _ENUMS = {

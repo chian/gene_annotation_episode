@@ -10,7 +10,7 @@ from gene_annotation_episode.tool_grading_artifacts import validate_tool_corresp
 
 
 def bio_native():
-    return {"native_format": "biopython_pairwise_native_v2", "aligned": True,
+    return {"native_format": "biopython_pairwise_native", "aligned": True,
         "mode": "global", "query_length": 4, "reference_length": 5,
         "matrix": "NUC.4.4", "gap_open": -10, "gap_extend": -0.5,
         "native_score": 8, "aligned_query": "AC-GT", "aligned_reference": "ACAGT",
@@ -25,7 +25,7 @@ def blast_hsp():
 
 
 def normalized(hsps):
-    return {"schema": "blast_normalized_result_v1", "mode": "pairwise", "resource": "local",
+    return {"schema": "blast_normalized_result", "mode": "pairwise", "resource": "local",
         "format": "json2", "query": {"id": "q", "title": "q", "length": 4},
         "search": {"program": "blastn", "hit_array_present": True},
         "hits": [{"length": 5, "hsps": hsps, "descriptions": [], "unpaired_metadata": {}}],
@@ -178,7 +178,7 @@ def test_admission_rejects_inconsistency_and_frozen_validation_never_recalculate
 def test_frozen_earlier_common_components_keep_stored_compatibility_cells(monkeypatch):
     grading = bio.grade_biopython_pairwise(bio_native(), molecule="dna", _retain_correspondence=True)
     companion = grading.pop("correspondence")
-    # Explicit old common-v1 shape control: the new success-qualified fields
+    # Explicit earlier common shape control: the new success-qualified fields
     # were absent. Reading it cannot infer new cells or rewrite old facts.
     for selected in companion["instances"][0]["components"]["selected"].values():
         selected.pop("execution_success_numerator")

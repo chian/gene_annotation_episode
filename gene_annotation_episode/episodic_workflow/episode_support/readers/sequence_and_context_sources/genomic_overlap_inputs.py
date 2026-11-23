@@ -117,7 +117,7 @@ def _validate_line_locations(records, byte_count):
 
 def _specification(value):
     spec = validate_genomic_overlap_record("RegionSetSpec", value)
-    expected = "bed_artifact" if spec["format"] == "bed_outer_span_v1" else "coordinate_rows_artifact"
+    expected = "bed_artifact" if spec["format"] == "bed_outer_span" else "coordinate_rows_artifact"
     if spec["source"]["kind"] != expected or spec["source"]["file"]["format"] != spec["format"]:
         raise ValueError("genomic_overlap_input_format_binding")
     return spec
@@ -204,7 +204,7 @@ def parse_region_set(content: bytes | BinaryIO | None, *,
     if type(set_position) is not int or set_position < 0:
         raise ValueError("genomic_overlap_set_position")
     source, set_key = spec["source"]["file"], spec["set_key"]
-    result = {"version": "genomic_overlap_parsed_set_v1", "set_key": set_key,
+    result = {"version": "genomic_overlap_parsed_set", "set_key": set_key,
               "source_file": deepcopy(source), "parsed_byte_count": 0,
               "result_extent": "unavailable", "input_data_row_count": None,
               "regions": [], "ignored_records": [], "invalid_records": [],
@@ -235,7 +235,7 @@ def parse_region_set(content: bytes | BinaryIO | None, *,
     ordinal = 0
     def add(fields, locator, extra_errors=()):
         nonlocal ordinal
-        errors, coordinates = _row_values(fields, textual=spec["format"] == "bed_outer_span_v1")
+        errors, coordinates = _row_values(fields, textual=spec["format"] == "bed_outer_span")
         errors = list(extra_errors) + errors
         if errors:
             issues = [issue(code, locator=locator, field_path=path, expected_value=expected,
@@ -253,7 +253,7 @@ def parse_region_set(content: bytes | BinaryIO | None, *,
                 "name": _optional_text(fields, 3), "raw_strand": _optional_text(fields, 5)})
         ordinal += 1
     syntax_complete = True
-    if spec["format"] == "bed_outer_span_v1":
+    if spec["format"] == "bed_outer_span":
         for line, locator, terminated in _lines(raw):
             try:
                 text = line.decode("utf-8")
@@ -307,7 +307,7 @@ def _validate_set(value, *, specification=None, set_position=None):
             raise ValueError("genomic_overlap_occurrence_identity")
         if set_position is not None and row["native_token"] != f"s{set_position}_r{ordinal}":
             raise ValueError("genomic_overlap_native_token_position")
-        textual = parsed["source_file"]["format"] == "bed_outer_span_v1"
+        textual = parsed["source_file"]["format"] == "bed_outer_span"
         errors, coordinates = _row_values(row["original_fields"], textual=textual)
         if errors or coordinates != (row["chromosome"], row["start"], row["end"]):
             raise ValueError("genomic_overlap_original_coordinate_correspondence")
@@ -341,19 +341,19 @@ def _validate_set(value, *, specification=None, set_position=None):
         if [{k: v for k, v in row.items() if k != "group_key"} for row in actual] != [
                 {k: v for k, v in row.items() if k != "group_key"} for row in expected]:
             raise ValueError("genomic_overlap_duplicate_group_membership")
-    if parsed["source_file"]["format"] == "coordinate_rows_v1" and parsed["ignored_records"]:
+    if parsed["source_file"]["format"] == "coordinate_rows" and parsed["ignored_records"]:
         raise ValueError("genomic_overlap_coordinate_rows_have_no_bed_headers")
     for row in rows + parsed["invalid_records"] + parsed["ignored_records"]:
         locator = row["locator"]
-        if parsed["source_file"]["format"] == "bed_outer_span_v1":
+        if parsed["source_file"]["format"] == "bed_outer_span":
             if locator["kind"] != "bed_line" or not 0 <= locator["byte_start"] < locator["byte_end"] <= parsed["parsed_byte_count"]:
                 raise ValueError("genomic_overlap_input_locator")
-        elif parsed["source_file"]["format"] == "coordinate_rows_v1":
+        elif parsed["source_file"]["format"] == "coordinate_rows":
             if locator["kind"] != "array_index" or locator["index"] != row["data_ordinal"]:
                 raise ValueError("genomic_overlap_input_locator")
         else:
             raise ValueError("genomic_overlap_source_format")
-    if parsed["source_file"]["format"] == "bed_outer_span_v1":
+    if parsed["source_file"]["format"] == "bed_outer_span":
         _validate_line_locations(rows + parsed["invalid_records"] + parsed["ignored_records"], parsed["parsed_byte_count"])
     return parsed
 
@@ -459,9 +459,9 @@ def _native_binding(pair, sets, native):
         if key not in sets or native[side]["set_key"] != key or native[side]["original_file"] != sets[key]["source_file"]:
             raise ValueError("genomic_overlap_native_source_binding")
         canonical = native[side]["canonical_file"]
-        if canonical is not None and canonical["format"] != "bed4_occurrence_v1":
+        if canonical is not None and canonical["format"] != "bed4_occurrence":
             raise ValueError("genomic_overlap_canonical_format")
-    for name, expected in (("stdout", "bedtools_intersect_wo_bed4_v1"), ("stderr", "native_stderr_text_v1")):
+    for name, expected in (("stdout", "bedtools_intersect_wo_bed4"), ("stderr", "native_stderr_text")):
         if native[name] is not None and native[name]["format"] != expected:
             raise ValueError("genomic_overlap_native_format")
     if native["derivation"] in {"validated_empty_input", "not_executed_invalid_input"}:
@@ -567,7 +567,7 @@ def parse_bedtools_intersect_wo(content: bytes | BinaryIO | None, *, pair: Compa
     if any(key != value["set_key"] for key, value in sets.items()):
         raise ValueError("genomic_overlap_set_mapping")
     _native_binding(pair, sets, native)
-    result = {"version": "genomic_overlap_parsed_pairs_v1", "format": "bedtools_intersect_wo_bed4_v1",
+    result = {"version": "genomic_overlap_parsed_pairs", "format": "bedtools_intersect_wo_bed4",
               "comparison_key": pair["comparison_key"], "receipt": native, "result_extent": "unavailable",
               "parsed_byte_count": 0, "valid_pairs": [], "rejected_rows": [], "issues": []}
     if native["derivation"] == "validated_empty_input" and native["capture_extent"] == "unavailable":
@@ -762,7 +762,7 @@ def build_genomic_overlap_sheet(*, request: Request, sets: Sequence[ParsedRegion
     issues = _unique_issues(*(row["issues"] for row in parsed_sets),
         *(row["receipt"]["issues"] for row in pairs), *(row["issues"] for row in pairs),
         *(row["issues"] for row in references))
-    result = {"version": "genomic_region_overlap_sheet_v1", "request": request,
+    result = {"version": "genomic_region_overlap_sheet", "request": request,
               "sets": parsed_sets, "comparisons": pairs, "reference_relations": references, "issues": issues}
     return validate_genomic_overlap_record("Sheet", result)
 

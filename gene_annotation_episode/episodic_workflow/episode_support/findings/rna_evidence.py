@@ -18,7 +18,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.acquisition.partn
 from gene_annotation_episode.episodic_workflow.episode_support.records.partner_presence_evidence.domain import ContractError
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.local_execution.partner_presence_evidence.local_jobs import LocalJobPolicy, check_scratch_budget, run_local_job
 
-VERSION = "infernal_cmsearch_fmt3_v1"
+VERSION = "infernal_cmsearch_fmt3"
 RFAM_ACCESSION = re.compile(r"^RF[0-9]{5}$")
 
 

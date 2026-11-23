@@ -30,7 +30,7 @@ ANALYSIS_KINDS = (PAIRWISE, DATABASE_SEARCH, ALL_VS_ALL, DATABASE_BUILD, MASKING
 # The public service's job fields, and the preparation plan's version and programs (the plan is read by the
 # preparation job's compiler and by the job-side driver; the program of its first step is what the kind is read from).
 API_JOB_FIELDS = frozenset({'program', 'database', 'hitlist_size', 'query_file'})
-PREPARATION_PLAN_VERSION = 'blast_preparation_job_v1'
+PREPARATION_PLAN_VERSION = 'blast_preparation_job'
 KIND_OF_PROGRAM = {'makeblastdb': DATABASE_BUILD, 'dustmasker': MASKING, 'segmasker': MASKING}
 NATIVE_FAMILIES = ('native_blast', 'native_blast_standard_database', 'native_blast_database')
 

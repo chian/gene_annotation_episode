@@ -39,14 +39,14 @@ def make_case(*, mode='L'):
     def read(ref, representation):
         calls.append((ref, representation))
         return sources[ref, representation]
-    comparison = {'version': 'gel_competition_comparison_v1', 'baseline_lane_id': 'baseline', 'protein_lane_id': 'protein', 'competitor_lane_id': 'competitor'}
+    comparison = {'version': 'gel_competition_comparison', 'baseline_lane_id': 'baseline', 'protein_lane_id': 'protein', 'competitor_lane_id': 'competitor'}
     return (selected, read, sources, calls, comparison)
 
 def resign(extraction):
     extraction['extraction_digest'] = gel._hash(gel._canonical({key: value for key, value in extraction.items() if key != 'extraction_digest'}))
 
-def select_v2(selected, method='mean'):
-    selected['version'] = gel.VERSION_V2
+def select(selected, method='mean'):
+    selected['version'] = gel.VERSION
     for assignment in selected['roi_assignments']:
         for lane in assignment['lanes']:
             lane['background_method'] = method
@@ -179,17 +179,17 @@ def test_coherently_resigned_saved_artifact_alias_conflict_is_rejected():
         gel.validate_gel_extraction(selected, extraction)
 
 
-def test_v2_unknown_background_method_is_rejected_before_source_io():
+def test_unknown_background_method_is_rejected_before_source_io():
     selected, read, _, calls, _ = make_case()
-    select_v2(selected, 'favorable')
+    select(selected, 'favorable')
     with pytest.raises(ExperimentalContractError, match='unsupported_background_method'):
         gel.read_gel_inputs(selected, read_source=read)
     assert not calls
 
 @pytest.mark.parametrize('darkness,expected', [([0, 20, 100], (20, 1)), ([0, 21], (21, 2)), ([30], (30, 1))])
-def test_v2_median_actual_odd_even_single_pixel_order_statistics(darkness, expected):
+def test_median_actual_odd_even_single_pixel_order_statistics(darkness, expected):
     selected, read, sources, _, _ = make_case()
-    select_v2(selected, 'median')
+    select(selected, 'median')
     record = sources['source_image', 'original']
     with Image.open(BytesIO(record['content'])) as image:
         image.load()
@@ -206,9 +206,9 @@ def test_v2_median_actual_odd_even_single_pixel_order_statistics(darkness, expec
     assert gel._fraction(corrected['exact']) == 80 - gel._fraction(corrected['background_per_pixel'])
     assert gel.validate_gel_extraction(selected, result) == result
 
-def test_v2_saved_median_check_preserves_method_and_needs_no_decoder(monkeypatch):
+def test_saved_median_check_preserves_method_and_needs_no_decoder(monkeypatch):
     selected, read, _, _, _ = make_case()
-    select_v2(selected, 'median')
+    select(selected, 'median')
     extraction = gel.read_gel_inputs(selected, read_source=read)
 
     def forbidden(*_args, **_kwargs):

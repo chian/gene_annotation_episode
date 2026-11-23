@@ -20,8 +20,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
 )
 
 # Generated, readable and losslessly shared schema declarations. Do not mutate.
-_S0 = {'const': 'a105_kinetic_summary_precision_selection_v1'}
-_S1 = {'const': 'a105_kinetic_source_selection_v1'}
+_S0 = {'const': 'a105_kinetic_summary_precision_selection'}
+_S1 = {'const': 'a105_kinetic_source_selection'}
 _S2 = {'type': 'string', 'pattern': '^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$', 'description': 'An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.'}
 _S3 = ['primary_source', 'synthetic_fixture']
 _S4 = {'enum': _S3}
@@ -114,7 +114,7 @@ _S90 = {'type': 'object', 'properties': _S89, 'required': _S17, 'additionalPrope
 _S91 = {'row_footnote_applicability': _S86, 'source_count_meaning': _S90, 'statistical_count': _S45, 'statistical_count_matches_sd': _S86, 'one_estimate_per_preparation': _S86, 'equal_weight_arithmetic_mean': _S86, 'sample_sd_n_minus_one': _S86, 'iid_common_mean_finite_variance': _S86, 'normal_sampling_units': _S86, 'reported_sd_summarizes_counted_preparation_estimates': _S86}
 _S92 = ['row_footnote_applicability', 'source_count_meaning', 'statistical_count', 'statistical_count_matches_sd', 'one_estimate_per_preparation', 'equal_weight_arithmetic_mean', 'sample_sd_n_minus_one', 'iid_common_mean_finite_variance', 'normal_sampling_units', 'reported_sd_summarizes_counted_preparation_estimates']
 _S93 = {'type': 'object', 'properties': _S91, 'required': _S92, 'additionalProperties': False}
-_S94 = {'const': 'a105_summary_precision_scenario_v1'}
+_S94 = {'const': 'a105_summary_precision_scenario'}
 _S95 = ['source_statistical_count', 'one_per_physical_preparation']
 _S96 = {'enum': _S95}
 _S97 = ['one_estimate_per_preparation', 'reported_sd_summarizes_counted_preparation_estimates', 'equal_weight_arithmetic_mean', 'sample_sd_n_minus_one', 'iid_common_mean_finite_variance', 'normal_sampling_units']
@@ -130,9 +130,9 @@ _S106 = {'enum': _S105}
 _S107 = {'version': _S0, 'kinetic_selection': _S81, 'interpretation': _S93, 'scenario': _S104, 'interval_request': _S106}
 _S108 = ['version', 'kinetic_selection', 'interpretation', 'scenario', 'interval_request']
 _S109 = {'$schema': 'https://json-schema.org/draft/2020-12/schema', 'type': 'object', 'properties': _S107, 'required': _S108, 'additionalProperties': False}
-_S110 = {'const': 'a105_kinetic_summary_precision_extraction_v1'}
+_S110 = {'const': 'a105_kinetic_summary_precision_extraction'}
 _S111 = {'type': 'object', 'properties': _S107, 'required': _S108, 'additionalProperties': False}
-_S112 = {'const': 'a105_kinetic_source_extraction_v3'}
+_S112 = {'const': 'a105_kinetic_source_extraction'}
 _S113 = {'type': 'string', 'format': 'reference'}
 _S114 = {'source_ref': _S2, 'representation': _S8, 'start': _S9, 'end': _S10, 'quote': _S11, 'artifact_ref': _S11}
 _S115 = ['source_ref', 'representation', 'start', 'end', 'quote', 'artifact_ref']
@@ -272,7 +272,7 @@ _S248 = {'value': _S72, 'witnesses': _S117}
 _S249 = {'type': 'object', 'properties': _S248, 'required': _S17, 'additionalProperties': False}
 _S250 = {'subject_relationship': _S249, 'parameter_definition_relationship': _S249, 'substrate_arrangement': _S249, 'comparison_scope': _S249, 'nonintended_conditions_relationship': _S249}
 _S251 = {'type': 'object', 'properties': _S250, 'required': _S77, 'additionalProperties': False}
-_S252 = {'const': 'a105_kinetic_contrast_inputs_v1'}
+_S252 = {'const': 'a105_kinetic_contrast_inputs'}
 _S253 = {'version': _S252, 'subject_relationship': _S72, 'parameter_definition_relationship': _S72, 'substrate_arrangement': _S72, 'comparison_scope': _S72, 'nonintended_conditions_relationship': _S72, 'numerator': _S240, 'denominator': _S19}
 _S254 = ['version', 'subject_relationship', 'parameter_definition_relationship', 'substrate_arrangement', 'comparison_scope', 'nonintended_conditions_relationship', 'numerator', 'denominator']
 _S255 = {'type': 'object', 'properties': _S253, 'required': _S254, 'additionalProperties': False}
@@ -288,7 +288,7 @@ _S267 = {'value': _S88, 'witnesses': _S117}
 _S268 = {'type': 'object', 'properties': _S267, 'required': _S17, 'additionalProperties': False}
 _S269 = {'row_footnote_applicability': _S266, 'source_count_meaning': _S268, 'statistical_count': _S200, 'statistical_count_matches_sd': _S266, 'one_estimate_per_preparation': _S266, 'equal_weight_arithmetic_mean': _S266, 'sample_sd_n_minus_one': _S266, 'iid_common_mean_finite_variance': _S266, 'normal_sampling_units': _S266, 'reported_sd_summarizes_counted_preparation_estimates': _S266}
 _S270 = {'type': 'object', 'properties': _S269, 'required': _S92, 'additionalProperties': False}
-_S271 = {'const': 'a105_kinetic_summary_precision_inputs_v1'}
+_S271 = {'const': 'a105_kinetic_summary_precision_inputs'}
 _S272 = ['source_measurement_unreported', 'source_kinetic_unit_unreported', 'unsupported_source_kinetic_unit', 'source_operand_qualification_unknown', 'source_operand_qualification_conflicting', 'source_numeric_range', 'source_parameter_kind_unknown', 'source_parameter_kind_conflicting']
 _S273 = {'enum': _S272}
 _S274 = [_S273, _S19]
@@ -316,7 +316,7 @@ _S295 = {'version': _S110, 'selection': _S111, 'kinetic_extraction': _S264, 'int
 _S296 = ['version', 'selection', 'kinetic_extraction', 'interpretation', 'source_refs', 'calculation_inputs']
 _S297 = {'$schema': 'https://json-schema.org/draft/2020-12/schema', 'type': 'object', 'properties': _S295, 'required': _S296, 'additionalProperties': False}
 _S298 = {'$schema': 'https://json-schema.org/draft/2020-12/schema', 'type': 'object', 'properties': _S292, 'required': _S293, 'additionalProperties': False}
-_S299 = {'const': 'a105_kinetic_summary_precision_sheet_v1'}
+_S299 = {'const': 'a105_kinetic_summary_precision_sheet'}
 _S300 = {'const': 'A105'}
 _S301 = {'const': 'source_kinetic_summary_precision'}
 _S302 = {'$ref': '#/$defs/Cell'}
@@ -479,9 +479,9 @@ _S458 = {'$schema': 'https://json-schema.org/draft/2020-12/schema', 'type': 'obj
 
 _SCHEMAS = {'selection': _S109, 'extraction': _S297, 'inputs': _S298, 'sheet': _S458}
 
-VERSION = 'a105_kinetic_summary_precision_extraction_v1'
-SELECTION_VERSION = 'a105_kinetic_summary_precision_selection_v1'
-INPUT_VERSION = 'a105_kinetic_summary_precision_inputs_v1'
+VERSION = 'a105_kinetic_summary_precision_extraction'
+SELECTION_VERSION = 'a105_kinetic_summary_precision_selection'
+INPUT_VERSION = 'a105_kinetic_summary_precision_inputs'
 ASSUMPTIONS = (
     'one_estimate_per_preparation',
     'reported_sd_summarizes_counted_preparation_estimates',

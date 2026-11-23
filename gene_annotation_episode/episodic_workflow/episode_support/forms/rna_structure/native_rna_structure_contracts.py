@@ -24,8 +24,8 @@ STARTED_FILENAME = ".native-rna-structure-started.json"
 WORKER_MODULE = "gene_annotation_episode.episodic_workflow.episode_support.jobs.native_rna_structure_worker"
 POLICY = {'memory_bytes': ENVIRONMENT_BOUNDS['memory_bytes'], 'scratch_bytes': 4294967296}
 INPUT_NAMES = {"input": "input.json", "model_parameter_input": "model-parameter-input.par"}
-ROLE_FORMATS = {"input": "rna_input_json_v1", "model_parameter_input": "viennarna_parameter_file",
-    "native_result": "rna_native_record_json_v1", "model": "vienna_model_json_v1",
+ROLE_FORMATS = {"input": "rna_input_json", "model_parameter_input": "viennarna_parameter_file",
+    "native_result": "rna_native_record_json", "model": "vienna_model_json",
     "effective_parameters": "viennarna_parameter_file", "stdout": "text", "stderr": "text"}
 _TEXT = {"type": "string", "minLength": 1, "pattern": "^[^\\u0000]+$"}
 _SHA = {"type": "string", "pattern": "^[0-9a-f]{64}$"}
@@ -38,7 +38,7 @@ _SETTINGS = {"temperature_c": {"type": "number", "exclusiveMinimum": -273.15},
     **{name: {"type": "boolean"} for name in ("noLP", "noGU", "noGUclosure", "special_hp", "logML")},
     "min_loop_size": _COUNT, "max_bp_span": {"anyOf": [{"const": -1}, {"type": "integer", "minimum": 1}]},
     "circ": {"const": False}, "gquad": {"const": False}}
-MODEL_SPEC_SCHEMA = obj({"schema": {"const": "vienna_rna_model_spec_v1"}, **_SETTINGS,
+MODEL_SPEC_SCHEMA = obj({"schema": {"const": "vienna_rna_model_spec"}, **_SETTINGS,
     "hard_constraints": _NULL, "soft_constraints": _NULL,
     "parameters": {"oneOf": [obj({"kind": {"const": "turner2004"}, "operand_role": _NULL}),
         obj({"kind": {"const": "supplied_parameter_file"}, "operand_role": {"const": "model_parameter_input"}})]}})
@@ -46,7 +46,7 @@ SOFTWARE_SCHEMA = obj({"python_executable": _TEXT,
     "python_version": {"anyOf": [_TEXT, _NULL]}, "worker_module": {"const": WORKER_MODULE},
     "viennarna_distribution_version": {"anyOf": [_TEXT, _NULL]},
     "rna_module_sha256": {"anyOf": [_SHA, _NULL]}, "rna_extension_sha256": {"anyOf": [_SHA, _NULL]}})
-PARAMETERS_SCHEMA = obj({"schema": {"const": "rna_calculation_parameters_v1"},
+PARAMETERS_SCHEMA = obj({"schema": {"const": "rna_calculation_parameters"},
     "topology": obj({"long_stem_min_pairs": {"type": "integer", "minimum": 1},
         "include_exterior_in_loop_size_statistics": {"const": False}}),
     "pair_composition": obj({"accepted_ordered_pair_types": {"type": "array", "uniqueItems": True,
@@ -57,7 +57,7 @@ _INPUT = obj({"role": {"enum": list(INPUT_NAMES)}, "path": _TEXT,
     "size_bytes": _COUNT, "artifact_ref": {"anyOf": [_TEXT, _NULL]}})
 _OUTPUT = obj({"role": {"enum": [r for r in ROLE_FORMATS if r not in INPUT_NAMES]},
     "format": {"enum": [ROLE_FORMATS[r] for r in ROLE_FORMATS if r not in INPUT_NAMES]}, "relative_path": _TEXT})
-NATIVE_RNA_STRUCTURE_JOB_SCHEMA = obj({"version": {"const": "native_rna_structure_job_v1"},
+NATIVE_RNA_STRUCTURE_JOB_SCHEMA = obj({"version": {"const": "native_rna_structure_job"},
     "program": {"const": "rna_structure_python"}, "operation": {"enum": list(OPERATIONS.values())},
     "mode": {"enum": list(OPERATIONS)}, "record_key": _TEXT, "software": SOFTWARE_SCHEMA,
     "model": {"anyOf": [MODEL_SPEC_SCHEMA, _NULL]},
@@ -204,7 +204,7 @@ def realized_environment(job, attempt_directory):
 def validate_rna_structure_run_plan(value: dict) -> dict:
     identity_schema = obj({"run_id": _TEXT, "episode_id": _TEXT, "resource_id": _TEXT,
         "execution_id": _TEXT, "attempt_id": _SHA, "operation_key": _TEXT, "requested_job_sha256": _SHA})
-    result = checked(value, obj({"version": {"const": "native_rna_structure_run_plan_v1"},
+    result = checked(value, obj({"version": {"const": "native_rna_structure_run_plan"},
         "identity": identity_schema, "requested_job": NATIVE_RNA_STRUCTURE_REQUESTED_JOB_SCHEMA,
         "attempt_directory": _TEXT, "policy": obj({k: {"const": v} for k, v in POLICY.items()})}),
         "rna_original_attempt_mismatch")
@@ -232,7 +232,7 @@ def validate_rna_structure_bundle(value: dict, *, plan: dict) -> dict:
         "started_at", "finished_at", "sealed"})
     result = deepcopy(value)
     job = plan["requested_job"]["native_rna_structure"]
-    _require(result["version"] == "native_rna_structure_bundle_v1" and result["sealed"] is True, "rna_unsealed_native_attempt")
+    _require(result["version"] == "native_rna_structure_bundle" and result["sealed"] is True, "rna_unsealed_native_attempt")
     _require(result["identity"] == plan["identity"] and result["requested_job"] == plan["requested_job"], "rna_original_attempt_mismatch")
     _require(all(result[k] == job[k] for k in ("program", "operation", "mode", "record_key", "software")), "rna_original_attempt_mismatch")
     attempt = PurePosixPath(plan["attempt_directory"])

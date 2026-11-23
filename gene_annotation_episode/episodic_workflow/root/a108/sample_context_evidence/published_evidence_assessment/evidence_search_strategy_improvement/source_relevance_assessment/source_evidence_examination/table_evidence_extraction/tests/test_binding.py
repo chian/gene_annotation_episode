@@ -25,14 +25,14 @@ FILES = {'__init__.py', 'goal.py', 'task.py', 'credit.py', 'yield_estimator.py',
          'messages/__init__.py', 'messages/read_from_parent.py', 'messages/internal_summary.py',
          'messages/final_to_parent.py', 'tests/__init__.py', 'tests/test_binding.py'}
 ROOT = 'gene_annotation_episode.episodic_workflow.root'
-PAGE = {'version': 'page_assignment_v1', 'source_ref': 'src_1', 'representation': 'original', 'artifact_ref': 'art_1',
+PAGE = {'version': 'page_assignment', 'source_ref': 'src_1', 'representation': 'original', 'artifact_ref': 'art_1',
         'question_context_refs': [], 'prior_delivery_refs': []}
 REGION = {'source_ref': 'src_1', 'representation': 'original', 'offset': 5, 'limit': 20}
 TASK = {'kind': 'verified_source_leads', 'evidence_axis': 'A108', 'credit_unit': 1.0}
 
 
 def assignment(**changes):
-    return {'version': 'reading_assignment_v1', 'page': PAGE, 'selection': REGION, 'literature_task': TASK,
+    return {'version': 'reading_assignment', 'page': PAGE, 'selection': REGION, 'literature_task': TASK,
             'proposed_annotation_ref': 'hyp_1', 'scope': {'subject_refs': ['sub_1']},
             'received_record_refs': ['src_1', 'art_1'], **changes}
 

@@ -12,21 +12,21 @@ returns and this commission selects the fact sources it wants (the old fact-sour
 child's own: nothing is checked here, a commission the child does not admit fails, and a record this episode does not
 hold fails the run. The child's scope is this episode's own (the old model-selected sub-scope is not carried).
 
-``literature``: ``literature_assignment_v1`` from the model's records and the one task, ``verified_source_leads`` (the
+``literature``: ``literature_assignment`` from the model's records and the one task, ``verified_source_leads`` (the
 task's ``credit_unit`` is this episode's own, where the old child binding filled it), the proposed annotation of this
 episode (a child may not change it), the scope and every record this episode names for the child: the question context
 and the proposed annotation. No source is named: a paper reaches the chain only through its search.
 
-``launch``: ``execution_launch_assignment_v1`` from the model's arguments, the scope and ``handoff_unit`` which
+``launch``: ``execution_launch_assignment`` from the model's arguments, the scope and ``handoff_unit`` which
 ``task.action`` took from the settings; the resources that already have a usable handoff from earlier launches of this
 episode are passed as ``received_handoff_resources`` (the old initial known handoff records).
 
-``monitor``: ``monitor_assignment_v2`` for one job this episode holds as outstanding (``summary['outstanding_jobs']``):
+``monitor``: ``monitor_assignment`` for one job this episode holds as outstanding (``summary['outstanding_jobs']``):
 the job's handoff row of the job ledger and the check rows of it this episode holds, passed in custody, the fields
 the model asked to be observed and ``information_unit`` which ``task.action`` took from the settings. The model names
 the job by its held handoff reference; it writes no assignment.
 
-``results``: ``execution_results_assignment_v1`` (the handoff, named in custody, the selector and the API service of
+``results``: ``execution_results_assignment`` (the handoff, named in custody, the selector and the API service of
 the original job).
 
 ``perturbation_evidence``: the old ``prepare_invocation``: the selection and revision origin of a ``process.revise``
@@ -35,10 +35,10 @@ model chose (this episode's own when it chose none), this episode's task context
 child reads through them. The closed-commission replay of the old method is the system's resume."""
 from episode_runtime import ChildMessage
 
-LITERATURE_VERSION = 'literature_assignment_v1'
-LAUNCH_VERSION = 'execution_launch_assignment_v1'
-MONITOR_VERSION = 'monitor_assignment_v2'
-RESULTS_VERSION = 'execution_results_assignment_v1'
+LITERATURE_VERSION = 'literature_assignment'
+LAUNCH_VERSION = 'execution_launch_assignment'
+MONITOR_VERSION = 'monitor_assignment'
+RESULTS_VERSION = 'execution_results_assignment'
 # The sources the old ``required_return_sources`` of each child binding required, plus the ones that keep this
 # episode's summary informed (a launch's completion). A monitor always returns its credit, its finding and its
 # check rows (``check_refs``); nothing more of it is required here.

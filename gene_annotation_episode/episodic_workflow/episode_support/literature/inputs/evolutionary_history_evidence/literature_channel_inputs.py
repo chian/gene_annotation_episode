@@ -28,7 +28,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.
 )
 
 
-VERSION = "a105_channel_inputs_v1"
+VERSION = "a105_channel_inputs"
 SOURCE_KINDS = ("primary_source", "retained_extraction", "graph_extraction", "synthetic_fixture")
 LITERAL_FIELDS = ("organism", "genotype", "molecule", "construct", "preparation",
     "experimental_system", "membrane", "ionic_conditions", "voltage_convention",
@@ -265,7 +265,7 @@ def _covariance(reference, measurements, sources):
     except (UnicodeDecodeError, json.JSONDecodeError) as error:
         raise ExperimentalContractError("covariance_json_required", "covariance_source_ref") from error
     _keys(value, _COVARIANCE_FIELDS, "covariance_source")
-    if value["version"] != "a105_channel_covariance_v1":
+    if value["version"] != "a105_channel_covariance":
         _fail("covariance_version_mismatch", "covariance_source.version")
     if value["primitive_order"] != list(PRIMITIVE_ORDER):
         _fail("covariance_primitive_order_mismatch", "covariance_source.primitive_order")

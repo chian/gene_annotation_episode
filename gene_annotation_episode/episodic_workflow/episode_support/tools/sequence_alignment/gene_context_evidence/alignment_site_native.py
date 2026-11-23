@@ -64,7 +64,7 @@ def source_descriptor(store, source, alignment):
         operations = [grading['sheet'].get('operation')
             for grading in source_tool_gradings(store, source['id'])
             if isinstance(grading.get('sheet'), dict)
-            and grading['sheet'].get('schema') == 'hmmer_search_sheet_v1']
+            and grading['sheet'].get('schema') == 'hmmer_search_sheet']
         if len(operations) > 1:
             raise ContractError('site_native_version_ambiguous')
         native_version = None
@@ -118,7 +118,7 @@ def original_mappings(store, operands):
 
 def read_quality(store, query_ref):
     """Return the bound original read member's quality and declared encoding."""
-    from gene_annotation_episode.episodic_workflow.episode_support.records.documents.gene_context_evidence import materials_packing as packing
+    from gene_annotation_episode import materials_packing as packing
     query = store.get(query_ref)
     if query['record_type'] != 'read_subject':
         return None, 'unspecified'
@@ -130,7 +130,7 @@ def read_quality(store, query_ref):
 
 def paf_row_bytes(store, source, locator):
     """Validate the retained artifact, then read one exact row with bounded memory."""
-    from gene_annotation_episode.episodic_workflow.episode_support.records.documents.gene_context_evidence.materials import artifact_path
+    from gene_annotation_episode.materials import artifact_path
     path = artifact_path(store, source['stdout_ref'])
     start, end = locator['row_start'], locator['row_end']
     if (type(start) is not int or type(end) is not int
@@ -182,7 +182,7 @@ def biopython_molecule(store, source, body):
     from gene_annotation_episode.episodic_workflow.episode_support.grading.gene_context_evidence.tool_grading_artifacts import source_tool_gradings
     candidates = [g['sheet'] for g in source_tool_gradings(store, source['id'])
                   if isinstance(g.get('sheet'), dict)
-                  and g['sheet'].get('schema') == 'biopython_pairwise_sheet_v1']
+                  and g['sheet'].get('schema') == 'biopython_pairwise_sheet']
     if len(candidates) != 1:
         raise ValueError('site_processing_model_unavailable')
     sheet = candidates[0]

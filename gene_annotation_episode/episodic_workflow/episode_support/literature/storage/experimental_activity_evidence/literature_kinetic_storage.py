@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
 from gene_annotation_episode.episodic_workflow.episode_support.literature.calculations.experimental_activity_evidence.literature_kinetic_calculations import populate_kinetic_contrast, COMPONENTS as ALL_COMPONENTS, FORMULAS, REASONS, CONDITIONAL_CODES
 from gene_annotation_episode.episodic_workflow.episode_support.literature.validation.experimental_activity_evidence.literature_kinetic_validation import validate_saved_kinetic, witnesses
 PROVIDER = 'literature.a105.kinetic_population'
-VERSION = 'literature_kinetic_population_record_v3'
+VERSION = 'literature_kinetic_population_record'
 COMPONENTS = ALL_COMPONENTS[:5]
 FORMULA_CODES = {name: 'kinetic_' + name for name in COMPONENTS}
 UNIT_CODES = {'uM^-1min^-1': 'uM_inverse_min_inverse'}

@@ -21,7 +21,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.documents.b
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.local_execution.biochemical_feasibility_evidence.local_jobs import LocalJobPolicy, run_local_job
 
 
-VERSION = 'xlsx_selected_cells_v1'
+VERSION = 'xlsx_selected_cells'
 
 
 def _tag(element):

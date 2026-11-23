@@ -17,12 +17,12 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.
 
 
 def controlled_response_local_arguments_schema():
-    from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.perturbation_evidence.literature_controlled_response_v3_inputs import _schemas
+    from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.perturbation_evidence.literature_controlled_response_source_inputs import _schemas
     return cp(_schemas()['LOCAL_INPUT_SCHEMA_007'])
 
 
 def _result_schema():
-    from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.perturbation_evidence.literature_controlled_response_v3_inputs import _schemas
+    from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.perturbation_evidence.literature_controlled_response_source_inputs import _schemas
     return cp(_schemas()['LOCAL_OUTPUT_SCHEMA_007'])
 
 
@@ -289,7 +289,7 @@ def populate_controlled_response_local(inputs):
         pairs.append({'pair_key': pair['pair_key'], 'difference': difference, 'variance': variance_cell,
             'standard_uncertainty': se_cell, 'dependencies': {'difference': _dependency(selectors, arms),
                 'variance': cp(covariance_dependency), 'standard_uncertainty': cp(covariance_dependency)}})
-    result = {'version': 'controlled_response_local_sheet_v1', 'inputs': cp(inputs), 'raw': raw, 'pairs': pairs,
+    result = {'version': 'controlled_response_local_sheet', 'inputs': cp(inputs), 'raw': raw, 'pairs': pairs,
         'full_covariance_checks': [{'covariance_index': i, 'source_validation': validity, 'document_state': d['document_state']}
             for i, (d, matrix, validity) in enumerate(documents)]}
     _schema_check(_result_schema(), result, 'local_sheet_schema_invalid')

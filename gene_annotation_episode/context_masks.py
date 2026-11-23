@@ -9,7 +9,7 @@ import hashlib
 from .domain import ContractError, canonical
 from gene_annotation_episode import library_targets as libraries
 
-VERSION = "fixed_original_position_set_v1"
+VERSION = "fixed_original_position_set"
 FIELDS = {"subject_refs", "read_selection_refs", "segments"}
 
 

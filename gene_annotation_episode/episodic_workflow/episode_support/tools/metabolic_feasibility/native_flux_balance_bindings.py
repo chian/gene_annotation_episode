@@ -6,7 +6,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.flux_balanc
 from gene_annotation_episode.episodic_workflow.episode_support.forms.native_flux_balance_contracts import validate_flux_balance_software
 
 
-_VERSION = "flux_balance_local_binding_v1"
+_VERSION = "flux_balance_local_binding"
 _OPERATION = "perform_flux_balance_analysis"
 _MODE = "steady_state_linear_fba"
 _FORMATS = ("sbml", "cobra_json")

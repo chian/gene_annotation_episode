@@ -104,10 +104,10 @@ def test_existing_physical_amount_unit_paths_remain_usable(unit):
     assert out['A_reference_summary_value']['unit'] == unit
 
 
-def test_v1_reader_contract_still_rejects_unreported_amount_unit():
+def test_reader_contract_still_rejects_unreported_amount_unit():
     data = missing_amount_data()
     data = {k: data[k] for k in ('version', 'endpoint_unit', 'exposure_unit', 'origin', 'uncertainty_basis', 'measurements')}
-    data.update(version='a106_source_measurements_v1', uncertainty_basis='unreported')
+    data.update(version='a106_source_measurements', uncertainty_basis='unreported')
     data['measurements'] = {r: {k: e[k] for k in ('value', 'measurement_id')} for r, e in data['measurements'].items()}
     bodies = {SOURCE: TEXT, DATA: canonical(data).encode()}
     with pytest.raises(ExperimentalContractError, match='unsupported_exposure_unit'):

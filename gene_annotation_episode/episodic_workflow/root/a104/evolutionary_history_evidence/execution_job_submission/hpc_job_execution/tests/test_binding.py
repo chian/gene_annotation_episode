@@ -22,7 +22,7 @@ FILES = {'__init__.py', 'goal.py', 'task.py', 'credit.py', 'yield_estimator.py',
 ROOT = 'gene_annotation_episode.episodic_workflow.root'
 WORKSPACE = '/lus/flare/projects/x/job'
 ASSIGNMENT = {
-    'version': 'practical_assignment_v1', 'assignment_id': 'job_1', 'resource_kind': 'hpc', 'workspace': WORKSPACE,
+    'version': 'practical_assignment', 'assignment_id': 'job_1', 'resource_kind': 'hpc', 'workspace': WORKSPACE,
     'endpoint': 'usable_handoff', 'requested_job': {'argv': ['qsub', 'run.sh'], 'environment': {}},
     'progress_requirements': [
         {'key': 'cwd', 'credit': 1.0, 'predicate': {'kind': 'context_cwd', 'path': WORKSPACE + '/work'}},

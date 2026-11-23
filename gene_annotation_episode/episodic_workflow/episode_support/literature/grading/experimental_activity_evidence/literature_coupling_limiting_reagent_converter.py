@@ -115,7 +115,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_reaction_coupling_direction import select_coupling_effect
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import SUPPORTS, apply_support
 
-VERSION = 'a105_coupling_limiting_reagent_converted_v1'
+VERSION = 'a105_coupling_limiting_reagent_converted'
 CRITERIA_MAP = {'matched_windows': ('same_reaction', 'completion_shown'), 'stoichiometry': ('reaction_coefficient', 'excess_of_other_reagents', 'no_regeneration'),
                 'calibration_applicability': ('limiting_amount_verified', 'product_calibration'), 'product_identity': ('product_identity',), 'reporter_specificity': ('no_substrate_control',),
                 'background_alternatives': ('no_enzyme_control',), 'attribution_supported': ('inactive_enzyme_control',), 'sampling_basis': ('replicates', 'titration_points'),

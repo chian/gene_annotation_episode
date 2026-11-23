@@ -12,8 +12,8 @@ from scipy.stats import t as student_t
 
 from gene_annotation_episode.episodic_workflow.episode_support.records.evolutionary_history_evidence.domain import ContractError, obj, validate_schema
 
-INPUT_VERSION = 'a105_assay_grading_inputs_v1'
-VERSION = 'a105_assay_grading_sheet_v1'
+INPUT_VERSION = 'a105_assay_grading_inputs'
+VERSION = 'a105_assay_grading_sheet'
 EVALUATION_SCOPE = 'assay_type_experimental_evidence'
 ASSAY_TYPES = ('activity_rate', 'endpoint_conversion', 'product_distribution', 'reaction_coupling',
                'ligand_binding', 'transport_response', 'protein_signal', 'protein_amount')

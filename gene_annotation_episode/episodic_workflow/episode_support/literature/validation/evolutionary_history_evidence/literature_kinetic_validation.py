@@ -21,7 +21,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs
     COUNT_STATUSES, COUNT_REASONS, COUNT_NOTATIONS, COUNT_RELATIONS,
 )
 
-VERSION = "a105_kinetic_saved_validation_v3"
+VERSION = "a105_kinetic_saved_validation"
 WITNESS = ("source_ref", "representation", "start", "end", "quote")
 LOCATOR = ("source_ref", "artifact_ref", "representation", "start", "end")
 UNCERTAINTY = ("statistic", "magnitude", "interval", "confidence_level", "count",
@@ -406,7 +406,7 @@ def _validate_saved_kinetic(selection, extraction, calculation):
         operand = inputs[role]
         physical = operand["physical_measurement_id"] if operand else None
         _equal(calculation["physical_measurement_ids"][role], physical, role)
-        encoded = json.dumps({"version": "kinetic_estimate_identity_v1", "operand": operand},
+        encoded = json.dumps({"version": "kinetic_estimate_identity", "operand": operand},
             sort_keys=True, ensure_ascii=False, allow_nan=False, separators=(",", ":"))
         key = "kinetic_estimate_" + hashlib.sha256(encoded.encode()).hexdigest() if physical is not None else None
         _equal(calculation["measurement_keys"][role], key, role)

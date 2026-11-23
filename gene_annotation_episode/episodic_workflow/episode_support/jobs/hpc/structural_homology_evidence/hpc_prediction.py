@@ -97,7 +97,7 @@ def prior_model(specification):
     if any(field['scale'] <= 0 for field in specification['features']):
         raise ValueError('positive_feature_scales_required')
     dimension = 1+2*len(specification['features'])
-    result = {'version': 'hpc_time_model_v1', 'specification': deepcopy(specification),
+    result = {'version': 'hpc_time_model', 'specification': deepcopy(specification),
               'training_ids': [], 'metrics': {}, 'successes': 0, 'failures': 0, 'ranges': {}}
     resources = specification.get('resource_priors', {})
     if set(resources)-set(RESOURCE_UNITS):

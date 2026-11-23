@@ -12,11 +12,11 @@ import math
 import re
 
 
-REQUEST_VERSION = "liftover_point_request_v1"
-OBSERVATION_VERSION = "liftover_point_observation_v1"
-SHEET_VERSION = "liftover_point_sheet_v1"
-COMPONENTS_VERSION = "liftover_point_components_v1"
-RETURN_VERSION = "liftover_point_return_v1"
+REQUEST_VERSION = "liftover_point_request"
+OBSERVATION_VERSION = "liftover_point_observation"
+SHEET_VERSION = "liftover_point_sheet"
+COMPONENTS_VERSION = "liftover_point_components"
+RETURN_VERSION = "liftover_point_return"
 FACT_SOURCE = "liftover_point_mappings"
 CALL_SCOPE = "retained_convert_coordinate_call"
 CHAIN_FORMATS = ("ucsc_chain", "ucsc_chain_gzip")

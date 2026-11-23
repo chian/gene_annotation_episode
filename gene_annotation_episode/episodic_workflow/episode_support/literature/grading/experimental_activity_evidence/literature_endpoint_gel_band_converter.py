@@ -92,7 +92,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.literature.gradin
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.experimental_activity_evidence.literature_endpoint_conversion_direction import select_endpoint_effect
 from gene_annotation_episode.episodic_workflow.episode_support.literature.grading.literature_quote_support import apply_support
 
-VERSION = 'a105_endpoint_gel_band_converted_v1'
+VERSION = 'a105_endpoint_gel_band_converted'
 CRITERIA_MAP = {'background_alternatives': ('spontaneous_reaction_control', 'substrate_purity_control', 'control_lane_background'), 'attribution_supported': ('enzyme_dependence',),
                 'product_identity': ('product_identity',), 'calibration_applicability': ('densitometry_linear_range',), 'conversion_denominator': ('same_lane_fraction',),
                 'endpoint_alignment': ('endpoint_time_defined', 'lanes_same_time'), 'assertion_relevance': ('native_reaction',), 'condition_scope': ('purified_enzyme',),

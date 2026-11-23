@@ -39,7 +39,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.je
     JEV_EVALUATION_TOKEN_BUDGET, JEV_REQUEST_TOKEN_BUDGET, JEV_TOKEN_BOUND, JEV_TOKEN_HEADROOM, token_bound,
     window_text)
 
-PAGE_CONTENT_ASSESSMENT_VERSION = 'jev_goal_need_vector_v1'      # nano-graphrag's version name
+PAGE_CONTENT_ASSESSMENT_VERSION = 'jev_goal_need_vector'    
 SOURCE_TABLE = 'source_table'
 PROSE_CHUNK = 'prose_chunk'
 CHUNK_SIZE = 2000              # nano-graphrag's pipeline chunk_size (characters)

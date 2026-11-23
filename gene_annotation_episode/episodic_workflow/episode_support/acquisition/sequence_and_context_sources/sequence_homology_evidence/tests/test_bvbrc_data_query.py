@@ -1,4 +1,4 @@
-"""Pure D1 contracts, retained native request oracles and legacy isolation.
+"""Pure D1 contracts, retained native request oracles and isolation from the RQL service.
 
 Retained response/schema bytes are historical observations, not new live calls.
 All punctuation, mixed/open ranges and failure examples here are fixtures.
@@ -24,7 +24,7 @@ BASE = "https://www.bv-brc.org/api"
 
 
 def request(collection="genome", mode="page", filters=None, **kwargs):
-    return {"version": "bvbrc_data_request_v2", "collection": collection,
+    return {"version": "bvbrc_data_request", "collection": collection,
             "mode": mode, "filters": [] if filters is None else filters, **kwargs}
 
 

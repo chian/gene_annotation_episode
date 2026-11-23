@@ -11,7 +11,7 @@ Derivation of ``K`` from epsilon
 --------------------------------
 The root credit is the calibrated, rescaled offset-product hypervolume
 (``docs/axis_restructure_20261117/README.md``; the arithmetic it restates is
-``offset_normalized_product_hypervolume_v1``, ``softened_hypervolume`` of ``gene_annotation_episode/credit.py`` at
+``offset_normalized_product_hypervolume``, ``softened_hypervolume`` of ``gene_annotation_episode/credit.py`` at
 ``7e662ea29``). Its definition:
 
 1. Offset product. Every axis contributes the factor ``epsilon + (1 - epsilon) * v`` with the offset

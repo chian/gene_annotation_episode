@@ -5,7 +5,7 @@ The old ``prepare_request`` validated the child scope, expanded the report contr
 child binding required, checked the initial report against the interpretation schema, checked the role against the
 allowed children, materialized the launch instructions and let the child binding's ``prepare_assignment`` build the
 child's assignment from the model's search assignment. Here the child declares what it returns and this commission
-selects the fact sources it wants (the old fact-source names); the assignment is the child's ``search_assignment_v1``:
+selects the fact sources it wants (the old fact-source names); the assignment is the child's ``search_assignment``:
 the records that give the question its context, the ONE query as ``search_query_ref`` (the reference of the record of
 this episode that holds the query its model wrote: no query text travels between episodes), the one task with its
 credit unit, the proposed annotation, the scope and every record this episode names for the child: the question
@@ -23,7 +23,7 @@ def msg_to_child(slot, arguments, summary):
     query_ref = arguments['search_query_ref']
     context = summary['strategy']['question_context_refs']
     received = [*context, query_ref, summary['proposed_annotation_ref']]
-    assignment = {'version': 'search_assignment_v1', 'question_context_refs': context,
+    assignment = {'version': 'search_assignment', 'question_context_refs': context,
                   'search_query_ref': query_ref, 'literature_task': summary['task'],
                   'proposed_annotation_ref': summary['proposed_annotation_ref'], 'scope': summary['scope'],
                   'received_record_refs': list(dict.fromkeys(received))}

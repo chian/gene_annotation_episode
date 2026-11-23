@@ -56,7 +56,7 @@ def _inspection(context, contents):
     checks, failures = _outcome_observations(outcome, [output], subject_key)
     complete = output["completeness"] == "complete" and outcome["writer_closed"] and outcome["inventory_complete"]
     return core("DatabaseInspection", {
-        "version": "blast_database_inspection_v2", "operation": operation,
+        "version": "blast_prepared_database_inspection", "operation": operation,
         "original_outcome": outcome, "subject": subject,
         "database_bindings": context["database_bindings"], "output_occurrence": output,
         "native_fields": document["native_fields"],
@@ -90,14 +90,14 @@ def _documents(context, contents):
 
 
 def assemble_blast_preparation_result(*, context: dict, capture: dict, contents: dict) -> tuple[dict, dict | None]:
-    """Assemble the exact v2 record from the worker's authenticated context.
+    """Assemble the exact record from the worker's authenticated context.
 
     The existing worker authenticates the capture, file population, original
     bundle and retained bytes before calling this helper. Parsers independently
     compare each supplied text blob to its occurrence identity.
     """
     operation = context["operation"]
-    if blast_utility_result_version_for_operation(operation) == "blast_database_inspection_v2":
+    if blast_utility_result_version_for_operation(operation) == "blast_prepared_database_inspection":
         return _inspection(context, contents), None
     bundle, plan = capture["original_bundle"], capture["plan"]
     job = plan["requested_job"]["native_blast_utility"]

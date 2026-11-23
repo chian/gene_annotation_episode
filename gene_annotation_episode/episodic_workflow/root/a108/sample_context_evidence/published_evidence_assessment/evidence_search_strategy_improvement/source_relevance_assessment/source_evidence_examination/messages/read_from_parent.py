@@ -1,4 +1,4 @@
-"""What the parent gives: the page assignment ``page_assignment_v1`` (ONE paper in one representation, by its source
+"""What the parent gives: the page assignment ``page_assignment`` (ONE paper in one representation, by its source
 reference), the commissioned A108 literature task (``verified_source_leads``, the only task), the proposed annotation, the
 A108 grading and aggregation components the parent wants returned, the Store scope of the commission and the records passed
 in custody. This is the only place the assignment is read.
@@ -23,10 +23,10 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.sample_co
 REPRESENTATIONS = ('text', 'original', 'stdout', 'stderr')
 REQUESTED_GRADING = 'requested_a108_grading_components'
 REQUESTED_AGGREGATION = 'requested_a108_aggregation_components'
-VERSION = 'literature_local_task_v1'
+VERSION = 'literature_local_task'
 
 ASSIGNMENT_FORM = RecordForm({
-    'version': DeclaredField('text', 'The page assignment version', 'page_assignment_v1'),
+    'version': DeclaredField('text', 'The page assignment version', 'page_assignment'),
     'source_ref': Field('text', 'The paper to examine'),
     'representation': ChoiceField('text', 'The representation of the paper that is read', REPRESENTATIONS),
     'artifact_ref': Field('text', "The paper's artifact for that representation"),

@@ -12,7 +12,7 @@ import math
 from gene_annotation_episode.episodic_workflow.episode_support.literature.forms.literature_contract_error import ExperimentalContractError
 
 
-VERSION = "a105_rate_extraction_v1"
+VERSION = "a105_rate_table_extraction"
 REPRESENTATIONS = ("primary_table", "retained_extraction", "synthetic_fixture")
 ORIGINS = ("reported", "graph_derived", "synthetic")
 SAMPLING_BASES = ("biological_preparations", "technical_measurements", "unspecified")
@@ -78,7 +78,7 @@ def validate_rate_extraction(value):
     Conditions/arms are matched to a commissioned comparison by the calculator.
     A reader additionally binds every row to its literal source table fields.
     """
-    if isinstance(value, dict) and value.get("version") == "a105_rate_extraction_v2":
+    if isinstance(value, dict) and value.get("version") == "a105_rate_native_extraction":
         from gene_annotation_episode.episodic_workflow.episode_support.literature.inputs.partner_presence_evidence.literature_rate_native_inputs import validate_native_extraction
         return validate_native_extraction(value)
     _keys(value, ("version", "subject", "experiment", "rows"), "extraction")

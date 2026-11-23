@@ -20,8 +20,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.native_blast_database_contracts import DATABASE_OPERAND_SCHEMA as ADDITIONAL_DATABASE_SCHEMA, validate_native_blast_database_operand
 from gene_annotation_episode.episodic_workflow.episode_support.forms.similarity_search.sequence_homology_evidence.native_blast_standard_database_contracts import DATABASE_OPERAND_SCHEMA, _database
 
-REQUEST_VERSION = "native_blast_vdb_utility_context_request_v1"
-AUTHENTICATION_VERSION = "native_blast_vdb_context_authentication_v1"
+REQUEST_VERSION = "native_blast_vdb_utility_context_request"
+AUTHENTICATION_VERSION = "native_blast_vdb_context_authentication"
 _PREFIX = "/requested_job/native_blast_utility/vdb_context_request"
 _STR = {"type": "string", "minLength": 1, "pattern": r"^[^\s\x00]+$"}
 _INT = {"type": "integer", "minimum": 0}
@@ -242,11 +242,11 @@ def validate_vdb_utility_context_request(value: dict, *, job: dict) -> dict:
     _schema(request, REQUEST_SCHEMA)
     job = {**job, "vdb_context_request": request}
     op = core("Operation", job["operation"])
-    _require(op["version"] == "blast_utility_operation_v3")
+    _require(op["version"] == "blast_vdb_utility_operation")
     databases = vdb_utility_database_operands(job)
     _require(len({d["database_key"] for d in databases}) == len(databases))
     for db in databases:
-        if db["manifest"]["version"] == "native_blast_prepared_database_manifest_v1":
+        if db["manifest"]["version"] == "native_blast_prepared_database_manifest":
             validate_native_blast_database_operand(db)
         else:
             _database(db)
@@ -413,7 +413,7 @@ def qualify_vdb_utility_context(capture: dict, *, base_context: dict) -> dict:
     _require(set(job["operation"]["input_occurrence_ids"]) <= by_id.keys(), "input_population_unavailable")
     context["operation_input_occurrences"] = [by_id[k] for k in job["operation"]["input_occurrence_ids"]]
     p = job["operation"]["parameters"]
-    context["vdb_context"] = {"version": "blast_vdb_utility_context_v1",
+    context["vdb_context"] = {"version": "blast_vdb_utility_context",
         **{k: deepcopy(request[k]) for k in ("source_inputs", "entry_identifier_bindings", "member_bindings", "sample_links")},
         "selection_kind": None if p["selection"] is None else p["selection"]["kind"],
         "include_filtered_reads": p["include_filtered_reads"], "dependency_database_bindings": bindings[1:],

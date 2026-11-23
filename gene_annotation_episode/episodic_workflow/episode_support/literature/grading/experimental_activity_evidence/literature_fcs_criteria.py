@@ -57,7 +57,7 @@ statement that only this method was used are kept in the record for the
 reviewer; no criterion judges them.
 """
 
-VERSION = 'a105_fcs_criteria_v1'
+VERSION = 'a105_fcs_criteria'
 
 # ---- Threshold constants -------------------------------------------------
 CUBE_ROOT_EXPONENT = 1 / 3  # FIXED_BY_DEFINITION: the diffusion time of a compact particle grows with the cube root of its mass (the Stokes-Einstein relation with a radius that grows with the cube root of the mass).

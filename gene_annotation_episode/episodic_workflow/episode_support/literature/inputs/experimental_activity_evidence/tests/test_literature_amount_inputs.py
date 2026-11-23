@@ -34,7 +34,7 @@ def fixture(text=TEXT, first='5 mg/ml', second='7 mg/ml', n='5', d='7', nunit='m
 def add_covariance(args, sources, reader, matrix=((0.25, 0.1), (0.1, 0.49))):
     first = read_amount_inputs(args, read_source=reader)
     quantities = first['quantities']
-    data = {'version': 'a105_amount_covariance_v1', 'quantity_order': ['numerator', 'denominator'], 'quantity_measurement_keys': [quantities[role]['measurement_key'] for role in quantities], 'quantity_physical_observation_keys': [quantities[role]['physical_observation_key'] for role in quantities], 'quantity_owner_keys': [quantities[role]['owner_key'] for role in quantities], 'quantity_units': [quantities[role]['unit']['raw_unit'] for role in quantities], 'covariance': [list(row) for row in matrix], 'origin': 'synthetic', 'variance_status': 'estimated'}
+    data = {'version': 'a105_amount_covariance', 'quantity_order': ['numerator', 'denominator'], 'quantity_measurement_keys': [quantities[role]['measurement_key'] for role in quantities], 'quantity_physical_observation_keys': [quantities[role]['physical_observation_key'] for role in quantities], 'quantity_owner_keys': [quantities[role]['owner_key'] for role in quantities], 'quantity_units': [quantities[role]['unit']['raw_unit'] for role in quantities], 'covariance': [list(row) for row in matrix], 'origin': 'synthetic', 'variance_status': 'estimated'}
     sources[COV_SOURCE] = {'artifact_ref': 'artifact_' + '2' * 24, 'content': json.dumps(data).encode()}
     args['covariance_source_ref'] = COV_SOURCE
     return data

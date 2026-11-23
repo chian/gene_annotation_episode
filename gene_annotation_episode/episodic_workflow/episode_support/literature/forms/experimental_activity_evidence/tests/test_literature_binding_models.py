@@ -18,11 +18,11 @@ def sheet(reference=10, test=20, *, reference_relation='eq', test_relation='eq')
     return from_rows([row(reference, relation=reference_relation)], [row(test, index=1, relation=test_relation, ligand='test')])
 
 def from_rows(reference_rows, test_rows):
-    return populate_binding_contrast({'version': 'binding_parameter_extraction_v1', 'parameter_kind': 'ic50', 'unit': 'nM', 'uncertainty_basis': 'fit_to_averaged_curve', 'minimum_experiment_count': 3, 'reference_rows': reference_rows, 'test_rows': test_rows})
+    return populate_binding_contrast({'version': 'binding_parameter_extraction', 'parameter_kind': 'ic50', 'unit': 'nM', 'uncertainty_basis': 'fit_to_averaged_curve', 'minimum_experiment_count': 3, 'reference_rows': reference_rows, 'test_rows': test_rows})
 
 def model(binding_sheet, covariance=None, **updates):
     keys = binding_model_operand_keys(binding_sheet)
-    result = {'version': 'known_normal_log_binding_v1', 'parameter_kind': binding_sheet['parameter_kind'], 'measurement_order': ['reference', 'test'], 'measurement_keys': [keys['reference'], keys['test']], 'log_covariance': [[0.04, 0.01], [0.01, 0.09]] if covariance is None else covariance, 'variance_status': 'known', 'censoring_model': 'threshold_of_log_estimate', 'log_basis': 'natural_log_nM', 'origin': 'synthetic'}
+    result = {'version': 'known_normal_log_binding', 'parameter_kind': binding_sheet['parameter_kind'], 'measurement_order': ['reference', 'test'], 'measurement_keys': [keys['reference'], keys['test']], 'log_covariance': [[0.04, 0.01], [0.01, 0.09]] if covariance is None else covariance, 'variance_status': 'known', 'censoring_model': 'threshold_of_log_estimate', 'log_basis': 'natural_log_nM', 'origin': 'synthetic'}
     result.update(updates)
     return result
 
@@ -34,7 +34,7 @@ def test_printed_joint_point_example_and_detachment_closed_outputs():
     error_model = model(source)
     before = deepcopy((source, error_model))
     result = populate_binding_model(source, error_model)
-    assert result['version'] == 'binding_model_sheet_v2'
+    assert result['version'] == 'binding_model_sheet'
     assert result['contrast_meaning'] == 'test_parameter_exceeds_reference'
     assert value(result, 'log_parameter_contrast') == pytest.approx(0.6931471805599453)
     assert value(result, 'log_contrast_noise_variance') == pytest.approx(0.11)
@@ -137,7 +137,7 @@ def test_covariance_is_used_once_and_counts_and_fit_spreads_are_not_weights():
     assert value(correlated, 'log_contrast_noise_variance') < value(independent, 'log_contrast_noise_variance')
     assert value(correlated, 'source_profile_log_ratio') > value(independent, 'source_profile_log_ratio')
     extraction = {key: deepcopy(source[key]) for key in ('parameter_kind', 'unit', 'uncertainty_basis', 'minimum_experiment_count', 'reference_rows', 'test_rows')}
-    extraction['version'] = 'binding_parameter_extraction_v1'
+    extraction['version'] = 'binding_parameter_extraction'
     extraction['minimum_experiment_count'] = 100
     for arm in ('reference_rows', 'test_rows'):
         extraction[arm][0]['reported_spread'] = 300

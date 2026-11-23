@@ -43,7 +43,7 @@ converter does. The constructors take ``support`` and default it to 'direct'; th
 through the extraction (the extraction always passes the model's answer).
 """
 
-VERSION = 'a105_coupling_electron_balance_record_v1'
+VERSION = 'a105_coupling_electron_balance_record'
 SUPPORTS = ('direct', 'implied', 'about_something_else')
 EXPERIMENT_TYPE = 'coupling_electron_balance'
 QUANTITIES = ('productive_fraction', 'productive_fraction_spread', 'electrons_delivered', 'product_formed', 'electrons_per_product', 'background_electrons',

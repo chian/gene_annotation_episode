@@ -131,7 +131,7 @@ def test_saved_driver_preserves_original_sheet_bytes_and_never_calls_native(tmp_
     sheet_path = tmp_path / "original-sheet.json"
     sheet_path.write_bytes(raw_sheet)
     pin = {"path": str(sheet_path), "sha256": hashlib.sha256(raw_sheet).hexdigest(), "size_bytes": len(raw_sheet)}
-    request = {"version": driver.REQUEST_VERSION_V2, "mode": "saved_sheet", "attempt_identity":
+    request = {"version": driver.PROTEASE_REQUEST_VERSION, "mode": "saved_sheet", "attempt_identity":
         {k: "constructed-fixture" for k in driver._IDENTITY_FIELDS}, "selection":
         {"operation": "analyze_protease_kinetics", "sheet_file": pin}, "scientific_context": None}
     raw = json.dumps(request).encode()
@@ -143,7 +143,7 @@ def test_saved_driver_preserves_original_sheet_bytes_and_never_calls_native(tmp_
     output = tmp_path / "saved"
     result = driver.run_molecular_sequence_driver(request_file={"path": str(request_path),
         "sha256": hashlib.sha256(raw).hexdigest(), "size_bytes": len(raw)}, output_directory=str(output))
-    assert result["version"] == driver.DECLARATION_VERSION_V2
+    assert result["version"] == driver.PROTEASE_DECLARATION_VERSION
     assert result["driver_failure"] is None
     assert result["native_call_state"] == "not_requested"
     assert (output / "sheet.json").read_bytes() == raw_sheet

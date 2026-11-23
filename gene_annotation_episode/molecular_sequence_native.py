@@ -22,26 +22,33 @@ import sys
 import traceback
 
 
-REQUEST_VERSION = "molecular_sequence_request_v1"
-DEPLOYMENT_VERSION = "molecular_sequence_deployment_v1"
-RESULT_VERSION = "molecular_sequence_execution_v1"
-REQUEST_VERSION_V2 = "molecular_sequence_request_v2"
-DEPLOYMENT_VERSION_V2 = "molecular_sequence_deployment_v2"
-RESULT_VERSION_V2 = "molecular_sequence_execution_v2"
-REQUEST_VERSION_V3 = "molecular_sequence_request_v3"
-DEPLOYMENT_VERSION_V3 = "molecular_sequence_deployment_v3"
-RESULT_VERSION_V3 = "molecular_sequence_execution_v3"
+REQUEST_VERSION = "molecular_sequence_request"
+DEPLOYMENT_VERSION = "molecular_sequence_deployment"
+RESULT_VERSION = "molecular_sequence_execution"
+PROTEASE_REQUEST_VERSION = "molecular_sequence_protease_request"
+PROTEASE_DEPLOYMENT_VERSION = "molecular_sequence_protease_deployment"
+PROTEASE_RESULT_VERSION = "molecular_sequence_protease_execution"
 _MODULE_NAME = "_selected_molecular_sequence_native"
 _OPERATIONS = {
     "annotate_open_reading_frames": {
         "fields": {"sequence", "min_length", "search_reverse", "filter_subsets"},
-        "schema": "biomni_orf_native_record_v1",
+        "schema": "biomni_orf_native_record",
         "source": "molecular",
     },
     "align_sequences": {
         "fields": {"long_seq", "short_seqs"},
-        "schema": "biomni_primer_placement_native_v1",
+        "schema": "biomni_primer_placement_native",
         "source": "molecular",
+    },
+    "find_n_glycosylation_motifs": {
+        "fields": {"sequence", "allow_overlap"},
+        "schema": "biomni_glycosylation_log_native",
+        "source": "glyco",
+    },
+    "predict_o_glycosylation_hotspots": {
+        "fields": {"sequence", "window", "min_st_fraction", "disallow_proline_next"},
+        "schema": "biomni_glycosylation_log_native",
+        "source": "glyco",
     },
 }
 _LIBRARIES = (
@@ -53,20 +60,6 @@ _SOURCE_PROFILES = {
     "molecular": {"libraries": _LIBRARIES},
     "glyco": {"libraries": ()},
 }
-_OPERATIONS_V2 = {
-    **_OPERATIONS,
-    "find_n_glycosylation_motifs": {
-        "fields": {"sequence", "allow_overlap"},
-        "schema": "biomni_glycosylation_log_native_v1",
-        "source": "glyco",
-    },
-    "predict_o_glycosylation_hotspots": {
-        "fields": {"sequence", "window", "min_st_fraction", "disallow_proline_next"},
-        "schema": "biomni_glycosylation_log_native_v1",
-        "source": "glyco",
-    },
-}
-
 
 class _BoundaryError(ValueError):
     def __init__(self, code, path="", **details):
@@ -262,11 +255,9 @@ def execute_molecular_sequence_request(request):
     validity and numerical interpretation remain with the existing readers.
     The canonical digest does not claim the host input file's byte identity.
     """
-    if type(request) is dict and request.get("version") == REQUEST_VERSION_V3:
+    if type(request) is dict and request.get("version") == PROTEASE_REQUEST_VERSION:
         return _execute_protease_request(request)
-    result_version = (RESULT_VERSION_V2 if type(request) is dict
-        and request.get("version") == REQUEST_VERSION_V2 else RESULT_VERSION)
-    capture = {"version": result_version, "request": None,
+    capture = {"version": RESULT_VERSION, "request": None,
         "request_canonical_sha256": None, "stage": "request", "native_record": None,
         "native_call_state": "not_started", "reference_data": None,
         "execution_receipt": {"software_files_file": None, "runtime": None,
@@ -282,14 +273,12 @@ def execute_molecular_sequence_request(request):
         retained = json.loads(encoded)
         capture.update(request=retained, request_canonical_sha256=hashlib.sha256(encoded).hexdigest())
         _closed(retained, ("version", "operation", "arguments", "deployment"), "")
-        if retained["version"] not in (REQUEST_VERSION, REQUEST_VERSION_V2):
+        if retained["version"] != REQUEST_VERSION:
             _fail("request_version_required", "/version")
-        is_v2 = retained["version"] == REQUEST_VERSION_V2
-        operations = _OPERATIONS_V2 if is_v2 else _OPERATIONS
         operation = retained["operation"]
-        if type(operation) is not str or operation not in operations:
+        if type(operation) is not str or operation not in _OPERATIONS:
             _fail("operation_not_supported", "/operation")
-        specification = operations[operation]
+        specification = _OPERATIONS[operation]
         source_profile = _SOURCE_PROFILES[specification["source"]]
         _closed(retained["arguments"], specification["fields"], "/arguments")
         record = {"schema": specification["schema"], "outcome": "failed", "result": None,
@@ -297,8 +286,7 @@ def execute_molecular_sequence_request(request):
         capture["native_record"] = record
         deployment = retained["deployment"]
         capture["stage"] = "deployment_verification"
-        _deployment(deployment,
-            version=DEPLOYMENT_VERSION_V2 if is_v2 else DEPLOYMENT_VERSION)
+        _deployment(deployment, version=DEPLOYMENT_VERSION)
         capture["stage"] = "software_manifest"
         index, manifest_file = _manifest(deployment)
         receipt = capture["execution_receipt"]
@@ -538,13 +526,13 @@ def _protease_workspace(request):
 
 
 def _execute_protease_request(request):
-    """v3 alone adds an unchanged biochemical call and passive observation."""
-    capture = {"version": RESULT_VERSION_V3, "request": None, "request_canonical_sha256": None,
+    """The protease request alone adds an unchanged biochemical call and passive observation."""
+    capture = {"version": PROTEASE_RESULT_VERSION, "request": None, "request_canonical_sha256": None,
         "stage": "request", "native_record": None, "native_call_state": "not_started", "reference_data": None,
         "execution_receipt": {"software_files_file": None, "runtime": None, "helper_file": None,
             "module_load": {"state": "not_started", "source_file": None}, "observed_callable": None,
             "libraries": [], "imported_files": []}, "stdout": "", "stderr": "", "failure": None,
-        "observer": {"schema": "native_selected_return_observation_v1", "mechanism": "selected_code_return_profile",
+        "observer": {"schema": "native_selected_return_observation", "mechanism": "selected_code_return_profile",
             "state": "not_started", "reason": None, "selected_call_count": 0, "selected_terminal_event_count": 0,
             "profile_restored": None, "locals": {}, "failures": []}, "verification_failures": []}
     saved_path, saved_bytecode = list(sys.path), sys.dont_write_bytecode
@@ -557,7 +545,7 @@ def _execute_protease_request(request):
         retained = json.loads(encoded)
         capture.update(request=retained, request_canonical_sha256=hashlib.sha256(encoded).hexdigest())
         _closed(retained, ("version", "operation", "arguments", "deployment", "output_workspace", "environment"), "")
-        if retained["version"] != REQUEST_VERSION_V3 or retained["operation"] != "analyze_protease_kinetics":
+        if retained["version"] != PROTEASE_REQUEST_VERSION or retained["operation"] != "analyze_protease_kinetics":
             _fail("operation_not_supported", "/operation")
         _closed(retained["arguments"], _PROTEASE_ARGUMENTS, "/arguments")
         _protease_workspace(retained)
@@ -566,12 +554,12 @@ def _execute_protease_request(request):
         for key, value in retained["environment"].items():
             saved_environment[key] = os.environ.get(key)
             os.environ[key] = value
-        record = {"schema": "biomni_protease_kinetics_native_v1", "outcome": "not_called", "result_kind": None,
+        record = {"schema": "biomni_protease_kinetics_native", "outcome": "not_called", "result_kind": None,
             "result": None, "failure": None, "source_identity": None}
         capture["native_record"] = record
         deployment = retained["deployment"]
         capture["stage"] = "deployment_verification"
-        _deployment(deployment, version=DEPLOYMENT_VERSION_V3)
+        _deployment(deployment, version=PROTEASE_DEPLOYMENT_VERSION)
         capture["stage"] = "software_manifest"
         index, manifest_file = _manifest(deployment)
         receipt = capture["execution_receipt"]
@@ -691,6 +679,5 @@ def _execute_protease_request(request):
 
 
 __all__ = ["REQUEST_VERSION", "DEPLOYMENT_VERSION", "RESULT_VERSION",
-    "REQUEST_VERSION_V2", "DEPLOYMENT_VERSION_V2", "RESULT_VERSION_V2",
-    "REQUEST_VERSION_V3", "DEPLOYMENT_VERSION_V3", "RESULT_VERSION_V3",
+    "PROTEASE_REQUEST_VERSION", "PROTEASE_DEPLOYMENT_VERSION", "PROTEASE_RESULT_VERSION",
     "execute_molecular_sequence_request"]
