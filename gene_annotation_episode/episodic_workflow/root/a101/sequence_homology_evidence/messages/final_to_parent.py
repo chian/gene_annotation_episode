@@ -50,6 +50,10 @@ FUNCTION_IDENTIFIER_FORM = RecordForm({
     'identifier': Field('text', 'The identifier exactly as its source gives it'),
     'hit_count': Field('integer', 'The hits of the candidate that carry it'),
 })
+IDENTIFIER_SOURCE_FORM = RecordForm({
+    'source': ChoiceField('text', 'A source of function-level identifiers', (FAMILY_SOURCE,)),
+    'protein_count': Field('integer', 'The hits of the candidate that carry any identifier of that source'),
+})
 UNCHARACTERIZED_FAMILY_FORM = RecordForm({
     'source': ChoiceField('text', 'Where the identifier is from', (FAMILY_SOURCE,), required=False),
     'identifier': Field('text', 'The family identifier of the hits (absent: their features carry none)', required=False),
@@ -61,6 +65,8 @@ CANDIDATE_FORM = RecordForm({
     'function_identifiers': Field('list', 'For a candidate a database search named: the function-level identifiers of '
                                           'the proteins behind it, read from its hits, the one most hits carry first',
                                   items=FUNCTION_IDENTIFIER_FORM, required=False),
+    'identifier_sources': Field('list', 'Per source of those identifiers, the hits that carry any identifier of it',
+                                items=IDENTIFIER_SOURCE_FORM, required=False),
     'hits_without_identifier': Field('integer', 'Its hits whose feature carries no such identifier', required=False),
     'score': Field('number', 'The candidate\'s annotation score: the sum of its sheet values, that is, of its mean '
                              'value (0 to 1) in each test it has undergone'),

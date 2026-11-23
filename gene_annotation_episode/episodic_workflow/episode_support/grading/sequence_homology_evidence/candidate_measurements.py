@@ -33,7 +33,10 @@ The kinds of held graded source read, by the content of their retained sheet:
   at the root: "leave a101 names alone until root"). A candidate keeps its name and its score exactly as above. It
   additionally carries ``function_identifiers``: the identifiers of the proteins behind it, read from its hits and
   never from a search by its name: for BV-BRC hits the global protein family of each hit's feature (``pgfam_id``,
-  source ``bvbrc_global_family``), each with the number of its hits that carry it, and ``hits_without_identifier``.
+  source ``bvbrc_global_family``), each with the number of its hits that carry it, ``identifier_sources`` (per source,
+  the number of its hits that carry any identifier of that source: an identifier whose hit count equals it is carried
+  by every hit that has the source; the same field the structural-homology head returns) and
+  ``hits_without_identifier``.
   The uncharacterized hits are returned by family in the same way (``uncharacterized_families``: identifier, hit
   count and highest value), so that an unknown family is something a later investigation can start from.
 * a profile scan (``hmmer_search_sheet`` of ``hmmscan``): test ``profile_scan:<database name>``; each matched family
@@ -498,6 +501,7 @@ def _identity(candidate, families):
     counts = {family: carried.count(family) for family in dict.fromkeys(carried)}
     return {'function_identifiers': [{'source': FAMILY_SOURCE, 'identifier': family, 'hit_count': count}
                                      for family, count in sorted(counts.items(), key=lambda item: -item[1])],
+            'identifier_sources': [{'source': FAMILY_SOURCE, 'protein_count': len(carried)}] if carried else [],
             'hits_without_identifier': len(families[candidate['name']]) - len(carried)}
 
 

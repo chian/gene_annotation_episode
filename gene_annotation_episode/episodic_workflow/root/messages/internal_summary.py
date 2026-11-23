@@ -27,11 +27,16 @@ on several lines wastes work, and joining two different functions corrupts the s
 its starting point is the note on deduplicating candidate annotations of 2026-11-23, not settled knowledge):
 
 1. A name or an alias never joins two annotations.
-2. Two annotations are one function only when a source of function-level identifiers gives both the same identifier
-   and no source that gives both an identifier separates them. The identifiers are read by the head from the proteins
-   behind its candidate, never from a search by a name.
-3. An annotation whose hits carry several identifiers of one source has no identifier in that source: it is unsettled
-   there and is joined to nothing by it.
+2. Two annotations are one function only when a deciding source of function-level identifiers
+   (``read_from_child.DECIDING_SOURCES``) gives both the same identifier and no deciding source that gives both an
+   identifier separates them. The identifiers are read by the head from the proteins behind its candidate, never from
+   a search by a name.
+3. What a source gives an annotation is the set of its identifiers that EVERY protein behind the annotation that has
+   the source carries (the hit count of the identifier equals the source's protein count). One protein may carry
+   several identifiers of one source (found on CspA: two NCBIfam identifiers), and then the set is that pair; proteins
+   that split over identifiers (half carry one, half another) share none, the set is empty, and the annotation is
+   unsettled in that source: it is joined to nothing and separated from nothing by it. Two annotations agree in a
+   source when their sets overlap and are separated by it when both sets are non-empty and do not overlap.
 4. A line holds annotations that are one function pair by pair (the relation does not chain: A with B and B with C does
    not join A with C when a source separates them).
 Two annotations of the same vocabulary and the same identifier of their own (a family accession, a record reference)
@@ -65,32 +70,35 @@ annotation."""
 import math
 
 from ..credit import AXIS_WEIGHTS, hypervolume
-from .read_from_child import CREDIT_RETURNED
+from .read_from_child import CREDIT_RETURNED, DECIDING_SOURCES
 
 ROW_FIELDS = ('status', 'score', 'support', 'opposition')
 # net -> the score of an axis that checks claims: tanh(net / CLAIM_SCALAR_DIVISOR), the divisor that head's sheet uses.
 CLAIM_SCALAR_DIVISOR = 2.0
 
 
-IDENTITY_FIELDS = ('vocabulary', 'name', 'identifier', 'function_identifiers', 'hits_without_identifier')
+IDENTITY_FIELDS = ('vocabulary', 'name', 'identifier', 'function_identifiers', 'identifier_sources',
+                   'hits_without_identifier')
 
 
 def settled_identifiers(annotation):
-    """``{source: identifier}`` for every source of function-level identifiers in which the annotation's hits carry
-    exactly one identifier (rule 3 of the module text)."""
-    by_source = {}
+    """``{source: the identifiers of that source every protein behind the annotation that has the source carries}``,
+    for the deciding sources in which that set is not empty (rule 3 of the module text)."""
+    proteins = {row['source']: row['protein_count'] for row in annotation.get('identifier_sources', ())}
+    settled = {}
     for row in annotation.get('function_identifiers', ()):
-        by_source.setdefault(row['source'], []).append(row['identifier'])
-    return {source: identifiers[0] for source, identifiers in by_source.items() if len(identifiers) == 1}
+        if row['source'] in DECIDING_SOURCES and row['hit_count'] == proteins[row['source']]:
+            settled.setdefault(row['source'], set()).add(row['identifier'])
+    return settled
 
 
 def same_function(first, second):
-    """Whether two annotations are one function (rules 1 and 2 of the module text), or the same annotation by their
+    """Whether two annotations are one function (rules 1 to 3 of the module text), or the same annotation by their
     own vocabulary and identifier."""
     one, other = settled_identifiers(first), settled_identifiers(second)
     shared = [source for source in one if source in other]
     if shared:
-        return all(one[source] == other[source] for source in shared)
+        return all(one[source] & other[source] for source in shared)
     return ('identifier' in first and 'identifier' in second and first['vocabulary'] == second['vocabulary']
             and first['identifier'] == second['identifier'])
 
@@ -100,7 +108,7 @@ def annotation_key(annotation):
     its vocabulary and its own identifier, or its name when it has none."""
     settled = settled_identifiers(annotation)
     if settled:
-        return 'function:' + ';'.join(source + '=' + settled[source] for source in sorted(settled))
+        return 'function:' + ';'.join(source + '=' + '+'.join(sorted(settled[source])) for source in sorted(settled))
     return annotation['vocabulary'] + ':' + (annotation['identifier'] if 'identifier' in annotation
                                              else annotation['name'])
 

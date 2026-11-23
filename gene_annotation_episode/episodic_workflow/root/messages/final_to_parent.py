@@ -30,6 +30,10 @@ FUNCTION_IDENTIFIER_FORM = RecordForm({
     'identifier': Field('text', 'The function-level identifier exactly as its source gives it'),
     'hit_count': Field('integer', 'The proteins behind the annotation that carry it'),
 })
+IDENTIFIER_SOURCE_FORM = RecordForm({
+    'source': ChoiceField('text', 'A source of function-level identifiers', FUNCTION_SOURCES),
+    'protein_count': Field('integer', 'The proteins behind the annotation that carry any identifier of that source'),
+})
 MEMBER_FORM = RecordForm({
     'vocabulary': ChoiceField('text', 'The vocabulary of the annotation', VOCABULARIES),
     'name': Field('text', 'Its name exactly as its source gives it', required=False),
@@ -51,6 +55,8 @@ ANNOTATION_FORM = RecordForm({
                    required=False),
     'function_identifiers': Field('list', 'The function-level identifiers of the proteins behind the annotation',
                                   items=FUNCTION_IDENTIFIER_FORM, required=False),
+    'identifier_sources': Field('list', 'Per source of those identifiers, the proteins that carry any identifier of it',
+                                items=IDENTIFIER_SOURCE_FORM, required=False),
     'hits_without_identifier': Field('integer', 'The proteins behind it that carry no such identifier', required=False),
     'rows': Field('list', 'One row per axis whose head scored the annotation', items=AXIS_ROW_FORM),
     'members': Field('list', 'Every annotation on this line (the names the heads gave this one function), with the axis '

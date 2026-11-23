@@ -87,9 +87,14 @@ ROW_STATUS = ('measured', 'measured_zero', 'unknown')
 # The vocabularies of a candidate annotation, as the sequence-homology head names its candidates: a database search's
 # function, a family of a profile database, a sequence record it was compared with.
 VOCABULARIES = ('product', 'profile_family', 'reference_sequence')
-# The sources of function-level identifiers the linked heads return with a candidate (read from the proteins behind
-# it): the global protein family of a BV-BRC feature.
-FUNCTION_SOURCES = ('bvbrc_global_family',)
+# The sources of function-level identifiers a head may return with a candidate (read from the proteins behind it): the
+# global protein family of a BV-BRC feature (the sequence-homology head), and the identifiers of a UniProt entry (the
+# structural-homology head, when it is linked).
+FUNCTION_SOURCES = ('bvbrc_global_family', 'hamap', 'ncbifam', 'panther_subfamily', 'orthodb', 'eggnog', 'pirsf')
+# The sources that decide whether two annotations are one function. The orthologous-group sources (OrthoDB, eggNOG,
+# PIRSF) are recorded and decide nothing until they have been measured: on the one case checked (the cold shock
+# proteins CspA and CspC, 2026-11-23) they join what the BV-BRC family and NCBIfam keep apart.
+DECIDING_SOURCES = ('bvbrc_global_family', 'hamap', 'ncbifam', 'panther_subfamily')
 
 
 def sequence_homology_rows(finding):
@@ -98,12 +103,13 @@ def sequence_homology_rows(finding):
     head's subscoring sheets, never negative) is a row with that score. This head's sheets hold no evidence against a
     candidate, so its rows have no support and opposition apart from the score. A candidate a database search named
     carries the function-level identifiers of the proteins behind it (``function_identifiers``: source, identifier and
-    the number of its hits that carry it) and ``hits_without_identifier``; the root decides with them which names are
+    the number of its hits that carry it; ``identifier_sources``: per source, the number of its hits that carry any
+    identifier of it) and ``hits_without_identifier``; the root decides with them which names are
     one function (``internal_summary.same_function``)."""
     (target,) = finding['targets']
     return [{'vocabulary': candidate['vocabulary'], 'name': candidate['name'],
-             **{name: candidate[name] for name in ('identifier', 'function_identifiers', 'hits_without_identifier')
-                if name in candidate},
+             **{name: candidate[name] for name in ('identifier', 'function_identifiers', 'identifier_sources',
+                                                    'hits_without_identifier') if name in candidate},
              'status': 'measured' if candidate['score'] else 'measured_zero', 'score': candidate['score']}
             for candidate in target['candidates']]
 
