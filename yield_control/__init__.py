@@ -1431,7 +1431,11 @@ def accumulation_provenance():
 
 class AccumulationYieldController:
     """Continue while nano-graphrag's estimator controller does not stop and an item remains (see the section
-    comment). ``control`` is ``ADAPTIVE_CONTROL`` or ``FIXED_CONTROL``; ``items`` is None or the number of items of
+    comment). ``control`` is ``ADAPTIVE_CONTROL``, ``FIXED_CONTROL`` or an episode's own ``AccumulationControl``
+    (the owner, 2026-11-22: the window and the streak "were tuned parameters based on what behavior you want ... you can
+    tune the stopping criteria however you want to make the behavior more in line with cost:benefit ratio that you
+    perceive in your examples"; an episode tunes its own in its ``yield_estimator.py``, the two shared declarations
+    stay as they are for the others); ``items`` is None or the number of items of
     the episode's input list at its start (a positive integer: the loop runs at least one unit). A unit whose
     ``estimation_context`` carries ``items_remaining`` sets the number remaining to it (see the section comment). No
     cost."""
@@ -1439,8 +1443,8 @@ class AccumulationYieldController:
     def __init__(self, epoch, initial_credit, control, *, items=None):
         self.epoch = _epoch(epoch)
         self.initial_credit = _signed(initial_credit, "initial_credit")
-        if not isinstance(control, AccumulationControl) or control not in (ADAPTIVE_CONTROL, FIXED_CONTROL):
-            raise ValueError("accumulation_control_must_be_ADAPTIVE_CONTROL_or_FIXED_CONTROL")
+        if not isinstance(control, AccumulationControl):
+            raise ValueError("accumulation_control_must_be_an_AccumulationControl")
         if items is not None and (type(items) is not int or items < 1):
             raise ValueError("accumulation_items_must_be_None_or_a_positive_integer")
         self.control = control
