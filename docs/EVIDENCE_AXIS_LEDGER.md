@@ -5,6 +5,27 @@ This is the central progress record for evidence axes. Individual implementation
 documents and dated run reports supply detail; they do not independently set an
 axis's current status.
 
+## 2026-11-23 — A102 child `partner_cofolding` (Chai-1 on Polaris) built; runs for real standalone, not chosen by the head
+
+Scope: the A102 child `structural_homology_evidence/partner_cofolding` (tree row P7, `docs/plan/designs/a102_partner_cofolding.md`):
+a job child on a resource of kind `pbs` (Polaris, account `IMPROVE_Aim1`), wired into the A102 head beside `structure_search`.
+Not shared-root integration. Evidence, code `5aaa1b25b` (schema fix `ff161e1e6`):
+(1) Head run `a102_cofold_reca_4` on RecA (`runs/a102_cofold_ws_reca_2/`, worktree `gae_a102_ff161e1e6`): 5 units, stopped by its
+yield controller at credit 29.06 (structure search, `ligand_transplants`, `partner_contacts`, structure search, `site_correspondence`).
+`partner_cofolding` was offered at three decisions with ceiling 1.0 and never commissioned: the forecast controller's row was
+forecast gain 0.5 against a threshold of 0.60 to 0.63 (about 300 expected seconds times the exchange rate 0.002). So no head run
+has commissioned this child. (2) The child as the run's entry, the parent's commission supplied in the run setup
+(`runs/a102_cofold_child_ws_reca_1/`): run `a102_cofold_child_reca_1` (estimate 600 s, launch, one status request; job 7880586
+still queued, so the child returned parked, credit 2.0; resumed once after a code fault, no second submission) and the resuming
+commission `a102_cofold_child_reca_2` (one status request after a wait of 1800 s the model chose, then extract; state `extracted`,
+credit 2.0). Graded sheet `a102_partner_cofolding_sheet`, RecA with four ligands, five samples each, no clash flagged:
+`ligand:ADP` 0.739, `ligand:GTP` 0.646, `ligand:MG` 0.128, `ligand:MN` 0.118. The job took 30 minutes from submission to its end
+(queue wait included); the ledger's observed duration is 3,717 s because the standalone resume came later and waited 1800 s.
+Faults found by these runs and fixed: `uniqueItems` in the `ligands` answer schema (refused by the strict schema mode); the job-child
+code read the service's own estimate from the handoff record, which the PBS route does not record. Open: the values of single-atom
+ligands (0.12 to 0.13) are far below the nucleotides'; whether that is a property of the interface score for one atom is not examined.
+Same day: version names removed across the code (`430cc7fba`; rule in `AGENTS.md`), no tests run after it.
+
 ## 2026-11-23 — A105 head: a standalone real-model run returns from start to finish (one "binds" claim)
 
 Scope: one evidence-axis head run from the command line (`run --entry experimental_activity_evidence`), standing in for

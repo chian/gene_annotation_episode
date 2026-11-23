@@ -81,3 +81,31 @@ child takes up to four of the 14 held ligand candidates (the first four availabl
   almost nothing for that pair.
 - No sample is flagged as clashing for the nucleotide ligands; a clash flag is possible for an ion.
 - The credit the test earns is the differential of the top two ligands it measures, bounded by its ceiling `w`; it admits no candidate.
+
+## Results (2026-11-23)
+
+Head run `a102_cofold_reca_4` (RecA, pinned `ff161e1e6`): 5 units, credit 29.06, stopped by the yield controller. `partner_cofolding`
+was offered three times (ceiling 1.0) and never commissioned: forecast gain 0.5 against a threshold of about 0.6 (300 expected
+seconds times the exchange rate 0.002). The first prediction above (the head commissions it) was wrong.
+
+The child as entry, the parent's commission in the run setup (`runs/a102_cofold_child_ws_reca_1/`, pinned `5aaa1b25b`), ligands
+`MN`, `MG` (the head's two leading ligand candidates), `ADP`, `GTP`; job 7880586 on `IMPROVE_Aim1`:
+
+| ligand | value (mean iptm of 5) | samples | clashing | mean ptm |
+|---|---|---|---|---|
+| `ligand:ADP` | 0.739 | 0.734 to 0.742 | 0 | 0.908 |
+| `ligand:GTP` | 0.646 | 0.643 to 0.650 | 0 | 0.911 |
+| `ligand:MG` | 0.128 | 0.125 to 0.130 | 0 | 0.875 |
+| `ligand:MN` | 0.118 | 0.115 to 0.121 | 0 | 0.872 |
+
+Against the prediction: queue wait within 5 to 60 minutes: yes (30 minutes from submission to the end, run included); nucleotides
+above ions: yes; the nucleotides within 0.4 to 0.85: yes, the ions are not (0.12 to 0.13); ADP and GTP differ by 0.093; no clash
+flagged, also none for the ions. The differential the head would count is between the two leading candidates the test measures,
+`MN` and `MG`: 0.010. Not examined: whether an interface score of one atom is comparable with a nucleotide's.
+
+The first run returned parked (the job was still queued at its one status request, 609 s after launch); the resuming commission
+extracted it. The ledger row for `partner_cofolding:chai1:4` holds 3,717 s, which includes the standalone resume's delay and the
+1800 s wait the model chose; the job itself ended 1,800 s after submission.
+
+Faults found and fixed by these runs: `uniqueItems` (and an unproven `pattern`) in the `ligands` answer schemas; the service's own
+estimate is now a field of the job application (the PBS route records none).
