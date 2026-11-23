@@ -26,6 +26,37 @@ code read the service's own estimate from the handoff record, which the PBS rout
 ligands (0.12 to 0.13) are far below the nucleotides'; whether that is a property of the interface score for one atom is not examined.
 Same day: version names removed across the code (`430cc7fba`; rule in `AGENTS.md`), no tests run after it.
 
+## 2026-11-23 — Shared root: a real-model run entered at the root commissions A101 and A105 and returns
+
+Scope: shared-root integration of two heads only (sequence_homology_evidence and experimental_activity_evidence); the
+other seven are not linked (six do not load on the current system; A102 loads, its link is drafted in another session).
+One subject (PopZ with every second position mutated). Evidence: run `root_a101_a105_05`, code `6722d5bc4`
+(`runs/root_a101_a105_20261123/`: `run_e.out`, `workspace_e/journal.sqlite3`, `prediction_e.md`, `result_e.md`). The
+root commissioned A101 (credit 0.901, three candidate annotations), made the claims of each annotation by its own tool
+(none for "hypothetical protein" and DUF2497; popZ binds parB, chpT and zitP for the PopZ product), commissioned A105
+on the claim its model chose (binds parB, credit 0.009), and was stopped by its own forecast yield controller: 5 units,
+1 h 27 min, 324 model calls, 132 episodes all closed by their own yield estimators, no credit fall in any of 412 units.
+It returned annotation credit 0.918 = (1 + 0.901)(1 + 0.009) - 1 and its scoring sheet, with A101's and A105's scores
+of the PopZ product on one line. Runs 01 to 03 were stopped by the owner or on the owner's word for design changes
+(the root held no annotation scores; the two heads scored different annotations; A101 stopped before its database
+search), not by errors; run 04 failed at the first claim step on a record link the schema does not allow, fixed in
+`6722d5bc4`. What changed in the root since `dd2ed89be`: it holds the candidate annotations and their scores and merges
+the axes per annotation with its hypervolume (`cf14ea5c8`); annotations generate claims (tool `make_claims`, a set
+workflow: one UniProt lookup, one model call, only looked-up molecules kept) and a claim's check is that head's score
+of its annotation (`91684f5b9`); a step is offered only when there is something new for it (`43ac94e68`); its
+controller is the forecast yield controller, exchange rate 0.00003, and claim-making is owed work taken without the
+model (`f27741c21`). A101's exchange rate is 0.0015 in the run's settings (0.002 refused the database search once the
+ledger had learned its gain on this subject; reason in `docs/plan/designs/forecast_yield_controller.md`).
+Not shown by this run, and later than its code: a label of ignorance is no candidate in A101 (`352c6568c`); candidates
+carry the function-level identifiers of the proteins behind them and the root joins names by them, never by name
+(`52bfcdc29`, `4d5d2b106`, `7bb8a8ccc`); the root's grouping goes back down to A101, which rescores under it
+(`96d4c2d40`, design `docs/plan/designs/a102_regrouping.md`). Those are checked on made-up cases only; the PopZ subject
+has no duplicate names. Open: the root stopped after one weak claim without checking the other two (all claim checks
+share one forecast; the exchange rate was set from one good check and is to be tuned from this record); the claim
+step reads UniProt by exact name, not the proteins behind the annotation; a "catalyzes" or "transports" claim has not
+run; the root's reopening of a head at a deeper setting (a multiplier on the head's stop threshold) is designed in
+discussion only.
+
 ## 2026-11-23 — A105 head: a standalone real-model run returns from start to finish (one "binds" claim)
 
 Scope: one evidence-axis head run from the command line (`run --entry experimental_activity_evidence`), standing in for
