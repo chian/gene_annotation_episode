@@ -11,7 +11,10 @@ predicate reads as it reads a proposed annotation. The workflow (``generate_clai
 
 1. Find what the public record states about proteins of the annotation: one UniProt search (by protein name; by the
    Pfam cross-reference for a profile family), read for the names, functions, subunit statements, catalytic
-   activities, cofactors, interaction partners and complexes of the entries found.
+   activities, cofactors, interaction partners and complexes of the entries found. A search by name matches loosely
+   (found in the real run ``root_a101_a105_04``: "hypothetical protein" returned 25 unrelated proteins that carry those
+   words in a synonym), so of a name search only the entries one of whose names is exactly the annotation's name (case
+   apart) are read.
 2. One model call reads the annotation, what was found and the rival annotations, and writes the list of claims: what
    the record states and whatever else it knows the annotation to mean, the claims that set this annotation apart from
    its rivals first. It also gives the name the literature uses for the protein.
@@ -20,10 +23,11 @@ predicate reads as it reads a proposed annotation. The workflow (``generate_clai
    model wrote. The name the literature uses is taken the same way; when it is not found the annotation's own name
    stands.
 
-What is written, through the scoped store handed in: the sources of the lookups; one ``reference`` record for the
-subject under the annotation (the subject's own sequence, carrying the protein name of the annotation, so that a head
-searches under that name and compares what it finds with the subject's sequence); one ``reference`` record per
-admitted molecule; one ``hypothesis`` record per claim; and one ``source`` record whose artifact holds everything the
+What is written, through the scoped store handed in: the sources of the lookups; when the annotation has a claim, one
+``reference`` record for the subject under the annotation (the subject's own sequence, carrying the protein name of
+the annotation, so that a head searches under that name and compares what it finds with the subject's sequence; its
+accession is the subject's record reference); one ``reference`` record per admitted molecule; one ``hypothesis`` record
+per claim; and one ``source`` record whose artifact holds everything the
 workflow read and what the model answered (the trace). Returned: the claims only.
 
 A lookup that fails raises (a failed lookup is not an absent molecule). A protein subject is required."""
@@ -138,6 +142,14 @@ def stated(rows):
             'interaction_partners': _unique(partners), 'complexes': _unique(complexes)}
 
 
+def of_annotation(rows, annotation):
+    """The entries a search found that are of the annotation: every entry of a profile family's cross-reference search;
+    of a name search, the entries one of whose names is exactly the annotation's name (case apart)."""
+    if annotation['vocabulary'] == 'profile_family':
+        return rows
+    return [row for row in rows if any(_same(name, annotation['name']) for name in _protein_names(row))]
+
+
 def annotation_query(annotation):
     """The UniProt search for one annotation: the entries cross-referenced to the Pfam family of a profile family
     (its accession without the version), else the entries of that protein name."""
@@ -201,7 +213,7 @@ async def generate_claims(store, model, operation_key, *, annotation, rivals, su
     # 1. what the public record states
     source, rows = _uniprot(store, annotation_query(annotation))
     written.append(source['id'])
-    found = stated(rows)
+    found = stated(of_annotation(rows, annotation))
     # 2. the claims, by one model call
     answer = await model.complete('REASONING', INSTRUCTIONS,
                                   {'annotation': annotation, 'database': found, 'rival_annotations': rivals},
@@ -213,28 +225,29 @@ async def generate_claims(store, model, operation_key, *, annotation, rivals, su
         if named is not None:
             written.append(named[0]['id'])
             label = named[2]
-    under = store.put('reference', {
-        'reference_type': 'protein', 'source_ref': source['id'], 'accession': subject_ref, 'label': label,
-        'sequence_ref': subject['sequence_ref'], 'molecule': 'protein', 'length': subject['length'],
-        'term_refs': [], 'context_refs': [subject_ref]}, origin='tool')
-    written.append(under['id'])
-    claims, seen, not_found = [], set(), 0
+    admitted, seen, not_found = [], set(), 0
     for proposed in answer['claims']:
         partner = admit(store, proposed['partner_name'], proposed['partner_kind'])
         if partner is None:
             not_found += 1
-            continue
-        key = (proposed['predicate'], partner['id'])
-        if key in seen or _same(partner['label'], label):
-            continue
-        seen.add(key)
-        claim = store.put('hypothesis', {'subject_refs': [under['id']], 'predicate': proposed['predicate'],
-                                         'value': {'type': 'reference', 'ref': partner['id']},
-                                         'context_refs': [subject_ref]}, origin='tool')
-        written.extend([partner['source_ref'], partner['id'], claim['id']])
-        claims.append({'claim_ref': claim['id'], 'predicate': proposed['predicate'], 'partner': partner['label'],
-                       'partner_kind': proposed['partner_kind'],
-                       'record_refs': [under['id'], partner['id'], claim['id']]})
+        elif (proposed['predicate'], partner['id']) not in seen and not _same(partner['label'], label):
+            seen.add((proposed['predicate'], partner['id']))
+            admitted.append((proposed, partner))
+    claims = []
+    if admitted:
+        under = store.put('reference', {
+            'reference_type': 'protein', 'source_ref': source['id'], 'accession': subject_ref, 'label': label,
+            'sequence_ref': subject['sequence_ref'], 'molecule': 'protein', 'length': subject['length'],
+            'term_refs': [], 'context_refs': []}, origin='tool')
+        written.append(under['id'])
+        for proposed, partner in admitted:
+            claim = store.put('hypothesis', {'subject_refs': [under['id']], 'predicate': proposed['predicate'],
+                                             'value': {'type': 'reference', 'ref': partner['id']},
+                                             'context_refs': []}, origin='tool')
+            written.extend([partner['source_ref'], partner['id'], claim['id']])
+            claims.append({'claim_ref': claim['id'], 'predicate': proposed['predicate'], 'partner': partner['label'],
+                           'partner_kind': proposed['partner_kind'],
+                           'record_refs': [under['id'], partner['id'], claim['id']]})
     trace = store.artifact(canonical({'annotation': annotation, 'rival_annotations': rivals, 'database': found,
                                       'answer': answer, 'subject_name': label, 'not_found': not_found}),
                            'application/json')
