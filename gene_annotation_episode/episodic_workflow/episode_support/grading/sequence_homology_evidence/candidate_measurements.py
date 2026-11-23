@@ -28,6 +28,14 @@ The kinds of held graded source read, by the content of their retained sheet:
   ``uncharacterized_labels.UNCHARACTERIZED_LABELS``; the owner, 2026-11-23: "a label of ignorance, not a label of
   positive knowledge") names no candidate either, in any test: a hit all of whose functions are such labels is counted
   as ``uncharacterized``.
+  The function-level identity of a product candidate (the owner, 2026-11-23: an annotation is a function; two heads, and
+  one head, name one function in several ways, and which names are one function is decided where all the evidence is,
+  at the root: "leave a101 names alone until root"). A candidate keeps its name and its score exactly as above. It
+  additionally carries ``function_identifiers``: the identifiers of the proteins behind it, read from its hits and
+  never from a search by its name: for BV-BRC hits the global protein family of each hit's feature (``pgfam_id``,
+  source ``bvbrc_global_family``), each with the number of its hits that carry it, and ``hits_without_identifier``.
+  The uncharacterized hits are returned by family in the same way (``uncharacterized_families``: identifier, hit
+  count and highest value), so that an unknown family is something a later investigation can start from.
 * a profile scan (``hmmer_search_sheet`` of ``hmmscan``): test ``profile_scan:<database name>``; each matched family
   is a candidate of vocabulary ``profile_family`` (identifier: its accession, name: its name, as the profile database
   gives them); its value is the subscore of its domains.
@@ -151,8 +159,8 @@ def _by(rows, key):
 def search_hits(grading, value_of):
     """The hits of a database search with names, one row per (hit, product name) in hit order: ``hit_index``, ``product``
     (the function the sheet's reference metadata gives it), ``value`` (the subscore of that hit's alignments), and the
-    hit's ``accession``, ``aa_sequence_md5``, ``aa_length`` and ``feature_id`` (BV-BRC's feature fields; ``None`` where the metadata has
-    none); a hit that names no product (not asked, or asked and carrying none) gives one row with ``product`` ``None``."""
+    hit's ``accession``, ``aa_sequence_md5``, ``aa_length``, ``feature_id`` and ``pgfam_id`` (BV-BRC's feature fields; ``None`` where the
+    metadata has none); a hit that names no product (not asked, or asked and carrying none) gives one row with ``product`` ``None``."""
     sheet = grading['sheet']
     rows = _by(route_native_grading(grading), 'hit_index')
     found = []
@@ -168,22 +176,34 @@ def search_hits(grading, value_of):
         value = value_of(rows.get(hit['hit_index'], []))
         if not names:
             found.append({'hit_index': hit['hit_index'], 'product': None, 'value': value, 'accession': None,
-                          'aa_sequence_md5': None, 'aa_length': None, 'feature_id': None})
+                          'aa_sequence_md5': None, 'aa_length': None, 'feature_id': None, 'pgfam_id': None})
         found.extend({'hit_index': hit['hit_index'], 'product': name, 'value': value, 'accession': accession,
                       'aa_sequence_md5': feature.get('aa_sequence_md5'), 'aa_length': feature.get('aa_length'),
-                      'feature_id': feature.get('feature_id')}
+                      'feature_id': feature.get('feature_id'), 'pgfam_id': feature.get('pgfam_id') or None}
                      for name, (accession, feature) in names.items())
     return found
 
 
 def uncharacterized_hits(grading, value_of):
-    """The values of the hits of a database search with names all of whose functions are labels of ignorance: one value
-    per such hit (the subscore of its alignments, on the scale of a candidate's value in that test). The owner,
+    """The values of the hits of a database search with names all of whose functions are labels of ignorance: one row
+    per such hit: its ``value`` (the subscore of its alignments, on the scale of a candidate's value in that test) and
+    the global protein family of its feature (``pgfam_id``, ``None`` where it carries none). The owner,
     2026-11-23: listing this evidence tells "if it's closer to something else unknown or closer to an actually named
     function and by how much"."""
     rows = [row for row in search_hits(grading, value_of) if row['product'] is not None]
     stated = {row['hit_index'] for row in rows if not is_uncharacterized_label(row['product'])}
-    return list({row['hit_index']: row['value'] for row in rows if row['hit_index'] not in stated}.values())
+    return list({row['hit_index']: {'value': row['value'], 'pgfam_id': row['pgfam_id']}
+                 for row in rows if row['hit_index'] not in stated}.values())
+
+
+def product_families(grading):
+    """The global protein family of each hit of a database search with names, by the product the hit names: product ->
+    one family identifier per hit (``None`` for a hit whose feature carries none)."""
+    families = {}
+    for row in search_hits(grading, lambda alignments: None):
+        if row['product'] is not None and not is_uncharacterized_label(row['product']):
+            families.setdefault(row['product'], []).append(row['pgfam_id'])
+    return families
 
 
 def _database_search(source, grading, value_of):
@@ -322,11 +342,12 @@ def _pairwise(reader, source, grading, value_of):
 def _read(reader, scope, sources):
     """The measurements in arrival order, per target the hits of database searches that name no candidate
     (``{'not_asked', 'no_product', 'uncharacterized'}``: the hits whose function was never asked, those asked that carry
-    no product, and the values of those whose every function is a label of ignorance), the
+    no product, the values and families of those whose every function is a label of ignorance, and under ``families``
+    the family identifier of every hit of each product), the
     identified conserved sites (target, target position, residue, candidate name) of the held alignments and the matched
     sites the held MetaCATS reports confirmed (the same identities)."""
     scope = reader.validate_scope(scope)
-    measurements, unnamed = [], {target: {'not_asked': 0, 'no_product': 0, 'uncharacterized': []}
+    measurements, unnamed = [], {target: {'not_asked': 0, 'no_product': 0, 'uncharacterized': [], 'families': {}}
                                  for target in scope['subject_refs']}
     identified, confirmed = set(), set()
     for reference in sources:
@@ -363,6 +384,8 @@ def _read(reader, scope, sources):
                 unnamed[target]['no_product'] += missing - not_asked
             if read is _database_search:
                 unnamed[target]['uncharacterized'].extend(uncharacterized_hits(grading, value_of))
+                for product, families in product_families(grading).items():
+                    unnamed[target]['families'].setdefault(product, []).extend(families)
             measurements.extend(_measurement(target, row[0] + '@' + reference, *row[1:5], reference, *row[5:]) for row in found
                                 if not (row[1] == 'product' and is_uncharacterized_label(row[2])))
     return measurements, unnamed, identified, confirmed
@@ -449,9 +472,33 @@ def _entry(measurements, candidate):
             **({} if first['identifier'] is None else {'identifier': first['identifier']})}
 
 
-def _uncharacterized(values):
-    """The count of the uncharacterized hits and, when there is one, the highest value among them."""
-    return {'uncharacterized_hit_count': len(values), **({'uncharacterized_best_value': max(values)} if values else {})}
+FAMILY_SOURCE = 'bvbrc_global_family'
+
+
+def _uncharacterized(hits):
+    """The count of the uncharacterized hits, the highest value among them when there is one, and the hits by family
+    (``uncharacterized_families``: the family identifier, absent for hits whose feature carries none, the number of
+    hits and their highest value; the family with the highest value first)."""
+    families = {}
+    for hit in hits:
+        families.setdefault(hit['pgfam_id'], []).append(hit['value'])
+    rows = [{**({} if family is None else {'source': FAMILY_SOURCE, 'identifier': family}),
+             'hit_count': len(values), 'best_value': max(values)} for family, values in families.items()]
+    return {'uncharacterized_hit_count': len(hits),
+            **({'uncharacterized_best_value': max(hit['value'] for hit in hits)} if hits else {}),
+            'uncharacterized_families': sorted(rows, key=lambda row: -row['best_value'])}
+
+
+def _identity(candidate, families):
+    """The function-level identity of a product candidate, from the families of its hits (the module text): nothing for
+    a candidate no database search named."""
+    if candidate['vocabulary'] != 'product' or candidate['name'] not in families:
+        return {}
+    carried = [family for family in families[candidate['name']] if family is not None]
+    counts = {family: carried.count(family) for family in dict.fromkeys(carried)}
+    return {'function_identifiers': [{'source': FAMILY_SOURCE, 'identifier': family, 'hit_count': count}
+                                     for family, count in sorted(counts.items(), key=lambda item: -item[1])],
+            'hits_without_identifier': len(families[candidate['name']]) - len(carried)}
 
 
 def candidate_table(reader, scope, sources):
@@ -463,13 +510,15 @@ def candidate_table(reader, scope, sources):
     database searches whose function was never asked: the naming stopped once the candidates settled), ``no_product_hit_count``
     (the hits asked that carry no product), ``uncharacterized_hit_count`` (the hits whose every function is a label of
     ignorance) with ``uncharacterized_best_value`` (the highest value among them, on the scale of a candidate's
-    ``best_value``; absent when there is none) and the target's ``credit``), and the ``credit`` of the scope: the sum
-    over its targets."""
+    ``best_value``; absent when there is none) and ``uncharacterized_families`` (those hits by family) and the target's
+    ``credit``), and the ``credit`` of the scope: the sum over its targets. A product candidate also carries its
+    ``function_identifiers`` and ``hits_without_identifier`` (the module text)."""
     measurements, unnamed = _read(reader, scope, sources)[:2]
     targets = {}
     for target, rows in _by(measurements, 'target').items():
         result = differential_credit(rows)
-        candidates = [{**_entry(rows, candidate), 'score': score, 'sheets': [{'sheet': kind, 'value': value} for kind, value in result['sheets'][candidate].items()],
+        candidates = [{**_entry(rows, candidate), **_identity(_entry(rows, candidate), unnamed[target]['families']),
+                       'score': score, 'sheets': [{'sheet': kind, 'value': value} for kind, value in result['sheets'][candidate].items()],
                        'tests': list(dict.fromkeys(row['test'] for row in rows if row['candidate'] == candidate)),
                        'measurement_count': sum(1 for row in rows if row['candidate'] == candidate),
                        'best_value': max(row['value'] for row in rows if row['candidate'] == candidate)}

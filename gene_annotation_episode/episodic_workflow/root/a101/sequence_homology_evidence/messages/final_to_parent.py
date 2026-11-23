@@ -16,7 +16,7 @@ from method_loop import ChoiceField, Field, RecordForm
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.axis_features import (
     FEATURES, MEANINGS)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.candidate_measurements import (
-    VOCABULARIES)
+    FAMILY_SOURCE, VOCABULARIES)
 
 FIELD_TYPES = {'number': 'number', 'count': 'integer', 'boolean': 'boolean'}
 
@@ -44,8 +44,24 @@ SHEET_FORM = RecordForm({
     'sheet': Field('text', 'The subscoring sheet: the kind of test (the part of the test name before the @)'),
     'value': Field('number', 'The candidate\'s value on the sheet: the sum of its values in the tests of that kind'),
 })
+FUNCTION_IDENTIFIER_FORM = RecordForm({
+    'source': ChoiceField('text', 'Where the identifier is from: the global protein family of the hit\'s BV-BRC feature',
+                          (FAMILY_SOURCE,)),
+    'identifier': Field('text', 'The identifier exactly as its source gives it'),
+    'hit_count': Field('integer', 'The hits of the candidate that carry it'),
+})
+UNCHARACTERIZED_FAMILY_FORM = RecordForm({
+    'source': ChoiceField('text', 'Where the identifier is from', (FAMILY_SOURCE,), required=False),
+    'identifier': Field('text', 'The family identifier of the hits (absent: their features carry none)', required=False),
+    'hit_count': Field('integer', 'The uncharacterized hits of that family'),
+    'best_value': Field('number', 'The highest value among them, 0 to 1'),
+})
 CANDIDATE_FORM = RecordForm({
     **CANDIDATE_REFERENCE_FORM.fields,
+    'function_identifiers': Field('list', 'For a candidate a database search named: the function-level identifiers of '
+                                          'the proteins behind it, read from its hits, the one most hits carry first',
+                                  items=FUNCTION_IDENTIFIER_FORM, required=False),
+    'hits_without_identifier': Field('integer', 'Its hits whose feature carries no such identifier', required=False),
     'score': Field('number', 'The candidate\'s annotation score: the sum of its sheet values, that is, of its mean '
                              'value (0 to 1) in each test it has undergone'),
     'sheets': Field('list', 'The candidate\'s subscoring sheets, one per kind of test it has undergone', items=SHEET_FORM),
@@ -76,6 +92,8 @@ TARGET_FORM = RecordForm({
     'uncharacterized_best_value': Field('number', 'The highest value among those hits, on the scale of a candidate\'s '
                                                   'best_value: how close the target is to a protein nobody has '
                                                   'characterized (absent when there is no such hit)', required=False),
+    'uncharacterized_families': Field('list', 'Those hits by family, the family with the highest value first',
+                                      items=UNCHARACTERIZED_FAMILY_FORM),
     'differentials': Field('list', 'The tests that differentiated the top two listed candidates they measured (one per test)', items=DIFFERENTIAL_FORM),
 })
 FINDING_FORM = RecordForm({

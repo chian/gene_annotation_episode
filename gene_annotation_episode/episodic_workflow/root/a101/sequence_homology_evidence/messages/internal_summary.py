@@ -76,6 +76,7 @@ def _candidate_fields(target):
             'uncharacterized_hit_count': target['uncharacterized_hit_count'],
             **({'uncharacterized_best_value': target['uncharacterized_best_value']}
                if 'uncharacterized_best_value' in target else {}),
+            'uncharacterized_families': target['uncharacterized_families'],
             'differentials': target['differentials']}
 
 
