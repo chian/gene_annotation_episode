@@ -21,7 +21,8 @@ The steps (``choices``, ``resume_action``). A step is offered only when there is
 tools"). Every head is ended by its own yield estimator, which is that head's verdict that nothing more is worth doing
 with what it holds; a head that returned and left no job running ran fully, and commissioning it again on the same
 input asks the same question again. So the model is offered: a commission of the sequence-homology head before its
-first return and while it has a job outstanding; and a commission of a claim-checking head on a claim while that head
+first return, while it has a job outstanding, and (once it takes the root's grouping of its candidates) when that
+grouping has changed since it was last sent: a changed grouping is new input, the head rescores under it; and a commission of a claim-checking head on a claim while that head
 was not commissioned on that claim or has a job outstanding. The model answers with the number of one of them.
 
 Making the claims of an annotation is no decision: it is a set path that is always taken, once, for every candidate
@@ -79,6 +80,11 @@ CLAIM_CHECKERS = {
     'experimental_activity_evidence': ('binds', 'catalyzes', 'transports'),
 }
 
+# The heads that take the root's grouping of their candidates in their commission (``candidate_groups``) and return
+# their candidates rescored under it (``docs/plan/designs/a102_regrouping.md``). A head is listed here when its own
+# side is built; until then the root sends it none and reads its candidates as found.
+TAKES_GROUPING = ()
+
 INSTRUCTIONS = """You direct the annotation of one protein. The aim is to find its best annotation and how well the evidence supports it.
 
 Each step you take one of the `choices`, by its number:
@@ -124,10 +130,12 @@ def claim_view(claim, summary):
 
 def has_something_new(slot, summary, claim_ref=None):
     """Whether a commission of ``slot`` (on ``claim_ref`` for a claim-checking head) has something new to run on: the
-    head has not run on this input yet, or it left a job running at its latest return."""
+    head has not run on this input yet, it left a job running at its latest return, or (a head that takes the root's
+    grouping of its candidates) the grouping the root holds now differs from the one it was last sent."""
     axis = summary['axes'][slot]
     ran = bool(axis['credit_after_each_return']) if claim_ref is None else claim_ref in axis['claim_commissions']
-    return not ran or axis['outstanding_jobs'] > 0
+    regrouped = slot in TAKES_GROUPING and claim_ref is None and summary['groups'][slot] != axis['groups_sent']
+    return not ran or axis['outstanding_jobs'] > 0 or regrouped
 
 
 def choices(summary):
@@ -197,6 +205,8 @@ def action(response, summary, records, ctx):
     arguments = {'selection': ctx.settings['axis_selections'][step['action']]}
     if step['action'] != ANNOTATION_FINDER:
         arguments['claim_ref'] = step['claim_ref']
+    elif step['action'] in TAKES_GROUPING:
+        arguments['candidate_groups'] = summary['groups'][step['action']]
     return ChildCall(step['action'], arguments)
 
 

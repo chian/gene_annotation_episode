@@ -13,6 +13,8 @@
   ``status`` of the evidence (``ROW_STATUS``) and its ``score``: the one number that head's scoring sheet gives the
   annotation, on that head's own scale, never bounded, clamped or rescaled here. With them, where the head returns
   them, the function-level identifiers of the proteins behind the candidate.
+- ``grouped_rows`` and ``grouping_in_force``: for a head that applies the root's grouping of its candidates
+  (``GROUPED_ROWS``), its candidates rescored under the grouping it was last given, and that grouping.
 - ``claim_rows``: the score channel of a head that checks claims (``CLAIM_ROWS``). One row per claim its sheet scored:
   the claim (the hypothesis record the root made from an annotation and commissioned the head on), the ``status`` and
   the ``support`` and ``opposition`` of the head's sheet (absent when the status is unknown, never written as 0).
@@ -114,6 +116,21 @@ def sequence_homology_rows(finding):
             for candidate in target['candidates']]
 
 
+def no_groups(finding):
+    return {'grouped_rows': [], 'grouping_in_force': []}
+
+
+# How the candidates of a head that applies the root's grouping are read once a grouping is in force (the design
+# ``docs/plan/designs/a102_regrouping.md``, agreed between the sessions on 2026-11-23): ``grouped_rows``, one per group
+# of the head's table under that grouping (``members``, each named exactly as the head returned it, and the group's
+# ``score``, rescored by the head from its own records), and ``grouping_in_force``, the grouping it applied. A head is
+# listed with its own reader when it takes a grouping (``task.TAKES_GROUPING``); until then it has none in force.
+GROUPED_ROWS = {
+    'sequence_homology_evidence': no_groups,
+    'experimental_activity_evidence': no_groups,
+}
+
+
 def experimental_activity_rows(finding):
     """A105. The finding holds one score per candidate of the head's main scoring sheet: the hypothesis record it is
     about (``assertion_ref``: the claim the head was commissioned on), the status, and the summed support and opposition
@@ -167,6 +184,7 @@ def read_from_child(slot, result, summary, records):
                         if type(value) in (bool, int, float)},
             'annotation_rows': ANNOTATION_ROWS[slot](result['finding']),
             'claim_rows': CLAIM_ROWS[slot](result['finding']),
+            **GROUPED_ROWS[slot](result['finding']),
             'record_refs': references(result, (*RECORD_FIELDS[slot], *SHEET_FIELDS[slot])),
             'sheet_state_refs': references(result, SHEET_FIELDS[slot]),
             'outstanding_job_refs': references(result, JOB_FIELDS[slot]),

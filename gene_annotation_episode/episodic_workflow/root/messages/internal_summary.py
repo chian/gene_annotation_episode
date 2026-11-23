@@ -44,8 +44,13 @@ are the same annotation. Everything else stands on its own line.
 
 A line is shown under its leading member (the one with the highest score): its vocabulary, name and identifiers, and
 ``members``: every annotation on the line with the axis that named it and the score that axis gave it. The row an axis
-gives a line. An axis that scores annotations: the highest score it gave a member (the members are names of one
-function, so their scores are not added: that would count the same tests twice). An axis that checks claims gives the
+gives a line. An axis that scores annotations and has applied the root's grouping (the owner, 2026-11-23: "the purpose
+is to make the arms annotation scores honest"; the head rescores its own records under the grouping, the mean over the
+hits of all the members, which the root cannot compute from the per-name scores): the score of the head's group
+whose members are exactly the line's members from that axis. Where no such group exists (the head has not been given
+this grouping yet, or takes none): the highest score it gave a member, a stand-in that never adds the members' scores
+(that would count the same tests twice). ``groups`` holds, per axis that takes a grouping, the grouping the root would
+send it now (``groups_of``): one group per line with two or more of that axis's own candidates. An axis that checks claims gives the
 line one row made from its rows of the line's claims (``claim_axis_row``): the support of the claims of known status
 summed, their opposition summed, and the score ``tanh((support - opposition) / CLAIM_SCALAR_DIVISOR)``, which for one
 claim is exactly the scalar that head's own sheet gives it (A105's rule for its sheet, applied over the claims of one
@@ -137,6 +142,19 @@ def on_line(annotation, line):
                for _, member in line)
 
 
+def member_identity(row):
+    """A candidate named exactly as its head returned it: its vocabulary, name and own identifier."""
+    return {name: row[name] for name in ('vocabulary', 'name', 'identifier') if name in row}
+
+
+def groups_of(slot, lines):
+    """The grouping of the candidates of ``slot`` the lines give: one group per line that holds two or more of that
+    axis's own candidates, each member named exactly as the head returned it, in a fixed order."""
+    groups = [sorted((member_identity(row) for member_slot, row in line if member_slot == slot),
+                     key=lambda member: (member['vocabulary'], member['name'])) for line in lines]
+    return sorted((group for group in groups if len(group) > 1), key=lambda group: (group[0]['vocabulary'], group[0]['name']))
+
+
 def function_lines(axes):
     """The annotations the axes named, grouped into lines (rule 4 of the module text): each line a list of
     ``(slot, row)``, the annotation with the highest score first. An annotation joins the first line every member of
@@ -163,6 +181,12 @@ def scoring_sheet(axes, claims):
         for slot, row in line:
             if slot not in by_axis or row['score'] > by_axis[slot]['score']:
                 by_axis[slot] = {name: row[name] for name in ROW_FIELDS if name in row}
+        for slot in list(by_axis):
+            members = sorted((member_identity(row) for member_slot, row in line if member_slot == slot),
+                             key=lambda member: (member['vocabulary'], member['name']))
+            for group in axes[slot]['grouped_rows']:
+                if sorted(group['members'], key=lambda member: (member['vocabulary'], member['name'])) == members:
+                    by_axis[slot] = {'status': 'measured' if group['score'] else 'measured_zero', 'score': group['score']}
         for slot, axis in axes.items():
             rows = [axis['claim_rows'][claim['claim_ref']] for claim in claims
                     if claim['claim_ref'] in axis['claim_rows'] and on_line(claim['annotation'], line)]
@@ -203,8 +227,8 @@ def _line(identity, by_axis, members):
 
 def internal_summary(view):
     axes = {slot: {'credit': 0.0, 'credit_after_each_return': [], 'finding': {}, 'record_refs': [],
-                   'outstanding_job_refs': [], 'outstanding_jobs': 0, 'annotation_rows': [], 'claim_rows': {},
-                   'claim_sheets': {},
+                   'outstanding_job_refs': [], 'outstanding_jobs': 0, 'annotation_rows': [], 'grouped_rows': [],
+                   'grouping_in_force': [], 'groups_sent': None, 'claim_rows': {}, 'claim_sheets': {},
                    'claim_commissions': {}}
             for slot in AXIS_WEIGHTS}
     claims, claims_made, commissions, units = [], [], [], []
@@ -223,6 +247,8 @@ def internal_summary(view):
         axis['finding'] = report['finding']
         if report['annotation_rows']:
             axis['annotation_rows'] = report['annotation_rows']
+        axis['grouped_rows'], axis['grouping_in_force'] = report['grouped_rows'], report['grouping_in_force']
+        axis['groups_sent'] = outcome['arguments'].get('candidate_groups', [])
         axis['claim_rows'].update({row['claim_ref']: row for row in report['claim_rows']})
         if 'claim_ref' in outcome['arguments']:
             claim_ref = outcome['arguments']['claim_ref']
@@ -231,5 +257,7 @@ def internal_summary(view):
         axis['record_refs'].extend(ref for ref in report['record_refs'] if ref not in axis['record_refs'])
         axis['outstanding_job_refs'] = report['outstanding_job_refs']
         axis['outstanding_jobs'] = report['outstanding_jobs']
+    lines = function_lines(axes)
     return {**view.parent_input, 'axes': axes, 'claims': claims, 'claims_made': claims_made,
-            'annotations': scoring_sheet(axes, claims), 'commissions': commissions, 'units': units}
+            'annotations': scoring_sheet(axes, claims), 'groups': {slot: groups_of(slot, lines) for slot in axes},
+            'commissions': commissions, 'units': units}
