@@ -8,11 +8,17 @@ refused nor lets the episode stop. The episode stops when no offered step's fore
 the exchange rate and no work is owed (``task.resume_action``). Nothing else ends this episode.
 
 ``ROOT_FORECAST`` is the root's own tuning (the owner, 2026-11-22: the stop settings are "tuned parameters based on
-what behavior you want"). ``exchange_rate`` is the price of a second in annotation credit: 0.00003. A first value,
-from the one measured check of a claim by the literature (A105 head run 20: axis credit 0.249 in 2 h 13 min, which
-beside a sequence-homology credit of 0.9 is an annotation credit of 0.47, 0.00006 per second): half of that rate, so
-a check expected to earn as much is taken and one expected to earn less than half as much is not. A commission of the
-sequence-homology head earns far above it (0.9 in about 8 minutes). It is to be tuned from the root's own run records.
+what behavior you want"). ``exchange_rate`` is the price of a second in annotation credit: 0.000002. Tuned from the
+first root run that returned (``root_a101_a105_05``, 2026-11-23). All claim checks are one kind of step and share one
+forecast, and one check moves it all the way. In that run the first claim checked (popZ binds parB) found one weak
+result: 0.0173 annotation credit in 4849 s, 0.0000036 per second. At the first value of the rate (0.00003, half the
+rate of the one good check measured before: binds ChpT in the A105 head run 20, about 0.47 in 2 h 13 min) that priced
+out the two claims still unchecked, binds ChpT among them, and its ledger row alone would have refused the first check
+of every later run. What a claim check is for is to find whether experiments bear on the annotation, and one claim says
+little about the next, so the rate sits just below what a check that found something weak earned: a check that finds
+anything keeps the checks going, and the forecast after a check that finds nothing (half of the ledger's mean) falls
+under the threshold and ends them. A commission of the sequence-homology head earns far above it (0.9 in about 6
+minutes). To be tuned again as root runs accumulate.
 ``forget_old_rows``: ledger rows are weighted by age, as for the other forecast episodes. ``job_kinds``: none; a
 step's cost is its measured unit seconds.
 
@@ -27,7 +33,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.configuration.yie
 
 from .credit import CEILINGS, CREDIT_DEFINITION
 
-ROOT_FORECAST = {'exchange_rate': 0.00003, 'forget_old_rows': True, 'job_kinds': {}}
+ROOT_FORECAST = {'exchange_rate': 0.000002, 'forget_old_rows': True, 'job_kinds': {}}
 
 
 def yield_controller(initial_credit, settings, parent_input):
