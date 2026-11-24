@@ -2,7 +2,7 @@
 candidate annotation. The model chooses the step.
 
 The child slots are named by the axis roles. Each is bound to the binding path of the head in its axis folder
-(``root/a101/sequence_homology_evidence``, ``root/a105/experimental_activity_evidence``). The annotation credit is
+(``root/sequence_homology_evidence``, ``root/experimental_activity_evidence``). The annotation credit is
 over nine axes (``credit.AXIS_WEIGHTS``); ``CHILD_SLOTS`` holds the heads the root is linked with today, and an axis
 whose head is not linked stands at credit 0 (see the comment at ``CHILD_SLOTS``). It never ends its own Episode; its
 yield controller does.

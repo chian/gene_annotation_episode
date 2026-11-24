@@ -37,7 +37,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.structura
 )
 
 if TYPE_CHECKING:
-    from gene_annotation_episode.episodic_workflow.root.a102.structural_homology_evidence.runtime_continuation import A102RuntimeContext as BindingContext
+    from gene_annotation_episode.episodic_workflow.root.structural_homology_evidence.runtime_continuation import A102RuntimeContext as BindingContext
 
 
 class ResolvedComparisonOperands(TypedDict):
