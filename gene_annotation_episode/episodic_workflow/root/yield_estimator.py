@@ -8,17 +8,19 @@ refused nor lets the episode stop. The episode stops when no offered step's fore
 the exchange rate and no work is owed (``task.resume_action``). Nothing else ends this episode.
 
 ``ROOT_FORECAST`` is the root's own tuning (the owner, 2026-11-22: the stop settings are "tuned parameters based on
-what behavior you want"). ``exchange_rate`` is the price of a second in annotation credit: 0.000002. Tuned from the
-first root run that returned (``root_a101_a105_05``, 2026-11-23). All claim checks are one kind of step and share one
-forecast, and one check moves it all the way. In that run the first claim checked (popZ binds parB) found one weak
-result: 0.0173 annotation credit in 4849 s, 0.0000036 per second. At the first value of the rate (0.00003, half the
-rate of the one good check measured before: binds ChpT in the A105 head run 20, about 0.47 in 2 h 13 min) that priced
-out the two claims still unchecked, binds ChpT among them, and its ledger row alone would have refused the first check
-of every later run. What a claim check is for is to find whether experiments bear on the annotation, and one claim says
-little about the next, so the rate sits just below what a check that found something weak earned: a check that finds
-anything keeps the checks going, and the forecast after a check that finds nothing (half of the ledger's mean) falls
-under the threshold and ends them. A commission of the sequence-homology head earns far above it (0.9 in about 6
-minutes). To be tuned again as root runs accumulate.
+what behavior you want"). ``exchange_rate`` is the price of a second in annotation credit: 0.0000005. Tuned from the
+root runs of 2026-11-23. All claim checks are one kind of step and share one forecast: the mean of what the ledger's
+checks earned and of what this run's checks earned. The same claim (popZ binds parB) was checked in three runs and
+found 0.0173 (run 05), 0.228 on its sheet (run 06, stopped for another reason before it returned) and 0 (run 08): one
+check of one claim is a noisy sample and says little about the next claim. At 0.00003 (the first value, from one good
+check measured before) the one weak check of run 05 priced out the two claims still unchecked; at 0.000002 the empty
+check of run 08 ended the checks with three claims unchecked, binds chpT among them (0.249 in the A105 head run 20),
+and the root returned a family of unknown function as its best annotation. A claim check is how the root learns
+whether experiments bear on an annotation, and it takes about two hours whatever it finds, so the rate is set so that
+an empty check does not end the checks: with the ledger's mean at 0.0087 the forecast after any number of empty
+checks in a run is half of it, 0.0043, against a threshold of about 0.003 for a check of 100 minutes. The checks then
+end when the claims are used up, or when the ledger's mean itself has fallen (many runs of empty checks). A commission
+of the sequence-homology head earns far above it. To be tuned again as root runs accumulate.
 ``forget_old_rows``: ledger rows are weighted by age, as for the other forecast episodes. ``job_kinds``: none; a
 step's cost is its measured unit seconds.
 
@@ -33,7 +35,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.configuration.yie
 
 from .credit import CEILINGS, CREDIT_DEFINITION
 
-ROOT_FORECAST = {'exchange_rate': 0.000002, 'forget_old_rows': True, 'job_kinds': {}}
+ROOT_FORECAST = {'exchange_rate': 0.0000005, 'forget_old_rows': True, 'job_kinds': {}}
 
 
 def yield_controller(initial_credit, settings, parent_input):
