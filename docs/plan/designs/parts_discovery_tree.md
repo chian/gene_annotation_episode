@@ -130,3 +130,23 @@ Genes with introns are in the design (a part may be several joined stretches) an
   Pfam, BLAST+ 2.17, minimap2 2.31. Not installed: a finder for genes with introns; anything specific to repeats, CRISPR
   arrays, terminators or motif discovery.
 - No tool of the subtree was run.
+
+## First real run (2026-11-23)
+
+The head as the entry, pinned at `c9fed4976`, on E. coli K-12 chromosome 2,790,000 to 2,850,000 (60,001 nt); run
+`parts_ecoli_stretch_1`, workspace `runs/parts_ws_ecoli_stretch_1/` (the prediction written first is `prediction.md` there).
+
+- Five units, ended by its yield controller, two model calls. The three owed units ran in order without the model:
+  `describe_piece`, `find_genes` (code 11), `find_rna_genes`. The model then asked for the reading under code 4 and under code
+  25; each earned nothing, and the controller stopped.
+- The reading reported: code 11, self-trained, 64 genes, coding share 0.889, score sum 8012.6. Seven RNA genes (five tRNA,
+  MicA, naRNA4). Credit 12.8256, as predicted (12.83).
+- Positions in the return are positions on the piece (1 to 60,001), not on the chromosome it was cut from.
+
+Before the build, on real DNA (`runs/parts_survey_1/`, `runs/parts_code_check_1/`): the finder's call for recA equals BV-BRC's;
+of 66 BV-BRC genes in the stretch 60 were called with the same end and 54 with the same end and start; a wrong genetic code
+gives MORE genes and a higher sum of confidence in a mycoplasma (995 genes under the default code against 527 under its own),
+and a lower sum of the finder's scores in both the mycoplasma and E. coli, which is why a reading's score is that sum.
+
+Not yet run: a piece under 20,000 nt (pre-trained mode), a whole chromosome, a piece that really uses another code, a second
+commission that passes records back.
