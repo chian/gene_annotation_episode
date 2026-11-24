@@ -1,7 +1,8 @@
 # A103 (gene context evidence): the whole design
 
-Status: design for the owner's review, 2026-11-23, from a thinking session with the owner ("No coding yet. I want to just
-think"). Nothing here is built. The design covers the whole arm; the order of building is a separate matter and is at the end.
+Status: design in progress with the owner, 2026-11-23 ("No coding yet. I want to just think"). Nothing here is built. This note
+holds the shape agreed for work on a piece of DNA and what is settled for the context arm; the arm that finds the parts is
+`parts_discovery_tree.md`.
 The owner on why (2026-11-23): "The point of designing first is to be able to know what the holistic shape needs to be before
 you slot in parts that do not work with the broad design."
 
@@ -87,55 +88,26 @@ now need explanation sets."
 - Sets are not enumerated. A set is built from the leading candidates of its members; only the best few are kept.
 - Open: whether strand and distance from the origin are statements of a set or observations it uses.
 
-## The exchange with the root, and the subtree
+## Two arms, not one
 
-The owner rejected the first tree (2026-11-23): "That's just a bunch of tools attached to the head followed by one child
-instead of communicating back up to root to call a101 (for example) to evaluate pieces (which are kind of like one level up
-from claims)". The arm does only what no other arm can do. Everything another arm can evaluate goes up to the root as a piece.
+The owner (2026-11-23): "Maybe this is just the parts discovery arm"; "Maybe those both being as separate things under the
+root". Finding the parts of a piece (rows C1 to C6, C12 and C13 of the table) is the parts discovery arm,
+`parts_discovery_tree.md`. This arm, context, is the relations between the parts: the explanation sets.
 
-Three levels the root commissions work around:
+What is settled for the context arm:
 
-- an explanation set: one account of a stretch (this arm proposes and scores them);
-- a piece: one thing in a set that an arm can evaluate: "what is this feature", "is this feature a Y", "is there a Y in this
-  stretch", "where does this short piece sit in known genomes";
-- a claim: what an annotation says the thing does ("binds X").
+- It does only what no other arm can do. What another arm can evaluate goes up to the root as a piece: "what is this
+  feature", "is this feature a Y", "is there a Y in this stretch" (a claim about what is there, checked by parts discovery),
+  "where does this short piece sit in known genomes". Pieces are one level above claims; the root commissions arms on them.
+- The loop runs through the root: the arm returns sets and the pieces that would tell the two leading sets apart; the root
+  has them evaluated and comes back.
+- Aligning coherence is itself iterative work inside the arm (which candidate each member takes, which known system to try,
+  where the region ends, whether the frame fits, what to ask for, when to stop), so explaining a region is an episode, not one
+  tool.
+- Its own measurements: which features go together (C7), whether a region belongs to its surroundings (C8), what a function
+  is usually found beside (C10), and the building and scoring of a region's sets.
 
-The loop runs through the root, visit by visit:
-
-1. The root commissions this arm on a piece of DNA. The arm describes it and finds its features. It returns the features as
-   pieces ("what is this"), the frame candidates of the piece and the regions the layout suggests.
-2. The root commissions other arms on the pieces it judges worth it (sequence homology on a gene, structure on a gene or an
-   RNA) and holds what they return.
-3. The root commissions this arm on a region, passing what it holds about the members. The arm assembles the explanation
-   sets, scores their coverage and coherence, and returns the leading sets with the pieces that would tell the two leaders
-   apart ("is feature 3 a Y", "is there a Y in this stretch") and the revisions it proposes.
-4. The root commissions other arms on those pieces, and this arm again when something changed. The same for a claim about
-   place.
-
-```
-gene_context_evidence               HEAD   Commissioned on: a piece of DNA; a region; a claim about place.
-├─ describe_piece                  TOOL   Composition: frame candidates (lineage, kind of replicon).
-├─ find_features                   TOOL   Genes (with or without introns; default code, again under a special one), RNA genes,
-│                                         repeats, mobile elements, regulatory sites: the readings it proposes.
-├─ layout                          TOOL   Which features go together: the regions.
-├─ native_or_acquired              TOOL   Regions that do not belong to their surroundings.
-├─ predicted_members               TOOL   If a member is X, what else should be in the set (from annotated relatives).
-├─ assemble_explanations           TOOL   Builds and scores the sets of a region from what the root holds about its members.
-└─ propose_revisions               TOOL   Fusion, split and extent, from the position-anchored evidence the root passed.
-```
-
-What goes up to the root as pieces, and which arm could evaluate each:
-
-| Piece | Evaluated by |
-|---|---|
-| what is this gene | sequence homology, structure |
-| what is this RNA | structure (its RNA family scan) |
-| is this feature a Y; is there a Y in this stretch | sequence homology; partner presence (A107) is the axis whose question this is |
-| where does this short piece, or this protein given alone, sit in known genomes | sequence homology (its hits are features with positions) |
-
-- There is no child episode: propose, test and revise happen between this arm and the root, not inside this arm.
-- This arm searches no sequence database and folds nothing.
-- What the root needs for it: a kind of commission on a piece, one level above a commission on a claim.
+Its subtree is not settled yet: the owner turned to parts discovery first.
 
 ## What this asks of the rest of the system
 
