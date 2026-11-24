@@ -214,7 +214,7 @@ runpy.run_path(script, run_name="__main__")
                     observer = '''import requests, runpy, sys
 script, package_root, limit, destination, entity_destination = sys.argv[1:]
 sys.path.insert(0, package_root)
-from gene_annotation_episode.episodic_workflow.root.a107 import acquisition as capture_adapter
+from gene_annotation_episode.episodic_workflow.episode_support.acquisition.partner_presence_evidence import acquisition as capture_adapter
 original_request = requests.Session.request
 original_redirects = requests.Session.resolve_redirects
 def observed(self, *args, **kwargs):

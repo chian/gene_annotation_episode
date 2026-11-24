@@ -240,7 +240,7 @@ def history_comparison(store, reference, family_name, organismal_name, tip_ids, 
 
 
 # Native clade-membership and robustness measurements with bounded meaning (restored from
-# ``root/a104/a104_interpretation.py`` at ``60889621e``; the reads go through the scoped store or the reader).
+# ``a104_interpretation.py`` at ``60889621e``; the reads go through the scoped store or the reader).
 
 
 def _placement(store, reference, known):

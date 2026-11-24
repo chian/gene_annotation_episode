@@ -3,7 +3,7 @@
 Original operands stay in the immutable extraction. Returns expose only selected
 numerical cells and finite meanings; replay never reads original source bytes.
 
-Carried from ``root/a102/literature_structure_storage.py`` at ``97308b94c`` onto the custody-scoped store
+Carried from ``literature_structure_storage.py`` at ``97308b94c`` onto the custody-scoped store
 (``store``: ``ctx.store`` of the populating tool unit, or ``records`` for reads). What was the old Store's:
 
 * the source an Episode may read was "received" (``context.received_record_refs``); it is now a source the

@@ -1,6 +1,6 @@
 """Receipt-triggered attribution of each A104 test to its original target part: the per-use attribution sheet.
 
-Restored from ``root/a104/a104_attachments.py`` at ``60889621e`` (``_qualify``, ``refresh``): the owner's text and
+Restored from ``a104_attachments.py`` at ``60889621e`` (``_qualify``, ``refresh``): the owner's text and
 logic, with the storage on the scoped store (the ``a104_attachments`` table is the declared work table of
 ``records/evolutionary_history_evidence/attachments.py``, whose ``received_attachments`` reads it back). The old
 ``context`` argument fed the characterization from received literature forms; the characterization now reads the

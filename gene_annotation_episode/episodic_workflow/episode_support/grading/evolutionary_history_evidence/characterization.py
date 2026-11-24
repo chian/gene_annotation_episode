@@ -4,7 +4,7 @@ This is a receiving adapter, not a new experimental-evidence subtree. Copied
 names, an assessment alone, and an unreceived literature return cannot supply
 an experimentally characterized clade member.
 
-Restored from ``root/a104/a104_characterization.py`` at ``60889621e``. The owner's qualification rules are kept
+Restored from ``a104_characterization.py`` at ``60889621e``. The owner's qualification rules are kept
 verbatim (rows 11 to 14 of ``LOST_CONTENT_a104.md``). What changed is where a link is read from: the old adapter read
 the A105 worksheet that a literature child's return form carried (``EpisodeReturnRecords.received_attempts``, an
 old-runner reader). A child now returns no form text, only its credit, controlled features and the references of

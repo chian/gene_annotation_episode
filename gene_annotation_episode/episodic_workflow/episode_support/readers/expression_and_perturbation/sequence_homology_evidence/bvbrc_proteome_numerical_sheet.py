@@ -1,6 +1,6 @@
 """Compose separately measured native and directional sheets without a join.
 
-A101's own copy (``root/a101/library/bvbrc_proteome_numerical_sheet.py`` at ``97308b94c``): it validates against
+A101's own copy (``bvbrc_proteome_numerical_sheet.py`` at ``97308b94c``): it validates against
 A101's own sheet contracts (``forms/expression_and_perturbation/sequence_homology_evidence/``), so tuning another
 axis's contracts never changes A101's sheet."""
 from copy import deepcopy

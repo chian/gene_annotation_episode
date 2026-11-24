@@ -1,4 +1,4 @@
-"""The A107 scoring sheet (``component_axis_scoring_sheet``), restored from ``root/a107/component_axis_reports.py`` at
+"""The A107 scoring sheet (``component_axis_scoring_sheet``), restored from ``component_axis_reports.py`` at
 ``60889621e`` (``current_scoring_sheets``, ``dependence``, ``native_dependence``, ``cross_dependence``, ``PATHS``) onto
 what an Episode now holds: the controlled features of the literature partner sheets its children returned (with the
 sheets' references), the native component records and the per-use tool qualification records it holds.

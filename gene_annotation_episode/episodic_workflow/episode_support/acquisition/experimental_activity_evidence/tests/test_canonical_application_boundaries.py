@@ -16,7 +16,7 @@ from method_loop.identities import EpisodeRef
 from gene_annotation_episode.episodic_workflow.episode_support.literature.storage.experimental_activity_evidence.literature_context import LiteratureContext
 
 
-PRIVATE = 'gene_annotation_episode.episodic_workflow.root.a105'
+PRIVATE = 'gene_annotation_episode.episodic_workflow.root.experimental_activity_evidence'
 ROOT = 'gene_annotation_episode.episodic_workflow.root'
 RUN = 'canonical-private-context-boundary'
 

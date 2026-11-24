@@ -1,6 +1,6 @@
 """Host-issued A104 native measurements with automatic immutable grading.
 
-Restored from ``root/a104/a104_publication.py`` at ``60889621e``: the owner's text and logic, with the storage on the
+Restored from ``a104_publication.py`` at ``60889621e``: the owner's text and logic, with the storage on the
 scoped store (the ``a104_publications`` table is a declared work table; the ``sqlite_master`` check and the
 ``CREATE TABLE`` are gone). A tool unit passes ``ctx.store``; a reader passes ``ctx.store`` or ``records``."""
 from __future__ import annotations

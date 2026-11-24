@@ -1,5 +1,5 @@
 """The A107 partner grader operations as an episode offers them to the model, restored from
-``root/a107/library/partner_source_contracts.py`` at ``60889621e`` (``population_catalog_entries``,
+``partner_source_contracts.py`` at ``60889621e`` (``population_catalog_entries``,
 ``fact_sources``): the owner's description of each grader operation, its input schema, and the meaning of the partner
 sheet's cells. Every literature episode that runs the partner graders offers these entries; each episode's tool calls
 ``literature_partner_storage.populate_partner_sheet``.

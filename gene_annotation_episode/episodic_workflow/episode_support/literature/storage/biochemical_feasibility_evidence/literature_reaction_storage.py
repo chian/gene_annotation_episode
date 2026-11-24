@@ -4,8 +4,8 @@ This adapter owns source custody and immutable selected-operation records. It
 does not choose investigations, interpret experiments, add observations or
 recompute a saved numerical sheet during replay.
 
-Carried from ``root/a110/literature_reaction_storage.py``, ``root/a110/library/reaction_population.py`` and the
-``populate_source`` of ``root/a110/library/reaction_source_selection.py`` at ``97308b94c`` onto the custody-scoped
+Carried from ``literature_reaction_storage.py``, ``reaction_population.py`` and the
+``populate_source`` of ``reaction_source_selection.py`` at ``97308b94c`` onto the custody-scoped
 store (``store``: ``ctx.store`` of the populating tool unit, or ``records`` for reads). What was the old Store's:
 
 * the source an Episode may read was "received" (``context.received_record_refs``); it is now a source the

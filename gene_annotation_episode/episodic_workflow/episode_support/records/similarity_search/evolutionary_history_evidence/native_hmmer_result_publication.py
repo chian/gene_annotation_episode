@@ -135,7 +135,7 @@ def _prepare_native_hmmer_grading(scratch, store, *, bundle, bundle_artifact_ref
         for name in ("tmp", "cache"):
             (directory / name).mkdir()
         check_scratch_budget(directory, policy)
-        result = run_local_job([sys.executable, "-m", "gene_annotation_episode.episodic_workflow.root.a104.native_hmmer_result_worker",
+        result = run_local_job([sys.executable, "-m", "gene_annotation_episode.episodic_workflow.episode_support.jobs.similarity_search.evolutionary_history_evidence.native_hmmer_result_worker",
             str(directory / "plan.json")], cwd=directory, policy=policy,
             stdout_path=directory / "worker.stdout", stderr_path=directory / "worker.stderr",
             env={"PYTHONPATH": str(Path(__file__).resolve().parents[6]),

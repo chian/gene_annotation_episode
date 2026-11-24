@@ -1,8 +1,8 @@
 """Original phmmer scientific associations over the caller-supplied row index.
 
-Restored from ``root/a101/library/phmmer_grading_values.py`` at ``97308b94c`` (``grading_identity`` and
-``PhmmerGradingValues``), with the disk-backed associations of ``root/a101/phmmer_grading_worker.py``
-(``GradingRows``) and the bounded extraction of ``root/a101/phmmer_result_worker.py`` (``extract``), owner text and
+Restored from ``phmmer_grading_values.py`` at ``97308b94c`` (``grading_identity`` and
+``PhmmerGradingValues``), with the disk-backed associations of ``phmmer_grading_worker.py``
+(``GradingRows``) and the bounded extraction of ``phmmer_result_worker.py`` (``extract``), owner text and
 logic unchanged. What changed is where the native rows live: the old ``grading_native_rows`` SQLite table of the
 worker's directory is the declared work table ``NATIVE_ROWS``, written through the scoped store the tool hands
 this module and read through ``reader.table(NATIVE_ROWS).select(...)``. A capture's rows are keyed by the capture's

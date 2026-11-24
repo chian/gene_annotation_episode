@@ -43,7 +43,7 @@ def case_summary(result_path):
             command=body['command']
             if 'gene_annotation_episode.episodic_workflow.episode_support.jobs.local_execution.gene_context_evidence.native_worker' in command:
                 category='context.'+json.loads(Path(command[-1]).read_text())['operation']
-            elif 'gene_annotation_episode.episodic_workflow.root.a103.phmmer_result_worker' in command:category='homology.parse'
+            elif any(part.endswith('.phmmer_result_worker') for part in command):category='homology.parse'
             elif Path(command[0]).name=='phmmer':category='homology.search'
             else:category='other'
             categories[category]+=1

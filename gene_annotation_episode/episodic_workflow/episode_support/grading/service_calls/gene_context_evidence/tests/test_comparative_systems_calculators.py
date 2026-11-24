@@ -1,6 +1,6 @@
 """The restored BV-BRC ComparativeSystems sheet calculator (97308b94c text, imports repointed) recalculates the
 numerical values of the reviewed sheets' saved components exactly: counts of assignment records, ratios with their
-operands and named populations. Fixture: ``root/a103/tests/fixtures/bvbrc_comparative_systems_calculators/
+operands and named populations. Fixture: ``fixtures/bvbrc_comparative_systems_calculators/
 saved_examples.json`` at ``97308b94c``; the examples were assembled before the calculator began recording each cell's
 input pointers (``input_refs``, ``qualification_codes``), so the values, quantities and sheet digest are compared."""
 from copy import deepcopy

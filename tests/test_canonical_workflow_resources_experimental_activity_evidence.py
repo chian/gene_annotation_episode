@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 from gene_annotation_episode import workflow_budget as canonical
 
-PACKAGE='gene_annotation_episode.episodic_workflow.root.a105'
+PACKAGE='gene_annotation_episode.episodic_workflow.root.experimental_activity_evidence'
 
 def selected_checker():
     original=PACKAGE+'.workflow_budget'

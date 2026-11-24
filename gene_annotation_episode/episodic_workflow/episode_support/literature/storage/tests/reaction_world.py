@@ -1,6 +1,6 @@
 """A held world for the A110 literature reaction grading: a Store with the problem, a short reaction paper, the
 retained ``a110_source_reaction_measurements`` dataset of its numbers, a source of literal witnesses and an
-interpretation source (the fixtures of the old ``root/a110/tests/test_literature_reaction_storage.py`` at
+interpretation source (the fixtures of the old ``test_literature_reaction_storage.py`` at
 ``97308b94c``), the entry assignment that passes all of them in custody and the population arguments the model
 would select (literal witnesses as source locations). Real records; nothing is faked."""
 import json

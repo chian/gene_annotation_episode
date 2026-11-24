@@ -1,4 +1,4 @@
-"""Original A101 BLAST request and return data contracts (``root/a101/library/blast_return_contracts.py`` at
+"""Original A101 BLAST request and return data contracts (``blast_return_contracts.py`` at
 ``97308b94c``; imports repointed).
 
 The graded return travels as references: the result-acquisition episode returns the grading artifact of schema

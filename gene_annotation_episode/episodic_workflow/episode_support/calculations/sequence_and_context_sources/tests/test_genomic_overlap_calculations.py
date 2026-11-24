@@ -1,6 +1,6 @@
 """The restored genomic-overlap calculator (97308b94c text, imports repointed) reproduces the hand-worked components
 of the contract's worked example: occurrence counts and union quantities apart, ratios with integer operands, no
-invented uncertainty. Fixture: ``root/a103/tests/fixtures/genomic_overlap/contract/WORKED_EXAMPLE.json`` at
+invented uncertainty. Fixture: ``fixtures/genomic_overlap/contract/WORKED_EXAMPLE.json`` at
 ``97308b94c``."""
 from copy import deepcopy
 import json
