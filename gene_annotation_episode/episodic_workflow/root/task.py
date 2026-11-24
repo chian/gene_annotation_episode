@@ -1,8 +1,8 @@
 """The task of the root: each unit is one commission of one evidence-axis head, or the making of the claims of one
 candidate annotation. The model chooses the step.
 
-The child slots are named by the axis roles. Each is bound to the binding path of the head in its axis folder
-(``root/sequence_homology_evidence``, ``root/experimental_activity_evidence``). The annotation credit is
+The child slots are named by the axis roles. Each is bound to the binding path of its head, whose folder sits directly
+under the root (``root/sequence_homology_evidence``, ``root/experimental_activity_evidence``). The annotation credit is
 over nine axes (``credit.AXIS_WEIGHTS``); ``CHILD_SLOTS`` holds the heads the root is linked with today, and an axis
 whose head is not linked stands at credit 0 (see the comment at ``CHILD_SLOTS``). It never ends its own Episode; its
 yield controller does.
@@ -59,7 +59,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.annotation_
 from .credit import AXIS_WEIGHTS, K, annotation_credit
 from .messages.internal_summary import annotation_key, identity_of
 
-# Slot (the axis role) -> the binding path of the axis head in its axis folder: the heads the root is linked with.
+# Slot (the axis role) -> the binding path of the axis head, the folder of that name under the root: the heads the root is
+# linked with.
 # The owner, 2026-11-23: link A101 to A105 through a real root and run it from start to finish ("modify the root episode
 # to make this now work"). A run links every binding its child slots name, so a head is listed here once it runs on the
 # system. On 2026-11-23 the heads of A103, A104, A106, A107, A108 and A110 do not load (they lack ``offered_actions`` and
@@ -68,8 +69,8 @@ from .messages.internal_summary import annotation_key, identity_of
 #     'structural_homology_evidence', 'gene_context_evidence', 'evolutionary_history_evidence', 'perturbation_evidence',
 #     'partner_presence_evidence', 'sample_context_evidence', 'biochemical_feasibility_evidence'
 CHILD_SLOTS = {
-    'sequence_homology_evidence': 'sequence_homology_evidence',                # A101, root/a101
-    'experimental_activity_evidence': 'experimental_activity_evidence',        # A105, root/a105
+    'sequence_homology_evidence': 'sequence_homology_evidence',                # A101
+    'experimental_activity_evidence': 'experimental_activity_evidence',        # A105
 }
 SERVICES = ()
 # The head that finds the candidate annotations: it is commissioned on the subject, not on a claim.
