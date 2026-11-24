@@ -1,126 +1,125 @@
-# A103 (gene context evidence): what was agreed, and a tree derived from it
+# A103 (gene context evidence): the whole design
 
-Status: draft for the owner's review, 2026-11-23. Written from a thinking session with the owner ("No coding yet. I want to just
-think"; then "Wrote this down along with a subtree design that matches these criteria"). Nothing here is built. It follows
-`docs/sop/evidence_axis_build_sop.md` Step 0A as far as the table; the full inventory of the old A103 library (Step 0A item 7)
-is not done yet and is listed at the end.
+Status: design for the owner's review, 2026-11-23, from a thinking session with the owner ("No coding yet. I want to just
+think"). Nothing here is built. The design covers the whole arm; the order of building is a separate matter and is at the end.
+The owner on why (2026-11-23): "The point of designing first is to be able to know what the holistic shape needs to be before
+you slot in parts that do not work with the broad design."
 
 ## What the axis is for
 
-The process library entry A103 (`research/slotted_process_library/publications/2026-10-24-001/entries/A103.json`): "Investigate
-genomic organization and identified neighboring components to discover and distinguish possible functional relationships";
-"Establish the relevant locus and actual genome or assembly before interpreting context; an unmapped sequence or fragment does
-not supply a neighborhood"; neighbours, gene order, strand, spacing, fusions and regulatory features.
+The process library entry A103: "Investigate genomic organization and identified neighboring components to discover and
+distinguish possible functional relationships"; "Establish the relevant locus and actual genome or assembly before interpreting
+context; an unmapped sequence or fragment does not supply a neighborhood"; neighbours, gene order, strand, spacing, fusions
+and regulatory features.
 
-The owner widened it on 2026-11-23: an arm "that can, like this arm [A102], propose annotations and/or verify claims"; "context
-is defined as a bunch of annotations to begin with and some broader context for coding frequency, AT bias, and so on".
+The owner widened it: an arm "that can, like this arm [A102], propose annotations and/or verify claims"; "context is defined as
+a bunch of annotations to begin with and some broader context for coding frequency, AT bias, and so on".
 
-## What was agreed (the owner's rulings, 2026-11-23)
+## The shape
 
-1. The start is DNA. "in reality it should be an arbitrary piece of dna of any size"; "I do want this to take in both aa and
-   dna sequences but primarily this will all start from dna (since that is how sequencing rolls). Aa has to come after a gene
-   caller, which now becomes necessary".
-2. Context comes first. With a piece of DNA nobody has yet said what the things in it are, so this arm also finds the targets
-   the other arms work on ("Yes, i realized the same thing. Context comes first").
-3. Three sources of context, needing less and less annotation: (a) the bare sequence, no annotation at all; (b) context
-   borrowed from already annotated relatives; (c) a shallow first pass over the neighbours, sharpened in later passes. Build
-   (a) first ("Only bc that's the easiest to build").
-4. Source (b), in the owner's words: "use proposed annotation (and perhaps potential taxa identified from first item) to
-   suggest possible neighboring gene annotations and search the neighborhood for those specifically".
-5. The genetic code: "frozen except in a few specific examples. So that seems like you know mostly where to start unless you
-   trigger a special case of taxa". Default code first; another code only when a known special case is triggered.
-6. A gene call is a proposal and stays revisable ("The keep the gene/region revisable part is the hard part here"). It is the
-   problem already solved for names (`a102_regrouping.md`): the DNA piece is the one fixed thing, a call is a reading of
-   positions on it, the observations stay as observed, one place decides the call in force, and credit follows the change in
-   annotation scores. Redoing an expensive test after a revision is decided by expected gain ("only minor change in sequence,
-   likely same binding score"), not by a rule.
+1. **The piece of DNA is the one fixed thing.** "in reality it should be an arbitrary piece of dna of any size": a read, a
+   contig, a chromosome, a genome, a set of pieces from one sample; from any organism, organelle, plasmid or virus. A protein
+   given directly is also taken ("I do want this to take in both aa and dna sequences but primarily this will all start from
+   dna ... Aa has to come after a gene caller"): it joins where the gene caller's products join and has no position.
+2. **Everything else is a reading of positions on the piece.** A feature is a set of positions on one strand read as one
+   thing: a protein gene (one stretch, or several stretches joined when the gene has introns), an RNA gene, a regulatory
+   site, a repeat, a mobile element, an operon, an island, the whole piece. An annotation is always about such a set of
+   positions. So "this piece is a plasmid", "these six genes are one operon" and "this gene is RecA" are the same kind of
+   statement at three sizes, and the root's sheet needs one kind of line for all three.
+3. **Context comes first.** With a piece of DNA nobody has yet said what the things in it are, so this arm also finds the
+   features the other arms work on ("Yes, i realized the same thing. Context comes first").
+4. **Three sources of context**, needing less and less annotation: (a) the bare sequence; (b) context borrowed from already
+   annotated relatives: "use proposed annotation (and perhaps potential taxa identified from first item) to suggest possible
+   neighboring gene annotations and search the neighborhood for those specifically"; (c) a shallow first pass over the
+   neighbours, sharpened in later passes.
+5. **The genetic code** is "frozen except in a few specific examples": the default first, another code only when a known
+   special case is triggered, by lineage or by how the genes come out under the default.
+6. **Every reading is revisable, and revision means every revision** (the owner: "Revision means all revisions"): a start or
+   an end moved, two readings joined, one split, a strand or a frame changed, the stretches of a gene with introns changed, a
+   reading dropped as no gene, a new one added. All of them are one operation: a set of readings of some positions is
+   replaced by another set. It is the problem solved for names (`a102_regrouping.md`): the observations stay as observed and
+   are anchored to positions; a reading is applied when the evidence is read; credit follows the change in annotation scores;
+   going back and forth without new evidence earns nothing.
+7. **The root decides.** The root is above this head, as above every head. This arm proposes readings and reports the
+   evidence for and against them; the other arms report what they see about a feature's extent; the root holds the reading
+   of the piece and passes it down, as it passes the grouping of names.
+8. **Redoing work after a revision is a forecast, not a rule**: "As long as we can usefully revise based on the expected gain
+   (i.e., only minor change in sequence, likely same binding score)". A redo is an offered action whose expected gain depends
+   on how much of the feature changed and whether the changed part touches what the test measured.
 
-## Step 0A: the derivation
+## The analyses (SOP Step 0A)
 
-**Targets.** A piece of DNA of any size (a read, a contig, a genome); a protein given directly (it joins after the gene
-caller and has no position, neighbours or surrounding composition).
+What this axis observes that no other does: where things are and what surrounds them. A101 and A102 look at one sequence at a
+time and see none of it.
 
-**What this axis can observe that no other axis can.** Where things are and what surrounds them: the composition of the DNA
-itself, where the reading frames and RNA genes lie, their order, strand and spacing, whether a gene looks native to its
-surroundings, and what a family is usually found next to. A101 and A102 look at one sequence at a time and see none of this.
+| # | Analysis | Question it answers | Needs first | Measures | Proposes or tells apart |
+|---|---|---|---|---|---|
+| C1 | Composition | what kind of DNA is this: which lineage; chromosome, plasmid, virus or organelle | the piece | base fractions, skew, short-word signature, overall and along the piece | proposes annotations of the piece and of regions |
+| C2 | Protein genes without introns | where are the genes, strand, start | the piece, the code | readings with their scores, alternative starts, ends cut off by the piece's end | makes features |
+| C3 | Protein genes with introns | which stretches join into one gene | the piece, C1 (which kind of organism) | readings as joined stretches, with the evidence for each junction | makes features |
+| C4 | Code check | is one of the few special codes in use | C1, C2 or C3 | the lineage signal; the length of genes and the coding share under the default | switches the code and the gene finding is run again |
+| C5 | RNA genes | where are the RNA genes | the piece | family, span, strand, score against the family's threshold | makes features; proposes RNA families |
+| C6 | Other features | where are repeats, mobile elements, regulatory sites | the piece, C2, C3, C5 | spans and kinds | makes features |
+| C7 | Layout | which features go together: same-strand runs, spacing, overlaps | the features | distances, runs, overlaps | proposes regions (an operon, a cluster) |
+| C8 | Native or acquired | does a gene or region belong to its surroundings | C1, the features | the deviation of its composition and codon use from the piece's | proposes annotations of regions; tells apart |
+| C9 | Placement | where does this piece, or a protein given alone, sit in known genomes | the piece or the protein | the matching places, how exact, in which genomes | supplies a neighbourhood the piece itself does not hold (a read, a lone protein) |
+| C10 | Predicted neighbourhood | if this is function X, what should be beside it | a candidate annotation with its family identifier; the lineage from C1 | per neighbouring family: in what share of genomes it is beside X, how far, which strand | each candidate predicts a different neighbourhood |
+| C11 | Neighbourhood check | are the predicted neighbours here | C10, the features | which predicted neighbours are found, how well, where; for the leader and its rival in one test | tells two candidates apart |
+| C12 | Fusion and split | is one feature two things that are separate neighbours elsewhere, or two features one thing | the features, C10 | the parts' matches and whether those families are neighbours or one gene elsewhere | proposes a revision; tells apart |
+| C13 | Extent evidence | does evidence say a feature's extent is wrong | the features; the position-anchored evidence of every arm | how far evidence extends beyond a feature, or stops short, on which side | proposes a revision |
 
-| # | Analysis | Question it answers | Needs first | Does it today (checked 2026-11-23) | Measures | Tells candidates apart |
-|---|---|---|---|---|---|---|
-| C1 | Composition of the piece | what kind of DNA is this: which lineage, chromosome or plasmid or phage or organelle | the piece | computed in the repository's Python (numpy, Biopython importable) | base fractions, skew, short-word signature, along the piece and overall | piece-level candidates (lineage, replicon kind) |
-| C2 | Gene calls | where are the protein genes, on which strand, with which start | the piece, the code (default) | `pyrodigal` 3.7.1 is importable in the venv; no call was run; its modes for short pieces are not verified | calls with their scores, start alternatives, partial ends | no: it makes the targets |
-| C3 | Code check | is one of the few special genetic codes in use | C1, C2 | a fixed table of the known cases, to be written; nothing checked | lineage signal; under the default code the length of calls and the coding share | switches the code, then C2 again |
-| C4 | RNA genes | where are the RNA genes | the piece | Infernal 1.1.5 and Rfam 15.1 are installed (A102 scans RNA targets with them); a scan of a whole piece was not run | hits with family, span, strand, bit score against the family threshold | makes targets; admits RNA family candidates |
-| C5 | Layout | which genes run together: same-strand runs, spacing, overlaps | C2, C4 | computed | distances, run lengths, overlaps | supports C8, C9 |
-| C6 | Atypical gene or region | is this gene native to its surroundings or acquired | C1, C2 | computed | the deviation of a gene's composition and codon use from the piece's | feature-level: native or acquired |
-| C7 | Locus of a given protein | where does a protein given alone sit in known genomes | a protein | BV-BRC features carry `aa_sequence_md5` (field seen live); a lookup by it was not run | the features with exactly that sequence, their genome and position | no: it supplies a neighbourhood |
-| C8 | Predicted neighbourhood | if this is function X, what should be beside it | a candidate annotation with its family identifier; lineage from C1 | BV-BRC features carry the global family and their position (seen live); the neighbourhood query was not run | per neighbouring family, in what share of genomes it sits beside X, at what distance and strand | yes: each candidate predicts a different neighbourhood |
-| C9 | Neighbourhood check | are the predicted neighbours here | C8, and the piece's own calls (C2) | BLAST+ 2.17 is installed; nothing run | which predicted neighbours are found, their match values and positions, for the leader AND its rival | yes: the direct comparison of two candidates |
-| C10 | Fusion | is one call the fusion of two things that are separate neighbours elsewhere | C2, C8 | not checked | the two halves' matches and whether those families are neighbours elsewhere | yes |
-| C11 | Boundary evidence | does evidence from other arms say a call's start or end is wrong | calls, the other arms' position-anchored evidence | nothing exists | how far evidence extends beyond a call, on which side | no: it revises targets |
-
-The check the SOP asks for (could another axis have produced this row?): C9 uses a sequence search, which is A101's kind of
-tool, but what it measures (whether a predicted neighbour is present beside the target) is not something A101 asks. No other
-row has a counterpart.
+Could another axis have produced a row? C11 uses a sequence search, A101's kind of tool, but it asks whether a predicted
+neighbour is present beside the target, which A101 does not ask. C9 likewise. No other row has a counterpart.
 
 ## The subtree
 
 ```
-gene_context_evidence                HEAD. Forecast yield controller. Offers only what the given piece allows.
-├─ describe_piece                   TOOL   C1. Set path, no choices. First unit for a DNA piece.
-├─ call_genes                       TOOL   C2 with the default code; C3 decides whether it is run again with another code.
-├─ scan_rna_genes                   TOOL   C4. One local job.
-├─ layout                           TOOL   C5. Computed from the calls.
-├─ atypical_regions                 TOOL   C6.
-├─ locate_protein                   TOOL   C7. Only for a protein given alone.
-├─ predicted_neighbourhood          TOOL   C8. Commissioned per candidate annotation (leader and rival).
-├─ neighbourhood_check              TOOL   C9. One local job; measures both candidates in one test.
-└─ fusion_check                     TOOL   C10.
+gene_context_evidence              HEAD. Forecast yield controller. Offers only what the given piece allows.
+├─ describe_piece                 TOOL   C1.
+├─ find_genes                     TOOL   C2, C3, C4: the gene finding that fits the piece (with or without introns; fragment or
+│                                        whole), the default code, and again under another code when a special case is triggered.
+├─ find_rna_genes                 TOOL   C5.
+├─ find_other_features            TOOL   C6.
+├─ layout                         TOOL   C7.
+├─ native_or_acquired             TOOL   C8.
+├─ place                          TOOL   C9. For a piece too short to hold a neighbourhood, and for a protein given alone.
+├─ predicted_neighbourhood        TOOL   C10. Per candidate annotation, the leader and its rival.
+├─ neighbourhood_check            TOOL   C11.
+├─ fusion_and_split               TOOL   C12.
+└─ extent_evidence                TOOL   C13.
 ```
 
-- Every node is a tool, not a child: each is a set path with no decisions inside it (the owner's rule that a set path is a
-  tool). A child appears only if one of them turns out to be a long job on an outside service.
-- `describe_piece` and `call_genes` earn nothing about function by themselves: they are what the rest stands on. The SOP says a
-  prerequisite that earns nothing cannot be an action on the forecast controller (its ceiling would be 0); here they do earn,
-  because they admit piece-level candidates (lineage, replicon kind) and make the targets. This has to be settled when the
-  credit is designed.
-- As a proposer the arm returns candidate annotations from C8 to C10 and the piece-level candidates from C1, C3 and C6. As a
-  verifier it checks claims of kinds the root cannot make yet: "encoded in the organelle or the main genome", "beside X",
-  "native to this genome".
-- What the arm hands the root: the features it called (each a sequence with its position, strand, code and whether an end is
-  cut off), so the other arms can be commissioned on them.
+- Each node is a set path with no decisions inside it, so each is a tool (the owner's rule). A node becomes a child episode
+  only if it turns out to be a long job on an outside service.
+- What the arm returns to the root: the readings it proposes (each a set of positions on a strand, what kind of feature, the
+  code, whether an end is cut off, how sure), candidate annotations of features, regions and the piece, and its rows for the
+  claims it was asked to check.
+- What the arm receives from the root: the piece (or the protein), the reading of the piece the root holds, the grouping of
+  names it holds, and the candidate annotations or claims to work on.
+- As a verifier it checks claims about place: "encoded in the organelle or in the main genome", "beside X", "part of one
+  operon with X", "native to this genome". The root cannot write such claims yet.
 
-## Revisable calls
+## What this asks of the rest of the system
 
-- Evidence is anchored to positions on the piece. A call says which positions are one gene; it is applied when evidence is
-  read, as a grouping of names is in A102.
-- The arms report what they see about boundaries (C11); one place decides the call in force and passes it down.
-- A gene is then a group of calls. Evidence gathered on any call of the group counts for the gene.
-- A revision that changes annotation scores earns; going back and forth without new evidence earns nothing.
-- After a revision, redoing a test is an offered action whose expected gain depends on how much of the sequence changed and
-  whether the changed part touches what the test measured.
+- The root holds a piece and its readings, not one protein: it decides which feature to work on next and what each is worth.
+- The root's sheet takes annotations of any set of positions (a gene, a region, the piece).
+- The other arms return their evidence with positions, so it can be read under a revised reading.
+- The claim maker gets kinds of claim about place.
+- The intake takes DNA.
 
-## Heavy, later
+## Order of building (not the design's scope)
 
-| What | Adds | Why it waits |
-|---|---|---|
-| Gene calling in eukaryotes | genes with introns | a different and much harder problem; not asked for yet |
-| Assembly or mapping of reads | a neighbourhood for a read | needs a reference or enough reads; not designed |
-| Whole-genome alignment (Mauve: the library has readers for its format; the program is not installed) | conserved order across genomes | a build and long runs |
-| A lineage classifier with a large database | a firmer lineage than composition gives | a large download; not installed |
+1. The bare sequence first (the owner: "the easiest to build"): `describe_piece`, then `find_genes` for genes without introns
+   and `find_rna_genes`.
+2. `predicted_neighbourhood` and `neighbourhood_check`.
+3. The rest; genes with introns, the placement of reads and whole-genome comparison are heavier and come later.
 
-## Open, for the owner
+## What was checked on 2026-11-23, and what was not
 
-1. Is the first target prokaryotic DNA (bacteria, archaea, their phages), with eukaryotes later?
-2. Does "revisable" mean corrected starts and ends first, or also joining and splitting calls?
-3. Who is the one place that decides the call in force: the root, or this arm?
-4. Where do annotations that belong to the piece and not to a gene (lineage, replicon kind, code) live on the root's sheet?
-5. One piece gives many targets; the root today directs the annotation of one protein.
-
-## Not done
-
-- The inventory of what the repository already holds for A103 (SOP Step 0A item 7): the old head (`root/a103/
-  gene_context_evidence`, old-runner children, does not load on the current system) and its library folders
-  (`episode_support/*/gene_context_evidence`: knowledge notes on alignment sites, minimap2 placements, read composition,
-  sequence extraction and translation; `calculations/comparative_ops.py`, `evidence_geometry.py`; `tools/detection.py`). None
-  of it was read for this note.
-- No tool in the table was run. Each "does it today" cell says what was checked and what was not.
+- Installed here: the gene finder library `pyrodigal` 3.7.1 (importable; no run made; how it handles short pieces is not
+  verified), Infernal 1.1.5 with Rfam 15.1, BLAST+ 2.17, minimap2 2.31. Not installed: a finder for genes with introns, Mauve
+  (the library has readers for its format), a lineage classifier with its own database.
+- Seen live in BV-BRC: a feature carries its position, strand, global family and the hash of its exact sequence.
+- None of the thirteen analyses was run.
+- The old A103 head (`root/a103/gene_context_evidence`, old-runner children, does not load on the current system) and its
+  library folders (`episode_support/*/gene_context_evidence`) were not read. That inventory (SOP Step 0A item 7) is still to do.
