@@ -87,45 +87,55 @@ now need explanation sets."
 - Sets are not enumerated. A set is built from the leading candidates of its members; only the best few are kept.
 - Open: whether strand and distance from the origin are statements of a set or observations it uses.
 
-## The subtree
+## The exchange with the root, and the subtree
+
+The owner rejected the first tree (2026-11-23): "That's just a bunch of tools attached to the head followed by one child
+instead of communicating back up to root to call a101 (for example) to evaluate pieces (which are kind of like one level up
+from claims)". The arm does only what no other arm can do. Everything another arm can evaluate goes up to the root as a piece.
+
+Three levels the root commissions work around:
+
+- an explanation set: one account of a stretch (this arm proposes and scores them);
+- a piece: one thing in a set that an arm can evaluate: "what is this feature", "is this feature a Y", "is there a Y in this
+  stretch", "where does this short piece sit in known genomes";
+- a claim: what an annotation says the thing does ("binds X").
+
+The loop runs through the root, visit by visit:
+
+1. The root commissions this arm on a piece of DNA. The arm describes it and finds its features. It returns the features as
+   pieces ("what is this"), the frame candidates of the piece and the regions the layout suggests.
+2. The root commissions other arms on the pieces it judges worth it (sequence homology on a gene, structure on a gene or an
+   RNA) and holds what they return.
+3. The root commissions this arm on a region, passing what it holds about the members. The arm assembles the explanation
+   sets, scores their coverage and coherence, and returns the leading sets with the pieces that would tell the two leaders
+   apart ("is feature 3 a Y", "is there a Y in this stretch") and the revisions it proposes.
+4. The root commissions other arms on those pieces, and this arm again when something changed. The same for a claim about
+   place.
 
 ```
-gene_context_evidence                 HEAD. One piece. Describes it, finds its features, chooses which region to explain next.
-│
-│   the bare piece (no annotation needed)
-├─ describe_piece                    TOOL   C1. Composition: proposes the frame of the piece (lineage, kind of replicon).
-├─ find_genes                        TOOL   C2, C3, C4. Genes with or without introns; default code, again under a special one.
-├─ find_rna_genes                    TOOL   C5.
-├─ find_other_features               TOOL   C6. Repeats, mobile elements, regulatory sites.
-├─ layout                            TOOL   C7. Which features go together: proposes the regions.
-├─ native_or_acquired                TOOL   C8. Proposes regions that do not belong to their surroundings.
-├─ place                             TOOL   C9. A neighbourhood for a piece too short to hold one, or for a protein given alone.
-│
-│   one region at a time
-└─ region_explanation                CHILD  Builds and tests the explanation sets of one region; its cycle improves them.
-    ├─ predicted_members             TOOL   C10. If a member is X, what else should be in the set.
-    ├─ propose_explanations          TOOL   Assembles the sets from the members' leading candidates, the predictions and the layout.
-    ├─ member_check                  TOOL   C11. Are the predicted members here; aimed where the two leading sets differ.
-    ├─ coherence_check               TOOL   Do the members form one known system, and how much of it is present.
-    ├─ regulatory_check              TOOL   Is there a regulatory site that fits the set.
-    ├─ fusion_and_split              TOOL   C12. Proposes a revision of the region's readings.
-    └─ extent_evidence               TOOL   C13. Proposes a revision of a feature's extent.
+gene_context_evidence               HEAD   Commissioned on: a piece of DNA; a region; a claim about place.
+├─ describe_piece                  TOOL   Composition: frame candidates (lineage, kind of replicon).
+├─ find_features                   TOOL   Genes (with or without introns; default code, again under a special one), RNA genes,
+│                                         repeats, mobile elements, regulatory sites: the readings it proposes.
+├─ layout                          TOOL   Which features go together: the regions.
+├─ native_or_acquired              TOOL   Regions that do not belong to their surroundings.
+├─ predicted_members               TOOL   If a member is X, what else should be in the set (from annotated relatives).
+├─ assemble_explanations           TOOL   Builds and scores the sets of a region from what the root holds about its members.
+└─ propose_revisions               TOOL   Fusion, split and extent, from the position-anchored evidence the root passed.
 ```
 
-- The head's tools are set paths. Explaining a region is not: it is propose, test, revise, with real choices, so it is a
-  child episode (the owner's rule: a set path is a tool, a loop with choices is an episode).
-- The head decides which region to explain next and commissions the child on it; the child returns the region's leading
-  explanation sets with their scores and the revisions it proposes.
-- The arms do not call each other. The annotation of a member by sequence or structure is commissioned by the root; this arm
-  receives what the root holds about the members and returns sets.
-- What the arm returns to the root: the readings it proposes, the frame candidates of the piece, per region its leading
-  explanation sets (frame, members, how each member is stated, the set's score and what it leaves unexplained), and its rows
-  for the claims it was asked to check ("encoded in the organelle or the main genome", "beside X", "one operon with X",
-  "native to this genome").
-- What the arm receives from the root: the piece (or the protein), the reading of the piece the root holds, the grouping of
-  names it holds, the annotations it holds of the members, and the claims to check.
-- `coherence_check` needs a source of known systems (BV-BRC marks features that belong to a subsystem: seen on one feature,
-  not examined); `regulatory_check` needs known binding motifs: neither is verified.
+What goes up to the root as pieces, and which arm could evaluate each:
+
+| Piece | Evaluated by |
+|---|---|
+| what is this gene | sequence homology, structure |
+| what is this RNA | structure (its RNA family scan) |
+| is this feature a Y; is there a Y in this stretch | sequence homology; partner presence (A107) is the axis whose question this is |
+| where does this short piece, or this protein given alone, sit in known genomes | sequence homology (its hits are features with positions) |
+
+- There is no child episode: propose, test and revise happen between this arm and the root, not inside this arm.
+- This arm searches no sequence database and folds nothing.
+- What the root needs for it: a kind of commission on a piece, one level above a commission on a claim.
 
 ## What this asks of the rest of the system
 
