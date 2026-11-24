@@ -9,7 +9,7 @@ there is no repair. That the subject is an ``input`` record of a DNA molecule is
 (``internal_summary``). ``yield_task`` is the key of the head's declaration in ``yield_bindings`` (``yield_estimator.py``)."""
 from method_loop import Field, RecordForm
 
-YIELD_TASK = 'PARTS:parts_discovery'
+YIELD_TASK = 'parts_discovery:parts_reading'
 PART_UNIT_KINDS = ('protein_gene', 'rna_gene')
 
 ASSIGNMENT_FORM = RecordForm({

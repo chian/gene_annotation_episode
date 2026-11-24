@@ -125,7 +125,7 @@ Genes with introns are in the design (a part may be several joined stretches) an
 
 - The intake takes DNA (`init --molecule dna`; formats fasta, fastq, genbank among others): read in the code, not run.
 - A head in any folder under `root/` is found by its name (`run_command._folder`), so this arm lives at
-  `root/parts/parts_discovery`.
+  `root/parts_discovery`, directly under the root: every folder is an episode.
 - Importable here: `pyrodigal` 3.7.1 (a gene finder), `pyhmmer`, Biopython, numpy. Installed: Infernal 1.1.5 with Rfam 15.1,
   Pfam, BLAST+ 2.17, minimap2 2.31. Not installed: a finder for genes with introns; anything specific to repeats, CRISPR
   arrays, terminators or motif discovery.

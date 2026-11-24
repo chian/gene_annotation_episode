@@ -8,7 +8,7 @@ stops when no offered action's forecast exceeds its expected seconds times the e
 gated (``task.resume_action``): the episode does not stop before it is done.
 
 The controller is opened through the library's ``checked_yield_declaration`` (the declaration for the task key
-``PARTS:parts_discovery`` as ``read_from_parent`` reads it must name exactly this credit definition,
+``parts_discovery:parts_reading`` as ``read_from_parent`` reads it must name exactly this credit definition,
 ``PartsDiscoveryCredit(part_units).as_record()``, and the kind ``forecast``) and ``open_yield_controller``, which takes the
 declaration's parameters: ``exchange_rate``, ``forget_old_rows`` and ``job_kinds``. The exchange rate is in credit per second and
 the credit's scale is the commissioner's ``part_units``: it is a setting of the run and is set with them. The declarations are this
