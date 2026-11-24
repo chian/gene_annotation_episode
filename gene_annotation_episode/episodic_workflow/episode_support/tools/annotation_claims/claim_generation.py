@@ -21,7 +21,11 @@ predicate reads as it reads a proposed annotation. The workflow (``generate_clai
 3. A claim is written only when its molecule is found by lookup under the name given (a protein in UniProt by gene or
    protein name, a small molecule in ChEBI by name), so every name in a claim record is a looked-up name, never text a
    model wrote. The name the literature uses is taken the same way; when it is not found the annotation's own name
-   stands.
+   stands. A claim that the protein binds itself (it forms oligomers) is a claim like any other: the molecule is then the
+   looked-up protein of the same name, a record of its own beside the subject's (the first form of this workflow
+   dropped such a claim, found in the real runs ``root_a101_a105_06`` and ``_09``: "binds PopZ" was proposed and lost).
+   The list the model writes differs from run to run (four runs gave ParB with ChpT and ZitP; ParB, ChpT, CckA and
+   PopZ; ParB, CckA, DivL and ChpT; ParB and PopZ), so the model is asked for every claim it knows of.
 
 What is written, through the scoped store handed in: the sources of the lookups; when the annotation has a claim, one
 ``reference`` record for the subject under the annotation (the subject's own sequence, carrying the protein name of
@@ -52,7 +56,7 @@ Write the claims this annotation makes that an experiment could check. Each clai
 - `catalyzes`: it catalyzes a reaction of that molecule (name one substrate or product);
 - `transports`: it moves that molecule across a membrane.
 
-Use what the database states and add what you know this annotation to mean beyond it. Name each molecule by the one name a database would list it under: a gene or protein symbol for a protein (`partner_kind` `protein`), a compound name for a small molecule or ion (`partner_kind` `chemical`). Never name a class of molecules. Put first the claims that set this annotation apart from the rival annotations: what it would do and they would not.
+Use what the database states and add what you know this annotation to mean beyond it. Write every such claim you know of, not a selection: each one is a separate thing an experiment can check, and a protein that binds copies of itself is one of them. Name each molecule by the one name a database would list it under: a gene or protein symbol for a protein (`partner_kind` `protein`), a compound name for a small molecule or ion (`partner_kind` `chemical`). Never name a class of molecules. Put first the claims that set this annotation apart from the rival annotations: what it would do and they would not.
 
 An annotation that states no function (a hypothetical protein, a domain or family of unknown function) makes no claims: answer with an empty list.
 
@@ -230,7 +234,7 @@ async def generate_claims(store, model, operation_key, *, annotation, rivals, su
         partner = admit(store, proposed['partner_name'], proposed['partner_kind'])
         if partner is None:
             not_found += 1
-        elif (proposed['predicate'], partner['id']) not in seen and not _same(partner['label'], label):
+        elif (proposed['predicate'], partner['id']) not in seen:
             seen.add((proposed['predicate'], partner['id']))
             admitted.append((proposed, partner))
     claims = []
