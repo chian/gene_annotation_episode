@@ -121,14 +121,17 @@ def freeze_libraries(store, *, source, continuation, tools, axis=None):
     when one is given), freeze that axis's libraries from the published ``source`` into the directories the head's own
     settings name (the same file ``run`` takes, so the run reads exactly what was frozen), and give the selection a
     parent commissions that head with. Nothing here knows an axis: each axis's library module
-    (``episode_support/configuration/<head>/process_options.py``) supplies ``freeze_selection`` with its own pieces.
+    (``episode_support/configuration/<head>/process_options.py``) supplies ``freeze_selection`` with its own pieces,
+    and the head itself says which option of its library it is (``AXIS`` of its ``messages/read_from_parent.py``, the
+    option id its commissions must select; a head's folder says nothing about it: every folder under the root is an
+    episode, named for what the episode does).
     An axis that has no such function is reported as not frozen; it does not stop the others (this is a help to keep
     runs tidy, not a gate). Freezing an already frozen directory returns the snapshot that is there."""
     configuration = ROOT.parent / 'episode_support' / 'configuration'
     package = PACKAGE.rsplit('.', 1)[0] + '.episode_support.configuration'
     result = {}
     for head in sorted(path for path in continuation if '/' not in path and path != 'root'):
-        own_axis = _folder(head).parent.name.upper()
+        own_axis = importlib.import_module('.'.join((PACKAGE, head, 'messages', 'read_from_parent'))).AXIS
         if axis is not None and axis != own_axis:
             continue
         freeze = None
