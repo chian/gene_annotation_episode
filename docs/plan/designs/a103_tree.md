@@ -71,33 +71,61 @@ time and see none of it.
 Could another axis have produced a row? C11 uses a sequence search, A101's kind of tool, but it asks whether a predicted
 neighbour is present beside the target, which A101 does not ask. C9 likewise. No other row has a counterpart.
 
+## Explanation sets
+
+The owner (2026-11-23): "annotations are a whole set. Like an operon with 5 genes likely has 6 or 7 annotations. 5 orfs, 1
+regulatory region, and like a whole context piece like plasmid sequence or near origin or forward strand ... annotations must
+now need explanation sets."
+
+- An explanation set is one account of a stretch: its features (which positions are what), a statement about each, how they
+  relate, and the frame they sit in. A region-level or piece-level annotation is the name and frame of a set; the gene
+  annotations are its members. Sets nest (an operon's set inside a plasmid's). A protein given alone is a set of one.
+- A set is more than its members: coherence is evidence (members that belong to one system support each other), coverage is
+  evidence (every feature of the stretch accounted for), contradiction counts against.
+- Rivals are rival explanations of the same stretch. The two leading ones usually differ in one or two members, and that is
+  where a test is aimed: the top-two differential, with sets in place of single names.
+- Sets are not enumerated. A set is built from the leading candidates of its members; only the best few are kept.
+- Open: whether strand and distance from the origin are statements of a set or observations it uses.
+
 ## The subtree
 
 ```
-gene_context_evidence              HEAD. Forecast yield controller. Offers only what the given piece allows.
-├─ describe_piece                 TOOL   C1.
-├─ find_genes                     TOOL   C2, C3, C4: the gene finding that fits the piece (with or without introns; fragment or
-│                                        whole), the default code, and again under another code when a special case is triggered.
-├─ find_rna_genes                 TOOL   C5.
-├─ find_other_features            TOOL   C6.
-├─ layout                         TOOL   C7.
-├─ native_or_acquired             TOOL   C8.
-├─ place                          TOOL   C9. For a piece too short to hold a neighbourhood, and for a protein given alone.
-├─ predicted_neighbourhood        TOOL   C10. Per candidate annotation, the leader and its rival.
-├─ neighbourhood_check            TOOL   C11.
-├─ fusion_and_split               TOOL   C12.
-└─ extent_evidence                TOOL   C13.
+gene_context_evidence                 HEAD. One piece. Describes it, finds its features, chooses which region to explain next.
+│
+│   the bare piece (no annotation needed)
+├─ describe_piece                    TOOL   C1. Composition: proposes the frame of the piece (lineage, kind of replicon).
+├─ find_genes                        TOOL   C2, C3, C4. Genes with or without introns; default code, again under a special one.
+├─ find_rna_genes                    TOOL   C5.
+├─ find_other_features               TOOL   C6. Repeats, mobile elements, regulatory sites.
+├─ layout                            TOOL   C7. Which features go together: proposes the regions.
+├─ native_or_acquired                TOOL   C8. Proposes regions that do not belong to their surroundings.
+├─ place                             TOOL   C9. A neighbourhood for a piece too short to hold one, or for a protein given alone.
+│
+│   one region at a time
+└─ region_explanation                CHILD  Builds and tests the explanation sets of one region; its cycle improves them.
+    ├─ predicted_members             TOOL   C10. If a member is X, what else should be in the set.
+    ├─ propose_explanations          TOOL   Assembles the sets from the members' leading candidates, the predictions and the layout.
+    ├─ member_check                  TOOL   C11. Are the predicted members here; aimed where the two leading sets differ.
+    ├─ coherence_check               TOOL   Do the members form one known system, and how much of it is present.
+    ├─ regulatory_check              TOOL   Is there a regulatory site that fits the set.
+    ├─ fusion_and_split              TOOL   C12. Proposes a revision of the region's readings.
+    └─ extent_evidence               TOOL   C13. Proposes a revision of a feature's extent.
 ```
 
-- Each node is a set path with no decisions inside it, so each is a tool (the owner's rule). A node becomes a child episode
-  only if it turns out to be a long job on an outside service.
-- What the arm returns to the root: the readings it proposes (each a set of positions on a strand, what kind of feature, the
-  code, whether an end is cut off, how sure), candidate annotations of features, regions and the piece, and its rows for the
-  claims it was asked to check.
+- The head's tools are set paths. Explaining a region is not: it is propose, test, revise, with real choices, so it is a
+  child episode (the owner's rule: a set path is a tool, a loop with choices is an episode).
+- The head decides which region to explain next and commissions the child on it; the child returns the region's leading
+  explanation sets with their scores and the revisions it proposes.
+- The arms do not call each other. The annotation of a member by sequence or structure is commissioned by the root; this arm
+  receives what the root holds about the members and returns sets.
+- What the arm returns to the root: the readings it proposes, the frame candidates of the piece, per region its leading
+  explanation sets (frame, members, how each member is stated, the set's score and what it leaves unexplained), and its rows
+  for the claims it was asked to check ("encoded in the organelle or the main genome", "beside X", "one operon with X",
+  "native to this genome").
 - What the arm receives from the root: the piece (or the protein), the reading of the piece the root holds, the grouping of
-  names it holds, and the candidate annotations or claims to work on.
-- As a verifier it checks claims about place: "encoded in the organelle or in the main genome", "beside X", "part of one
-  operon with X", "native to this genome". The root cannot write such claims yet.
+  names it holds, the annotations it holds of the members, and the claims to check.
+- `coherence_check` needs a source of known systems (BV-BRC marks features that belong to a subsystem: seen on one feature,
+  not examined); `regulatory_check` needs known binding motifs: neither is verified.
 
 ## What this asks of the rest of the system
 
