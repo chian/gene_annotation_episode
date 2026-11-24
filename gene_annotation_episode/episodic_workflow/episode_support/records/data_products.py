@@ -152,6 +152,14 @@ KINDS = {
     # this kind, so no closer term is claimed); format_3464 JSON. The scores are the model's confidence, never measured binding.
     'cofolding_results': ('http://edamontology.org/data_2048', 'http://edamontology.org/format_3464',
                           'Report, JSON (Chai-1 co-folding scores of the target with each of several ligands)'),
+    # The protein genes one run of the gene finder called on a piece of DNA (parts discovery ``find_genes``: per gene its
+    # positions, strand, start codon, ends cut off by the piece, ribosome-binding site, the finder's scores and confidence, with
+    # the finder's version, mode and genetic code). data_1255 Sequence features ("positional features of a sequence": the term
+    # named in the EDAM.tsv reading of 2026-11-21 in the comment of ``functional_site_annotations`` above, where it was set aside
+    # for a protein because it is positional; the calls are positions on DNA); format_3464 JSON. EDAM.tsv was not read again for
+    # this kind (no outside request was allowed in the task that added it): data_1255 is to be confirmed as not obsolete.
+    'gene_calls': ('http://edamontology.org/data_1255', 'http://edamontology.org/format_3464',
+                   'Sequence features, JSON (the protein genes called by a gene finder on a piece of DNA)'),
 }
 EDAM_SOURCE = 'https://edamontology.org/EDAM.tsv, read 2026-11-20'
 
