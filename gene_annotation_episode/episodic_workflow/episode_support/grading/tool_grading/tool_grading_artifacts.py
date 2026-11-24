@@ -72,4 +72,16 @@ def source_tool_grading_entries(store, source_ref: str) -> list[dict]:
     return results
 
 
-__all__ = ["retain_tool_grading", "record_grading_product", "source_tool_grading_entries", "SCHEMA", "MEDIA_TYPE", "GRADING_KIND"]
+def held_grading_sheets(records, provider: str) -> list[tuple[str, dict]]:
+    """``[(source reference, sheet)]`` of the held sources of ``provider`` among ``records`` (a custody reader), in the order held;
+    each source carries exactly one retained grading."""
+    found = []
+    for source in records.list("source"):
+        if source["provider"] != provider:
+            continue
+        (entry,) = source_tool_grading_entries(records, source["id"])
+        found.append((source["id"], entry["grading"]["sheet"]))
+    return found
+
+
+__all__ = ["retain_tool_grading", "record_grading_product", "source_tool_grading_entries", "held_grading_sheets", "SCHEMA", "MEDIA_TYPE", "GRADING_KIND"]

@@ -15,23 +15,23 @@ controller does. No ``reason`` action.
 Settings of the head: ``infernal_executable_directory`` (the directory of ``cmscan``), ``covariance_database_manifest`` (the path of
 the Rfam manifest) and ``yield_bindings`` (``yield_estimator.py``). The service ``job_access`` is read for the resources
 ``find_rna_genes`` runs on (the first local one)."""
+import os
+from pathlib import Path
+
 from jsonschema import Draft202012Validator, ValidationError
 
 from episode_runtime import ModelRequest, Rejected, ToolCall
 
 from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.episodic_workflow.episode_support.grading.parts_discovery.gene_finding_sheet import DEFAULT_CODE
-from gene_annotation_episode.episodic_workflow.episode_support.tools.parts_discovery.find_genes import SELF_TRAINED_MINIMUM
+from gene_annotation_episode.episodic_workflow.episode_support.tools.gene_finding.find_genes import SELF_TRAINED_MINIMUM, find_genes
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import rejection_feedback
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import time_accounting
-from gene_annotation_episode.episodic_workflow.episode_support.tools.parts_discovery.describe_piece import (
-    TOOL_NAME as DESCRIBE_TOOL, check_describe_piece_request, describe_piece)
-from gene_annotation_episode.episodic_workflow.episode_support.tools.parts_discovery.find_genes import (
-    TOOL_NAME as FIND_GENES_TOOL, check_find_genes_request, find_genes)
-from gene_annotation_episode.episodic_workflow.episode_support.tools.parts_discovery.find_rna_genes import (
-    TOOL_NAME as RNA_TOOL, check_find_rna_genes_request, find_rna_genes)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_composition.describe_piece import describe_piece
+from gene_annotation_episode.episodic_workflow.episode_support.tools.rna_gene_finding.find_rna_genes import (
+    PROGRAM as RNA_PROGRAM, find_rna_genes)
 
-from .credit import held_codes, offered_codes, rna_scanned
+from .credit import (CODES, DEFAULT_CODE, DESCRIBE_TOOL, FIND_GENES_TOOL, RNA_TOOL, held_codes, mode_of, offered_codes,
+                     rna_scanned)
 from .goal import GOAL
 
 CHILD_SLOTS = {}
@@ -44,14 +44,18 @@ def describe_piece_tool(arguments, ctx):
 
 
 def find_genes_tool(arguments, ctx):
-    """One gene finding under one genetic code as one unit, by the library's one function."""
-    return find_genes(ctx, piece_ref=arguments['piece_ref'], code=arguments['code'])
+    """One gene finding under one genetic code as one unit, by the library's one function, in the mode this episode's rule gives
+    for the piece's length (``credit.mode_of``)."""
+    piece_ref = arguments['piece_ref']
+    return find_genes(ctx, piece_ref=piece_ref, mode=mode_of(ctx.store.get(piece_ref)['length']), code=arguments['code'])
 
 
 async def find_rna_genes_tool(arguments, ctx):
     """One scan of the piece for RNA genes as one unit, by the library's one function (an async unit: its local job goes through the
-    job service)."""
-    return await find_rna_genes(ctx, piece_ref=arguments['piece_ref'], resource_id=arguments['resource_id'])
+    job service), with the program directory and the database manifest of this episode's settings."""
+    return await find_rna_genes(ctx, piece_ref=arguments['piece_ref'], resource_id=arguments['resource_id'],
+                                executable_directory=ctx.settings['infernal_executable_directory'],
+                                manifest_path=ctx.settings['covariance_database_manifest'])
 
 
 TOOLS = {DESCRIBE_TOOL: describe_piece_tool, FIND_GENES_TOOL: find_genes_tool, RNA_TOOL: find_rna_genes_tool}
@@ -115,18 +119,59 @@ def owed_action(summary, ctx):
     return None
 
 
+def check_describe_piece(request, summary):
+    """The things to fix in a ``describe_piece`` request: the piece must be the scope's piece, not yet described."""
+    piece = summary['piece']['ref']
+    if request['piece_ref'] != piece:
+        return [{'code': 'piece_is_not_the_scope_piece', 'field': 'piece_ref', 'choose_from': [piece]}]
+    if summary['description'] is not None:
+        return [{'code': 'piece_already_described', 'field': 'piece_ref', 'choose_from': []}]
+    return []
+
+
+def check_find_genes(request, summary):
+    """The things to fix in a ``find_genes`` request: the piece must be the scope's piece; the code one of ``CODES`` with no
+    reading held (a repeat earns nothing); a code other than the default only for a piece the finder is trained on (the pre-trained
+    finder ignores the code, so the reading would be the default's again)."""
+    piece, offered, code = summary['piece'], offered_codes(summary), request['code']
+    if request['piece_ref'] != piece['ref']:
+        return [{'code': 'piece_is_not_the_scope_piece', 'field': 'piece_ref', 'choose_from': [piece['ref']]}]
+    if code not in CODES:
+        return [{'code': 'code_is_not_offered', 'field': 'code', 'choose_from': offered}]
+    if code in held_codes(summary):
+        return [{'code': 'reading_under_the_code_already_held', 'field': 'code', 'choose_from': offered}]
+    if code != DEFAULT_CODE and mode_of(piece['length']) != 'self_trained':
+        return [{'code': 'code_is_not_applied_below_the_self_trained_minimum', 'field': 'code', 'choose_from': offered}]
+    return []
+
+
+def check_find_rna_genes(request, summary, ctx):
+    """The things to fix in a ``find_rna_genes`` request: the piece must be the scope's piece, not yet scanned (one scan of a
+    piece: a repeat adds nothing); the resource a local one of the job service; the program and the database manifest of this
+    episode's settings must be there."""
+    piece, resources, problems = summary['piece']['ref'], bound_resources(ctx), []
+    if request['piece_ref'] != piece:
+        problems.append({'code': 'piece_is_not_the_scope_piece', 'field': 'piece_ref', 'choose_from': [piece]})
+    elif rna_scanned(summary):
+        problems.append({'code': 'piece_already_scanned', 'field': 'piece_ref', 'choose_from': []})
+    if resources.get(request['resource_id']) != 'local':
+        problems.append({'code': 'resource_is_not_local', 'field': 'resource_id',
+                         'choose_from': [name for name, kind in resources.items() if kind == 'local']})
+    if not os.access(ctx.settings['covariance_database_manifest'], os.R_OK):
+        problems.append({'code': 'manifest_missing', 'field': 'settings', 'detail': 'covariance_database_manifest'})
+    if not os.access(Path(ctx.settings['infernal_executable_directory']) / RNA_PROGRAM, os.X_OK):
+        problems.append({'code': 'program_missing', 'field': 'settings', 'detail': RNA_PROGRAM})
+    return problems
+
+
 def check_request(tool, request, summary, ctx):
-    """The things to fix in a request of ``tool``: the library's one check of that tool over what the head holds."""
-    piece = summary['piece']
+    """The things to fix in a request of ``tool``, before anything runs: this episode's own check of that action over what it
+    holds. An empty list means the request can run."""
     if tool == DESCRIBE_TOOL:
-        return check_describe_piece_request(request, piece_ref=piece['ref'],
-                                            described={piece['ref']} if summary['description'] is not None else set())
+        return check_describe_piece(request, summary)
     if tool == FIND_GENES_TOOL:
-        return check_find_genes_request(request, piece_ref=piece['ref'], length=piece['length'], held_codes=held_codes(summary))
-    return check_find_rna_genes_request(
-        request, piece_ref=piece['ref'], resources=bound_resources(ctx), scanned={piece['ref']} if rna_scanned(summary) else set(),
-        manifest_path=ctx.settings['covariance_database_manifest'],
-        executable_directory=ctx.settings['infernal_executable_directory'])
+        return check_find_genes(request, summary)
+    return check_find_rna_genes(request, summary, ctx)
 
 
 def resume_action(summary, records, ctx):

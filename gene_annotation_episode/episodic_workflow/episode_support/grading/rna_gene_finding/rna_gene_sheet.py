@@ -1,7 +1,7 @@
-"""The grader and the sheet of the parts-discovery tool ``find_rna_genes``: the RNA genes Infernal's covariance models of Rfam find on
-the piece. One scan of the whole piece, by Rfam's own documented command (``cmscan -Z <Mb> --cut_ga --rfam --nohmmonly --cpu 1
---tblout <file> --fmt 2 --clanin Rfam.clanin``): each family's own gathering threshold GA decides what is reported, both strands
-are searched and reported.
+"""The sheet of one scan of a DNA sequence for RNA genes: the hits Infernal's covariance models of Rfam report on it, by Rfam's
+own documented command (``cmscan -Z <Mb> --cut_ga --rfam --nohmmonly --cpu 1 --tblout <file> --fmt 2 --clanin Rfam.clanin``): each
+family's own gathering threshold GA decides what the program reports, both strands are searched and reported. This module states
+the table's facts only; which hits a caller counts, and how, is the caller's.
 
 INPUT. The ``--tblout`` table in format 2 (29 columns, Infernal user guide ``tabular.tex``: ``idx``, target name, accession, query
 name, accession, clan name, ``mdl``, model from and to, sequence from and to, strand, ``trunc``, ``pass``, ``gc``, ``bias``, bit
@@ -11,14 +11,12 @@ length, description) and the family index of the database (per accession the nam
 THE SHEET: per hit (a row of ``hits``) the family accession and name, its clan, ``begin`` and ``end`` on the piece (1-based,
 inclusive, begin below end, whatever the strand), ``strand``, ``bit_score``, ``ga``, the E-value (it depends on ``-Z`` and weighs
 nothing), the model span, ``truncation`` (the table's ``trunc``), ``overlap_mark`` (the table's ``olp``) and ``overlapped``: true
-when the mark is ``=``, a hit that overlaps a better-scoring hit of its clan which itself stands (the user guide: ``=`` overlaps a
-lower-E-value hit and is itself marked ``^``; a ``$`` hit overlaps only hits that are removed, so it stands). A PART is ``rna_gene``
-for each hit that is NOT overlapped. ``part_count`` and ``part_bit_score_sum`` (the sum of the bit scores of the parts) summarize.
-An RNA gene's score is its bit score.
+when the mark is ``=`` (the user guide: a ``=`` hit overlaps a lower-E-value hit of its clan, which is itself marked ``^``; a ``$``
+hit overlaps only hits that are removed). ``hit_count`` counts the rows.
 
 The sheet is controlled data: numbers, marks of the table's own vocabulary, accessions, family and clan names of the database and
 record references."""
-SCHEMA = 'parts_rna_gene_sheet'
+SCHEMA = 'rna_gene_scan_sheet'
 PROVIDER = 'rna_gene_finding'
 TRUNCATIONS = ('no', "5'", "3'", "5'&3'")
 OVERLAP_MARKS = ('*', '^', '$', '=')
@@ -31,7 +29,7 @@ HEADER = ('#idx target name          accession query name           accession cl
 
 def _require(condition, code):
     if not condition:
-        raise ValueError('parts_rna_gene_' + code)
+        raise ValueError('rna_gene_scan_' + code)
 
 
 def parse_tblout(text):
@@ -78,11 +76,9 @@ def grade_rna_gene_finding(tblout, *, index, piece, database, z_megabases):
     rows = hit_rows(parse_tblout(tblout), index)
     _require(all(row['seq_length'] == piece['length'] and row['end'] <= piece['length'] for row in rows),
              'sequence_length_differs_from_the_piece')
-    parts = [row for row in rows if not row['overlapped']]
     return {'schema': SCHEMA, 'provider': PROVIDER, 'piece_ref': piece['piece_ref'], 'piece_length': piece['length'],
             'database': database['name'], 'database_version': database['version'], 'families_in_database': database['model_count'],
-            'z_megabases': z_megabases, 'hit_count': len(rows), 'part_count': len(parts),
-            'part_bit_score_sum': sum(row['bit_score'] for row in parts), 'hits': rows}
+            'z_megabases': z_megabases, 'hit_count': len(rows), 'hits': rows}
 
 
 __all__ = ['PROVIDER', 'SCHEMA', 'grade_rna_gene_finding', 'hit_rows', 'parse_tblout']

@@ -12,9 +12,10 @@ on a later visit) and ``data_product_refs`` (the held data-product rows). EVERY 
 ``internal_summary``'s ``returned_refs`` entry, built with ``job_records.returned_with_names``."""
 from method_loop import ChoiceField, Field, RecordForm
 
-from gene_annotation_episode.episodic_workflow.episode_support.grading.parts_discovery.gene_finding_sheet import (
-    CODES, MODES, STRANDS)
-from gene_annotation_episode.episodic_workflow.episode_support.grading.parts_discovery.held_sheets import PART_KINDS
+from gene_annotation_episode.episodic_workflow.episode_support.grading.gene_finding.gene_finding_sheet import MODES, STRANDS
+
+from ..credit import CODES
+from .internal_summary import PART_KINDS
 
 PIECE_FORM = RecordForm({
     'ref': Field('text', 'The piece of DNA: an input record of the scope (a record reference)'),

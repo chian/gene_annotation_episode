@@ -1,7 +1,7 @@
 """Credit: the progress of the reading of the piece, earned by changes in the scores of its parts (never the annotation score
 itself: a score is how well a reading is supported, a state recomputed from what is held; credit is what that state gained).
 
-``credit(summary, records)`` is ``part_credit(part_units, readings, rna_scans)`` (library: ``grading/parts_discovery/held_sheets.py``):
+``credit(summary, records)`` is ``part_credit(part_units, readings, rna_scans)`` (below):
 
     part_units['protein_gene'] x (the highest ``score_sum`` over the gene-finding sheets held, from zero)
     + part_units['rna_gene'] x (the sum of the bit scores of the RNA parts held)
@@ -14,15 +14,13 @@ has a ceiling, so the credit's controller is the forecast controller (``yield_es
 definition record."""
 from method_loop import UNBOUNDED
 
-from gene_annotation_episode.episodic_workflow.episode_support.grading.parts_discovery.held_sheets import part_credit
-from gene_annotation_episode.episodic_workflow.episode_support.tools.parts_discovery.describe_piece import (
-    TOOL_NAME as DESCRIBE_TOOL)
-from gene_annotation_episode.episodic_workflow.episode_support.tools.parts_discovery.find_genes import (
-    TOOL_NAME as FIND_GENES_TOOL, offered_codes as library_offered_codes)
-from gene_annotation_episode.episodic_workflow.episode_support.tools.parts_discovery.find_rna_genes import (
-    TOOL_NAME as RNA_TOOL)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.gene_finding.find_genes import SELF_TRAINED_MINIMUM
 
+# The names of this episode's three actions (a unit is recorded under its action's name).
+DESCRIBE_TOOL, FIND_GENES_TOOL, RNA_TOOL = 'describe_piece', 'find_genes', 'find_rna_genes'
 PART_UNIT_KINDS = ('protein_gene', 'rna_gene')
+DEFAULT_CODE = 11          # the genetic code read first (bacterial, archaeal, plant plastid)
+CODES = (DEFAULT_CODE, 4, 25)   # the codes this episode offers; 4 and 25 give the same calls
 
 
 class PartsDiscoveryCredit:
@@ -48,14 +46,33 @@ def held_codes(summary):
     return {row['code'] for row in summary['readings']}
 
 
+def mode_of(length):
+    """This episode's rule for the gene finder's mode: trained on the piece itself when the piece has the least length the finder
+    accepts for that (``SELF_TRAINED_MINIMUM`` nt), else its pre-trained mode. A rule of the length, not a choice."""
+    return 'self_trained' if length >= SELF_TRAINED_MINIMUM else 'pre_trained'
+
+
 def offered_codes(summary):
-    """The codes a ``find_genes`` request may name now (``find_genes.offered_codes``)."""
-    return library_offered_codes(summary['piece']['length'], held_codes(summary))
+    """The codes a ``find_genes`` request may name now: the codes of ``CODES`` with no reading held; a code other than the default
+    only for a piece read by the self-trained finder (the pre-trained one ignores the code, so the reading would be the default's
+    again)."""
+    held, self_trained = held_codes(summary), mode_of(summary['piece']['length']) == 'self_trained'
+    return [code for code in CODES if code not in held and (code == DEFAULT_CODE or self_trained)]
 
 
 def rna_scanned(summary):
     """Whether the piece's RNA scan is held."""
     return bool(summary['rna_scans'])
+
+
+def part_credit(part_units, readings, rna_scans):
+    """The credit of the held readings (``reading_row`` each) and RNA scans (``rna_scan_row`` each): ``part_units['protein_gene']``
+    times the highest ``score_sum`` over the readings held (from zero) plus ``part_units['rna_gene']`` times the sum of the bit
+    scores of the RNA parts held. A second reading earns only the amount by which it beats the best so far, a repeat earns nothing,
+    and the credit never falls."""
+    protein = max([0.0, *(row['score_sum'] for row in readings)])
+    rna = sum(row['part_bit_score_sum'] for row in rna_scans)
+    return part_units['protein_gene'] * protein + part_units['rna_gene'] * rna
 
 
 def credit(summary, records):

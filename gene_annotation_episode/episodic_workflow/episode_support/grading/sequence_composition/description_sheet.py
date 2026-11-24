@@ -1,4 +1,4 @@
-"""The grader and the sheet of the parts-discovery tool ``describe_piece``: what the bare DNA of the piece is, as facts. It proposes
+"""The grader and the sheet of the tool ``describe_piece``: what the bare DNA of the piece is, as facts. It proposes
 no part. Everything is counted from the sequence alone.
 
 THE FACTS. ``length`` (nt); the counts of A, C, G, T and of every other letter (``ambiguous_nt``); ``gc_fraction`` = (G + C) over
@@ -6,15 +6,15 @@ the unambiguous bases (A + C + G + T); ``gc_skew`` = (G - C) / (G + C) over the 
 non-overlapping window of ``WINDOW_NT`` nt (the full windows only: a tail shorter than a window is not a window; a piece shorter
 than one window has ``window_count`` 0 and no minimum or maximum), kept as a list, with its minimum and maximum; the frequencies of
 the 256 overlapping words of four unambiguous bases (``tetranucleotide_frequency``, each count over ``tetranucleotide_total``, the
-words with an ambiguous base left out). The frequencies stay in this sheet; what the head returns are the numbers named above.
+words with an ambiguous base left out). The frequencies stay in this sheet; what a caller reports are the numbers named above.
 
 The sheet is controlled data: numbers and the letters of the bases."""
 from itertools import product
 
 import numpy as np
 
-SCHEMA = 'parts_piece_description_sheet'
-PROVIDER = 'piece_description'
+SCHEMA = 'sequence_composition_sheet'
+PROVIDER = 'sequence_composition'
 WINDOW_NT = 5000
 WORD_LENGTH = 4
 BASES = 'ACGT'

@@ -4,25 +4,94 @@ leading parts and the controller's yield table.
 
 THE PIECE is the scope's one subject, which must be an ``input`` record of the DNA molecule (a wrong commission raises here, where
 the record is read). ``piece``: ``ref`` and ``length``. ``description``: the facts of the held description sheet (``None`` before
-it is held). ``readings``: one row per gene-finding sheet held (``held_sheets.reading_row``: mode, code, code_applied, gene_count,
+it is held). ``readings``: one row per gene-finding sheet held (``reading_row``: mode, code, code_applied, gene_count,
 median_gene_nt, coding_share, score_sum, where held), in the order held; ``reported``: the held reading of the highest
 ``score_sum`` (``None`` before one is held); ``rna_scans``: one row per RNA scan held; ``leading_parts``: the leading parts of the
-reported reading and the scan (``held_sheets.leading_parts``).
+reported reading and the scan (``leading_parts``).
 
 ``returned_refs`` are the record lists ``final_to_parent`` returns (``committed_record_refs``: the graded records the credit reads,
 and ``data_product_refs``: every held data-product row), each CLOSED UNDER NAMING by ``job_records.returned_with_names`` (the
 records chosen with everything they name, recursively, among the held records): the parent holds what a returned record names."""
-from gene_annotation_episode.episodic_workflow.episode_support.grading.parts_discovery.held_sheets import (
-    held_descriptions, held_readings, held_rna_scans, leading_parts, reading_row, reported_reading, rna_scan_row)
+from gene_annotation_episode.episodic_workflow.episode_support.grading.gene_finding import gene_finding_sheet
+from gene_annotation_episode.episodic_workflow.episode_support.grading.rna_gene_finding import rna_gene_sheet
+from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_composition import description_sheet
+from gene_annotation_episode.episodic_workflow.episode_support.grading.tool_grading.tool_grading_artifacts import held_grading_sheets
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import returned_with_names
 from gene_annotation_episode.episodic_workflow.episode_support.records.data_products import products
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
+
+PART_KINDS = ('protein_gene', 'rna_gene')
+LEADING_PER_KIND = 10
+READING_FIELDS = ('piece_ref', 'mode', 'code', 'code_applied', 'gene_count', 'median_gene_nt', 'coding_share', 'score_sum')
+
+
+def held_descriptions(records):
+    """``[(source reference, sheet)]`` of the description sheets held, in the order held."""
+    return held_grading_sheets(records, description_sheet.PROVIDER)
+
+
+def held_readings(records):
+    """The readings held (gene-finding sheets), as ``(source reference, sheet)``, in the order held."""
+    return held_grading_sheets(records, gene_finding_sheet.PROVIDER)
+
+
+def held_rna_scans(records):
+    """The RNA scan sheets held, as ``(source reference, sheet)``."""
+    return held_grading_sheets(records, rna_gene_sheet.PROVIDER)
+
+
+def reading_row(source_ref, sheet):
+    """One reading without its genes: the sheet's scalars and where it is held."""
+    return {'source_ref': source_ref, **{name: sheet[name] for name in READING_FIELDS}}
+
+
+def reported_reading(rows):
+    """The reading the episode reports among ``rows`` (``reading_row``): the highest ``score_sum``, the earliest held on a tie."""
+    best = None
+    for row in rows:
+        if best is None or row['score_sum'] > best['score_sum']:
+            best = row
+    return best
+
+
+def rna_parts(sheet):
+    """This episode's rule for which hits of an RNA scan sheet are parts: a hit is an ``rna_gene`` unless the program marked it as
+    overlapped by a better hit of its clan. An RNA gene's score is its bit score."""
+    return [row for row in sheet['hits'] if not row['overlapped']]
+
+
+def rna_scan_row(source_ref, sheet):
+    """One RNA scan without its hits: where it is held, its hit count, and this episode's parts of it (their count and the sum of
+    their bit scores)."""
+    parts = rna_parts(sheet)
+    return {'source_ref': source_ref, 'piece_ref': sheet['piece_ref'], 'hit_count': sheet['hit_count'],
+            'part_count': len(parts), 'part_bit_score_sum': sum(row['bit_score'] for row in parts)}
+
+
+def leading_parts(reading_sheet, rna_sheet):
+    """The leading parts: per kind the ``LEADING_PER_KIND`` parts of the highest score first, the protein genes of the reported
+    reading, then the RNA genes. Each: ``kind``, ``begin``, ``end``, ``strand``, ``partial_begin``, ``partial_end``, ``score`` and
+    for an RNA gene ``family_accession``. An RNA gene runs off an end of the piece where its ``truncation`` says so: on the plus
+    strand the 5' end is the beginning, on the minus strand the 3' end is."""
+    genes = sorted(reading_sheet['genes'], key=lambda row: -row['score'])[:LEADING_PER_KIND]
+    parts = [{'kind': 'protein_gene', 'begin': row['begin'], 'end': row['end'], 'strand': row['strand'],
+              'partial_begin': row['partial_begin'], 'partial_end': row['partial_end'], 'score': row['score']} for row in genes]
+    if rna_sheet is not None:
+        hits = sorted(rna_parts(rna_sheet), key=lambda row: -row['bit_score'])
+        beginning = {'+': "5'", '-': "3'"}
+        ending = {'+': "3'", '-': "5'"}
+        parts.extend({'kind': 'rna_gene', 'begin': row['begin'], 'end': row['end'], 'strand': row['strand'],
+                      'partial_begin': row['truncation'] in (beginning[row['strand']], "5'&3'"),
+                      'partial_end': row['truncation'] in (ending[row['strand']], "5'&3'"), 'score': row['bit_score'],
+                      'family_accession': row['family_accession']} for row in hits[:LEADING_PER_KIND])
+    return parts
+
 
 # What the model is shown of a completed or failed tool unit (the tool's own result fields: numbers, booleans, marks and a failure code).
 RESULT_FIELDS = {'describe_piece': ('failure_code', 'length', 'gc_fraction', 'gc_skew', 'window_count'),
                  'find_genes': ('failure_code', 'mode', 'code', 'code_applied', 'gene_count', 'median_gene_nt', 'coding_share',
                                 'score_sum'),
-                 'find_rna_genes': ('failure_code', 'hit_count', 'part_count', 'part_bit_score_sum')}
+                 'find_rna_genes': ('failure_code', 'hit_count')}
 DESCRIPTION_FIELDS = ('gc_fraction', 'gc_skew', 'window_count', 'window_gc_min', 'window_gc_max', 'ambiguous_nt')
 
 
