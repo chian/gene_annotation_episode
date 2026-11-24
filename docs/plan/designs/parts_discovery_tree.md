@@ -150,3 +150,18 @@ and a lower sum of the finder's scores in both the mycoplasma and E. coli, which
 
 Not yet run: a piece under 20,000 nt (pre-trained mode), a whole chromosome, a piece that really uses another code, a second
 commission that passes records back.
+
+## Audit and second real run (2026-11-24)
+
+An audit of the first build against the repository's principles found, and commit `494a16473` fixed: the arm imported A102's own
+grading-record module and one function of A101's forms module (it now has its own `grading/parts_discovery/
+tool_grading_artifacts.py` and takes `canonical` from `gene_annotation_episode.domain`); the RNA gene scan was kept under A102's
+data-product kinds (it now has `rna_gene_scan_results` and `rna_gene_scan_report`); the arm was called `parts` in its credit
+record and goal; the finder's minimum length for training sat in the grader (now in the tool). Earlier, `a4a45a541` moved the
+episode from a container folder to `root/parts_discovery`, which needed one change in the shared `run_command.py`.
+
+Run `parts_ecoli_stretch_2` (pinned `494a16473`, workspace `runs/parts_ws_ecoli_stretch_2/`, prediction written first): the same
+five units, the same reading (code 11, 64 genes, score sum 8012.6), 7 RNA genes, credit 12.8256, as predicted.
+
+Open for the owner: until its children exist the head decides almost nothing (three owed units, then only whether to try a
+special code); the library folders are named after the arm (`tools/parts_discovery`, `grading/parts_discovery`).
