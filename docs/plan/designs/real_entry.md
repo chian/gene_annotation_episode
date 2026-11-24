@@ -45,9 +45,10 @@ the frozen libraries may live anywhere under `runs/`.
 `propose-annotation` registers the caller's proposed annotation (one hypothesis record of caller origin), and
 `freeze-libraries` is the general run rule that keeps runs tidy: a run reads frozen copies of its libraries, so a later
 edit of a published library cannot change a run that has started. It takes the run's own continuation file
-(`--continuation`, the file `run` takes) and the published library (`--source`), and for every axis head that file
-names it freezes the axis's libraries into the directories that head's settings name, then prints the selection a
-parent commissions each head with. `--axis A105` is optional and narrows it to one axis; `--tool` names the tools to
+(`--continuation`, the file `run` takes) and the published library (`--source`), and for every head that file
+names it freezes the head's libraries into the directories that head's settings name, then prints the selection a
+parent commissions each head with. `--head experimental_activity_evidence` is optional and narrows it to one head,
+named by its binding path (the command takes no axis: the owner, 2026-11-24); `--tool` names the tools to
 offer. The command knows no axis: each axis's library module
 (`episode_support/configuration/<head>/process_options.py`) supplies `freeze_selection` with its own pieces (A101 and
 A105 do today). An axis without one is reported as not frozen and does not stop the others: the rule is a help, not a

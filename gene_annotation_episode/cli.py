@@ -72,11 +72,11 @@ def parser():
     proposed.add_argument("--subject", required=True)
     proposed.add_argument("--predicate", required=True)
     proposed.add_argument("--value", required=True, help="JSON: the typed value of the hypothesis.")
-    frozen = sub.add_parser("freeze-libraries", help="Freeze the libraries of every axis a run covers, where the run reads them, and print each axis selection.")
+    frozen = sub.add_parser("freeze-libraries", help="Freeze the libraries of every head a run covers, where the run reads them, and print each head's selection.")
     frozen.add_argument("--workspace", type=Path, required=True)
     frozen.add_argument("--source", type=Path, required=True, help="The published process library to freeze.")
-    frozen.add_argument("--continuation", type=Path, required=True, help="JSON: the run's own continuation file (binding path -> settings); it names the axis heads and where each reads its libraries.")
-    frozen.add_argument("--axis", help="Optional: freeze only this axis, for example A105. Default: every axis head in the continuation.")
+    frozen.add_argument("--continuation", type=Path, required=True, help="JSON: the run's own continuation file (binding path -> settings); it names the heads and where each reads its libraries.")
+    frozen.add_argument("--head", help="Optional: freeze only this head, by its binding path (the name of its folder under the root, for example experimental_activity_evidence). Default: every head in the continuation.")
     frozen.add_argument("--tool", action="append", default=[], help="A tool of the tool registry to offer; may repeat.")
     return result
 
@@ -133,7 +133,7 @@ def main(argv=None):
                         value=parse_json_object(args.value)))
                 else:
                     _print(run_command.freeze_libraries(store, source=args.source,
-                        continuation=run_command.read_json(args.continuation), tools=args.tool, axis=args.axis))
+                        continuation=run_command.read_json(args.continuation), tools=args.tool, head=args.head))
                 return 0
             if args.command == "export":
                 from .export import export_annotation

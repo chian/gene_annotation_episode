@@ -83,7 +83,7 @@ is parked. Selectable lists (each closed under naming): `committed_record_refs`,
 * `root/messages/msg_to_child.py` builds the A102 assignment without `child_credit_units`; the head requires it (with `model_unit`).
   A real run through the root needs that line (the owner's files).
 * `episode_support/configuration/structural_homology_evidence/process_options.py` has no `freeze_selection`, so
-  `freeze-libraries --axis A102` reports the axis as not frozen; the runs below copy the frozen library of A101's workspace
+  `freeze-libraries --head structural_homology_evidence` (then `--axis A102`) reported the head as not frozen; the runs below copy the frozen library of A101's workspace
   (it already holds the entry `A102.json`) and write the selection by hand.
 
 ## Prediction for the first real run (CspA), written before it
@@ -228,7 +228,7 @@ CspA:
 
 Runs used: 2 of 5. Foldseek tickets: RecA 1, CspA 2 (afdb-swissprot, then pdb100 chosen by the model). Workspaces are built by
 `/tmp/.../build_ws.py`-style scripts: `init`, `propose-annotation`, a continuation written with `A102DifferentialCredit().as_record()` imported from
-the PINNED worktree, `freeze-libraries --axis A102 --source research/slotted_process_library/publications/2026-10-24-001`
+the PINNED worktree, `freeze-libraries --head structural_homology_evidence --source research/slotted_process_library/publications/2026-10-24-001`
 (the new `freeze_selection` worked first time), then the commission; every run a fresh workspace and run id.
 
 * RecA: `runs/a102_site_ws_reca_1`, run dir `runs/a102_site_run_reca_1`, run id `a102_site_reca_1`, worktree `gae_a102_4f840abe6`, commit

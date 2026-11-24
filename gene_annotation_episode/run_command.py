@@ -115,35 +115,38 @@ def propose_annotation(store, *, subject, predicate, value):
     return {'proposed_annotation_ref': record['id'], 'record': record}
 
 
-def freeze_libraries(store, *, source, continuation, tools, axis=None):
+def freeze_libraries(store, *, source, continuation, tools, head=None):
     """The general run rule: a run reads frozen copies of its libraries, so a later edit of a published library cannot
-    change a run that has started. For every axis head the run's ``continuation`` names (or only the head of ``axis``
-    when one is given), freeze that axis's libraries from the published ``source`` into the directories the head's own
-    settings name (the same file ``run`` takes, so the run reads exactly what was frozen), and give the selection a
-    parent commissions that head with. Nothing here knows an axis: each axis's library module
-    (``episode_support/configuration/<head>/process_options.py``) supplies ``freeze_selection`` with its own pieces,
-    and the head itself says which option of its library it is (``AXIS`` of its ``messages/read_from_parent.py``, the
-    option id its commissions must select; a head's folder says nothing about it: every folder under the root is an
-    episode, named for what the episode does).
-    An axis that has no such function is reported as not frozen; it does not stop the others (this is a help to keep
-    runs tidy, not a gate). Freezing an already frozen directory returns the snapshot that is there."""
+    change a run that has started. For every head the run's ``continuation`` names (an episode directly under the root;
+    or only ``head``, a binding path, when one is given), freeze that head's libraries from the published ``source`` into
+    the directories the head's own settings name (the same file ``run`` takes, so the run reads exactly what was
+    frozen), and give the selection a parent commissions that head with.
+
+    The command names no axis (the owner, 2026-11-24: "The library freeze command should not specify axes"): a head is
+    named by its binding path, as everywhere in a run. Each head's library module
+    (``episode_support/configuration/<head>/process_options.py``) supplies ``freeze_selection`` with its own pieces, and
+    the head itself says which option of its library it is (``AXIS`` of its ``messages/read_from_parent.py``, the option
+    id its commissions must select), which is handed to that function unread.
+    A head whose library module has no such function is reported as not frozen; it does not stop the others (this is a
+    help to keep runs tidy, not a gate). Freezing an already frozen directory returns the snapshot that is there."""
     configuration = ROOT.parent / 'episode_support' / 'configuration'
     package = PACKAGE.rsplit('.', 1)[0] + '.episode_support.configuration'
+    heads = sorted(path for path in continuation if '/' not in path and path != 'root')
+    if head is not None:
+        if head not in heads:
+            raise ValueError('freeze_libraries_head_not_in_the_continuation:' + head)
+        heads = [head]
     result = {}
-    for head in sorted(path for path in continuation if '/' not in path and path != 'root'):
-        own_axis = importlib.import_module('.'.join((PACKAGE, head, 'messages', 'read_from_parent'))).AXIS
-        if axis is not None and axis != own_axis:
-            continue
+    for name in heads:
         freeze = None
-        if (configuration / head / 'process_options.py').is_file():
-            freeze = getattr(importlib.import_module(f'{package}.{head}.process_options'), 'freeze_selection', None)
+        if (configuration / name / 'process_options.py').is_file():
+            freeze = getattr(importlib.import_module(f'{package}.{name}.process_options'), 'freeze_selection', None)
         if freeze is None:
-            result[head] = {'axis': own_axis, 'frozen': False,
-                            'reason': 'the_library_module_of_this_axis_supplies_no_freeze_selection'}
+            result[name] = {'frozen': False, 'reason': 'the_library_module_of_this_head_supplies_no_freeze_selection'}
             continue
-        result[head] = {'axis': own_axis, 'frozen': True,
-                        **freeze(store, source=Path(source), settings=continuation[head], axis=own_axis,
-                                 tools=list(tools))}
+        option = importlib.import_module('.'.join((PACKAGE, name, 'messages', 'read_from_parent'))).AXIS
+        result[name] = {'frozen': True, **freeze(store, source=Path(source), settings=continuation[name], axis=option,
+                                                 tools=list(tools))}
     return result
 
 
