@@ -1,6 +1,6 @@
 # A101: the tree (tools and child episodes), as the code stands
 
-HEAD = `gene_annotation_episode/episodic_workflow/root/a101/sequence_homology_evidence`; LIB =
+HEAD = `gene_annotation_episode/episodic_workflow/root/sequence_homology_evidence`; LIB =
 `gene_annotation_episode/episodic_workflow/episode_support`. Read from `HEAD/task.py` and each child's `task.py` on 2026-11-21.
 Lines marked **[owner]** are the owner's rulings; the rest are decisions made from the owner's criteria, and the owner can strike
 any of them.

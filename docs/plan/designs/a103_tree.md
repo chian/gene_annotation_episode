@@ -131,5 +131,5 @@ Its subtree is not settled yet: the owner turned to parts discovery first.
   (the library has readers for its format), a lineage classifier with its own database.
 - Seen live in BV-BRC: a feature carries its position, strand, global family and the hash of its exact sequence.
 - None of the thirteen analyses was run.
-- The old A103 head (`root/a103/gene_context_evidence`, old-runner children, does not load on the current system) and its
+- The old A103 head (`root/gene_context_evidence`, old-runner children, does not load on the current system) and its
   library folders (`episode_support/*/gene_context_evidence`) were not read. That inventory (SOP Step 0A item 7) is still to do.

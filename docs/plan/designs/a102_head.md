@@ -2,8 +2,8 @@
 
 Status: built 2026-11-21, not yet run for real (see "Prediction for the first real run"). Design: `a102_tree.md`; the child:
 `a102_structure_search_episode.md`; the SOP: `docs/sop/evidence_axis_build_sop.md` (Steps 1, 5, 7, 8, 9, 10, 11, 12, 13).
-HEAD = `gene_annotation_episode/episodic_workflow/root/a102/structural_homology_evidence`; LIB = `.../episode_support`;
-A101HEAD = `.../root/a101/sequence_homology_evidence` (the pattern, read only).
+HEAD = `gene_annotation_episode/episodic_workflow/root/structural_homology_evidence`; LIB = `.../episode_support`;
+A101HEAD = `.../root/sequence_homology_evidence` (the pattern, read only).
 
 ## What was deleted (AGENTS.md, "Removing unwanted code")
 

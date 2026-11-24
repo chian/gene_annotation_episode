@@ -4,8 +4,8 @@ Status: design, 2026-11-21. Follows `docs/sop/evidence_axis_build_sop.md` step b
 `a102_inventory.md` (what code exists) and `a102_services.md` (what was verified live). The owner's order (2026-11-21):
 "can we move to A102 head and follow the same SOP here."
 
-Names: HEAD = `gene_annotation_episode/episodic_workflow/root/a102/structural_homology_evidence`; LIB =
-`gene_annotation_episode/episodic_workflow/episode_support`; A101HEAD = `.../root/a101/sequence_homology_evidence`.
+Names: HEAD = `gene_annotation_episode/episodic_workflow/root/structural_homology_evidence`; LIB =
+`gene_annotation_episode/episodic_workflow/episode_support`; A101HEAD = `.../root/sequence_homology_evidence`.
 
 ## What the axis is for (the process library entry A102, unchanged)
 

@@ -16,7 +16,7 @@
 
 The head's credit (`HEAD/credit.py`) is `differential_credit` (the owner's formula, `LIB/grading/sequence_homology_evidence/differential_credit.py`, unchanged) over the candidate annotations that the graded sources the head holds give. The head's return carries those candidates with their scores, the leading one first: the annotation prototype.
 
-HEAD = `gene_annotation_episode/episodic_workflow/root/a101/sequence_homology_evidence`; LIB = `gene_annotation_episode/episodic_workflow/episode_support`.
+HEAD = `gene_annotation_episode/episodic_workflow/root/sequence_homology_evidence`; LIB = `gene_annotation_episode/episodic_workflow/episode_support`.
 
 | function written | the existing function it calls |
 | --- | --- |

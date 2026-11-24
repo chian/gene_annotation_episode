@@ -223,7 +223,7 @@ All are in A101 only. The results-episode files below were also edited by the pa
 currently absent from the working tree, so these patches assume it is re-applied first and add a second family beside
 the pairwise one.
 
-1. **`root/a101/.../execution_result_acquisition/messages/read_from_parent.py`**
+1. **`root/sequence_homology_evidence/.../execution_result_acquisition/messages/read_from_parent.py`**
    - `family(target, selector)`: `if selector.get('version') == 'blast_preparation_return_request_v1': return
      'blast_preparation'` (placed before the others). Delete the branches for masking, utility, and for the
      `native_hmmer*`, standard database and database requested jobs that this episode must not carry.
@@ -251,7 +251,7 @@ the pairwise one.
 5. **`.../messages/final_to_parent.py`**: add the finding fields of section 8 (numbers, booleans, vocabulary values and
    the `failure_codes` list) and the selectable `prepared_data_refs`; keep credit and finding always returned.
 6. **`.../yield_estimator.py`**: profile key `results:blast_preparation_v1`.
-7. **`root/a101/.../execution_job_submission/local_job_execution/`** (the launch leaf): `read_from_parent` accepts
+7. **`root/sequence_homology_evidence/.../execution_job_submission/local_job_execution/`** (the launch leaf): `read_from_parent` accepts
    `requested_job = {'blast_preparation': <controlled fields>}` and validates it with `validate_commission`;
    `action` returns a `ToolCall('launch_preparation', ...)` whose tool does
    `compiled = compile_preparation(fields, input_bytes=ctx.store.get_artifact(fields['input_ref']),

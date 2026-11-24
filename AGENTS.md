@@ -1,7 +1,8 @@
 # Repository layout
 
 Episode folders (`gene_annotation_episode/episodic_workflow/root/` and the
-nine axis folders beneath it) contain only episode bindings and their tests.
+folders beneath it: every folder under the root is an episode, found by following
+its path's folders from the root) contain only episode bindings.
 The library lives in `gene_annotation_episode/episodic_workflow/episode_support/`,
 grouped by what the code does. The system is three top-level packages of the
 repository, beside `gene_annotation_episode/`; none is inside `episode_support/`:

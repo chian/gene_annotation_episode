@@ -105,7 +105,7 @@ X00000 (HTTP 400), A0A0A0A0A1 (HTTP 404)) and file 2; UniProt search 1; ESM Atla
 # The child episode `structure_search`
 
 Status: built and checked directly on 2026-11-21 (direct checks, not a real run: no model was asked). Episode folder
-`gene_annotation_episode/episodic_workflow/root/a102/structural_homology_evidence/structure_search/` (binding path
+`gene_annotation_episode/episodic_workflow/root/structural_homology_evidence/structure_search/` (binding path
 `structural_homology_evidence/structure_search`; `goal.py`, `task.py`, `credit.py`, `yield_estimator.py`, `episode.py`,
 `messages/{read_from_parent,internal_summary,final_to_parent}.py`; the class inherits only from `EpisodeBinding`). Library:
 `LIB/tools/structure_search/structural_homology_evidence/structure_search_child.py` (the job-child machinery) and

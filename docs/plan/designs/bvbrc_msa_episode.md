@@ -1,6 +1,6 @@
 # bvbrc_msa: a child episode of the A101 head (multiple sequence alignment through the BV-BRC application service)
 
-Written 2026-11-20/21. Pattern: `bvbrc_blast_episode.md`. HEAD = `gene_annotation_episode/episodic_workflow/root/a101/sequence_homology_evidence`;
+Written 2026-11-20/21. Pattern: `bvbrc_blast_episode.md`. HEAD = `gene_annotation_episode/episodic_workflow/root/sequence_homology_evidence`;
 LIB = `gene_annotation_episode/episodic_workflow/episode_support`.
 
 Owner: "wire up MSA and MetaCATS children to A101 head. Same pattern as blast_database with bv-brc with the multiple steps (and gate

@@ -63,7 +63,7 @@ Imported today: only by A107 episode files (`ROOT/a107/partner_presence_evidence
 
 Test fixtures with real `cmsearch`/`cmscan` outputs (formats 1/2/3, no-hit, HMM-only) and tRNA models sit under `LIB/grading/similarity_search/tests/fixtures/infernal_search_graders/`.
 
-Which axis folders use any of these: only `ROOT/a107/...` (15 files mention infernal, rfam or rna_structure; none in a101-a106, a108-a110). `ROOT/a102` has no hit for `infernal|rfam`.
+Which heads use any of these: only the partner-presence head, A107 (15 files mention infernal, rfam or rna_structure; none in the heads of A101 to A106, A108 and A110). The A102 head has no hit for `infernal|rfam`.
 
 Not determined: whether the Rfam batch service route currently answers (no request was sent); whether a full Rfam.cm download route exists in code (no hit for an Rfam.cm download URL found; only `batch.rfam.org`).
 

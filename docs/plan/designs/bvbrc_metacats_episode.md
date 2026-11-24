@@ -3,7 +3,7 @@
 Written 2026-11-20. Pattern: `bvbrc_blast_episode.md`; shared machinery: `bvbrc_job_child.py` (the `bvbrc_msa` agent's), data products: `records/data_products.py`.
 
 Owner: "wire up MSA and MetaCATS children to A101 head. Same pattern as blast_database with bv-brc with the multiple steps (and gate requiring a time estimate)"; "MetaCATS needs to have a requirement that it needs an input MSA, which means we need to start storing and labeling data and data products for reuse"; "I don't know that MSA and MetaCATS need to be in a chain. I think both wired to head is fine".
-HEAD = `gene_annotation_episode/episodic_workflow/root/a101/sequence_homology_evidence`, LIB = `gene_annotation_episode/episodic_workflow/episode_support`.
+HEAD = `gene_annotation_episode/episodic_workflow/root/sequence_homology_evidence`, LIB = `gene_annotation_episode/episodic_workflow/episode_support`.
 
 ## What was verified against the live service (and how)
 

@@ -20,7 +20,7 @@ interface score of that pair.
 
 ## The child (SOP Step 4)
 
-`root/a102/structural_homology_evidence/partner_cofolding`: a job child (`estimate`, `launch`, `fix`, `monitor`, `extract`) on a
+`root/structural_homology_evidence/partner_cofolding`: a job child (`estimate`, `launch`, `fix`, `monitor`, `extract`) on a
 resource of kind `pbs` (Polaris). The machinery is A102's own job-child module `structure_search_child.py`; its route kind
 becomes a field of the application (`structure_search` keeps `foldseek`) and `get_model` is offered only to an application that
 names model sources. `structure_search` behaves as before.

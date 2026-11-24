@@ -78,7 +78,7 @@ its highest value is the owner's.
 ## 2026-11-19 — A101 literature episodes: a commission-specific brief replaces the old investigation text
 
 Scope: the model request of the seven A101 literature episodes
-(`root/a101/sequence_homology_evidence/run` and the six beneath it (named then `published_evidence_assessment` and its six)) and the head's
+(`root/sequence_homology_evidence/run` and the six beneath it (named then `published_evidence_assessment` and its six)) and the head's
 commission of the first; no axis or full-workflow validation, and no change of credit or tools. Each episode's
 instructions are its own brief (`BRIEF` in its `task.py`: 5,156 to 6,710 characters; the old shared text was 14,410
 to 14,639). The commissioner's objective is one value of the commissioned episode's own vocabulary (`OBJECTIVES` in
@@ -99,8 +99,8 @@ ends after four units at the test cost of 0.1.
 ## 2026-11-19 — A102 and A110 result acquisition run on the built job service (file result of a job)
 
 Scope: implementation of five episodes entered directly (group 2 of `EXTRACT_PORT_RECIPE.md`), and one branch run
-per axis: `root/a102/structural_homology_evidence/execution_result_acquisition`, its `hpc_work_planning/` and
-`hpc_work_planning/hpc_allocation_execution/` copies, `root/a110/biochemical_feasibility_evidence/execution_result_acquisition`
+per axis: `root/structural_homology_evidence/execution_result_acquisition`, its `hpc_work_planning/` and
+`hpc_work_planning/hpc_allocation_execution/` copies, `root/biochemical_feasibility_evidence/execution_result_acquisition`
 and its `hpc_work_planning/` copy; no axis or full-workflow validation, and no parent builds the commission from a
 job ledger handoff row yet. As in A101: `JobAccess.check`, `JobAccess.fetch`, windows of the fetched artifact read
 through custody, credit over the windows of held result records, a return of controlled fields only, a rewritten
@@ -112,15 +112,15 @@ each A110 copy); with the real model 2 passed, a finished local job fetched, cre
 controller, resumed with no new model call (`runs/extg2_6/` A102 head copy, 9 units; `runs/extg2_7/` A110 head
 copy, 12 units). Not run with the real model: the three planning and allocation copies, and the job that has not
 ended (run offline only). Not in this scope and still raising at its `BLOCKED-ON-JOB-SERVICE` notes:
-`root/a110/biochemical_feasibility_evidence/hpc_work_planning/hpc_allocation_execution/execution_result_acquisition`
+`root/biochemical_feasibility_evidence/hpc_work_planning/hpc_allocation_execution/execution_result_acquisition`
 (the same form; the recipe does not list it). In `runs/extg2_9/` the A110 head's binding test has 1 failure, for
 its `monitor` slot (that child's form changed elsewhere).
 
 ## 2026-11-19 — A104 and A107 head result acquisition run on the built job service (plain file result of a job)
 
 Scope: implementation and one branch run each of two episodes,
-`root/a104/evolutionary_history_evidence/execution_result_acquisition` and
-`root/a107/partner_presence_evidence/execution_result_acquisition`, entered directly (group 1 of
+`root/evolutionary_history_evidence/execution_result_acquisition` and
+`root/partner_presence_evidence/execution_result_acquisition`, entered directly (group 1 of
 `EXTRACT_PORT_RECIPE.md`); no axis or full-workflow validation, and neither head builds the commission from the
 handoff row yet. As in A101: `JobAccess.check`, `JobAccess.fetch`, windows of the fetched artifact read through
 custody, credit over the windows of held result records, a return of controlled fields only, a rewritten model
@@ -135,7 +135,7 @@ forms changed elsewhere); its `results` cases pass.
 
 ## 2026-11-19 — A102 resource work (launch on a local resource, submission, result acquisition) runs on the job services
 
-Scope: implementation and branch runs of three episodes under `root/a102/structural_homology_evidence/`:
+Scope: implementation and branch runs of three episodes under `root/structural_homology_evidence/`:
 `resource_work_submission/local_resource_work_execution`, `resource_work_submission` (over its local child) and
 `resource_result_acquisition`, each entered directly, and the two builders of the A102 head that commission them
 (`task.py` child tables, `messages/msg_to_child.py`); no axis or full-workflow validation. The model chooses among
@@ -159,9 +159,9 @@ record, so the head cannot commission the launch end to end yet. Open items and 
 
 ## 2026-11-19 — A101, A102 and A103 monitors run on the built job services
 
-Scope: implementation and branch runs of three episodes, `root/a101/sequence_homology_evidence/execution_progress_assessment`,
-`root/a102/structural_homology_evidence/execution_progress_assessment` and
-`root/a103/gene_context_evidence/execution_progress_assessment` (the top-level monitors; not the `hpc_work_planning`
+Scope: implementation and branch runs of three episodes, `root/sequence_homology_evidence/execution_progress_assessment`,
+`root/structural_homology_evidence/execution_progress_assessment` and
+`root/gene_context_evidence/execution_progress_assessment` (the top-level monitors; not the `hpc_work_planning`
 copies), each a private copy of the A104 monitor by `MONITOR_PORT_RECIPE.md`, and their heads' commission of them
 (`messages/msg_to_child.py`, `outstanding_jobs` in the summary, the monitor offered in `task.py` only for a held
 outstanding job, by its handoff reference); no axis or full-workflow validation. The A101 monitor keeps its own
@@ -177,7 +177,7 @@ rows of a real job outside a head run. Open items: `docs/axis_restructure_202611
 
 ## 2026-11-19 — A104 monitor runs on the built job services
 
-Scope: implementation and branch runs of one episode, `root/a104/evolutionary_history_evidence/execution_progress_assessment`,
+Scope: implementation and branch runs of one episode, `root/evolutionary_history_evidence/execution_progress_assessment`,
 and the A104 head's commission of it (`messages/msg_to_child.py`, `outstanding_jobs` in its summary); no axis or
 full-workflow validation, and the head's model is still not offered the monitor. The job is passed as a record (its
 job ledger handoff row); a check is `JobAccess.check`, a log window the new `JobAccess.window`, the wait
@@ -192,7 +192,7 @@ holds), each ended by its yield controller. Open items and the steps for the oth
 
 ## 2026-11-19 — A101 result acquisition runs on the built job service (plain file result of a job)
 
-Scope: implementation and a branch run of one episode, `root/a101/sequence_homology_evidence/execution_result_acquisition`,
+Scope: implementation and a branch run of one episode, `root/sequence_homology_evidence/execution_result_acquisition`,
 entered directly (the head does not build its commission yet); no axis or full-workflow validation. The plain file
 result of a job is acquired with `JobAccess.check` and `JobAccess.fetch` and windows of the fetched artifact read
 through custody; the return is controlled fields only; the model request was rewritten. Evidence: real runner tests
@@ -6018,8 +6018,8 @@ raise `unknown_execution_episode_role`, and the separate initial-context field
 conflicts remain. No native or model operation executes. Evidence:
 `runs/a107_original_masking_static_20261111_repaired_probe/`, with a successful
 drained receipt and exact source transition under `..._transition/`.
-Its reusable original helpers and separate driver have been promoted under
-root/tests with whole-byte/AST reversal audits in
+Its reusable original helpers and separate driver have been promoted to
+the root's tests with whole-byte/AST reversal audits in
 `runs/launch_diagnostics_required_helpers_20261111_{audit,apply,applied_audit}/`.
 
 Thirty-three JSON inventories and thirty-three ownership documents now account
@@ -13191,7 +13191,7 @@ completion. The12 HPC/monitor homes have separate responsibility and integration
 dispositions and are not silently added to this count. Source candidates and
 controlled checks remain distinct from canonical completion. Evidence:
 `runs/fourth_remaining76_application_preparation_01/FOURTH_ORGANIZATION_REMAINDER_20261113.md`
-and `gene_annotation_episode/episodic_workflow/root/a107/scientific_process/task.py`.
+and the A107 `scientific_process/task.py` of that date.
 
 2026-11-13 shared fixture integration: Main adds the actual permanent
 tests/fixtures/organization_original/*.source inputs to this axis's package-data
@@ -13533,7 +13533,7 @@ message component stays complete. Together with A10745 and Main's A10240,
 A10360 and A10444, this yields228 identified unfinished homes, a lower bound
 rather than an audited global total. Evidence:
 `runs/fourth_remaining76_application_preparation_01/FOURTH_ORGANIZATION_REMAINDER_20261113.md`
-and `gene_annotation_episode/episodic_workflow/root/a110/scientific_process/task.py`.
+and the A110 `scientific_process/task.py` of that date.
 
 2026-11-13 shared fixture integration: Main adds the actual permanent
 tests/fixtures/organization_original/*.source inputs to this axis's package-data
@@ -19261,7 +19261,7 @@ process state. No passing case or native/scientific claim is added. Evidence:
 ## 2026-11-19 — A107 HPC planning (planning head, resource prediction, allocation execution) runs on the HPC ledger work table
 
 Scope: implementation and branch runs of three episodes under
-`root/a107/partner_presence_evidence/hpc_work_planning/` (the head, `hpc_resource_prediction`,
+`root/partner_presence_evidence/hpc_work_planning/` (the head, `hpc_resource_prediction`,
 `hpc_allocation_execution`), each entered directly; no axis or full-workflow validation, and no HPC: nothing was
 authenticated to Aurora and nothing remote was contacted. The HPC ledger is the declared work table in custody
 (opened from the commission, its id passed to later tools and to the sisters, its rows passed and returned as
@@ -19334,7 +19334,7 @@ public BLAST result through the A101 episodes is still not shown. Nothing was su
 
 ## 2026-11-19 — A101 literature episodes renamed to the reference names
 
-The seven A101 literature folders under `root/a101/sequence_homology_evidence/` were renamed to the grain names of the reference binding, nesting kept: `published_evidence_assessment` to `run`, `evidence_search_strategy_improvement` to `strategy`, `source_relevance_assessment` to `search`, `source_evidence_examination` to `page`, `table_evidence_extraction` to `source_table`, `source_coverage_improvement` to `report`, `passage_evidence_extraction` to `lexical_probe`. Binding paths, imports, child slots and tests follow; no behaviour changed.
+The seven A101 literature folders under `root/sequence_homology_evidence/` were renamed to the grain names of the reference binding, nesting kept: `published_evidence_assessment` to `run`, `evidence_search_strategy_improvement` to `strategy`, `source_relevance_assessment` to `search`, `source_evidence_examination` to `page`, `table_evidence_extraction` to `source_table`, `source_coverage_improvement` to `report`, `passage_evidence_extraction` to `lexical_probe`. Binding paths, imports, child slots and tests follow; no behaviour changed.
 
 ## 2026-11-21 — A101 and A102 heads: real runs under the top-two differential
 

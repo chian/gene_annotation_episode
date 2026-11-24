@@ -2,7 +2,7 @@
 
 Facts only, read on 2026-11-21 from the tree (`git grep`, `git ls-files`, direct reads, one import check). No code was run beyond the one import check of section 5. No recommendations.
 
-Names: LIB = `gene_annotation_episode/episodic_workflow/episode_support`; A102HEAD = `gene_annotation_episode/episodic_workflow/root/a102/structural_homology_evidence`; A101HEAD = `gene_annotation_episode/episodic_workflow/root/a101/sequence_homology_evidence`.
+Names: LIB = `gene_annotation_episode/episodic_workflow/episode_support`; A102HEAD = `gene_annotation_episode/episodic_workflow/root/structural_homology_evidence`; A101HEAD = `gene_annotation_episode/episodic_workflow/root/sequence_homology_evidence`.
 
 How to read the "forbidden machinery" column. AGENTS.md forbids the old raw `store.db` connection and old-runner machinery. A direct search found no file in the structure code that uses `store.db`, `.db.` or sqlite. What the old code does use is the **old Store API object** bound to an old `ToolRegistry` (`registry.store.artifact(...)`, `.get`, `.put`, `.get_artifact`, `.artifact_file`, `.in_transaction()`, `.validate_scope`, `.read_snapshot`, `.table(...)`), and some imports of top-level old modules `gene_annotation_episode/state.py` (class `Store`, 1920 lines), `gene_annotation_episode/domain.py` (`ContractError`, `canonical`) and `gene_annotation_episode/workflow_budget.py` (`ENVIRONMENT_BOUNDS`), all of which still exist in the tree. "Old-store-bound" below means: takes a `registry` / `registry.store` / `store` argument of that old shape, not the scoped custody store `ctx.store` or a reader. Where a file imports `TableDeclaration` from `episode_runtime` it has already been partly rewritten to declared work tables, but may still call the old-shaped store methods around it. I did not run any of these on a custody store, so "works on `ctx.store`" is not established for any file in this document.
 
@@ -163,7 +163,7 @@ Copies: `forms/protein_structure/evolutionary_history_evidence/*`, `readers/prot
 Import check (run: `.venv/bin/python -B -c "from gene_annotation_episode import run_command; print(len(run_command.subtree('structural_homology_evidence')))"`): **fails** with
 
 ```
-File ".../root/a102/structural_homology_evidence/episode.py", line 10, in <module>
+File ".../root/structural_homology_evidence/episode.py", line 10, in <module>
     class StructuralHomologyEvidence(EpisodeBinding):
 File ".../method_loop/episode_type.py", line 362, in __init_subclass__
     raise TypeError('episode_lacks_members:' + name + ':' + ','.join(missing))

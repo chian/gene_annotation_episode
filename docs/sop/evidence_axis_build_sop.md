@@ -9,13 +9,13 @@ commissioned this SOP and is in no design note yet, it says so.
 
 Names used below (the same as in the A101 notes):
 
-- HEAD = `gene_annotation_episode/episodic_workflow/root/a101/sequence_homology_evidence` (the A101 head episode).
+- HEAD = `gene_annotation_episode/episodic_workflow/root/sequence_homology_evidence` (the A101 head episode).
 - LIB = `gene_annotation_episode/episodic_workflow/episode_support` (the shared library).
 - The system packages, at the top of the repository beside `gene_annotation_episode/`: `method_loop` (the episode
   contract is `method_loop/episode_type.py`), `episode_runtime` (the runner and its services) and `yield_control` (the
   stopping controllers). You do not edit them to fit your axis. If your axis needs a change there, stop and ask the owner.
-- An axis lives at `gene_annotation_episode/episodic_workflow/root/a1xx/<axis>_evidence/` (A102 is
-  `a102/structural_homology_evidence`, and so on). That folder holds only the episode bindings. Everything shared lives in LIB.
+- An axis lives at `gene_annotation_episode/episodic_workflow/root/<axis>_evidence/`, directly under the root (A102 is
+  `structural_homology_evidence`, and so on). That folder holds only the episode bindings. Everything shared lives in LIB.
 
 Read before you write anything: `AGENTS.md` in full (private episode bindings, the failure rules, controlled messaging,
 removing unwanted code, local execution policy), then `docs/plan/designs/a101_tree.md` (the shape of the A101 tree and what

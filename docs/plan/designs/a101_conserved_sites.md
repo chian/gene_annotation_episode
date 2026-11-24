@@ -1,6 +1,6 @@
 # A101: the conserved-site measurement of an alignment (and MetaCATS without a p-value choice)
 
-Written 2026-11-21. HEAD = `gene_annotation_episode/episodic_workflow/root/a101/sequence_homology_evidence`; LIB =
+Written 2026-11-21. HEAD = `gene_annotation_episode/episodic_workflow/root/sequence_homology_evidence`; LIB =
 `gene_annotation_episode/episodic_workflow/episode_support`. Pattern and earlier runs: `a101_child_returns.md`, `bvbrc_msa_episode.md`,
 `bvbrc_metacats_episode.md`, `a101_differential_credit.md`.
 

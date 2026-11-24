@@ -1,6 +1,6 @@
 # all_vs_all: a child episode of the A101 head (all-vs-all BLAST of a chosen set, clustered with MCL)
 
-Written 2026-11-21. HEAD = `gene_annotation_episode/episodic_workflow/root/a101/sequence_homology_evidence`; LIB =
+Written 2026-11-21. HEAD = `gene_annotation_episode/episodic_workflow/root/sequence_homology_evidence`; LIB =
 `gene_annotation_episode/episodic_workflow/episode_support`. Pattern: `bvbrc_msa_episode.md` (a test over chosen product candidates,
 graded into a measurement per candidate, kept as labelled data products, returned with closed record lists). Earlier design of the
 never-run all-vs-all library: `all_vs_all.md`.
