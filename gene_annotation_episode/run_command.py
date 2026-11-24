@@ -23,13 +23,12 @@ PACKAGE = 'gene_annotation_episode.episodic_workflow.root'
 
 def _folder(binding_path):
     """The folder of the episode bound at ``binding_path``: the root episode's own folder, or the folder named by the
-    path below the one folder that holds its first part: the root's folder itself (an episode directly under the root) or
-    one axis folder."""
+    path below the one axis folder that holds its first part."""
     if binding_path == 'root':
         return ROOT
     head, *rest = binding_path.split('/')
-    (home,) = [folder for folder in (ROOT, *sorted(ROOT.iterdir())) if (folder / head / 'episode.py').is_file()]
-    return home.joinpath(head, *rest)
+    (axis,) = [folder for folder in sorted(ROOT.iterdir()) if (folder / head / 'episode.py').is_file()]
+    return axis.joinpath(head, *rest)
 
 
 def _binding(binding_path):
