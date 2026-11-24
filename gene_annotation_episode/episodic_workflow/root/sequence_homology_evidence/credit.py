@@ -142,7 +142,7 @@ def credit(summary, records):
     return held_candidate_table(summary, records)['credit']
 
 
-BVBRC_HOMOLOGY_SPEC = (Path(__file__).parents[3] / 'episode_support' / 'forms' / 'application_service_specs'
+BVBRC_HOMOLOGY_SPEC = (Path(__file__).parents[2] / 'episode_support' / 'forms' / 'application_service_specs'
                        / 'original' / 'Homology.json')
 
 
