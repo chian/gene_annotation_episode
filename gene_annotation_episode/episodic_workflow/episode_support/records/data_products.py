@@ -144,6 +144,13 @@ KINDS = {
                                 'Sequence signature matches, textual (Infernal cmscan table, format 2)'),
     'rna_family_scan_report': ('http://edamontology.org/data_0858', 'http://edamontology.org/format_2330',
                                'Sequence signature matches, textual (Infernal cmscan report with the alignments of the hits)'),
+    # The RNA genes of a piece of DNA found by parts discovery ``find_rna_genes`` (Infernal ``cmscan`` of the whole piece over the
+    # covariance models of Rfam, both strands): the same data types and format as the A102 ``rna_family_scan_results`` and
+    # ``rna_family_scan_report`` above (data_0858 Sequence signature matches, format_2330 Textual format, for the same reasons).
+    'rna_gene_scan_results': ('http://edamontology.org/data_0858', 'http://edamontology.org/format_2330',
+                              'Sequence signature matches, textual (Infernal cmscan table, format 2, of a piece of DNA)'),
+    'rna_gene_scan_report': ('http://edamontology.org/data_0858', 'http://edamontology.org/format_2330',
+                             'Sequence signature matches, textual (Infernal cmscan report with the alignments of the hits, of a piece of DNA)'),
     'rna_family_alignments': ('http://edamontology.org/data_0863', 'http://edamontology.org/format_2330',
                               'Sequence alignment, textual (Stockholm alignment of the span of the target to one covariance model, by cmalign)'),
     # The scores of one A102 ``partner_cofolding`` job (``scores.json`` of ``run_chai.py``: per ligand and sample the interface and

@@ -34,7 +34,7 @@ class PartsDiscoveryCredit:
         self.part_units = dict(part_units)
 
     def as_record(self):
-        return {'kind': 'parts_discovery_credit', 'arm': 'parts', 'part_units': dict(self.part_units),
+        return {'kind': 'parts_discovery_credit', 'arm': 'parts_discovery', 'part_units': dict(self.part_units),
                 'protein_gene_score': 'the_gene_finders_own_score_of_the_call',
                 'reading': 'one_gene_finding_sheet_its_score_is_the_sum_of_the_scores_of_its_genes',
                 'rna_gene_score': 'the_bit_score_of_the_hit_not_overlapped_by_a_better_hit_of_its_clan',

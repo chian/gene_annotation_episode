@@ -10,7 +10,7 @@ check: it refuses a piece that is not the scope's piece, a resource that is not 
 piece: a repeat adds nothing), and a program or database file that is not there. A request that passes simply works.
 
 THE UNIT: stage the piece, run the job, read the table, grade (``rna_gene_sheet``), keep the table and the program's report as the
-data products ``rna_family_scan_results`` and ``rna_family_scan_report`` and the grading with a source record (provider
+data products ``rna_gene_scan_results`` and ``rna_gene_scan_report`` and the grading with a source record (provider
 ``rna_gene_finding``, operand the piece) labelled a ``tool_grading_sheet`` product. A job that does not end well is a ``failed``
 outcome with its code, reported once. Writes only through ``ctx.store``. Settings: ``infernal_executable_directory`` (the
 directory of ``cmscan``) and ``covariance_database_manifest`` (the path of the Rfam manifest: the database, its clan file and its
@@ -22,11 +22,10 @@ from pathlib import Path
 
 from episode_runtime.job_access import job_handle
 
-from gene_annotation_episode.episodic_workflow.episode_support.forms.sequence_homology_evidence.execution_contracts import (
-    canonical)
+from gene_annotation_episode.domain import canonical
 from gene_annotation_episode.episodic_workflow.episode_support.grading.parts_discovery import rna_gene_sheet as sheets
 from gene_annotation_episode.episodic_workflow.episode_support.grading.parts_discovery.held_sheets import piece_sequence
-from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.tool_grading_artifacts import (
+from gene_annotation_episode.episodic_workflow.episode_support.grading.parts_discovery.tool_grading_artifacts import (
     record_grading_product, retain_tool_grading)
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.resource_local import execute_on_local_resource
 from gene_annotation_episode.episodic_workflow.episode_support.records.data_products import record_product
@@ -36,7 +35,7 @@ TOOL_NAME = 'find_rna_genes'
 PROGRAM = 'cmscan'
 QUERY_FILE, TBLOUT_FILE, REPORT_FILE = 'query.fa', 'cmscan.tblout', 'cmscan.out'
 OPTIONS = ['--cut_ga', '--rfam', '--nohmmonly', '--cpu', '1']
-TABLE_KIND, REPORT_KIND = 'rna_family_scan_results', 'rna_family_scan_report'
+TABLE_KIND, REPORT_KIND = 'rna_gene_scan_results', 'rna_gene_scan_report'
 OWN_FAILURE_CODES = ('job_not_accepted', 'job_not_fetched', 'cmscan_exit_nonzero', 'output_missing', 'grading_refused')
 
 

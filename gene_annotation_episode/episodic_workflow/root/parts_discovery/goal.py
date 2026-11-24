@@ -3,7 +3,7 @@ cycle improves: the reading of the piece, that is, which protein genes and RNA g
 that reading is supported). ``UNIT`` and ``RESULT`` describe one unit and the return."""
 
 BINDING_PATH = 'parts_discovery'
-GOAL = ('The parts arm owns what is in the assigned piece of DNA: which protein genes and which RNA genes lie on it, where each '
+GOAL = ('This arm owns what is in the assigned piece of DNA: which protein genes and which RNA genes lie on it, where each '
         'begins and ends, on which strand, and whether an end is cut off by the end of the piece. The piece is the one fixed '
         'thing; a part is a reading of positions on it, under a genetic code. A protein gene\'s score is the gene finder\'s own '
         'score for it, an RNA gene\'s score is its bit score against its Rfam family, and a reading of the protein genes has the '

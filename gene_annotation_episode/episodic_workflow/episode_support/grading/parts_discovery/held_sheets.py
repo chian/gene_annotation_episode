@@ -14,7 +14,7 @@ earns only above zero) plus ``part_units['rna_gene']`` times the sum of the bit 
 only the amount by which it beats the best so far, a repeat earns nothing, and the credit never falls."""
 from gene_annotation_episode.episodic_workflow.episode_support.grading.parts_discovery import (
     description_sheet, gene_finding_sheet, rna_gene_sheet)
-from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.tool_grading_artifacts import (
+from gene_annotation_episode.episodic_workflow.episode_support.grading.parts_discovery.tool_grading_artifacts import (
     source_tool_grading_entries)
 
 PART_KINDS = ('protein_gene', 'rna_gene')

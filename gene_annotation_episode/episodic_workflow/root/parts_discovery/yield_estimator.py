@@ -27,7 +27,7 @@ def yield_controller(initial_credit, settings, parent_input):
     projector = PartsDiscoveryCredit(parent_input['part_units'])
     declaration = checked_yield_declaration(settings['yield_bindings'], parent_input['yield_task'],
                                             credit_definition=projector.as_record(),
-                                            yield_method=projector.yield_method, code_prefix='parts')
+                                            yield_method=projector.yield_method, code_prefix='parts_discovery')
     return open_yield_controller(declaration['kind'], epoch='parts_discovery', initial_credit=initial_credit,
                                  parameters=declaration['parameters'],
                                  definition=forecast_definitions(projector.as_record(), CEILINGS))

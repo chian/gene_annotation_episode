@@ -2,7 +2,7 @@
 Prodigal), read under one genetic code. One fixed workflow, called the same way for any piece.
 
 THE REQUEST (one controlled field besides the piece): ``code`` (an integer of ``gene_finding_sheet.CODES``: the default 11, or a
-special code 4 or 25). THE MODE is a fixed rule of the piece's length, not a choice (``gene_finding_sheet.mode_of``): self-trained
+special code 4 or 25). THE MODE is a fixed rule of the piece's length, not a choice (``mode_of``): self-trained
 on the piece (``GeneFinder().train(piece, translation_table=code)`` then ``find_genes``) at ``SELF_TRAINED_MINIMUM`` nt or more;
 else the pre-trained mode (``GeneFinder(meta=True)``), which ignores the code (the sheet records ``code_applied`` false).
 
@@ -19,7 +19,7 @@ import pyrodigal
 
 from gene_annotation_episode.episodic_workflow.episode_support.grading.parts_discovery import gene_finding_sheet as sheets
 from gene_annotation_episode.episodic_workflow.episode_support.grading.parts_discovery.held_sheets import piece_sequence
-from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.tool_grading_artifacts import (
+from gene_annotation_episode.episodic_workflow.episode_support.grading.parts_discovery.tool_grading_artifacts import (
     record_grading_product, retain_tool_grading)
 from gene_annotation_episode.episodic_workflow.episode_support.records.data_products import record_product
 
@@ -27,13 +27,19 @@ PROVIDER = sheets.PROVIDER
 TOOL_NAME = 'find_genes'
 PRODUCT_KIND = 'gene_calls'
 FINDER = 'pyrodigal'
+SELF_TRAINED_MINIMUM = 20000   # the finder's own minimum length (nt) for training on the piece itself
+
+
+def mode_of(length):
+    """The finder's mode for a piece of ``length`` nt, by the fixed rule."""
+    return 'self_trained' if length >= SELF_TRAINED_MINIMUM else 'pre_trained'
 
 
 def offered_codes(length, held_codes):
     """The codes a request may name now: the codes of ``CODES`` with no reading held, the special ones only for a piece of
     ``SELF_TRAINED_MINIMUM`` nt or more."""
     return [code for code in sheets.CODES if code not in held_codes
-            and (code == sheets.DEFAULT_CODE or length >= sheets.SELF_TRAINED_MINIMUM)]
+            and (code == sheets.DEFAULT_CODE or length >= SELF_TRAINED_MINIMUM)]
 
 
 def check_find_genes_request(request, *, piece_ref, length, held_codes):
@@ -47,7 +53,7 @@ def check_find_genes_request(request, *, piece_ref, length, held_codes):
         return [{'code': 'code_is_not_offered', 'field': 'code', 'choose_from': offered}]
     if code in held_codes:
         return [{'code': 'reading_under_the_code_already_held', 'field': 'code', 'choose_from': offered}]
-    if code != sheets.DEFAULT_CODE and length < sheets.SELF_TRAINED_MINIMUM:
+    if code != sheets.DEFAULT_CODE and length < SELF_TRAINED_MINIMUM:
         return [{'code': 'code_is_not_applied_below_the_self_trained_minimum', 'field': 'code', 'choose_from': offered}]
     return []
 
@@ -55,7 +61,7 @@ def check_find_genes_request(request, *, piece_ref, length, held_codes):
 def run_finder(sequence, code):
     """The finder's genes on ``sequence`` (upper case) under ``code``, in the mode of the sequence's length."""
     data = sequence.encode('ascii')
-    if sheets.mode_of(len(sequence)) == 'self_trained':
+    if mode_of(len(sequence)) == 'self_trained':
         finder = pyrodigal.GeneFinder()
         finder.train(data, translation_table=code)
     else:
@@ -73,7 +79,8 @@ def gene_rows(genes):
 
 def read_genes(sequence, *, piece_ref, code):
     """The sheet of the reading of ``sequence`` under ``code`` (the finder run, graded): no store involved."""
-    return sheets.grade_gene_finding(gene_rows(run_finder(sequence, code)), piece_ref=piece_ref, length=len(sequence), code=code)
+    return sheets.grade_gene_finding(gene_rows(run_finder(sequence, code)), piece_ref=piece_ref, length=len(sequence), code=code,
+                                       mode=mode_of(len(sequence)))
 
 
 def find_genes(ctx, *, piece_ref, code):
@@ -107,5 +114,5 @@ def find_genes(ctx, *, piece_ref, code):
             **({} if sheet['median_gene_nt'] is None else {'median_gene_nt': sheet['median_gene_nt']})}
 
 
-__all__ = ['FINDER', 'PRODUCT_KIND', 'PROVIDER', 'TOOL_NAME', 'check_find_genes_request', 'find_genes', 'gene_rows',
+__all__ = ['FINDER', 'SELF_TRAINED_MINIMUM', 'mode_of', 'PRODUCT_KIND', 'PROVIDER', 'TOOL_NAME', 'check_find_genes_request', 'find_genes', 'gene_rows',
            'offered_codes', 'read_genes', 'run_finder']

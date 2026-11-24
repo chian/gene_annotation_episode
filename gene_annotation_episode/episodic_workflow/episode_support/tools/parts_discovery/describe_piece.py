@@ -7,7 +7,7 @@ piece that is not the scope's piece and a piece already described. THE UNIT: rea
 sequence artifact, operand the piece) and label it a ``tool_grading_sheet`` product. Writes only through ``ctx.store``."""
 from gene_annotation_episode.episodic_workflow.episode_support.grading.parts_discovery import description_sheet as sheets
 from gene_annotation_episode.episodic_workflow.episode_support.grading.parts_discovery.held_sheets import piece_sequence
-from gene_annotation_episode.episodic_workflow.episode_support.grading.structural_homology_evidence.tool_grading_artifacts import (
+from gene_annotation_episode.episodic_workflow.episode_support.grading.parts_discovery.tool_grading_artifacts import (
     record_grading_product, retain_tool_grading)
 
 PROVIDER = sheets.PROVIDER

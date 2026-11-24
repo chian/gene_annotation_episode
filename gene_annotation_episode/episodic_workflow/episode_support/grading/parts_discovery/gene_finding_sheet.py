@@ -23,19 +23,12 @@ MODES = ('self_trained', 'pre_trained')
 DEFAULT_CODE = 11
 SPECIAL_CODES = (4, 25)
 CODES = (DEFAULT_CODE, *SPECIAL_CODES)
-SELF_TRAINED_MINIMUM = 20000
 STRANDS = ('+', '-')
 
 
-def mode_of(length):
-    """The finder's mode for a piece of ``length`` nt, by the fixed rule."""
-    return 'self_trained' if length >= SELF_TRAINED_MINIMUM else 'pre_trained'
-
-
-def grade_gene_finding(genes, *, piece_ref, length, code):
+def grade_gene_finding(genes, *, piece_ref, length, code, mode):
     """The sheet of one reading: ``genes`` are the finder's rows (``find_genes.gene_rows``), ``length`` the piece's nt, ``code`` the
-    code asked."""
-    mode = mode_of(length)
+    code asked, ``mode`` the finder's mode for the piece (``find_genes.mode_of``)."""
     lengths = [row['end'] - row['begin'] + 1 for row in genes]
     return {'schema': SCHEMA, 'provider': PROVIDER, 'piece_ref': piece_ref, 'piece_length': length, 'mode': mode, 'code': code,
             'code_applied': mode == 'self_trained', 'gene_count': len(genes),
@@ -43,5 +36,5 @@ def grade_gene_finding(genes, *, piece_ref, length, code):
             'score_sum': sum((row['score'] for row in genes), 0.0), 'genes': genes}
 
 
-__all__ = ['CODES', 'DEFAULT_CODE', 'MODES', 'PROVIDER', 'SCHEMA', 'SELF_TRAINED_MINIMUM', 'SPECIAL_CODES', 'STRANDS',
-           'grade_gene_finding', 'mode_of']
+__all__ = ['CODES', 'DEFAULT_CODE', 'MODES', 'PROVIDER', 'SCHEMA', 'SPECIAL_CODES', 'STRANDS',
+           'grade_gene_finding']

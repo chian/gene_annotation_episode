@@ -20,8 +20,8 @@ from jsonschema import Draft202012Validator, ValidationError
 from episode_runtime import ModelRequest, Rejected, ToolCall
 
 from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.episodic_workflow.episode_support.grading.parts_discovery.gene_finding_sheet import (
-    DEFAULT_CODE, SELF_TRAINED_MINIMUM)
+from gene_annotation_episode.episodic_workflow.episode_support.grading.parts_discovery.gene_finding_sheet import DEFAULT_CODE
+from gene_annotation_episode.episodic_workflow.episode_support.tools.parts_discovery.find_genes import SELF_TRAINED_MINIMUM
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import rejection_feedback
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import time_accounting
 from gene_annotation_episode.episodic_workflow.episode_support.tools.parts_discovery.describe_piece import (
