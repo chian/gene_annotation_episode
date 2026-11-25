@@ -211,7 +211,7 @@ def decide(summary, feedback, ctx):
     context = {'annotation_credit': current, 'k': K,
                'annotations': summary['annotations'],
                'claims': [claim_view(claim, summary) for claim in summary['claims']],
-               'axes': [axis_view(slot, summary, credits, current) for slot in CHILD_SLOTS],
+               'axes': [axis_view(slot, summary, credits, current) for slot in CHILD_SLOTS if slot in AXIS_WEIGHTS],
                'commissions': summary['commissions'],
                'organism': {name: summary['organism'][name] for name in ('candidates', 'placement', 'test_count')},
                'choices': [{name: value for name, value in step.items() if name != 'claim_ref'} for step in offered],
