@@ -18,6 +18,16 @@ A test is one graded source: ``<sheet>@<source reference>``. The sheets (a kind 
   the sequence's k-mers the index maps to that taxon itself (``kmers_direct`` over all k-mers). The bits of one test sum
   to at most 1. Kraken 2 itself decides this way: it sums the k-mers along each root-to-leaf path and takes the leaf with
   the most.
+* ``genomad:<database version>`` (the ``genomad_classification_sheet`` of ``genomad_grader``): geNomad's three scores of
+  the kind of DNA sum to 1 and are its bits. The chromosome and the plasmid score together are the bit at cellular
+  organisms (a chromosome or a plasmid is of a cell). The virus score is the bit of the virus side: the share of it that the
+  genes' agreement on a lineage carries sits at the deepest taxon of that lineage, the rest at Viruses (all of it there when
+  no gene gave a taxonomy). The bits of one test sum to 1.
+* ``vitap:<database name>`` (the ``vitap_assignment_sheet`` of ``vitap_grader``): the lineage VITAP settled on, and each
+  other lineage it considered that is not nested with one already taken (the higher score first; the same lineage cut at
+  another depth is not a second call). VITAP's lineage score s has no stated maximum, so the bit of lineage i, at the finest
+  taxon of it that resolves, is s_i / (1 + the sum of the taken lineages' scores): it rises with the score, stays below 1,
+  and the bits of one test sum to less than 1.
 
 The weight of a sheet is one over its typical strong value, so that a strong result of each sheet counts about 1
 (``TYPICAL_STRONG_VALUE``, derived from stored real runs, the derivation beside each value).
@@ -45,8 +55,12 @@ import math
 
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.tool_grading_artifacts import (
     source_tool_grading_entries)
+from gene_annotation_episode.episodic_workflow.episode_support.grading.taxonomic_classification.genomad_grader import (
+    CELLULAR, SHEET as GENOMAD_SHEET, VIRUSES)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.taxonomic_classification.kraken2_grader import (
     SHEET as KRAKEN2_SHEET)
+from gene_annotation_episode.episodic_workflow.episode_support.grading.taxonomic_classification.vitap_grader import (
+    SHEET as VITAP_SHEET)
 
 # The typical strong value of each sheet: the value of the right candidate when the sequence's own genome is in the index.
 # Derived 2026-11-24 from the stored real classifications of runs/organism_kmer_check_1 (hepatitis E virus M73218 and three
@@ -56,7 +70,15 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.taxonomic
 #                         with a taxon; nearly all of them lie on the lineage of Escherichia coli): median 0.068. The index is
 #                         capped at 8 GB and holds a part of the k-mers of its genomes, hence the low share.
 # One virus and one bacterium: re-derive as classifications of other organisms accumulate.
-TYPICAL_STRONG_VALUE = {'kraken2:viral': 0.988, 'kraken2:standard_8gb': 0.068}
+#   genomad:1.9           the value of the family Hepeviridae for the four whole hepevirus genomes of runs/genomad_run_2 whose
+#                         relatives are in geNomad's markers (M73218, ON009841, OR232336, OR713884): their virus scores
+#                         0.9707, 0.9706, 0.9687, 0.9717, median 0.9707 (the agreement was 1.0 in all four)
+#   vitap:DB_hybrid_MSL37_RefSeq209_IMGVR
+#                         the bit of the family Hepeviridae for M73218 and two slices of it in runs/vitap_run_2 (the genome
+#                         is in VITAP's database): lineage scores 3.191, 2.272, 1.776 with a second lineage at 0.001 or none,
+#                         so bits 0.761, 0.694, 0.640: median 0.694
+TYPICAL_STRONG_VALUE = {'kraken2:viral': 0.988, 'kraken2:standard_8gb': 0.068, 'genomad:1.9': 0.9707,
+                        'vitap:DB_hybrid_MSL37_RefSeq209_IMGVR': 0.694}
 SHEET_WEIGHT = {sheet: 1 / value for sheet, value in TYPICAL_STRONG_VALUE.items()}
 
 
@@ -86,7 +108,42 @@ def _kraken2(grading):
     return 'kraken2:' + grading['index']['index'], list(grading['index']['covers_taxon_ids']), rows
 
 
-READERS = {KRAKEN2_SHEET: _kraken2}
+def _bit_row(row, bit):
+    return {'taxon_id': row['taxon_id'], 'name': row['name'], 'rank_code': row['rank_code'],
+            'lineage_taxon_ids': list(row['lineage_taxon_ids']), 'bit': bit}
+
+
+def _genomad(grading):
+    """``(sheet name, covers, rows)`` of one geNomad grading (the module's description states the bits)."""
+    sheet = grading['sheet']
+    kind, genes = sheet['kind'], sheet['gene_taxonomy']
+    bits = {CELLULAR: (sheet['kind_taxa']['cellular'], kind['chromosome_score'] + kind['plasmid_score'])}
+    deepest = None if not sheet['taxa'] else sheet['taxa'][-1]
+    agreed = 0.0 if deepest is None else kind['virus_score'] * genes['agreement']
+    if deepest is not None and deepest['taxon_id'] != VIRUSES:
+        bits[deepest['taxon_id']] = (deepest, agreed)
+        bits[VIRUSES] = (sheet['kind_taxa']['virus'], kind['virus_score'] - agreed)
+    else:
+        bits[VIRUSES] = (sheet['kind_taxa']['virus'], kind['virus_score'])
+    return ('genomad:' + grading['database']['version'], [VIRUSES, CELLULAR],
+            [_bit_row(row, bit) for row, bit in bits.values() if bit > 0])
+
+
+def _vitap(grading):
+    """``(sheet name, covers, rows)`` of one VITAP grading (the module's description states the bits)."""
+    sheet = grading['sheet']
+    taken = []
+    for lineage in ([] if sheet['best'] is None else [sheet['best']]) + sorted(
+            sheet['lineages'], key=lambda item: (-item['lineage_score'], item['names'])):
+        taxon = lineage['taxon']
+        if taxon is None or lineage['lineage_score'] <= 0 or any(nested(taxon, other) for other, _ in taken):
+            continue
+        taken.append((taxon, lineage['lineage_score']))
+    total = 1 + math.fsum(score for _, score in taken)
+    return 'vitap:' + grading['database']['name'], [VIRUSES], [_bit_row(taxon, score / total) for taxon, score in taken]
+
+
+READERS = {KRAKEN2_SHEET: _kraken2, GENOMAD_SHEET: _genomad, VITAP_SHEET: _vitap}
 
 
 def taxon_tests(reader, scope, sources):

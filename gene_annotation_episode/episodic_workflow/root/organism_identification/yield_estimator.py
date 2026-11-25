@@ -7,11 +7,15 @@ actions realized before (this episode's units and the estimate ledger's history 
 its expected seconds times the exchange rate (``yield_control``, section ``ForecastYieldController``; the design is
 ``docs/plan/designs/forecast_yield_controller.md``).
 
-The parameters are this episode's own (``FORECAST``). ``exchange_rate`` is credit per second. A first classification of a
-sequence that has a relative in the index earns about 1 (the sheets are weighted so) and takes seconds to half a minute; one
-that finds nothing earns 0. The rate 0.002 lets a classification of a kind that has earned be taken (a forecast of 0.1
-over 30 seconds is 0.0033 per second) and stops a kind that keeps earning nothing. It is a first value from the direct
-checks of 2026-11-24, to be tuned from this episode's own real runs.
+The parameters are this episode's own (``FORECAST``). ``exchange_rate`` is credit per second. The sheets are weighted so
+that a strong result of any tool counts about 1. The tools differ in time by more than tenfold: a Kraken 2 classification
+takes seconds to half a minute, a VITAP assignment a few minutes, a geNomad run several minutes (about 500 seconds measured
+on 2026-11-24). At 0.0005 credit per second a geNomad run costs about 0.25 and a VITAP assignment about 0.08, so each is
+taken while it is forecast to earn a good part of a strong result (a first run of a kind is forecast at half its ceiling,
+0.5 or more) and refused once runs of its kind have earned little. A Kraken 2 classification costs about 0.01. The first
+value, 0.002 (the Kraken 2 only head of the first three runs), would have priced geNomad at 1.0, more than a first run of
+it can be forecast to earn, so the one tool that places a distant virus would never have been asked. To be tuned from this
+episode's own real runs.
 
 The definition each action's learned shares are on (``forecast_definitions``: per action type, the digest of the credit
 definition record and that action's own ceiling name, ``credit.CEILINGS``) is handed to the controller. The assignment is
@@ -21,7 +25,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.configuration.yie
 
 from .credit import CEILINGS, TaxonDifferentialCredit
 
-FORECAST = {'exchange_rate': 0.002, 'forget_old_rows': True, 'job_kinds': {}}
+FORECAST = {'exchange_rate': 0.0005, 'forget_old_rows': True, 'job_kinds': {}}
 
 
 def yield_controller(initial_credit, settings, parent_input):

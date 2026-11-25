@@ -154,6 +154,17 @@ KINDS = {
                                          'Taxonomy, TSV (Kraken 2 per-sequence output: taxon assigned and k-mer mapping)'),
     'taxonomic_classification_report': ('http://edamontology.org/data_3028', 'http://edamontology.org/format_3475',
                                         'Taxonomy, TSV (Kraken 2 report: taxa with their share of the sequences)'),
+    # The tables of the two virus tools of the organism identification head. geNomad's aggregated classification (three
+    # scores of the kind of DNA per sequence): data_2048 Report (as ``tool_grading_sheet``; EDAM has no term for a score of
+    # the kind of a sequence), format_3475 TSV. The virus taxonomy a tool assigns a sequence (geNomad's gene taxonomy,
+    # VITAP's best lineage) and the lineages VITAP considered: data_3028 Taxonomy, format_3475 TSV, for the reasons given
+    # at ``taxonomic_classification_results``. EDAM.tsv read 2026-11-24.
+    'sequence_kind_scores': ('http://edamontology.org/data_2048', 'http://edamontology.org/format_3475',
+                             'Report, TSV (geNomad aggregated classification: chromosome, plasmid and virus scores)'),
+    'virus_taxonomy_assignment': ('http://edamontology.org/data_3028', 'http://edamontology.org/format_3475',
+                                  'Taxonomy, TSV (the virus lineage a tool assigns a sequence)'),
+    'virus_taxonomy_lineages': ('http://edamontology.org/data_3028', 'http://edamontology.org/format_3475',
+                                'Taxonomy, TSV (VITAP: every lineage considered for a sequence, with its score)'),
     # The RNA genes of a piece of DNA found by parts discovery ``find_rna_genes`` (Infernal ``cmscan`` of the whole piece over the
     # covariance models of Rfam, both strands): the same data types and format as the A102 ``rna_family_scan_results`` and
     # ``rna_family_scan_report`` above (data_0858 Sequence signature matches, format_2330 Textual format, for the same reasons).

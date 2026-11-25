@@ -1,31 +1,44 @@
 """The internal summary: what this episode holds, as its ``decide``, ``action``, ``credit`` and ``final_to_parent`` read it.
 
-From the system's view: the parent input (the scope), one row per unit (the tool, its arguments, the status and the facts
-of its result), the records held, the sequences of the scope with their molecule and length, the classifications held
-(read from their sources: the query, the index), the scoring sheet of the scope (``credit.held_table``: per sequence the
+From the system's view: the parent input (the scope), one row per unit (the tool, its request, the status and the facts
+of its result), the records held, the sequences of the scope with their molecule and length, the runs held (read from their
+sources: the tool, the query, the database), the scoring sheet of the scope (``credit.held_table``: per sequence the
 candidate taxa with their scores, the leading candidate, its rival, the taxon they share), the records to return (those
 this episode committed, closed under naming) and the controller's yield table."""
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import returned_with_names
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
+from gene_annotation_episode.episodic_workflow.episode_support.tools.taxonomic_classification.genomad_classification import (
+    PROVIDER as GENOMAD_PROVIDER)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.taxonomic_classification.kraken2_classification import (
     PROVIDER as KRAKEN2_PROVIDER)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.taxonomic_classification.vitap_assignment import (
+    PROVIDER as VITAP_PROVIDER)
 
-from ..credit import KRAKEN2_TOOL, TaxonDifferentialCredit, held_table
+from ..credit import GENOMAD_TOOL, KRAKEN2_TOOL, VITAP_TOOL, TaxonDifferentialCredit, held_table
 
 EXECUTED = ('completed', 'partial')
-# The tools whose records this episode's credit reads and so returns: its graded classifications.
-CREDITED_TOOLS = (KRAKEN2_TOOL,)
-# The record types that carry a sequence: what a classification's query is chosen from.
+TOOL_OF_PROVIDER = {KRAKEN2_PROVIDER: KRAKEN2_TOOL, GENOMAD_PROVIDER: GENOMAD_TOOL, VITAP_PROVIDER: VITAP_TOOL}
+# The tools whose records this episode's credit reads and so returns: its graded runs.
+CREDITED_TOOLS = tuple(TOOL_OF_PROVIDER.values())
+# The record types that carry a sequence: what a run's query is chosen from.
 SEQUENCE_RECORD_TYPES = ('input', 'reference', 'product')
-# The facts of a classification's result a unit's row shows (the taxa themselves are in the candidate table).
-RESULT_FACTS = ('index', 'index_version', 'classified', 'assigned_taxon_id', 'kmers', 'taxon_count')
+# The facts of a run's result a unit's row shows (the taxa themselves are in the candidate table).
+RESULT_FACTS = {KRAKEN2_TOOL: ('index', 'index_version', 'classified', 'assigned_taxon_id', 'kmers', 'taxon_count'),
+                GENOMAD_TOOL: ('database', 'database_version', 'kind', 'gene_taxonomy', 'deepest_taxon_id',
+                               'unresolved_names'),
+                VITAP_TOOL: ('database', 'database_version', 'best', 'lineage_count')}
 
 
-def _held_classifications(records):
-    """The classifications this episode holds, read from their sources: the query, the index and its version."""
-    return [{'query_ref': source['operand_refs'][0], 'index': source['accession'], 'index_version': source['version'],
-             'source_ref': source['id']}
-            for source in records.list('source') if source['provider'] == KRAKEN2_PROVIDER]
+def _held_runs(records):
+    """The runs this episode holds, read from their sources: the tool, the query, and for Kraken 2 the index."""
+    rows = []
+    for source in records.list('source'):
+        tool = TOOL_OF_PROVIDER.get(source['provider'])
+        if tool is not None:
+            rows.append({'tool': tool, 'query_ref': source['operand_refs'][0], 'database': source['accession'],
+                         'database_version': source['version'], 'source_ref': source['id'],
+                         **({'index': source['accession']} if tool == KRAKEN2_TOOL else {})})
+    return rows
 
 
 def _candidate(row):
@@ -51,11 +64,10 @@ def internal_summary(view):
     for position, outcome in enumerate(view.outcomes):
         result = outcome['outcome']
         row = {'position': position, 'kind': 'tool', 'tool': outcome['tool'], 'status': result['status'],
-               'record_refs': list(result['record_refs']), 'feedback': result.get('feedback')}
-        if outcome['tool'] == KRAKEN2_TOOL:
-            row['classification'] = dict(outcome['arguments'])
-            row['features'] = (None if result['result'] is None
-                               else {name: result['result'][name] for name in RESULT_FACTS})
+               'record_refs': list(result['record_refs']), 'feedback': result.get('feedback'),
+               'request': dict(outcome['arguments']),
+               'features': (None if result['result'] is None
+                            else {name: result['result'][name] for name in RESULT_FACTS[outcome['tool']]})}
         if outcome['tool'] in CREDITED_TOOLS and result['status'] in EXECUTED:
             committed.extend(ref for ref in result['record_refs'] if ref not in committed)
         units.append(row)
@@ -63,8 +75,7 @@ def internal_summary(view):
     held = [ref for ref in records.refs() if not ref.startswith('row_')]
     held_sequences = {ref: records.get(ref).get('molecule') for ref in held
                       if ref.split('_')[0] in SEQUENCE_RECORD_TYPES and records.get(ref).get('sequence_ref')}
-    summary = {**parent, 'units': units, 'held_sequences': held_sequences,
-               'held_classifications': _held_classifications(records)}
+    summary = {**parent, 'units': units, 'held_sequences': held_sequences, 'held_runs': _held_runs(records)}
     table = held_table(summary, records)
     return {**summary,
             'path_depth': len(view.path),
