@@ -1640,6 +1640,14 @@ class CompletionYieldController:
 #   ceiling (``ForecastParameters.definition_of(k)``: the credit's definition and k's own ceiling version, so changing
 #   one action's ceiling discards only that action's shares): a share learned under another definition is on another
 #   scale and is not used; with no such row the ledger has no half.
+#   ``ledger_prior_rows`` (a setting of the episode, 0 unless it names another value): the fraction of no history, one
+#   half, counts in the ledger's mean as that many rows of weight 1, so the ledger's fraction is
+#   (prior x 1/2 + sum of weight x fraction) / (prior + sum of weights). With a prior above 0 the ledger always has its
+#   half: one half with no row, and a few rows move it only part of the way. The owner, 2026-11-25, after one run in which
+#   a quick classifier rightly found nothing left that kind with a single row of 0, a forecast of 0, and the classifier
+#   never offered again: "change the yield estimator to not skip Kraken2. that's a behavior tuning"; and 2026-11-23: "how
+#   will it make the first forecast after one run? how will it make it's forecast at zero runs. those are the key real
+#   world questions now". With the prior at 0 the rule is as before: the few rows the ledger holds are its whole fraction.
 # * a pending unit is not an observation: a unit whose outcome is pending (its action started work, e.g. a job a child
 #   launched and returned parked, that a later unit of the same action finishes and extracts) has a rise that measures
 #   nothing of its action yet, and seconds that cover only the start. It gives no share or gain of its kind, and its
@@ -1704,11 +1712,14 @@ class ForecastParameters:
     the mapping does not name raises ``forecast_definition_missing_for_action``. The controller hands
     ``definition_of`` to the ledger, which writes each action's name on its forecast rows and reads as that action's
     shares only the rows written under the same name (a share learned under another credit or ceiling is on another
-    scale). Required: there is no default."""
+    scale). Required: there is no default. ``ledger_prior_rows``: how many ledger rows the fraction of no history
+    (one half) counts as in the ledger's mean fraction of a bounded action (see the rule above); 0, the value when an
+    episode does not name it, leaves the ledger's rows as its whole fraction."""
     exchange_rate: float
     forget_old_rows: bool
     job_kinds: Mapping
     definition: str | Mapping
+    ledger_prior_rows: float = 0.0
 
     def __post_init__(self):
         rate = _finite_number("exchange_rate", self.exchange_rate)
@@ -1728,6 +1739,8 @@ class ForecastParameters:
         elif type(self.definition) is not str or not self.definition:
             raise ValueError("forecast_definition_required")
         object.__setattr__(self, "job_kinds", dict(self.job_kinds))
+        if _finite_number("ledger_prior_rows", self.ledger_prior_rows) < 0:
+            raise ValueError("ledger_prior_rows_must_not_be_negative")
 
     def definition_of(self, action_type):
         """The name of the definition of credit and ceiling the shares of ``action_type`` are on."""
@@ -1739,8 +1752,11 @@ class ForecastParameters:
 
     def as_record(self):
         definition = self.definition if type(self.definition) is str else dict(self.definition)
-        return {"exchange_rate": self.exchange_rate, "forget_old_rows": self.forget_old_rows,
-                "job_kinds": dict(self.job_kinds), "definition": definition}
+        record = {"exchange_rate": self.exchange_rate, "forget_old_rows": self.forget_old_rows,
+                  "job_kinds": dict(self.job_kinds), "definition": definition}
+        if self.ledger_prior_rows:
+            record["ledger_prior_rows"] = self.ledger_prior_rows
+        return record
 
 
 def _forecast_parameters(value):
@@ -1814,8 +1830,9 @@ def forecast_actions(parameters, observations, histories, offered):
                 mine = [(0.0, _fraction(item["gain"], item["ceiling"], action_type))
                         for item in own if _is_ceiling_number(item["ceiling"]) and item["ceiling"] > 0]
                 mine = _recent(mine)
-                weight = math.fsum(w for w, _ in ledger)
-                means = ([math.fsum(w * f for w, f in ledger) / weight] if weight else []) + (
+                prior = parameters.ledger_prior_rows
+                weight = prior + math.fsum(w for w, _ in ledger)
+                means = ([(prior * 0.5 + math.fsum(w * f for w, f in ledger)) / weight] if weight else []) + (
                     [math.fsum(w * f for w, f in mine) / math.fsum(w for w, _ in mine)] if mine else [])
                 forecast = (math.fsum(means) / len(means) if means else 0.5) * ceiling
         else:
@@ -1899,6 +1916,7 @@ class ForecastYieldState:
 def forecast_provenance():
     return {"controller": FORECAST_VERSION, "forecast": "realized_fraction_times_ceiling_or_typical_gain_if_unbounded",
             "fraction": "mean_of_ledger_mean_and_own_recency_weighted_mean_each_one_half_own_half_life_one_unit",
+            "ledger_prior": "one_half_counts_as_ledger_prior_rows_rows_of_weight_one_in_the_ledgers_mean_zero_unless_named",
             "pending": "a_pending_unit_gives_its_kind_no_share_gain_or_unit_seconds_own_or_ledger",
             "cost": "expected_seconds",
             "stop": "no_offered_forecast_exceeds_expected_seconds_times_exchange_rate_and_not_must_continue",
