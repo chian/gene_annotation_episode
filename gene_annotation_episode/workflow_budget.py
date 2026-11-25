@@ -31,7 +31,21 @@ def window_units(window_id):
 
 UNIT,SLICE=window_units(WINDOW_ID) if WINDOW_ID else (None,None)
 ENV='GENE_EPISODE_WORKFLOW_BUDGET_FILE'
-ENVIRONMENT_BOUNDS={'cpu_percent':100,'memory_bytes':5*1024**3,
+# The memory bound of one workflow: 5 GiB, or what the launcher was told for this workflow (``--memory-gib``), at most
+# 10 GiB. The owner, 2026-11-24: anything that needs more than 10 GiB belongs on HPC. The launcher states the bound in
+# the workflow's environment; a process outside a launched workflow has the 5 GiB bound.
+MEMORY_ENV='GENE_EPISODE_WORKFLOW_MEMORY_BYTES'
+MEMORY_BYTES_RANGE=(5*1024**3,10*1024**3)
+
+
+def _memory_bound():
+    value=int(os.environ.get(MEMORY_ENV,MEMORY_BYTES_RANGE[0]))
+    if not MEMORY_BYTES_RANGE[0]<=value<=MEMORY_BYTES_RANGE[1]:
+        raise ValueError('workflow_memory_bound_outside_machine_bounds')
+    return value
+
+
+ENVIRONMENT_BOUNDS={'cpu_percent':100,'memory_bytes':_memory_bound(),
     'swap_bytes':0}
 
 

@@ -1,7 +1,9 @@
 # Organism identification: the head that says which organism a piece of DNA is from
 
-Status, 2026-11-24: tools installed and measured on real pieces; the library's Kraken 2 grader and tool written and not yet
-run inside an episode; the head's folder not yet built. Written by the session that builds the root. An agent's note: the
+Status, 2026-11-24: tools installed and measured on real pieces; the head `root/organism_identification` is built with one
+tool, `kraken2_classify`, and returned from its first real run (`runs/organism_identification_20261124`, run 01: the
+hepatitis E genome, two classifications, stopped by its own yield estimator, species Paslahepevirus balayani at score 1.98).
+The root does not link it yet; the other tools are not in the head yet. Written by the session that builds the root. An agent's note: the
 owner's words quoted here decide, the rest is that session's reading.
 
 ## The global task and this head's part

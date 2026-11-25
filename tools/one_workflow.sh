@@ -5,16 +5,24 @@ task_repo=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)
 # A slot is one exclusive workflow lane in this checkout. Runs in the same slot
 # never overlap; a second terminal that needs its own lane names another slot.
 task_slot_name=main
-if [[ ${1-} == --slot ]]; then
-    task_slot_name=${2-}
+# The memory bound of the whole workload, in GiB. 5 unless the caller names more; 10 is the most one workflow gets on
+# this machine (the owner, 2026-11-24: anything that needs more than 10 GiB belongs on HPC).
+task_memory_gib=5
+while [[ ${1-} == --slot || ${1-} == --memory-gib ]]; do
+    if [[ $1 == --slot ]]; then task_slot_name=${2-}; else task_memory_gib=${2-}; fi
     shift 2
-fi
+done
 if [[ ! $task_slot_name =~ ^[a-z0-9][a-z0-9_-]*$ ]]; then
     echo 'Slot names use lowercase letters, digits, underscore and hyphen.' >&2
     exit 64
 fi
+if [[ ! $task_memory_gib =~ ^([5-9]|10)$ ]]; then
+    echo 'The memory bound is a whole number of GiB from 5 to 10; work that needs more than 10 belongs on HPC.' >&2
+    exit 64
+fi
+task_memory_bytes=$((task_memory_gib * 1024 * 1024 * 1024))
 if [[ $# -lt 3 || $2 != -- ]]; then
-    echo 'Usage: bash tools/one_workflow.sh [--slot <name>] runs/<unique-run> -- command arguments...' >&2
+    echo 'Usage: bash tools/one_workflow.sh [--slot <name>] [--memory-gib <5 to 10>] runs/<unique-run> -- command arguments...' >&2
     exit 64
 fi
 task_run=$(realpath -m -- "$1")
@@ -64,11 +72,12 @@ task_status=0
 # workload, including children whose parent episode has already yielded.
 systemd-run --user --quiet --wait --pipe --collect --service-type=exec --expand-environment=no \
     --unit="$task_service" --slice="$task_slice" \
-    --property=CPUQuota=100% --property=MemoryMax=5368709120 \
+    --property=CPUQuota=100% --property=MemoryMax="$task_memory_bytes" \
     --property=MemorySwapMax=0 --property=TasksMax=infinity \
     --property=KillMode=control-group --working-directory="$task_repo" \
     --setenv="PYTHONPATH=$task_repo" --setenv=PYTHONDONTWRITEBYTECODE=1 \
     --setenv="GENE_EPISODE_WORKFLOW_SLOT=$task_window" \
+    --setenv="GENE_EPISODE_WORKFLOW_MEMORY_BYTES=$task_memory_bytes" \
     --property="ExecStopPost=$task_python -m gene_annotation_episode.workflow_budget cleanup" \
     "$task_python" -m gene_annotation_episode.workflow_budget "$task_run" -- "$@" \
     >"$task_run/stdout.log" 2>"$task_run/stderr.log" || task_status=$?

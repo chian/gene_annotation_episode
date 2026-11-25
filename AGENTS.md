@@ -147,6 +147,11 @@ Confirm the complete workload has exited before starting the next command.
 
 The launcher manages ownership and machine resources: one CPU, 5 GiB RAM
 (increased by the user on 2026-11-04), and no swap across the whole workload.
+A workflow that needs more memory names it to the launcher (`--memory-gib`, a
+whole number up to 10); the user allowed this on 2026-11-24 for the session
+building the organism head ("Let yourself go to 10GB. anything that goes over
+that will need hpc"). 10 GiB is the ceiling on this machine: work that needs
+more belongs on HPC. Another session asks the user before using more than 5.
 Do not increase those bounds or move another window's work without authorization.
 Never introduce or enforce process/thread count ceilings or arbitrary time,
 token, turn, action-count or cumulative-usage cutoffs, in code, launchers,
