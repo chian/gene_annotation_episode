@@ -1,5 +1,6 @@
-"""The command-line entry of an episode run: ``run``, ``resume`` and ``report``, and the two registrations a run's
-caller makes before it (``propose-annotation``, ``freeze-libraries``). ``cli.py`` calls these.
+"""The command-line entry of an episode run: ``run``, ``resume`` and ``report``, and the registration a run's caller
+makes before it (``freeze-libraries``). ``cli.py`` calls these. A run starts with no proposed annotation: there is no
+command that makes one.
 
 Nothing here is episode code or recording code. ``run`` links the entry binding and every binding below it with
 the four system collaborators (the workspace's ``Store``, the real ``ModelProvider``, the caller's continuation
@@ -108,13 +109,6 @@ def report(*, run_id, journal):
             'episodes': episodes}
 
 
-def propose_annotation(store, *, subject, predicate, value):
-    """Register the caller's proposed annotation of ``subject``: one hypothesis record of caller origin."""
-    record = store.put('hypothesis', {'subject_refs': [subject], 'predicate': predicate, 'value': value,
-                                      'context_refs': []}, origin='caller')
-    return {'proposed_annotation_ref': record['id'], 'record': record}
-
-
 def freeze_libraries(store, *, source, continuation, tools, head=None):
     """The general run rule: a run reads frozen copies of its libraries, so a later edit of a published library cannot
     change a run that has started. For every head the run's ``continuation`` names (an episode directly under the root;
@@ -154,4 +148,4 @@ def read_json(path):
     return json.loads(Path(path).read_text())
 
 
-__all__ = ['freeze_libraries', 'propose_annotation', 'read_json', 'report', 'resume_run', 'run', 'subtree']
+__all__ = ['freeze_libraries', 'read_json', 'report', 'resume_run', 'run', 'subtree']

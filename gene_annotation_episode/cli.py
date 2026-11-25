@@ -67,11 +67,6 @@ def parser():
     shown.add_argument("--workspace", type=Path, required=True)
     shown.add_argument("--run-id", required=True)
     shown.add_argument("--journal", type=Path, required=True)
-    proposed = sub.add_parser("propose-annotation", help="Register the caller's proposed annotation of a subject (one hypothesis record).")
-    proposed.add_argument("--workspace", type=Path, required=True)
-    proposed.add_argument("--subject", required=True)
-    proposed.add_argument("--predicate", required=True)
-    proposed.add_argument("--value", required=True, help="JSON: the typed value of the hypothesis.")
     frozen = sub.add_parser("freeze-libraries", help="Freeze the libraries of every head a run covers, where the run reads them, and print each head's selection.")
     frozen.add_argument("--workspace", type=Path, required=True)
     frozen.add_argument("--source", type=Path, required=True, help="The published process library to freeze.")
@@ -115,7 +110,7 @@ def main(argv=None):
                         "total": store.count("annotation", current=True),
                         "next_offset": args.offset+args.limit if len(annotations)>args.limit else None}})
                 return 0
-            if args.command in ("run", "resume", "report", "propose-annotation", "freeze-libraries"):
+            if args.command in ("run", "resume", "report", "freeze-libraries"):
                 from . import run_command
                 if args.command == "run":
                     _print(run_command.run(store, entry=args.entry, commission=run_command.read_json(args.commission),
@@ -128,9 +123,6 @@ def main(argv=None):
                         model_calls=args.model_calls))
                 elif args.command == "report":
                     _print(run_command.report(run_id=args.run_id, journal=args.journal))
-                elif args.command == "propose-annotation":
-                    _print(run_command.propose_annotation(store, subject=args.subject, predicate=args.predicate,
-                        value=parse_json_object(args.value)))
                 else:
                     _print(run_command.freeze_libraries(store, source=args.source,
                         continuation=run_command.read_json(args.continuation), tools=args.tool, head=args.head))

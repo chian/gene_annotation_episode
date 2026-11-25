@@ -9,8 +9,8 @@ A commission carries controlled data only. Nothing in it was written by a model:
 - the objective, a fixed sentence of this file for each axis;
 - the head's selection (its evidence-axis option, thought pattern and tools), which the root's settings give for
   the axis and ``task.action`` put into ``arguments``;
-- the proposed annotation and the scope, as the root was given them; for a head that checks claims, the claim it is
-  commissioned on (a hypothesis record the root's own tool made from a candidate annotation) in its place;
+- the scope, as the root was given it; the root has no proposed annotation and passes none. A head that checks claims
+  is given the claim it is commissioned on (a hypothesis record the root's own tool made from a candidate annotation);
 - the whole-axis finding task with the root's credit unit of the axis (``credit.AXIS_CREDIT_UNITS``): the setting
   that makes the nine axis scales comparable; for the heads that take them, the credit units of their
   operational children (``credit.OPERATIONAL_CREDIT_UNITS``);
@@ -62,83 +62,75 @@ def returned(slot, summary):
 
 
 def sequence_homology_evidence(arguments, summary):
-    """A101. The proposed annotation as text and in custody; the scope records in ``scope_refs``; the credit
-    units of its operational children; and, when the root's lines join two or more of this head's own candidates, the
+    """A101. The scope records in ``scope_refs``; no proposed annotation (the root has none: this head finds the
+    candidate annotations); the credit units of its operational children; and, when the root's lines join two or more of this head's own candidates, the
     grouping of them (``candidate_groups``, ``internal_summary.groups_of``), which the head applies and rescores
     under."""
     slot = 'sequence_homology_evidence'
-    proposed = summary['proposed_annotation_ref']
     assignment = {
         'selection': arguments['selection'],
-        'proposed_annotation_ref': proposed,
         'evidence_refs': unique(summary['evidence_refs'], summary['received_record_refs'], returned(slot, summary)),
         'constraints': {},
         'context': {'evidence_task': evidence_task(slot, 'A101')},
         'scope': summary['scope'], 'scope_refs': summary['scope_refs'],
-        'proposed_annotation_refs': [proposed],
         'child_credit_units': dict(OPERATIONAL_CREDIT_UNITS)}
     if arguments['candidate_groups']:
         assignment['candidate_groups'] = arguments['candidate_groups']
     if arguments.get('organism_candidates'):
         assignment['organism_candidates'] = arguments['organism_candidates']
-    return ChildMessage(objective='Establish what the sequence-homology evidence shows about the proposed '
-                                  'annotation of the assigned subject',
+    return ChildMessage(objective='Find what the sequence-homology evidence shows the assigned subject to be',
                         message={}, assignment=assignment, selection=SELECTION[slot])
 
 
 def structural_homology_evidence(arguments, summary):
-    """A102. The proposed annotation as one reference in custody; the scope records in ``scope_refs``."""
+    """A102. The scope records in ``scope_refs``."""
     slot = 'structural_homology_evidence'
     assignment = {
         'selection': arguments['selection'],
-        'proposed_annotation_ref': [summary['proposed_annotation_ref']],
         'evidence_refs': unique(summary['evidence_refs'], summary['received_record_refs'], returned(slot, summary)),
         'constraints': {},
         'context': {'evidence_task': evidence_task(slot, 'A102')},
         'scope': summary['scope'], 'scope_refs': summary['scope_refs']}
-    return ChildMessage(objective='Establish what the structural-homology evidence shows about the proposed '
-                                  'annotation of the assigned subject',
+    return ChildMessage(objective='Establish what the structural-homology evidence shows about the '
+                                  'assigned subject',
                         message={}, assignment=assignment, selection=SELECTION[slot])
 
 
 def gene_context_evidence(arguments, summary):
-    """A103. The proposed annotation as one reference in custody; the scope records in ``scope_refs``."""
+    """A103. The scope records in ``scope_refs``."""
     slot = 'gene_context_evidence'
     assignment = {
         'selection': arguments['selection'],
-        'proposed_annotation_ref': [summary['proposed_annotation_ref']],
         'evidence_refs': unique(summary['evidence_refs'], summary['received_record_refs'], returned(slot, summary)),
         'constraints': {},
         'context': {'evidence_task': evidence_task(slot, 'A103')},
         'scope': summary['scope'], 'scope_refs': summary['scope_refs']}
-    return ChildMessage(objective='Establish what the gene-context evidence shows about the proposed annotation '
-                                  'of the assigned subject',
+    return ChildMessage(objective='Establish what the gene-context evidence shows about the '
+                                  'assigned subject',
                         message={}, assignment=assignment, selection=SELECTION[slot])
 
 
 def evolutionary_history_evidence(arguments, summary):
-    """A104. The proposed annotation as text; the proposed annotation, the scope records and the further records
-    in ``record_refs``. Its ``read_from_parent`` reads ``purpose`` (the kind of the task) and ``initial_report``
+    """A104. The scope records and the further records in ``record_refs``. Its ``read_from_parent`` reads ``purpose`` (the kind of the task) and ``initial_report``
     from the message."""
     slot = 'evolutionary_history_evidence'
-    proposed = summary['proposed_annotation_ref']
     assignment = {
         'selection': arguments['selection'],
-        'proposed_annotation_ref': proposed,
         'evidence_refs': unique(summary['evidence_refs'], returned(slot, summary)),
         'constraints': {},
         'context': {'evidence_task': evidence_task(slot, 'A104')},
         'scope': summary['scope'],
-        'record_refs': unique([proposed], summary['scope_refs'], summary['received_record_refs'])}
-    return ChildMessage(objective='Establish what the evolutionary-history evidence shows about the proposed '
-                                  'annotation of the assigned subject',
+        'record_refs': unique(summary['scope_refs'], summary['received_record_refs'])}
+    return ChildMessage(objective='Establish what the evolutionary-history evidence shows about the '
+                                  'assigned subject',
                         message={'purpose': TASK_KIND, 'initial_report': {}},
                         assignment=assignment, selection=SELECTION[slot])
 
 
 def experimental_activity_evidence(arguments, summary):
     """A105. It is commissioned on one claim (``arguments['claim_ref']``): a hypothesis record the root made from a
-    candidate annotation (``task.make_claims``), which the head evaluates as its proposed annotation. One custody field,
+    candidate annotation (``task.make_claims``), which is what the head evaluates (the head's own form names that field
+    ``proposed_annotation_ref``; it is the root's claim, never an input of the root). One custody field,
     ``evidence_refs``, for the scope records, the claim with the records it names, and the evidence; its context is
     exactly the finding task. Once its head has returned a sheet for this claim, the sheet states of that return go back
     as ``sheet_state_refs``: the head continues that sheet and returns the rise of its credit since it
@@ -157,37 +149,34 @@ def experimental_activity_evidence(arguments, summary):
     sheets = summary['axes'][slot]['claim_sheets']
     if claim['claim_ref'] in sheets and sheets[claim['claim_ref']]:
         assignment['sheet_state_refs'] = list(sheets[claim['claim_ref']])
-    return ChildMessage(objective='Establish what the experimental-activity evidence shows about the proposed '
-                                  'annotation of the assigned subject',
+    return ChildMessage(objective='Establish what the experimental-activity evidence shows about the claim '
+                                  'it is commissioned on',
                         message={}, assignment=assignment, selection=SELECTION[slot])
 
 
 def perturbation_evidence(arguments, summary):
-    """A106. The proposed annotation as text; the proposed annotation, the scope records and the further records
+    """A106. The scope records and the further records
     in ``received_record_refs``."""
     slot = 'perturbation_evidence'
-    proposed = summary['proposed_annotation_ref']
     assignment = {
         'selection': arguments['selection'],
-        'proposed_annotation_ref': proposed,
         'evidence_refs': unique(summary['evidence_refs'], returned(slot, summary)),
         'constraints': {},
         'context': {'evidence_task': evidence_task(slot, 'A106')},
         'scope': summary['scope'],
-        'received_record_refs': unique([proposed], summary['scope_refs'], summary['received_record_refs'])}
-    return ChildMessage(objective='Establish what the perturbation evidence shows about the proposed annotation '
-                                  'of the assigned subject',
+        'received_record_refs': unique(summary['scope_refs'], summary['received_record_refs'])}
+    return ChildMessage(objective='Establish what the perturbation evidence shows about the '
+                                  'assigned subject',
                         message={}, assignment=assignment, selection=SELECTION[slot])
 
 
 def partner_presence_evidence(arguments, summary):
-    """A107. The proposed annotation as one reference in custody; the scope records and the further records in
+    """A107. The scope records and the further records in
     ``received_record_refs``; the finding unit and the credit units of its operational children as fields of the
     assignment."""
     slot = 'partner_presence_evidence'
     assignment = {
         'selection': arguments['selection'],
-        'proposed_annotation_ref': [summary['proposed_annotation_ref']],
         'evidence_refs': unique(summary['evidence_refs'], returned(slot, summary)),
         'constraints': {},
         'context': {'evidence_task': evidence_task(slot, 'A107')},
@@ -197,43 +186,40 @@ def partner_presence_evidence(arguments, summary):
         'handoff_unit': OPERATIONAL_CREDIT_UNITS['handoff_unit'],
         'acquired_record_unit': OPERATIONAL_CREDIT_UNITS['acquired_record_unit'],
         'information_unit': OPERATIONAL_CREDIT_UNITS['information_unit']}
-    return ChildMessage(objective='Establish what the partner-presence evidence shows about the proposed '
-                                  'annotation of the assigned subject',
+    return ChildMessage(objective='Establish what the partner-presence evidence shows about the '
+                                  'assigned subject',
                         message={}, assignment=assignment, selection=SELECTION[slot])
 
 
 def sample_context_evidence(arguments, summary):
-    """A108. The proposed annotation as text; the proposed annotation, the scope records and the further records
+    """A108. The scope records and the further records
     in ``received_record_refs``."""
     slot = 'sample_context_evidence'
-    proposed = summary['proposed_annotation_ref']
     assignment = {
         'selection': arguments['selection'],
-        'proposed_annotation_ref': proposed,
         'evidence_refs': unique(summary['evidence_refs'], returned(slot, summary)),
         'constraints': {},
         'context': {'evidence_task': evidence_task(slot, 'A108')},
         'scope': summary['scope'],
-        'received_record_refs': unique([proposed], summary['scope_refs'], summary['received_record_refs'])}
-    return ChildMessage(objective='Establish what the sample-context evidence shows about the proposed annotation '
-                                  'of the assigned subject',
+        'received_record_refs': unique(summary['scope_refs'], summary['received_record_refs'])}
+    return ChildMessage(objective='Establish what the sample-context evidence shows about the '
+                                  'assigned subject',
                         message={}, assignment=assignment, selection=SELECTION[slot])
 
 
 def biochemical_feasibility_evidence(arguments, summary):
-    """A110. The proposed annotation as one reference in custody; the scope records and the further records in
+    """A110. The scope records and the further records in
     ``received_record_refs``. Its return form requires ``committed_record_refs``, so nothing is selected."""
     slot = 'biochemical_feasibility_evidence'
     assignment = {
         'selection': arguments['selection'],
-        'proposed_annotation_ref': [summary['proposed_annotation_ref']],
         'evidence_refs': unique(summary['evidence_refs'], returned(slot, summary)),
         'constraints': {},
         'context': {'evidence_task': evidence_task(slot, 'A110')},
         'scope': summary['scope'],
         'received_record_refs': unique(summary['scope_refs'], summary['received_record_refs'])}
-    return ChildMessage(objective='Establish what the biochemical-feasibility evidence shows about the proposed '
-                                  'annotation of the assigned subject',
+    return ChildMessage(objective='Establish what the biochemical-feasibility evidence shows about the '
+                                  'assigned subject',
                         message={}, assignment=assignment, selection=SELECTION[slot])
 
 

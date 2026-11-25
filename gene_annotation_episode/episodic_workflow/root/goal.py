@@ -1,8 +1,8 @@
-"""What this episode is for: the annotation of one subject, as the credit nine evidence axes earn for its proposed
-annotation."""
+"""What this episode is for: the annotation of one subject. It starts with no proposed annotation: the candidate
+annotations are what its heads find, and its credit is what the nine evidence axes earn for them."""
 
 BINDING_PATH = 'root'
-GOAL = ('Raise the annotation credit of the proposed annotation of the assigned subject: the credit over the nine '
+GOAL = ('Find the annotation of the assigned subject and raise its annotation credit: the credit over the nine '
         'evidence-axis credits, which grows linearly with progress on one axis and more when the progress is '
         'spread over several axes')
 UNIT = ('One commission of one evidence-axis head, which returns its axis credit, the scores of its scoring sheet, the '
