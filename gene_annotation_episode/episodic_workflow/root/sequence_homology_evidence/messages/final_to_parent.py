@@ -10,9 +10,22 @@ records of its comparisons: the records its credit reads, which a parent passes 
 ``execution_closure_refs`` (the status and closure records its children returned) and ``data_product_refs`` (the held
 data-product rows). EVERY RETURNED RECORD LIST IS CLOSED UNDER NAMING: each is ``internal_summary``'s ``returned_refs`` entry, built with
 ``job_records.returned_with_names`` (the records chosen with everything they name among the records held), so the parent holds
-whatever a returned record names."""
+whatever a returned record names.
+
+Also selectable: ``candidate_hit_organisms`` (controlled data, no records): for each target of the scope, in the order
+of ``finding.targets``, the organisms of the database hits behind each candidate a database search named: per candidate
+its vocabulary and name, one entry per NCBI taxon id with the number of its hits of that taxon, and the number of its
+hits whose feature carries no taxon id (``candidate_measurements._hit_organisms``). Ids and counts only.
+
+And ``candidate_hit_feature_kinds`` (controlled data, no records), in the same arrangement: per candidate a database
+search named, the number of its hits per feature type (a type of the one list ``feature_types.KINDS``, matched from the
+database's own feature type of each hit by ``database_feature_types``), the number of its hits whose database value has
+no type of ours yet, and the number of its hits whose feature carries no feature type
+(``candidate_measurements._hit_feature_kinds``). The database's own values are not returned: they stay in this
+episode's records."""
 from method_loop import ChoiceField, Field, RecordForm
 
+from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_features.feature_types import KINDS
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.axis_features import (
     FEATURES, MEANINGS)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.candidate_measurements import (
@@ -121,6 +134,42 @@ TARGET_FORM = RecordForm({
     'grouping_in_force': Field('list', 'The grouping in force, as the commission gave it', items=GROUP_FORM,
                                required=False),
 })
+HIT_ORGANISM_FORM = RecordForm({
+    'taxon_id': Field('integer', 'The taxon the hits are from (NCBI taxonomy id), as the database gives it for each '
+                                 'hit\'s feature'),
+    'hit_count': Field('integer', 'The hits of the candidate that are from that taxon'),
+})
+CANDIDATE_HIT_ORGANISMS_FORM = RecordForm({
+    'vocabulary': ChoiceField('text', 'The vocabulary of the candidate: product (a database search\'s function)',
+                              ('product',)),
+    'name': Field('text', 'The candidate\'s name exactly as its source gives it'),
+    'organisms': Field('list', 'The taxa the candidate\'s hits are from, the taxon of most hits first',
+                       items=HIT_ORGANISM_FORM),
+    'hits_without_taxon': Field('integer', 'Its hits whose feature carries no taxon id'),
+})
+TARGET_HIT_ORGANISMS_FORM = RecordForm({
+    'candidates': Field('list', 'One row per candidate of the target that a database search named, in the order of the '
+                                'target\'s candidates', items=CANDIDATE_HIT_ORGANISMS_FORM),
+})
+HIT_FEATURE_KIND_FORM = RecordForm({
+    'kind': ChoiceField('text', 'The type of feature the hits are, in this code base\'s list of feature types, matched '
+                                'from the database\'s own feature type of each hit', KINDS),
+    'hit_count': Field('integer', 'The hits of the candidate that are features of that type'),
+})
+CANDIDATE_HIT_FEATURE_KINDS_FORM = RecordForm({
+    'vocabulary': ChoiceField('text', 'The vocabulary of the candidate: product (a database search\'s function)',
+                              ('product',)),
+    'name': Field('text', 'The candidate\'s name exactly as its source gives it'),
+    'feature_kinds': Field('list', 'The types of feature the candidate\'s hits are, the type of most hits first',
+                           items=HIT_FEATURE_KIND_FORM),
+    'hits_with_unmapped_feature_type': Field('integer', 'Its hits whose feature type in the database is matched to '
+                                                        'no type of this code base yet'),
+    'hits_without_feature_type': Field('integer', 'Its hits whose feature carries no feature type'),
+})
+TARGET_HIT_FEATURE_KINDS_FORM = RecordForm({
+    'candidates': Field('list', 'One row per candidate of the target that a database search named, in the order of the '
+                                'target\'s candidates', items=CANDIDATE_HIT_FEATURE_KINDS_FORM),
+})
 FINDING_FORM = RecordForm({
     'evidence_axis': ChoiceField('text', 'The evidence axis', ('A101',)),
     'targets': Field('list', 'One entry per target of the scope: the features of its axis sheet', items=TARGET_FORM),
@@ -144,6 +193,14 @@ RETURN_FORM = RecordForm({
     'data_product_refs': Field('record_refs', 'The data-product rows it holds (labelled files: EDAM type and format, what '
                                               'made them, where else they lie), which a later visit passes back for reuse',
                                required=False),
+    'candidate_hit_organisms': Field('list', 'For each target of the scope, in the order of the finding\'s targets: the '
+                                             'organisms of the database hits behind each candidate a database search '
+                                             'named (taxon ids and hit counts)',
+                                     items=TARGET_HIT_ORGANISMS_FORM, required=False),
+    'candidate_hit_feature_kinds': Field('list', 'For each target of the scope, in the order of the finding\'s targets: '
+                                                 'the feature types of the database hits behind each candidate a '
+                                                 'database search named (types of the fixed list and hit counts)',
+                                         items=TARGET_HIT_FEATURE_KINDS_FORM, required=False),
 })
 
 
@@ -159,4 +216,8 @@ def final_to_parent(summary, completion, selection):
                           'outstanding_handoff_count': summary['outstanding_handoff_count'],
                           **({'waiting_searches': waiting} if waiting else {})}}
     result.update({name: refs for name, refs in summary['returned_refs'].items() if name in selection})
+    if 'candidate_hit_organisms' in selection:
+        result['candidate_hit_organisms'] = summary['candidate_hit_organisms']
+    if 'candidate_hit_feature_kinds' in selection:
+        result['candidate_hit_feature_kinds'] = summary['candidate_hit_feature_kinds']
     return result

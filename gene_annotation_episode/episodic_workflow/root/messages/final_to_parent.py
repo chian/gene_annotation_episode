@@ -1,7 +1,8 @@
 """The return of the annotation: controlled data only. Always returned: ``credit`` (the annotation credit its
 controller stopped on, which the system hands in ``completion``) and ``finding``: the root's scoring sheet
 (``annotations``: every candidate annotation the axis heads scored, with its score, the hypervolume over the scores
-the axes give it, and the row of each axis that scored it, the highest score first), the best annotation (``best_annotation``:
+the axes give it multiplied by the factor ``(1 + k * s_o) ** w_o`` of the organism it is reported with (a pure
+multiple: zero from the axes stays zero), that organism's taxon id and score, and the row of each axis that scored it, the highest score first), the best annotation (``best_annotation``:
 the first of the sheet, present when its status is known), the claims made from the annotations (``claims``), how many
 commissions the root made and, for each of the
 nine axes, its credit, how often it was commissioned and how many job records its head left outstanding. Selectable, returned in custody: ``record_refs`` (the records the axis heads returned) and
@@ -50,9 +51,17 @@ ANNOTATION_FORM = RecordForm({
                         required=False),
     'status': ChoiceField('text', 'Whether the merged evidence is measured, measured as exactly zero, or unknown',
                           ROW_STATUS),
-    'score': Field('number', 'The annotation score: the hypervolume prod_i (1 + k * s_i) ** w_i - 1 over the scores '
-                             's_i the axes give the annotation (0 for an axis that has not scored it)' + _ABSENT,
+    'score': Field('number', 'The annotation score: (prod_i (1 + k * s_i) ** w_i - 1) * (1 + k * s_o) ** w_o: the '
+                             'hypervolume over the scores s_i the axes give the annotation (0 for an axis that has '
+                             'not scored it), multiplied by the factor of the score s_o of the organism it is '
+                             'reported with (0 when no candidate taxon is held: the factor is 1)' + _ABSENT,
                    required=False),
+    'organism_taxon_id': Field('integer', 'The organism the annotation is reported with, whose score entered the '
+                                          'annotation score: the leading candidate taxon of the sequence (NCBI '
+                                          'taxonomy id); absent when the annotation has no score or no candidate '
+                                          'taxon is held', required=False),
+    'organism_score': Field('number', "That taxon's score as the organism identification head returned it: s_o of "
+                                      'the annotation score; absent with the taxon', required=False),
     'function_identifiers': Field('list', 'The function-level identifiers of the proteins behind the annotation',
                                   items=FUNCTION_IDENTIFIER_FORM, required=False),
     'identifier_sources': Field('list', 'Per source of those identifiers, the proteins that carry any identifier of it',

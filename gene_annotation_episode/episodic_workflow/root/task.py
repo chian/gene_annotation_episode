@@ -57,7 +57,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.annotation_
     TOOL_NAME as MAKE_CLAIMS, generate_claims)
 
 from .credit import AXIS_WEIGHTS, K, annotation_credit
-from .messages.internal_summary import annotation_key, identity_of
+from .messages.internal_summary import ORGANISM_WEIGHT, annotation_key, identity_of
 
 # Slot (the axis role) -> the binding path of the axis head, the folder of that name under the root: the heads the root is
 # linked with.
@@ -79,7 +79,8 @@ ANNOTATION_FINDER = 'sequence_homology_evidence'
 # The head that says which organism the subject is from. It is commissioned on the root's own scope, as every head is, and
 # it works from DNA: its commission is a unit the root owes once, at the start, when the subject of the scope is DNA
 # (``resume_action``). It is no evidence axis and earns no annotation credit; what it returns is passed down to the heads
-# that take it (``TAKES_ORGANISM``) and to the claim maker. The owner,
+# that take it (``TAKES_ORGANISM``) and to the claim maker, and the score of its leading candidate is a factor of every
+# candidate annotation's score (``internal_summary.annotation_score``). The owner,
 # 2026-11-24: "add organismal taxa ID potential candidates as a new head from root"; "a way to pass this info on taxa
 # candidates to the root who can pass whatever info it decides down to the other children".
 ORGANISM_FINDER = 'organism_identification'
@@ -103,7 +104,7 @@ Each step you take one of the `choices`, by its number:
 
 Claims are made for you: for every candidate annotation found, what it says the protein does is turned into claims an experiment could check ("binds", "catalyzes" or "transports" a named molecule). An annotation that states no function gives no claims.
 
-`annotations` is the scoring sheet: every candidate annotation scored so far, the highest `score` first. Each has its `vocabulary` and its `name` or `identifier`, its `score`, and `rows`: the score each axis gives it, on that axis's own scale (negative when that axis's evidence says the annotation does not hold). The annotation's score is prod_i (1 + k * s_i) ** w_i - 1 over the axis scores s_i, with 0 for an axis that has not scored it: an annotation supported on several axes scores more than the same support on one, and an axis that speaks against it discounts the rest. The first is the best annotation as the evidence stands.
+`annotations` is the scoring sheet: every candidate annotation scored so far, the highest `score` first. Each has its `vocabulary` and its `name` or `identifier`, its `score`, and `rows`: the score each axis gives it, on that axis's own scale (negative when that axis's evidence says the annotation does not hold). The annotation's score is (prod_i (1 + k * s_i) ** w_i - 1) * (1 + k * s_o) ** w_o: the product over the axis scores s_i, with 0 for an axis that has not scored it, multiplied by the factor of the score s_o of the organism the annotation is reported with. An annotation supported on several axes scores more than the same support on one, and an axis that speaks against it discounts the rest; the organism only scales what the axes give, so an annotation the axes give zero stays at zero. That organism is the leading candidate taxon of `organism`; the annotation shows it as `organism_taxon_id` and `organism_score` (absent, with s_o counted 0 and the factor 1, when no candidate taxon is held), and `organism_weight` is w_o. The first is the best annotation as the evidence stands.
 
 `organism` shows which organism the subject is from, when the subject is DNA: the candidate taxa found by the organism identification episode, the leading one first, each with its score (the support on its own lineage, so a vaguer call such as a family supports every finer candidate inside it), and the `placement` (the leading candidate, its leading rival and the deepest taxon the two share). That episode is run for you before anything else, and what it found is passed to the sequence homology episode and to the making of the claims.
 
@@ -210,7 +211,7 @@ def decide(summary, feedback, ctx):
     credits = {slot: summary['axes'][slot]['credit'] for slot in AXIS_WEIGHTS}
     current = annotation_credit(credits)
     offered = choices(summary)
-    context = {'annotation_credit': current, 'k': K,
+    context = {'annotation_credit': current, 'k': K, 'organism_weight': ORGANISM_WEIGHT,
                'annotations': summary['annotations'],
                'claims': [claim_view(claim, summary) for claim in summary['claims']],
                'axes': [axis_view(slot, summary, credits, current) for slot in CHILD_SLOTS if slot in AXIS_WEIGHTS],

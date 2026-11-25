@@ -10,7 +10,13 @@ API (no login is sent: the service answers them without one), three collections,
 300 hits take a handful of requests, at least ``SPACING_SECONDS`` apart:
 
 * ``genome_feature`` by ``patric_id``: ``product``, ``annotation``, ``pgfam_id``, ``plfam_id``, ``genome_id``,
-  ``taxon_id``, ``feature_id``, ``aa_length``;
+  ``taxon_id``, ``feature_id``, ``aa_length``, ``aa_sequence_md5``, and the hit's own feature annotation in its genome
+  (the owner, 2026-11-25: "just like with organismal taxa ... you also have to extract this? we can decide how to use
+  it later"): ``feature_type`` (the database's type of the feature), ``sequence_id`` and ``accession`` (the sequence of
+  the genome it lies on: the service's id of it and its accession), ``start``, ``end``, ``strand`` and ``na_length``
+  (its position, strand and length in nucleotides on that sequence). The names are those of the repository's field
+  list of the collection (``bvbrc_data_fields``); the values are kept exactly as the service gives them and nothing
+  here reads them (``grading/sequence_features/database_feature_types.py`` matches ``feature_type`` to our types);
 * ``protein_family_ref`` by ``family_id`` (the family ids found): ``family_type``, ``family_product``;
 * ``genome`` by ``genome_id``: ``genome_name``, ``taxon_id``.
 
@@ -43,7 +49,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.acquisition.servi
 BATCH = 100
 SPACING_SECONDS = 10
 FEATURE_FIELDS = ['patric_id', 'feature_id', 'product', 'annotation', 'pgfam_id', 'plfam_id', 'genome_id', 'taxon_id',
-                  'aa_length', 'aa_sequence_md5']
+                  'aa_length', 'aa_sequence_md5', 'feature_type', 'sequence_id', 'accession', 'start', 'end', 'strand',
+                  'na_length']
 FAMILY_FIELDS = ['family_id', 'family_type', 'family_product']
 GENOME_FIELDS = ['genome_id', 'genome_name', 'taxon_id']
 SOURCE = 'bvbrc_data:genome_feature'
@@ -178,7 +185,10 @@ def sequences_by_md5(md5s):
 def reference_metadata(found):
     """The grader's reference-metadata rows (legacy association, matched by ``accession`` and the native ``taxid``) from
     the records ``lookup`` found: one row per feature that has a ``product``. A feature without one has a row without
-    functions. ``source`` of a function is BV-BRC's ``annotation`` of the feature (who assigned the name)."""
+    functions. ``source`` of a function is BV-BRC's ``annotation`` of the feature (who assigned the name).
+    ``bvbrc_feature`` of a function is the feature's record as the service gave it (every one of ``FEATURE_FIELDS`` it
+    returned: the taxon id and the feature's own type, sequence, position, strand and length among them), which the
+    graded sheet keeps with the function."""
     rows = []
     for record in found['features']:
         families = [found['families'][record[name]] for name in ('pgfam_id', 'plfam_id') if record.get(name)]

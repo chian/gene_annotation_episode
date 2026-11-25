@@ -13,7 +13,13 @@ record, job ledger rows included, the held records it names: what travels in cus
 ``returned_refs`` are the record lists ``final_to_parent`` returns (``committed_record_refs``, ``execution_handoff_refs``,
 ``execution_check_refs``, ``execution_closure_refs``, ``data_product_refs``), each CLOSED UNDER NAMING by
 ``job_records.returned_with_names`` (the records chosen with everything they name, recursively, among the held records), as every
-child's returned lists are: the parent holds what a returned record names."""
+child's returned lists are: the parent holds what a returned record names.
+
+``candidate_hit_organisms`` is the selectable field of that name ``final_to_parent`` returns: for each target, in the
+order of ``axis_findings``, the organisms of the database hits behind each candidate a database search named (taxon
+ids and hit counts: the table's ``hit_organisms``). ``candidate_hit_feature_kinds`` is the selectable field of that
+name, in the same arrangement: the feature types of those hits (types of ``feature_types.KINDS`` and hit counts: the
+table's ``hit_feature_kinds``)."""
 import json
 
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import (
@@ -168,6 +174,10 @@ def internal_summary(view):
             'working_state': records.reasoning_view(parent['scope']),
             'reasoning_schema': records.reasoning_schema(),
             'credit_binding': A101DifferentialCredit().as_record(), 'axis_findings': findings,
+            'candidate_hit_organisms': [{'candidates': table['targets'][target]['hit_organisms']}
+                                        for target in details['a101_sheet']['targets']],
+            'candidate_hit_feature_kinds': [{'candidates': table['targets'][target]['hit_feature_kinds']}
+                                            for target in details['a101_sheet']['targets']],
             # the commission carries a grouping of this episode's candidates it does not hold yet: the unit that keeps it
             # is owed (``task.resume_action``)
             'grouping_owed': bool(parent['candidate_groups']) and parent['candidate_groups'] not in held_groupings(records),

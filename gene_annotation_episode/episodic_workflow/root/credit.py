@@ -126,7 +126,9 @@ def axis_gain(axis_value, weight):
 def hypervolume(axis_values):
     """``prod_i (1 + K * v_i) ** w_i - 1`` over the values ``{slot: v_i}`` of the nine axes: the root's one
     arithmetic. Over the axis credits it is the annotation credit (below); over the scores the axes give one candidate
-    annotation it is that annotation's score (``messages/internal_summary.py``). The two never read each other."""
+    annotation it is the axes' part of that annotation's score (``messages/internal_summary.annotation_score``, which
+    multiplies this result by the organism's factor ``(1 + K * s_o) ** w_o``, a pure multiple outside the product;
+    that factor is in the score only). The two never read each other."""
     total = 0.0
     for slot, weight in AXIS_WEIGHTS.items():
         gain = axis_gain(axis_values[slot], weight)

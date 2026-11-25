@@ -12,7 +12,10 @@
   candidate annotation: which annotation (``vocabulary``, and the ``name`` and ``identifier`` its source gives it), the
   ``status`` of the evidence (``ROW_STATUS``) and its ``score``: the one number that head's scoring sheet gives the
   annotation, on that head's own scale, never bounded, clamped or rescaled here. With them, where the head returns
-  them, the function-level identifiers of the proteins behind the candidate.
+  them, the function-level identifiers of the proteins behind the candidate, and the organisms of the database hits
+  behind it (``hit_organisms``: NCBI taxon ids with hit counts; ``hits_without_taxon``) and the feature types of
+  those hits (``hit_feature_kinds``: types of the head's fixed list with hit counts;
+  ``hits_with_unmapped_feature_type``; ``hits_without_feature_type``), which enter no score.
 - ``grouped_rows`` and ``grouping_in_force``: for a head that applies the root's grouping of its candidates
   (``GROUPED_ROWS``), its candidates rescored under the grouping it was last given, and that grouping.
 - ``claim_rows``: the score channel of a head that checks claims (``CLAIM_ROWS``). One row per claim its sheet scored:
@@ -99,7 +102,7 @@ FUNCTION_SOURCES = ('bvbrc_global_family', 'hamap', 'ncbifam', 'panther_subfamil
 DECIDING_SOURCES = ('bvbrc_global_family', 'hamap', 'ncbifam', 'panther_subfamily')
 
 
-def sequence_homology_rows(finding):
+def sequence_homology_rows(result):
     """A101. The finding holds one entry per target of the scope, and the root annotates one subject: one target. Each
     of its candidates (the possible annotations found, each with its annotation score: the sum of its values on the
     head's subscoring sheets, never negative) is a row with that score. This head's sheets hold no evidence against a
@@ -107,11 +110,28 @@ def sequence_homology_rows(finding):
     carries the function-level identifiers of the proteins behind it (``function_identifiers``: source, identifier and
     the number of its hits that carry it; ``identifier_sources``: per source, the number of its hits that carry any
     identifier of it) and ``hits_without_identifier``; the root decides with them which names are
-    one function (``internal_summary.same_function``)."""
-    (target,) = finding['targets']
+    one function (``internal_summary.same_function``). Such a candidate also carries the organisms of the database hits
+    behind it, from the field the root selects (``candidate_hit_organisms``, one entry per target as the finding):
+    ``hit_organisms`` (one entry per NCBI taxon id with the number of its hits of that taxon, the taxon of most hits
+    first) and ``hits_without_taxon``; and, from the field ``candidate_hit_feature_kinds`` (arranged the same), the
+    feature types of those hits: ``hit_feature_kinds`` (one entry per type of the head's fixed list with the number of
+    its hits of that type), ``hits_with_unmapped_feature_type`` (its hits whose database feature type is matched to no
+    type yet) and ``hits_without_feature_type``. They are kept on the row and enter no score."""
+    (target,) = result['finding']['targets']
+    (organisms,) = result['candidate_hit_organisms']
+    (feature_kinds,) = result['candidate_hit_feature_kinds']
+    behind = {(row['vocabulary'], row['name']): {'hit_organisms': row['organisms'],
+                                                 'hits_without_taxon': row['hits_without_taxon']}
+              for row in organisms['candidates']}
+    kinds = {(row['vocabulary'], row['name']): {
+        'hit_feature_kinds': row['feature_kinds'],
+        'hits_with_unmapped_feature_type': row['hits_with_unmapped_feature_type'],
+        'hits_without_feature_type': row['hits_without_feature_type']} for row in feature_kinds['candidates']}
     return [{'vocabulary': candidate['vocabulary'], 'name': candidate['name'],
              **{name: candidate[name] for name in ('identifier', 'function_identifiers', 'identifier_sources',
                                                     'hits_without_identifier') if name in candidate},
+             **behind.get((candidate['vocabulary'], candidate['name']), {}),
+             **kinds.get((candidate['vocabulary'], candidate['name']), {}),
              'status': 'measured' if candidate['score'] else 'measured_zero', 'score': candidate['score']}
             for candidate in target['candidates']]
 
@@ -153,12 +173,17 @@ def no_rows(finding):
     return []
 
 
-# How the rows of each linked head's return are read from its finding, written against that head's own
-# ``messages/final_to_parent.py``. A head is listed here when it is linked (``task.CHILD_SLOTS``): a head that scores
-# the annotations it finds gives annotation rows, a head that checks claims gives claim rows.
+def no_annotation_rows(result):
+    return []
+
+
+# How the rows of each linked head's return are read, written against that head's own ``messages/final_to_parent.py``.
+# A head is listed here when it is linked (``task.CHILD_SLOTS``): a head that scores the annotations it finds gives
+# annotation rows (read from its return: its finding and the fields the root selected), a head that checks claims
+# gives claim rows (read from its finding).
 ANNOTATION_ROWS = {
     'sequence_homology_evidence': sequence_homology_rows,
-    'experimental_activity_evidence': no_rows,
+    'experimental_activity_evidence': no_annotation_rows,
 }
 CLAIM_ROWS = {
     'sequence_homology_evidence': no_rows,
@@ -211,7 +236,7 @@ def read_from_child(slot, result, summary, records):
     return {'credit': result['credit'],
             'finding': {name: value for name, value in result['finding'].items()
                         if type(value) in (bool, int, float)},
-            'annotation_rows': ANNOTATION_ROWS[slot](result['finding']),
+            'annotation_rows': ANNOTATION_ROWS[slot](result),
             'claim_rows': CLAIM_ROWS[slot](result['finding']),
             **GROUPED_ROWS[slot](result['finding']),
             'record_refs': references(result, (*RECORD_FIELDS[slot], *SHEET_FIELDS[slot])),

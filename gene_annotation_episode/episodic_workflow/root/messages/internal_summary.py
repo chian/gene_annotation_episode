@@ -4,7 +4,11 @@ the root's own tool are read (numbers, flags, looked-up names and record referen
 
 For each axis: ``credit`` (the axis credit; 0 before its head's first return), ``credit_after_each_return`` (the axis
 credit after each return, in order), ``finding`` (the numbers and flags of its latest finding), ``annotation_rows``
-(the rows of a head that scores the annotations it finds: those of its latest return that carried any), ``claim_rows``
+(the rows of a head that scores the annotations it finds: those of its latest return that carried any; a row keeps,
+where its head returned them, the organisms of the database hits behind the candidate, ``hit_organisms`` (NCBI taxon
+ids with hit counts) and ``hits_without_taxon``, and the feature types of those hits, ``hit_feature_kinds`` (types of
+the fixed list with hit counts), ``hits_with_unmapped_feature_type`` and ``hits_without_feature_type``, which no score
+reads and no line of the sheet carries), ``claim_rows``
 (the rows of a head that checks claims, by claim: the latest row its sheet gave each claim), ``claim_sheets`` (by
 claim, the sheet states of the head's latest return on that claim, which go back to it when it is commissioned on that
 claim again), ``claim_commissions`` (by claim, how often the head was commissioned on it), ``record_refs`` (every record
@@ -57,11 +61,12 @@ claim is exactly the scalar that head's own sheet gives it (A105's rule for its 
 annotation: each claim is a separate thing the annotation says, checked on its own). A claim is on the line of the
 annotation it was made from.
 
-The merger of the axes is the root's hypervolume (``credit.hypervolume``, the owner's rule for the root): the score of
-an annotation is ``prod_i (1 + K * s_i) ** w_i - 1`` over the nine axes, where ``s_i`` is the score axis ``i`` gives
-that annotation. The concept: the axes are independent kinds of evidence, and an annotation stands on how many of
-them agree. So the axes multiply: an annotation scored on one axis alone has exactly that axis's score (times ``K``),
-and the same evidence spread over several axes scores more than it would on one. An axis that has not scored the
+The merger of the axes is the root's hypervolume (``credit.hypervolume``, the owner's rule for the root): what the
+axes give an annotation is ``prod_i (1 + K * s_i) ** w_i - 1`` over the nine axes, where ``s_i`` is the score axis
+``i`` gives that annotation (the annotation's score is this times the organism's factor, below). The concept: the axes
+are independent kinds of evidence, and an annotation stands on how many of them agree. So the axes multiply: an
+annotation scored on one axis alone has from the axes exactly that axis's score (times ``K``), and the same evidence
+spread over several axes scores more than it would on one. An axis that has not scored the
 annotation, or whose row for it is of unknown status, takes ``s_i = 0``: its factor is 1, so it neither adds nor erases
 what the other axes established (the offset ``credit.EPSILON`` of the hypervolume), and the row keeps its status, so
 unknown is never read as a measured zero. An axis whose score is negative (its evidence says the annotation does not
@@ -69,17 +74,38 @@ hold) has a factor below 1 and discounts what the other axes built; it cannot re
 fails there). The same arithmetic over the axis credits is the annotation credit; the score reads no credit and the
 credit reads no score.
 
+The organism multiplies an annotation's score (the owner, 2026-11-25: "the organism taxa score (which hopefully
+relates to the certainty of that call) should play a role in the annotation score b/c it is part of the annotation
+ultimately"). An annotation is reported with the organism of the sequence: the leading candidate taxon the organism
+identification head returned (``leading_taxon``). Its score ``s_o`` gives the factor ``(1 + K * s_o) ** w_o``, with its
+own weight ``w_o`` (``ORGANISM_WEIGHT``), and the score of an annotation is (``annotation_score``)
+
+    (prod_i (1 + K * s_i) ** w_i  -  1)  *  (1 + K * s_o) ** w_o
+
+The factor is a pure multiple of what the axes give, not one more offset factor inside their product (the owner,
+2026-11-25: "make it depend on a pure multiple and not a discounted multiple", for the organism only): the axes merge
+among themselves with the offset product as before, and the organism scales their result. So an annotation the axes
+give exactly zero stays at zero: the organism alone earns an annotation nothing. With no candidate taxon held (the
+head was not commissioned, or found none) ``s_o = 0``, the factor is 1 and the score is what the axes give. A line with
+a score shows what entered it: ``organism_taxon_id`` and ``organism_score``, absent when no candidate taxon is held.
+The organism head is no evidence axis: its weight is not among ``credit.AXIS_WEIGHTS`` and its factor is in the score
+only, never in the annotation credit.
+
 An annotation with no row of known status has status unknown and no score. The sheet is ordered: the annotations of
 known status by score, highest first, then the unknown ones; the first, when its status is known, is the best
 annotation."""
 import math
 
-from ..credit import AXIS_WEIGHTS, hypervolume
+from ..credit import AXIS_WEIGHTS, axis_gain, hypervolume
 from .read_from_child import CREDIT_RETURNED, DECIDING_SOURCES, ORGANISM_FINDER
 
 ROW_FIELDS = ('status', 'score', 'support', 'opposition')
 # net -> the score of an axis that checks claims: tanh(net / CLAIM_SCALAR_DIVISOR), the divisor that head's sheet uses.
 CLAIM_SCALAR_DIVISOR = 2.0
+# w_o: the root's weight of the organism's factor (1 + K * s_o) ** w_o in an annotation's score. 1, like the axes. A
+# setting of the score only: the organism identification head is no evidence axis and this weight is not part of the
+# annotation credit.
+ORGANISM_WEIGHT = 1.0
 
 
 IDENTITY_FIELDS = ('vocabulary', 'name', 'identifier', 'function_identifiers', 'identifier_sources',
@@ -172,10 +198,38 @@ def function_lines(axes):
     return lines
 
 
-def scoring_sheet(axes, claims):
-    """The root's scoring sheet from the rows of the axes and the claims (see the module text)."""
+def leading_taxon(organism):
+    """The leading candidate taxon the organism identification head returned (its row of ``organism['candidates']``), or
+    ``None`` when the root holds none: the head was not commissioned, or found no candidate."""
+    placement = organism['placement']
+    if 'leader_taxon_id' not in placement:
+        return None
+    return next(row for row in organism['candidates'] if row['taxon_id'] == placement['leader_taxon_id'])
+
+
+def organism_entry(organism):
+    """What the organism enters into the score of every line of the sheet, as the line carries it: the leading
+    candidate taxon (``organism_taxon_id``) and its score (``organism_score``); empty when the root holds none."""
+    leader = leading_taxon(organism)
+    return {} if leader is None else {'organism_taxon_id': leader['taxon_id'], 'organism_score': leader['score']}
+
+
+def annotation_score(axis_scores, organism_score):
+    """``(prod_i (1 + K * s_i) ** w_i - 1) * (1 + K * s_o) ** w_o``: the score of one candidate annotation, from the
+    scores ``{slot: s_i}`` the nine axes give it (their own merge, ``credit.hypervolume``) and the score ``s_o`` of
+    the leading candidate taxon of the sequence, with the weight ``ORGANISM_WEIGHT``. The organism's factor is a pure
+    multiple of the axes' score: zero from the axes stays zero, and ``s_o = 0`` leaves the axes' score as it is."""
+    over_axes = hypervolume(axis_scores)
+    gain = axis_gain(organism_score, ORGANISM_WEIGHT)
+    return over_axes + over_axes * gain          # over_axes * (1 + gain)
+
+
+def scoring_sheet(axes, claims, organism):
+    """The root's scoring sheet from the rows of the axes, the claims and what the root holds of the organism
+    (see the module text)."""
     sheet = []
     lines = function_lines(axes)
+    entry = organism_entry(organism)
     placed = set()
     for line in lines:
         leader = line[0][1]
@@ -197,7 +251,7 @@ def scoring_sheet(axes, claims):
         placed.update(claim['claim_ref'] for claim in claims if on_line(claim['annotation'], line))
         sheet.append(_line(identity_of(leader), by_axis,
                            [{**{name: row[name] for name in ('vocabulary', 'name', 'identifier') if name in row},
-                             'axis': slot, 'score': row['score']} for slot, row in line]))
+                             'axis': slot, 'score': row['score']} for slot, row in line], entry))
     # a claim whose annotation no axis names any more still has its line (the annotation it was made from)
     orphans = {}
     for claim in claims:
@@ -210,18 +264,21 @@ def scoring_sheet(axes, claims):
             if rows:
                 by_axis[slot] = claim_axis_row(rows)
         if by_axis:
-            sheet.append(_line(identity_of(group[0]['annotation']), by_axis, []))
+            sheet.append(_line(identity_of(group[0]['annotation']), by_axis, [], entry))
     return sorted(sheet, key=lambda annotation: (annotation['status'] == 'unknown', -annotation.get('score', 0.0)))
 
 
-def _line(identity, by_axis, members):
-    """One line of the sheet: the identity it is shown under, its merged score, its axis rows and its members."""
+def _line(identity, by_axis, members, entry):
+    """One line of the sheet: the identity it is shown under, its merged score with what the organism entered into it
+    (``entry``: ``organism_entry``), its axis rows and its members."""
     line = dict(identity)
     known = {slot: row for slot, row in by_axis.items() if row['status'] != 'unknown'}
     if known:
         line.update(
             status='measured_zero' if all(row['status'] == 'measured_zero' for row in known.values()) else 'measured',
-            score=hypervolume({slot: known[slot]['score'] if slot in known else 0.0 for slot in AXIS_WEIGHTS}))
+            score=annotation_score({slot: known[slot]['score'] if slot in known else 0.0 for slot in AXIS_WEIGHTS},
+                                   entry['organism_score'] if entry else 0.0),
+            **entry)
     else:
         line['status'] = 'unknown'
     return {**line, 'rows': [{'axis': slot, **row} for slot, row in by_axis.items()], 'members': members}
@@ -233,9 +290,9 @@ def passed_down(organism):
     receiver sees how much of its score each level carries) and the leading rival, each with its role. A head reads
     them by degree: the scores say how far the placement is settled."""
     rows, placement = organism['candidates'], organism['placement']
-    if 'leader_taxon_id' not in placement:
+    leader = leading_taxon(organism)
+    if leader is None:
         return []
-    leader = next(row for row in rows if row['taxon_id'] == placement['leader_taxon_id'])
     chosen = [{**leader, 'role': 'leader'}]
     chosen.extend({**row, 'role': 'on_the_leaders_lineage'} for row in rows
                   if row['taxon_id'] != leader['taxon_id'] and row['taxon_id'] in leader['lineage_taxon_ids'])
@@ -285,7 +342,7 @@ def internal_summary(view):
         axis['outstanding_jobs'] = report['outstanding_jobs']
     lines = function_lines(axes)
     return {**view.parent_input, 'axes': axes, 'claims': claims, 'claims_made': claims_made,
-            'annotations': scoring_sheet(axes, claims), 'groups': {slot: groups_of(slot, lines) for slot in axes},
+            'annotations': scoring_sheet(axes, claims, organism), 'groups': {slot: groups_of(slot, lines) for slot in axes},
             'commissions': commissions, 'units': units,
             'organism': {**organism, 'passed_down': passed_down(organism)},
             # the molecule of each subject of the scope, read from its record: the organism identification head works

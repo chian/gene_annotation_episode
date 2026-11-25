@@ -39,6 +39,20 @@ The kinds of held graded source read, by the content of their retained sheet:
   ``hits_without_identifier``.
   The uncharacterized hits are returned by family in the same way (``uncharacterized_families``: identifier, hit
   count and highest value), so that an unknown family is something a later investigation can start from.
+  The organisms of the hits behind a product candidate (the owner, 2026-11-25: the head "should be capable of
+  returning that organismal source info for sure"): the table gives, per target, ``hit_organisms``: for each candidate
+  a database search named, the taxa its hits are from (``organisms``: the NCBI taxon id of each hit's feature, BV-BRC's
+  ``taxon_id`` as the sheet's reference metadata keeps it, with the number of its hits of that taxon) and
+  ``hits_without_taxon`` (its hits whose feature carries none). Ids and counts only; they enter no score and no
+  credit.
+  The feature type of the hits behind a product candidate (the owner, 2026-11-25: "just like with organismal taxa ...
+  you also have to extract this? we can decide how to use it later"): the table gives, per target,
+  ``hit_feature_kinds``: for each candidate a database search named, the types of the features its hits are
+  (``feature_kinds``: one of ``feature_types.KINDS``, matched from BV-BRC's ``feature_type`` of each hit's feature by
+  ``database_feature_types.bvbrc_feature_kind``, with the number of its hits of that type),
+  ``hits_with_unmapped_feature_type`` (its hits whose database value has no type of ours yet: the table of the matching
+  is to be extended; the value itself stays in the sheet) and ``hits_without_feature_type`` (its hits whose feature
+  carries none). Types of the fixed list and counts only; they enter no score and no credit.
 * a profile scan (``hmmer_search_sheet`` of ``hmmscan``): test ``profile_scan:<database name>``; each matched family
   is a candidate of vocabulary ``profile_family`` (identifier: its accession, name: its name, as the profile database
   gives them); its value is the subscore of its domains.
@@ -110,6 +124,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_
     SCHEMA as CLUSTER_SHEET, group_values)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.differential_credit import (
     GROUP_PREFIX, differential_credit, group_key, grouped_credit, regrouped, standing)
+from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_features.database_feature_types import (
+    bvbrc_feature_kind)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.uncharacterized_labels import is_uncharacterized_label
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.scoring import (
     compile_native_sheet, hmmer_comparisons, route_native_grading)
@@ -186,7 +202,8 @@ def _by(rows, key):
 def search_hits(grading, value_of):
     """The hits of a database search with names, one row per (hit, product name) in hit order: ``hit_index``, ``product``
     (the function the sheet's reference metadata gives it), ``value`` (the subscore of that hit's alignments), and the
-    hit's ``accession``, ``aa_sequence_md5``, ``aa_length``, ``feature_id`` and ``pgfam_id`` (BV-BRC's feature fields; ``None`` where the
+    hit's ``accession``, ``aa_sequence_md5``, ``aa_length``, ``feature_id``, ``pgfam_id``, ``taxon_id`` and ``feature_type`` (BV-BRC's feature fields,
+    each exactly as the database gives it; ``None`` where the
     metadata has none); a hit that names no product (not asked, or asked and carrying none) gives one row with ``product`` ``None``."""
     sheet = grading['sheet']
     rows = _by(route_native_grading(grading), 'hit_index')
@@ -203,10 +220,12 @@ def search_hits(grading, value_of):
         value = value_of(rows.get(hit['hit_index'], []))
         if not names:
             found.append({'hit_index': hit['hit_index'], 'product': None, 'value': value, 'accession': None,
-                          'aa_sequence_md5': None, 'aa_length': None, 'feature_id': None, 'pgfam_id': None})
+                          'aa_sequence_md5': None, 'aa_length': None, 'feature_id': None, 'pgfam_id': None,
+                          'taxon_id': None, 'feature_type': None})
         found.extend({'hit_index': hit['hit_index'], 'product': name, 'value': value, 'accession': accession,
                       'aa_sequence_md5': feature.get('aa_sequence_md5'), 'aa_length': feature.get('aa_length'),
-                      'feature_id': feature.get('feature_id'), 'pgfam_id': feature.get('pgfam_id') or None}
+                      'feature_id': feature.get('feature_id'), 'pgfam_id': feature.get('pgfam_id') or None,
+                      'taxon_id': feature.get('taxon_id'), 'feature_type': feature.get('feature_type')}
                      for name, (accession, feature) in names.items())
     return found
 
@@ -231,6 +250,27 @@ def product_families(grading):
         if row['product'] is not None and not is_uncharacterized_label(row['product']):
             families.setdefault(row['product'], []).append(row['pgfam_id'])
     return families
+
+
+def product_taxa(grading):
+    """The taxon of each hit of a database search with names, by the product the hit names: product -> one NCBI taxon
+    id per hit (the ``taxon_id`` of the hit's feature; ``None`` for a hit whose feature carries none)."""
+    taxa = {}
+    for row in search_hits(grading, lambda alignments: None):
+        if row['product'] is not None and not is_uncharacterized_label(row['product']):
+            taxa.setdefault(row['product'], []).append(row['taxon_id'])
+    return taxa
+
+
+def product_feature_types(grading):
+    """The feature type of each hit of a database search with names, by the product the hit names: product -> one
+    value per hit (BV-BRC's ``feature_type`` of the hit's feature, exactly as the database gives it; ``None`` for a hit
+    whose feature carries none)."""
+    feature_types = {}
+    for row in search_hits(grading, lambda alignments: None):
+        if row['product'] is not None and not is_uncharacterized_label(row['product']):
+            feature_types.setdefault(row['product'], []).append(row['feature_type'])
+    return feature_types
 
 
 def _database_search(source, grading, value_of):
@@ -369,12 +409,14 @@ def _pairwise(reader, source, grading, value_of):
 def _read(reader, scope, sources):
     """The measurements in arrival order, per target the hits of database searches that name no candidate
     (``{'not_asked', 'no_product', 'uncharacterized'}``: the hits whose function was never asked, those asked that carry
-    no product, the values and families of those whose every function is a label of ignorance, and under ``families``
-    the family identifier of every hit of each product), the
+    no product, the values and families of those whose every function is a label of ignorance, under ``families``
+    the family identifier of every hit of each product, under ``taxa`` the taxon id of every hit of each product and
+    under ``feature_types`` the database's feature type of every hit of each product), the
     identified conserved sites (target, target position, residue, candidate name) of the held alignments and the matched
     sites the held MetaCATS reports confirmed (the same identities)."""
     scope = reader.validate_scope(scope)
-    measurements, unnamed = [], {target: {'not_asked': 0, 'no_product': 0, 'uncharacterized': [], 'families': {}}
+    measurements, unnamed = [], {target: {'not_asked': 0, 'no_product': 0, 'uncharacterized': [], 'families': {},
+                                          'taxa': {}, 'feature_types': {}}
                                  for target in scope['subject_refs']}
     identified, confirmed = set(), set()
     for reference in sources:
@@ -413,6 +455,10 @@ def _read(reader, scope, sources):
                 unnamed[target]['uncharacterized'].extend(uncharacterized_hits(grading, value_of))
                 for product, families in product_families(grading).items():
                     unnamed[target]['families'].setdefault(product, []).extend(families)
+                for product, taxa in product_taxa(grading).items():
+                    unnamed[target]['taxa'].setdefault(product, []).extend(taxa)
+                for product, feature_types in product_feature_types(grading).items():
+                    unnamed[target]['feature_types'].setdefault(product, []).extend(feature_types)
             measurements.extend(_measurement(target, row[0] + '@' + reference, *row[1:5], reference, *row[5:]) for row in found
                                 if not (row[1] == 'product' and is_uncharacterized_label(row[2])))
     return measurements, unnamed, identified, confirmed
@@ -529,6 +575,46 @@ def _identity(candidate, families):
             'hits_without_identifier': len(families[candidate['name']]) - len(carried)}
 
 
+def _hit_organisms(candidates, taxa):
+    """The organisms of the hits behind the candidates a database search named (the module text), in the order of
+    ``candidates``: for each its vocabulary and name, ``organisms`` (one entry per NCBI taxon id with the number of its
+    hits of that taxon, most hits first, ties by taxon id) and ``hits_without_taxon``. A candidate no database search
+    named has no hits and no entry."""
+    rows = []
+    for candidate in candidates:
+        if candidate['vocabulary'] != 'product' or candidate['name'] not in taxa:
+            continue
+        carried = [taxon for taxon in taxa[candidate['name']] if taxon is not None]
+        counts = {taxon: carried.count(taxon) for taxon in dict.fromkeys(carried)}
+        rows.append({'vocabulary': candidate['vocabulary'], 'name': candidate['name'],
+                     'organisms': [{'taxon_id': taxon, 'hit_count': count}
+                                   for taxon, count in sorted(counts.items(), key=lambda item: (-item[1], item[0]))],
+                     'hits_without_taxon': len(taxa[candidate['name']]) - len(carried)})
+    return rows
+
+
+def _hit_feature_kinds(candidates, feature_types):
+    """The feature types of the hits behind the candidates a database search named (the module text), in the order of
+    ``candidates``: for each its vocabulary and name, ``feature_kinds`` (one entry per type of ``feature_types.KINDS``
+    with the number of its hits whose database value matches that type, most hits first, ties by the type's name),
+    ``hits_with_unmapped_feature_type`` (its hits whose database value is not in the table of the matching yet) and
+    ``hits_without_feature_type`` (its hits whose feature carries no feature type). The three counts add up to the
+    candidate's hits. A candidate no database search named has no hits and no entry."""
+    rows = []
+    for candidate in candidates:
+        if candidate['vocabulary'] != 'product' or candidate['name'] not in feature_types:
+            continue
+        stated = [value for value in feature_types[candidate['name']] if value is not None]
+        matched = [kind for kind in map(bvbrc_feature_kind, stated) if kind is not None]
+        counts = {kind: matched.count(kind) for kind in dict.fromkeys(matched)}
+        rows.append({'vocabulary': candidate['vocabulary'], 'name': candidate['name'],
+                     'feature_kinds': [{'kind': kind, 'hit_count': count}
+                                       for kind, count in sorted(counts.items(), key=lambda item: (-item[1], item[0]))],
+                     'hits_with_unmapped_feature_type': len(stated) - len(matched),
+                     'hits_without_feature_type': len(feature_types[candidate['name']]) - len(stated)})
+    return rows
+
+
 def _grouped(rows, in_force):
     """The candidates of one target rescored under the grouping in force: one entry per candidate of the table read
     under it (a candidate in no group is a group of one), its ``members`` named as the head returned them, its ``score``
@@ -552,7 +638,10 @@ def candidate_table(reader, scope, sources, in_force=None):
     ignorance) with ``uncharacterized_best_value`` (the highest value among them, on the scale of a candidate's
     ``best_value``; absent when there is none) and ``uncharacterized_families`` (those hits by family) and the target's
     ``credit``), and the ``credit`` of the scope: the sum over its targets. A product candidate also carries its
-    ``function_identifiers`` and ``hits_without_identifier`` (the module text).
+    ``function_identifiers`` and ``hits_without_identifier`` (the module text). Beside the candidates the target has
+    ``hit_organisms``: the organisms of the hits behind each candidate a database search named (``_hit_organisms``),
+    in the order of the candidates, and ``hit_feature_kinds``: the feature types of those hits
+    (``_hit_feature_kinds``), in the same order.
 
     Groupings (the design ``docs/plan/designs/a102_regrouping.md``; the owner, 2026-11-23: only the root decides which
     candidates are one function, and its grouping comes back down "to make the arms annotation scores honest"). The
@@ -580,6 +669,8 @@ def candidate_table(reader, scope, sources, in_force=None):
                           'second': _entry(rows, row['pair'][1]), 'value': row['value']}
                          for row in result['differentials']]
         targets[target] = {'candidates': candidates, 'tests': tests, 'differentials': differentials,
+                           'hit_organisms': _hit_organisms(candidates, unnamed[target]['taxa']),
+                           'hit_feature_kinds': _hit_feature_kinds(candidates, unnamed[target]['feature_types']),
                            'not_asked_hit_count': unnamed[target]['not_asked'],
                            'no_product_hit_count': unnamed[target]['no_product'],
                            **_uncharacterized(unnamed[target]['uncharacterized']),
@@ -587,7 +678,8 @@ def candidate_table(reader, scope, sources, in_force=None):
                                                            'grouping_in_force': in_force}),
                            'credit': grouped_credit(rows, groupings)}
     for target, counts in unnamed.items():
-        targets.setdefault(target, {'candidates': [], 'tests': [], 'differentials': [],
+        targets.setdefault(target, {'candidates': [], 'tests': [], 'differentials': [], 'hit_organisms': [],
+                                    'hit_feature_kinds': [],
                                     'not_asked_hit_count': counts['not_asked'], 'no_product_hit_count': counts['no_product'],
                                     **_uncharacterized(counts['uncharacterized']),
                                     'credit': 0.0})

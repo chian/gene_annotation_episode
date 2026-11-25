@@ -20,10 +20,13 @@ A commission carries controlled data only. Nothing in it was written by a model:
   is how the root returns to that head. Records another axis returned are not passed;
 - empty constraints (every head's form has the field; the root has none to give).
 
-The return fields the root selects (``SELECTION``) are record references only: ``committed_record_refs`` wherever a
+The return fields the root selects (``SELECTION``) are record references, ``committed_record_refs`` wherever a
 head declares it selectable (the biochemical-feasibility head always returns it) and ``execution_handoff_refs``
-from the sequence-homology head, the one head whose return form declares a job field today. Credit and finding
-are always returned. ``messages/read_from_child.py`` reads exactly these fields."""
+from the sequence-homology head, the one head whose return form declares a job field today, and two fields of
+controlled data from the sequence-homology head: ``candidate_hit_organisms`` (the organisms of the database hits
+behind each of its candidates: taxon ids and hit counts) and ``candidate_hit_feature_kinds`` (the feature types of
+those hits: types of the fixed list and hit counts). Credit and finding are always returned.
+``messages/read_from_child.py`` reads exactly these fields."""
 from episode_runtime import ChildMessage
 
 from ..credit import AXIS_CREDIT_UNITS, OPERATIONAL_CREDIT_UNITS
@@ -33,7 +36,8 @@ TASK_KIND = 'whole_axis_findings'
 
 # The selectable fields of each head's return form the root asks for.
 SELECTION = {
-    'sequence_homology_evidence': ('committed_record_refs', 'execution_handoff_refs'),
+    'sequence_homology_evidence': ('committed_record_refs', 'execution_handoff_refs', 'candidate_hit_organisms',
+                                   'candidate_hit_feature_kinds'),
     'structural_homology_evidence': ('committed_record_refs',),
     'gene_context_evidence': ('committed_record_refs',),
     'evolutionary_history_evidence': ('committed_record_refs',),
