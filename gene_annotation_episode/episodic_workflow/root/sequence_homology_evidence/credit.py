@@ -31,6 +31,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_
     msa_test_ceiling, test_ceiling)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence import (
     bvbrc_metacats_search as metacats)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_blast_search import (
+    DATABASES as BVBRC_DATABASES)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.msa_alignment_sheet import (
     MINIMUM_GROUP_SIZE)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_msa_alignment import (
@@ -360,16 +362,24 @@ def all_vs_all_best(summary, records):
     return best
 
 
+def unsearched_databases(summary, query):
+    """The BV-BRC databases that hold no graded search of ``query``: the databases a new search of it can still be
+    sent to. The databases hold different proteins (``bacteria-archaea``, ``viral-reference``), so a graded search of one
+    says nothing of what the other holds."""
+    graded = {row['database'] for row in summary['bvbrc_searches'] if row['query_ref'] == query and row['closed']}
+    return [database for database in BVBRC_DATABASES if database not in graded]
+
+
 def bvbrc_blast_best(summary, records):
-    """``(ceiling, arguments)`` of ``bvbrc_blast`` over the scope's held sequences with no graded search (the ceiling
-    ``ceiling`` gives with ``arguments`` ``None``; the first query on a tie). The arguments are the continuation of the
+    """``(ceiling, arguments)`` of ``bvbrc_blast`` over the scope's held sequences with a database not yet searched
+    (``unsearched_databases``; the ceiling ``ceiling`` gives with ``arguments`` ``None``; the first query on a tie). The arguments are the continuation of the
     query's outstanding search (its query, program, database and resource, and ``until`` ``extracted``: the one commission
     of that query the head's check accepts while it is outstanding; it extracts what the launch started, so its ceiling is
     the search's), or ``None`` when the query has no outstanding search (a new search: its fields are the model's)."""
     standing, limit, best = candidate_standing(records, summary['scope'], held_sources(records)), bvbrc_hit_bound(), None
     for query in (ref for ref in summary['scope']['subject_refs'] if ref in summary['held_sequences']):
         searches = [row for row in summary['bvbrc_searches'] if row['query_ref'] == query]
-        if any(row['closed'] for row in searches):
+        if not unsearched_databases(summary, query):
             continue
         products = [candidate for candidate in standing.get(query, {}) if candidate.startswith('product:')]
         value = test_ceiling(standing.get(query, {}), products, 'database_search', unseen=limit, limit=limit)
@@ -518,7 +528,8 @@ def found_ceiling(summary, records, action_type, arguments, ctx):
     An action the head's request checks would refuse as a repeat earns nothing, so its ceiling is 0: a pairwise
     comparison already held (``held_comparisons``), a profile scan of the same query and database already held
     (``held_profile_scans``), a search of the same query, program and database already graded (a closed search of
-    ``bvbrc_searches``; an outstanding one can still be continued and keeps its ceiling: the continuation, ``until``
+    ``bvbrc_searches``; with no arguments the ceiling stands while a database holds no graded search of the query; an
+    outstanding one can still be continued and keeps its ceiling: the continuation, ``until``
     ``extracted``, extracts what the launch started, so its ceiling is the search's, and ``best_arguments`` names it)."""
     if action_type == 'reason':
         return 0.0
@@ -535,10 +546,12 @@ def found_ceiling(summary, records, action_type, arguments, ctx):
                 if arguments is None or row['program'] == arguments['program']}
 
     def searched(view, query):
-        """Whether a search of ``query`` with the arguments' program and database (any, with no arguments) is graded."""
+        """Whether a search of ``query`` with the arguments' program and database is graded; with no arguments, whether
+        every database holds a graded search of it (``unsearched_databases``)."""
+        if arguments is None:
+            return not unsearched_databases(summary, query)
         return any(row['query_ref'] == query and row['closed']
-                   and (arguments is None or (row.get('program'), row.get('database'))
-                        == (arguments.get('program'), arguments.get('database')))
+                   and (row.get('program'), row.get('database')) == (arguments.get('program'), arguments.get('database'))
                    for row in summary[view])
 
     def products(target):
