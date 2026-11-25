@@ -3,7 +3,9 @@ grader (``blast_database_grader.build_database_sheet``, legacy association: one 
 
 The hits of the ``bacteria-archaea`` database are named by feature ids: a description of the report has ``accession``
 ``<genome id>.peg.<n>`` and ``id`` ``gnl|fig|<genome id>.peg.<n>``; the feature's ``patric_id`` in the data service is
-``fig|<accession>`` (verified against the live service: every one of 300 hits was found). The lookups are the public Data
+``fig|<accession>`` (verified against the live service: every one of 300 hits was found). The hits of the
+``viral-reference`` database are named the same way, with ``CDS`` as well as ``peg`` as the feature kind
+(``<genome id>.CDS.<n>``; one live search, 2026-11-24, 5 hits). The lookups are the public Data
 API (no login is sent: the service answers them without one), three collections, each in batches of ``BATCH`` ids so that
 300 hits take a handful of requests, at least ``SPACING_SECONDS`` apart:
 

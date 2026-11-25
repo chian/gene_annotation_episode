@@ -88,7 +88,8 @@ CONFIGURATION = ('service', 'endpoints', 'authorization_env', 'workspace', 'root
 # ``db_type``, the unit of its sequences and the file name the report names as its database (``search_target.db``,
 # the last path component).
 PRECOMPUTED_DATABASES = {
-    'bacteria-archaea': {'db_type': 'faa', 'unit': 'aa', 'database_file': 'bacteria-archaea.features.faa'}}
+    'bacteria-archaea': {'db_type': 'faa', 'unit': 'aa', 'database_file': 'bacteria-archaea.features.faa'},
+    'viral-reference': {'db_type': 'faa', 'unit': 'aa', 'database_file': 'viral-reference.features.faa'}}
 FEATURE_GROUP = 'hits'
 MSA_ALIGNERS = ('Muscle',)
 MSA_ALPHABETS = ('protein',)
