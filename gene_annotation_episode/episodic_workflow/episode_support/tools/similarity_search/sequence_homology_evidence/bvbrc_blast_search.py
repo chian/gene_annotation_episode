@@ -46,7 +46,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.acquisition.servi
     DEFAULT_BASE_URL as DATA_BASE_URL)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.similarity_search.sequence_homology_evidence.blast_database_grading_inputs import (
     metadata_accounting)
-from gene_annotation_episode.episodic_workflow.episode_support.jobs.bvbrc_job_route import PRECOMPUTED_DATABASES
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.bvbrc_job_route import (
+    NUCLEOTIDE_DATABASES, PRECOMPUTED_DATABASES, homology_job, report_names_database)
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.duration_trend import duration_trend
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import checks, closure, job_rows
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_wait import wait_for_job
@@ -81,6 +82,11 @@ METADATA_KIND = 'search_hit_metadata'
 # The precomputed databases, by name as the application takes it (``db_precomputed_database``), with the unit of their
 # sequences. Each was run against the live service before it was added (the design note records which).
 DATABASES = {name: spec['unit'] for name, spec in PRECOMPUTED_DATABASES.items()}
+# The set of databases an episode searches is its own: every function here that looks a database up takes it as
+# ``databases``, ``{name: entry}`` with the entries of the route's lists (``bvbrc_job_route.PRECOMPUTED_DATABASES``, the
+# protein databases, and ``bvbrc_job_route.NUCLEOTIDE_DATABASES``, the nucleotide databases; an entry's ``unit`` is the
+# unit of its sequences). An episode that names no set searches ``PRECOMPUTED_DATABASES``, the databases of
+# ``DATABASES``.
 ACTIONS = ('estimate', 'launch', 'fix', 'monitor', 'extract')
 STATES = ('no_estimate', 'estimated', 'launched', 'finished', 'extracted', 'failed')
 UNTIL = ('launched', 'extracted')
@@ -137,23 +143,25 @@ def record_metadata_product(store, *, metadata_ref, metadata_source_ref, result_
                           used=[result_ref], derived_from=[search_product_ref], settings=metadata_settings())
 
 
-def combinations():
-    """The (program, database) pairs the episode offers: each program that searches the unit of a database."""
+def combinations(databases=PRECOMPUTED_DATABASES):
+    """The (program, database) pairs the episode offers: each program that searches the unit of a database of
+    ``databases`` (the set the episode searches)."""
     return [(program, database) for program, (_, unit, _) in sorted(PROGRAM_UNITS.items())
-            for database, held in DATABASES.items() if held == unit]
+            for database, entry in databases.items() if entry['unit'] == unit]
 
 
 LEDGER_ROWS = 500
 
 
-def learned_statistics(table, query_length):
+def learned_statistics(table, query_length, databases=PRECOMPUTED_DATABASES):
     """What the estimate ledger has learned of each offered kind of search, by ``program:database`` (read through the
     table's read handle in a decision): the short trend of its measured durations (``duration_trend``: how many were
     measured, their band, the latest ones, and once enough searches of different query lengths are measured the line of
     duration against query length with what it gives for a query of ``query_length``), with ``ledger_estimate``
-    (``bvbrc_job_child.ledger_estimate``): the basis and seconds an estimate of that kind of search must state."""
+    (``bvbrc_job_child.ledger_estimate``): the basis and seconds an estimate of that kind of search must state. The
+    kinds are the ``combinations`` of ``databases`` (the set the episode searches)."""
     found = {}
-    for program, database in combinations():
+    for program, database in combinations(databases):
         trend = duration_trend(table.read('rows', search_kind(program, database), LEDGER_ROWS), size_field='query_length',
                                size=query_length)
         found[program + ':' + database] = {**trend,
@@ -186,19 +194,22 @@ def graded_rows(reader):
     return rows
 
 
-def held_searches(reader, sequences):
+def held_searches(reader, sequences, searched_types=('input',)):
     """The searches of the BV-BRC service the parent (the head) holds, from its job ledger rows: one row per handoff of a
     ``bvbrc`` job, with its request, its query (the held subject whose sequence artifact was staged), the state its latest
     held check showed (``submitted`` before any), whether it is outstanding (no closure held and not shown failed or lost)
     and the references of its handoff, status and closure rows: an outstanding search is continued by a later commission
-    (``until`` ``extracted``). ``sequences`` is ``{subject record: its sequence artifact}``."""
+    (``until`` ``extracted``). ``sequences`` is ``{subject record: its sequence artifact}``. ``searched_types`` are the
+    record types a head searches: inputs only by default; a head that also searches sequences derived from its input (a
+    translation, an extracted stretch: ``product`` records, each tied to the positions it came from by its ``mapping``)
+    names them."""
     found = []
     for handoff in (row for row in job_rows(reader) if row['event'] == 'handoff' and row['detail']['kind'] == ROUTE_KIND
                     and row['detail']['estimates']['kind'].startswith(JOB_NAME + ':')):
         shown, ended = checks(reader, handoff['job']), closure(reader, handoff['job'])
         state = 'submitted' if not shown else shown[-1]['detail']['state']
         request = handoff['detail']['native']['request']
-        (query,) = [ref for ref, artifact in sequences.items() if ref.startswith('input_')
+        (query,) = [ref for ref, artifact in sequences.items() if ref.split('_')[0] in searched_types
                     and artifact == handoff['detail']['input_refs'][QUERY_FILE]]
         found.append({'handoff_ref': handoff['id'], 'resource_id': handoff['detail']['resource_id'], 'query_ref': query,
                       'program': request['program'], 'database': request['database'], 'latest_state': state,
@@ -296,27 +307,28 @@ def episode_state(rows):
 
 
 # -- the checks: the things to fix in the model's JSON ----------------------------------------------------------------
-def _program_and_database_problems(program, database, query_molecule):
+def _program_and_database_problems(program, database, query_molecule, databases):
     problems = []
     units = PROGRAM_UNITS[program]
     if units[0] != MOLECULE_UNITS[query_molecule]:
         problems.append(_choose('program', 'program_does_not_take_the_query_molecule', query_molecule=query_molecule,
                                 choose_from=[name for name, (unit, *_) in PROGRAM_UNITS.items()
                                              if unit == MOLECULE_UNITS[query_molecule]]))
-    if DATABASES[database] != units[1]:
+    if databases[database]['unit'] != units[1]:
         problems.append(_choose('database', 'database_does_not_hold_what_the_program_searches',
-                                choose_from=[name for name, unit in DATABASES.items() if unit == units[1]]))
+                                choose_from=[name for name, entry in databases.items() if entry['unit'] == units[1]]))
     return problems
 
 
-def check_estimate(request, *, state, learned, query_molecule):
+def check_estimate(request, *, state, learned, query_molecule, databases=PRECOMPUTED_DATABASES):
     """``request``: ``program``, ``database``, ``expected_seconds``, ``basis``. The conditions: no search is running or
     waiting for a fix (an estimate is made before a launch, again to revise it, and again after a fix); the program
-    takes the query's molecule and the database holds what it searches; the seconds are in range; the estimate is the
+    takes the query's molecule and the database (one of ``databases``, the set the episode searches) holds what it
+    searches; the seconds are in range; the estimate is the
     ledger's for this kind of search (``learned_statistics``' ``ledger_estimate``, which the decision shows): the basis says
     what it rests on (``learned_from_earlier_searches`` only when the table has measured searches of this kind,
     ``no_earlier_measurement`` only when it has none) and the seconds are the ledger's figure for it."""
-    problems = _program_and_database_problems(request['program'], request['database'], query_molecule)
+    problems = _program_and_database_problems(request['program'], request['database'], query_molecule, databases)
     if state['state'] in ('launched', 'finished', 'failed'):
         problems.append(_choose('action', {'launched': 'search_running_monitor_it', 'finished': 'search_finished_extract_it',
                                            'failed': 'failure_needs_a_fix'}[state['state']]))
@@ -329,13 +341,14 @@ def check_estimate(request, *, state, learned, query_molecule):
     return problems
 
 
-def check_launch(request, *, state, fields, query_molecule, resources):
+def check_launch(request, *, state, fields, query_molecule, resources, databases=PRECOMPUTED_DATABASES):
     """``request``: ``program``, ``database``, ``resource_id``. The conditions: an estimate is held (the gate: nothing
     is launched before one is made), for this program and database; the resource is a bound BV-BRC service; the program
-    takes the query's molecule and the database what it searches; no search is running, finished or extracted; the first
+    takes the query's molecule and the database (one of ``databases``, the set the episode searches) what it searches;
+    no search is running, finished or extracted; the first
     request is the commission's, and after a failure only after a fix, with a request that differs from the failed one
     in the field the fix named."""
-    problems = _program_and_database_problems(request['program'], request['database'], query_molecule)
+    problems = _program_and_database_problems(request['program'], request['database'], query_molecule, databases)
     if state['estimate'] is None:
         problems.append(_choose('action', 'estimate_required', take_first='estimate'))
     elif (state['estimate']['program'], state['estimate']['database']) != (request['program'], request['database']):
@@ -418,10 +431,12 @@ def check_extract(request, *, state, search):
     return problems
 
 
-def check_commission(request, *, programs, sequences, scope_subjects, resources, searches, commissioned):
+def check_commission(request, *, programs, sequences, scope_subjects, resources, searches, commissioned,
+                     databases=PRECOMPUTED_DATABASES):
     """The things to fix in the head's commission of this episode (``request``: ``query_ref``, ``program``,
     ``database``, ``resource_id``, ``until``), before any child is commissioned. ``programs`` are the programs the
-    commissioning episode offers (those its own credit can score). ``sequences`` is ``{record: molecule}``, ``searches``
+    commissioning episode offers (those its own credit can score) and ``databases`` the set of databases it searches.
+    ``sequences`` is ``{record: molecule}``, ``searches``
     is ``held_searches`` and ``commissioned`` the (query, program, database) of the earlier commissions of this child.
     The conditions: the query is a sequence of the scope; the program takes its molecule; the database holds what the
     program searches; the resource is a bound BV-BRC service; a search of the query held outstanding is continued: the
@@ -435,7 +450,7 @@ def check_commission(request, *, programs, sequences, scope_subjects, resources,
     if query not in scope_subjects:
         problems.append(_choose('query_ref', 'query_is_not_a_sequence_of_the_scope',
                                 choose_from=[ref for ref in scope_subjects if ref in sequences]))
-    problems.extend(_program_and_database_problems(program, database, sequences[query]))
+    problems.extend(_program_and_database_problems(program, database, sequences[query], databases))
     if resources.get(request['resource_id']) != ROUTE_KIND:
         problems.append(_choose('resource_id', 'resource_is_not_a_bvbrc_service',
                                 choose_from=[name for name, kind in resources.items() if kind == ROUTE_KIND]))
@@ -466,12 +481,13 @@ def record_estimate(ctx, *, estimate):
     return {'status': 'completed', 'failure_code': None, 'retryable': False, 'record_refs': [], 'estimate': dict(estimate)}
 
 
-def launch_search(ctx, *, request, estimate, sequence_ref):
+def launch_search(ctx, *, request, estimate, sequence_ref, databases=PRECOMPUTED_DATABASES):
     """One submission of the search the held estimate was made for. The expectation is recorded on the estimate table
     first (one row per launch, keyed by the launch's job handle, kept in the handoff row so the status requests resolve
-    it); a failed submission resolves it with that outcome."""
+    it); a failed submission resolves it with that outcome. ``databases`` is the set of databases the episode searches:
+    the job is of that set (``bvbrc_job_route.homology_job``)."""
     access, table = ctx.services['job_access'], ctx.services['estimate_table']
-    job = {'application': 'Homology', 'program': request['program'], 'database': request['database'], 'query_file': QUERY_FILE}
+    job = homology_job(request['program'], request['database'], QUERY_FILE, databases)
     handle = job_handle(ctx.operation_key, request['resource_id'], JOB_NAME)
     started = now_text()
     table.expect(search_kind(request['program'], request['database']),
@@ -540,10 +556,11 @@ async def monitor_search(ctx, *, handoff_ref, wait_seconds, expected_remaining_s
             'expected_remaining_seconds': expected_remaining_seconds}
 
 
-def _grading(store, result_ref, fields, query_ref, sequence, metadata):
+def _grading(store, result_ref, fields, query_ref, sequence, metadata, databases):
     """The grading of the fetched report into the database sheet of the original query, with the hits' reference
     metadata: a report of another query or database is refused (``ValueError`` with its code). The report names its
-    database by the file the service searched (``search_target.db``): its last path component is the database's file."""
+    database by the file the service searched (``search_target.db``): its last path component is the database's file
+    (``bvbrc_job_route.report_names_database``, with the database's entry of ``databases``)."""
     operand = {'subject_ref': query_ref, 'sequence_sha256': hashlib.sha256(sequence.encode()).hexdigest(),
                'database': fields['database']}
     grading = grade_blast_result(store.get_artifact(result_ref), mode='database', resource='api',
@@ -552,7 +569,7 @@ def _grading(store, result_ref, fields, query_ref, sequence, metadata):
     normalized = grading['sheet']['normalized_result']
     if normalized['mode'] != 'database' or normalized['query']['length'] != len(sequence):
         raise ValueError('result_of_another_query')
-    if posixpath.basename(normalized['search']['database']) != PRECOMPUTED_DATABASES[fields['database']]['database_file']:
+    if not report_names_database(posixpath.basename(normalized['search']['database']), databases[fields['database']]):
         raise ValueError('result_of_another_database')
     return grading
 
@@ -638,7 +655,7 @@ def _observations(store, report, grading, grading_ref, result_ref, source_ref, q
     return observations, references, unprojected
 
 
-def fetch_and_grade_search(ctx, *, handoff_ref, fields, query_ref):
+def fetch_and_grade_search(ctx, *, handoff_ref, fields, query_ref, databases=PRECOMPUTED_DATABASES, order=ordered_hits):
     """Fetch the report of the finished search, learn what its hits are from BV-BRC's data service
     (``bvbrc_hit_metadata``) and grade the report with that as reference metadata, all in the same unit, kept through
     custody: the grading artifact, a source of the provider over the fetched report, the search row that enters the search into the A101 sheet's tool profile, one
@@ -646,7 +663,11 @@ def fetch_and_grade_search(ctx, *, handoff_ref, fields, query_ref):
     observation per alignment (what the head's credit reads), and the metadata the hits were graded with (an artifact
     with BV-BRC's field names, and its source); the report, the metadata and the grading are labelled as data products
     (``sequence_search_results``, ``search_hit_metadata``, ``tool_grading_sheet``). A hit with no metadata is counted as missing by
-    ``metadata_accounting``. No step stands between the fetch and the grading."""
+    ``metadata_accounting``. No step stands between the fetch and the grading. ``databases`` is the set of databases the
+    episode searches: the report is checked to be of the database of ``fields`` by that database's entry of the set.
+    ``order`` gives the order in which the hits are named, as ``order(report, grading, query length) -> [(accession,
+    value)]``, highest value first: by default the value the sequence homology head's credit reads (``ordered_hits``,
+    which reads protein-to-protein alignments only); an episode that searches with other programs names its own."""
     store = ctx.store
     fetched = ctx.services['job_access'].fetch(ctx, handoff_ref, names=[REPORT])
     if fetched['status'] != 'completed':
@@ -655,14 +676,14 @@ def fetch_and_grade_search(ctx, *, handoff_ref, fields, query_ref):
     report = store.get_artifact(result_ref)
     sequence = store.get_artifact(store.get(query_ref)['sequence_ref']).decode('ascii').upper()
     try:
-        ordered = ordered_hits(report, _grading(store, result_ref, fields, query_ref, sequence, []), len(sequence))
+        ordered = order(report, _grading(store, result_ref, fields, query_ref, sequence, [], databases), len(sequence))
     except (ValueError, ContractError) as error:
         code = str(error) if str(error) in FAILURE_CODES else 'grading_refused'
         return {**_failed(code, False, reason=str(error)), 'closure_ref': fetched['closure_ref']}
     found = name_hits(ordered)
     rows = reference_metadata(found)
     try:
-        grading = _grading(store, result_ref, fields, query_ref, sequence, rows)
+        grading = _grading(store, result_ref, fields, query_ref, sequence, rows, databases)
     except (ValueError, ContractError) as error:
         code = str(error) if str(error) in FAILURE_CODES else 'grading_refused'
         return {**_failed(code, False, reason=str(error)), 'closure_ref': fetched['closure_ref']}
@@ -706,7 +727,7 @@ def fetch_and_grade_search(ctx, *, handoff_ref, fields, query_ref):
             'naming_batch_count': found['naming']['batches'], 'naming_stopped': found['naming']['stopped']}
 
 
-__all__ = ['ACTIONS', 'DATABASES', 'ESTIMATE_BASES', 'ESTIMATE_RANGE', 'FAILURE_CODES', 'PROVIDER', 'REQUEST_FIELDS',
+__all__ = ['ACTIONS', 'DATABASES', 'NUCLEOTIDE_DATABASES', 'PRECOMPUTED_DATABASES', 'ESTIMATE_BASES', 'ESTIMATE_RANGE', 'FAILURE_CODES', 'PROVIDER', 'REQUEST_FIELDS',
            'PRODUCT_KIND', 'METADATA_KIND', 'ROUTE_KIND', 'STATES', 'WAIT_RANGE_MAX', 'check_commission', 'check_estimate', 'held_searches', 'resumed_rows', 'search_notice', 'UNTIL', 'ENDED_SEARCH_STATES',
            'check_extract', 'check_fix', 'check_launch', 'check_monitor', 'combinations', 'episode_state',
            'fetch_and_grade_search', 'graded_rows', 'launch_search', 'learned_statistics', 'minimum_wait',

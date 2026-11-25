@@ -26,7 +26,10 @@ that contacts the service is replaced here; ``_send`` of the public route is mad
 
 The ``Homology`` job is ``{'application', 'program', 'database', 'query_file'}``: ``database`` is a name of
 ``PRECOMPUTED_DATABASES`` (a value of the application's ``db_precomputed_database`` with ``db_source``
-``precomputed_database``), ``query_file`` the staged query. The ``MSA`` job is ``{'application', 'aligner', 'alphabet',
+``precomputed_database``), ``query_file`` the staged query. A caller that searches another set of databases gives the
+set with the job (``databases``, built by ``homology_job``): the job is then checked against that set and its request
+built from it, and ``database`` is a name of it. A job that names no set is of ``PRECOMPUTED_DATABASES``; ``describe``
+names those only. The ``MSA`` job is ``{'application', 'aligner', 'alphabet',
 'sequences_file'}``: ``sequences_file`` the staged FASTA (at least two sequences), sent as the application's
 ``fasta_keyboard_input`` with ``input_type`` ``input_sequence``.
 The ``MetaCATS`` job is ``{'application', 'p_value', 'alignment_file', 'group_file'}``: the staged aligned FASTA and group
@@ -90,6 +93,23 @@ CONFIGURATION = ('service', 'endpoints', 'authorization_env', 'workspace', 'root
 PRECOMPUTED_DATABASES = {
     'bacteria-archaea': {'db_type': 'faa', 'unit': 'aa', 'database_file': 'bacteria-archaea.features.faa'},
     'viral-reference': {'db_type': 'faa', 'unit': 'aa', 'database_file': 'viral-reference.features.faa'}}
+# The precomputed nucleotide databases of the same application: the same two genome sets, each with the application's
+# three nucleotide types (``db_type``: ``ffn`` the genes as DNA, ``frn`` the RNA genes, ``fna`` the genome sequences),
+# named in the service's own words, ``<set>.<type>``. Each entry gives the set sent as ``db_precomputed_database``, the
+# ``db_type`` and the unit of its sequences. They are not part of ``PRECOMPUTED_DATABASES`` and the route does not
+# search them by itself: a caller that searches them gives its set of databases with the job (``homology_job``).
+# No search of any of them has been made, so the file name the service's report gives for each (``search_target.db``,
+# the last path component) is NOT known and no entry has a ``database_file``. Until it is, a report is taken as of the
+# database when that file name starts with the set name and ``.`` and ends with ``.`` and the type
+# (``report_names_database``). The exact file names will be seen in the first live search of each database; they then
+# go here as ``database_file`` and are compared exactly, as for the protein databases.
+NUCLEOTIDE_DATABASES = {
+    'bacteria-archaea.ffn': {'db_precomputed_database': 'bacteria-archaea', 'db_type': 'ffn', 'unit': 'nt'},
+    'bacteria-archaea.frn': {'db_precomputed_database': 'bacteria-archaea', 'db_type': 'frn', 'unit': 'nt'},
+    'bacteria-archaea.fna': {'db_precomputed_database': 'bacteria-archaea', 'db_type': 'fna', 'unit': 'nt'},
+    'viral-reference.ffn': {'db_precomputed_database': 'viral-reference', 'db_type': 'ffn', 'unit': 'nt'},
+    'viral-reference.frn': {'db_precomputed_database': 'viral-reference', 'db_type': 'frn', 'unit': 'nt'},
+    'viral-reference.fna': {'db_precomputed_database': 'viral-reference', 'db_type': 'fna', 'unit': 'nt'}}
 FEATURE_GROUP = 'hits'
 MSA_ALIGNERS = ('Muscle',)
 MSA_ALPHABETS = ('protein',)
@@ -134,30 +154,65 @@ def refusal(error):
     raise error
 
 
+def homology_job(program, database, query_file, databases=PRECOMPUTED_DATABASES):
+    """The ``Homology`` job of one search of ``database``, a name of ``databases`` (the set of databases its caller
+    searches: ``{name: entry}`` with entries as in ``PRECOMPUTED_DATABASES`` or ``NUCLEOTIDE_DATABASES``). A job of
+    ``PRECOMPUTED_DATABASES`` does not name its set; a job of any other set carries it as ``databases``, and the route
+    checks the job and builds its request from that set (``job_databases``)."""
+    job = {'application': 'Homology', 'program': program, 'database': database, 'query_file': query_file}
+    return job if databases == PRECOMPUTED_DATABASES else {**job, 'databases': databases}
+
+
+def job_databases(facts):
+    """The set of databases a ``Homology`` job, or the facts prepared from it, is of: the set it names (``databases``);
+    one that names none is of ``PRECOMPUTED_DATABASES``."""
+    return facts['databases'] if 'databases' in facts else PRECOMPUTED_DATABASES
+
+
+def database_set(name, entry):
+    """The value of ``db_precomputed_database`` a search of the database ``name`` sends: the set its entry names. An
+    entry of ``PRECOMPUTED_DATABASES`` names none: there the name of the database is the set."""
+    return entry['db_precomputed_database'] if 'db_precomputed_database' in entry else name
+
+
+def report_names_database(file_name, entry):
+    """Whether ``file_name`` (the last path component of a report's ``search_target.db``) is the file of the database
+    ``entry``. An entry with a ``database_file`` (the name the service was seen to report): exactly that name. An entry
+    without one (``NUCLEOTIDE_DATABASES``, whose file names are not known yet): a name that starts with the entry's set
+    and ``.`` and ends with ``.`` and its ``db_type``."""
+    if 'database_file' in entry:
+        return file_name == entry['database_file']
+    return file_name.startswith(entry['db_precomputed_database'] + '.') and file_name.endswith('.' + entry['db_type'])
+
+
 def _homology_prepare(job, files):
     """The facts a ``Homology`` request is built from, with the query read: a job that is not of the form raises
-    ``ValueError``."""
-    if job['program'] not in blast.PROGRAM_UNITS or job['database'] not in PRECOMPUTED_DATABASES:
+    ``ValueError``. The program and the database are checked against the job's set of databases (``job_databases``);
+    a set the job names is kept with the facts, for the request built from them."""
+    databases = job_databases(job)
+    if job['program'] not in blast.PROGRAM_UNITS or job['database'] not in databases:
         raise ValueError('bvbrc_blast_job_program_or_database_invalid')
     units = blast.PROGRAM_UNITS[job['program']]
-    if units[1] != PRECOMPUTED_DATABASES[job['database']]['unit']:
+    if units[1] != databases[job['database']]['unit']:
         raise ValueError('bvbrc_blast_job_database_does_not_hold_what_the_program_searches')
     text = files[job['query_file']].decode('ascii')
     records = parse_sequences(text, format='fasta' if text.lstrip().startswith('>') else 'raw', name='query')
     if len(records) != 1:
         raise ValueError('bvbrc_blast_job_requires_a_single_query_sequence')
     query = records[0]
-    return {'program': job['program'], 'database': job['database'], 'query_title': query.name,
+    named = {'databases': job['databases']} if 'databases' in job else {}
+    return {'program': job['program'], 'database': job['database'], **named, 'query_title': query.name,
             'query_length': len(query.sequence), 'input_type': 'aa' if units[0] == 'aa' else 'dna',
             'sequence_sha256': hashlib.sha256(query.sequence.encode()).hexdigest(),
             'query_fasta': '>' + query.name + '\n' + query.sequence + '\n'}
 
 
 def _homology_parameters(prepared, folder, output_file):
-    catalog = PRECOMPUTED_DATABASES[prepared['database']]
+    catalog = job_databases(prepared)[prepared['database']]
     return {'input_type': prepared['input_type'], 'input_source': 'fasta_data',
             'input_fasta_data': prepared['query_fasta'], 'db_type': catalog['db_type'],
-            'db_source': 'precomputed_database', 'db_precomputed_database': prepared['database'],
+            'db_source': 'precomputed_database',
+            'db_precomputed_database': database_set(prepared['database'], catalog),
             'blast_program': prepared['program'], 'output_path': folder, 'output_file': output_file}
 
 
@@ -243,7 +298,8 @@ def _homology_native(prepared, parameters):
 
 # The applications the route submits, by the BV-BRC application id (see the module's description).
 APPLICATIONS = {
-    'Homology': {'job': ('application', 'program', 'database', 'query_file'), 'prepare': _homology_prepare,
+    'Homology': {'job': ('application', 'program', 'database', 'query_file'), 'optional': ('databases',),
+                 'prepare': _homology_prepare,
                  'parameters': _homology_parameters, 'native': _homology_native, 'output_file': 'blast',
                  'bulk': 'query_fasta',
                  'result_files': {'blast_out.raw.json': 'the single-query JSON15 report'}},
@@ -471,4 +527,5 @@ class BvbrcJobRoute(ApiJobRoute):
             return stream.read(limit)
 
 
-__all__ = ['APPLICATIONS', 'BvbrcJobRoute', 'CONFIGURATION', 'PRECOMPUTED_DATABASES', 'SERVICE', 'STATES', 'native_params']
+__all__ = ['APPLICATIONS', 'BvbrcJobRoute', 'CONFIGURATION', 'NUCLEOTIDE_DATABASES', 'PRECOMPUTED_DATABASES', 'SERVICE',
+           'STATES', 'database_set', 'homology_job', 'job_databases', 'report_names_database', 'native_params']
