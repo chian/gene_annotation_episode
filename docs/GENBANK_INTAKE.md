@@ -24,7 +24,7 @@ artifact, not a second copy of full metadata or a competing annotation table.
 `export_annotation` streams the same index as `native_material_annotations`, and
 source/artifact closure retains both native JSONL and original bytes. Portable
 exports preserve those exact bytes. No native feature is automatically copied
-to `Store.current_annotations()`, a structural proposal, or GFF3.
+to `Store.current_annotations()` or GFF3.
 
 ## Ordinary access
 

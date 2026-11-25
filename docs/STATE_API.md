@@ -183,7 +183,7 @@ execution permissions or acceptance gates.
 
 ## One reasoning acquisition
 
-The closed reasoning payload has arrays `structural_proposals`, `terms`,
+The closed reasoning payload has arrays `terms`,
 `source_subjects`, `observations`, `hypotheses`, `assessments`,
 `annotation_updates`, plus optional source-anchored `contexts`. New rows have
 simple local aliases; `@alias` resolves within the same acquisition. Returned
@@ -247,7 +247,7 @@ ratios. Physical coordinates and eligible credit footprints remain separate.
 Native observation `operand_intervals` retain each actual aligned operand
 independently. A gap never receives an invented query-residue coordinate.
 
-The required reasoning arrays are `structural_proposals`, `terms`,
+The required reasoning arrays are `terms`,
 `source_subjects`, `observations`, `hypotheses`, `assessments`,
 `annotation_updates`. Optional `contexts` descriptors retain the actual anchored
 context type, literal name, typed attributes and related references.

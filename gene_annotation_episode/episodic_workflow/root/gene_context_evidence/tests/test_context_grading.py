@@ -116,7 +116,7 @@ def test_measurements_are_graded_into_sheets_and_the_return_is_their_controlled_
     assert EPISODE.credit(summary, reader) == 0.0
     observation = next(row['id'] for row in reader.list('observation')
                        if row['source_ref'] == recurrence['source_ref'])
-    commit = {'structural_proposals': [], 'terms': [], 'source_subjects': [], 'observations': [], 'hypotheses': [],
+    commit = {'terms': [], 'source_subjects': [], 'observations': [], 'hypotheses': [],
               'annotation_updates': [],
               'assessments': [{'alias': 'context_support', 'expected_revision': 0,
                                'hypothesis_ref': held['hypothesis'], 'observation_ref': observation,

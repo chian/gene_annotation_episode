@@ -120,7 +120,7 @@ def graded_commit(world):
     (``evidence_processing`` ``graded``: the grader arguments as JSON, the observation by its alias)."""
     subjects = world['scope']['subject_refs']
     start, end = span(PAPER, RESULT)
-    commit = {'structural_proposals': [], 'terms': [], 'source_subjects': [], 'hypotheses': [],
+    commit = {'terms': [], 'source_subjects': [], 'hypotheses': [],
               'annotation_updates': [],
               'observations': [{'alias': 'growth', 'subject_refs': subjects,
                                 'source_subject_refs': [world['organism']['id']], 'kind': 'growth_assay',

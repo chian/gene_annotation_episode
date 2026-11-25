@@ -126,7 +126,7 @@ time and the duration of an own monitoring action are distinct measurements.
 Define local rows with a bare alias, for example {"alias":"role"}, and use
 "@role" to reference an earlier successful row within this same commit. Later
 commits use the returned persistent IDs, not aliases from earlier commits.
-Sections resolve in this order: structural_proposals, terms, source_subjects,
+Sections resolve in this order: terms, source_subjects,
 contexts, observations, hypotheses, assessments, interpretation_accounts,
 annotation_updates. An interpretation_account records your coherent evidence
 interpretation with runtime-bound episode ownership and assigned scope. It does

@@ -190,7 +190,7 @@ GRADING_SECTION = (
     'absence. The credit is the maximum attached score per region cell of the assigned scope, length-weighted, '
     'counted only for sheets whose context observation a current assessment of yours links to the proposed '
     'annotation (commit it with reason: hypothesis_ref the proposed annotation, observation_ref the context '
-    'observation; a whole commit is {"commit": {"structural_proposals": [], "terms": [], "source_subjects": [], '
+    'observation; a whole commit is {"commit": {"terms": [], "source_subjects": [], '
     '"observations": [], "hypotheses": [], "annotation_updates": [], "assessments": [{"alias": "context_link", '
     '"expected_revision": 0, "hypothesis_ref": <the proposed annotation>, "observation_ref": <the context '
     'observation>, "relation": "strengthens" or "weakens", "applicability": "direct", "extent_basis": '

@@ -110,7 +110,7 @@ def reasoning_selection(world):
     proposed annotation with a typed investigation finding, and the grading of the assay in the same action."""
     claim = {'subject_refs': [world['assay']], 'predicate': 'catalyzes',
              'value': {'type': 'term_ref', 'ref': world['reaction']}, 'context_refs': []}
-    commit = {'structural_proposals': [], 'terms': [], 'source_subjects': [], 'hypotheses': [],
+    commit = {'terms': [], 'source_subjects': [], 'hypotheses': [],
               'annotation_updates': [],
               'observations': [{'alias': 'rate', 'subject_refs': [world['target']],
                                 'source_subject_refs': [world['assay']], 'kind': 'assay_report',

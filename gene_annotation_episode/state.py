@@ -1857,7 +1857,7 @@ class Store:
                 result.update(status="invalid", error_code="representation_error")
             else:
                 aliases_seen = set()
-                sections = [("structural_proposals", "feature", "reasoning"), ("terms", "term", "extracted"),
+                sections = [("terms", "term", "extracted"),
                             ("source_subjects", "reference", "extracted"), ("contexts", "context", "extracted"),
                             ("observations", "observation", "extracted"), ("hypotheses", "hypothesis", "reasoning"),
                             ("assessments", "assessment", "reasoning"),

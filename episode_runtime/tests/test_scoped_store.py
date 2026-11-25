@@ -59,7 +59,7 @@ def problem(world):
     quote = 'protein binds zinc'
     anchor = {'source_ref': source['id'], 'artifact_ref': artifact, 'start': text.index(quote),
               'end': text.index(quote) + len(quote)}
-    payload = {name: [] for name in ('structural_proposals', 'terms', 'source_subjects', 'observations',
+    payload = {name: [] for name in ('terms', 'source_subjects', 'observations',
                                      'hypotheses', 'assessments', 'annotation_updates')}
     payload['terms'] = [{'alias': 'zinc', 'label': 'zinc', 'term_type': 'chemical', 'source_ref': source['id'],
                          'anchor': anchor}]

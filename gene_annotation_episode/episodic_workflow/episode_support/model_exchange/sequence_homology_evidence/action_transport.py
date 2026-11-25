@@ -95,7 +95,7 @@ def generation_schema(schema):
             properties = result.get('properties', {})
             first = ('kind', 'type', 'view', 'tool', 'role', 'selection')
             if {'terms', 'source_subjects', 'hypotheses', 'assessments', 'annotation_updates'} <= set(properties):
-                first = ('structural_proposals', 'terms', 'source_subjects', 'contexts', 'observations',
+                first = ('terms', 'source_subjects', 'contexts', 'observations',
                          'hypotheses', 'assessments', 'interpretation_accounts', 'annotation_updates')
             properties = {key: properties[key] for key in (*(key for key in first if key in properties),
                                                            *(key for key in properties if key not in first))}

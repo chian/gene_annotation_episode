@@ -13,6 +13,7 @@ import jsonschema
 
 
 from gene_annotation_episode.domain import ContractError
+from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_features.feature_types import KINDS
 
 
 def canonical(value: Any) -> str:
@@ -214,8 +215,8 @@ ANCHOR['description'] = (
     'Character indices and a cropped quote do not determine new byte offsets.')
 SEGMENTS = {"type": "array", "minItems": 1,
             "items": obj({"start": {"type": "integer", "minimum": 0}, "end": {"type": "integer", "minimum": 1}})}
-FEATURE_KINDS = ["CDS", "gene", "tRNA", "rRNA", "ncRNA", "regulatory_element", "repeat", "mobile_element",
-                 "protein_domain", "protein_site", "sequence_region"]
+# The kinds a feature record may have: the one list of feature types, held by feature calling.
+FEATURE_KINDS = list(KINDS)
 OBSERVATION_KINDS = ["sequence_composition", "gene_prediction", "alignment", "profile_match", "structure_match",
     "taxonomy_assignment", "source_annotation", "source_content", "assay_report", "biochemical_assay",
     "genetic_phenotype", "growth_assay", "context_measurement", "read_support", "coordinate_mapping",
@@ -582,7 +583,6 @@ def aliased(schema: dict, *, revision: bool = False) -> dict:
 
 
 REASONING_SCHEMA = obj({
-    "structural_proposals": {"type": "array", "items": aliased(RECORD_SCHEMAS["feature"])},
     "terms": {"type": "array", "items": aliased(obj({key:value for key,value in RECORD_SCHEMAS["term"]["properties"].items() if key not in {"namespace", "accession"}}))},
     "source_subjects": {"type": "array", "items": aliased(obj({"reference_type": {"enum": ["protein", "dna", "rna", "assay", "literature_result", "construct", "sample", "organism", "complex", "element", "feature", "chemical"]},
         "source_ref": REF, "label": LABEL, "anchor": ANCHOR}))},
@@ -595,7 +595,7 @@ REASONING_SCHEMA = obj({
     "interpretation_accounts": {"type": "array",
         "description": RECORD_SCHEMAS['interpretation_account']['description'],
         "items": aliased(RECORD_SCHEMAS['interpretation_account'], revision=True)},
-}, required=["structural_proposals", "terms", "source_subjects", "observations", "hypotheses", "assessments", "annotation_updates"])
+}, required=["terms", "source_subjects", "observations", "hypotheses", "assessments", "annotation_updates"])
 
 REASONING_SCHEMA["properties"]["terms"]["items"]["properties"]["label"] = {
     **LABEL, "description": "Literal label occurring in the anchored quote, e.g. DUF8182. Do not compose DUF8182 (Pfam PF26554) unless that complete text occurs in the quote. Extraction preserves a source assertion, not its biological truth."}

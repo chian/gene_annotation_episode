@@ -30,7 +30,7 @@ _COMPOSITION = {'allOf', 'anyOf', 'oneOf', '$ref', '$dynamicRef', '$recursiveRef
 _DROPPED = ('uniqueItems', 'pattern', 'format', 'x-source', 'x-reference-namespace')
 _FIRST = ('kind', 'type', 'view', 'tool', 'role', 'selection')
 _INTERPRETATION = {'terms', 'source_subjects', 'hypotheses', 'assessments', 'annotation_updates'}
-_INTERPRETATION_FIRST = ('structural_proposals', 'terms', 'source_subjects', 'contexts', 'observations',
+_INTERPRETATION_FIRST = ('terms', 'source_subjects', 'contexts', 'observations',
                          'hypotheses', 'assessments', 'interpretation_accounts', 'annotation_updates')
 
 
