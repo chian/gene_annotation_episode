@@ -192,8 +192,10 @@ CHILD_DESCRIPTIONS = {
         'your scope; held_sequences gives the molecule of each), program (only blastp is offered: a protein query against '
         'a protein database), database (bacteria-archaea holds the proteins of the '
         'reference and representative bacterial and archaeal genomes; viral-reference holds the proteins of the '
-        'reference and representative viral genomes; neither holds the other\'s proteins, and nothing given to you says '
-        'which kind of organism the query is from), resource_id (a bvbrc resource of bound_resources) '
+        'reference and representative viral genomes; neither holds the other\'s proteins. organism_candidates, when it '
+        'is not empty, says which organism the query\'s DNA is from: the leading candidate taxon, the vaguer candidates on '
+        'its lineage and its leading rival, each with its score; search the database that holds that kind of organism '
+        'first. When it is empty nothing says which kind of organism the query is from), resource_id (a bvbrc resource of bound_resources) '
         'and until. Code checks the commission before the child is commissioned; if something is wrong it comes back in '
         'feedback with the things to fix and nothing was commissioned. While a child runs, you do nothing else: your next '
         'decision comes after it returns. What until means: with until launched the child estimates the duration, launches '
@@ -687,6 +689,7 @@ def decide(summary, feedback, ctx):
         'own_outcomes': summary['units'],
         'last_local_outcome': summary['last_local_outcome'], 'child_reports': summary['child_reports'],
         'handoff_refs': summary['handoff_refs'], 'bound_resources': resources,
+        'organism_candidates': summary['organism_candidates'],
         'held_sequences': summary['held_sequences'], 'held_comparisons': summary['held_comparisons'],
         'held_profile_scans': summary['held_profile_scans'],
         'bvbrc_searches': bvbrc_searches_view(summary['bvbrc_searches'], ctx.clock.now),

@@ -51,6 +51,8 @@ CHEBI_ROWS = 10
 
 INSTRUCTIONS = """You are given one candidate annotation of a protein, what a public protein database states about proteins of that annotation, and the rival annotations of the same protein.
 
+`organism`, when it is given, is the organism the protein is from: a taxon of the NCBI taxonomy with its name, its rank and a score of how well it is supported. The database entries shown are then those of that organism, and the claims are about this protein in that organism: a capsid protein of one virus does not bind what the capsid protein of another binds. When `organism` is empty the organism is not known.
+
 Write the claims this annotation makes that an experiment could check. Each claim says that the annotated protein does one of three things to one named molecule:
 - `binds`: it binds that molecule (a specific protein, or a specific small molecule or ion);
 - `catalyzes`: it catalyzes a reaction of that molecule (name one substrate or product);
@@ -154,12 +156,16 @@ def of_annotation(rows, annotation):
     return [row for row in rows if any(_same(name, annotation['name']) for name in _protein_names(row))]
 
 
-def annotation_query(annotation):
+def annotation_query(annotation, organism=None):
     """The UniProt search for one annotation: the entries cross-referenced to the Pfam family of a profile family
-    (its accession without the version), else the entries of that protein name."""
+    (its accession without the version), else the entries of that protein name; within the taxon of ``organism`` (its
+    NCBI taxon id: the taxon and everything below it) when the caller knows the organism. A name such as "capsid
+    protein" is carried by the proteins of many unrelated organisms, and only the organism says which are meant."""
     if annotation['vocabulary'] == 'profile_family':
-        return '(xref:pfam-' + annotation['identifier'].split('.')[0] + ') AND (reviewed:true)'
-    return 'protein_name:' + _quoted(annotation['name'])
+        query = '(xref:pfam-' + annotation['identifier'].split('.')[0] + ') AND (reviewed:true)'
+    else:
+        query = 'protein_name:' + _quoted(annotation['name'])
+    return query if organism is None else '(' + query + ') AND (taxonomy_id:' + str(int(organism['taxon_id'])) + ')'
 
 
 def find_protein(store, name):
@@ -207,20 +213,23 @@ def admit(store, name, kind):
         'sequence_ref': None, 'molecule': None, 'length': None, 'term_refs': [], 'context_refs': []}, origin='external')
 
 
-async def generate_claims(store, model, operation_key, *, annotation, rivals, subject_ref):
+async def generate_claims(store, model, operation_key, *, annotation, rivals, subject_ref, organism=None):
     """The set workflow of the module text for one annotation of the subject ``subject_ref``. ``annotation`` is
-    ``{'vocabulary', 'name'?, 'identifier'?}``; ``rivals`` the other candidate annotations in the same form."""
+    ``{'vocabulary', 'name'?, 'identifier'?}``; ``rivals`` the other candidate annotations in the same form;
+    ``organism`` the organism the subject is from when the caller knows it (``{'taxon_id', 'name', 'rank_code',
+    'score'}``: the leading candidate taxon and how well it is supported), else ``None``."""
     subject = store.get(subject_ref)
     if subject['molecule'] != 'protein':
         raise ValueError('annotation_claims_need_a_protein_subject:' + repr(subject['molecule']))
     written = []
     # 1. what the public record states
-    source, rows = _uniprot(store, annotation_query(annotation))
+    source, rows = _uniprot(store, annotation_query(annotation, organism))
     written.append(source['id'])
     found = stated(of_annotation(rows, annotation))
     # 2. the claims, by one model call
     answer = await model.complete('REASONING', INSTRUCTIONS,
-                                  {'annotation': annotation, 'database': found, 'rival_annotations': rivals},
+                                  {'annotation': annotation, 'organism': organism, 'database': found,
+                                   'rival_annotations': rivals},
                                   OUTPUT_SCHEMA)
     # 3. only looked-up names are written
     label = annotation.get('name') or annotation['identifier']

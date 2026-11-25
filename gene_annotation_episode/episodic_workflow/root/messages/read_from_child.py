@@ -187,7 +187,27 @@ def references(result, fields):
     return list(dict.fromkeys(ref for field in fields for ref in result[field]))
 
 
+ORGANISM_FINDER = 'organism_identification'
+
+
+def organism_report(result):
+    """The return of the organism identification head, which is not an evidence axis: the candidate taxa of the one DNA
+    sequence it was commissioned on (taxon id, the taxonomy's name, rank code, the ids of its lineage, score; the leading
+    one first), the leading candidate, its leading rival and the deepest taxon the two share, and the records it
+    committed. It leaves no job running."""
+    (target,) = result['finding']['targets']
+    return {'credit': result['credit'],
+            'organism_rows': [{'taxon_id': row['taxon_id'], 'name': row['name'], 'rank_code': row['rank_code'],
+                               'lineage_taxon_ids': [item['taxon_id'] for item in row['lineage']], 'score': row['score']}
+                              for row in target['candidates']],
+            'placement': {name: target[name] for name in ('leader_taxon_id', 'rival_taxon_id', 'agreed_taxon_id')
+                          if name in target},
+            'test_count': target['test_count'], 'record_refs': list(result['record_refs']), 'outstanding_jobs': 0}
+
+
 def read_from_child(slot, result, summary, records):
+    if slot == ORGANISM_FINDER:
+        return organism_report(result)
     return {'credit': result['credit'],
             'finding': {name: value for name, value in result['finding'].items()
                         if type(value) in (bool, int, float)},

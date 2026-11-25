@@ -150,13 +150,14 @@ CREDIT_DEFINITION = {'kind': 'root_annotation_hypervolume', 'formula': 'prod_i (
 # from ledger rows recorded under the same credit definition and the same name of that action's ceiling; the name of
 # an action's ceiling changes when the derivation of that action's ceiling changes, and only that action's.
 CEILINGS = {'sequence_homology_evidence': 'root_ceiling', 'experimental_activity_evidence': 'root_ceiling',
-            'make_claims': 'root_ceiling'}
+            'make_claims': 'root_ceiling', 'organism_identification': 'root_ceiling'}
 
 
 def ceiling(summary, records, action_type, arguments, ctx):
     """The most the annotation credit can rise if ``action_type`` is taken next. A commission of an axis head: an axis
     credit has no upper bound (this file never bounds one), so neither has the rise: ``UNBOUNDED``. The making of an
-    annotation's claims (the tool ``make_claims``) changes no axis credit: 0."""
+    annotation's claims (the tool ``make_claims``) changes no axis credit: 0. So does the commission of the organism
+    identification head, which is no evidence axis: what it finds is passed to the heads that are: 0."""
     return UNBOUNDED if action_type in AXIS_WEIGHTS else 0.0
 
 

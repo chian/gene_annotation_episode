@@ -75,7 +75,7 @@ annotation."""
 import math
 
 from ..credit import AXIS_WEIGHTS, hypervolume
-from .read_from_child import CREDIT_RETURNED, DECIDING_SOURCES
+from .read_from_child import CREDIT_RETURNED, DECIDING_SOURCES, ORGANISM_FINDER
 
 ROW_FIELDS = ('status', 'score', 'support', 'opposition')
 # net -> the score of an axis that checks claims: tanh(net / CLAIM_SCALAR_DIVISOR), the divisor that head's sheet uses.
@@ -227,6 +227,23 @@ def _line(identity, by_axis, members):
     return {**line, 'rows': [{'axis': slot, **row} for slot, row in by_axis.items()], 'members': members}
 
 
+def passed_down(organism):
+    """What the root passes to a head that takes the organism: of the candidate taxa the organism identification head
+    returned, the leading candidate with the nested candidates on its lineage (the vaguer calls that support it, so the
+    receiver sees how much of its score each level carries) and the leading rival, each with its role. A head reads
+    them by degree: the scores say how far the placement is settled."""
+    rows, placement = organism['candidates'], organism['placement']
+    if 'leader_taxon_id' not in placement:
+        return []
+    leader = next(row for row in rows if row['taxon_id'] == placement['leader_taxon_id'])
+    chosen = [{**leader, 'role': 'leader'}]
+    chosen.extend({**row, 'role': 'on_the_leaders_lineage'} for row in rows
+                  if row['taxon_id'] != leader['taxon_id'] and row['taxon_id'] in leader['lineage_taxon_ids'])
+    if 'rival_taxon_id' in placement:
+        chosen.extend({**row, 'role': 'rival'} for row in rows if row['taxon_id'] == placement['rival_taxon_id'])
+    return [{name: row[name] for name in ('taxon_id', 'name', 'rank_code', 'score', 'role')} for row in chosen]
+
+
 def internal_summary(view):
     axes = {slot: {'credit': 0.0, 'credit_after_each_return': [], 'finding': {}, 'record_refs': [],
                    'outstanding_job_refs': [], 'outstanding_jobs': 0, 'annotation_rows': [], 'grouped_rows': [],
@@ -234,8 +251,15 @@ def internal_summary(view):
                    'claim_commissions': {}}
             for slot in AXIS_WEIGHTS}
     claims, claims_made, commissions, units = [], [], [], []
+    organism = {'commissions': 0, 'credit': 0.0, 'candidates': [], 'placement': {}, 'test_count': 0, 'record_refs': []}
     for outcome in view.outcomes:
         units.append({'pending': outcome['kind'] == 'child' and outcome['report']['outstanding_jobs'] > 0})
+        if outcome['kind'] == 'child' and outcome['slot'] == ORGANISM_FINDER:
+            report = outcome['report']
+            organism = {'commissions': organism['commissions'] + 1, 'credit': report['credit'],
+                        'candidates': report['organism_rows'], 'placement': report['placement'],
+                        'test_count': report['test_count'], 'record_refs': report['record_refs']}
+            continue
         if outcome['kind'] == 'tool':
             annotation = outcome['arguments']['annotation']
             claims_made.append(annotation_key(annotation))
@@ -262,4 +286,5 @@ def internal_summary(view):
     lines = function_lines(axes)
     return {**view.parent_input, 'axes': axes, 'claims': claims, 'claims_made': claims_made,
             'annotations': scoring_sheet(axes, claims), 'groups': {slot: groups_of(slot, lines) for slot in axes},
-            'commissions': commissions, 'units': units}
+            'commissions': commissions, 'units': units,
+            'organism': {**organism, 'passed_down': passed_down(organism)}}

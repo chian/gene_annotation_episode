@@ -42,6 +42,15 @@ MEMBER_FORM = RecordForm({
     'name': Field('text', 'Its name exactly as this episode returned it'),
     'identifier': Field('text', 'Its own identifier, when it has one', required=False),
 })
+ORGANISM_ROLES = ('leader', 'on_the_leaders_lineage', 'rival')
+ORGANISM_FORM = RecordForm({
+    'taxon_id': Field('integer', 'The candidate taxon (NCBI taxonomy id)'),
+    'name': Field('text', 'The taxonomy\'s own name of the taxon'),
+    'rank_code': Field('text', 'The rank code of the taxon (a rank letter, a digit for a level between two ranks)'),
+    'score': Field('number', 'The candidate\'s score: the support on its own lineage'),
+    'role': ChoiceField('text', 'The leading candidate, a vaguer candidate on its lineage, or its leading rival',
+                        ORGANISM_ROLES),
+})
 GROUP_FORM = RecordForm({
     'members': Field('list', 'The candidates of the group', items=MEMBER_FORM),
 })
@@ -66,6 +75,10 @@ ASSIGNMENT_FORM = RecordForm({
                                       'candidates that are one function, each member named exactly as this episode '
                                       'returned it; a candidate in no group stands alone', items=GROUP_FORM,
                               required=False),
+    'organism_candidates': Field('list', 'The candidate organisms of the DNA the subject is from, as the organism '
+                                         'identification head found them and the commissioner chose to pass them: the '
+                                         'leading candidate, the vaguer candidates on its lineage and its leading rival, '
+                                         'each with its score', items=ORGANISM_FORM, required=False),
 })
 
 
@@ -97,7 +110,8 @@ def read_from_parent(assignment, message):
                     'evidence_refs': list(assignment['evidence_refs']), 'constraints': assignment['constraints'],
                     'context': context, 'scope': assignment['scope'], 'scope_refs': list(assignment['scope_refs']),
                     'child_credit_units': dict(units), 'yield_task': yield_task, 'message': dict(message),
-                    'candidate_groups': list(assignment.get('candidate_groups', []))}
+                    'candidate_groups': list(assignment.get('candidate_groups', [])),
+                    'organism_candidates': list(assignment.get('organism_candidates', []))}
     if 'revision_origin' in assignment:
         parent_input['revision_origin'] = validate_revision_origin(assignment['revision_origin'])
     return parent_input

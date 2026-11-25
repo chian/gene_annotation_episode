@@ -79,6 +79,8 @@ def sequence_homology_evidence(arguments, summary):
         'child_credit_units': dict(OPERATIONAL_CREDIT_UNITS)}
     if arguments['candidate_groups']:
         assignment['candidate_groups'] = arguments['candidate_groups']
+    if arguments.get('organism_candidates'):
+        assignment['organism_candidates'] = arguments['organism_candidates']
     return ChildMessage(objective='Establish what the sequence-homology evidence shows about the proposed '
                                   'annotation of the assigned subject',
                         message={}, assignment=assignment, selection=SELECTION[slot])
@@ -235,7 +237,18 @@ def biochemical_feasibility_evidence(arguments, summary):
                         message={}, assignment=assignment, selection=SELECTION[slot])
 
 
+def organism_identification(arguments, summary):
+    """The organism identification head (not an evidence axis): the DNA the subject is from, as its scope, with the
+    records that DNA record names in custody. Its committed records are selected so the root holds the taxon records."""
+    refs = summary['source_dna_refs']
+    (dna,) = [ref for ref in refs if ref.startswith('input_')]
+    return ChildMessage(objective='Find which organism the DNA is from', message={},
+                        assignment={'scope': {'subject_refs': [dna]}, 'scope_refs': list(refs)},
+                        selection=('record_refs',))
+
+
 COMMISSIONS = {
+    'organism_identification': organism_identification,
     'sequence_homology_evidence': sequence_homology_evidence,
     'structural_homology_evidence': structural_homology_evidence,
     'gene_context_evidence': gene_context_evidence,

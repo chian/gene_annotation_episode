@@ -69,12 +69,20 @@ from .messages.internal_summary import annotation_key, identity_of
 #     'structural_homology_evidence', 'gene_context_evidence', 'evolutionary_history_evidence', 'perturbation_evidence',
 #     'partner_presence_evidence', 'sample_context_evidence', 'biochemical_feasibility_evidence'
 CHILD_SLOTS = {
+    'organism_identification': 'organism_identification',                      # not an evidence axis
     'sequence_homology_evidence': 'sequence_homology_evidence',                # A101
     'experimental_activity_evidence': 'experimental_activity_evidence',        # A105
 }
 SERVICES = ()
 # The head that finds the candidate annotations: it is commissioned on the subject, not on a claim.
 ANNOTATION_FINDER = 'sequence_homology_evidence'
+# The head that says which organism the subject's DNA is from. It is no evidence axis and earns no annotation credit: its
+# commission is a unit the root owes once, at the start, whenever the commissioner gave the DNA (``resume_action``), and
+# what it returns is passed down to the heads that take it (``TAKES_ORGANISM``) and to the claim maker. The owner,
+# 2026-11-24: "add organismal taxa ID potential candidates as a new head from root"; "a way to pass this info on taxa
+# candidates to the root who can pass whatever info it decides down to the other children".
+ORGANISM_FINDER = 'organism_identification'
+TAKES_ORGANISM = ('sequence_homology_evidence',)
 # The kinds of claim each linked head can check, read from that head's own claim contract (A105:
 # ``literature_row_contract.CLAIM_PREDICATES``). A claim is offered to every head that lists its predicate.
 CLAIM_CHECKERS = {
@@ -95,6 +103,8 @@ Each step you take one of the `choices`, by its number:
 Claims are made for you: for every candidate annotation found, what it says the protein does is turned into claims an experiment could check ("binds", "catalyzes" or "transports" a named molecule). An annotation that states no function gives no claims.
 
 `annotations` is the scoring sheet: every candidate annotation scored so far, the highest `score` first. Each has its `vocabulary` and its `name` or `identifier`, its `score`, and `rows`: the score each axis gives it, on that axis's own scale (negative when that axis's evidence says the annotation does not hold). The annotation's score is prod_i (1 + k * s_i) ** w_i - 1 over the axis scores s_i, with 0 for an axis that has not scored it: an annotation supported on several axes scores more than the same support on one, and an axis that speaks against it discounts the rest. The first is the best annotation as the evidence stands.
+
+`organism` shows which organism the protein's DNA is from, when that DNA was given: the candidate taxa found by the organism identification episode, the leading one first, each with its score (the support on its own lineage, so a vaguer call such as a family supports every finer candidate inside it), and the `placement` (the leading candidate, its leading rival and the deepest taxon the two share). That episode is run for you before anything else, and what it found is passed to the sequence homology episode and to the making of the claims.
 
 `claims` lists the claims made: the annotation each was made from, what it says, and for each episode that can check it how often it was commissioned on it.
 
@@ -158,21 +168,38 @@ def annotations_without_claims(summary):
             if annotation_key(annotation) not in summary['claims_made']]
 
 
+def organism_owed(summary):
+    """Whether the commission of the organism identification head is owed: the commissioner gave the subject's DNA and
+    the head has not been commissioned yet."""
+    return bool(summary['source_dna_refs']) and summary['organism']['commissions'] == 0
+
+
+def organism_of_claims(summary):
+    """The organism the claim maker is told: the leading candidate taxon (id, name, rank code, score), or ``None`` when
+    there is none."""
+    leaders = [row for row in summary['organism']['passed_down'] if row['role'] == 'leader']
+    return leaders[0] if leaders else None
+
+
 def resume_action(summary, records, ctx):
-    """The unit this episode owes (``method_loop.episode_type``, step 3): the making of the claims of the first
+    """The unit this episode owes (``method_loop.episode_type``, step 3): the commission of the organism identification
+    head while it is owed, due at once (before any head that takes the organism is commissioned); else the making of the claims of the first
     annotation on the sheet that has none yet, due at once; else the return to a head that left a job running, not due
     (the model may take other steps worth their cost first); else ``None``."""
+    if organism_owed(summary):
+        return {'action_type': ORGANISM_FINDER, 'due': True, 'arguments': {}}
     waiting = annotations_without_claims(summary)
     if waiting:
         (subject,) = summary['scope']['subject_refs']
         return {'action_type': MAKE_CLAIMS, 'due': True,
-                'arguments': {'annotation': waiting[0], 'subject_ref': subject,
+                'arguments': {'annotation': waiting[0], 'subject_ref': subject, 'organism': organism_of_claims(summary),
                               'rivals': [identity_of(annotation) for annotation in summary['annotations']
                                          if identity_of(annotation) != waiting[0]]}}
     if summary['axes'][ANNOTATION_FINDER]['outstanding_jobs'] > 0:
         return {'action_type': ANNOTATION_FINDER, 'due': False,
                 'arguments': {'selection': ctx.settings['axis_selections'][ANNOTATION_FINDER],
-                              'candidate_groups': summary['groups'][ANNOTATION_FINDER]}}
+                              'candidate_groups': summary['groups'][ANNOTATION_FINDER],
+                              'organism_candidates': summary['organism']['passed_down']}}
     return None
 
 
@@ -186,6 +213,7 @@ def decide(summary, feedback, ctx):
                'claims': [claim_view(claim, summary) for claim in summary['claims']],
                'axes': [axis_view(slot, summary, credits, current) for slot in CHILD_SLOTS],
                'commissions': summary['commissions'],
+               'organism': {name: summary['organism'][name] for name in ('candidates', 'placement', 'test_count')},
                'choices': [{name: value for name, value in step.items() if name != 'claim_ref'} for step in offered],
                'feedback': feedback}
     schema = {'type': 'object', 'additionalProperties': False, 'required': ['choice'],
@@ -197,7 +225,8 @@ def offered_actions(summary, ctx):
     """The action types this decision offers: the actions of ``choices(summary)``, each once, and ``make_claims`` while
     an annotation's claims are owed."""
     return list(dict.fromkeys([step['action'] for step in choices(summary)]
-                              + ([MAKE_CLAIMS] if annotations_without_claims(summary) else [])))
+                              + ([MAKE_CLAIMS] if annotations_without_claims(summary) else [])
+                              + ([ORGANISM_FINDER] if organism_owed(summary) else [])))
 
 
 def action(response, summary, records, ctx):
@@ -209,13 +238,16 @@ def action(response, summary, records, ctx):
         arguments['claim_ref'] = step['claim_ref']
     elif step['action'] in TAKES_GROUPING:
         arguments['candidate_groups'] = summary['groups'][step['action']]
+    if step['action'] in TAKES_ORGANISM:
+        arguments['organism_candidates'] = summary['organism']['passed_down']
     return ChildCall(step['action'], arguments)
 
 
 async def make_claims(arguments, ctx):
     """The claims of one candidate annotation, by the set workflow of ``claim_generation.generate_claims``."""
     return await generate_claims(ctx.store, ctx.model, ctx.operation_key, annotation=arguments['annotation'],
-                                 rivals=arguments['rivals'], subject_ref=arguments['subject_ref'])
+                                 rivals=arguments['rivals'], subject_ref=arguments['subject_ref'],
+                                 organism=arguments['organism'])
 
 
 TOOLS = {MAKE_CLAIMS: make_claims}
