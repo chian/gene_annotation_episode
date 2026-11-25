@@ -144,6 +144,16 @@ KINDS = {
                                 'Sequence signature matches, textual (Infernal cmscan table, format 2)'),
     'rna_family_scan_report': ('http://edamontology.org/data_0858', 'http://edamontology.org/format_2330',
                                'Sequence signature matches, textual (Infernal cmscan report with the alignments of the hits)'),
+    # The two files Kraken 2 writes for one classified sequence (``kraken2_classification``): the per-sequence output (the
+    # taxon assigned and the taxon of each k-mer) and the report (the taxa with their share). EDAM.tsv, read 2026-11-24
+    # (https://edamontology.org/EDAM.tsv), neither obsolete: data_3028 Taxonomy ("Data concerning the classification,
+    # identification and naming of organisms"; EDAM calls it a broad placeholder, and it has no closer term that is not
+    # obsolete: data_1872 Taxonomic classification is the NAME of a group, data_2987 Classification report is obsolete);
+    # format_3475 TSV (both files are tab-separated).
+    'taxonomic_classification_results': ('http://edamontology.org/data_3028', 'http://edamontology.org/format_3475',
+                                         'Taxonomy, TSV (Kraken 2 per-sequence output: taxon assigned and k-mer mapping)'),
+    'taxonomic_classification_report': ('http://edamontology.org/data_3028', 'http://edamontology.org/format_3475',
+                                        'Taxonomy, TSV (Kraken 2 report: taxa with their share of the sequences)'),
     # The RNA genes of a piece of DNA found by parts discovery ``find_rna_genes`` (Infernal ``cmscan`` of the whole piece over the
     # covariance models of Rfam, both strands): the same data types and format as the A102 ``rna_family_scan_results`` and
     # ``rna_family_scan_report`` above (data_0858 Sequence signature matches, format_2330 Textual format, for the same reasons).
