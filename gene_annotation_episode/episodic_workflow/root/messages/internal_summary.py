@@ -287,4 +287,8 @@ def internal_summary(view):
     return {**view.parent_input, 'axes': axes, 'claims': claims, 'claims_made': claims_made,
             'annotations': scoring_sheet(axes, claims), 'groups': {slot: groups_of(slot, lines) for slot in axes},
             'commissions': commissions, 'units': units,
-            'organism': {**organism, 'passed_down': passed_down(organism)}}
+            'organism': {**organism, 'passed_down': passed_down(organism)},
+            # the molecule of each subject of the scope, read from its record: the organism identification head works
+            # from DNA, so the root commissions it only on a scope whose subject is DNA (``task.organism_owed``)
+            'subject_molecules': {ref: view.records.get(ref).get('molecule')
+                                  for ref in view.parent_input['scope']['subject_refs']}}

@@ -238,12 +238,11 @@ def biochemical_feasibility_evidence(arguments, summary):
 
 
 def organism_identification(arguments, summary):
-    """The organism identification head (not an evidence axis): the DNA the subject is from, as its scope, with the
-    records that DNA record names in custody. Its committed records are selected so the root holds the taxon records."""
-    refs = summary['source_dna_refs']
-    (dna,) = [ref for ref in refs if ref.startswith('input_')]
+    """The organism identification head (not an evidence axis): the root's own scope, as every head is commissioned on,
+    with the records the scope names in custody. Its committed records are selected so the root holds the taxon
+    records."""
     return ChildMessage(objective='Find which organism the DNA is from', message={},
-                        assignment={'scope': {'subject_refs': [dna]}, 'scope_refs': list(refs)},
+                        assignment={'scope': summary['scope'], 'scope_refs': list(summary['scope_refs'])},
                         selection=('record_refs',))
 
 
