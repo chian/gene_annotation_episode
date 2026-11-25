@@ -22,7 +22,8 @@ A test is one graded source: ``<sheet>@<source reference>``. The sheets (a kind 
   the kind of DNA sum to 1 and are its bits. The chromosome and the plasmid score together are the bit at cellular
   organisms (a chromosome or a plasmid is of a cell). The virus score is the bit of the virus side: the share of it that the
   genes' agreement on a lineage carries sits at the deepest taxon of that lineage, the rest at Viruses (all of it there when
-  no gene gave a taxonomy). The bits of one test sum to 1.
+  no gene gave a taxonomy). The bits of one test sum to 1 (geNomad writes the scores rounded, so as written they can sum
+  to a little more; they are then divided by their sum).
 * ``vitap:<database name>`` (the ``vitap_assignment_sheet`` of ``vitap_grader``): the lineage VITAP settled on, and each
   other lineage it considered that is not nested with one already taken (the higher score first; the same lineage cut at
   another depth is not a second call). VITAP's lineage score s has no stated maximum, so the bit of lineage i, at the finest
@@ -80,6 +81,9 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.taxonomic
 TYPICAL_STRONG_VALUE = {'kraken2:viral': 0.988, 'kraken2:standard_8gb': 0.068, 'genomad:1.9': 0.9707,
                         'vitap:DB_hybrid_MSL37_RefSeq209_IMGVR': 0.694}
 SHEET_WEIGHT = {sheet: 1 / value for sheet, value in TYPICAL_STRONG_VALUE.items()}
+# The bits of one test sum to at most 1 as numbers; summed in floating point, in another order than the proof's, they can
+# come out above 1 by a few units in the last place. The ceiling allows for that and for nothing else.
+SUM_ROUNDING = 1e-9
 
 
 def held_sources(reader):
@@ -116,7 +120,12 @@ def _bit_row(row, bit):
 def _genomad(grading):
     """``(sheet name, covers, rows)`` of one geNomad grading (the module's description states the bits)."""
     sheet = grading['sheet']
-    kind, genes = sheet['kind'], sheet['gene_taxonomy']
+    genes = sheet['gene_taxonomy']
+    # geNomad writes the three scores rounded to four decimals, so as written they can sum to a little more than 1
+    # (0.4501 + 0.4419 + 0.1081 = 1.0001 in run organism_identification_06): they are shares of one, so they are divided by
+    # their sum when it is above 1
+    over = max(1.0, math.fsum(sheet['kind'].values()))
+    kind = {name: value / over for name, value in sheet['kind'].items()}
     bits = {CELLULAR: (sheet['kind_taxa']['cellular'], kind['chromosome_score'] + kind['plasmid_score'])}
     deepest = None if not sheet['taxa'] else sheet['taxa'][-1]
     agreed = 0.0 if deepest is None else kind['virus_score'] * genes['agreement']
@@ -272,7 +281,7 @@ def test_ceiling(table, sheet, covers):
     times its own bit, the bits it adds to its deepest listed ancestor; a vaguer candidate above a listed one earns
     nothing), and its one differential is at most the weight (two moves, each between 0 and the weight). The differential
     needs two listed rivals the test can measure."""
-    weight = sheet_weight(sheet)
+    weight = sheet_weight(sheet) * (1 + SUM_ROUNDING)
     return weight + (weight if lead_rivals(table['candidates'], table['scores'], covers) is not None else 0.0)
 
 
