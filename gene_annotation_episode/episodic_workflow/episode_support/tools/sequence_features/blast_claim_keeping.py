@@ -63,6 +63,29 @@ async def same_calls(model, labels):
     return {row['label']: given[number] for number, row in enumerate(labels, 1)}
 
 
+def keep_taxon_claims(store, *, search_source_ref, searched_ref):
+    """Keep the taxon claims of the hits of the graded search whose source is ``search_source_ref`` (see the module),
+    about the sequence ``searched_ref`` was searched for. Returns the references kept: the claims' source, their
+    retained sheet and its data-product row."""
+    (graded,) = [entry for entry in source_tool_grading_entries(store, search_source_ref)
+                 if entry['grading']['sheet']['schema'] == GRADED_SHEET]
+    mapping = store.get(searched_ref).get('mapping')
+    subject_ref = searched_ref if mapping is None else mapping['path'][0]['subject_ref']
+    taxon_sheet = {**search_taxon_claim_sheet(graded['grading']), 'subject_ref': subject_ref}
+    report_ref = store.get(search_source_ref)['artifact_ref']
+    with store.transaction():
+        taxon_grading_ref = retain_tool_grading(store, provider=TAXON_PROVIDER, native_artifact_ref=report_ref,
+                                                grading={'sheet': taxon_sheet})
+        taxon_source = store.put('source', {
+            'provider': TAXON_PROVIDER, 'accession': None, 'uri': None, 'artifact_ref': report_ref, 'text_ref': None,
+            'request_ref': None, 'version': None, 'retrieved_at': None, 'auxiliary_artifact_refs': [taxon_grading_ref],
+            'operand_refs': [subject_ref]}, origin='tool')
+        taxon_product = record_grading_product(store, grading_ref=taxon_grading_ref, grading={'sheet': taxon_sheet},
+                                               provider=TAXON_PROVIDER, source_ref=taxon_source['id'],
+                                               used=[graded['artifact_ref']])
+    return [taxon_source['id'], taxon_grading_ref, taxon_product['id']]
+
+
 async def keep_blast_claims(ctx, *, search_source_ref, searched_ref):
     """Turn the graded sheet of the search whose source is ``search_source_ref`` into claims about the sequence
     ``searched_ref`` was searched for, and keep them (see the module). Returns ``{'claim_count', 'refs'}``: the number of
@@ -76,7 +99,6 @@ async def keep_blast_claims(ctx, *, search_source_ref, searched_ref):
     subject_ref = searched_ref if mapping is None else mapping['path'][0]['subject_ref']
     groups = [await same_calls(ctx.model, labels) for labels in place_labels(grading, mapping)]
     sheet = blast_claim_sheet(grading, groups, mapping)
-    taxon_sheet = {**search_taxon_claim_sheet(grading), 'subject_ref': subject_ref}
     report_ref = store.get(search_source_ref)['artifact_ref']
     with store.transaction():
         kept = {**sheet, 'subject_ref': subject_ref}
@@ -87,18 +109,9 @@ async def keep_blast_claims(ctx, *, search_source_ref, searched_ref):
             'request_ref': None, 'version': None, 'retrieved_at': None, 'auxiliary_artifact_refs': [grading_ref],
             'operand_refs': [subject_ref]}, origin='tool')
         # the taxon claims of the same hits, for the organism side, on a source of their own
-        taxon_grading_ref = retain_tool_grading(store, provider=TAXON_PROVIDER, native_artifact_ref=report_ref,
-                                                grading={'sheet': taxon_sheet})
-        taxon_source = store.put('source', {
-            'provider': TAXON_PROVIDER, 'accession': None, 'uri': None, 'artifact_ref': report_ref, 'text_ref': None,
-            'request_ref': None, 'version': None, 'retrieved_at': None, 'auxiliary_artifact_refs': [taxon_grading_ref],
-            'operand_refs': [subject_ref]}, origin='tool')
-        taxon_product = record_grading_product(store, grading_ref=taxon_grading_ref, grading={'sheet': taxon_sheet},
-                                               provider=TAXON_PROVIDER, source_ref=taxon_source['id'],
-                                               used=[graded['artifact_ref']])
+        taxon_refs = keep_taxon_claims(store, search_source_ref=search_source_ref, searched_ref=searched_ref)
     feature_refs = settle_feature_records(ctx, subject_ref=subject_ref, source_ref=source['id'])
-    return {'claim_count': len(sheet['claims']), 'refs': [source['id'], grading_ref, *feature_refs,
-                                                          taxon_source['id'], taxon_grading_ref, taxon_product['id']]}
+    return {'claim_count': len(sheet['claims']), 'refs': [source['id'], grading_ref, *feature_refs, *taxon_refs]}
 
 
 
@@ -115,4 +128,4 @@ def hits_by_bit_score(report, grading, length):
                   key=lambda pair: (-pair[1], pair[0]))
 
 
-__all__ = ['PROVIDER', 'TAXON_PROVIDER', 'hits_by_bit_score', 'keep_blast_claims']
+__all__ = ['PROVIDER', 'TAXON_PROVIDER', 'hits_by_bit_score', 'keep_blast_claims', 'keep_taxon_claims']

@@ -47,8 +47,10 @@ def settle_feature_records(ctx, *, subject_ref, source_ref):
                         'changes': [*record.get('changes', []), {'segments': record['segments'],
                                                                  'strand': record['strand'], 'source_ref': source_ref}]})
             refs.append(ref)
-            # a coding sequence that can be read in codons on a strand is translated under the code held
-            if row['kind'] == CODING and code is not None and row['strand'] in STRANDS and letters(row) % 3 == 0:
+            # a coding sequence, or a mature peptide, that can be read in codons on a strand is translated under the
+            # code held
+            if (row['kind'] in (CODING, 'mature_peptide') and code is not None and row['strand'] in STRANDS
+                    and letters(row) % 3 == 0):
                 record = store.get(ref)
                 if 'protein_ref' not in record or _protein_code(store, record['protein_ref']) != code:
                     refs.extend(translate_feature_call(ctx, feature_ref=ref, code=int(code))['refs'])

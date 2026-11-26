@@ -262,6 +262,14 @@ class Custody:
         if ref not in self._pending[-1]:
             self._pending[-1].append(ref)
 
+    def changed(self, ref, before, after):
+        """The current unit changed the feature record ``ref`` in place, inside the scoped-store transaction now
+        open: the change is logged in the Store transaction that made it."""
+        self.require_unit('feature_change')
+        if not self._pending:
+            raise CustodyError('record_changed_outside_a_scoped_store_transaction:' + repr(self.path) + ':' + str(ref))
+        self._ledger.changed(self._run_id, self.path, ref, self._position.position, before, after)
+
     def in_transaction(self):
         return bool(self._pending)
 

@@ -118,6 +118,7 @@ GROUPED_CANDIDATE_FORM = RecordForm({
     'sheets': Field('list', 'Its subscoring sheets under the grouping in force', items=SHEET_FORM),
 })
 TARGET_FORM = RecordForm({
+    'target_ref': Field('record_refs', 'The sequence the entry is of: exactly one record'),
     **{name: feature_field(name, rule) for name, rule in FEATURES.items()},
     'candidates': Field('list', 'The possible annotations found for the target, each with its score, the leading one '
                                 'first', items=CANDIDATE_FORM),
@@ -182,6 +183,7 @@ CLAIM_ANNOTATION_FORM = RecordForm({name: CANDIDATE_FORM.fields[name] for name i
     'vocabulary', 'name', 'identifier', 'function_identifiers', 'identifier_sources', 'hits_without_identifier')})
 CLAIM_FORM = RecordForm({
     'claim_ref': Field('text', 'The claim: a hypothesis record this episode made from the annotation'),
+    'target_ref': Field('record_refs', 'The sequence the annotation is of: exactly one record'),
     'annotation': Field('record', 'The candidate annotation the claim was made from, named as in the finding',
                         form=CLAIM_ANNOTATION_FORM),
     'predicate': ChoiceField('text', 'What the claim says the protein does to the molecule', PREDICATES),

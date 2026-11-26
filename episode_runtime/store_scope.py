@@ -827,11 +827,15 @@ class ScopedStore(RecordReader):
 
     def change_feature(self, ref, fields):
         """Change fields of the held feature record ``ref`` in place (the Store's ``change_feature``): it keeps its
-        reference. The record and every record ``fields`` names must be readable."""
+        reference. The record and every record ``fields`` names must be readable. The change is logged with the
+        record as it was and as it is (``store_ledger``), and put back if its unit is abandoned."""
         self._readable(ref)
         self.__named(fields)
         with self.transaction():
-            return self.__store.change_feature(ref, fields)
+            before = self.__store.get(ref)
+            changed = self.__store.change_feature(ref, fields)
+            self.__custody.changed(ref, before, changed)
+            return changed
 
     def artifact(self, data, media_type='application/octet-stream'):
         """Write a Store artifact; the Episode then holds it as produced at this unit."""

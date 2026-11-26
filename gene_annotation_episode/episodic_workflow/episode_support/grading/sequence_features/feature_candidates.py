@@ -30,8 +30,8 @@ earliest on a tie). A later, better supported call moves the positions to it: th
 
 CLAIMS IN SLOTS, AND CLAIMS THAT WAIT. A claim sits in every slot that includes it: the slot is of the claim's type, their
 strands agree, the claim's letters lie WHOLLY inside one version of the slot ("interior here at least implies 100% overlap
-so it's a subset of a span"), that version has every end the claim claims at the same position (for a coding claim the end read last may
-lie one stop codon inside the version's: a protein alignment ends before the stop codon a gene call includes), and a
+so it's a subset of a span"), that version has every end the claim claims at the same position (a coding statement that ends one codon before a
+stop codon is stated at the stop codon first, under the genetic code held: ``stated_to_the_stop_codon``), and a
 coding claim is read in the slot's frame. A claim in a slot adds to the slot's score ("interior claim adds to a score when it sits usefully in a
 feature_call slot"). Claims are never joined with each other and no positions are made up from them: a claim is in a slot
 or it is not. A claim that no slot includes WAITS ("these are claims waiting for a home"; "they might immediately slot into
@@ -129,6 +129,8 @@ Measurements of different sequences are never compared: every table is per seque
 tool: it reads the records the episode holds, through the reader it is given."""
 import math
 
+from gene_annotation_episode.sequence_ops import translation_codes
+
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.tool_grading_artifacts import (
     source_tool_grading_entries)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_features.feature_types import (
@@ -149,8 +151,6 @@ RNA_UNITS = ('tRNA', 'rRNA')
 RNA_SHARE = 0.5
 # The types read in codons.
 IN_CODONS = (CODING, *PROTEIN_PARTS)
-# The letters of a stop codon: how far the end of a protein lies inside the end of its coding sequence.
-STOP_CODON = 3
 # Per family of technique (the first part of a sheet name: ``protein_similarity``, ``nucleotide_similarity``, ...): its
 # weight; and per sheet schema: its reader ``grading -> (sheet name, covers, rows)`` with one row per statement of the
 # test: ``{'kind', 'strand', 'segments', 'claims_start', 'claims_end', 'bit'}``. Entered by each tool's
@@ -265,19 +265,12 @@ def same_slot(first, second):
 
 def sits_in(claim, slot):
     """Whether a claim sits in a slot: the slot is of its type, their strands agree, its letters lie wholly inside one
-    version of the slot that has every end the claim claims at the same position, and it is read in the slot's frame. At
-    the end a coding sequence is read last (the upper end on ``+``, the lower on ``-``) the claim's end may also lie one
-    stop codon inside the version's: a protein alignment that reaches the last residue of a known protein ends before
-    the stop codon, and a gene finder's call includes it."""
+    version of the slot that has every end the claim claims at the same position, and it is read in the slot's frame."""
     if claim['kind'] != slot['kind'] or not strands_agree(claim, slot):
         return False
-    # the end read last, where a coding call may carry a stop codon the claim does not
-    strand = slot['strand'] if slot['strand'] != '.' else claim['strand']
-    stop = STOP_CODON if claim['kind'] == CODING else 0
-    after_low, after_high = (stop if strand == '-' else 0), (stop if strand == '+' else 0)
     return any(inside(claim, version)
-               and (not claim['claims_start'] or low(claim) - low(version) in (0, after_low))
-               and (not claim['claims_end'] or high(version) - high(claim) in (0, after_high))
+               and (not claim['claims_start'] or low(claim) == low(version))
+               and (not claim['claims_end'] or high(claim) == high(version))
                and _frames_agree(claim, {**version, 'kind': slot['kind'], 'strand': slot['strand']})
                for version in slot['versions'])
 
@@ -569,6 +562,29 @@ def target_table(tests):
             'test_credits': test_credits, 'credit': math.fsum(test_credits.values())}
 
 
+def stated_to_the_stop_codon(rows, sequence, stops):
+    """The statements ``rows`` of one sequence (its letters ``sequence``, upper case), each coding statement that claims
+    the end it is read to (the upper end on ``+``, the lower on ``-``) and ends one codon before a stop codon of ``stops``
+    (the codons that end a protein under the genetic code held) stated at that stop codon. A protein alignment that
+    reaches the last residue of a known protein ends before the stop codon and a gene finder's call includes it: they
+    state the same end. A statement that already ends with a stop codon, or is of another type, is as it was."""
+    turned = {codon[::-1].translate(str.maketrans('ACGT', 'TGCA')) for codon in stops}
+    found = []
+    for row in rows:
+        segments = [dict(segment) for segment in row['segments']]
+        if row['kind'] == CODING and row['strand'] == '+' and row['claims_end']:
+            last = max(segments, key=lambda segment: segment['end'])
+            if sequence[last['end'] - 3:last['end']] not in stops and sequence[last['end']:last['end'] + 3] in stops:
+                last['end'] += 3
+        if row['kind'] == CODING and row['strand'] == '-' and row['claims_start']:
+            first = min(segments, key=lambda segment: segment['start'])
+            if (sequence[first['start']:first['start'] + 3] not in turned and first['start'] >= 3
+                    and sequence[first['start'] - 3:first['start']] in turned):
+                first['start'] -= 3
+        found.append({**row, 'segments': segments})
+    return found
+
+
 def _outer(segments):
     return {'start': min(segment['start'] for segment in segments), 'end': max(segment['end'] for segment in segments)}
 
@@ -587,7 +603,13 @@ def feature_table(reader, scope, sources):
     records = [reader.get(ref) for ref in reader.refs() if ref.startswith('feature_')]
     targets = {}
     for target in reader.validate_scope(scope)['subject_refs']:
-        table = target_table([test for test in tests if test['target'] == target])
+        held = [test for test in tests if test['target'] == target]
+        code = held_readings(held)[0].get('genetic_code', {}).get('held')
+        if code is not None:
+            sequence = reader.get_artifact(reader.get(target)['sequence_ref']).decode('ascii').upper()
+            stops = next(row['stop_codons'] for row in translation_codes() if row['code'] == int(code))
+            held = [{**test, 'rows': stated_to_the_stop_codon(test['rows'], sequence, stops)} for test in held]
+        table = target_table(held)
         order = _order(table['slots'], table['score'])
         pair = lead_rivals(table['slots'], table['score'])
         rows = []
@@ -613,5 +635,6 @@ __all__ = ['ABOVE', 'ALTERNATIVES', 'COMPETING', 'KINDS', 'READERS', 'RIVAL_LETT
            'SHEET_WEIGHT', 'STRANDS',
            'feature_table', 'feature_tests', 'held_readings', 'held_sources', 'high', 'inside', 'lead_rivals', 'letters', 'low',
            'measurable', 'nested', 'overlap_facts', 'positions', 'rivals', 'same_frame', 'same_reading', 'same_slot',
-           'shared_letters', 'sheet_family', 'sheet_of', 'sheet_weight', 'sits_in', 'strands_agree', 'target_table',
+           'shared_letters', 'sheet_family', 'sheet_of', 'sheet_weight', 'sits_in', 'stated_to_the_stop_codon', 'strands_agree',
+           'target_table',
            'within']

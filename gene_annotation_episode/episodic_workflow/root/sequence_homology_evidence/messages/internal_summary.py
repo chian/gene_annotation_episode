@@ -142,7 +142,7 @@ def internal_summary(view):
     table = held_candidate_table(parent, records)
     held_products = products(records)
     alignments = [row for row in held_products if row['kind'] == msa.PRODUCT_KIND]
-    findings = [{**finding, **_candidate_fields(table['targets'][target])}
+    findings = [{'target_ref': [target], **finding, **_candidate_fields(table['targets'][target])}
                 for target, finding in zip(details['a101_sheet']['targets'], axis_features(details), strict=True)]
     return {**parent,
             'path_depth': len(view.path),
@@ -186,7 +186,7 @@ def internal_summary(view):
             'candidate_hit_feature_kinds': [{'candidates': table['targets'][target]['hit_feature_kinds']}
                                             for target in details['a101_sheet']['targets']],
             # the claims this episode holds, each with the annotation it was made from, read from the claim tool's traces
-            'claims': [{**claim, 'annotation': trace['annotation']}
+            'claims': [{**claim, 'annotation': trace['annotation'], 'target_ref': [trace['subject_ref']]}
                        for trace in (json.loads(records.get_artifact(source['artifact_ref']))
                                      for source in records.list('source') if source['provider'] == TRACE_PROVIDER)
                        for claim in trace['claims']],

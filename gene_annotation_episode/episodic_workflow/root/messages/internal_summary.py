@@ -54,11 +54,8 @@ The level above (``feature_calls``): the feature calls feature calling returned,
 of the sheet with its score; a feature call with no annotation is still a line, and its score is the feature call's own
 (``feature_lines``). With each sequence's lines: the claims that wait for a feature call and the genetic code held.
 
-The level below (``annotations``): the annotation lines, computed as below and shown beside the feature calls. No
-annotation line is tied to a feature call yet: tying an annotation to the feature call it sits on (commissioning the
-annotation heads on a coding feature call), and the factor of the feature call's score in an annotation's score, are
-part B of the root link, which waits on a decision of the owner. Until then an annotation line's score is what the axes
-and the organism give it, as below.
+The level below (``annotations``): the annotation lines, computed as below. Each sits on one feature call
+(``feature_call``), and its score is multiplied by that feature call's score.
 
 The annotation lines: one line per function, with one row per axis that scored it.
 
@@ -203,10 +200,11 @@ def claim_axis_row(rows):
             'support': support, 'opposition': opposition}
 
 
-def on_line(annotation, line):
-    """Whether ``annotation`` (the annotation a claim was made from, named as its head returned it) is a member of
-    ``line``."""
-    return any(member_identity(annotation) == member_identity(member) for _, member in line)
+def on_line(claim, line):
+    """Whether the annotation ``claim`` was made from (named as its head returned it) is a member of ``line``, on the
+    claim's own feature call."""
+    return any(claim['feature_ref'] == member['feature_ref']
+               and member_identity(claim['annotation']) == member_identity(member) for _, member in line)
 
 
 def member_identity(row):
@@ -228,6 +226,8 @@ def one_line(slot, row, member_slot, member, axes):
     """Whether two annotations belong on one line. Two of one head: that head joined them (its joining in force) or they
     are the same annotation; the root decides nothing among one head's own candidates (the owner, 2026-11-26: "join
     this automatically and not use the root to decide"). Two of different heads: ``same_function``."""
+    if row['feature_ref'] != member['feature_ref']:
+        return False
     if slot != member_slot:
         return same_function(row, member)
     pair = (member_identity(row), member_identity(member))
@@ -266,7 +266,8 @@ def _taxon_waiting(row):
 
 def taxon_sources(records, organism_refs, feature_refs):
     """The sources the root's scoring sheet of candidate taxa reads, in the order the root received them: those the
-    organism identification head returned (its graded classifications), then the taxon claim sources feature calling
+    organism identification head returned (its graded classifications), then the taxon claim sources the heads that
+    searched (feature calling, the sequence-homology head)
     returned (provider ``blast_claim_keeping.TAXON_PROVIDER``: the taxa the hits of one of its searches name)."""
     return ([ref for ref in organism_refs if ref.startswith('source_')]
             + [ref for ref in feature_refs if ref.startswith('source_') and records.get(ref)['provider'] == TAXON_PROVIDER])
@@ -318,19 +319,28 @@ def organism_entry(organism):
     return {} if leader is None else {'organism_taxon_id': leader['taxon_id'], 'organism_score': leader['score']}
 
 
-def annotation_score(axis_scores, organism_score):
-    """``(prod_i (1 + K * s_i) ** w_i - 1) * ((1 + K * s_o) ** w_o - 1)``: the score of one candidate annotation, from the
-    scores ``{slot: s_i}`` the nine axes give it (their own merge, ``credit.hypervolume``) and the score ``s_o`` of
-    the leading candidate taxon of the sequence, with the weight ``ORGANISM_WEIGHT``. The organism's factor is a pure
-    multiple of the axes' score: zero from the axes stays zero, and with no organism (``s_o = 0``) the score is zero."""
+def annotation_score(axis_scores, organism_score, feature_score):
+    """``(prod_i (1 + K * s_i) ** w_i - 1) * ((1 + K * s_o) ** w_o - 1) * s_f``: the score of one candidate annotation, from the
+    scores ``{slot: s_i}`` the nine axes give it (their own merge, ``credit.hypervolume``), the score ``s_o`` of
+    the leading candidate taxon of the sequence, with the weight ``ORGANISM_WEIGHT``, and the score ``s_f`` of the
+    feature call the annotation sits on. The organism's factor and the feature call's score are pure
+    multiples of the axes' score: zero from the axes stays zero, with no organism (``s_o = 0``) the score is zero, and
+    an annotation on a feature call of score zero scores zero."""
     over_axes = hypervolume(axis_scores)
     gain = axis_gain(organism_score, ORGANISM_WEIGHT)
-    return over_axes * gain
+    return over_axes * gain * feature_score
 
 
-def scoring_sheet(axes, claims, organism):
-    """The root's scoring sheet from the rows of the axes, the claims and what the root holds of the organism
-    (see the module text)."""
+def feature_call_of(features, feature_ref):
+    """The feature call of feature calling's return that the feature record ``feature_ref`` states, as a line carries
+    it: the record, the type, strand, positions and score of the feature call."""
+    (call,) = [row for target in features['targets'] for row in target['features'] if feature_ref in row['feature_refs']]
+    return {'feature_ref': feature_ref, **{name: call[name] for name in ('kind', 'strand', 'start', 'end', 'score')}}
+
+
+def scoring_sheet(axes, claims, organism, features):
+    """The root's scoring sheet from the rows of the axes, the claims, what the root holds of the organism and the
+    feature calls (see the module text). A line belongs to one feature call."""
     sheet = []
     lines = function_lines(axes)
     entry = organism_entry(organism)
@@ -345,22 +355,24 @@ def scoring_sheet(axes, claims, organism):
             members = sorted((member_identity(row) for member_slot, row in line if member_slot == slot),
                              key=lambda member: (member['vocabulary'], member['name']))
             for group in axes[slot]['grouped_rows']:
-                if sorted(group['members'], key=lambda member: (member['vocabulary'], member['name'])) == members:
+                if (group['feature_ref'] == leader['feature_ref'] and
+                        sorted(group['members'], key=lambda member: (member['vocabulary'], member['name'])) == members):
                     by_axis[slot] = {'status': 'measured' if group['score'] else 'measured_zero', 'score': group['score']}
         for slot, axis in axes.items():
             rows = [axis['claim_rows'][claim['claim_ref']] for claim in claims
-                    if claim['claim_ref'] in axis['claim_rows'] and on_line(claim['annotation'], line)]
+                    if claim['claim_ref'] in axis['claim_rows'] and on_line(claim, line)]
             if rows:
                 by_axis[slot] = claim_axis_row(rows)
-        placed.update(claim['claim_ref'] for claim in claims if on_line(claim['annotation'], line))
+        placed.update(claim['claim_ref'] for claim in claims if on_line(claim, line))
         sheet.append(_line(identity_of(leader), by_axis,
                            [{**{name: row[name] for name in ('vocabulary', 'name', 'identifier') if name in row},
-                             'axis': slot, 'score': row['score']} for slot, row in line], entry))
+                             'axis': slot, 'score': row['score']} for slot, row in line], entry,
+                           feature_call_of(features, leader['feature_ref'])))
     # a claim whose annotation no axis names any more still has its line (the annotation it was made from)
     orphans = {}
     for claim in claims:
         if claim['claim_ref'] not in placed:
-            orphans.setdefault(annotation_key(claim['annotation']), []).append(claim)
+            orphans.setdefault((claim['feature_ref'], annotation_key(claim['annotation'])), []).append(claim)
     for group in orphans.values():
         by_axis = {}
         for slot, axis in axes.items():
@@ -368,20 +380,22 @@ def scoring_sheet(axes, claims, organism):
             if rows:
                 by_axis[slot] = claim_axis_row(rows)
         if by_axis:
-            sheet.append(_line(identity_of(group[0]['annotation']), by_axis, [], entry))
+            sheet.append(_line(identity_of(group[0]['annotation']), by_axis, [], entry,
+                               feature_call_of(features, group[0]['feature_ref'])))
     return sorted(sheet, key=lambda annotation: (annotation['status'] == 'unknown', -annotation.get('score', 0.0)))
 
 
-def _line(identity, by_axis, members, entry):
-    """One line of the sheet: the identity it is shown under, its merged score with what the organism entered into it
-    (``entry``: ``organism_entry``), its axis rows and its members."""
-    line = dict(identity)
+def _line(identity, by_axis, members, entry, call):
+    """One line of the sheet: the identity it is shown under, the feature call it sits on (``call``:
+    ``feature_call_of``), its merged score with what the organism (``entry``: ``organism_entry``) and the feature
+    call's score entered into it, its axis rows and its members."""
+    line = {**identity, 'feature_call': call}
     known = {slot: row for slot, row in by_axis.items() if row['status'] != 'unknown'}
     if known:
         line.update(
             status='measured_zero' if all(row['status'] == 'measured_zero' for row in known.values()) else 'measured',
             score=annotation_score({slot: known[slot]['score'] if slot in known else 0.0 for slot in AXIS_WEIGHTS},
-                                   entry['organism_score'] if entry else 0.0),
+                                   entry['organism_score'] if entry else 0.0, call['score']),
             **entry)
     else:
         line['status'] = 'unknown'
@@ -452,9 +466,12 @@ def internal_summary(view):
     lines = function_lines(axes)
     claims = [claim for axis in axes.values() for claim in axis['claims']]
     organism.update(organism_table(view.records, view.parent_input['scope'],
-                                   taxon_sources(view.records, organism['record_refs'], features['record_refs'])))
+                                   taxon_sources(view.records, organism['record_refs'],
+                                                 [*features['record_refs'],
+                                                  *axes['sequence_homology_evidence']['record_refs']])))
     return {**view.parent_input, 'axes': axes, 'claims': claims,
             'features': features, 'feature_calls': feature_lines(features),
-            'annotations': scoring_sheet(axes, claims, organism), 'groups': {slot: groups_of(slot, lines) for slot in axes},
+            'annotations': scoring_sheet(axes, claims, organism, features),
+            'groups': {slot: groups_of(slot, lines) for slot in axes},
             'commissions': commissions, 'units': units,
             'organism': {**organism, 'passed_down': passed_down(organism)}}

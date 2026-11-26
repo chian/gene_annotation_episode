@@ -106,10 +106,18 @@ FUNCTION_SOURCES = ('bvbrc_global_family', 'hamap', 'ncbifam', 'panther_subfamil
 DECIDING_SOURCES = ('bvbrc_global_family', 'hamap', 'ncbifam', 'panther_subfamily')
 
 
-def sequence_homology_rows(result):
-    """A101. The finding holds one entry per target of the scope, and the root annotates one subject: one target. Each
+def feature_of(records, row):
+    """The feature record a row of the sequence-homology head's return belongs to: its target (``target_ref``: exactly
+    one record) is the protein a feature record names, and that feature record is the protein's parent."""
+    (target,) = row['target_ref']
+    return records.get(target)['parent_refs'][0]
+
+
+def sequence_homology_rows(result, records):
+    """A101. The finding holds one entry per target: a protein a feature record names (``feature_of``). Each
     of its candidates (the possible annotations found, each with its annotation score: the sum of its values on the
-    head's subscoring sheets, never negative) is a row with that score. This head's sheets hold no evidence against a
+    head's subscoring sheets, never negative) is a row with that score and the feature record its target belongs to
+    (``feature_ref``). This head's sheets hold no evidence against a
     candidate, so its rows have no support and opposition apart from the score. A candidate a database search named
     carries the function-level identifiers of the proteins behind it (``function_identifiers``: source, identifier and
     the number of its hits that carry it; ``identifier_sources``: per source, the number of its hits that carry any
@@ -121,36 +129,42 @@ def sequence_homology_rows(result):
     feature types of those hits: ``hit_feature_kinds`` (one entry per type of the head's fixed list with the number of
     its hits of that type), ``hits_with_unmapped_feature_type`` (its hits whose database feature type is matched to no
     type yet) and ``hits_without_feature_type``. They are kept on the row and enter no score."""
-    (target,) = result['finding']['targets']
-    (organisms,) = result['candidate_hit_organisms']
-    (feature_kinds,) = result['candidate_hit_feature_kinds']
-    behind = {(row['vocabulary'], row['name']): {'hit_organisms': row['organisms'],
-                                                 'hits_without_taxon': row['hits_without_taxon']}
-              for row in organisms['candidates']}
-    kinds = {(row['vocabulary'], row['name']): {
-        'hit_feature_kinds': row['feature_kinds'],
-        'hits_with_unmapped_feature_type': row['hits_with_unmapped_feature_type'],
-        'hits_without_feature_type': row['hits_without_feature_type']} for row in feature_kinds['candidates']}
-    return [{'vocabulary': candidate['vocabulary'], 'name': candidate['name'],
-             **{name: candidate[name] for name in ('identifier', 'function_identifiers', 'identifier_sources',
-                                                    'hits_without_identifier') if name in candidate},
-             **behind.get((candidate['vocabulary'], candidate['name']), {}),
-             **kinds.get((candidate['vocabulary'], candidate['name']), {}),
-             'status': 'measured' if candidate['score'] else 'measured_zero', 'score': candidate['score']}
-            for candidate in target['candidates']]
+    rows = []
+    for target, organisms, feature_kinds in zip(result['finding']['targets'], result['candidate_hit_organisms'],
+                                                result['candidate_hit_feature_kinds'], strict=True):
+        behind = {(row['vocabulary'], row['name']): {'hit_organisms': row['organisms'],
+                                                     'hits_without_taxon': row['hits_without_taxon']}
+                  for row in organisms['candidates']}
+        kinds = {(row['vocabulary'], row['name']): {
+            'hit_feature_kinds': row['feature_kinds'],
+            'hits_with_unmapped_feature_type': row['hits_with_unmapped_feature_type'],
+            'hits_without_feature_type': row['hits_without_feature_type']} for row in feature_kinds['candidates']}
+        feature_ref = feature_of(records, target)
+        rows.extend({'feature_ref': feature_ref, 'vocabulary': candidate['vocabulary'], 'name': candidate['name'],
+                     **{name: candidate[name] for name in ('identifier', 'function_identifiers', 'identifier_sources',
+                                                            'hits_without_identifier') if name in candidate},
+                     **behind.get((candidate['vocabulary'], candidate['name']), {}),
+                     **kinds.get((candidate['vocabulary'], candidate['name']), {}),
+                     'status': 'measured' if candidate['score'] else 'measured_zero', 'score': candidate['score']}
+                    for candidate in target['candidates'])
+    return rows
 
 
-def no_groups(finding):
+def no_groups(finding, records):
     return {'grouped_rows': [], 'grouping_in_force': []}
 
 
-def sequence_homology_groups(finding):
-    """A101. With a grouping in force its one target carries ``grouped_candidates`` (every candidate rescored under
-    it: members and score) and ``grouping_in_force``; without one, neither."""
-    (target,) = finding['targets']
-    return {'grouped_rows': [{'members': group['members'], 'score': group['score']}
-                             for group in target.get('grouped_candidates', ())],
-            'grouping_in_force': target.get('grouping_in_force', [])}
+def sequence_homology_groups(finding, records):
+    """A101. With a grouping in force each target carries ``grouped_candidates`` (every candidate rescored under it:
+    members and score, here with the feature record the target belongs to) and ``grouping_in_force``; without one,
+    neither."""
+    grouping = []
+    for target in finding['targets']:
+        grouping.extend(group for group in target.get('grouping_in_force', ()) if group not in grouping)
+    return {'grouped_rows': [{'feature_ref': feature_of(records, target), 'members': group['members'],
+                              'score': group['score']}
+                             for target in finding['targets'] for group in target.get('grouped_candidates', ())],
+            'grouping_in_force': grouping}
 
 
 # How the candidates of a head that applies the root's grouping are read once a grouping is in force (the design
@@ -177,7 +191,7 @@ def no_rows(finding):
     return []
 
 
-def no_annotation_rows(result):
+def no_annotation_rows(result, records):
     return []
 
 
@@ -195,13 +209,14 @@ CLAIM_ROWS = {
 }
 
 
-def sequence_homology_claims(result):
+def sequence_homology_claims(result, records):
     """A101. The claims it made from its leading candidate annotations, from the field the root selects (``claims``):
-    each with the annotation it was made from, its predicate, the looked-up name of its molecule and its records."""
-    return result['claims']
+    each with the annotation it was made from, its predicate, the looked-up name of its molecule and its records, here
+    with the feature record its target belongs to (``feature_ref``)."""
+    return [{**claim, 'feature_ref': feature_of(records, claim)} for claim in result['claims']]
 
 
-def no_claims(result):
+def no_claims(result, records):
     return []
 
 
@@ -304,10 +319,10 @@ def read_from_child(slot, result, summary, records):
     return {'credit': result['credit'],
             'finding': {name: value for name, value in result['finding'].items()
                         if type(value) in (bool, int, float)},
-            'annotation_rows': ANNOTATION_ROWS[slot](result),
+            'annotation_rows': ANNOTATION_ROWS[slot](result, records),
             'claim_rows': CLAIM_ROWS[slot](result['finding']),
-            'claims': CLAIMS[slot](result),
-            **GROUPED_ROWS[slot](result['finding']),
+            'claims': CLAIMS[slot](result, records),
+            **GROUPED_ROWS[slot](result['finding'], records),
             'record_refs': references(result, (*RECORD_FIELDS[slot], *SHEET_FIELDS[slot])),
             'sheet_state_refs': references(result, SHEET_FIELDS[slot]),
             'outstanding_job_refs': references(result, JOB_FIELDS[slot]),

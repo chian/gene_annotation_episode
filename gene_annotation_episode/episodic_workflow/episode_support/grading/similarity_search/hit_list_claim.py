@@ -11,8 +11,8 @@ TAXA_FLOOR = 0.5
 
 
 def taxa_share(taxon_ids):
-    """The share of a block's hits (``taxon_ids`` in rank order, the top hit first) that are of the top hit's family; 0
-    when the top hit's family is not in the prepared taxonomy."""
+    """The share of a run's hits (``taxon_ids`` in rank order) that are of the family of the first of them, over the
+    hits that carry a taxon id; 0 when none carries one or the first has no family."""
     nodes = prepared_taxonomy()['nodes']
 
     def family(taxon):
@@ -23,8 +23,8 @@ def taxa_share(taxon_ids):
                 return taxon
             taxon = nodes[taxon]['parent']
         return None
-    families = [family(taxon) for taxon in taxon_ids]
-    if families[0] is None:
+    families = [family(taxon) for taxon in taxon_ids if taxon is not None]
+    if not families or families[0] is None:
         return 0.0
     return sum(1 for found in families if found == families[0]) / len(families)
 

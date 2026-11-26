@@ -58,10 +58,8 @@ as claims are kept in the sheet of feature calls (``sequence_features/feature_ca
   weight of its sheet times its bit, when it is the first claim held at its taxon. A claim no listed candidate is on a
   line with (neither inside it nor containing it: it disagrees with what is listed, or nothing is listed) waits
   (``no_candidate_on_its_lineage``) and earns nothing.
-* KNOWN CASE: the prepared taxonomy holds only the taxa under Viruses and the children of the root (its manifest's
-  ``holds``). A claim at a taxon it does not hold cannot be placed: it adds to nothing, earns nothing and is listed with
-  the reason ``taxon_not_in_taxonomy``, so the gap is visible. It is not guessed. It is closed by preparing the whole
-  taxonomy, not by code.
+* A claim at a taxon the prepared taxonomy does not hold cannot be placed: it adds to nothing, earns nothing and is listed with
+  the reason ``taxon_not_in_taxonomy``, so the gap is visible. It is not guessed.
 
 Measurements of the organism side are of the sequence that is placed; a search's claims are about the sequence its hits
 are on, so a claim test is read for a sequence of the scope only when its source's operand is that sequence.
@@ -218,7 +216,7 @@ CLAIM_READERS = {SEARCH_CLAIM_SHEET: read_search_taxon_claim_sheet}
 
 def _placed(rows):
     """The claims of a claim test placed on the prepared taxonomy (each with its taxon's name, rank code and lineage), and
-    those at a taxon it does not hold (the module's description, KNOWN CASE)."""
+    those at a taxon it does not hold (the module's description)."""
     taxonomy = prepared_taxonomy()
     placed, unplaced = [], []
     for row in rows:

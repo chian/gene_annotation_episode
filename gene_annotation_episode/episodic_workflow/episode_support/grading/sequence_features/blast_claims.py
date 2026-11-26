@@ -55,8 +55,8 @@ block, by the rule of every hit list (``hit_list_claim.claim_value``): the top h
 anything different (another call, another frame or strand) and the taxa of that run. The other fields are kept for
 the naming of the feature.
 
-The type of a claim: a hit of a database of proteins is of a coding sequence; a hit of a database of nucleotide features
-is of its own feature type as the database gives it, mapped to our types (``database_feature_types``). A hit with no
+The type of a claim: a hit is of its own feature type as the database gives it, mapped to our types
+(``database_feature_types``); a hit of a database of proteins that carries none is of a coding sequence. A hit with no
 such type (an entry of a database of whole genomes) states no feature and makes no claim; its taxon claim is separate.
 
 WORDS. A run has one query: the sequence the root was given (the owner, 2026-11-25: "There is only one query for this
@@ -80,7 +80,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_features.feature_candidates import (
     READERS, SHEET_WEIGHT, same_reading, shared_letters)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_features.feature_types import (
-    CODING, KINDS)
+    ABOVE, CODING, KINDS)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.blast_search import (
     PROGRAM_UNITS)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.scoring import SCALES
@@ -129,11 +129,10 @@ def place_labels(grading, searched_mapping=None):
 
 def _kind(function, reference_unit):
     """The type a hit is of (the module's description); ``None`` when the database gives it no type we hold."""
-    if reference_unit == 'aa':
-        return CODING
-    if function is None or 'feature_type' not in function['bvbrc_feature']:
-        return None
-    return bvbrc_feature_kind(function['bvbrc_feature']['feature_type'])
+    stated = None if function is None else function['bvbrc_feature'].get('feature_type')
+    if stated is None:
+        return CODING if reference_unit == 'aa' else None
+    return bvbrc_feature_kind(stated)
 
 
 def _on_the_subject(searched, reference, searched_mapping):
@@ -214,9 +213,12 @@ def _longest_run_without_call(place):
 def _claims_of_place(place, hits):
     """The claims of one place, one per block, in the order of the rank of their top hit."""
     top = place[0]
-    # the first hit, of any place, that shares letters with this place's top hit and does not have its reading
+    # the first hit, of any place, that shares letters with this place's top hit and does not have its reading; a hit of
+    # a type that holds the top hit's type, or is held by it (a coding sequence and a mature peptide in it), has its
+    # reading when strand and frame agree
     crossing = [hit['rank'] for hit in hits if hit['rank'] > top['rank'] and shared_letters(top, hit) > 0
-                and not same_reading(top, hit)]
+                and not same_reading(top, {**hit, 'kind': top['kind']} if hit['kind'] in ABOVE[top['kind']]
+                                     or top['kind'] in ABOVE[hit['kind']] else hit)]
     before_frame = [hit for hit in place if not crossing or hit['rank'] < crossing[0]]
     calls = [call for call in dict.fromkeys(hit['call'] for hit in place) if call != NO_CALL] or [NO_CALL]
     unlabeled = _longest_run_without_call(place)

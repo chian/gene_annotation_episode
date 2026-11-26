@@ -18,14 +18,17 @@ stands on:
   every hit of a stored real search (200 hits, 2026-11-25) carries it as its type component
   (``PATRIC.<genome id>.<accession>.CDS.<start>.<end>.<fwd|rev>``).
 
-No other BV-BRC value could be confirmed from this repository or its stored real data when the table was written: the
-request had never asked for ``feature_type``, so no stored real response holds one. This module holds data and one
+* ``mat_peptide``: 200 hits of the stored real searches of a viral polyprotein against ``viral-reference`` (run
+  ``feature_calling_06``, 2026-11-26) carry it, beside 399 with ``CDS``.
+
+This module holds data and one
 lookup."""
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_features.feature_types import CODING
 
 # BV-BRC ``genome_feature.feature_type`` -> one of ``feature_types.KINDS``.
 BVBRC_FEATURE_TYPE = {
     'CDS': CODING,
+    'mat_peptide': 'mature_peptide',
 }
 
 

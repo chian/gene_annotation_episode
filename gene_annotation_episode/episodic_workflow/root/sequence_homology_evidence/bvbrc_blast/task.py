@@ -28,6 +28,8 @@ from episode_runtime import ModelRequest, Rejected, ToolCall
 
 from gene_annotation_episode.episodic_workflow.episode_support.tools.annotation_claims.annotation_settling import (
     settle_annotations)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_features.blast_claim_keeping import (
+    keep_taxon_claims)
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import (
     rejection_feedback)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.blast_search import (
@@ -226,9 +228,10 @@ async def extract(arguments, ctx):
                                     query_ref=arguments['query_ref'])
     if graded['status'] != 'completed':
         return graded
+    taxa = keep_taxon_claims(ctx.store, search_source_ref=graded['graded_refs'][0], searched_ref=arguments['query_ref'])
     settled = await settle_annotations(ctx, scope=arguments['scope'], organism=arguments['organism'])
-    return {**graded, 'graded_refs': [*graded['graded_refs'], *settled],
-            'record_refs': [*graded['record_refs'], *settled]}
+    return {**graded, 'graded_refs': [*graded['graded_refs'], *taxa, *settled],
+            'record_refs': [*graded['record_refs'], *taxa, *settled]}
 
 
 TOOLS = {'estimate': estimate, 'launch': launch, 'fix': fix, 'monitor': monitor, 'extract': extract}

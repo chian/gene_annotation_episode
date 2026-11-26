@@ -6,7 +6,7 @@ with no annotation is a line with its own score; with them the claims that wait 
 held) and the level below (``annotations``: every candidate annotation the axis heads scored, with its score, the
 hypervolume over the scores the axes give it multiplied by the factor ``((1 + k * s_o) ** w_o - 1)`` of the organism it is
 reported with (a pure multiple: zero from the axes stays zero), that organism's taxon id and score, and the row of each
-axis that scored it, the highest score first; no annotation is tied to a feature call yet), the best annotation
+axis that scored it, the highest score first; each sits on one feature call, whose score multiplies its own), the best annotation
 (``best_annotation``: the first of the annotation lines, present when its status is known), the organism (``organism``:
 the candidate taxa of the root's scoring sheet of candidate taxa, the leading one first, and the placement), the claims
 made from the annotations (``claims``), feature calling's credit and how often it was commissioned
@@ -146,6 +146,10 @@ MEMBER_FORM = RecordForm({
     'axis': ChoiceField('text', 'The axis whose head named it', tuple(AXIS_WEIGHTS)),
     'score': Field('number', 'The score that axis gave it'),
 })
+LINE_FEATURE_CALL_FORM = RecordForm({
+    'feature_ref': Field('text', 'The feature record of the feature call'),
+    **{name: FEATURE_CALL_FORM.fields[name] for name in ('kind', 'strand', 'start', 'end', 'score')},
+})
 ANNOTATION_FORM = RecordForm({
     'vocabulary': ChoiceField('text', 'The vocabulary of the candidate annotation: product (a database search\'s '
                                       'function), profile_family (a family of a profile database) or '
@@ -153,12 +157,15 @@ ANNOTATION_FORM = RecordForm({
     'name': Field('text', 'The name of the annotation exactly as its source gives it', required=False),
     'identifier': Field('text', 'The identifier of the annotation: a family accession or a record reference',
                         required=False),
+    'feature_call': Field('record', 'The feature call the annotation sits on: its feature record, type, strand, '
+                                    'positions and score', form=LINE_FEATURE_CALL_FORM),
     'status': ChoiceField('text', 'Whether the merged evidence is measured, measured as exactly zero, or unknown',
                           ROW_STATUS),
-    'score': Field('number', 'The annotation score: (prod_i (1 + k * s_i) ** w_i - 1) * ((1 + k * s_o) ** w_o - 1): the '
+    'score': Field('number', 'The annotation score: (prod_i (1 + k * s_i) ** w_i - 1) * ((1 + k * s_o) ** w_o - 1) * s_f: the '
                              'hypervolume over the scores s_i the axes give the annotation (0 for an axis that has '
                              'not scored it), multiplied by the factor of the score s_o of the organism it is '
-                             'reported with (0 when no candidate taxon is held: the factor is 1)' + _ABSENT,
+                             'reported with (0 when no candidate taxon is held), multiplied by the score s_f of the '
+                             'feature call it sits on' + _ABSENT,
                    required=False),
     'organism_taxon_id': Field('integer', 'The organism the annotation is reported with, whose score entered the '
                                           'annotation score: the leading candidate taxon of the sequence (NCBI '
@@ -195,8 +202,8 @@ FINDING_FORM = RecordForm({
     'feature_calls': Field('list', "The level above of the root's scoring sheet: per sequence of the scope its feature "
                                    'calls, the highest score first', items=FEATURE_TARGET_FORM),
     'annotations': Field('list', "The level below of the root's scoring sheet: every candidate annotation the axis "
-                                 'heads scored, the highest score first, the ones of unknown status last; none is tied '
-                                 'to a feature call yet', items=ANNOTATION_FORM),
+                                 'heads scored, the highest score first, the ones of unknown status last; each on '
+                                 'one feature call', items=ANNOTATION_FORM),
     'claims': Field('list', 'The claims made from the candidate annotations', items=CLAIM_FORM),
     'best_annotation': Field('record', 'The best annotation: the first of the annotation lines (absent while no '
                                        'annotation has a known status)', form=ANNOTATION_FORM, required=False),
