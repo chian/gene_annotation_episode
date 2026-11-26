@@ -102,8 +102,7 @@ def internal_summary(view):
         units.append(row)
         last = row
     held = [ref for ref in records.refs() if not ref.startswith('row_')]
-    held_sequences = {ref: records.get(ref).get('molecule') for ref in held
-                      if ref.split('_')[0] in SEQUENCE_RECORD_TYPES and records.get(ref).get('sequence_ref')}
+    held_sequences = {ref: records.get(ref).get('molecule') for ref in parent['scope']['subject_refs']}
     summary = {**parent, 'units': units}
     table = held_table(summary, records)
     return {**summary,
