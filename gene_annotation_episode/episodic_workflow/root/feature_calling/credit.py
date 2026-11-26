@@ -176,6 +176,8 @@ def search_ceiling(summary, ref, program, database):
     times the weight of its family. A hit that reaches both ends of its entry is a feature call: the entry of the slot
     it opens can also gain the support of the claims that wait (``waiting_support``). One differential, at most the
     weight."""
+    if DATABASES[database].get('db_type') == 'fna':      # genome sequences: an entry has no feature type, so no hit
+        return 0.0                                      # of it states a feature and the search earns nothing here
     parameters = {item['id']: item for item in json.loads((SPECS / 'Homology.json').read_text())['parameters']}
     length = summary['sequence_lengths'][ref]
     bits = math.log2(length / parameters['blast_evalue_cutoff']['default'])
