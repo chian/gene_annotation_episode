@@ -163,6 +163,7 @@ def translate_feature_call(ctx, *, feature_ref, code):
             'derivation': 'translation', 'context_refs': [context['id']],
             'footprint': store.footprint_from_mapping(mapping), 'mapping': mapping,
             'mapping_source_ref': source['id']}, origin='tool')
+        store.change_feature(feature_ref, {'protein_ref': product['id']})     # the feature record names its protein
         grading_product = record_grading_product(store, grading_ref=grading_ref, grading=grading, provider=PROVIDER,
                                                  source_ref=source['id'], used=[native_ref])
     return {'product_ref': product['id'], 'length': len(protein), 'inner_stops': len(native['internal_stop_positions']),

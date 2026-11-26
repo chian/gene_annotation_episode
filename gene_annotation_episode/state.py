@@ -1665,6 +1665,19 @@ class Store:
             raise conflict
         return stored
 
+    def change_feature(self, ref, fields):
+        """Change fields of the feature record ``ref`` in place: the record keeps its reference."""
+        stored = self.get(ref)
+        record = {**{key: value for key, value in stored.items() if key not in ("id", "record_type", "origin")}, **fields}
+        self._validate_record("feature", record, stored["origin"])
+        roots = self._record_roots("feature", record)
+        changed = {**record, "id": ref, "record_type": "feature", "origin": stored["origin"]}
+        with self.transaction():
+            self._db.execute("UPDATE records SET data=? WHERE id=?", (canonical(changed), ref))
+            self._db.execute("DELETE FROM record_roots WHERE record_ref=?", (ref,))
+            self._db.executemany("INSERT OR IGNORE INTO record_roots VALUES(?,?)", [(ref, root) for root in roots])
+        return changed
+
     def _current(self, kind, scope=None, limit=None, offset=0):
         normalized = self.validate_scope(scope) if scope is not None else None
         parameters = [kind]

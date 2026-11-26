@@ -48,7 +48,7 @@ What ``RecordReader`` offers (every read; it writes nothing):
 
 What ``ScopedStore`` adds, for the tool unit that is running:
 
-- **writes** (``put``, ``artifact``, ``artifact_file``, ``artifact_stream``, ``caller_source``,
+- **writes** (``put``, ``change_feature``, ``artifact``, ``artifact_file``, ``artifact_stream``, ``caller_source``,
   ``commit_reasoning``, ``register_material``, ``create_problem``, ``parse_material``, ``material_header``,
   ``material_reference``, ``select_library_members``, ``reclaim``, and ``table(declaration).put`` and
   ``.withdraw``).
@@ -824,6 +824,14 @@ class ScopedStore(RecordReader):
             stored = self.__store.put(kind, record, origin=origin, scope=scope)
             self.__custody.produced(stored['id'])
         return stored
+
+    def change_feature(self, ref, fields):
+        """Change fields of the held feature record ``ref`` in place (the Store's ``change_feature``): it keeps its
+        reference. The record and every record ``fields`` names must be readable."""
+        self._readable(ref)
+        self.__named(fields)
+        with self.transaction():
+            return self.__store.change_feature(ref, fields)
 
     def artifact(self, data, media_type='application/octet-stream'):
         """Write a Store artifact; the Episode then holds it as produced at this unit."""
