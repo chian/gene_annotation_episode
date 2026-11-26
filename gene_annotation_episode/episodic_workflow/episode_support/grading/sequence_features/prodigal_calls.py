@@ -53,7 +53,7 @@ from).
 
 No I/O: this module reads a grading and returns values."""
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_features.feature_candidates import (
-    READERS, SHEET_WEIGHT)
+    ALTERNATIVES, READERS, SHEET_WEIGHT)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_features.feature_types import CODING
 from gene_annotation_episode.episodic_workflow.episode_support.readers.sequence_operations.sequence_mapping import (
     map_interval)
@@ -130,5 +130,8 @@ def read_call_sheet(grading):
 # A starting value of 2026-11-25 with no run behind it.
 READERS[SHEET] = read_call_sheet
 SHEET_WEIGHT[FAMILY] = 1.0
+# A gene finding is made under one genetic code, and a sequence has one: findings under different codes are alternatives
+# (``feature_candidates.ALTERNATIVES``), never added together.
+ALTERNATIVES[SHEET] = lambda grading: ('genetic_code', str(grading['sheet']['code']))
 
 __all__ = ['FAMILY', 'GRADED_SHEET', 'PROGRAM', 'SHEET', 'call_bit', 'prodigal_call_sheet', 'read_call_sheet']

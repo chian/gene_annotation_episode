@@ -51,8 +51,21 @@ SERVICES = ('job_access',)
 # The tools, named by their program. Each is one fixed call that ends within the turn: run, grade and keep in the unit.
 PRODIGAL = 'prodigal_find_genes'
 CMSCAN = 'cmscan_find_rna_genes'
-# The genetic codes Prodigal can be given: which of them a sequence can take follows from its length (the tool's check).
+# The genetic code Prodigal is given. The owner, 2026-11-25: "i don't think you usually need to test different genetic
+# codes"; "i wouldn't say it's only offered on the default code, but you definitely shouldn't gain credit for a different
+# genetic code. you can only gain credit on one or another. you can't shift codes in one genome, so it's kind of like an
+# organismal taxa". So every code the tool can take is offered, the default named to the model, and findings under
+# different codes are alternatives in the sheet of feature calls: only the better supported code counts
+# (``feature_candidates``, "ONE READING OF THE WHOLE SEQUENCE"), so another code gains only by being the better one.
+DEFAULT_GENETIC_CODE = 11
 GENETIC_CODES = tuple(sorted({*MODE_CODES['meta'], *MODE_CODES['single']}))
+
+
+def offered_codes(summary, ref):
+    """The genetic codes a Prodigal run on the sequence ``ref`` may be given: those the mode of its length can take, the
+    default first."""
+    codes = MODE_CODES[prodigal_mode(summary['sequence_lengths'][ref])]
+    return sorted(codes, key=lambda code: (code != DEFAULT_GENETIC_CODE, code))
 # The letters of a sequence cmscan is given here (it reads a T as a U and searches both strands).
 CMSCAN_LETTERS = ('dna', 'rna')
 DESCRIPTIONS = {
@@ -60,8 +73,10 @@ DESCRIPTIONS = {
                'ribosome binding sites); it compares the sequence with nothing. For each gene it gives the coding '
                'sequence with its strand and its first and last letter (the stop codon included) and its own confidence. '
                'It is a tool that states a feature WITH its ends: a gene that runs off an edge of the sequence is given '
-               'without that end. It needs a genetic code (genetic_codes shows which a sequence of each length can take: '
-               'under 20,000 letters only the codes of its ready-made models). It cannot say what a gene does, and it '
+               'without that end. It is run under one genetic code (genetic_codes: the default, and which codes a '
+               'sequence of each length can take). A sequence has one genetic code: findings under different codes '
+               'are alternatives, only the better supported one counts, and a run under another code gains only if '
+               'it is the better one, which is rare. It cannot say what a gene does, and it '
                'calls genes in any DNA, so a call alone is weak; a search that lands inside a call is what supports it. '
                'Under a second. Fields: searched_ref, code.'),
     CMSCAN: ('Infernal cmscan with the covariance models of Rfam: find RNA genes and structured RNAs (tRNA, rRNA, other '
@@ -274,7 +289,8 @@ def decide(summary, feedback, ctx):
         'tools': [{'name': option['properties']['tool']['const'],
                    'description': DESCRIPTIONS[option['properties']['tool']['const']]}
                   for option in tool_options(summary, resources, ctx.settings)],
-        'genetic_codes': {'under_20000_letters': MODE_CODES['meta'], 'from_20000_letters': MODE_CODES['single']},
+        'genetic_codes': {'default': DEFAULT_GENETIC_CODE, 'under_20000_letters': MODE_CODES['meta'],
+                          'from_20000_letters': MODE_CODES['single'], 'held': summary['held_readings']},
         'gene_findings': summary['gene_findings'], 'rna_scans': summary['rna_scans'],
         'searches': searches_view(summary['searches'], ctx.clock.now),
         'given_features': summary['given_features'],

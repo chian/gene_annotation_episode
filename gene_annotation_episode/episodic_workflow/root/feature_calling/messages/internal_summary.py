@@ -116,6 +116,9 @@ def internal_summary(view):
                                             searched_types=SEQUENCE_RECORD_TYPES),
             'named_refs': {ref: named_records(records, ref) for ref in records.refs()},
             'gene_findings': _gene_findings(records), 'rna_scans': _rna_scans(records),
+            # per sequence, the readings of the whole sequence held (its genetic code) with each value's support
+            'held_readings': {target: held['readings'] for target, held in table['targets'].items()},
+            'set_aside_tests': [test for held in table['targets'].values() for test in held['set_aside']],
             'given_features': _given_features(records, parent),
             'returned_refs': returned_with_names(records, committed),
             'credit_binding': FeatureDifferentialCredit().as_record(),

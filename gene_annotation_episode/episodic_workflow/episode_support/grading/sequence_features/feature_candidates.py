@@ -72,6 +72,15 @@ regulatory element can lie wholly inside a gene on either strand; a protein doma
   scores and positions and have no rivals (the owner: "regulatory elements just get marked without any rival notice, same
   with domains").
 
+ONE READING OF THE WHOLE SEQUENCE. Some things hold for a sequence as a whole and cannot be two at once: its genetic code
+(the owner, 2026-11-25: "you definitely shouldn't gain credit for a different genetic code. you can only gain credit on one
+or another. you can't shift codes in one genome, so it's kind of like an organismal taxa. you can't have two in one
+genome"). A test made under such a reading says so (``ALTERNATIVES``: per sheet schema, the dimension and the value its
+grading was made under, for example the genetic code 11). Tests of one sequence under different values of one dimension
+are alternatives, never added together: the value whose tests carry the most weighted support is the one held (the first
+made on a tie), and the tests under any other value are set aside: they stay held and listed, and add to no score and no
+credit. Tests under the same value add as usual. Running another value can therefore gain only by being the better one.
+
 The cutoffs are hard: two calls are one slot or they are not, a claim is in a slot or it is not, two slots are rivals or
 they are not (the owner: "rivals are vs each other and are units"). The degrees are in the scores.
 
@@ -130,6 +139,9 @@ STOP_CODON = 3
 # converter when it is imported.
 SHEET_WEIGHT = {}
 READERS = {}
+# Per sheet schema: ``grading -> (dimension, value)``, the reading of the whole sequence its test was made under (the
+# module's description: tests under different values of one dimension are alternatives). Entered by a tool's converter.
+ALTERNATIVES = {}
 
 
 def held_sources(reader):
@@ -302,8 +314,26 @@ def feature_tests(reader, scope, sources):
             if target not in scope['subject_refs']:
                 continue
             sheet, covers, rows = READERS[schema](entry['grading'])
-            tests.append({'test': sheet + '@' + reference, 'target': target, 'covers': covers, 'rows': rows})
+            tests.append({'test': sheet + '@' + reference, 'target': target, 'covers': covers, 'rows': rows,
+                          'alternative': ALTERNATIVES[schema](entry['grading']) if schema in ALTERNATIVES else None})
     return tests
+
+
+def held_readings(tests):
+    """For the tests of one sequence: per dimension the value held (the one whose tests carry the most weighted support,
+    the first made on a tie) with each value's support, and the names of the tests set aside (made under another value)."""
+    support = {}
+    for test in tests:
+        if test['alternative'] is not None:
+            dimension, value = test['alternative']
+            total = sheet_weight(test['test']) * math.fsum(row['bit'] for row in test['rows'])
+            support.setdefault(dimension, {})
+            support[dimension][value] = support[dimension].get(value, 0.0) + total
+    readings = {dimension: {'held': max(values, key=lambda value: values[value]), 'support': values}
+                for dimension, values in support.items()}
+    aside = [test['test'] for test in tests if test['alternative'] is not None
+             and readings[test['alternative'][0]]['held'] != test['alternative'][1]]
+    return readings, aside
 
 
 def _order(slots, score):
@@ -399,6 +429,9 @@ def target_table(tests):
     names = [test['test'] for test in tests]
     if len(set(names)) != len(names):
         raise ValueError('feature_test_held_twice:' + next(name for name in names if names.count(name) > 1))
+    # tests made under a reading of the whole sequence that is not the one held state nothing here
+    readings, aside = held_readings(tests)
+    tests = [{**test, 'rows': []} if test['test'] in aside else test for test in tests]
     weights = [sheet_weight(name) for name in names]
     statements = _statements(tests)
     calls = [row for row in statements if row['claims_start'] and row['claims_end']]
@@ -494,6 +527,7 @@ def target_table(tests):
             'waiting': sorted(waiting.values(), key=lambda row: (-row['support'], row['start'], row['end'], row['kind'],
                                                                   row['strand'])),
             'entries': entries, 'waiting_credits': waiting_credits, 'differentials': differentials,
+            'readings': readings, 'set_aside': aside,
             'test_credits': test_credits, 'credit': math.fsum(test_credits.values())}
 
 
@@ -530,8 +564,8 @@ def feature_table(reader, scope, sources):
     return {'targets': targets, 'credit': math.fsum(table['credit'] for table in targets.values())}
 
 
-__all__ = ['ABOVE', 'COMPETING', 'KINDS', 'READERS', 'RIVAL_LETTERS', 'SAME_SHARE', 'SHEET_WEIGHT', 'STRANDS',
-           'feature_table', 'feature_tests', 'held_sources', 'high', 'inside', 'lead_rivals', 'letters', 'low',
+__all__ = ['ABOVE', 'ALTERNATIVES', 'COMPETING', 'KINDS', 'READERS', 'RIVAL_LETTERS', 'SAME_SHARE', 'SHEET_WEIGHT', 'STRANDS',
+           'feature_table', 'feature_tests', 'held_readings', 'held_sources', 'high', 'inside', 'lead_rivals', 'letters', 'low',
            'measurable', 'nested', 'overlap_facts', 'positions', 'rivals', 'same_frame', 'same_reading', 'same_slot',
            'shared_letters', 'sheet_family', 'sheet_of', 'sheet_weight', 'sits_in', 'strands_agree', 'target_table',
            'within']

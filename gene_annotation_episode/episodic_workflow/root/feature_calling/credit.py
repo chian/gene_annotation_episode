@@ -27,7 +27,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
 from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_features.prodigal_gene_calls import (
     MODE_CODES, SEARCHED_MOLECULES as PRODIGAL_LETTERS, prodigal_mode)
 
-from .task import CMSCAN, CMSCAN_LETTERS, DATABASES, PRODIGAL, PROGRAMS, SEARCH, gene_findings_made, rna_scans_made
+from .task import (CMSCAN, CMSCAN_LETTERS, DATABASES, PRODIGAL, PROGRAMS, SEARCH, gene_findings_made, offered_codes,
+                   rna_scans_made)
 
 
 class FeatureDifferentialCredit:
@@ -57,6 +58,7 @@ class FeatureDifferentialCredit:
                 'waiting_credit': 'a_claim_no_slot_called_so_far_includes_earns_its_weighted_bit_when_first_of_its_type_and_reading_on_its_letters_and_that_is_taken_off_the_entry_of_the_slot_it_comes_to_sit_in',
                 'differential': 'abs_difference_of_the_moves_of_the_two_leading_rival_slots_listed_before_the_test_that_it_can_measure',
                 'credit': 'sum_of_entries_waiting_credits_and_differentials', 'maximum': 'none', 'repeat': 'earns_nothing',
+                'one_reading': 'tests_under_different_values_of_one_dimension_of_the_whole_sequence_such_as_its_genetic_code_are_alternatives_only_the_best_supported_value_counts',
                 'can_step_down': 'when_a_later_call_joins_two_slots_the_seconds_entry_is_no_longer_counted'}
 
 
@@ -105,10 +107,11 @@ CEILINGS = {SEARCH: 'feature_calling_ceiling', PRODIGAL: 'feature_calling_ceilin
 
 def open_gene_findings(summary):
     """The Prodigal runs that can still be made, as (searched sequence, genetic code): every held sequence of its
-    letters with every code the mode of its length can take, that is neither held nor failed."""
+    letters with every code the mode of its length can take (``task.offered_codes``), that is neither held nor
+    failed."""
     made = gene_findings_made(summary)
     return [(ref, code) for ref, letters in summary['held_sequences'].items() if letters in PRODIGAL_LETTERS
-            for code in MODE_CODES[prodigal_mode(summary['sequence_lengths'][ref])] if (ref, code) not in made]
+            for code in offered_codes(summary, ref) if (ref, code) not in made]
 
 
 def open_rna_scans(summary, ctx):
@@ -133,6 +136,10 @@ def gene_finding_ceiling(summary, ref):
     genes = 2 * (summary['sequence_lengths'][ref] // 30 + 1)
     waiting = sum(claim['support'] for finding in summary['target_findings'] for claim in finding['waiting_claims']
                   if claim['kind'] == prodigal_calls.CODING)
+    # The ceiling is the same under every genetic code. That a sequence has one code is not handled here: findings under
+    # different codes are alternatives in the sheet of feature calls, where one code controls the scoring and the others
+    # are set aside (the owner, 2026-11-25: "not low ceiling, but you can only earn once per genetic code and you can only
+    # have one genetic code per run controlling the scoring. you cannot mix scores from different genetic codes period").
     return weight * genes + waiting + weight
 
 
