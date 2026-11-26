@@ -2,10 +2,10 @@
 
 The credit is the feature credit of the graded sheets this episode holds over the commissioned scope
 (``feature_candidates.feature_table``): the entries of the slots (the candidate feature calls), what the claims earned
-while no slot included them, and the differentials of the two leading rival slots, counted as soon as a graded sheet is
-held. No model step stands between a graded result and its being counted. A slot's score is not the credit: the score is
-how well a type at a location is supported (and is part of the scoring of the annotations that belong to that feature),
-the credit is what this episode gained.
+(the same whether they wait or sit in a slot called before them), and the differentials of the two leading rival slots,
+counted as soon as a graded sheet is held. No model step stands between a graded result and its being counted. A slot's
+score is not the credit: the score is how well a type at a location is supported (and is part of the scoring of the
+annotations that belong to that feature), the credit is what this episode gained.
 
 Every action has a finite ceiling, derived from how its program operates on a stretch of a given length (the owner,
 2026-11-25: "For a given slice of genome, they can only annotate so much right? so they can only at most provide X score.
@@ -60,9 +60,10 @@ class FeatureDifferentialCredit:
                 'settling': 'slots_claims_in_them_and_waiting_claims_follow_from_all_the_records_held_whatever_their_order',
                 'counting': 'tests_in_the_order_they_came_over_what_all_held_records_settle',
                 'entry': 'new_possibility_its_score_finer_within_listed_what_it_adds_one_that_only_holds_listed_ones_nothing',
-                'waiting_credit': 'a_claim_no_slot_called_so_far_includes_earns_its_weighted_bit_when_first_of_its_type_and_reading_on_its_letters_and_that_is_taken_off_the_entry_of_the_slot_it_comes_to_sit_in',
+                'claim_credit': 'a_claim_waiting_or_sitting_in_a_slot_called_so_far_earns_its_weighted_bit_when_first_among_claims_of_its_type_and_reading_on_its_letters_and_that_is_taken_off_the_first_entry_of_a_slot_not_yet_listed_when_it_was_paid_that_counts_it',
                 'differential': 'abs_difference_of_the_moves_of_the_two_leading_rival_slots_listed_before_the_test_that_it_can_measure',
-                'credit': 'sum_of_entries_waiting_credits_and_differentials', 'maximum': 'none', 'repeat': 'earns_nothing',
+                'credit': 'sum_of_entries_claim_credits_and_differentials', 'maximum': 'none',
+                'repeat': 'earns_nothing',
                 'one_reading': 'tests_under_different_values_of_one_dimension_of_the_whole_sequence_such_as_its_genetic_code_are_alternatives_only_the_best_supported_value_counts',
                 'can_step_down': 'when_a_later_call_joins_two_slots_the_seconds_entry_is_no_longer_counted'}
 
@@ -135,8 +136,10 @@ def gene_finding_ceiling(summary, ref):
     confidence as a share, at most 1, times the weight of its family. A call that opens a slot earns at most its score:
     its own bit and the support of the waiting coding claims that come to sit in it (each waiting claim sits in at most
     one such slot: two coding calls that share letters in one frame are one slot), less what those claims were already
-    paid; a call cut off at an end is a claim and earns at most its bit. One differential, at most the weight. So: the
-    weight times the number of genes, plus the support of the waiting coding claims of the scope, plus the weight."""
+    paid; a call cut off at an end is a claim and earns at most its bit, whether it waits or sits in a slot called
+    before it (what it earned is taken off a later entry that counts it, never paid twice). One differential, at most
+    the weight. So: the weight times the number of genes, plus the support of the waiting coding claims of the scope,
+    plus the weight."""
     weight = SHEET_WEIGHT[prodigal_calls.FAMILY]
     genes = 2 * (summary['sequence_lengths'][ref] // 30 + 1)
     waiting = sum(claim['support'] for finding in summary['target_findings'] for claim in finding['waiting_claims']
@@ -148,17 +151,27 @@ def gene_finding_ceiling(summary, ref):
     return weight * genes + waiting + weight
 
 
+def waiting_support(summary, ref):
+    """The support of the claims that wait on the sequence ``ref``: what the entry of a slot a unit's own feature call
+    opens can gain from claims held before it (each sits in the slot with its support; what a claim was already paid is
+    taken off, so this is an upper bound)."""
+    return sum(claim['support'] for finding in summary['target_findings'] if finding['target_ref'] == [ref]
+               for claim in finding['waiting_claims'])
+
+
 def search_ceiling(summary, ref, program, database):
-    """The most the credit can rise by one search of the sequence ``ref``. A claim earns only as the first statement of
-    its type and reading on its letters, so the earning claims of one reading share no letter: one reading holds at most
-    ``length // span + 1`` of them, ``span`` the shortest stretch an alignment the search reports can cover. The search
-    reports an alignment only under its E-value cutoff (the application's default), which needs at least
-    ``log2(letters searched / cutoff)`` bits (the database counted as one letter: the least it can be). Nucleotides give
+    """The most the credit can rise by one search of the sequence ``ref``. A claim earns only as the first claim of its
+    type and reading on its letters (whether it waits or sits in a slot called before it), so the earning claims of one
+    reading share no letter: one reading holds at most ``length // span + 1`` of them, ``span`` the shortest stretch an
+    alignment the search reports can cover. The search reports an alignment only under its E-value cutoff (the
+    application's default), which needs at least ``log2(letters searched / cutoff)`` bits (the database counted as one letter: the least it can be). Nucleotides give
     at most 2 bits a letter. Proteins under the service's scoring (BLOSUM62, gapped: lambda 0.267, K 0.041, the highest
     substitution score 11) give at most 4.24 bits a residue after 4.6 bits, and a residue is three letters. The readings:
     six frames against proteins; against nucleotide entries the two strands for each type an entry can be of. The service
     returns at most its hit limit (the application's default), which bounds the claims too. A claim's value is below 1,
-    times the weight of its family. One differential, at most the weight."""
+    times the weight of its family. A hit that reaches both ends of its entry is a feature call: the entry of the slot
+    it opens can also gain the support of the claims that wait (``waiting_support``). One differential, at most the
+    weight."""
     parameters = {item['id']: item for item in json.loads((SPECS / 'Homology.json').read_text())['parameters']}
     length = summary['sequence_lengths'][ref]
     bits = math.log2(length / parameters['blast_evalue_cutoff']['default'])
@@ -167,7 +180,7 @@ def search_ceiling(summary, ref, program, database):
     else:
         family, readings, span = 'nucleotide_similarity', 2 * len(KINDS), max(1, math.ceil(bits / 2))
     claims = min(parameters['blast_max_hits']['default'], readings * (length // span + 1))
-    return SHEET_WEIGHT[family] * claims + SHEET_WEIGHT[family]
+    return SHEET_WEIGHT[family] * claims + waiting_support(summary, ref) + SHEET_WEIGHT[family]
 
 
 def rna_scan_ceiling(summary, ref, database, ctx):
@@ -183,7 +196,8 @@ def rna_scan_ceiling(summary, ref, database, ctx):
     index = json.loads(Path(manifest['files']['family_index']['path']).read_text())
     shortest = math.ceil(min(family['ga'] for family in index.values()) / 2)
     weight = SHEET_WEIGHT[infernal_calls.FAMILY]
-    return weight * 2 * (summary['sequence_lengths'][ref] // shortest + 2) + weight
+    # a full hit is a feature call: the entry of the slot it opens can also gain the support of the claims that wait
+    return weight * 2 * (summary['sequence_lengths'][ref] // shortest + 2) + waiting_support(summary, ref) + weight
 
 
 def ceiling(summary, records, action_type, arguments, ctx):

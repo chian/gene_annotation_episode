@@ -101,11 +101,15 @@ THE CREDIT, counted by going through the tests in the order they came, over what
 * Entry of a slot, at the first test that called it. A new possibility (nested with no listed slot) earns its score. A
   finer slot within a listed one earns what it adds: its score less the score of the highest scoring listed slot it is
   within. A slot that only has listed slots within it earns nothing. Another call of a listed slot has no entry.
-* A waiting claim earns when it is found (the owner: "a waiting claim in my scheme should earn credit otherwise there is no
-  reason to do it"): a claim that no slot called so far includes earns its weighted bit when it is the first statement of
-  its type and reading on its letters (the strongest of a test's claims first); a claim on letters where a claim or call of
-  that type and reading was already held earns nothing. What a claim earned while waiting is not paid again: it is taken
-  off the entry of the slot it comes to sit in.
+* A claim earns when it is found (the owner: "a waiting claim in my scheme should earn credit otherwise there is no
+  reason to do it"), and earns the same whether a slot called so far includes it or not (the owner, 2026-11-25: "the
+  scoring should not depend on order in this case with claim being put in a feature call right away vs not. that seems
+  like a trivial fix."): a claim earns its weighted bit when it is the first claim of its type and reading on its letters
+  (the strongest of a test's claims first); a claim on letters where a claim of that type and reading was already held
+  earns nothing. A feature call is not an earlier statement that takes a claim's credit away. What a claim earned is not
+  paid again: it is taken off the first entry of a slot it sits in that was not yet listed when the claim was paid, or of
+  a slot within such a slot (their scores count it). So a call and a claim that sits in it earn the same together in
+  either order: the call's own weighted bit and the claim's.
 * Differential. A test earns the absolute difference of the moves of ONE pair: the two leading rival slots among those
   listed before the test that the test can measure (the highest score, then the highest score among its rivals).
 * Credit is the sum of these. A test is held once: the same test twice raises. When a later call joins two slots into one, the entry
@@ -424,8 +428,8 @@ def target_table(tests):
     Returns ``slots`` (per number its kind, strand, positions, versions, feature records and the number of claims in it),
     ``score``, ``sheets`` (per slot, per sheet, its summed weighted bits), ``waiting`` (the claims no slot includes, the
     same statement held twice as one row, the best supported first), ``entries`` (per slot its entry credit and the test
-    that called it), ``waiting_credits`` (per test what its claims earned while no slot included them), ``differentials``
-    (per test at most one: the pair, the two moves, the difference), ``test_credits`` and ``credit``."""
+    that called it), ``claim_credits`` (per test what its claims earned, whether they wait or sit in a slot),
+    ``differentials`` (per test at most one: the pair, the two moves, the difference), ``test_credits`` and ``credit``."""
     names = [test['test'] for test in tests]
     if len(set(names)) != len(names):
         raise ValueError('feature_test_held_twice:' + next(name for name in names if names.count(name) > 1))
@@ -457,9 +461,11 @@ def target_table(tests):
         """What the test at ``place`` adds to a slot: the weight times its bits at the slot and at every slot the slot
         is within."""
         return weights[place] * math.fsum(bits[item].get(place, 0.0) for item in (number, *around[number]))
-    listed, score, sheets, entries, differentials, waiting_credits, test_credits = {}, {}, {}, {}, [], {}, {}
-    paid = {}                     # per claim (its place in ``claims``): what it earned while it waited, not yet taken off
-    seen = []                     # the statements of the tests gone through, for "the first of its type and reading"
+    listed, score, sheets, entries, differentials, claim_credits, test_credits = {}, {}, {}, {}, [], {}, {}
+    # per claim (its place in ``claims``): what it earned, not yet taken off, and the slots it sits in that were not yet
+    # listed when it was paid (the entry of one of them, or of a slot within one, counts it in its score)
+    paid = {}
+    seen = []                     # the claims of the tests gone through, for "the first claim of its type and reading"
     for place, test in enumerate(tests):
         sheet, credit = sheet_of(test['test']), 0.0
         pair = lead_rivals(listed, score, test['covers'])
@@ -473,22 +479,19 @@ def target_table(tests):
             if change:
                 score[item] += change
                 sheets[item][sheet] = sheets[item].get(sheet, 0.0) + change
-        # the claims of this test that no slot called so far includes: each earns when it is the first statement of its
-        # type and reading on its letters, the strongest first
-        earned_waiting = 0.0
-        arrived = [row for row in statements if row['test'] == place]
-        here = sorted((index for index, claim in enumerate(claims) if claim['test'] == place
-                       and not any(slots[number]['first_test'] <= place for number in homes[index])),
+        # the claims of this test, whether they wait or sit in a slot called so far: each earns when it is the first
+        # claim of its type and reading on its letters, the strongest first
+        earned_by_claims = 0.0
+        here = sorted((index for index, claim in enumerate(claims) if claim['test'] == place),
                       key=lambda index: (-claims[index]['bit'], positions(claims[index]), claims[index]['strand']))
-        counted = list(seen)
         for index in here:
-            if not any(same_reading(claims[index], other) for other in counted):
-                paid[index] = weights[place] * claims[index]['bit']
-                earned_waiting += paid[index]
-            counted.append(claims[index])
-        seen.extend(arrived)
-        waiting_credits[test['test']] = earned_waiting
-        credit += earned_waiting
+            if not any(same_reading(claims[index], other) for other in seen):
+                paid[index] = (weights[place] * claims[index]['bit'],
+                               {number for number in homes[index] if number not in listed})
+                earned_by_claims += paid[index][0]
+            seen.append(claims[index])
+        claim_credits[test['test']] = earned_by_claims
+        credit += earned_by_claims
         # the slots this test is the first to call, those of the outer types first, so that a slot within them earns
         # what it adds to them
         for number in sorted((number for number, slot in slots.items() if slot['first_test'] == place),
@@ -502,11 +505,13 @@ def target_table(tests):
                     own[sheet_of(names[earlier])] = own.get(sheet_of(names[earlier]), 0.0) + change
             base = max((score[other] for other in above), default=0.0)
             listed[number], score[number], sheets[number] = slots[number], math.fsum(own.values()), own
-            # what the claims counted in its score earned while they waited is not paid again: the claims that sit in
-            # it, and those that sit in a slot it is within (their bits are in its score too)
+            # what the claims counted in its score earned is not paid again: the claims that sit in it, and those that
+            # sit in a slot it is within (their bits are in its score too), of the slots not yet listed when they were
+            # paid (a claim paid in a slot listed then is not taken off again here: this slot's base is at least the
+            # score of that slot, which holds it)
             counted_in = {number, *around[number]}
-            already = math.fsum(paid.pop(index) for index, found in enumerate(homes)
-                                if counted_in.intersection(found) and index in paid)
+            taken = [index for index, (_, awaited) in paid.items() if counted_in.intersection(awaited)]
+            already = math.fsum(paid.pop(index)[0] for index in taken)
             earned = 0.0 if (below and not above) else max(0.0, score[number] - base - already)
             entries[number] = {'test': test['test'], 'credit': earned}
             credit += earned
@@ -526,7 +531,7 @@ def target_table(tests):
     return {'slots': listed, 'score': score, 'sheets': sheets,
             'waiting': sorted(waiting.values(), key=lambda row: (-row['support'], row['start'], row['end'], row['kind'],
                                                                   row['strand'])),
-            'entries': entries, 'waiting_credits': waiting_credits, 'differentials': differentials,
+            'entries': entries, 'claim_credits': claim_credits, 'differentials': differentials,
             'readings': readings, 'set_aside': aside,
             'test_credits': test_credits, 'credit': math.fsum(test_credits.values())}
 

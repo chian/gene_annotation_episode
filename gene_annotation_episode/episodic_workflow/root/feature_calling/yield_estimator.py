@@ -1,7 +1,7 @@
 """Continuation: the forecast yield controller (``ForecastYieldController``) over the feature credit. The credit
-(``credit.py``) grows with every slot admitted, every claim found while no slot includes it and every differential, and
-has no fixed maximum, but every action the head offers has a finite ceiling (``credit.ceiling``: what its program can
-state at most on a stretch of that length). The forecast of an offered action is a formula, not the model's estimate:
+(``credit.py``) grows with every slot admitted, every claim found (waiting or sitting in a slot) and every differential,
+and has no fixed maximum, but every action the head offers has a finite ceiling (``credit.ceiling``: what its program
+can state at most on a stretch of that length). The forecast of an offered action is a formula, not the model's estimate:
 the share of its ceiling such actions realized, times the ceiling. The episode stops when no offered action's forecast
 exceeds its expected seconds times the exchange rate, and not while a search is left running (``task.resume_action``).
 
