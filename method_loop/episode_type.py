@@ -11,7 +11,7 @@ services (``BoundEpisode``); this type only calls them, and an episode's own fil
 |---|---|
 | ``goal.py`` | ``binding_path``, ``goal``, ``unit``, ``result`` (text) |
 | ``task.py`` | ``child_slots`` ({slot: child binding path}), ``tools`` ({name: ``tool(arguments, ctx)``}), ``services`` (names), ``decide(summary, feedback, ctx)``, ``offered_actions(summary, ctx)`` -> the action types this decision offers, ``action(response, summary, records, ctx)``; optional ``resume_action(summary, records, ctx)`` (``OPTIONAL_MEMBERS``) |
-| ``credit.py`` | ``credit(summary, records)`` -> finite number; ``ceiling(summary, records, action_type, arguments, ctx)`` -> ``UNBOUNDED`` or a finite number >= 0; optional ``best_arguments(summary, records, action_type, ctx)`` and ``outcome_pending(summary, records, position)`` (``OPTIONAL_MEMBERS``) |
+| ``credit.py`` | ``credit(summary, records)`` -> finite number; ``ceiling(summary, records, action_type, arguments, ctx)`` -> ``UNBOUNDED`` or a finite number >= 0; optional ``best_arguments(summary, records, action_type, ctx)``, ``outcome_pending(summary, records, position)`` and ``situations(summary, records, action_type, arguments, ctx)`` (``OPTIONAL_MEMBERS``) |
 | ``yield_estimator.py`` | ``yield_controller(initial_credit, settings, parent_input)`` -> a ``yield_control`` controller; optional ``items_remaining(summary)`` -> ``None`` or the number of items left on the episode's list (``OPTIONAL_MEMBERS``) |
 | ``messages/read_from_parent.py`` | ``assignment_form``, ``read_from_parent(assignment, message)`` -> parent input |
 | ``messages/msg_to_child.py`` | ``msg_to_child(slot, arguments, summary)`` -> ``ChildMessage(objective, message, assignment, selection)`` |
@@ -87,6 +87,20 @@ The loop of one Episode:
    model chooses as usual (the resume is an ordinary, gated choice then). An Episode with a forecast controller and
    child slots must supply ``resume_action`` (``forecast_episode_with_children_must_supply_resume_action``); one whose
    controller is not a forecast controller may not (``resume_action_requires_a_forecast_controller``).
+   Situations (the owner, 2026-11-25: "Yes, that is much better if you can cluster by situation"). The optional member
+   ``credit.py`` ``situations(summary, records, action_type, arguments, ctx)`` (beside ``ceiling``, asked whenever
+   ``ceiling`` is) says in which situation an action is taken: a situation is a list of names from general to specific
+   (for a database search: the letters of the searched sequence, the database, the program). With ``arguments`` it
+   returns a list holding the one situation of that action; with ``arguments`` ``None`` the situations the action
+   could still be taken in now. With a forecast controller (``yield_control``, the section ``ForecastYieldController``)
+   each unit's facts then carry ``situation`` (the unit's own, asked with its arguments before it ran) and
+   ``next_situations`` (per action the next decision offers), the unit's ledger row records its situation, every
+   forecast row carries ``situations`` (one entry per situation asked: ``situation``, ``forecast_gain``, ``worth``),
+   which the model is shown in ``action_forecasts``, and the gate's refusal names the refused ``situation``. An
+   offered action's forecast is the highest of its situations' forecasts, unknown if any is unknown; the gate and the
+   ledger row are of the chosen arguments' one situation. An Episode that does not supply the member has the empty
+   situation everywhere: nothing it records or computes carries a situation and nothing changes for it. One whose
+   controller is not a forecast controller may not supply it (``situations_requires_a_forecast_controller``).
 4. Each unit's controller input is ``{'credit': credit(internal_summary(view.with_unit(outcome)), records),
    'estimation_context': {'progress_time': bound.progress.receipt(position)}}``. The episode's yield controller
    observes it and alone decides whether the Episode stops: nothing else ends an Episode. The controller is built
@@ -212,7 +226,11 @@ CHILD_MEMBERS = ('msg_to_child', 'read_from_child')
 # (an integer >= 0). The number goes to the episode's yield controller with the unit
 # (``estimation_context['items_remaining']``); an ``AccumulationYieldController`` stops at 0. The stop stays the yield
 # controller's alone: this is the count of the list it stops on, for an episode whose list is not known at its start.
-OPTIONAL_MEMBERS = ('best_arguments', 'outcome_pending', 'resume_action', 'items_remaining')
+# ``credit.py`` ``situations(summary, records, action_type, arguments, ctx)`` returns the situations of an action, each a
+# list of names from general to specific: with ``arguments`` exactly the one situation of that action, with ``arguments``
+# None every situation the action could still be taken in now (module docstring, step 3). Only an Episode with a forecast
+# controller may supply it; one that does not has the empty situation for every action.
+OPTIONAL_MEMBERS = ('best_arguments', 'outcome_pending', 'resume_action', 'items_remaining', 'situations')
 SUPPLIED = tuple(name for names in SUPPLIED_BY_FILE.values() for name in names)
 # Each function member: the parameters it takes, and the module (below the episode package) that defines it.
 SIGNATURES = MappingProxyType({
@@ -224,6 +242,7 @@ SIGNATURES = MappingProxyType({
     'outcome_pending': ('summary', 'records', 'position'),
     'resume_action': ('summary', 'records', 'ctx'),
     'items_remaining': ('summary',),
+    'situations': ('summary', 'records', 'action_type', 'arguments', 'ctx'),
     'offered_actions': ('summary', 'ctx'),
     'yield_controller': ('initial_credit', 'settings', 'parent_input'),
     'read_from_parent': ('assignment', 'message'),
@@ -233,7 +252,7 @@ SIGNATURES = MappingProxyType({
     'final_to_parent': ('summary', 'completion', 'selection'),
 })
 FILE_OF = MappingProxyType({
-    'decide': 'task', 'action': 'task', 'offered_actions': 'task', 'credit': 'credit', 'ceiling': 'credit', 'best_arguments': 'credit', 'outcome_pending': 'credit', 'resume_action': 'task', 'yield_controller': 'yield_estimator', 'items_remaining': 'yield_estimator',
+    'decide': 'task', 'action': 'task', 'offered_actions': 'task', 'credit': 'credit', 'ceiling': 'credit', 'best_arguments': 'credit', 'outcome_pending': 'credit', 'resume_action': 'task', 'yield_controller': 'yield_estimator', 'items_remaining': 'yield_estimator', 'situations': 'credit',
     'read_from_parent': 'messages.read_from_parent', 'msg_to_child': 'messages.msg_to_child',
     'read_from_child': 'messages.read_from_child', 'internal_summary': 'messages.internal_summary',
     'final_to_parent': 'messages.final_to_parent'})
@@ -617,14 +636,20 @@ class _SystemSource:
     def _forecast_facts(self, summary, position, chosen):
         """What a ``ForecastYieldController`` is given with the completion of unit ``position``: the action and its
         ceiling, the unit's measured seconds, whether its outcome is pending, and the ceilings the next decision offers
-        (computed from the summary after the unit, as that decision will compute them)."""
+        (computed from the summary after the unit, as that decision will compute them). For an Episode that supplies
+        ``situations`` also the unit's own situation (asked with its arguments before it ran) and the situations of each
+        action the next decision offers."""
         context = self._bound.decision_context(position + 1)
         resume = self._resume(summary, context, forecast=True)
         offered = self._offered_ceilings(summary, context, resume)
-        return {'action_type': chosen['action_type'], 'ceiling': _written(chosen['ceiling']),
-                'unit_seconds': self._unit_seconds(position), 'decision_seconds': chosen['decision_seconds'],
-                'pending': self._pending(summary, position), 'must_continue': resume is not None,
-                'next_offered': {name: _written(ceiling) for name, ceiling in offered.items()}}
+        facts = {'action_type': chosen['action_type'], 'ceiling': _written(chosen['ceiling']),
+                 'unit_seconds': self._unit_seconds(position), 'decision_seconds': chosen['decision_seconds'],
+                 'pending': self._pending(summary, position), 'must_continue': resume is not None,
+                 'next_offered': {name: _written(ceiling) for name, ceiling in offered.items()}}
+        situations = self._situations(summary, {name: None for name in offered}, context, forecast=True)
+        if situations is not None:
+            facts.update(situation=chosen['situation'], next_situations=situations)
+        return facts
 
     def _resume(self, summary, context, *, forecast):
         """The resume the Episode owes, from its optional ``resume_action`` (module docstring, step 3): ``None``, or
@@ -680,12 +705,37 @@ class _SystemSource:
         self._bound.ceilings.offered(position, offered)
         return offered
 
-    def _forecast_rows(self, view, offered):
+    def _situations(self, summary, arguments_of, context, *, forecast):
+        """The situations of the actions of ``arguments_of`` (``{action type: its arguments, or None for every
+        arguments it can take now}``), from the episode's optional ``situations`` (module docstring, step 3): ``None``
+        when the Episode supplies none (the empty situation everywhere), else ``{action type: [situation, ...]}``, a
+        situation a list of names from general to specific; with arguments exactly one. ``forecast``: whether the
+        Episode's controller is a forecast controller; one with another controller must not supply the member."""
+        path = self._binding.binding_path
+        member = getattr(type(self._binding), 'situations', None)
+        if member is None:
+            return None
+        if not forecast:
+            raise TypeError('situations_requires_a_forecast_controller:' + path)
+        found = {}
+        for action_type, arguments in arguments_of.items():
+            listed = member(summary, self._bound.reader, action_type, arguments, context)
+            if (not isinstance(listed, (list, tuple)) or (arguments is not None and len(listed) != 1)
+                    or any(not isinstance(situation, (list, tuple))
+                           or any(type(level) is not str or not level for level in situation) for situation in listed)):
+                raise TypeError('episode_situations_must_be_lists_of_names_and_exactly_one_with_arguments:' + path + ':'
+                                + str(action_type) + ':' + repr(listed))
+            found[action_type] = [list(situation) for situation in listed]
+        return found
+
+    def _forecast_rows(self, view, offered, situations):
         """The forecast of every offered action, from what the controller has learned (``None`` when the Episode's
-        controller is not a ``ForecastYieldController``)."""
+        controller is not a ``ForecastYieldController``). ``situations``: what ``_situations`` gave for the same
+        actions and arguments the ceilings of ``offered`` were asked with."""
         if not isinstance(view.controller_state, ForecastYieldState):
             return None
-        return view.controller_state.forecast({name: _written(ceiling) for name, ceiling in offered.items()})
+        return view.controller_state.forecast({name: _written(ceiling) for name, ceiling in offered.items()},
+                                              situations)
 
     def _best(self, summary, action_type, context):
         """The arguments of the commission that reaches the action's ceiling asked with ``arguments`` None, from the
@@ -698,13 +748,20 @@ class _SystemSource:
 
     def _shown(self, rows, summary=None, context=None):
         """The forecast rows as the model sees them: facts only, and for an action with a best commission its arguments
-        (``best_arguments``: the ceiling and forecast of the row are those of exactly that commission)."""
+        (``best_arguments``: the ceiling and forecast of the row are those of exactly that commission). The row of an
+        Episode that supplies situations also lists the forecast of the action in each situation it can still be taken
+        in (``situations``): the gate will judge the chosen arguments by their own situation's forecast."""
         shown = []
         for row in rows:
             item = {'action_type': row['action_type'], 'ceiling': row['ceiling'],
                     'forecast_gain': 'unknown' if row['forecast_gain'] is None else row['forecast_gain'],
                     'expected_seconds': 'unknown' if row['expected_seconds'] is None else row['expected_seconds'],
                     'worth': row['worth']}
+            if 'situations' in row:
+                item['situations'] = [
+                    {'situation': entry['situation'],
+                     'forecast_gain': 'unknown' if entry['forecast_gain'] is None else entry['forecast_gain'],
+                     'worth': entry['worth']} for entry in row['situations']]
             best = None if summary is None else self._best(summary, row['action_type'], context)
             if best is not None:
                 item['best_arguments'] = best
@@ -725,12 +782,17 @@ class _SystemSource:
         if (owed is not None and action_type == owed['action_type']
                 and same_json(_closed(dict(decision.arguments), 'gate_arguments'), owed['arguments'])):
             return
-        ceiling = self._ceiling_of(summary, action_type, _closed(dict(decision.arguments), 'ceiling_arguments'), context)
-        rows = self._forecast_rows(view, {action_type: ceiling})
+        arguments = _closed(dict(decision.arguments), 'ceiling_arguments')
+        ceiling = self._ceiling_of(summary, action_type, arguments, context)
+        situations = self._situations(summary, {action_type: arguments}, context,
+                                      forecast=isinstance(view.controller_state, ForecastYieldState))
+        rows = self._forecast_rows(view, {action_type: ceiling}, situations)
         if rows is not None and not rows[0]['worth']:
             row = rows[0]
             detail = {'action_type': action_type, 'ceiling': row['ceiling'], 'forecast_gain': row['forecast_gain'],
                       'expected_seconds': row['expected_seconds'], 'threshold': row['threshold']}
+            if situations is not None:
+                (detail['situation'],) = situations[action_type]
             best = self._best(summary, action_type, context)
             if best is not None:
                 detail['choose_from'] = best
@@ -740,16 +802,22 @@ class _SystemSource:
     def _chosen(self, view, position, decision, summary, context, offered):
         """The action taken: its type, its ceiling (asked again with its arguments), the credit before the unit and
         the seconds the decision took. With a ``ForecastYieldController`` its forecast, for that ceiling, is recorded
-        in the estimate ledger before the unit runs."""
+        in the estimate ledger before the unit runs. For an Episode that supplies ``situations`` also the one situation
+        of its arguments, which its forecast is made in and its ledger row and its facts record."""
         path = self._binding.binding_path
         action_type = decision.name if isinstance(decision, ToolCall) else decision.slot
         if action_type not in offered:
             raise LookupError('episode_action_not_offered:' + path + ':' + str(action_type))
-        ceiling = self._ceiling_of(summary, action_type, _closed(dict(decision.arguments), 'ceiling_arguments'), context)
+        arguments = _closed(dict(decision.arguments), 'ceiling_arguments')
+        ceiling = self._ceiling_of(summary, action_type, arguments, context)
         self._bound.ceilings.chosen(position, action_type, ceiling)
         chosen = {'action_type': action_type, 'ceiling': ceiling, 'decision_seconds': time.monotonic() - self._began,
                   'before': self._binding._credit_of(summary, self._bound)}
-        rows = self._forecast_rows(view, {action_type: ceiling})
+        situations = self._situations(summary, {action_type: arguments}, context,
+                                      forecast=isinstance(view.controller_state, ForecastYieldState))
+        if situations is not None:
+            (chosen['situation'],) = situations[action_type]
+        rows = self._forecast_rows(view, {action_type: ceiling}, situations)
         if rows is not None:
             self._bound.forecast_ledger.expect(position, action_type, rows[0], context.clock.now)
         return chosen
@@ -796,7 +864,10 @@ class _SystemSource:
         context = self._bound.decision_context(position)
         resume = self._resume(summary, context, forecast=isinstance(view.controller_state, ForecastYieldState))
         offered = self._offered(summary, position, context, resume)
-        if resume is not None and (resume['due'] or not any(row['worth'] for row in self._forecast_rows(view, offered))):
+        situations = self._situations(summary, {name: None for name in offered}, context,
+                                      forecast=isinstance(view.controller_state, ForecastYieldState))
+        if resume is not None and (resume['due']
+                                   or not any(row['worth'] for row in self._forecast_rows(view, offered, situations))):
             # The owed resume is the unit (module docstring, step 3): due, or no offered action is worth its cost and the
             # Episode may not stop. The model is not asked; the gate is asked and lets exactly this resume pass.
             decision = self._resume_call(resume)
@@ -808,7 +879,7 @@ class _SystemSource:
             decision = decide(summary, feedback, context)
             if not isinstance(decision, ModelRequest):
                 break
-            rows = self._forecast_rows(view, offered)
+            rows = self._forecast_rows(view, offered, situations)
             if rows is not None:
                 decision = replace(decision, context={**decision.context, FORECASTS_KEY: self._shown(rows, summary, context)})
             response = await self._bound.model.complete(decision.role, decision.instructions, decision.context,

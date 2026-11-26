@@ -219,3 +219,46 @@ run too, the ledger's mean and the run's recency-weighted mean each weigh one ha
 show"): after one `partner_contacts` row (0.22 of a ceiling of 49, a share of 0.0045) the next run's forecast for that action was 0.327 against
 a threshold of 0.934 and it was not run, where with an empty ledger it had been 24.5. The tuning would weigh the ledger by how much it holds, so
 that a ledger of one test moves the forecast only part of the way from half the ceiling. Not changed; the formula is in `yield_control/`.
+
+## 2026-11-25: situations, and a thin ledger falls back to learning within the run
+
+The owner's words (verbatim; they govern):
+
+- After the first real run of the feature calling head, in which one database search that found nothing made the
+  forecast of every other search 0 and ended the episode with seven databases untried, and to a proposal of a fixed
+  number of units before a forecast counts: "i don't like this 2 hard fixed limit. It sounds like the problem is the weight
+  of the ledger since some runs are one thing and not another it's affecting decision making. like when something is a
+  protein, blastp is great, but obviously zero when not. so hmmm... the ledger forecaster needs to be better really."
+- To the proposal that each ledger row record the situation it was made in and a forecast be taken from like situations:
+  "Yes, that is much better if you can cluster by situation".
+- On a forecast when the like history is thin: "history is thin means you don't know a lot. it means you don't rely on
+  the ledger and for example, in almost all schemes this means you don't know anything and you learn as you go along. you
+  don't have any prior so you don't have any cutoff but some initial setting. yes? like this is how things used to work
+  before the ledger. that's what they need to asymptote back to if there is no information"; "so basically option A but
+  the starting assumption is what we used to do anyway".
+- "i'm surprised you need to implement it since it was already there and the ledger was supposed to be an adjustment, not
+  a rewrite". (The earlier controllers' estimator was in the file; the forecast controller's own half had been written as a
+  plain recency-weighted mean and did not use it.)
+
+What was built (all of it off unless an episode turns it on; an episode that supplies no situations and names neither
+parameter computes and records what it did before):
+
+- Situations. An episode may supply `credit.py` `situations(summary, records, action_type, arguments, ctx)`: a situation
+  is a list of names from general to specific. Each unit's facts and its ledger row record the unit's situation. A unit or
+  ledger row counts for a forecast in the situation s by `situation_discount ** k`, k the number of levels of s that its
+  own situation does not share as a leading prefix. An offered action is forecast in each situation it can still be
+  taken in: its forecast is the highest, unknown if any is unknown. The gate and the ledger row are of the chosen
+  arguments' one situation. A ledger row written before situations existed has the empty situation.
+- `ledger_strength_rows` (0 unless named). Above 0, the ledger's mean gets the share W / (W + ledger_strength_rows) of a
+  forecast, W the summed weight (age times likeness) of the ledger's rows of the action, and the rest goes to the estimate
+  of this run alone: the estimator of the bounded-quality and completion controllers (`estimate_score_yield`, every
+  mark fitted against its progress receipt time) over this run's units of the action, read as those controllers read it
+  against the cost: the upper bound of the next marginal credit. With no unit of the action in this run, or a fit with no
+  normal band, the run's estimate is unknown; the forecast is then the ledger's mean when the ledger's share is at least
+  one half, else unknown, and an unknown forecast never stops or refuses.
+- That estimator takes no weight per mark, so within the run every unit of the action counts in full whatever its
+  situation: likeness reaches a forecast through the ledger's rows only.
+- First use: the feature calling head (`situations`: letters of the searched sequence, database, program;
+  `ledger_strength_rows` 2, `situation_discount` 0.5).
+
+Not exercised when written: no run had used it.

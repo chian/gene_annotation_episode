@@ -29,6 +29,14 @@ returned parked, that a later unit of the same action finishes) is resolved with
 seconds are written as the facts they are, and ``history`` skips the row for both the shares and the seconds, since its
 rise measures nothing of its action yet and its seconds cover only the start. The later unit that continues the work is
 resolved ``finished`` and is the observation. A forecast row resolved with any other outcome raises.
+
+The situation (the owner, 2026-11-25: "Yes, that is much better if you can cluster by situation"): an Episode whose
+binding supplies ``situations`` (``method_loop.episode_type``) has every unit's forecast row carry the one situation of
+its action (``situations`` of the row of ``forecast_actions``), and ``expect`` writes it as ``situation`` of the
+expectation (a list of names, general to specific). ``history`` gives each share its ``situation`` when its row
+recorded one; a row that recorded none (every row of an Episode that supplies no situations, and every row written
+before situations existed) is given without the key, and the controller reads it as the empty situation. Nothing else
+about a row or a history changes, so those of an Episode that supplies no situations are what they were.
 """
 from __future__ import annotations
 
@@ -82,7 +90,8 @@ class ForecastLedger:
     def history(self, action_type, job_prefix, forget):
         """The recorded history of ``action_type`` for the controller: ``{'rows': [{'ceiling', 'gain', 'weight'}],
         'seconds': [{'seconds', 'decision_seconds'}], 'job_seconds': [seconds]}``: ``rows`` (the shares) only those
-        recorded under the action's definition, ``seconds`` every resolved row of the kind whatever its definition;
+        recorded under the action's definition, each with its ``'situation'`` when its row recorded one,
+        ``seconds`` every resolved row of the kind whatever its definition;
         a row resolved ``pending`` is in neither;
         ``job_prefix`` (or ``None``) names the ledger kinds of the jobs the action launches and ``forget`` weights the
         rows by the table's forgetting policy (and drops those past it). A history journaled before the seconds were
@@ -118,7 +127,10 @@ class ForecastLedger:
                 raise RuntimeError('forecast_row_outcome_unknown:' + row['key'] + ':' + str(actual['outcome']))
             seconds.append({'seconds': actual['duration_seconds'], 'decision_seconds': actual['decision_seconds']})
             if expected.get('definition') == definition:
-                rows.append({'ceiling': expected['ceiling'], 'gain': actual['gain'], 'weight': weight(row)})
+                share = {'ceiling': expected['ceiling'], 'gain': actual['gain'], 'weight': weight(row)}
+                if 'situation' in expected:
+                    share['situation'] = expected['situation']
+                rows.append(share)
         job_seconds = []
         if job_prefix is not None:
             for kind in table.kinds():
@@ -132,15 +144,21 @@ class ForecastLedger:
     def expect(self, position, action_type, row, at):
         """Record, before unit ``position`` runs, what the controller forecast for its action (``row`` of
         ``forecast_actions``), with the definition of its action it was made under. A forecast that is unknown is written as a gain
-        of 0 with ``forecast`` null."""
+        of 0 with ``forecast`` null. The row of an Episode that supplies situations carries ``situations``: for a unit
+        that is exactly the one situation of its action, written as ``situation`` (any other number raises)."""
         forecast, ceiling = row['forecast_gain'], row['ceiling']
         value = 0.0 if forecast is None else forecast
         upper = value if ceiling == UNBOUNDED_TEXT else ceiling
-        self._table().expect(self.kind(action_type), {
+        expectation = {
             'gain': {'value': value, 'lower': 0.0, 'upper': upper},
             'cost': 0.0 if row['expected_seconds'] is None else row['expected_seconds'],
             'ceiling': ceiling, 'forecast': forecast, 'expected_seconds': row['expected_seconds'],
-            'seconds_basis': row['seconds_basis'], 'definition': self._defined(action_type)}, key=self.key(position), at=at)
+            'seconds_basis': row['seconds_basis'], 'definition': self._defined(action_type)}
+        if 'situations' in row:
+            if len(row['situations']) != 1:
+                raise ValueError('forecast_ledger_unit_has_exactly_one_situation:' + action_type)
+            expectation['situation'] = list(row['situations'][0]['situation'])
+        self._table().expect(self.kind(action_type), expectation, key=self.key(position), at=at)
 
     def resolve(self, position, rise, unit_seconds, decision_seconds, pending, at):
         """Record what unit ``position`` obtained: the rise of the credit and its measured seconds, with the outcome

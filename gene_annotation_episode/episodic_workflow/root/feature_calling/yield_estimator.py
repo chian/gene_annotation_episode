@@ -10,9 +10,18 @@ from this episode's own real runs. ``exchange_rate`` is credit per second. A fir
 (``blast_claims``: the value of a place is run / (run + 1), the family's weight 1). A search at the service has taken from
 a few minutes to a quarter of an hour, so at 0.0005 credit per second a search costs about 0.1 to 0.45: it is taken while
 such searches are forecast to earn a good part of one new firm claim and refused once they have earned little.
-``ledger_prior_rows`` 1 is set as in the organism identification head, but the controller uses it only for an action
-with a finite ceiling, so it does nothing here: with no history, one finished search that earns nothing gives a forecast
-of 0 and the episode stops after it. Whether that is wanted is to be seen in the first real runs.
+The ledger and the run (the owner, 2026-11-25, after the first real run, in which one search that found nothing made
+the forecast of every other search 0 and ended the episode with seven databases untried: "the ledger forecaster needs to
+be better really"; "Yes, that is much better if you can cluster by situation"; "history is thin means you don't know a
+lot. it means you don't rely on the ledger ... you learn as you go along ... like this is how things used to work before
+the ledger. that's what they need to asymptote back to if there is no information"). Each search states its situation
+(``credit.situations``: letters of the searched sequence, database, program). ``situation_discount`` 0.5: a past search
+counts for the forecast of another in full when it is the same search, half for another program on the same database, a
+quarter for another database, an eighth for a sequence of other letters. ``ledger_strength_rows`` 2: the ledger's mean
+gets the share W / (W + 2) of a forecast, W the summed weight of its like rows, and the rest goes to the estimate of this
+run alone, which is the earlier controllers' own estimator over this run's searches; so the ledger and the run weigh the
+same once the ledger holds two searches' worth of like history, and with little like history the episode learns as it
+goes. Both are starting values with no run behind them.
 
 The definition each action's learned gains are on (``forecast_definitions``: per action type, the digest of the credit
 definition record and that action's own ceiling name, ``credit.CEILINGS``) is handed to the controller. The assignment is
@@ -22,7 +31,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.configuration.yie
 
 from .credit import CEILINGS, FeatureDifferentialCredit
 
-FORECAST = {'exchange_rate': 0.0005, 'forget_old_rows': True, 'job_kinds': {}, 'ledger_prior_rows': 1.0}
+FORECAST = {'exchange_rate': 0.0005, 'forget_old_rows': True, 'job_kinds': {}, 'ledger_strength_rows': 2.0,
+            'situation_discount': 0.5}
 
 
 def yield_controller(initial_credit, settings, parent_input):

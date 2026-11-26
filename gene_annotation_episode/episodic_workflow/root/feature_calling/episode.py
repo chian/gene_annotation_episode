@@ -23,6 +23,7 @@ class FeatureCalling(EpisodeBinding):
     ceiling = credit_file.ceiling
     best_arguments = credit_file.best_arguments
     outcome_pending = credit_file.outcome_pending
+    situations = credit_file.situations
     yield_controller = yield_file.yield_controller
     assignment_form = from_parent_file.ASSIGNMENT_FORM
     read_from_parent = from_parent_file.read_from_parent

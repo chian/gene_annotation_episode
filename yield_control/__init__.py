@@ -17,7 +17,11 @@
 * ``ForecastYieldController`` -- credit whose every offered action declares a ceiling (the most the credit can rise
   if that action is the next unit, or ``UNBOUNDED``); its forecast is a formula of the ceiling and of what such
   actions realized before, in this episode and in the estimate ledger, and it stops when no offered action's forecast
-  exceeds its expected cost at the declared exchange rate (see the section ``ForecastYieldController`` below).
+  exceeds its expected cost at the declared exchange rate (see the section ``ForecastYieldController`` below). An
+  episode may say in which situation each unit is made; a forecast then counts earlier units by how like its own
+  situation theirs was, and, where the episode sets ``ledger_strength_rows``, leans on the ledger only as far as the
+  ledger holds like rows and otherwise on the estimate of the run itself, made by the estimator of the bounded-quality
+  and completion controllers below.
 
 The bounded-quality and completion controllers receive one cumulative credit per
 completed action, pass the raw signed difference to their estimator, and stop
@@ -1658,6 +1662,44 @@ class CompletionYieldController:
 #   mean of the ledger's mean gain and this episode's recency-weighted mean gain, or the one that exists. With no unit of k anywhere
 #   the forecast is unknown, and an unknown forecast never lets the episode stop (as in the three controllers,
 #   unknown stays unknown).
+# * situations (the owner, 2026-11-25, after a new head's one search that found nothing left its kind with a single
+#   row of 0 and a forecast of 0 for every other search, whatever was searched: "It sounds like the problem is the
+#   weight of the ledger since some runs are one thing and not another it's affecting decision making. like when
+#   something is a protein, blastp is great, but obviously zero when not ... the ledger forecaster needs to be better
+#   really"; and to the proposal that each row record the situation it was made in and a forecast be taken from like
+#   situations: "Yes, that is much better if you can cluster by situation"). A situation is a list of names from
+#   general to specific (for a database search: the letters of the searched sequence, the database, the program). An
+#   episode may say the situation of each unit (the optional member ``situations``, ``method_loop.episode_type``):
+#   the unit's facts then carry ``situation`` and, per action the next decision offers, ``next_situations`` (the
+#   situations that action could still be taken in), and the unit's ledger row records its situation. A unit or a
+#   ledger row counts for a forecast in the situation s with its weight (age in the ledger, recency in this episode)
+#   times its likeness to s: ``situation_discount ** k``, k the number of levels of s that the unit's own situation
+#   does not share as a leading prefix (the same situation: 1; a row that records no situation has the empty one, so
+#   k is the number of levels of s). An offered action with several possible situations is forecast in each: its
+#   forecast is the highest of them, and unknown if any of them is unknown; its row lists them all (``situations``).
+#   The gate and the ledger row of a chosen action are of the one situation of its arguments. An episode that
+#   supplies no situations has the empty situation everywhere: every likeness is 1 and nothing above changes. The
+#   units of one episode carry situations all or none: a mix (a journal recorded before its episode supplied them,
+#   continued after) raises.
+# * ``ledger_strength_rows`` (0 unless the episode names another value; at 0 everything above holds as written). The
+#   owner, 2026-11-25, on what a forecast is when the like history is thin: "history is thin means you don't know a
+#   lot. it means you don't rely on the ledger and for example, in almost all schemes this means you don't know
+#   anything and you learn as you go along. you don't have any prior so you don't have any cutoff but some initial
+#   setting. yes? like this is how things used to work before the ledger. that's what they need to asymptote back to
+#   if there is no information"; "so basically option A but the starting assumption is what we used to do anyway".
+#   Above 0 the forecast of k in the situation s is a blend. W is the summed weight (age times likeness to s) of the
+#   ledger's rows of k; the ledger's mean (the weighted mean share, or gain when UNBOUNDED, as above) gets the share
+#   W / (W + ledger_strength_rows) and the rest goes to the estimate of this run alone. That estimate is what the
+#   bounded-quality and completion controllers did before there was a ledger, used as it is: their estimator
+#   (``estimate_score_yield``: every mark fitted against its progress receipt time) over this episode's units of k
+#   that are not pending, read as those controllers read it against the cost: the upper bound of the next marginal
+#   credit at ``uncertainty_alpha``. For a bounded action the marks are the shares of the ceiling and the bound is
+#   limited to 1 (a ceiling limits the forecast, as the declared maximum does in the bounded-quality estimator). That
+#   estimator takes no weight per mark, so within the run every unit of k counts in full whatever its situation:
+#   likeness reaches the forecast through the ledger's rows only. With no unit of k in this run, or a fit without a
+#   normal band, the run's estimate is unknown: the forecast is then the ledger's mean if the ledger's share is at
+#   least one half, else unknown (never a stop or a refusal). With no ledger row W is 0 and the forecast is the run's
+#   estimate alone. ``ledger_prior_rows`` keeps its place inside the ledger's mean share and adds nothing to W.
 # * the cost of ``a`` is its expected seconds: for an action type of ``job_kinds`` whose ledger kind has measured
 #   jobs, the median job duration plus the median seconds the model took to decide; otherwise the median measured
 #   wall seconds of the units of k that are not pending (ledger history and this episode); with none, the median unit seconds of this
@@ -1677,6 +1719,9 @@ class CompletionYieldController:
 FORECAST_VERSION = "forecast_yield"
 UNBOUNDED_TEXT = "unbounded"
 FRACTION_TOLERANCE = 1e-9
+# What one unshared level of a situation costs a unit's weight, for an episode that supplies situations and names no
+# other value.
+DEFAULT_SITUATION_DISCOUNT = 0.5
 
 
 def _is_ceiling_number(value):
@@ -1714,12 +1759,21 @@ class ForecastParameters:
     shares only the rows written under the same name (a share learned under another credit or ceiling is on another
     scale). Required: there is no default. ``ledger_prior_rows``: how many ledger rows the fraction of no history
     (one half) counts as in the ledger's mean fraction of a bounded action (see the rule above); 0, the value when an
-    episode does not name it, leaves the ledger's rows as its whole fraction."""
+    episode does not name it, leaves the ledger's rows as its whole fraction. ``ledger_strength_rows``: the summed
+    weight of like ledger rows at which the ledger's mean and the estimate of this run alone each get one half of a
+    forecast (the ledger's share is W / (W + ``ledger_strength_rows``)); 0, the value when an episode does not name
+    it, keeps the rule of equal halves whatever the ledger holds. ``situation_discount``: what one level of a
+    forecast's situation that a unit's situation does not share costs that unit's weight (above 0, at most 1; it
+    matters only to an episode that supplies situations). ``uncertainty_alpha``: the alpha of the band of the run's
+    own estimate (read only when ``ledger_strength_rows`` is above 0); its default is the other controllers'."""
     exchange_rate: float
     forget_old_rows: bool
     job_kinds: Mapping
     definition: str | Mapping
     ledger_prior_rows: float = 0.0
+    ledger_strength_rows: float = 0.0
+    situation_discount: float = DEFAULT_SITUATION_DISCOUNT
+    uncertainty_alpha: float = DEFAULT_ALPHA
 
     def __post_init__(self):
         rate = _finite_number("exchange_rate", self.exchange_rate)
@@ -1741,6 +1795,12 @@ class ForecastParameters:
         object.__setattr__(self, "job_kinds", dict(self.job_kinds))
         if _finite_number("ledger_prior_rows", self.ledger_prior_rows) < 0:
             raise ValueError("ledger_prior_rows_must_not_be_negative")
+        if _finite_number("ledger_strength_rows", self.ledger_strength_rows) < 0:
+            raise ValueError("ledger_strength_rows_must_not_be_negative")
+        if not 0 < _finite_number("situation_discount", self.situation_discount) <= 1:
+            raise ValueError("situation_discount_must_be_above_zero_and_at_most_one")
+        if not 0 < _finite_number("uncertainty_alpha", self.uncertainty_alpha) < 1:
+            raise ValueError("uncertainty_alpha must be between zero and one")
 
     def definition_of(self, action_type):
         """The name of the definition of credit and ceiling the shares of ``action_type`` are on."""
@@ -1756,6 +1816,14 @@ class ForecastParameters:
                   "job_kinds": dict(self.job_kinds), "definition": definition}
         if self.ledger_prior_rows:
             record["ledger_prior_rows"] = self.ledger_prior_rows
+        # Like ``ledger_prior_rows``: a parameter is written only when the episode set it away from its default, so the
+        # record of an episode that names none of them is what it was before they existed.
+        if self.ledger_strength_rows:
+            record["ledger_strength_rows"] = self.ledger_strength_rows
+        if self.situation_discount != DEFAULT_SITUATION_DISCOUNT:
+            record["situation_discount"] = self.situation_discount
+        if self.uncertainty_alpha != DEFAULT_ALPHA:
+            record["uncertainty_alpha"] = self.uncertainty_alpha
         return record
 
 
@@ -1767,14 +1835,24 @@ def _forecast_parameters(value):
     raise TypeError("forecast settings must be ForecastParameters or their record")
 
 
+def _situation(value, what):
+    """A situation: its levels as names, general to specific (none: the empty situation)."""
+    if not isinstance(value, (list, tuple)) or any(type(level) is not str or not level for level in value):
+        raise ValueError(f"forecast_situation_must_be_a_list_of_names:{what}")
+    return tuple(value)
+
+
 def _forecast_context(context):
-    """The facts of one completed unit the system puts in its estimation context (``estimation_context['forecast']``)."""
+    """The facts of one completed unit the system puts in its estimation context (``estimation_context['forecast']``):
+    the required ones alone, or, for an episode that supplies situations, with both ``situation`` (the unit's) and
+    ``next_situations`` (``{action type: [situation, ...]}`` for exactly the actions of ``next_offered``)."""
     required = {"action_type", "ceiling", "unit_seconds", "decision_seconds", "pending", "must_continue", "next_offered"}
+    situated = {"situation", "next_situations"}
     if not isinstance(context, Mapping) or not isinstance(context.get("forecast"), Mapping):
         raise ValueError("forecast_controller_requires_estimation_context_forecast")
     facts = context["forecast"]
-    if set(facts) != required:
-        raise ValueError(f"forecast_context_requires_exactly:{sorted(required)}")
+    if set(facts) not in (required, required | situated):
+        raise ValueError(f"forecast_context_requires_exactly:{sorted(required)}:alone_or_with:{sorted(situated)}")
     if type(facts["action_type"]) is not str or not facts["action_type"]:
         raise ValueError("forecast_action_type_required")
     for name in ("unit_seconds", "decision_seconds"):
@@ -1797,6 +1875,15 @@ def _forecast_context(context):
             _score(ceiling, "offered ceiling")
         elif ceiling != UNBOUNDED_TEXT:
             raise ValueError("forecast_ceiling_is_a_number_or_unbounded")
+    if "situation" in facts:
+        _situation(facts["situation"], facts["action_type"])
+        following = facts["next_situations"]
+        if (not isinstance(following, Mapping) or set(following) != set(offered)
+                or any(not isinstance(listed, (list, tuple)) for listed in following.values())):
+            raise ValueError("forecast_next_situations_must_list_the_situations_of_exactly_the_next_offered_actions")
+        for name, listed in following.items():
+            for situation in listed:
+                _situation(situation, name)
     return facts
 
 
@@ -1806,41 +1893,106 @@ def _recent(values):
     return [(0.5 ** (len(values) - 1 - index), value) for index, (_, value) in enumerate(values)]
 
 
-def forecast_actions(parameters, observations, histories, offered):
+def _likeness(discount, asked, recorded):
+    """How much a unit made in the situation ``recorded`` counts for a forecast in the situation ``asked``:
+    ``discount ** k``, k the number of levels of ``asked`` that ``recorded`` does not share as a leading prefix (the
+    same situation, or an empty ``asked``: 1)."""
+    shared = 0
+    for wanted, held in zip(asked, recorded):
+        if wanted != held:
+            break
+        shared += 1
+    return discount ** (len(asked) - shared)
+
+
+def _run_estimate(parameters, bounded, mine):
+    """The estimate of one action from this run alone, as the bounded-quality and completion controllers make it:
+    their estimator (``estimate_score_yield``) over ``mine`` (this episode's ``(unit, mark)`` pairs of the action,
+    oldest first; each unit's ``context`` is its estimation context, with its progress receipt), read as they read it
+    against the cost: the upper bound of the next marginal credit. For a bounded action the marks are shares of the
+    ceiling and the bound is limited to 1. ``None`` (unknown) with no unit, or when the fit gives no normal band."""
+    if not mine:
+        return None
+    band = estimate_score_yield([mark for _, mark in mine], YieldParameters(parameters.uncertainty_alpha),
+                                contexts=[item["context"] for item, _ in mine]).expected_next_gain
+    if band.status_code != STATUS_NORMAL:
+        return None
+    return min(1.0, band.upper) if bounded else band.upper
+
+
+def _situation_value(parameters, bounded, ledger, mine, run, situation):
+    """The forecast of one action in one situation, before its ceiling: the share of the ceiling (bounded) or the gain
+    (UNBOUNDED); ``None``: unknown. ``ledger`` and ``mine`` are the ledger's ``(row, value)`` and this episode's
+    ``(unit, value)`` pairs of the action (a row or unit that records no situation has the empty one), ``run`` the
+    estimate of this run alone (``_run_estimate``; read only when ``ledger_strength_rows`` is above 0). The formulas
+    are described above."""
+    discount, strength = parameters.situation_discount, parameters.ledger_strength_rows
+    ledger = [(row["weight"] * _likeness(discount, situation, row.get("situation", ())), value)
+              for row, value in ledger]
+    rows_weight = math.fsum(w for w, _ in ledger)
+    if bounded:
+        prior = parameters.ledger_prior_rows
+        weight = prior + rows_weight
+        ledger_mean = (prior * 0.5 + math.fsum(w * f for w, f in ledger)) / weight if weight else None
+    else:
+        ledger_mean = math.fsum(w * g for w, g in ledger) / rows_weight if rows_weight else None
+    if not strength:
+        own = [(recency * _likeness(discount, situation, item.get("situation", ())), value)
+               for (recency, value), (item, _) in zip(_recent(mine), mine)]
+        means = ([] if ledger_mean is None else [ledger_mean]) + (
+            [math.fsum(w * v for w, v in own) / math.fsum(w for w, _ in own)] if own else [])
+        return math.fsum(means) / len(means) if means else (0.5 if bounded else None)
+    share = rows_weight / (rows_weight + strength)
+    if run is None:
+        return ledger_mean if share >= 0.5 else None
+    if not rows_weight:
+        return run
+    return share * ledger_mean + (1.0 - share) * run
+
+
+def forecast_actions(parameters, observations, histories, offered, situations):
     """One row per offered action (``{action type: ceiling number or 'unbounded'}``), from this episode's own
-    ``observations`` (each ``{'action_type', 'ceiling', 'gain', 'unit_seconds', 'decision_seconds', 'pending'}``;
-    a pending unit gives its kind no share, gain or unit seconds) and the
+    ``observations`` (each ``{'action_type', 'ceiling', 'gain', 'unit_seconds', 'decision_seconds', 'pending',
+    'context'}``, ``context`` the unit's estimation context, and ``'situation'`` for an episode that supplies
+    situations; a pending unit gives its kind no share, gain or unit seconds) and the
     ledger's ``histories`` (``{action type: {'rows': [{'ceiling', 'gain', 'weight'}], 'seconds': [{'seconds',
-    'decision_seconds'}], 'job_seconds': [seconds]}}``: ``rows`` the shares, of the action's own definition only;
+    'decision_seconds'}], 'job_seconds': [seconds]}}``: ``rows`` the shares, of the action's own definition only, each
+    with its ``'situation'`` when it recorded one;
     ``seconds`` every resolved row of the kind whatever its definition): ``{'action_type', 'ceiling', 'forecast_gain' (``None``: unknown),
-    'expected_seconds' (``None``: unknown), 'seconds_basis', 'threshold', 'worth'}``. The formulas are described
-    above."""
+    'expected_seconds' (``None``: unknown), 'seconds_basis', 'threshold', 'worth'}``. ``situations`` is ``None`` for an
+    episode that supplies none (every action is forecast in the empty situation), else ``{action type: [situation,
+    ...]}`` for every offered action: the row's forecast is then the highest of its situations' forecasts (unknown if
+    any is unknown) and the row also carries ``'situations'``: ``[{'situation', 'forecast_gain', 'worth'}]``, one per
+    situation asked. The formulas are described above."""
+    if any(("situation" in item) != (situations is not None) for item in observations):
+        raise ValueError("forecast_units_and_offered_actions_carry_situations_together_or_not_at_all")
     decision_pool = [item["decision_seconds"] for item in observations]
     unit_pool = [item["unit_seconds"] for item in observations]
     rows = []
     for action_type, ceiling in offered.items():
         history = histories[action_type]
         own = [item for item in observations if item["action_type"] == action_type and not item["pending"]]
-        if _is_ceiling_number(ceiling):
-            if ceiling == 0:
-                forecast = 0.0
-            else:
-                ledger = [(row["weight"], _fraction(row["gain"], row["ceiling"], action_type))
-                          for row in history["rows"] if _is_ceiling_number(row["ceiling"]) and row["ceiling"] > 0]
-                mine = [(0.0, _fraction(item["gain"], item["ceiling"], action_type))
-                        for item in own if _is_ceiling_number(item["ceiling"]) and item["ceiling"] > 0]
-                mine = _recent(mine)
-                prior = parameters.ledger_prior_rows
-                weight = prior + math.fsum(w for w, _ in ledger)
-                means = ([(prior * 0.5 + math.fsum(w * f for w, f in ledger)) / weight] if weight else []) + (
-                    [math.fsum(w * f for w, f in mine) / math.fsum(w for w, _ in mine)] if mine else [])
-                forecast = (math.fsum(means) / len(means) if means else 0.5) * ceiling
+        bounded = _is_ceiling_number(ceiling)
+        asked = [()] if situations is None else [_situation(situation, action_type)
+                                                 for situation in situations[action_type]]
+        if bounded and ceiling == 0:
+            forecasts = [0.0 for _ in asked]
+            forecast = 0.0
         else:
-            weight = math.fsum(row["weight"] for row in history["rows"])
-            mine = _recent([(0.0, item["gain"]) for item in own])
-            means = ([math.fsum(row["weight"] * row["gain"] for row in history["rows"]) / weight] if weight else []) + (
-                [math.fsum(w * g for w, g in mine) / math.fsum(w for w, _ in mine)] if mine else [])
-            forecast = math.fsum(means) / len(means) if means else None
+            if not asked:
+                raise ValueError(f"forecast_offered_action_has_no_situation:{action_type}")
+            if bounded:
+                ledger = [(row, _fraction(row["gain"], row["ceiling"], action_type))
+                          for row in history["rows"] if _is_ceiling_number(row["ceiling"]) and row["ceiling"] > 0]
+                mine = [(item, _fraction(item["gain"], item["ceiling"], action_type))
+                        for item in own if _is_ceiling_number(item["ceiling"]) and item["ceiling"] > 0]
+            else:
+                ledger = [(row, row["gain"]) for row in history["rows"]]
+                mine = [(item, item["gain"]) for item in own]
+            run = _run_estimate(parameters, bounded, mine) if parameters.ledger_strength_rows else None
+            values = [_situation_value(parameters, bounded, ledger, mine, run, situation) for situation in asked]
+            forecasts = [value * ceiling if bounded and value is not None else value for value in values]
+            forecast = None if any(value is None for value in forecasts) else max(forecasts)
         decision = (_median(decision_pool) if decision_pool
                     else _median([row["decision_seconds"] for row in history["seconds"]]) if history["seconds"] else None)
         action_seconds = [row["seconds"] for row in history["seconds"]] + [item["unit_seconds"] for item in own]
@@ -1854,9 +2006,14 @@ def forecast_actions(parameters, observations, histories, offered):
         else:
             seconds, basis = None, "unknown"
         threshold = (0.0 if seconds is None else seconds) * parameters.exchange_rate
-        rows.append({"action_type": action_type, "ceiling": ceiling if _is_ceiling_number(ceiling) else UNBOUNDED_TEXT,
-                     "forecast_gain": forecast, "expected_seconds": seconds, "seconds_basis": basis,
-                     "threshold": threshold, "worth": forecast is None or forecast > threshold})
+        row = {"action_type": action_type, "ceiling": ceiling if _is_ceiling_number(ceiling) else UNBOUNDED_TEXT,
+               "forecast_gain": forecast, "expected_seconds": seconds, "seconds_basis": basis,
+               "threshold": threshold, "worth": forecast is None or forecast > threshold}
+        if situations is not None:
+            row["situations"] = [{"situation": list(situation), "forecast_gain": value,
+                                  "worth": value is None or value > threshold}
+                                 for situation, value in zip(asked, forecasts)]
+        rows.append(row)
     return tuple(rows)
 
 
@@ -1893,8 +2050,10 @@ class ForecastStep:
 
 
 class ForecastYieldState:
-    """What the forecast controller holds after its completed units. ``forecast(offered)`` gives the rows for a
-    decision that offers ``offered`` (``{action type: ceiling or 'unbounded'}``) from what has been learned so far."""
+    """What the forecast controller holds after its completed units. ``forecast(offered, situations)`` gives the rows
+    for a decision that offers ``offered`` (``{action type: ceiling or 'unbounded'}``) from what has been learned so
+    far; ``situations`` is ``None`` for an episode that supplies no situations, else ``{action type: [situation,
+    ...]}`` for every offered action (``forecast_actions``)."""
 
     def __init__(self, epoch, initial_credit, current_credit, history, decision, parameters, forecast):
         self.epoch, self.initial_credit, self.current_credit = epoch, initial_credit, current_credit
@@ -1904,8 +2063,8 @@ class ForecastYieldState:
     def stop(self):
         return self.decision.stop
 
-    def forecast(self, offered):
-        return self._forecast(offered)
+    def forecast(self, offered, situations):
+        return self._forecast(offered, situations)
 
     def as_record(self):
         return {"epoch": self.epoch, "initial_credit": self.initial_credit, "current_credit": self.current_credit,
@@ -1917,6 +2076,10 @@ def forecast_provenance():
     return {"controller": FORECAST_VERSION, "forecast": "realized_fraction_times_ceiling_or_typical_gain_if_unbounded",
             "fraction": "mean_of_ledger_mean_and_own_recency_weighted_mean_each_one_half_own_half_life_one_unit",
             "ledger_prior": "one_half_counts_as_ledger_prior_rows_rows_of_weight_one_in_the_ledgers_mean_zero_unless_named",
+            "situations": "a_unit_counts_by_situation_discount_to_the_number_of_levels_of_the_forecasts_situation_"
+                          "it_does_not_share_as_a_leading_prefix_an_action_is_forecast_at_the_best_of_its_situations",
+            "ledger_strength": "above_zero_the_ledgers_mean_gets_its_like_weight_over_that_plus_ledger_strength_rows_"
+                               "and_the_rest_goes_to_the_upper_bound_of_the_runs_own_real_time_estimate_zero_unless_named",
             "pending": "a_pending_unit_gives_its_kind_no_share_gain_or_unit_seconds_own_or_ledger",
             "cost": "expected_seconds",
             "stop": "no_offered_forecast_exceeds_expected_seconds_times_exchange_rate_and_not_must_continue",
@@ -1929,8 +2092,10 @@ class ForecastYieldController:
     The system attaches the estimate-ledger access once (``attach``) and gives each completed unit's facts in its
     estimation context (``estimation_context['forecast']``: the action type and its ceiling, the unit's measured
     seconds and decision seconds, whether its outcome is pending, whether the episode must continue (it holds started
-    work it must finish: no stop while it does) and the ceilings the next decision offers). Nothing here writes the
-    ledger."""
+    work it must finish: no stop while it does) and the ceilings the next decision offers; for an episode that
+    supplies situations also the unit's situation and the situations of each action the next decision offers). The
+    unit's whole estimation context is kept with it: its progress receipt is what the run's own estimate is fitted
+    against (``ledger_strength_rows``). Nothing here writes the ledger."""
 
     def __init__(self, epoch, initial_credit, settings):
         self.epoch = _epoch(epoch)
@@ -1957,20 +2122,24 @@ class ForecastYieldController:
         return {action_type: self._ledger.history(action_type, self.settings.job_kinds.get(action_type),
                                                   self.settings.forget_old_rows) for action_type in offered}
 
-    def _rows(self, observations, offered):
-        return forecast_actions(self.settings, observations, self._histories(offered), offered)
+    def _rows(self, observations, offered, situations):
+        return forecast_actions(self.settings, observations, self._histories(offered), offered, situations)
 
     def observe(self, unit_label, value, is_root=False):
         cumulative, context = _completed(value)
         facts = _forecast_context(context)
         delta = cumulative - self._current_credit
-        self._observations = (*self._observations, {
+        observation = {
             "action_type": facts["action_type"], "ceiling": facts["ceiling"], "gain": delta,
             "unit_seconds": facts["unit_seconds"], "decision_seconds": facts["decision_seconds"],
-            "pending": facts["pending"]})
+            "pending": facts["pending"], "context": context}
+        if "situation" in facts:
+            observation["situation"] = facts["situation"]
+        self._observations = (*self._observations, observation)
         self._scores = (*self._scores, delta)
         self._current_credit = cumulative
-        rows = self._rows(self._observations, facts["next_offered"])
+        # The facts carry ``situation`` and ``next_situations`` together or neither (``_forecast_context``).
+        rows = self._rows(self._observations, facts["next_offered"], facts.get("next_situations"))
         must_continue = facts["must_continue"]
         self._decision = ForecastDecision(not must_continue and not any(row["worth"] for row in rows), rows, must_continue)
         return ForecastStep(str(unit_label), cumulative, delta, self._decision, bool(is_root))
@@ -1979,4 +2148,4 @@ class ForecastYieldController:
         observations = self._observations
         return ForecastYieldState(self.epoch, self.initial_credit, self._current_credit, self._scores,
                                   self._decision, self.settings,
-                                  lambda offered: self._rows(observations, offered))
+                                  lambda offered, situations: self._rows(observations, offered, situations))

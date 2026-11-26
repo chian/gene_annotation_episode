@@ -130,3 +130,19 @@ def outcome_pending(summary, records, position):
     cover only the launch, so the forecast controller learns from neither; the commission that continues the search is
     the observation."""
     return summary['units'][position]['parked']
+
+
+def situations(summary, records, action_type, arguments, ctx):
+    """In which situation a search is made, for the forecast controller's use of the estimate ledger: the letters of the
+    searched sequence, then the database, then the program (general to specific). A past search counts for the forecast
+    of another by how much of this they share: the same search in full, another program on the same database half,
+    another database a quarter, a sequence of other letters an eighth (``situation_discount``, ``yield_estimator.py``).
+    With arguments: the one situation of that commission. With no arguments: the situation of every search that can
+    still be sent (``open_searches``) and of every search left running."""
+    def of(ref, program, database):
+        return [summary['held_sequences'][ref], database, program]
+    if arguments is not None:
+        return [of(*_searched(arguments))]
+    running = [(search['query_ref'], search['program'], search['database']) for search in summary['searches']
+               if search['outstanding']]
+    return [list(found) for found in dict.fromkeys(tuple(of(*search)) for search in [*running, *open_searches(summary)])]
