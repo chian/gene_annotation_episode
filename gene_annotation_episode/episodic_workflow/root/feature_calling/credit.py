@@ -22,7 +22,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.jobs.bvbrc_job_ro
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_features import (  # noqa: F401
     blast_claims, infernal_calls, prodigal_calls)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_features.feature_candidates import (
-    ABOVE, COMPETING, RIVAL_LETTERS, SAME_SHARE, SHEET_WEIGHT, feature_table, held_sources)
+    ABOVE, COMPETING, RIVAL_LETTERS, RNA_SHARE, RNA_UNITS, SAME_SHARE, SHEET_WEIGHT, feature_table, held_sources)
 
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.blast_search import (
     PROGRAM_UNITS)
@@ -53,8 +53,10 @@ class FeatureDifferentialCredit:
                 'test': 'one_graded_sheet_of_one_sequence_from_one_source',
                 'score': 'sum_over_tests_of_sheet_weight_times_the_tests_bits_at_the_slots_calls_and_claims_and_at_every_slot_it_is_within',
                 'sheet_weights': dict(SHEET_WEIGHT),
-                'rivals': 'two_slots_of_a_competing_type_that_share_rival_letters_or_more_and_are_neither_one_slot_nor_nested',
+                'rivals': ('two_slots_of_a_competing_type_neither_one_slot_nor_nested_that_share_rival_letters_or_more_'
+                           'or_more_than_rna_share_of_the_rna_gene_when_one_is_an_rna_unit'),
                 'competing_types': list(COMPETING), 'rival_letters': RIVAL_LETTERS,
+                'rna_units': list(RNA_UNITS), 'rna_share': RNA_SHARE,
                 'rival_is': 'a_competitor_for_letters_not_a_verdict_nothing_is_removed_or_lowered',
                 'measurable': 'the_test_can_speak_of_the_slots_kind',
                 'settling': 'slots_claims_in_them_and_waiting_claims_follow_from_all_the_records_held_whatever_their_order',

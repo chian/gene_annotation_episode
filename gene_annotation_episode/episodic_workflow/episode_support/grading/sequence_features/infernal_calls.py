@@ -30,11 +30,13 @@ and where it ends: it is a FEATURE CALL (``feature_candidates``), except at an e
   on one strand, not only of one clan (``tabular.tex``, ``olp``). A hit marked ``$`` overlaps only better hits that are
   not marked ``^``; it is a statement and counted (``overlapped_kept``). The shared scan sheet's own
   ``overlapped_by_a_better_hit_of_the_clan`` is true for both ``$`` and ``=`` and is not read here.
-* Kind: ``tRNA`` or ``rRNA`` for the families of ``RFAM_FAMILY_KIND`` (each confirmed by its exact name in the family index of
-  Rfam 15.1, ``Rfam.index.json``), ``ncRNA`` for every other family. Rfam's own table of family types (which families are
-  genes, and which are cis-regulatory elements such as riboswitches and leaders, or other structures) is not on disk: the
-  release installed holds the models, the clan file and the index of names, lengths and thresholds only. Until that table is
-  entered, a cis-regulatory family is stated as ``ncRNA``. The owner will help extend the table.
+* Kind: our type for the type Rfam gives the hit's family (``RFAM_TYPE_KIND``: a conversion from Rfam's few type labels to
+  our types, not a list of families). The family's Rfam type comes from the database's own table of family types
+  (``family_types``: accession -> label, the file ``family_types`` of the database's manifest, prepared from
+  ``database_files/family.txt.gz`` of the release). In the real run feature_calling_04 the two hits on a hepatitis A
+  virus genome, ``IRES_HepA`` (Rfam: ``Cis-reg; IRES;``) and ``HAV_CRE`` (``Cis-reg;``), had been stated as RNA genes
+  because the table then knew only tRNA and rRNA families; they are regulatory elements. A label that is not in the
+  table is not guessed: it raises. The owner will help correct the table.
 * Value (``bit``): the value the shared sheet gives the hit (``rna_family_scan_sheet.value_of``: ``x^2 / (1 + x^2)`` with ``x``
   the bit score over the family's GA; one half at GA, rising gradually towards one).
 
@@ -56,35 +58,43 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_s
 
 SHEET = 'infernal_feature_call_sheet'
 FAMILY = 'family_model'
-COVERS = ('tRNA', 'rRNA', 'ncRNA')
-OTHER_FAMILY_KIND = 'ncRNA'
+# Our type for each type Rfam gives a family: every label of Rfam 15.1 (22 labels over 4,227 families, read 2026-11-25
+# from ``database_files/family.txt.gz``, trailing blanks removed). Starting values:
+# * a gene of a named class of RNA is that class where we have it (tRNA, rRNA), else an RNA gene (``ncRNA``);
+# * every cis-regulatory label is a regulatory element;
+# * ``Gene; CRISPR;`` are the direct repeats of CRISPR arrays (the families are named ``CRISPR-DR*``): a repeat;
+# * ``Intron;`` are the self-splicing group I and group II introns, entered as mobile elements (many of them are; our list
+#   of types has no intron). The last two are the least sure.
+RFAM_TYPE_KIND = {
+    'Gene; tRNA;': 'tRNA',
+    'Gene; rRNA;': 'rRNA',
+    'Gene;': 'ncRNA',
+    'Gene; miRNA;': 'ncRNA',
+    'Gene; sRNA;': 'ncRNA',
+    'Gene; lncRNA;': 'ncRNA',
+    'Gene; antisense;': 'ncRNA',
+    'Gene; antitoxin;': 'ncRNA',
+    'Gene; ribozyme;': 'ncRNA',
+    'Gene; snRNA;': 'ncRNA',
+    'Gene; snRNA; splicing;': 'ncRNA',
+    'Gene; snRNA; snoRNA; CD-box;': 'ncRNA',
+    'Gene; snRNA; snoRNA; HACA-box;': 'ncRNA',
+    'Gene; snRNA; snoRNA; scaRNA;': 'ncRNA',
+    'Gene; CRISPR;': 'repeat',
+    'Cis-reg;': 'regulatory_element',
+    'Cis-reg; IRES;': 'regulatory_element',
+    'Cis-reg; leader;': 'regulatory_element',
+    'Cis-reg; riboswitch;': 'regulatory_element',
+    'Cis-reg; thermoregulator;': 'regulatory_element',
+    'Cis-reg; frameshift_element;': 'regulatory_element',
+    'Intron;': 'mobile_element',
+}
+# The types a scan of the database can state: those of the table.
+COVERS = tuple(dict.fromkeys(RFAM_TYPE_KIND.values()))
 # The overlap mark of a hit Infernal's annotation guide removes, and the mark of one it keeps though a better hit overlaps it.
 LEFT_OUT_MARK, KEPT_OVERLAPPED_MARK = '=', '$'
 # The truncation marks of a hit cut off at its 5' end and at its 3' end.
 CUT_AT_FIVE, CUT_AT_THREE = ("5'", "5'&3'"), ("3'", "5'&3'")
-# Rfam families stated as tRNA or rRNA: accession -> (the family's exact name in ``Rfam.index.json`` of Rfam 15.1, our type).
-# Read 2026-11-25 from the index. Families whose names suggest it but do not say it are not entered: RF02545
-# ``SSU_trypano_mito`` and RF02546 ``LSU_trypano_mito`` (subunits of the trypanosome mitochondrial ribosome by Rfam's
-# naming); the tmRNA families (a tRNA-like and mRNA-like RNA, not a tRNA); RF00233 ``Tymo_tRNA-like`` (a structure of a virus
-# genome); the ``xrRNA`` families (exoribonuclease-resistant RNAs, not ribosomal).
-RFAM_FAMILY_KIND = {
-    'RF00005': ('tRNA', 'tRNA'),
-    'RF01852': ('tRNA-Sec', 'tRNA'),
-    'RF00001': ('5S_rRNA', 'rRNA'),
-    'RF00002': ('5_8S_rRNA', 'rRNA'),
-    'RF00177': ('SSU_rRNA_bacteria', 'rRNA'),
-    'RF01959': ('SSU_rRNA_archaea', 'rRNA'),
-    'RF01960': ('SSU_rRNA_eukarya', 'rRNA'),
-    'RF02542': ('SSU_rRNA_microsporidia', 'rRNA'),
-    'RF02540': ('LSU_rRNA_archaea', 'rRNA'),
-    'RF02541': ('LSU_rRNA_bacteria', 'rRNA'),
-    'RF02543': ('LSU_rRNA_eukarya', 'rRNA'),
-}
-
-
-def rfam_family_kind(accession):
-    """Our type of an Rfam family (the module's description)."""
-    return RFAM_FAMILY_KIND[accession][1] if accession in RFAM_FAMILY_KIND else OTHER_FAMILY_KIND
 
 
 def _on_the_subject(row, searched_mapping):
@@ -97,24 +107,27 @@ def _on_the_subject(row, searched_mapping):
     return sorted(({'start': part['start'], 'end': part['end']} for part in path), key=lambda part: part['start']), strand
 
 
-def hit_statement(row, searched_mapping=None):
-    """What one hit of the scan sheet states (the module's description)."""
+def hit_statement(row, family_types, searched_mapping=None):
+    """What one hit of the scan sheet states (the module's description). ``family_types`` is the database's table of
+    family types (accession -> Rfam's label)."""
     segments, strand = _on_the_subject(row, searched_mapping)
     five, three = row['truncation'] not in CUT_AT_FIVE, row['truncation'] not in CUT_AT_THREE
+    rfam_type = family_types[row['family_accession']]
     return {'rank': row['rank'], 'family_accession': row['family_accession'], 'family_name': row['family_name'],
-            'clan': row['clan'], 'kind': rfam_family_kind(row['family_accession']), 'strand': strand, 'segments': segments,
+            'clan': row['clan'], 'rfam_type': rfam_type, 'kind': RFAM_TYPE_KIND[rfam_type], 'strand': strand,
+            'segments': segments,
             'claims_start': five if strand == '+' else three, 'claims_end': three if strand == '+' else five,
             'truncation': row['truncation'], 'model_from': row['model_from'], 'model_to': row['model_to'],
             'model_length': row['model_length'], 'overlap_mark': row['overlap_mark'], 'bit_score': row['bit_score'],
             'ga': row['ga'], 'bit': row['value']}
 
 
-def infernal_call_sheet(grading, searched_mapping=None):
+def infernal_call_sheet(grading, family_types, searched_mapping=None):
     """The subscoring sheet of one graded scan (``grading``: the retained grading of ``rna_family_scan``, ``{'sheet'}``):
     ``{'schema', 'program', 'database', 'database_version', 'searched_ref', 'searched_length', 'hit_count',
     'overlapped_left_out', 'overlapped_kept', 'statements'}`` with one statement per hit not left out, in the order of rank.
-    ``searched_mapping`` is the mapping of the searched sequence when it was derived from the sequence the statements are
-    about."""
+    ``family_types`` is the database's table of family types (accession -> Rfam's label). ``searched_mapping`` is the
+    mapping of the searched sequence when it was derived from the sequence the statements are about."""
     sheet = grading['sheet']
     rows = sheet['rows']
     return {'schema': SHEET, 'program': PROGRAM, 'database': sheet['database'],
@@ -122,7 +135,8 @@ def infernal_call_sheet(grading, searched_mapping=None):
             'searched_length': sheet['query_length'], 'hit_count': sheet['hit_count'],
             'overlapped_left_out': sum(row['overlap_mark'] == LEFT_OUT_MARK for row in rows),
             'overlapped_kept': sum(row['overlap_mark'] == KEPT_OVERLAPPED_MARK for row in rows),
-            'statements': [hit_statement(row, searched_mapping) for row in rows if row['overlap_mark'] != LEFT_OUT_MARK]}
+            'statements': [hit_statement(row, family_types, searched_mapping) for row in rows
+                           if row['overlap_mark'] != LEFT_OUT_MARK]}
 
 
 def read_call_sheet(grading):
@@ -142,5 +156,5 @@ def read_call_sheet(grading):
 READERS[SHEET] = read_call_sheet
 SHEET_WEIGHT[FAMILY] = 1.0
 
-__all__ = ['COVERS', 'FAMILY', 'OTHER_FAMILY_KIND', 'RFAM_FAMILY_KIND', 'SCAN_SHEET', 'SHEET', 'hit_statement',
-           'infernal_call_sheet', 'read_call_sheet', 'rfam_family_kind']
+__all__ = ['COVERS', 'FAMILY', 'RFAM_TYPE_KIND', 'SCAN_SHEET', 'SHEET', 'hit_statement', 'infernal_call_sheet',
+           'read_call_sheet']

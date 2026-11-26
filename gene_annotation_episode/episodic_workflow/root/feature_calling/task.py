@@ -79,8 +79,9 @@ DESCRIPTIONS = {
                'it is the better one, which is rare. It cannot say what a gene does, and it '
                'calls genes in any DNA, so a call alone is weak; a search that lands inside a call is what supports it. '
                'Under a second. Fields: searched_ref, code.'),
-    CMSCAN: ('Infernal cmscan with the covariance models of Rfam: find RNA genes and structured RNAs (tRNA, rRNA, other '
-             'non-coding RNAs) on both strands, each hit at or above its family\'s own threshold, with its positions and '
+    CMSCAN: ('Infernal cmscan with the covariance models of Rfam: find RNA genes (tRNA, rRNA, other non-coding RNAs) and '
+             'structured regulatory elements of RNA (riboswitches, leaders, ribosome entry sites, frameshift elements) '
+             'on both strands, each hit at or above its family\'s own threshold, with its positions and '
              'strand. It states a feature WITH its ends unless the hit is cut off by an edge of the sequence. It says '
              'nothing of protein genes, and finding nothing only means no family of the database matches. Seconds to '
              'minutes with the length of the sequence. Fields: searched_ref, database, resource_id (a local resource).'),

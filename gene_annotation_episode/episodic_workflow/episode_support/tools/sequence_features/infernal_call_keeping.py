@@ -10,7 +10,13 @@ that source (``feature_candidates.feature_tests``); the scan's own source is not
 
 The sequence the statements are about is the searched sequence itself, or, when the searched sequence is a product derived
 from another (an extracted stretch: its record has a ``mapping``), the sequence its mapping leads back to. Nothing is decided
-and nothing is checked here: whether and what to scan is the caller's. Writes only through ``ctx.store``."""
+and nothing is checked here: whether and what to scan is the caller's. Writes only through ``ctx.store``.
+
+Settings read (``ctx.settings``): ``covariance_databases`` (name -> the path of the database's manifest; its file
+``family_types`` is the table of the type Rfam gives each family, which the statements' types are converted from)."""
+import json
+from pathlib import Path
+
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_features.infernal_calls import (
     SCAN_SHEET, infernal_call_sheet)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.tool_grading_artifacts import (
@@ -30,7 +36,10 @@ def keep_infernal_calls(ctx, *, scan_source_ref, searched_ref):
                 if entry['grading']['sheet']['schema'] == SCAN_SHEET]
     mapping = store.get(searched_ref).get('mapping')
     subject_ref = searched_ref if mapping is None else mapping['path'][0]['subject_ref']
-    sheet = infernal_call_sheet(entry['grading'], mapping)
+    # the table of family types of the database the scan was made against, named by that database's manifest
+    manifest = json.loads(Path(ctx.settings['covariance_databases'][entry['grading']['sheet']['database']]).read_text())
+    family_types = json.loads(Path(manifest['files']['family_types']['path']).read_text())
+    sheet = infernal_call_sheet(entry['grading'], family_types, mapping)
     table_ref = store.get(scan_source_ref)['artifact_ref']
     scan_gradings = [row['id'] for row in products(store, GRADING_KIND) if row['generated_by'] == scan_source_ref]
     with store.transaction():

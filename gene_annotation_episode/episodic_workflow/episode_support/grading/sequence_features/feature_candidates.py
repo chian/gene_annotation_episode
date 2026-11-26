@@ -62,9 +62,20 @@ cent of the overlaps were under 50 letters, Schlub and Holmes 2020; in 338 genom
 60 letters or more of genes of one direction were found to be wrong start codons, Palleja, Harrington and Bork 2008); a
 regulatory element can lie wholly inside a gene on either strand; a protein domain can lie wholly inside another. So:
 
-* Only slots of what a stretch is made into compete (``COMPETING``: gene, coding sequence, RNA gene, tRNA, rRNA). Two of
+* Only slots of what a stretch is made into compete (``COMPETING``: gene, coding sequence, tRNA, rRNA). Two of
   them are RIVALS when they share ``RIVAL_LETTERS`` letters or more and are neither the same slot nor nested. Fewer shared
   letters are the ordinary overlap of neighbours and get no notice.
+* A tRNA or an rRNA (``RNA_UNITS``) competes for its letters with a coding sequence on either strand and with another
+  tRNA or rRNA call: the two are rivals when they share more than ``RNA_SHARE`` (half) of the RNA gene's letters (of the
+  shorter, between two RNA genes). No virus was found in which one overlaps a coding sequence; a coding sequence called
+  across one is the usual false call. A tRNA is about 75 letters, so the 60 letters of coding sequences would notice
+  almost nothing; the half is a starting value of 2026-11-25 with no source behind it. Which rRNA or tRNA it is, is
+  identity, which belongs to the annotation and is not known here.
+* Every other RNA gene (``ncRNA``) competes with nothing, like a regulatory element: microRNAs lie inside open reading
+  frames on both strands (human cytomegalovirus miR-UL70-1, UL112-1, UL148D, US33-1; Kaposi's sarcoma herpesvirus miR-K10
+  inside the K12 reading frame), a long non-coding RNA runs over the end of one (PAN over K7), a phage antisense RNA
+  covers 55 letters of one (lambda OOP over cII), and small RNAs sit inside longer RNA genes. Looked up 2026-11-25; the
+  owner: "your rule is fine for now".
 * A rival is a competitor for the same letters, not a verdict that one of the two is false: in a virus both may stand.
   Nothing is ever removed or lowered for having a rival; the facts of the shared letters are kept with the pair
   (``overlap_facts``) for when the organism is known.
@@ -132,7 +143,11 @@ SAME_SHARE = 0.8
 # 84 per cent of the gene overlaps of viruses (under 50, Schlub and Holmes 2020).
 RIVAL_LETTERS = 60
 # The types that compete for letters: what a stretch is made into.
-COMPETING = ('gene', CODING, 'ncRNA', 'tRNA', 'rRNA')
+COMPETING = ('gene', CODING, 'tRNA', 'rRNA')
+# The RNA genes that compete for their letters, and the share of the RNA gene's letters above which a slot of one and
+# another competing slot are rivals.
+RNA_UNITS = ('tRNA', 'rRNA')
+RNA_SHARE = 0.5
 # The types read in codons.
 IN_CODONS = (CODING, *PROTEIN_PARTS)
 # The letters of a stop codon: how far the end of a protein lies inside the end of its coding sequence.
@@ -280,11 +295,17 @@ def nested(first, second):
 
 
 def rivals(first, second):
-    """Whether two slots compete for the same letters: both are of a competing type, they share ``RIVAL_LETTERS`` letters
-    or more, and they are neither one slot nor nested."""
-    return (first['kind'] in COMPETING and second['kind'] in COMPETING
-            and shared_letters(first, second) >= RIVAL_LETTERS
-            and not same_slot(first, second) and not nested(first, second))
+    """Whether two slots compete for the same letters: both are of a competing type, they are neither one slot nor
+    nested, and they share enough letters: more than ``RNA_SHARE`` of the RNA gene (the shorter of two) when one is a
+    tRNA or an rRNA, else ``RIVAL_LETTERS`` letters or more."""
+    if first['kind'] not in COMPETING or second['kind'] not in COMPETING:
+        return False
+    if same_slot(first, second) or nested(first, second):
+        return False
+    rna_genes = [slot for slot in (first, second) if slot['kind'] in RNA_UNITS]
+    if rna_genes:
+        return shared_letters(first, second) > RNA_SHARE * min(letters(slot) for slot in rna_genes)
+    return shared_letters(first, second) >= RIVAL_LETTERS
 
 
 def overlap_facts(first, second):
@@ -569,7 +590,8 @@ def feature_table(reader, scope, sources):
     return {'targets': targets, 'credit': math.fsum(table['credit'] for table in targets.values())}
 
 
-__all__ = ['ABOVE', 'ALTERNATIVES', 'COMPETING', 'KINDS', 'READERS', 'RIVAL_LETTERS', 'SAME_SHARE', 'SHEET_WEIGHT', 'STRANDS',
+__all__ = ['ABOVE', 'ALTERNATIVES', 'COMPETING', 'KINDS', 'READERS', 'RIVAL_LETTERS', 'RNA_SHARE', 'RNA_UNITS', 'SAME_SHARE',
+           'SHEET_WEIGHT', 'STRANDS',
            'feature_table', 'feature_tests', 'held_readings', 'held_sources', 'high', 'inside', 'lead_rivals', 'letters', 'low',
            'measurable', 'nested', 'overlap_facts', 'positions', 'rivals', 'same_frame', 'same_reading', 'same_slot',
            'shared_letters', 'sheet_family', 'sheet_of', 'sheet_weight', 'sits_in', 'strands_agree', 'target_table',
