@@ -120,17 +120,9 @@ THE CREDIT, counted by going through the tests in the order they came, over what
   What a claim earned is not paid again: it is taken off the first entry of a slot it sits in that was not yet listed
   when the claim was paid, or of a slot within such a slot (their scores count it). So a call and a claim that sits in
   it earn the same together in either order: the call's own weighted bit and the claim's.
-* Repeated support earns less each time, and never nothing (the owner, 2026-11-25: "The reason you want less credit on
-  repeated support is you don't want to encourage wasting time on it. I do agree zero is too little though b/c support
-  is still worth something"). In the real run feature_calling_05 the search of viral proteins, the strongest evidence
-  of the run, had raised the score of a feature call another tool had made first and earned nothing. A statement of
-  something already supported earns its weighted bit times ``repeat_share`` of the support that was already there (a
-  half for every ``REPEAT_HALVING`` of it, so what repeats can earn in all has a limit):
-  - a call of a slot that was listed before its test: the support already there is the slot's own, of the earlier
-    tests (their calls of it and their claims in it);
-  - a claim on letters where earlier tests held claims of its type and reading: the support already there is that of
-    those claims. Of the claims of ONE test with one reading on shared letters only the strongest earns: they are one
-    statement of that test, not repeats of each other.
+* Repeated support earns less each time, and never nothing: a call of a slot listed before its test, and a claim where
+  earlier tests held claims of its type and reading, earn their weighted bit times ``repeat_share`` of the support
+  already there. Of the claims of one test with one reading on shared letters only the strongest earns.
 * Differential. A test earns the absolute difference of the moves of ONE pair: the two leading rival slots among those
   listed before the test that the test can measure (the highest score, then the highest score among its rivals).
 * Credit is the sum of these. A test is held once: the same test twice raises. When a later call joins two slots into one, the entry
@@ -158,10 +150,7 @@ COMPETING = ('gene', CODING, 'tRNA', 'rRNA')
 # another competing slot are rivals.
 RNA_UNITS = ('tRNA', 'rRNA')
 RNA_SHARE = 0.5
-# The support already there (in weighted bits) for which a further statement of the same thing earns half of its
-# weighted bit: with 1.0, a statement after one full-strength statement of weight 1 earns a half, after two a quarter.
-# A starting value of 2026-11-25 with no run behind it (the owner: "the exact numbers and constants will have to be
-# decided as we tune").
+# The support already there for which a further statement of the same thing earns half. A starting value, to be tuned.
 REPEAT_HALVING = 1.0
 # The types read in codons.
 IN_CODONS = (CODING, *PROTEIN_PARTS)
