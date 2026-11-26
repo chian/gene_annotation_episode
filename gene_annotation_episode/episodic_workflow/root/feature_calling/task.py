@@ -106,7 +106,7 @@ What a search gives. A search compares the sequence with known sequences and ret
 What you are shown:
 - `held_sequences`: the sequences you can search, with their length and letters.
 - `programs` and `databases`: each program with the letters it takes and the letters it searches, each database with the letters it holds and its type: `faa` the proteins of its genomes, `ffn` their genes as DNA, `fna` the genome sequences themselves. A program must take the letters of the searched sequence and the database must hold what the program searches.
-- `searches`: the searches already sent, each with its state. A search that is still running is continued by commissioning it again with the same program, database and service and `until` `extracted`; it is not sent a second time. A search already extracted is not repeated.
+- `searches`: the searches already sent, each with its state. A search that is still running is continued by commissioning it again with the same program, database and service and `until` `extracted`; it is not sent a second time. A search already extracted would return the same result, so its forecast is zero.
 - `until`: `extracted` follows the search to its graded result. `launched` sends the search and returns at once; the service runs one search of a sequence at a time, so while it runs no other search of that sequence can be sent, and the only thing left to do with it is to continue it.
 - `feature_calls`: the candidate feature calls found so far for each sequence, the highest score first: type, positions, strand, score, and the calls that compete with it for the same letters. `waiting_claims`: the claims that no feature call includes yet: type, strand, positions, which end they claim, and their support. A waiting claim is real evidence that has no feature call to sit in yet.
 - `action_yields`: what each offered action is forecast to earn against its cost in time. You do not set these numbers and you do not end the episode; it ends when nothing left is worth its cost.
@@ -180,8 +180,8 @@ def offered_actions(summary, ctx):
 
 
 def gene_findings_made(summary):
-    """The Prodigal runs this episode holds (``completed``) or saw fail (``failed``), as its check reads them: by
-    (searched sequence, genetic code)."""
+    """The Prodigal runs this episode holds (``completed``) or saw fail (``failed``), by (searched sequence, genetic
+    code)."""
     made = {(row['arguments']['searched_ref'], row['arguments']['code']): 'failed' for row in summary['units']
             if row['kind'] == 'tool' and row['tool'] == PRODIGAL and row['status'] != 'completed'}
     made.update({(row['searched_ref'], row['code']): 'completed' for row in summary['gene_findings']})
@@ -189,15 +189,14 @@ def gene_findings_made(summary):
 
 
 def rna_scans_made(summary):
-    """The sequences cmscan was already run on, held or failed (its check refuses a second scan of one)."""
-    return [*(row['searched_ref'] for row in summary['rna_scans']),
-            *(row['arguments']['searched_ref'] for row in summary['units']
+    """The cmscan runs this episode holds or saw fail, by (searched sequence, database)."""
+    return [*((row['searched_ref'], row['database']) for row in summary['rna_scans']),
+            *((row['arguments']['searched_ref'], row['arguments']['database']) for row in summary['units']
               if row['kind'] == 'tool' and row['tool'] == CMSCAN and row['status'] != 'completed')]
 
 
 def check_prodigal(arguments, summary, resources, ctx):
-    return check_prodigal_request(arguments, sequences=summary['held_sequences'], lengths=summary['sequence_lengths'],
-                                  made=gene_findings_made(summary))
+    return check_prodigal_request(arguments, sequences=summary['held_sequences'], lengths=summary['sequence_lengths'])
 
 
 def check_cmscan(arguments, summary, resources, ctx):
@@ -206,7 +205,7 @@ def check_cmscan(arguments, summary, resources, ctx):
         {'query_ref': arguments['searched_ref'], 'database': arguments['database'],
          'resource_id': arguments['resource_id']},
         sequences=summary['held_sequences'], scope_subjects=list(summary['held_sequences']), resources=resources,
-        scanned=rna_scans_made(summary), databases=ctx.settings['covariance_databases'],
+        scanned=(), databases=ctx.settings['covariance_databases'],
         executable_directory=ctx.settings['infernal_executable_directory'], molecules=CMSCAN_LETTERS)
 
 
@@ -222,13 +221,10 @@ def library_request(commission):
 def check_search(commission, summary, resources):
     """The things to fix in a commission of the search child (``bvbrc_blast_search.check_commission``): the program takes
     the letters of the searched sequence, the database (one of ``DATABASES``) holds what the program searches, the
-    service is a bound BV-BRC service, a search still running is continued and a search already extracted or already
-    sent is not sent again. Any sequence this episode holds may be searched."""
+    service is a bound BV-BRC service and a search still running is continued. Any sequence this episode holds may be searched."""
     return bvbrc.check_commission(
         library_request(commission), programs=PROGRAMS, databases=DATABASES, sequences=summary['held_sequences'],
-        scope_subjects=list(summary['held_sequences']), resources=resources, searches=summary['searches'],
-        commissioned=[(row['arguments']['searched_ref'], row['arguments']['program'], row['arguments']['database'])
-                      for row in summary['units'] if row['kind'] == 'child'])
+        scope_subjects=list(summary['held_sequences']), resources=resources, searches=summary['searches'])
 
 
 def searches_view(searches, now):

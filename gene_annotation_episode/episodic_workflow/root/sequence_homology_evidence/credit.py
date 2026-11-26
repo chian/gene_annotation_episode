@@ -17,17 +17,16 @@ import heapq
 import json
 from pathlib import Path
 
-import math
-
 from method_loop import UNBOUNDED
+
 
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_alignment.native_correspondence import (
     NativeCorrespondenceScoring)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.candidate_measurements import (
-    SITE_WEIGHT, alignment_contexts, candidate_measurements, candidate_standing, candidate_table, dataset_bests,
-    grouping_keys, held_groupings, held_sources, matched_positions_taken, unconfirmed_matched_sites)
+    SITE_WEIGHT, alignment_contexts, candidate_standing, candidate_table, dataset_bests,
+    held_groupings, held_sources, matched_positions_taken, unconfirmed_matched_sites)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.differential_credit import (
-    CLUSTER_PSEUDO_COUNT, SHEET_WEIGHT, cluster_test_bound, cluster_test_ceiling, grouped_credit, metacats_test_ceiling,
+    CLUSTER_PSEUDO_COUNT, SHEET_WEIGHT, cluster_test_bound, cluster_test_ceiling, metacats_test_ceiling,
     msa_test_ceiling, test_ceiling)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence import (
     bvbrc_metacats_search as metacats)
@@ -75,7 +74,8 @@ class A101DifferentialCredit:
                 'candidates': 'product_from_database_search_functions_that_are_no_label_of_ignorance_profile_family_reference_sequence',
                 'test': 'one_graded_source_kind_with_its_program_and_database',
                 'sheet_weights': dict(SHEET_WEIGHT),
-                'score': 'sum_over_subscoring_sheets_of_weight_times_sum_of_mean_value_in_test_of_that_kind',
+                'score': 'sum_over_subscoring_sheets_of_weight_times_sum_of_value_in_test_of_that_kind',
+                'database_search_value': 'top_hit_value_times_run_over_run_plus_one_times_taxa_factor_of_the_run',
                 'admission': 'first_value_above_zero',
                 'entry': 'score_after_the_admitting_test_only',
                 'differential': 'abs_difference_of_the_score_moves_of_the_top_two_candidates_listed_before_the_test_that_it_measures_nothing_for_any_other_pair',
@@ -87,35 +87,17 @@ class A101DifferentialCredit:
                 'repeat': 'earns_nothing'}
 
 
-APPLY_GROUPING = 'apply_grouping'
-
-
 def grouping_in_force(summary, records):
-    """The grouping of the current commission once this episode holds it (``task.apply_grouping`` keeps it), else
-    ``None``: with no grouping in the commission, or before the owed unit has kept it, the table is read as found."""
-    owed = summary['candidate_groups']
-    return owed if owed and owed in held_groupings(records) else None
+    """The latest joining of its candidates this episode made (``annotation_settling.settle_annotations``) when it joins any of them,
+    else ``None``: before the first joining, or when it joined none, the table is read as found."""
+    held = held_groupings(records)
+    return held[-1] if held and held[-1] else None
 
 
 def held_candidate_table(summary, records):
     """The table of candidates of the records this episode holds over the commissioned scope, its credit over the
     groupings it holds and, with a grouping in force, its candidates rescored under it."""
     return candidate_table(records, summary['scope'], held_sources(records), grouping_in_force(summary, records))
-
-
-def grouping_gain(summary, records):
-    """What keeping the grouping of the current commission adds to the credit, exactly: the credit over the held
-    groupings with it less the credit over the held groupings (``differential_credit.grouped_credit``), summed over the
-    targets; 0 when the commission has none or it is held already."""
-    owed, held = summary['candidate_groups'], held_groupings(records)
-    if not owed or owed in held:
-        return 0.0
-    keys = [grouping_keys(grouping) for grouping in held]
-    by_target = {}
-    for row in candidate_measurements(records, summary['scope'], held_sources(records)):
-        by_target.setdefault(row['target'], []).append(row)
-    return math.fsum(grouped_credit(rows, keys + [grouping_keys(owed)]) - grouped_credit(rows, keys)
-                     for rows in by_target.values())
 
 
 def grouping_room(summary, records, action_type):
@@ -133,7 +115,7 @@ def grouping_room(summary, records, action_type):
               'all_vs_all': 'cluster'}.get(action_type)
     if family is not None:
         return SHEET_WEIGHT[family]
-    return max(records.subject_length(target) for target in summary['scope']['subject_refs']
+    return max(records.subject_length(target) for target in summary['targets']
                if target in summary['held_sequences']) * SITE_WEIGHT * SHEET_WEIGHT['msa']
 
 
@@ -189,7 +171,7 @@ def msa_value(state, records, query, search_ref, names, per_candidate):
 
 
 def msa_refused(summary, search_ref, names, per_candidate):
-    """Whether the head's check refuses this commission as a repeat (``task.check_bvbrc_msa``): an alignment product of it is
+    """Whether ``msa_best`` leaves this commission out: an alignment product of it is
     held, or it was commissioned and no outstanding job of it is continued."""
     ordered = sorted(names)
     if any(search_ref in row['used'] and row['settings']['candidates'] == ordered
@@ -233,8 +215,8 @@ def msa_best(summary, records):
 
 
 def metacats_refused(summary, records, alignment_ref):
-    """Whether the head's check refuses a MetaCATS commission of this alignment as a repeat (``task.check_bvbrc_metacats``,
-    ``bvbrc_metacats_search.check_commission``): a report of its groups is held (the reuse check), or it was commissioned and
+    """Whether a MetaCATS commission of this alignment is a repeat:
+    a report of its groups is held (the reuse check), or it was commissioned and
     no outstanding job of it is continued."""
     if metacats.reusable_report(records, alignment_ref) is not None:
         return True
@@ -247,7 +229,7 @@ def metacats_refused(summary, records, alignment_ref):
 
 def metacats_value(summary, records, alignment_ref, standing=None):
     """The proved maximum of one commission of ``bvbrc_metacats`` of the held alignment ``alignment_ref`` (see ``ceiling``): 0 when
-    the check refuses it as a repeat; else ``differential_credit.metacats_test_ceiling`` over the alignment's group candidates,
+    it is a repeat (``metacats_refused``); else ``differential_credit.metacats_test_ceiling`` over the alignment's group candidates,
     each at most (its matched sites in the alignment not yet confirmed) x ``SITE_WEIGHT`` x the msa sheet's weight."""
     if metacats_refused(summary, records, alignment_ref):
         return 0.0
@@ -311,7 +293,7 @@ def all_vs_all_best(summary, records):
     candidates that add nothing (later in the option's order first), when what is left is not commissioned. Ties: the options in
     their order, then the order of discovery."""
     scope, high = summary['scope'], ALL_VS_ALL_PER_CANDIDATE_RANGE[1]
-    options = [item for item in summary['msa_options'] if item['query_ref'] in scope['subject_refs']
+    options = [item for item in summary['msa_options'] if item['query_ref'] in summary['targets']
                and summary['held_sequences'].get(item['query_ref']) == 'protein'
                and len(set(item['candidates'])) >= ALL_VS_ALL_MINIMUM_CANDIDATES]
     if not options:
@@ -377,7 +359,7 @@ def bvbrc_blast_best(summary, records):
     of that query the head's check accepts while it is outstanding; it extracts what the launch started, so its ceiling is
     the search's), or ``None`` when the query has no outstanding search (a new search: its fields are the model's)."""
     standing, limit, best = candidate_standing(records, summary['scope'], held_sources(records)), bvbrc_hit_bound(), None
-    for query in (ref for ref in summary['scope']['subject_refs'] if ref in summary['held_sequences']):
+    for query in (ref for ref in summary['targets'] if ref in summary['held_sequences']):
         searches = [row for row in summary['bvbrc_searches'] if row['query_ref'] == query]
         if not unsearched_databases(summary, query):
             continue
@@ -430,7 +412,7 @@ def outcome_pending(summary, records, position):
 # that action's ceiling (``yield_estimator.py``). Every offered action has one; an action without one raises
 # (``forecast_definition_missing_for_action``). The differential of a test is ONE pair's (the top two of the listed
 # candidates it measures).
-CEILINGS = {'reason': 'a101_ceiling', 'execute_selected_tool': 'a101_ceiling', APPLY_GROUPING: 'a101_ceiling',
+CEILINGS = {'reason': 'a101_ceiling', 'execute_selected_tool': 'a101_ceiling',
             'pairwise_blast': 'a101_ceiling', 'hmmer_profile_scan': 'a101_ceiling',
             'bvbrc_blast': 'a101_ceiling', 'bvbrc_msa': 'a101_ceiling',
             'bvbrc_metacats': 'a101_ceiling', 'all_vs_all': 'a101_ceiling'}
@@ -441,11 +423,9 @@ def ceiling(summary, records, action_type, arguments, ctx):
     proved for the table as found (``found_ceiling``), and, while this episode holds a grouping of its candidates, that
     plus the one differential a grouping can add (``grouping_room``). A clustering is then bounded by its own test
     credit (``cluster_test_bound``), not by the improvement over the dataset's best: under a grouping the dataset's
-    best is another number. Keeping the commission's grouping (``apply_grouping``) has its exact gain as its ceiling
-    (``grouping_gain``). An action that earns nothing as found because its check refuses it as a repeat (ceiling 0)
+    best is another number. An action that earns
+    nothing as found because it is a repeat (ceiling 0)
     earns nothing under a grouping either: no test is run."""
-    if action_type == APPLY_GROUPING:
-        return grouping_gain(summary, records)
     found = found_ceiling(summary, records, action_type, arguments, ctx)
     if found is UNBOUNDED or action_type == 'reason' or not held_groupings(records):
         return found
@@ -515,7 +495,7 @@ def found_ceiling(summary, records, action_type, arguments, ctx):
       candidates; a candidate's value is ``SITE_WEIGHT`` x (its matched conserved sites of that alignment confirmed by the report
       and by no earlier held report), so at most ``SITE_WEIGHT`` x (its matched sites there not yet confirmed:
       ``candidate_measurements.unconfirmed_matched_sites``) x the msa sheet's weight, and the rise is at most the entries of the candidates it can admit plus the largest of those bounds among the listed candidates
-      (one pair). An alignment the head's check refuses (a report of it held: the reuse check; or commissioned and not
+      (one pair). An alignment whose report is held (the reuse check; or commissioned and not
       continued) earns 0. With ``arguments`` ``None``: the largest over the alignments a commission may name now
       (``metacats_best``), and ``best_arguments`` names that commission.
     * ``hmmer_profile_scan``: the scan of the target ``query_ref`` against the profile database ``database`` reports
@@ -525,7 +505,7 @@ def found_ceiling(summary, records, action_type, arguments, ctx):
     * ``execute_selected_tool``: ``UNBOUNDED``: a selected registry tool can import a search report of any size and its
       arguments fix no bound on the candidates it measures.
 
-    An action the head's request checks would refuse as a repeat earns nothing, so its ceiling is 0: a pairwise
+    A repeat of a step whose result is held earns nothing, so its ceiling is 0: a pairwise
     comparison already held (``held_comparisons``), a profile scan of the same query and database already held
     (``held_profile_scans``), a search of the same query, program and database already graded (a closed search of
     ``bvbrc_searches``; with no arguments the ceiling stands while a database holds no graded search of the query; an
@@ -539,7 +519,7 @@ def found_ceiling(summary, records, action_type, arguments, ctx):
         return metacats_value(summary, records, arguments['alignment_ref'])
     scope = summary['scope']
     standing = candidate_standing(records, scope, held_sources(records))
-    sequences = [ref for ref in scope['subject_refs'] if ref in summary['held_sequences']]
+    sequences = [ref for ref in summary['targets'] if ref in summary['held_sequences']]
     queries = sequences if arguments is None else [arguments['query_ref']]
     scanned = {(row['query_ref'], row['database']) for row in summary['held_profile_scans']}
     compared = {(row['query_ref'], row['reference_ref']) for row in summary['held_comparisons']
@@ -576,6 +556,9 @@ def found_ceiling(summary, records, action_type, arguments, ctx):
     if action_type == 'bvbrc_msa':
         if arguments is None:
             return msa_best(summary, records)[0]
+        if any(arguments['search_ref'] in row['used'] and row['settings']['candidates'] == sorted(arguments['candidates'])
+               and row['settings']['per_candidate'] == arguments['per_candidate'] for row in summary['reusable_alignments']):
+            return 0.0
         return msa_value(msa_state(summary, records), records, arguments['query_ref'], arguments['search_ref'],
                          arguments['candidates'], arguments['per_candidate'])
     if action_type == 'hmmer_profile_scan':

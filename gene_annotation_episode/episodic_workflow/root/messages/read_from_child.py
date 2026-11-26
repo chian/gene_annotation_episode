@@ -22,7 +22,8 @@ its feature calls, the claims that wait for one, the genetic code held and its r
 - ``grouped_rows`` and ``grouping_in_force``: for a head that applies the root's grouping of its candidates
   (``GROUPED_ROWS``), its candidates rescored under the grouping it was last given, and that grouping.
 - ``claim_rows``: the score channel of a head that checks claims (``CLAIM_ROWS``). One row per claim its sheet scored:
-  the claim (the hypothesis record the root made from an annotation and commissioned the head on), the ``status`` and
+  the claim (the hypothesis record the root commissioned the head on, made by the head that found the annotation), the
+  ``status`` and
   the ``support`` and ``opposition`` of the head's sheet (absent when the status is unknown, never written as 0).
   ``messages/internal_summary.py`` puts each claim's row on the line of the annotation the claim was made from.
   The score never reads a credit, and the credit never reads a score.
@@ -194,6 +195,24 @@ CLAIM_ROWS = {
 }
 
 
+def sequence_homology_claims(result):
+    """A101. The claims it made from its leading candidate annotations, from the field the root selects (``claims``):
+    each with the annotation it was made from, its predicate, the looked-up name of its molecule and its records."""
+    return result['claims']
+
+
+def no_claims(result):
+    return []
+
+
+# The claims each linked head made itself and returns (the owner, 2026-11-26: "claims are supposed to be made in their
+# respective arms and passed up to root"). The root makes none.
+CLAIMS = {
+    'sequence_homology_evidence': sequence_homology_claims,
+    'experimental_activity_evidence': no_claims,
+}
+
+
 def sequence_homology_outstanding(finding):
     """A101. The job handoffs it holds whose closure it does not hold, as its finding counts them."""
     return finding['outstanding_handoff_count']
@@ -287,6 +306,7 @@ def read_from_child(slot, result, summary, records):
                         if type(value) in (bool, int, float)},
             'annotation_rows': ANNOTATION_ROWS[slot](result),
             'claim_rows': CLAIM_ROWS[slot](result['finding']),
+            'claims': CLAIMS[slot](result),
             **GROUPED_ROWS[slot](result['finding']),
             'record_refs': references(result, (*RECORD_FIELDS[slot], *SHEET_FIELDS[slot])),
             'sheet_state_refs': references(result, SHEET_FIELDS[slot]),

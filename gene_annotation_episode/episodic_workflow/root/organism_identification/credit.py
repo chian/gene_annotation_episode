@@ -63,7 +63,7 @@ def credit(summary, records):
 
 
 def made(summary, tool):
-    """What this episode holds (``completed``) or saw fail (``failed``) of ``tool``, as its request check reads it: by
+    """What this episode holds (``completed``) or saw fail (``failed``) of ``tool``: by
     (query, index) for ``kraken2_classify``, by query for a tool that runs once for a sequence."""
     key = (lambda row: (row['query_ref'], row['index'])) if tool == KRAKEN2_TOOL else (lambda row: row['query_ref'])
     done = {key(row['request']): 'failed' for row in summary['units'] if row['tool'] == tool and row['status'] != 'completed'}
@@ -115,7 +115,7 @@ def ceiling(summary, records, action_type, arguments, ctx):
     Every action is one new test of one sheet on one sequence. The bits of one test sum to at most 1, so its entries are at
     most the sheet's weight and its one differential at most the weight, the differential only with two listed rivals the
     tool's database can measure (the proof is in ``taxon_candidates.test_ceiling``). A run already held or already failed
-    is refused by the request check and earns nothing: 0. With no arguments: the largest over the runs not yet made, 0 when
+    earns nothing: 0. With no arguments: the largest over the runs not yet made, 0 when
     none is left."""
     if action_type not in CEILINGS:
         raise ValueError('organism_identification_ceiling_of_unknown_action:' + str(action_type))

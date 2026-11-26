@@ -76,20 +76,17 @@ def scan_settings(manifest):
             'cutoff': OPTIONS[0]}
 
 
-def check_profile_scan_request(request, *, sequences, scope_subjects, resources, made):
+def check_profile_scan_request(request, *, sequences, scope_subjects, resources):
     """The things to fix in a profile scan request, before anything runs; an empty list means it can run.
 
     ``request`` holds ``query_ref`` (a key of ``sequences``), ``database`` (a configured profile database) and
     ``resource_id`` (a key of ``resources``); the caller's schema has already bound each to those sets.
     ``sequences`` is ``{record: molecule}`` of the sequence records the episode holds, ``scope_subjects`` the
-    subjects of its scope, ``resources`` ``{resource id: kind}`` and ``made`` ``{(query, database): 'completed' |
-    'failed'}`` of the scans the episode already holds or already saw fail. The conditions:
+    subjects of its scope and ``resources`` ``{resource id: kind}``. The conditions:
 
     1. the query is a subject of the episode's scope;
     2. the query is a protein (the profiles are protein families);
-    3. the resource is a local resource;
-    4. the same scan (query, database) is not already held;
-    5. the same scan has not already failed."""
+    3. the resource is a local resource."""
     query = request['query_ref']
     problems = []
     if query not in scope_subjects:
@@ -102,10 +99,6 @@ def check_profile_scan_request(request, *, sequences, scope_subjects, resources,
     if resources[request['resource_id']] != 'local':
         problems.append({'field': 'resource_id', 'code': 'resource_is_not_local',
                          'choose_from': [name for name, kind in resources.items() if kind == 'local']})
-    if (query, request['database']) in made:
-        problems.append({'field': 'database', 'code': {
-            'completed': 'scan_already_held', 'failed': 'scan_already_failed_and_cannot_be_retried'}[
-                made[query, request['database']]]})
     return problems
 
 

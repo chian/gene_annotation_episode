@@ -41,9 +41,10 @@ records of its latest return) and ``outstanding_jobs`` (how many jobs its head l
 The axis credit is made from what the head's returned credit measures (``read_from_child.CREDIT_RETURNED``): a
 ``standing`` return is the axis credit itself; a ``rise`` return is added to the axis credit before it.
 
-Claims. ``claims`` lists the claims the tool ``make_claims`` made, each with the annotation it was made from (the tool
-was called for that annotation: nothing attaches a claim to an annotation afterwards), what it says (predicate and the
-looked-up name of its molecule) and its records; ``claims_made`` holds the annotations the tool was called for.
+Claims. ``claims`` lists the claims the heads made and returned (the root makes none; the owner, 2026-11-26: "claims
+are supposed to be made in their respective arms and passed up to root"), each with the annotation it was made from,
+what it says (predicate and the looked-up name of its molecule) and its records. A claim is on the line of the sheet
+that holds the annotation it was made from (``on_line``): attaching is done here, by code, where everything is together.
 ``units`` says of every unit, in order, whether its outcome is pending (``credit.outcome_pending``).
 
 The root's scoring sheet has two levels (the owner, 2026-11-25: "features need to be scored and those features get
@@ -60,6 +61,10 @@ part B of the root link, which waits on a decision of the owner. Until then an a
 and the organism give it, as below.
 
 The annotation lines: one line per function, with one row per axis that scored it.
+
+Among the candidates of one head, that head says which names are one function (its own joining, returned as
+``grouping_in_force``; the owner, 2026-11-26: "join this automatically and not use the root to decide"), and a line
+follows it (``one_line``). Between two heads:
 
 Which names are one function is decided here, where all the evidence is (the owner, 2026-11-23: an annotation is a
 function; "leave a101 names alone until root"). Two heads, and one head, name one function in several ways: scoring it
@@ -113,16 +118,16 @@ credit and the credit reads no score.
 The organism multiplies an annotation's score (the owner, 2026-11-25: "the organism taxa score (which hopefully
 relates to the certainty of that call) should play a role in the annotation score b/c it is part of the annotation
 ultimately"). An annotation is reported with the organism of the sequence: the leading candidate taxon of the root's
-scoring sheet of candidate taxa (``leading_taxon``). Its score ``s_o`` gives the factor ``(1 + K * s_o) ** w_o``, with its
+scoring sheet of candidate taxa (``leading_taxon``). Its score ``s_o`` gives the factor ``((1 + K * s_o) ** w_o - 1)``, with its
 own weight ``w_o`` (``ORGANISM_WEIGHT``), and the score of an annotation is (``annotation_score``)
 
-    (prod_i (1 + K * s_i) ** w_i  -  1)  *  (1 + K * s_o) ** w_o
+    (prod_i (1 + K * s_i) ** w_i  -  1)  *  ((1 + K * s_o) ** w_o - 1)
 
 The factor is a pure multiple of what the axes give, not one more offset factor inside their product (the owner,
 2026-11-25: "make it depend on a pure multiple and not a discounted multiple", for the organism only): the axes merge
 among themselves with the offset product as before, and the organism scales their result. So an annotation the axes
 give exactly zero stays at zero: the organism alone earns an annotation nothing. With no candidate taxon held (the
-head was not commissioned, or found none) ``s_o = 0``, the factor is 1 and the score is what the axes give. A line with
+head was not commissioned, or found none) ``s_o = 0`` and the score is zero. A line with
 a score shows what entered it: ``organism_taxon_id`` and ``organism_score``, absent when no candidate taxon is held.
 The organism head is no evidence axis: its weight is not among ``credit.AXIS_WEIGHTS`` and its factor is in the score
 only, never in the root's credit.
@@ -137,16 +142,12 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.taxonomic
 from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_features.blast_claim_keeping import (
     TAXON_PROVIDER)
 
-from ..credit import AXIS_WEIGHTS, axis_gain, hypervolume
+from ..credit import AXIS_WEIGHTS, ORGANISM_WEIGHT, axis_gain, hypervolume
 from .read_from_child import CREDIT_RETURNED, DECIDING_SOURCES, FEATURE_FINDER, ORGANISM_FINDER
 
 ROW_FIELDS = ('status', 'score', 'support', 'opposition')
 # net -> the score of an axis that checks claims: tanh(net / CLAIM_SCALAR_DIVISOR), the divisor that head's sheet uses.
 CLAIM_SCALAR_DIVISOR = 2.0
-# w_o: the root's weight of the organism's factor (1 + K * s_o) ** w_o in an annotation's score. 1, like the axes. A
-# setting of the score only: the organism identification head is no evidence axis and this weight is not part of the
-# root's credit.
-ORGANISM_WEIGHT = 1.0
 
 
 IDENTITY_FIELDS = ('vocabulary', 'name', 'identifier', 'function_identifiers', 'identifier_sources',
@@ -203,10 +204,9 @@ def claim_axis_row(rows):
 
 
 def on_line(annotation, line):
-    """Whether ``annotation`` (the annotation a claim was made from) is on ``line``: it is one function with a member, or
-    it is that member."""
-    return any(same_function(annotation, member) or annotation_key(annotation) == annotation_key(member)
-               for _, member in line)
+    """Whether ``annotation`` (the annotation a claim was made from, named as its head returned it) is a member of
+    ``line``."""
+    return any(member_identity(annotation) == member_identity(member) for _, member in line)
 
 
 def member_identity(row):
@@ -224,14 +224,26 @@ def groups_of(slot, lines):
                                                    key=lambda group: (group[0]['vocabulary'], group[0]['name']))]
 
 
+def one_line(slot, row, member_slot, member, axes):
+    """Whether two annotations belong on one line. Two of one head: that head joined them (its joining in force) or they
+    are the same annotation; the root decides nothing among one head's own candidates (the owner, 2026-11-26: "join
+    this automatically and not use the root to decide"). Two of different heads: ``same_function``."""
+    if slot != member_slot:
+        return same_function(row, member)
+    pair = (member_identity(row), member_identity(member))
+    return pair[0] == pair[1] or any(all(identity in group['members'] for identity in pair)
+                                     for group in axes[slot]['grouping_in_force'])
+
+
 def function_lines(axes):
     """The annotations the axes named, grouped into lines (rule 4 of the module text): each line a list of
-    ``(slot, row)``, the annotation with the highest score first. An annotation joins the first line every member of
-    which it is one function with (or is the same annotation as)."""
+    ``(slot, row)``, the annotation with the highest score first. An annotation joins the first line with every member
+    of which it belongs on one line (``one_line``)."""
     named = [(slot, row) for slot, axis in axes.items() for row in axis['annotation_rows']]
     lines = []
     for slot, row in sorted(named, key=lambda item: -item[1]['score']):
-        line = next((line for line in lines if all(same_function(row, member) for _, member in line)), None)
+        line = next((line for line in lines
+                     if all(one_line(slot, row, member_slot, member, axes) for member_slot, member in line)), None)
         if line is None:
             lines.append([(slot, row)])
         else:
@@ -307,13 +319,13 @@ def organism_entry(organism):
 
 
 def annotation_score(axis_scores, organism_score):
-    """``(prod_i (1 + K * s_i) ** w_i - 1) * (1 + K * s_o) ** w_o``: the score of one candidate annotation, from the
+    """``(prod_i (1 + K * s_i) ** w_i - 1) * ((1 + K * s_o) ** w_o - 1)``: the score of one candidate annotation, from the
     scores ``{slot: s_i}`` the nine axes give it (their own merge, ``credit.hypervolume``) and the score ``s_o`` of
     the leading candidate taxon of the sequence, with the weight ``ORGANISM_WEIGHT``. The organism's factor is a pure
-    multiple of the axes' score: zero from the axes stays zero, and ``s_o = 0`` leaves the axes' score as it is."""
+    multiple of the axes' score: zero from the axes stays zero, and with no organism (``s_o = 0``) the score is zero."""
     over_axes = hypervolume(axis_scores)
     gain = axis_gain(organism_score, ORGANISM_WEIGHT)
-    return over_axes + over_axes * gain          # over_axes * (1 + gain)
+    return over_axes * gain
 
 
 def scoring_sheet(axes, claims, organism):
@@ -396,10 +408,10 @@ def passed_down(organism):
 def internal_summary(view):
     axes = {slot: {'credit': 0.0, 'credit_after_each_return': [], 'finding': {}, 'record_refs': [],
                    'outstanding_job_refs': [], 'outstanding_jobs': 0, 'annotation_rows': [], 'grouped_rows': [],
-                   'grouping_in_force': [], 'groups_sent': None, 'claim_rows': {}, 'claim_sheets': {},
+                   'grouping_in_force': [], 'groups_sent': None, 'claims': [], 'claim_rows': {}, 'claim_sheets': {},
                    'claim_commissions': {}}
             for slot in AXIS_WEIGHTS}
-    claims, claims_made, commissions, units = [], [], [], []
+    commissions, units = [], []
     organism = {'commissions': 0, 'credit': 0.0, 'record_refs': []}
     features = {'credit': 0.0, 'credit_after_each_return': [], 'targets': [], 'held_readings': [], 'record_refs': [],
                 'outstanding_jobs': 0}
@@ -418,11 +430,6 @@ def internal_summary(view):
             features['record_refs'].extend(ref for ref in report['record_refs'] if ref not in features['record_refs'])
             features['outstanding_jobs'] = report['outstanding_jobs']
             continue
-        if outcome['kind'] == 'tool':
-            annotation = outcome['arguments']['annotation']
-            claims_made.append(annotation_key(annotation))
-            claims.extend({**claim, 'annotation': annotation} for claim in outcome['outcome']['result']['claims'])
-            continue
         slot, report = outcome['slot'], outcome['report']
         axis = axes[slot]
         commissions.append(slot)
@@ -433,6 +440,7 @@ def internal_summary(view):
             axis['annotation_rows'] = report['annotation_rows']
         axis['grouped_rows'], axis['grouping_in_force'] = report['grouped_rows'], report['grouping_in_force']
         axis['groups_sent'] = outcome['arguments'].get('candidate_groups', [])
+        axis['claims'] = report['claims']
         axis['claim_rows'].update({row['claim_ref']: row for row in report['claim_rows']})
         if 'claim_ref' in outcome['arguments']:
             claim_ref = outcome['arguments']['claim_ref']
@@ -442,9 +450,10 @@ def internal_summary(view):
         axis['outstanding_job_refs'] = report['outstanding_job_refs']
         axis['outstanding_jobs'] = report['outstanding_jobs']
     lines = function_lines(axes)
+    claims = [claim for axis in axes.values() for claim in axis['claims']]
     organism.update(organism_table(view.records, view.parent_input['scope'],
                                    taxon_sources(view.records, organism['record_refs'], features['record_refs'])))
-    return {**view.parent_input, 'axes': axes, 'claims': claims, 'claims_made': claims_made,
+    return {**view.parent_input, 'axes': axes, 'claims': claims,
             'features': features, 'feature_calls': feature_lines(features),
             'annotations': scoring_sheet(axes, claims, organism), 'groups': {slot: groups_of(slot, lines) for slot in axes},
             'commissions': commissions, 'units': units,

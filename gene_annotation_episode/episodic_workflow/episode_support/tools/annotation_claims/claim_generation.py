@@ -32,7 +32,8 @@ What is written, through the scoped store handed in: the sources of the lookups;
 the annotation, so that a head searches under that name and compares what it finds with the subject's sequence; its
 accession is the subject's record reference); one ``reference`` record per admitted molecule; one ``hypothesis`` record
 per claim; and one ``source`` record whose artifact holds everything the
-workflow read and what the model answered (the trace). Returned: the claims only.
+workflow read, what the model answered, the subject and the claims written (the trace: an episode that holds it knows
+which annotations it made claims for and what they are). Returned: the claims only.
 
 A lookup that fails raises (a failed lookup is not an absent molecule). A protein subject is required."""
 import json
@@ -250,7 +251,7 @@ async def generate_claims(store, model, operation_key, *, annotation, rivals, su
     if admitted:
         under = store.put('reference', {
             'reference_type': 'protein', 'source_ref': source['id'], 'accession': subject_ref, 'label': label,
-            'sequence_ref': subject['sequence_ref'], 'molecule': 'protein', 'length': subject['length'],
+            'sequence_ref': subject['sequence_ref'], 'molecule': 'protein', 'length': store.subject_length(subject_ref),
             'term_refs': [], 'context_refs': []}, origin='tool')
         written.append(under['id'])
         for proposed, partner in admitted:
@@ -262,7 +263,8 @@ async def generate_claims(store, model, operation_key, *, annotation, rivals, su
                            'partner_kind': proposed['partner_kind'],
                            'record_refs': [under['id'], partner['id'], claim['id']]})
     trace = store.artifact(canonical({'annotation': annotation, 'rival_annotations': rivals, 'database': found,
-                                      'answer': answer, 'subject_name': label, 'not_found': not_found}),
+                                      'answer': answer, 'subject_name': label, 'not_found': not_found,
+                                      'subject_ref': subject_ref, 'claims': claims}),
                            'application/json')
     written.append(store.put('source', {'provider': TRACE_PROVIDER, 'accession': None, 'uri': None,
                                         'artifact_ref': trace, 'text_ref': None, 'request_ref': None, 'version': None,

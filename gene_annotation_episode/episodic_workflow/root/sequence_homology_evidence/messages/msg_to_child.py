@@ -79,10 +79,20 @@ def _bvbrc_blast(arguments, summary):
     status records and the closure record, with whether a status already shows it ended: nothing is submitted again."""
     query = arguments['query_ref']
     units = summary['child_credit_units']
-    assignment = {'query_refs': [query], 'input_refs': [ref for ref in _custody([query], summary) if ref != query],
+    # the child settles the annotations after it grades its search, from every graded source held: it is passed the
+    # scope's records and every source and feature record this episode holds, with the records they name
+    settled = [*summary['scope_refs'],
+               *(ref for ref in summary['held_record_refs'] if ref.split('_')[0] in ('source', 'feature'))]
+    assignment = {'query_refs': [query],
+                  'input_refs': [ref for ref in _custody([query, *settled], summary)
+                                 if ref != query and not ref.startswith('row_')],
             'program': arguments['program'], 'database': arguments['database'], 'resource_id': arguments['resource_id'],
             'until': arguments['until'], 'handoff_unit': units['handoff_unit'],
-            'information_unit': units['information_unit'], 'graded_unit': units['acquired_record_unit']}
+            'information_unit': units['information_unit'], 'graded_unit': units['acquired_record_unit'],
+            'scope': summary['scope']}
+    organisms = [row for row in summary['organism_candidates'] if row['role'] == 'leader']
+    if organisms:
+        assignment['organism'] = organisms[0]
     held = [search for search in summary['bvbrc_searches'] if search['query_ref'] == query and search['outstanding']]
     if held:
         (search,) = held

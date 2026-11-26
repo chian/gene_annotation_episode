@@ -88,19 +88,15 @@ def prodigal_mode(length):
     return 'single' if length >= MIN_TRAINING_LETTERS else 'meta'
 
 
-def check_prodigal_request(request, *, sequences, lengths, made):
+def check_prodigal_request(request, *, sequences, lengths):
     """The things to fix in a gene finding request, before anything runs; an empty list means it can run.
 
     ``request`` holds ``searched_ref`` (a key of ``sequences``) and ``code`` (a genetic code); the caller's schema has
     already bound each to its set. ``sequences`` is ``{record: its letters}`` (``dna``, ``rna``, ``protein``, ...) of the
-    sequences the episode holds, ``lengths`` ``{record: its length}`` of the same sequences, and ``made``
-    ``{(searched_ref, code): 'completed' | 'failed'}`` of the runs the episode already holds or already saw fail. The
-    conditions:
+    sequences the episode holds and ``lengths`` ``{record: its length}`` of the same sequences. The conditions:
 
     1. the searched sequence is of DNA letters (the finder reads no other);
-    2. the code is one the mode the sequence's length gives can use (``prodigal_mode``, ``MODE_CODES``);
-    3. the same run (searched sequence, code) is not already held;
-    4. the same run has not already failed."""
+    2. the code is one the mode the sequence's length gives can use (``prodigal_mode``, ``MODE_CODES``)."""
     searched, code = request['searched_ref'], request['code']
     problems = []
     if sequences[searched] not in SEARCHED_MOLECULES:
@@ -111,10 +107,6 @@ def check_prodigal_request(request, *, sequences, lengths, made):
     if code not in MODE_CODES[mode]:
         problems.append({'field': 'code', 'code': 'genetic_code_not_taken_in_the_mode_of_this_length', 'mode': mode,
                          'choose_from': MODE_CODES[mode]})
-    if (searched, code) in made:
-        problems.append({'field': 'code', 'code': {
-            'completed': 'gene_finding_already_held',
-            'failed': 'gene_finding_already_failed_and_cannot_be_retried'}[made[searched, code]]})
     return problems
 
 

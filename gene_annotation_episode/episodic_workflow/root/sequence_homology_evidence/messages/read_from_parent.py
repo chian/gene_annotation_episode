@@ -1,6 +1,6 @@
 """What the commissioner gives: the selection, the scope and its records in custody, the records already known, the
 constraints, the context and the credit units of the children this episode commissions; and, when the commissioner has
-them, its grouping of this episode's candidates and the candidate organisms of the subject.
+them, the candidate organisms of the subject.
 
 There is no proposed annotation: this head is commissioned on a subject and finds its candidate annotations (the owner,
 2026-11-25: the pipeline starts "with no proposed annotations period"). This is the only place the assignment is read.
@@ -10,9 +10,6 @@ units are the four positive ones. Custody holds every record named in a record_r
 import re
 
 from method_loop import ChoiceField, Field, RecordForm
-
-from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.candidate_measurements import (
-    VOCABULARIES)
 
 from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_homology_evidence.construction_records import (
     validate_revision_origin, validate_selection)
@@ -28,11 +25,6 @@ _EVIDENCE_TASK = obj({'version': {'const': 'evidence_axis_task'}, 'kind': {'cons
                                                                                          'credit_unit'])
 _UNITS = ('handoff_unit', 'acquired_record_unit', 'information_unit', 'completion_target')
 
-MEMBER_FORM = RecordForm({
-    'vocabulary': ChoiceField('text', 'The vocabulary of the candidate', VOCABULARIES),
-    'name': Field('text', 'Its name exactly as this episode returned it'),
-    'identifier': Field('text', 'Its own identifier, when it has one', required=False),
-})
 ORGANISM_ROLES = ('leader', 'on_the_leaders_lineage', 'rival')
 ORGANISM_FORM = RecordForm({
     'taxon_id': Field('integer', 'The candidate taxon (NCBI taxonomy id)'),
@@ -41,9 +33,6 @@ ORGANISM_FORM = RecordForm({
     'score': Field('number', 'The candidate\'s score: the support on its own lineage'),
     'role': ChoiceField('text', 'The leading candidate, a vaguer candidate on its lineage, or its leading rival',
                         ORGANISM_ROLES),
-})
-GROUP_FORM = RecordForm({
-    'members': Field('list', 'The candidates of the group', items=MEMBER_FORM),
 })
 ASSIGNMENT_FORM = RecordForm({
     'selection': Field('record', 'The selected evidence axis (A101), thought pattern and the child tool info '
@@ -59,10 +48,6 @@ ASSIGNMENT_FORM = RecordForm({
     'scope_refs': Field('record_refs', 'The records the scope names (new field)'),
     'child_credit_units': Field('record', 'The credit units of the children this episode commissions, by unit '
                                           'name (new field)'),
-    'candidate_groups': Field('list', "The commissioner's grouping of this episode's own candidates: each group the "
-                                      'candidates that are one function, each member named exactly as this episode '
-                                      'returned it; a candidate in no group stands alone', items=GROUP_FORM,
-                              required=False),
     'organism_candidates': Field('list', 'The candidate organisms of the DNA the subject is from, as the organism '
                                          'identification head found them and the commissioner chose to pass them: the '
                                          'leading candidate, the vaguer candidates on its lineage and its leading rival, '
@@ -95,7 +80,6 @@ def read_from_parent(assignment, message):
                     'evidence_refs': list(assignment['evidence_refs']), 'constraints': assignment['constraints'],
                     'context': context, 'scope': assignment['scope'], 'scope_refs': list(assignment['scope_refs']),
                     'child_credit_units': dict(units), 'yield_task': yield_task, 'message': dict(message),
-                    'candidate_groups': list(assignment.get('candidate_groups', [])),
                     'organism_candidates': list(assignment.get('organism_candidates', []))}
     if 'revision_origin' in assignment:
         parent_input['revision_origin'] = validate_revision_origin(assignment['revision_origin'])

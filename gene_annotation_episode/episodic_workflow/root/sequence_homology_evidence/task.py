@@ -31,9 +31,9 @@ from jsonschema import Draft202012Validator, ValidationError
 
 from episode_runtime import ChildCall, CustodyError, ModelRequest, Rejected, ToolCall
 
-from gene_annotation_episode.domain import ContractError, canonical, identity
-from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.candidate_measurements import (
-    GROUPING_PROVIDER)
+from gene_annotation_episode.domain import ContractError
+from gene_annotation_episode.episodic_workflow.episode_support.tools.annotation_claims.annotation_settling import (
+    settle_annotations)
 from gene_annotation_episode.episodic_workflow.episode_support.configuration.sequence_homology_evidence.process_options import (
     SequenceHomologyEvidenceLibrary, evidence_axis_instruction_view)
 from gene_annotation_episode.episodic_workflow.episode_support.instructions.instruction_spans import replace_span
@@ -71,7 +71,6 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
 from gene_annotation_episode.episodic_workflow.episode_support.tools.tool_catalog import ScientificToolLibrary
 from gene_annotation_episode.episodic_workflow.episode_support.tools.unit_outcomes import failure_outcome
 
-from .credit import APPLY_GROUPING
 from .goal import GOAL
 
 HEAD = 'sequence_homology_evidence'
@@ -150,10 +149,9 @@ DESCRIPTIONS = {
                    'that passed its own threshold: its reference record, its accession and name in the profile '
                    'database, and for each matched domain the interval of your sequence, the bit score, the '
                    'independent E-value, the fraction of the profile that is paired and the match strength. A scan '
-                   'that matched no family is completed with no family. A scan you already hold is not run again. '
+                   'that matched no family is completed with no family. A scan you already hold would return the same result, so its forecast is zero. '
                    'The grading is automatic: each matched family is a candidate (vocabulary profile_family; its '
-                   'accession and name are the profile database\'s) and is counted as soon as the unit completes. ' + CREDIT_TEXT + ' A failed outcome is a fault of the environment and the same request '
-                   'is not made again.'),
+                   'accession and name are the profile database\'s) and is counted as soon as the unit completes. ' + CREDIT_TEXT + ' A failed outcome is a fault of the environment.'),
     'reason': REASONING_COMMIT_REQUIREMENT,
     PAIRWISE_TOOL: ('Compare one query sequence with one reference sequence by a pairwise BLAST on a local resource. Fill '
                     'out the four fields of its request: query_ref (a sequence of your scope), reference_ref (another '
@@ -168,11 +166,10 @@ DESCRIPTIONS = {
                     'completed outcome shows the controlled features of the saved pairwise sheet (counts and '
                     'fractions of paired and identical residues, the two lengths, the native E-value with the '
                     'search-space context the report gives) and observation_refs: one alignment observation per '
-                    'reported alignment, which you now hold. A comparison you already hold is not run again. The '
+                    'reported alignment, which you now hold. A comparison you already hold would return the same result, so its forecast is zero. The '
                     'grading is automatic: the reference sequence is a candidate (vocabulary reference_sequence) and is '
                     'counted as soon as the unit completes; no reasoning commit is needed for it and none changes it. ' + CREDIT_TEXT + ' A failed outcome is a fault of '
-                    'the environment, not of your request: it is reported once and the same request is not made '
-                    'again.'),
+                    'the environment, not of your request.'),
 }
 # What every BV-BRC child's description says of a parked job (the system's rule, ``resume_action``).
 PARKED_TEXT = ('A parked job is always finished: this episode does not end while one is parked; once its expected '
@@ -210,8 +207,8 @@ CHILD_DESCRIPTIONS = {
         'search is parked (parked true) the report is a wait notice: seconds_since_launch, estimated_seconds and '
         'expected_remaining_seconds (the estimate minus the seconds since the launch, not below zero, or the later '
         'revised figure of a status request), and bvbrc_searches keeps showing the search with the seconds since its launch '
-        'and the seconds still expected as of each decision. A search that failed or is already held extracted is not '
-        'commissioned again.'),
+        'and the seconds still expected as of each decision. A search already held extracted would return the same '
+        'result, so its forecast is zero.'),
     'bvbrc_msa': (
         'Align the target (a protein sequence of your scope) with sequences of several candidates of a graded BV-BRC '
         'database search you hold, through the BV-BRC application service (the MSA application, Muscle, protein, run on the '
@@ -240,8 +237,8 @@ CHILD_DESCRIPTIONS = {
         'alignment, the seconds estimated and observed, the last failure code and the credit; when parked (parked true) a '
         'wait notice: seconds_since_launch, estimated_seconds and expected_remaining_seconds. The alignment is also kept as '
         'a labelled data product (data_products shows it with where it also lies in the BV-BRC workspace) that a later '
-        'child that needs an alignment is passed. An alignment already held is not commissioned again; a job that failed is '
-        'not commissioned again.'),
+        'child that needs an alignment is passed. An alignment already held would return the same result, so its '
+        'forecast is zero.'),
     'all_vs_all': (
         'Put the target (a protein sequence of your scope) and the sequences of several candidates of a graded BV-BRC database search '
         'you hold in one set, search the set against itself with BLAST+ on a local resource (every sequence against all) and cluster '
@@ -287,8 +284,8 @@ CHILD_DESCRIPTIONS = {
         'launched, finished, extracted or failed), the groups, sequences, columns and significant positions, the seconds '
         'estimated and observed, the last failure code and the credit; when parked (parked true) a wait notice: '
         'seconds_since_launch, estimated_seconds and expected_remaining_seconds. The result is also kept as a labelled data '
-        'product (an alignment position report). A report of the same groups already held is not commissioned '
-        'again; a job that failed is not commissioned again.'),
+        'product (an alignment position report). A report of the same groups already held would return the same '
+        'result, so its forecast is zero.'),
 }
 
 
@@ -369,32 +366,11 @@ def profile_scan_options(summary, resources, databases):
                                    'resource_id': {'enum': list(resources)}})})]
 
 
-def scans_made(summary):
-    """The profile scans this episode holds (``completed``) or saw fail (``failed``), by query and database: what
-    ``check_profile_scan_request`` refuses to run again."""
-    made = {(row['scan']['query_ref'], row['scan']['database']): 'failed'
-            for row in summary['units'] if row['kind'] == 'tool' and row['tool'] == PROFILE_TOOL
-            and row['status'] != 'completed'}
-    made.update({(row['query_ref'], row['database']): 'completed' for row in summary['held_profile_scans']})
-    return made
-
-
-def comparisons_made(summary):
-    """The comparisons this episode holds (``completed``) or saw fail (``failed``), by query, reference and
-    program: what ``check_pairwise_request`` refuses to run again."""
-    made = {(row['comparison']['query_ref'], row['comparison']['reference_ref'], row['comparison']['program']): 'failed'
-            for row in summary['units'] if row['kind'] == 'tool' and row['tool'] == PAIRWISE_TOOL
-            and row['status'] != 'completed'}
-    made.update({(row['query_ref'], row['reference_ref'], row['program']): 'completed'
-                 for row in summary['held_comparisons']})
-    return made
-
-
 def bvbrc_blast_fields(summary, resources):
     """The commission of ``bvbrc_blast``: the query among the scope's held sequences, the program, the precomputed BV-BRC
     database and the BV-BRC resource, each from a fixed set. Not offered while the scope holds no sequence or no BV-BRC
     resource is bound."""
-    queries = [ref for ref in summary['scope']['subject_refs'] if ref in summary['held_sequences']]
+    queries = [ref for ref in summary['targets'] if ref in summary['held_sequences']]
     services = [name for name, kind in resources.items() if kind == bvbrc.ROUTE_KIND]
     if not queries or not services:
         return None
@@ -428,15 +404,8 @@ def bvbrc_msa_fields(summary, resources):
 def check_bvbrc_msa(commission, summary, resources):
     """The things to fix in a commission of ``bvbrc_msa`` (``bvbrc_msa_alignment.check_commission``)."""
     return msa.check_commission(
-        commission, scope_subjects=summary['scope']['subject_refs'], sequences=summary['held_sequences'],
-        options=summary['msa_options'], resources=resources, jobs=summary['bvbrc_msa_jobs'],
-        commissioned=[(row['arguments']['search_ref'], sorted(row['arguments']['candidates']),
-                       row['arguments']['per_candidate']) for row in summary['units']
-                      if row['kind'] == 'child' and row['slot'] == 'bvbrc_msa'],
-        reusable=next((row for row in summary['reusable_alignments']
-                       if commission['search_ref'] in row['used'] and row['settings']['candidates'] == sorted(
-                           commission['candidates']) and row['settings']['per_candidate'] == commission['per_candidate']),
-                      None))
+        commission, scope_subjects=summary['targets'], sequences=summary['held_sequences'],
+        options=summary['msa_options'], resources=resources, jobs=summary['bvbrc_msa_jobs'])
 
 
 def all_vs_all_fields(summary, resources):
@@ -461,7 +430,7 @@ def all_vs_all_fields(summary, resources):
 def check_all_vs_all(commission, summary):
     """The things to fix in a commission of ``all_vs_all`` (``all_vs_all_run.check_commission``)."""
     return all_vs_all.check_commission(
-        commission, scope_subjects=summary['scope']['subject_refs'], sequences=summary['held_sequences'],
+        commission, scope_subjects=summary['targets'], sequences=summary['held_sequences'],
         options=summary['msa_options'], commissioned=all_vs_all.commission_keys(summary))
 
 
@@ -485,9 +454,7 @@ def check_bvbrc_metacats(commission, summary, resources, records):
     that the alignment is a held data product of its kind comes first)."""
     return metacats.check_commission(
         commission, reader=records, options=summary['metacats_options'], resources=resources,
-        jobs=summary['bvbrc_metacats_jobs'],
-        commissioned=[row['arguments']['alignment_ref'] for row in summary['units']
-                      if row['kind'] == 'child' and row['slot'] == 'bvbrc_metacats'])
+        jobs=summary['bvbrc_metacats_jobs'])
 
 
 def bvbrc_searches_view(searches, now, msa=False):
@@ -513,9 +480,7 @@ def check_bvbrc_blast(commission, summary, resources):
     """The things to fix in a commission of ``bvbrc_blast`` (``bvbrc_blast_search.check_commission``)."""
     return bvbrc.check_commission(
         commission, programs=COMMISSION_PROGRAMS, sequences=summary['held_sequences'],
-        scope_subjects=summary['scope']['subject_refs'], resources=resources, searches=summary['bvbrc_searches'],
-        commissioned=[(row['arguments']['query_ref'], row['arguments']['program'], row['arguments']['database'])
-                      for row in summary['units'] if row['kind'] == 'child' and row['slot'] == 'bvbrc_blast'])
+        scope_subjects=summary['targets'], resources=resources, searches=summary['bvbrc_searches'])
 
 
 def commission_fields(slot, summary, resources):
@@ -574,7 +539,7 @@ def offered_actions(summary, ctx):
         names.append(PAIRWISE_TOOL)
     if profile_scan_options(summary, resources, ctx.settings.get('profile_databases', {})):
         names.append(PROFILE_TOOL)
-    return names + offered_children(summary, resources) + ([APPLY_GROUPING] if summary['grouping_owed'] else [])
+    return names + offered_children(summary, resources)
 
 
 def parked_jobs(summary):
@@ -605,26 +570,6 @@ def resume_commission(slot, job, summary):
             'until': 'extracted'}
 
 
-def apply_grouping(arguments, ctx):
-    """Keep the grouping of this episode's candidates the commission carries (the design
-    ``docs/plan/designs/a102_regrouping.md``: only the root decides which candidates are one function; the head applies
-    its grouping in code, with no model decision). The grouping is kept as a record of this episode (a ``source``
-    record whose artifact is the grouping): nothing held is rewritten, the candidate table is read under the grouping
-    from then on (``credit.held_candidate_table``), and the credit reads every grouping kept
-    (``differential_credit.grouped_credit``). The record goes back to the commissioner with the committed records and
-    returns at the next commission, so a grouping given twice is known."""
-    grouping = arguments['candidate_groups']
-    artifact = ctx.store.artifact(canonical(grouping), 'application/json')
-    source = ctx.store.put('source', {'provider': GROUPING_PROVIDER, 'accession': None, 'uri': None,
-                                      'artifact_ref': artifact, 'text_ref': None, 'request_ref': None,
-                                      'version': None, 'retrieved_at': None}, origin='tool')
-    return {'status': 'completed',
-            'operation_ref': identity('operation', {'key': ctx.operation_key, 'name': APPLY_GROUPING,
-                                                    'arguments': grouping}),
-            'record_refs': [source['id']], 'changed_record_refs': [], 'result': {'groups': len(grouping)},
-            'feedback': None}
-
-
 def resume_action(summary, records, ctx):
     """The resume this episode owes (``method_loop.episode_type``, step 3; the owner, 2026-11-21: "the head must finish
     parked jobs"): ``None`` while no child's BV-BRC job is parked, else the resume of one parked job as
@@ -635,9 +580,6 @@ def resume_action(summary, records, ctx):
     once it is due its resume is the only action offered; before that the model may choose other work worth its cost,
     and when none is worth it the resume is taken in place of a stop (the system's rule). The commission passes the
     head's own check (``COMMISSION_CHECKS``), else this raises: a resume the check refuses is a fault of the episode."""
-    if summary['grouping_owed']:
-        return {'action_type': APPLY_GROUPING, 'arguments': {'candidate_groups': summary['candidate_groups']},
-                'due': True}
     parked = parked_jobs(summary)
     if not parked:
         return None
@@ -733,14 +675,14 @@ def action(response, summary, records, ctx):
         if selection['kind'] == 'tool' and selection['tool'] == PAIRWISE_TOOL:
             problems = check_pairwise_request(
                 selection['arguments'], sequences=summary['held_sequences'],
-                scope_subjects=summary['scope']['subject_refs'], resources=resources, made=comparisons_made(summary))
+                scope_subjects=summary['targets'], resources=resources)
             if problems:
                 raise Rejected({'status': 'invalid', 'category': 'pairwise_blast_request',
                                 'detail': {'request': selection['arguments'], 'fix': problems}})
         if selection['kind'] == 'tool' and selection['tool'] == PROFILE_TOOL:
             problems = check_profile_scan_request(
                 selection['arguments'], sequences=summary['held_sequences'],
-                scope_subjects=summary['scope']['subject_refs'], resources=resources, made=scans_made(summary))
+                scope_subjects=summary['targets'], resources=resources)
             if problems:
                 raise Rejected({'status': 'invalid', 'category': 'hmmer_profile_scan_request',
                                 'detail': {'request': selection['arguments'], 'fix': problems}})
@@ -758,7 +700,8 @@ def action(response, summary, records, ctx):
     if selection['tool'] == 'reason':
         return ToolCall('reason', {'commit': selection['arguments']['commit'], 'scope': scope})
     if selection['tool'] in (PAIRWISE_TOOL, PROFILE_TOOL):
-        return ToolCall(selection['tool'], dict(selection['arguments']))
+        return ToolCall(selection['tool'], {**selection['arguments'], 'scope': scope, 'organism': next(
+            (row for row in summary['organism_candidates'] if row['role'] == 'leader'), None)})
     return ToolCall('execute_selected_tool', {'tool': selection['tool'], 'arguments': selection['arguments'],
                                               'scope': scope,
                                               'permitted_record_refs': (summary['held_record_refs']
@@ -796,21 +739,32 @@ async def execute_selected_tool(arguments, ctx):
 
 
 async def pairwise_blast(arguments, ctx):
-    """One pairwise comparison as one unit: run, fetch and grade, by the library's one function. The arguments are
-    the model's four controlled choices."""
-    return await pairwise_blast_comparison(
+    """One pairwise comparison as one unit: run, fetch and grade, by the library's one function, then the settling of
+    the annotations (``settle_annotations``). The arguments are the model's four controlled choices."""
+    compared = await pairwise_blast_comparison(
         ctx, program=arguments['program'], query_ref=arguments['query_ref'], reference_ref=arguments['reference_ref'],
         resource_id=arguments['resource_id'], executable_directory=ctx.settings['blast_executable_directory'])
+    if compared['status'] != 'completed':
+        return compared
+    settled = await settle_annotations(ctx, scope=arguments['scope'], organism=arguments['organism'])
+    return {**compared, 'record_refs': [*compared['record_refs'], *settled],
+            'changed_record_refs': [*compared['changed_record_refs'], *settled]}
 
 
 async def profile_scan(arguments, ctx):
-    """One profile scan as one unit: run, fetch and grade, by the library's one function. The arguments are the
-    model's three controlled choices; the database's manifest and the programs' directory are settings."""
-    return await hmmer_profile_scan(
+    """One profile scan as one unit: run, fetch and grade, by the library's one function, then the settling of the
+    annotations (``settle_annotations``). The arguments are the model's three controlled choices; the database's
+    manifest and the programs' directory are settings."""
+    scanned = await hmmer_profile_scan(
         ctx, query_ref=arguments['query_ref'], database=arguments['database'], resource_id=arguments['resource_id'],
         executable_directory=ctx.settings['hmmer_executable_directory'],
         manifest_path=ctx.settings['profile_databases'][arguments['database']])
+    if scanned['status'] != 'completed':
+        return scanned
+    settled = await settle_annotations(ctx, scope=arguments['scope'], organism=arguments['organism'])
+    return {**scanned, 'record_refs': [*scanned['record_refs'], *settled],
+            'changed_record_refs': [*scanned['changed_record_refs'], *settled]}
 
 
-TOOLS = {'reason': reason, 'execute_selected_tool': execute_selected_tool, APPLY_GROUPING: apply_grouping, PAIRWISE_TOOL: pairwise_blast,
+TOOLS = {'reason': reason, 'execute_selected_tool': execute_selected_tool, PAIRWISE_TOOL: pairwise_blast,
          PROFILE_TOOL: profile_scan}

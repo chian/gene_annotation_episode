@@ -44,14 +44,17 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
     all_vs_all_run as all_vs_all, bvbrc_job_child as job_child, bvbrc_metacats_search as metacats, bvbrc_msa_alignment as msa)
 
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.candidate_measurements import (
-    held_groupings)
+    targets)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.annotation_claims.claim_generation import (
+    TRACE_PROVIDER)
 
-from ..credit import APPLY_GROUPING, A101DifferentialCredit, A101SequenceCredit, held_candidate_table
+from ..credit import A101DifferentialCredit, A101SequenceCredit, held_candidate_table
 from ..task import CHILD_SLOTS, PAIRWISE_TOOL, PROFILE_TOOL
 
 EXECUTED = ('completed', 'partial')
-# The tools whose records this episode's credit reads and so returns: its reasoning commits and its graded comparisons.
-CREDITED_TOOLS = ('reason', PAIRWISE_TOOL, PROFILE_TOOL, APPLY_GROUPING)
+# The tools whose records this episode returns: its reasoning commits, its graded comparisons, its joinings of its
+# candidates (all read by its credit) and the claims it made.
+CREDITED_TOOLS = ('reason', PAIRWISE_TOOL, PROFILE_TOOL)
 EVIDENCE_RECORD_TYPES = ('observation', 'assessment')
 # The record types that carry a sequence: what the two sequences of a comparison are chosen from.
 SEQUENCE_RECORD_TYPES = ('input', 'reference', 'product')
@@ -131,8 +134,11 @@ def internal_summary(view):
     held = [ref for ref in records.refs() if not ref.startswith('row_')]
     held_sequences = {ref: records.get(ref).get('molecule') for ref in held
                       if ref.split('_')[0] in SEQUENCE_RECORD_TYPES and records.get(ref).get('sequence_ref')}
-    details = A101SequenceCredit().read_details(records, parent['scope'], known_record_refs=held,
-                                                details_limit=ALL, details_offset=0)
+    # the sequences the head finds annotations for: the scope's subjects, or the proteins of the feature calls held
+    wanted = targets(records, parent['scope'])
+    details = A101SequenceCredit().read_details(
+        records, parent['scope'], known_record_refs=held, details_limit=ALL, details_offset=0,
+        subjects=None if wanted == records.validate_scope(parent['scope'])['subject_refs'] else wanted)
     table = held_candidate_table(parent, records)
     held_products = products(records)
     alignments = [row for row in held_products if row['kind'] == msa.PRODUCT_KIND]
@@ -152,8 +158,9 @@ def internal_summary(view):
             'held_source_refs': [row['id'] for row in records.list('source')],
             'held_comparisons': _held_comparisons(records),
             'held_profile_scans': _held_profile_scans(records),
-            'held_sequences': held_sequences,
-            'bvbrc_searches': bvbrc.held_searches(records, {ref: records.get(ref)['sequence_ref'] for ref in held_sequences}),
+            'held_sequences': held_sequences, 'targets': wanted,
+            'bvbrc_searches': bvbrc.held_searches(records, {ref: records.get(ref)['sequence_ref'] for ref in held_sequences},
+                                                  searched_types=('input', 'product')),
             'named_refs': {ref: named_records(records, ref) for ref in records.refs()},
             # the held handoffs whose closure is not held (``job_records.outstanding_jobs``): this episode's own local jobs
             # (the profile scan) are closed in their unit; a child's job counts until the closure it returns is held
@@ -178,9 +185,11 @@ def internal_summary(view):
                                         for target in details['a101_sheet']['targets']],
             'candidate_hit_feature_kinds': [{'candidates': table['targets'][target]['hit_feature_kinds']}
                                             for target in details['a101_sheet']['targets']],
-            # the commission carries a grouping of this episode's candidates it does not hold yet: the unit that keeps it
-            # is owed (``task.resume_action``)
-            'grouping_owed': bool(parent['candidate_groups']) and parent['candidate_groups'] not in held_groupings(records),
+            # the claims this episode holds, each with the annotation it was made from, read from the claim tool's traces
+            'claims': [{**claim, 'annotation': trace['annotation']}
+                       for trace in (json.loads(records.get_artifact(source['artifact_ref']))
+                                     for source in records.list('source') if source['provider'] == TRACE_PROVIDER)
+                       for claim in trace['claims']],
             'candidates': _across_targets(table, 'candidates'), 'tests': _across_targets(table, 'tests'),
             'differentials': _across_targets(table, 'differentials'),
             'not_asked_hit_count': sum(target['not_asked_hit_count'] for target in table['targets'].values()),

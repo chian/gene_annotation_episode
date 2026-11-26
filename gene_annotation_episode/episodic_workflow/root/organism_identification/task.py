@@ -38,8 +38,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.taxonomic_c
 from gene_annotation_episode.episodic_workflow.episode_support.tools.taxonomic_classification.vitap_assignment import (
     check_vitap_request, vitap_assignment)
 
-from .credit import (GENOMAD_TOOL, KRAKEN2_TOOL, ONCE_TOOLS, VITAP_TOOL, database_manifest, dna_subjects, index_manifests,
-                     made)
+from .credit import GENOMAD_TOOL, KRAKEN2_TOOL, ONCE_TOOLS, VITAP_TOOL, database_manifest, dna_subjects, index_manifests
 from .goal import GOAL
 
 HEAD = 'organism_identification'
@@ -54,7 +53,7 @@ Each step you choose one run, as `selection`: one of the `tools`, with a `query_
 What you are shown:
 - `tools`: what each tool measures, what it can speak of, and about how long it takes. No tool works at every distance. Exact k-mers name the species of a sequence that has a close relative in the index and say nothing of a distant one. The tools that work from the sequence's genes reach distant viruses but stop at family or above, and take minutes.
 - `indexes` and `databases`: what each holds. A tool says what its database holds and nothing of what it does not hold: an index of viruses only cannot tell you the DNA is bacterial, and a virus classifier gives a virus lineage with a low score to a piece of a cell that carries a few virus-like genes.
-- `held_runs`: the runs already made. The same run again is refused as a repeat.
+- `held_runs`: the runs already made. A run already held would return the same result, so its forecast is zero.
 - `candidates`: the candidate taxa found so far for each sequence, the leading one first, each with its score. A candidate's score is the support on its own lineage, so a call at a vaguer level (a family, or just "virus") supports every finer candidate inside it. A taxon and its ancestor are not rivals; rivals are calls that are not nested. `leader_taxon_id`, `rival_taxon_id` and `agreed_taxon_id` (the deepest taxon the leader and its rival share) say how far the placement is settled.
 - `waiting_claims` (in each sequence's `candidates` row): taxa named by the hits of a database search you were given, which no candidate is or lies inside. A claim never makes a candidate; it adds to the score of the candidates it includes. `finer_than_its_candidate`: it agrees with the listed candidate `consistent_taxon_id` and is finer, so a run that can name taxa at that depth may confirm it. `no_candidate_on_its_lineage`: it disagrees with what is listed, or nothing is listed yet. `taxon_not_in_taxonomy`: its taxon is outside the prepared taxonomy and cannot be placed.
 - `action_yields`: what each offered action is forecast to earn against its cost in time. You do not set these numbers and you do not end the episode; it ends when nothing left is worth its cost.
@@ -164,8 +163,7 @@ def action(response, summary, records, ctx):
         Draft202012Validator(schema['properties']['selection']).validate(selection)
         tool = selection['tool']
         problems = CHECKS[tool](selection['arguments'], sequences=summary['held_sequences'],
-                                scope_subjects=summary['scope']['subject_refs'], resources=resources,
-                                made=made(summary, tool))
+                                scope_subjects=summary['scope']['subject_refs'], resources=resources)
         if problems:
             raise Rejected({'status': 'invalid', 'category': tool + '_request',
                             'detail': {'request': selection['arguments'], 'fix': problems}})

@@ -9,10 +9,8 @@ problems makes ``action`` raise ``Rejected`` (no unit). A passed check runs as o
   against it; the matrix of bit scores is kept as a labelled data product.
 * ``cluster`` (``resource_id``, ``matrix_ref``, ``inflation``, ``contrast``): a TRY. REQUIRES the matrix product; MCL at an inflation
   and on a graph contrast of the fixed sets (the model's tuning, chosen on the facts of the matrix's score ratios it is shown once the
-  matrix is held); the clusters are kept as a working result and the model is shown controlled facts of them. Nothing is graded. The
-  same tuning of the same matrix is refused.
-* ``commit_clustering`` (``clusters_ref``): REQUIRES a held clustering of a matrix of which at least two completed tries with different
-  tunings are held (``all_vs_all_run.committable``; offered only then), once: it is graded into the cluster sheet, the one graded
+  matrix is held); the clusters are kept as a working result and the model is shown controlled facts of them. Nothing is graded.
+* ``commit_clustering`` (``clusters_ref``): REQUIRES a held clustering (``all_vs_all_run.committable``): it is graded into the cluster sheet, the graded
   source of the head's credit. Tries neither add to nor dilute that credit.
 * ``hold`` (a reason): nothing is run; always a valid answer, so a model with no valid tool is never stuck in rejections.
 
@@ -55,15 +53,16 @@ INSTRUCTIONS = (
     'each percentile contrast keeps edges at or above, and max) and, for each candidate, the median ratio among its own sequences and '
     'the median ratio of its sequences to the target (a pair without an alignment counts 0): choose the first tuning on them. You are '
     'shown the facts of each try (tries): the clusters, the target\'s cluster and, for each candidate, how many of its sequences are in '
-    'the target\'s cluster and how many clusters they span. The same tuning of the same matrix is not tried again.\n'
-    '- commit_clustering, with clusters_ref (a held sequence_clusters product): commits that clustering, once. It is graded: for each '
-    'candidate the share of its sequences in the target\'s cluster, the one test the parent reads. It is offered only when at least '
-    'two tries of the matrix with different tunings are held: try at least two tunings, compare their facts, and commit the one that '
+    'the target\'s cluster and how many clusters they span. The same tuning of the same matrix gives the same clustering again.\n'
+    '- commit_clustering, with clusters_ref (a held sequence_clusters product): commits that clustering. It is graded: for each '
+    'candidate the share of its sequences in the target\'s cluster, the test the parent reads. It is offered whenever a clustering '
+    'is held. The first commit earns the clustering\'s credit whatever the number of tunings tried, and a later commit earns '
+    'nothing more: commit the one that '
     'best shows where the target falls among the candidates.\n'
     '- hold, with a reason: do nothing now.\n'
     'If a check finds something wrong you are told each problem as a code with its field (feedback.problems) and nothing has run. '
-    'A call that passed its check works; a failure after it is the environment\'s, is reported once as failed and is never '
-    'retryable. The yield table shows what each unit earned. You cannot end the episode; the yield controller does.')
+    'A call that passed its check works; a failure after it is the environment\'s and is reported as failed. '
+    'The yield table shows what each unit earned. You cannot end the episode; the yield controller does.')
 
 
 def local_resources(ctx):
@@ -79,16 +78,14 @@ def output_schema(summary, resources):
     local = {'type': 'string', 'enum': sorted(name for name, kind in resources.items() if kind == 'local')}
     databases = [row['row_ref'] for row in summary['products'] if row['kind'] == run.DATABASE_KIND]
     matrices = [row['row_ref'] for row in summary['products'] if row['kind'] == run.MATRIX_KIND]
-    options = []
-    if not databases and not summary['failed']['prepare']:
-        options.append(one('prepare_database', resource_id=local))
-    if databases and not matrices and not summary['failed']['blast']:
+    options = [one('prepare_database', resource_id=local)]
+    if databases:
         options.append(one('all_vs_all_blast', resource_id=local, database_ref={'type': 'string', 'enum': databases}))
-    if matrices and not summary['committed']:
+    if matrices:
         options.append(one('cluster', resource_id=local, matrix_ref={'type': 'string', 'enum': matrices},
                            inflation={'type': 'number', 'enum': list(run.INFLATIONS)},
                            contrast={'type': 'string', 'enum': list(run.CONTRASTS)}))
-    if summary['committable'] and not summary['committed']:
+    if summary['committable']:
         options.append(one('commit_clustering', clusters_ref={'type': 'string', 'enum': summary['committable']}))
     options.append(one('hold', reason={'type': 'string', 'enum': list(run.HOLD_REASONS)}))
     return {'type': 'object', 'additionalProperties': False, 'required': ['action'], 'properties': {'action': {'anyOf': options}}}
@@ -125,24 +122,20 @@ def action(response, summary, records, ctx):
     name = chosen['name']
     if name == 'hold':
         return ToolCall('hold', {'reason': chosen['reason']})
-    failed, settings = summary['failed'], ctx.settings
+    settings = ctx.settings
     if name == 'prepare_database':
         problems = run.check_prepare(chosen, commission=commission, per_candidate=per_candidate, reader=records,
-                                     resources=resources, failed=failed['prepare'],
-                                     blast_directory=settings['blast_executable_directory'],
+                                     resources=resources, blast_directory=settings['blast_executable_directory'],
                                      python=settings['python_executable'])
     elif name == 'all_vs_all_blast':
-        problems = run.check_blast(chosen, commission=commission, per_candidate=per_candidate, reader=records,
-                                   resources=resources, failed=failed['blast'],
+        problems = run.check_blast(chosen, reader=records, resources=resources,
                                    blast_directory=settings['blast_executable_directory'],
                                    python=settings['python_executable'])
     elif name == 'cluster':
         problems = run.check_cluster(chosen, reader=records, ids=summary['set_ids'], resources=resources,
-                                     tried={tuple(pair) for pair in summary['tried']},
                                      mcl_directory=settings['mcl_executable_directory'])
     else:
-        problems = run.check_commit(chosen, reader=records, committed=summary['committed'],
-                                    tries=[(row['matrix_ref'], row['inflation'], row['contrast']) for row in summary['tries']])
+        problems = run.check_commit(chosen, reader=records)
     if problems:
         raise Rejected({'status': 'invalid', 'category': name + '_check', 'problems': problems})
     return ToolCall(name, {'call': {key: value for key, value in chosen.items() if key != 'name'}, 'commission': commission})

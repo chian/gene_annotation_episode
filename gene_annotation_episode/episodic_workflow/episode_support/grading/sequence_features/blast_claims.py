@@ -51,8 +51,8 @@ So, going down the hits in the order of their rank:
 
 What the feature calls take from a claim is its type, strand, positions and claimed ends, and one value (``bit``): the
 claims of one place all say the same of the feature's type and reading, so the place's value is one, carried by its first
-block: ``run / (run + 1)`` with ``run = run_before_different_frame``: 1 hit 0.5, 3 hits 0.75, 9 hits 0.9. A starting rule
-of 2026-11-25 with no run behind it. The other fields are kept for the grading of the claims as they are refined, and for
+block, by the rule of every hit list (``hit_list_claim.claim_value``): the top hit's strength, the run of the block before
+anything different (another call, another frame or strand) and the taxa of that run. The other fields are kept for
 the naming of the feature.
 
 The type of a claim: a hit of a database of proteins is of a coding sequence; a hit of a database of nucleotide features
@@ -73,6 +73,8 @@ which program: that is the tool's own knowledge (the owner: "certain tools only 
 general and modular").
 
 No I/O: this module reads a grading and returns values."""
+import math
+
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_features.database_feature_types import (
     bvbrc_feature_kind)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_features.feature_candidates import (
@@ -81,6 +83,9 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_
     CODING, KINDS)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.blast_search import (
     PROGRAM_UNITS)
+from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.scoring import SCALES
+from gene_annotation_episode.episodic_workflow.episode_support.grading.similarity_search.hit_list_claim import (
+    claim_value, taxa_share)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.uncharacterized_labels import (
     is_uncharacterized_label)
 from gene_annotation_episode.episodic_workflow.episode_support.readers.sequence_operations.sequence_mapping import (
@@ -221,6 +226,7 @@ def _claims_of_place(place, hits):
         first = block[0]
         other = [hit['rank'] for hit in place if hit['rank'] > first['rank'] and hit['call'] not in (call, NO_CALL)]
         run = [hit for hit in block if not other or hit['rank'] < other[0]]
+        firm = [hit for hit in run if not crossing or hit['rank'] < crossing[0]]
         claims.append({
             'rank': first['rank'], 'kind': first['kind'], 'strand': first['strand'],
             'segments': [dict(segment) for segment in first['segments']],
@@ -232,6 +238,8 @@ def _claims_of_place(place, hits):
             'makes_call': call != NO_CALL, 'hits': len(block),
             'run_before_different_call': len(run), 'different_call_met': bool(other),
             'run_before_different_frame': len(before_frame), 'different_frame_met': bool(crossing),
+            'run_before_anything_different': len(firm),
+            'taxa_share': taxa_share([hit['taxon_id'] for hit in firm]) if firm else 0.0,
             'unlabeled_run': unlabeled,
             'taxon_count': len({hit['taxon_id'] for hit in block if hit['taxon_id'] is not None}),
             'first_of_place': call == calls[0]})
@@ -264,8 +272,8 @@ def claim_bit(claim):
     block; nothing at the other blocks of the place, which say the same of the feature's type and reading."""
     if not claim['first_of_place']:
         return 0.0
-    run = claim['run_before_different_frame']
-    return run / (run + 1)
+    return claim_value(-math.expm1(-SCALES['blast'] * max(claim['bit_score'], 0)), claim['run_before_anything_different'],
+                       claim['taxa_share'])
 
 
 def read_claim_sheet(grading):

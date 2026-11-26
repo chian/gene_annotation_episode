@@ -2,8 +2,8 @@
 the held search gives, ``all_vs_all_run.set_members``); one row per completed unit; the data products the episode holds (the set,
 the database, the matrix, the clusters); the facts of each held matrix's score ratios (``matrix_facts``:
 ``all_vs_all_run.held_matrix_facts``, what the model tunes the first try on); the tries made with their facts; the clusterings that may
-be committed (``committable``: those of a matrix with at least two completed tries of different tunings); the failed steps (what the
-checks refuse to run again); the committed clustering (the
+be committed (``committable``: the held ones); the failed steps; the
+committed clustering (the
 source of provider ``all_vs_all`` with its sheet's facts: the cluster count, the target's cluster size and each candidate's share
 of its sequences in it); the state; and the yield table. The one returned record list, ``graded_refs`` (the labelled products and
 the committed clustering's source and grading), is closed under naming by ``job_records.returned_with_names`` (the records the
@@ -64,7 +64,6 @@ def internal_summary(view):
     tries = [{'clusters_ref': outcome['clusters_ref'], **unit['arguments']['call'], 'same_as_held': outcome['same_as_held'],
               **outcome['facts']} for unit, outcome in zip(view.outcomes, outcomes)
              if unit['tool'] == 'cluster' and outcome['status'] == 'completed']
-    tuned = [(row['matrix_ref'], row['inflation'], row['contrast']) for row in tries]
     kinds = {row['kind'] for row in held}
     state = ('clustered' if clusterings else 'tried' if run.CLUSTERS_KIND in kinds else 'matrix_ready' if run.MATRIX_KIND in kinds
              else 'database_ready' if run.DATABASE_KIND in kinds else 'nothing_done')
@@ -78,8 +77,7 @@ def internal_summary(view):
             'products': [{'row_ref': row['id'], 'kind': row['kind'], 'edam_data': row['edam_data'],
                           'edam_format': row['edam_format'], 'settings': row['settings']} for row in held],
             'matrix_facts': run.held_matrix_facts(records, members),
-            'tries': tries, 'committable': run.committable(records, tuned), 'tried': [[row['call']['matrix_ref'], row['call']['inflation'], row['call']['contrast']] for row in rows
-                                      if row['action'] == 'cluster' and row['status'] in ('completed', 'failed')],
+            'tries': tries, 'committable': run.committable(records),
             'committed': bool(clusterings), 'set_ids': [row['id'] for row in members], 'clusterings': clusterings,
             'matrix': [{'pair_count': outcome['pair_count']} for outcome in outcomes if 'pair_count' in outcome],
             'graded_refs': returned_with_names(records, [ref for outcome in outcomes for ref in outcome['graded_refs']]),

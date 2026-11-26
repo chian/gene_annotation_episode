@@ -218,14 +218,13 @@ def graded_rows(reader):
     return rows
 
 
-def check_commission(request, *, reader, options, resources, jobs, commissioned):
+def check_commission(request, *, reader, options, resources, jobs):
     """The things to fix in the head's commission of this child (``request``: ``query_ref``, ``alignment_ref``,
     ``resource_id``, ``until``). ``options`` is ``held_alignments``; ``jobs`` the head's held MetaCATS jobs
-    (``bvbrc_job_child.held_jobs``); ``commissioned`` the alignments of the earlier commissions. The conditions: the
+    (``bvbrc_job_child.held_jobs``). The conditions: the
     alignment is a held data product of kind ``multiple_sequence_alignment`` (the requirement) with at least two groups, of
     the target; the resource a bound BV-BRC service; an outstanding job of this commission is
-    continued (``until`` ``extracted``) and another one blocks it; a report already held (or already commissioned and not
-    held) is not commissioned again."""
+    continued (``until`` ``extracted``) and another one blocks it."""
     problems = requirement_problems(reader, request)
     option = [item for item in options if item['alignment_ref'] == request['alignment_ref']]
     if not problems and not option:
@@ -237,11 +236,6 @@ def check_commission(request, *, reader, options, resources, jobs, commissioned)
                         and job['identity']['groups_ref'] == group_artifact_ref(plan(reader, request['alignment_ref'])))
     if not problems:
         problems.extend(check_resource_and_continuation(request, resources=resources, jobs=jobs, same=same))
-        reusable = reusable_report(reader, request['alignment_ref'])
-        if reusable is not None:
-            problems.append(_choose('alignment_ref', PRODUCT_KIND + '_already_held', row=reusable['id']))
-        if request['alignment_ref'] in commissioned and not any(job['outstanding'] and same(job) for job in jobs):
-            problems.append(_choose('alignment_ref', 'analysis_already_commissioned'))
     return problems
 
 

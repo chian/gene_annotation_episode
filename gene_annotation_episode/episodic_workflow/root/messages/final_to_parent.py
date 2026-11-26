@@ -4,7 +4,7 @@ level above (``feature_calls``: per sequence of the scope its feature calls, the
 type, strand, positions, versions, score, claim count, rivals and the feature records that state it; a feature call
 with no annotation is a line with its own score; with them the claims that wait for a feature call and the genetic code
 held) and the level below (``annotations``: every candidate annotation the axis heads scored, with its score, the
-hypervolume over the scores the axes give it multiplied by the factor ``(1 + k * s_o) ** w_o`` of the organism it is
+hypervolume over the scores the axes give it multiplied by the factor ``((1 + k * s_o) ** w_o - 1)`` of the organism it is
 reported with (a pure multiple: zero from the axes stays zero), that organism's taxon id and score, and the row of each
 axis that scored it, the highest score first; no annotation is tied to a feature call yet), the best annotation
 (``best_annotation``: the first of the annotation lines, present when its status is known), the organism (``organism``:
@@ -155,7 +155,7 @@ ANNOTATION_FORM = RecordForm({
                         required=False),
     'status': ChoiceField('text', 'Whether the merged evidence is measured, measured as exactly zero, or unknown',
                           ROW_STATUS),
-    'score': Field('number', 'The annotation score: (prod_i (1 + k * s_i) ** w_i - 1) * (1 + k * s_o) ** w_o: the '
+    'score': Field('number', 'The annotation score: (prod_i (1 + k * s_i) ** w_i - 1) * ((1 + k * s_o) ** w_o - 1): the '
                              'hypervolume over the scores s_i the axes give the annotation (0 for an axis that has '
                              'not scored it), multiplied by the factor of the score s_o of the organism it is '
                              'reported with (0 when no candidate taxon is held: the factor is 1)' + _ABSENT,
@@ -177,7 +177,7 @@ ANNOTATION_FORM = RecordForm({
 })
 ANNOTATION_IDENTITY_FORM = RecordForm({name: ANNOTATION_FORM.fields[name] for name in IDENTITY_FIELDS})
 CLAIM_FORM = RecordForm({
-    'claim_ref': Field('text', 'The claim: a hypothesis record the root made from the annotation'),
+    'claim_ref': Field('text', 'The claim: a hypothesis record the head that found the annotation made from it'),
     'annotation': Field('record', 'The candidate annotation the claim was made from', form=ANNOTATION_IDENTITY_FORM),
     'predicate': ChoiceField('text', 'What the claim says the protein does to the molecule', CLAIM_PREDICATES),
     'partner': Field('text', 'The molecule of the claim, by the name it was found under in a database'),

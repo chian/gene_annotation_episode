@@ -9,7 +9,7 @@ only for ``until`` ``extracted`` (the first only when the search was not already
 and a rejected answer earn nothing."""
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import job_rows
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_blast_search import (
-    ENDED_SEARCH_STATES, PROVIDER)
+    ENDED_SEARCH_STATES)
 
 
 def _earned(summary, records):
@@ -24,7 +24,7 @@ def _earned(summary, records):
         'ended': extracted and not summary['known_ended'] and any(
             row['event'] == 'check' and row['id'] not in prior['check_refs'] and row['detail']['state'] in ENDED_SEARCH_STATES
             for row in job_rows(records)),
-        'graded': extracted and any(source['provider'] == PROVIDER for source in records.list('source'))}
+        'graded': extracted and any(row['action'] == 'extract' and row['status'] == 'completed' for row in rows)}
 
 
 def credit(summary, records):

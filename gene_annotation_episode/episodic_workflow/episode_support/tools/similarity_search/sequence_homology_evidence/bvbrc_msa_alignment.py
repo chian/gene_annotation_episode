@@ -65,7 +65,6 @@ def settings_of(candidates, per_candidate):
 def search_rows(reader, scope, search_ref):
     """The product-named hits of the held graded search ``search_ref`` with their values (the head's credit's own
     subscore): ``search_hits`` over the retained grading of the source."""
-    scope = reader.validate_scope(scope)
     source = reader.get(search_ref)
     (entry,) = source_tool_grading_entries(reader, search_ref)
     target = source['operand_refs'][0]
@@ -107,6 +106,8 @@ def msa_options(reader, scope, table):
         test = ('database_search:' + SEARCH_PROVIDER + ':' + search['program'] + ':' + search['request']['database']
                 + '@' + ref_['id'])   # one test is one graded source (candidate_measurements)
         target = ref_['operand_refs'][0]
+        if target not in table['targets']:      # a held search of a sequence that is not a target of the head
+            continue
         names = [row['name'] for row in table['targets'][target]['candidates']
                  if row['vocabulary'] == 'product' and test in row['tests']]
         options.append({'search_ref': ref_['id'], 'query_ref': target, 'candidates': names})
@@ -253,15 +254,13 @@ def graded_rows(reader):
     return rows
 
 
-def check_commission(request, *, scope_subjects, sequences, options, resources, jobs, commissioned, reusable):
+def check_commission(request, *, scope_subjects, sequences, options, resources, jobs):
     """The things to fix in the head's commission of this child (``request``: ``query_ref``, ``search_ref``,
     ``candidates``, ``per_candidate``, ``resource_id``, ``until``). ``options`` is ``msa_options``; ``jobs`` the head's
-    held MSA jobs (``bvbrc_job_child.held_jobs``); ``commissioned`` the (search, candidates, per_candidate) of the earlier
-    commissions; ``reusable`` the held alignment product of the same inputs and settings, or ``None``. The conditions:
+    held MSA jobs (``bvbrc_job_child.held_jobs``). The conditions:
     the query is a protein sequence of the scope; the search is a held graded BV-BRC search of that query; at least two
     distinct candidates, each admitted from that search; ``per_candidate`` in range; the resource a bound BV-BRC service;
-    an outstanding job of this commission is continued (``until`` ``extracted``) and another one blocks it; an alignment
-    already held (or already commissioned and not held) is not commissioned again."""
+    an outstanding job of this commission is continued (``until`` ``extracted``) and another one blocks it."""
     problems = []
     query, search = request['query_ref'], request['search_ref']
     if query not in scope_subjects or sequences.get(query) != 'protein':
@@ -283,11 +282,6 @@ def check_commission(request, *, scope_subjects, sequences, options, resources, 
         request['candidates']) and job['identity']['per_candidate'] == request['per_candidate']
         and job['resource_id'] == request['resource_id'])
     problems.extend(check_resource_and_continuation(request, resources=resources, jobs=jobs, same=same))
-    if reusable is not None:
-        problems.append(_choose('candidates', PRODUCT_KIND + '_already_held', row=reusable['id']))
-    if (search, sorted(request['candidates']), request['per_candidate']) in commissioned and not any(
-            job['outstanding'] and same(job) for job in jobs):
-        problems.append(_choose('candidates', 'alignment_already_commissioned'))
     return problems
 
 

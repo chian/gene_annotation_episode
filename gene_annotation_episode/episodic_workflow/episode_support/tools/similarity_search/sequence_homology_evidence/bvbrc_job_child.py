@@ -464,7 +464,7 @@ def check_extract(request, *, state, job):
 def check_resource_and_continuation(request, *, resources, jobs, same):
     """The commission conditions every child shares: the resource is a bound BV-BRC service; a job outstanding for this
     commission (``same(job)``: the job's identity and request are the commission's) is continued with ``until``
-    ``extracted`` and one that is not the commission's blocks it; a job already closed for it is not commissioned again."""
+    ``extracted`` and one that is not the commission's blocks it."""
     problems = []
     if resources.get(request['resource_id']) != ROUTE_KIND:
         problems.append(_choose('resource_id', 'resource_is_not_a_bvbrc_service',
@@ -474,8 +474,6 @@ def check_resource_and_continuation(request, *, resources, jobs, same):
             problems.append(_choose('until', 'commission_must_continue_the_outstanding_job', job=job['identity']))
         if job['outstanding'] and same(job) and request['until'] != 'extracted':
             problems.append(_choose('until', 'a_continuation_follows_the_job_to_its_result', choose_from=['extracted']))
-        if job['closed'] and same(job):
-            problems.append(_choose('until', 'job_already_held'))
     return problems
 
 

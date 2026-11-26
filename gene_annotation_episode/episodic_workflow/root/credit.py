@@ -79,8 +79,7 @@ The units are what makes the nine axis scales comparable; the scale is what make
 Feature calling's commission takes no credit unit (its assignment form has none), so its scale is applied here.
 
 The estimate credit (the scores of the time estimates a head makes about its jobs) is a separate quantity. It is
-not an axis credit and does not enter this credit. Neither does the organism identification head's credit: it is no
-evidence axis, and what it finds enters the scores only (``messages/internal_summary.annotation_score``)."""
+not an axis credit and does not enter this credit."""
 import math
 
 from method_loop import UNBOUNDED
@@ -93,6 +92,10 @@ FEATURE_FINDER = 'feature_calling'
 # S: the root's scale of one unit of feature calling's credit. 1.0: the head's unit as it is (a firm claim at a new
 # place earns about 1 there). A starting value of 2026-11-25 with no run behind it.
 FEATURE_CREDIT_SCALE = 1.0
+# The head whose credit is the pure multiple of the root's credit, and the weight of the organism's factor in an
+# annotation's score.
+ORGANISM_FINDER = 'organism_identification'
+ORGANISM_WEIGHT = 1.0
 
 # w_i: the root's weight of each axis. All 1: one axis alone is rewarded linearly and spread beats concentration.
 AXIS_WEIGHTS = {
@@ -148,7 +151,7 @@ def hypervolume(axis_values):
     arithmetic of the axes. Over the axis credits it is the axes' factor of the root's credit less 1 (``root_credit``);
     over the scores the axes give one candidate annotation it is the axes' part of that annotation's score
     (``messages/internal_summary.annotation_score``, which multiplies this result by the organism's factor
-    ``(1 + K * s_o) ** w_o``, a pure multiple outside the product; that factor is in the score only). The two never
+    ``((1 + K * s_o) ** w_o - 1)``, a pure multiple outside the product). The two never
     read each other."""
     total = 0.0
     for slot, weight in AXIS_WEIGHTS.items():
@@ -162,56 +165,53 @@ def feature_base(feature_credit):
     return FEATURE_CREDIT_SCALE * feature_credit
 
 
-def root_credit(feature_credit, axis_credits):
-    """``S * v_f * prod_i (1 + K * v_i) ** w_i``: the base ``feature_base(feature_credit)`` times the axes' factor over
-    the axis credits ``{slot: v_i}`` of the nine axes."""
+def root_credit(feature_credit, axis_credits, organism_credit):
+    """``v_o * (1 + S * v_f * prod_i (1 + K * v_i) ** w_i)``: the organism identification head's credit ``v_o`` is a pure
+    multiple of everything (with no organism call the credit is 0 whatever else was done); alone it earns itself, and
+    feature calling's base ``feature_base(feature_credit)`` times the axes' factor multiplies it."""
     base = feature_base(feature_credit)
     over_axes = hypervolume(axis_credits)
-    return base + base * over_axes          # base * (1 + over_axes)
+    return organism_credit + organism_credit * (base + base * over_axes)
 
 
 def credit(summary, records):
     return root_credit(summary['features']['credit'],
-                       {slot: summary['axes'][slot]['credit'] for slot in AXIS_WEIGHTS})
+                       {slot: summary['axes'][slot]['credit'] for slot in AXIS_WEIGHTS}, summary['organism']['credit'])
 
 
 # The record of this credit's definition: what the forecast controller's learned gains are on (``yield_estimator.py``).
 # Its change on 2026-11-25 (feature calling's credit became the base) starts every action's learned shares afresh.
-CREDIT_DEFINITION = {'kind': 'root_feature_base_times_axes_hypervolume',
-                     'formula': 'S * v_f * prod_i (1 + K * v_i) ** w_i', 'feature_credit_scale': FEATURE_CREDIT_SCALE,
+CREDIT_DEFINITION = {'kind': 'root_organism_times_one_plus_feature_base_times_axes_hypervolume',
+                     'formula': 'v_o * (1 + S * v_f * prod_i (1 + K * v_i) ** w_i)',
+                     'feature_credit_scale': FEATURE_CREDIT_SCALE,
                      'epsilon': EPSILON, 'axis_weights': dict(AXIS_WEIGHTS), 'axis_credit_units': dict(AXIS_CREDIT_UNITS)}
 # What ``ceiling`` means for each action type the root offers. The forecast controller learns an action's gains only
 # from ledger rows recorded under the same credit definition and the same name of that action's ceiling; the name of
 # an action's ceiling changes when the derivation of that action's ceiling changes, and only that action's.
-CEILINGS = {'feature_calling': 'root_ceiling',
-            'sequence_homology_evidence': 'root_ceiling_zero_without_feature_credit',
-            'experimental_activity_evidence': 'root_ceiling_zero_without_feature_credit',
-            'make_claims': 'root_ceiling', 'organism_identification': 'root_ceiling'}
+CEILINGS = {'feature_calling': 'root_ceiling_zero_without_organism_credit',
+            'sequence_homology_evidence': 'root_ceiling_zero_without_organism_or_feature_credit',
+            'experimental_activity_evidence': 'root_ceiling_zero_without_organism_or_feature_credit',
+            'organism_identification': 'root_ceiling'}
 
 
 def ceiling(summary, records, action_type, arguments, ctx):
-    """The most the root's credit can rise if ``action_type`` is taken next.
-
-    - A commission of feature calling: its credit has no upper bound the root can state, and the axes' factor is at
-      least 1, so neither has the rise: ``UNBOUNDED``.
-    - A commission of an axis head: while the features' base is 0 the credit is 0 whatever the axis earns, so the rise
-      is 0; once it is above 0, an axis credit has no upper bound (this file never bounds one), so neither has the
-      rise: ``UNBOUNDED``.
-    - The making of an annotation's claims (the tool ``make_claims``) changes no credit: 0. Neither does the commission
-      of the organism identification head, which is no evidence axis: what it finds is passed to the heads that are,
-      and enters the scores only: 0."""
-    if action_type == FEATURE_FINDER:
+    """The most the root's credit can rise if ``action_type`` is taken next: the arithmetic of ``root_credit``. The
+    organism identification head's credit has no upper bound: ``UNBOUNDED``. Feature calling multiplies the organism's
+    credit: 0 while that is 0, else ``UNBOUNDED``. An axis head multiplies the organism's credit and the features'
+    base: 0 while either is 0, else ``UNBOUNDED``."""
+    organism, base = summary['organism']['credit'], feature_base(summary['features']['credit'])
+    if action_type == ORGANISM_FINDER:
         return UNBOUNDED
-    if action_type in AXIS_WEIGHTS:
-        return UNBOUNDED if feature_base(summary['features']['credit']) > 0 else 0.0
-    return 0.0
+    if action_type == FEATURE_FINDER:
+        return UNBOUNDED if organism > 0 else 0.0
+    return UNBOUNDED if organism > 0 and base > 0 else 0.0
 
 
 def outcome_pending(summary, records, position):
     """Whether the outcome of unit ``position`` is pending (``method_loop.episode_type``; ``summary`` after the unit): a
     commission of a head that left a job running when it ended its turn. Its rise does not yet measure the commission
     (the job's results are not in), so the forecast controller learns nothing from it; the commission that returns to
-    the head is the observation. A unit of ``make_claims`` ends its work in the unit and is never pending; neither is a
+    the head is the observation. Never pending is a
     commission of feature calling or of the organism identification head, which leave no job running (their returns
     declare no job field, and feature calling does not end while a search of its own is running)."""
     return summary['units'][position]['pending']

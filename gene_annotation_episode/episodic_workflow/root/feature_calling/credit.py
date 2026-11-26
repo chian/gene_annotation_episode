@@ -52,6 +52,7 @@ class FeatureDifferentialCredit:
                 'types_above': {kind: list(above) for kind, above in ABOVE.items()},
                 'test': 'one_graded_sheet_of_one_sequence_from_one_source',
                 'support': 'sum_over_tests_of_sheet_weight_times_the_tests_bits_at_the_slots_calls_and_claims',
+                'blast_claim_bit': 'top_hit_strength_times_run_over_run_plus_one_times_taxa_factor_of_the_run',
                 'score': 'support_over_support_plus_one_at_the_slot_plus_that_at_every_slot_it_is_within',
                 'sheet_weights': dict(SHEET_WEIGHT),
                 'rivals': ('two_slots_of_a_competing_type_neither_one_slot_nor_nested_that_share_rival_letters_or_more_'
@@ -126,11 +127,10 @@ def open_gene_findings(summary):
 
 def open_rna_scans(summary, ctx):
     """The cmscan runs that can still be made, as (searched sequence, database): every held sequence of its letters
-    not yet scanned, with every covariance database of the run's settings."""
+    with every covariance database of the run's settings, that is neither held nor failed."""
     made = rna_scans_made(summary)
-    return [(ref, database) for ref, letters in summary['held_sequences'].items()
-            if letters in CMSCAN_LETTERS and ref not in made
-            for database in ctx.settings.get('covariance_databases', {})]
+    return [(ref, database) for ref, letters in summary['held_sequences'].items() if letters in CMSCAN_LETTERS
+            for database in ctx.settings.get('covariance_databases', {}) if (ref, database) not in made]
 
 
 def gene_finding_ceiling(summary, ref):

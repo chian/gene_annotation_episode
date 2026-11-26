@@ -36,7 +36,8 @@ def internal_summary(view):
     record = records.get(searched_ref)
     sequence = records.get_artifact(record['sequence_ref'])
     rows = [_unit(position, unit) for position, unit in enumerate(view.outcomes)]
-    search, graded = search_view(records), graded_rows(records)
+    extracted = [ref for unit in view.outcomes if unit['tool'] == 'extract' for ref in unit['outcome'].get('graded_refs', [])]
+    search, graded = search_view(records), [row for row in graded_rows(records) if row['source_ref'] in extracted]
     resumed = resumed_rows(search) if parent['resumed'] else []
     facts = episode_state([*resumed, *rows])
     revised = [row['expected_remaining_seconds'] for unit, row in zip(view.outcomes, rows)
@@ -62,7 +63,6 @@ def internal_summary(view):
                                                         if unit['tool'] == 'monitor' and unit['outcome']['status'] == 'completed']),
             'closure_refs': returned_with_names(records, [unit['outcome']['closure_ref'] for unit in view.outcomes
                                                           if unit['tool'] == 'extract' and unit['outcome']['closure_ref'] is not None]),
-            'graded_refs': returned_with_names(records, [ref for unit in view.outcomes if unit['tool'] == 'extract'
-                                                         for ref in unit['outcome'].get('graded_refs', [])]),
+            'graded_refs': returned_with_names(records, extracted),
             'yield_table': (None if view.controller_state is None
                             else yield_table(view.controller_state, forecast_unit='bvbrc_blast_credit'))}

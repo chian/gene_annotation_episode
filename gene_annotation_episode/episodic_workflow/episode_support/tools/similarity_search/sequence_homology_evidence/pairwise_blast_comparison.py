@@ -68,23 +68,19 @@ PROGRAM_MOLECULES = {'blastp': (('protein',), ('protein',)), 'blastn': (NUCLEOTI
                      'tblastx': (NUCLEOTIDE, NUCLEOTIDE)}
 
 
-def check_pairwise_request(request, *, sequences, scope_subjects, resources, made):
+def check_pairwise_request(request, *, sequences, scope_subjects, resources):
     """The things to fix in a pairwise request, before anything runs; an empty list means it can run.
 
     ``request`` holds ``program`` (one of ``PROGRAM_MOLECULES``), ``query_ref``, ``reference_ref`` (each a key of
     ``sequences``) and ``resource_id`` (a key of ``resources``); the caller's schema has already bound each to those
     sets. ``sequences`` is ``{record: molecule}`` of the sequence records the episode holds, ``scope_subjects`` the
-    subjects of its scope, ``resources`` ``{resource id: kind}`` of the bound resources, and ``made``
-    ``{(query, reference, program): 'completed' | 'failed'}`` of the comparisons the episode already holds or already
-    saw fail. The conditions, each one problem with the field it concerns:
+    subjects of its scope and ``resources`` ``{resource id: kind}`` of the bound resources. The conditions, each one
+    problem with the field it concerns:
 
     1. the query is a subject of the episode's scope (the comparison is about the scope's own sequence);
     2. the reference is another record than the query;
     3. the program compares a query of the query's molecule with a reference of the reference's molecule;
-    4. the resource is a local resource;
-    5. the same comparison (query, reference, program) is not already held;
-    6. the same comparison has not already failed (a failure after a passed check is a fault of the environment and
-       cannot be repaired by the same call)."""
+    4. the resource is a local resource."""
     query, reference, program = request['query_ref'], request['reference_ref'], request['program']
     problems = []
     if query not in scope_subjects:
@@ -102,10 +98,6 @@ def check_pairwise_request(request, *, sequences, scope_subjects, resources, mad
     if resources[request['resource_id']] != 'local':
         problems.append({'field': 'resource_id', 'code': 'resource_is_not_local',
                          'choose_from': [name for name, kind in resources.items() if kind == 'local']})
-    if (query, reference, program) in made:
-        problems.append({'field': 'reference_ref', 'code': {
-            'completed': 'comparison_already_held', 'failed': 'comparison_already_failed_and_cannot_be_retried'}[
-                made[query, reference, program]]})
     return problems
 
 

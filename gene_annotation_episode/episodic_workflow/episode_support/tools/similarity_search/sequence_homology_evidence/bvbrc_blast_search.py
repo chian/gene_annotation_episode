@@ -431,18 +431,16 @@ def check_extract(request, *, state, search):
     return problems
 
 
-def check_commission(request, *, programs, sequences, scope_subjects, resources, searches, commissioned,
+def check_commission(request, *, programs, sequences, scope_subjects, resources, searches,
                      databases=PRECOMPUTED_DATABASES):
     """The things to fix in the head's commission of this episode (``request``: ``query_ref``, ``program``,
     ``database``, ``resource_id``, ``until``), before any child is commissioned. ``programs`` are the programs the
     commissioning episode offers (those its own credit can score) and ``databases`` the set of databases it searches.
     ``sequences`` is ``{record: molecule}``, ``searches``
-    is ``held_searches`` and ``commissioned`` the (query, program, database) of the earlier commissions of this child.
+    is ``held_searches``.
     The conditions: the query is a sequence of the scope; the program takes its molecule; the database holds what the
     program searches; the resource is a bound BV-BRC service; a search of the query held outstanding is continued: the
-    same program, database and resource, and ``until`` ``extracted`` (a continuation submits nothing); a search already
-    closed is not commissioned again; a new search of a query, program and database already commissioned and not held
-    (nothing was launched, or the launch failed) is not commissioned again: it would submit afresh."""
+    same program, database and resource, and ``until`` ``extracted`` (a continuation submits nothing)."""
     query, program, database = request['query_ref'], request['program'], request['database']
     problems = []
     if program not in programs:
@@ -464,12 +462,6 @@ def check_commission(request, *, programs, sequences, scope_subjects, resources,
                                     resource_id=search['resource_id']))
         if search['outstanding'] and same and request['until'] != 'extracted':
             problems.append(_choose('until', 'a_continuation_follows_the_search_to_its_result', choose_from=['extracted']))
-        if search['closed'] and (search['program'], search['database']) == (program, database):
-            # the same query, program and database: held, whichever resource ran it (the reuse key of its product)
-            problems.append(_choose('database', 'search_already_held'))
-    if (query, program, database) in commissioned and not any(
-            search['outstanding'] and (search['program'], search['database']) == (program, database) for search in held):
-        problems.append(_choose('database', 'search_already_commissioned'))
     return problems
 
 

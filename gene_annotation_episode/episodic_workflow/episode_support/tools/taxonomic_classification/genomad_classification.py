@@ -58,11 +58,9 @@ def run_settings(manifest, splits):
     return {'program': PROGRAM, 'database': manifest['name'], 'database_version': manifest['version']}
 
 
-def check_genomad_request(request, *, sequences, scope_subjects, resources, made):
+def check_genomad_request(request, *, sequences, scope_subjects, resources):
     """The things to fix in a geNomad request, before anything runs; an empty list means it can run. ``request`` holds
-    ``query_ref`` and ``resource_id``; ``made`` is ``{query: 'completed' | 'failed'}`` of the runs the episode already
-    holds or already saw fail. The conditions: the query is a subject of the scope; it is DNA; the resource is local; the
-    run is not already held and has not already failed."""
+    ``query_ref`` and ``resource_id``. The conditions: the query is a subject of the scope; it is DNA; the resource is local."""
     query = request['query_ref']
     problems = []
     if query not in scope_subjects:
@@ -74,9 +72,6 @@ def check_genomad_request(request, *, sequences, scope_subjects, resources, made
     if resources[request['resource_id']] != 'local':
         problems.append({'field': 'resource_id', 'code': 'resource_is_not_local',
                          'choose_from': [name for name, kind in resources.items() if kind == 'local']})
-    if query in made:
-        problems.append({'field': 'query_ref', 'code': {
-            'completed': 'genomad_run_already_held', 'failed': 'genomad_run_already_failed_and_cannot_be_retried'}[made[query]]})
     return problems
 
 

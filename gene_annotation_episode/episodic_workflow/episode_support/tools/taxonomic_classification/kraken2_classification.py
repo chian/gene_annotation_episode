@@ -68,20 +68,17 @@ def classification_settings(manifest):
     return {'program': PROGRAM, 'index': manifest['name'], 'index_version': manifest['version']}
 
 
-def check_kraken2_request(request, *, sequences, scope_subjects, resources, made):
+def check_kraken2_request(request, *, sequences, scope_subjects, resources):
     """The things to fix in a classification request, before anything runs; an empty list means it can run.
 
     ``request`` holds ``query_ref`` (a key of ``sequences``), ``index`` (a configured index) and ``resource_id`` (a key
     of ``resources``); the caller's schema has already bound each to those sets. ``sequences`` is ``{record: molecule}``
-    of the sequence records the episode holds, ``scope_subjects`` the subjects of its scope, ``resources`` ``{resource
-    id: kind}`` and ``made`` ``{(query, index): 'completed' | 'failed'}`` of the classifications the episode already
-    holds or already saw fail. The conditions:
+    of the sequence records the episode holds, ``scope_subjects`` the subjects of its scope and ``resources`` ``{resource
+    id: kind}``. The conditions:
 
     1. the query is a subject of the episode's scope;
     2. the query is DNA (the indexes hold nucleotide k-mers);
-    3. the resource is a local resource;
-    4. the same classification (query, index) is not already held;
-    5. the same classification has not already failed."""
+    3. the resource is a local resource."""
     query = request['query_ref']
     problems = []
     if query not in scope_subjects:
@@ -93,10 +90,6 @@ def check_kraken2_request(request, *, sequences, scope_subjects, resources, made
     if resources[request['resource_id']] != 'local':
         problems.append({'field': 'resource_id', 'code': 'resource_is_not_local',
                          'choose_from': [name for name, kind in resources.items() if kind == 'local']})
-    if (query, request['index']) in made:
-        problems.append({'field': 'index', 'code': {
-            'completed': 'classification_already_held',
-            'failed': 'classification_already_failed_and_cannot_be_retried'}[made[query, request['index']]]})
     return problems
 
 

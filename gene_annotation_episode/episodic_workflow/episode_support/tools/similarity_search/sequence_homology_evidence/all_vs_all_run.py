@@ -26,13 +26,12 @@ component files, the raw report, receipts, logs) stay in the child, which is the
    matrix of BIT SCORES (``cluster_sheet``: why bit scores) is the ``sequence_similarity_matrix`` product.
 3. ``cluster`` (a TRY): REQUIRES a held ``sequence_similarity_matrix`` product. Its weights are the score ratio
    (``cluster_sheet.score_ratio_graph``) under the contrast the model chose, clustered by ``mcl`` (``cluster_sheet``: why MCL, and the
-   tuning) at the inflation the model chose. The same tuning of the same matrix again is refused. A try is a working result: its clusters
+   tuning) at the inflation the model chose. A try is a working result: its clusters
    are a ``sequence_clusters`` product (a partition already held is reported as the same clustering, not a second product) and the
    model is shown controlled facts of it (``cluster_sheet.cluster_facts``). Nothing is graded and nothing reaches the head's credit.
    Before the first try the model is shown the facts of the matrix's score ratios (``held_matrix_facts``).
-4. ``commit_clustering``: REQUIRES a held ``sequence_clusters`` product of a matrix of which at least ``MINIMUM_TRIES`` (two) completed
-   tries with different tunings are held (``committable``), once per commission: the clustering is graded into the cluster sheet
-   (``cluster_sheet.grade_clustering``) as a source of provider ``all_vs_all``: the ONE graded test the head reads.
+4. ``commit_clustering``: REQUIRES a held ``sequence_clusters`` product (``committable``): the clustering is graded into the cluster sheet
+   (``cluster_sheet.grade_clustering``) as a source of provider ``all_vs_all``: the graded test the head reads.
 
 Settings (``ctx.settings``): ``blast_executable_directory`` (``makeblastdb``, ``blastdbcmd``, ``blastp``),
 ``mcl_executable_directory`` (``mcl``) and ``python_executable``."""
@@ -57,7 +56,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.jobs.resource_loc
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.similarity_search.sequence_homology_evidence.blast_preparation_run import (
     prepare_locally)
 from gene_annotation_episode.episodic_workflow.episode_support.records.data_products import (
-    find_reusable, products, record_product, require_product)
+    products, record_product, require_product)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence import (
     all_vs_all_driver)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_hit_metadata import (
@@ -77,9 +76,6 @@ SET_KIND, DATABASE_KIND, MATRIX_KIND, CLUSTERS_KIND = ('protein_sequences', 'bla
 BLAST_PROGRAMS = ('makeblastdb', 'blastdbcmd')
 TOOLS = ('prepare_database', 'all_vs_all_blast', 'cluster', 'commit_clustering')
 HOLD_REASONS = ('a_step_failed_and_cannot_be_retried', 'every_step_is_done')
-# The completed tries of one matrix, with different tunings, a clustering of it needs before it can be committed: the owner, "just let
-# MCL be tuned by agent"; a committed clustering is chosen by comparing tunings, not taken from the first one tried.
-MINIMUM_TRIES = 2
 OWN_FAILURE_CODES = ('sequence_not_returned_by_the_service', 'a_sequence_did_not_find_itself', 'blastp_exit_nonzero',
                      'mcl_exit_nonzero', 'job_not_accepted', 'job_not_fetched', 'failed', 'incomplete')
 
@@ -123,48 +119,37 @@ def _programs(directory, names):
             if not os.access(Path(directory) / name, os.X_OK)]
 
 
-def check_prepare(call, *, commission, per_candidate, reader, resources, failed, blast_directory, python):
+def check_prepare(call, *, commission, per_candidate, reader, resources, blast_directory, python):
     """The things to fix in a ``prepare_database`` call (``resource_id``): the resource is a bound local one; the set the
-    commission gives has at least two sequences; no database of this set is held (the reuse key of the product); an earlier
-    preparation of it did not fail (a failure after a passed check is the environment's and the same call fails again); the
-    BLAST programs and the interpreter exist."""
+    commission gives has at least two sequences; the BLAST programs and the interpreter exist."""
     problems = _resource_problems(call, resources)
     if len(set_members(reader, commission, per_candidate)) < 2:
         problems.append({'code': 'set_needs_two_sequences', 'field': 'commission'})
-    held = find_reusable(reader, DATABASE_KIND, _used(reader, commission), database_settings(commission, per_candidate))
-    if held is not None:
-        problems.append({'code': DATABASE_KIND + '_already_held', 'field': 'resource_id', 'detail': held['id']})
-    if failed:
-        problems.append({'code': 'preparation_already_failed_and_cannot_be_retried', 'field': 'resource_id'})
     problems.extend(_programs(blast_directory, BLAST_PROGRAMS))
     if not os.access(python, os.X_OK):
         problems.append({'code': 'python_missing', 'field': 'settings'})
     return problems
 
 
-def check_blast(call, *, commission, per_candidate, reader, resources, failed, blast_directory, python):
+def check_blast(call, *, reader, resources, blast_directory, python):
     """The things to fix in an ``all_vs_all_blast`` call (``resource_id``, ``database_ref``): the resource is a bound local
-    one; the database is a held ``blast_protein_database`` product (``require_product``); the matrix of this database is not
-    held; no earlier search failed; ``blastp`` and the interpreter exist."""
+    one; the database is a held ``blast_protein_database`` product (``require_product``); ``blastp`` and the interpreter
+    exist."""
     problems = _resource_problems(call, resources)
     row, problem = require_product(reader, call['database_ref'], DATABASE_KIND)
     if problem is not None:
         problems.append({'code': problem, 'field': 'database_ref'})
-    elif find_reusable(reader, MATRIX_KIND, [row['artifact_ref']], matrix_settings(commission, per_candidate)) is not None:
-        problems.append({'code': MATRIX_KIND + '_already_held', 'field': 'database_ref'})
-    if failed:
-        problems.append({'code': 'search_already_failed_and_cannot_be_retried', 'field': 'database_ref'})
     problems.extend(_programs(blast_directory, ('blastp',)))
     if not os.access(python, os.X_OK):
         problems.append({'code': 'python_missing', 'field': 'settings'})
     return problems
 
 
-def check_cluster(call, *, reader, ids, resources, tried, mcl_directory):
+def check_cluster(call, *, reader, ids, resources, mcl_directory):
     """The things to fix in a ``cluster`` call (``resource_id``, ``matrix_ref``, ``inflation``, ``contrast``): the resource is a bound
     local one; the matrix is a held ``sequence_similarity_matrix`` product (``require_product``); the inflation and the contrast are of
-    the fixed sets; the contrast has a meaning on this matrix (``rescale`` needs ratios below 1); this tuning of this matrix is not
-    already tried (``tried``: the (matrix, inflation, contrast) of the tries made); ``mcl`` exists. ``ids`` are the set's ids in file order."""
+    the fixed sets; the contrast has a meaning on this matrix (``rescale`` needs ratios below 1); ``mcl`` exists. ``ids`` are the
+    set's ids in file order."""
     problems = _resource_problems(call, resources)
     row, problem = require_product(reader, call['matrix_ref'], MATRIX_KIND)
     if problem is not None:
@@ -177,45 +162,20 @@ def check_cluster(call, *, reader, ids, resources, tried, mcl_directory):
         if contrast_undefined(score_ratio_graph(matrix_edges(reader.get_artifact(row['artifact_ref']).decode()), ids),
                               call['contrast']):
             problems.append({'code': 'contrast_undefined_on_this_matrix', 'field': 'contrast'})
-    if (call['matrix_ref'], call['inflation'], call['contrast']) in tried:
-        problems.append({'code': 'this_tuning_of_the_matrix_is_already_tried', 'field': 'inflation'})
     problems.extend(_programs(mcl_directory, ('mcl',)))
     return problems
 
 
-def tunings_by_matrix(tries):
-    """The number of different tunings (inflation, contrast) among the completed tries of each matrix, ``{matrix_ref: count}``;
-    ``tries`` are the (``matrix_ref``, ``inflation``, ``contrast``) of each completed try."""
-    found = {}
-    for matrix, inflation, contrast in tries:
-        found.setdefault(matrix, set()).add((inflation, contrast))
-    return {matrix: len(tunings) for matrix, tunings in found.items()}
+def committable(reader):
+    """The held clusterings, any of which may be committed: the ``sequence_clusters`` products."""
+    return [row['id'] for row in products(reader, CLUSTERS_KIND)]
 
 
-def committable(reader, tries):
-    """The held clusterings that may be committed: the ``sequence_clusters`` products derived from a matrix of which at least
-    ``MINIMUM_TRIES`` completed tries with different tunings are held (``tries`` as in ``tunings_by_matrix``)."""
-    ready = {matrix for matrix, count in tunings_by_matrix(tries).items() if count >= MINIMUM_TRIES}
-    return [row['id'] for row in products(reader, CLUSTERS_KIND) if row['derived_from'][0] in ready]
-
-
-def check_commit(call, *, reader, committed, tries):
+def check_commit(call, *, reader):
     """The things to fix in a ``commit_clustering`` call (``clusters_ref``): the clusters are a held ``sequence_clusters`` product
-    (``require_product``); at least ``MINIMUM_TRIES`` completed tries of its matrix with different tunings are held (``tries``: the
-    (``matrix_ref``, ``inflation``, ``contrast``) of each completed try); no clustering is committed yet (one graded clustering per
-    commission)."""
-    problems = []
+    (``require_product``)."""
     row, problem = require_product(reader, call['clusters_ref'], CLUSTERS_KIND)
-    if problem is not None:
-        problems.append({'code': problem, 'field': 'clusters_ref'})
-    else:
-        tuned = tunings_by_matrix(tries).get(row['derived_from'][0], 0)
-        if tuned < MINIMUM_TRIES:
-            problems.append({'code': 'tries_with_different_tunings_required', 'field': 'clusters_ref', 'held': tuned,
-                             'required': MINIMUM_TRIES})
-    if committed:
-        problems.append({'code': 'a_clustering_is_already_committed', 'field': 'clusters_ref'})
-    return problems
+    return [] if problem is None else [{'code': problem, 'field': 'clusters_ref'}]
 
 
 # -- the settings of the products ------------------------------------------------------------------------------------
@@ -298,9 +258,10 @@ def commission_keys(summary):
 def check_commission(request, *, scope_subjects, sequences, options, commissioned):
     """The things to fix in the head's commission of this child (``request``: ``query_ref``, ``search_ref``, ``candidates``,
     ``per_candidate``). ``options`` is ``msa_options`` (each held graded BV-BRC search with the product candidates the head admitted
-    from it); ``commissioned`` the (search, sorted candidates) of the earlier commissions. The conditions: the query
+    from it). The conditions: the query
     is a protein sequence of the scope; the search is a held graded search of that query; at least two distinct candidates, each
-    admitted from that search; ``per_candidate`` in range; the same candidates of the same search not commissioned before at any per_candidate (graded or not): a replicate."""
+    admitted from that search; ``per_candidate`` in range. ``commissioned`` is not read here: a set commissioned before is not
+    refused (the head's ceiling prices a replicate at 0)."""
     problems = []
     query, search = request['query_ref'], request['search_ref']
     if query not in scope_subjects or sequences.get(query) != 'protein':
@@ -320,8 +281,6 @@ def check_commission(request, *, scope_subjects, sequences, options, commissione
     if not PER_CANDIDATE_RANGE[0] <= request['per_candidate'] <= PER_CANDIDATE_RANGE[1]:
         problems.append({'field': 'per_candidate', 'code': 'per_candidate_out_of_range', 'minimum': PER_CANDIDATE_RANGE[0],
                          'maximum': PER_CANDIDATE_RANGE[1]})
-    if (search, sorted(request['candidates'])) in commissioned:
-        problems.append({'field': 'candidates', 'code': 'this_set_was_already_commissioned'})
     return problems
 
 
@@ -489,7 +448,7 @@ def commit_clustering(ctx, clusters_ref, commission, per_candidate):
 
 
 __all__ = ['BLAST_PROGRAMS', 'CHILD', 'CONTRASTS', 'CLUSTERS_KIND', 'DATABASE_KIND', 'EVALUE', 'HOLD_REASONS', 'INFLATIONS', 'OWN_FAILURE_CODES', 'MATRIX_KIND',
-           'MINIMUM_CANDIDATES', 'MINIMUM_TRIES', 'PER_CANDIDATE_RANGE', 'PROVIDER', 'SET_KIND', 'TOOLS', 'all_vs_all_blast', 'check_blast',
+           'MINIMUM_CANDIDATES', 'PER_CANDIDATE_RANGE', 'PROVIDER', 'SET_KIND', 'TOOLS', 'all_vs_all_blast', 'check_blast',
            'check_cluster', 'check_commission', 'commission_keys', 'check_commit', 'check_prepare', 'held_clusterings', 'held_matrix_facts',
            'cluster', 'commit_clustering', 'committable', 'database_settings', 'matrix_settings', 'clusters_settings',
-           'pack_database', 'prepare_database', 'set_members', 'set_settings', 'tunings_by_matrix']
+           'pack_database', 'prepare_database', 'set_members', 'set_settings']

@@ -13,7 +13,7 @@ A measurement is one graded result: the test it belongs to (the same tool, setti
 candidate annotation its reference stands for, and its value on the subscoring sheet (0 to 1). Measurements are
 given in the order they arrived. The tests are ordered by their first measurement.
 
-- A candidate's value in one test is the mean of its measurements in that test (its replicates in that test), in
+- A candidate's value in one test is the largest of its measurements in that test (its replicates in that test: for a database search its top hit), in
   [0, 1] (the alignment's value, a count of new conserved sites x a weight, is not capped at 1: see
   ``candidate_measurements``).
 - A subscoring sheet is a kind of test: the part of the test name before ``@`` (for example ``database_search:...``,
@@ -56,6 +56,9 @@ differential of two candidates is ``min(r_a, r_b) x |d_a - d_b|``: a pair is onl
 test admits (an entry) earns ``r(n) x`` its entry score: a candidate entering on thin data enters with less. Every other family
 (search, scan, alignment, MetaCATS, pairwise) has evidence 1, so its rule is unchanged."""
 import math
+
+from gene_annotation_episode.episodic_workflow.episode_support.grading.similarity_search.hit_list_claim import (
+    claim_value, taxa_share)
 
 
 # The typical strong value of each sheet's family: the value, in ONE test of that family, of the candidate that leads a stored real run
@@ -131,6 +134,19 @@ def lead_pair(scores):
     return first, second
 
 
+def test_value(rows, candidate):
+    """The candidate's value in one test, from the test's measurements ``rows``. A ranked hit list (measurements with a
+    ``rank``: a database search) gives the value of the claim the list makes for the candidate
+    (``hit_list_claim.claim_value``): its top hit's value, the run of its hits before the first later hit of another
+    candidate, and the taxa of that run. Any other test gives the largest of the candidate's measurements."""
+    own = sorted((row for row in rows if row['candidate'] == candidate), key=lambda row: row.get('rank', 0))
+    if 'rank' not in own[0]:
+        return max(row['value'] for row in own)
+    other = [row['rank'] for row in rows if row['candidate'] != candidate and row['rank'] > own[0]['rank']]
+    block = [row for row in own if not other or row['rank'] < min(other)]
+    return claim_value(own[0]['value'], len({row['rank'] for row in block}), taxa_share([row['taxon_id'] for row in block]))
+
+
 def differential_credit(measurements):
     """The scores, the sheets and the credit of ``measurements`` (``[{'test', 'candidate', 'value'}]``, each optionally
     with its ``dataset``, in arrival order; a measurement of a ``cluster`` test also has its ``size``). Also ``test_credits``
@@ -156,7 +172,7 @@ def differential_credit(measurements):
         return math.fsum(_sheet_value(held) for held in sheets[candidate].values())
     for position, test in enumerate(tests):
         measured = [candidate for candidate in candidates if (test, candidate) in values]
-        changes = {candidate: sheet_weight(test) * math.fsum(values[test, candidate]) / len(values[test, candidate])
+        changes = {candidate: sheet_weight(test) * test_value([row for row in measurements if row['test'] == test], candidate)
                    for candidate in measured}
         pair = lead_pair({candidate: score(candidate) for candidate in measured if candidate in entries})
         if pair is not None:
@@ -204,7 +220,7 @@ def regrouped(measurements, groups):
     annotation scorings"; the design ``docs/plan/designs/a102_regrouping.md``). ``groups`` is a list of groups, each a
     list of candidate keys; a candidate in no group is read as before. The records stay as observed: only the candidate a
     measurement is read as changes, to its group's key (``group_key``). The measurements of the members of one group in
-    one test are then that one candidate's replicates, so its value in the test is their mean: for a database search,
+    one test are then that one candidate's replicates, so its value in the test is their largest: for a database search,
     whose measurements are the hits, exactly the value the test would have given under one name. A ``cluster`` test gives
     one measurement per candidate (its share of its sequences in the target's cluster, with its ``size``), so the members
     of a group are joined into one measurement there: the group's share over all its sequences (the sum of
@@ -271,10 +287,9 @@ def standing(measurements):
     below zero). A sheet value from the tests of one dataset is the largest of them (``_sheet_value``)."""
     held, dataset_of = {}, _datasets(measurements)
     for row_test, row_candidate in dict.fromkeys((row['test'], row['candidate']) for row in measurements):
-        replicates = [row['value'] for row in measurements
-                      if row['test'] == row_test and row['candidate'] == row_candidate]
         held.setdefault(row_candidate, {}).setdefault(_kind(row_test), []).append(
-            (dataset_of.get(row_test), sheet_weight(row_test) * math.fsum(replicates) / len(replicates)))
+            (dataset_of.get(row_test), sheet_weight(row_test) * test_value(
+                [row for row in measurements if row['test'] == row_test], row_candidate)))
     sheets = {candidate: {kind: _sheet_value(values) for kind, values in kinds.items()}
               for candidate, kinds in held.items()}
     return {candidate: {'sheets': kinds, 'score': math.fsum(kinds.values()), 'listed': math.fsum(kinds.values()) > 0}

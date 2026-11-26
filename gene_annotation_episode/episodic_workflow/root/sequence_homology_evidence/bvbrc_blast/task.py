@@ -26,6 +26,8 @@ from jsonschema import Draft202012Validator, ValidationError
 
 from episode_runtime import ModelRequest, Rejected, ToolCall
 
+from gene_annotation_episode.episodic_workflow.episode_support.tools.annotation_claims.annotation_settling import (
+    settle_annotations)
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import (
     rejection_feedback)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.blast_search import (
@@ -191,7 +193,8 @@ def action(response, summary, records, ctx):
         return ToolCall('monitor', {'handoff_ref': chosen['handoff_ref'], 'wait_seconds': chosen['wait_seconds'],
                                     'expected_remaining_seconds': chosen['expected_remaining_seconds']})
     return ToolCall('extract', {'handoff_ref': chosen['handoff_ref'], 'request': facts['request'],
-                                'query_ref': query['subject_ref']})
+                                'query_ref': query['subject_ref'], 'scope': summary['scope'],
+                                'organism': summary['organism']})
 
 
 def estimate(arguments, ctx):
@@ -216,10 +219,16 @@ async def monitor(arguments, ctx):
                                 expected_remaining_seconds=arguments['expected_remaining_seconds'])
 
 
-def extract(arguments, ctx):
-    """The fetch of the report and its grading into the database sheet, as one unit."""
-    return fetch_and_grade_search(ctx, handoff_ref=arguments['handoff_ref'], fields=arguments['request'],
-                                  query_ref=arguments['query_ref'])
+async def extract(arguments, ctx):
+    """The fetch of the report and its grading into the database sheet, then the settling of the annotations
+    (``settle_annotations``), as one unit."""
+    graded = fetch_and_grade_search(ctx, handoff_ref=arguments['handoff_ref'], fields=arguments['request'],
+                                    query_ref=arguments['query_ref'])
+    if graded['status'] != 'completed':
+        return graded
+    settled = await settle_annotations(ctx, scope=arguments['scope'], organism=arguments['organism'])
+    return {**graded, 'graded_refs': [*graded['graded_refs'], *settled],
+            'record_refs': [*graded['record_refs'], *settled]}
 
 
 TOOLS = {'estimate': estimate, 'launch': launch, 'fix': fix, 'monitor': monitor, 'extract': extract}

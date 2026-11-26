@@ -12,7 +12,7 @@ A commission carries controlled data only. Nothing in it was written by a model:
 - the head's selection (its evidence-axis option, thought pattern and tools), which the root's settings give for
   the axis and ``task.action`` put into ``arguments``;
 - the scope, as the root was given it; the root has no proposed annotation and passes none. A head that checks claims
-  is given the claim it is commissioned on (a hypothesis record the root's own tool made from a candidate annotation);
+  is given the claim it is commissioned on (a hypothesis record the head that found the annotation made from it);
 - the whole-axis finding task with the root's credit unit of the axis (``credit.AXIS_CREDIT_UNITS``): the setting
   that makes the nine axis scales comparable; for the heads that take them, the credit units of their
   operational children (``credit.OPERATIONAL_CREDIT_UNITS``);
@@ -24,10 +24,11 @@ A commission carries controlled data only. Nothing in it was written by a model:
 
 The return fields the root selects (``SELECTION``) are record references, ``committed_record_refs`` wherever a
 head declares it selectable (the biochemical-feasibility head always returns it) and ``execution_handoff_refs``
-from the sequence-homology head, the one head whose return form declares a job field today, and two fields of
+from the sequence-homology head, the one head whose return form declares a job field today, and three fields of
 controlled data from the sequence-homology head: ``candidate_hit_organisms`` (the organisms of the database hits
 behind each of its candidates: taxon ids and hit counts) and ``candidate_hit_feature_kinds`` (the feature types of
-those hits: types of the fixed list and hit counts). Credit and finding are always returned.
+those hits: types of the fixed list and hit counts) and ``claims`` (the claims it made from its leading candidate
+annotations: the root makes none). Credit and finding are always returned.
 ``messages/read_from_child.py`` reads exactly these fields."""
 from episode_runtime import ChildMessage
 
@@ -39,7 +40,7 @@ TASK_KIND = 'whole_axis_findings'
 # The selectable fields of each head's return form the root asks for.
 SELECTION = {
     'sequence_homology_evidence': ('committed_record_refs', 'execution_handoff_refs', 'candidate_hit_organisms',
-                                   'candidate_hit_feature_kinds'),
+                                   'candidate_hit_feature_kinds', 'claims'),
     'structural_homology_evidence': ('committed_record_refs',),
     'gene_context_evidence': ('committed_record_refs',),
     'evolutionary_history_evidence': ('committed_record_refs',),
@@ -69,19 +70,18 @@ def returned(slot, summary):
 
 def sequence_homology_evidence(arguments, summary):
     """A101. The scope records in ``scope_refs``; no proposed annotation (the root has none: this head finds the
-    candidate annotations); the credit units of its operational children; and, when the root's lines join two or more of this head's own candidates, the
-    grouping of them (``candidate_groups``, ``internal_summary.groups_of``), which the head applies and rescores
-    under."""
+    candidate annotations, joins the names that are one function itself and makes the claims of its leading ones); the
+    records feature calling returned (its feature records name the proteins this head works on); and the credit units of
+    its operational children."""
     slot = 'sequence_homology_evidence'
     assignment = {
         'selection': arguments['selection'],
-        'evidence_refs': unique(summary['evidence_refs'], summary['received_record_refs'], returned(slot, summary)),
+        'evidence_refs': unique(summary['evidence_refs'], summary['received_record_refs'], returned(slot, summary),
+                                summary['features']['record_refs']),
         'constraints': {},
         'context': {'evidence_task': evidence_task(slot, 'A101')},
         'scope': summary['scope'], 'scope_refs': summary['scope_refs'],
         'child_credit_units': dict(OPERATIONAL_CREDIT_UNITS)}
-    if arguments['candidate_groups']:
-        assignment['candidate_groups'] = arguments['candidate_groups']
     if arguments.get('organism_candidates'):
         assignment['organism_candidates'] = arguments['organism_candidates']
     return ChildMessage(objective='Find what the sequence-homology evidence shows the assigned subject to be',
@@ -134,8 +134,8 @@ def evolutionary_history_evidence(arguments, summary):
 
 
 def experimental_activity_evidence(arguments, summary):
-    """A105. It is commissioned on one claim (``arguments['claim_ref']``): a hypothesis record the root made from a
-    candidate annotation (``task.make_claims``), which is what the head evaluates (the head's own form names that field
+    """A105. It is commissioned on one claim (``arguments['claim_ref']``): a hypothesis record the head that found a
+    candidate annotation made from it and returned, which is what the head evaluates (the head's own form names that field
     ``proposed_annotation_ref``; it is the root's claim, never an input of the root). One custody field,
     ``evidence_refs``, for the scope records, the claim with the records it names, and the evidence; its context is
     exactly the finding task. Once its head has returned a sheet for this claim, the sheet states of that return go back
@@ -250,8 +250,10 @@ def organism_identification(arguments, summary):
     """The organism identification head (not an evidence axis): the root's own scope, as every head is commissioned on,
     with the records the scope names in custody. Its committed records are selected so the root holds its graded
     classifications, over which it computes the scoring sheet of candidate taxa (``internal_summary.organism_table``)."""
-    return ChildMessage(objective='Find which organism the sequence is from', message={},
-                        assignment={'scope': summary['scope'], 'scope_refs': list(summary['scope_refs'])},
+    assignment = {'scope': summary['scope'], 'scope_refs': list(summary['scope_refs'])}
+    if summary['organism']['record_refs']:
+        assignment['evidence_refs'] = list(summary['organism']['record_refs'])
+    return ChildMessage(objective='Find which organism the sequence is from', message={}, assignment=assignment,
                         selection=('record_refs',))
 
 

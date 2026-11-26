@@ -29,8 +29,8 @@ The kinds of held graded source read, by the content of their retained sheet:
   positive knowledge") names no candidate either, in any test: a hit all of whose functions are such labels is counted
   as ``uncharacterized``.
   The function-level identity of a product candidate (the owner, 2026-11-23: an annotation is a function; two heads, and
-  one head, name one function in several ways, and which names are one function is decided where all the evidence is,
-  at the root: "leave a101 names alone until root"). A candidate keeps its name and its score exactly as above. It
+  one head, name one function in several ways; among this head's own candidates the head joins the names itself
+  (2026-11-26: "join this automatically and not use the root to decide"). A candidate keeps its name and its score exactly as above. It
   additionally carries ``function_identifiers``: the identifiers of the proteins behind it, read from its hits and
   never from a search by its name: for BV-BRC hits the global protein family of each hit's feature (``pgfam_id``,
   source ``bvbrc_global_family``), each with the number of its hits that carry it, ``identifier_sources`` (per source,
@@ -158,7 +158,7 @@ EXPECTED_DISTINGUISHING_SITES = 7
 SITE_WEIGHT = 1 / EXPECTED_DISTINGUISHING_SITES
 
 
-# The provider of the records in which an episode keeps the groupings of its candidates it was given (one ``source``
+# The provider of the records in which an episode keeps its joinings of its candidates (one ``source``
 # record per grouping, its artifact the grouping itself).
 GROUPING_PROVIDER = 'candidate_grouping'
 
@@ -175,9 +175,9 @@ def grouping_keys(grouping):
 
 
 def held_groupings(reader):
-    """The groupings of its candidates the episode holds, in the order it obtained them (the design
-    ``docs/plan/designs/a102_regrouping.md``: only the root decides which candidates are one function; the head keeps
-    each grouping it was given as a record, and its credit reads them)."""
+    """The groupings of its candidates the episode holds, in the order it obtained them (the owner, 2026-11-26: the
+    head joins the names that are one function itself, by one automatic model call; it keeps
+    each joining as a record, and its credit reads them)."""
     return [json.loads(reader.get_artifact(reader.get(ref)['artifact_ref'])) for ref in held_sources(reader)
             if reader.get(ref)['provider'] == GROUPING_PROVIDER]
 
@@ -185,6 +185,19 @@ def held_groupings(reader):
 def held_sources(reader):
     """The sources the episode holds, in the order it obtained them (receipt order)."""
     return [ref for ref in reader.refs() if ref.startswith('source_')]
+
+
+def targets(reader, scope):
+    """The sequences the head finds annotations for, in the order of the scope's subjects: each subject itself, or, when
+    the episode holds feature records of it that name their protein (the candidate feature calls of feature calling),
+    those proteins in the order the records were received."""
+    features = [reader.get(ref) for ref in reader.refs() if ref.startswith('feature_')]
+    found = []
+    for subject in reader.validate_scope(scope)['subject_refs']:
+        proteins = [record['protein_ref'] for record in features
+                    if record['subject_ref'] == subject and 'protein_ref' in record and 'joined_ref' not in record]
+        found.extend(proteins or [subject])
+    return found
 
 
 def _measurement(target, test, vocabulary, name, identifier, value, source, extra=None):
@@ -277,7 +290,8 @@ def _database_search(source, grading, value_of):
     search = grading['sheet']['normalized_result']['search']
     test = 'database_search:' + source['provider'] + ':' + search['program'] + ':' + search['request']['database']
     rows = search_hits(grading, value_of)
-    found = [(test, 'product', row['product'], None, row['value']) for row in rows if row['product'] is not None]
+    found = [(test, 'product', row['product'], None, row['value'], {'rank': row['hit_index'], 'taxon_id': row['taxon_id']})
+             for row in rows if row['product'] is not None]
     return found, sum(1 for row in rows if row['product'] is None)
 
 
@@ -414,10 +428,10 @@ def _read(reader, scope, sources):
     under ``feature_types`` the database's feature type of every hit of each product), the
     identified conserved sites (target, target position, residue, candidate name) of the held alignments and the matched
     sites the held MetaCATS reports confirmed (the same identities)."""
-    scope = reader.validate_scope(scope)
+    scope, wanted = reader.validate_scope(scope), targets(reader, scope)
     measurements, unnamed = [], {target: {'not_asked': 0, 'no_product': 0, 'uncharacterized': [], 'families': {},
                                           'taxa': {}, 'feature_types': {}}
-                                 for target in scope['subject_refs']}
+                                 for target in wanted}
     identified, confirmed = set(), set()
     for reference in sources:
         source = reader.get(reference)
@@ -439,7 +453,7 @@ def _read(reader, scope, sources):
             else:
                 continue
             target = source['operand_refs'][0]
-            if target not in scope['subject_refs']:
+            if target not in wanted:
                 continue
             length, regions = reader.subject_length(target), _regions(reader, scope, target)
             value_of = lambda rows: compile_native_sheet(rows, supplied_length=length, regions=regions)['value']
@@ -510,7 +524,7 @@ def matched_positions_taken(reader, scope, sources):
     scope = reader.validate_scope(scope)
     identified = _read(reader, scope, sources)[2]
     taken = {}
-    for target in scope['subject_refs']:
+    for target in targets(reader, scope):
         sequence_ref = reader.get(target).get('sequence_ref')
         residues = None if sequence_ref is None else reader.get_artifact(sequence_ref).decode('ascii').strip().upper()
         found = {}
@@ -526,7 +540,7 @@ def alignment_contexts(reader, scope, sources):
     ...)`` for its reference sequences in the order they were given to the aligner (the sheet's order). Two alignments with
     the same tuple (the same candidates, sequences and order) are the same input."""
     scope = reader.validate_scope(scope)
-    contexts = {target: [] for target in scope['subject_refs']}
+    contexts = {target: [] for target in targets(reader, scope)}
     for reference in sources:
         source = reader.get(reference)
         target = source['operand_refs'][0] if source.get('operand_refs') else None
@@ -643,11 +657,12 @@ def candidate_table(reader, scope, sources, in_force=None):
     in the order of the candidates, and ``hit_feature_kinds``: the feature types of those hits
     (``_hit_feature_kinds``), in the same order.
 
-    Groupings (the design ``docs/plan/designs/a102_regrouping.md``; the owner, 2026-11-23: only the root decides which
-    candidates are one function, and its grouping comes back down "to make the arms annotation scores honest"). The
+    Groupings (the owner, 2026-11-26: the head joins the names that are one function itself, "automatically and not
+    use the root to decide"; 2026-11-23: a grouping is there
+    "to make the arms annotation scores honest"). The
     ``candidates`` stay as found, by name. The target's ``credit`` is ``differential_credit.grouped_credit`` over the
     groupings the episode holds (``held_groupings``): with none held, the credit as before. With ``in_force`` (the
-    grouping of the current commission, once the episode holds it) the target also carries ``grouped_candidates`` (its
+    latest joining the episode made, when it joins any) the target also carries ``grouped_candidates`` (its
     candidates rescored under that grouping, ``_grouped``) and ``grouping_in_force``."""
     measurements, unnamed = _read(reader, scope, sources)[:2]
     groupings = [grouping_keys(grouping) for grouping in held_groupings(reader)]

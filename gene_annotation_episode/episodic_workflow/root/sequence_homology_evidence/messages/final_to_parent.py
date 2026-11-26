@@ -22,7 +22,12 @@ search named, the number of its hits per feature type (a type of the one list ``
 database's own feature type of each hit by ``database_feature_types``), the number of its hits whose database value has
 no type of ours yet, and the number of its hits whose feature carries no feature type
 (``candidate_measurements._hit_feature_kinds``). The database's own values are not returned: they stay in this
-episode's records."""
+episode's records.
+
+And ``claims``: the claims this episode made from its two leading candidate annotations (``annotation_settling.settle_annotations``; the
+owner, 2026-11-26: "claims are supposed to be made in their respective arms and passed up to root"), each with the
+annotation it was made from (named as in the finding), what it says (a predicate of a fixed list and the looked-up
+name of its molecule) and its records. The records are among ``committed_record_refs``."""
 from method_loop import ChoiceField, Field, RecordForm
 
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_features.feature_types import KINDS
@@ -30,6 +35,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_
     FEATURES, MEANINGS)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.candidate_measurements import (
     FAMILY_SOURCE, VOCABULARIES)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.annotation_claims.claim_generation import (
+    PARTNER_KINDS, PREDICATES)
 
 FIELD_TYPES = {'number': 'number', 'count': 'integer', 'boolean': 'boolean'}
 
@@ -81,7 +88,7 @@ CANDIDATE_FORM = RecordForm({
     'identifier_sources': Field('list', 'Per source of those identifiers, the hits that carry any identifier of it',
                                 items=IDENTIFIER_SOURCE_FORM, required=False),
     'hits_without_identifier': Field('integer', 'Its hits whose feature carries no such identifier', required=False),
-    'score': Field('number', 'The candidate\'s annotation score: the sum of its sheet values, that is, of its mean '
+    'score': Field('number', 'The candidate\'s annotation score: the sum of its sheet values, that is, of its '
                              'value (0 to 1) in each test it has undergone'),
     'sheets': Field('list', 'The candidate\'s subscoring sheets, one per kind of test it has undergone', items=SHEET_FORM),
     'tests': Field('list', 'The tests the candidate has undergone, each as the controlled test name'),
@@ -128,10 +135,11 @@ TARGET_FORM = RecordForm({
     'uncharacterized_families': Field('list', 'Those hits by family, the family with the highest value first',
                                       items=UNCHARACTERIZED_FAMILY_FORM),
     'differentials': Field('list', 'The tests that differentiated the top two listed candidates they measured (one per test)', items=DIFFERENTIAL_FORM),
-    'grouped_candidates': Field('list', 'With a grouping of the candidates in force (the commissioner\'s): every '
+    'grouped_candidates': Field('list', 'With a joining of the candidates in force (this episode\'s own): every '
                                         'candidate rescored under it, the leading one first',
                                 items=GROUPED_CANDIDATE_FORM, required=False),
-    'grouping_in_force': Field('list', 'The grouping in force, as the commission gave it', items=GROUP_FORM,
+    'grouping_in_force': Field('list', 'The joining in force: the candidates this episode sorted together as one '
+                                       'function', items=GROUP_FORM,
                                required=False),
 })
 HIT_ORGANISM_FORM = RecordForm({
@@ -170,6 +178,18 @@ TARGET_HIT_FEATURE_KINDS_FORM = RecordForm({
     'candidates': Field('list', 'One row per candidate of the target that a database search named, in the order of the '
                                 'target\'s candidates', items=CANDIDATE_HIT_FEATURE_KINDS_FORM),
 })
+CLAIM_ANNOTATION_FORM = RecordForm({name: CANDIDATE_FORM.fields[name] for name in (
+    'vocabulary', 'name', 'identifier', 'function_identifiers', 'identifier_sources', 'hits_without_identifier')})
+CLAIM_FORM = RecordForm({
+    'claim_ref': Field('text', 'The claim: a hypothesis record this episode made from the annotation'),
+    'annotation': Field('record', 'The candidate annotation the claim was made from, named as in the finding',
+                        form=CLAIM_ANNOTATION_FORM),
+    'predicate': ChoiceField('text', 'What the claim says the protein does to the molecule', PREDICATES),
+    'partner': Field('text', 'The molecule of the claim, by the name it was found under in a database'),
+    'partner_kind': ChoiceField('text', 'Whether the molecule is a protein or a small molecule', PARTNER_KINDS),
+    'record_refs': Field('record_refs', 'The records of the claim: the subject under the annotation, the molecule and '
+                                        'the claim, which a head that checks the claim is given'),
+})
 FINDING_FORM = RecordForm({
     'evidence_axis': ChoiceField('text', 'The evidence axis', ('A101',)),
     'targets': Field('list', 'One entry per target of the scope: the features of its axis sheet', items=TARGET_FORM),
@@ -201,6 +221,8 @@ RETURN_FORM = RecordForm({
                                                  'the feature types of the database hits behind each candidate a '
                                                  'database search named (types of the fixed list and hit counts)',
                                          items=TARGET_HIT_FEATURE_KINDS_FORM, required=False),
+    'claims': Field('list', 'The claims this episode made from its leading candidate annotations, each with the '
+                            'annotation it was made from', items=CLAIM_FORM, required=False),
 })
 
 
@@ -220,4 +242,6 @@ def final_to_parent(summary, completion, selection):
         result['candidate_hit_organisms'] = summary['candidate_hit_organisms']
     if 'candidate_hit_feature_kinds' in selection:
         result['candidate_hit_feature_kinds'] = summary['candidate_hit_feature_kinds']
+    if 'claims' in selection:
+        result['claims'] = summary['claims']
     return result

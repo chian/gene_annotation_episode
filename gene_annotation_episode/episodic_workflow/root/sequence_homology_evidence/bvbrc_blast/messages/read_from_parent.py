@@ -23,6 +23,13 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
     DATABASES, UNTIL)
 
 UNITS = ('handoff_unit', 'information_unit', 'graded_unit')
+ORGANISM_FORM = RecordForm({
+    'taxon_id': Field('integer', 'The candidate taxon (NCBI taxonomy id)'),
+    'name': Field('text', 'The taxonomy\'s own name of the taxon'),
+    'rank_code': Field('text', 'The rank code of the taxon'),
+    'score': Field('number', 'The candidate\'s score'),
+    'role': ChoiceField('text', 'The leading candidate', ('leader',)),
+})
 ASSIGNMENT_FORM = RecordForm({
     'query_refs': Field('record_refs', 'The query: exactly one subject record of the parent\'s scope, passed in custody'),
     'input_refs': Field('record_refs', 'The records the query\'s sequence is read from (its sequence artifact), passed '
@@ -41,6 +48,9 @@ ASSIGNMENT_FORM = RecordForm({
     'check_refs': Field('record_refs', 'The status records of that search, passed back in custody', required=False),
     'closure_refs': Field('record_refs', 'The closure record of that search, passed back in custody', required=False),
     'known_ended': Field('boolean', 'Whether a passed-back status record already shows the search ended', required=False),
+    'scope': Field('record', 'The parent\'s scope: what the annotations are settled over after the graded result'),
+    'organism': Field('record', 'The leading candidate organism the parent holds, told to the claim tool',
+                      form=ORGANISM_FORM, required=False),
 })
 
 
@@ -65,4 +75,5 @@ def read_from_parent(assignment, message):
         target += units['graded_unit'] + (0.0 if known_ended else units['information_unit'])
     fields = {name: assignment[name] for name in ('program', 'database', 'resource_id')}
     return {'fields': fields, 'query_ref': query, 'units': units, 'until': until, 'prior': prior,
-            'resumed': resumed, 'known_ended': known_ended, 'target': target}
+            'resumed': resumed, 'known_ended': known_ended, 'target': target, 'scope': assignment['scope'],
+            'organism': assignment.get('organism')}
