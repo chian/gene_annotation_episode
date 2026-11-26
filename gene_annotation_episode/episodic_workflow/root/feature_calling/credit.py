@@ -2,8 +2,9 @@
 
 The credit is the feature credit of the graded sheets this episode holds over the commissioned scope
 (``feature_candidates.feature_table``): the entries of the slots (the candidate feature calls), what the claims earned
-(the same whether they wait or sit in a slot called before them), and the differentials of the two leading rival slots,
-counted as soon as a graded sheet is held. No model step stands between a graded result and its being counted. A slot's
+(the same whether they wait or sit in a slot called before them), what repeated support earned (a call of a slot
+already listed, a claim where earlier tests claimed the same: less each time, never nothing), and the differentials of
+the two leading rival slots, counted as soon as a graded sheet is held. No model step stands between a graded result and its being counted. A slot's
 score is not the credit: the score is how well a type at a location is supported (and is part of the scoring of the
 annotations that belong to that feature), the credit is what this episode gained.
 
@@ -22,7 +23,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.jobs.bvbrc_job_ro
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_features import (  # noqa: F401
     blast_claims, infernal_calls, prodigal_calls)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_features.feature_candidates import (
-    ABOVE, COMPETING, RIVAL_LETTERS, RNA_SHARE, RNA_UNITS, SAME_SHARE, SHEET_WEIGHT, feature_table, held_sources)
+    ABOVE, COMPETING, REPEAT_HALVING, RIVAL_LETTERS, RNA_SHARE, RNA_UNITS, SAME_SHARE, SHEET_WEIGHT, feature_table,
+    held_sources)
 
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.blast_search import (
     PROGRAM_UNITS)
@@ -62,9 +64,11 @@ class FeatureDifferentialCredit:
                 'settling': 'slots_claims_in_them_and_waiting_claims_follow_from_all_the_records_held_whatever_their_order',
                 'counting': 'tests_in_the_order_they_came_over_what_all_held_records_settle',
                 'entry': 'new_possibility_its_score_finer_within_listed_what_it_adds_one_that_only_holds_listed_ones_nothing',
-                'claim_credit': 'a_claim_waiting_or_sitting_in_a_slot_called_so_far_earns_its_weighted_bit_when_first_among_claims_of_its_type_and_reading_on_its_letters_and_that_is_taken_off_the_first_entry_of_a_slot_not_yet_listed_when_it_was_paid_that_counts_it',
+                'claim_credit': 'a_claim_waiting_or_sitting_in_a_slot_called_so_far_earns_its_weighted_bit_when_its_tests_first_claim_of_its_type_and_reading_on_its_letters_and_that_is_taken_off_the_first_entry_of_a_slot_not_yet_listed_when_it_was_paid_that_counts_it',
+                'repeated_support': 'a_call_of_a_slot_listed_before_its_test_and_a_claim_on_letters_where_earlier_tests_held_claims_of_its_type_and_reading_earn_their_weighted_bit_times_a_half_for_every_repeat_halving_of_the_support_already_there',
+                'repeat_halving': REPEAT_HALVING,
                 'differential': 'abs_difference_of_the_moves_of_the_two_leading_rival_slots_listed_before_the_test_that_it_can_measure',
-                'credit': 'sum_of_entries_claim_credits_and_differentials', 'maximum': 'none',
+                'credit': 'sum_of_entries_claim_credits_repeat_credits_and_differentials', 'maximum': 'none',
                 'repeat': 'earns_nothing',
                 'one_reading': 'tests_under_different_values_of_one_dimension_of_the_whole_sequence_such_as_its_genetic_code_are_alternatives_only_the_best_supported_value_counts',
                 'can_step_down': 'when_a_later_call_joins_two_slots_the_seconds_entry_is_no_longer_counted'}
@@ -162,8 +166,9 @@ def waiting_support(summary, ref):
 
 
 def search_ceiling(summary, ref, program, database):
-    """The most the credit can rise by one search of the sequence ``ref``. A claim earns only as the first claim of its
-    type and reading on its letters (whether it waits or sits in a slot called before it), so the earning claims of one
+    """The most the credit can rise by one search of the sequence ``ref``. A claim earns only as its search's first claim
+    of its type and reading on its letters (whether it waits or sits in a slot called before it; at most its weighted
+    bit, less when earlier tests said the same there), so the earning claims of one
     reading share no letter: one reading holds at most ``length // span + 1`` of them, ``span`` the shortest stretch an
     alignment the search reports can cover. The search reports an alignment only under its E-value cutoff (the
     application's default), which needs at least ``log2(letters searched / cutoff)`` bits (the database counted as one letter: the least it can be). Nucleotides give
@@ -172,8 +177,8 @@ def search_ceiling(summary, ref, program, database):
     six frames against proteins; against nucleotide entries the two strands for each type an entry can be of. The service
     returns at most its hit limit (the application's default), which bounds the claims too. A claim's value is below 1,
     times the weight of its family. A hit that reaches both ends of its entry is a feature call: the entry of the slot
-    it opens can also gain the support of the claims that wait (``waiting_support``). One differential, at most the
-    weight."""
+    it opens can also gain the support of the claims that wait (``waiting_support``); when it is a call of a slot
+    already listed it earns at most its weighted bit. One differential, at most the weight."""
     parameters = {item['id']: item for item in json.loads((SPECS / 'Homology.json').read_text())['parameters']}
     length = summary['sequence_lengths'][ref]
     bits = math.log2(length / parameters['blast_evalue_cutoff']['default'])

@@ -56,8 +56,12 @@ of 2026-11-25 with no run behind it. The other fields are kept for the grading o
 the naming of the feature.
 
 The type of a claim: a hit of a database of proteins is of a coding sequence; a hit of a database of nucleotide features
-is of its own feature type as the database gives it, mapped to our types (``database_feature_types``), and of no stated
-type (``sequence_region``) when the database's value has no mapping yet.
+is of its own feature type as the database gives it, mapped to our types (``database_feature_types``). A hit the
+database gives no type we hold (an entry of a database of whole sequences, such as a genome, which is not a feature; or
+a feature type with no mapping yet) states no feature: it makes no claim here and is counted (``hits_without_type``).
+In the real run feature_calling_05 a hit on a whole genome sequence had been kept as a waiting claim of no type and had
+earned 0.83 of feature credit; what such a hit is worth is on the organism side, where its taxon claim goes
+(``search_taxon_claims``, which reads the graded search itself, not this sheet). The owner, 2026-11-25: agreed.
 
 WORDS. A run has one query: the sequence the root was given (the owner, 2026-11-25: "There is only one query for this
 whole run from root. that is the input DNA sequence"). That word is kept for it. What a search is run on is called here
@@ -88,7 +92,6 @@ from gene_annotation_episode.episodic_workflow.episode_support.readers.sequence_
 
 SHEET = 'blast_feature_claim_sheet'
 GRADED_SHEET = 'blast_database_sheet'
-UNTYPED = 'sequence_region'
 # A label of ignorance that is a call here (the owner's rule quoted above).
 CONSERVED_UNKNOWN = 'conserved hypothetical protein'
 NO_CALL = ''
@@ -124,12 +127,25 @@ def place_labels(grading, searched_mapping=None):
 
 
 def _kind(function, reference_unit):
-    """The type a hit is of (the module's description)."""
+    """The type a hit is of (the module's description); ``None`` when the database gives it no type we hold."""
     if reference_unit == 'aa':
         return CODING
     if function is None or 'feature_type' not in function['bvbrc_feature']:
-        return UNTYPED
-    return bvbrc_feature_kind(function['bvbrc_feature']['feature_type']) or UNTYPED
+        return None
+    return bvbrc_feature_kind(function['bvbrc_feature']['feature_type'])
+
+
+def _located(grading):
+    """The hits of a graded search whose best alignment has positions, in the order of rank, each with its type
+    (``None`` when it has none)."""
+    found = []
+    for hit in sorted(grading['sheet']['hits'], key=lambda item: item['hit_index']):
+        component = hit['hsp_components'][0]
+        if component['geometry_available']:
+            functions = hit['associations'][0]['functions']
+            function = functions[0] if functions else None
+            found.append((hit, function, _kind(function, component['endpoint_spans']['reference']['unit'])))
+    return found
 
 
 def _on_the_subject(searched, reference, searched_mapping):
@@ -158,29 +174,23 @@ def hit_statements(grading, searched_mapping=None):
     gives none). ``searched_mapping`` is the mapping of the searched sequence when it was derived from that sequence.
 
     A hit whose best alignment the grader could give no positions for (``geometry_available`` false) states nothing of
-    where anything lies and has no row. A hit that is of no stated type (an entry of a database of whole sequences, which
-    is not a feature) states only that its letters match: its strand is ``.`` and it claims no end, since the direction
-    and the ends of such an entry are not those of a feature."""
+    where anything lies and has no row. A hit the database gives no type we hold states no feature and has no row
+    either (the module's description)."""
     rows = []
-    for hit in sorted(grading['sheet']['hits'], key=lambda item: item['hit_index']):
-        component = hit['hsp_components'][0]
-        if not component['geometry_available']:
+    for hit, function, kind in _located(grading):
+        if kind is None:
             continue
-        spans = component['endpoint_spans']
+        spans = hit['hsp_components'][0]['endpoint_spans']
         searched, reference = spans['query'], spans['reference']     # ``query``: the grader's field name
         segments, strand, forward = _on_the_subject(searched, reference, searched_mapping)
-        functions = hit['associations'][0]['functions']
-        function = functions[0] if functions else None
-        kind = _kind(function, reference['unit'])
-        typed = kind != UNTYPED
         at_first = reference['interval'][0] == 0
         at_last = reference['interval'][1] == reference['operand_length']
         rows.append({
             'rank': hit['hit_index'], 'bit_score': hit['measurements']['maximum_bit_score'],
             'evalue': hit['measurements']['minimum_evalue'], 'kind': kind,
-            'strand': strand if typed else '.', 'segments': segments,
-            'claims_start': typed and (at_first if forward else at_last),
-            'claims_end': typed and (at_last if forward else at_first),
+            'strand': strand, 'segments': segments,
+            'claims_start': at_first if forward else at_last,
+            'claims_end': at_last if forward else at_first,
             'label': _label(function), 'annotation': None if function is None else function['function'],
             'taxon_id': None if function is None else function['bvbrc_feature'].get('taxon_id')})
     return rows
@@ -241,7 +251,9 @@ def _claims_of_place(place, hits):
 
 
 def blast_claim_sheet(grading, groups, searched_mapping=None):
-    """The subscoring sheet of one graded search: ``{'schema', 'program', 'database', 'hit_count', 'claims'}`` with the
+    """The subscoring sheet of one graded search: ``{'schema', 'program', 'database', 'hit_count',
+    'hits_without_type', 'claims'}`` (``hit_count``: the hits that state a feature; ``hits_without_type``: those with
+    positions that state none) with the
     claims of every place (the module's description), in the order of the rank of their top hit. ``groups`` says which
     labels of each place indicate the same thing: per place (in the order of ``place_labels``) ``{label: group number}``,
     one entry for every label of the place; labels with one number are one call, and the number 0 is for an annotation
@@ -258,7 +270,9 @@ def blast_claim_sheet(grading, groups, searched_mapping=None):
             hit['call'] = NO_CALL if number == 0 else 'call_' + str(number)
     claims = [claim for place in places for claim in _claims_of_place(place, hits)]
     return {'schema': SHEET, 'program': search['program'], 'database': search['request']['database'],
-            'hit_count': len(hits), 'claims': sorted(claims, key=lambda claim: claim['rank'])}
+            'hit_count': len(hits),
+            'hits_without_type': sum(kind is None for _, _, kind in _located(grading)),
+            'claims': sorted(claims, key=lambda claim: claim['rank'])}
 
 
 def claim_bit(claim):
