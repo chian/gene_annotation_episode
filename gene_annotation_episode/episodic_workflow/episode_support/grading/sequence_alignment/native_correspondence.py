@@ -157,6 +157,9 @@ class NativeCorrespondenceScoring:
                         raise A101ScoringUnavailable('a101_original_protein_mapping_required', target_ref=target)
                     expected = intervals([[p['start'], p['end']] for p in declared], length=length)
                     matches = [row for row in populated if (intervals(row['target_intervals'], length=length) == expected if source.get('provider') == 'native.phmmer.alignment' else all((any((a <= x and y <= b for a, b in expected)) for x, y in row['target_intervals'])))]
+                    if len(matches) > 1:        # several rows inside the span: the one whose own span is exactly it
+                        matches = [row for row in matches if min(x for x, _ in row['target_intervals']) == expected[0][0]
+                                   and max(y for _, y in row['target_intervals']) == expected[-1][1]]
                     if len(matches) != 1:
                         raise A101ScoringUnavailable('a101_observation_grader_join_ambiguous', observation_ref=reference, candidate_count=len(matches))
                     row = dict(matches[0])
