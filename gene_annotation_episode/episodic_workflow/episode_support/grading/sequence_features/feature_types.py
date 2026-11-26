@@ -11,6 +11,7 @@ That's nested. But two proteins are not nested."). The hierarchy agreed with the
         regulatory element (promoter, operator, ribosome binding site, terminator)
         gene
             coding sequence (the protein)
+                mature peptide (a protein cut out of the translated one; it can hold the types below)
                 protein domain
                     protein site, protein motif, protein structural element
                 protein site, protein motif, protein structural element outside any domain
@@ -27,15 +28,16 @@ CODING = 'CDS'
 _UNIT = ('transcription_unit', 'sequence_region')
 _GENE = ('gene', *_UNIT)
 _PROTEIN = (CODING, *_GENE)
+_MATURE = ('mature_peptide', *_PROTEIN)
 _RNA = ('ncRNA', *_GENE)
 ABOVE = {
     'sequence_region': (), 'transcription_unit': ('sequence_region',), 'mobile_element': ('sequence_region',),
     'repeat': ('sequence_region',), 'regulatory_element': _UNIT, 'gene': _UNIT, CODING: _GENE, 'ncRNA': _GENE,
     'tRNA': _RNA, 'rRNA': _RNA, 'rna_structural_element': ('tRNA', 'rRNA', *_RNA),
-    'protein_domain': _PROTEIN, 'protein_site': ('protein_domain', *_PROTEIN),
-    'protein_motif': ('protein_domain', *_PROTEIN), 'protein_structural_element': ('protein_domain', *_PROTEIN)}
+    'mature_peptide': _PROTEIN, 'protein_domain': _MATURE, 'protein_site': ('protein_domain', *_MATURE),
+    'protein_motif': ('protein_domain', *_MATURE), 'protein_structural_element': ('protein_domain', *_MATURE)}
 KINDS = tuple(ABOVE)
 # The types that are parts of a protein: within a coding sequence they are read in its frame.
-PROTEIN_PARTS = ('protein_domain', 'protein_site', 'protein_motif', 'protein_structural_element')
+PROTEIN_PARTS = ('mature_peptide', 'protein_domain', 'protein_site', 'protein_motif', 'protein_structural_element')
 
 __all__ = ['ABOVE', 'CODING', 'KINDS', 'PROTEIN_PARTS', 'STRANDS']

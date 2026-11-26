@@ -51,9 +51,10 @@ like that. That's nested. But two proteins are not nested."):
 * The types are nested in one hierarchy (``feature_types.ABOVE``).
 * One slot is WITHIN another when its type is under the other's in that hierarchy, their strands agree, its letters lie
   wholly inside the other's and, for a part of a protein within a coding sequence, it is read in that frame.
-* The support at a slot (its own calls and the claims in it) is support for every slot within it. The score of a slot is
-  the sum, over the tests, of the weight of the test's sheet times the test's bits at the slot and at every slot it is
-  within. The finest slot the tests agree on has the highest score, as a species has the support of its genus and family.
+* The support at a slot is ``S``: the sum, over the tests, of the weight of the test's sheet times the test's bits at the
+  slot (its own calls and the claims in it). It is worth ``S / (S + 1)`` (``support_value``): support of the same call
+  adds less each time. The score of a slot is that value at the slot plus that at every slot it is within. The finest
+  slot the tests agree on has the highest score, as a species has the support of its genus and family.
 
 RIVALS. What may share letters was read from the literature on 2026-11-25 and settled with the owner: a gene can lie wholly
 inside another in a different frame (phage phiX174 gene E in gene D; the surface gene of hepatitis B virus in its polymerase
@@ -111,18 +112,14 @@ THE CREDIT, counted by going through the tests in the order they came, over what
 
 * Entry of a slot, at the first test that called it. A new possibility (nested with no listed slot) earns its score. A
   finer slot within a listed one earns what it adds: its score less the score of the highest scoring listed slot it is
-  within. A slot that only has listed slots within it earns nothing. Another call of a listed slot has no entry.
-* A claim earns when it is found (the owner: "a waiting claim in my scheme should earn credit otherwise there is no
-  reason to do it"), and earns the same whether a slot called so far includes it or not (the owner, 2026-11-25: "the
-  scoring should not depend on order in this case with claim being put in a feature call right away vs not. that seems
-  like a trivial fix."): a claim earns its weighted bit when it is the first claim of its type and reading on its letters
-  (the strongest of a test's claims first). A feature call is not an earlier statement that takes a claim's credit away.
-  What a claim earned is not paid again: it is taken off the first entry of a slot it sits in that was not yet listed
-  when the claim was paid, or of a slot within such a slot (their scores count it). So a call and a claim that sits in
-  it earn the same together in either order: the call's own weighted bit and the claim's.
-* Repeated support earns less each time, and never nothing: a call of a slot listed before its test, and a claim where
-  earlier tests held claims of its type and reading, earn their weighted bit times ``repeat_share`` of the support
-  already there. Of the claims of one test with one reading on shared letters only the strongest earns.
+  within. A slot that only has listed slots within it earns nothing.
+* More support of a listed slot (another call of it, a claim that sits in it) earns the rise of its value
+  ``S / (S + 1)``.
+* A claim that sits in no listed slot earns when it is found (the owner: "a waiting claim in my scheme should earn
+  credit otherwise there is no reason to do it"): the rise of ``S / (S + 1)`` over the claims of its type and reading
+  on its letters. What it earned is not paid again: it is taken off the first entry of a slot it sits in, or of a slot
+  within such a slot (their scores count it). So a call and a claim that sits in it earn the same together in either
+  order (the owner, 2026-11-25: "the scoring should not depend on order in this case").
 * Differential. A test earns the absolute difference of the moves of ONE pair: the two leading rival slots among those
   listed before the test that the test can measure (the highest score, then the highest score among its rivals).
 * Credit is the sum of these. A test is held once: the same test twice raises. When a later call joins two slots into one, the entry
@@ -150,8 +147,6 @@ COMPETING = ('gene', CODING, 'tRNA', 'rRNA')
 # another competing slot are rivals.
 RNA_UNITS = ('tRNA', 'rRNA')
 RNA_SHARE = 0.5
-# The support already there for which a further statement of the same thing earns half. A starting value, to be tuned.
-REPEAT_HALVING = 1.0
 # The types read in codons.
 IN_CODONS = (CODING, *PROTEIN_PARTS)
 # The letters of a stop codon: how far the end of a protein lies inside the end of its coding sequence.
@@ -312,10 +307,9 @@ def rivals(first, second):
     return shared_letters(first, second) >= RIVAL_LETTERS
 
 
-def repeat_share(prior):
-    """The share of its weighted bit a statement earns when ``prior`` support of what it states was already there: 1
-    with none, a half for every ``REPEAT_HALVING`` of it."""
-    return 0.5 ** (prior / REPEAT_HALVING)
+def support_value(support):
+    """What the summed support ``S`` of one call is worth: ``S / (S + 1)``."""
+    return support / (support + 1.0)
 
 
 def overlap_facts(first, second):
@@ -459,9 +453,8 @@ def target_table(tests):
     Returns ``slots`` (per number its kind, strand, positions, versions, feature records and the number of claims in it),
     ``score``, ``sheets`` (per slot, per sheet, its summed weighted bits), ``waiting`` (the claims no slot includes, the
     same statement held twice as one row, the best supported first), ``entries`` (per slot its entry credit and the test
-    that called it), ``claim_credits`` (per test what its claims earned, whether they wait or sit in a slot),
-    ``repeat_credits`` (per test what its calls of slots listed before it earned), ``differentials`` (per test at most
-    one: the pair, the two moves, the difference), ``test_credits`` and ``credit``."""
+    that called it), ``claim_credits`` (per test what its claims that sat in no listed slot earned),
+    ``differentials`` (per test at most one: the pair, the two moves, the difference), ``test_credits`` and ``credit``."""
     names = [test['test'] for test in tests]
     if len(set(names)) != len(names):
         raise ValueError('feature_test_held_twice:' + next(name for name in names if names.count(name) > 1))
@@ -475,12 +468,11 @@ def target_table(tests):
     members = dict(enumerate(_groups(calls)))
     slots = {number: _slot([calls[place] for place in group], weights) for number, group in members.items()}
     homes = [[number for number, slot in slots.items() if sits_in(claim, slot)] for claim in claims]
-    # per slot, per test: the bits of its own calls and of the claims in it (``called``: of its own calls alone)
+    # per slot, per test: the bits of its own calls and of the claims in it
     bits = {number: {} for number in slots}
     for number, group in members.items():
         for place in group:
             bits[number][calls[place]['test']] = bits[number].get(calls[place]['test'], 0.0) + calls[place]['bit']
-    called = {number: dict(found) for number, found in bits.items()}
     for claim, found in zip(claims, homes):
         for number in found:
             bits[number][claim['test']] = bits[number].get(claim['test'], 0.0) + claim['bit']
@@ -494,46 +486,47 @@ def target_table(tests):
         """What the test at ``place`` adds to a slot: the weight times its bits at the slot and at every slot the slot
         is within."""
         return weights[place] * math.fsum(bits[item].get(place, 0.0) for item in (number, *around[number]))
+    support = {number: 0.0 for number in slots}     # per slot: its own support (S) from the tests gone through
+
+    def value(number):
+        """The score of a slot from the tests gone through: the value of its own support and of that of every slot it
+        is within."""
+        return math.fsum(support_value(support[item]) for item in (number, *around[number]))
     listed, score, sheets, entries, differentials, claim_credits, test_credits = {}, {}, {}, {}, [], {}, {}
-    repeat_credits = {}
-    # per claim (its place in ``claims``): what it earned, not yet taken off, and the slots it sits in that were not yet
-    # listed when it was paid (the entry of one of them, or of a slot within one, counts it in its score)
+    # per claim (its place in ``claims``): what it earned, not yet taken off, and the slots it sits in (the entry of
+    # one of them, or of a slot within one, counts it in its score)
     paid = {}
-    seen = []                     # the claims of the tests gone through, for "the first claim of its type and reading"
+    seen = []                     # the claims of the tests gone through
     for place, test in enumerate(tests):
         sheet, credit = sheet_of(test['test']), 0.0
         pair = lead_rivals(listed, score, test['covers'])
-        if pair is not None:
-            moves = [move(item, place) for item in pair]
-            differentials.append({'test': test['test'], 'pair': list(pair), 'moves': moves,
-                                  'difference': abs(moves[0] - moves[1])})
-            credit += abs(moves[0] - moves[1])
-        # the calls of this test of slots listed before it: repeated support, which earns the less the more support
-        # the slot already had from the earlier tests
-        earned_by_repeats = 0.0
-        for item in listed:
-            if called[item].get(place):
-                prior = math.fsum(weights[earlier] * bits[item].get(earlier, 0.0) for earlier in range(place))
-                earned_by_repeats += weights[place] * called[item][place] * repeat_share(prior)
-        repeat_credits[test['test']] = earned_by_repeats
-        credit += earned_by_repeats
+        before = dict(score)
+        for number in slots:
+            added = weights[place] * bits[number].get(place, 0.0)
+            if number in listed:      # more support of a listed slot earns the rise of its value
+                credit += support_value(support[number] + added) - support_value(support[number])
+            support[number] += added
         for item in listed:
             change = move(item, place)
             if change:
-                score[item] += change
                 sheets[item][sheet] = sheets[item].get(sheet, 0.0) + change
-        # the claims of this test, whether they wait or sit in a slot called so far, the strongest first: each earns
-        # its weighted bit when it is this test's first claim of its type and reading on its letters, less by the
-        # support of the claims of that type and reading the earlier tests held on those letters
+            score[item] = value(item)
+        if pair is not None:
+            moves = [score[item] - before[item] for item in pair]
+            differentials.append({'test': test['test'], 'pair': list(pair), 'moves': moves,
+                                  'difference': abs(moves[0] - moves[1])})
+            credit += abs(moves[0] - moves[1])
+        # the claims of this test that sit in no listed slot, the strongest first: each earns the rise of the value of
+        # the claims of its type and reading on its letters
         earned_by_claims = 0.0
         here = sorted((index for index, claim in enumerate(claims) if claim['test'] == place),
                       key=lambda index: (-claims[index]['bit'], positions(claims[index]), claims[index]['strand']))
         for index in here:
-            same = [other for other in seen if same_reading(claims[index], other)]
-            if not any(other['test'] == place for other in same):
-                prior = math.fsum(weights[other['test']] * other['bit'] for other in same)
-                paid[index] = (weights[place] * claims[index]['bit'] * repeat_share(prior),
-                               {number for number in homes[index] if number not in listed})
+            if not any(number in listed for number in homes[index]):
+                prior = math.fsum(weights[other['test']] * other['bit'] for other in seen
+                                  if same_reading(claims[index], other))
+                paid[index] = (support_value(prior + weights[place] * claims[index]['bit']) - support_value(prior),
+                               set(homes[index]))
                 earned_by_claims += paid[index][0]
             seen.append(claims[index])
         claim_credits[test['test']] = earned_by_claims
@@ -550,11 +543,9 @@ def target_table(tests):
                 if change:
                     own[sheet_of(names[earlier])] = own.get(sheet_of(names[earlier]), 0.0) + change
             base = max((score[other] for other in above), default=0.0)
-            listed[number], score[number], sheets[number] = slots[number], math.fsum(own.values()), own
+            listed[number], score[number], sheets[number] = slots[number], value(number), own
             # what the claims counted in its score earned is not paid again: the claims that sit in it, and those that
-            # sit in a slot it is within (their bits are in its score too), of the slots not yet listed when they were
-            # paid (a claim paid in a slot listed then is not taken off again here: this slot's base is at least the
-            # score of that slot, which holds it)
+            # sit in a slot it is within (their bits are in its score too)
             counted_in = {number, *around[number]}
             taken = [index for index, (_, awaited) in paid.items() if counted_in.intersection(awaited)]
             already = math.fsum(paid.pop(index)[0] for index in taken)
@@ -577,8 +568,7 @@ def target_table(tests):
     return {'slots': listed, 'score': score, 'sheets': sheets,
             'waiting': sorted(waiting.values(), key=lambda row: (-row['support'], row['start'], row['end'], row['kind'],
                                                                   row['strand'])),
-            'entries': entries, 'claim_credits': claim_credits, 'repeat_credits': repeat_credits,
-            'differentials': differentials,
+            'entries': entries, 'claim_credits': claim_credits, 'differentials': differentials,
             'readings': readings, 'set_aside': aside,
             'test_credits': test_credits, 'credit': math.fsum(test_credits.values())}
 
@@ -616,10 +606,9 @@ def feature_table(reader, scope, sources):
     return {'targets': targets, 'credit': math.fsum(table['credit'] for table in targets.values())}
 
 
-__all__ = ['ABOVE', 'ALTERNATIVES', 'COMPETING', 'KINDS', 'READERS', 'REPEAT_HALVING', 'RIVAL_LETTERS', 'RNA_SHARE',
-           'RNA_UNITS', 'SAME_SHARE', 'SHEET_WEIGHT', 'STRANDS',
+__all__ = ['ABOVE', 'ALTERNATIVES', 'COMPETING', 'KINDS', 'READERS', 'RIVAL_LETTERS', 'RNA_SHARE', 'RNA_UNITS', 'SAME_SHARE',
+           'SHEET_WEIGHT', 'STRANDS',
            'feature_table', 'feature_tests', 'held_readings', 'held_sources', 'high', 'inside', 'lead_rivals', 'letters', 'low',
-           'measurable', 'nested', 'overlap_facts', 'positions', 'repeat_share', 'rivals', 'same_frame', 'same_reading',
-           'same_slot',
+           'measurable', 'nested', 'overlap_facts', 'positions', 'rivals', 'same_frame', 'same_reading', 'same_slot',
            'shared_letters', 'sheet_family', 'sheet_of', 'sheet_weight', 'sits_in', 'strands_agree', 'target_table',
            'within']
