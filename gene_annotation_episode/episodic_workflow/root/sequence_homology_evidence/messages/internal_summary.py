@@ -133,7 +133,9 @@ def internal_summary(view):
         last = row
     held = [ref for ref in records.refs() if not ref.startswith('row_')]
     held_sequences = {ref: records.get(ref).get('molecule') for ref in held
-                      if ref.split('_')[0] in SEQUENCE_RECORD_TYPES and records.get(ref).get('sequence_ref')}
+                      if ref.split('_')[0] in SEQUENCE_RECORD_TYPES and records.get(ref).get('sequence_ref')
+                      # a reference whose accession is a record held is that record's own sequence under another name
+                      and records.get(ref).get('accession') not in held}
     # the sequences the head finds annotations for: the scope's subjects, or the proteins of the feature calls held
     wanted = targets(records, parent['scope'])
     details = A101SequenceCredit().read_details(

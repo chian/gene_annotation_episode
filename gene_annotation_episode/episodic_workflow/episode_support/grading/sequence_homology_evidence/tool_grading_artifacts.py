@@ -18,6 +18,9 @@ SCHEMA = "tool_grading_artifact"
 SCHEMA_WITH_CORRESPONDENCE = "tool_grading_artifact_with_correspondence"
 MEDIA_TYPE = "application/vnd.gene-annotation.tool-grading+json"
 GRADING_KIND = "tool_grading_sheet"
+# The grading artifacts whose correspondence was validated in this process: an artifact is addressed by its content, so
+# its validation is the same every time it is read.
+_VALIDATED = set()
 
 
 def _required_correspondence(grading):
@@ -115,7 +118,9 @@ def source_tool_grading_entries(store, source_ref: str) -> list[dict]:
             if body["schema"] == SCHEMA_WITH_CORRESPONDENCE:
                 if not _required_correspondence(body["grading"]):
                     raise ContractError("tool_grading_unexpected_correspondence")
-                validate_tool_correspondence(body["grading"], body["correspondence"])
+                if reference not in _VALIDATED:
+                    validate_tool_correspondence(body["grading"], body["correspondence"])
+                    _VALIDATED.add(reference)
             canonical(body)
         except (ValueError, TypeError, KeyError, IndexError) as error:
             if isinstance(error, ContractError):
