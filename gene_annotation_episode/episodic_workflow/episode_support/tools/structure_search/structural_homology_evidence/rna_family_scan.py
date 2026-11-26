@@ -5,7 +5,8 @@ JSON, ONE deterministic check, ONE function that runs the unit and grades it.
 
 THE REQUEST (controlled fields): ``query_ref`` (an RNA sequence of the scope), ``database`` (a covariance database of the settings'
 ``covariance_databases``) and ``resource_id`` (a local resource). ``check_rna_family_scan_request`` is the one check. It refuses,
-with the fix list (the field, a code and what to choose from): a query that is not a sequence of the scope, or not RNA; a database
+with the fix list (the field, a code and what to choose from): a query that is not a sequence of the scope, or not RNA (or not of
+the molecules the caller names: ``molecules``, RNA by default); a database
 that is not configured; a resource that is not local; a target already scanned (one scan of a target: a repeat adds nothing); a
 program or a manifest file that is not there. A request that passes it simply works.
 
@@ -87,19 +88,24 @@ def _programs(directory, names):
             if not os.access(Path(directory) / name, os.X_OK)]
 
 
-def check_rna_family_scan_request(request, *, sequences, scope_subjects, resources, scanned, databases, executable_directory):
+def check_rna_family_scan_request(request, *, sequences, scope_subjects, resources, scanned, databases, executable_directory,
+                                  molecules=('rna',)):
     """The things to fix in an ``rna_family_scan`` request, before anything runs; an empty list means it can run.
 
     ``request`` holds ``query_ref``, ``database`` and ``resource_id``. ``sequences`` is ``{record: molecule}`` of the sequence
     records the caller holds, ``scope_subjects`` the subjects of its scope, ``resources`` ``{resource id: kind}``, ``scanned`` the
-    targets already scanned and ``databases`` ``{name: manifest path}`` (the settings' ``covariance_databases``)."""
+    targets already scanned and ``databases`` ``{name: manifest path}`` (the settings' ``covariance_databases``). ``molecules`` are
+    the molecules of a sequence the caller scans: RNA by default; a caller that scans DNA names ``dna`` (``cmscan`` reads a T as a U,
+    Easel's RNA alphabet, and searches both strands, and ``-Z`` is the letters searched times two whatever the molecule, so the scan
+    itself is the same)."""
     query, database, resource = request['query_ref'], request['database'], request['resource_id']
-    rna = [ref for ref in scope_subjects if sequences.get(ref) == 'rna' and ref not in scanned]
+    admitted = [ref for ref in scope_subjects if sequences.get(ref) in molecules and ref not in scanned]
     problems = []
-    if query not in scope_subjects or sequences.get(query) != 'rna':
-        problems.append(_choose('query_ref', 'query_is_not_an_rna_sequence_of_the_scope', choose_from=rna))
+    if query not in scope_subjects or sequences.get(query) not in molecules:
+        problems.append(_choose('query_ref', 'query_is_not_an_' + '_or_'.join(molecules) + '_sequence_of_the_scope',
+                                choose_from=admitted))
     elif query in scanned:
-        problems.append(_choose('query_ref', 'target_already_scanned', choose_from=rna))
+        problems.append(_choose('query_ref', 'target_already_scanned', choose_from=admitted))
     if database not in databases:
         problems.append(_choose('database', 'database_is_not_configured', choose_from=sorted(databases)))
     elif not os.access(databases[database], os.R_OK):

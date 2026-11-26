@@ -19,7 +19,7 @@ Words: the QUERY is the sequence the root was given, and nothing else is called 
 SEARCHED sequence (``searched_ref``); the search library's own argument for it is named ``query_ref``."""
 from jsonschema import Draft202012Validator, ValidationError
 
-from episode_runtime import ChildCall, ModelRequest, Rejected
+from episode_runtime import ChildCall, ModelRequest, Rejected, ToolCall
 
 from gene_annotation_episode.domain import ContractError, obj
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.presentation import extend_context
@@ -35,13 +35,41 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_job_child import (
     seconds_between)
 
+from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_features.infernal_call_keeping import (
+    keep_infernal_calls)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_features.prodigal_gene_calls import (
+    MODE_CODES, SEARCHED_MOLECULES as PRODIGAL_LETTERS, check_prodigal_request, prodigal_gene_calls, prodigal_mode)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.rna_family_scan import (
+    check_rna_family_scan_request, rna_family_scan)
+
 from .goal import GOAL
 
 HEAD = 'feature_calling'
 SEARCH = 'bvbrc_blast'
 CHILD_SLOTS = {SEARCH: 'feature_calling/bvbrc_blast'}
 SERVICES = ('job_access',)
-TOOLS = {}
+# The tools, named by their program. Each is one fixed call that ends within the turn: run, grade and keep in the unit.
+PRODIGAL = 'prodigal_find_genes'
+CMSCAN = 'cmscan_find_rna_genes'
+# The genetic codes Prodigal can be given: which of them a sequence can take follows from its length (the tool's check).
+GENETIC_CODES = tuple(sorted({*MODE_CODES['meta'], *MODE_CODES['single']}))
+# The letters of a sequence cmscan is given here (it reads a T as a U and searches both strands).
+CMSCAN_LETTERS = ('dna', 'rna')
+DESCRIPTIONS = {
+    PRODIGAL: ('Prodigal: find the protein genes of a DNA sequence from the sequence itself (codon usage, start codons, '
+               'ribosome binding sites); it compares the sequence with nothing. For each gene it gives the coding '
+               'sequence with its strand and its first and last letter (the stop codon included) and its own confidence. '
+               'It is a tool that states a feature WITH its ends: a gene that runs off an edge of the sequence is given '
+               'without that end. It needs a genetic code (genetic_codes shows which a sequence of each length can take: '
+               'under 20,000 letters only the codes of its ready-made models). It cannot say what a gene does, and it '
+               'calls genes in any DNA, so a call alone is weak; a search that lands inside a call is what supports it. '
+               'Under a second. Fields: searched_ref, code.'),
+    CMSCAN: ('Infernal cmscan with the covariance models of Rfam: find RNA genes and structured RNAs (tRNA, rRNA, other '
+             'non-coding RNAs) on both strands, each hit at or above its family\'s own threshold, with its positions and '
+             'strand. It states a feature WITH its ends unless the hit is cut off by an edge of the sequence. It says '
+             'nothing of protein genes, and finding nothing only means no family of the database matches. Seconds to '
+             'minutes with the length of the sequence. Fields: searched_ref, database, resource_id (a local resource).'),
+}
 # Every program of the service is offered: which takes which letters and which database is the search library's check.
 PROGRAMS = tuple(sorted(PROGRAM_UNITS))
 # The databases this head searches at the BV-BRC service, by the name a commission gives: the protein databases of its
@@ -53,7 +81,9 @@ SEARCH_FIELDS = ('searched_ref', 'program', 'database', 'resource_id', 'until')
 
 INSTRUCTIONS = """You are finding out which features a sequence holds: what type of thing lies where on it, and on which strand. Nothing about the sequence is known beforehand.
 
-Each step you choose one database search, as `selection`: the child `bvbrc_blast` with a `searched_ref` (a sequence you hold), a `program`, a `database`, a `resource_id` (a BV-BRC service of `bound_resources`) and `until`.
+Each step you choose one thing, as `selection`: a database search (the child `bvbrc_blast` with a `searched_ref` (a sequence you hold), a `program`, a `database`, a `resource_id` (a BV-BRC service of `bound_resources`) and `until`), or one run of one of the `tools` with its fields.
+
+Two kinds of statement come back. A feature call says a feature of a type lies from here to there on a strand: the tools make these. A claim says only that some letters lie inside a feature of a type, read a certain way: a search makes these. A claim that lies wholly inside a feature call of its type, strand and reading frame sits in that call and adds to its score; a claim with no call to sit in waits.
 
 What a search gives. A search compares the sequence with known sequences and returns the ones it resembles. A hit says that a stretch of your sequence lies inside a feature of the hit's type, on which strand and, for a search against proteins, in which reading frame. It finds a part of a feature: it says where the feature starts or ends only when the alignment reaches the first or the last position of the known sequence. Code turns the hits into such claims when the result is fetched; you do not grade them.
 
@@ -65,7 +95,7 @@ What you are shown:
 - `feature_calls`: the candidate feature calls found so far for each sequence, the highest score first: type, positions, strand, score, and the calls that compete with it for the same letters. `waiting_claims`: the claims that no feature call includes yet: type, strand, positions, which end they claim, and their support. A waiting claim is real evidence that has no feature call to sit in yet.
 - `action_yields`: what each offered action is forecast to earn against its cost in time. You do not set these numbers and you do not end the episode; it ends when nothing left is worth its cost.
 
-Choose the search that will tell you most for its cost given what is held: a database not yet searched, a program that reads the sequence another way, a search that could tell two competing calls apart. Answer with the selection only."""
+Choose what will tell you most for its cost given what is held: a database not yet searched, a program that reads the sequence another way, a tool that could give waiting claims a feature call to sit in, a search that could support a call or tell two competing calls apart. Answer with the selection only."""
 
 
 def bound_resources(ctx):
@@ -89,17 +119,82 @@ def search_fields(summary, resources):
     return properties, list(properties)
 
 
-def selection_schema(summary, resources):
-    """What the model answers with: one commission of the search child."""
-    properties, required = search_fields(summary, resources)
-    return obj({'selection': obj({'kind': {'const': 'episode_child'}, 'slot': {'const': SEARCH}, **properties},
-                                 required=['kind', 'slot', *required])})
+def tool_options(summary, resources, settings):
+    """The requests of the tools the model can fill, one per offered tool, each field from a fixed set. Prodigal while a
+    sequence of its letters is held; cmscan while a sequence of its letters is held, a local resource is bound and the
+    run's settings name a covariance database. Whether a filled request can run is the tool's own check (``action``)."""
+    options = []
+    for_prodigal = [ref for ref, letters in summary['held_sequences'].items() if letters in PRODIGAL_LETTERS]
+    if for_prodigal:
+        options.append(obj({'kind': {'const': 'tool'}, 'tool': {'const': PRODIGAL},
+                            'arguments': obj({'searched_ref': {'enum': for_prodigal},
+                                              'code': {'enum': list(GENETIC_CODES)}})}))
+    for_cmscan = [ref for ref, letters in summary['held_sequences'].items() if letters in CMSCAN_LETTERS]
+    local = [name for name, kind in resources.items() if kind == 'local']
+    if for_cmscan and local and 'covariance_databases' in settings:
+        options.append(obj({'kind': {'const': 'tool'}, 'tool': {'const': CMSCAN},
+                            'arguments': obj({'searched_ref': {'enum': for_cmscan},
+                                              'database': {'enum': list(settings['covariance_databases'])},
+                                              'resource_id': {'enum': local}})}))
+    return options
+
+
+def options(summary, resources, settings):
+    """Everything the model can choose at this decision: the commission of the search child while it can be stated, and
+    the tools."""
+    found = []
+    fields = search_fields(summary, resources)
+    if fields is not None:
+        properties, required = fields
+        found.append(obj({'kind': {'const': 'episode_child'}, 'slot': {'const': SEARCH}, **properties},
+                         required=['kind', 'slot', *required]))
+    return [*found, *tool_options(summary, resources, settings)]
+
+
+def selection_schema(summary, resources, settings):
+    """What the model answers with: one commission of the search child, or one run of one tool."""
+    return obj({'selection': {'anyOf': options(summary, resources, settings)}})
 
 
 def offered_actions(summary, ctx):
-    """The action types this decision offers, by the names a unit is recorded under: the search child while its
-    commission can be stated."""
-    return [] if search_fields(summary, bound_resources(ctx)) is None else [SEARCH]
+    """The action types this decision offers, by the names a unit is recorded under: the search child's slot and each
+    offered tool's name."""
+    return [option['properties']['slot']['const'] if 'slot' in option['properties'] else option['properties']['tool']['const']
+            for option in options(summary, bound_resources(ctx), ctx.settings)]
+
+
+def gene_findings_made(summary):
+    """The Prodigal runs this episode holds (``completed``) or saw fail (``failed``), as its check reads them: by
+    (searched sequence, genetic code)."""
+    made = {(row['arguments']['searched_ref'], row['arguments']['code']): 'failed' for row in summary['units']
+            if row['kind'] == 'tool' and row['tool'] == PRODIGAL and row['status'] != 'completed'}
+    made.update({(row['searched_ref'], row['code']): 'completed' for row in summary['gene_findings']})
+    return made
+
+
+def rna_scans_made(summary):
+    """The sequences cmscan was already run on, held or failed (its check refuses a second scan of one)."""
+    return [*(row['searched_ref'] for row in summary['rna_scans']),
+            *(row['arguments']['searched_ref'] for row in summary['units']
+              if row['kind'] == 'tool' and row['tool'] == CMSCAN and row['status'] != 'completed')]
+
+
+def check_prodigal(arguments, summary, resources, ctx):
+    return check_prodigal_request(arguments, sequences=summary['held_sequences'], lengths=summary['sequence_lengths'],
+                                  made=gene_findings_made(summary))
+
+
+def check_cmscan(arguments, summary, resources, ctx):
+    """The scan library's check, in its own argument names (its ``query_ref`` is the searched sequence)."""
+    return check_rna_family_scan_request(
+        {'query_ref': arguments['searched_ref'], 'database': arguments['database'],
+         'resource_id': arguments['resource_id']},
+        sequences=summary['held_sequences'], scope_subjects=list(summary['held_sequences']), resources=resources,
+        scanned=rna_scans_made(summary), databases=ctx.settings['covariance_databases'],
+        executable_directory=ctx.settings['infernal_executable_directory'], molecules=CMSCAN_LETTERS)
+
+
+TOOL_CHECKS = {PRODIGAL: check_prodigal, CMSCAN: check_cmscan}
 
 
 def library_request(commission):
@@ -176,6 +271,11 @@ def decide(summary, feedback, ctx):
         'databases': [{'database': name, 'holds': entry['unit'], 'type': entry['db_type']}
                       for name, entry in DATABASES.items()],
         'bound_resources': resources,
+        'tools': [{'name': option['properties']['tool']['const'],
+                   'description': DESCRIPTIONS[option['properties']['tool']['const']]}
+                  for option in tool_options(summary, resources, ctx.settings)],
+        'genetic_codes': {'under_20000_letters': MODE_CODES['meta'], 'from_20000_letters': MODE_CODES['single']},
+        'gene_findings': summary['gene_findings'], 'rna_scans': summary['rna_scans'],
         'searches': searches_view(summary['searches'], ctx.clock.now),
         'given_features': summary['given_features'],
         'feature_calls': [{'target_ref': finding['target_ref'], 'features': finding['features'],
@@ -188,14 +288,15 @@ def decide(summary, feedback, ctx):
         'time_accounting': time_accounting(ctx.clock.progress_time)}
     context = extend_context(context, {'feedback': feedback, 'action_yields': summary['action_yields']},
                              conflict='initial_binding_context_field_conflict')
-    return ModelRequest('REASONING', INSTRUCTIONS, context, generation_schema(selection_schema(summary, resources)))
+    return ModelRequest('REASONING', INSTRUCTIONS, context,
+                        generation_schema(selection_schema(summary, resources, ctx.settings)))
 
 
 def action(response, summary, records, ctx):
     """Turn the model's answer into the commission of the search child, or reject it (no unit): an answer that does not
     fit the schema, or a commission the check finds something to fix in (rejected with the things to fix)."""
     resources = bound_resources(ctx)
-    schema = selection_schema(summary, resources)
+    schema = selection_schema(summary, resources, ctx.settings)
     try:
         if not isinstance(response, dict) or set(response) != {'selection'}:
             raise ValueError('feature_calling_decision_response_must_be_exactly_selection')
@@ -203,9 +304,37 @@ def action(response, summary, records, ctx):
         Draft202012Validator(schema['properties']['selection']).validate(selection)
     except (ValueError, KeyError, TypeError, ContractError, ValidationError) as error:
         raise Rejected(rejection_feedback(error, category='action_contract')) from error
+    if selection['kind'] == 'tool':
+        tool, arguments = selection['tool'], dict(selection['arguments'])
+        problems = TOOL_CHECKS[tool](arguments, summary, resources, ctx)
+        if problems:
+            raise Rejected({'status': 'invalid', 'category': tool + '_request',
+                            'detail': {'request': arguments, 'fix': problems}})
+        return ToolCall(tool, arguments)
     commission = {name: selection[name] for name in SEARCH_FIELDS}
     problems = check_search(commission, summary, resources)
     if problems:
         raise Rejected({'status': 'invalid', 'category': SEARCH + '_commission',
                         'detail': {'commission': commission, 'fix': problems}})
     return ChildCall(SEARCH, commission)
+
+
+async def prodigal_find_genes(arguments, ctx):
+    """One Prodigal run as one unit: run, grade and keep the gene calls, by the library's one function."""
+    return prodigal_gene_calls(ctx, searched_ref=arguments['searched_ref'], code=arguments['code'])
+
+
+async def cmscan_find_rna_genes(arguments, ctx):
+    """One cmscan run as one unit: the shared scan (run, grade, keep), then the keeping of the calls its hits make about
+    the features of the sequence. Nobody chooses the grading or the calls: they follow the scan. A scan that did not
+    complete is returned as it is."""
+    scanned = await rna_family_scan(ctx, query_ref=arguments['searched_ref'], database=arguments['database'],
+                                    resource_id=arguments['resource_id'])
+    if scanned['status'] != 'completed':
+        return scanned
+    kept = keep_infernal_calls(ctx, scan_source_ref=scanned['source_ref'], searched_ref=arguments['searched_ref'])
+    return {**scanned, 'graded_refs': [*scanned['graded_refs'], *kept['refs']],
+            'record_refs': [*scanned['record_refs'], *kept['refs']], 'call_count': kept['call_count']}
+
+
+TOOLS = {PRODIGAL: prodigal_find_genes, CMSCAN: cmscan_find_rna_genes}

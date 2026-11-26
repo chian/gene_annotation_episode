@@ -2,7 +2,8 @@
 
 From the system's view: the parent input (the scope and the information given with it), one row per unit (a commission
 of the search child: its arguments, the state the child returned, its credit, whether it came back with the search still
-running), the records held, the sequences held with their letters and length (the query of the run and any sequence
+running; or a run of a tool: its arguments and status), the Prodigal runs and the cmscan runs held (``gene_findings``,
+``rna_scans``: what their checks refuse to run again), the records held, the sequences held with their letters and length (the query of the run and any sequence
 derived from it), the searches sent (read from their job records: the searched sequence, program, database, state, and
 whether still running), the feature records given with the commission (``given_features``: what already existed, each
 with its kind, positions and strand), the sheet of the scope (``credit.held_table``: per sequence the candidate feature
@@ -12,6 +13,15 @@ from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records 
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence import (
     bvbrc_blast_search as bvbrc)
+
+from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_features.prodigal_calls import (
+    SHEET as PRODIGAL_CALL_SHEET)
+from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.tool_grading_artifacts import (
+    source_tool_grading_entries)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_features.prodigal_gene_calls import (
+    PROVIDER as PRODIGAL_PROVIDER)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.structure_search.structural_homology_evidence.rna_family_scan import (
+    rna_scan_inputs)
 
 from ..credit import FeatureDifferentialCredit, held_table
 
@@ -48,19 +58,47 @@ def _given_features(records, parent):
     return rows
 
 
+def _gene_findings(records):
+    """The Prodigal runs this episode holds, read from their kept call sheets: the searched sequence, the genetic code,
+    the mode and the number of genes."""
+    rows = []
+    for source in records.list('source'):
+        if source['provider'] != PRODIGAL_PROVIDER:
+            continue
+        for entry in source_tool_grading_entries(records, source['id']):
+            sheet = entry['grading']['sheet']
+            if sheet['schema'] == PRODIGAL_CALL_SHEET:
+                rows.append({'searched_ref': sheet['searched_ref'], 'code': sheet['code'], 'mode': sheet['mode'],
+                             'gene_count': sheet['gene_count']})
+    return rows
+
+
+def _rna_scans(records):
+    """The cmscan runs this episode holds, read from their kept scan sheets: the searched sequence and the database."""
+    return [{'searched_ref': scan['query_ref'], 'database': scan['database']}
+            for scan in rna_scan_inputs(records).values()]
+
+
 def internal_summary(view):
     records = view.records
     parent = view.parent_input
     units, committed, last = [], [], None
     for position, outcome in enumerate(view.outcomes):
-        report = outcome['report']
-        row = {'position': position, 'kind': 'child', 'slot': outcome['slot'], 'status': 'completed',
-               'arguments': outcome['arguments'], 'child_state': report['finding']['state'],
-               'hit_count': report['finding'].get('hit_count'), 'claim_count': report['finding'].get('claim_count'),
-               'credit': report['credit'], 'record_refs': list(report['record_refs']),
-               # the child came back with its search launched and not extracted: the unit's outcome is pending
-               'parked': report['finding'].get('parked') is True}
-        committed.extend(ref for ref in report['graded_refs'] if ref not in committed)
+        if outcome['kind'] == 'tool':
+            result = outcome['outcome']
+            row = {'position': position, 'kind': 'tool', 'tool': outcome['tool'], 'status': result['status'],
+                   'arguments': dict(outcome['arguments']), 'record_refs': list(result['record_refs'])}
+            if result['status'] == 'completed':
+                committed.extend(ref for ref in result['record_refs'] if ref not in committed)
+        else:
+            report = outcome['report']
+            row = {'position': position, 'kind': 'child', 'slot': outcome['slot'], 'status': 'completed',
+                   'arguments': outcome['arguments'], 'child_state': report['finding']['state'],
+                   'hit_count': report['finding'].get('hit_count'), 'claim_count': report['finding'].get('claim_count'),
+                   'credit': report['credit'], 'record_refs': list(report['record_refs']),
+                   # the child came back with its search launched and not extracted: the unit's outcome is pending
+                   'parked': report['finding'].get('parked') is True}
+            committed.extend(ref for ref in report['graded_refs'] if ref not in committed)
         units.append(row)
         last = row
     held = [ref for ref in records.refs() if not ref.startswith('row_')]
@@ -77,6 +115,7 @@ def internal_summary(view):
             'searches': bvbrc.held_searches(records, {ref: records.get(ref)['sequence_ref'] for ref in held_sequences},
                                             searched_types=SEQUENCE_RECORD_TYPES),
             'named_refs': {ref: named_records(records, ref) for ref in records.refs()},
+            'gene_findings': _gene_findings(records), 'rna_scans': _rna_scans(records),
             'given_features': _given_features(records, parent),
             'returned_refs': returned_with_names(records, committed),
             'credit_binding': FeatureDifferentialCredit().as_record(),

@@ -30,8 +30,9 @@ earliest on a tie). A later, better supported call moves the positions to it: th
 
 CLAIMS IN SLOTS, AND CLAIMS THAT WAIT. A claim sits in every slot that includes it: the slot is of the claim's type, their
 strands agree, the claim's letters lie WHOLLY inside one version of the slot ("interior here at least implies 100% overlap
-so it's a subset of a span"), that version has every end the claim claims at the same position, and a coding claim is read
-in the slot's frame. A claim in a slot adds to the slot's score ("interior claim adds to a score when it sits usefully in a
+so it's a subset of a span"), that version has every end the claim claims at the same position (for a coding claim the end read last may
+lie one stop codon inside the version's: a protein alignment ends before the stop codon a gene call includes), and a
+coding claim is read in the slot's frame. A claim in a slot adds to the slot's score ("interior claim adds to a score when it sits usefully in a
 feature_call slot"). Claims are never joined with each other and no positions are made up from them: a claim is in a slot
 or it is not. A claim that no slot includes WAITS ("these are claims waiting for a home"; "they might immediately slot into
 a home if homes already exist, or they might wait on the side for a home"): it is kept as it was stated, with its support,
@@ -121,6 +122,8 @@ RIVAL_LETTERS = 60
 COMPETING = ('gene', CODING, 'ncRNA', 'tRNA', 'rRNA')
 # The types read in codons.
 IN_CODONS = (CODING, *PROTEIN_PARTS)
+# The letters of a stop codon: how far the end of a protein lies inside the end of its coding sequence.
+STOP_CODON = 3
 # Per family of technique (the first part of a sheet name: ``protein_similarity``, ``nucleotide_similarity``, ...): its
 # weight; and per sheet schema: its reader ``grading -> (sheet name, covers, rows)`` with one row per statement of the
 # test: ``{'kind', 'strand', 'segments', 'claims_start', 'claims_end', 'feature_ref', 'bit'}``. Entered by each tool's
@@ -232,11 +235,19 @@ def same_slot(first, second):
 
 def sits_in(claim, slot):
     """Whether a claim sits in a slot: the slot is of its type, their strands agree, its letters lie wholly inside one
-    version of the slot that has every end the claim claims at the same position, and it is read in the slot's frame."""
+    version of the slot that has every end the claim claims at the same position, and it is read in the slot's frame. At
+    the end a coding sequence is read last (the upper end on ``+``, the lower on ``-``) the claim's end may also lie one
+    stop codon inside the version's: a protein alignment that reaches the last residue of a known protein ends before
+    the stop codon, and a gene finder's call includes it."""
     if claim['kind'] != slot['kind'] or not strands_agree(claim, slot):
         return False
-    return any(inside(claim, version) and (not claim['claims_start'] or low(claim) == low(version))
-               and (not claim['claims_end'] or high(claim) == high(version))
+    # the end read last, where a coding call may carry a stop codon the claim does not
+    strand = slot['strand'] if slot['strand'] != '.' else claim['strand']
+    stop = STOP_CODON if claim['kind'] == CODING else 0
+    after_low, after_high = (stop if strand == '-' else 0), (stop if strand == '+' else 0)
+    return any(inside(claim, version)
+               and (not claim['claims_start'] or low(claim) - low(version) in (0, after_low))
+               and (not claim['claims_end'] or high(version) - high(claim) in (0, after_high))
                and _frames_agree(claim, {**version, 'kind': slot['kind'], 'strand': slot['strand']})
                for version in slot['versions'])
 

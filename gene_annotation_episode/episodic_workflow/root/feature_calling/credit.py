@@ -13,8 +13,9 @@ forecasts it from what such searches earned before. A search that is already ext
 again: 0."""
 from method_loop import UNBOUNDED
 
-# importing the converter enters its reader and its families' weights into the sheet of feature calls
-from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_features import blast_claims  # noqa: F401
+# importing a converter enters its reader and its family's weight into the sheet of feature calls
+from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_features import (  # noqa: F401
+    blast_claims, infernal_calls, prodigal_calls)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_features.feature_candidates import (
     ABOVE, COMPETING, RIVAL_LETTERS, SAME_SHARE, SHEET_WEIGHT, feature_table, held_sources)
 
@@ -23,7 +24,10 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence import (
     bvbrc_blast_search as bvbrc)
 
-from .task import DATABASES, PROGRAMS, SEARCH
+from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_features.prodigal_gene_calls import (
+    MODE_CODES, SEARCHED_MOLECULES as PRODIGAL_LETTERS, prodigal_mode)
+
+from .task import CMSCAN, CMSCAN_LETTERS, DATABASES, PRODIGAL, PROGRAMS, SEARCH, gene_findings_made, rna_scans_made
 
 
 class FeatureDifferentialCredit:
@@ -84,7 +88,7 @@ def open_searches(summary):
     program that takes its letters and every database of this head that holds what that program searches, that has not
     been sent yet (no commission of it and no search of it held). Which program takes which letters is the search
     library's own table."""
-    sent = {_searched(row['arguments']) for row in summary['units']}
+    sent = {_searched(row['arguments']) for row in summary['units'] if row['kind'] == 'child'}
     sent |= {(search['query_ref'], search['program'], search['database']) for search in summary['searches']}
     return [(ref, program, database)
             for ref, letters in summary['held_sequences'].items() if letters in bvbrc.MOLECULE_UNITS
@@ -96,7 +100,40 @@ def open_searches(summary):
 # What ``ceiling`` means for each action type the head offers. The forecast controller learns each action's typical gain
 # only from ledger rows recorded under the same credit definition and the same name of that action's ceiling
 # (``yield_estimator.py``). Every offered action has one.
-CEILINGS = {SEARCH: 'feature_calling_ceiling'}
+CEILINGS = {SEARCH: 'feature_calling_ceiling', PRODIGAL: 'feature_calling_ceiling', CMSCAN: 'feature_calling_ceiling'}
+
+
+def open_gene_findings(summary):
+    """The Prodigal runs that can still be made, as (searched sequence, genetic code): every held sequence of its
+    letters with every code the mode of its length can take, that is neither held nor failed."""
+    made = gene_findings_made(summary)
+    return [(ref, code) for ref, letters in summary['held_sequences'].items() if letters in PRODIGAL_LETTERS
+            for code in MODE_CODES[prodigal_mode(summary['sequence_lengths'][ref])] if (ref, code) not in made]
+
+
+def open_rna_scans(summary, ctx):
+    """The cmscan runs that can still be made, as (searched sequence, database): every held sequence of its letters
+    not yet scanned, with every covariance database of the run's settings."""
+    made = rna_scans_made(summary)
+    return [(ref, database) for ref, letters in summary['held_sequences'].items()
+            if letters in CMSCAN_LETTERS and ref not in made
+            for database in ctx.settings.get('covariance_databases', {})]
+
+
+def gene_finding_ceiling(summary, ref):
+    """The most the credit can rise by one Prodigal run on the sequence ``ref``. Prodigal calls no gene under 90 letters
+    (60 at an edge of the sequence) and lets two genes share at most 60 letters, so on one strand each further gene needs
+    at least 30 letters of its own: at most ``length // 30 + 1`` genes a strand, twice that on both. A call's bit is its
+    confidence as a share, at most 1, times the weight of its family. A call that opens a slot earns at most its score:
+    its own bit and the support of the waiting coding claims that come to sit in it (each waiting claim sits in at most
+    one such slot: two coding calls that share letters in one frame are one slot), less what those claims were already
+    paid; a call cut off at an end is a claim and earns at most its bit. One differential, at most the weight. So: the
+    weight times the number of genes, plus the support of the waiting coding claims of the scope, plus the weight."""
+    weight = SHEET_WEIGHT[prodigal_calls.FAMILY]
+    genes = 2 * (summary['sequence_lengths'][ref] // 30 + 1)
+    waiting = sum(claim['support'] for finding in summary['target_findings'] for claim in finding['waiting_claims']
+                  if claim['kind'] == prodigal_calls.CODING)
+    return weight * genes + waiting + weight
 
 
 def ceiling(summary, records, action_type, arguments, ctx):
@@ -106,6 +143,19 @@ def ceiling(summary, records, action_type, arguments, ctx):
     this head can state has been made, nothing more can be earned, and the forecast of 0 lets the episode stop."""
     if action_type not in CEILINGS:
         raise ValueError('feature_calling_ceiling_of_unknown_action:' + str(action_type))
+    if action_type == PRODIGAL:
+        still = open_gene_findings(summary)
+        if arguments is not None:
+            key = (arguments['searched_ref'], arguments['code'])
+            return gene_finding_ceiling(summary, key[0]) if key in still else 0.0
+        return max((gene_finding_ceiling(summary, ref) for ref, _ in still), default=0.0)
+    if action_type == CMSCAN:
+        # No bound on the number of hits a scan keeps has been derived (a hit cut off by an edge can be short, and hits
+        # of different families may share letters): UNBOUNDED until one is, as for a search. 0 once nothing is left.
+        still = open_rna_scans(summary, ctx)
+        if arguments is not None:
+            return UNBOUNDED if (arguments['searched_ref'], arguments['database']) in still else 0.0
+        return UNBOUNDED if still else 0.0
     if arguments is not None:
         return 0.0 if _searched(arguments) in extracted_searches(summary) else UNBOUNDED
     running = any(search['outstanding'] for search in summary['searches'])
@@ -115,7 +165,9 @@ def ceiling(summary, records, action_type, arguments, ctx):
 def best_arguments(summary, records, action_type, ctx):
     """The commission the ceiling with no arguments stands for: the continuation of a search left running (its own
     commission again, followed to its result), or ``None`` when none is running (a new search: its fields are the
-    model's)."""
+    model's). A tool's fields are the model's: ``None``."""
+    if action_type != SEARCH:
+        return None
     running = [search for search in summary['searches'] if search['outstanding']]
     if not running:
         return None
@@ -129,7 +181,8 @@ def outcome_pending(summary, records, position):
     search launched and not extracted. Its rise (nothing is extracted yet) does not measure the search and its seconds
     cover only the launch, so the forecast controller learns from neither; the commission that continues the search is
     the observation."""
-    return summary['units'][position]['parked']
+    row = summary['units'][position]
+    return row['kind'] == 'child' and row['parked']
 
 
 def situations(summary, records, action_type, arguments, ctx):
@@ -141,6 +194,18 @@ def situations(summary, records, action_type, arguments, ctx):
     still be sent (``open_searches``) and of every search left running."""
     def of(ref, program, database):
         return [summary['held_sequences'][ref], database, program]
+    if action_type == PRODIGAL:
+        # letters, the program, the mode its length gives, the genetic code
+        def run(ref, code):
+            return [summary['held_sequences'][ref], 'prodigal', prodigal_mode(summary['sequence_lengths'][ref]), str(code)]
+        if arguments is not None:
+            return [run(arguments['searched_ref'], arguments['code'])]
+        return [run(ref, code) for ref, code in open_gene_findings(summary)]
+    if action_type == CMSCAN:
+        if arguments is not None:
+            return [[summary['held_sequences'][arguments['searched_ref']], 'cmscan', arguments['database']]]
+        return [list(found) for found in dict.fromkeys((summary['held_sequences'][ref], 'cmscan', database)
+                                                       for ref, database in open_rna_scans(summary, ctx))]
     if arguments is not None:
         return [of(*_searched(arguments))]
     running = [(search['query_ref'], search['program'], search['database']) for search in summary['searches']
