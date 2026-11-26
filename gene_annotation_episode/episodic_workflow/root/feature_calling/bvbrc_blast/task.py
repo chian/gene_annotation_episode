@@ -52,6 +52,8 @@ SERVICES = ('job_access', 'estimate_table')
 # form (``messages/read_from_parent.py``) and the actions' form take their choices from it, and every library function
 # that looks a database up is given it.
 DATABASES = {**PRECOMPUTED_DATABASES, **NUCLEOTIDE_DATABASES}
+# The programs that search with a nucleotide sequence: this episode makes no search with a protein.
+PROGRAMS = tuple(sorted(program for program, units in PROGRAM_UNITS.items() if units[0] == 'nt'))
 
 INSTRUCTIONS = (
     'You are the database search agent for one assigned sequence. This episode exists to search that sequence '
@@ -111,11 +113,11 @@ def output_schema(state):
     handoff = {'type': 'string', 'minLength': 1}
     seconds = {'type': 'number', 'minimum': 0, 'maximum': ESTIMATE_RANGE[1]}
     options = [
-        one('estimate', program={'type': 'string', 'enum': sorted(PROGRAM_UNITS)},
+        one('estimate', program={'type': 'string', 'enum': list(PROGRAMS)},
             database={'type': 'string', 'enum': list(DATABASES)},
             expected_seconds={'type': 'number', 'minimum': ESTIMATE_RANGE[0], 'maximum': ESTIMATE_RANGE[1]},
             basis={'type': 'string', 'enum': list(ESTIMATE_BASES)}),
-        one('launch', program={'type': 'string', 'enum': sorted(PROGRAM_UNITS)},
+        one('launch', program={'type': 'string', 'enum': list(PROGRAMS)},
             database={'type': 'string', 'enum': list(DATABASES)}, resource_id={'type': 'string', 'minLength': 1}),
         one('monitor', handoff_ref=handoff, wait_seconds={'type': 'number', 'minimum': 0, 'maximum': WAIT_RANGE_MAX},
             expected_remaining_seconds=seconds),

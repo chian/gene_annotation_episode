@@ -22,14 +22,14 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_blast_search import (
     UNTIL)
 
-from ..task import DATABASES
+from ..task import DATABASES, PROGRAMS
 
 UNITS = ('handoff_unit', 'information_unit', 'graded_unit')
 ASSIGNMENT_FORM = RecordForm({
     'searched_refs': Field('record_refs', 'The sequence to search: exactly one sequence record the parent holds, passed in custody'),
     'input_refs': Field('record_refs', 'The records that sequence is read from (its sequence artifact), passed '
                                        'in custody'),
-    'program': ChoiceField('text', 'The BLAST program; it must take the letters of the searched sequence', tuple(sorted(PROGRAM_UNITS))),
+    'program': ChoiceField('text', 'The BLAST program; it must take the letters of the searched sequence', PROGRAMS),
     'database': ChoiceField('text', 'The precomputed BV-BRC database: a genome set as the application spells it (its '
                                     'proteins), or the set, a dot and the application\'s nucleotide type (ffn or fna)'
                                     '', tuple(DATABASES)),

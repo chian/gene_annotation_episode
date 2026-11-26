@@ -86,8 +86,8 @@ DESCRIPTIONS = {
              'nothing of protein genes, and finding nothing only means no family of the database matches. Seconds to '
              'minutes with the length of the sequence. Fields: searched_ref, database, resource_id (a local resource).'),
 }
-# Every program of the service is offered: which takes which letters and which database is the search library's check.
-PROGRAMS = tuple(sorted(PROGRAM_UNITS))
+# The programs that search with a nucleotide sequence: this head makes no search with a protein.
+PROGRAMS = tuple(sorted(program for program, units in PROGRAM_UNITS.items() if units[0] == 'nt'))
 # The databases this head searches at the BV-BRC service, by the name a commission gives: the protein databases of its
 # two genome sets (named by the set) and the nucleotide databases of the same sets (named ``<set>.<type>``: ``ffn`` the
 # genes as DNA, ``fna`` the genome sequences). The set is this head's own: it is what the model is
