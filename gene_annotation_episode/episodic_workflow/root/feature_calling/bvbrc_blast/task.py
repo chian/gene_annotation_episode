@@ -246,7 +246,7 @@ async def monitor(arguments, ctx):
                                 expected_remaining_seconds=arguments['expected_remaining_seconds'])
 
 
-def extract(arguments, ctx):
+async def extract(arguments, ctx):
     """The fetch of the report, its grading into the database sheet and the keeping of the claims its hits make about
     the features of the sequence, as one unit. Nobody chooses the grading or the claims: they follow the fetch."""
     graded = fetch_and_grade_search(ctx, handoff_ref=arguments['handoff_ref'], fields=arguments['request'],
@@ -254,7 +254,8 @@ def extract(arguments, ctx):
                                     order=hits_by_bit_score)
     if graded['status'] != 'completed':
         return graded
-    kept = keep_blast_claims(ctx, search_source_ref=graded['graded_refs'][0], searched_ref=arguments['searched_ref'])
+    kept = await keep_blast_claims(ctx, search_source_ref=graded['graded_refs'][0],
+                                   searched_ref=arguments['searched_ref'])
     return {**graded, 'graded_refs': [*graded['graded_refs'], *kept['refs']],
             'record_refs': [*graded['record_refs'], *kept['refs']], 'claim_count': kept['claim_count']}
 

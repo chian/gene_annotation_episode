@@ -7,11 +7,16 @@ held. No model step stands between a graded result and its being counted. A slot
 how well a type at a location is supported (and is part of the scoring of the annotations that belong to that feature),
 the credit is what this episode gained.
 
-What a search can still earn has no finite bound that can be stated before it is read: a search can find claims at any
-number of places on the sequence. Its ceiling is therefore ``UNBOUNDED``, deliberately, and the forecast controller
-forecasts it from what such searches earned before. A search that is already extracted earns nothing if commissioned
-again: 0."""
-from method_loop import UNBOUNDED
+Every action has a finite ceiling, derived from how its program operates on a stretch of a given length (the owner,
+2026-11-25: "For a given slice of genome, they can only annotate so much right? so they can only at most provide X score.
+just think about the density of potential RNA genes on any given segment"): ``search_ceiling``, ``rna_scan_ceiling``,
+``gene_finding_ceiling``. An action that is already made earns nothing if made again: 0."""
+import json
+import math
+from pathlib import Path
+
+from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_features.feature_types import KINDS
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.bvbrc_job_route import SPECS
 
 # importing a converter enters its reader and its family's weight into the sheet of feature calls
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_features import (  # noqa: F401
@@ -143,11 +148,49 @@ def gene_finding_ceiling(summary, ref):
     return weight * genes + waiting + weight
 
 
+def search_ceiling(summary, ref, program, database):
+    """The most the credit can rise by one search of the sequence ``ref``. A claim earns only as the first statement of
+    its type and reading on its letters, so the earning claims of one reading share no letter: one reading holds at most
+    ``length // span + 1`` of them, ``span`` the shortest stretch an alignment the search reports can cover. The search
+    reports an alignment only under its E-value cutoff (the application's default), which needs at least
+    ``log2(letters searched / cutoff)`` bits (the database counted as one letter: the least it can be). Nucleotides give
+    at most 2 bits a letter. Proteins under the service's scoring (BLOSUM62, gapped: lambda 0.267, K 0.041, the highest
+    substitution score 11) give at most 4.24 bits a residue after 4.6 bits, and a residue is three letters. The readings:
+    six frames against proteins; against nucleotide entries the two strands for each type an entry can be of. The service
+    returns at most its hit limit (the application's default), which bounds the claims too. A claim's value is below 1,
+    times the weight of its family. One differential, at most the weight."""
+    parameters = {item['id']: item for item in json.loads((SPECS / 'Homology.json').read_text())['parameters']}
+    length = summary['sequence_lengths'][ref]
+    bits = math.log2(length / parameters['blast_evalue_cutoff']['default'])
+    if DATABASES[database]['unit'] == 'aa':
+        family, readings, span = 'protein_similarity', 6, 3 * max(1, math.ceil((bits - 4.6) / 4.24))
+    else:
+        family, readings, span = 'nucleotide_similarity', 2 * len(KINDS), max(1, math.ceil(bits / 2))
+    claims = min(parameters['blast_max_hits']['default'], readings * (length // span + 1))
+    return SHEET_WEIGHT[family] * claims + SHEET_WEIGHT[family]
+
+
+def rna_scan_ceiling(summary, ref, database, ctx):
+    """The most the credit can rise by one cmscan run on the sequence ``ref``. RNA genes are not dense without limit: a
+    hit is reported only at or above its family's threshold, a covariance model gives at most 2 bits a letter, so no hit
+    is shorter than half the lowest threshold of the database in letters; and of the hits of one strand that share
+    letters Infernal marks one as the best and the converter leaves out those it marks as overlapped by it. So one strand
+    holds at most ``length // shortest + 2`` statements (the 2: a hit cut off at each edge), twice that on both. A
+    statement's value is below 1, times the weight of its family. One differential, at most the weight. (A hit marked
+    ``$``, overlapped by a better hit that is not the best of its group, is kept and is not counted by this argument: a
+    scan that kept more than this bound raises ``episode_ceiling_exceeded``, and the bound is then to be redone.)"""
+    manifest = json.loads(Path(ctx.settings['covariance_databases'][database]).read_text())
+    index = json.loads(Path(manifest['files']['family_index']['path']).read_text())
+    shortest = math.ceil(min(family['ga'] for family in index.values()) / 2)
+    weight = SHEET_WEIGHT[infernal_calls.FAMILY]
+    return weight * 2 * (summary['sequence_lengths'][ref] // shortest + 2) + weight
+
+
 def ceiling(summary, records, action_type, arguments, ctx):
     """The most the head's credit can rise if the action ``action_type`` with ``arguments`` is the next unit (the
-    module's description). With arguments: 0 for a search already extracted, else ``UNBOUNDED``. With no arguments:
-    ``UNBOUNDED`` while a search is left running or a search can still be sent (``open_searches``), else 0: every search
-    this head can state has been made, nothing more can be earned, and the forecast of 0 lets the episode stop."""
+    module's description): the ceiling of that run when it can still be made, 0 when it is already made. With no
+    arguments: the highest over the runs that can still be made (for a search, also the one left running), 0 when none
+    is left: nothing more can be earned, and the forecast of 0 lets the episode stop."""
     if action_type not in CEILINGS:
         raise ValueError('feature_calling_ceiling_of_unknown_action:' + str(action_type))
     if action_type == PRODIGAL:
@@ -157,16 +200,16 @@ def ceiling(summary, records, action_type, arguments, ctx):
             return gene_finding_ceiling(summary, key[0]) if key in still else 0.0
         return max((gene_finding_ceiling(summary, ref) for ref, _ in still), default=0.0)
     if action_type == CMSCAN:
-        # No bound on the number of hits a scan keeps has been derived (a hit cut off by an edge can be short, and hits
-        # of different families may share letters): UNBOUNDED until one is, as for a search. 0 once nothing is left.
         still = open_rna_scans(summary, ctx)
         if arguments is not None:
-            return UNBOUNDED if (arguments['searched_ref'], arguments['database']) in still else 0.0
-        return UNBOUNDED if still else 0.0
+            key = (arguments['searched_ref'], arguments['database'])
+            return rna_scan_ceiling(summary, *key, ctx) if key in still else 0.0
+        return max((rna_scan_ceiling(summary, ref, database, ctx) for ref, database in still), default=0.0)
     if arguments is not None:
-        return 0.0 if _searched(arguments) in extracted_searches(summary) else UNBOUNDED
-    running = any(search['outstanding'] for search in summary['searches'])
-    return UNBOUNDED if running or open_searches(summary) else 0.0
+        return 0.0 if _searched(arguments) in extracted_searches(summary) else search_ceiling(summary, *_searched(arguments))
+    running = [(search['query_ref'], search['program'], search['database']) for search in summary['searches']
+               if search['outstanding']]
+    return max((search_ceiling(summary, *search) for search in [*running, *open_searches(summary)]), default=0.0)
 
 
 def best_arguments(summary, records, action_type, ctx):

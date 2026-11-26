@@ -22,10 +22,16 @@ So, going down the hits in the order of their rank:
 * A PLACE is the hits that say the same kind of thing of letters they share with its first hit: one type, one strand, one
   frame (``feature_candidates.same_reading``). The many hits of a place are one statement, not many: variants of one
   thing in the database.
-* A hit makes a CALL when the database says something positive of it. Two hits make the same call when they are of one
-  protein family of the database (``pgfam_id``); a hit with no family id makes the call of its product's wording. A hit
-  with no product, or with a label of ignorance (``uncharacterized_labels``), makes no call and is passed over: it neither
-  agrees nor disagrees. "Conserved hypothetical protein" is a call here, by the owner's rule above.
+* A hit makes a CALL when the database says something positive of it. Which hits make the same call is a judgement of
+  what their annotations indicate, not of their wording, and it is made in this head (the owner, 2026-11-25: "i think you
+  need to resolve via names in this head and not wait until root"). Hits of one protein family of the database
+  (``pgfam_id``) carry one label; a hit with no family id carries its product's wording as its label (``place_labels``).
+  The step that keeps the claims has the labels of each place sorted by meaning (a model is shown the annotations and
+  answers with a group number for each label, nothing else) and gives the result here (``groups``). In the first real
+  search of a piece of a virus, whose hits had no family id, eleven hits of one protein under six wordings ("RNA-dependent
+  RNA polymerase VP1", "RdRp", "VP1", ...) had come out as ten calls when wordings were compared as text. A hit with no
+  product, or with a label of ignorance (``uncharacterized_labels``), makes no call and is passed over: it neither agrees
+  nor disagrees. "Conserved hypothetical protein" is a call here, by the owner's rule above.
 * A BLOCK is the hits of a place that make one call. Each block is a claim: its positions, strand and ends are those of
   its top hit (nothing is made up from the other hits), and the rest says how firm it is:
 
@@ -90,13 +96,31 @@ NO_CALL = ''
 FAMILY = {'aa': 'protein_similarity', 'nt': 'nucleotide_similarity'}
 
 
-def _call(function):
-    """The call a hit's function row makes: its protein family of the database, else its product's wording; ``NO_CALL``
-    when the database says nothing positive of it."""
+def _label(function):
+    """What stands for a hit's annotation when hits are sorted into calls: its protein family of the database when it has
+    one, else its product's wording (case and spacing apart); ``None`` when the database says nothing positive of it (no
+    annotation, or a label of ignorance other than a conserved hypothetical)."""
+    if function is None:
+        return None
     name = ' '.join(function['function'].casefold().split())
     if is_uncharacterized_label(name) and name != CONSERVED_UNKNOWN:
-        return NO_CALL
+        return None
     return function['bvbrc_feature'].get('pgfam_id') or name
+
+
+def place_labels(grading, searched_mapping=None):
+    """What has to be sorted into calls, per place of a graded search (in the order of the places): for each label of the
+    place's hits (a family id or a wording, ``_label``) the annotations the database gives the hits that carry it, as
+    written. Two hits of one family are one label; which labels indicate the same thing is a judgement of meaning, made
+    by whoever calls ``blast_claim_sheet`` and given to it as ``groups``."""
+    found = []
+    for place in _places(hit_statements(grading, searched_mapping)):
+        labels = {}
+        for hit in place:
+            if hit['label'] is not None and hit['annotation'] not in labels.setdefault(hit['label'], []):
+                labels[hit['label']].append(hit['annotation'])
+        found.append([{'label': label, 'annotations': annotations} for label, annotations in labels.items()])
+    return found
 
 
 def _kind(function, reference_unit):
@@ -157,7 +181,7 @@ def hit_statements(grading, searched_mapping=None):
             'strand': strand if typed else '.', 'segments': segments,
             'claims_start': typed and (at_first if forward else at_last),
             'claims_end': typed and (at_last if forward else at_first),
-            'call': NO_CALL if function is None else _call(function),
+            'label': _label(function), 'annotation': None if function is None else function['function'],
             'taxon_id': None if function is None else function['bvbrc_feature'].get('taxon_id')})
     return rows
 
@@ -203,7 +227,10 @@ def _claims_of_place(place, hits):
             'rank': first['rank'], 'kind': first['kind'], 'strand': first['strand'],
             'segments': [dict(segment) for segment in first['segments']],
             'claims_start': first['claims_start'], 'claims_end': first['claims_end'],
-            'bit_score': first['bit_score'], 'evalue': first['evalue'], 'family_id': call if call.startswith('PGF_') else None,
+            'bit_score': first['bit_score'], 'evalue': first['evalue'],
+            # what the database says of the block's hits, as written, and their families: for the naming of the feature
+            'annotations': list(dict.fromkeys(hit['annotation'] for hit in block if hit['annotation'] is not None)),
+            'family_ids': sorted({hit['label'] for hit in block if hit['label'] is not None and hit['label'].startswith('PGF_')}),
             'makes_call': call != NO_CALL, 'hits': len(block),
             'run_before_different_call': len(run), 'different_call_met': bool(other),
             'run_before_different_frame': len(before_frame), 'different_frame_met': bool(crossing),
@@ -213,13 +240,23 @@ def _claims_of_place(place, hits):
     return claims
 
 
-def blast_claim_sheet(grading, searched_mapping=None):
+def blast_claim_sheet(grading, groups, searched_mapping=None):
     """The subscoring sheet of one graded search: ``{'schema', 'program', 'database', 'hit_count', 'claims'}`` with the
-    claims of every place (the module's description), in the order of the rank of their top hit. ``searched_mapping`` is the
-    mapping of the searched sequence when it was derived from the sequence the claims are about."""
+    claims of every place (the module's description), in the order of the rank of their top hit. ``groups`` says which
+    labels of each place indicate the same thing: per place (in the order of ``place_labels``) ``{label: group number}``,
+    one entry for every label of the place; labels with one number are one call, and the number 0 is for an annotation
+    that states nothing of what the feature is (its hits make no call). ``searched_mapping`` is the mapping of the
+    searched sequence when it was derived from the sequence the claims are about."""
     hits = hit_statements(grading, searched_mapping)
     search = grading['sheet']['normalized_result']['search']
-    claims = [claim for place in _places(hits) for claim in _claims_of_place(place, hits)]
+    places = _places(hits)
+    for place, grouping in zip(places, groups, strict=True):
+        if set(grouping) != {hit['label'] for hit in place if hit['label'] is not None}:
+            raise ValueError('blast_claims_groups_do_not_cover_the_labels_of_the_place')
+        for hit in place:
+            number = 0 if hit['label'] is None else grouping[hit['label']]
+            hit['call'] = NO_CALL if number == 0 else 'call_' + str(number)
+    claims = [claim for place in places for claim in _claims_of_place(place, hits)]
     return {'schema': SHEET, 'program': search['program'], 'database': search['request']['database'],
             'hit_count': len(hits), 'claims': sorted(claims, key=lambda claim: claim['rank'])}
 
@@ -259,5 +296,6 @@ def statement_rows(sheet, feature_refs):
 READERS[SHEET] = read_claim_sheet
 SHEET_WEIGHT.update({family: 1.0 for family in FAMILY.values()})
 
-__all__ = ['FAMILY', 'GRADED_SHEET', 'SHEET', 'blast_claim_sheet', 'claim_bit', 'hit_statements', 'read_claim_sheet',
+__all__ = ['FAMILY', 'GRADED_SHEET', 'SHEET', 'blast_claim_sheet', 'claim_bit', 'hit_statements', 'place_labels',
+           'read_claim_sheet',
            'statement_rows']
