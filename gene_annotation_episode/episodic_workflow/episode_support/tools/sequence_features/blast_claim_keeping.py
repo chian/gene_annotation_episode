@@ -7,8 +7,7 @@ record as a retained grading, and a source record of the provider ``feature_call
 sequence the claims are about. The sheet of feature calls reads that source (``feature_candidates.feature_tests``).
 
 In the same transaction it keeps the taxon claims of the same hits (``search_taxon_claims.search_taxon_claim_sheet``: per
-taxon the hits name, its place on the prepared taxonomy of the run (the setting ``taxonomy``, the path of its manifest),
-its hits and the closeness and share covered of its best one) for the organism side: the claim sheet
+taxon the hits name, its hits and the closeness and share covered of its best one) for the organism side: the claim sheet
 as a retained grading, labelled as a ``tool_grading_sheet`` data product (``record_grading_product``, made from the
 search's graded sheet), on a source of its own provider ``feature_calling.search_taxon_claims`` whose operand is the same
 sequence. The scoring sheet of candidate taxa reads that source (``taxon_candidates.taxon_tests``); the sheet of feature
@@ -22,8 +21,6 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_
     GRADED_SHEET, blast_claim_sheet, place_labels)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.tool_grading_artifacts import (
     record_grading_product, retain_tool_grading, source_tool_grading_entries)
-from gene_annotation_episode.episodic_workflow.episode_support.grading.taxonomic_classification.ncbi_taxonomy import (
-    load_taxonomy)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.taxonomic_classification.search_taxon_claims import (
     search_taxon_claim_sheet)
 
@@ -76,9 +73,7 @@ async def keep_blast_claims(ctx, *, search_source_ref, searched_ref):
     subject_ref = searched_ref if mapping is None else mapping['path'][0]['subject_ref']
     groups = [await same_calls(ctx.model, labels) for labels in place_labels(grading, mapping)]
     sheet = blast_claim_sheet(grading, groups, mapping)
-    # each hit's taxon is placed on the one prepared taxonomy of the run (the setting ``taxonomy``: its manifest's path)
-    taxon_sheet = {**search_taxon_claim_sheet(grading, load_taxonomy(ctx.settings['taxonomy'])),
-                   'subject_ref': subject_ref}
+    taxon_sheet = {**search_taxon_claim_sheet(grading), 'subject_ref': subject_ref}
     report_ref = store.get(search_source_ref)['artifact_ref']
     with store.transaction():
         feature_refs = [store.put('feature', {'subject_ref': subject_ref, 'kind': claim['kind'],

@@ -9,17 +9,14 @@ search become TAXON CLAIMS, one per taxon the hits name, kept by the step that k
 (``tools/sequence_features/blast_claim_keeping.py``), and the scoring sheet of candidate taxa reads them as a claim test
 (``taxon_candidates``: a claim adds to the candidates that include it, waits otherwise, and never opens a candidate).
 
-A claim is the taxon id the database gives and the facts of its hits. Nothing the database says of the taxon's place
-among the taxa is taken: when the sheet is made, each taxon is placed on the organism side's one prepared taxonomy
-(``ncbi_taxonomy``: its name, rank code and lineage), as the geNomad and VITAP gradings place theirs, so every sheet's taxa
-meet on one taxonomy and the scoring sheet reads rows that are already placed. A taxon the prepared taxonomy does not hold
-is kept as stated and marked not placed (``placed`` false): it is not guessed. (The prepared taxonomy holds only the taxa
-under Viruses and the children of the root; that gap is closed by preparing the whole taxonomy, not by code.)
+A claim is only the taxon id the database gives and the facts of its hits. It carries no lineage and no name: the
+algorithm that scores holds the tree (``taxon_candidates`` places each claim's taxon on the one prepared taxonomy,
+``ncbi_taxonomy.prepared_taxonomy``), so every sheet's taxa meet on one taxonomy and whoever keeps a claim needs to know
+nothing of the taxa.
 
 The sheet, going down the hits in the order of their rank (``hit_index``), per taxon named by the hits:
 
-* ``taxon_id``: the taxon the database gives the hit; ``placed``, and when placed its ``name``, ``rank_code`` and
-  ``lineage_taxon_ids`` on the prepared taxonomy (the sheet records which: ``taxonomy``);
+* ``taxon_id``: the taxon the database gives the hit;
 * ``hit_count``: the hits of that taxon used;
 * of its best hit (the highest ``value``, the earliest rank on a tie): ``best_rank``, ``closeness`` (the identical
   positions over the aligned positions of the hit: ``identical_unique_pair_count`` over ``unique_pair_count`` of the
@@ -47,8 +44,6 @@ import math
 
 from gene_annotation_episode.episodic_workflow.episode_support.grading.taxonomic_classification.genomad_grader import (
     VIRUSES)
-from gene_annotation_episode.episodic_workflow.episode_support.grading.taxonomic_classification.ncbi_taxonomy import (
-    identity, taxon_row)
 
 SHEET = 'search_taxon_claim_sheet'
 GRADED_SHEET = 'blast_database_sheet'
@@ -77,20 +72,10 @@ def _hit(hit):
     return taxon, closeness * covered, closeness, covered
 
 
-def _place(taxonomy, taxon):
-    """Where the prepared taxonomy has a taxon: its name, rank code and lineage, or not placed."""
-    if taxon not in taxonomy['nodes']:
-        return {'placed': False, 'name': None, 'rank_code': None, 'lineage_taxon_ids': None}
-    row = taxon_row(taxonomy, taxon)
-    return {'placed': True, 'name': row['name'], 'rank_code': row['rank_code'],
-            'lineage_taxon_ids': row['lineage_taxon_ids']}
-
-
-def search_taxon_claim_sheet(grading, taxonomy):
+def search_taxon_claim_sheet(grading):
     """The subscoring sheet of one graded search (the module's description): ``{'schema', 'program', 'database',
-    'taxonomy', 'hit_count', 'hits_without_taxon', 'hits_without_positions', 'claims'}`` with one claim per taxon, the
-    highest value first (the lower taxon id on a tie), each placed on ``taxonomy`` (the prepared taxonomy,
-    ``ncbi_taxonomy.load_taxonomy``)."""
+    'hit_count', 'hits_without_taxon', 'hits_without_positions', 'claims'}`` with one claim per taxon, the highest value
+    first (the lower taxon id on a tie)."""
     sheet = grading['sheet']
     search = sheet['normalized_result']['search']
     taxa, without_taxon, without_positions = {}, 0, 0
@@ -106,9 +91,9 @@ def search_taxon_claim_sheet(grading, taxonomy):
     claims = []
     for taxon, hits in taxa.items():
         best = max(hits, key=lambda row: (row['value'], -row['best_rank']))
-        claims.append({'taxon_id': taxon, **_place(taxonomy, taxon), 'hit_count': len(hits), **best})
+        claims.append({'taxon_id': taxon, 'hit_count': len(hits), **best})
     return {'schema': SHEET, 'program': search['program'], 'database': search['request']['database'],
-            'taxonomy': identity(taxonomy), 'hit_count': len(sheet['hits']), 'hits_without_taxon': without_taxon,
+            'hit_count': len(sheet['hits']), 'hits_without_taxon': without_taxon,
             'hits_without_positions': without_positions,
             'claims': sorted(claims, key=lambda claim: (-claim['value'], claim['taxon_id']))}
 
@@ -122,13 +107,11 @@ def claim_bits(sheet):
 
 def read_search_taxon_claim_sheet(grading):
     """The reader of a kept claim sheet for the scoring sheet of candidate taxa (``taxon_candidates.CLAIM_READERS``):
-    ``(sheet name, covers, rows)`` with one row per claim: ``taxon_id``, ``placed``, ``name``, ``rank_code``,
-    ``lineage_taxon_ids`` (as the sheet placed it) and ``bit``."""
+    ``(sheet name, covers, rows)`` with one row per claim, ``{'taxon_id', 'bit'}``. The scoring sheet places each taxon
+    on the taxonomy it holds."""
     sheet = grading['sheet']
     return (FAMILY + ':' + sheet['program'] + ':' + sheet['database'], list(DATABASE_COVERS[database_set(sheet['database'])]),
-            [{'taxon_id': claim['taxon_id'], 'placed': claim['placed'], 'name': claim['name'],
-              'rank_code': claim['rank_code'], 'lineage_taxon_ids': claim['lineage_taxon_ids'], 'bit': bit}
-             for claim, bit in zip(sheet['claims'], claim_bits(sheet))])
+            [{'taxon_id': claim['taxon_id'], 'bit': bit} for claim, bit in zip(sheet['claims'], claim_bits(sheet))])
 
 
 __all__ = ['ARCHAEA', 'BACTERIA', 'DATABASE_COVERS', 'FAMILY', 'GRADED_SHEET', 'SHEET', 'claim_bits', 'database_set',

@@ -44,9 +44,10 @@ augment the organism side like a claim does for our feature calls"; "the whole g
 score should be like claim being added to a feature call"; it needs "an auto-scoring feature", not a re-commission. So,
 as claims are kept in the sheet of feature calls (``sequence_features/feature_candidates``):
 
-* A claim is a taxon and a bit. Its taxon was placed on the one prepared taxonomy when its sheet was made
-  (``search_taxon_claims``: its name, rank code and lineage), as every classification sheet's taxa are, so the table
-  reads placed rows and needs no taxonomy of its own.
+* A claim is a taxon id and a bit, and nothing else. The table holds the tree: it places the claim's taxon on the one
+  prepared taxonomy (``ncbi_taxonomy.prepared_taxonomy``: its name, rank code and lineage), which is how it sees that a
+  claim at a species lies inside a candidate family. The taxonomy is a fixed fact, not a property of a run, and it is
+  loaded only when a claim test is held.
 * A claim never admits a candidate. Its bit at taxon T is a bit like any other: it adds to the score of every listed
   candidate that is T or lies inside T, from the moment the claim is held, whatever the order (a candidate admitted
   later has in its score the bits of the claims held before it on its lineage).
@@ -101,6 +102,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.taxonomic
     CELLULAR, SHEET as GENOMAD_SHEET, VIRUSES)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.taxonomic_classification.kraken2_grader import (
     SHEET as KRAKEN2_SHEET)
+from gene_annotation_episode.episodic_workflow.episode_support.grading.taxonomic_classification.ncbi_taxonomy import (
+    prepared_taxonomy, taxon_row)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.taxonomic_classification.search_taxon_claims import (
     FAMILY as CLAIM_FAMILY, SHEET as SEARCH_CLAIM_SHEET, read_search_taxon_claim_sheet)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.taxonomic_classification.vitap_grader import (
@@ -208,18 +211,19 @@ def _vitap(grading):
     return 'vitap:' + grading['database']['name'], [VIRUSES], [_bit_row(taxon, score / total) for taxon, score in taken]
 
 
-READERS = {KRAKEN2_SHEET: _kraken2, GENOMAD_SHEET: _genomad, VITAP_SHEET: _vitap}
-# The readers of claim sheets: ``grading -> (sheet name, covers, rows)`` with one row per claim, placed or not.
+READERS ={KRAKEN2_SHEET: _kraken2, GENOMAD_SHEET: _genomad, VITAP_SHEET: _vitap}
+# The readers of claim sheets: ``grading -> (sheet name, covers, rows)`` with one row per claim, ``{'taxon_id', 'bit'}``.
 CLAIM_READERS = {SEARCH_CLAIM_SHEET: read_search_taxon_claim_sheet}
 
 
 def _placed(rows):
-    """The claims of a claim test that their sheet placed on the prepared taxonomy (each with its taxon's name, rank code
-    and lineage), and those at a taxon it does not hold (the module's description, KNOWN CASE)."""
+    """The claims of a claim test placed on the prepared taxonomy (each with its taxon's name, rank code and lineage), and
+    those at a taxon it does not hold (the module's description, KNOWN CASE)."""
+    taxonomy = prepared_taxonomy()
     placed, unplaced = [], []
     for row in rows:
-        if row['placed']:
-            placed.append(_bit_row(row, row['bit']))
+        if row['taxon_id'] in taxonomy['nodes']:
+            placed.append(_bit_row(taxon_row(taxonomy, row['taxon_id']), row['bit']))
         else:
             unplaced.append({'taxon_id': row['taxon_id'], 'bit': row['bit']})
     return placed, unplaced
@@ -229,8 +233,8 @@ def taxon_tests(reader, scope, sources):
     """The tests the episode holds, in arrival order: ``[{'test', 'target', 'covers', 'rows', 'claim', 'unplaced'}]``,
     one per graded classification sheet or claim sheet of a source whose operand is a subject of ``scope``. ``rows`` are
     the test's bits (``taxon_id``, ``name``, ``rank_code``, ``lineage_taxon_ids``, ``bit``); a test that found nothing has
-    no row and is still a test. ``claim`` says whether it is a claim test; a claim test's rows are its claims that are
-    placed on the prepared taxonomy, and ``unplaced`` its claims at taxa the taxonomy does not hold."""
+    no row and is still a test. ``claim`` says whether it is a claim test; a claim test's rows are its claims placed on
+    the prepared taxonomy, and ``unplaced`` its claims at taxa the taxonomy does not hold."""
     scope = reader.validate_scope(scope)
     tests = []
     for reference in sources:

@@ -25,8 +25,7 @@ The decision shows, as controlled facts: the commission, the state, the held est
 learned of each kind of search, the seconds since the launch and how far past the estimate (facts, never a deadline), the
 minimum wait of a status request, and each earlier unit. The task never ends the Episode; the yield controller does.
 
-Settings (``ctx.settings``): ``cost`` and ``parameters`` (``yield_estimator.py``); ``taxonomy`` (the path of the prepared
-NCBI taxonomy's manifest: the taxa of a search's hits are placed on it when their claims are kept)."""
+Settings (``ctx.settings``): ``cost`` and ``parameters`` (``yield_estimator.py``)."""
 from jsonschema import Draft202012Validator, ValidationError
 
 from episode_runtime import ModelRequest, Rejected, ToolCall

@@ -7,9 +7,14 @@ The prepared taxonomy is named by a manifest (``name``, ``version``, what it ``h
 id; the classes kept are the scientific name, synonyms and equivalent names). A name resolves when it is the scientific name
 of exactly one taxon, or, failing that, a synonym or equivalent name of exactly one. A name that is not held is ``unknown``;
 a name of more than one taxon is ``ambiguous``. Neither is guessed."""
+import functools
 import json
 from pathlib import Path
 
+# The prepared taxonomy the scoring of candidate taxa holds: a fixed fact, not a property of a run. It sits in the
+# repository's ``resources`` directory (data that is not in git; a pinned worktree links that directory).
+PREPARED_MANIFEST = (Path(__file__).parents[5] / 'resources' / 'software' / 'ncbi-taxonomy-viruses-20261022'
+                     / 'taxonomy.manifest.json')
 ROOT = 1
 RESOLVED, UNKNOWN, AMBIGUOUS = 'resolved', 'unknown', 'ambiguous'
 
@@ -61,10 +66,17 @@ def taxon_row(taxonomy, taxon):
             'lineage_taxon_ids': lineage(taxonomy, taxon)}
 
 
+@functools.lru_cache(maxsize=None)
+def prepared_taxonomy():
+    """The prepared taxonomy (``PREPARED_MANIFEST``), loaded once."""
+    return load_taxonomy(PREPARED_MANIFEST)
+
+
 def identity(taxonomy):
     """The prepared taxonomy's identity as a sheet records it."""
     manifest = taxonomy['manifest']
     return {'name': manifest['name'], 'version': manifest['version']}
 
 
-__all__ = ['AMBIGUOUS', 'RESOLVED', 'UNKNOWN', 'identity', 'lineage', 'load_taxonomy', 'resolve', 'taxon_row']
+__all__ = ['AMBIGUOUS', 'PREPARED_MANIFEST', 'RESOLVED', 'UNKNOWN', 'identity', 'lineage', 'load_taxonomy',
+           'prepared_taxonomy', 'resolve', 'taxon_row']

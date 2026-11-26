@@ -52,8 +52,8 @@ class TaxonDifferentialCredit:
 
 def held_table(summary, records):
     """The scoring sheet of the scope from the records this episode holds: its classifications and the taxon claims
-    passed in (``evidence_refs``), whose taxa were placed on the prepared taxonomy when their sheets were made; with no
-    claim test held the table is as before."""
+    passed in (``evidence_refs``), which the table places on the taxonomy it holds; with no claim test held the table is
+    as before."""
     return taxon_table(records, summary['scope'], held_sources(records))
 
 
