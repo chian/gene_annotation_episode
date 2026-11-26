@@ -59,7 +59,7 @@ FEATURE_CALL_FORM = RecordForm({
                              "annotation is a line of the sheet with this score"),
     'claim_count': Field('integer', 'The claims that sit in this feature call'),
     'rivals': Field('list', 'The feature calls that compete with this one for letters', items=RIVAL_FORM),
-    'feature_refs': Field('record_refs', 'The feature records that state this feature call'),
+    'feature_refs': Field('record_refs', 'The feature record of this feature call'),
 })
 WAITING_FEATURE_CLAIM_FORM = RecordForm({
     'kind': ChoiceField('text', 'The type of feature the letters are claimed to lie inside', KINDS),
@@ -70,7 +70,6 @@ WAITING_FEATURE_CLAIM_FORM = RecordForm({
     'claims_start': Field('boolean', 'Whether the claim says the feature starts at its first position'),
     'claims_end': Field('boolean', 'Whether the claim says the feature ends at its last position'),
     'support': Field('number', 'The weighted support of the tests that made this claim'),
-    'feature_refs': Field('record_refs', 'The feature records that state this claim'),
 })
 READING_VALUE_FORM = RecordForm({
     'value': ChoiceField('integer', 'A genetic code tests were made under', GENETIC_CODES),

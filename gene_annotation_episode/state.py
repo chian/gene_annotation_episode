@@ -1666,9 +1666,11 @@ class Store:
         return stored
 
     def change_feature(self, ref, fields):
-        """Change fields of the feature record ``ref`` in place: the record keeps its reference."""
+        """Change fields of the feature record ``ref`` in place: the record keeps its reference. A field given as
+        ``None`` is removed."""
         stored = self.get(ref)
-        record = {**{key: value for key, value in stored.items() if key not in ("id", "record_type", "origin")}, **fields}
+        record = {key: value for key, value in {**stored, **fields}.items()
+                  if key not in ("id", "record_type", "origin") and value is not None}
         self._validate_record("feature", record, stored["origin"])
         roots = self._record_roots("feature", record)
         changed = {**record, "id": ref, "record_type": "feature", "origin": stored["origin"]}

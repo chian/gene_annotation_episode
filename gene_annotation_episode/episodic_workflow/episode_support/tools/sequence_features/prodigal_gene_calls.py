@@ -17,8 +17,7 @@ transaction:
 
 1. the native result as an artifact (JSON);
 2. the grading, retained beside it (``retain_tool_grading``);
-3. one ``feature`` record per gene (the sequence the statement is about, ``CDS``, its positions, its strand);
-4. the call sheet with each gene's ``feature_ref``, retained as a second grading beside the native result;
+3. the call sheet, retained as a second grading beside the native result;
 5. one ``source`` record of the provider ``native.pyrodigal.find_genes`` over the native result, whose operand is the
    sequence the statements are about and whose auxiliary artifacts are the two gradings (the sheet of feature calls
    reads it: ``feature_candidates.feature_tests``);
@@ -50,8 +49,9 @@ THE LETTERS: the finder reads DNA letters only (``predict_genes`` refuses any ot
 
 The searched sequence can be a product derived from another (an extracted stretch, a reverse complement: its record has a
 ``mapping``). The statements are then about the sequence its mapping leads back to, as in
-``blast_claim_keeping.keep_blast_claims``: the feature records and the source name that sequence, and the positions are
-carried back by the mapping (``prodigal_calls``).
+``blast_claim_keeping.keep_blast_claims``: the source names that sequence, and the positions are
+carried back by the mapping (``prodigal_calls``). The feature records of the candidates are then settled
+(``feature_record_keeping.settle_feature_records``).
 
 The outcome has the shape of every tool outcome of an episode. ``completed``: ``record_refs`` are the source, the native
 result, the two gradings, their product rows and the feature records; ``result`` holds the mode, the code, the gene count
@@ -69,6 +69,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_
     prodigal_call_sheet)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.tool_grading_artifacts import (
     record_grading_product, retain_tool_grading)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_features.feature_record_keeping import (
+    settle_feature_records)
 
 PROVIDER = 'native.pyrodigal.find_genes'
 SEARCHED_MOLECULES = ('dna',)
@@ -131,12 +133,7 @@ def prodigal_gene_calls(ctx, *, searched_ref, code):
     with store.transaction():
         native_ref = store.artifact(canonical(native), 'application/json')
         grading_ref = retain_tool_grading(store, provider=PROVIDER, native_artifact_ref=native_ref, grading=grading)
-        feature_refs = [store.put('feature', {'subject_ref': subject_ref, 'kind': gene['kind'],
-                                              'segments': gene['segments'], 'strand': gene['strand'],
-                                              'context_refs': []}, origin='tool')['id']
-                        for gene in sheet['genes']]
-        kept = {**sheet, 'searched_ref': searched_ref, 'subject_ref': subject_ref,
-                'genes': [{**gene, 'feature_ref': ref} for gene, ref in zip(sheet['genes'], feature_refs)]}
+        kept = {**sheet, 'searched_ref': searched_ref, 'subject_ref': subject_ref}
         call_grading = {'sheet': kept}
         call_sheet_ref = retain_tool_grading(store, provider=PROVIDER, native_artifact_ref=native_ref,
                                              grading=call_grading)
@@ -150,7 +147,7 @@ def prodigal_gene_calls(ctx, *, searched_ref, code):
                                               provider=PROVIDER, source_ref=source['id'], used=[native_ref],
                                               derived_from=[grading_product['id']])
     refs = [source['id'], native_ref, grading_ref, call_sheet_ref, grading_product['id'], call_product['id'],
-            *feature_refs]
+            *settle_feature_records(ctx, subject_ref=subject_ref, source_ref=source['id'])]
     ends = [gene['claims_start'] + gene['claims_end'] for gene in sheet['genes']]
     return {'status': 'completed', 'record_refs': refs, 'changed_record_refs': refs,
             'result': {'mode': mode, 'code': code, 'grading_ref': grading_ref, 'call_sheet_ref': call_sheet_ref,

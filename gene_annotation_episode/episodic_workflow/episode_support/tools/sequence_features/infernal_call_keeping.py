@@ -2,11 +2,11 @@
 same unit.
 
 ``keep_infernal_calls`` reads the kept sheet of the scan through custody, turns its hits into statements
-(``infernal_calls.infernal_call_sheet``), and keeps through custody: one ``feature`` record for each statement (the sequence it
-is about, its type, its positions and its strand), the call sheet with the reference of each statement's feature record as a
+(``infernal_calls.infernal_call_sheet``), and keeps through custody: the call sheet as a
 retained grading labelled a ``tool_grading_sheet`` data product, and a source record of the provider
 ``feature_calling.infernal_calls`` whose operand is the sequence the statements are about. The sheet of feature calls reads
 that source (``feature_candidates.feature_tests``); the scan's own source is not read by it (its sheet has no reader there).
+The feature records of the candidates are then settled (``feature_record_keeping.settle_feature_records``).
 
 The sequence the statements are about is the searched sequence itself, or, when the searched sequence is a product derived
 from another (an extracted stretch: its record has a ``mapping``), the sequence its mapping leads back to. Nothing is decided
@@ -22,6 +22,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.tool_grading_artifacts import (
     GRADING_KIND, record_grading_product, retain_tool_grading, source_tool_grading_entries)
 from gene_annotation_episode.episodic_workflow.episode_support.records.data_products import products
+from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_features.feature_record_keeping import (
+    settle_feature_records)
 
 PROVIDER = 'feature_calling.infernal_calls'
 
@@ -43,13 +45,7 @@ def keep_infernal_calls(ctx, *, scan_source_ref, searched_ref):
     table_ref = store.get(scan_source_ref)['artifact_ref']
     scan_gradings = [row['id'] for row in products(store, GRADING_KIND) if row['generated_by'] == scan_source_ref]
     with store.transaction():
-        feature_refs = [store.put('feature', {'subject_ref': subject_ref, 'kind': statement['kind'],
-                                              'segments': statement['segments'], 'strand': statement['strand'],
-                                              'context_refs': []}, origin='tool')['id']
-                        for statement in sheet['statements']]
-        grading = {'sheet': {**sheet, 'subject_ref': subject_ref,
-                             'statements': [{**statement, 'feature_ref': ref}
-                                            for statement, ref in zip(sheet['statements'], feature_refs)]}}
+        grading = {'sheet': {**sheet, 'subject_ref': subject_ref}}
         grading_ref = retain_tool_grading(store, provider=PROVIDER, native_artifact_ref=table_ref, grading=grading)
         source = store.put('source', {
             'provider': PROVIDER, 'accession': None, 'uri': None, 'artifact_ref': table_ref, 'text_ref': None,
@@ -57,8 +53,8 @@ def keep_infernal_calls(ctx, *, scan_source_ref, searched_ref):
             'operand_refs': [subject_ref]}, origin='tool')
         product = record_grading_product(store, grading_ref=grading_ref, grading=grading, provider=PROVIDER,
                                          source_ref=source['id'], used=[entry['artifact_ref']], derived_from=scan_gradings)
-    return {'call_count': len(feature_refs),
-            'refs': [source['id'], grading_ref, product['id'], *dict.fromkeys(feature_refs)]}
+    feature_refs = settle_feature_records(ctx, subject_ref=subject_ref, source_ref=source['id'])
+    return {'call_count': len(sheet['statements']), 'refs': [source['id'], grading_ref, product['id'], *feature_refs]}
 
 
 __all__ = ['PROVIDER', 'keep_infernal_calls']

@@ -58,7 +58,7 @@ FEATURE_FORM = RecordForm({
     'claim_count': Field('integer', 'The claims that sit in this feature call'),
     'rivals': Field('list', 'The rows that compete with this one for letters, each with the facts of the letters shared',
                     items=RIVAL_FORM),
-    'feature_refs': Field('record_refs', 'The feature records that state this feature call'),
+    'feature_refs': Field('record_refs', 'The feature record of this feature call'),
 })
 CLAIM_FORM = RecordForm({
     'kind': ChoiceField('text', 'The type of feature the letters are claimed to lie inside', KINDS),
@@ -69,7 +69,6 @@ CLAIM_FORM = RecordForm({
     'claims_start': Field('boolean', 'Whether the claim says the feature starts at its first position'),
     'claims_end': Field('boolean', 'Whether the claim says the feature ends at its last position'),
     'support': Field('number', 'The weighted support of the tests that made this claim'),
-    'feature_refs': Field('record_refs', 'The feature records that state this claim'),
 })
 TARGET_FORM = RecordForm({
     'target_ref': Field('record_refs', 'The sequence of the scope the rows are of: exactly one record'),

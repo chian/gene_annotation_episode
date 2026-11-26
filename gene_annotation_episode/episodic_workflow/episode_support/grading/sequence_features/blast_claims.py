@@ -276,16 +276,14 @@ def read_claim_sheet(grading):
     sheet = grading['sheet']
     unit = PROGRAM_UNITS[sheet['program']][1]
     return (FAMILY[unit] + ':' + sheet['program'] + ':' + sheet['database'], [CODING] if unit == 'aa' else list(KINDS),
-            statement_rows(sheet, [claim['feature_ref'] for claim in sheet['claims']]))
+            statement_rows(sheet))
 
 
-def statement_rows(sheet, feature_refs):
-    """The rows the sheet of feature calls reads (``feature_candidates.READERS``): one per claim of the claim sheet, with
-    the feature record that states it (``feature_refs``: per claim, in the sheet's order)."""
+def statement_rows(sheet):
+    """The rows the sheet of feature calls reads (``feature_candidates.READERS``): one per claim of the claim sheet."""
     return [{'kind': claim['kind'], 'strand': claim['strand'], 'segments': claim['segments'],
-             'claims_start': claim['claims_start'], 'claims_end': claim['claims_end'], 'feature_ref': feature_ref,
-             'bit': claim_bit(claim)}
-            for claim, feature_ref in zip(sheet['claims'], feature_refs)]
+             'claims_start': claim['claims_start'], 'claims_end': claim['claims_end'], 'bit': claim_bit(claim)}
+            for claim in sheet['claims']]
 
 
 # Entered into the sheet of feature calls when this module is imported: the reader of the kept claim sheet, and the

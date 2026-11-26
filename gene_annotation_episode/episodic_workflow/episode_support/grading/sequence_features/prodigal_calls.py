@@ -116,12 +116,11 @@ def call_bit(gene):
 def read_call_sheet(grading):
     """The reader of a kept call sheet for the sheet of feature calls (``feature_candidates.READERS``): ``(sheet name,
     covers, rows)``. The sheet name is ``sequence_signal:prodigal:<code>:<mode>``; a gene finder can speak of coding
-    sequences only; one row per gene, with the feature record that states it."""
+    sequences only; one row per gene."""
     sheet = grading['sheet']
     return (FAMILY + ':prodigal:' + str(sheet['code']) + ':' + sheet['mode'], [CODING],
             [{'kind': gene['kind'], 'strand': gene['strand'], 'segments': gene['segments'],
-              'claims_start': gene['claims_start'], 'claims_end': gene['claims_end'], 'feature_ref': gene['feature_ref'],
-              'bit': call_bit(gene)}
+              'claims_start': gene['claims_start'], 'claims_end': gene['claims_end'], 'bit': call_bit(gene)}
              for gene in sheet['genes']])
 
 

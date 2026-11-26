@@ -250,10 +250,8 @@ def _feature_call(row):
 
 
 def _waiting_feature_claim(row):
-    """One claim that waits for a feature call: type, strand, positions, which end it claims, its support and the
-    feature records that state it."""
-    return {**{name: row[name] for name in WAITING_FIELDS}, 'segments': _segments(row['segments']),
-            'feature_refs': list(row['feature_refs'])}
+    """One claim that waits for a feature call: type, strand, positions, which end it claims and its support."""
+    return {**{name: row[name] for name in WAITING_FIELDS}, 'segments': _segments(row['segments'])}
 
 
 def feature_report(result):

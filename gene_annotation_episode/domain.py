@@ -281,7 +281,12 @@ RECORD_SCHEMAS = {
         "anchor": {"anyOf": [ANCHOR, {"type": "null"}]}},
         required=["context_type", "name", "source_ref", "attributes", "related_refs"]),
     "feature": obj({"subject_ref": REF, "kind": {"enum": FEATURE_KINDS}, "segments": SEGMENTS,
-                    "strand": {"enum": ["+", "-", "."]}, "context_refs": REFS, "protein_ref": REF},
+                    "strand": {"enum": ["+", "-", "."]}, "context_refs": REFS, "protein_ref": REF,
+                    # the positions it had before, each with the source whose statements moved it; and, when the
+                    # candidate it stood for became one with another, that candidate's record
+                    "changes": {"type": "array", "items": obj({"segments": SEGMENTS, "strand": {"enum": ["+", "-", "."]},
+                                                               "source_ref": REF})},
+                    "joined_ref": REF},
                    required=["subject_ref", "kind", "segments", "strand", "context_refs"]),
     "product": obj({"parent_refs": {"type": "array", "items": REF, "minItems": 1}, "molecule": {"enum": MOLECULES},
         "sequence_ref": REF, "derivation": {"enum": ["translation", "splicing", "extraction", "reverse_complement", "correction_hypothesis"]},

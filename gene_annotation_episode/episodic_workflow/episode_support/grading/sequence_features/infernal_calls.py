@@ -141,12 +141,11 @@ def infernal_call_sheet(grading, family_types, searched_mapping=None):
 
 def read_call_sheet(grading):
     """The reader of a kept call sheet for the sheet of feature calls (``feature_candidates.READERS``): ``(sheet name,
-    covers, rows)``, one row per statement with the feature record that states it."""
+    covers, rows)``, one row per statement."""
     sheet = grading['sheet']
     return (FAMILY + ':' + sheet['program'] + ':' + sheet['database'] + ':' + sheet['database_version'], list(COVERS),
             [{'kind': statement['kind'], 'strand': statement['strand'], 'segments': statement['segments'],
-              'claims_start': statement['claims_start'], 'claims_end': statement['claims_end'],
-              'feature_ref': statement['feature_ref'], 'bit': statement['bit']}
+              'claims_start': statement['claims_start'], 'claims_end': statement['claims_end'], 'bit': statement['bit']}
              for statement in sheet['statements']])
 
 

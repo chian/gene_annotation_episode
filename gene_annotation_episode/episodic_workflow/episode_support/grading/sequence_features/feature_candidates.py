@@ -153,7 +153,7 @@ IN_CODONS = (CODING, *PROTEIN_PARTS)
 STOP_CODON = 3
 # Per family of technique (the first part of a sheet name: ``protein_similarity``, ``nucleotide_similarity``, ...): its
 # weight; and per sheet schema: its reader ``grading -> (sheet name, covers, rows)`` with one row per statement of the
-# test: ``{'kind', 'strand', 'segments', 'claims_start', 'claims_end', 'feature_ref', 'bit'}``. Entered by each tool's
+# test: ``{'kind', 'strand', 'segments', 'claims_start', 'claims_end', 'bit'}``. Entered by each tool's
 # converter when it is imported.
 SHEET_WEIGHT = {}
 READERS = {}
@@ -329,7 +329,7 @@ def measurable(slot, covers):
 def feature_tests(reader, scope, sources):
     """The tests the episode holds, in arrival order: ``[{'test', 'target', 'covers', 'rows'}]``, one per graded sheet of a
     source whose operand is a subject of ``scope`` and whose sheet has a reader. ``rows`` are the test's statements
-    (``kind``, ``strand``, ``segments``, ``claims_start``, ``claims_end``, ``feature_ref``, ``bit``); a test that found
+    (``kind``, ``strand``, ``segments``, ``claims_start``, ``claims_end``, ``bit``); a test that found
     nothing has no row and is still a test."""
     scope = reader.validate_scope(scope)
     tests = []
@@ -416,8 +416,8 @@ def _slot(members, weights):
     """The slot a group of feature calls is: its kind, its strand (the strand its calls name; ``.`` when none does), its
     versions (every position called for it, each with the weighted support of the calls that stated exactly it, in the
     order they were first called), its positions (``segments``: those of the best supported version, the earliest on a
-    tie), the feature records that state it and the place of the first test that called it."""
-    versions, refs = [], []
+    tie) and the place of the first test that called it."""
+    versions = []
     for call in members:
         support = weights[call['test']] * call['bit']
         for version in versions:
@@ -426,19 +426,17 @@ def _slot(members, weights):
                 break
         else:
             versions.append({'segments': [dict(segment) for segment in call['segments']], 'support': support})
-        if call['feature_ref'] not in refs:
-            refs.append(call['feature_ref'])
     best = max(versions, key=lambda version: version['support'])
     return {'kind': members[0]['kind'],
             'strand': next((call['strand'] for call in members if call['strand'] != '.'), '.'),
-            'segments': [dict(segment) for segment in best['segments']], 'versions': versions, 'feature_refs': refs,
+            'segments': [dict(segment) for segment in best['segments']], 'versions': versions,
             'first_test': min(call['test'] for call in members)}
 
 
 def _waiting_row(claim, support):
     return {'kind': claim['kind'], 'strand': claim['strand'], 'segments': [dict(segment) for segment in claim['segments']],
             'start': low(claim), 'end': high(claim), 'claims_start': claim['claims_start'],
-            'claims_end': claim['claims_end'], 'support': support, 'feature_refs': [claim['feature_ref']]}
+            'claims_end': claim['claims_end'], 'support': support}
 
 
 def target_table(tests):
@@ -561,8 +559,6 @@ def target_table(tests):
         support = weights[claim['test']] * claim['bit']
         if key in waiting:
             waiting[key]['support'] += support
-            if claim['feature_ref'] not in waiting[key]['feature_refs']:
-                waiting[key]['feature_refs'].append(claim['feature_ref'])
         else:
             waiting[key] = _waiting_row(claim, support)
     return {'slots': listed, 'score': score, 'sheets': sheets,
@@ -581,11 +577,14 @@ def feature_table(reader, scope, sources):
     """The sheet of the scope: per sequence its table (``target_table``) with the slot rows in order (the highest score
     first: ``kind``, ``strand``, ``segments``, ``start`` and ``end`` (the outer positions), ``versions`` (every position
     called for the slot, each with its outer positions and support), ``claim_count`` (the claims that sit in it),
-    ``feature_refs``, ``score``, ``sheets`` and ``rivals``: for each row that is its rival the place of that row in the
+    ``feature_refs`` (the held feature record of the slot: the one whose positions are one of the slot's versions; none
+    before the record is written, several until records of slots that became one are joined), ``score``, ``sheets`` and
+    ``rivals``: for each row that is its rival the place of that row in the
     order and the facts of the letters the two share), ``rival_rank`` (the place of the leading rival of the first row,
     ``None`` when it has none), the waiting claims and the tests; and the ``credit`` of the scope (the sum over
     sequences)."""
     tests = feature_tests(reader, scope, sources)
+    records = [reader.get(ref) for ref in reader.refs() if ref.startswith('feature_')]
     targets = {}
     for target in reader.validate_scope(scope)['subject_refs']:
         table = target_table([test for test in tests if test['target'] == target])
@@ -597,7 +596,11 @@ def feature_table(reader, scope, sources):
             rows.append({
                 'kind': slot['kind'], 'strand': slot['strand'], 'segments': slot['segments'], **_outer(slot['segments']),
                 'versions': [{**version, **_outer(version['segments'])} for version in slot['versions']],
-                'claim_count': slot['claim_count'], 'feature_refs': slot['feature_refs'],
+                'claim_count': slot['claim_count'],
+                'feature_refs': [record['id'] for record in records
+                                 if record['subject_ref'] == target and 'joined_ref' not in record
+                                 and record['kind'] == slot['kind'] and strands_agree(record, slot)
+                                 and positions(record) in [positions(version) for version in slot['versions']]],
                 'score': table['score'][item], 'sheets': table['sheets'][item],
                 'rivals': [{'rank': rank, **overlap_facts(slot, table['slots'][other])}
                            for rank, other in enumerate(order) if rivals(slot, table['slots'][other])]})

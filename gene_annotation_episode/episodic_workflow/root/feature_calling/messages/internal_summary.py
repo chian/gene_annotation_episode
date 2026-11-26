@@ -111,7 +111,7 @@ def internal_summary(view):
             'last_local_outcome': last,
             'held_record_refs': held,
             'held_sequences': held_sequences,
-            'sequence_lengths': {ref: records.get(ref).get('length') for ref in held_sequences},
+            'sequence_lengths': {ref: records.subject_length(ref) for ref in held_sequences},
             'searches': bvbrc.held_searches(records, {ref: records.get(ref)['sequence_ref'] for ref in held_sequences},
                                             searched_types=SEQUENCE_RECORD_TYPES),
             'named_refs': {ref: named_records(records, ref) for ref in records.refs()},

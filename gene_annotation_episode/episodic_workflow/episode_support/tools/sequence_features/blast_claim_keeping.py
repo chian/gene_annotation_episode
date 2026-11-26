@@ -1,10 +1,11 @@
 """Keeping the claims of one graded BLAST search: the step that follows the grading of a search in the same unit.
 
 ``keep_blast_claims`` reads the graded sheet of the search through custody, turns its hits into claims
-(``blast_claims.blast_claim_sheet``), and keeps through custody: one ``feature`` record for each claim (the sequence the
-claim is about, its type, its positions and its strand), the claim sheet with the reference of each claim's feature
-record as a retained grading, and a source record of the provider ``feature_calling.blast_claims`` whose operand is the
+(``blast_claims.blast_claim_sheet``), and keeps through custody: the claim sheet as a retained grading, and a source
+record of the provider ``feature_calling.blast_claims`` whose operand is the
 sequence the claims are about. The sheet of feature calls reads that source (``feature_candidates.feature_tests``).
+The feature records of the candidates are then settled (``feature_record_keeping.settle_feature_records``): the unit
+must hold every graded source of the sequence, so the search child is passed them with its commission.
 
 In the same transaction it keeps the taxon claims of the same hits (``search_taxon_claims.search_taxon_claim_sheet``: per
 taxon the hits name, its hits and the closeness and share covered of its best one) for the organism side: the claim sheet
@@ -23,6 +24,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_
     record_grading_product, retain_tool_grading, source_tool_grading_entries)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.taxonomic_classification.search_taxon_claims import (
     search_taxon_claim_sheet)
+from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_features.feature_record_keeping import (
+    settle_feature_records)
 
 PROVIDER = 'feature_calling.blast_claims'
 TAXON_PROVIDER = 'feature_calling.search_taxon_claims'
@@ -76,12 +79,7 @@ async def keep_blast_claims(ctx, *, search_source_ref, searched_ref):
     taxon_sheet = {**search_taxon_claim_sheet(grading), 'subject_ref': subject_ref}
     report_ref = store.get(search_source_ref)['artifact_ref']
     with store.transaction():
-        feature_refs = [store.put('feature', {'subject_ref': subject_ref, 'kind': claim['kind'],
-                                              'segments': claim['segments'], 'strand': claim['strand'],
-                                              'context_refs': []}, origin='tool')['id']
-                        for claim in sheet['claims']]
-        kept = {**sheet, 'subject_ref': subject_ref,
-                'claims': [{**claim, 'feature_ref': ref} for claim, ref in zip(sheet['claims'], feature_refs)]}
+        kept = {**sheet, 'subject_ref': subject_ref}
         grading_ref = retain_tool_grading(store, provider=PROVIDER, native_artifact_ref=report_ref,
                                           grading={'sheet': kept})
         source = store.put('source', {
@@ -98,8 +96,9 @@ async def keep_blast_claims(ctx, *, search_source_ref, searched_ref):
         taxon_product = record_grading_product(store, grading_ref=taxon_grading_ref, grading={'sheet': taxon_sheet},
                                                provider=TAXON_PROVIDER, source_ref=taxon_source['id'],
                                                used=[graded['artifact_ref']])
-    return {'claim_count': len(feature_refs), 'refs': [source['id'], grading_ref, *dict.fromkeys(feature_refs),
-                                                       taxon_source['id'], taxon_grading_ref, taxon_product['id']]}
+    feature_refs = settle_feature_records(ctx, subject_ref=subject_ref, source_ref=source['id'])
+    return {'claim_count': len(sheet['claims']), 'refs': [source['id'], grading_ref, *feature_refs,
+                                                          taxon_source['id'], taxon_grading_ref, taxon_product['id']]}
 
 
 

@@ -49,8 +49,12 @@ def _continued(assignment, search, summary):
 
 def msg_to_child(slot, arguments, summary):
     searched = arguments['searched_ref']
+    # the child settles the feature records after it keeps its claims, from every graded source held: it is passed
+    # every source and feature record this episode holds, with the records they name
+    statements = [ref for ref in summary['held_record_refs'] if ref.split('_')[0] in ('source', 'feature')]
     assignment = {'searched_refs': [searched],
-                  'input_refs': [ref for ref in _custody([searched], summary) if ref != searched],
+                  'input_refs': [ref for ref in _custody([searched, *statements], summary)
+                                 if ref != searched and not ref.startswith('row_')],
                   'program': arguments['program'], 'database': arguments['database'],
                   'resource_id': arguments['resource_id'], 'until': arguments['until'], **SEARCH_UNITS}
     running = [search for search in summary['searches'] if search['outstanding']
