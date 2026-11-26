@@ -3,8 +3,9 @@
 From the system's view: the parent input (the scope), one row per unit (the tool, its request, the status and the facts
 of its result), the records held, the sequences of the scope with their molecule and length, the runs held (read from their
 sources: the tool, the query, the database), the scoring sheet of the scope (``credit.held_table``: per sequence the
-candidate taxa with their scores, the leading candidate, its rival, the taxon they share), the records to return (those
-this episode committed, closed under naming) and the controller's yield table."""
+candidate taxa with their scores, the leading candidate, its rival, the taxon they share, and the taxon claims passed in
+that wait for a candidate), the records to return (those this episode committed, closed under naming) and the controller's
+yield table."""
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import returned_with_names
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
 from gene_annotation_episode.episodic_workflow.episode_support.tools.taxonomic_classification.genomad_classification import (
@@ -46,10 +47,24 @@ def _candidate(row):
             'lineage': [{'taxon_id': taxon} for taxon in row['lineage_taxon_ids']], 'score': row['score']}
 
 
+def _waiting(row):
+    """A waiting taxon claim as controlled data: the taxon, its lineage on the prepared taxonomy (empty when the taxonomy
+    does not hold it), its bit and weighted support, the listed candidate it is consistent with, why it waits, what it
+    earned while waiting and the source of its claim sheet."""
+    claim = {'taxon_id': row['taxon_id'], 'lineage': [{'taxon_id': taxon} for taxon in row['lineage_taxon_ids']],
+             'bit': row['bit'], 'support': row['support'], 'reason': row['reason'], 'credit': row['credit'],
+             'source_ref': [row['test'].split('@', 1)[1]]}
+    if row['consistent_taxon_id'] is not None:
+        claim['consistent_taxon_id'] = row['consistent_taxon_id']
+    return claim
+
+
 def _finding(target, table):
     """The finding of one sequence of the scope (``final_to_parent``)."""
     finding = {'target_ref': [target], 'candidates': [_candidate(row) for row in table['rows']],
-               'candidate_count': len(table['rows']), 'test_count': len(table['tests'])}
+               'candidate_count': len(table['rows']), 'test_count': len(table['tests']),
+               'waiting_claims': [_waiting(row) for row in table['waiting']],
+               'waiting_claim_count': len(table['waiting'])}
     for name, value in (('leader_taxon_id', table['leader']), ('rival_taxon_id', table['rival']),
                         ('agreed_taxon_id', table['agreed_taxon_id'])):
         if value is not None:

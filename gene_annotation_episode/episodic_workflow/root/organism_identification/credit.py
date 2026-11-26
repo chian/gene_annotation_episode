@@ -43,11 +43,17 @@ class TaxonDifferentialCredit:
                 'admission': 'first_bit_of_its_own_above_zero',
                 'entry': 'new_possibility_its_score_finer_under_listed_what_it_adds_vaguer_above_listed_nothing',
                 'differential': 'abs_difference_of_the_moves_of_the_two_leading_rivals_listed_before_the_test_that_it_can_measure',
-                'credit': 'sum_of_entries_and_differentials', 'maximum': 'none', 'repeat': 'earns_nothing'}
+                'claims': 'search_hit_taxa_placed_on_the_prepared_taxonomy_add_to_candidates_that_are_or_lie_inside_them_never_admit',
+                'claim_bit': 'closeness_of_the_taxons_best_hit_times_share_of_the_searched_sequence_covered_divided_by_the_searchs_sum_above_one',
+                'waiting': 'finer_than_a_listed_candidate_on_its_lineage_half_its_weighted_bit_once_off_lineage_or_not_in_taxonomy_nothing',
+                'claim_in_entry': 'weighted_bit_less_what_it_earned_at_most_once',
+                'credit': 'sum_of_entries_differentials_and_waiting_halves', 'maximum': 'none', 'repeat': 'earns_nothing'}
 
 
 def held_table(summary, records):
-    """The scoring sheet of the scope from the records this episode holds."""
+    """The scoring sheet of the scope from the records this episode holds: its classifications and the taxon claims
+    passed in (``evidence_refs``), whose taxa were placed on the prepared taxonomy when their sheets were made; with no
+    claim test held the table is as before."""
     return taxon_table(records, summary['scope'], held_sources(records))
 
 

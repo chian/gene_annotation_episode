@@ -12,8 +12,8 @@ rejected with the things to fix and no unit is made. A request that passed runs 
 of that tool: run, grade, keep. Grading is not a choice of anyone.
 
 The model is the router: it chooses what to ask next from what the runs held so far show (the candidate taxa, their scores,
-what each tool and database can speak of, what each costs). It never ends the episode: the forecast yield controller does,
-when no run left is worth its cost. The service ``job_access`` is read for the bound resources a tool may name.
+the taxon claims passed in that wait for a candidate, what each tool and database can speak of, what each costs). It never
+ends the episode: the forecast yield controller does, when no run left is worth its cost. The service ``job_access`` is read for the bound resources a tool may name.
 
 Settings: ``kraken2_indexes`` (index name to the path of its manifest) and ``kraken2_executable_directory``;
 ``genomad_database`` (the path of its database's manifest), ``genomad_environment_directory`` and ``genomad_splits``;
@@ -56,6 +56,7 @@ What you are shown:
 - `indexes` and `databases`: what each holds. A tool says what its database holds and nothing of what it does not hold: an index of viruses only cannot tell you the DNA is bacterial, and a virus classifier gives a virus lineage with a low score to a piece of a cell that carries a few virus-like genes.
 - `held_runs`: the runs already made. The same run again is refused as a repeat.
 - `candidates`: the candidate taxa found so far for each sequence, the leading one first, each with its score. A candidate's score is the support on its own lineage, so a call at a vaguer level (a family, or just "virus") supports every finer candidate inside it. A taxon and its ancestor are not rivals; rivals are calls that are not nested. `leader_taxon_id`, `rival_taxon_id` and `agreed_taxon_id` (the deepest taxon the leader and its rival share) say how far the placement is settled.
+- `waiting_claims` (in each sequence's `candidates` row): taxa named by the hits of a database search you were given, which no candidate is or lies inside. A claim never makes a candidate; it adds to the score of the candidates it includes. `finer_than_its_candidate`: it agrees with the listed candidate `consistent_taxon_id` and is finer, so a run that can name taxa at that depth may confirm it. `no_candidate_on_its_lineage`: it disagrees with what is listed, or nothing is listed yet. `taxon_not_in_taxonomy`: its taxon is outside the prepared taxonomy and cannot be placed.
 - `action_yields`: what each offered action is forecast to earn against its cost in time. You do not set these numbers and you do not end the episode; it ends when nothing left is worth its cost.
 
 Choose the run that will tell you most for its cost given what is known: when the quick runs have found nothing, the slower ones are what can still place the DNA; when they have found a close relative, a slower run is worth it only for what it adds. Answer with the selection only."""
@@ -127,7 +128,8 @@ def offered_actions(summary, ctx):
 
 def decide(summary, feedback, ctx):
     """Ask the model for the next run, shown the scope's sequences, the tools with their indexes and databases, the runs
-    held, the candidate taxa, its own outcomes, the measured time and the yield table."""
+    held, the candidate taxa with the waiting taxon claims of each sequence, its own outcomes, the measured time and the
+    yield table."""
     resources, offered = bound_resources(ctx), configured(ctx)
     names = [option['properties']['tool']['const'] for option in options(summary, resources, offered)]
     context = {
