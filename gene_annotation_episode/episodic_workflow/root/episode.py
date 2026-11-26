@@ -1,4 +1,5 @@
-"""The root annotation episode: an ordinary episode whose children are the evidence-axis heads it is linked with."""
+"""The root annotation episode: an ordinary episode whose children are the heads it is linked with: feature calling,
+the organism identification head and the evidence-axis heads."""
 from episode_runtime import EpisodeBinding
 
 from . import credit as credit_file, goal as goal_file, task as task_file, yield_estimator as yield_file

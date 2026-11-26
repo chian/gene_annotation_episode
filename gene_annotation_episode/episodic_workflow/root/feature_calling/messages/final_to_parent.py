@@ -13,11 +13,20 @@ feature call so far includes: its kind, strand, position ranges, which end it cl
 that state it. It is not a feature call and has no score.
 
 Selectable: ``record_refs`` (the records this episode committed: each test's source, its grading and the feature
-records)."""
+records) and ``held_readings`` (per sequence of the scope, each reading of the whole sequence held: the dimension, from a
+fixed list, the value held and the weighted support of every value tested; ``feature_candidates``, "ONE READING OF THE
+WHOLE SEQUENCE". The one dimension is the genetic code, whose values are the codes this head's gene finder can take. A
+sequence on which no test was made under a reading has no row)."""
 from method_loop import ChoiceField, Field, RecordForm
 
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_features.feature_candidates import (
     KINDS, STRANDS)
+
+from ..task import GENETIC_CODES
+
+# The dimensions of a reading of the whole sequence, as the converters name them (``prodigal_calls.ALTERNATIVES``), and
+# the values each can take.
+READING_VALUES = {'genetic_code': GENETIC_CODES}
 
 SEGMENT_FORM = RecordForm({
     'start': Field('integer', 'The first position of the range on the sequence (zero-based)'),
@@ -74,14 +83,40 @@ TARGET_FORM = RecordForm({
 FINDING_FORM = RecordForm({
     'targets': Field('list', 'One row per sequence of the scope', items=TARGET_FORM),
 })
+READING_VALUE_FORM = RecordForm({
+    'value': ChoiceField('integer', 'A value of the dimension that tests were made under: a genetic code',
+                         READING_VALUES['genetic_code']),
+    'support': Field('number', 'The weighted support of the tests made under that value'),
+})
+READING_FORM = RecordForm({
+    'target_ref': Field('record_refs', 'The sequence of the scope the reading is of: exactly one record'),
+    'dimension': ChoiceField('text', 'What is read of the whole sequence', tuple(READING_VALUES)),
+    'held': ChoiceField('integer', 'The value held: the one whose tests carry the most weighted support (the first made '
+                                   'on a tie); the tests under any other value add to no score',
+                        READING_VALUES['genetic_code']),
+    'values': Field('list', 'Every value tests were made under, with its support', items=READING_VALUE_FORM),
+})
 RETURN_FORM = RecordForm({
     'credit': Field('number', "The Episode's credit when its controller stopped it"),
     'finding': Field('record', 'The feature calls and waiting claims of each sequence of the scope', form=FINDING_FORM),
     'record_refs': Field('record_refs', 'The records this episode committed, closed under naming', required=False),
+    'held_readings': Field('list', 'Per sequence of the scope, each reading of the whole sequence held (its genetic '
+                                   'code), with the support of every value tested', items=READING_FORM, required=False),
 })
 
 
+def held_readings(summary):
+    """The readings of the whole sequence held (``internal_summary``'s ``held_readings``: per sequence, per dimension, the
+    value held and the support of each value, the values as the converter writes them) as controlled rows, the values as
+    integers, in the order of the scope's sequences and then of the values."""
+    return [{'target_ref': [target], 'dimension': dimension, 'held': int(reading['held']),
+             'values': [{'value': int(value), 'support': support}
+                        for value, support in sorted(reading['support'].items(), key=lambda item: int(item[0]))]}
+            for target in summary['scope']['subject_refs']
+            for dimension, reading in summary['held_readings'][target].items()]
+
+
 def final_to_parent(summary, completion, selection):
-    facts = {'record_refs': list(summary['returned_refs'])}
+    facts = {'record_refs': list(summary['returned_refs']), 'held_readings': held_readings(summary)}
     return {'credit': completion['credit'], 'finding': {'targets': summary['target_findings']},
             **{name: facts[name] for name in selection}}

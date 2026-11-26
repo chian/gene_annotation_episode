@@ -1,4 +1,7 @@
-"""What the root takes from an axis head's return: controlled data only.
+"""What the root takes from a head's return: controlled data only. The two heads that are no evidence axis are read by
+their own functions: the organism identification head (``organism_report``: its credit and its records; the candidate
+taxa are computed by the root from the records it holds) and the feature calling head (``feature_report``: its credit,
+its feature calls, the claims that wait for one, the genetic code held and its records). An axis head's return:
 
 - ``credit``: the credit the head returned (never bounded, clamped or rescaled). What it measures is the head's own
   (``CREDIT_RETURNED``): the axis credit as it stands over every record the head holds, or the rise since the sheet
@@ -213,26 +216,74 @@ def references(result, fields):
 
 
 ORGANISM_FINDER = 'organism_identification'
+FEATURE_FINDER = 'feature_calling'
 
 
 def organism_report(result):
-    """The return of the organism identification head, which is not an evidence axis: the candidate taxa of the one DNA
-    sequence it was commissioned on (taxon id, the taxonomy's name, rank code, the ids of its lineage, score; the leading
-    one first), the leading candidate, its leading rival and the deepest taxon the two share, and the records it
-    committed. It leaves no job running."""
-    (target,) = result['finding']['targets']
+    """The return of the organism identification head, which is not an evidence axis: its credit and the records it
+    committed (its classifications' sources, their gradings and what they name), which the root now holds. The candidate
+    taxa are not read from its finding: the root computes the scoring sheet of candidate taxa itself over the records it
+    holds (``internal_summary.organism_table``), these and the taxon claims feature calling's searches kept. It leaves
+    no job running."""
+    return {'credit': result['credit'], 'record_refs': list(result['record_refs']), 'outstanding_jobs': 0}
+
+
+SEGMENT_FIELDS = ('start', 'end')
+FEATURE_FIELDS = ('kind', 'strand', 'start', 'end', 'score', 'claim_count')
+RIVAL_FIELDS = ('rank', 'shared_letters', 'same_type', 'same_strand', 'same_frame')
+WAITING_FIELDS = ('kind', 'strand', 'start', 'end', 'claims_start', 'claims_end', 'support')
+
+
+def _segments(segments):
+    return [{name: segment[name] for name in SEGMENT_FIELDS} for segment in segments]
+
+
+def _feature_call(row):
+    """One feature call as feature calling returned it: type, strand, positions (its segments and outer start and end,
+    zero-based, the end not included), every version called (positions and support), score, the number of claims that
+    sit in it, its rivals (place and the facts of the letters shared) and the feature records that state it."""
+    return {**{name: row[name] for name in FEATURE_FIELDS}, 'segments': _segments(row['segments']),
+            'versions': [{'segments': _segments(version['segments']), 'start': version['start'], 'end': version['end'],
+                          'support': version['support']} for version in row['versions']],
+            'rivals': [{name: rival[name] for name in RIVAL_FIELDS} for rival in row['rivals']],
+            'feature_refs': list(row['feature_refs'])}
+
+
+def _waiting_feature_claim(row):
+    """One claim that waits for a feature call: type, strand, positions, which end it claims, its support and the
+    feature records that state it."""
+    return {**{name: row[name] for name in WAITING_FIELDS}, 'segments': _segments(row['segments']),
+            'feature_refs': list(row['feature_refs'])}
+
+
+def feature_report(result):
+    """The return of the feature calling head, which is not an evidence axis: its credit (the feature credit over every
+    record it holds, so with its earlier records passed back it continues from where it stood: a ``standing`` credit),
+    per sequence of the scope its feature calls (``_feature_call``, the highest score first), the place of the leading
+    rival of the first, the number of graded tests and the claims that wait for a call (``_waiting_feature_claim``); the
+    readings of the whole sequence held (its genetic code: the code held and the support of every code tested); and the
+    records it committed (each test's source, its grading and the feature records, the taxon claims of its searches
+    among them). Its return declares no job field, and it does not end while a search of its own is running (its
+    ``resume_action``): it leaves no job running."""
     return {'credit': result['credit'],
-            'organism_rows': [{'taxon_id': row['taxon_id'], 'name': row['name'], 'rank_code': row['rank_code'],
-                               'lineage_taxon_ids': [item['taxon_id'] for item in row['lineage']], 'score': row['score']}
-                              for row in target['candidates']],
-            'placement': {name: target[name] for name in ('leader_taxon_id', 'rival_taxon_id', 'agreed_taxon_id')
-                          if name in target},
-            'test_count': target['test_count'], 'record_refs': list(result['record_refs']), 'outstanding_jobs': 0}
+            'targets': [{'target_ref': list(target['target_ref']),
+                         'features': [_feature_call(row) for row in target['features']],
+                         'waiting_claims': [_waiting_feature_claim(row) for row in target['waiting_claims']],
+                         'test_count': target['test_count'],
+                         **({'rival_rank': target['rival_rank']} if 'rival_rank' in target else {})}
+                        for target in result['finding']['targets']],
+            'held_readings': [{'target_ref': list(row['target_ref']), 'dimension': row['dimension'], 'held': row['held'],
+                               'values': [{'value': value['value'], 'support': value['support']}
+                                          for value in row['values']]}
+                              for row in result['held_readings']],
+            'record_refs': list(result['record_refs']), 'outstanding_jobs': 0}
 
 
 def read_from_child(slot, result, summary, records):
     if slot == ORGANISM_FINDER:
         return organism_report(result)
+    if slot == FEATURE_FINDER:
+        return feature_report(result)
     return {'credit': result['credit'],
             'finding': {name: value for name, value in result['finding'].items()
                         if type(value) in (bool, int, float)},

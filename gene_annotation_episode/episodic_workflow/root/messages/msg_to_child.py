@@ -1,4 +1,6 @@
-"""The commission of each of the nine axis heads: one function per slot, written against that head's own
+"""The commission of each head: the nine axis heads, the feature calling head and the organism identification head
+(the last two are no evidence axis and are commissioned on the root's scope alone; see their functions). One function
+per slot, written against that head's own
 ``messages/read_from_parent.py`` (its assignment form and what it reads of the message) and
 ``messages/final_to_parent.py`` (the fields it declares it can return), read as data. Nothing is imported from an
 axis folder, and nothing here checks a commission: one the head does not admit, or that names a record the root
@@ -227,16 +229,34 @@ def biochemical_feasibility_evidence(arguments, summary):
                         message={}, assignment=assignment, selection=SELECTION[slot])
 
 
+def feature_calling(arguments, summary):
+    """The feature calling head (not an evidence axis): the root's own scope, as every head is commissioned on, with the
+    records the scope names in custody (``scope_refs``) and, once it has returned, every record it returned to the root
+    earlier (``evidence_refs``: its sources, their gradings and the feature records, which its sheet of feature calls
+    reads among the sources it holds, so its credit continues from where it stood). Records another head returned are not
+    passed. Its form takes no selection and no credit unit: its tools and databases are its own, and the root scales its
+    credit (``credit.FEATURE_CREDIT_SCALE``). Selected: ``record_refs`` (so the root holds its records:
+    the feature records, the tests' sources and the taxon claim sources of its searches) and ``held_readings`` (the
+    genetic code held); its credit and its finding (the feature calls and the claims that wait for one) are always
+    returned."""
+    assignment = {'scope': summary['scope'], 'scope_refs': list(summary['scope_refs'])}
+    if summary['features']['record_refs']:
+        assignment['evidence_refs'] = list(summary['features']['record_refs'])
+    return ChildMessage(objective='Find which features the sequence holds', message={}, assignment=assignment,
+                        selection=('record_refs', 'held_readings'))
+
+
 def organism_identification(arguments, summary):
     """The organism identification head (not an evidence axis): the root's own scope, as every head is commissioned on,
-    with the records the scope names in custody. Its committed records are selected so the root holds the taxon
-    records."""
-    return ChildMessage(objective='Find which organism the DNA is from', message={},
+    with the records the scope names in custody. Its committed records are selected so the root holds its graded
+    classifications, over which it computes the scoring sheet of candidate taxa (``internal_summary.organism_table``)."""
+    return ChildMessage(objective='Find which organism the sequence is from', message={},
                         assignment={'scope': summary['scope'], 'scope_refs': list(summary['scope_refs'])},
                         selection=('record_refs',))
 
 
 COMMISSIONS = {
+    'feature_calling': feature_calling,
     'organism_identification': organism_identification,
     'sequence_homology_evidence': sequence_homology_evidence,
     'structural_homology_evidence': structural_homology_evidence,
