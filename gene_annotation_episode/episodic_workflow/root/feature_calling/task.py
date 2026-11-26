@@ -46,7 +46,7 @@ TOOLS = {}
 PROGRAMS = tuple(sorted(PROGRAM_UNITS))
 # The databases this head searches at the BV-BRC service, by the name a commission gives: the protein databases of its
 # two genome sets (named by the set) and the nucleotide databases of the same sets (named ``<set>.<type>``: ``ffn`` the
-# genes as DNA, ``frn`` the RNA genes, ``fna`` the genome sequences). The set is this head's own: it is what the model is
+# genes as DNA, ``fna`` the genome sequences). The set is this head's own: it is what the model is
 # offered and what the search library's check is given (``check_search``).
 DATABASES = {**bvbrc.PRECOMPUTED_DATABASES, **bvbrc.NUCLEOTIDE_DATABASES}
 SEARCH_FIELDS = ('searched_ref', 'program', 'database', 'resource_id', 'until')
@@ -59,7 +59,7 @@ What a search gives. A search compares the sequence with known sequences and ret
 
 What you are shown:
 - `held_sequences`: the sequences you can search, with their length and letters.
-- `programs` and `databases`: each program with the letters it takes and the letters it searches, each database with the letters it holds and its type: `faa` the proteins of its genomes, `ffn` their genes as DNA, `frn` their RNA genes, `fna` the genome sequences themselves. A program must take the letters of the searched sequence and the database must hold what the program searches.
+- `programs` and `databases`: each program with the letters it takes and the letters it searches, each database with the letters it holds and its type: `faa` the proteins of its genomes, `ffn` their genes as DNA, `fna` the genome sequences themselves. A program must take the letters of the searched sequence and the database must hold what the program searches.
 - `searches`: the searches already sent, each with its state. A search that is still running is continued by commissioning it again with the same program, database and service and `until` `extracted`; it is not sent a second time. A search already extracted is not repeated.
 - `until`: `extracted` follows the search to its graded result. `launched` sends the search and returns at once; the service runs one search of a sequence at a time, so while it runs no other search of that sequence can be sent, and the only thing left to do with it is to continue it.
 - `feature_calls`: the candidate feature calls found so far for each sequence, the highest score first: type, positions, strand, score, and the calls that compete with it for the same letters. `waiting_claims`: the claims that no feature call includes yet: type, strand, positions, which end they claim, and their support. A waiting claim is real evidence that has no feature call to sit in yet.

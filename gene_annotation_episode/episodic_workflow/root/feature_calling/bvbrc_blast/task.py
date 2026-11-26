@@ -9,8 +9,11 @@ once as failed and not retried.
 * ``estimate``: the expected duration of the coming search (seconds) and the basis it rests on, made before anything is
   launched and again to revise it; code records it on the estimate table as the expectation of the launch.
 * ``launch``: submit the ``Homology`` search. Gated: refused unless an estimate is held.
-* ``fix``: offered after a failure: the failure code addressed and the request field that will change. After it a launch
-  is accepted, one whose request differs from the failed one in that field.
+* ``fix``: offered after a failure: the failure code addressed and the request field that will change, which can only be
+  the resource (``FIX_FIELDS``). The program and the database are the commission's: which database is searched with
+  which program is the parent's choice, and this episode never searches another (in the first real run that reached a
+  failure, 2026-11-25, a fix to another database left the parent holding searches it had not commissioned). After a fix
+  a launch is accepted, on another resource; with no other resource the failure stands and the episode is wound down.
 * ``monitor``: one status request after a wait the model chooses (its lower end is what the service's spacing needs);
   the model gives with it the expected remaining seconds, recorded while the search is not finished; the first request
   that shows the search ended resolves the estimate with the measured duration.
@@ -39,10 +42,13 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
     launch_search, learned_statistics, minimum_wait, monitor_search, record_estimate, search_facts, search_view, timing)
 
 CHILD_SLOTS = {}
+# What a fix may change after a failure: the resource only. The program and the database are the commission's.
+FIX_FIELDS = ('resource_id',)
+COMMISSION_FIELDS = ('program', 'database')
 SERVICES = ('job_access', 'estimate_table')
 # The databases this episode searches at the BV-BRC service, by the name a commission gives: the protein databases of
 # its two genome sets (named by the set) and the nucleotide databases of the same sets (named ``<set>.<type>``: ``ffn``
-# the genes as DNA, ``frn`` the RNA genes, ``fna`` the genome sequences). The set is this episode's own: the commission's
+# the genes as DNA, ``fna`` the genome sequences). The set is this episode's own: the commission's
 # form (``messages/read_from_parent.py``) and the actions' form take their choices from it, and every library function
 # that looks a database up is given it.
 DATABASES = {**PRECOMPUTED_DATABASES, **NUCLEOTIDE_DATABASES}
@@ -78,8 +84,9 @@ INSTRUCTIONS = (
     '- extract: only when the latest monitor shows the search finished (state finished). Code fetches the result files '
     'and grades them in the same unit; nothing more is needed for the result to count.\n'
     '- fix: only after a failure (state failed): the failure code you address (last_failure_code) and the request field '
-    'you will change (program, database or resource_id). Only after a fix does a launch pass, with a request that '
-    'differs from the failed one in that field, after a new estimate.\n'
+    'you will change, which can only be resource_id: the program and the database are the commission\'s and are never '
+    'changed here. Only after a fix does a launch pass, on another resource, after a new estimate. With no other '
+    'resource the failure stands: it is returned to the parent as it is.\n'
     'If your JSON is wrong you are told each problem as a code with the field it concerns (feedback.problems) and '
     'nothing has run; fix those fields and answer again. A correct action works on the first try.\n'
     '\n'
@@ -115,9 +122,18 @@ def output_schema(state):
         one('extract', handoff_ref=handoff)]
     if state == 'failed':
         options.append(one('fix', failure_code={'type': 'string', 'enum': list(FAILURE_CODES)},
-                           field={'type': 'string', 'enum': list(REQUEST_FIELDS)}))
+                           field={'type': 'string', 'enum': list(FIX_FIELDS)}))
     return {'type': 'object', 'additionalProperties': False, 'required': ['action'],
             'properties': {'action': {'anyOf': options}}}
+
+
+def outside_the_commission(chosen, fields, problems):
+    """The things to fix in an estimate or a launch that names another program or database than the commission's (those
+    two are the parent's choice at every point of this episode, after a failure too), each once: a field the library's
+    check already named with that code is not named again."""
+    named = {problem['field'] for problem in problems if problem['code'] == 'differs_from_the_commission'}
+    return [{'field': name, 'code': 'differs_from_the_commission', 'commission': fields[name]}
+            for name in COMMISSION_FIELDS if chosen[name] != fields[name] and name not in named]
 
 
 def offered_actions(summary, ctx):
@@ -172,10 +188,12 @@ def action(response, summary, records, ctx):
         learned = learned_statistics(ctx.services['estimate_table'], searched['length'], databases=DATABASES)
         problems = check_estimate(chosen, state=facts, learned=learned, query_molecule=searched['molecule'],
                                   databases=DATABASES)
+        problems = [*problems, *outside_the_commission(chosen, fields, problems)]
     elif name == 'launch':
         resources = {item['resource_id']: item['kind'] for item in ctx.services['job_access'].read('resources')}
         problems = check_launch(chosen, state=facts, fields=fields, query_molecule=searched['molecule'],
                                 resources=resources, databases=DATABASES)
+        problems = [*problems, *outside_the_commission(chosen, fields, problems)]
     elif name == 'fix':
         problems = check_fix(chosen, state=facts)
     elif name == 'monitor':

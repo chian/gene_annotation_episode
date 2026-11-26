@@ -7,7 +7,8 @@ message is empty. A commission the child does not admit fails (no check here).
 Every record the child's code reads is named in a ``record_refs`` field of the assignment: the searched sequence's record
 and, in ``input_refs``, every held record it names, and those name in turn (its sequence artifact and, for a sequence
 derived from another, the sequence it was derived from: ``_custody`` over the summary's ``named_refs``). When this episode
-holds a search of that sequence that is still running (``summary['searches']``), the commission continues it and code
+holds that same search (the sequence, the program and the database) still running (``summary['searches']``), the
+commission continues it and code
 passes back, in custody, the records the child returned for it: its handoff, status and closure records.
 
 Required return fields: every kind of record the child returns for its search (handoff, status, closure and graded
@@ -52,7 +53,9 @@ def msg_to_child(slot, arguments, summary):
                   'input_refs': [ref for ref in _custody([searched], summary) if ref != searched],
                   'program': arguments['program'], 'database': arguments['database'],
                   'resource_id': arguments['resource_id'], 'until': arguments['until'], **SEARCH_UNITS}
-    running = [search for search in summary['searches'] if search['query_ref'] == searched and search['outstanding']]
+    running = [search for search in summary['searches'] if search['outstanding']
+               and (search['query_ref'], search['program'], search['database'])
+               == (searched, arguments['program'], arguments['database'])]
     if running:
         (search,) = running
         _continued(assignment, search, summary)

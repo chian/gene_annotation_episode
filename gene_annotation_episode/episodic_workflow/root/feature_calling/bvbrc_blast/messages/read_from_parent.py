@@ -31,8 +31,8 @@ ASSIGNMENT_FORM = RecordForm({
                                        'in custody'),
     'program': ChoiceField('text', 'The BLAST program; it must take the letters of the searched sequence', tuple(sorted(PROGRAM_UNITS))),
     'database': ChoiceField('text', 'The precomputed BV-BRC database: a genome set as the application spells it (its '
-                                    'proteins), or the set, a dot and the application\'s nucleotide type (ffn, frn or '
-                                    'fna)', tuple(DATABASES)),
+                                    'proteins), or the set, a dot and the application\'s nucleotide type (ffn or fna)'
+                                    '', tuple(DATABASES)),
     'resource_id': Field('text', 'The bound BV-BRC resource of the job service the search is launched on'),
     'until': ChoiceField('text', 'Where this commission ends: launched (estimate and launch, then park and return) or '
                                  'extracted (follow the search to its graded result)', UNTIL),

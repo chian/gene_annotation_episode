@@ -93,23 +93,25 @@ CONFIGURATION = ('service', 'endpoints', 'authorization_env', 'workspace', 'root
 PRECOMPUTED_DATABASES = {
     'bacteria-archaea': {'db_type': 'faa', 'unit': 'aa', 'database_file': 'bacteria-archaea.features.faa'},
     'viral-reference': {'db_type': 'faa', 'unit': 'aa', 'database_file': 'viral-reference.features.faa'}}
-# The precomputed nucleotide databases of the same application: the same two genome sets, each with the application's
-# three nucleotide types (``db_type``: ``ffn`` the genes as DNA, ``frn`` the RNA genes, ``fna`` the genome sequences),
-# named in the service's own words, ``<set>.<type>``. Each entry gives the set sent as ``db_precomputed_database``, the
-# ``db_type`` and the unit of its sequences. They are not part of ``PRECOMPUTED_DATABASES`` and the route does not
-# search them by itself: a caller that searches them gives its set of databases with the job (``homology_job``).
-# No search of any of them has been made, so the file name the service's report gives for each (``search_target.db``,
-# the last path component) is NOT known and no entry has a ``database_file``. Until it is, a report is taken as of the
-# database when that file name starts with the set name and ``.`` and ends with ``.`` and the type
-# (``report_names_database``). The exact file names will be seen in the first live search of each database; they then
-# go here as ``database_file`` and are compared exactly, as for the protein databases.
+# The precomputed nucleotide databases of the same application: the same two genome sets, each with two of the
+# application's nucleotide types (``db_type``: ``ffn`` the genes as DNA, ``fna`` the genome sequences), named in the
+# service's own words, ``<set>.<type>``. Each entry gives the set sent as ``db_precomputed_database``, the ``db_type``,
+# the unit of its sequences and the file name the report names as its database (``search_target.db``, the last path
+# component). They are not part of ``PRECOMPUTED_DATABASES`` and the route does not search them by itself: a caller that
+# searches them gives its set of databases with the job (``homology_job``).
+# Seen in live searches on 2026-11-25 (run ``feature_calling_02``, ``blastn`` of a 614-letter piece): the report of an
+# ``ffn`` search names ``<set>.features.fna`` and that of an ``fna`` search ``<set>.contigs.fna``, for both sets. The
+# application's third nucleotide type, ``frn`` (the RNA genes), is not listed: the service reported the job failed for
+# both sets in that run (two jobs), so a search of it is not a call that can succeed.
 NUCLEOTIDE_DATABASES = {
-    'bacteria-archaea.ffn': {'db_precomputed_database': 'bacteria-archaea', 'db_type': 'ffn', 'unit': 'nt'},
-    'bacteria-archaea.frn': {'db_precomputed_database': 'bacteria-archaea', 'db_type': 'frn', 'unit': 'nt'},
-    'bacteria-archaea.fna': {'db_precomputed_database': 'bacteria-archaea', 'db_type': 'fna', 'unit': 'nt'},
-    'viral-reference.ffn': {'db_precomputed_database': 'viral-reference', 'db_type': 'ffn', 'unit': 'nt'},
-    'viral-reference.frn': {'db_precomputed_database': 'viral-reference', 'db_type': 'frn', 'unit': 'nt'},
-    'viral-reference.fna': {'db_precomputed_database': 'viral-reference', 'db_type': 'fna', 'unit': 'nt'}}
+    'bacteria-archaea.ffn': {'db_precomputed_database': 'bacteria-archaea', 'db_type': 'ffn', 'unit': 'nt',
+                             'database_file': 'bacteria-archaea.features.fna'},
+    'bacteria-archaea.fna': {'db_precomputed_database': 'bacteria-archaea', 'db_type': 'fna', 'unit': 'nt',
+                             'database_file': 'bacteria-archaea.contigs.fna'},
+    'viral-reference.ffn': {'db_precomputed_database': 'viral-reference', 'db_type': 'ffn', 'unit': 'nt',
+                            'database_file': 'viral-reference.features.fna'},
+    'viral-reference.fna': {'db_precomputed_database': 'viral-reference', 'db_type': 'fna', 'unit': 'nt',
+                            'database_file': 'viral-reference.contigs.fna'}}
 FEATURE_GROUP = 'hits'
 MSA_ALIGNERS = ('Muscle',)
 MSA_ALPHABETS = ('protein',)
@@ -177,12 +179,8 @@ def database_set(name, entry):
 
 def report_names_database(file_name, entry):
     """Whether ``file_name`` (the last path component of a report's ``search_target.db``) is the file of the database
-    ``entry``. An entry with a ``database_file`` (the name the service was seen to report): exactly that name. An entry
-    without one (``NUCLEOTIDE_DATABASES``, whose file names are not known yet): a name that starts with the entry's set
-    and ``.`` and ends with ``.`` and its ``db_type``."""
-    if 'database_file' in entry:
-        return file_name == entry['database_file']
-    return file_name.startswith(entry['db_precomputed_database'] + '.') and file_name.endswith('.' + entry['db_type'])
+    ``entry``: exactly its ``database_file``, the name the service was seen to report."""
+    return file_name == entry['database_file']
 
 
 def _homology_prepare(job, files):
