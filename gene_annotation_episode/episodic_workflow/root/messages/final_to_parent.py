@@ -7,7 +7,8 @@ held) and the level below (``annotations``: every candidate annotation the axis 
 hypervolume over the scores the axes give it multiplied by the factor ``((1 + k * s_o) ** w_o - 1)`` of the organism it is
 reported with (a pure multiple: zero from the axes stays zero), that organism's taxon id and score, and the row of each
 axis that scored it, the highest score first; each sits on one feature call, whose score multiplies its own), the best annotation
-(``best_annotation``: the first of the annotation lines, present when its status is known), the organism (``organism``:
+(``best_annotation``: the first of the annotation lines, present when its status is known), the genome annotation
+(``genome_annotation``: ``internal_summary.genome_annotation``), the organism (``organism``:
 the candidate taxa of the root's scoring sheet of candidate taxa, the leading one first, and the placement), the claims
 made from the annotations (``claims``), feature calling's credit and how often it was commissioned
 (``feature_calling``), how many axis commissions the root made and, for each of the nine axes, its credit, how often it
@@ -191,6 +192,30 @@ CLAIM_FORM = RecordForm({
     'partner_kind': ChoiceField('text', 'Whether the molecule is a protein or a small molecule', PARTNER_KINDS),
     'commissions': Field('integer', 'How often a head was commissioned on the claim'),
 })
+GENOME_FEATURE_CALL_FORM = RecordForm({
+    'feature_call': Field('record', 'The feature call: its feature record, type, strand, positions and score',
+                          form=RecordForm({name: FEATURE_CALL_FORM.fields[name]
+                                           for name in ('feature_refs', 'kind', 'strand', 'start', 'end', 'score')})),
+    'annotation': Field('record', 'The annotation chosen for the feature call (absent when none is)', required=False,
+                        form=RecordForm({name: ANNOTATION_FORM.fields[name]
+                                         for name in ('vocabulary', 'name', 'identifier')})),
+    'annotation_score': Field('number', 'The hypervolume over the scores the axes give that annotation, without the '
+                                        'organism and the feature call; 0 with no annotation'),
+    'agreement': Field('number', "TAXA_FLOOR + (1 - TAXA_FLOOR) * the share of the hits behind that annotation that are "
+                                 "of the family of the leading candidate taxon; 1 with no annotation"),
+    'part_coherence': Field('number', 'The part coherence of the feature call: a slot, 1 until it is filled'),
+    'term': Field('number', 'feature call score * (1 + annotation score) * agreement * part coherence'),
+    'chosen': Field('boolean', 'Whether the feature call is part of the genome annotation'),
+    'lost_to': Field('record_refs', 'The feature record of the chosen rival it lost to (absent when chosen)',
+                     required=False),
+})
+GENOME_ANNOTATION_FORM = RecordForm({
+    'score': Field('number', 'The genome score: organism factor * set coherence * the sum of the terms of the chosen '
+                             'feature calls'),
+    'organism_factor': Field('number', 'The factor of the score of the leading candidate taxon; 0 when none is held'),
+    'set_coherence': Field('number', 'The set coherence of the chosen feature calls: a slot, 1 until it is filled'),
+    'feature_calls': Field('list', 'Every feature call of the scope', items=GENOME_FEATURE_CALL_FORM),
+})
 AXIS_FORM = RecordForm({
     'credit': Field('number', 'The axis credit: what its head returned at its latest return, 0 before the first'),
     'commissions': Field('integer', 'How often the axis was commissioned'),
@@ -207,6 +232,8 @@ FINDING_FORM = RecordForm({
     'claims': Field('list', 'The claims made from the candidate annotations', items=CLAIM_FORM),
     'best_annotation': Field('record', 'The best annotation: the first of the annotation lines (absent while no '
                                        'annotation has a known status)', form=ANNOTATION_FORM, required=False),
+    'genome_annotation': Field('record', 'The genome annotation: the chosen feature calls with their annotations, and '
+                                         'the genome score', form=GENOME_ANNOTATION_FORM),
     'organism': Field('record', 'Which organism the sequence is from: the candidate taxa and the placement',
                       form=ORGANISM_FORM),
     'feature_calling': Field('record', 'The state of feature calling', form=FEATURE_CALLING_FORM),
@@ -246,6 +273,7 @@ def final_to_parent(summary, completion, selection):
                                      for claim in summary['claims']],
                           **({'best_annotation': annotations[0]}
                              if annotations and annotations[0]['status'] != 'unknown' else {}),
+                          'genome_annotation': summary['genome_annotation'],
                           'organism': organism_finding(summary['organism']),
                           'feature_calling': {'credit': features['credit'],
                                               'commissions': len(features['credit_after_each_return'])},

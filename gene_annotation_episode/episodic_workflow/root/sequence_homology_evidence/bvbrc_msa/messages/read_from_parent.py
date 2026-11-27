@@ -8,7 +8,7 @@ part, each ``{name}`` exactly as the search's source gives the product (at least
 candidates it admitted from that search); ``per_candidate``: how many sequences of each (2 to 20; code chooses which);
 ``resource_id``: the bound BV-BRC resource; ``until`` and the three credit units and, on a resuming commission, the
 handoff, status and closure records passed back with ``known_ended`` (the shared ``bvbrc_job_child.read_common``)."""
-from method_loop import Field, RecordForm
+from method_loop import ChoiceField, Field, RecordForm
 
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_job_child import (
     COMMON_ASSIGNMENT, read_common)
@@ -16,6 +16,13 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
     MINIMUM_CANDIDATES, PER_CANDIDATE_RANGE)
 
 CANDIDATE_FORM = RecordForm({'name': Field('text', 'A product candidate\'s name exactly as the search gives it')})
+ORGANISM_FORM = RecordForm({
+    'taxon_id': Field('integer', 'The candidate taxon (NCBI taxonomy id)'),
+    'name': Field('text', 'The taxonomy\'s own name of the taxon'),
+    'rank_code': Field('text', 'The rank code of the taxon'),
+    'score': Field('number', 'The candidate\'s score'),
+    'role': ChoiceField('text', 'The leading candidate', ('leader',)),
+})
 ASSIGNMENT_FORM = RecordForm({
     'query_refs': Field('record_refs', 'The target: exactly one protein subject record of the parent\'s scope, passed in '
                                        'custody'),
@@ -27,6 +34,9 @@ ASSIGNMENT_FORM = RecordForm({
                            + ' to ' + str(PER_CANDIDATE_RANGE[1]) + '); code chooses which'),
     'resource_id': Field('text', 'The bound BV-BRC resource of the job service the alignment is launched on'),
     **COMMON_ASSIGNMENT,
+    'scope': Field('record', 'The parent\'s scope: what the annotations are settled over after the graded result'),
+    'organism': Field('record', 'The leading candidate organism the parent holds, told to the claim tool',
+                      form=ORGANISM_FORM, required=False),
 })
 
 
@@ -40,4 +50,5 @@ def read_from_parent(assignment, message):
         raise ValueError('bvbrc_msa_per_candidate_out_of_range')
     common = read_common(assignment, 'bvbrc_msa')
     fields = {'per_candidate': assignment['per_candidate'], 'resource_id': assignment['resource_id']}
-    return {'fields': fields, 'query_ref': query, 'search_ref': search, 'candidates': names, **common}
+    return {'fields': fields, 'query_ref': query, 'search_ref': search, 'candidates': names, **common,
+            'scope': assignment['scope'], 'organism': assignment.get('organism')}

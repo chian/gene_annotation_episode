@@ -13,6 +13,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
 def internal_summary(view):
     parent, records = view.parent_input, view.records
     rows = [unit_row(position, unit) for position, unit in enumerate(view.outcomes)]
+    extracted = [ref for unit in view.outcomes if unit['tool'] == 'extract' for ref in unit['outcome'].get('graded_refs', [])]
     job = job_view(records, APPLICATION)
     resumed = resumed_rows(APPLICATION, job) if parent['resumed'] else []
     facts = episode_state([*resumed, *rows])
@@ -22,21 +23,22 @@ def internal_summary(view):
     planned = plan(records, parent['alignment_ref'])
     return {'fields': parent['fields'], 'units': parent['units'], 'until': parent['until'], 'prior': parent['prior'],
             'resumed': parent['resumed'], 'known_ended': parent['known_ended'], 'target': parent['target'],
+            'scope': parent['scope'], 'organism': parent['organism'],
             'commission': {'query_ref': parent['query_ref'], 'alignment_ref': parent['alignment_ref']},
             'planned': {**planned_size(planned), 'candidates': [{'name': group['product'], 'size': len(group['ids'])}
                                                                 for group in planned['groups']]},
             'notice': (job_notice(search_facts(job), revised[-1] if revised else None)
                        if job is not None and facts['state'] in ('launched', 'finished') else None),
             'unit_rows': rows, 'state_facts': facts, 'state': facts['state'],
-            'last_failure_code': facts['last_failure_code'], 'job': search_facts(job), 'graded': graded_rows(records),
+            'last_failure_code': facts['last_failure_code'], 'job': search_facts(job),
+            'graded': [row for row in graded_rows(records) if row['source_ref'] in extracted],
             'handoff_refs': returned_with_names(records, [ref for unit in view.outcomes if unit['tool'] == 'launch'
                                                           for ref in unit['outcome']['handoff_refs']]),
             'check_refs': returned_with_names(records, [unit['outcome']['check_ref'] for unit in view.outcomes
                                                         if unit['tool'] == 'monitor' and unit['outcome']['status'] == 'completed']),
             'closure_refs': returned_with_names(records, [unit['outcome']['closure_ref'] for unit in view.outcomes
                                                           if unit['tool'] == 'extract' and unit['outcome']['closure_ref'] is not None]),
-            'graded_refs': returned_with_names(records, [ref for unit in view.outcomes if unit['tool'] == 'extract'
-                                                         for ref in unit['outcome'].get('graded_refs', [])]),
+            'graded_refs': returned_with_names(records, extracted),
             'counts': [{name: unit['outcome'][name] for name in ('group_count', 'sequence_count', 'column_count',
                                                                  'significant_count')}
                        for unit in view.outcomes if unit['tool'] == 'extract' and unit['outcome']['status'] == 'completed'],

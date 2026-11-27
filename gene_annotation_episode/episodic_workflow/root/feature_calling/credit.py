@@ -53,7 +53,7 @@ class FeatureDifferentialCredit:
                 'test': 'one_graded_sheet_of_one_sequence_from_one_source',
                 'support': 'sum_over_tests_of_sheet_weight_times_the_tests_bits_at_the_slots_calls_and_claims',
                 'blast_claim_bit': 'top_hit_strength_times_run_over_run_plus_one_times_taxa_factor_of_the_run',
-                'score': 'support_over_support_plus_one_at_the_slot_plus_that_at_every_slot_it_is_within',
+                'score': 'support_over_support_plus_one_at_the_slot_plus_that_at_every_slot_within_it',
                 'sheet_weights': dict(SHEET_WEIGHT),
                 'rivals': ('two_slots_of_a_competing_type_neither_one_slot_nor_nested_that_share_rival_letters_or_more_'
                            'or_more_than_rna_share_of_the_rna_gene_when_one_is_an_rna_unit'),
@@ -63,7 +63,7 @@ class FeatureDifferentialCredit:
                 'measurable': 'the_test_can_speak_of_the_slots_kind',
                 'settling': 'slots_claims_in_them_and_waiting_claims_follow_from_all_the_records_held_whatever_their_order',
                 'counting': 'tests_in_the_order_they_came_over_what_all_held_records_settle',
-                'entry': 'new_possibility_its_score_finer_within_listed_what_it_adds_one_that_only_holds_listed_ones_nothing',
+                'entry': 'support_over_support_plus_one_of_the_slots_own_support',
                 'more_support': 'more_support_of_a_listed_slot_earns_the_rise_of_its_support_over_support_plus_one',
                 'claim_credit': 'a_claim_in_no_listed_slot_earns_the_rise_of_support_over_support_plus_one_of_the_claims_of_its_type_and_reading_on_its_letters_and_that_is_taken_off_the_first_entry_of_a_slot_that_counts_it',
                 'differential': 'abs_difference_of_the_moves_of_the_two_leading_rival_slots_listed_before_the_test_that_it_can_measure',
@@ -176,8 +176,6 @@ def search_ceiling(summary, ref, program, database):
     times the weight of its family. A hit that reaches both ends of its entry is a feature call: the entry of the slot
     it opens can also gain the support of the claims that wait (``waiting_support``). One differential, at most the
     weight."""
-    if DATABASES[database].get('db_type') == 'fna':      # genome sequences: an entry has no feature type, so no hit
-        return 0.0                                      # of it states a feature and the search earns nothing here
     parameters = {item['id']: item for item in json.loads((SPECS / 'Homology.json').read_text())['parameters']}
     length = summary['sequence_lengths'][ref]
     bits = math.log2(length / parameters['blast_evalue_cutoff']['default'])

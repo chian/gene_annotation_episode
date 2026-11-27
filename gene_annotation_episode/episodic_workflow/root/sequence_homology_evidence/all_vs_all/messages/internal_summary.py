@@ -4,7 +4,7 @@ the database, the matrix, the clusters); the facts of each held matrix's score r
 ``all_vs_all_run.held_matrix_facts``, what the model tunes the first try on); the tries made with their facts; the clusterings that may
 be committed (``committable``: the held ones); the failed steps; the
 committed clustering (the
-source of provider ``all_vs_all`` with its sheet's facts: the cluster count, the target's cluster size and each candidate's share
+source of provider ``all_vs_all`` a ``commit_clustering`` unit of this episode kept, with its sheet's facts: the cluster count, the target's cluster size and each candidate's share
 of its sequences in it); the state; and the yield table. The one returned record list, ``graded_refs`` (the labelled products and
 the committed clustering's source and grading), is closed under naming by ``job_records.returned_with_names`` (the records the
 child returns together with everything they name among the records it holds), so the parent holds what the returned records
@@ -55,7 +55,8 @@ def internal_summary(view):
     members = run.set_members(records, commission, parent['per_candidate'])
     rows = _rows(view.outcomes)
     held = [row for row in products(records) if row['kind'] in KINDS]
-    clusterings = _clusterings(records)
+    committed = [ref for unit in view.outcomes if unit['tool'] == 'commit_clustering' for ref in unit['outcome']['graded_refs']]
+    clusterings = [row for row in _clusterings(records) if row['source_ref'] in committed]
     failed = {'prepare': any(row['action'] == 'prepare_database' and row['status'] == 'failed' for row in rows),
               'blast': any(row['action'] == 'all_vs_all_blast' and row['status'] == 'failed' for row in rows),
               'cluster': [[row['call']['matrix_ref'], row['call']['inflation'], row['call']['contrast']] for row in rows
@@ -69,6 +70,7 @@ def internal_summary(view):
              else 'database_ready' if run.DATABASE_KIND in kinds else 'nothing_done')
     codes = [row['failure_code'] for row in rows if row['failure_code'] is not None]
     return {'commission': commission, 'units': parent['units'], 'target': parent['target'],
+            'scope': parent['scope'], 'organism': parent['organism'],
             'planned': {'sequences': len(members), 'letters': sum(row['length'] for row in members),
                         'per_candidate': parent['per_candidate'],
                         'by_candidate': {name: sum(1 for row in members if row['candidate'] == name)

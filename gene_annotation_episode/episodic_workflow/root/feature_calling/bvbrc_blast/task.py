@@ -47,11 +47,12 @@ FIX_FIELDS = ('resource_id',)
 COMMISSION_FIELDS = ('program', 'database')
 SERVICES = ('job_access', 'estimate_table')
 # The databases this episode searches at the BV-BRC service, by the name a commission gives: the protein databases of
-# its two genome sets (named by the set) and the nucleotide databases of the same sets (named ``<set>.<type>``: ``ffn``
-# the genes as DNA, ``fna`` the genome sequences). The set is this episode's own: the commission's
+# its two genome sets (named by the set) and the nucleotide databases of the same sets (named ``<set>.ffn``:
+# the genes as DNA). The set is this episode's own: the commission's
 # form (``messages/read_from_parent.py``) and the actions' form take their choices from it, and every library function
 # that looks a database up is given it.
-DATABASES = {**PRECOMPUTED_DATABASES, **NUCLEOTIDE_DATABASES}
+DATABASES = {**PRECOMPUTED_DATABASES,
+             **{name: entry for name, entry in NUCLEOTIDE_DATABASES.items() if entry['db_type'] == 'ffn'}}
 # The programs that search with a nucleotide sequence: this episode makes no search with a protein.
 PROGRAMS = tuple(sorted(program for program, units in PROGRAM_UNITS.items() if units[0] == 'nt'))
 
@@ -89,7 +90,7 @@ INSTRUCTIONS = (
     'you will change, which can only be resource_id: the program and the database are the commission\'s and are never '
     'changed here. Only after a fix does a launch pass, on another resource, after a new estimate. With no other '
     'resource the failure stands: it is returned to the parent as it is.\n'
-    'If your JSON is wrong you are told each problem as a code with the field it concerns (feedback.problems) and '
+    'If your JSON is wrong you are told each problem as a code with the field it concerns (`problems` in each entry of feedback) and '
     'nothing has run; fix those fields and answer again. A correct action works on the first try.\n'
     '\n'
     'What you are shown. state: no_estimate, estimated, launched, finished, extracted or failed. unit_rows: each earlier '

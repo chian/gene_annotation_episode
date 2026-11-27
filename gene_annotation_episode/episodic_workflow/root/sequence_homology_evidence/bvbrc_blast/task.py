@@ -75,7 +75,7 @@ INSTRUCTIONS = (
     '- fix: only after a failure (state failed): the failure code you address (last_failure_code) and the request field '
     'you will change (program, database or resource_id). Only after a fix does a launch pass, with a request that '
     'differs from the failed one in that field, after a new estimate.\n'
-    'If your JSON is wrong you are told each problem as a code with the field it concerns (feedback.problems) and '
+    'If your JSON is wrong you are told each problem as a code with the field it concerns (`problems` in each entry of feedback) and '
     'nothing has run; fix those fields and answer again. A correct action works on the first try.\n'
     '\n'
     'What you are shown. state: no_estimate, estimated, launched, finished, extracted or failed. unit_rows: each earlier '

@@ -7,11 +7,18 @@ data-product rows). ``alignment_refs``: exactly one record, the held data-produc
 (the requirement: the child's checks refuse a record that is not one); ``resource_id``: the bound
 BV-BRC resource; ``until`` and the three credit units and, on a resuming commission, the handoff, status and closure records
 passed back with ``known_ended`` (the shared ``bvbrc_job_child.read_common``). The groups are not a field: code builds them; the p-value is not a field: it is one fixed value (``P_VALUE``)."""
-from method_loop import Field, RecordForm
+from method_loop import ChoiceField, Field, RecordForm
 
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_job_child import (
     COMMON_ASSIGNMENT, read_common)
 
+ORGANISM_FORM = RecordForm({
+    'taxon_id': Field('integer', 'The candidate taxon (NCBI taxonomy id)'),
+    'name': Field('text', 'The taxonomy\'s own name of the taxon'),
+    'rank_code': Field('text', 'The rank code of the taxon'),
+    'score': Field('number', 'The candidate\'s score'),
+    'role': ChoiceField('text', 'The leading candidate', ('leader',)),
+})
 ASSIGNMENT_FORM = RecordForm({
     'query_refs': Field('record_refs', 'The target: exactly one protein subject record of the parent\'s scope, passed in '
                                        'custody'),
@@ -21,6 +28,9 @@ ASSIGNMENT_FORM = RecordForm({
                                            'multiple_sequence_alignment, passed in custody'),
     'resource_id': Field('text', 'The bound BV-BRC resource of the job service the analysis is launched on'),
     **COMMON_ASSIGNMENT,
+    'scope': Field('record', 'The parent\'s scope: what the annotations are settled over after the graded result'),
+    'organism': Field('record', 'The leading candidate organism the parent holds, told to the claim tool',
+                      form=ORGANISM_FORM, required=False),
 })
 
 
@@ -29,4 +39,5 @@ def read_from_parent(assignment, message):
     (alignment,) = assignment['alignment_refs']
     common = read_common(assignment, 'bvbrc_metacats')
     fields = {'resource_id': assignment['resource_id']}
-    return {'fields': fields, 'query_ref': query, 'alignment_ref': alignment, **common}
+    return {'fields': fields, 'query_ref': query, 'alignment_ref': alignment, **common,
+            'scope': assignment['scope'], 'organism': assignment.get('organism')}

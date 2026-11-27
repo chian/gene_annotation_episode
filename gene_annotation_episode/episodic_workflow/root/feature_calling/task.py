@@ -89,10 +89,11 @@ DESCRIPTIONS = {
 # The programs that search with a nucleotide sequence: this head makes no search with a protein.
 PROGRAMS = tuple(sorted(program for program, units in PROGRAM_UNITS.items() if units[0] == 'nt'))
 # The databases this head searches at the BV-BRC service, by the name a commission gives: the protein databases of its
-# two genome sets (named by the set) and the nucleotide databases of the same sets (named ``<set>.<type>``: ``ffn`` the
-# genes as DNA, ``fna`` the genome sequences). The set is this head's own: it is what the model is
+# two genome sets (named by the set) and the nucleotide databases of the same sets (named ``<set>.ffn``: the
+# genes as DNA; a genome sequence has no feature type, so its database states no feature). The set is this head's own: it is what the model is
 # offered and what the search library's check is given (``check_search``).
-DATABASES = {**bvbrc.PRECOMPUTED_DATABASES, **bvbrc.NUCLEOTIDE_DATABASES}
+DATABASES = {**bvbrc.PRECOMPUTED_DATABASES,
+             **{name: entry for name, entry in bvbrc.NUCLEOTIDE_DATABASES.items() if entry['db_type'] == 'ffn'}}
 SEARCH_FIELDS = ('searched_ref', 'program', 'database', 'resource_id', 'until')
 
 INSTRUCTIONS = """You are finding out which features a sequence holds: what type of thing lies where on it, and on which strand. Nothing about the sequence is known beforehand.
@@ -105,7 +106,7 @@ What a search gives. A search compares the sequence with known sequences and ret
 
 What you are shown:
 - `held_sequences`: the sequences you can search, with their length and letters.
-- `programs` and `databases`: each program with the letters it takes and the letters it searches, each database with the letters it holds and its type: `faa` the proteins of its genomes, `ffn` their genes as DNA, `fna` the genome sequences themselves. A program must take the letters of the searched sequence and the database must hold what the program searches.
+- `programs` and `databases`: each program with the letters it takes and the letters it searches, each database with the letters it holds and its type: `faa` the proteins of its genomes, `ffn` their genes as DNA. A program must take the letters of the searched sequence and the database must hold what the program searches.
 - `searches`: the searches already sent, each with its state. A search that is still running is continued by commissioning it again with the same program, database and service and `until` `extracted`; it is not sent a second time. A search already extracted would return the same result, so its forecast is zero.
 - `until`: `extracted` follows the search to its graded result. `launched` sends the search and returns at once; the service runs one search of a sequence at a time, so while it runs no other search of that sequence can be sent, and the only thing left to do with it is to continue it.
 - `feature_calls`: the candidate feature calls found so far for each sequence, the highest score first: type, positions, strand, score, and the calls that compete with it for the same letters. `waiting_claims`: the claims that no feature call includes yet: type, strand, positions, which end they claim, and their support. A waiting claim is real evidence that has no feature call to sit in yet.
@@ -274,6 +275,9 @@ def decide(summary, feedback, ctx):
     """Ask the model for the next search, shown the sequences it holds, the programs and databases, the searches sent,
     the feature calls and the waiting claims, its own outcomes, the measured time and the yield table."""
     resources = bound_resources(ctx)
+    # the model is shown how many records a unit produced, not their references
+    outcomes = [{**{key: value for key, value in unit.items() if key != 'record_refs'},
+                 'record_count': len(unit['record_refs'])} for unit in summary['units']]
     context = {
         'goal': GOAL, 'scope': summary['scope'],
         'held_sequences': [{'record_ref': ref, 'letters': letters, 'length': summary['sequence_lengths'][ref]}
@@ -297,7 +301,7 @@ def decide(summary, feedback, ctx):
                            for finding in summary['target_findings']],
         'tests': summary['tests'], 'differentials': summary['differentials'],
         'credit_binding': summary['credit_binding'],
-        'own_outcomes': summary['units'], 'last_local_outcome': summary['last_local_outcome'],
+        'own_outcomes': outcomes, 'last_local_outcome': outcomes[-1] if outcomes else None,
         'time_accounting': time_accounting(ctx.clock.progress_time)}
     context = extend_context(context, {'feedback': feedback, 'action_yields': summary['action_yields']},
                              conflict='initial_binding_context_field_conflict')

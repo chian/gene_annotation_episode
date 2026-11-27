@@ -10,13 +10,20 @@ source gives the product (at least two, chosen by the parent from the candidates
 episode's target is the credit still obtainable: the three units. (The clustering's tuning is the child's own model's choice.)"""
 import math
 
-from method_loop import Field, RecordForm
+from method_loop import ChoiceField, Field, RecordForm
 
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.all_vs_all_run import (
     MINIMUM_CANDIDATES, PER_CANDIDATE_RANGE)
 
 UNITS = ('handoff_unit', 'information_unit', 'graded_unit')
 CANDIDATE_FORM = RecordForm({'name': Field('text', 'A product candidate\'s name exactly as the search gives it')})
+ORGANISM_FORM = RecordForm({
+    'taxon_id': Field('integer', 'The candidate taxon (NCBI taxonomy id)'),
+    'name': Field('text', 'The taxonomy\'s own name of the taxon'),
+    'rank_code': Field('text', 'The rank code of the taxon'),
+    'score': Field('number', 'The candidate\'s score'),
+    'role': ChoiceField('text', 'The leading candidate', ('leader',)),
+})
 ASSIGNMENT_FORM = RecordForm({
     'query_refs': Field('record_refs', 'The target: exactly one protein subject record of the parent\'s scope, passed in custody'),
     'input_refs': Field('record_refs', 'The records the target\'s sequence and the search are read from, passed in custody'),
@@ -28,6 +35,9 @@ ASSIGNMENT_FORM = RecordForm({
     'handoff_unit': Field('number', 'The credit of the established database (positive)'),
     'information_unit': Field('number', 'The credit of the established matrix of bit scores (positive)'),
     'graded_unit': Field('number', 'The credit of the committed graded clustering (positive)'),
+    'scope': Field('record', 'The parent\'s scope: what the annotations are settled over after the graded result'),
+    'organism': Field('record', 'The leading candidate organism the parent holds, told to the claim tool',
+                      form=ORGANISM_FORM, required=False),
 })
 
 
@@ -43,4 +53,5 @@ def read_from_parent(assignment, message):
         raise ValueError('all_vs_all_credit_units_must_be_positive')
     units = {unit: assignment[unit] for unit in UNITS}
     return {'per_candidate': assignment['per_candidate'], 'query_ref': query, 'search_ref': search, 'candidates': names,
-            'units': units, 'target': units['handoff_unit'] + units['information_unit'] + units['graded_unit']}
+            'units': units, 'target': units['handoff_unit'] + units['information_unit'] + units['graded_unit'],
+            'scope': assignment['scope'], 'organism': assignment.get('organism')}

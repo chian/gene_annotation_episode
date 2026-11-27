@@ -117,6 +117,8 @@ THOUGHT_FIELDS = ('id', 'name', 'description', 'use_when', 'live_alternatives', 
 # The optional return fields a commission may select from what the child declares (read from the child's own
 # ``RETURN_FORM``); credit and finding are always returned. A child's entry is added with its commission.
 SELECTABLE = {'bvbrc_blast': [], 'bvbrc_msa': [], 'bvbrc_metacats': [], 'all_vs_all': []}
+# The lists of record references of a unit's outcome and of a child's report (``counted``).
+REF_LISTS = ('record_refs', 'graded_refs', 'check_refs', 'closure_refs', 'handoff_refs')
 
 # The two bodies the old ``ScientificGoal.instructions`` appended after the goal text, by the entry version of the
 # selected evidence axis (instruction text, unchanged).
@@ -126,7 +128,7 @@ EVIDENCE_AXIS_BODY = "Investigate the parent's assigned scientific problem itera
 HISTORY_START = 'On a fresh provider conversation,'
 HISTORY_END = 'Do not execute native provider tools.'
 HISTORY_GUIDANCE = ('Your own earlier outcomes are shown to you as own_outcomes, one row per completed unit, with '
-                    'the records each produced; a failed or invalid outcome is shown with its feedback. Your '
+                    'the number of records each produced; a failed or invalid outcome is shown with its feedback. Your '
                     'children\'s reports are in child_reports. Reading them creates no completed action or '
                     'observation and does not execute or credit the historical work again.\n')
 # What the credit is, in plain words, as every description of an action that earns it states it (the definition record
@@ -594,10 +596,17 @@ def resume_action(summary, records, ctx):
     return {'action_type': slot, 'arguments': arguments, 'due': bool(due)}
 
 
+def counted(row):
+    """``row`` (a unit's outcome or a child's report) as the model is shown it: the count of each list of record
+    references in place of the list."""
+    return {(name.removesuffix('s') + '_count' if name in REF_LISTS else name):
+            (len(value) if name in REF_LISTS else value) for name, value in row.items()}
+
+
 def decide(summary, feedback, ctx):
     """Ask the model for the next unit, shown the commission, the selected process library entries, the working
-    state of the scope, its own outcomes and its children's reports, the tools and children it may use, the
-    measured time and the yield table."""
+    state of the scope, its own outcomes and its children's reports (``counted``), the tools and children it may use,
+    the measured time and the yield table."""
     settings = ctx.settings
     library = SequenceHomologyEvidenceLibrary(settings['process_library_directory'])
     selection = summary['selection']
@@ -618,7 +627,7 @@ def decide(summary, feedback, ctx):
             'evidence_axis': axis_view,
             'thought_pattern': {name: thought[name] for name in THOUGHT_FIELDS if name in thought},
             'child_tool_info': selection['child_tool_info'],
-            'assignment': {'evidence_refs': summary['evidence_refs'], 'constraints': summary['constraints'],
+            'assignment': {'evidence_ref_count': len(summary['evidence_refs']), 'constraints': summary['constraints'],
                            'context': summary['context']},
             'permitted_children': offered},
         'working_state': summary['working_state'], 'visible_record_refs': summary['held_record_refs'],
@@ -627,8 +636,9 @@ def decide(summary, feedback, ctx):
         'differentials': summary['differentials'], 'not_asked_hit_count': summary['not_asked_hit_count'],
         'no_product_hit_count': summary['no_product_hit_count'],
         'uncharacterized_hit_count': summary['uncharacterized_hit_count'],
-        'own_outcomes': summary['units'],
-        'last_local_outcome': summary['last_local_outcome'], 'child_reports': summary['child_reports'],
+        'own_outcomes': [counted(row) for row in summary['units']],
+        'last_local_outcome': summary['last_local_outcome'] and counted(summary['last_local_outcome']),
+        'child_reports': [counted(row) for row in summary['child_reports']],
         'handoff_refs': summary['handoff_refs'], 'bound_resources': resources,
         'organism_candidates': summary['organism_candidates'],
         'held_sequences': summary['held_sequences'], 'held_comparisons': summary['held_comparisons'],

@@ -13,7 +13,7 @@ def credit(summary, records):
     held = [row['kind'] for row in products(records)]
     return ((units['handoff_unit'] if run.DATABASE_KIND in held else 0.0)
             + (units['information_unit'] if run.MATRIX_KIND in held else 0.0)
-            + (units['graded_unit'] if any(source['provider'] == run.PROVIDER for source in records.list('source')) else 0.0))
+            + (units['graded_unit'] if summary['committed'] else 0.0))
 
 
 def ceiling(summary, records, action_type, arguments, ctx):

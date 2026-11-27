@@ -18,6 +18,9 @@ visit; of ``all_vs_all``, which waits for and closes its own jobs inside its uni
 products and the committed clustering), so none of its job rows, and none of the files they name, reach this episode."""
 from episode_runtime import ChildMessage
 
+from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.candidate_measurements import (
+    ALIGNMENT_KIND, REPORT_KIND)
+
 ANALYSIS_KIND = 'database_search'
 
 # The objective of each commission: this episode's own text, never the model's.
@@ -80,12 +83,14 @@ def _bvbrc_blast(arguments, summary):
     query = arguments['query_ref']
     units = summary['child_credit_units']
     # the child settles the annotations after it grades its search, from every graded source held: it is passed the
-    # scope's records and every source and feature record this episode holds, with the records they name
+    # scope's records and every source and feature record this episode holds, with the records they name, and the
+    # data-product rows the candidate table reads beside a held MetaCATS source (the alignments and the reports)
     settled = [*summary['scope_refs'],
                *(ref for ref in summary['held_record_refs'] if ref.split('_')[0] in ('source', 'feature'))]
+    rows = [row['row_ref'] for row in summary['data_products'] if row['kind'] in (ALIGNMENT_KIND, REPORT_KIND)]
     assignment = {'query_refs': [query],
-                  'input_refs': [ref for ref in _custody([query, *settled], summary)
-                                 if ref != query and not ref.startswith('row_')],
+                  'input_refs': [*(ref for ref in _custody([query, *settled], summary)
+                                   if ref != query and not ref.startswith('row_')), *rows],
             'program': arguments['program'], 'database': arguments['database'], 'resource_id': arguments['resource_id'],
             'until': arguments['until'], 'handoff_unit': units['handoff_unit'],
             'information_unit': units['information_unit'], 'graded_unit': units['acquired_record_unit'],
@@ -107,13 +112,22 @@ def _bvbrc_msa(arguments, summary):
     continues an outstanding job of the same fields, the records of that job passed back."""
     query, search = arguments['query_ref'], arguments['search_ref']
     units = summary['child_credit_units']
-    named = [ref for ref in _custody([query, search], summary) if ref not in (query, search)]
+    # the child settles the annotations after it grades its alignment: passed as to ``bvbrc_blast``
+    settled = [*summary['scope_refs'],
+               *(ref for ref in summary['held_record_refs'] if ref.split('_')[0] in ('source', 'feature'))]
+    rows = [row['row_ref'] for row in summary['data_products'] if row['kind'] in (ALIGNMENT_KIND, REPORT_KIND)]
+    named = [ref for ref in _custody([query, search, *settled], summary)
+             if ref not in (query, search) and not ref.startswith('row_')]
     assignment = {'query_refs': [query], 'search_refs': [search],
-                  'input_refs': [*named, *summary['alignment_product_refs']],
+                  'input_refs': list(dict.fromkeys([*named, *summary['alignment_product_refs'], *rows])),
                   'candidates': [{'name': name} for name in arguments['candidates']],
                   'per_candidate': arguments['per_candidate'], 'resource_id': arguments['resource_id'],
                   'until': arguments['until'], 'handoff_unit': units['handoff_unit'],
-                  'information_unit': units['information_unit'], 'graded_unit': units['acquired_record_unit']}
+                  'information_unit': units['information_unit'], 'graded_unit': units['acquired_record_unit'],
+                  'scope': summary['scope']}
+    organisms = [row for row in summary['organism_candidates'] if row['role'] == 'leader']
+    if organisms:
+        assignment['organism'] = organisms[0]
     held = [job for job in summary['bvbrc_msa_jobs'] if job['outstanding'] and job['identity'] == {
         'query_ref': query, 'search_ref': search, 'candidates': sorted(arguments['candidates']),
         'per_candidate': arguments['per_candidate']}]
@@ -131,11 +145,20 @@ def _bvbrc_metacats(arguments, summary):
     query, alignment = arguments['query_ref'], arguments['alignment_ref']
     units = summary['child_credit_units']
     (option,) = [item for item in summary['metacats_options'] if item['alignment_ref'] == alignment]
-    named = [ref for ref in _custody([query, option['source_ref']], summary) if ref != query]
-    assignment = {'query_refs': [query], 'alignment_refs': [alignment], 'input_refs': named,
+    # the child settles the annotations after it grades its report: passed as to ``bvbrc_blast``
+    settled = [*summary['scope_refs'],
+               *(ref for ref in summary['held_record_refs'] if ref.split('_')[0] in ('source', 'feature'))]
+    rows = [row['row_ref'] for row in summary['data_products'] if row['kind'] in (ALIGNMENT_KIND, REPORT_KIND)]
+    named = [ref for ref in _custody([query, option['source_ref'], *settled], summary)
+             if ref != query and not ref.startswith('row_')]
+    assignment = {'query_refs': [query], 'alignment_refs': [alignment],
+                  'input_refs': [*named, *(ref for ref in rows if ref != alignment)],
                   'resource_id': arguments['resource_id'], 'until': arguments['until'],
                   'handoff_unit': units['handoff_unit'], 'information_unit': units['information_unit'],
-                  'graded_unit': units['acquired_record_unit']}
+                  'graded_unit': units['acquired_record_unit'], 'scope': summary['scope']}
+    organisms = [row for row in summary['organism_candidates'] if row['role'] == 'leader']
+    if organisms:
+        assignment['organism'] = organisms[0]
     held = [job for job in summary['bvbrc_metacats_jobs'] if job['outstanding'] and job['resource_id'] == arguments[
         'resource_id'] and job['identity']['groups_ref'] == option['groups_ref']]
     if held:
@@ -150,11 +173,21 @@ def _all_vs_all(arguments, summary):
     clustering tuning itself."""
     query, search = arguments['query_ref'], arguments['search_ref']
     units = summary['child_credit_units']
-    named = [ref for ref in _custody([query, search], summary) if ref not in (query, search)]
-    return {'query_refs': [query], 'search_refs': [search], 'input_refs': named,
-            'candidates': [{'name': name} for name in arguments['candidates']], 'per_candidate': arguments['per_candidate'],
-            'handoff_unit': units['handoff_unit'], 'information_unit': units['information_unit'],
-            'graded_unit': units['acquired_record_unit']}
+    # the child settles the annotations after it commits a clustering: passed as to ``bvbrc_blast``
+    settled = [*summary['scope_refs'],
+               *(ref for ref in summary['held_record_refs'] if ref.split('_')[0] in ('source', 'feature'))]
+    rows = [row['row_ref'] for row in summary['data_products'] if row['kind'] in (ALIGNMENT_KIND, REPORT_KIND)]
+    named = [ref for ref in _custody([query, search, *settled], summary)
+             if ref not in (query, search) and not ref.startswith('row_')]
+    assignment = {'query_refs': [query], 'search_refs': [search], 'input_refs': [*named, *rows],
+                  'candidates': [{'name': name} for name in arguments['candidates']],
+                  'per_candidate': arguments['per_candidate'],
+                  'handoff_unit': units['handoff_unit'], 'information_unit': units['information_unit'],
+                  'graded_unit': units['acquired_record_unit'], 'scope': summary['scope']}
+    organisms = [row for row in summary['organism_candidates'] if row['role'] == 'leader']
+    if organisms:
+        assignment['organism'] = organisms[0]
+    return assignment
 
 
 ASSIGNMENTS = {'bvbrc_blast': _bvbrc_blast, 'bvbrc_msa': _bvbrc_msa, 'bvbrc_metacats': _bvbrc_metacats,

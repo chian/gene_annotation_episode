@@ -35,7 +35,8 @@ The loop of one Episode:
    action; ``ctx`` is the read-only ``DecisionContext`` (settings, read handles of the declared services, the
    recorded clock of this decision, run identity). ``action(response, summary, records, ctx)`` turns a response
    into an action or raises ``Rejected(feedback)``. A rejected response creates no unit and no observation, and
-   ``decide`` is called again with that feedback. An action is a ``ToolCall`` or a ``ChildCall`` and nothing else:
+   ``decide`` is called again with the feedback of every rejection of this decision so far, in order (a list;
+   ``None`` before the first). An action is a ``ToolCall`` or a ``ChildCall`` and nothing else:
    the task always offers a unit and cannot end its Episode. A model answer that selects no unit is an invalid
    answer, which ``action`` rejects like any other.
 3. ``ToolCall(name, arguments)`` runs ``tools[name](arguments, ctx)`` as one ``Leaf`` (``ctx`` a ``UnitContext``);
@@ -889,7 +890,7 @@ class _SystemSource:
                 self._gate(view, decision, summary, context, offered)
             except Rejected as rejection:
                 # Rejected before acquisition: no unit, no observation; the task decides again.
-                feedback = _closed(rejection.feedback, 'rejection_feedback')
+                feedback = (feedback or []) + [_closed(rejection.feedback, 'rejection_feedback')]
                 continue
             break
         return self._unit(view, position, decision, summary, context, offered)

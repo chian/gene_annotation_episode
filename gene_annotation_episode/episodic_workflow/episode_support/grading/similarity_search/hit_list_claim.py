@@ -10,19 +10,21 @@ TAXA_RANK = 'F'
 TAXA_FLOOR = 0.5
 
 
+def family(taxon):
+    """The family (``TAXA_RANK``) ``taxon`` is of; ``None`` when it has none."""
+    nodes = prepared_taxonomy()['nodes']
+    for _ in range(200):
+        if taxon not in nodes:
+            return None
+        if nodes[taxon]['rank_code'] == TAXA_RANK:
+            return taxon
+        taxon = nodes[taxon]['parent']
+    return None
+
+
 def taxa_share(taxon_ids):
     """The share of a run's hits (``taxon_ids`` in rank order) that are of the family of the first of them, over the
     hits that carry a taxon id; 0 when none carries one or the first has no family."""
-    nodes = prepared_taxonomy()['nodes']
-
-    def family(taxon):
-        for _ in range(200):
-            if taxon not in nodes:
-                return None
-            if nodes[taxon]['rank_code'] == TAXA_RANK:
-                return taxon
-            taxon = nodes[taxon]['parent']
-        return None
     families = [family(taxon) for taxon in taxon_ids if taxon is not None]
     if not families or families[0] is None:
         return 0.0

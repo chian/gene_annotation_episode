@@ -87,16 +87,19 @@ class StoreLedger:
 
     def abandon_unfinished(self, run_id, holder, owner, position):
         """What ``holder``'s units from ``position`` on produced is abandoned, the feature records they changed are
-        put back as they stood before, and their row writes are taken back; ``owner`` is the Episode's ``(run_id,
+        put back field by field (a field changed again since is left), and their row writes are taken back; ``owner`` is the Episode's ``(run_id,
         episode_id)``, the key of its rows and of its scratch directories, which are removed."""
         with self._store.transaction():
             self._db.execute('UPDATE episode_produced SET abandoned=1 WHERE run_id=? AND holder=? AND unit>=? '
                              'AND abandoned=0', (run_id, _path(holder), position))
-            for ref, before in self._db.execute(
-                    'SELECT record_ref, before FROM episode_feature_changes WHERE run_id=? AND holder=? AND unit>=? '
-                    'AND abandoned=0 ORDER BY rowid DESC', (run_id, _path(holder), position)).fetchall():
-                before = json.loads(before)
-                self._store.change_feature(ref, {**dict.fromkeys(self._store.get(ref)), **before})
+            for ref, before, after in self._db.execute(
+                    'SELECT record_ref, before, after FROM episode_feature_changes WHERE run_id=? AND holder=? '
+                    'AND unit>=? AND abandoned=0 ORDER BY rowid DESC', (run_id, _path(holder), position)).fetchall():
+                before, after, current = json.loads(before), json.loads(after), self._store.get(ref)
+                # a field another holder changed since keeps that later change
+                self._store.change_feature(ref, {key: before.get(key) for key in {*before, *after}
+                                                 if before.get(key) != after.get(key)
+                                                 and current.get(key) == after.get(key)})
             self._db.execute('UPDATE episode_feature_changes SET abandoned=1 WHERE run_id=? AND holder=? AND unit>=? '
                              'AND abandoned=0', (run_id, _path(holder), position))
             self._rows.abandon_unfinished(owner, position)

@@ -54,7 +54,7 @@ FEATURE_FORM = RecordForm({
     'start': Field('integer', 'The first position of the feature on the sequence (zero-based)'),
     'end': Field('integer', 'The position after the last of the feature'),
     'score': Field('number', 'The score of the feature call: the weighted support of the tests at its calls, at the '
-                             'claims that sit in it and at every feature call it lies within by type'),
+                             'claims that sit in it and at every feature call that lies within it by type'),
     'claim_count': Field('integer', 'The claims that sit in this feature call'),
     'rivals': Field('list', 'The rows that compete with this one for letters, each with the facts of the letters shared',
                     items=RIVAL_FORM),

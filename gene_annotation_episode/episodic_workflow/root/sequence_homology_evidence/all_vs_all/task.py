@@ -23,6 +23,8 @@ from jsonschema import Draft202012Validator, ValidationError
 
 from episode_runtime import ModelRequest, Rejected, ToolCall
 
+from gene_annotation_episode.episodic_workflow.episode_support.tools.annotation_claims.annotation_settling import (
+    settle_annotations)
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import (
     rejection_feedback)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence import (
@@ -60,7 +62,7 @@ INSTRUCTIONS = (
     'nothing more: commit the one that '
     'best shows where the target falls among the candidates.\n'
     '- hold, with a reason: do nothing now.\n'
-    'If a check finds something wrong you are told each problem as a code with its field (feedback.problems) and nothing has run. '
+    'If a check finds something wrong you are told each problem as a code with its field (`problems` in each entry of feedback) and nothing has run. '
     'A call that passed its check works; a failure after it is the environment\'s and is reported as failed. '
     'The yield table shows what each unit earned. You cannot end the episode; the yield controller does.')
 
@@ -138,7 +140,10 @@ def action(response, summary, records, ctx):
         problems = run.check_commit(chosen, reader=records)
     if problems:
         raise Rejected({'status': 'invalid', 'category': name + '_check', 'problems': problems})
-    return ToolCall(name, {'call': {key: value for key, value in chosen.items() if key != 'name'}, 'commission': commission})
+    arguments = {'call': {key: value for key, value in chosen.items() if key != 'name'}, 'commission': commission}
+    if name == 'commit_clustering':
+        arguments.update(scope=summary['scope'], organism=summary['organism'])
+    return ToolCall(name, arguments)
 
 
 async def prepare_database(arguments, ctx):
@@ -157,9 +162,13 @@ async def cluster(arguments, ctx):
                              arguments['commission']['per_candidate'])
 
 
-def commit_clustering(arguments, ctx):
-    return run.commit_clustering(ctx, arguments['call']['clusters_ref'], arguments['commission'],
-                                 arguments['commission']['per_candidate'])
+async def commit_clustering(arguments, ctx):
+    """The commit of the clustering, then the settling of the annotations (``settle_annotations``), as one unit."""
+    graded = run.commit_clustering(ctx, arguments['call']['clusters_ref'], arguments['commission'],
+                                   arguments['commission']['per_candidate'])
+    settled = await settle_annotations(ctx, scope=arguments['scope'], organism=arguments['organism'])
+    return {**graded, 'graded_refs': [*graded['graded_refs'], *settled],
+            'record_refs': [*graded['record_refs'], *settled]}
 
 
 def hold(arguments, ctx):

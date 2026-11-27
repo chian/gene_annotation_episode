@@ -134,6 +134,8 @@ known status by score, highest first, then the unknown ones; the first, when its
 annotation."""
 import math
 
+from gene_annotation_episode.episodic_workflow.episode_support.grading.similarity_search.hit_list_claim import (
+    TAXA_FLOOR, family)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.taxonomic_classification.taxon_candidates import (
     taxon_table)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_features.blast_claim_keeping import (
@@ -278,8 +280,8 @@ def organism_table(records, scope, sources):
     ``sources`` (``taxon_sources``) of the records the root holds: ``candidates`` (the leading one first: taxon id, the
     taxonomy's name, rank code, the ids of its lineage, score), ``placement`` (``leader_taxon_id``, ``rival_taxon_id``,
     ``agreed_taxon_id``, each present when the sheet has it), ``test_count`` (the graded classifications and claim sheets
-    held for the subject) and ``waiting_claims`` (``_taxon_waiting``). The table's credit is the organism head's matter
-    and is not read here."""
+    held for the subject), ``waiting_claims`` (``_taxon_waiting``) and ``credit``: the sheet's credit over all of them, which
+    is the organism's credit at the root (a claim another arm's search kept earns here)."""
     (subject,) = scope['subject_refs']
     table = taxon_table(records, scope, sources)['targets'][subject]
     return {'candidates': [{'taxon_id': row['taxon_id'], 'name': row['name'], 'rank_code': row['rank_code'],
@@ -289,7 +291,7 @@ def organism_table(records, scope, sources):
                                                           ('rival_taxon_id', table['rival']),
                                                           ('agreed_taxon_id', table['agreed_taxon_id']))
                           if value is not None},
-            'test_count': len(table['tests']),
+            'test_count': len(table['tests']), 'credit': table['credit'],
             'waiting_claims': [_taxon_waiting(row) for row in table['waiting']]}
 
 
@@ -402,6 +404,55 @@ def _line(identity, by_axis, members, entry, call):
     return {**line, 'rows': [{'axis': slot, **row} for slot, row in by_axis.items()], 'members': members}
 
 
+def genome_annotation(features, annotations, axes, organism):
+    """The genome annotation and its score: ``organism factor x set coherence x`` the sum over the chosen feature calls
+    of the term ``feature call score x (1 + annotation score) x agreement x part coherence``. The annotation score is a
+    line's hypervolume over its axis scores alone. The agreement is ``TAXA_FLOOR + (1 - TAXA_FLOOR) x`` the share of the
+    hits behind the line's members (``hit_organisms``) that are of the family of the leading candidate taxon. A feature
+    call takes, of its two leading lines and no annotation (annotation score 0, agreement 1), the one of the highest
+    term; of rival feature calls the one of the higher term is chosen. Part coherence and set coherence are slots, 1.0
+    until they are filled."""
+    part_coherence = set_coherence = 1.0
+    leader = leading_taxon(organism)
+    leader_family = None if leader is None else family(leader['taxon_id'])
+    rows = []
+    for target in features['targets']:
+        calls = []
+        for call in target['features']:
+            best = {'annotation_score': 0.0, 'agreement': 1.0, 'part_coherence': part_coherence,
+                    'term': call['score'] * part_coherence}
+            scored = [(hypervolume({**{slot: 0.0 for slot in AXIS_WEIGHTS},
+                                    **{row['axis']: row['score'] for row in line['rows'] if row['status'] != 'unknown'}}),
+                       line) for line in annotations if line['feature_call']['feature_ref'] in call['feature_refs']]
+            for over_axes, line in sorted(scored, key=lambda item: -item[0])[:2]:
+                hits = [hit for member in line['members'] for row in axes[member['axis']]['annotation_rows']
+                        if row['feature_ref'] == line['feature_call']['feature_ref'] and 'hit_organisms' in row
+                        and member_identity(row) == member_identity(member) for hit in row['hit_organisms']]
+                counted = sum(hit['hit_count'] for hit in hits)
+                share = sum(hit['hit_count'] for hit in hits if leader_family is not None
+                            and family(hit['taxon_id']) == leader_family) / counted if counted else 0.0
+                agreement = TAXA_FLOOR + (1 - TAXA_FLOOR) * share
+                term = call['score'] * (1 + over_axes) * agreement * part_coherence
+                if term > best['term']:
+                    best = {'annotation': member_identity(line), 'annotation_score': over_axes, 'agreement': agreement,
+                            'part_coherence': part_coherence, 'term': term}
+            calls.append({'feature_call': {name: call[name] for name in ('feature_refs', 'kind', 'strand', 'start', 'end',
+                                                                         'score')}, **best})
+        chosen = []
+        for index in sorted(range(len(calls)), key=lambda index: -calls[index]['term']):
+            won = [rival['rank'] for rival in target['features'][index]['rivals'] if rival['rank'] in chosen]
+            if won:
+                calls[index].update(chosen=False, lost_to=calls[max(won, key=lambda rank: calls[rank]['term'])][
+                    'feature_call']['feature_refs'])
+            else:
+                chosen.append(index)
+                calls[index]['chosen'] = True
+        rows.extend(calls)
+    factor = axis_gain(leader['score'] if leader else 0.0, ORGANISM_WEIGHT)
+    return {'score': factor * set_coherence * math.fsum(row['term'] for row in rows if row['chosen']),
+            'organism_factor': factor, 'set_coherence': set_coherence, 'feature_calls': rows}
+
+
 def passed_down(organism):
     """What the root passes to a head that takes the organism: of the candidate taxa of the root's scoring sheet, the
     leading candidate with the nested candidates on its lineage (the vaguer calls that support it, so the
@@ -469,9 +520,11 @@ def internal_summary(view):
                                    taxon_sources(view.records, organism['record_refs'],
                                                  [*features['record_refs'],
                                                   *axes['sequence_homology_evidence']['record_refs']])))
+    annotations = scoring_sheet(axes, claims, organism, features)
     return {**view.parent_input, 'axes': axes, 'claims': claims,
             'features': features, 'feature_calls': feature_lines(features),
-            'annotations': scoring_sheet(axes, claims, organism, features),
+            'annotations': annotations,
+            'genome_annotation': genome_annotation(features, annotations, axes, organism),
             'groups': {slot: groups_of(slot, lines) for slot in axes},
             'commissions': commissions, 'units': units,
             'organism': {**organism, 'passed_down': passed_down(organism)}}
