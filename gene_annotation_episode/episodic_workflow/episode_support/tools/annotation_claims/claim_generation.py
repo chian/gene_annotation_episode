@@ -39,6 +39,7 @@ A lookup that fails raises (a failed lookup is not an absent molecule). A protei
 import json
 
 from gene_annotation_episode.acquisition import PublicClients
+from gene_annotation_episode.acquisition_types import AcquisitionError
 from gene_annotation_episode.domain import canonical, identity
 
 TOOL_NAME = 'make_claims'
@@ -183,7 +184,14 @@ def find_protein(store, name):
 def find_chemical(store, name):
     """A small molecule by its name: the ChEBI entry whose name is exactly ``name`` (case apart). Returns ``(source
     record, accession, the name as ChEBI spells it)`` or None when there is none."""
-    snapshot = PublicClients().chebi_search(name, size=CHEBI_ROWS)
+    try:
+        snapshot = PublicClients().chebi_search(name, size=CHEBI_ROWS)
+    except AcquisitionError as error:
+        # ChEBI answers a term that matches no compound with HTTP 404 and this detail: there is none
+        if (error.code == 'provider_http_404' and error.snapshot is not None
+                and json.loads(error.snapshot.content).get('detail', '').startswith('No compound matches')):
+            return None
+        raise
     source = _source(store, snapshot)
     for hit in json.loads(snapshot.content)['results']:
         entry = hit['_source']
