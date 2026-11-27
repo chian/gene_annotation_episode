@@ -75,12 +75,13 @@ def search_rows(reader, scope, search_ref):
 
 
 def plan_rows(rows, candidates, per_candidate):
-    """The references of the alignment: for each of ``candidates`` its hits by value (highest first, ties by accession),
+    """The references of the alignment: for each of ``candidates`` its hits that carry a sequence and a feature id, by value (highest first, ties by accession),
     one per distinct ``aa_sequence_md5``, the first ``per_candidate``; named ``r1``... in the order of ``candidates``."""
     chosen = []
     for candidate in candidates:
         seen = set()
-        for row in sorted((row for row in rows if row['product'] == candidate),
+        for row in sorted((row for row in rows if row['product'] == candidate and row['aa_sequence_md5']
+                           and row['feature_id']),
                           key=lambda row: (-row['value'], row['accession'])):
             if row['aa_sequence_md5'] not in seen and len(seen) < per_candidate:
                 seen.add(row['aa_sequence_md5'])
