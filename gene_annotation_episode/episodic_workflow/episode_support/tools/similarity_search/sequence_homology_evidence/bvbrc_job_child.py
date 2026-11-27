@@ -18,7 +18,8 @@ child's folder keeps its own five-action ``decide``/``action``/``TOOLS``; each b
         request_fields=('per_candidate', 'resource_id'),   # what a launch request restates (``resource_id`` always)
         estimate_fields=('per_candidate',),                # what an estimate restates (subset)
         field_schemas={'per_candidate': {...JSON schema...}, 'resource_id': {'type': 'string', 'minLength': 1}},
-        size_field='residues',             # the job fact the duration trend is fitted against
+        curve={'constant': 10.0, 'powers': {'residues': 1.0}},   # the duration curve the ledger's jobs are fitted from
+                                           # (``jobs.duration_curve``): its keys are job facts of ``prepare``
         kind=lambda fields: 'MSA:muscle:protein',   # the application part of the ledger kind
         field_problems=lambda request, commission: [...],   # the application's own checks of request fields
         prepare=lambda ctx, request, commission: {'job': {...}, 'inputs': {name: artifact ref}, 'job_facts': {...},
@@ -52,6 +53,8 @@ from episode_runtime.job_access import job_handle
 from yield_control import CompletionYieldController
 from method_loop import ChoiceField, Field
 
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.duration_curve import (
+    age_weight, fitted, measured_jobs, predicted)
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.duration_trend import duration_trend
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import checks, closure, job_rows
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_wait import wait_for_job
@@ -61,7 +64,8 @@ ACTIONS = ('estimate', 'launch', 'fix', 'monitor', 'extract')
 STATES = ('no_estimate', 'estimated', 'launched', 'finished', 'extracted', 'failed')
 UNTIL = ('launched', 'extracted')
 ENDED_JOB_STATES = ('finished', 'failed', 'unknown')
-ESTIMATE_BASES = ('learned_from_earlier_jobs', 'no_earlier_measurement')
+CURVE_BASIS = 'duration_curve_of_earlier_jobs'
+ESTIMATE_BASES = ('learned_from_earlier_jobs', CURVE_BASIS, 'no_earlier_measurement')
 ESTIMATE_RANGE = (1, 604800)
 # The seconds of the first job of a kind, when the ledger has measured none: the one figure not learned from the ledger (there
 # is nothing to learn from); the first measured job of the kind replaces it.
@@ -170,7 +174,7 @@ class JobApplication:
     request_fields: tuple
     estimate_fields: tuple
     field_schemas: dict
-    size_field: str
+    curve: dict
     kind: Callable
     field_problems: Callable
     prepare: Callable
@@ -185,17 +189,27 @@ def ledger_kind(binding, fields):
     return binding.child + ':' + binding.service + ':' + binding.kind(fields)
 
 
-def ledger_estimate(trend, learned_basis):
-    """THE ESTIMATE THE LEDGER GIVES for a job, from the trend of its kind (``duration_trend``): ``{'basis',
-    'expected_seconds'}``. With measured jobs the basis is ``learned_basis`` and the seconds are what the line of duration
-    against size gives for this job when the line is fitted, else the median of the measured jobs; with none the basis is
+def job_curve(table, kind, curve, size, now):
+    """The duration curve the ledger's measured jobs of ``kind`` make from the tool's declared ``curve``
+    (``jobs.duration_curve``; each job weighted by its age as of ``now``, the decision's time), with ``seconds``:
+    what it gives for a job of ``size``. ``None`` when the jobs make no curve. ``table`` is the read handle of a decision."""
+    policy = table.read('policy')
+    found = fitted(measured_jobs(table.read('rows', kind, LEDGER_ROWS),
+                                 lambda row: age_weight(policy, row['expected_at'], now)), curve)
+    return None if found is None else {**found, 'seconds': predicted(found, size)}
+
+
+def ledger_estimate(trend, curve, learned_basis):
+    """THE ESTIMATE THE LEDGER GIVES for a job, from the trend of its kind (``duration_trend``) and its duration curve
+    (``job_curve``; ``None``: none): ``{'basis', 'expected_seconds'}``. With a curve the basis is ``CURVE_BASIS`` and the
+    seconds are the curve's for this job; else with measured jobs the basis is ``learned_basis`` and the seconds their
+    median; with none the basis is
     ``no_earlier_measurement`` and the seconds are ``FIRST_JOB_SECONDS``. Rounded to 0.1 s and held inside
     ``ESTIMATE_RANGE``, so the figure the model is shown is the figure the check requires."""
-    if trend['measured']:
-        fit = trend['size_fit']
-        seconds = (fit['predicted_seconds'] if fit is not None and fit['predicted_seconds'] is not None
-                   else trend['typical_seconds'])
-        basis = learned_basis
+    if curve is not None:
+        seconds, basis = curve['seconds'], CURVE_BASIS
+    elif trend['measured']:
+        seconds, basis = trend['typical_seconds'], learned_basis
     else:
         seconds, basis = FIRST_JOB_SECONDS, 'no_earlier_measurement'
     return {'basis': basis, 'expected_seconds': min(max(round(seconds, 1), ESTIMATE_RANGE[0]), ESTIMATE_RANGE[1])}
@@ -214,13 +228,16 @@ def estimate_problems(request, figure, found, field):
     return problems
 
 
-def learned(table, binding, fields, size):
-    """What the ledger has learned of this kind of job (``duration_trend``: how many were measured, their band, the
-    latest, and the line of duration against ``binding.size_field`` once enough different sizes are measured), with
-    ``ledger_estimate``: the basis and seconds an estimate of this job must state."""
-    trend = duration_trend(table.read('rows', ledger_kind(binding, fields), LEDGER_ROWS),
-                           size_field=binding.size_field, size=size)
-    return {**trend, 'ledger_estimate': ledger_estimate(trend, 'learned_from_earlier_jobs')}
+def learned(table, binding, fields, size, now):
+    """What the ledger has learned of this kind of job (``duration_trend``: how many were measured, their band and the
+    latest; ``duration_curve``: the curve they make from ``binding.curve`` and its seconds for a job of ``size``, the job
+    facts), with ``ledger_estimate``: the basis and seconds an estimate of this job must state."""
+    kind = ledger_kind(binding, fields)
+    trend = {key: value for key, value in duration_trend(table.read('rows', kind, LEDGER_ROWS)).items()
+             if key != 'size_fit'}
+    curve = job_curve(table, kind, binding.curve, size, now)
+    return {**trend, 'duration_curve': curve,
+            'ledger_estimate': ledger_estimate(trend, curve, 'learned_from_earlier_jobs')}
 
 
 # -- what the episode holds ------------------------------------------------------------------------------------------
@@ -360,7 +377,7 @@ def check_estimate(binding, request, *, state, learned_trend, commission):
     """``request``: the binding's ``estimate_fields``, ``expected_seconds``, ``basis``. The conditions: no job is
     running or waiting for a fix; the application's own checks of the fields pass; the seconds are in range; the estimate
     is the ledger's (``learned_trend['ledger_estimate']``, which the decision shows): the basis says what it rests on
-    (``learned_from_earlier_jobs`` only when the ledger has measured jobs of this kind, ``no_earlier_measurement`` only
+    (the duration curve of the measured jobs of this kind, else their median, ``no_earlier_measurement`` only
     when it has none) and the seconds are the ledger's figure for it."""
     problems = list(binding.field_problems(request, commission))
     if state['state'] in ('launched', 'finished', 'failed'):
@@ -589,9 +606,10 @@ def common_instructions(what, result):
         'runs the job.\n'
         '- estimate: before anything is launched, the seconds the job is expected to take (expected_seconds) and their basis, '
         'both exactly as learned_durations.ledger_estimate gives them: the estimate comes from the ledger. With measured jobs '
-        'of this kind (measured is how many, typical_seconds their median, latest_seconds the newest first, size_fit, when '
-        'present, a line of seconds against the job size) the basis is learned_from_earlier_jobs and the seconds are what '
-        'size_fit gives for this job, else typical_seconds; with none the basis is no_earlier_measurement and the seconds are '
+        'of this kind (measured is how many, typical_seconds their median, latest_seconds the newest first, duration_curve, '
+        'when present, the curve of seconds against the job size they make, with its seconds for this job) the basis is '
+        'duration_curve_of_earlier_jobs and the seconds are duration_curve.seconds when the curve is present, else '
+        'learned_from_earlier_jobs and typical_seconds; with none the basis is no_earlier_measurement and the seconds are '
         'the fixed first figure. Any other figure is refused.\n'
         '- launch: the job, with the fields of the commission. Refused unless an estimate is held (state estimated). One '
         'launch per estimate. Refused when the product it would make is already held.\n'
@@ -708,7 +726,8 @@ def common_finding(summary):
     return finding
 
 
-__all__ = ['ACTIONS', 'COMMON_ASSIGNMENT', 'COMMON_FINDING', 'ESTIMATE_BASES', 'ESTIMATE_RANGE', 'FAILURE_CODES',
+__all__ = ['ACTIONS', 'COMMON_ASSIGNMENT', 'COMMON_FINDING', 'CURVE_BASIS', 'ESTIMATE_BASES', 'ESTIMATE_RANGE',
+           'FAILURE_CODES', 'job_curve',
            'FIRST_JOB_SECONDS', 'JobApplication', 'ROUTE_KIND', 'STATES', 'UNTIL', 'WAIT_RANGE_MAX', 'bounded_credit', 'check_estimate',
            'check_extract', 'check_fix', 'check_launch', 'check_monitor', 'check_resource_and_continuation',
            'common_finding', 'common_instructions', 'completion_controller', 'episode_state', 'held_jobs', 'job_notice',

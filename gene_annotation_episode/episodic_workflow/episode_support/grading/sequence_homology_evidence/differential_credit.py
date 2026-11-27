@@ -435,13 +435,15 @@ def metacats_test_ceiling(held, maxima, measurable):
     """The most one further MetaCATS report of a named alignment can add to the credit of one target: a PROVED maximum.
 
     ``held`` is ``standing`` of the target; ``measurable`` lists the candidates (identifiers) of the alignment's groups;
-    ``maxima`` maps each to ``m_c`` = (its matched conserved sites in that alignment, with a target position, that no held
-    MetaCATS report confirmed: ``candidate_measurements.unconfirmed_matched_sites``) x ``SITE_WEIGHT`` x ``SHEET_WEIGHT['msa']``.
+    ``maxima`` maps each to ``m_c`` = (the regions of the target in which that alignment has a matched conserved site of it and
+    that no held MetaCATS report confirmed: ``candidate_measurements.unconfirmed_regions``) x ``W`` x ``SHEET_WEIGHT['msa']``,
+    ``W`` = ``EXPECTED_DISTINGUISHING_SITES`` x ``SITE_WEIGHT``.
 
-    Proof. The report's value for ``c`` is ``W`` x (its matched sites of that alignment whose column is significant and that no
-    earlier report confirmed) (``confirmed_site_values``); a confirmed site is one of the alignment's matched sites of ``c``
-    (fixed by the held alignment's sheet, whatever columns the service finds significant), and a site already confirmed is not
-    counted, so the count is between 0 and the number of matched sites not yet confirmed; weighted by the msa sheet's weight,
+    Proof. The report's value for ``c`` is ``W`` x (the regions in which a matched site of that alignment lies on a
+    significant column and that no earlier report confirmed) (``candidate_measurements._held_metacats``); such a region holds
+    one of the alignment's matched sites of ``c`` (fixed by the held alignment's sheet, whatever columns the service finds
+    significant), and a region already confirmed is not counted, so the count is between 0 and the number of those regions
+    not yet confirmed; weighted by the msa sheet's weight,
     ``0 <= v_c <= m_c``. A candidate with ``m_c`` = 0 gets no measurement (it earns nothing and is no partner). The report is
     one test appended last, so the credit rises by the entries of the candidates it admits (each ``v_c``) plus ONE differential,
     ``|v_a - v_b|`` of the top two listed candidates it measures (``differential_credit``; it is no dataset test, so nothing

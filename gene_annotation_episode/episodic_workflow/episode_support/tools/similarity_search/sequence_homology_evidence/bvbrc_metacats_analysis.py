@@ -25,6 +25,9 @@ Nothing here contacts a service or a store."""
 import re
 from statistics import fmean
 
+from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.msa_alignment_sheet import (
+    matched_regions)
+
 GROUP_HEADER = 'group'
 CHISQ_FILE = GROUP_HEADER + '-chisqTable.tsv'
 MC_FILE = GROUP_HEADER + '-mcTable.tsv'
@@ -36,8 +39,9 @@ P_VALUE = 0.05
 P_VALUES = (P_VALUE,)   # the route (``bvbrc_job_route``) checks a job's p-value against this set: the one fixed value
 SHEET_MEANING = ('the significant positions are columns of the analysed alignment (the job took it without the target row, every '
                  'column kept); a matched conserved site of a candidate (the conserved-site grading of the alignment) whose column '
-                 'is significant is confirmed, and each candidate is measured by its matched sites confirmed here and by no '
-                 'earlier report, times the site weight')
+                 'is significant is confirmed; confirmed_regions lists, per candidate, the regions of the target (windows of '
+                 'consecutive target positions) that hold a confirmed site, and each candidate is measured by its regions '
+                 'confirmed here and by no earlier report')
 MINIMUM_GROUP_SIZE = 2
 MINIMUM_GROUPS = 2
 SCHEMA = 'metacats_sheet'
@@ -101,13 +105,17 @@ def read_chisq_table(text):
     return labels, rows
 
 
-def grade(rows, groups, target_id, chisq_text):
+def grade(rows, groups, target_id, chisq_text, sites, region_residues):
     """The sheet of a MetaCATS result: the positions the service reports as significant at ``P_VALUE`` (its own statistic
     and p-value; the table holds only those), for each the residue counts per group and the target's residue (read from the
     held alignment ``rows`` at the same column), and per group its VALUE: the mean over the significant positions of the
     fraction of the group's sequences that carry the target's residue there (0 to 1; a position where the target has a gap
     counts 0 for every group; a sequence of the group with a terminal gap there does not carry it). With no significant
-    position the sheet says so and gives no value: the groups were measured not to differ, which places no candidate."""
+    position the sheet says so and gives no value: the groups were measured not to differ, which places no candidate.
+    ``confirmed_regions``: per candidate of the analysed alignment's conserved sites (``sites``), the regions of the target
+    (windows of ``region_residues`` target positions, ``msa_alignment_sheet.matched_regions``) that hold at least one
+    matched site on a significant column, each with its number, its first and last target position and the count of those
+    sites."""
     labels, table = read_chisq_table(chisq_text)
     if labels != [group['label'] for group in groups]:
         raise ValueError('metacats_result_groups_are_not_the_commissioned_groups')
@@ -122,11 +130,19 @@ def grade(rows, groups, target_id, chisq_text):
         positions.append({**row, 'target_residue': carried, 'fractions': fractions})
     values = ({group['label']: fmean(position['fractions'][group['label']] for position in positions) for group in groups}
               if positions else {})
+    length = len(target.replace('-', ''))
+    confirmed = matched_regions(sites, region_residues, {position['position'] for position in positions})
     return {'schema': SCHEMA, 'application': 'MetaCATS', 'p_value': P_VALUE, 'meaning': SHEET_MEANING, 'target': target_id, 'columns': columns,
             'sequence_count': sum(len(group['ids']) for group in groups), 'group_count': len(groups),
             'groups': [{'label': group['label'], 'product': group['product'], 'size': len(group['ids'])} for group in groups],
             'significant_positions': positions, 'significant_count': len(positions),
             'no_significant_position': not positions,
+            'confirmed_regions': [
+                {'candidate': candidate,
+                 'regions': [{'region': region, 'first_position': region * region_residues + 1,
+                              'last_position': min((region + 1) * region_residues, length), 'confirmed_sites': count}
+                             for region, count in sorted(held.items())]}
+                for candidate, held in sorted(confirmed.items())],
             'values': [{'label': group['label'], 'product': group['product'], 'value': values[group['label']]}
                        for group in groups] if positions else []}
 

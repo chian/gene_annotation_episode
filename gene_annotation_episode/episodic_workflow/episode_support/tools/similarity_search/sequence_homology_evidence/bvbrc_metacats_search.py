@@ -23,8 +23,11 @@ the application, the p-value and the candidates (sorted); a second analysis of t
 import hashlib
 import json
 
+from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.candidate_measurements import (
+    REGION_RESIDUES)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.tool_grading_artifacts import (
     record_grading_product, retain_tool_grading, source_tool_grading_entries)
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.duration_curve import fitted, predicted
 from gene_annotation_episode.episodic_workflow.episode_support.records.data_products import (
     find_reusable, products, record_product, require_product)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_homology_evidence.tools import (
@@ -41,6 +44,24 @@ ALIGNMENT_PROVIDER = 'bvbrc_msa'
 ALIGNMENT_KIND = 'multiple_sequence_alignment'
 PRODUCT_KIND = 'alignment_position_report'
 REQUEST_FIELDS = ('resource_id',)
+# The duration curve a MetaCATS job's measured durations are fitted from (``jobs.duration_curve``): seconds
+# against the groups and the alignment's columns. Starting values read off the ledger's 28 jobs on 2026-11-27 (about
+# ``10 + groups ** 3 * columns / 2500``: 9 to 14 s at 2 to 4 groups and 70 columns; at about 2,500 to 2,950 columns 28 s
+# at 3 groups, 152 and 191 s at 6, 633 s at 9 and 2,249 to 3,489 s at 13).
+DURATION_CURVE = {'constant': 10.0, 'powers': {'groups': 3.0, 'columns': 1.0}}
+
+
+def commission_size(reader, arguments):
+    """The size of the MetaCATS job the commission ``arguments`` plans (``planned_size``)."""
+    return planned_size(plan(reader, arguments['alignment_ref']))
+
+
+def expected_job_seconds(jobs, size):
+    """The seconds a MetaCATS job of ``size`` is expected to run: what the duration curve the measured MetaCATS jobs
+    ``jobs`` (``[{'size', 'seconds', 'weight'}]``) make from ``DURATION_CURVE`` (``jobs.duration_curve``) gives for it.
+    ``None`` when the jobs make no curve."""
+    curve = fitted(jobs, DURATION_CURVE)
+    return None if curve is None else predicted(curve, size)
 
 
 def settings_of(products):
@@ -60,9 +81,9 @@ def alignment_source(reader, row):
 def plan(reader, alignment_ref):
     """What the job is built from, read from the held alignment product row ``alignment_ref`` and the sheet of its source (the
     records the child returned; the alignment artifact is NOT opened here, so the head can call this): ``{'target_id',
-    'groups', 'source_ref', 'query_ref', 'alignment_artifact', 'columns'}``. The groups are ``build_groups`` over the sheet's
-    reference sequences (each named as the alignment names it, with its candidate); the alignment holds every sequence the
-    sheet lists (the grading checked it)."""
+    'groups', 'source_ref', 'query_ref', 'alignment_artifact', 'columns', 'sites'}``. The groups are ``build_groups`` over
+    the sheet's reference sequences (each named as the alignment names it, with its candidate); the alignment holds every
+    sequence the sheet lists (the grading checked it); ``sites`` are the sheet's conserved sites."""
     row, problem = require_product(reader, alignment_ref, ALIGNMENT_KIND)
     if problem is not None:
         raise ValueError(problem)
@@ -72,7 +93,7 @@ def plan(reader, alignment_ref):
     groups = build_groups(members, target_id, list(members))
     return {'target_id': target_id, 'groups': groups, 'source_ref': source['id'],
             'query_ref': source['operand_refs'][0], 'alignment_artifact': row['artifact_ref'],
-            'columns': sheet['alignment']['columns']}
+            'columns': sheet['alignment']['columns'], 'sites': sheet['conserved_sites']['sites']}
 
 
 def alignment_rows(reader, planned):
@@ -159,7 +180,7 @@ def extract(ctx, handoff_ref, request, commission):
     planned = plan(store, commission['alignment_ref'])
     try:
         grading = {'sheet': grade(alignment_rows(store, planned), planned['groups'], planned['target_id'],
-                                  store.get_artifact(result_ref).decode('ascii'))}
+                                  store.get_artifact(result_ref).decode('ascii'), planned['sites'], REGION_RESIDUES)}
     except ValueError as error:
         return {**_failed('grading_refused', False, reason=str(error)), 'closure_ref': fetched['closure_ref']}
     sheet = grading['sheet']
@@ -243,9 +264,11 @@ APPLICATION = JobApplication(
     application='MetaCATS', child=CHILD, service='bvbrc_metacats', provider=PROVIDER, product_kind=PRODUCT_KIND,
     request_fields=REQUEST_FIELDS, estimate_fields=(),
     field_schemas={'resource_id': {'type': 'string', 'minLength': 1}},
-    size_field='sequences', kind=lambda fields: 'MetaCATS:protein', field_problems=field_problems, prepare=prepare,
+    curve=DURATION_CURVE, kind=lambda fields: 'MetaCATS:protein', field_problems=field_problems, prepare=prepare,
     extract=extract, describe_identity=describe_identity)
 
-__all__ = ['ALIGNMENT_KIND', 'APPLICATION', 'CHILD', 'PROVIDER', 'REQUEST_FIELDS', 'check_commission', 'graded_rows',
-           'group_artifact_ref', 'held_alignments', 'plan', 'planned_size', 'requirement_problems', 'reusable_report',
+__all__ = ['ALIGNMENT_KIND', 'APPLICATION', 'CHILD', 'DURATION_CURVE', 'PROVIDER', 'REQUEST_FIELDS', 'check_commission',
+           'graded_rows',
+           'commission_size', 'expected_job_seconds', 'group_artifact_ref', 'held_alignments', 'plan', 'planned_size',
+           'requirement_problems', 'reusable_report',
            'settings_of']

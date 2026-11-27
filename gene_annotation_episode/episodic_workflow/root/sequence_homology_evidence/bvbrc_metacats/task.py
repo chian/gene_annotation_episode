@@ -40,7 +40,8 @@ INSTRUCTIONS = common_instructions(
     '(sequences, groups, columns and the size of each candidate group).',
     'the service\'s table of the positions that differ between the groups at the fixed p-value is read and, for each such '
     'position, the residue counts per group and the target\'s residue are saved; a candidate\'s conserved site of the alignment '
-    'whose column is significant is confirmed, and the head\'s credit counts each candidate\'s newly confirmed sites; '
+    'whose column is significant is confirmed, and the head\'s credit counts each candidate\'s regions of the target '
+    'with a confirmed site that no earlier analysis confirmed; '
     'when no position is significant the sheet says so; nothing more '
     'is needed for the result to count.')
 
@@ -51,7 +52,7 @@ def _resource(summary):
 
 
 def _trend(summary, ctx):
-    return learned(ctx.services['estimate_table'], APPLICATION, summary['fields'], summary['planned']['sequences'])
+    return learned(ctx.services['estimate_table'], APPLICATION, summary['fields'], summary['planned'], ctx.clock.now)
 
 
 def offered_actions(summary, ctx):

@@ -18,13 +18,14 @@ import json
 from pathlib import Path
 
 from method_loop import UNBOUNDED
+from yield_control import size_levels
 
 
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_alignment.native_correspondence import (
     NativeCorrespondenceScoring)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.candidate_measurements import (
-    SITE_WEIGHT, alignment_contexts, candidate_standing, candidate_table, dataset_bests,
-    held_groupings, held_sources, matched_positions_taken, unconfirmed_matched_sites)
+    EXPECTED_DISTINGUISHING_SITES, REGION_RESIDUES, SITE_WEIGHT, alignment_contexts, candidate_standing, candidate_table,
+    dataset_bests, held_groupings, held_sources, matched_positions_taken, unconfirmed_regions)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.differential_credit import (
     CLUSTER_PSEUDO_COUNT, SHEET_WEIGHT, cluster_test_bound, cluster_test_ceiling, metacats_test_ceiling,
     msa_test_ceiling, test_ceiling)
@@ -35,7 +36,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.msa_alignment_sheet import (
     MINIMUM_GROUP_SIZE)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_msa_alignment import (
-    PER_CANDIDATE_RANGE, plan_rows, search_rows)
+    PER_CANDIDATE_RANGE, commission_size as msa_commission_size, plan_rows, search_rows)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.all_vs_all_run import (
     MINIMUM_CANDIDATES as ALL_VS_ALL_MINIMUM_CANDIDATES, PER_CANDIDATE_RANGE as ALL_VS_ALL_PER_CANDIDATE_RANGE,
     commission_keys as all_vs_all_commission_keys)
@@ -81,7 +82,7 @@ class A101DifferentialCredit:
                 'differential': 'abs_difference_of_the_score_moves_of_the_top_two_candidates_listed_before_the_test_that_it_measures_nothing_for_any_other_pair',
                 'credit': 'sum_of_entry_scores_and_differentials', 'maximum': 'none',
                 'dataset': 'tests_of_one_dataset_earn_their_largest_test_credit_once_and_sheet_reads_largest_value',
-                'metacats': 'matched_conserved_sites_confirmed_significant_not_confirmed_before_times_site_weight_msa_family',
+                'metacats': 'regions_of_the_target_holding_a_matched_conserved_site_confirmed_significant_not_confirmed_before_times_expected_sites_times_site_weight_msa_family',
                 'cluster_evidence': 'top_pair_times_min_r_entry_times_own_r_r_is_n_over_n_plus_pseudo_count_value_stays_share',
                 'cluster_pseudo_count': CLUSTER_PSEUDO_COUNT,
                 'repeat': 'earns_nothing'}
@@ -108,15 +109,18 @@ def grouping_room(summary, records, action_type):
     ceiling did not count (a group whose listed member the test does not measure, a group against a third candidate).
     That differential is the difference of two values of the test, so it is at most the largest value the test can
     give one candidate: the sheet weight for a test whose values are in [0, 1] (search, scan, pairwise comparison,
-    clustering: the evidence of a clustering is at most 1), and the whole target for an alignment or a MetaCATS report
-    (a candidate's sites are at most the target's positions: length x ``SITE_WEIGHT`` x the msa sheet weight). So the
-    as-found ceiling plus this is a proved bound under every held grouping; it is not tight."""
+    clustering: the evidence of a clustering is at most 1), and the whole target for an alignment
+    (a candidate's sites are at most the target's positions: length x ``SITE_WEIGHT`` x the msa sheet weight) or a MetaCATS
+    report (a candidate's regions are at most the target's: those x ``EXPECTED_DISTINGUISHING_SITES`` x ``SITE_WEIGHT`` x
+    the msa sheet weight). So the as-found ceiling plus this is a proved bound under every held grouping; it is not tight."""
     family = {'pairwise_blast': 'pairwise', 'bvbrc_blast': 'database_search', 'hmmer_profile_scan': 'profile_scan',
               'all_vs_all': 'cluster'}.get(action_type)
     if family is not None:
         return SHEET_WEIGHT[family]
-    return max(records.subject_length(target) for target in summary['targets']
-               if target in summary['held_sequences']) * SITE_WEIGHT * SHEET_WEIGHT['msa']
+    length = max(records.subject_length(target) for target in summary['targets'] if target in summary['held_sequences'])
+    if action_type == 'bvbrc_metacats':
+        return -(-length // REGION_RESIDUES) * EXPECTED_DISTINGUISHING_SITES * SITE_WEIGHT * SHEET_WEIGHT['msa']
+    return length * SITE_WEIGHT * SHEET_WEIGHT['msa']
 
 
 def credit(summary, records):
@@ -230,16 +234,18 @@ def metacats_refused(summary, records, alignment_ref):
 def metacats_value(summary, records, alignment_ref, standing=None):
     """The proved maximum of one commission of ``bvbrc_metacats`` of the held alignment ``alignment_ref`` (see ``ceiling``): 0 when
     it is a repeat (``metacats_refused``); else ``differential_credit.metacats_test_ceiling`` over the alignment's group candidates,
-    each at most (its matched sites in the alignment not yet confirmed) x ``SITE_WEIGHT`` x the msa sheet's weight."""
+    each at most (its regions with a matched site in the alignment that no held report confirmed) x
+    ``EXPECTED_DISTINGUISHING_SITES`` x ``SITE_WEIGHT`` x the msa sheet's weight."""
     if metacats_refused(summary, records, alignment_ref):
         return 0.0
     scope, sources = summary['scope'], held_sources(records)
-    target, open_sites = unconfirmed_matched_sites(records, scope, sources, alignment_ref)
+    target, open_regions = unconfirmed_regions(records, scope, sources, alignment_ref)
     names = [group['product'] for group in metacats.plan(records, alignment_ref)['groups']]
     if standing is None:
         standing = candidate_standing(records, scope, sources)
     return metacats_test_ceiling(standing.get(target, {}),
-                                 {'product:' + name: open_sites.get(name, 0) * SITE_WEIGHT * SHEET_WEIGHT['msa'] for name in names},
+                                 {'product:' + name: open_regions.get(name, 0) * EXPECTED_DISTINGUISHING_SITES * SITE_WEIGHT
+                                  * SHEET_WEIGHT['msa'] for name in names},
                                  ['product:' + name for name in names])
 
 
@@ -395,6 +401,20 @@ def best_arguments(summary, records, action_type, ctx):
     return None
 
 
+def situations(summary, records, action_type, arguments, ctx):
+    """In which situation an action is taken, for the forecast controller (``yield_estimator.py``). This head names no
+    situation, so every share counts for every forecast as before. An alignment (``bvbrc_msa``) and a MetaCATS report
+    (``bvbrc_metacats``) state the size of the commission's job (``yield_control.size_levels`` of the tool's
+    ``commission_size``: the fields its job rows record), which only the head's cost estimator reads. With
+    ``arguments`` ``None``: of the commission the action's ceiling is for (``best_arguments``; none: no size)."""
+    sizes = {'bvbrc_msa': msa_commission_size, 'bvbrc_metacats': metacats.commission_size}
+    if action_type in sizes and arguments is None:
+        arguments = best_arguments(summary, records, action_type, ctx)
+    if action_type not in sizes or arguments is None:
+        return [[]]
+    return [size_levels(sizes[action_type](records, arguments))]
+
+
 def outcome_pending(summary, records, position):
     """Whether the outcome of unit ``position`` is pending (``method_loop.episode_type``; ``summary`` after the unit): a
     child commission whose child returned parked (``bvbrc_blast``, ``bvbrc_msa`` or ``bvbrc_metacats``: its job launched and
@@ -415,7 +435,7 @@ def outcome_pending(summary, records, position):
 CEILINGS = {'execute_selected_tool': 'a101_ceiling',
             'pairwise_blast': 'a101_ceiling', 'hmmer_profile_scan': 'a101_ceiling',
             'bvbrc_blast': 'a101_ceiling', 'bvbrc_msa': 'a101_ceiling',
-            'bvbrc_metacats': 'a101_ceiling', 'all_vs_all': 'a101_ceiling'}
+            'bvbrc_metacats': 'a101_ceiling_of_unconfirmed_regions', 'all_vs_all': 'a101_ceiling'}
 
 
 def ceiling(summary, records, action_type, arguments, ctx):
@@ -490,9 +510,10 @@ def found_ceiling(summary, records, action_type, arguments, ctx):
     * ``bvbrc_metacats``: derived from the current state, as a proved maximum (proof in
       ``differential_credit.metacats_test_ceiling``). The owner: "It's wrong that it has no credit. i told you it gains credit by
       confirming conserved sites in comparison to a gene family." A report of the named alignment measures the alignment's group
-      candidates; a candidate's value is ``SITE_WEIGHT`` x (its matched conserved sites of that alignment confirmed by the report
-      and by no earlier held report), so at most ``SITE_WEIGHT`` x (its matched sites there not yet confirmed:
-      ``candidate_measurements.unconfirmed_matched_sites``) x the msa sheet's weight, and the rise is at most the entries of the candidates it can admit plus the largest of those bounds among the listed candidates
+      candidates; a candidate's value is ``EXPECTED_DISTINGUISHING_SITES`` x ``SITE_WEIGHT`` x (the regions of the target in
+      which the report confirms a matched conserved site of that alignment and that no earlier held report confirmed), so
+      at most that weight x (its regions with a matched site there not yet confirmed:
+      ``candidate_measurements.unconfirmed_regions``) x the msa sheet's weight, and the rise is at most the entries of the candidates it can admit plus the largest of those bounds among the listed candidates
       (one pair). An alignment whose report is held (the reuse check; or commissioned and not
       continued) earns 0. With ``arguments`` ``None``: the largest over the alignments a commission may name now
       (``metacats_best``), and ``best_arguments`` names that commission.

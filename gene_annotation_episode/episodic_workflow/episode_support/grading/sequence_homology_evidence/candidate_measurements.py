@@ -97,13 +97,16 @@ The kinds of held graded source read, by the content of their retained sheet:
   the held alignment's column of that number). A matched conserved site of a candidate (``msa_alignment_sheet.conserved_sites``
   of that alignment: identity (target position, residue, candidate), the group conserving the target's own residue there; the
   column is mapped to the target's residue position through the target's row, and a column where the target has a gap is
-  identified by nothing) is CONFIRMED when its column is significant. Test ``msa:bvbrc_metacats:confirmed_sites`` (family
-  ``msa``, so the msa sheet weight applies), one test per report; for each candidate with at least one matched site in the
-  alignment that no earlier held MetaCATS confirmed, one measurement: value = (its matched sites confirmed by this report and by
-  no earlier one) x ``SITE_WEIGHT`` (a confirmed site is one of the sites, so the same scale); it also records ``confirmed`` and
-  ``unconfirmed_before`` (the sites it could confirm). Confirmation is cumulative over the held reports in arrival order.
-  ``unconfirmed_matched_sites`` gives, for an alignment, each candidate's matched sites not yet confirmed (what the ceiling
-  reads).
+  identified by nothing) is CONFIRMED when its column is significant. The owner (2026-11-27): "metacats should perhaps only
+  earn if it identifies new regions, not just runs on new MSAs"; "you must put regions in the grading report (and compare
+  past grading sheets to see if regions are new or not)". A REGION is a window of ``REGION_RESIDUES`` consecutive target
+  positions; the report's sheet lists, per candidate, the regions that hold a confirmed site (``confirmed_regions``). Test
+  ``msa:bvbrc_metacats:confirmed_regions`` (family ``msa``, so the msa sheet weight applies), one test per report; for each
+  candidate with a region in the sheet that no earlier held report's sheet has for it, one measurement: value = (those
+  regions) x ``EXPECTED_DISTINGUISHING_SITES`` x ``SITE_WEIGHT`` (a region is worth its expected sites); it also records
+  ``new_regions`` and ``regions``. A report on another alignment that confirms sites in regions already confirmed earns
+  nothing. ``unconfirmed_regions`` gives, for an alignment, each candidate's regions with a matched site that no held
+  report confirmed (what the ceiling reads).
 
 A candidate is identified by its vocabulary and its identifier (its name when it has none). Candidates of different
 vocabularies are different candidates: nothing merges a family with a product or a sequence.
@@ -127,6 +130,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_features.database_feature_types import (
     bvbrc_feature_kind)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.uncharacterized_labels import is_uncharacterized_label
+from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.msa_alignment_sheet import (
+    matched_regions)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.scoring import (
     compile_native_sheet, hmmer_comparisons, route_native_grading)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.tool_grading_artifacts import (
@@ -135,7 +140,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.records.data_prod
 
 VOCABULARIES = ('product', 'profile_family', 'reference_sequence')
 METACATS_SHEET = 'metacats_sheet'
-METACATS_TEST = 'msa:bvbrc_metacats:confirmed_sites'
+METACATS_TEST = 'msa:bvbrc_metacats:confirmed_regions'
 ALIGNMENT_KIND = 'multiple_sequence_alignment'
 REPORT_KIND = 'alignment_position_report'
 ALIGNMENT_PROVIDER = 'bvbrc_msa'
@@ -156,6 +161,8 @@ HIT_METADATA_KIND = 'search_hit_metadata'
 # lengths) accumulate: then a per-residue figure x the target's length may replace it.
 EXPECTED_DISTINGUISHING_SITES = 7
 SITE_WEIGHT = 1 / EXPECTED_DISTINGUISHING_SITES
+# The length of a region of the target: the 70 residues of the proteins E was derived on.
+REGION_RESIDUES = 70
 
 
 # The provider of the records in which an episode keeps its joinings of its candidates (one ``source``
@@ -366,44 +373,22 @@ def alignment_sheet(reader, alignment_ref):
     return entry['grading']['sheet']
 
 
-def analysed_alignment(reader, source):
-    """The alignment data product (its row reference) a held MetaCATS source analysed: the report product labelling the source's
-    table is ``derived_from`` it."""
-    (report,) = [item for item in products(reader, REPORT_KIND) if item['artifact_ref'] == source['artifact_ref']]
-    (alignment_ref,) = report['derived_from']
-    return alignment_ref
-
-
-def confirmed_site_values(sites, significant_columns, confirmed, target):
-    """The measurements of one MetaCATS report given the conserved-site section's ``sites`` of the alignment it analysed, the
-    alignment columns it found significant (its ``Position`` values: the derived alignment kept every column) and ``confirmed``,
-    the matched-site identities (target, target position, residue, candidate) earlier reports confirmed, which this call extends.
-    Only a matched site with a target position counts (a column where the target has a gap is identified by nothing). Returns
-    ``[(candidate, value, confirmed, unconfirmed_before)]`` for each candidate with at least one matched site not confirmed
-    before: ``confirmed`` = those of them whose column is significant, ``value`` = ``confirmed`` x ``SITE_WEIGHT``."""
-    found, newly = {}, []
-    for site in sites:
-        key = (target, site['target_position'], site['residue'], site['candidate'])
-        if not site['matched'] or site['target_position'] is None or key in confirmed:
-            continue
-        held = found.setdefault(site['candidate'], [0, 0])
-        held[1] += 1
-        if site['column'] in significant_columns:
-            held[0] += 1
-            newly.append(key)
-    confirmed.update(newly)
-    return [(candidate, count * SITE_WEIGHT, count, open_count) for candidate, (count, open_count) in found.items()]
-
-
-def _held_metacats(reader, source, grading, confirmed):
-    """A graded MetaCATS report (``metacats_sheet``): test ``METACATS_TEST``; one measurement per candidate with matched sites
-    of the analysed alignment that no earlier report confirmed (``confirmed_site_values``)."""
-    sheet = alignment_sheet(reader, analysed_alignment(reader, source))
-    significant = {position['position'] for position in grading['sheet']['significant_positions']}
-    return [(METACATS_TEST, 'product', candidate, None, value, {'weight': SITE_WEIGHT, 'confirmed': count,
-                                                               'unconfirmed_before': open_count})
-            for candidate, value, count, open_count
-            in confirmed_site_values(sheet['conserved_sites']['sites'], significant, confirmed, source['operand_refs'][0])], 0
+def _held_metacats(source, grading, confirmed):
+    """A graded MetaCATS report (``metacats_sheet``): test ``METACATS_TEST``; one measurement per candidate with a region in
+    the sheet's ``confirmed_regions`` that no earlier report's sheet has for it. ``confirmed`` is the set of the regions the
+    earlier reports confirmed (target, candidate, region number), which this call extends. The value is the new regions x
+    ``EXPECTED_DISTINGUISHING_SITES`` x ``SITE_WEIGHT``."""
+    target, found = source['operand_refs'][0], []
+    for row in grading['sheet']['confirmed_regions']:
+        regions = [(target, row['candidate'], region['region']) for region in row['regions']]
+        new = [key for key in regions if key not in confirmed]
+        confirmed.update(new)
+        if new:
+            found.append((METACATS_TEST, 'product', row['candidate'], None,
+                          len(new) * EXPECTED_DISTINGUISHING_SITES * SITE_WEIGHT,
+                          {'weight': EXPECTED_DISTINGUISHING_SITES * SITE_WEIGHT, 'new_regions': len(new),
+                           'regions': len(regions)}))
+    return found, 0
 
 
 def _profile_scan(source, grading, value_of):
@@ -427,8 +412,8 @@ def _read(reader, scope, sources):
     no product, the values and families of those whose every function is a label of ignorance, under ``families``
     the family identifier of every hit of each product, under ``taxa`` the taxon id of every hit of each product and
     under ``feature_types`` the database's feature type of every hit of each product), the
-    identified conserved sites (target, target position, residue, candidate name) of the held alignments and the matched
-    sites the held MetaCATS reports confirmed (the same identities)."""
+    identified conserved sites (target, target position, residue, candidate name) of the held alignments and the regions
+    the held MetaCATS reports confirmed (target, candidate name, region number)."""
     scope, wanted = reader.validate_scope(scope), targets(reader, scope)
     measurements, unnamed = [], {target: {'not_asked': 0, 'no_product': 0, 'uncharacterized': [], 'families': {},
                                           'taxa': {}, 'feature_types': {}}
@@ -448,7 +433,7 @@ def _read(reader, scope, sources):
             elif sheet['schema'] == CLUSTER_SHEET:
                 read = lambda s, g, v: _held_cluster(s, g)
             elif sheet['schema'] == METACATS_SHEET:
-                read = lambda s, g, v: _held_metacats(reader, s, g, confirmed)
+                read = lambda s, g, v: _held_metacats(s, g, confirmed)
             elif sheet['schema'] == PAIRWISE_SHEET:
                 read = lambda s, g, v: _pairwise(reader, s, g, v)
             else:
@@ -500,20 +485,17 @@ def dataset_bests(reader, scope, sources):
             for target, rows in _by(measurements, 'target').items()}
 
 
-def unconfirmed_matched_sites(reader, scope, sources, alignment_ref):
-    """``(target, {candidate name: count})`` for the held alignment data product ``alignment_ref``: per candidate, its matched
-    sites in that alignment (with a target position) that no held MetaCATS report has confirmed (``confirmed_site_values``):
-    the most a MetaCATS report of that alignment can confirm for it."""
+def unconfirmed_regions(reader, scope, sources, alignment_ref):
+    """``(target, {candidate name: count})`` for the held alignment data product ``alignment_ref``: per candidate, the
+    regions in which that alignment has a matched site of it (``msa_alignment_sheet.matched_regions``) and that no held
+    MetaCATS report's sheet has for it: the most a MetaCATS report of that alignment can confirm for it."""
     confirmed = _read(reader, scope, sources)[3]
     (source,) = [item for item in reader.list('source') if item['provider'] == ALIGNMENT_PROVIDER and item['artifact_ref']
                  == next(row['artifact_ref'] for row in products(reader, ALIGNMENT_KIND) if row['id'] == alignment_ref)]
     target = source['operand_refs'][0]
-    open_sites = {}
-    for site in alignment_sheet(reader, alignment_ref)['conserved_sites']['sites']:
-        if site['matched'] and site['target_position'] is not None and (
-                target, site['target_position'], site['residue'], site['candidate']) not in confirmed:
-            open_sites[site['candidate']] = open_sites.get(site['candidate'], 0) + 1
-    return target, open_sites
+    held = matched_regions(alignment_sheet(reader, alignment_ref)['conserved_sites']['sites'], REGION_RESIDUES)
+    return target, {candidate: sum(1 for region in regions if (target, candidate, region) not in confirmed)
+                    for candidate, regions in held.items()}
 
 
 def matched_positions_taken(reader, scope, sources):

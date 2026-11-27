@@ -43,6 +43,7 @@ def yield_table(controller_state, *, forecast_unit):
                 'initial_credit': controller_state.initial_credit, 'current_credit': controller_state.current_credit,
                 'marginal_credits': list(controller_state.history), 'completed_units': len(controller_state.history),
                 'stop_requested': controller_state.stop, 'parameters': controller_state.parameters.as_record(),
+                'cost': controller_state.cost.as_record(), 'forget_old_rows': controller_state.forget_old_rows,
                 'forecast_unit': forecast_unit}
     if not isinstance(controller_state, YieldState):
         raise TypeError('yield_table_requires_a_yield_control_state:' + type(controller_state).__name__)

@@ -19,14 +19,20 @@ declaration; everything that differs between episodes is a parameter.
   (each action's own ceiling version), so changing one action's ceiling changes only that action's definition and the
   ledger keeps every other action's history.
 * ``open_yield_controller(kind, *, epoch, initial_credit, parameters, cutoff=None, maximum_credit=None, target=None,
-  definition=None)`` opens the matching ``yield_control`` controller: ``'accumulation'`` (credit without a declared limit),
+  definition=None, cost=None, cost_estimator=None, forget_old_rows=None)`` opens the matching ``yield_control``
+  controller:
+  ``'accumulation'`` (credit without a declared limit),
   ``'bounded_quality'`` (a quality credit whose definition declares ``maximum_credit``), ``'completion'``
   (credit toward the commission's finite ``target``) or ``'forecast'`` (credit whose every offered action declares a
-  ceiling: ``ForecastYieldController``; its ``parameters`` are ``ForecastParameters`` (exchange rate, forgetting, job
-  kinds) and it requires ``definition`` (``forecast_definitions`` per action, or ``forecast_definition`` for every
-  action; never in the declared parameters), it takes no
+  ceiling: ``ForecastYieldController``; as for the other kinds its ``parameters`` are its estimator's settings
+  (``ForecastParameters``; it requires ``definition``, ``forecast_definitions`` per action, or ``forecast_definition``
+  for every action; never in the declared parameters), and it takes no
   ``cutoff``: its cost of one more unit is the expected seconds of each
-  action times the exchange rate). An operand the kind does not take, a missing one, or any
+  action times the exchange rate, so it requires the cost's settings ``cost`` (``ForecastCost``: exchange rate, job
+  kinds), the episode's ``cost_estimator`` (the function that gives the expected seconds of an offered step; the
+  plain one is ``yield_control.expected_seconds_from_history``) and ``forget_old_rows``, whether the one load of the
+  ledger both sides read weights its rows by age). An
+  operand the kind does not take, a missing one, or any
   other kind raises. The controller is returned unchanged: it is a ``method_loop`` Controller, so
   ``build_controller`` returns it directly.
 """
@@ -38,7 +44,7 @@ import hashlib
 from method_loop.jsonvalue import canonical
 
 from yield_control import (AccumulationYieldController, BoundedQualityYieldController, CompletionYieldController,
-                           ForecastParameters, ForecastYieldController, YieldParameters)
+                           ForecastCost, ForecastParameters, ForecastYieldController, YieldParameters)
 
 KINDS = ('accumulation', 'bounded_quality', 'completion', 'forecast')
 
@@ -96,7 +102,7 @@ def _parameters(parameters):
 
 
 def open_yield_controller(kind, *, epoch, initial_credit, parameters, cutoff=None, maximum_credit=None, target=None,
-                          definition=None):
+                          definition=None, cost=None, cost_estimator=None, forget_old_rows=None):
     """The ``yield_control`` controller of ``kind`` (see the module docstring)."""
     if kind == 'forecast':
         if cutoff is not None or maximum_credit is not None or target is not None:
@@ -105,9 +111,14 @@ def open_yield_controller(kind, *, epoch, initial_credit, parameters, cutoff=Non
             raise ValueError('forecast_yield_requires_its_definition')
         if 'definition' in parameters:
             raise ValueError('forecast_definition_is_derived_not_declared')
-        return ForecastYieldController(epoch, initial_credit, ForecastParameters(**parameters, definition=definition))
+        if cost is None or cost_estimator is None or forget_old_rows is None:
+            raise ValueError('forecast_yield_requires_its_cost_settings_cost_estimator_and_forget_old_rows')
+        return ForecastYieldController(epoch, initial_credit, ForecastCost(**cost), cost_estimator, forget_old_rows,
+                                       ForecastParameters(**parameters, definition=definition))
     if definition is not None:
         raise ValueError('only_the_forecast_yield_takes_a_definition')
+    if cost is not None or cost_estimator is not None or forget_old_rows is not None:
+        raise ValueError('only_the_forecast_yield_takes_cost_settings_a_cost_estimator_and_forget_old_rows')
     if cutoff is None:
         raise ValueError('yield_cutoff_required:' + str(kind))
     settings = _parameters(parameters)

@@ -40,12 +40,16 @@ The annotation task sets no target and no maximum, so the controller takes nothi
 ``messages/read_from_parent.py`` produced). The assignment is not read here."""
 from gene_annotation_episode.episodic_workflow.episode_support.configuration.yield_declarations import (
     forecast_definitions, open_yield_controller)
+from yield_control import expected_seconds_from_history
 
 from .credit import CEILINGS, CREDIT_DEFINITION
 
-ROOT_FORECAST = {'exchange_rate': 0.0000005, 'forget_old_rows': True, 'job_kinds': {}}
+ROOT_FORECAST = {'parameters': {}, 'cost': {'exchange_rate': 0.0000005, 'job_kinds': {}}, 'forget_old_rows': True}
 
 
 def yield_controller(initial_credit, settings, parent_input):
-    return open_yield_controller('forecast', epoch='root', initial_credit=initial_credit, parameters=ROOT_FORECAST,
+    return open_yield_controller('forecast', epoch='root', initial_credit=initial_credit,
+                                 parameters=ROOT_FORECAST['parameters'], cost=ROOT_FORECAST['cost'],
+                                 cost_estimator=expected_seconds_from_history,
+                                 forget_old_rows=ROOT_FORECAST['forget_old_rows'],
                                  definition=forecast_definitions(CREDIT_DEFINITION, CEILINGS))

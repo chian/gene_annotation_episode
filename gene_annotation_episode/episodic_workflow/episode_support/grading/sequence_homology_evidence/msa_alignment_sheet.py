@@ -87,6 +87,20 @@ def conserved_sites(rows, groups, target_name):
                            for candidate in groups]}
 
 
+def matched_regions(sites, region_residues, columns=None):
+    """Per candidate, the regions of the target that hold at least one matched site of ``sites`` (the section's ``sites``; a
+    site with a target position), on one of ``columns`` when given: ``{candidate: {region number: count of those sites}}``.
+    A region is a window of ``region_residues`` consecutive target positions: positions 1 to ``region_residues`` are region
+    0, the next window region 1, and so on."""
+    found = {}
+    for site in sites:
+        if site['matched'] and site['target_position'] is not None and (columns is None or site['column'] in columns):
+            held = found.setdefault(site['candidate'], {})
+            region = (site['target_position'] - 1) // region_residues
+            held[region] = held.get(region, 0) + 1
+    return found
+
+
 def grade_alignment(aligned, *, given, target_name, aligner, alphabet, source_ref):
     """The sheet of the aligned FASTA ``aligned`` (bytes). ``given`` is the plan's rows: the target's own
     ``{'name': target_name, 'sequence'}`` and the references ``{'name', 'candidate', 'accession', 'md5'}`` (a reference
@@ -131,4 +145,4 @@ def grade_alignment(aligned, *, given, target_name, aligner, alphabet, source_re
                       'references': references, 'conserved_sites': conserved_sites(rows, groups, target_name)}}
 
 
-__all__ = ['MINIMUM_GROUP_SIZE', 'MINIMUM_SHARE', 'SCHEMA', 'conserved_sites', 'grade_alignment']
+__all__ = ['MINIMUM_GROUP_SIZE', 'MINIMUM_SHARE', 'SCHEMA', 'conserved_sites', 'grade_alignment', 'matched_regions']

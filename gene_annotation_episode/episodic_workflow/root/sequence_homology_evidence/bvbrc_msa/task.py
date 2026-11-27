@@ -49,7 +49,7 @@ def _resource(summary):
 
 
 def _trend(summary, ctx):
-    return learned(ctx.services['estimate_table'], APPLICATION, summary['fields'], summary['planned']['residues'])
+    return learned(ctx.services['estimate_table'], APPLICATION, summary['fields'], summary['planned'], ctx.clock.now)
 
 
 def decide(summary, feedback, ctx):

@@ -65,7 +65,8 @@ from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.blast_search import (
     PROGRAM_UNITS)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.similarity_search.sequence_homology_evidence.bvbrc_job_child import (
-    FAILURE_CODES, SPACING, _choose, _ended, _failed, estimate_problems, failure_code, ledger_estimate, now_text,
+    CURVE_BASIS, FAILURE_CODES, SPACING, _choose, _ended, _failed, estimate_problems, failure_code, job_curve,
+    ledger_estimate, now_text,
     search_facts, seconds_between, seconds_until_allowed, timing)
 
 # The source's provider names the service that ran the search. The Store admits an observation carrying native BLAST
@@ -93,7 +94,10 @@ UNTIL = ('launched', 'extracted')
 ENDED_SEARCH_STATES = ('finished', 'failed', 'unknown')
 # The unit a query's residues are counted in, by molecule.
 MOLECULE_UNITS = {'protein': 'aa', 'dna': 'nt', 'rna': 'nt'}
-ESTIMATE_BASES = ('learned_from_earlier_searches', 'no_earlier_measurement')
+ESTIMATE_BASES = ('learned_from_earlier_searches', CURVE_BASIS, 'no_earlier_measurement')
+# The duration curve a search's measured jobs are fitted from (``jobs.duration_curve``), each kind (database and
+# program) its own: seconds against the query's length, as the job rows record it.
+DURATION_CURVE = {'constant': 10.0, 'powers': {'query_length': 1.0}}
 REQUEST_FIELDS = ('program', 'database', 'resource_id')
 # The range of the seconds an estimate may name, and of one wait of a status request. A wait is a granule the model
 # chooses within the range (its lower end is what the service's spacing needs); it is no deadline on the search.
@@ -153,19 +157,22 @@ def combinations(databases=PRECOMPUTED_DATABASES):
 LEDGER_ROWS = 500
 
 
-def learned_statistics(table, query_length, databases=PRECOMPUTED_DATABASES):
+def learned_statistics(table, query_length, now, databases=PRECOMPUTED_DATABASES):
     """What the estimate ledger has learned of each offered kind of search, by ``program:database`` (read through the
-    table's read handle in a decision): the short trend of its measured durations (``duration_trend``: how many were
-    measured, their band, the latest ones, and once enough searches of different query lengths are measured the line of
-    duration against query length with what it gives for a query of ``query_length``), with ``ledger_estimate``
+    table's read handle in a decision, whose time is ``now``): the short trend of its measured durations (``duration_trend``:
+    how many were measured, their band and the latest ones), ``duration_curve`` (``bvbrc_job_child.job_curve``: the curve its
+    measured searches make from ``DURATION_CURVE``, with its seconds for a query of ``query_length``), with ``ledger_estimate``
     (``bvbrc_job_child.ledger_estimate``): the basis and seconds an estimate of that kind of search must state. The
     kinds are the ``combinations`` of ``databases`` (the set the episode searches)."""
     found = {}
     for program, database in combinations(databases):
-        trend = duration_trend(table.read('rows', search_kind(program, database), LEDGER_ROWS), size_field='query_length',
-                               size=query_length)
-        found[program + ':' + database] = {**trend,
-                                           'ledger_estimate': ledger_estimate(trend, 'learned_from_earlier_searches')}
+        kind = search_kind(program, database)
+        trend = {key: value for key, value in duration_trend(table.read('rows', kind, LEDGER_ROWS)).items()
+                 if key != 'size_fit'}
+        curve = job_curve(table, kind, DURATION_CURVE, {'query_length': query_length}, now)
+        found[program + ':' + database] = {
+            **trend, 'duration_curve': curve,
+            'ledger_estimate': ledger_estimate(trend, curve, 'learned_from_earlier_searches')}
     return found
 
 
@@ -326,7 +333,7 @@ def check_estimate(request, *, state, learned, query_molecule, databases=PRECOMP
     takes the query's molecule and the database (one of ``databases``, the set the episode searches) holds what it
     searches; the seconds are in range; the estimate is the
     ledger's for this kind of search (``learned_statistics``' ``ledger_estimate``, which the decision shows): the basis says
-    what it rests on (``learned_from_earlier_searches`` only when the table has measured searches of this kind,
+    what it rests on (the duration curve of the measured searches of this kind, else their median,
     ``no_earlier_measurement`` only when it has none) and the seconds are the ledger's figure for it."""
     problems = _program_and_database_problems(request['program'], request['database'], query_molecule, databases)
     if state['state'] in ('launched', 'finished', 'failed'):

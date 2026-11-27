@@ -73,10 +73,11 @@ INSTRUCTIONS = (
     '- estimate: before anything is launched, the program and database you will search, and the seconds the search is '
     'expected to take (expected_seconds) and their basis, both exactly as learned_durations gives them for that '
     'program:database in ledger_estimate: the estimate comes from the ledger. With measured searches of that kind '
-    '(measured is how many, typical_seconds their median, latest_seconds the newest first, size_fit, when present, a line '
-    'of seconds against the length of the searched sequence) the basis is learned_from_earlier_searches and the seconds are what size_fit gives '
-    'for this sequence, else typical_seconds; with none the basis is no_earlier_measurement and the seconds are the fixed '
-    'first figure. Any other figure is refused.\n'
+    '(measured is how many, typical_seconds their median, latest_seconds the newest first, duration_curve, when present, '
+    'the curve of seconds against the length of the searched sequence they make, with its seconds for this sequence) the '
+    'basis is duration_curve_of_earlier_jobs and the seconds are duration_curve.seconds when the curve is present, else '
+    'learned_from_earlier_searches and typical_seconds; with none the basis is no_earlier_measurement and the seconds are '
+    'the fixed first figure. Any other figure is refused.\n'
     '- launch: the search, with program, database and resource_id as the commission gives them. Refused unless an '
     'estimate is held (state estimated). One launch per estimate.\n'
     '- monitor: one status request of the launched search (handoff_ref: the handoff record in search). wait_seconds is '
@@ -163,7 +164,7 @@ def decide(summary, feedback, ctx):
         'state': summary['state'], 'held_estimate': facts['estimate'], 'last_failure_code': summary['last_failure_code'],
         'failed_request': facts['failed_request'], 'fixed_field': facts['fixed_field'],
         'learned_durations': learned_statistics(ctx.services['estimate_table'], summary['searched']['length'],
-                                                databases=DATABASES),
+                                                ctx.clock.now, databases=DATABASES),
         'unit_rows': summary['unit_rows'],
         'service': {'request_spacing_seconds': description['request_spacing_seconds'],
                     'poll_spacing_seconds': description['poll_spacing_seconds']},
@@ -188,7 +189,8 @@ def action(response, summary, records, ctx):
     name, fields, searched, facts = chosen['name'], summary['fields'], summary['searched'], summary['state_facts']
     search = search_view(records)
     if name == 'estimate':
-        learned = learned_statistics(ctx.services['estimate_table'], searched['length'], databases=DATABASES)
+        learned = learned_statistics(ctx.services['estimate_table'], searched['length'], ctx.clock.now,
+                                     databases=DATABASES)
         problems = check_estimate(chosen, state=facts, learned=learned, query_molecule=searched['molecule'],
                                   databases=DATABASES)
         problems = [*problems, *outside_the_commission(chosen, fields, problems)]

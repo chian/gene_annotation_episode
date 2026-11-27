@@ -9,7 +9,7 @@ A unit's action kind is ``<binding path>:<action type>`` (for example ``a101/seq
 so the history of a kind carries over to every later run of the same episode. The ledger key of a unit is
 ``forecast:<episode id>:<position>``.
 
-``history`` is the earlier runs' record of one action kind, in the form ``yield_control.forecast_actions`` reads. It is
+``history`` is the earlier runs' record of one action kind, in the form the forecast controller reads (``yield_control.ForecastYieldController``). It is
 recorded in the run journal the first time it is asked for in an Episode (like a clock point), so a resumed run, and
 every replay of a decision, sees the history it first saw, whatever the ledger holds by then. The rows of this
 Episode's own units are left out of it (they enter the controller as its own observations).
@@ -21,8 +21,8 @@ whole). Every forecast row ``expect`` writes records its action's definition, an
 are only the resolved rows of the action kind whose recorded definition is the action's; a row that records none
 (written before definitions were recorded) or another one gives no share, since a share learned under another credit or
 ceiling is on another scale. Seconds are not credit: the measured seconds of ``history`` (``seconds``: unit and decision
-seconds) are every resolved row of the kind whatever its definition, and the job durations (``job_seconds``, the service
-jobs' own rows) likewise. Writing or reading without a definition raises.
+seconds) are every resolved row of the kind whatever its definition, and the measured jobs (``jobs``, the service
+jobs' own rows: each job's duration, the size its row recorded and its weight) likewise. Writing or reading without a definition raises.
 
 A pending unit (``pending`` of the unit's forecast facts: its action started work, such as a job a child launched and
 returned parked, that a later unit of the same action finishes) is resolved with the outcome ``pending``: its rise and
@@ -32,7 +32,7 @@ resolved ``finished`` and is the observation. A forecast row resolved with any o
 
 The situation (the owner, 2026-11-25: "Yes, that is much better if you can cluster by situation"): an Episode whose
 binding supplies ``situations`` (``method_loop.episode_type``) has every unit's forecast row carry the one situation of
-its action (``situations`` of the row of ``forecast_actions``), and ``expect`` writes it as ``situation`` of the
+its action (``situations`` of the controller's forecast row), and ``expect`` writes it as ``situation`` of the
 expectation (a list of names, general to specific). ``history`` gives each share its ``situation`` when its row
 recorded one; a row that recorded none (every row of an Episode that supplies no situations, and every row written
 before situations existed) is given without the key, and the controller reads it as the empty situation. Nothing else
@@ -89,17 +89,19 @@ class ForecastLedger:
     # -- history: read -----------------------------------------------------------------------------------------
     def history(self, action_type, job_prefix, forget):
         """The recorded history of ``action_type`` for the controller: ``{'rows': [{'ceiling', 'gain', 'weight'}],
-        'seconds': [{'seconds', 'decision_seconds'}], 'job_seconds': [seconds]}``: ``rows`` (the shares) only those
+        'seconds': [{'seconds', 'decision_seconds'}], 'jobs': [{'seconds', 'size', 'weight'}]}``: ``rows`` (the shares) only those
         recorded under the action's definition, each with its ``'situation'`` when its row recorded one,
         ``seconds`` every resolved row of the kind whatever its definition;
         a row resolved ``pending`` is in neither;
         ``job_prefix`` (or ``None``) names the ledger kinds of the jobs the action launches and ``forget`` weights the
-        rows by the table's forgetting policy (and drops those past it). A history journaled before the seconds were
-        kept apart (no ``seconds``) raises: it cannot be read under this rule."""
+        rows by the table's forgetting policy (and drops those past it); each job is given with the size its row
+        recorded (the numbers of its expectation's ``job``; none: empty) and that weight. A history journaled before
+        the seconds were kept apart (no ``seconds``) or with bare job durations (no ``jobs``) raises: it cannot be read
+        under this rule."""
         name = 'forecast_history.' + action_type
         definition = self._defined(action_type)
         history = self._recorder.recorded(name, lambda: self._read(action_type, job_prefix, forget, definition))
-        if set(history) != {'rows', 'seconds', 'job_seconds'}:
+        if set(history) != {'rows', 'seconds', 'jobs'}:
             raise RuntimeError('forecast_history_journaled_before_per_action_definitions:' + action_type)
         return history
 
@@ -131,19 +133,22 @@ class ForecastLedger:
                 if 'situation' in expected:
                     share['situation'] = expected['situation']
                 rows.append(share)
-        job_seconds = []
+        jobs = []
         if job_prefix is not None:
             for kind in table.kinds():
                 if kind.startswith(job_prefix):
-                    job_seconds += [row['actual']['duration_seconds'] for row in table.rows(kind, ROWS_LIMIT)
-                                    if row['actual'] is not None and row['actual']['outcome'] == OUTCOME
-                                    and 'duration_seconds' in row['actual'] and weight(row) is not None]
-        return {'rows': rows, 'seconds': seconds, 'job_seconds': job_seconds}
+                    jobs += [{'seconds': row['actual']['duration_seconds'],
+                              'size': {key: value for key, value in row['expected'].get('job', {}).items()
+                                       if type(value) in (int, float)},
+                              'weight': weight(row)} for row in table.rows(kind, ROWS_LIMIT)
+                             if row['actual'] is not None and row['actual']['outcome'] == OUTCOME
+                             and 'duration_seconds' in row['actual'] and weight(row) is not None]
+        return {'rows': rows, 'seconds': seconds, 'jobs': jobs}
 
     # -- the unit's expectation and resolution: written by the runner only ------------------------------------
     def expect(self, position, action_type, row, at):
-        """Record, before unit ``position`` runs, what the controller forecast for its action (``row`` of
-        ``forecast_actions``), with the definition of its action it was made under. A forecast that is unknown is written as a gain
+        """Record, before unit ``position`` runs, what the controller forecast for its action (``row``: one row of
+        its forecast), with the definition of its action it was made under. A forecast that is unknown is written as a gain
         of 0 with ``forecast`` null. The row of an Episode that supplies situations carries ``situations``: for a unit
         that is exactly the one situation of its action, written as ``situation`` (any other number raises)."""
         forecast, ceiling = row['forecast_gain'], row['ceiling']

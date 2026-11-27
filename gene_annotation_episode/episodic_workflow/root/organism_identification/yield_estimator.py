@@ -30,13 +30,17 @@ definition record and that action's own ceiling name, ``credit.CEILINGS``) is ha
 not read here."""
 from gene_annotation_episode.episodic_workflow.episode_support.configuration.yield_declarations import (
     forecast_definitions, open_yield_controller)
+from yield_control import expected_seconds_from_history
 
 from .credit import CEILINGS, TaxonDifferentialCredit
 
-FORECAST = {'exchange_rate': 0.0005, 'forget_old_rows': True, 'job_kinds': {}, 'ledger_prior_rows': 1.0}
+FORECAST = {'parameters': {'ledger_prior_rows': 1.0}, 'cost': {'exchange_rate': 0.0005, 'job_kinds': {}},
+            'forget_old_rows': True}
 
 
 def yield_controller(initial_credit, settings, parent_input):
     return open_yield_controller('forecast', epoch='organism_identification', initial_credit=initial_credit,
-                                 parameters=FORECAST,
+                                 parameters=FORECAST['parameters'], cost=FORECAST['cost'],
+                                 cost_estimator=expected_seconds_from_history,
+                                 forget_old_rows=FORECAST['forget_old_rows'],
                                  definition=forecast_definitions(TaxonDifferentialCredit().as_record(), CEILINGS))

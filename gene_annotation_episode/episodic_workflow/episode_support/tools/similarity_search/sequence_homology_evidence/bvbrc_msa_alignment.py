@@ -34,6 +34,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_
     compile_native_sheet)
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.tool_grading_artifacts import (
     record_grading_product, retain_tool_grading, source_tool_grading_entries)
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.duration_curve import fitted, predicted
 from gene_annotation_episode.episodic_workflow.episode_support.records.data_products import (
     find_reusable, record_product)
 from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_homology_evidence.domain import canonical
@@ -53,6 +54,25 @@ MINIMUM_CANDIDATES = 2
 SEQUENCES_FILE, GROUP_FILE, ALIGNMENT_FILE = 'sequences.fasta', 'group.json', 'msa.afa'
 PRODUCT_KIND = 'multiple_sequence_alignment'
 REQUEST_FIELDS = ('per_candidate', 'resource_id')
+# The duration curve an alignment job's measured durations are fitted from (``jobs.duration_curve``): seconds
+# against the residues to align. Starting values read off the ledger's jobs on 2026-11-27 (14 to 33 s at 1,100 to 4,500
+# residues; 39 to 356 s at 15,834 to 104,802).
+DURATION_CURVE = {'constant': 10.0, 'powers': {'residues': 1.0}}
+
+
+def commission_size(reader, arguments):
+    """The size of the alignment job the commission ``arguments`` plans (``planned_size``)."""
+    rows = search_rows(reader, {'subject_refs': [arguments['query_ref']]}, arguments['search_ref'])
+    return planned_size(plan_rows(rows, arguments['candidates'], arguments['per_candidate']),
+                        reader.subject_length(arguments['query_ref']))
+
+
+def expected_job_seconds(jobs, size):
+    """The seconds an alignment job of ``size`` is expected to run: what the duration curve the measured alignment jobs
+    ``jobs`` (``[{'size', 'seconds', 'weight'}]``) make from ``DURATION_CURVE`` (``jobs.duration_curve``) gives for it.
+    ``None`` when the jobs make no curve."""
+    curve = fitted(jobs, DURATION_CURVE)
+    return None if curve is None else predicted(curve, size)
 
 
 def settings_of(candidates, per_candidate):
@@ -292,9 +312,12 @@ APPLICATION = JobApplication(
     field_schemas={'per_candidate': {'type': 'integer', 'minimum': PER_CANDIDATE_RANGE[0],
                                      'maximum': PER_CANDIDATE_RANGE[1]},
                    'resource_id': {'type': 'string', 'minLength': 1}},
-    size_field='residues', kind=lambda fields: 'MSA:' + ALIGNER.lower() + ':' + ALPHABET,
+    curve=DURATION_CURVE, kind=lambda fields: 'MSA:' + ALIGNER.lower() + ':' + ALPHABET,
     field_problems=field_problems, prepare=prepare, extract=extract, describe_identity=describe_identity)
 
-__all__ = ['ALIGNER', 'ALPHABET', 'APPLICATION', 'CHILD', 'PER_CANDIDATE_RANGE', 'PROVIDER', 'REQUEST_FIELDS',
-           'TARGET_NAME', 'check_commission', 'graded_rows', 'msa_options', 'plan_rows', 'planned_size',
+__all__ = ['ALIGNER', 'ALPHABET', 'APPLICATION', 'CHILD', 'DURATION_CURVE', 'PER_CANDIDATE_RANGE', 'PROVIDER',
+           'REQUEST_FIELDS',
+           'TARGET_NAME', 'check_commission', 'commission_size', 'expected_job_seconds', 'graded_rows', 'msa_options',
+           'plan_rows',
+           'planned_size',
            'reusable_alignment', 'search_rows', 'settings_of']
