@@ -1,13 +1,13 @@
 """Where the episode stands, as a pure function of the loop's view: the commission, one row per completed unit
-(a selected tool, a reasoning commit, a pairwise comparison or a child commission), what each child reported, the
-records this episode committed or graded (its reasoning commits and the graded records of its comparisons: what its
-credit reads), the handoff records its children returned, the working state of the scope and the controller's yield
+(a selected tool, a pairwise comparison, a profile scan or a child commission), what each child reported, the
+records this episode graded (the graded records of its comparisons: what its
+credit reads), the handoff records its children returned and the controller's yield
 table.
 
 For the commissions (``task.commission_fields``, ``msg_to_child``) the summary also holds what a commission is
 chosen from and built with: ``held_record_refs`` (the held records), ``held_sequences`` (the held records
 that carry a sequence, each with its molecule: what the two sequences of a comparison are chosen from),
-``held_comparisons`` (the pairwise comparisons already held: what the check refuses to run again), ``bvbrc_searches`` (the BV-BRC searches this episode holds, with their records: what a commission of ``bvbrc_blast`` continues), ``held_clusterings`` (the committed clusterings of the ``all_vs_all`` child), ``held_source_refs`` (the held sources) and ``named_refs`` (for each held
+``held_comparisons`` (the pairwise comparisons already held: what the check refuses to run again), ``bvbrc_searches`` (the BV-BRC searches this episode holds, with their records: what a commission of ``bvbrc_blast`` continues), ``held_clusterings`` (the committed clusterings of the ``all_vs_all`` child) and ``named_refs`` (for each held
 record, job ledger rows included, the held records it names: what travels in custody beside it).
 
 ``returned_refs`` are the record lists ``final_to_parent`` returns (``committed_record_refs``, ``execution_handoff_refs``,
@@ -25,8 +25,6 @@ import json
 from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import (
     named_records, outstanding_jobs, returned_with_names)
 from gene_annotation_episode.episodic_workflow.episode_support.records.progress_views import yield_table
-from gene_annotation_episode.episodic_workflow.episode_support.records.sequence_homology_evidence.construction_records import (
-    scientific_digest)
 
 from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_homology_evidence.axis_features import (
     ALL, axis_features)
@@ -48,14 +46,13 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.sequence_
 from gene_annotation_episode.episodic_workflow.episode_support.tools.annotation_claims.claim_generation import (
     TRACE_PROVIDER)
 
-from ..credit import A101DifferentialCredit, A101SequenceCredit, held_candidate_table
-from ..task import CHILD_SLOTS, PAIRWISE_TOOL, PROFILE_TOOL
+from ..credit import A101SequenceCredit, held_candidate_table
+from ..task import PAIRWISE_TOOL, PROFILE_TOOL
 
 EXECUTED = ('completed', 'partial')
-# The tools whose records this episode returns: its reasoning commits, its graded comparisons, its joinings of its
+# The tools whose records this episode returns: its graded comparisons, its joinings of its
 # candidates (all read by its credit) and the claims it made.
-CREDITED_TOOLS = ('reason', PAIRWISE_TOOL, PROFILE_TOOL)
-EVIDENCE_RECORD_TYPES = ('observation', 'assessment')
+CREDITED_TOOLS = (PAIRWISE_TOOL, PROFILE_TOOL)
 # The record types that carry a sequence: what the two sequences of a comparison are chosen from.
 SEQUENCE_RECORD_TYPES = ('input', 'reference', 'product')
 
@@ -93,15 +90,10 @@ def _candidate_fields(target):
             'differentials': target['differentials']}
 
 
-def _across_targets(table, name):
-    """The rows ``name`` of every target of the table, each with its target reference."""
-    return [{'target_ref': ref, **row} for ref, target in table['targets'].items() for row in target[name]]
-
-
 def internal_summary(view):
     records = view.records
     parent = view.parent_input
-    units, child_reports, committed, handoff_refs, check_refs, closure_refs, last = [], [], [], [], [], [], None
+    units, child_reports, committed, handoff_refs, check_refs, closure_refs = [], [], [], [], [], []
     for position, outcome in enumerate(view.outcomes):
         if outcome['kind'] == 'tool':
             result = outcome['outcome']
@@ -130,7 +122,6 @@ def internal_summary(view):
             check_refs.extend(ref for ref in report['check_refs'] if ref not in check_refs)
             closure_refs.extend(ref for ref in report['closure_refs'] if ref not in closure_refs)
         units.append(row)
-        last = row
     held = [ref for ref in records.refs() if not ref.startswith('row_')]
     held_sequences = {ref: records.get(ref).get('molecule') for ref in held
                       if ref.split('_')[0] in SEQUENCE_RECORD_TYPES and records.get(ref).get('sequence_ref')
@@ -148,16 +139,12 @@ def internal_summary(view):
                 for target, finding in zip(details['a101_sheet']['targets'], axis_features(details), strict=True)]
     return {**parent,
             'path_depth': len(view.path),
-            'initial_selection_sha256': scientific_digest(parent['selection']),
-            'permitted_children': sorted(CHILD_SLOTS),
-            'units': units, 'last_local_outcome': last, 'child_reports': child_reports,
-            'handoff_refs': handoff_refs,
+            'units': units, 'child_reports': child_reports,
             'returned_refs': {name: returned_with_names(records, refs) for name, refs in (
                 ('committed_record_refs', committed), ('execution_handoff_refs', handoff_refs),
                 ('execution_check_refs', check_refs), ('execution_closure_refs', closure_refs),
                 ('data_product_refs', [row['id'] for row in held_products]))},
             'held_record_refs': held,
-            'held_source_refs': [row['id'] for row in records.list('source')],
             'held_comparisons': _held_comparisons(records),
             'held_profile_scans': _held_profile_scans(records),
             'held_sequences': held_sequences, 'targets': wanted,
@@ -179,10 +166,7 @@ def internal_summary(view):
                                'settings': row['settings']} for row in held_products],
             'alignment_product_refs': [row['id'] for row in alignments],
             'reusable_alignments': alignments,
-            'evidence_refs': [row['id'] for kind in EVIDENCE_RECORD_TYPES for row in records.list(kind)],
-            'working_state': records.reasoning_view(parent['scope']),
-            'reasoning_schema': records.reasoning_schema(),
-            'credit_binding': A101DifferentialCredit().as_record(), 'axis_findings': findings,
+            'axis_findings': findings,
             'candidate_hit_organisms': [{'candidates': table['targets'][target]['hit_organisms']}
                                         for target in details['a101_sheet']['targets']],
             'candidate_hit_feature_kinds': [{'candidates': table['targets'][target]['hit_feature_kinds']}
@@ -192,11 +176,8 @@ def internal_summary(view):
                        for trace in (json.loads(records.get_artifact(source['artifact_ref']))
                                      for source in records.list('source') if source['provider'] == TRACE_PROVIDER)
                        for claim in trace['claims']],
-            'candidates': _across_targets(table, 'candidates'), 'tests': _across_targets(table, 'tests'),
-            'differentials': _across_targets(table, 'differentials'),
-            'not_asked_hit_count': sum(target['not_asked_hit_count'] for target in table['targets'].values()),
-            'no_product_hit_count': sum(target['no_product_hit_count'] for target in table['targets'].values()),
-            'uncharacterized_hit_count': sum(target['uncharacterized_hit_count'] for target in table['targets'].values()),
+            'candidates': [{'target_ref': ref, **row} for ref, target in table['targets'].items()
+                           for row in target['candidates']],
             'units_consumed': view.units_consumed,
             'action_yields': (None if view.controller_state is None
                               else yield_table(view.controller_state, forecast_unit='differential_credit'))}

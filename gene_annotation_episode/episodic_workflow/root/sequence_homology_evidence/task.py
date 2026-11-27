@@ -1,8 +1,8 @@
 """The task of the A101 head: one model-selected unit per decision. The model investigates the assigned subject with
-the selected tools of its commission (``execute_selected_tool``), commits scientific interpretations (``reason``) and
+the selected tools of its commission (``execute_selected_tool``), its own two tools and
 commissions its children. It never ends the Episode: only the yield controller does.
 
-Tools. ``reason`` is the ``Store.commit_reasoning`` path. ``execute_selected_tool`` dispatches a tool the commission
+Tools. ``execute_selected_tool`` dispatches a tool the commission
 selected to the library's ``ToolRegistry``, called with ``ctx.store`` (a tool name here has lowercase letters, digits
 and underscores, so the selected name travels as an argument). ``pairwise_blast`` is this episode's own defined tool:
 the model fills out one request (the query, the reference sequence record, the program and a bound resource, each
@@ -10,7 +10,7 @@ from a fixed set). ``action`` runs the library's one deterministic check of that
 holds and the bound resources (``check_pairwise_request``): a request with problems is rejected with the things to
 fix and no unit is made; a request that passes runs as one unit (``pairwise_blast_comparison``: the search, the
 fetch of its report and the grading). The graded comparison is counted by the credit as soon as its sheet is saved (the
-reference sequence is a candidate; ``CREDIT_TEXT`` says how the credit counts); no reasoning commit is needed for it.
+reference sequence is a candidate; ``CREDIT_TEXT`` says how the credit counts).
 
 Children. The head's child episodes in the A101 tree are ``bvbrc_blast``, ``bvbrc_msa``, ``bvbrc_metacats`` and ``all_vs_all``
 (HMMER later). A child is declared in ``CHILD_SLOTS`` when its episode is built (the runner
@@ -42,7 +42,7 @@ from gene_annotation_episode.episodic_workflow.episode_support.instructions.sequ
 from gene_annotation_episode.episodic_workflow.episode_support.forms.sequence_homology_evidence.evidence_axis_contracts import (
     VERSION as EVIDENCE_AXIS_VERSION)
 from gene_annotation_episode.episodic_workflow.episode_support.literature.prompts.sequence_homology_evidence.literature_investigation_prompt import (
-    INSTRUCTIONS, REASONING_COMMIT_REQUIREMENT)
+    INSTRUCTIONS)
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.presentation import extend_context
 from gene_annotation_episode.episodic_workflow.episode_support.model_exchange.rejection_feedback import (
     rejection_feedback)
@@ -122,8 +122,8 @@ REF_LISTS = ('record_refs', 'graded_refs', 'check_refs', 'closure_refs', 'handof
 
 # The two bodies the old ``ScientificGoal.instructions`` appended after the goal text, by the entry version of the
 # selected evidence axis (instruction text, unchanged).
-INSTRUCTION_ENTRY_BODY = "Determine what the supplied target does within the parent's assigned question, scope and constraints. Start with the supplied sequence, selected file contents or snippets, preserving their boundaries, completeness and known context. No initial candidate annotation or publicly searchable name is required. Possible functions can emerge from the evidence and be compared or revised. Apply the complete selected investigation instructions and thought-pattern guidance on every decision. Use actual outcomes and received child results to choose and revise your approach. Selected instructions describe how to investigate; they are not evidence about this target. Preserve the measured subject, conditions, controls, native measurements, uncertainty and limits of inference when interpreting evidence. Missing information remains unknown.\n\nChoose an available tool action, commit a scientific interpretation through the reasoning action, or commission one of the offered children (child_options) by choosing the controlled fields of its commission; code builds the child's assignment from your choices. Use only the selected actual tools and their supplied resource instructions; choose callable operands through the declared response contract. Preserve the parent's exact requested result meanings and allowed values. Recorded facts come from actual records. Keep inherited information distinct from new findings and completed work distinct from attempts. Return valid partial findings and specific failures through the requested form.\n\nKeep the assigned evidence axis, thought pattern and selected tools for this episode. Children own their iterative choices. The configured controller owns continuation. Waiting and unchanged observations do not manufacture progress."
-EVIDENCE_AXIS_BODY = "Investigate the parent's assigned scientific problem iteratively in the shared Episode loop. The selected scientific support proposition and operands define the support problem; the thought pattern supplies alternatives and outcome-sensitive guidance; the selected real tools supply their exact callable contracts. Choose your own actions using actual outcomes and received child forms. The selection is no prescribed sequence or automatic compatibility verdict. Library sources are instruction provenance, not scientific evidence about this target. Inspect actual source subjects, conditions and target applicability before interpreting evidence. annotation_support_routes describes the actual separately bound annotation policy's kind dispatch. An unmapped kind has no base-axis mapping in that known policy. Unavailable metadata means this reader cannot declare the bound policy; it is no verdict on evidence or the actual score. Metadata itself earns no credit and never replaces or filters the actual projectors, annotation formula or continuation rule. Keep the parent's objective, scope, constraints and exact typed form; support metadata never adds form fields or scoring axes. Use common reasoning to commit scientific interpretations. Keep the originally assigned scientific support, thought pattern and selected tool set throughout this episode. Only retrieved actual tools are available; their descriptions do not grant execution. The configured controller owns continuation."
+INSTRUCTION_ENTRY_BODY = "Determine what the supplied target does within the parent's assigned question, scope and constraints. Start with the supplied sequence, selected file contents or snippets, preserving their boundaries, completeness and known context. No initial candidate annotation or publicly searchable name is required. Possible functions can emerge from the evidence and be compared or revised. Apply the complete selected investigation instructions and thought-pattern guidance on every decision. Use actual outcomes and received child results to choose and revise your approach. Selected instructions describe how to investigate; they are not evidence about this target. Preserve the measured subject, conditions, controls, native measurements, uncertainty and limits of inference when interpreting evidence. Missing information remains unknown.\n\nChoose an available tool action or commission one of the offered children (child_options) by choosing the controlled fields of its commission; code builds the child's assignment from your choices. Use only the selected actual tools and their supplied resource instructions; choose callable operands through the declared response contract. Preserve the parent's exact requested result meanings and allowed values. Recorded facts come from actual records. Keep inherited information distinct from new findings and completed work distinct from attempts. Return valid partial findings and specific failures through the requested form.\n\nKeep the assigned evidence axis, thought pattern and selected tools for this episode. Children own their iterative choices. The configured controller owns continuation. Waiting and unchanged observations do not manufacture progress."
+EVIDENCE_AXIS_BODY = "Investigate the parent's assigned scientific problem iteratively in the shared Episode loop. The selected scientific support proposition and operands define the support problem; the thought pattern supplies alternatives and outcome-sensitive guidance; the selected real tools supply their exact callable contracts. Choose your own actions using actual outcomes and received child forms. The selection is no prescribed sequence or automatic compatibility verdict. Library sources are instruction provenance, not scientific evidence about this target. Inspect actual source subjects, conditions and target applicability before interpreting evidence. annotation_support_routes describes the actual separately bound annotation policy's kind dispatch. An unmapped kind has no base-axis mapping in that known policy. Unavailable metadata means this reader cannot declare the bound policy; it is no verdict on evidence or the actual score. Metadata itself earns no credit and never replaces or filters the actual projectors, annotation formula or continuation rule. Keep the parent's objective, scope, constraints and exact typed form; support metadata never adds form fields or scoring axes. Keep the originally assigned scientific support, thought pattern and selected tool set throughout this episode. Only retrieved actual tools are available; their descriptions do not grant execution. The configured controller owns continuation."
 
 HISTORY_START = 'On a fresh provider conversation,'
 HISTORY_END = 'Do not execute native provider tools.'
@@ -131,8 +131,8 @@ HISTORY_GUIDANCE = ('Your own earlier outcomes are shown to you as own_outcomes,
                     'the number of records each produced; a failed or invalid outcome is shown with its feedback. Your '
                     'children\'s reports are in child_reports. Reading them creates no completed action or '
                     'observation and does not execute or credit the historical work again.\n')
-# What the credit is, in plain words, as every description of an action that earns it states it (the definition record
-# ``credit_binding`` has the fixed fields; ``candidates``, ``tests`` and ``differentials`` of the context are its data).
+# What the credit is, in plain words, as every description of an action that earns it states it (``candidates`` of
+# the context is its data).
 CREDIT_TEXT = ('Your credit counts possible annotations (candidates). A candidate found with positive evidence is '
                'admitted to the list and earns its score; a possible annotation with no positive evidence is not on '
                'the list. A test also earns the difference of the moves of the scores of the top two candidates '
@@ -154,7 +154,6 @@ DESCRIPTIONS = {
                    'that matched no family is completed with no family. A scan you already hold would return the same result, so its forecast is zero. '
                    'The grading is automatic: each matched family is a candidate (vocabulary profile_family; its '
                    'accession and name are the profile database\'s) and is counted as soon as the unit completes. ' + CREDIT_TEXT + ' A failed outcome is a fault of the environment.'),
-    'reason': REASONING_COMMIT_REQUIREMENT,
     PAIRWISE_TOOL: ('Compare one query sequence with one reference sequence by a pairwise BLAST on a local resource. Fill '
                     'out the four fields of its request: query_ref (a sequence of your scope), reference_ref (another '
                     'sequence record you hold; held_sequences gives each record with its molecule), program (blastp '
@@ -170,7 +169,7 @@ DESCRIPTIONS = {
                     'search-space context the report gives) and observation_refs: one alignment observation per '
                     'reported alignment, which you now hold. A comparison you already hold would return the same result, so its forecast is zero. The '
                     'grading is automatic: the reference sequence is a candidate (vocabulary reference_sequence) and is '
-                    'counted as soon as the unit completes; no reasoning commit is needed for it and none changes it. ' + CREDIT_TEXT + ' A failed outcome is a fault of '
+                    'counted as soon as the unit completes. ' + CREDIT_TEXT + ' A failed outcome is a fault of '
                     'the environment, not of your request.'),
 }
 # What every BV-BRC child's description says of a parked job (the system's rule, ``resume_action``).
@@ -238,7 +237,7 @@ CHILD_DESCRIPTIONS = {
         'job (no_estimate, estimated, launched, finished, extracted or failed), the sequences, columns and candidates of the '
         'alignment, the seconds estimated and observed, the last failure code and the credit; when parked (parked true) a '
         'wait notice: seconds_since_launch, estimated_seconds and expected_remaining_seconds. The alignment is also kept as '
-        'a labelled data product (data_products shows it with where it also lies in the BV-BRC workspace) that a later '
+        'a labelled data product that a later '
         'child that needs an alignment is passed. An alignment already held would return the same result, so its '
         'forecast is zero.'),
     'all_vs_all': (
@@ -259,12 +258,12 @@ CHILD_DESCRIPTIONS = {
         '(minutes on a local resource). What comes back: the state of the work (nothing_done, database_ready, matrix_ready, tried or '
         'clustered), the sequences and letters of the set, the pairs of the matrix, the number of tries, the committed clustering '
         '(inflation, contrast, cluster count, size of the target\'s cluster), the last failure code and the credit. The set, '
-        'database, matrix and clusters are kept as labelled data products (data_products). A set already commissioned is not '
+        'database, matrix and clusters are kept as labelled data products. A set already commissioned is not '
         'commissioned again.'),
     'bvbrc_metacats': (
         'Test the alignment you hold with MetaCATS through the BV-BRC application service (the MetaCATS application, protein, '
         'run on the owner\'s account). The alignment must be a labelled data product of kind multiple_sequence_alignment that '
-        'you hold (data_products shows it; metacats_options shows each one MetaCATS can take, with its candidate groups). '
+        'you hold (metacats_options shows each one MetaCATS can take, with its candidate groups). '
         'MetaCATS looks for the alignment positions where the sequences of different groups differ significantly (a '
         'chi-square test per position at the p-value 0.05, which is fixed and not your choice). Code, not you, builds the '
         'groups: one group per product candidate of the alignment, its members that candidate\'s reference sequences; the '
@@ -309,17 +308,14 @@ def replaces_default_instructions(library):
 
 
 def instructions(library, selection):
-    """The investigation text (replaced by the goal text when every axis is a published instruction entry) and the
-    reasoning-commit requirement. The text lives in this episode's own files: no knowledge or launch instruction
-    library is assembled into it."""
+    """The investigation text (replaced by the goal text when every axis is a published instruction entry). The text
+    lives in this episode's own files: no knowledge or launch instruction library is assembled into it."""
     entry, _ = axis_entry(library, selection)
     body = INSTRUCTION_ENTRY_BODY if entry.get('entry_version') == INSTRUCTION_VERSION else EVIDENCE_AXIS_BODY
     specialized = GOAL + '\n\n' + body
     if replaces_default_instructions(library):
-        text = specialized
-    else:
-        text = replace_span(INSTRUCTIONS, HISTORY_START, HISTORY_END, HISTORY_GUIDANCE) + '\n' + specialized
-    return text + '\n' + REASONING_COMMIT_REQUIREMENT
+        return specialized
+    return replace_span(INSTRUCTIONS, HISTORY_START, HISTORY_END, HISTORY_GUIDANCE) + '\n' + specialized
 
 
 def selected_tools(settings, selection):
@@ -511,15 +507,9 @@ def child_option(slot, summary, resources):
 
 
 def selection_schema(summary, tools, resources, databases):
-    """What the model answers with: one reasoning commit, one selected tool, one pairwise comparison, one profile
-    scan, or one child.
-    The reasoning commit is the tool ``reason``, as the model is shown it: the arguments of a tool whose schema is
-    composed travel as JSON text, and the Store's reasoning schema sent as output schema itself has more enum
-    values than the model endpoint takes in one schema."""
-    options = [obj({'kind': {'const': 'tool'}, 'tool': {'const': 'reason'},
-                    'arguments': obj({'commit': summary['reasoning_schema']})})]
-    options.extend(obj({'kind': {'const': 'tool'}, 'tool': {'const': row['name']},
-                        'arguments': row.get('input_schema', OPEN)}) for row in tools)
+    """What the model answers with: one selected tool, one pairwise comparison, one profile scan, or one child."""
+    options = [obj({'kind': {'const': 'tool'}, 'tool': {'const': row['name']},
+                    'arguments': row.get('input_schema', OPEN)}) for row in tools]
     options.extend(pairwise_options(summary, resources))
     options.extend(profile_scan_options(summary, resources, databases))
     options.extend(child_option(slot, summary, resources) for slot in offered_children(summary, resources))
@@ -528,13 +518,13 @@ def selection_schema(summary, tools, resources, databases):
 
 def offered_actions(summary, ctx):
     """The action types this decision offers, by the names a unit is recorded under (``ToolCall.name``, ``ChildCall.slot``):
-    ``reason``; ``execute_selected_tool`` while the commission selects tools (every selected tool is run by this one
+    ``execute_selected_tool`` while the commission selects tools (every selected tool is run by this one
     tool); ``pairwise_blast`` and ``hmmer_profile_scan`` while their options are offered; and each child slot offered.
     Built from the functions ``decide`` offers the model with (``selected_tools``, ``pairwise_options``,
     ``profile_scan_options``, ``offered_children``)."""
     tools = selected_tools(ctx.settings, summary['selection'])
     resources = bound_resources(ctx)
-    names = ['reason']
+    names = []
     if tools:
         names.append('execute_selected_tool')
     if pairwise_options(summary, resources):
@@ -603,10 +593,23 @@ def counted(row):
             (len(value) if name in REF_LISTS else value) for name, value in row.items()}
 
 
+def reported(row):
+    """A child's report as the model is shown it: ``counted``, and of a database search's identification the number of
+    its functions in place of their list (``candidates`` has them with their scores)."""
+    row = counted(row)
+    found = row['finding'].get('identification')
+    if found is None:
+        return row
+    return {**row, 'finding': {**row['finding'], 'identification': {
+        **{name: value for name, value in found.items() if name != 'functions'},
+        'function_count': len(found['functions'])}}}
+
+
 def decide(summary, feedback, ctx):
-    """Ask the model for the next unit, shown the commission, the selected process library entries, the working
-    state of the scope, its own outcomes and its children's reports (``counted``), the tools and children it may use,
-    the measured time and the yield table."""
+    """Ask the model for the next unit, shown what the choice of it reads: the goal, the selected process library
+    entries, the candidates, its own outcomes and its children's reports (``counted``, ``reported``), what it holds
+    that an action names or that is already done, the tools and children it may use, the measured time and the yield
+    table."""
     settings = ctx.settings
     library = SequenceHomologyEvidenceLibrary(settings['process_library_directory'])
     selection = summary['selection']
@@ -623,36 +626,26 @@ def decide(summary, feedback, ctx):
     context = {
         'goal': GOAL, 'scope': summary['scope'],
         'sequence_homology_evidence': {
-            'selection': selection, 'initial_selection_sha256': summary['initial_selection_sha256'],
             'evidence_axis': axis_view,
             'thought_pattern': {name: thought[name] for name in THOUGHT_FIELDS if name in thought},
-            'child_tool_info': selection['child_tool_info'],
-            'assignment': {'evidence_ref_count': len(summary['evidence_refs']), 'constraints': summary['constraints'],
-                           'context': summary['context']},
-            'permitted_children': offered},
-        'working_state': summary['working_state'], 'visible_record_refs': summary['held_record_refs'],
-        'held_source_refs': summary['held_source_refs'],
-        'credit_binding': summary['credit_binding'], 'candidates': summary['candidates'], 'tests': summary['tests'],
-        'differentials': summary['differentials'], 'not_asked_hit_count': summary['not_asked_hit_count'],
-        'no_product_hit_count': summary['no_product_hit_count'],
-        'uncharacterized_hit_count': summary['uncharacterized_hit_count'],
+            'assignment': {'constraints': summary['constraints']}},
+        'candidates': summary['candidates'],
         'own_outcomes': [counted(row) for row in summary['units']],
-        'last_local_outcome': summary['last_local_outcome'] and counted(summary['last_local_outcome']),
-        'child_reports': [counted(row) for row in summary['child_reports']],
-        'handoff_refs': summary['handoff_refs'], 'bound_resources': resources,
+        'child_reports': [reported(row) for row in summary['child_reports']],
+        'bound_resources': resources,
         'organism_candidates': summary['organism_candidates'],
         'held_sequences': summary['held_sequences'], 'held_comparisons': summary['held_comparisons'],
         'held_profile_scans': summary['held_profile_scans'],
         'bvbrc_searches': bvbrc_searches_view(summary['bvbrc_searches'], ctx.clock.now),
         'msa_options': summary['msa_options'],
         'bvbrc_msa_jobs': bvbrc_searches_view(summary['bvbrc_msa_jobs'], ctx.clock.now, msa=True),
-        'held_alignments': summary['held_alignments'], 'data_products': summary['data_products'],
+        'held_alignments': summary['held_alignments'],
         'metacats_options': summary['metacats_options'],
         'bvbrc_metacats_jobs': bvbrc_searches_view(summary['bvbrc_metacats_jobs'], ctx.clock.now, msa=True),
         'held_clusterings': summary['held_clusterings'],
         'held_metacats': summary['held_metacats'],
-        'tools': [{'name': 'reason', 'description': DESCRIPTIONS['reason']}, *own, *tools],
-        'child_options': [{'slot': slot, 'binding_path': CHILD_SLOTS[slot], 'description': CHILD_DESCRIPTIONS[slot],
+        'tools': [*own, *tools],
+        'child_options': [{'slot': slot, 'description': CHILD_DESCRIPTIONS[slot],
                            'selectable_return_fields': SELECTABLE[slot]} for slot in offered],
         'time_accounting': time_accounting(ctx.clock.progress_time)}
     context = extend_context(context, {
@@ -662,15 +655,9 @@ def decide(summary, feedback, ctx):
                         generation_schema(selection_schema(summary, tools, resources, databases)))
 
 
-def empty_commit(commit):
-    """The old ``reasoning_has_task_content`` test: every section of the commit is empty."""
-    return all(rows == [] for rows in commit.values())
-
-
 def action(response, summary, records, ctx):
     """Turn the model's answer into one tool call or one commission, or reject it (no unit): an answer that does not
-    fit the schema, a reasoning commit with every section empty (rejected before acquisition), or a pairwise request
-    the check finds something to fix in (rejected with the things to fix)."""
+    fit the schema, or a pairwise request the check finds something to fix in (rejected with the things to fix)."""
     tools = selected_tools(ctx.settings, summary['selection'])
     resources = bound_resources(ctx)
     schema = selection_schema(summary, tools, resources, ctx.settings.get('profile_databases', {}))
@@ -679,9 +666,6 @@ def action(response, summary, records, ctx):
             raise ValueError('a101_decision_response_must_be_exactly_selection')
         selection = decode_response(response, schema)['selection']
         Draft202012Validator(schema['properties']['selection']).validate(selection)
-        if selection['kind'] == 'tool' and selection['tool'] == 'reason' and empty_commit(
-                selection['arguments']['commit']):
-            raise ValueError('empty_reasoning_commit')
         if selection['kind'] == 'tool' and selection['tool'] == PAIRWISE_TOOL:
             problems = check_pairwise_request(
                 selection['arguments'], sequences=summary['held_sequences'],
@@ -707,8 +691,6 @@ def action(response, summary, records, ctx):
         arguments = {key: value for key, value in selection.items() if key not in ('kind', 'slot')}
         return ChildCall(selection['slot'], arguments)
     scope = summary['scope']
-    if selection['tool'] == 'reason':
-        return ToolCall('reason', {'commit': selection['arguments']['commit'], 'scope': scope})
     if selection['tool'] in (PAIRWISE_TOOL, PROFILE_TOOL):
         return ToolCall(selection['tool'], {**selection['arguments'], 'scope': scope, 'organism': next(
             (row for row in summary['organism_candidates'] if row['role'] == 'leader'), None)})
@@ -717,13 +699,6 @@ def action(response, summary, records, ctx):
                                               'permitted_record_refs': (summary['held_record_refs']
                                                                         if selection['tool'] in RECEIVED_RECORD_READERS
                                                                         else None)})
-
-
-def reason(arguments, ctx):
-    """Commit the model's typed reasoning (the old ``Store.commit_reasoning`` path of ``execute``; the owner of
-    interpretation accounts is named by the system). Every reference the payload names is held, else
-    ``CustodyError``."""
-    return ctx.store.commit_reasoning(arguments['commit'], arguments['scope'], ctx.operation_key)
 
 
 async def execute_selected_tool(arguments, ctx):
@@ -776,5 +751,4 @@ async def profile_scan(arguments, ctx):
             'changed_record_refs': [*scanned['changed_record_refs'], *settled]}
 
 
-TOOLS = {'reason': reason, 'execute_selected_tool': execute_selected_tool, PAIRWISE_TOOL: pairwise_blast,
-         PROFILE_TOOL: profile_scan}
+TOOLS = {'execute_selected_tool': execute_selected_tool, PAIRWISE_TOOL: pairwise_blast, PROFILE_TOOL: profile_scan}

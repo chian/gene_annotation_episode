@@ -27,7 +27,8 @@ claims").
 
 For each axis: ``credit`` (the axis credit; 0 before its head's first return), ``credit_after_each_return`` (the axis
 credit after each return, in order), ``finding`` (the numbers and flags of its latest finding), ``annotation_rows``
-(the rows of a head that scores the annotations it finds: those of its latest return that carried any; a row keeps,
+(the rows of a head that scores the annotations it finds: for each feature record it was commissioned on, those of its
+latest return on it that carried any; a row keeps,
 where its head returned them, the organisms of the database hits behind the candidate, ``hit_organisms`` (NCBI taxon
 ids with hit counts) and ``hits_without_taxon``, and the feature types of those hits, ``hit_feature_kinds`` (types of
 the fixed list with hit counts), ``hits_with_unmapped_feature_type`` and ``hits_without_feature_type``, which no score
@@ -35,11 +36,18 @@ reads and no line of the sheet carries), ``claim_rows``
 (the rows of a head that checks claims, by claim: the latest row its sheet gave each claim), ``claim_sheets`` (by
 claim, the sheet states of the head's latest return on that claim, which go back to it when it is commissioned on that
 claim again), ``claim_commissions`` (by claim, how often the head was commissioned on it), ``record_refs`` (every record
-its head returned so far, which goes back to that head at its next commission), ``outstanding_job_refs`` (the job
-records of its latest return) and ``outstanding_jobs`` (how many jobs its head left running at its latest return). ``commissions`` lists the axes commissioned, in order.
+its head returned so far), ``outstanding_job_refs`` and ``outstanding_jobs`` (the job records and the number of jobs its
+head left running, over its latest return on each feature record) and ``on_feature``: by the feature record a commission
+was on ('' for a commission that names none), what the head's returns on it add up to (``commissions``, ``credit``, the
+rows, groups and claims of its latest return on it, the records it returned on it, which go back to it when it is
+commissioned on that feature record again, and the jobs it left). ``commissions`` lists the axes commissioned, in order.
 
-The axis credit is made from what the head's returned credit measures (``read_from_child.CREDIT_RETURNED``): a
-``standing`` return is the axis credit itself; a ``rise`` return is added to the axis credit before it.
+The axis credit is made from what the head's returned credit measures (``read_from_child.CREDIT_RETURNED``), per feature
+record: a ``standing`` return is the credit on that feature record itself; a ``rise`` return is added to it. The axis
+credit is the sum over the feature records, so a head that moves to another feature record adds to it.
+
+``features['custody']``: for the feature record of each feature call, the records an annotation head is passed with it
+(``custody``): the feature record, the protein it names and every held record that names in turn.
 
 Claims. ``claims`` lists the claims the heads made and returned (the root makes none; the owner, 2026-11-26: "claims
 are supposed to be made in their respective arms and passed up to root"), each with the annotation it was made from,
@@ -140,8 +148,9 @@ from gene_annotation_episode.episodic_workflow.episode_support.grading.taxonomic
     taxon_table)
 from gene_annotation_episode.episodic_workflow.episode_support.tools.sequence_features.blast_claim_keeping import (
     TAXON_PROVIDER)
+from gene_annotation_episode.episodic_workflow.episode_support.jobs.job_records import named_records
 
-from ..credit import AXIS_WEIGHTS, ORGANISM_WEIGHT, axis_gain, hypervolume
+from ..credit import AXIS_WEIGHTS, ORGANISM_WEIGHT, axis_gain, feature_records, hypervolume
 from .read_from_child import CREDIT_RETURNED, DECIDING_SOURCES, FEATURE_FINDER, ORGANISM_FINDER
 
 ROW_FIELDS = ('status', 'score', 'support', 'opposition')
@@ -470,11 +479,24 @@ def passed_down(organism):
     return [{name: row[name] for name in ('taxon_id', 'name', 'rank_code', 'score', 'role')} for row in chosen]
 
 
+def custody(records, feature_ref):
+    """The records an annotation head is passed with the feature record ``feature_ref``: the record, the protein it
+    names and every held record that names in turn (the protein's letters, its translation's records)."""
+    record = records.get(feature_ref)
+    found, pending = [feature_ref], [record['protein_ref']] if 'protein_ref' in record else []
+    while pending:
+        ref = pending.pop(0)
+        if ref not in found:
+            found.append(ref)
+            pending.extend(named_records(records, ref))
+    return found
+
+
 def internal_summary(view):
     axes = {slot: {'credit': 0.0, 'credit_after_each_return': [], 'finding': {}, 'record_refs': [],
                    'outstanding_job_refs': [], 'outstanding_jobs': 0, 'annotation_rows': [], 'grouped_rows': [],
                    'grouping_in_force': [], 'groups_sent': None, 'claims': [], 'claim_rows': {}, 'claim_sheets': {},
-                   'claim_commissions': {}}
+                   'claim_commissions': {}, 'on_feature': {}}
             for slot in AXIS_WEIGHTS}
     commissions, units = [], []
     organism = {'commissions': 0, 'credit': 0.0, 'record_refs': []}
@@ -498,22 +520,35 @@ def internal_summary(view):
         slot, report = outcome['slot'], outcome['report']
         axis = axes[slot]
         commissions.append(slot)
-        axis['credit'] = axis['credit'] + report['credit'] if CREDIT_RETURNED[slot] == 'rise' else report['credit']
+        on = axis['on_feature'].setdefault(outcome['arguments'].get('feature_ref', ''), {
+            'commissions': 0, 'credit': 0.0, 'annotation_rows': [], 'grouped_rows': [], 'grouping_in_force': [],
+            'claims': [], 'record_refs': [], 'outstanding_job_refs': [], 'outstanding_jobs': 0})
+        on['commissions'] += 1
+        on['credit'] = on['credit'] + report['credit'] if CREDIT_RETURNED[slot] == 'rise' else report['credit']
+        if report['annotation_rows']:
+            on['annotation_rows'] = report['annotation_rows']
+        on['grouped_rows'], on['grouping_in_force'] = report['grouped_rows'], report['grouping_in_force']
+        on['claims'] = report['claims']
+        on['record_refs'].extend(ref for ref in report['record_refs'] if ref not in on['record_refs'])
+        on['outstanding_job_refs'], on['outstanding_jobs'] = report['outstanding_job_refs'], report['outstanding_jobs']
+        returns = list(axis['on_feature'].values())
+        axis['credit'] = math.fsum(item['credit'] for item in returns)
         axis['credit_after_each_return'].append(axis['credit'])
         axis['finding'] = report['finding']
-        if report['annotation_rows']:
-            axis['annotation_rows'] = report['annotation_rows']
-        axis['grouped_rows'], axis['grouping_in_force'] = report['grouped_rows'], report['grouping_in_force']
+        axis['annotation_rows'] = [row for item in returns for row in item['annotation_rows']]
+        axis['grouped_rows'] = [row for item in returns for row in item['grouped_rows']]
+        axis['grouping_in_force'] = [group for item in returns for group in item['grouping_in_force']]
         axis['groups_sent'] = outcome['arguments'].get('candidate_groups', [])
-        axis['claims'] = report['claims']
+        axis['claims'] = [claim for item in returns for claim in item['claims']]
         axis['claim_rows'].update({row['claim_ref']: row for row in report['claim_rows']})
         if 'claim_ref' in outcome['arguments']:
             claim_ref = outcome['arguments']['claim_ref']
             axis['claim_sheets'][claim_ref] = report['sheet_state_refs']
             axis['claim_commissions'][claim_ref] = axis['claim_commissions'].get(claim_ref, 0) + 1
         axis['record_refs'].extend(ref for ref in report['record_refs'] if ref not in axis['record_refs'])
-        axis['outstanding_job_refs'] = report['outstanding_job_refs']
-        axis['outstanding_jobs'] = report['outstanding_jobs']
+        axis['outstanding_job_refs'] = [ref for item in returns for ref in item['outstanding_job_refs']]
+        axis['outstanding_jobs'] = sum(item['outstanding_jobs'] for item in returns)
+    features['custody'] = {ref: custody(view.records, ref) for ref in feature_records({'features': features})}
     lines = function_lines(axes)
     claims = [claim for axis in axes.values() for claim in axis['claims']]
     organism.update(organism_table(view.records, view.parent_input['scope'],

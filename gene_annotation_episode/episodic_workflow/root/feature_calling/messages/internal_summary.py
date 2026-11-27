@@ -32,7 +32,7 @@ FEATURE_FACTS = ('kind', 'strand', 'segments', 'start', 'end', 'versions', 'scor
 
 
 def _feature(row):
-    return {name: row[name] for name in FEATURE_FACTS}
+    return {name: row[name] for name in (*FEATURE_FACTS, 'strongest_hit') if name in row}
 
 
 def _finding(target, table):

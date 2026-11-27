@@ -4,7 +4,7 @@ and ``finding``: the controlled features code read from the A101 axis sheet of e
 results. No held-record lists, no per-child rows and no prose: the root decides which axis to commission next and
 whether to come back for an outstanding job, and that is what it needs.
 
-Selectable: ``committed_record_refs`` (the records this episode committed through its reasoning units and the graded
+Selectable: ``committed_record_refs`` (the graded
 records of its comparisons: the records its credit reads, which a parent passes back on a later visit) and
 ``execution_handoff_refs`` (the handoff records its launches returned), ``execution_check_refs`` and
 ``execution_closure_refs`` (the status and closure records its children returned) and ``data_product_refs`` (the held

@@ -19,7 +19,9 @@ A commission carries controlled data only. Nothing in it was written by a model:
 - records in custody: the records the root was given and every record this axis's own head returned to the root
   earlier. A head measures its credit over the records it holds, so the axis's earlier records go back to it and
   its credit continues from where it stood. The records of a job a head left outstanding are among them: this
-  is how the root returns to that head. Records another axis returned are not passed;
+  is how the root returns to that head. Records another axis returned are not passed. The sequence-homology head is
+  commissioned on one feature record: it is passed that record with what it names and the records it returned from
+  its earlier commissions on that same feature record, not its returns on other feature records;
 - empty constraints (every head's form has the field; the root has none to give).
 
 The return fields the root selects (``SELECTION``) are record references, ``committed_record_refs`` wherever a
@@ -71,13 +73,16 @@ def returned(slot, summary):
 def sequence_homology_evidence(arguments, summary):
     """A101. The scope records in ``scope_refs``; no proposed annotation (the root has none: this head finds the
     candidate annotations, joins the names that are one function itself and makes the claims of its leading ones); the
-    records feature calling returned (its feature records name the proteins this head works on); and the credit units of
-    its operational children."""
+    one feature record it is commissioned on with what that names (its protein: what this head works on) and the
+    records this head returned from its earlier commissions on that feature record; and the credit units of its
+    operational children."""
     slot = 'sequence_homology_evidence'
+    feature_ref = arguments['feature_ref']
+    earlier = summary['axes'][slot]['on_feature'].get(feature_ref, {'record_refs': []})    # none: its first commission
     assignment = {
         'selection': arguments['selection'],
-        'evidence_refs': unique(summary['evidence_refs'], summary['received_record_refs'], returned(slot, summary),
-                                summary['features']['record_refs']),
+        'evidence_refs': unique(summary['evidence_refs'], summary['received_record_refs'],
+                                summary['features']['custody'][feature_ref], earlier['record_refs']),
         'constraints': {},
         'context': {'evidence_task': evidence_task(slot, 'A101')},
         'scope': summary['scope'], 'scope_refs': summary['scope_refs'],

@@ -378,7 +378,7 @@ def bvbrc_blast_best(summary, records):
 def best_arguments(summary, records, action_type, ctx):
     """The commission that reaches the action's ceiling asked with ``arguments`` ``None`` (``ceiling``), as the arguments a
     decision can name, or ``None`` when no choice of arguments changes the action's ceiling or none can earn
-    (``reason``, and the actions whose arguments the ceiling does not distinguish here). For ``bvbrc_blast``: the
+    (the actions whose arguments the ceiling does not distinguish here). For ``bvbrc_blast``: the
     continuation (``until`` ``extracted``) of the outstanding search of the query that reaches the ceiling, when it has one
     (``bvbrc_blast_best``; a new search: ``None``). For ``bvbrc_msa``:
     the query, the search, the candidates (a subset of those admitted) and the sequences per candidate (``msa_best``). For
@@ -412,7 +412,7 @@ def outcome_pending(summary, records, position):
 # that action's ceiling (``yield_estimator.py``). Every offered action has one; an action without one raises
 # (``forecast_definition_missing_for_action``). The differential of a test is ONE pair's (the top two of the listed
 # candidates it measures).
-CEILINGS = {'reason': 'a101_ceiling', 'execute_selected_tool': 'a101_ceiling',
+CEILINGS = {'execute_selected_tool': 'a101_ceiling',
             'pairwise_blast': 'a101_ceiling', 'hmmer_profile_scan': 'a101_ceiling',
             'bvbrc_blast': 'a101_ceiling', 'bvbrc_msa': 'a101_ceiling',
             'bvbrc_metacats': 'a101_ceiling', 'all_vs_all': 'a101_ceiling'}
@@ -427,7 +427,7 @@ def ceiling(summary, records, action_type, arguments, ctx):
     nothing as found because it is a repeat (ceiling 0)
     earns nothing under a grouping either: no test is run."""
     found = found_ceiling(summary, records, action_type, arguments, ctx)
-    if found is UNBOUNDED or action_type == 'reason' or not held_groupings(records):
+    if found is UNBOUNDED or not held_groupings(records):
         return found
     if action_type == 'all_vs_all':
         if arguments is not None and (arguments['search_ref'], sorted(arguments['candidates'])) in all_vs_all_commission_keys(summary):
@@ -457,8 +457,6 @@ def found_ceiling(summary, records, action_type, arguments, ctx):
     candidate the test admits earns its entry, its first score, at most ``w``; a test that measures one candidate on the list and
     admits none earns 0. Per action type:
 
-    * ``reason``: 0. A reasoning commit holds interpretations and writes no graded source, and the credit is read from
-      graded sources only (``held_sources``).
     * ``pairwise_blast``: the one test measures one candidate, the reference sequence (``reference_sequence:<ref>``)
       of the target ``query_ref``. With no pair, a candidate already on the list earns 0; one not on the list can be
       admitted for at most 1.
@@ -511,8 +509,6 @@ def found_ceiling(summary, records, action_type, arguments, ctx):
     ``bvbrc_searches``; with no arguments the ceiling stands while a database holds no graded search of the query; an
     outstanding one can still be continued and keeps its ceiling: the continuation, ``until``
     ``extracted``, extracts what the launch started, so its ceiling is the search's, and ``best_arguments`` names it)."""
-    if action_type == 'reason':
-        return 0.0
     if action_type == 'bvbrc_metacats':
         if arguments is None:
             return metacats_best(summary, records)[0]

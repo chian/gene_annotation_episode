@@ -275,8 +275,10 @@ def _segments(segments):
 def _feature_call(row):
     """One feature call as feature calling returned it: type, strand, positions (its segments and outer start and end,
     zero-based, the end not included), every version called (positions and support), score, the number of claims that
-    sit in it, its rivals (place and the facts of the letters shared) and the feature records that state it."""
+    sit in it, its rivals (place and the facts of the letters shared), the feature records that state it and, when a
+    database hit lies behind it, the value of the strongest (``strongest_hit``)."""
     return {**{name: row[name] for name in FEATURE_FIELDS}, 'segments': _segments(row['segments']),
+            **({'strongest_hit': row['strongest_hit']} if 'strongest_hit' in row else {}),
             'versions': [{'segments': _segments(version['segments']), 'start': version['start'], 'end': version['end'],
                           'support': version['support']} for version in row['versions']],
             'rivals': [{name: rival[name] for name in RIVAL_FIELDS} for rival in row['rivals']],

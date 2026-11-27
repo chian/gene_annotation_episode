@@ -10,7 +10,7 @@ GOAL = ('A101 owns sequence similarity evidence for the assigned scope: what the
         'test to candidates already listed earns by how differently they respond, and a repeat earns nothing. Starting or waiting '
         'on a job is operational progress, not homology evidence. Report correspondence as correspondence, not as '
         'proof of function. Only the yield controller ends the episode.')
-UNIT = ('One selected tool, one reasoning commit of a scientific interpretation, or one commission of a child '
+UNIT = ('One selected tool, one pairwise comparison, one profile scan, or one commission of a child '
         'episode')
 RESULT = ('The qualified sequence-homology findings: the records this episode committed and holds, the graded '
           'comparisons it holds, the possible annotations found with their scores, and the differential credit')

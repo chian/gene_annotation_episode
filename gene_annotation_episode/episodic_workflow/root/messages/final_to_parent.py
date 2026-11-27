@@ -61,6 +61,8 @@ FEATURE_CALL_FORM = RecordForm({
     'claim_count': Field('integer', 'The claims that sit in this feature call'),
     'rivals': Field('list', 'The feature calls that compete with this one for letters', items=RIVAL_FORM),
     'feature_refs': Field('record_refs', 'The feature record of this feature call'),
+    'strongest_hit': Field('number', 'The value of the strongest database hit behind this feature call (absent when '
+                                     'none)', required=False),
 })
 WAITING_FEATURE_CLAIM_FORM = RecordForm({
     'kind': ChoiceField('text', 'The type of feature the letters are claimed to lie inside', KINDS),

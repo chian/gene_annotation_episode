@@ -148,6 +148,8 @@ COMPETING = ('gene', CODING, 'tRNA', 'rRNA')
 # another competing slot are rivals.
 RNA_UNITS = ('tRNA', 'rRNA')
 RNA_SHARE = 0.5
+# The families of technique whose statements are hits of a database search.
+HIT_FAMILIES = ('protein_similarity', 'nucleotide_similarity')
 # The types read in codons.
 IN_CODONS = (CODING, *PROTEIN_PARTS)
 # Per family of technique (the first part of a sheet name: ``protein_similarity``, ``nucleotide_similarity``, ...): its
@@ -468,6 +470,12 @@ def target_table(tests):
             bits[number][claim['test']] = bits[number].get(claim['test'], 0.0) + claim['bit']
     for number, slot in slots.items():
         slot['claim_count'] = sum(number in found for found in homes)
+        # the strongest database hit behind the slot: the highest bit of a statement of a similarity search at it
+        hits = [row['bit'] for row in ([calls[place] for place in members[number]]
+                                       + [claim for claim, found in zip(claims, homes) if number in found])
+                if sheet_family(names[row['test']]) in HIT_FAMILIES and row['bit'] > 0]
+        if hits:
+            slot['strongest_hit'] = max(hits)
     # the slots within each slot: the support at them is its support too
     parts = {number: [other for other, inner in slots.items() if other != number and within(inner, slot)]
              for number, slot in slots.items()}
@@ -613,6 +621,7 @@ def feature_table(reader, scope, sources):
                 'kind': slot['kind'], 'strand': slot['strand'], 'segments': slot['segments'], **_outer(slot['segments']),
                 'versions': [{**version, **_outer(version['segments'])} for version in slot['versions']],
                 'claim_count': slot['claim_count'],
+                **({'strongest_hit': slot['strongest_hit']} if 'strongest_hit' in slot else {}),
                 'feature_refs': [record['id'] for record in records
                                  if record['subject_ref'] == target and 'joined_ref' not in record
                                  and record['kind'] == slot['kind'] and strands_agree(record, slot)

@@ -131,6 +131,9 @@ def decide(summary, feedback, ctx):
     yield table."""
     resources, offered = bound_resources(ctx), configured(ctx)
     names = [option['properties']['tool']['const'] for option in options(summary, resources, offered)]
+    # the model is shown how many records a unit produced, not their references
+    outcomes = [{**{key: value for key, value in unit.items() if key != 'record_refs'},
+                 'record_count': len(unit['record_refs'])} for unit in summary['units']]
     context = {
         'goal': GOAL, 'scope': summary['scope'],
         'held_sequences': [{'record_ref': ref, 'molecule': molecule, 'length': summary['sequence_lengths'][ref]}
@@ -142,7 +145,7 @@ def decide(summary, feedback, ctx):
         'bound_resources': resources, 'held_runs': summary['held_runs'],
         'candidates': summary['target_findings'], 'tests': summary['tests'], 'differentials': summary['differentials'],
         'credit_binding': summary['credit_binding'],
-        'own_outcomes': summary['units'], 'last_local_outcome': summary['last_local_outcome'],
+        'own_outcomes': outcomes, 'last_local_outcome': outcomes[-1] if outcomes else None,
         'tools': [{'name': name, 'description': DESCRIPTIONS[name]} for name in names],
         'time_accounting': time_accounting(ctx.clock.progress_time)}
     context = extend_context(context, {'feedback': feedback, 'action_yields': summary['action_yields']},

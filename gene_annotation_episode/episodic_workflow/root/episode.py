@@ -22,6 +22,7 @@ class RootAnnotation(EpisodeBinding):
     resume_action = task_file.resume_action
     credit = credit_file.credit
     ceiling = credit_file.ceiling
+    situations = credit_file.situations
     outcome_pending = credit_file.outcome_pending
     yield_controller = yield_file.yield_controller
     assignment_form = from_parent_file.ASSIGNMENT_FORM

@@ -96,6 +96,8 @@ FEATURE_CREDIT_SCALE = 1.0
 # annotation's score.
 ORGANISM_FINDER = 'organism_identification'
 ORGANISM_WEIGHT = 1.0
+# The head that finds the candidate annotations: it is commissioned on one feature record, not on a claim.
+ANNOTATION_FINDER = 'sequence_homology_evidence'
 
 # w_i: the root's weight of each axis. All 1: one axis alone is rewarded linearly and spread beats concentration.
 AXIS_WEIGHTS = {
@@ -189,22 +191,53 @@ CREDIT_DEFINITION = {'kind': 'root_organism_times_one_plus_feature_base_times_ax
 # from ledger rows recorded under the same credit definition and the same name of that action's ceiling; the name of
 # an action's ceiling changes when the derivation of that action's ceiling changes, and only that action's.
 CEILINGS = {'feature_calling': 'root_ceiling_zero_without_organism_credit',
-            'sequence_homology_evidence': 'root_ceiling_zero_without_organism_or_feature_credit',
+            'sequence_homology_evidence': 'root_ceiling_of_one_feature_record_zero_without_its_protein',
             'experimental_activity_evidence': 'root_ceiling_zero_without_organism_or_feature_credit',
             'organism_identification': 'root_ceiling'}
+
+
+def feature_records(summary):
+    """The feature record of each feature call of the root's sheet with that feature call's row, in the sheet's order:
+    what an annotation head is commissioned on, one at a time."""
+    return {row['feature_refs'][0]: row for target in summary['features']['targets'] for row in target['features']
+            if row['feature_refs']}
 
 
 def ceiling(summary, records, action_type, arguments, ctx):
     """The most the root's credit can rise if ``action_type`` is taken next: the arithmetic of ``root_credit``. The
     organism identification head's credit has no upper bound: ``UNBOUNDED``. Feature calling multiplies the organism's
     credit: 0 while that is 0, else ``UNBOUNDED``. An axis head multiplies the organism's credit and the features'
-    base: 0 while either is 0, else ``UNBOUNDED``."""
+    base: 0 while either is 0, else ``UNBOUNDED``. The annotation finder works on the protein its feature record names:
+    0 on a feature record that names none (with no arguments: when no feature record names one)."""
     organism, base = summary['organism']['credit'], feature_base(summary['features']['credit'])
     if action_type == ORGANISM_FINDER:
         return UNBOUNDED
     if action_type == FEATURE_FINDER:
         return UNBOUNDED if organism > 0 else 0.0
+    if action_type == ANNOTATION_FINDER and not any(
+            'protein_ref' in records.get(ref)
+            for ref in ([arguments['feature_ref']] if arguments and 'feature_ref' in arguments
+                        else feature_records(summary))):
+        return 0.0
     return UNBOUNDED if organism > 0 and base > 0 else 0.0
+
+
+def situations(summary, records, action_type, arguments, ctx):
+    """In which situation a step is taken, for the forecast controller's use of the estimate ledger. A commission of
+    the annotation finder: the type of the feature call, whether a database hit lies behind it, and whether this head
+    was commissioned on that feature record before (general to specific). With no arguments: the situations of the
+    feature records that name a protein. Every other step: the empty situation."""
+    if action_type != ANNOTATION_FINDER:
+        return [[]]
+    calls, done = feature_records(summary), summary['axes'][action_type]['on_feature']
+
+    def of(ref):
+        return [calls[ref]['kind'], 'database_hit' if 'strongest_hit' in calls[ref] else 'no_database_hit',
+                'further_commission' if ref in done else 'first_commission']
+    if arguments is not None and 'feature_ref' in arguments:
+        return [of(arguments['feature_ref'])]
+    return [list(found) for found in dict.fromkeys(tuple(of(ref)) for ref in calls
+                                                   if 'protein_ref' in records.get(ref))] or [[]]
 
 
 def outcome_pending(summary, records, position):

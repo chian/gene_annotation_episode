@@ -56,6 +56,8 @@ FEATURE_FORM = RecordForm({
     'score': Field('number', 'The score of the feature call: the weighted support of the tests at its calls, at the '
                              'claims that sit in it and at every feature call that lies within it by type'),
     'claim_count': Field('integer', 'The claims that sit in this feature call'),
+    'strongest_hit': Field('number', 'The value of the strongest database hit behind this feature call (absent when '
+                                     'it has none)', required=False),
     'rivals': Field('list', 'The rows that compete with this one for letters, each with the facts of the letters shared',
                     items=RIVAL_FORM),
     'feature_refs': Field('record_refs', 'The feature record of this feature call'),

@@ -18,8 +18,9 @@ and the genetic code its gene calls are read under. Its searches also keep taxon
 of candidate taxa reads with the organism head's classifications (``messages/internal_summary.organism_table``). Its
 credit is the base of the root's credit: until it is credited, no annotation head can raise the root's credit (the
 owner, 2026-11-25: the annotation "is a multiplier of that that cannot gain anything until feature type scoring/credit
-is settled a certain amount"; ``credit.ceiling`` is then 0 for an axis head). The annotation heads are commissioned on the
-root's scope.
+is settled a certain amount"; ``credit.ceiling`` is then 0 for an axis head). The annotation finder is commissioned on
+one feature record at a time (the owner, 2026-11-26: "the root should figure out which feature_records to track down
+with which arm").
 
 Annotations generate claims (the owner, 2026-11-23). The sequence-homology head finds the candidate annotations and
 scores them. What a candidate annotation says the protein does is checked by other heads, and for that the annotation
@@ -30,8 +31,9 @@ the line of the annotation it was made from, by code. A claim is then handed to 
 (``CLAIM_CHECKERS``), and what that head finds is that head's score of the annotation the claim was made from: both
 heads score the same annotation, on one line of the root's scoring sheet. One claim may go to several heads.
 
-The steps (``choices``). Every head is offered at every decision; the model decides which and how often. A head that
-left a job outstanding is owed its return (``resume_action``, not due).
+The steps (``choices``). Every step is offered at every decision: feature calling, the organism identification head,
+the annotation finder on each feature record of the sheet, each claim check; the model decides which and how often. A
+feature record on which a head left a job outstanding is owed that head's return (``resume_action``, not due).
 
 The root's controller is the forecast yield controller (``yield_estimator.py``): the system adds to what the model is
 shown the forecast of every offered action (``action_forecasts``), refuses a chosen step whose forecast is not worth
@@ -42,7 +44,8 @@ returns, how often it was commissioned, how many jobs it left outstanding and wh
 the root's scoring sheet in its two levels (the feature calls of each sequence with their scores, the claims that wait
 for a call and the genetic code held; and every candidate annotation the heads scored, with its merged score and each
 axis's row); the organism (the candidate taxa of the root's scoring sheet, the placement, the number of tests and the
-taxon claims that wait); the claims made; the steps it may take; and for each axis its credit, the credit at each of its
+number of taxon claims that wait); the steps it may take, each with what tells it from the others (a feature call's
+type, positions, score and strongest database hit; a claim); and for each axis its credit, the credit at each of its
 returns (the trend of an axis's credit says whether it is still productive), how often it was commissioned, the numbers
 and flags of its latest finding, how many job records its head left outstanding and what one more unit of its credit
 would add.
@@ -50,8 +53,8 @@ would add.
 A head that ended its turn with a job outstanding. A head may launch a job that outlives its turn. When only that
 job is outstanding its own controller ends it, and it returns the job's records. The root does not wait: the model
 sees ``outstanding_jobs`` for that axis, works on other steps, and returns to the axis by commissioning it again.
-Every commission of an axis passes back the records its head returned earlier (``messages/msg_to_child.py``), the
-job records among them.
+Every commission of an axis passes back the records its head returned earlier (``messages/msg_to_child.py``; for the
+annotation finder those it returned on that feature record), the job records among them.
 
 The selection each axis head is commissioned with (its evidence-axis option, thought pattern and tools, in that head's
 own selection form) is the root's setting ``settings['axis_selections'][slot]``: the references name entries of the
@@ -59,8 +62,8 @@ run's frozen libraries by their digests, which only the run's caller has. ``acti
 Feature calling and the organism identification head take no selection: their assignment is the root's scope."""
 from episode_runtime import ChildCall, ModelRequest
 
-from .credit import (AXIS_WEIGHTS, FEATURE_CREDIT_SCALE, FEATURE_FINDER, K, ORGANISM_FINDER, ORGANISM_WEIGHT,
-                     root_credit)
+from .credit import (ANNOTATION_FINDER, AXIS_WEIGHTS, FEATURE_CREDIT_SCALE, FEATURE_FINDER, K, ORGANISM_FINDER,
+                     ORGANISM_WEIGHT, feature_records, root_credit)
 
 # Slot (the head's role) -> the binding path of the head, the folder of that name under the root: the heads the root is
 # linked with. Feature calling (``FEATURE_FINDER``, named in ``credit.py`` because its credit is the base of the root's)
@@ -79,8 +82,6 @@ CHILD_SLOTS = {
     'experimental_activity_evidence': 'experimental_activity_evidence',        # A105
 }
 SERVICES = ()
-# The head that finds the candidate annotations: it is commissioned on the subject, not on a claim.
-ANNOTATION_FINDER = 'sequence_homology_evidence'
 TAKES_ORGANISM = ('sequence_homology_evidence',)
 # The kinds of claim each linked head can check, read from that head's own claim contract (A105:
 # ``literature_row_contract.CLAIM_PREDICATES``). A claim is offered to every head that lists its predicate.
@@ -100,7 +101,7 @@ INSTRUCTIONS = """You direct the annotation of one sequence. Nothing about it is
 Each step you take one of the `choices`, by its number. They are options, not a sequence of stages: take the one you expect to raise the credit most for its cost.
 - `feature_calling`: its episode finds the features of the sequence. It searches sequence databases and runs gene and RNA finders, and gives the candidate feature calls of the sequence (type, positions, strand), each with its score and the calls that compete with it for the same letters, the claims that wait for a call, and the genetic code its gene calls are read under. Its searches also keep taxon claims: the organisms of their hits, which add to the candidate taxa of `organism` by themselves.
 - `organism_identification`: its episode classifies the sequence with the tools that can take it and gives the candidate taxa it is from. What it and the taxon claims together say is passed to the sequence homology episode when that is commissioned.
-- `sequence_homology_evidence`: its episode searches sequence databases with the sequence, finds candidate annotations and scores each from sequence.
+- `sequence_homology_evidence` on one feature call: its episode searches sequence databases with the protein that feature call names, finds its candidate annotations and scores each from sequence. Each such choice shows the feature call (`kind`, `strand`, `start`, `end`, `score`), `strongest_hit`, and how often that episode was commissioned on it (`commissions`) with its `credit` there. `strongest_hit` is how strong the best database hit behind the feature call is; a feature call with a strong hit is the likeliest to be annotated quickly. On a feature call that names no protein this step can earn nothing, and its forecast is 0.
 - `experimental_activity_evidence` on one claim: its episode searches the literature for experiments that test that claim. It takes hours. What it finds is its score of the annotation the claim was made from.
 
 Claims are not yours to make: the sequence homology episode makes them for the two leading annotations it finds for a product, turning what each says the product does into claims an experiment could check ("binds", "catalyzes" or "transports" a named molecule), and returns them. An annotation that states no function gives no claims.
@@ -111,15 +112,15 @@ The scoring sheet has two levels. `feature_calls` is the level above: for each s
 
 `genome_annotation` is the annotation of the whole sequence as it stands: every feature call with its `term`, the feature call's score * (1 + `annotation_score`) * `agreement` * `part_coherence`, where `annotation` is the one of its two leading annotations, or none, that gives the highest term, `annotation_score` the axes' score of that annotation alone and `agreement` how far the organisms of the hits behind it are of the family of the leading candidate taxon. Of rival feature calls the one of the higher term is `chosen`; the other shows the feature record it `lost_to`. Its `score` is `organism_factor` * `set_coherence` * the sum of the chosen terms; `part_coherence` and `set_coherence` are 1 for now. The steps earn the `credit`, not this score.
 
-`organism` shows the organism identification episode's `credit`, `commissions` and `gain_of_one_credit`, and which organism the sequence is from: the `candidates` taxa, the leading one first, each with its taxon id, name, rank code, lineage and score (the support on its own lineage, so a vaguer call such as a family supports every finer candidate inside it), the `placement` (the leading candidate, its leading rival and the deepest taxon the two share), `test_count` (the classifications and claim sheets held) and `waiting_claims` (taxon claims of the searches that no candidate is or lies inside: the claimed taxon and its lineage, its bit and support, the candidate it is consistent with, why it waits, what it earned and the source of its claim sheet). The candidates are scored from the classifications of the organism identification episode and the taxon claims of feature calling's searches together: a claim adds to the candidates it lies inside and never opens one.
+`organism` shows the organism identification episode's `credit`, `commissions` and `gain_of_one_credit`, and which organism the sequence is from: the `candidates` taxa, the leading one first, each with its taxon id, name, rank code, lineage and score (the support on its own lineage, so a vaguer call such as a family supports every finer candidate inside it), the `placement` (the leading candidate, its leading rival and the deepest taxon the two share), `test_count` (the classifications and claim sheets held) and `waiting_claim_count` (how many taxon claims of the searches no candidate is or lies inside). The candidates are scored from the classifications of the organism identification episode and the taxon claims of feature calling's searches together: a claim adds to the candidates it lies inside and never opens one.
 
-`claims` lists the claims made: the annotation each was made from, what it says, and for each episode that can check it how often it was commissioned on it.
+Each choice on a claim shows the claim: the annotation it was made from, what it says, and for each episode that can check it how often it was commissioned on it.
 
 The `credit` is v_o * (1 + s * v_f * prod_i (1 + k * v_i) ** w_i): v_o is the credit of the organism identification episode, v_f feature calling's credit with its scale s (`feature_credit_scale`), and v_i the axis credits; `k` and the `weight` w_i of each axis are given. The organism multiplies everything: until the organism identification episode has credit the credit is 0 and no other step can raise it, so no other step is worth its cost then. With an organism and nothing else the credit is v_o. Feature calling then multiplies it, and until feature calling has credit no annotation episode can raise it: an annotation sits on a feature. Progress on one axis alone raises the credit linearly; the same progress spread over several axes raises it more. `gain_of_one_credit` is what one more unit of credit of that episode would add now. The scores say which feature and which annotation the evidence favours; the credit says how productive the work was. They are separate.
 
 `feature_calling` shows: `credit`; `credit_after_each_return`; `commissions`; `outstanding_jobs`; and `gain_of_one_credit`. `axes` shows for each axis: `credit`; `credit_after_each_return`; `commissions`; `finding` (the numbers and flags of its latest finding); `outstanding_jobs` (how many jobs its episode left running); and `gain_of_one_credit`. A job that is still running is not evidence: take other steps and return to that axis later.
 
-`action_forecasts` gives, for each kind of step offered, what steps of that kind have earned before (`forecast_gain`), how long they took (`expected_seconds`) and whether one is worth its cost now (`worth`). A step that is not worth its cost is refused.
+`action_forecasts` gives, for each kind of step offered, what steps of that kind have earned before (`forecast_gain`), how long they took (`expected_seconds`) and whether one is worth its cost now (`worth`). For `sequence_homology_evidence` its `situations` give the forecast by the feature call's type, whether a database hit lies behind it and whether it is the first commission on it or a further one. A step that is not worth its cost is refused.
 
 Spend the expensive steps where they tell the leading annotations apart: a claim that the leading annotation makes and its rival does not is worth more than one both make. Choose the step you expect to raise the credit most. You cannot end this episode: its controller ends it when no step is worth its cost."""
 
@@ -168,10 +169,21 @@ def claim_view(claim, summary):
 
 
 def choices(summary):
-    """The steps the model is offered, at every decision: a commission of each head, and of each claim-checking head on
+    """The steps the model is offered, at every decision: a commission of feature calling and of the organism
+    identification head, of the annotation finder on each feature record of the sheet (the feature call's type,
+    positions, score and strongest database hit, and what that head has done on it), and of each claim-checking head on
     each claim it can check. Listed in a fixed order so that a number names the same step for the model and for
     ``action``; the list is not an order of work. What to take and how often is the model's decision."""
-    offered = [{'action': FEATURE_FINDER}, {'action': ORGANISM_FINDER}, {'action': ANNOTATION_FINDER}]
+    offered = [{'action': FEATURE_FINDER}, {'action': ORGANISM_FINDER}]
+    done = summary['axes'][ANNOTATION_FINDER]['on_feature']
+    offered.extend({'action': ANNOTATION_FINDER, 'feature_ref': ref,
+                    **{name: row[name] for name in ('kind', 'strand', 'start', 'end', 'score', 'strongest_hit')
+                       if name in row},
+                    'commissions': done[ref]['commissions'] if ref in done else 0,
+                    'credit': done[ref]['credit'] if ref in done else 0.0}
+                   for ref, row in feature_records(summary).items())
+    if not feature_records(summary):          # no feature record yet: the head stays on offer, at ceiling 0
+        offered.append({'action': ANNOTATION_FINDER})
     offered.extend({'action': slot, 'claim_ref': claim['claim_ref'], **claim_view(claim, summary)}
                    for claim in summary['claims'] for slot, predicates in CLAIM_CHECKERS.items()
                    if claim['predicate'] in predicates)
@@ -181,10 +193,11 @@ def choices(summary):
 def resume_action(summary, records, ctx):
     """The unit this episode owes (``method_loop.episode_type``, step 3): the return to a head that left a job running,
     not due (the model may take other steps worth their cost first); else ``None``."""
-    if summary['axes'][ANNOTATION_FINDER]['outstanding_jobs'] > 0:
-        return {'action_type': ANNOTATION_FINDER, 'due': False,
-                'arguments': {'selection': ctx.settings['axis_selections'][ANNOTATION_FINDER],
-                              'organism_candidates': summary['organism']['passed_down']}}
+    for ref, on in summary['axes'][ANNOTATION_FINDER]['on_feature'].items():
+        if on['outstanding_jobs'] > 0:
+            return {'action_type': ANNOTATION_FINDER, 'due': False,
+                    'arguments': {'selection': ctx.settings['axis_selections'][ANNOTATION_FINDER],
+                                  'feature_ref': ref, 'organism_candidates': summary['organism']['passed_down']}}
     return None
 
 
@@ -200,15 +213,14 @@ def decide(summary, feedback, ctx):
                'feature_calls': feature_calls_view(summary),
                'annotations': summary['annotations'],
                'genome_annotation': summary['genome_annotation'],
-               'claims': [claim_view(claim, summary) for claim in summary['claims']],
                'axes': [axis_view(slot, summary, feature_credit, credits, organism_credit, current)
                         for slot in CHILD_SLOTS if slot in AXIS_WEIGHTS],
-               'commissions': summary['commissions'],
                'organism': {**{name: summary['organism'][name]
-                               for name in ('credit', 'commissions', 'candidates', 'placement', 'test_count',
-                                            'waiting_claims')},
+                               for name in ('credit', 'commissions', 'candidates', 'placement', 'test_count')},
+                            'waiting_claim_count': len(summary['organism']['waiting_claims']),
                             'gain_of_one_credit': root_credit(feature_credit, credits, organism_credit + 1.0) - current},
-               'choices': [{name: value for name, value in step.items() if name != 'claim_ref'} for step in offered],
+               'choices': [{name: value for name, value in step.items() if name not in ('claim_ref', 'feature_ref')}
+                           for step in offered],
                'feedback': feedback}
     schema = {'type': 'object', 'additionalProperties': False, 'required': ['choice'],
               'properties': {'choice': {'type': 'integer', 'enum': [step['choice'] for step in offered]}}}
@@ -223,15 +235,18 @@ def offered_actions(summary, ctx):
 def action(response, summary, records, ctx):
     """The step the model chose: the commission of feature calling or of the organism identification head (on the root's
     scope: no arguments), or of an axis head with the selection the root's settings give that axis (and, for a head that
-    checks claims, the claim)."""
+    checks claims, the claim; for the annotation finder, the feature record)."""
     step = choices(summary)[response['choice']]
     if step['action'] in (FEATURE_FINDER, ORGANISM_FINDER):
         return ChildCall(step['action'], {})
     arguments = {'selection': ctx.settings['axis_selections'][step['action']]}
     if step['action'] != ANNOTATION_FINDER:
         arguments['claim_ref'] = step['claim_ref']
-    elif step['action'] in TAKES_GROUPING:
-        arguments['candidate_groups'] = summary['groups'][step['action']]
+    else:
+        if 'feature_ref' in step:
+            arguments['feature_ref'] = step['feature_ref']
+        if step['action'] in TAKES_GROUPING:
+            arguments['candidate_groups'] = summary['groups'][step['action']]
     if step['action'] in TAKES_ORGANISM:
         arguments['organism_candidates'] = summary['organism']['passed_down']
     return ChildCall(step['action'], arguments)
