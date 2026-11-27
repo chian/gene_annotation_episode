@@ -23,7 +23,7 @@ Like A102 it both proposes and checks (the owner: "looking for something that mi
   through the root.
 
 A check has three answers: found (how well, where); looked properly and not there; could not look (with the reason). That
-the first pass called no Y is not evidence that Y is absent: nobody looked for it.
+no Y has been called is not evidence that Y is absent: nobody looked for it.
 
 ## Rules it is built on (the owner, 2026-11-23)
 
@@ -36,22 +36,20 @@ the first pass called no Y is not evidence that Y is absent: nobody looked for i
   workflow if different tools can be used for different things under different circumstances."
 - The arms do not do each other's work. What another arm can evaluate goes up to the root (for example a model of a protein
   family from its relatives is the sequence arm's work; this arm asks for it and receives it).
-- It is not "merely a set of tool calls": the first pass is, the rest is thought (what is missing, what is doubtful, which
-  check would settle it for its cost).
+- It is not "merely a set of tool calls": it is thought (what is missing, what is doubtful, which check would settle it for
+  its cost).
 
 ## The head's cycle
 
-1. The first pass is owed once (no choice).
-2. Look at the reading as it stands: what is missing, what is doubtful, which claims wait.
-3. Choose the one check that would settle the most for its cost; commission it.
-4. Revise how sure each part is. Stop when no remaining check is worth its cost (the forecast yield controller).
+1. Look at the reading as it stands: what is missing, what is doubtful, which claims wait.
+2. Choose the one check that would settle the most for its cost; commission it.
+3. Revise how sure each part is. Stop when no remaining check is worth its cost (the forecast yield controller).
 
 ## The subtree
 
 ```
 parts_discovery                       HEAD   Its cycle improves the reading of one piece. Commissioned on a piece of DNA,
 │                                            or on claims about what is there.
-│   the first pass (owed once; fixed workflows)
 ├─ describe_piece                    TOOL   Composition and signature of the bare DNA.
 ├─ find_genes                        TOOL   Protein genes. One field: the genetic code, from a fixed list.
 ├─ find_rna_genes                    TOOL   RNA genes, by family models.
@@ -82,8 +80,8 @@ parts_discovery                       HEAD   Its cycle improves the reading of o
 
 - The head decides which doubt or claim is worth working on next; each child decides how to settle the one thing it was
   given; each tool is one fixed measurement.
-- The first-pass tools pass the owner's test for a tool: run the same way for any piece; which code and whether the piece is a
-  fragment follow from fixed rules.
+- `describe_piece`, `find_genes`, `find_rna_genes` and `find_known_elements` pass the owner's test for a tool: each is run the
+  same way for any piece.
 - The scan methods and the kinds of evidence are a first list from how the field works; there may be more of each.
 
 ## What passes
@@ -115,7 +113,7 @@ root takes it, the head is run as the entry with the root's commission supplied 
 
 ## Order of building
 
-1. The head with the first pass: `describe_piece`, `find_genes`, `find_rna_genes`, on a real piece of bacterial DNA.
+1. The head with `describe_piece`, `find_genes` and `find_rna_genes`, on a real piece of bacterial DNA.
 2. `part_search` with `scan_with_protein_model` and `scan_with_rna_model`.
 3. `reading_revision`.
 4. `find_known_elements`, `motif_discovery`, the remaining scans.
@@ -136,9 +134,8 @@ Genes with introns are in the design (a part may be several joined stretches) an
 The head as the entry, pinned at `c9fed4976`, on E. coli K-12 chromosome 2,790,000 to 2,850,000 (60,001 nt); run
 `parts_ecoli_stretch_1`, workspace `runs/parts_ws_ecoli_stretch_1/` (the prediction written first is `prediction.md` there).
 
-- Five units, ended by its yield controller, two model calls. The three owed units ran in order without the model:
-  `describe_piece`, `find_genes` (code 11), `find_rna_genes`. The model then asked for the reading under code 4 and under code
-  25; each earned nothing, and the controller stopped.
+- Five units, ended by its yield controller: `describe_piece`, `find_genes` (code 11), `find_rna_genes`, then `find_genes`
+  under code 4 and under code 25, which each earned nothing.
 - The reading reported: code 11, self-trained, 64 genes, coding share 0.889, score sum 8012.6. Seven RNA genes (five tRNA,
   MicA, naRNA4). Credit 12.8256, as predicted (12.83).
 - Positions in the return are positions on the piece (1 to 60,001), not on the chromosome it was cut from.
@@ -163,5 +160,4 @@ episode from a container folder to `root/parts_discovery`, which needed one chan
 Run `parts_ecoli_stretch_2` (pinned `494a16473`, workspace `runs/parts_ws_ecoli_stretch_2/`, prediction written first): the same
 five units, the same reading (code 11, 64 genes, score sum 8012.6), 7 RNA genes, credit 12.8256, as predicted.
 
-Open for the owner: until its children exist the head decides almost nothing (three owed units, then only whether to try a
-special code); the library folders are named after the arm (`tools/parts_discovery`, `grading/parts_discovery`).
+Open for the owner: the library folders are named after the arm (`tools/parts_discovery`, `grading/parts_discovery`).

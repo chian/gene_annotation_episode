@@ -1,12 +1,8 @@
 """The task of the parts-discovery head: one unit per decision, three tools and no child yet.
 
-THE FIRST PASS is OWED, in this order, without asking the model (``resume_action``, due at once; the system takes it as the unit, and
-the forecast gate never refuses it): ``describe_piece``, then ``find_genes`` with the default genetic code (11), then
-``find_rna_genes``. A unit counts as done once it was tried, whatever its outcome (a failed scan is reported once, not owed again).
-``offered_actions`` lists the owed action while it is owed.
-
-AFTER THE FIRST PASS the model is offered ``find_genes`` with a special code (4 or 25) not yet read, and only when the piece has at
-least 20000 nt (a shorter piece is read by the pre-trained finder, which ignores the code). Each tool is a fixed workflow with ONE
+The model is offered ``find_genes`` with a code not yet read (``credit.offered_codes``); a code other than the default only when the
+piece has at least 20000 nt (a shorter piece is read by the pre-trained finder, which ignores the code). ``describe_piece`` and
+``find_rna_genes`` are in ``TOOLS`` and no decision offers them. Each tool is a fixed workflow with ONE
 deterministic check run in ``action`` before anything runs (SOP Step 3); a request that passes simply works, a repeat of a held
 (tool, arguments) is refused with its fix list. With no code left to read ``find_genes`` is still the one offered action, with the
 ceiling 0, which is how the yield controller ends the episode (``credit.ceiling``). The head never ends its episode: only the yield
@@ -14,7 +10,7 @@ controller does. No ``reason`` action.
 
 Settings of the head: ``infernal_executable_directory`` (the directory of ``cmscan``), ``covariance_database_manifest`` (the path of
 the Rfam manifest) and ``yield_bindings`` (``yield_estimator.py``). The service ``job_access`` is read for the resources
-``find_rna_genes`` runs on (the first local one)."""
+``find_rna_genes`` runs on."""
 import os
 from pathlib import Path
 
@@ -64,8 +60,7 @@ INSTRUCTIONS = (
     GOAL + '\n\n'
     'You are the head of this investigation. At each decision you choose exactly one action, from the actions offered '
     '(tool_options), by answering with the controlled fields of its request; the configured yield controller owns continuation: '
-    'you cannot end the episode. The first pass (a description of the piece, a gene finding under the default genetic code 11 and a '
-    'scan for RNA genes) is done by code before your first decision. Recorded facts come from actual records and are shown to you as '
+    'you cannot end the episode. Recorded facts come from actual records and are shown to you as '
     'they are: the piece with its length, GC fraction and GC skew, the readings held (one per genetic code read: the finder\'s mode, '
     'the code, whether the code was applied, the gene count, the median gene length, the coding share, which is the nucleotides in '
     'the called genes over the length of the piece, and the score, which is the sum of the finder\'s own scores of the genes), the RNA '
@@ -93,30 +88,6 @@ def bound_resources(ctx):
     """The resources bound to the job service, each with its kind (read through the service's read handle, so the read is recorded
     with the decision)."""
     return {resource['resource_id']: resource['kind'] for resource in ctx.services['job_access'].read('resources')}
-
-
-def local_resource(ctx):
-    """The first local resource of the job service: where the RNA scan runs (a fixed rule, not a choice)."""
-    return [name for name, kind in bound_resources(ctx).items() if kind == 'local'][0]
-
-
-def tried(summary, tool, **arguments):
-    """Whether a unit of ``tool`` with these ``arguments`` was tried, whatever its outcome."""
-    return any(row['tool'] == tool and all(row['arguments'][name] == value for name, value in arguments.items())
-               for row in summary['units'])
-
-
-def owed_action(summary, ctx):
-    """The first unit of the first pass not yet tried, as ``{'action_type', 'arguments'}``, or ``None`` once the first pass is
-    done. The arguments are those the tool's check accepts."""
-    piece = summary['piece']['ref']
-    if not tried(summary, DESCRIBE_TOOL):
-        return {'action_type': DESCRIBE_TOOL, 'arguments': {'piece_ref': piece}}
-    if not tried(summary, FIND_GENES_TOOL, code=DEFAULT_CODE):
-        return {'action_type': FIND_GENES_TOOL, 'arguments': {'piece_ref': piece, 'code': DEFAULT_CODE}}
-    if not tried(summary, RNA_TOOL):
-        return {'action_type': RNA_TOOL, 'arguments': {'piece_ref': piece, 'resource_id': local_resource(ctx)}}
-    return None
 
 
 def check_describe_piece(request, summary):
@@ -174,18 +145,6 @@ def check_request(tool, request, summary, ctx):
     return check_find_rna_genes(request, summary, ctx)
 
 
-def resume_action(summary, records, ctx):
-    """The unit this episode owes (``method_loop.episode_type``, step 3): the next unit of the first pass, due at once, else
-    ``None``. Its request passes the tool's own check, else this raises: an owed unit the check refuses is a fault of the episode."""
-    owed = owed_action(summary, ctx)
-    if owed is None:
-        return None
-    problems = check_request(owed['action_type'], owed['arguments'], summary, ctx)
-    if problems:
-        raise ContractError('parts_owed_unit_refused_by_its_check:' + owed['action_type'] + ':' + repr(problems))
-    return {**owed, 'due': True}
-
-
 def find_genes_options(summary):
     """The request of the ``find_genes`` tool as the model fills it out: the codes still offered (``credit.offered_codes``). Empty
     when none is."""
@@ -202,10 +161,9 @@ def selection_schema(summary):
 
 
 def offered_actions(summary, ctx):
-    """The action types this decision offers, by the names a unit is recorded under (``ToolCall.name``): the owed unit while the
-    first pass is not done, else ``find_genes`` (with the ceiling 0 once no code is left to read)."""
-    owed = owed_action(summary, ctx)
-    return [FIND_GENES_TOOL] if owed is None else [owed['action_type']]
+    """The action types this decision offers, by the names a unit is recorded under (``ToolCall.name``): ``find_genes`` (with the
+    ceiling 0 once no code is left to read)."""
+    return [FIND_GENES_TOOL]
 
 
 def outcome_row(row):
